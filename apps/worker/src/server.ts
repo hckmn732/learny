@@ -8,7 +8,11 @@ import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
 import { parseServerEnv } from '@learny/config/server';
-import { functions as sharedFunctions, inngest } from '@learny/jobs';
+import type { ErrorReporter } from '@learny/core';
+import { resolveRequestId, REQUEST_ID_HEADER } from '@learny/core/server';
+import { createFunctions, functions as sharedFunctions, inngest, sddDemoStore } from '@learny/jobs';
+
+import { createWorkerReporter, initWorkerSentry } from './sentry';
 
 export const DEFAULT_PORT = 3001;
 export const INNGEST_PATH = '/api/inngest';
@@ -36,19 +40,40 @@ export interface AppOptions {
   client?: Inngest;
   functions?: Parameters<typeof serve>[0]['functions'];
   env?: Env;
+  /** Telemetry sink of unexpected worker/job failures (SPEC-010, EF-3/EF-4). */
+  reporter?: ErrorReporter;
 }
 
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
-  const handler = serve({
-    client: options.client ?? inngest,
-    functions: options.functions ?? sharedFunctions,
-  });
+  const client = options.client ?? inngest;
+  const registry =
+    options.functions ??
+    (options.reporter === undefined
+      ? sharedFunctions
+      : createFunctions(client, {
+          demoStore: sddDemoStore,
+          reportError: (report) => {
+            options.reporter?.capture(report.error, {
+              ...(report.requestId === undefined ? {} : { requestId: report.requestId }),
+              ...(report.jobId === undefined ? {} : { jobId: report.jobId }),
+            });
+          },
+        }));
+  const handler = serve({ client, functions: registry });
   app.get('/health', (c) => {
+    // Every API answer carries a safe correlation identifier (SPEC-010, EF-1/ET-3).
+    const requestId = resolveRequestId(c.req.header(REQUEST_ID_HEADER));
+    c.header(REQUEST_ID_HEADER, requestId);
     c.header('cache-control', 'no-store');
     return c.json(getWorkerHealth(options.env));
   });
   app.on(['GET', 'POST', 'PUT'], INNGEST_PATH, (c) => handler(c));
+  // A route error stays a safe 500: no stack, no exception message (SPEC-010, EF-3).
+  app.onError((error, c) => {
+    options.reporter?.capture(error, { route: '/worker' });
+    return c.json({ status: 'error', code: 'INTERNAL_ERROR' }, 500);
+  });
   return app;
 }
 
@@ -89,7 +114,10 @@ export async function main(env: Env = process.env): Promise<void> {
     // (SPEC-009, EF-1). The error names variables only, never a value.
     const config = parseServerEnv(env);
     const port = parsePort(env.PORT);
-    await startServer(createApp({ env }), port);
+    // Telemetry is optional: either way the worker starts and serves requests (CL-3, CL-4).
+    const reporter = createWorkerReporter(env);
+    await initWorkerSentry(env);
+    await startServer(createApp({ env, reporter }), port);
     console.info(
       `learny worker: http://localhost:${String(port)}${INNGEST_PATH} (${config.APP_ENV})`,
     );

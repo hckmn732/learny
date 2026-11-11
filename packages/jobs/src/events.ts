@@ -10,6 +10,11 @@ export const DEMO_RUN_ID_MAX = 64;
 export const demoJobInputSchema = z.object({
   runId: z.string().trim().min(1).max(DEMO_RUN_ID_MAX),
   value: z.number().int().min(DEMO_VALUE_MIN).max(DEMO_VALUE_MAX),
+  // Correlation identifier transmitted by the caller of the job (SPEC-010, EF-4).
+  requestId: z
+    .string()
+    .regex(/^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$/)
+    .optional(),
 });
 
 export type DemoJobInput = z.infer<typeof demoJobInputSchema>;

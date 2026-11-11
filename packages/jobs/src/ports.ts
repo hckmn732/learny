@@ -16,3 +16,18 @@ export const silentLogger: JobLogger = {
   warn: () => undefined,
   error: () => undefined,
 };
+
+/**
+ * Safe description of a job failure (SPEC-010, EF-4). The error object is only handed to the
+ * telemetry reporter, which keeps its type; nothing of the payload is included.
+ */
+export interface JobErrorReport {
+  job: string;
+  jobId?: string;
+  step?: string;
+  attempt?: number;
+  requestId?: string;
+  error: unknown;
+}
+
+export type JobErrorReporter = (report: JobErrorReport) => void;

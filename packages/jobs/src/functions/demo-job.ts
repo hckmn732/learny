@@ -6,7 +6,13 @@ import { clock, type Clock } from '@learny/core';
 import type { DemoResultStore } from '../demo-store';
 import { PermanentJobError, errorCode, isPermanentError } from '../errors';
 import { demoJobInputSchema, sddDemoJobRequested } from '../events';
-import { silentLogger, type JobLogger, type StepTools } from '../ports';
+import {
+  silentLogger,
+  type JobErrorReporter,
+  type JobLogger,
+  type SafeLogFields,
+  type StepTools,
+} from '../ports';
 
 export const DEMO_JOB_ID = 'sdd-demo-job';
 export const DEMO_JOB_NAME = 'sdd/demo-job';
@@ -19,6 +25,8 @@ export type DemoStepName = (typeof DEMO_STEPS)[number];
 export interface DemoJobDeps {
   store: DemoResultStore;
   clock?: Clock;
+  /** Optional telemetry hook; the worker wires it to Sentry (SPEC-010, EF-3/EF-4). */
+  reportError?: JobErrorReporter;
 }
 
 export interface DemoJobResult {
@@ -30,6 +38,20 @@ export interface DemoJobContext {
   data: unknown;
   step: StepTools;
   logger?: JobLogger;
+  /** Inngest run identifier, stable across retries (SPEC-010, EF-4, CL-7). */
+  jobId?: string;
+  /** Zero-indexed attempt number given by Inngest (SPEC-010, EF-4, CL-7). */
+  attempt?: number;
+  /** Correlation identifier transmitted by the event, when safe (SPEC-010, EF-4). */
+  requestId?: string;
+}
+
+function correlationFields(ctx: DemoJobContext): SafeLogFields {
+  return {
+    ...(ctx.jobId === undefined ? {} : { jobId: ctx.jobId }),
+    ...(ctx.attempt === undefined ? {} : { attempt: ctx.attempt }),
+    ...(ctx.requestId === undefined ? {} : { requestId: ctx.requestId }),
+  };
 }
 
 function conflict(): PermanentJobError {
@@ -37,6 +59,7 @@ function conflict(): PermanentJobError {
 }
 
 async function inStep<T>(
+  ctx: DemoJobContext,
   step: StepTools,
   logger: JobLogger,
   name: DemoStepName,
@@ -47,8 +70,14 @@ async function inStep<T>(
     try {
       return await fn();
     } catch (error) {
-      // Safe log: step, run identifier and error code only, never the input value.
-      const fields = { job: DEMO_JOB_NAME, step: name, runId, code: errorCode(error) };
+      // Safe log: correlation, step, run identifier and error code only, never the input value.
+      const fields = {
+        job: DEMO_JOB_NAME,
+        step: name,
+        runId,
+        code: errorCode(error),
+        ...correlationFields(ctx),
+      };
       if (isPermanentError(error)) logger.error('job step failed permanently', fields);
       else logger.warn('job step failed, will be retried', fields);
       throw error;
@@ -61,18 +90,22 @@ export async function runDemoJob(ctx: DemoJobContext, deps: DemoJobDeps): Promis
   // The input is validated before the first step: nothing is written on failure (CL-1).
   const parsed = demoJobInputSchema.safeParse(ctx.data);
   if (!parsed.success) {
-    logger.error('job input rejected', { job: DEMO_JOB_NAME, code: 'VALIDATION_FAILED' });
+    logger.error('job input rejected', {
+      job: DEMO_JOB_NAME,
+      code: 'VALIDATION_FAILED',
+      ...correlationFields(ctx),
+    });
     throw new PermanentJobError('VALIDATION_FAILED', 'Entrée du job invalide.');
   }
   const { runId, value } = parsed.data;
 
-  const checked = await inStep(ctx.step, logger, 'validate-input', runId, async () => {
+  const checked = await inStep(ctx, ctx.step, logger, 'validate-input', runId, async () => {
     const existing = await deps.store.find(runId);
     if (existing !== undefined && existing.value !== value) throw conflict();
     return { runId, value, doubledValue: value * 2 };
   });
 
-  const persisted = await inStep(ctx.step, logger, 'persist-result', runId, async () => {
+  const persisted = await inStep(ctx, ctx.step, logger, 'persist-result', runId, async () => {
     // Idempotent on runId: a second delivery returns the stored result (CL-2).
     const existing = await deps.store.find(checked.runId);
     if (existing !== undefined) {
@@ -88,7 +121,11 @@ export async function runDemoJob(ctx: DemoJobContext, deps: DemoJobDeps): Promis
     return { runId: checked.runId, doubledValue: checked.doubledValue };
   });
 
-  logger.info('job completed', { job: DEMO_JOB_NAME, runId });
+  logger.info('job completed', {
+    job: DEMO_JOB_NAME,
+    runId,
+    ...correlationFields(ctx),
+  });
   return persisted;
 }
 
@@ -118,17 +155,32 @@ export function createDemoJob(client: Inngest, deps: DemoJobDeps) {
       retries: JOB_RETRIES,
       triggers: [sddDemoJobRequested],
     },
-    async ({ event, step }) =>
-      runDemoJob(
-        {
-          data: event.data,
-          // Step results are plain JSON objects: Inngest's Jsonify<T> is T here.
-          step: {
-            run: <T>(name: string, fn: () => Promise<T>) => step.run(name, fn) as Promise<T>,
-          },
-          logger: toJobLogger(client.logger),
+    async ({ event, step, attempt }) => {
+      const requestId = (event.data as { requestId?: unknown } | null | undefined)?.requestId;
+      const ctx: DemoJobContext = {
+        data: event.data,
+        // Step results are plain JSON objects: Inngest's Jsonify<T> is T here.
+        step: {
+          run: <T>(name: string, fn: () => Promise<T>) => step.run(name, fn) as Promise<T>,
         },
-        deps,
-      ),
+        logger: toJobLogger(client.logger),
+        jobId: event.id,
+        attempt,
+        ...(typeof requestId !== 'string' ? {} : { requestId }),
+      };
+      try {
+        return await runDemoJob(ctx, deps);
+      } catch (error) {
+        // Telemetry hook: the report carries correlation only, never the payload (EF-4).
+        deps.reportError?.({
+          job: DEMO_JOB_NAME,
+          ...(ctx.jobId === undefined ? {} : { jobId: ctx.jobId }),
+          ...(ctx.attempt === undefined ? {} : { attempt: ctx.attempt }),
+          ...(ctx.requestId === undefined ? {} : { requestId: ctx.requestId }),
+          error,
+        });
+        throw error;
+      }
+    },
   );
 }
