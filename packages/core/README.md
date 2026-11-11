@@ -10,6 +10,10 @@ Primitives partagées par tout le monorepo, sans dépendance applicative.
 - `systemClock` : horloge système.
 - `setClock(c)` : remplace l'horloge (tests).
 
+- `AppError(code, detail, extra?)` : erreur typée portant un `code` stable, et facultativement `status`, `requestId`, `errors` ; un code reçu de l'API est conservé tel quel.
+- `ERROR_CATALOG`, `ErrorCode` : catalogue minimal des codes (statut HTTP, titre), complété par SPEC-201.
+- `isAppError(value)` : garde de type.
+
 `src/clock.ts` est le seul fichier autorisé à appeler `Date.now()` ou `new Date()` sans argument (ADR-0047).
 
 ```ts
