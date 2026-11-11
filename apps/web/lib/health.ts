@@ -1,5 +1,5 @@
 // Health of the web process and of its database (SPEC-006, EF-1/EF-2, ET-1).
-import { HealthResponse, type DatabaseStatus } from '@learny/contracts';
+import { HealthResponse, type ComponentStatus, type DatabaseStatus } from '@learny/contracts';
 
 /**
  * Capability given to the probe: run one trivial query (e.g. `select 1`).
@@ -73,12 +73,25 @@ export function buildInfo(env: Record<string, string | undefined> = process.env)
 export async function getHealth(options: HealthOptions = {}): Promise<HealthResult> {
   const query = options.query === undefined ? registeredQuery : options.query;
   const database = await probeDatabase(query, options.timeoutMs);
+  const build = buildInfo(options.env);
   const body = HealthResponse.parse({
     status: database === 'ok' ? 'ok' : 'degraded',
-    ...buildInfo(options.env),
+    ...build,
     database,
+    components: {
+      database,
+      build: buildStatus(build),
+    },
   });
   return { httpStatus: database === 'unavailable' ? 503 : 200, body };
+}
+
+/**
+ * Build component state (EF-5): the deployment identifiers are `not_configured` when they fall
+ * back to their safe defaults, `ok` otherwise. No build probe can be `unavailable`.
+ */
+export function buildStatus(build: { version: string; commit: string }): ComponentStatus {
+  return build.version === 'dev' || build.commit === 'unknown' ? 'not_configured' : 'ok';
 }
 
 export const HEALTH_HEADERS = {

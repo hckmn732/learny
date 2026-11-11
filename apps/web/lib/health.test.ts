@@ -21,7 +21,13 @@ describe('[SPEC-006] health', () => {
     const result = await getHealth({ query: healthy, env: {} });
     expect(result).toEqual({
       httpStatus: 200,
-      body: { status: 'ok', version: 'dev', commit: 'unknown', database: 'ok' },
+      body: {
+        status: 'ok',
+        version: 'dev',
+        commit: 'unknown',
+        database: 'ok',
+        components: { database: 'ok', build: 'not_configured' },
+      },
     });
   });
 
@@ -63,22 +69,37 @@ describe('[SPEC-006] health', () => {
 
   it('exposes only the public fields, without any secret or connection detail', async () => {
     const { body } = await getHealth({ query: refused, env: {} });
-    expect(Object.keys(body).sort()).toEqual(['commit', 'database', 'status', 'version']);
+    expect(Object.keys(body).sort()).toEqual([
+      'commit',
+      'components',
+      'database',
+      'status',
+      'version',
+    ]);
     const json = JSON.stringify(body);
     expect(json).not.toMatch(/postgres|ECONNREFUSED|db\.internal|learny-test-only|5432/);
     expect(scanText(json, 'health')).toEqual([]);
   });
 
-  it('validates the contract: four required fields, extra fields allowed', () => {
-    const valid = { status: 'ok', version: 'dev', commit: 'unknown', database: 'ok' };
+  it('validates the contract: five required fields, extra fields allowed', () => {
+    const valid = {
+      status: 'ok',
+      version: 'dev',
+      commit: 'unknown',
+      database: 'ok',
+      components: { database: 'ok', build: 'ok' },
+    };
     expect(HealthResponse.safeParse({ ...valid, uptime: 3 }).success).toBe(true);
-    for (const field of ['status', 'version', 'commit', 'database'] as const) {
-      const rest: Record<string, string> = { ...valid };
+    for (const field of ['status', 'version', 'commit', 'database', 'components'] as const) {
+      const rest: Record<string, unknown> = { ...valid };
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete rest[field];
       expect(HealthResponse.safeParse(rest).success, field).toBe(false);
     }
     expect(HealthResponse.safeParse({ ...valid, database: 'down' }).success).toBe(false);
+    expect(
+      HealthResponse.safeParse({ ...valid, components: { database: 'ok', build: 'down' } }).success,
+    ).toBe(false);
   });
 
   it('keeps every declared hosting region in the EU (BR-PLA-04)', () => {
