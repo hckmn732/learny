@@ -8,6 +8,7 @@
     "pnpm": ">=10 <11"
   },
   "scripts": {
+    "prepare": "husky",
     "dev": "turbo run dev --filter=@learny/web",
     "build": "turbo run build",
     "lint": "turbo run lint && pnpm run lint:root",
@@ -21,6 +22,10 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/lint": "^21.2.4",
+    "@commitlint/load": "^21.2.4",
     "@eslint/js": "^9.39.5",
     "@next/eslint-plugin-next": "^16.4.6",
     "@playwright/test": "^1.65.0",
@@ -30,8 +35,11 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "husky": "^9.1.7",
     "jsdom": "^31.0.0",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.10.0",
+    "tsx": "^4.23.15",
     "turbo": "^2.11.11",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",

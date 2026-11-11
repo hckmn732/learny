@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/lint": "^21.2.4",
     "@learny/config": "workspace:*",
     "@learny/core": "workspace:*",
     "next": "^16.4.6",
