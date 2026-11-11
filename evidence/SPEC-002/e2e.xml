@@ -1,0 +1,48 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="2.376183">
+<testsuite name="p0/spec-002.spec.ts" timestamp="2026-11-11T19:20:20.095Z" hostname="desktop" tests="4" failures="0" skipped="0" time="1.122" errors="0">
+<testcase name="vérifie des messages de commit @SPEC-002" classname="p0/spec-002.spec.ts" time="0.432">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-002-vérifie-des-messages-de-commit-SPEC-002-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-vérifie-des-messages-de-commit-SPEC-002-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-vérifie-des-messages-de-commit-SPEC-002-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="détecte un secret @SPEC-002" classname="p0/spec-002.spec.ts" time="0.274">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-002-détecte-un-secret-SPEC-002-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-détecte-un-secret-SPEC-002-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-détecte-un-secret-SPEC-002-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="pages SDD désactivées en production @SPEC-002" classname="p0/spec-002.spec.ts" time="0.099">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-002-pages-SDD-désactivées-en-production-SPEC-002-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-pages-SDD-désactivées-en-production-SPEC-002-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-pages-SDD-désactivées-en-production-SPEC-002-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration SPEC-002 conforme @SPEC-002 @visual" classname="p0/spec-002.spec.ts" time="0.317">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-002-démonstration-SPEC-002-conforme-SPEC-002-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-démonstration-SPEC-002-conforme-SPEC-002-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-002-démonstration-SPEC-002-conforme-SPEC-002-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
