@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Paramètres</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside data-sidebar style="flex: 1 1 248px; box-sizing: border-box; background: #111113; color: #F4F4F1; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<a href="Main.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; white-space: nowrap"><span aria-hidden="true" style="flex: 0 0 30px; height: 30px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span><span style="overflow: hidden; text-overflow: ellipsis">Learny</span></a>
+<button type="button" data-action="toggle-sidebar" aria-label="Masquer le menu" aria-expanded="true" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m16 10-2 2 2 2"></path></svg></button>
+</div>
+<nav aria-label="Navigation principale" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Agenda</a>
+</nav>
+<div aria-hidden="true" style="height: 1px; margin: 0 6px; background: #26262B"></div>
+<section aria-labelledby="t-formation-en-cours" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 8px; border-radius: 18px; background: #18181B; border: 1px solid #26262B">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<h2 id="t-formation-en-cours" style="margin: 0; font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Formation en cours</h2>
+<button type="button" aria-label="Changer de formation" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 13px; background: #232328">
+<span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700">SAP</span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.25">SAP S/4HANA Finance</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: 1; height: 4px; border-radius: 2px; background: #3A3A40"><span style="display: block; width: 38%; height: 4px; border-radius: 2px; background: #C6F432"></span></span><span style="font-size: 11px; font-weight: 600; color: #D4D4D8">38 %</span></span>
+<span style="font-size: 11px; color: #A1A1AA">Module 3 sur 7</span>
+</span>
+</div>
+<nav aria-label="Formation en cours" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Programme.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg>Programme</a>
+<a href="Carte.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><circle cx="9" cy="18" r="2.5"></circle><path d="M8.4 6.4 15.5 7.6M6.6 8.4l1.7 7.2M16.4 10l-5.6 6.3"></path></svg>Carte des notions</a>
+<a href="QuizGlobal.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg>Quiz global<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">14</span></a>
+<a href="Lacunes.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>Mes lacunes<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #3A2A20; color: #FDBA74; font-size: 12px; font-weight: 700">4</span></a>
+</nav>
+</section>
+<div style="margin-top: auto; background: #1C1C20; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Série</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #FFFFFF">12 jours</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span>
+</div>
+<p style="margin: 0; font-size: 11px; color: #A1A1AA">Régularité sur les 14 derniers jours</p>
+</div>
+</aside>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 28px 40px 56px">
+<header style="position: sticky; top: 0; z-index: 30; margin: -28px -40px 24px; padding: 12px 40px; background: rgba(244, 244, 241, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #E7E6E1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" data-action="toggle-sidebar" data-show-when="collapsed" aria-label="Afficher le menu" aria-expanded="false" style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m14 10 2 2-2 2"></path></svg></button>
+<div role="search" style="position: relative; flex: 1 1 320px; max-width: 520px">
+<label for="recherche-globale" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Rechercher</label>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 14px; top: 12px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-globale" type="search" placeholder="Rechercher une notion, un cours, une formation…" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</div>
+<div style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px">
+<button type="button" data-popover-toggle="notifications" aria-controls="panneau-notifications" aria-expanded="false" aria-label="Notifications, 3 non lues" style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span data-notif-dot aria-hidden="true" style="position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #F97316; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; transform: translate(50%, -50%)">3</span></button>
+<button type="button" data-popover-toggle="compte" aria-haspopup="menu" aria-controls="menu-compte" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 4px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; color: #111113; cursor: pointer"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="font-size: 14px; font-weight: 600">Mon compte</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+<section id="panneau-notifications" data-popover="notifications" hidden aria-labelledby="t-notifications" style="position: absolute; right: 0; top: 54px; width: 400px; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 20px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 18px 48px rgba(17, 17, 19, 0.16); display: flex; flex-direction: column; z-index: 40">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px">
+<h2 id="t-notifications" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Notifications</h2>
+<button type="button" data-action="notif-read-all" style="min-height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tout marquer comme lu</button>
+</div>
+<div role="group" aria-label="Filtrer les notifications" style="display: flex; gap: 4px; margin: 0 16px 8px; padding: 4px; border-radius: 12px; background: #F4F4F1">
+<button type="button" data-notif-filter="toutes" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Toutes <span data-count="toutes" style="font-size: 12px; font-weight: 700">8</span></button>
+<button type="button" data-notif-filter="non-lues" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Non lues <span data-count="non-lues" style="font-size: 12px; font-weight: 700">3</span></button>
+</div>
+<div style="max-height: min(420px, calc(100vh - 200px)); overflow-y: auto; padding: 0 6px 6px">
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Aujourd'hui</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Quiz.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz de validation à 14:00</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">13:20</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Cours.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #E1F4EF; color: #0B5C4D; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5M9 7h6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Votre cours est prêt</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">11:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Une séance à replacer</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30. Votre accord est demandé.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="QuizGlobal.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #EEF8CF; color: #3F5A00; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz global du jour</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">14 notions à revoir, lacunes en priorité. Prévu à 17:00, environ 10 min.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Hier</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Lacunes.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Nouvelle lacune repérée</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">16:42</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Clé de comptabilisation : confondue avec le type de pièce, deux fois.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Agenda.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F0E9FE; color: #5B21B6; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Session demain à 17:30</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">18:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Rétrospectives · apports du chapitre 2. Pensez à préparer vos notes.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Gestion de projet agile</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Plus tôt</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Programme.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Module 2 validé · 91 %</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">lun. 9 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Le module 3 · Comptabilité générale est débloqué.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; color: #3F3F46; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Bilan de la semaine</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">dim. 8 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">13 h d'étude, 86 % retenu à 1 mois, 3 notions à risque d'oubli.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<p data-notif-empty hidden style="margin: 0; padding: 28px 16px; text-align: center; font-size: 14px; color: #62626B">Vous avez tout lu. Les prochains rappels arriveront ici.</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #EEEDE8; font-size: 13px">
+<span style="color: #62626B">Rappels aussi envoyés par e-mail</span>
+<a href="Parametres.dc.html#notifications" style="font-weight: 600">Gérer les notifications</a>
+</div>
+</section>
+<div id="menu-compte" data-popover="compte" hidden role="menu" aria-label="Mon compte" style="position: absolute; right: 0; top: 54px; width: 260px; padding: 8px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.14); display: flex; flex-direction: column; gap: 2px; z-index: 40">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid #EEEDE8"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Apprenant</span><span style="font-size: 12px; color: #62626B">3 formations en cours</span></span></div>
+<a role="menuitem" href="Parametres.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Paramètres</a>
+<a role="menuitem" href="Parametres.dc.html#automatismes" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>Mettre en pause</a>
+<a role="menuitem" href="Inscription.dc.html?connexion" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H4"></path></svg>Se déconnecter</a>
+</div>
+</div>
+</header>
+<div style="max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p style="margin: 0; font-size: 14px; color: #62626B">Paramètres</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">{{tabTitle}}</h1>
+</div>
+<div role="tablist" aria-label="Rubriques des paramètres" style="display: inline-flex; padding: 4px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E7E6E1; gap: 4px">
+<sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+<button type="button" role="tab" id="{{tb.id}}" aria-selected="{{tb.selected}}" aria-controls="panneau-parametres" tabindex="{{tb.tabindex}}" onClick="{{tb.pick}}" onKeyDown="{{tb.key}}" style="{{tb.style}}">{{tb.label}}</button>
+</sc-for>
+</div>
+</div>
+<div id="panneau-parametres" role="tabpanel" aria-labelledby="{{tabId}}" style="display: flex; flex-direction: column; gap: 24px">
+<sc-if value="{{isModeles}}" hint-placeholder-val="{{ true }}">
+<section aria-label="Principe" style="background: #111113; color: #FFFFFF; border-radius: 24px; padding: 24px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+<p style="flex: 1 1 420px; margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.3">Claude est utilisé par défaut. Remplacez-le, tâche par tâche, par le modèle de votre choix avec votre propre clé.</p>
+<ul style="flex: 1 1 320px; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #D4D4D8">
+<li style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 7px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Vos clés sont chiffrées et ne reviennent jamais au navigateur</li>
+<li style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 7px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Chaque modèle est testé avant d'être activé</li>
+<li style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="width: 22px; height: 22px; border-radius: 7px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Révisions, lacunes et planning ne dépendent d'aucun modèle</li>
+</ul>
+</section>
+<section aria-labelledby="t-taches" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 10px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 id="t-taches" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Modèle par tâche</h2>
+<p style="margin: 0; font-size: 14px; color: #62626B">Seuls les modèles qualifiés pour la tâche sont proposés.</p>
+</div>
+<button type="button" onClick="{{resetAll}}" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Revenir aux modèles par défaut</button>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{tasks}}" as="t" hint-placeholder-count="5">
+<li style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 14px 16px; border-radius: 18px; background: #F8F8F6">
+<span style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px">
+<label for="{{t.id}}" style="font-size: 15px; font-weight: 700">{{t.label}}</label>
+<span style="font-size: 13px; color: #62626B">Exige : {{t.caps}}</span>
+<sc-if value="{{t.hasNote}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #3A3AA8; font-weight: 600">{{t.note}}</span></sc-if>
+</span>
+<select id="{{t.id}}" value="{{t.value}}" onChange="{{t.set}}" style="flex: 0 1 300px; min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; color: #111113">
+<option value="opus">Claude Opus</option>
+<option value="sonnet">Claude Sonnet</option>
+<option value="haiku">Claude Haiku</option>
+<option value="openai">OpenAI · ma clé</option>
+<option value="deepseek" disabled>DeepSeek · ma clé (non qualifié)</option>
+</select>
+<span style="display: flex; flex-wrap: wrap; gap: 6px; min-width: 150px">
+<span style="{{t.pillStyle}}">{{t.pill}}</span>
+<sc-if value="{{t.outsideEu}}" hint-placeholder-val="{{ false }}"><span style="padding: 4px 10px; border-radius: 999px; background: #FFEDE0; color: #8F3305; font-size: 12px; font-weight: 700">Hors UE</span></sc-if>
+</span>
+</li>
+</sc-for>
+</ul>
+</section>
+<section aria-labelledby="t-fournisseurs" style="display: flex; flex-direction: column; gap: 12px">
+<h2 id="t-fournisseurs" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Mes fournisseurs</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<article style="flex: 1 1 260px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><h3 style="margin: 0; font-size: 17px; font-weight: 700">Anthropic · Claude</h3><span style="padding: 4px 10px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">Par défaut</span></div>
+<p style="margin: 0; font-size: 14px; color: #62626B">Fourni par la plateforme. Aucune clé à renseigner.</p>
+<p style="margin: 0; font-size: 13px; color: #62626B">Opus, Sonnet, Haiku · recherche web et citations intégrées</p>
+</article>
+<article style="flex: 1 1 260px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><h3 style="margin: 0; font-size: 17px; font-weight: 700">OpenAI</h3><span style="padding: 4px 10px; border-radius: 999px; background: #E1F4EF; color: #0B5C4D; font-size: 12px; font-weight: 700">Qualifié</span></div>
+<p style="margin: 0; font-size: 14px; color: #62626B">Votre clé · <span style="font-family: ui-monospace, monospace; color: #111113">sk-••••••••a91F</span></p>
+<p style="margin: 0; padding: 8px 10px; border-radius: 10px; background: #FFEDE0; color: #8F3305; font-size: 13px; font-weight: 600">Traite les données hors de l'Union européenne</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tester à nouveau</button><button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 10px; border: 0; background: transparent; color: #8F3305; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Supprimer la clé</button></div>
+</article>
+<article style="flex: 1 1 260px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px"><h3 style="margin: 0; font-size: 17px; font-weight: 700">DeepSeek</h3><span style="padding: 4px 10px; border-radius: 999px; background: #FFEDE0; color: #8F3305; font-size: 12px; font-weight: 700">Non qualifié</span></div>
+<p style="margin: 0; font-size: 14px; color: #62626B">Votre clé · <span style="font-family: ui-monospace, monospace; color: #111113">sk-••••••••77c2</span></p>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: #62626B">Échec du test : sortie non conforme pour la brique « Association ». Le modèle reste désactivé.</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 10px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Relancer le test</button><button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 10px; border: 0; background: transparent; color: #8F3305; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Supprimer la clé</button></div>
+</article>
+<sc-if value="{{formClosed}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{openForm}}" style="flex: 1 1 260px; min-height: 160px; border-radius: 22px; border: 2px dashed #C9C8C1; background: transparent; font-family: inherit; color: #111113; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px"><span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 14px; background: #111113; color: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg></span><span style="font-size: 15px; font-weight: 700">Ajouter un fournisseur</span></button>
+</sc-if>
+</div>
+<sc-if value="{{formOpen}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="t-ajout" style="background: #FFFFFF; border: 1.5px solid #111113; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<h3 id="t-ajout" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Ajouter un fournisseur</h3>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-type" style="font-size: 13px; font-weight: 700">Fournisseur</label>
+<select id="f-type" value="{{prov}}" onChange="{{setProv}}" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113">
+<option value="mistral">Mistral</option>
+<option value="openai">OpenAI</option>
+<option value="deepseek">DeepSeek</option>
+<option value="compat">Service compatible OpenAI</option>
+<option value="local">Modèle local (Ollama, vLLM)</option>
+</select>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-model" style="font-size: 13px; font-weight: 700">Nom du modèle</label>
+<input id="f-model" type="text" placeholder="Tel qu'indiqué par le fournisseur" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113">
+</div>
+<sc-if value="{{needsUrl}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-url" style="font-size: 13px; font-weight: 700">Adresse du point d'accès</label>
+<input id="f-url" type="url" placeholder="https://… ou http://localhost:11434" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113">
+</div>
+</sc-if>
+<sc-if value="{{needsKey}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-key" style="font-size: 13px; font-weight: 700">Clé d'API</label>
+<input id="f-key" type="password" autocomplete="off" placeholder="Collez votre clé" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113">
+</div>
+</sc-if>
+</div>
+<sc-if value="{{tested}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 18px; background: #F8F8F6">
+<p style="margin: 0; font-size: 14px; font-weight: 700">Résultat de la qualification</p>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-size: 14px">
+<li style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; background: #14A38B; display: inline-flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Connexion</li>
+<li style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; background: #14A38B; display: inline-flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Appel d'outils</li>
+<li style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; background: #14A38B; display: inline-flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Sortie au format imposé</li>
+<li style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; background: #14A38B; display: inline-flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Une brique de chaque type</li>
+</ul>
+<p style="{{dataNoteStyle}}">{{dataNote}}</p>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px">
+<button type="button" onClick="{{closeForm}}" style="min-height: 48px; padding: 0 18px; border-radius: 14px; border: 0; background: transparent; color: #62626B; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Annuler</button>
+<sc-if value="{{notTested}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{runTest}}" style="min-height: 48px; padding: 0 20px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Tester et qualifier</button></sc-if>
+<sc-if value="{{tested}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{closeForm}}" style="min-height: 48px; padding: 0 20px; border-radius: 14px; border: 0; background: #C6F432; color: #111113; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Enregistrer le fournisseur</button></sc-if>
+</div>
+</section>
+</sc-if>
+</section>
+</sc-if>
+<sc-if value="{{isProfil}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section aria-labelledby="t-identite" style="flex: 1 1 420px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; gap: 16px">
+<span aria-hidden="true" style="flex: 0 0 64px; height: 64px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">AP</span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-identite" style="margin: 0; font-size: 18px; font-weight: 600">Identité</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Compte créé le 28 octobre 2026 · 3 formations en cours</p>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="p-prenom" style="font-size: 13px; font-weight: 700">Prénom</label><input id="p-prenom" type="text" value="Alex" autocomplete="given-name" style="min-height: 44px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="p-nom" style="font-size: 13px; font-weight: 700">Nom</label><input id="p-nom" type="text" value="Perrin" autocomplete="family-name" style="min-height: 44px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113"></div>
+<div style="display: flex; flex-direction: column; gap: 6px; grid-column: 1 / -1"><label for="p-mail" style="font-size: 13px; font-weight: 700">Adresse e-mail</label><input id="p-mail" type="email" value="apprenant@exemple.fr" autocomplete="email" style="min-height: 44px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113"><span style="font-size: 12px; color: #62626B">Les rappels par e-mail partent à cette adresse.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="p-langue" style="font-size: 13px; font-weight: 700">Langue des cours</label><select id="p-langue" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>Français</option><option>English</option><option>Español</option><option>Deutsch</option></select><span style="font-size: 12px; color: #62626B">Le tuteur rédige dans cette langue, même si vos ressources sont dans une autre.</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="p-ton" style="font-size: 13px; font-weight: 700">Le tuteur vous parle en</label><select id="p-ton" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>Vouvoyant</option><option>Tutoyant</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="p-fuseau" style="font-size: 13px; font-weight: 700">Fuseau horaire</label><select id="p-fuseau" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>Europe/Paris (UTC+1)</option><option>Europe/Londres (UTC)</option><option>Amérique/Montréal (UTC−5)</option></select></div>
+</div>
+</section>
+<section aria-labelledby="t-rythme" style="flex: 1 1 420px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-rythme" style="margin: 0; font-size: 18px; font-weight: 600">Rythme d'apprentissage</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Le tuteur s'en sert pour placer les activités dans l'agenda. Valeur par défaut des nouvelles formations.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span id="l-heures" style="font-size: 13px; font-weight: 700">Temps d'étude par jour</span>
+<div role="group" aria-labelledby="l-heures" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{hoursOpts}}" as="o" hint-placeholder-count="6">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span id="l-jours" style="font-size: 13px; font-weight: 700">Jours d'étude</span>
+<div role="group" aria-labelledby="l-jours" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{daysOpts}}" as="o" hint-placeholder-count="7">
+<button type="button" aria-pressed="{{o.pressed}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span id="l-creneaux" style="font-size: 13px; font-weight: 700">Moments préférés</span>
+<div role="group" aria-labelledby="l-creneaux" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{slotOpts}}" as="o" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<p style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #F4F4F1; font-size: 14px; line-height: 1.5">{{rhythmSummary}}</p>
+</section>
+</div>
+<section aria-labelledby="t-donnees" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-donnees" style="margin: 0; font-size: 18px; font-weight: 600">Données et confidentialité</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Vos apports, cours et résultats restent à vous : exportables à tout moment, supprimés avec le compte.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Exporter mes données</button>
+<button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 0; background: transparent; color: #B42318; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Supprimer mon compte</button>
+</div>
+</section>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px">
+<sc-if value="{{profileSaved}}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size: 14px; font-weight: 600; color: #0B5C4D">Modifications enregistrées</span></sc-if>
+<button type="button" onClick="{{saveProfile}}" style="min-height: 48px; padding: 0 22px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Enregistrer</button>
+</div>
+</sc-if>
+<sc-if value="{{isAuto}}" hint-placeholder-val="{{ false }}">
+<section aria-label="Principe des automatismes" style="background: #111113; color: #FFFFFF; border-radius: 24px; padding: 24px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+<div style="flex: 2 1 380px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.25">Entre deux séances, le tuteur agit pour vous : il rattrape, rappelle et entraîne au bon moment.</p>
+<p style="margin: 0; font-size: 14px; color: #C6F432; font-weight: 600">{{autoSummary}}</p>
+</div>
+<ul style="flex: 1 1 260px; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #D4D4D8">
+<li style="display: flex; gap: 8px"><span aria-hidden="true" style="color: #C6F432">✓</span>Chaque action est expliquée et peut être annulée</li>
+<li style="display: flex; gap: 8px"><span aria-hidden="true" style="color: #C6F432">✓</span>Les grands changements de planning attendent votre accord</li>
+<li style="display: flex; gap: 8px"><span aria-hidden="true" style="color: #C6F432">✓</span>Les heures calmes sont toujours respectées</li>
+</ul>
+</section>
+<sc-for list="{{autoGroups}}" as="grp" hint-placeholder-count="3">
+<section aria-labelledby="{{grp.id}}" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="{{grp.tile}}"></span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="{{grp.id}}" style="margin: 0; font-size: 18px; font-weight: 600">{{grp.title}}</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">{{grp.desc}}</p>
+</div>
+</div>
+<sc-for list="{{grp.items}}" as="a" hint-placeholder-count="3">
+<article style="{{a.rowStyle}}">
+<div style="display: flex; align-items: flex-start; gap: 14px">
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<h3 id="{{a.hid}}" style="margin: 0; font-size: 15px; font-weight: 700">{{a.title}}</h3>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: #3F3F46">{{a.rule}}</p>
+</div>
+<button type="button" role="switch" aria-checked="{{a.checked}}" aria-labelledby="{{a.hid}}" onClick="{{a.toggle}}" style="{{a.track}}"><span style="{{a.knob}}"></span></button>
+</div>
+<sc-if value="{{a.on}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: 12px 20px">
+<sc-for list="{{a.settings}}" as="s" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="{{s.id}}" style="font-size: 12px; font-weight: 700; color: #3F3F46">{{s.label}}</label>
+<select id="{{s.id}}" value="{{s.value}}" onChange="{{s.set}}" data-options="{{s.options}}" style="min-height: 38px; padding: 0 8px; border: 1px solid #DAD9D3; border-radius: 10px; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</select>
+</div>
+</sc-for>
+</div>
+<p style="margin: 0; padding: 8px 12px; border-radius: 10px; background: #F8F8F6; font-size: 12px; line-height: 1.5; color: #3F3F46"><strong>Dernière action :</strong> {{a.last}}</p>
+</sc-if>
+</article>
+</sc-for>
+</section>
+</sc-for>
+<section aria-labelledby="t-pause" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 12px">
+<span aria-hidden="true" style="flex: 0 0 12px; height: 12px; border-radius: 4px; background: #5B5BD6"></span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-pause" style="margin: 0; font-size: 18px; font-weight: 600">Mode pause et retour</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Vacances, rush au travail : le planning est gelé sans casser la série. Au retour, un court diagnostic sur les notions à risque, puis une replanification.</p>
+</div>
+</div>
+<sc-if value="{{notPaused}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 24px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="pause-fin" style="font-size: 12px; font-weight: 700; color: #3F3F46">En pause jusqu'au</label>
+<select id="pause-fin" value="{{pauseUntil}}" onChange="{{setPauseUntil}}" data-options="{{pauseOptions}}" style="min-height: 38px; padding: 0 8px; border: 1px solid #DAD9D3; border-radius: 10px; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</select>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; min-height: 38px">
+<button type="button" role="switch" aria-checked="{{diag.checked}}" aria-labelledby="l-diag" onClick="{{diag.toggle}}" style="{{diag.track}}"><span style="{{diag.knob}}"></span></button>
+<span id="l-diag" style="font-size: 14px; font-weight: 600">Diagnostic au retour</span>
+</div>
+<button type="button" onClick="{{startPause}}" style="margin-left: auto; min-height: 44px; padding: 0 18px; border-radius: 12px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Mettre en pause</button>
+</div>
+</sc-if>
+<sc-if value="{{paused}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 16px; background: #ECECFC; color: #2E2E8F">
+<span style="font-size: 14px; line-height: 1.5"><strong>En pause jusqu'au {{pauseLabel}}</strong> Série gelée à 12 jours, {{pauseMoved}} activités mises de côté. {{pauseDiag}}</span>
+<button type="button" onClick="{{stopPause}}" style="min-height: 40px; padding: 0 16px; border-radius: 12px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Reprendre maintenant</button>
+</div>
+</sc-if>
+</section>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section aria-labelledby="t-garde" style="flex: 1 1 320px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 id="t-garde" style="margin: 0; font-size: 18px; font-weight: 600">Garde-fous</h2>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<label for="garde-notifs" style="font-size: 12px; font-weight: 700; color: #3F3F46">Notifications par jour, au maximum</label>
+<select id="garde-notifs" value="{{maxNotifs}}" onChange="{{setMaxNotifs}}" style="align-self: flex-start; min-height: 38px; padding: 0 8px; border: 1px solid #DAD9D3; border-radius: 10px; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113"><option value="3">3</option><option value="5">5</option><option value="8">8</option></select>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid #EEEDE8">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Grands changements de planning</span><span style="font-size: 12px; color: #62626B">Alléger le programme, décaler la fin</span></span>
+<span style="padding: 3px 10px; border-radius: 999px; background: #F4F4F1; font-size: 12px; font-weight: 700; color: #3F3F46">Toujours sur accord</span>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 12px; border-top: 1px solid #EEEDE8">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Heures calmes</span><span style="font-size: 12px; color: #62626B">21:00 – 08:00</span></span>
+<a href="#notifications" style="font-size: 14px; font-weight: 600">Modifier</a>
+</div>
+</section>
+<section aria-labelledby="t-journal" style="flex: 2 1 420px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-journal" style="margin: 0; font-size: 18px; font-weight: 600">Journal de la semaine</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Ce que les automatismes ont fait, et pourquoi.</p>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+<sc-for list="{{journal}}" as="j" hint-placeholder-count="5">
+<li style="{{j.rowStyle}}">
+<span style="flex: 0 0 74px; font-size: 12px; font-weight: 700; color: #62626B; font-variant-numeric: tabular-nums">{{j.when}}</span>
+<span style="flex: 1 1 auto; font-size: 14px; line-height: 1.45">{{j.text}}</span>
+<sc-if value="{{j.canUndo}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{j.undo}}" style="flex: 0 0 auto; min-height: 32px; padding: 0 12px; border-radius: 10px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Annuler</button></sc-if>
+<sc-if value="{{j.undone}}" hint-placeholder-val="{{ false }}"><span style="flex: 0 0 auto; font-size: 12px; font-weight: 700; color: #8F3305">Annulé</span></sc-if>
+</li>
+</sc-for>
+</ul>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isNotifs}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="t-canaux" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-canaux" style="margin: 0; font-size: 18px; font-weight: 600">Canaux</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Où vous recevez les rappels. Le centre de notifications (la cloche) les garde toujours.</p>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px">
+<sc-for list="{{channels}}" as="n" hint-placeholder-count="3">
+<li style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-radius: 16px; background: #F8F8F6">
+<span style="display: flex; flex-direction: column; gap: 2px"><span id="{{n.id}}" style="font-size: 14px; font-weight: 700">{{n.label}}</span><span style="font-size: 12px; color: #62626B">{{n.desc}}</span></span>
+<button type="button" role="switch" aria-checked="{{n.checked}}" aria-labelledby="{{n.id}}" disabled="{{n.locked}}" onClick="{{n.toggle}}" style="{{n.track}}"><span style="{{n.knob}}"></span></button>
+</li>
+</sc-for>
+</ul>
+</section>
+<section aria-labelledby="t-types" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 8px; margin-bottom: 8px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-types" style="margin: 0; font-size: 18px; font-weight: 600">Ce qui vous est notifié</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Les rappels de mémorisation sont recommandés : ils font le gros du travail contre l'oubli.</p>
+</div>
+<span style="font-size: 13px; font-weight: 600; color: #3F3F46">{{typesSummary}}</span>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+<sc-for list="{{notifTypes}}" as="n" hint-placeholder-count="6">
+<li style="display: flex; align-items: center; gap: 14px; padding: 12px 4px; border-top: 1px solid #EEEDE8">
+<span aria-hidden="true" style="{{n.dot}}"></span>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px"><span id="{{n.id}}" style="font-size: 14px; font-weight: 700">{{n.label}}</span><span style="font-size: 13px; color: #62626B">{{n.desc}}</span></span>
+<sc-if value="{{n.recommended}}" hint-placeholder-val="{{ false }}"><span style="padding: 3px 8px; border-radius: 999px; background: #F1FBD3; color: #3D5200; font-size: 11px; font-weight: 700">Recommandé</span></sc-if>
+<button type="button" role="switch" aria-checked="{{n.checked}}" aria-labelledby="{{n.id}}" onClick="{{n.toggle}}" style="{{n.track}}"><span style="{{n.knob}}"></span></button>
+</li>
+</sc-for>
+</ul>
+</section>
+<section aria-labelledby="t-quand" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="t-quand" style="margin: 0; font-size: 18px; font-weight: 600">Quand</h2>
+<p style="margin: 0; font-size: 13px; color: #62626B">Aucune notification pendant les heures calmes : elles attendent le matin.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="n-recap" style="font-size: 13px; font-weight: 700">Programme du jour envoyé à</label><select id="n-recap" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>07:30</option><option selected>08:00</option><option>08:30</option><option>09:00</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="n-calme-debut" style="font-size: 13px; font-weight: 700">Heures calmes, de</label><select id="n-calme-debut" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>20:00</option><option selected>21:00</option><option>22:00</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="n-calme-fin" style="font-size: 13px; font-weight: 700">à</label><select id="n-calme-fin" style="min-height: 44px; padding: 0 10px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option>07:00</option><option selected>08:00</option><option>09:00</option></select></div>
+<div style="display: flex; align-items: center; gap: 12px; min-height: 44px">
+<button type="button" role="switch" aria-checked="{{weekendQuiet.checked}}" aria-labelledby="l-weekend" onClick="{{weekendQuiet.toggle}}" style="{{weekendQuiet.track}}"><span style="{{weekendQuiet.knob}}"></span></button>
+<span id="l-weekend" style="font-size: 14px; font-weight: 600">Rien le week-end, sauf les révisions dues</span>
+</div>
+</div>
+</section>
+</sc-if>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1350}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    /* « Gérer les notifications », cliqué depuis cette page, change seulement l'adresse. */
+    window.addEventListener('hashchange', () => {
+      const h = window.location.hash.replace('#', '');
+      if (['profil', 'notifications', 'automatismes', 'modeles'].indexOf(h) >= 0) this.setState({ tab: h });
+    });
+  }
+  renderVals() {
+    const st = this.state || {};
+    const defaults = { programme: 'opus', cours: 'opus', lacunes: 'opus', tuteur: 'sonnet', leger: 'haiku' };
+    const sel = st.sel || { programme: 'opus', cours: 'opus', lacunes: 'opus', tuteur: 'openai', leger: 'haiku' };
+    const defs = [
+      { k: 'programme', label: 'Conception du programme', caps: 'appel d’outils, sortie structurée, recherche web' },
+      { k: 'cours', label: 'Rédaction du cours', caps: 'sortie structurée, renvois aux apports' },
+      { k: 'lacunes', label: 'Analyse des lacunes', caps: 'sortie structurée' },
+      { k: 'tuteur', label: 'Tuteur, questions, jeux et correction', caps: 'appel d’outils, sortie structurée' },
+      { k: 'leger', label: 'Tâches légères (classement, découpage)', caps: 'sortie structurée' }
+    ];
+    const notes = { programme: 'Recherche web assurée par l’API de recherche de la plateforme', cours: 'Citations remplacées par des renvois vérifiés aux apports' };
+    const claude = ['opus', 'sonnet', 'haiku'];
+    const pill = 'padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; ';
+    const tasks = defs.map((d) => {
+      const v = sel[d.k];
+      const isDefault = v === defaults[d.k];
+      const isClaude = claude.indexOf(v) !== -1;
+      return {
+        id: 'task-' + d.k, label: d.label, caps: d.caps, value: v,
+        hasNote: !isClaude && !!notes[d.k], note: notes[d.k] || '',
+        outsideEu: v === 'openai',
+        pill: isDefault ? 'Par défaut' : 'Personnalisé',
+        pillStyle: pill + (isDefault ? 'background: #F0EFEA; color: #3F3F46' : 'background: #ECECFC; color: #2E2E8F'),
+        set: (e) => {
+          const cur = Object.assign({}, (this.state && this.state.sel) || sel);
+          cur[d.k] = e.target.value;
+          this.setState({ sel: cur });
+        }
+      };
+    });
+    const prov = st.prov || 'mistral';
+    const tested = !!st.tested;
+    const notesData = {
+      openai: 'Ce fournisseur traite les données hors de l’Union européenne.',
+      deepseek: 'Ce fournisseur traite les données hors de l’Union européenne.',
+      compat: 'Vérifiez où ce service traite les données avant de l’utiliser.',
+      local: 'Les données restent sur votre machine.',
+      mistral: 'Vérifiez la région de traitement proposée par votre offre.'
+    };
+    const warn = prov === 'openai' || prov === 'deepseek';
+    /* Onglets : Profil, Notifications, Modèles d'IA. L'onglet est repris de l'adresse (#notifications). */
+    const TABS = [['profil', 'Profil'], ['notifications', 'Notifications'], ['automatismes', 'Automatismes'], ['modeles', "Modèles d'IA"]];
+    const fromHash = (window.location.hash || '').replace('#', '');
+    const tab = st.tab || (TABS.some((x) => x[0] === fromHash) ? fromHash : 'profil');
+    const goTab = (k) => {
+      this.setState({ tab: k, saved: false });
+      try { history.replaceState(null, '', '#' + k); } catch (err) { /* adresse inchangée */ }
+    };
+    const tabs = TABS.map((x, i) => ({
+      id: 'onglet-' + x[0],
+      label: x[1],
+      selected: tab === x[0] ? 'true' : 'false',
+      tabindex: tab === x[0] ? '0' : '-1',
+      pick: () => goTab(x[0]),
+      key: (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = TABS[(i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length][0];
+        goTab(next);
+        setTimeout(() => { const b = document.getElementById('onglet-' + next); if (b) b.focus(); }, 0);
+      },
+      style: 'min-height: 40px; padding: 0 14px; border-radius: 10px; border: 0; font-family: inherit; font-size: 14px; cursor: pointer; ' + (tab === x[0] ? 'background: #111113; color: #FFFFFF; font-weight: 600' : 'background: transparent; color: #62626B; font-weight: 500')
+    }));
+
+    /* Profil : rythme d'apprentissage. */
+    const chip = (on) => 'min-height: 40px; min-width: 44px; padding: 0 14px; border-radius: 12px; font-family: inherit; font-size: 14px; cursor: pointer; ' + (on ? 'border: 1px solid #111113; background: #111113; color: #FFFFFF; font-weight: 700' : 'border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-weight: 500');
+    const hoursPerDay = st.hours || 5;
+    const studyDays = st.days || [true, true, true, true, true, false, false];
+    const slots = st.slots || { matin: true, apres: true, soir: false };
+    const hoursOpts = [1, 2, 3, 4, 5, 6].map((h) => ({ label: h + ' h', pressed: h === hoursPerDay ? 'true' : 'false', pick: () => this.setState({ hours: h, saved: false }), style: chip(h === hoursPerDay) }));
+    const DAYS_L = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    const DAYS_A = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const daysOpts = DAYS_L.map((l, i) => ({
+      label: l, aria: DAYS_A[i], pressed: studyDays[i] ? 'true' : 'false', style: chip(studyDays[i]),
+      pick: () => { const d = studyDays.slice(); d[i] = !d[i]; if (d.some(Boolean)) this.setState({ days: d, saved: false }); }
+    }));
+    const SLOTS = [['matin', 'Matin'], ['apres', 'Après-midi'], ['soir', 'Soir']];
+    const slotOpts = SLOTS.map((x) => ({
+      label: x[1], pressed: slots[x[0]] ? 'true' : 'false', style: chip(slots[x[0]]),
+      pick: () => { const s2 = Object.assign({}, slots); s2[x[0]] = !s2[x[0]]; if (Object.keys(s2).some((k) => s2[k])) this.setState({ slots: s2, saved: false }); }
+    }));
+    const nDays = studyDays.filter(Boolean).length;
+    const slotNames = SLOTS.filter((x) => slots[x[0]]).map((x) => x[1].toLowerCase());
+    const rhythmSummary = hoursPerDay + ' h par jour, ' + nDays + ' jour' + (nDays > 1 ? 's' : '') + ' sur 7, plutôt ' + slotNames.join(' et ') + ' : ' + (hoursPerDay * nDays) + ' h par semaine.';
+
+    /* Notifications : interrupteurs. */
+    const sw = (on, locked) => ({
+      track: 'flex: 0 0 auto; width: 46px; height: 28px; padding: 3px; box-sizing: border-box; border-radius: 999px; border: 0; display: inline-flex; align-items: center; justify-content: ' + (on ? 'flex-end' : 'flex-start') + '; background: ' + (on ? '#111113' : '#DAD9D3') + '; cursor: ' + (locked ? 'default' : 'pointer') + (locked ? '; opacity: 0.55' : ''),
+      knob: 'width: 22px; height: 22px; border-radius: 50%; background: ' + (on ? '#C6F432' : '#FFFFFF') + '; box-shadow: 0 1px 2px rgba(17, 17, 19, 0.2)'
+    });
+    const ch = st.ch || { app: true, mail: true, nav: true };
+    const channels = [
+      ['app', "Dans l'application", 'La cloche, en haut de chaque écran', true],
+      ['mail', 'E-mail', 'apprenant@exemple.fr', false],
+      ['nav', 'Navigateur', 'Même application fermée', false]
+    ].map((x) => Object.assign({ id: 'canal-' + x[0], label: x[1], desc: x[2], checked: ch[x[0]] ? 'true' : 'false', locked: x[3], toggle: () => { if (!x[3]) { const c = Object.assign({}, ch); c[x[0]] = !c[x[0]]; this.setState({ ch: c }); } } }, sw(ch[x[0]], x[3])));
+    const nt = st.nt || { revision: true, validation: true, cours: true, lacune: true, planning: true, relance: true };
+    const TYPES = [
+      ['revision', 'Révisions et quiz global', "Les notions dues du jour, à l'heure prévue", '#5B21B6', true],
+      ['validation', 'Quiz de validation à venir', 'Un rappel 40 min avant chaque quiz', '#F97316', false],
+      ['cours', 'Cours prêt à relire', 'Quand le tuteur a fini de rédiger un chapitre', '#0F9F7F', false],
+      ['lacune', 'Nouvelle lacune repérée', 'Avec la notion concernée et ce que le tuteur propose', '#C2410C', false],
+      ['planning', 'Planning réajusté', 'Quand une marge est utilisée ou que le tuteur propose des options', '#5B5BD6', false],
+      ['relance', "Relance après une pause", 'Progressive et discrète, au bout de 2 jours sans activité', '#62626B', false]
+    ];
+    const notifTypes = TYPES.map((x) => Object.assign({
+      id: 'type-' + x[0], label: x[1], desc: x[2], recommended: x[4],
+      dot: 'flex: 0 0 10px; height: 10px; border-radius: 50%; background: ' + x[3],
+      checked: nt[x[0]] ? 'true' : 'false',
+      toggle: () => { const n = Object.assign({}, nt); n[x[0]] = !n[x[0]]; this.setState({ nt: n }); }
+    }, sw(nt[x[0]], false)));
+    const activeTypes = TYPES.filter((x) => nt[x[0]]).length;
+    const weekendOn = st.weekend !== undefined ? st.weekend : true;
+    const weekendQuiet = Object.assign({ checked: weekendOn ? 'true' : 'false', toggle: () => this.setState({ weekend: !weekendOn }) }, sw(weekendOn, false));
+    /* Automatismes : actions du tuteur entre les séances, chacune réglable. */
+    const opt = (pairs) => pairs.map((p) => ({ value: p[0], label: p[1] }));
+    const AUTOS = [
+      { g: 'decrochage', k: 'reprise', title: 'Reprise après décrochage', rule: 'Une séance manquée est replacée dans une marge. Après quelques jours sans activité, le tuteur propose une reprise de 5 minutes, puis d’alléger le programme ou de décaler la fin.',
+        settings: [['reprise-jours', 'Proposer une reprise après', '2', opt([['1', '1 jour'], ['2', '2 jours'], ['3', '3 jours']])], ['reprise-alleger', 'Proposer d’alléger après', '5', opt([['4', '4 jours'], ['5', '5 jours'], ['7', '7 jours']])], ['reprise-mode', 'Replacer les séances manquées', 'accord', opt([['auto', 'Automatiquement'], ['accord', 'Après mon accord']])]],
+        last: 'mardi 21:00, « Ledgers parallèles » non terminé : reprise placée jeudi 10:30.' },
+      { g: 'decrochage', k: 'micro', title: 'Micro-séance de secours', rule: 'Si la séance du jour n’est pas faite le soir, une version courte est proposée (cartes de rappel et une question) pour garder le rythme et la série.',
+        settings: [['micro-heure', 'Proposée à', '20', opt([['19', '19:00'], ['20', '20:00'], ['21', '21:00']])], ['micro-duree', 'Durée', '5', opt([['3', '3 min'], ['5', '5 min'], ['10', '10 min']])]],
+        last: 'lundi 20:00, micro-séance de 5 min faite : série conservée.' },
+      { g: 'decrochage', k: 'bilan', title: 'Bilan de la semaine et replanification', rule: 'Une fois par semaine : progression, mémorisation, notions à risque et plan de la semaine suivante. Le tuteur demande si vos disponibilités changent.',
+        settings: [['bilan-jour', 'Jour', 'dim', opt([['ven', 'Vendredi'], ['sam', 'Samedi'], ['dim', 'Dimanche']])], ['bilan-heure', 'Heure', '19', opt([['18', '18:00'], ['19', '19:00'], ['20', '20:00']])], ['bilan-canal', 'Canal', 'app', opt([['app', 'Application'], ['mail', 'Application et e-mail']])]],
+        last: 'dimanche 8 nov., 13 h d’étude, 86 % retenu à 1 mois, 3 notions à risque.' },
+      { g: 'memoire', k: 'echauffement', title: 'Échauffement de début de séance', rule: 'Chaque séance commence par quelques questions sur les notions de la veille et les prérequis du chapitre : on se rappelle avant de lire.',
+        settings: [['echauf-nb', 'Nombre de questions', '3', opt([['2', '2'], ['3', '3'], ['5', '5']])], ['echauf-portee', 'Porte sur', 'veille-prerequis', opt([['veille-prerequis', 'La veille et les prérequis'], ['veille', 'La veille seulement']])]],
+        last: 'ce matin, 3 questions : clé de comptabilisation, plan comptable, date comptable.' },
+      { g: 'memoire', k: 'cartes', title: 'Vos questions deviennent des cartes', rule: 'Une question posée au tuteur devient une carte de rappel, révisée à intervalles espacés avec les autres.',
+        settings: [['cartes-mode', 'Création', 'confirm', opt([['confirm', 'Avec ma confirmation'], ['auto', 'Automatique']])]],
+        last: 'aujourd’hui, « Pourquoi deux dates sur une pièce ? » : carte proposée.' },
+      { g: 'memoire', k: 'plafond', title: 'Quiz global plafonné et lissé', rule: 'Quand trop de notions sont dues le même jour, la révision est étalée sur les jours suivants, lacunes en tête, pour que la charge reste tenable.',
+        settings: [['plafond-duree', 'Durée maximale par jour', '15', opt([['10', '10 min'], ['15', '15 min'], ['20', '20 min'], ['30', '30 min']])], ['plafond-cible', 'Taux de mémorisation visé', '90', opt([['85', '85 %'], ['90', '90 %'], ['95', '95 % (plus de révisions)']])]],
+        last: 'aujourd’hui, 18 notions dues : 4 reportées à jeudi pour tenir en 15 min.' },
+      { g: 'quiz', k: 'remediation', title: 'Remédiation après un quiz raté', rule: 'Sous le seuil, une remédiation ciblée sur les lacunes est préparée et la tentative suivante est planifiée après un délai, pour éviter de répondre au hasard.',
+        settings: [['remed-delai', 'Délai avant la tentative suivante', '24', opt([['0', 'Aucun'], ['12', '12 h'], ['24', '24 h'], ['48', '48 h']])], ['remed-mode', 'Remédiation', 'conseillee', opt([['conseillee', 'Conseillée'], ['obligatoire', 'Obligatoire']])]],
+        last: 'mardi, tentative 1 à 58 % : remédiation de 15 min prête, tentative 2 mercredi 14:00.' },
+      { g: 'quiz', k: 'jeux', title: 'Jeu choisi selon la lacune', rule: 'Confusion : un jeu d’association ou de classement oppose les deux notions. Oubli : cartes de rappel. Difficulté d’application : un exercice.',
+        settings: [['jeux-pref', 'Préférence', 'varier', opt([['varier', 'Varier les jeux'], ['cartes', 'Plutôt des cartes de rappel'], ['association', 'Plutôt association et classement']])]],
+        last: 'hier, association « clé de comptabilisation / type de pièce » ajoutée au quiz global.' },
+      { g: 'quiz', k: 'sprint', title: 'Sprint avant un jalon', rule: 'Avant un quiz de validation ou un examen blanc, des révisions courtes sont ajoutées sur les notions les plus faibles du module.',
+        settings: [['sprint-jours', 'Commencer', '3', opt([['2', '2 jours avant'], ['3', '3 jours avant'], ['5', '5 jours avant']])]],
+        last: 'prévu mardi 17 et jeudi 19 nov., avant le quiz du module 4.' }
+    ];
+    const GROUPS = [
+      ['decrochage', 'Contre le décrochage', 'Garder le fil, même les semaines difficiles.', '#F97316'],
+      ['memoire', 'Mémorisation', 'Se rappeler au bon moment, sans surcharge.', '#0F9F7F'],
+      ['quiz', 'Quiz et jeux', 'S’entraîner là où c’est utile.', '#5B5BD6']
+    ];
+    const autoOn = st.auto || {};
+    const autoVals = st.autoVals || {};
+    const autoGroups = GROUPS.map((g) => ({
+      id: 'auto-' + g[0], title: g[1], desc: g[2],
+      tile: 'flex: 0 0 12px; height: 12px; border-radius: 4px; background: ' + g[3],
+      items: AUTOS.filter((a) => a.g === g[0]).map((a) => {
+        const on = autoOn[a.k] !== false;
+        return Object.assign({
+          hid: 'auto-titre-' + a.k, title: a.title, rule: a.rule, last: a.last, on: on,
+          checked: on ? 'true' : 'false',
+          toggle: () => { const n = Object.assign({}, autoOn); n[a.k] = !on; this.setState({ auto: n }); },
+          rowStyle: 'display: flex; flex-direction: column; gap: 12px; padding: 16px 0 4px; border-top: 1px solid #EEEDE8; ' + (on ? '' : 'opacity: 0.6'),
+          settings: a.settings.map((s) => ({
+            id: s[0], label: s[1], options: s[3],
+            value: autoVals[s[0]] || s[2],
+            set: (e) => { const v = Object.assign({}, autoVals); v[s[0]] = e.target.value; this.setState({ autoVals: v }); }
+          }))
+        }, sw(on, false));
+      })
+    }));
+    const activeAutos = AUTOS.filter((a) => autoOn[a.k] !== false).length;
+    const JOURNAL = [
+      ['j1', 'Lun. 20:00', 'Micro-séance de 5 min proposée et faite : série conservée.', false],
+      ['j2', 'Mar. 17:05', 'Quiz à 58 % : remédiation de 15 min préparée, tentative 2 placée mercredi 14:00.', true],
+      ['j3', 'Mar. 21:00', '« Ledgers parallèles » non terminé : reprise placée jeudi 10:30, dans une marge.', true],
+      ['j4', 'Mer. 08:00', 'Quiz global lissé : 4 notions reportées à jeudi pour tenir en 15 min.', true],
+      ['j5', 'Mer. 08:00', 'Lacune « équilibre d’une pièce » : exercice pratique placé jeudi 9:00.', true]
+    ];
+    const undone = st.undone || {};
+    const journal = JOURNAL.map((j) => ({
+      when: j[1], text: j[2], canUndo: j[3] && !undone[j[0]], undone: !!undone[j[0]],
+      undo: () => { const u = Object.assign({}, undone); u[j[0]] = true; this.setState({ undone: u }); },
+      rowStyle: 'display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #EEEDE8; ' + (undone[j[0]] ? 'opacity: 0.55' : '')
+    }));
+    const PAUSES = [['2026-11-15', 'dimanche 15 nov.', 7], ['2026-11-22', 'dimanche 22 nov.', 19], ['2026-11-29', 'dimanche 29 nov.', 31]];
+    const pauseUntil = st.pauseUntil || '2026-11-22';
+    const pauseInfo = PAUSES.find((p) => p[0] === pauseUntil) || PAUSES[1];
+    const diagOn = st.diag !== false;
+    const diag = Object.assign({ checked: diagOn ? 'true' : 'false', toggle: () => this.setState({ diag: !diagOn }) }, sw(diagOn, false));
+    return {
+      tabs: tabs, tabId: 'onglet-' + tab,
+      tabTitle: TABS.find((x) => x[0] === tab)[1],
+      isProfil: tab === 'profil', isNotifs: tab === 'notifications', isModeles: tab === 'modeles', isAuto: tab === 'automatismes',
+      autoGroups: autoGroups, journal: journal, diag: diag,
+      autoSummary: (st.paused ? 'En pause · ' : '') + activeAutos + ' automatismes actifs sur ' + AUTOS.length + ' · ' + JOURNAL.filter((j) => !undone[j[0]]).length + ' actions cette semaine',
+      maxNotifs: st.maxNotifs || '5', setMaxNotifs: (e) => this.setState({ maxNotifs: e.target.value }),
+      pauseOptions: PAUSES.map((x) => ({ value: x[0], label: x[1] })), pauseUntil: pauseUntil,
+      setPauseUntil: (e) => this.setState({ pauseUntil: e.target.value }),
+      paused: !!st.paused, notPaused: !st.paused,
+      pauseLabel: pauseInfo[1], pauseMoved: String(pauseInfo[2]),
+      pauseDiag: diagOn ? 'Au retour : diagnostic de 10 min sur les notions à risque, puis nouveau planning.' : 'Au retour : nouveau planning.',
+      startPause: () => this.setState({ paused: true }), stopPause: () => this.setState({ paused: false }),
+      hoursOpts: hoursOpts, daysOpts: daysOpts, slotOpts: slotOpts, rhythmSummary: rhythmSummary,
+      profileSaved: !!st.saved, saveProfile: () => this.setState({ saved: true }),
+      channels: channels, notifTypes: notifTypes, weekendQuiet: weekendQuiet,
+      typesSummary: activeTypes + ' sur ' + TYPES.length + ' activés',
+      tasks: tasks,
+      resetAll: () => this.setState({ sel: Object.assign({}, defaults) }),
+      formOpen: !!st.form, formClosed: !st.form,
+      openForm: () => this.setState({ form: true, tested: false }),
+      closeForm: () => this.setState({ form: false, tested: false }),
+      prov: prov,
+      setProv: (e) => this.setState({ prov: e.target.value, tested: false }),
+      needsUrl: prov === 'compat' || prov === 'local',
+      needsKey: prov !== 'local',
+      tested: tested, notTested: !tested,
+      runTest: () => this.setState({ tested: true }),
+      dataNote: notesData[prov],
+      dataNoteStyle: 'margin: 0; padding: 10px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; ' + (warn ? 'background: #FFEDE0; color: #8F3305' : 'background: #ECECFC; color: #2E2E8F')
+    };
+  }
+}
+</script>
+</body>
+</html>

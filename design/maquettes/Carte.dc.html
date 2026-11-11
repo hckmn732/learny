@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Carte des notions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+#carte-svg svg{display:block;width:100%;height:100%;touch-action:none;user-select:none;cursor:grab}
+#carte-svg svg.pan{cursor:grabbing}
+#carte-svg .noeud{cursor:pointer}
+#carte-svg text{pointer-events:none;font-family:Inter,system-ui,sans-serif}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside data-sidebar style="flex: 1 1 248px; box-sizing: border-box; background: #111113; color: #F4F4F1; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<a href="Main.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; white-space: nowrap"><span aria-hidden="true" style="flex: 0 0 30px; height: 30px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span><span style="overflow: hidden; text-overflow: ellipsis">Learny</span></a>
+<button type="button" data-action="toggle-sidebar" aria-label="Masquer le menu" aria-expanded="true" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m16 10-2 2 2 2"></path></svg></button>
+</div>
+<nav aria-label="Navigation principale" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Agenda</a>
+</nav>
+<div aria-hidden="true" style="height: 1px; margin: 0 6px; background: #26262B"></div>
+<section aria-labelledby="t-formation-en-cours" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 8px; border-radius: 18px; background: #18181B; border: 1px solid #26262B">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<h2 id="t-formation-en-cours" style="margin: 0; font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Formation en cours</h2>
+<button type="button" aria-label="Changer de formation" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 13px; background: #232328">
+<span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700">SAP</span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.25">SAP S/4HANA Finance</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: 1; height: 4px; border-radius: 2px; background: #3A3A40"><span style="display: block; width: 38%; height: 4px; border-radius: 2px; background: #C6F432"></span></span><span style="font-size: 11px; font-weight: 600; color: #D4D4D8">38 %</span></span>
+<span style="font-size: 11px; color: #A1A1AA">Module 3 sur 7</span>
+</span>
+</div>
+<nav aria-label="Formation en cours" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Programme.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg>Programme</a>
+<a href="Carte.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; background: #2A2A30; color: #FFFFFF; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><circle cx="9" cy="18" r="2.5"></circle><path d="M8.4 6.4 15.5 7.6M6.6 8.4l1.7 7.2M16.4 10l-5.6 6.3"></path></svg>Carte des notions</a>
+<a href="QuizGlobal.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg>Quiz global<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">14</span></a>
+<a href="Lacunes.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>Mes lacunes<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #3A2A20; color: #FDBA74; font-size: 12px; font-weight: 700">4</span></a>
+</nav>
+</section>
+<div style="margin-top: auto; background: #1C1C20; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Série</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #FFFFFF">12 jours</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span>
+</div>
+<p style="margin: 0; font-size: 11px; color: #A1A1AA">Régularité sur les 14 derniers jours</p>
+</div>
+</aside>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 28px 40px 56px">
+<header style="position: sticky; top: 0; z-index: 30; margin: -28px -40px 24px; padding: 12px 40px; background: rgba(244, 244, 241, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #E7E6E1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" data-action="toggle-sidebar" data-show-when="collapsed" aria-label="Afficher le menu" aria-expanded="false" style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m14 10 2 2-2 2"></path></svg></button>
+<div role="search" style="position: relative; flex: 1 1 320px; max-width: 520px">
+<label for="recherche-globale" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Rechercher</label>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 14px; top: 12px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-globale" type="search" placeholder="Rechercher une notion, un cours, une formation…" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</div>
+<div style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px">
+<button type="button" data-popover-toggle="notifications" aria-controls="panneau-notifications" aria-expanded="false" aria-label="Notifications, 3 non lues" style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span data-notif-dot aria-hidden="true" style="position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #F97316; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; transform: translate(50%, -50%)">3</span></button>
+<button type="button" data-popover-toggle="compte" aria-haspopup="menu" aria-controls="menu-compte" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 4px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; color: #111113; cursor: pointer"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="font-size: 14px; font-weight: 600">Mon compte</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+<section id="panneau-notifications" data-popover="notifications" hidden aria-labelledby="t-notifications" style="position: absolute; right: 0; top: 54px; width: 400px; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 20px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 18px 48px rgba(17, 17, 19, 0.16); display: flex; flex-direction: column; z-index: 40">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px">
+<h2 id="t-notifications" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Notifications</h2>
+<button type="button" data-action="notif-read-all" style="min-height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tout marquer comme lu</button>
+</div>
+<div role="group" aria-label="Filtrer les notifications" style="display: flex; gap: 4px; margin: 0 16px 8px; padding: 4px; border-radius: 12px; background: #F4F4F1">
+<button type="button" data-notif-filter="toutes" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Toutes <span data-count="toutes" style="font-size: 12px; font-weight: 700">8</span></button>
+<button type="button" data-notif-filter="non-lues" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Non lues <span data-count="non-lues" style="font-size: 12px; font-weight: 700">3</span></button>
+</div>
+<div style="max-height: min(420px, calc(100vh - 200px)); overflow-y: auto; padding: 0 6px 6px">
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Aujourd'hui</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Quiz.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz de validation à 14:00</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">13:20</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Cours.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #E1F4EF; color: #0B5C4D; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5M9 7h6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Votre cours est prêt</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">11:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Une séance à replacer</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30. Votre accord est demandé.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="QuizGlobal.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #EEF8CF; color: #3F5A00; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz global du jour</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">14 notions à revoir, lacunes en priorité. Prévu à 17:00, environ 10 min.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Hier</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Lacunes.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Nouvelle lacune repérée</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">16:42</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Clé de comptabilisation : confondue avec le type de pièce, deux fois.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Agenda.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F0E9FE; color: #5B21B6; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Session demain à 17:30</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">18:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Rétrospectives · apports du chapitre 2. Pensez à préparer vos notes.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Gestion de projet agile</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Plus tôt</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Programme.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Module 2 validé · 91 %</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">lun. 9 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Le module 3 · Comptabilité générale est débloqué.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; color: #3F3F46; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Bilan de la semaine</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">dim. 8 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">13 h d'étude, 86 % retenu à 1 mois, 3 notions à risque d'oubli.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<p data-notif-empty hidden style="margin: 0; padding: 28px 16px; text-align: center; font-size: 14px; color: #62626B">Vous avez tout lu. Les prochains rappels arriveront ici.</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #EEEDE8; font-size: 13px">
+<span style="color: #62626B">Rappels aussi envoyés par e-mail</span>
+<a href="Parametres.dc.html#notifications" style="font-weight: 600">Gérer les notifications</a>
+</div>
+</section>
+<div id="menu-compte" data-popover="compte" hidden role="menu" aria-label="Mon compte" style="position: absolute; right: 0; top: 54px; width: 260px; padding: 8px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.14); display: flex; flex-direction: column; gap: 2px; z-index: 40">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid #EEEDE8"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Apprenant</span><span style="font-size: 12px; color: #62626B">3 formations en cours</span></span></div>
+<a role="menuitem" href="Parametres.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Paramètres</a>
+<a role="menuitem" href="Parametres.dc.html#automatismes" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>Mettre en pause</a>
+<a role="menuitem" href="Inscription.dc.html?connexion" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H4"></path></svg>Se déconnecter</a>
+</div>
+</div>
+</header>
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p style="margin: 0; font-size: 14px; color: #62626B">SAP S/4HANA Finance · {{statsLine}}</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">Carte des notions</h1>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<span id="l-couleur" style="font-size: 13px; font-weight: 600; color: #62626B">Couleurs</span>
+<div role="group" aria-labelledby="l-couleur" style="display: inline-flex; padding: 4px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E7E6E1; gap: 4px">
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="2">
+<button type="button" aria-pressed="{{m.pressed}}" onClick="{{m.pick}}" style="{{m.style}}">{{m.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+<div role="search" style="position: relative; flex: 1 1 280px; max-width: 420px">
+<label for="recherche-notion" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Chercher une notion</label>
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2" stroke-linecap="round" style="position: absolute; left: 13px; top: 13px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-notion" type="search" autocomplete="off" placeholder="Chercher une notion…" value="{{q}}" onChange="{{setQ}}" onKeyDown="{{searchKey}}" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 12px 0 38px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+<sc-if value="{{hasResults}}" hint-placeholder-val="{{ false }}">
+<ul aria-label="Notions trouvées" style="position: absolute; left: 0; right: 0; top: 48px; z-index: 20; list-style: none; margin: 0; padding: 6px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 12px 32px rgba(17, 17, 19, 0.12); display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{results}}" as="r" hint-placeholder-count="4">
+<li><button type="button" onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; gap: 10px; min-height: 38px; padding: 0 10px; border: 0; border-radius: 9px; background: transparent; font-family: inherit; font-size: 14px; color: #111113; text-align: left; cursor: pointer"><span aria-hidden="true" style="{{r.dot}}"></span><span style="flex: 1 1 auto">{{r.label}}</span><span style="font-size: 12px; color: #62626B">{{r.meta}}</span></button></li>
+</sc-for>
+</ul>
+</sc-if>
+</div>
+<div role="group" aria-label="Éléments affichés" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{toggles}}" as="t" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{t.pressed}}" onClick="{{t.toggle}}" style="{{t.style}}"><span aria-hidden="true" style="{{t.check}}">✓</span>{{t.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 20px">
+<section aria-label="Graphe des notions" style="flex: 999 1 560px; min-width: 0; position: relative; height: 660px; border-radius: 24px; background: #111113; overflow: hidden">
+<div id="carte-svg" style="position: absolute; inset: 0"></div>
+<div style="position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; gap: 6px">
+<button type="button" aria-label="Zoomer" onClick="{{zoomIn}}" style="width: 36px; height: 36px; border-radius: 10px; border: 1px solid #2E2E34; background: #1C1C20; color: #FFFFFF; font-size: 18px; cursor: pointer">+</button>
+<button type="button" aria-label="Dézoomer" onClick="{{zoomOut}}" style="width: 36px; height: 36px; border-radius: 10px; border: 1px solid #2E2E34; background: #1C1C20; color: #FFFFFF; font-size: 18px; cursor: pointer">−</button>
+<button type="button" aria-label="Recentrer la carte" onClick="{{recenter}}" style="width: 36px; height: 36px; border-radius: 10px; border: 1px solid #2E2E34; background: #1C1C20; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"></path></svg></button>
+</div>
+<div style="position: absolute; left: 14px; bottom: 14px; right: 70px; display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 10px 12px; border-radius: 14px; background: rgba(28, 28, 32, 0.88); font-size: 12px; color: #D4D4D8">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="5">
+<span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="{{l.swatch}}"></span>{{l.label}}</span>
+</sc-for>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 0; border-top: 2px dashed #F97316"></span>Se confondent</span>
+<span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 0; border-top: 2px dotted #C6F432"></span>Lien repéré par le tuteur</span>
+</div>
+<p style="position: absolute; top: 14px; left: 16px; margin: 0; font-size: 12px; color: #A1A1AA">Glisser pour déplacer · molette pour zoomer · cliquer une notion pour la détailler</p>
+</section>
+<aside aria-label="Détail" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px">
+<sc-if value="{{noSel}}" hint-placeholder-val="{{ true }}">
+<section style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 600">Comment lire la carte</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: #3F3F46">Chaque point est une notion de la formation. Un trait relie une notion à celles qui la préparent. Les grands points sont les modules ; les points creux, vos apports.</p>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: #3F3F46">Le tuteur ajoute les liens qu'il repère entre modules, et marque en orange les notions que vous confondez.</p>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 600">À consolider · {{gapCount}}</h2>
+<sc-for list="{{gaps}}" as="g" hint-placeholder-count="4">
+<button type="button" onClick="{{g.pick}}" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid #EEEDE8; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113; text-align: left; cursor: pointer"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #F97316"></span><span style="flex: 1 1 auto; font-weight: 600">{{g.label}}</span><span style="font-size: 12px; color: #8F3305; font-weight: 700">{{g.mastery}}</span></button>
+</sc-for>
+<div style="display: flex; gap: 8px; margin-top: 4px; font-size: 13px; color: #62626B"><span><strong style="color: #111113">{{mastered}}</strong> maîtrisées</span><span>·</span><span><strong style="color: #111113">{{upcoming}}</strong> à venir</span></div>
+</section>
+</sc-if>
+<sc-if value="{{hasSel}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="t-notion" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="{{d.kindPill}}">{{d.kind}}</span>
+<h2 id="t-notion" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.2">{{d.label}}</h2>
+</div>
+<button type="button" aria-label="Fermer le détail" onClick="{{clearSel}}" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 0; background: #F4F4F1; color: #62626B; font-size: 18px; line-height: 1; cursor: pointer">×</button>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.55; color: #3F3F46">{{d.desc}}</p>
+<sc-if value="{{d.hasMastery}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 13px"><span style="{{d.statusStyle}}">{{d.status}}</span><span style="font-weight: 700; font-variant-numeric: tabular-nums">{{d.mastery}}</span></div>
+<div aria-hidden="true" style="height: 8px; border-radius: 4px; background: #F0EFEA"><div style="{{d.bar}}"></div></div>
+</div>
+</sc-if>
+<sc-if value="{{d.noMastery}}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 10px 12px; border-radius: 12px; background: #F4F4F1; font-size: 13px; color: #3F3F46">{{d.status}}</p></sc-if>
+<sc-for list="{{d.groups}}" as="grp" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h3 style="margin: 0; font-size: 12px; font-weight: 700; color: #62626B; text-transform: uppercase; letter-spacing: 0.06em">{{grp.title}}</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{grp.items}}" as="it" hint-placeholder-count="3">
+<button type="button" onClick="{{it.pick}}" style="{{it.style}}"><span aria-hidden="true" style="{{it.dot}}"></span>{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px">
+<sc-for list="{{d.actions}}" as="a" hint-placeholder-count="2">
+<a href="{{a.href}}" style="{{a.style}}">{{a.label}}</a>
+</sc-for>
+</div>
+</section>
+</sc-if>
+</aside>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  /* Données de la carte : modules, notions, liens et apports de la formation SAP S/4HANA Finance. */
+  data() {
+    if (this._data) return this._data;
+    const MODULES = [
+      { id: 'm1', n: 1, label: 'Fondamentaux et Fiori', color: '#8B8BF0' },
+      { id: 'm2', n: 2, label: 'Structure organisationnelle', color: '#2DD4BF' },
+      { id: 'm3', n: 3, label: 'Comptabilité générale', color: '#C6F432' },
+      { id: 'm4', n: 4, label: 'Comptabilité fournisseurs', color: '#FBBF24' },
+      { id: 'm5', n: 5, label: 'Comptabilité clients', color: '#F472B6' },
+      { id: 'm6', n: 6, label: 'Immobilisations', color: '#60A5FA' },
+      { id: 'm7', n: 7, label: 'Clôture et certification', color: '#F87171' }
+    ];
+    /* [id, nom, module, maîtrise (null = pas encore vue), nature de la lacune] */
+    const N = [
+      ['s4', 'SAP S/4HANA', 'm1', 92], ['fiori', 'SAP Fiori', 'm1', 90], ['launchpad', 'Launchpad Fiori', 'm1', 88], ['appli', 'Application Fiori', 'm1', 85], ['role', 'Rôle utilisateur', 'm1', 82], ['bp', 'Partenaire (Business Partner)', 'm1', 84], ['donnees', 'Données de base', 'm1', 86],
+      ['societe', 'Société', 'm2', 90], ['pc', 'Plan comptable', 'm2', 88], ['variante', 'Variante d’exercice', 'm2', 60, 'Oubli'], ['devise', 'Devise de la société', 'm2', 85], ['perimetre', 'Périmètre analytique', 'm2', 81], ['segment', 'Segment', 'm2', 80], ['cdp', 'Centre de profit', 'm2', 83], ['division', 'Division', 'm2', 82], ['ledger', 'Ledger', 'm2', 84],
+      ['piece', 'Pièce comptable', 'm3', 88], ['entete', 'En-tête de pièce', 'm3', 86], ['poste', 'Poste', 'm3', 84], ['cle', 'Clé de comptabilisation', 'm3', 35, 'Confusion'], ['type', 'Type de pièce', 'm3', 81], ['dates', 'Date comptable', 'm3', 83], ['equilibre', 'Équilibre d’une pièce', 'm3', 55, 'Difficulté d’application'], ['acdoca', 'Journal universel (ACDOCA)', 'm3', 82], ['ledgers', 'Ledgers parallèles', 'm3', 28, 'Incompréhension'], ['compte', 'Compte général', 'm3', 87], ['partie', 'Partie double', 'm3', 90],
+      ['fourn', 'Fournisseur', 'm4', null], ['factf', 'Facture fournisseur', 'm4', null], ['collectif', 'Compte collectif', 'm4', null], ['paiement', 'Paiement', 'm4', null], ['progpaie', 'Programme de paiement', 'm4', null], ['compensation', 'Compensation', 'm4', null],
+      ['client', 'Client', 'm5', null], ['factc', 'Facture client', 'm5', null], ['encaissement', 'Encaissement', 'm5', null], ['relance', 'Relance', 'm5', null], ['credit', 'Gestion du crédit', 'm5', null],
+      ['immo', 'Immobilisation', 'm6', null], ['classe', 'Classe d’immobilisation', 'm6', null], ['amort', 'Amortissement', 'm6', null], ['domaine', 'Domaine d’évaluation', 'm6', null], ['rebut', 'Sortie d’immobilisation', 'm6', null],
+      ['cloture', 'Clôture de période', 'm7', null], ['regul', 'Écritures de régularisation', 'm7', null], ['report', 'Report de solde', 'm7', null], ['bilan', 'Bilan et compte de résultat', 'm7', null], ['reeval', 'Réévaluation des devises', 'm7', null]
+    ];
+    const DESC = {
+      cle: 'Code à deux chiffres porté par chaque poste : il fixe le sens (débit ou crédit) et le type de compte. 40 et 50 pour un compte général.',
+      type: 'Classe toute la pièce (SA, KR, DR) et fixe sa numérotation. Choisi une seule fois, dans l’en-tête.',
+      piece: 'Toute écriture est enregistrée sous forme de pièce : un en-tête qui décrit l’opération et des postes qui portent les montants.',
+      entete: 'Dates, type de pièce, société et devise : ce qui décrit toute l’opération.',
+      poste: 'Une ligne de la pièce : un compte, un montant et une clé de comptabilisation.',
+      dates: 'Fixe la période où l’écriture compte. Distincte de la date de pièce, celle du document d’origine.',
+      equilibre: 'Une pièce n’est enregistrée que si le total des débits égale le total des crédits.',
+      acdoca: 'Table unique où S/4HANA enregistre tous les postes : comptabilité générale, analytique et immobilisations.',
+      ledgers: 'Plusieurs ledgers tiennent la même comptabilité selon des normes différentes, par exemple locales et IFRS.',
+      ledger: 'Ensemble de comptes tenu selon une norme ; le ledger principal s’appelle 0L.',
+      compte: 'Compte du plan comptable sur lequel portent les postes.',
+      partie: 'Tout montant débité quelque part est crédité ailleurs : c’est l’origine de l’équilibre des pièces.',
+      variante: 'Définit l’exercice et ses périodes comptables ; rattachée à chaque société.',
+      societe: 'Unité qui tient une comptabilité complète et établit ses propres états financiers.',
+      pc: 'Liste des comptes généraux utilisés par une ou plusieurs sociétés.',
+      fiori: 'L’interface de S/4HANA, organisée en applications par rôle.'
+    };
+    /* Liens entre notions : p = prépare, c = se confondent, t = repéré par le tuteur */
+    const L = [
+      ['s4', 'fiori', 'p'], ['fiori', 'launchpad', 'p'], ['launchpad', 'appli', 'p'], ['role', 'appli', 'p'], ['bp', 'donnees', 'p'], ['s4', 'acdoca', 'p'],
+      ['societe', 'pc', 'p'], ['societe', 'devise', 'p'], ['societe', 'variante', 'p'], ['societe', 'division', 'p'], ['perimetre', 'cdp', 'p'], ['cdp', 'segment', 'p'], ['ledger', 'ledgers', 'p'],
+      ['pc', 'compte', 'p'], ['piece', 'entete', 'p'], ['piece', 'poste', 'p'], ['poste', 'cle', 'p'], ['entete', 'type', 'p'], ['entete', 'dates', 'p'], ['variante', 'dates', 'p'], ['partie', 'equilibre', 'p'], ['poste', 'equilibre', 'p'], ['compte', 'poste', 'p'], ['piece', 'acdoca', 'p'], ['acdoca', 'ledgers', 'p'],
+      ['bp', 'fourn', 'p'], ['bp', 'client', 'p'], ['donnees', 'fourn', 'p'], ['donnees', 'client', 'p'], ['compte', 'collectif', 'p'], ['collectif', 'fourn', 'p'], ['collectif', 'client', 'p'], ['cle', 'factf', 'p'], ['type', 'factf', 'p'], ['factf', 'paiement', 'p'], ['paiement', 'progpaie', 'p'], ['paiement', 'compensation', 'p'],
+      ['cle', 'factc', 'p'], ['type', 'factc', 'p'], ['factc', 'encaissement', 'p'], ['encaissement', 'compensation', 'p'], ['factc', 'relance', 'p'], ['client', 'credit', 'p'],
+      ['classe', 'immo', 'p'], ['immo', 'amort', 'p'], ['domaine', 'amort', 'p'], ['immo', 'rebut', 'p'],
+      ['variante', 'cloture', 'p'], ['cloture', 'regul', 'p'], ['cloture', 'report', 'p'], ['report', 'bilan', 'p'], ['regul', 'bilan', 'p'], ['devise', 'reeval', 'p'], ['acdoca', 'bilan', 'p'],
+      ['cle', 'type', 'c'],
+      ['dates', 'cloture', 't'], ['ledgers', 'domaine', 't'], ['equilibre', 'compensation', 't'], ['segment', 'bilan', 't']
+    ];
+    const SOURCES = [
+      ['src1', 'Guide FI (PDF)', ['piece', 'entete', 'poste', 'cle', 'type', 'dates', 'compte']],
+      ['src2', 'Note vocale, 1:42', ['cle', 'type', 'devise']],
+      ['src3', 'Tutoriel vidéo, 5:10', ['poste', 'cle', 'equilibre']],
+      ['src4', 'Vos notes · module 3', ['acdoca', 'ledgers', 'ledger']],
+      ['src5', 'Fiche Fiori (lien web)', ['fiori', 'launchpad', 'appli', 'role']],
+      ['src6', 'Cours en ligne · organisation', ['societe', 'pc', 'perimetre', 'segment', 'cdp', 'division']],
+      ['src7', 'Vos notes · module 1', ['s4', 'bp', 'donnees']],
+      ['src8', 'PDF · exercices comptables', ['variante', 'dates']]
+    ];
+    const modById = {};
+    MODULES.forEach((m) => { modById[m.id] = m; });
+    const nodes = [{ id: 'f', kind: 'formation', label: 'SAP S/4HANA Finance' }]
+      .concat(MODULES.map((m) => ({ id: m.id, kind: 'module', label: 'Module ' + m.n + ' · ' + m.label, short: 'M' + m.n, module: m.id })))
+      .concat(N.map((x) => ({ id: x[0], kind: 'notion', label: x[1], module: x[2], mastery: x[3], gap: x[4] || null, desc: DESC[x[0]] })))
+      .concat(SOURCES.map((s) => ({ id: s[0], kind: 'source', label: s[1] })));
+    const links = [];
+    MODULES.forEach((m) => links.push({ a: 'f', b: m.id, t: 'formation' }));
+    N.forEach((x) => links.push({ a: x[2], b: x[0], t: 'contient' }));
+    L.forEach((x) => links.push({ a: x[0], b: x[1], t: x[2] }));
+    SOURCES.forEach((s) => s[2].forEach((n) => links.push({ a: s[0], b: n, t: 'source' })));
+    const byId = {};
+    nodes.forEach((n) => { byId[n.id] = n; n.deg = 0; });
+    links.forEach((l) => { if (l.t !== 'contient' && l.t !== 'formation') { byId[l.a].deg++; byId[l.b].deg++; } });
+    this._data = { MODULES: MODULES, modById: modById, nodes: nodes, links: links, byId: byId };
+    return this._data;
+  }
+
+  /* Disposition par forces, calculée une fois (graine fixe : la carte est toujours la même). */
+  layout() {
+    const D = this.data();
+    let seed = 7;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+    D.MODULES.forEach((m, i) => {
+      const a = (i / D.MODULES.length) * Math.PI * 2 - Math.PI / 2;
+      m.ax = Math.cos(a); m.ay = Math.sin(a);
+    });
+    D.nodes.forEach((n) => {
+      if (n.kind === 'formation') { n.x = 0; n.y = 0; }
+      else if (n.kind === 'module') { const m = D.modById[n.id]; n.x = m.ax * 230; n.y = m.ay * 230; }
+      else if (n.kind === 'notion') { const m = D.modById[n.module]; const a = rnd() * Math.PI * 2; const r = 50 + rnd() * 70; n.x = m.ax * 300 + Math.cos(a) * r; n.y = m.ay * 300 + Math.sin(a) * r; }
+      else { n.x = (rnd() - 0.5) * 300; n.y = (rnd() - 0.5) * 300; }
+      n.vx = 0; n.vy = 0;
+    });
+    const LEN = { formation: 190, contient: 85, p: 70, c: 60, t: 110, source: 60 };
+    const STR = { formation: 0.04, contient: 0.03, p: 0.05, c: 0.05, t: 0.02, source: 0.04 };
+    const nodes = D.nodes;
+    for (let it = 0; it < 420; it++) {
+      const alpha = Math.max(0.02, 1 - it / 380);
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let d2 = dx * dx + dy * dy;
+          if (d2 < 1) { dx = rnd() - 0.5; dy = rnd() - 0.5; d2 = 1; }
+          const f = 2600 / d2 * alpha;
+          const d = Math.sqrt(d2);
+          a.vx -= dx / d * f; a.vy -= dy / d * f;
+          b.vx += dx / d * f; b.vy += dy / d * f;
+        }
+      }
+      D.links.forEach((l) => {
+        const a = D.byId[l.a], b = D.byId[l.b];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const d = Math.sqrt(dx * dx + dy * dy) || 1;
+        const f = (d - LEN[l.t]) * STR[l.t] * alpha;
+        a.vx += dx / d * f; a.vy += dy / d * f;
+        b.vx -= dx / d * f; b.vy -= dy / d * f;
+      });
+      nodes.forEach((n) => {
+        n.vx -= n.x * 0.004 * alpha; n.vy -= n.y * 0.004 * alpha;
+        if (n.kind === 'formation') { n.vx = 0; n.vy = 0; n.x = 0; n.y = 0; return; }
+        n.x += Math.max(-30, Math.min(30, n.vx)); n.y += Math.max(-30, Math.min(30, n.vy));
+        n.vx *= 0.55; n.vy *= 0.55;
+      });
+    }
+  }
+
+  componentDidMount() {
+    const D = this.data();
+    this.layout();
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (tag, attrs) => { const e = document.createElementNS(NS, tag); Object.keys(attrs || {}).forEach((k) => e.setAttribute(k, attrs[k])); return e; };
+    const svg = el('svg', { role: 'img', 'aria-label': 'Graphe des notions de la formation. Utilisez la recherche ou la liste « À consolider » pour choisir une notion.' });
+    const vp = el('g');
+    const gl = el('g');
+    const gn = el('g');
+    vp.appendChild(gl); vp.appendChild(gn); svg.appendChild(vp);
+    D.links.forEach((l) => {
+      l.el = el('line', { 'stroke-linecap': 'round' });
+      gl.appendChild(l.el);
+    });
+    D.nodes.forEach((n) => {
+      const g = el('g', { class: 'noeud' });
+      n.r = n.kind === 'formation' ? 13 : n.kind === 'module' ? 9 : n.kind === 'source' ? 4 : 4 + Math.min(n.deg, 8) * 0.55;
+      n.c = el('circle', { r: n.r });
+      n.t = el('text', { 'text-anchor': 'middle', 'font-size': n.kind === 'notion' || n.kind === 'source' ? 10 : 12, 'font-weight': n.kind === 'notion' || n.kind === 'source' ? 500 : 700 });
+      n.t.textContent = n.kind === 'module' ? n.short + ' · ' + D.modById[n.id].label : n.label;
+      g.appendChild(n.c); g.appendChild(n.t);
+      n.g = g;
+      gn.appendChild(g);
+      g.addEventListener('pointerenter', () => { this.hover = n.id; this.paint(); });
+      g.addEventListener('pointerleave', () => { this.hover = null; this.paint(); });
+      g.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        this.drag = { node: n, moved: false, sx: e.clientX, sy: e.clientY };
+        svg.setPointerCapture(e.pointerId);
+      });
+    });
+    this.svg = svg; this.vp = vp;
+    this.view = { x: 0, y: 0, k: 1 };
+
+    const toVB = (cx, cy) => {
+      const r = svg.getBoundingClientRect();
+      return { x: (cx - r.left) / r.width * this.vbW, y: (cy - r.top) / r.height * this.vbH };
+    };
+    const toGraph = (cx, cy) => {
+      const p = toVB(cx, cy);
+      return { x: (p.x - this.view.x) / this.view.k, y: (p.y - this.view.y) / this.view.k };
+    };
+    svg.addEventListener('pointerdown', (e) => {
+      if (this.drag) return;
+      this.pan = { sx: e.clientX, sy: e.clientY, x: this.view.x, y: this.view.y };
+      svg.classList.add('pan');
+      svg.setPointerCapture(e.pointerId);
+    });
+    svg.addEventListener('pointermove', (e) => {
+      if (this.drag) {
+        if (Math.abs(e.clientX - this.drag.sx) + Math.abs(e.clientY - this.drag.sy) > 3) this.drag.moved = true;
+        if (this.drag.moved) {
+          const p = toGraph(e.clientX, e.clientY);
+          this.drag.node.x = p.x; this.drag.node.y = p.y;
+          this.place();
+        }
+      } else if (this.pan) {
+        const r = svg.getBoundingClientRect();
+        this.view.x = this.pan.x + (e.clientX - this.pan.sx) / r.width * this.vbW;
+        this.view.y = this.pan.y + (e.clientY - this.pan.sy) / r.height * this.vbH;
+        this.applyView();
+      }
+    });
+    const end = () => {
+      if (this.drag && !this.drag.moved) this.select(this.drag.node.id, false);
+      this.drag = null; this.pan = null; svg.classList.remove('pan');
+    };
+    svg.addEventListener('pointerup', end);
+    svg.addEventListener('pointercancel', end);
+    svg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const p = toVB(e.clientX, e.clientY);
+      this.zoomAt(p.x, p.y, Math.exp(-e.deltaY * 0.0015));
+    }, { passive: false });
+    this.attach();
+    this.fit();
+    this.place();
+    this.paint();
+  }
+
+  componentDidUpdate() {
+    this.attach();
+    this.paint();
+  }
+
+  /* Le rendu de la page recrée la zone : on y replace le même graphe, avec sa vue et ses positions. */
+  attach() {
+    const host = document.getElementById('carte-svg');
+    if (!host || !this.svg) return;
+    if (this.svg.parentNode !== host) host.appendChild(this.svg);
+    const r = host.getBoundingClientRect();
+    this.vbW = 1000;
+    this.vbH = Math.round(1000 * (r.height / (r.width || 1))) || 660;
+    this.svg.setAttribute('viewBox', '0 0 ' + this.vbW + ' ' + this.vbH);
+  }
+
+  applyView() {
+    this.vp.setAttribute('transform', 'translate(' + this.view.x + ' ' + this.view.y + ') scale(' + this.view.k + ')');
+    this.paint();
+  }
+
+  zoomAt(px, py, f) {
+    const k = Math.max(0.35, Math.min(4, this.view.k * f));
+    const ratio = k / this.view.k;
+    this.view.x = px - (px - this.view.x) * ratio;
+    this.view.y = py - (py - this.view.y) * ratio;
+    this.view.k = k;
+    this.applyView();
+  }
+
+  fit() {
+    const st = this.state || {};
+    const vis = this.data().nodes.filter((n) => this.visible(n, st));
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    vis.forEach((n) => { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); });
+    const pad = 70;
+    const k = Math.min((this.vbW - pad * 2) / (x1 - x0 || 1), (this.vbH - pad * 2) / (y1 - y0 || 1), 2);
+    this.view.k = k;
+    this.view.x = this.vbW / 2 - (x0 + x1) / 2 * k;
+    this.view.y = this.vbH / 2 - (y0 + y1) / 2 * k;
+    this.applyView();
+  }
+
+  centerOn(id) {
+    const n = this.data().byId[id];
+    if (!n) return;
+    const from = Object.assign({}, this.view);
+    const k = Math.max(from.k, 1.5);
+    const to = { k: k, x: this.vbW * 0.5 - n.x * k, y: this.vbH * 0.5 - n.y * k };
+    const t0 = performance.now();
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / 320);
+      const e = 1 - Math.pow(1 - p, 3);
+      this.view = { k: from.k + (to.k - from.k) * e, x: from.x + (to.x - from.x) * e, y: from.y + (to.y - from.y) * e };
+      this.applyView();
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  select(id, center) {
+    this.setState({ sel: id, q: '' });
+    if (center) this.centerOn(id);
+  }
+
+  visible(n, st) {
+    if (n.kind === 'source') return !!st.sources;
+    if (n.kind === 'module' || n.kind === 'formation') return st.modules !== false;
+    if (n.kind === 'notion' && n.mastery === null) return st.upcoming !== false;
+    return true;
+  }
+
+  color(n, st) {
+    const D = this.data();
+    if (n.kind === 'formation') return '#FFFFFF';
+    if (n.kind === 'source') return '#A1A1AA';
+    if (n.kind === 'module') return st.mode === 'maitrise' ? '#E4E4E7' : D.modById[n.id].color;
+    if (st.mode === 'maitrise') {
+      if (n.mastery === null) return '#52525B';
+      if (n.gap) return '#F97316';
+      return '#34D399';
+    }
+    return D.modById[n.module].color;
+  }
+
+  place() {
+    const D = this.data();
+    D.nodes.forEach((n) => {
+      n.c.setAttribute('cx', n.x); n.c.setAttribute('cy', n.y);
+      n.t.setAttribute('x', n.x); n.t.setAttribute('y', n.y + n.r + 12);
+    });
+    D.links.forEach((l) => {
+      const a = D.byId[l.a], b = D.byId[l.b];
+      l.el.setAttribute('x1', a.x); l.el.setAttribute('y1', a.y);
+      l.el.setAttribute('x2', b.x); l.el.setAttribute('y2', b.y);
+    });
+  }
+
+  /* Couleurs, visibilité et mise en évidence selon l'état (mode, filtres, survol, sélection, recherche). */
+  paint() {
+    if (!this.svg) return;
+    const D = this.data();
+    const st = this.state || {};
+    const focus = this.hover || st.sel || null;
+    const near = {};
+    if (focus) {
+      near[focus] = true;
+      D.links.forEach((l) => { if (l.a === focus) near[l.b] = true; if (l.b === focus) near[l.a] = true; });
+    }
+    const q = (st.q || '').trim().toLowerCase();
+    const k = this.view.k;
+    D.nodes.forEach((n) => {
+      const vis = this.visible(n, st);
+      n.g.style.display = vis ? '' : 'none';
+      if (!vis) return;
+      const col = this.color(n, st);
+      const match = q && n.label.toLowerCase().indexOf(q) >= 0;
+      const dim = (focus && !near[n.id]) || (q && !match);
+      const faded = n.kind === 'notion' && n.mastery === null && st.mode !== 'maitrise';
+      if (n.kind === 'source') { n.c.setAttribute('fill', '#111113'); n.c.setAttribute('stroke', col); n.c.setAttribute('stroke-width', 1.5); }
+      else { n.c.setAttribute('fill', col); n.c.setAttribute('stroke', n.id === st.sel ? '#C6F432' : (n.gap && st.mode !== 'maitrise' ? '#F97316' : '#111113')); n.c.setAttribute('stroke-width', n.id === st.sel ? 3 : (n.gap && st.mode !== 'maitrise' ? 2 : 1)); }
+      n.g.setAttribute('opacity', dim ? 0.18 : (faded ? 0.5 : 1));
+      const showLabel = n.kind === 'formation' || n.kind === 'module' || near[n.id] || match || n.id === st.sel || (k >= 1.35 && n.kind === 'notion') || (k >= 1.9);
+      n.t.style.display = showLabel ? '' : 'none';
+      n.t.setAttribute('fill', n.kind === 'module' || n.kind === 'formation' ? '#FFFFFF' : '#D4D4D8');
+      n.t.setAttribute('font-size', (n.kind === 'notion' || n.kind === 'source' ? 10 : 12) / Math.max(0.8, Math.min(k, 1.6)));
+    });
+    D.links.forEach((l) => {
+      const a = D.byId[l.a], b = D.byId[l.b];
+      const vis = this.visible(a, st) && this.visible(b, st);
+      l.el.style.display = vis ? '' : 'none';
+      if (!vis) return;
+      const hot = focus && (l.a === focus || l.b === focus);
+      let stroke = 'rgba(255,255,255,0.16)', width = 1, dash = '';
+      if (l.t === 'contient' || l.t === 'formation') { stroke = 'rgba(255,255,255,0.09)'; }
+      if (l.t === 'source') { stroke = 'rgba(161,161,170,0.35)'; dash = '2 3'; }
+      if (l.t === 'c') { stroke = '#F97316'; width = 2; dash = '5 4'; }
+      if (l.t === 't') { stroke = 'rgba(198,244,50,0.7)'; width = 1.5; dash = '1 4'; }
+      if (hot && l.t !== 'c') { stroke = '#C6F432'; width = 2; }
+      l.el.setAttribute('stroke', stroke);
+      l.el.setAttribute('stroke-width', width / Math.max(0.6, Math.min(this.view.k, 2)) * 1.2);
+      l.el.setAttribute('stroke-dasharray', dash);
+      l.el.setAttribute('opacity', focus && !hot ? 0.25 : (q ? 0.35 : 1));
+    });
+  }
+
+  renderVals() {
+    const st = this.state || {};
+    const D = this.data();
+    const mode = st.mode || 'module';
+    const notions = D.nodes.filter((n) => n.kind === 'notion');
+    const relLinks = D.links.filter((l) => l.t === 'p' || l.t === 'c' || l.t === 't');
+    const pill = (on) => 'display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; font-family: inherit; font-size: 13px; cursor: pointer; ' + (on ? 'border: 1px solid #111113; background: #111113; color: #FFFFFF; font-weight: 600' : 'border: 1px solid #DAD9D3; background: #FFFFFF; color: #62626B; font-weight: 500');
+    const modes = [['module', 'Par module'], ['maitrise', 'Par maîtrise']].map((m) => ({
+      label: m[1], pressed: mode === m[0] ? 'true' : 'false',
+      pick: () => this.setState({ mode: m[0] }),
+      style: 'min-height: 34px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; ' + (mode === m[0] ? 'background: #111113; color: #FFFFFF; font-weight: 600' : 'background: transparent; color: #62626B; font-weight: 500')
+    }));
+    const T = [['modules', 'Modules', st.modules !== false], ['upcoming', 'Notions à venir', st.upcoming !== false], ['sources', 'Mes apports', !!st.sources]];
+    const toggles = T.map((x) => ({
+      label: x[1], pressed: x[2] ? 'true' : 'false', style: pill(x[2]),
+      check: 'display: inline-block; width: 12px; font-size: 12px; ' + (x[2] ? '' : 'visibility: hidden'),
+      toggle: () => { const p = {}; p[x[0]] = !x[2]; this.setState(p); setTimeout(() => this.fit(), 0); }
+    }));
+    const dot = (n) => 'flex: 0 0 8px; height: 8px; border-radius: 50%; background: ' + this.color(n, { mode: mode });
+    const q = (st.q || '').trim().toLowerCase();
+    const found = q ? D.nodes.filter((n) => n.kind !== 'formation' && n.label.toLowerCase().indexOf(q) >= 0).slice(0, 6) : [];
+    const results = found.map((n) => ({
+      label: n.label, dot: dot(n),
+      meta: n.kind === 'notion' ? 'Module ' + D.modById[n.module].n : (n.kind === 'module' ? 'Module' : 'Apport'),
+      pick: () => { this.select(n.id, true); }
+    }));
+    const legend = mode === 'maitrise'
+      ? [['#34D399', 'Maîtrisée'], ['#F97316', 'À consolider'], ['#52525B', 'Pas encore vue']].map((x) => ({ label: x[1], swatch: 'width: 10px; height: 10px; border-radius: 50%; background: ' + x[0] }))
+      : D.MODULES.map((m) => ({ label: 'M' + m.n, swatch: 'width: 10px; height: 10px; border-radius: 50%; background: ' + m.color }));
+    const gapsList = notions.filter((n) => n.gap).sort((a, b) => a.mastery - b.mastery).map((n) => ({ label: n.label, mastery: n.mastery + ' %', pick: () => this.select(n.id, true) }));
+
+    /* Détail du point sélectionné. */
+    const sel = st.sel ? D.byId[st.sel] : null;
+    let d = {};
+    if (sel) {
+      const chip = (n, extra) => ({
+        label: n.label + (extra || ''), dot: dot(n),
+        pick: () => this.select(n.id, true),
+        style: 'display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 600; color: #111113; cursor: pointer'
+      });
+      const groups = [];
+      const add = (title, items) => { if (items.length) groups.push({ title: title, items: items }); };
+      const other = (l) => D.byId[l.a === sel.id ? l.b : l.a];
+      const mine = D.links.filter((l) => l.a === sel.id || l.b === sel.id);
+      const btn = 'display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; ';
+      const primary = btn + 'background: #111113; color: #FFFFFF';
+      const secondary = btn + 'border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113';
+      if (sel.kind === 'notion') {
+        const m = D.modById[sel.module];
+        add('S’appuie sur', mine.filter((l) => l.t === 'p' && l.b === sel.id).map((l) => chip(D.byId[l.a])));
+        add('Prépare', mine.filter((l) => l.t === 'p' && l.a === sel.id).map((l) => chip(D.byId[l.b])));
+        add('Se confond avec', mine.filter((l) => l.t === 'c').map((l) => chip(other(l))));
+        add('Lien repéré par le tuteur', mine.filter((l) => l.t === 't').map((l) => chip(other(l))));
+        add('Dans vos apports', mine.filter((l) => l.t === 'source').map((l) => chip(other(l))));
+        const seen = sel.mastery !== null;
+        d = {
+          kind: 'Module ' + m.n + ' · ' + m.label,
+          kindPill: 'align-self: flex-start; padding: 3px 10px; border-radius: 999px; background: #F4F4F1; font-size: 12px; font-weight: 700; color: #3F3F46',
+          label: sel.label,
+          desc: sel.desc || ('Notion du module ' + m.n + ', ' + m.label.toLowerCase() + '.'),
+          hasMastery: seen, noMastery: !seen,
+          status: seen ? (sel.gap ? 'À consolider · ' + sel.gap.toLowerCase() : 'Maîtrisée') : 'Pas encore vue : elle arrive avec le module ' + m.n + '.',
+          statusStyle: 'font-weight: 700; color: ' + (sel.gap ? '#8F3305' : '#0B5C4D'),
+          mastery: seen ? sel.mastery + ' %' : '',
+          bar: 'width: ' + (sel.mastery || 0) + '%; height: 8px; border-radius: 4px; background: ' + (sel.gap ? '#F97316' : '#14A38B'),
+          groups: groups,
+          actions: seen
+            ? [{ label: 'Revoir dans le cours', href: 'Cours.dc.html', style: primary }, { label: sel.gap ? 'Voir la lacune' : 'S’entraîner', href: sel.gap ? 'Lacunes.dc.html' : 'QuizGlobal.dc.html', style: secondary }]
+            : [{ label: 'Voir dans le programme', href: 'Programme.dc.html', style: secondary }]
+        };
+      } else if (sel.kind === 'module') {
+        const m = D.modById[sel.id];
+        const inMod = notions.filter((n) => n.module === sel.id);
+        const seen = inMod.filter((n) => n.mastery !== null);
+        add('Notions du module', inMod.map((n) => chip(n)));
+        d = {
+          kind: 'Module ' + m.n, kindPill: 'align-self: flex-start; padding: 3px 10px; border-radius: 999px; background: #111113; color: #FFFFFF; font-size: 12px; font-weight: 700',
+          label: m.label,
+          desc: inMod.length + ' notions. ' + (seen.length ? seen.filter((n) => !n.gap).length + ' maîtrisées, ' + seen.filter((n) => n.gap).length + ' à consolider.' : 'Pas encore commencé.'),
+          hasMastery: false, noMastery: false, groups: groups,
+          actions: [{ label: m.n === 3 ? 'Ouvrir le module' : 'Voir dans le programme', href: m.n === 3 ? 'Module.dc.html' : 'Programme.dc.html', style: primary }]
+        };
+      } else if (sel.kind === 'source') {
+        add('Notions alimentées', mine.map((l) => chip(other(l))));
+        d = {
+          kind: 'Votre apport', kindPill: 'align-self: flex-start; padding: 3px 10px; border-radius: 999px; background: #E1F4EF; color: #0B5C4D; font-size: 12px; font-weight: 700',
+          label: sel.label, desc: 'Le tuteur s’en sert pour rédiger le cours et le cite en source.',
+          hasMastery: false, noMastery: false, groups: groups,
+          actions: [{ label: 'Voir le module', href: 'Module.dc.html', style: secondary }]
+        };
+      } else {
+        add('Modules', D.MODULES.map((m) => chip(D.byId[m.id])));
+        d = {
+          kind: 'Formation', kindPill: 'align-self: flex-start; padding: 3px 10px; border-radius: 999px; background: #ECECFC; color: #2E2E8F; font-size: 12px; font-weight: 700',
+          label: sel.label, desc: notions.length + ' notions réparties en ' + D.MODULES.length + ' modules.', hasMastery: false, noMastery: false, groups: groups,
+          actions: [{ label: 'Voir le programme', href: 'Programme.dc.html', style: primary }]
+        };
+      }
+    }
+
+    return {
+      statsLine: notions.length + ' notions · ' + relLinks.length + ' liens · ' + D.MODULES.length + ' modules',
+      modes: modes, toggles: toggles, legend: legend,
+      q: st.q || '',
+      setQ: (e) => this.setState({ q: e.target.value }),
+      searchKey: (e) => { if (e.key === 'Enter' && found.length) { e.preventDefault(); this.select(found[0].id, true); } if (e.key === 'Escape') this.setState({ q: '' }); },
+      results: results, hasResults: results.length > 0,
+      zoomIn: () => this.zoomAt(this.vbW / 2, this.vbH / 2, 1.3),
+      zoomOut: () => this.zoomAt(this.vbW / 2, this.vbH / 2, 1 / 1.3),
+      recenter: () => this.fit(),
+      noSel: !sel, hasSel: !!sel, d: d,
+      clearSel: () => this.setState({ sel: null }),
+      gaps: gapsList, gapCount: String(gapsList.length),
+      mastered: String(notions.filter((n) => n.mastery !== null && !n.gap).length),
+      upcoming: String(notions.filter((n) => n.mastery === null).length)
+    };
+  }
+}
+</script>
+</body>
+</html>

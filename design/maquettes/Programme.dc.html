@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Programme de formation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside data-sidebar style="flex: 1 1 248px; box-sizing: border-box; background: #111113; color: #F4F4F1; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<a href="Main.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; white-space: nowrap"><span aria-hidden="true" style="flex: 0 0 30px; height: 30px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span><span style="overflow: hidden; text-overflow: ellipsis">Learny</span></a>
+<button type="button" data-action="toggle-sidebar" aria-label="Masquer le menu" aria-expanded="true" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m16 10-2 2 2 2"></path></svg></button>
+</div>
+<nav aria-label="Navigation principale" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Agenda</a>
+</nav>
+<div aria-hidden="true" style="height: 1px; margin: 0 6px; background: #26262B"></div>
+<section aria-labelledby="t-formation-en-cours" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 8px; border-radius: 18px; background: #18181B; border: 1px solid #26262B">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<h2 id="t-formation-en-cours" style="margin: 0; font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Formation en cours</h2>
+<button type="button" aria-label="Changer de formation" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 13px; background: #232328">
+<span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700">SAP</span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.25">SAP S/4HANA Finance</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: 1; height: 4px; border-radius: 2px; background: #3A3A40"><span style="display: block; width: 38%; height: 4px; border-radius: 2px; background: #C6F432"></span></span><span style="font-size: 11px; font-weight: 600; color: #D4D4D8">38 %</span></span>
+<span style="font-size: 11px; color: #A1A1AA">Module 3 sur 7</span>
+</span>
+</div>
+<nav aria-label="Formation en cours" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Programme.dc.html" aria-current="{{navCurrent}}" style="{{navStyle}}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{navStroke}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg>Programme</a>
+<a href="Carte.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><circle cx="9" cy="18" r="2.5"></circle><path d="M8.4 6.4 15.5 7.6M6.6 8.4l1.7 7.2M16.4 10l-5.6 6.3"></path></svg>Carte des notions</a>
+<a href="QuizGlobal.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg>Quiz global<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">14</span></a>
+<a href="Lacunes.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>Mes lacunes<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #3A2A20; color: #FDBA74; font-size: 12px; font-weight: 700">4</span></a>
+</nav>
+</section>
+<div style="margin-top: auto; background: #1C1C20; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Série</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #FFFFFF">12 jours</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span>
+</div>
+<p style="margin: 0; font-size: 11px; color: #A1A1AA">Régularité sur les 14 derniers jours</p>
+</div>
+</aside>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 28px 40px 56px">
+<header style="position: sticky; top: 0; z-index: 30; margin: -28px -40px 24px; padding: 12px 40px; background: rgba(244, 244, 241, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #E7E6E1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" data-action="toggle-sidebar" data-show-when="collapsed" aria-label="Afficher le menu" aria-expanded="false" style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m14 10 2 2-2 2"></path></svg></button>
+<div role="search" style="position: relative; flex: 1 1 320px; max-width: 520px">
+<label for="recherche-globale" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Rechercher</label>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 14px; top: 12px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-globale" type="search" placeholder="Rechercher une notion, un cours, une formation…" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</div>
+<div style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px">
+<button type="button" data-popover-toggle="notifications" aria-controls="panneau-notifications" aria-expanded="false" aria-label="Notifications, 3 non lues" style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span data-notif-dot aria-hidden="true" style="position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #F97316; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; transform: translate(50%, -50%)">3</span></button>
+<button type="button" data-popover-toggle="compte" aria-haspopup="menu" aria-controls="menu-compte" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 4px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; color: #111113; cursor: pointer"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="font-size: 14px; font-weight: 600">Mon compte</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+<section id="panneau-notifications" data-popover="notifications" hidden aria-labelledby="t-notifications" style="position: absolute; right: 0; top: 54px; width: 400px; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 20px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 18px 48px rgba(17, 17, 19, 0.16); display: flex; flex-direction: column; z-index: 40">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px">
+<h2 id="t-notifications" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Notifications</h2>
+<button type="button" data-action="notif-read-all" style="min-height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tout marquer comme lu</button>
+</div>
+<div role="group" aria-label="Filtrer les notifications" style="display: flex; gap: 4px; margin: 0 16px 8px; padding: 4px; border-radius: 12px; background: #F4F4F1">
+<button type="button" data-notif-filter="toutes" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Toutes <span data-count="toutes" style="font-size: 12px; font-weight: 700">8</span></button>
+<button type="button" data-notif-filter="non-lues" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Non lues <span data-count="non-lues" style="font-size: 12px; font-weight: 700">3</span></button>
+</div>
+<div style="max-height: min(420px, calc(100vh - 200px)); overflow-y: auto; padding: 0 6px 6px">
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Aujourd'hui</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Quiz.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz de validation à 14:00</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">13:20</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Cours.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #E1F4EF; color: #0B5C4D; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5M9 7h6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Votre cours est prêt</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">11:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Une séance à replacer</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30. Votre accord est demandé.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="QuizGlobal.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #EEF8CF; color: #3F5A00; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz global du jour</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">14 notions à revoir, lacunes en priorité. Prévu à 17:00, environ 10 min.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Hier</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Lacunes.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Nouvelle lacune repérée</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">16:42</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Clé de comptabilisation : confondue avec le type de pièce, deux fois.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Agenda.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F0E9FE; color: #5B21B6; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Session demain à 17:30</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">18:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Rétrospectives · apports du chapitre 2. Pensez à préparer vos notes.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Gestion de projet agile</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Plus tôt</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Programme.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Module 2 validé · 91 %</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">lun. 9 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Le module 3 · Comptabilité générale est débloqué.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; color: #3F3F46; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Bilan de la semaine</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">dim. 8 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">13 h d'étude, 86 % retenu à 1 mois, 3 notions à risque d'oubli.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<p data-notif-empty hidden style="margin: 0; padding: 28px 16px; text-align: center; font-size: 14px; color: #62626B">Vous avez tout lu. Les prochains rappels arriveront ici.</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #EEEDE8; font-size: 13px">
+<span style="color: #62626B">Rappels aussi envoyés par e-mail</span>
+<a href="Parametres.dc.html#notifications" style="font-weight: 600">Gérer les notifications</a>
+</div>
+</section>
+<div id="menu-compte" data-popover="compte" hidden role="menu" aria-label="Mon compte" style="position: absolute; right: 0; top: 54px; width: 260px; padding: 8px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.14); display: flex; flex-direction: column; gap: 2px; z-index: 40">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid #EEEDE8"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Apprenant</span><span style="font-size: 12px; color: #62626B">3 formations en cours</span></span></div>
+<a role="menuitem" href="Parametres.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Paramètres</a>
+<a role="menuitem" href="Parametres.dc.html#automatismes" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>Mettre en pause</a>
+<a role="menuitem" href="Inscription.dc.html?connexion" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H4"></path></svg>Se déconnecter</a>
+</div>
+</div>
+</header>
+<div style="max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{proposal}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px">
+<a href="NouvelleFormation.dc.html" style="font-weight: 600">Cadrage</a>
+<span aria-hidden="true" style="color: #62626B">/</span>
+<span style="padding: 4px 10px; border-radius: 999px; background: #111113; color: #FFFFFF; font-weight: 600">Étape 2 sur 2 · programme proposé</span>
+</div>
+</sc-if>
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}">
+<span style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #111113; color: #FFFFFF; font-size: 12px; font-weight: 700">Programme · formation en cours</span>
+</sc-if>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">SAP S/4HANA Finance</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #62626B">Devenir opérationnel sur les processus financiers de SAP S/4HANA et préparer la certification.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" style="min-height: 48px; padding: 0 18px; border-radius: 14px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Ajuster avec le tuteur</button>
+<sc-if value="{{proposal}}" hint-placeholder-val="{{ false }}"><a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 14px; background: #111113; color: #FFFFFF; font-size: 15px; font-weight: 700; text-decoration: none">Valider le programme</a></sc-if>
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}"><a href="ExamenBlanc.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 14px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-size: 15px; font-weight: 600; text-decoration: none">Examen blanc</a></sc-if>
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}"><a href="Module.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 14px; background: #111113; color: #FFFFFF; font-size: 15px; font-weight: 700; text-decoration: none">Ouvrir le module en cours</a></sc-if>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="4">
+<div style="{{s.cardStyle}}"><span style="{{s.bigStyle}}">{{s.big}}</span><span style="{{s.smallStyle}}">{{s.small}}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{proposal}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div role="radiogroup" aria-label="Origine du programme" style="display: inline-flex; flex-wrap: wrap; padding: 4px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E7E6E1; gap: 4px">
+<button type="button" role="radio" aria-checked="{{proposeChecked}}" onClick="{{pickPropose}}" style="{{proposeStyle}}">Proposé par le tuteur</button>
+<button type="button" role="radio" aria-checked="{{importChecked}}" onClick="{{pickImport}}" style="{{importStyle}}">Importer mon programme</button>
+</div>
+<sc-if value="{{srcPropose}}" hint-placeholder-val="{{ true }}"><span style="font-size: 13px; color: #62626B">Construit d'après votre cadrage et 6 sources web</span></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{showImport}}" hint-placeholder-val="{{ false }}">
+<section aria-labelledby="t-import" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+<h2 id="t-import" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Importer votre programme</h2>
+<div style="border: 2px dashed #C9C8C1; border-radius: 22px; padding: 40px 20px; background: #F8F8F6; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<p style="margin: 0; font-size: 16px; font-weight: 600">Glissez votre programme ici</p>
+<p style="margin: 0; font-size: 14px; color: #62626B">PDF, Word ou texte. Le tuteur en extrait modules, chapitres et objectifs.</p>
+<button type="button" style="min-height: 44px; padding: 0 18px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Parcourir</button>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{showPlan}}" hint-placeholder-val="{{ true }}">
+<section aria-labelledby="t-cal" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<h2 id="t-cal" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Calendrier de la formation</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: #62626B">
+<sc-for list="{{legend}}" as="l" hint-placeholder-count="3"><li style="display: flex; align-items: center; gap: 6px"><span aria-hidden="true" style="{{l.style}}"></span>{{l.label}}</li></sc-for>
+</ul>
+</div>
+<div style="overflow-x: auto">
+<div role="img" aria-label="Planning des 7 modules sur 6 semaines, du 2 novembre au 11 décembre 2026" style="min-width: 900px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: grid; grid-template-columns: 250px repeat(6, minmax(0, 1fr))">
+<span></span>
+<sc-for list="{{weeks}}" as="w" hint-placeholder-count="6">
+<span style="padding: 0 8px 8px; border-left: 1px solid #EEEDE8; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; font-weight: 700">{{w.label}}</span><span style="font-size: 12px; color: #62626B">{{w.dates}}</span></span>
+</sc-for>
+</div>
+<div style="position: relative; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="position: absolute; top: -6px; bottom: 0; left: calc(250px + (100% - 250px) * 0.25); width: 2px; background: #F97316; z-index: 2"><span style="position: absolute; top: -18px; left: -26px; padding: 1px 6px; border-radius: 6px; background: #F97316; color: #111113; font-size: 11px; font-weight: 700; white-space: nowrap">Aujourd'hui</span></div>
+</sc-if>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<div style="display: grid; grid-template-columns: 250px repeat(30, minmax(0, 1fr)); align-items: center; min-height: 44px">
+<span style="grid-row: 1; grid-column: 1 / 2; display: flex; align-items: center; gap: 10px; padding-right: 12px"><span style="{{r.numStyle}}">{{r.n}}</span><span style="font-size: 13px; font-weight: 600; line-height: 1.3">{{r.short}}</span></span>
+<span aria-hidden="true" style="grid-row: 1; grid-column: 2 / 32; align-self: stretch; background-image: repeating-linear-gradient(to right, #EEEDE8 0, #EEEDE8 1px, transparent 1px, transparent calc(100% / 6))"></span>
+<span style="{{r.barStyle}}"><span style="font-size: 12px; font-weight: 700">{{r.label}}</span><span style="{{r.markStyle}}"></span></span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="t-modules" style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+<h2 id="t-modules" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">Modules et chapitres</h2>
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}"><span style="font-size: 13px; color: #62626B">Un module se débloque quand le quiz du précédent atteint 80 %.</span></sc-if>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{modules}}" as="m" hint-placeholder-count="7">
+<li style="{{m.cardStyle}}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 16px">
+<button type="button" aria-expanded="{{m.expanded}}" onClick="{{m.toggle}}" style="flex: 1 1 320px; min-height: 56px; padding: 0; border: 0; background: transparent; font-family: inherit; color: #111113; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 14px">
+<span style="{{m.numStyle}}">{{m.n}}</span>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">{{m.titre}}</span><span style="font-size: 13px; color: #62626B">{{m.nb}} chapitres · {{m.quiz}} · {{m.dates}}</span></span>
+<span aria-hidden="true" style="{{m.chevronStyle}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+</button>
+<sc-if value="{{ongoing}}" hint-placeholder-val="{{ true }}"><span style="{{m.pillStyle}}">{{m.statut}}</span></sc-if>
+<sc-if value="{{m.isCurrent}}" hint-placeholder-val="{{ false }}"><a href="Module.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; background: #111113; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none">Ouvrir le module</a></sc-if>
+<sc-if value="{{m.isDone}}" hint-placeholder-val="{{ false }}"><a href="Cours.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-size: 14px; font-weight: 600; text-decoration: none">Revoir le cours</a></sc-if>
+</div>
+<sc-if value="{{m.isOpen}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 0 16px 18px 70px; display: flex; flex-direction: column; gap: 12px">
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{m.chapitres}}" as="c" hint-placeholder-count="3">
+<li style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #F8F8F6; font-size: 14px; font-weight: 500"><span style="{{c.dotStyle}}">{{c.mark}}</span>{{c.titre}}</li>
+</sc-for>
+</ol>
+<sc-if value="{{m.isCurrent}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<a href="Module.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-size: 14px; font-weight: 600; text-decoration: none">Apports du module</a>
+<a href="Cours.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-size: 14px; font-weight: 600; text-decoration: none">Lire le cours</a>
+<a href="Exercice.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-size: 14px; font-weight: 600; text-decoration: none">Exercice pratique</a>
+<a href="Quiz.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; background: #C6F432; color: #111113; font-size: 14px; font-weight: 700; text-decoration: none">Passer le quiz de validation</a>
+</div>
+</sc-if>
+<sc-if value="{{m.isLocked}}" hint-placeholder-val="{{ false }}"><p style="margin: 0; font-size: 14px; color: #62626B">Se débloque quand le quiz du module {{m.prev}} est validé.</p></sc-if>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ol>
+</section>
+</sc-if>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const proposal = /proposition/.test(window.location.search);
+    const st = this.state || {};
+    const source = st.source || 'propose';
+    const open = st.open === undefined ? (proposal ? 1 : 3) : st.open;
+    const seg = 'min-height: 44px; padding: 0 16px; border-radius: 10px; border: 0; font-family: inherit; font-size: 14px; cursor: pointer; ';
+    const data = [
+      { n: 1, titre: 'Fondamentaux de SAP S/4HANA et navigation Fiori', short: 'Fondamentaux et Fiori', s: 1, e: 3, dates: '2 – 4 nov.', exam: false, status: 'done', score: 86, chapitres: ['Architecture de SAP S/4HANA', 'Navigation dans SAP Fiori', 'Données de base et transactions clés'] },
+      { n: 2, titre: 'Structure organisationnelle de la Finance', short: 'Structure organisationnelle', s: 4, e: 5, dates: '5 – 6 nov.', exam: false, status: 'done', score: 91, chapitres: ['Sociétés et périmètres comptables', 'Devises et variantes d’exercice', 'Paramètres de saisie'] },
+      { n: 3, titre: 'Comptabilité générale', short: 'Comptabilité générale', s: 6, e: 10, dates: '9 – 13 nov.', exam: false, status: 'current', chapitres: ['Plan comptable et comptes généraux', 'Saisie des pièces comptables', 'Journal universel (ACDOCA)', 'Ledgers parallèles'] },
+      { n: 4, titre: 'Comptabilité fournisseurs', short: 'Comptabilité fournisseurs', s: 11, e: 15, dates: '16 – 20 nov.', exam: false, status: 'locked', chapitres: ['Données de base fournisseurs', 'Factures fournisseurs', 'Paiements', 'Rapprochement des comptes'] },
+      { n: 5, titre: 'Comptabilité clients', short: 'Comptabilité clients', s: 16, e: 20, dates: '23 – 27 nov.', exam: false, status: 'locked', chapitres: ['Données de base clients', 'Factures clients', 'Encaissements', 'Relances'] },
+      { n: 6, titre: 'Immobilisations', short: 'Immobilisations', s: 21, e: 25, dates: '30 nov. – 4 déc.', exam: false, status: 'locked', chapitres: ['Fiches d’immobilisation', 'Acquisitions et cessions', 'Amortissements'] },
+      { n: 7, titre: 'Clôture de période et préparation à la certification', short: 'Clôture et certification', s: 26, e: 30, dates: '7 – 11 déc.', exam: true, status: 'locked', chapitres: ['Clôture mensuelle', 'Clôture annuelle', 'Examen blanc de certification'] }
+    ];
+    const statusOf = (m) => (proposal ? 'none' : m.status);
+    const weeks = [
+      { label: 'Semaine 1', dates: '2 – 6 nov.' }, { label: 'Semaine 2', dates: '9 – 13 nov.' }, { label: 'Semaine 3', dates: '16 – 20 nov.' },
+      { label: 'Semaine 4', dates: '23 – 27 nov.' }, { label: 'Semaine 5', dates: '30 nov. – 4 déc.' }, { label: 'Semaine 6', dates: '7 – 11 déc.' }
+    ];
+    const numBase = 'flex: 0 0 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; ';
+    const rows = data.map((m) => {
+      const s = statusOf(m);
+      let bar = 'grid-row: 1; grid-column: ' + (m.s + 1) + ' / ' + (m.e + 2) + '; z-index: 1; height: 34px; margin: 0 3px; box-sizing: border-box; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px 0 10px; ';
+      if (s === 'done') bar += 'background: #5B5BD6; color: #FFFFFF';
+      else if (s === 'current') bar += 'background: #111113; color: #FFFFFF; box-shadow: inset 0 0 0 2px #C6F432';
+      else if (s === 'locked') bar += 'background: #F0EFEA; color: #62626B; box-shadow: inset 0 0 0 1px #DAD9D3';
+      else bar += 'background: ' + (m.n % 2 ? '#ECECFC' : '#E3E3FA') + '; color: #2E2E8F; box-shadow: inset 0 0 0 1.5px #5B5BD6';
+      return {
+        n: m.n, short: m.short,
+        label: s === 'done' ? 'Validé' : (s === 'current' ? 'En cours' : (m.e - m.s + 1) + ' j'),
+        numStyle: numBase + (s === 'done' ? 'background: #5B5BD6; color: #FFFFFF' : (s === 'current' ? 'background: #C6F432; color: #111113' : 'background: #F4F4F1; color: #111113')),
+        barStyle: bar,
+        markStyle: 'width: 11px; height: 11px; border-radius: 2px; transform: rotate(45deg); background: ' + (m.exam ? (s === 'done' || s === 'current' ? '#FFFFFF' : '#111113') : '#F97316')
+      };
+    });
+    const pill = 'padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; ';
+    const modules = data.map((m) => {
+      const s = statusOf(m);
+      const isOpen = open === m.n;
+      return {
+        n: m.n, titre: m.titre, dates: m.dates, nb: m.chapitres.length,
+        quiz: m.exam ? 'examen blanc' : 'quiz de validation',
+        statut: s === 'done' ? 'Validé · ' + m.score + ' %' : (s === 'current' ? 'En cours' : 'Verrouillé'),
+        pillStyle: pill + (s === 'done' ? 'background: #ECECFC; color: #2E2E8F' : (s === 'current' ? 'background: #C6F432; color: #111113' : 'background: #F0EFEA; color: #62626B')),
+        isDone: s === 'done', isCurrent: s === 'current', isLocked: s === 'locked', prev: m.n - 1,
+        chapitres: m.chapitres.map((c, i) => ({
+          titre: c,
+          mark: s === 'done' ? '✓' : String(i + 1),
+          dotStyle: 'flex: 0 0 24px; height: 24px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; ' + (s === 'done' ? 'background: #5B5BD6; color: #FFFFFF' : 'background: #FFFFFF; border: 1px solid #E7E6E1; color: #111113')
+        })),
+        isOpen: isOpen, expanded: isOpen ? 'true' : 'false',
+        toggle: () => this.setState({ open: isOpen ? 0 : m.n }),
+        cardStyle: 'background: #FFFFFF; border-radius: 22px; ' + (isOpen ? 'border: 1.5px solid #111113' : (s === 'current' ? 'border: 1.5px solid #9FC51F' : 'border: 1px solid #E7E6E1')),
+        numStyle: 'flex: 0 0 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-family: Space Grotesk, sans-serif; font-size: 16px; font-weight: 600; ' + (s === 'done' ? 'background: #5B5BD6; color: #FFFFFF' : (s === 'current' ? 'background: #C6F432; color: #111113' : 'background: #F4F4F1; color: #111113')),
+        chevronStyle: 'flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; display: inline-flex; align-items: center; justify-content: center; ' + (isOpen ? 'transform: rotate(180deg)' : '')
+      };
+    });
+    const card = 'flex: 1 1 200px; border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 4px; ';
+    const big = 'font-family: Space Grotesk, sans-serif; font-size: 34px; font-weight: 600; ';
+    const stat = (b, s, dark) => ({
+      big: b, small: s,
+      cardStyle: card + (dark ? 'background: #111113; color: #FFFFFF' : 'background: #FFFFFF; border: 1px solid #E7E6E1'),
+      bigStyle: big + (dark ? 'color: #C6F432' : 'color: #111113'),
+      smallStyle: 'font-size: 13px; ' + (dark ? 'color: #D4D4D8' : 'color: #62626B')
+    });
+    const stats = proposal
+      ? [stat('150 h', '5 h par jour, 5 jours sur 7', true), stat('6 semaines', 'Du 2 nov. au 11 déc. 2026', false), stat('7 modules', '24 chapitres', false), stat('80 %', 'Seuil de validation par module', false)]
+      : [stat('38 %', '2 modules validés sur 7', true), stat('6 semaines', 'Du 2 nov. au 11 déc. 2026', false), stat('150 h', '5 h par jour, 5 jours sur 7', false), stat('80 %', 'Seuil de validation par module', false)];
+    const sq = 'width: 18px; height: 10px; border-radius: 4px; ';
+    const dia = 'width: 10px; height: 10px; border-radius: 2px; transform: rotate(45deg); ';
+    const legend = proposal
+      ? [{ label: 'Module', style: sq + 'background: #ECECFC; box-shadow: inset 0 0 0 1.5px #5B5BD6' }, { label: 'Quiz de validation', style: dia + 'background: #F97316' }, { label: 'Examen blanc', style: dia + 'background: #111113' }]
+      : [{ label: 'Validé', style: sq + 'background: #5B5BD6' }, { label: 'En cours', style: sq + 'background: #111113; box-shadow: inset 0 0 0 2px #C6F432' }, { label: 'Verrouillé', style: sq + 'background: #F0EFEA; box-shadow: inset 0 0 0 1px #DAD9D3' }, { label: 'Quiz de validation', style: dia + 'background: #F97316' }];
+    return {
+      proposal: proposal, ongoing: !proposal,
+      navCurrent: proposal ? null : 'page',
+      navStroke: proposal ? 'currentColor' : '#C6F432',
+      navStyle: 'display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; ' + (proposal ? 'color: #A1A1AA; font-weight: 500' : 'background: #2A2A30; color: #FFFFFF; font-weight: 600'),
+      stats: stats, legend: legend, weeks: weeks, rows: rows, modules: modules,
+      srcPropose: source === 'propose',
+      showImport: proposal && source === 'import',
+      showPlan: !proposal || source === 'propose',
+      proposeChecked: source === 'propose' ? 'true' : 'false',
+      importChecked: source === 'import' ? 'true' : 'false',
+      proposeStyle: seg + (source === 'propose' ? 'background: #111113; color: #FFFFFF; font-weight: 700' : 'background: transparent; color: #62626B; font-weight: 500'),
+      importStyle: seg + (source === 'import' ? 'background: #111113; color: #FFFFFF; font-weight: 700' : 'background: transparent; color: #62626B; font-weight: 500'),
+      pickPropose: () => this.setState({ source: 'propose' }),
+      pickImport: () => this.setState({ source: 'import' })
+    };
+  }
+}
+</script>
+</body>
+</html>

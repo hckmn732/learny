@@ -1,0 +1,1389 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-11T18:11:51.784Z",
+  "specs": {
+    "SPEC-001": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-002": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-003": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-004": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-005": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-006": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-007": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-008": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-009": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-010": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-011": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-012": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-013": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-101": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-102": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-103": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-104": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-105": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-106": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-107": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-108": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-109": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-110": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-111": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-112": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-113": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-114": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-115": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-201": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-202": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-203": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-204": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-205": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-206": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-207": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-208": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-209": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-210": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-211": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-212": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-301": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-302": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-303": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-304": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-305": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-306": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-307": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-308": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-309": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-401": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-402": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-403": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-404": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-405": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-406": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-407": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-408": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-409": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-410": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-411": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-501": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-502": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-503": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-504": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-505": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-506": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-507": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-508": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-509": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-510": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-511": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-512": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-513": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-601": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-602": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-603": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-604": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-605": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-606": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-607": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-608": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-609": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-610": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-611": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-612": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-613": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-614": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-615": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-616": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-617": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-618": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-701": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-702": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-703": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-704": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-705": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-706": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-707": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-708": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-709": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-710": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-711": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-712": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-713": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-714": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-715": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-716": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-717": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-718": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-719": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-720": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-721": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-722": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-723": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-724": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-725": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-801": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-802": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-803": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-804": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-805": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-806": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-807": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-808": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-901": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-902": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-903": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-904": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-905": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-906": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-907": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-908": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    }
+  },
+  "checkpoints": {
+    "CP-0": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-1": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-2": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-3": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-4": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-5": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-6": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-7": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-8": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-9": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    }
+  },
+  "anomalies": []
+}

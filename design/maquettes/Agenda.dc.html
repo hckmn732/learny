@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Agenda — Semaine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside data-sidebar style="flex: 1 1 248px; box-sizing: border-box; background: #111113; color: #F4F4F1; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<a href="Main.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; white-space: nowrap"><span aria-hidden="true" style="flex: 0 0 30px; height: 30px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span><span style="overflow: hidden; text-overflow: ellipsis">Learny</span></a>
+<button type="button" data-action="toggle-sidebar" aria-label="Masquer le menu" aria-expanded="true" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m16 10-2 2 2 2"></path></svg></button>
+</div>
+<nav aria-label="Navigation principale" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="Agenda.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; background: #232328; color: #FFFFFF; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Agenda</a>
+</nav>
+<div aria-hidden="true" style="height: 1px; margin: 0 6px; background: #26262B"></div>
+<section aria-labelledby="t-formation-en-cours" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 8px; border-radius: 18px; background: #18181B; border: 1px solid #26262B">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<h2 id="t-formation-en-cours" style="margin: 0; font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Formation en cours</h2>
+<button type="button" aria-label="Changer de formation" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 13px; background: #232328">
+<span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700">SAP</span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.25">SAP S/4HANA Finance</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: 1; height: 4px; border-radius: 2px; background: #3A3A40"><span style="display: block; width: 38%; height: 4px; border-radius: 2px; background: #C6F432"></span></span><span style="font-size: 11px; font-weight: 600; color: #D4D4D8">38 %</span></span>
+<span style="font-size: 11px; color: #A1A1AA">Module 3 sur 7</span>
+</span>
+</div>
+<nav aria-label="Formation en cours" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Programme.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg>Programme</a>
+<a href="Carte.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><circle cx="9" cy="18" r="2.5"></circle><path d="M8.4 6.4 15.5 7.6M6.6 8.4l1.7 7.2M16.4 10l-5.6 6.3"></path></svg>Carte des notions</a>
+<a href="QuizGlobal.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg>Quiz global<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">14</span></a>
+<a href="Lacunes.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>Mes lacunes<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #3A2A20; color: #FDBA74; font-size: 12px; font-weight: 700">4</span></a>
+</nav>
+</section>
+<div style="margin-top: auto; background: #1C1C20; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Série</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #FFFFFF">12 jours</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span>
+</div>
+<p style="margin: 0; font-size: 11px; color: #A1A1AA">Régularité sur les 14 derniers jours</p>
+</div>
+</aside>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 28px 40px 56px">
+<header style="position: sticky; top: 0; z-index: 30; margin: -28px -40px 24px; padding: 12px 40px; background: rgba(244, 244, 241, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #E7E6E1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" data-action="toggle-sidebar" data-show-when="collapsed" aria-label="Afficher le menu" aria-expanded="false" style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m14 10 2 2-2 2"></path></svg></button>
+<div role="search" style="position: relative; flex: 1 1 320px; max-width: 520px">
+<label for="recherche-globale" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Rechercher</label>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 14px; top: 12px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-globale" type="search" placeholder="Rechercher une notion, un cours, une formation…" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</div>
+<div style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px">
+<button type="button" data-popover-toggle="notifications" aria-controls="panneau-notifications" aria-expanded="false" aria-label="Notifications, 3 non lues" style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span data-notif-dot aria-hidden="true" style="position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #F97316; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; transform: translate(50%, -50%)">3</span></button>
+<button type="button" data-popover-toggle="compte" aria-haspopup="menu" aria-controls="menu-compte" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 4px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; color: #111113; cursor: pointer"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="font-size: 14px; font-weight: 600">Mon compte</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+<section id="panneau-notifications" data-popover="notifications" hidden aria-labelledby="t-notifications" style="position: absolute; right: 0; top: 54px; width: 400px; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 20px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 18px 48px rgba(17, 17, 19, 0.16); display: flex; flex-direction: column; z-index: 40">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px">
+<h2 id="t-notifications" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Notifications</h2>
+<button type="button" data-action="notif-read-all" style="min-height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tout marquer comme lu</button>
+</div>
+<div role="group" aria-label="Filtrer les notifications" style="display: flex; gap: 4px; margin: 0 16px 8px; padding: 4px; border-radius: 12px; background: #F4F4F1">
+<button type="button" data-notif-filter="toutes" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Toutes <span data-count="toutes" style="font-size: 12px; font-weight: 700">8</span></button>
+<button type="button" data-notif-filter="non-lues" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Non lues <span data-count="non-lues" style="font-size: 12px; font-weight: 700">3</span></button>
+</div>
+<div style="max-height: min(420px, calc(100vh - 200px)); overflow-y: auto; padding: 0 6px 6px">
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Aujourd'hui</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Quiz.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz de validation à 14:00</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">13:20</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Cours.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #E1F4EF; color: #0B5C4D; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5M9 7h6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Votre cours est prêt</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">11:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Une séance à replacer</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30. Votre accord est demandé.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="QuizGlobal.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #EEF8CF; color: #3F5A00; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz global du jour</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">14 notions à revoir, lacunes en priorité. Prévu à 17:00, environ 10 min.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Hier</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Lacunes.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Nouvelle lacune repérée</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">16:42</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Clé de comptabilisation : confondue avec le type de pièce, deux fois.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Agenda.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F0E9FE; color: #5B21B6; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Session demain à 17:30</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">18:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Rétrospectives · apports du chapitre 2. Pensez à préparer vos notes.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Gestion de projet agile</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Plus tôt</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Programme.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Module 2 validé · 91 %</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">lun. 9 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Le module 3 · Comptabilité générale est débloqué.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; color: #3F3F46; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Bilan de la semaine</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">dim. 8 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">13 h d'étude, 86 % retenu à 1 mois, 3 notions à risque d'oubli.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<p data-notif-empty hidden style="margin: 0; padding: 28px 16px; text-align: center; font-size: 14px; color: #62626B">Vous avez tout lu. Les prochains rappels arriveront ici.</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #EEEDE8; font-size: 13px">
+<span style="color: #62626B">Rappels aussi envoyés par e-mail</span>
+<a href="Parametres.dc.html#notifications" style="font-weight: 600">Gérer les notifications</a>
+</div>
+</section>
+<div id="menu-compte" data-popover="compte" hidden role="menu" aria-label="Mon compte" style="position: absolute; right: 0; top: 54px; width: 260px; padding: 8px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.14); display: flex; flex-direction: column; gap: 2px; z-index: 40">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid #EEEDE8"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Apprenant</span><span style="font-size: 12px; color: #62626B">3 formations en cours</span></span></div>
+<a role="menuitem" href="Parametres.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Paramètres</a>
+<a role="menuitem" href="Parametres.dc.html#automatismes" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>Mettre en pause</a>
+<a role="menuitem" href="Inscription.dc.html?connexion" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H4"></path></svg>Se déconnecter</a>
+</div>
+</div>
+</header>
+<div style="max-width: 1160px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<p style="margin: 0; font-size: 14px; color: #62626B">{{subtitle}}</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">Agenda</h1>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<label for="filtre-formation" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Formation affichée</label>
+<select id="filtre-formation" value="{{filter}}" onChange="{{setFilter}}" style="min-height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; color: #111113">
+<option value="all">Toutes les formations</option>
+<option value="sap">SAP S/4HANA Finance</option>
+<option value="agile">Gestion de projet agile</option>
+</select>
+<div role="group" aria-label="Affichage" style="display: inline-flex; padding: 4px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E7E6E1; gap: 4px">
+<sc-for list="{{views}}" as="v" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{v.pressed}}" onClick="{{v.pick}}" style="{{v.style}}">{{v.label}}</button>
+</sc-for>
+</div>
+<div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E7E6E1">
+<button type="button" aria-label="{{prevLabel}}" disabled="{{prevDisabled}}" onClick="{{prev}}" style="{{prevStyle}}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+<span aria-live="polite" style="min-width: 170px; padding: 0 6px; text-align: center; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums">{{rangeLabel}}</span>
+<button type="button" aria-label="{{nextLabel}}" disabled="{{nextDisabled}}" onClick="{{next}}" style="{{nextStyle}}"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+</div>
+<button type="button" onClick="{{goToday}}" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Aujourd'hui</button>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px">
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px">
+<section aria-labelledby="t-mois" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px">
+<h2 id="t-mois" style="margin: 0; white-space: nowrap; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600">{{miniTitle}}</h2>
+<span style="font-size: 12px; color: #62626B">Formation : 2 nov. – 11 déc.</span>
+</div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center; font-size: 11px; font-weight: 600; color: #62626B">
+<span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px">
+<sc-for list="{{monthCells}}" as="m" hint-placeholder-count="36">
+<button type="button" disabled="{{m.disabled}}" aria-hidden="{{m.hidden}}" aria-label="{{m.aria}}" aria-current="{{m.current}}" onClick="{{m.pick}}" style="{{m.style}}">{{m.label}}</button>
+</sc-for>
+</div>
+</section>
+<section aria-labelledby="t-detail" style="background: #111113; color: #FFFFFF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<h2 id="t-detail" style="margin: 0; font-size: 12px; font-weight: 700; color: #C6F432; text-transform: uppercase; letter-spacing: 0.1em">Activité sélectionnée</h2>
+<span style="{{selPill}}">{{selType}}</span>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.2">{{selTitle}}</p>
+<p style="margin: 0; font-size: 14px; color: #D4D4D8">{{selDay}} · {{selTime}}</p>
+<p style="margin: 0; font-size: 14px; color: #A1A1AA">{{selMeta}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px">
+<a href="{{selHref}}" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 12px; background: #C6F432; color: #111113; font-size: 14px; font-weight: 700; text-decoration: none">Ouvrir</a>
+<button type="button" style="min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #3A3A40; background: transparent; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Déplacer</button>
+</div>
+</section>
+<section aria-labelledby="t-legende" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+<h2 id="t-legende" style="margin: 0; font-size: 14px; font-weight: 600">Légende</h2>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; font-weight: 600">
+<li style="padding: 4px 10px; border-radius: 999px; background: #E1F4EF; color: #0B5C4D">Apports</li>
+<li style="padding: 4px 10px; border-radius: 999px; background: #ECECFC; color: #2E2E8F">Cours</li>
+<li style="padding: 4px 10px; border-radius: 999px; background: #F1FBD3; color: #3D5200">Exercice</li>
+<li style="padding: 4px 10px; border-radius: 999px; background: #FFEDE0; color: #8F3305">Quiz de validation</li>
+<li style="padding: 4px 10px; border-radius: 999px; background: #F0E9FE; color: #5B21B6">Quiz global · révision</li>
+<li style="padding: 4px 10px; border-radius: 999px; background: #FFFFFF; border: 1px dashed #A8A7A0; color: #62626B">Marge de rattrapage</li>
+</ul>
+<p style="margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: #62626B">Si un quiz n'est pas validé, le tuteur utilise d'abord les marges. Au-delà, il vous propose de décaler la fin, d'augmenter le volume quotidien ou d'alléger le programme.</p>
+</section>
+</div>
+<section aria-label="{{calLabel}}" style="flex: 999 1 600px; min-width: 0; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 8px 8px 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; padding: 12px 16px 8px; font-size: 13px; color: #62626B">
+<sc-if value="{{isDay}}" hint-placeholder-val="{{ false }}">
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: #111113">{{dayTitle}}</span>
+</sc-if>
+<span><strong style="color: #111113">{{sumPlanned}}</strong> prévues</span>
+<span><strong style="color: #111113">{{sumDone}}</strong> faites</span>
+<span><strong style="color: #111113">{{sumMargins}}</strong> {{marginsLabel}}</span>
+</div>
+<sc-if value="{{isWeek}}" hint-placeholder-val="{{ true }}">
+<div style="overflow-x: auto">
+<div style="min-width: 720px">
+<div style="display: grid; grid-template-columns: 64px repeat(5, minmax(0, 1fr)); border-bottom: 1px solid #E7E6E1">
+<div></div>
+<sc-for list="{{days}}" as="d" hint-placeholder-count="5">
+<button type="button" onClick="{{d.pick}}" aria-label="{{d.aria}}" style="padding: 10px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 0; background: transparent; font-family: inherit; cursor: pointer">
+<span style="font-size: 12px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.06em">{{d.label}}</span>
+<span style="{{d.numStyle}}">{{d.num}}</span>
+</button>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: 64px repeat(5, minmax(0, 1fr)); padding-top: 8px">
+<div style="position: relative; height: 540px">
+<sc-for list="{{hours}}" as="h" hint-placeholder-count="9">
+<span style="{{h.style}}">{{h.label}}</span>
+</sc-for>
+</div>
+<sc-for list="{{days}}" as="d" hint-placeholder-count="5">
+<div style="{{d.colStyle}}">
+<sc-for list="{{d.events}}" as="e" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{e.pressed}}" onClick="{{e.select}}" style="{{e.style}}">
+<span style="font-size: 12px; font-weight: 700; line-height: 1.3">{{e.title}}</span>
+<sc-if value="{{e.long}}" hint-placeholder-val="{{ true }}">
+<span style="font-size: 11.5px; line-height: 1.3; font-variant-numeric: tabular-nums">{{e.time}}</span>
+<span style="font-size: 11.5px; line-height: 1.3">{{e.meta}}</span>
+</sc-if>
+</button>
+</sc-for>
+<sc-if value="{{d.today}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 260px; height: 2px; background: #F97316; z-index: 2"><span style="position: absolute; left: -5px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #F97316"></span></div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isDay}}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr); padding-top: 8px; border-top: 1px solid #E7E6E1">
+<div style="position: relative; height: 540px; margin-top: 8px">
+<sc-for list="{{hours}}" as="h" hint-placeholder-count="9">
+<span style="{{h.style}}">{{h.label}}</span>
+</sc-for>
+</div>
+<div style="{{dayCol.colStyle}}">
+<sc-for list="{{dayCol.events}}" as="e" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{e.pressed}}" onClick="{{e.select}}" style="{{e.style}}">
+<span style="font-size: 13px; font-weight: 700; line-height: 1.3">{{e.title}}</span>
+<span style="font-size: 12px; line-height: 1.3; font-variant-numeric: tabular-nums">{{e.time}}</span>
+<span style="font-size: 12px; line-height: 1.3">{{e.meta}}</span>
+</button>
+</sc-for>
+<sc-if value="{{dayCol.today}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 260px; height: 2px; background: #F97316; z-index: 2"><span style="position: absolute; left: -5px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #F97316"></span></div>
+</sc-if>
+<sc-if value="{{dayCol.empty}}" hint-placeholder-val="{{ false }}">
+<p style="position: absolute; left: 16px; right: 16px; top: 220px; margin: 0; text-align: center; font-size: 14px; color: #62626B">Aucune activité prévue ce jour-là.</p>
+</sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{isMonth}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 0 8px">
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; padding: 8px 0; border-top: 1px solid #E7E6E1; font-size: 12px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.06em; text-align: center">
+<span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{monthGrid}}" as="c" hint-placeholder-count="35">
+<button type="button" disabled="{{c.disabled}}" aria-hidden="{{c.hidden}}" aria-label="{{c.aria}}" onClick="{{c.pick}}" style="{{c.style}}">
+<span style="{{c.numStyle}}">{{c.label}}</span>
+<sc-for list="{{c.chips}}" as="k" hint-placeholder-count="2">
+<span style="{{k.style}}">{{k.label}}</span>
+</sc-for>
+<sc-if value="{{c.more}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 11px; font-weight: 600; color: #62626B">{{c.more}}</span>
+</sc-if>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1050}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const TODAY = '2026-11-11', START = '2026-11-02', END = '2026-12-11';
+    const view = st.view || 'semaine';
+    const cursor = st.cursor || TODAY;
+    const selId = st.sel || 'w2';
+    const filter = st.f || 'all';
+    const H0 = 9, PX = 60;
+
+    /* Dates au format AAAA-MM-JJ, en heure locale. */
+    const toDate = (s) => { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); };
+    const iso = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const add = (s, n) => { const d = toDate(s); d.setDate(d.getDate() + n); return iso(d); };
+    const dow = (s) => (toDate(s).getDay() + 6) % 7;
+    const dnum = (s) => toDate(s).getDate();
+    const mon = (s) => toDate(s).getMonth();
+    const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    const MOIS_C = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+    const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const JOURS_C = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+    const fmt = (h) => {
+      const hh = Math.floor(h);
+      const mm = Math.round((h - hh) * 60);
+      return (hh < 10 ? '0' : '') + hh + ':' + (mm < 10 ? '0' : '') + mm;
+    };
+    const dur = (h) => {
+      const hh = Math.floor(h);
+      const mm = Math.round((h - hh) * 60);
+      return hh + ' h' + (mm ? ' ' + (mm < 10 ? '0' : '') + mm : '');
+    };
+    const longDay = (s) => JOURS[dow(s)] + ' ' + dnum(s) + ' ' + MOIS_C[mon(s)];
+
+    const types = {
+      apports: { bg: '#E1F4EF', fg: '#0B5C4D', label: 'Apports', border: '0' },
+      cours: { bg: '#ECECFC', fg: '#2E2E8F', label: 'Cours', border: '0' },
+      exercice: { bg: '#F1FBD3', fg: '#3D5200', label: 'Exercice', border: '0' },
+      validation: { bg: '#FFEDE0', fg: '#8F3305', label: 'Quiz de validation', border: '0' },
+      global: { bg: '#F0E9FE', fg: '#5B21B6', label: 'Quiz global', border: '0' },
+      revision: { bg: '#F0E9FE', fg: '#5B21B6', label: 'Révision', border: '0' },
+      marge: { bg: '#FFFFFF', fg: '#62626B', label: 'Marge de rattrapage', border: '1px dashed #A8A7A0' }
+    };
+    const hrefs = { apports: 'Module.dc.html', cours: 'Cours.dc.html', exercice: 'Exercice.dc.html', validation: 'Quiz.dc.html', global: 'QuizGlobal.dc.html', revision: 'QuizGlobal.dc.html', marge: 'Agenda.dc.html' };
+
+    /* Semaine du 9 au 13 novembre : le détail rédigé. */
+    const week2 = [
+      { id: 'l1', d: 0, s: 9, e: 12, t: 'apports', title: 'Apports · Plan comptable', meta: 'Chapitre 1 · fait', done: true },
+      { id: 'l2', d: 0, s: 14, e: 16, t: 'apports', title: 'Apports · Saisie des pièces', meta: 'Chapitre 2 · fait', done: true },
+      { id: 'l3', d: 0, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: '12 notions · fait', done: true },
+      { id: 'm1', d: 1, s: 9, e: 11, t: 'apports', title: 'Apports · Journal universel', meta: 'Chapitre 3 · fait', done: true },
+      { id: 'm2', d: 1, s: 11, e: 12, t: 'apports', title: 'Apports · Ledgers', meta: 'Chapitre 4 · fait', done: true },
+      { id: 'm3', d: 1, s: 14, e: 16, t: 'cours', title: 'Lecture du cours', meta: 'Module 3 complet · fait', done: true },
+      { id: 'm4', d: 1, s: 16.5, e: 17, t: 'validation', title: 'Quiz · tentative 1', meta: '58 %', done: true },
+      { id: 'm5', d: 1, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: '9 notions · fait', done: true },
+      { id: 'w1', d: 2, s: 9, e: 12, t: 'cours', title: 'Relecture ciblée', meta: 'Chapitre 2 et lacunes · fait', done: true },
+      { id: 'w2', d: 2, s: 14, e: 15, t: 'validation', title: 'Quiz de validation', meta: 'Tentative 2 · seuil 80 %', done: false },
+      { id: 'w3', d: 2, s: 15, e: 16, t: 'marge', title: 'Marge de remédiation', meta: 'Utilisée si le quiz échoue', done: false },
+      { id: 'w4', d: 2, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: '14 notions · 10 min', done: false },
+      { id: 'j1', d: 3, s: 9, e: 10.5, t: 'exercice', title: 'Exercice pratique', meta: 'Saisir une pièce équilibrée', done: false },
+      { id: 'j2', d: 3, s: 10.5, e: 12, t: 'cours', title: 'Ledgers parallèles', meta: 'Nouvelle explication', done: false },
+      { id: 'j3', d: 3, s: 14, e: 16, t: 'marge', title: 'Marge de rattrapage', meta: 'Réservée par le tuteur', done: false },
+      { id: 'j4', d: 3, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: 'Notions dues', done: false },
+      { id: 'v1', d: 4, s: 9, e: 11, t: 'revision', title: 'Révision du module', meta: 'Fiches « À retenir »', done: false },
+      { id: 'v2', d: 4, s: 11, e: 12, t: 'exercice', title: 'Cas complet de saisie', meta: 'Exercice pratique', done: false },
+      { id: 'v3', d: 4, s: 14, e: 16, t: 'marge', title: 'Marge de rattrapage', meta: 'Libérée si tout est validé', done: false },
+      { id: 'v4', d: 4, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: 'Notions dues', done: false },
+      { id: 'a1', d: 1, s: 17.5, e: 18, t: 'apports', f: 'agile', title: 'Agile · apports', meta: 'Rétrospectives, chapitre 1 · fait', done: true },
+      { id: 'a2', d: 3, s: 17.5, e: 18, t: 'apports', f: 'agile', title: 'Agile · apports', meta: 'Rétrospectives, chapitre 2', done: false }
+    ].map((x) => Object.assign({}, x, { date: add('2026-11-09', x.d) }));
+
+    /* Les autres jours : le planning généré à partir du programme (mêmes dates que l'écran Programme). */
+    const MODS = [
+      { n: 1, name: 'Fondamentaux et Fiori', from: '2026-11-02', to: '2026-11-04', ch: 3 },
+      { n: 2, name: 'Structure organisationnelle', from: '2026-11-05', to: '2026-11-06', ch: 3 },
+      { n: 3, name: 'Comptabilité générale', from: '2026-11-09', to: '2026-11-13', ch: 4 },
+      { n: 4, name: 'Comptabilité fournisseurs', from: '2026-11-16', to: '2026-11-20', ch: 4 },
+      { n: 5, name: 'Comptabilité clients', from: '2026-11-23', to: '2026-11-27', ch: 4 },
+      { n: 6, name: 'Immobilisations', from: '2026-11-30', to: '2026-12-04', ch: 3 },
+      { n: 7, name: 'Clôture et certification', from: '2026-12-07', to: '2026-12-11', ch: 3 }
+    ];
+    const all = week2.slice();
+    for (let s = START; s <= END; s = add(s, 1)) {
+      const wd = dow(s);
+      if (wd > 4 || (s >= '2026-11-09' && s <= '2026-11-13')) continue;
+      const m = MODS.find((x) => s >= x.from && s <= x.to);
+      const past = s < TODAY;
+      const idx = Math.round((toDate(s) - toDate(m.from)) / 86400000);
+      const last = s === m.to;
+      const tag = past ? ' · fait' : '';
+      all.push({ id: s + '-a', date: s, s: 9, e: 12, t: 'apports', title: 'Apports · chapitre ' + Math.min(idx + 1, m.ch), meta: 'Module ' + m.n + ' · ' + m.name + tag, done: past });
+      if (last) {
+        all.push({ id: s + '-q', date: s, s: 14, e: 15, t: 'validation', title: m.n === 7 ? 'Examen blanc' : 'Quiz de validation', meta: 'Module ' + m.n + (past ? ' · validé' : ' · seuil 80 %'), done: past });
+        all.push({ id: s + '-r', date: s, s: 15, e: 16, t: 'marge', title: 'Marge de rattrapage', meta: past ? 'Non utilisée' : 'Réservée par le tuteur', done: past });
+      } else {
+        all.push({ id: s + '-c', date: s, s: 14, e: 16, t: 'cours', title: 'Lecture du cours', meta: 'Module ' + m.n + ' · ' + m.name + tag, done: past });
+      }
+      if (s !== START) all.push({ id: s + '-g', date: s, s: 17, e: 17.5, t: 'global', title: 'Quiz global', meta: past ? 'Notions dues · fait' : 'Notions dues', done: past });
+      const jalon = MODS.find((x) => x.to > TODAY && (s === add(x.to, -3) || s === add(x.to, -1)));
+      if (jalon) all.push({ id: s + '-sp', date: s, s: 16.5, e: 17, t: 'revision', title: jalon.n === 7 ? 'Sprint avant l’examen blanc' : 'Sprint avant le quiz', meta: 'Notions faibles du module ' + jalon.n + ' · ajouté par le tuteur', done: false });
+      if ((wd === 1 || wd === 3) && s <= '2026-11-27') all.push({ id: s + '-ag', date: s, s: 17.5, e: 18, t: 'apports', f: 'agile', title: 'Agile · apports', meta: 'Gestion de projet agile' + tag, done: past });
+    }
+    const keep = (x) => filter === 'all' || (x.f || 'sap') === filter;
+    const on = (date) => all.filter((x) => x.date === date && keep(x)).sort((a, b) => a.s - b.s);
+
+    const mapEvent = (x, mode) => {
+      const ty = types[x.t];
+      const sel = x.id === selId;
+      const top = (x.s - H0) * PX + 2;
+      const height = (x.e - x.s) * PX - 4;
+      const layout = mode === 'jour'
+        ? 'left: 8px; right: 8px; padding: 6px 12px; flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 2px; '
+        : 'left: 5px; right: 5px; padding: 7px 10px; flex-direction: column; align-items: flex-start; gap: 2px; ';
+      return {
+        title: x.title,
+        meta: x.meta,
+        time: fmt(x.s) + ' – ' + fmt(x.e),
+        long: (x.e - x.s) >= 1,
+        pressed: sel ? 'true' : 'false',
+        select: () => this.setState({ sel: x.id }),
+        style: 'position: absolute; ' + layout + 'top: ' + top + 'px; height: ' + height + 'px; box-sizing: border-box; border-radius: 12px; border: ' + ty.border + '; background: ' + ty.bg + '; color: ' + ty.fg + '; display: flex; overflow: hidden; text-align: left; font-family: inherit; cursor: pointer; ' + (x.done ? 'opacity: 0.72; ' : '') + (sel ? 'box-shadow: 0 0 0 2px #111113; z-index: 3' : '')
+      };
+    };
+    const grid = 'background-image: repeating-linear-gradient(to bottom, #EEEDE8 0, #EEEDE8 1px, transparent 1px, transparent 60px); ';
+
+    /* Période affichée et navigation. */
+    const monday = add(cursor, -dow(cursor));
+    const weekDates = [0, 1, 2, 3, 4].map((i) => add(monday, i));
+    const monthIdx = mon(cursor);
+    const monthFirst = iso(new Date(2026, monthIdx, 1));
+    const monthDays = new Date(2026, monthIdx + 1, 0).getDate();
+    const prevWeekday = (s) => { let d = add(s, -1); while (dow(d) > 4) d = add(d, -1); return d; };
+    const nextWeekday = (s) => { let d = add(s, 1); while (dow(d) > 4) d = add(d, 1); return d; };
+    let range, rangeLabel, prevTarget, nextTarget, unit;
+    if (view === 'jour') {
+      range = [cursor];
+      rangeLabel = longDay(cursor) + ' 2026';
+      prevTarget = prevWeekday(cursor) >= START ? prevWeekday(cursor) : null;
+      nextTarget = nextWeekday(cursor) <= END ? nextWeekday(cursor) : null;
+      unit = 'Jour';
+    } else if (view === 'mois') {
+      range = [];
+      for (let i = 1; i <= monthDays; i++) range.push(iso(new Date(2026, monthIdx, i)));
+      rangeLabel = cap(MOIS[monthIdx]) + ' 2026';
+      prevTarget = monthIdx > 10 ? TODAY : null;
+      nextTarget = monthIdx < 11 ? '2026-12-01' : null;
+      unit = 'Mois';
+    } else {
+      range = weekDates;
+      const a = weekDates[0], b = weekDates[4];
+      rangeLabel = mon(a) === mon(b) ? dnum(a) + ' – ' + dnum(b) + ' ' + MOIS_C[mon(b)] + ' 2026' : dnum(a) + ' ' + MOIS_C[mon(a)] + ' – ' + dnum(b) + ' ' + MOIS_C[mon(b)] + ' 2026';
+      prevTarget = add(monday, -7) >= START ? add(monday, -7) : null;
+      nextTarget = add(monday, 7) <= END ? add(monday, 7) : null;
+      unit = 'Semaine';
+    }
+    const navStyle = (enabled) => 'width: 36px; height: 36px; border-radius: 9px; border: 0; background: transparent; color: #111113; display: inline-flex; align-items: center; justify-content: center; ' + (enabled ? 'cursor: pointer' : 'opacity: 0.3; cursor: default');
+
+    /* Totaux de la période. */
+    const inRange = all.filter((x) => range.indexOf(x.date) >= 0 && keep(x));
+    const work = inRange.filter((x) => x.t !== 'marge');
+    const planned = work.reduce((n, x) => n + x.e - x.s, 0);
+    const doneH = work.filter((x) => x.done).reduce((n, x) => n + x.e - x.s, 0);
+    const margins = inRange.filter((x) => x.t === 'marge' && !x.done).length;
+
+    const days = weekDates.map((date) => {
+      const isToday = date === TODAY;
+      return {
+        label: JOURS_C[dow(date)],
+        num: dnum(date),
+        today: isToday,
+        aria: 'Afficher le ' + longDay(date),
+        pick: () => this.setState({ view: 'jour', cursor: date }),
+        numStyle: isToday
+          ? 'width: 36px; height: 36px; border-radius: 50%; background: #111113; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-family: Space Grotesk, sans-serif; font-size: 17px; font-weight: 600'
+          : 'width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; font-family: Space Grotesk, sans-serif; font-size: 17px; font-weight: 600; color: #111113',
+        colStyle: 'position: relative; height: 540px; border-left: 1px solid #EEEDE8; ' + grid + (isToday ? 'background-color: #FAFAF6' : ''),
+        events: on(date).map((x) => mapEvent(x, 'semaine'))
+      };
+    });
+
+    const dayEvents = on(cursor);
+    const dayCol = {
+      today: cursor === TODAY,
+      empty: dayEvents.length === 0,
+      colStyle: 'position: relative; height: 540px; margin-top: 8px; border-left: 1px solid #EEEDE8; ' + grid + (cursor === TODAY ? 'background-color: #FAFAF6' : ''),
+      events: dayEvents.map((x) => mapEvent(x, 'jour'))
+    };
+    const curMod = MODS.find((x) => cursor >= x.from && cursor <= x.to);
+
+    const hours = [];
+    for (let h = 9; h <= 17; h++) {
+      hours.push({ label: fmt(h), style: 'position: absolute; right: 12px; top: ' + Math.max((h - H0) * PX - 7, 0) + 'px; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums' });
+    }
+
+    /* Mini calendrier : le mois du jour affiché, cliquable. */
+    const lead = dow(monthFirst);
+    const blank = { label: '', disabled: true, hidden: 'true', style: 'height: 34px; border: 0; background: transparent' };
+    const monthCells = [];
+    for (let i = 0; i < lead; i++) monthCells.push(blank);
+    for (let i = 1; i <= monthDays; i++) {
+      const date = iso(new Date(2026, monthIdx, i));
+      const weekend = dow(date) >= 5;
+      const isToday = date === TODAY;
+      const inView = range.indexOf(date) >= 0 && view !== 'mois';
+      const inFormation = date >= START && date <= END && !weekend;
+      let s = 'height: 34px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 10px; font-family: inherit; font-size: 13px; font-variant-numeric: tabular-nums; cursor: pointer; ';
+      if (isToday) s += 'background: #111113; color: #FFFFFF; font-weight: 700';
+      else s += (inView ? 'background: #ECECFC; ' : 'background: transparent; ') + (inFormation ? 'color: #111113; font-weight: 600' : 'color: #62626B; font-weight: 400');
+      monthCells.push({
+        label: String(i), disabled: false, hidden: null, style: s,
+        aria: longDay(date), current: date === cursor ? 'date' : null,
+        pick: () => this.setState({ cursor: date })
+      });
+    }
+
+    /* Vue Mois : une case par jour, avec les activités du jour. */
+    const monthGrid = [];
+    const mBlank = { label: '', disabled: true, hidden: 'true', chips: [], more: '', numStyle: '', style: 'min-height: 104px; border: 0; background: transparent' };
+    for (let i = 0; i < lead; i++) monthGrid.push(mBlank);
+    for (let i = 1; i <= monthDays; i++) {
+      const date = iso(new Date(2026, monthIdx, i));
+      const weekend = dow(date) >= 5;
+      const isToday = date === TODAY;
+      const evs = on(date);
+      const chips = evs.slice(0, 3).map((x) => {
+        const ty = types[x.t];
+        const label = x.f === 'agile' ? 'Agile · ' + fmt(x.s) : (x.t === 'validation' ? x.title : ty.label);
+        return { label: label, style: 'display: block; max-width: 100%; box-sizing: border-box; padding: 2px 6px; border-radius: 6px; background: ' + ty.bg + '; color: ' + ty.fg + '; border: ' + (x.t === 'marge' ? '1px dashed #A8A7A0' : '0') + '; font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ' + (x.done ? 'opacity: 0.7' : '') };
+      });
+      monthGrid.push({
+        label: String(i), disabled: false, hidden: null, chips: chips,
+        more: evs.length > 3 ? '+ ' + (evs.length - 3) + ' autre' + (evs.length - 3 > 1 ? 's' : '') : '',
+        aria: longDay(date) + ', ' + (evs.length ? evs.length + ' activité' + (evs.length > 1 ? 's' : '') : 'aucune activité'),
+        pick: () => this.setState({ view: 'jour', cursor: date }),
+        numStyle: isToday
+          ? 'width: 26px; height: 26px; border-radius: 50%; background: #111113; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700'
+          : 'height: 26px; display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: ' + (weekend ? '#A1A1AA' : '#111113'),
+        style: 'min-height: 104px; min-width: 0; box-sizing: border-box; padding: 8px; display: flex; flex-direction: column; align-items: stretch; gap: 4px; border-radius: 14px; text-align: left; font-family: inherit; cursor: pointer; ' + (isToday ? 'border: 2px solid #111113; ' : 'border: 1px solid #EEEDE8; ') + 'background: ' + (weekend ? '#FAFAF8' : '#FFFFFF')
+      });
+    }
+    while (monthGrid.length % 7) monthGrid.push(mBlank);
+
+    const viewKeys = [['jour', 'Jour'], ['semaine', 'Semaine'], ['mois', 'Mois']];
+    const views = viewKeys.map((v) => ({
+      label: v[1],
+      pressed: view === v[0] ? 'true' : 'false',
+      pick: () => this.setState({ view: v[0] }),
+      style: 'min-height: 36px; padding: 0 14px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; ' + (view === v[0] ? 'background: #111113; color: #FFFFFF; font-weight: 600' : 'background: transparent; color: #62626B; font-weight: 500')
+    }));
+
+    const cur = all.find((x) => x.id === selId) || week2[9];
+    const cty = types[cur.t];
+    const who = filter === 'agile' ? 'Gestion de projet agile' : (filter === 'sap' ? 'SAP S/4HANA Finance' : 'Toutes vos formations');
+    return {
+      filter: filter,
+      setFilter: (e) => this.setState({ f: e.target.value }),
+      subtitle: who + ' · ' + (view === 'jour' ? longDay(cursor) : (view === 'mois' ? MOIS[monthIdx] + ' 2026' : 'semaine du ' + rangeLabel.replace(' 2026', ''))),
+      views: views,
+      isWeek: view === 'semaine', isDay: view === 'jour', isMonth: view === 'mois',
+      rangeLabel: rangeLabel,
+      calLabel: unit + ' · ' + rangeLabel,
+      prevLabel: unit === 'Jour' ? 'Jour précédent' : (unit === 'Mois' ? 'Mois précédent' : 'Semaine précédente'),
+      nextLabel: unit === 'Jour' ? 'Jour suivant' : (unit === 'Mois' ? 'Mois suivant' : 'Semaine suivante'),
+      prevDisabled: !prevTarget, nextDisabled: !nextTarget,
+      prevStyle: navStyle(!!prevTarget), nextStyle: navStyle(!!nextTarget),
+      prev: () => { if (prevTarget) this.setState({ cursor: prevTarget }); },
+      next: () => { if (nextTarget) this.setState({ cursor: nextTarget }); },
+      goToday: () => this.setState({ cursor: TODAY }),
+      sumPlanned: dur(planned), sumDone: dur(doneH), sumMargins: String(margins),
+      marginsLabel: margins > 1 ? 'marges de rattrapage' : 'marge de rattrapage',
+      dayTitle: longDay(cursor) + (curMod && dow(cursor) < 5 ? ' · module ' + curMod.n : ''),
+      days: days,
+      dayCol: dayCol,
+      hours: hours,
+      miniTitle: cap(MOIS[monthIdx]) + ' 2026',
+      monthCells: monthCells,
+      monthGrid: monthGrid,
+      selType: cty.label,
+      selPill: 'align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: ' + (cur.t === 'marge' ? '#2A2A30' : cty.bg) + '; color: ' + (cur.t === 'marge' ? '#D4D4D8' : cty.fg) + '; font-size: 12px; font-weight: 700',
+      selTitle: cur.title,
+      selDay: longDay(cur.date),
+      selTime: fmt(cur.s) + ' – ' + fmt(cur.e),
+      selMeta: cur.meta,
+      selHref: cur.title === 'Examen blanc' ? 'ExamenBlanc.dc.html' : hrefs[cur.t]
+    };
+  }
+}
+</script>
+</body>
+</html>

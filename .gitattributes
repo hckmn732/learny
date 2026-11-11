@@ -1,0 +1,23 @@
+# Fins de ligne normalisées (le dépôt est utilisé sous Windows, macOS et Linux)
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binaires
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.woff binary
+*.woff2 binary
+*.mp3 binary
+*.mp4 binary
+
+# Vidéos de preuves Playwright : Git LFS (ADR-0050). Si Git LFS est absent,
+# tools/sdd/evidence.mjs applique le repli décrit dans l'ADR.
+evidence/**/*.webm filter=lfs diff=lfs merge=lfs -text

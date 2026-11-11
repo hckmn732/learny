@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Cours — Saisie des pièces comptables</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+@media (min-width: 1200px){[data-chat-open] main{padding-right:500px!important}}
+</style>
+</helmet>
+<div data-chat-open="{{chatOpenAttr}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside data-sidebar style="flex: 1 1 248px; box-sizing: border-box; background: #111113; color: #F4F4F1; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<a href="Main.dc.html" style="min-width: 0; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFFFFF; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; white-space: nowrap"><span aria-hidden="true" style="flex: 0 0 30px; height: 30px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span><span style="overflow: hidden; text-overflow: ellipsis">Learny</span></a>
+<button type="button" data-action="toggle-sidebar" aria-label="Masquer le menu" aria-expanded="true" style="flex: 0 0 32px; width: 32px; height: 32px; border-radius: 9px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m16 10-2 2 2 2"></path></svg></button>
+</div>
+<nav aria-label="Navigation principale" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Accueil</a>
+<a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg>Agenda</a>
+</nav>
+<div aria-hidden="true" style="height: 1px; margin: 0 6px; background: #26262B"></div>
+<section aria-labelledby="t-formation-en-cours" style="display: flex; flex-direction: column; gap: 6px; padding: 10px 8px 8px; border-radius: 18px; background: #18181B; border: 1px solid #26262B">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px">
+<h2 id="t-formation-en-cours" style="margin: 0; font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Formation en cours</h2>
+<button type="button" aria-label="Changer de formation" style="width: 28px; height: 28px; border-radius: 8px; border: 1px solid #2E2E34; background: transparent; color: #A1A1AA; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"></path><path d="m7 9 5-5 5 5"></path></svg></button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 13px; background: #232328">
+<span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700">SAP</span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+<span style="font-size: 13px; font-weight: 600; color: #FFFFFF; line-height: 1.25">SAP S/4HANA Finance</span>
+<span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: 1; height: 4px; border-radius: 2px; background: #3A3A40"><span style="display: block; width: 38%; height: 4px; border-radius: 2px; background: #C6F432"></span></span><span style="font-size: 11px; font-weight: 600; color: #D4D4D8">38 %</span></span>
+<span style="font-size: 11px; color: #A1A1AA">Module 3 sur 7</span>
+</span>
+</div>
+<nav aria-label="Formation en cours" style="display: flex; flex-direction: column; gap: 2px">
+<a href="Programme.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; background: #2A2A30; color: #FFFFFF; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg>Programme</a>
+<a href="Carte.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><circle cx="9" cy="18" r="2.5"></circle><path d="M8.4 6.4 15.5 7.6M6.6 8.4l1.7 7.2M16.4 10l-5.6 6.3"></path></svg>Carte des notions</a>
+<a href="QuizGlobal.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg>Quiz global<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #C6F432; color: #111113; font-size: 12px; font-weight: 700">14</span></a>
+<a href="Lacunes.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 36px; padding: 0 10px; border-radius: 11px; text-decoration: none; font-size: 14px; color: #A1A1AA; font-weight: 500"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>Mes lacunes<span style="margin-left: auto; padding: 1px 8px; border-radius: 999px; background: #3A2A20; color: #FDBA74; font-size: 12px; font-weight: 700">4</span></a>
+</nav>
+</section>
+<div style="margin-top: auto; background: #1C1C20; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 11px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">Série</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #FFFFFF">12 jours</span></div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+<span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #2E2E34"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span><span style="height: 10px; border-radius: 3px; background: #C6F432"></span>
+</div>
+<p style="margin: 0; font-size: 11px; color: #A1A1AA">Régularité sur les 14 derniers jours</p>
+</div>
+</aside>
+<main style="flex: 999 1 640px; min-width: 0; box-sizing: border-box; padding: 28px 40px 56px">
+<header style="position: sticky; top: 0; z-index: 30; margin: -28px -40px 24px; padding: 12px 40px; background: rgba(244, 244, 241, 0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid #E7E6E1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" data-action="toggle-sidebar" data-show-when="collapsed" aria-label="Afficher le menu" aria-expanded="false" style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path><path d="m14 10 2 2-2 2"></path></svg></button>
+<div role="search" style="position: relative; flex: 1 1 320px; max-width: 520px">
+<label for="recherche-globale" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Rechercher</label>
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 14px; top: 12px; pointer-events: none"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="recherche-globale" type="search" placeholder="Rechercher une notion, un cours, une formation…" style="width: 100%; box-sizing: border-box; min-height: 42px; padding: 0 14px 0 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; font-size: 14px; color: #111113">
+</div>
+<div style="margin-left: auto; position: relative; display: flex; align-items: center; gap: 8px">
+<button type="button" data-popover-toggle="notifications" aria-controls="panneau-notifications" aria-expanded="false" aria-label="Notifications, 3 non lues" style="position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span data-notif-dot aria-hidden="true" style="position: absolute; top: 8px; right: 9px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #F97316; box-shadow: 0 0 0 2px #FFFFFF; color: #FFFFFF; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; transform: translate(50%, -50%)">3</span></button>
+<button type="button" data-popover-toggle="compte" aria-haspopup="menu" aria-controls="menu-compte" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 12px 0 4px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; font-family: inherit; color: #111113; cursor: pointer"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="font-size: 14px; font-weight: 600">Mon compte</span><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+<section id="panneau-notifications" data-popover="notifications" hidden aria-labelledby="t-notifications" style="position: absolute; right: 0; top: 54px; width: 400px; max-width: calc(100vw - 32px); box-sizing: border-box; border-radius: 20px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 18px 48px rgba(17, 17, 19, 0.16); display: flex; flex-direction: column; z-index: 40">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px">
+<h2 id="t-notifications" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Notifications</h2>
+<button type="button" data-action="notif-read-all" style="min-height: 32px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Tout marquer comme lu</button>
+</div>
+<div role="group" aria-label="Filtrer les notifications" style="display: flex; gap: 4px; margin: 0 16px 8px; padding: 4px; border-radius: 12px; background: #F4F4F1">
+<button type="button" data-notif-filter="toutes" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Toutes <span data-count="toutes" style="font-size: 12px; font-weight: 700">8</span></button>
+<button type="button" data-notif-filter="non-lues" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 0; font-family: inherit; font-size: 13px; cursor: pointer; flex: 1; justify-content: center">Non lues <span data-count="non-lues" style="font-size: 12px; font-weight: 700">3</span></button>
+</div>
+<div style="max-height: min(420px, calc(100vh - 200px)); overflow-y: auto; padding: 0 6px 6px">
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Aujourd'hui</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Quiz.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz de validation à 14:00</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">13:20</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Cours.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #E1F4EF; color: #0B5C4D; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 19V5M9 7h6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Votre cours est prêt</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">11:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif data-unread style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Une séance à replacer</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:05</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30. Votre accord est demandé.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="QuizGlobal.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #EEF8CF; color: #3F5A00; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="14" rx="3"></rect><path d="M7 3h11a3 3 0 0 1 3 3v11"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Quiz global du jour</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">08:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">14 notions à revoir, lacunes en priorité. Prévu à 17:00, environ 10 min.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Hier</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Lacunes.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #FFEDE0; color: #8F3305; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Nouvelle lacune repérée</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">16:42</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Clé de comptabilisation : confondue avec le type de pièce, deux fois.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Agenda.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F0E9FE; color: #5B21B6; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="3"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Session demain à 17:30</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">18:00</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Rétrospectives · apports du chapitre 2. Pensez à préparer vos notes.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Gestion de projet agile</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<div data-notif-group style="display: flex; flex-direction: column; gap: 2px"><h3 style="margin: 0; padding: 8px 12px 4px; font-size: 11px; font-weight: 600; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Plus tôt</h3><ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px"><li><a href="Programme.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #ECECFC; color: #3A3AA8; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Module 2 validé · 91 %</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">lun. 9 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">Le module 3 · Comptabilité générale est débloqué.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li><li><a href="Main.dc.html" data-notif style="position: relative; display: flex; gap: 12px; padding: 12px 28px 12px 12px; border-radius: 14px; text-decoration: none; color: #111113"><span aria-hidden="true" style="flex: 0 0 36px; height: 36px; border-radius: 10px; background: #F4F4F1; color: #3F3F46; display: inline-flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"></path><circle cx="4.5" cy="6" r="1.2"></circle><circle cx="4.5" cy="12" r="1.2"></circle><circle cx="4.5" cy="18" r="1.2"></circle></svg></span><span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style="font-size: 14px; font-weight: 700">Bilan de la semaine</span><span style="flex: 0 0 auto; font-size: 12px; color: #62626B; font-variant-numeric: tabular-nums">dim. 8 nov.</span></span><span style="font-size: 13px; line-height: 1.45; color: #3F3F46">13 h d'étude, 86 % retenu à 1 mois, 3 notions à risque d'oubli.</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #62626B"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: #5B5BD6"></span>SAP S/4HANA Finance</span></span><span data-unread-dot style="position: absolute; top: 18px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: #5B5BD6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Non lue</span></span></a></li></ul></div>
+<p data-notif-empty hidden style="margin: 0; padding: 28px 16px; text-align: center; font-size: 14px; color: #62626B">Vous avez tout lu. Les prochains rappels arriveront ici.</p>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid #EEEDE8; font-size: 13px">
+<span style="color: #62626B">Rappels aussi envoyés par e-mail</span>
+<a href="Parametres.dc.html#notifications" style="font-weight: 600">Gérer les notifications</a>
+</div>
+</section>
+<div id="menu-compte" data-popover="compte" hidden role="menu" aria-label="Mon compte" style="position: absolute; right: 0; top: 54px; width: 260px; padding: 8px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.14); display: flex; flex-direction: column; gap: 2px; z-index: 40">
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; margin-bottom: 4px; border-bottom: 1px solid #EEEDE8"><span aria-hidden="true" style="width: 34px; height: 34px; border-radius: 50%; background: #5B5BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AP</span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">Apprenant</span><span style="font-size: 12px; color: #62626B">3 formations en cours</span></span></div>
+<a role="menuitem" href="Parametres.dc.html" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Paramètres</a>
+<a role="menuitem" href="Parametres.dc.html#automatismes" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>Mettre en pause</a>
+<a role="menuitem" href="Inscription.dc.html?connexion" style="display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 10px; border-radius: 10px; color: #111113; text-decoration: none; font-size: 14px; font-weight: 600"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"></path><path d="m10 17 5-5-5-5"></path><path d="M15 12H4"></path></svg>Se déconnecter</a>
+</div>
+</div>
+</header>
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<nav aria-label="Fil d'Ariane" style="font-size: 14px; color: #62626B"><a href="Programme.dc.html">Programme</a> / <a href="Module.dc.html">Module 3 · Comptabilité générale</a> / Cours</nav>
+<div style="display: flex; align-items: center; gap: 10px; min-width: 240px">
+<div aria-hidden="true" style="flex: 1; height: 6px; border-radius: 3px; background: #E7E6E1"><div style="width: 45%; height: 6px; border-radius: 3px; background: #111113"></div></div>
+<span style="font-size: 13px; font-weight: 600">45 % lu</span>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px">
+<nav aria-label="Sommaire du cours" style="flex: 1 1 220px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+<p style="margin: 4px 8px 8px; font-size: 11px; font-weight: 700; color: #62626B; text-transform: uppercase; letter-spacing: 0.08em">Sommaire</p>
+<button type="button" style="min-height: 48px; padding: 8px 10px; border-radius: 14px; border: 0; background: transparent; font-family: inherit; font-size: 14px; color: #111113; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Plan comptable et comptes généraux</button>
+<div style="border-radius: 16px; background: #F4F4F1; padding: 4px 0 8px">
+<button type="button" aria-current="page" style="width: 100%; min-height: 48px; padding: 8px 10px; border-radius: 14px; border: 0; background: transparent; font-family: inherit; font-size: 14px; font-weight: 700; color: #111113; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #111113; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px">2</span>Saisie des pièces comptables</button>
+<a href="#entete" style="display: block; padding: 6px 10px 6px 44px; font-size: 13px; color: #62626B; text-decoration: none">L'en-tête de pièce</a>
+<a href="#postes" style="display: block; padding: 6px 10px 6px 44px; font-size: 13px; color: #62626B; text-decoration: none">Postes et clés</a>
+<a href="#retenir" style="display: block; padding: 6px 10px 6px 44px; font-size: 13px; color: #62626B; text-decoration: none">À retenir</a>
+</div>
+<button type="button" style="min-height: 48px; padding: 8px 10px; border-radius: 14px; border: 0; background: transparent; font-family: inherit; font-size: 14px; color: #111113; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 50%; border: 1.5px solid #C9C8C1; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #62626B">3</span>Journal universel (ACDOCA)</button>
+<button type="button" style="min-height: 48px; padding: 8px 10px; border-radius: 14px; border: 0; background: transparent; font-family: inherit; font-size: 14px; color: #111113; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 50%; border: 1.5px solid #C9C8C1; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; color: #62626B">4</span>Ledgers parallèles</button>
+</nav>
+<article data-cours style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 28px; padding: 40px; display: flex; flex-direction: column; gap: 20px; font-size: 17px; line-height: 1.7">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; font-weight: 700; line-height: 1.4">
+<span style="padding: 5px 10px; border-radius: 999px; background: #111113; color: #FFFFFF">Chapitre 2 sur 4</span>
+<span style="padding: 5px 10px; border-radius: 999px; background: #F4F4F1">8 min de lecture</span>
+<span style="padding: 5px 10px; border-radius: 999px; background: #F4F4F1">Construit à partir de 4 apports</span>
+</div>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em">Saisie des pièces comptables</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.6; color: #3F3F46">Toute écriture comptable dans SAP S/4HANA est enregistrée sous forme de pièce. Une pièce réunit un en-tête, qui décrit l'opération, et des postes, qui portent les montants au débit et au crédit. <button type="button" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #FFEDE0; color: #A13A06; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path></svg>Guide FI, p. 4</button></p>
+<section aria-labelledby="t-eclair" style="padding: 22px 24px; border-radius: 22px; background: #ECECFC; display: flex; flex-direction: column; gap: 12px; line-height: 1.5">
+<h2 id="t-eclair" style="margin: 0; font-size: 12px; font-weight: 700; color: #2E2E8F; text-transform: uppercase; letter-spacing: 0.1em">Question éclair · avant de lire la suite</h2>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 600; color: #111113">Où le sens débit ou crédit est-il indiqué : dans l'en-tête ou dans chaque poste ?</p>
+<sc-if value="{{hideAnswer}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{reveal}}" style="align-self: flex-start; min-height: 44px; padding: 0 18px; border-radius: 12px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Afficher la réponse</button></sc-if>
+<sc-if value="{{showAnswer}}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #FFFFFF; font-size: 16px; color: #111113">Dans chaque poste, grâce à la clé de comptabilisation. La suite du chapitre explique comment.</p></sc-if>
+</section>
+<h2 id="entete" style="margin: 12px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.01em">L'en-tête de pièce</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 8px; height: 8px; margin-top: 11px; border-radius: 2px; background: #111113"></span><span>La <strong>date de pièce</strong>, celle du document d'origine, et la <strong>date comptable</strong>, qui fixe la période.</span></li>
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 8px; height: 8px; margin-top: 11px; border-radius: 2px; background: #111113"></span><span>Le <strong>type de pièce</strong>, qui classe toute l'opération : par exemple SA pour une écriture de comptabilité générale.</span></li>
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 8px; height: 8px; margin-top: 11px; border-radius: 2px; background: #111113"></span><span>La <strong>société</strong> et la <strong>devise</strong>. <button type="button" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #F0E9FE; color: #5B21B6; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path></svg>Note vocale, 1:42</button></span></li>
+</ul>
+<h2 id="postes" style="margin: 12px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.01em">Les postes et les clés de comptabilisation</h2>
+<p style="margin: 0">Chaque poste porte une clé de comptabilisation, qui indique le sens de l'écriture et le type de compte concerné. <button type="button" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #ECECFC; color: #2E2E8F; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6 10 6-10 6z"></path></svg>Tutoriel vidéo, 5:10</button> <button type="button" onClick="{{askPostes}}" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #F1FBD3; color: #3D5200; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg>Demander au tuteur</button></p>
+<div style="overflow-x: auto; border-radius: 18px; border: 1px solid #E7E6E1">
+<table style="width: 100%; min-width: 420px; border-collapse: collapse; font-size: 16px; line-height: 1.4">
+<thead><tr style="text-align: left; background: #F4F4F1"><th scope="col" style="padding: 12px 18px; font-size: 13px; font-weight: 700">Clé</th><th scope="col" style="padding: 12px 18px; font-size: 13px; font-weight: 700">Sens</th><th scope="col" style="padding: 12px 18px; font-size: 13px; font-weight: 700">Type de compte</th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #EEEDE8"><td style="padding: 14px 18px; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">40</td><td style="padding: 14px 18px">Débit</td><td style="padding: 14px 18px">Compte général</td></tr>
+<tr style="border-top: 1px solid #EEEDE8"><td style="padding: 14px 18px; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">50</td><td style="padding: 14px 18px">Crédit</td><td style="padding: 14px 18px">Compte général</td></tr>
+</tbody>
+</table>
+</div>
+<section aria-labelledby="t-confondre" style="display: flex; flex-direction: column; gap: 12px; line-height: 1.5">
+<h2 id="t-confondre" style="margin: 0; font-size: 12px; font-weight: 700; color: #8F3305; text-transform: uppercase; letter-spacing: 0.1em">Ne pas confondre</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px">
+<div style="flex: 1 1 220px; padding: 20px; border-radius: 20px; background: #FFEDE0; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Type de pièce</span><span style="font-size: 15px">Classe <strong>toute la pièce</strong>.</span><span style="font-size: 14px; color: #8F3305">Exemple : SA</span></div>
+<span aria-hidden="true" style="align-self: center; width: 44px; height: 44px; border-radius: 50%; background: #111113; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">≠</span>
+<div style="flex: 1 1 220px; padding: 20px; border-radius: 20px; background: #FFEDE0; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Clé de comptabilisation</span><span style="font-size: 15px">Agit <strong>poste par poste</strong>.</span><span style="font-size: 14px; color: #8F3305">Exemples : 40, 50</span></div>
+</div>
+<div><button type="button" onClick="{{askConfondre}}" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #F1FBD3; color: #3D5200; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg>Comparer avec le tuteur</button></div>
+</section>
+<div style="padding: 18px 20px; border-radius: 20px; border: 1.5px dashed #A8A7A0; display: flex; flex-direction: column; gap: 8px">
+<span style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #F4F4F1; font-size: 12px; font-weight: 700; line-height: 1.4">Complété par le tuteur · à confirmer dans vos sources</span>
+<p style="margin: 0">Une pièce n'est enregistrée que si le total des débits est égal au total des crédits. <button type="button" onClick="{{askEquilibre}}" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 0; background: #F1FBD3; color: #3D5200; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; vertical-align: middle"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg>Pourquoi ? Demander au tuteur</button></p>
+</div>
+<section id="retenir" aria-labelledby="t-retenir" style="margin-top: 8px; padding: 28px; border-radius: 26px; background: #111113; color: #FFFFFF; display: flex; flex-direction: column; gap: 18px; line-height: 1.5">
+<h2 id="t-retenir" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.01em">À retenir</h2>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 16px">
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 8px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Une pièce = un en-tête + des postes.</li>
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 8px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Le type de pièce classe la pièce ; la clé de comptabilisation agit sur chaque poste.</li>
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 8px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Clé 40 = débit, clé 50 = crédit, sur un compte général.</li>
+<li style="display: flex; gap: 12px"><span aria-hidden="true" style="flex: 0 0 24px; height: 24px; border-radius: 8px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"></path></svg></span>Une pièce n'est enregistrée que si elle est équilibrée.</li>
+</ul>
+<div role="img" aria-label="Schéma : une pièce comptable se compose d'un en-tête et de postes" style="padding: 20px; border-radius: 20px; background: #1C1C20; display: flex; flex-direction: column; align-items: center; gap: 10px">
+<span style="padding: 10px 20px; border-radius: 12px; background: #FFFFFF; color: #111113; font-size: 15px; font-weight: 700">Pièce comptable</span>
+<span aria-hidden="true" style="width: 2px; height: 16px; background: #52525B"></span>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px">
+<span style="padding: 12px 16px; border-radius: 14px; border: 1px solid #3A3A40; font-size: 14px; text-align: center; color: #D4D4D8"><strong style="display: block; color: #FFFFFF; font-size: 15px">En-tête</strong>dates · type de pièce · société</span>
+<span style="padding: 12px 16px; border-radius: 14px; border: 1px solid #3A3A40; font-size: 14px; text-align: center; color: #D4D4D8"><strong style="display: block; color: #FFFFFF; font-size: 15px">Postes</strong>40 débit · 50 crédit</span>
+</div>
+</div>
+<p style="margin: 0; padding: 14px 16px; border-radius: 16px; background: #C6F432; color: #111113; font-size: 15px"><strong>Moyen mnémotechnique :</strong> 4 vient avant 5, comme le débit avant le crédit.</p>
+</section>
+<section aria-labelledby="t-resume" style="display: flex; flex-direction: column; gap: 10px; line-height: 1.5">
+<h2 id="t-resume" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Résumez ce chapitre avec vos mots</h2>
+<label for="resume" style="font-size: 15px; color: #62626B">Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.</label>
+<textarea id="resume" rows="3" style="padding: 14px 16px; border: 1px solid #DAD9D3; border-radius: 16px; background: #FFFFFF; font-family: inherit; font-size: 16px; line-height: 1.5; color: #111113; resize: vertical">Une pièce a un en-tête avec les dates et le type de pièce, et des postes. Sur chaque poste, la clé dit si c'est un débit ou un crédit : 40 ou 50.</textarea>
+<button type="button" onClick="{{sendResume}}" style="align-self: flex-start; min-height: 48px; padding: 0 20px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Envoyer au tuteur</button>
+<sc-if value="{{showFeedback}}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 14px 16px; border-radius: 16px; background: #E1F4EF; color: #0B5C4D; font-size: 16px">Bon résumé, les notions clés y sont. Il manque un point : une pièce n'est enregistrée que si elle est équilibrée.</p></sc-if>
+</section>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 16px; border-top: 1px solid #EEEDE8">
+<button type="button" style="min-height: 48px; padding: 0 18px; border-radius: 14px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Chapitre 1</button>
+<button type="button" style="min-height: 48px; padding: 0 18px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Chapitre 3</button>
+</div>
+</article>
+<aside aria-label="Tuteur et quiz" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px">
+<section aria-labelledby="t-tuteur" style="background: #111113; color: #FFFFFF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 10px"><span aria-hidden="true" style="flex: 0 0 34px; height: 34px; border-radius: 10px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px"><h2 id="t-tuteur" style="margin: 0; font-size: 16px; font-weight: 700">Demander au tuteur</h2><span style="font-size: 12px; color: #A1A1AA">Il sait ce que vous lisez</span></span></div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #D4D4D8">
+<li style="display: flex; gap: 8px; align-items: baseline"><span aria-hidden="true" style="flex: 0 0 6px; height: 6px; border-radius: 50%; background: #FFFFFF"></span>Chapitre 2 · Saisie des pièces comptables</li>
+<li style="display: flex; gap: 8px; align-items: baseline"><span aria-hidden="true" style="flex: 0 0 6px; height: 6px; border-radius: 50%; background: #0F9F7F"></span>Vos 4 apports, cités en source</li>
+<li style="display: flex; gap: 8px; align-items: baseline"><span aria-hidden="true" style="flex: 0 0 6px; height: 6px; border-radius: 50%; background: #F97316"></span>Votre lacune : clé de comptabilisation</li>
+</ul>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{starters}}" as="q" hint-placeholder-count="3">
+<button type="button" onClick="{{q.ask}}" style="text-align: left; min-height: 40px; padding: 8px 12px; border-radius: 12px; border: 1px solid #2E2E34; background: #1C1C20; color: #FFFFFF; font-family: inherit; font-size: 13px; line-height: 1.35; cursor: pointer">{{q.label}}</button>
+</sc-for>
+</div>
+<button type="button" id="ouvrir-tuteur" onClick="{{openChat}}" aria-expanded="{{chatExpanded}}" aria-controls="chat-tuteur" style="min-height: 44px; border-radius: 12px; border: 0; background: #C6F432; color: #111113; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Ouvrir la discussion</button>
+<p style="margin: 0; font-size: 12px; line-height: 1.45; color: #A1A1AA">Astuce : sélectionnez un passage du cours pour le confier au tuteur.</p>
+</section>
+<section aria-labelledby="t-quiz" style="background: #C6F432; color: #111113; border-radius: 24px; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+<h2 id="t-quiz" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.2">Prêt pour le quiz de validation ?</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.5">Seuil 80 %. Nouvelles questions à chaque tentative. Le module 4 se débloque dès que vous l'atteignez.</p>
+<a href="Quiz.dc.html" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: #111113; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none">Passer au quiz</a>
+</section>
+</aside>
+</div>
+</div>
+<sc-if value="{{selBar}}" hint-placeholder-val="{{ false }}">
+<div role="region" aria-label="Passage sélectionné" style="position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 45; width: max-content; max-width: min(640px, calc(100% - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 16px; background: #111113; color: #FFFFFF; box-shadow: 0 16px 40px rgba(17, 17, 19, 0.28)">
+<span style="min-width: 0; font-size: 13px; color: #D4D4D8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">« {{selPreview}} »</span>
+<button type="button" onClick="{{askSelection}}" style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 11px; border: 0; background: #C6F432; color: #111113; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg>Demander au tuteur</button>
+<button type="button" aria-label="Ignorer la sélection" onClick="{{dismissSel}}" style="flex: 0 0 auto; width: 36px; height: 36px; border-radius: 10px; border: 0; background: transparent; color: #A1A1AA; font-size: 20px; line-height: 1; cursor: pointer">×</button>
+</div>
+</sc-if>
+<sc-if value="{{chatOpen}}" hint-placeholder-val="{{ false }}">
+<section id="chat-tuteur" role="dialog" aria-modal="false" aria-labelledby="t-chat" style="position: fixed; top: 0; right: 0; bottom: 0; z-index: 50; width: 460px; max-width: 100%; box-sizing: border-box; background: #FFFFFF; border-left: 1px solid #E7E6E1; box-shadow: -24px 0 60px rgba(17, 17, 19, 0.12); display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px 14px 18px; border-bottom: 1px solid #EEEDE8">
+<span aria-hidden="true" style="flex: 0 0 38px; height: 38px; border-radius: 12px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg></span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 1px">
+<h2 id="t-chat" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Tuteur</h2>
+<span style="font-size: 12px; color: #62626B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Cours · Saisie des pièces comptables</span>
+</div>
+<div style="margin-left: auto; display: flex; gap: 4px">
+<button type="button" onClick="{{resetChat}}" style="min-height: 36px; padding: 0 10px; border-radius: 10px; border: 1px solid #E7E6E1; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Nouvelle discussion</button>
+<button type="button" id="fermer-tuteur" aria-label="Fermer la discussion" onClick="{{closeChat}}" style="width: 36px; height: 36px; border-radius: 10px; border: 0; background: transparent; color: #62626B; font-size: 22px; line-height: 1; cursor: pointer">×</button>
+</div>
+</div>
+<div style="padding: 10px 16px; border-bottom: 1px solid #EEEDE8; background: #FAFAF8">
+<button type="button" aria-expanded="{{ctxExpanded}}" aria-controls="contexte-tuteur" onClick="{{toggleCtx}}" style="width: 100%; display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 2px; border: 0; background: transparent; font-family: inherit; color: #111113; cursor: pointer; text-align: left">
+<span style="font-size: 13px; font-weight: 700">Contexte transmis au tuteur</span>
+<span style="padding: 2px 8px; border-radius: 999px; background: #111113; color: #C6F432; font-size: 11px; font-weight: 700">{{ctxCount}}</span>
+<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#62626B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="{{ctxChevron}}"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
+<sc-if value="{{ctxIsOpen}}" hint-placeholder-val="{{ true }}">
+<ul id="contexte-tuteur" style="list-style: none; margin: 6px 0 4px; padding: 0; display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{ctxItems}}" as="c" hint-placeholder-count="5">
+<li style="{{c.rowStyle}}">
+<span aria-hidden="true" style="{{c.dotStyle}}"></span>
+<span style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+<span style="font-size: 11px; font-weight: 700; color: #62626B; text-transform: uppercase; letter-spacing: 0.06em">{{c.label}}</span>
+<span style="font-size: 13px; line-height: 1.4">{{c.value}}</span>
+</span>
+<button type="button" aria-pressed="{{c.pressed}}" aria-label="{{c.aria}}" onClick="{{c.toggle}}" style="{{c.btnStyle}}">{{c.btnLabel}}</button>
+</li>
+</sc-for>
+</ul>
+<p style="margin: 0 0 4px; font-size: 12px; line-height: 1.45; color: #62626B">Le tuteur répond à partir de ces éléments et cite vos sources. Retirez ce qui n'aide pas.</p>
+</sc-if>
+</div>
+<div id="chat-messages" aria-live="polite" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{messages}}" as="m" hint-placeholder-count="3">
+<sc-if value="{{m.fromTutor}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 10px; align-items: flex-start; max-width: 100%">
+<span aria-hidden="true" style="flex: 0 0 28px; height: 28px; border-radius: 9px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"></path></svg></span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<div style="background: #F4F4F1; border-radius: 4px 16px 16px 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.55; color: #111113">
+<sc-for list="{{m.paras}}" as="p" hint-placeholder-count="2"><p style="margin: 0">{{p}}</p></sc-for>
+<sc-if value="{{m.hasList}}" hint-placeholder-val="{{ false }}">
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{m.list}}" as="li" hint-placeholder-count="2"><li style="padding: 8px 10px; border-radius: 10px; background: #FFFFFF; font-size: 13px; line-height: 1.45">{{li}}</li></sc-for>
+</ul>
+</sc-if>
+<sc-if value="{{m.hasSource}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; color: #62626B">Sources : {{m.source}}</span></sc-if>
+</div>
+<sc-if value="{{m.hasFollow}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{m.follow}}" as="f" hint-placeholder-count="3"><button type="button" onClick="{{f.ask}}" style="min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{f.label}}</button></sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{m.fromMe}}" hint-placeholder-val="{{ false }}">
+<div style="align-self: flex-end; max-width: 85%; background: #111113; color: #FFFFFF; border-radius: 16px 4px 16px 16px; padding: 10px 14px; font-size: 14px; line-height: 1.5">{{m.text}}</div>
+</sc-if>
+</sc-for>
+<sc-if value="{{typing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 10px; align-items: center; font-size: 13px; color: #62626B"><span aria-hidden="true" style="flex: 0 0 28px; height: 28px; border-radius: 9px; background: #EEF8CF"></span>Le tuteur rédige sa réponse…</div>
+</sc-if>
+</div>
+<div style="padding: 12px 16px 14px; border-top: 1px solid #EEEDE8; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: flex-end; gap: 8px; padding: 6px; border-radius: 16px; border: 1px solid #DAD9D3; background: #FFFFFF">
+<label for="chat-input" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Votre question au tuteur</label>
+<textarea id="chat-input" rows="2" placeholder="Posez votre question sur ce chapitre…" onKeyDown="{{composerKey}}" style="flex: 1 1 auto; min-width: 0; resize: none; border: 0; padding: 8px; background: transparent; font-family: inherit; font-size: 14px; line-height: 1.45; color: #111113; outline: none"></textarea>
+<button type="button" aria-label="Envoyer" onClick="{{send}}" style="flex: 0 0 40px; width: 40px; height: 40px; border-radius: 11px; border: 0; background: #111113; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+<span style="font-size: 11px; color: #62626B">Entrée pour envoyer · Maj + Entrée pour aller à la ligne · Échap pour fermer</span>
+</div>
+</section>
+</sc-if>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    /* Texte sélectionné dans le cours : proposé comme passage à expliquer. */
+    document.addEventListener('mouseup', (e) => {
+      if (e.target && e.target.closest && e.target.closest('#chat-tuteur, [aria-label="Passage sélectionné"]')) return;
+      const article = document.querySelector('[data-cours]');
+      const sel = window.getSelection();
+      const text = sel ? String(sel).replace(/\s+/g, ' ').trim() : '';
+      if (text.length >= 12 && article && sel.anchorNode && article.contains(sel.anchorNode)) {
+        if (text !== (this.state || {}).pendingSel) this.setState({ pendingSel: text });
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && (this.state || {}).chat) {
+        this.setState({ chat: false });
+        setTimeout(() => { const b = document.getElementById('ouvrir-tuteur'); if (b) b.focus(); }, 0);
+      }
+    });
+  }
+
+  renderVals() {
+    const st = this.state || {};
+
+    /* Passages du cours qu'on peut confier au tuteur. */
+    const PASSAGES = {
+      postes: { label: 'Les postes et les clés de comptabilisation', text: 'Chaque poste porte une clé de comptabilisation, qui indique le sens de l’écriture et le type de compte concerné.', ask: 'autrement', prompt: 'Explique-moi ce passage' },
+      confondre: { label: 'Ne pas confondre', text: 'Type de pièce : classe toute la pièce (SA). Clé de comptabilisation : agit poste par poste (40, 50).', ask: 'difference', prompt: 'Compare ces deux notions' },
+      equilibre: { label: 'Complété par le tuteur', text: 'Une pièce n’est enregistrée que si le total des débits est égal au total des crédits.', ask: 'equilibre', prompt: 'Pourquoi cette règle ?' }
+    };
+
+    /* Réponses préparées pour la maquette : en production, le tuteur les rédige à partir du contexte. */
+    const ANSWERS = {
+      autrement: {
+        paras: ['Voyez la pièce comme une enveloppe. L’en-tête, c’est l’étiquette : la date, la société et le type de pièce, qui dit de quel genre d’opération il s’agit.', 'Les postes sont les lignes à l’intérieur. Chacune porte un montant, et sa clé de comptabilisation dit dans quel sens il va et sur quel genre de compte :'],
+        list: ['40 : débit d’un compte général', '50 : crédit d’un compte général'],
+        source: 'Guide FI, p. 4 · votre note vocale, 1:42',
+        follow: ['exemple', 'difference', 'teste']
+      },
+      exemple: {
+        paras: ['Achat de fournitures de bureau, payé par la banque, 120 € :'],
+        list: ['Poste 1 · clé 40 · compte Fournitures · 120 € au débit', 'Poste 2 · clé 50 · compte Banque · 120 € au crédit'],
+        paras2: 'Débits = crédits : la pièce peut être enregistrée. Le type de pièce, SA, n’apparaît qu’une fois, dans l’en-tête.',
+        source: 'Tutoriel vidéo, 2:15 · Guide FI, p. 5',
+        follow: ['teste', 'equilibre']
+      },
+      difference: {
+        lacuneIntro: 'C’est la confusion que vos deux dernières tentatives ont montrée, alors comparons-les côte à côte.',
+        paras: ['Le type de pièce se choisit une seule fois, dans l’en-tête. Il classe toute l’opération et fixe sa numérotation : SA pour une écriture générale, KR pour une facture fournisseur, DR pour une facture client.', 'La clé de comptabilisation se choisit sur chaque poste. Elle donne le sens et le type de compte : 40 ou 50 pour un compte général, 31 pour créditer un fournisseur, 01 pour débiter un client.'],
+        list: ['Type de pièce = toute la pièce, une fois', 'Clé de comptabilisation = chaque ligne'],
+        source: 'Votre note vocale, 1:42 · Guide FI, p. 6',
+        follow: ['exemple', 'teste']
+      },
+      equilibre: {
+        paras: ['Parce que c’est le principe de la partie double : tout montant qui entre quelque part sort d’ailleurs. Si les débits et les crédits d’une pièce ne sont pas égaux, une partie de l’opération manque.', 'SAP bloque donc l’enregistrement et affiche l’écart à corriger. C’est aussi pour cela qu’une pièce a toujours au moins deux postes.'],
+        source: 'Complété par le tuteur · à confirmer dans le Guide FI, chapitre 2',
+        follow: ['exemple', 'teste']
+      },
+      dates: {
+        paras: ['La date de pièce reprend celle du document d’origine, par exemple la date de la facture.', 'La date comptable fixe la période où l’écriture compte : une facture du 30 octobre reçue le 3 novembre peut être comptabilisée en novembre.'],
+        source: 'Guide FI, p. 6',
+        follow: ['autrement', 'teste']
+      },
+      selection: {
+        paras: ['Je pars du passage que vous avez sélectionné. Dans ce chapitre, il se rattache à la règle centrale : une pièce a un en-tête et des postes, et chaque poste porte une clé qui en fixe le sens.', 'Dites-moi ce qui vous bloque dans ce passage, ou choisissez :'],
+        source: 'Votre cours, chapitre 2',
+        follow: ['autrement', 'exemple', 'teste']
+      },
+      generic: {
+        paras: ['Je réponds à partir du chapitre « Saisie des pièces comptables » et de vos apports.', 'La règle à garder en tête : chaque poste porte une clé de comptabilisation qui fixe le sens, débit ou crédit, et le type de compte ; la pièce n’est enregistrée que si les débits égalent les crédits.', 'Si ce n’est pas votre question, sélectionnez le passage concerné dans le cours : je partirai de lui.'],
+        source: 'Votre cours, chapitre 2 · Guide FI',
+        follow: ['autrement', 'exemple', 'teste']
+      }
+    };
+    const TESTS = [
+      { q: 'Vous saisissez une facture fournisseur de 500 €. Pour le poste du fournisseur, quelle clé de comptabilisation utilisez-vous, et le montant va-t-il au débit ou au crédit ?', ok: /\b31\b/, good: 'Exact : clé 31, au crédit du compte fournisseur, puisque vous lui devez de l’argent. La charge, elle, passe au débit avec la clé 40.', bad: 'Pas tout à fait. Le poste du fournisseur prend la clé 31, au crédit : vous lui devez de l’argent. La charge passe au débit avec la clé 40.' },
+      { q: 'Autre cas : une facture client de 1 200 €. Quelle clé pour le poste du client, et dans quel sens ?', ok: /\b0?1\b/, good: 'Exact : clé 01, au débit du compte client, qui vous doit de l’argent. Le chiffre d’affaires passe au crédit avec la clé 50.', bad: 'Pas encore. Le poste du client prend la clé 01, au débit : il vous doit de l’argent. Le chiffre d’affaires passe au crédit avec la clé 50.' }
+    ];
+    const FOLLOW_LABELS = { autrement: 'Explique autrement', exemple: 'Un exemple concret', difference: 'Clé ou type de pièce ?', equilibre: 'Pourquoi l’équilibre ?', teste: 'Teste-moi', dates: 'Pourquoi deux dates ?' };
+
+    const ctx = st.ctx || { formation: true, chapitre: true, passage: true, apports: true, lacunes: true, profil: true };
+    const passage = st.passage || null;
+    const messages = st.messages || [];
+
+    const scrollEnd = () => setTimeout(() => {
+      const box = document.getElementById('chat-messages');
+      if (box) box.scrollTop = box.scrollHeight;
+    }, 0);
+    const focusInput = () => setTimeout(() => { const t = document.getElementById('chat-input'); if (t) t.focus({ preventScroll: true }); }, 0);
+    const now = () => this.state || {};
+
+    const greeting = (p) => {
+      const c = now().ctx || ctx;
+      const paras = [];
+      if (p && c.passage) paras.push('Vous lisez « ' + p.label + ' ». Je pars de ce passage' + (c.apports ? ', de vos 4 apports' : '') + ' et du reste du chapitre.');
+      else paras.push('Je connais ce chapitre' + (c.apports ? ', vos 4 apports (Guide FI, note vocale, tutoriel vidéo, vos notes)' : '') + ' et votre objectif.');
+      if (c.lacunes) paras.push('Vos quiz montrent que la clé de comptabilisation se confond encore avec le type de pièce : j’y ferai attention.');
+      paras.push('Que voulez-vous que je vous explique ?');
+      return { from: 'tuteur', paras: paras, follow: ['autrement', 'exemple', 'difference', 'teste'] };
+    };
+
+    const answerFor = (key) => {
+      const c = now().ctx || ctx;
+      const a = ANSWERS[key] || ANSWERS.generic;
+      const paras = (key === 'difference' && c.lacunes ? [a.lacuneIntro] : []).concat(a.paras);
+      const msg = { from: 'tuteur', paras: paras, list: a.list, source: a.source, follow: a.follow };
+      if (a.paras2) msg.after = a.paras2;
+      return msg;
+    };
+
+    const reply = (userText, build) => {
+      const s = now();
+      const msgs = (s.messages || []).concat([{ from: 'moi', text: userText }]);
+      this.setState({ messages: msgs, typing: true });
+      scrollEnd();
+      setTimeout(() => {
+        const s2 = now();
+        const out = build();
+        this.setState({ messages: (s2.messages || []).concat([out.msg]), typing: false, testIdx: out.testIdx === undefined ? null : out.testIdx });
+        scrollEnd();
+      }, 750);
+    };
+
+    const ask = (key) => {
+      if (key === 'teste') {
+        const idx = now().lastTest === 0 ? 1 : 0;
+        reply(FOLLOW_LABELS.teste, () => ({ msg: { from: 'tuteur', paras: ['Une question, sans regarder le cours :', TESTS[idx].q], follow: [] }, testIdx: idx }));
+        this.state = Object.assign({}, now(), { lastTest: idx });
+        return;
+      }
+      reply(FOLLOW_LABELS[key] || key, () => ({ msg: answerFor(key) }));
+    };
+
+    const route = (text) => {
+      const t = text.toLowerCase();
+      const pending = now().testIdx;
+      if (pending === 0 || pending === 1) {
+        const test = TESTS[pending];
+        const good = test.ok.test(t) && (pending === 0 ? /cr[ée]dit/.test(t) : /d[ée]bit/.test(t));
+        const c = now().ctx || ctx;
+        return { from: 'tuteur', paras: [good ? test.good : test.bad, good ? (c.lacunes ? 'Je note la réussite : la notion « clé de comptabilisation » passe de 35 % à 48 % de maîtrise.' : 'Bonne réponse, je la note.') : 'Je remets cette notion dans votre quiz global de ce soir, à 17:00.'], source: 'Guide FI, p. 6', follow: ['teste', 'exemple'] };
+      }
+      if (/date/.test(t)) return answerFor('dates');
+      if (/[ée]quilibr|total|partie double/.test(t)) return answerFor('equilibre');
+      if (/type de pi[èe]ce|diff[ée]rence|confond/.test(t)) return answerFor('difference');
+      if (/exemple|concret/.test(t)) return answerFor('exemple');
+      if (/autrement|simple|comprends? pas|r[ée]explique/.test(t)) return answerFor('autrement');
+      return answerFor('generic');
+    };
+
+    const send = () => {
+      const box = document.getElementById('chat-input');
+      const text = box ? box.value.trim() : '';
+      if (!text) return;
+      box.value = '';
+      const pending = now().testIdx;
+      if (pending !== 0 && pending !== 1 && /teste|interroge|v[ée]rifie ma|pose-moi une question/.test(text.toLowerCase())) {
+        const idx = now().lastTest === 0 ? 1 : 0;
+        reply(text, () => ({ msg: { from: 'tuteur', paras: ['Une question, sans regarder le cours :', TESTS[idx].q], follow: [] }, testIdx: idx }));
+        this.state = Object.assign({}, now(), { lastTest: idx });
+      } else {
+        reply(text, () => ({ msg: route(text) }));
+      }
+      focusInput();
+    };
+
+    const openChat = (p, autoAsk, autoPrompt) => {
+      const s = now();
+      const c = Object.assign({}, s.ctx || ctx, p ? { passage: true } : {});
+      let msgs = s.messages || [];
+      if (!msgs.length || p) {
+        this.state = Object.assign({}, s, { ctx: c, passage: p || s.passage || null });
+        msgs = msgs.length && p
+          ? msgs.concat([{ from: 'tuteur', paras: ['Passage ajouté au contexte : « ' + (p.text.length > 90 ? p.text.slice(0, 88) + '…' : p.text) + ' »'], follow: [] }])
+          : [greeting(p)];
+      }
+      this.setState({ chat: true, ctx: c, passage: p || s.passage || null, messages: msgs, pendingSel: null, testIdx: null });
+      if (autoAsk) {
+        const key = autoAsk;
+        const prompt = autoPrompt;
+        reply(prompt, () => ({ msg: answerFor(key) }));
+      }
+      scrollEnd();
+      focusInput();
+    };
+
+    /* Contexte affiché dans la discussion. */
+    const ITEMS = [
+      { k: 'formation', label: 'Formation', value: 'SAP S/4HANA Finance · être opérationnel et préparer la certification', color: '#5B5BD6' },
+      { k: 'chapitre', label: 'Cours en lecture', value: 'Module 3 · Chapitre 2 · Saisie des pièces comptables · 45 % lu', color: '#111113' },
+      { k: 'passage', label: 'Passage', value: passage ? '« ' + passage.text + ' »' : '', color: '#C6F432', only: !!passage },
+      { k: 'apports', label: 'Vos apports', value: 'Guide FI (PDF), note vocale 1:42, tutoriel vidéo 5:10, vos notes', color: '#0F9F7F' },
+      { k: 'lacunes', label: 'Lacune suivie', value: 'Clé de comptabilisation · confondue avec le type de pièce · maîtrise 35 %', color: '#F97316' },
+      { k: 'profil', label: 'Votre profil', value: 'Bonnes bases en comptabilité, débutant sur SAP', color: '#A1A1AA' }
+    ].filter((x) => x.only === undefined || x.only);
+    const ctxItems = ITEMS.map((x) => {
+      const on = ctx[x.k] !== false;
+      return {
+        label: x.label, value: x.value,
+        pressed: on ? 'true' : 'false',
+        aria: (on ? 'Retirer du contexte : ' : 'Remettre dans le contexte : ') + x.label,
+        btnLabel: on ? 'Inclus' : 'Retiré',
+        toggle: () => { const c = Object.assign({}, now().ctx || ctx); c[x.k] = !on; this.setState({ ctx: c }); scrollEnd(); },
+        rowStyle: 'display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #FFFFFF; border: 1px solid #EEEDE8; ' + (on ? '' : 'opacity: 0.55'),
+        dotStyle: 'flex: 0 0 8px; height: 8px; border-radius: 50%; background: ' + x.color,
+        btnStyle: 'flex: 0 0 auto; min-height: 28px; padding: 0 10px; border-radius: 999px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; ' + (on ? 'border: 0; background: #111113; color: #FFFFFF' : 'border: 1px solid #DAD9D3; background: #FFFFFF; color: #62626B')
+      };
+    });
+    const ctxCount = ITEMS.filter((x) => ctx[x.k] !== false).length + ' élément' + (ITEMS.filter((x) => ctx[x.k] !== false).length > 1 ? 's' : '');
+    const ctxIsOpen = st.ctxOpen !== false;
+
+    const lastTutor = messages.map((m) => m.from).lastIndexOf('tuteur');
+    const viewMessages = messages.map((m, i) => {
+      const paras = m.after ? m.paras.concat([]) : m.paras;
+      return {
+        fromTutor: m.from === 'tuteur', fromMe: m.from === 'moi', text: m.text,
+        paras: m.from === 'tuteur' ? paras : [],
+        list: m.list || [], hasList: !!(m.list && m.list.length),
+        source: m.source || '', hasSource: !!m.source,
+        hasFollow: i === lastTutor && !st.typing && !!(m.follow && m.follow.length),
+        follow: (m.follow || []).map((k) => ({ label: FOLLOW_LABELS[k], ask: () => ask(k) }))
+      };
+    });
+    /* Le paragraphe qui suit une liste (exemple chiffré) s'affiche après elle. */
+    viewMessages.forEach((v, i) => { if (messages[i].after) v.list = (messages[i].list || []).concat([messages[i].after]); });
+
+    const sel = st.pendingSel || '';
+    const starters = [
+      { label: 'Explique-moi les clés de comptabilisation autrement', ask: () => openChat(null, 'autrement', 'Explique-moi les clés de comptabilisation autrement') },
+      { label: 'Donne-moi un exemple chiffré', ask: () => openChat(null, 'exemple', 'Donne-moi un exemple chiffré') },
+      { label: 'Clé ou type de pièce : quelle différence ?', ask: () => openChat(null, 'difference', 'Clé ou type de pièce : quelle différence ?') }
+    ];
+
+    return {
+      showAnswer: !!st.answer,
+      hideAnswer: !st.answer,
+      reveal: () => this.setState({ answer: true }),
+      showFeedback: !!st.feedback,
+      sendResume: () => this.setState({ feedback: true }),
+
+      chatOpen: !!st.chat,
+      chatOpenAttr: st.chat ? 'true' : null,
+      chatExpanded: st.chat ? 'true' : 'false',
+      openChat: () => openChat(null),
+      closeChat: () => { this.setState({ chat: false }); setTimeout(() => { const b = document.getElementById('ouvrir-tuteur'); if (b) b.focus(); }, 0); },
+      resetChat: () => { this.setState({ messages: [greeting(now().passage)], testIdx: null, typing: false }); focusInput(); },
+      starters: starters,
+      askPostes: () => openChat(PASSAGES.postes, PASSAGES.postes.ask, PASSAGES.postes.prompt),
+      askConfondre: () => openChat(PASSAGES.confondre, PASSAGES.confondre.ask, PASSAGES.confondre.prompt),
+      askEquilibre: () => openChat(PASSAGES.equilibre, PASSAGES.equilibre.ask, PASSAGES.equilibre.prompt),
+      selBar: !!sel && !st.chat,
+      selPreview: sel.length > 90 ? sel.slice(0, 88) + '…' : sel,
+      askSelection: () => {
+        const p = { label: 'Passage sélectionné', text: sel.length > 160 ? sel.slice(0, 158) + '…' : sel };
+        openChat(p, 'selection', 'Explique-moi ce passage');
+      },
+      dismissSel: () => { try { window.getSelection().removeAllRanges(); } catch (err) { /* sans sélection */ } this.setState({ pendingSel: null }); },
+
+      ctxItems: ctxItems,
+      ctxCount: ctxCount,
+      ctxIsOpen: ctxIsOpen,
+      ctxExpanded: ctxIsOpen ? 'true' : 'false',
+      ctxChevron: 'transition: transform .15s; transform: rotate(' + (ctxIsOpen ? '180' : '0') + 'deg)',
+      toggleCtx: () => { this.setState({ ctxOpen: !ctxIsOpen }); scrollEnd(); },
+      messages: viewMessages,
+      typing: !!st.typing,
+      send: send,
+      composerKey: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
+    };
+  }
+}
+</script>
+</body>
+</html>

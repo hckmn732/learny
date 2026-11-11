@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Learny — Inscription</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#F4F4F1}
+a{color:#3A3AA8}a:hover{color:#26267A}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #5B5BD6;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F4F1; font-family: 'Inter', system-ui, sans-serif; color: #111113">
+<aside aria-label="Learny" style="flex: 1 1 380px; box-sizing: border-box; background: #111113; color: #FFFFFF; padding: 40px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 12px; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600"><span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 12px; background: #C6F432; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span>Learny</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 14px">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em">Apprenez vite.<br>Retenez longtemps.</p>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #D4D4D8">Un tuteur IA conçoit votre parcours, transforme vos ressources en cours, vous entraîne et vous fait réviser au bon moment.</p>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: #D4D4D8">
+<li style="display: flex; gap: 10px"><span aria-hidden="true" style="color: #C6F432; font-weight: 700">✓</span>Des cours construits à partir de vos propres ressources, sources citées</li>
+<li style="display: flex; gap: 10px"><span aria-hidden="true" style="color: #C6F432; font-weight: 700">✓</span>Des révisions espacées pour ne pas oublier</li>
+<li style="display: flex; gap: 10px"><span aria-hidden="true" style="color: #C6F432; font-weight: 700">✓</span>Gratuit avec votre propre clé d'IA</li>
+</ul>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 12px; font-weight: 600; color: #A1A1AA; text-transform: uppercase; letter-spacing: 0.08em">{{stepCounter}}</span>
+<ol aria-label="Étapes de l'inscription" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 6px">
+<sc-for list="{{stepDots}}" as="d" hint-placeholder-count="6"><li aria-current="{{d.current}}" style="{{d.style}}"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">{{d.label}}</span></li></sc-for>
+</ol>
+</div>
+</aside>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 48px 40px; display: flex; align-items: center; justify-content: center">
+<div style="width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 24px">
+<sc-if value="{{canBack}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{back}}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px 0 6px; border-radius: 10px; border: 0; background: transparent; color: #62626B; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>Retour</button>
+</sc-if>
+
+<sc-if value="{{isCompte}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">{{compteTitle}}</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">{{compteSub}}</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 28px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="i-mail" style="font-size: 13px; font-weight: 700">Adresse e-mail</label>
+<input id="i-mail" type="email" autocomplete="email" placeholder="vous@exemple.fr" value="{{email}}" onChange="{{setEmail}}" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113">
+</div>
+<div role="radiogroup" aria-label="Façon de se connecter" style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{methods}}" as="m" hint-placeholder-count="2">
+<button type="button" role="radio" aria-checked="{{m.checked}}" onClick="{{m.pick}}" style="{{m.style}}"><span aria-hidden="true" style="{{m.dot}}"></span><span style="display: flex; flex-direction: column; gap: 2px; text-align: left"><span style="font-size: 14px; font-weight: 700">{{m.label}}</span><span style="font-size: 13px; color: #62626B">{{m.desc}}</span></span></button>
+</sc-for>
+</div>
+<sc-if value="{{withPassword}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="i-mdp" style="font-size: 13px; font-weight: 700">Mot de passe</label>
+<input id="i-mdp" type="password" autocomplete="{{pwdAutocomplete}}" placeholder="12 caractères au moins" value="{{pwd}}" onChange="{{setPwd}}" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113">
+<sc-if value="{{isSignup}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="display: flex; gap: 4px"><sc-for list="{{pwdBars}}" as="b" hint-placeholder-count="4"><span style="{{b.style}}"></span></sc-for></div>
+<span style="font-size: 12px; color: #62626B">{{pwdHint}}</span>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{isSignup}}" hint-placeholder-val="{{ true }}">
+<label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; color: #3F3F46; cursor: pointer"><input type="checkbox" checked="{{cgu}}" onChange="{{toggleCgu}}" style="width: 18px; height: 18px; margin: 1px 0 0; accent-color: #111113">J'accepte les <a href="#">conditions d'utilisation</a> et la <a href="#">politique de confidentialité</a>. Mes ressources restent privées.</label>
+</sc-if>
+<sc-if value="{{hasError}}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin: 0; padding: 10px 12px; border-radius: 12px; background: #FFEDE0; color: #8F3305; font-size: 13px; font-weight: 600">{{error}}</p></sc-if>
+<button type="button" onClick="{{submitCompte}}" style="min-height: 50px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">{{compteCta}}</button>
+</div>
+<p style="margin: 0; text-align: center; font-size: 14px; color: #62626B">{{switchText}} <button type="button" onClick="{{switchMode}}" style="border: 0; background: transparent; padding: 0; color: #3A3AA8; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: underline">{{switchCta}}</button></p>
+</sc-if>
+
+<sc-if value="{{isMail}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 32px; text-align: center; align-items: center">
+<span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 20px; background: #F1FBD3; display: inline-flex; align-items: center; justify-content: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3D5200" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="m4 7 8 6 8-6"></path></svg></span>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600">Vérifiez votre boîte mail</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #3F3F46">{{mailText}}</p>
+<button type="button" onClick="{{confirmMail}}" style="min-height: 48px; padding: 0 20px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">J'ai cliqué sur le lien</button>
+<p style="margin: 0; font-size: 13px; color: #62626B">Rien reçu ? Regardez dans les indésirables, ou <button type="button" onClick="{{resend}}" style="border: 0; background: transparent; padding: 0; color: #3A3AA8; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: underline">renvoyez le lien</button>.</p>
+<sc-if value="{{resent}}" hint-placeholder-val="{{ false }}"><p role="status" style="margin: 0; font-size: 13px; font-weight: 600; color: #0B5C4D">Nouveau lien envoyé. Il reste valable 1 heure.</p></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isProfil}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">Faisons connaissance</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">Le tuteur s'adressera à vous comme vous le souhaitez.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 28px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="i-prenom" style="font-size: 13px; font-weight: 700">Prénom</label>
+<input id="i-prenom" type="text" autocomplete="given-name" value="{{prenom}}" onChange="{{setPrenom}}" style="min-height: 48px; padding: 0 14px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span id="l-ton" style="font-size: 13px; font-weight: 700">Le tuteur vous parle en</span>
+<div role="group" aria-labelledby="l-ton" style="display: flex; gap: 6px">
+<sc-for list="{{tons}}" as="t" hint-placeholder-count="2"><button type="button" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button></sc-for>
+</div>
+<p aria-live="polite" style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #F4F4F1; font-size: 14px; line-height: 1.5"><strong>Aperçu :</strong> {{tonPreview}}</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="i-langue" style="font-size: 13px; font-weight: 700">Langue des cours</label>
+<select id="i-langue" value="{{langue}}" onChange="{{setLangue}}" style="min-height: 48px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option value="fr">Français</option><option value="en">English</option><option value="es">Español</option><option value="de">Deutsch</option></select>
+<span style="font-size: 12px; color: #62626B">Le tuteur rédige dans cette langue, même si vos ressources sont dans une autre.</span>
+</div>
+<button type="button" onClick="{{next}}" style="min-height: 50px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Continuer</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isRythme}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">Votre rythme</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">Le tuteur s'en sert pour placer vos séances dans l'agenda. Modifiable à tout moment.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 28px">
+<div style="display: flex; flex-direction: column; gap: 8px"><span id="l-h" style="font-size: 13px; font-weight: 700">Temps d'étude par jour</span><div role="group" aria-labelledby="l-h" style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{hoursOpts}}" as="o" hint-placeholder-count="6"><button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span id="l-j" style="font-size: 13px; font-weight: 700">Jours d'étude</span><div role="group" aria-labelledby="l-j" style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{daysOpts}}" as="o" hint-placeholder-count="7"><button type="button" aria-pressed="{{o.pressed}}" aria-label="{{o.aria}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button></sc-for></div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span id="l-m" style="font-size: 13px; font-weight: 700">Moments préférés</span><div role="group" aria-labelledby="l-m" style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{slotOpts}}" as="o" hint-placeholder-count="3"><button type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}" style="{{o.style}}">{{o.label}}</button></sc-for></div></div>
+<p style="margin: 0; padding: 12px 14px; border-radius: 14px; background: #F4F4F1; font-size: 14px; line-height: 1.5">{{rhythmSummary}}</p>
+<button type="button" onClick="{{next}}" style="min-height: 50px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Continuer</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isIa}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">Votre IA</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">Le tuteur a besoin d'un modèle d'IA. Vous pourrez changer à tout moment dans les paramètres.</p>
+</div>
+<div role="radiogroup" aria-label="Choix de l'IA" style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{iaChoices}}" as="c" hint-placeholder-count="2">
+<button type="button" role="radio" aria-checked="{{c.checked}}" onClick="{{c.pick}}" style="{{c.style}}">
+<span aria-hidden="true" style="{{c.dot}}"></span>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px; text-align: left">
+<span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><span style="font-size: 16px; font-weight: 700">{{c.label}}</span><span style="{{c.pillStyle}}">{{c.pill}}</span></span>
+<span style="font-size: 13px; line-height: 1.5; color: #3F3F46">{{c.desc}}</span>
+</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{ownKey}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="i-fourn" style="font-size: 13px; font-weight: 700">Fournisseur</label><select id="i-fourn" value="{{provider}}" onChange="{{setProvider}}" style="min-height: 46px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #111113"><option value="anthropic">Anthropic · Claude</option><option value="openai">OpenAI</option><option value="mistral">Mistral</option><option value="compat">Service compatible OpenAI</option></select></div>
+<div style="flex: 2 1 240px; display: flex; flex-direction: column; gap: 6px"><label for="i-cle" style="font-size: 13px; font-weight: 700">Clé d'API</label><input id="i-cle" type="password" autocomplete="off" placeholder="Collez votre clé" value="{{apiKey}}" onChange="{{setKey}}" style="min-height: 46px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<button type="button" onClick="{{testKey}}" style="min-height: 42px; padding: 0 16px; border-radius: 12px; border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Tester la clé</button>
+<span role="status" style="{{keyStatusStyle}}">{{keyStatus}}</span>
+</div>
+<p style="margin: 0; font-size: 12px; line-height: 1.5; color: #62626B">Votre clé est chiffrée et ne sert qu'à vos propres demandes. Le test vérifie que le modèle sait produire les briques de Learny (cours, quiz, jeux).</p>
+</div>
+</sc-if>
+<sc-if value="{{providedIa}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 24px; font-size: 14px; line-height: 1.55; color: #3F3F46">
+<p style="margin: 0"><strong style="color: #111113">Abonnement mensuel, sans engagement.</strong> Il comprend un plafond d'usage quotidien ; au-delà, le tuteur passe sur un modèle plus léger jusqu'au lendemain.</p>
+<p style="margin: 0">Le paiement se fera à la fin de l'inscription. Vous pourrez revenir à votre propre clé à tout moment.</p>
+</div>
+</sc-if>
+<sc-if value="{{hasIaError}}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin: 0; padding: 10px 12px; border-radius: 12px; background: #FFEDE0; color: #8F3305; font-size: 13px; font-weight: 600">Testez votre clé avant de continuer, ou choisissez l'IA fournie.</p></sc-if>
+<button type="button" onClick="{{submitIa}}" style="min-height: 50px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Continuer</button>
+</sc-if>
+
+<sc-if value="{{isRappels}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">Rappels et automatismes</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">Ce qui vous fera revenir au bon moment, sans vous déranger.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 24px; padding: 12px 24px">
+<sc-for list="{{reminders}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #EEEDE8">
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px"><span id="{{r.id}}" style="font-size: 14px; font-weight: 700">{{r.label}}</span><span style="font-size: 13px; color: #62626B">{{r.desc}}</span></span>
+<button type="button" role="switch" aria-checked="{{r.checked}}" aria-labelledby="{{r.id}}" onClick="{{r.toggle}}" style="{{r.track}}"><span style="{{r.knob}}"></span></button>
+</div>
+</sc-for>
+<p style="margin: 8px 0; font-size: 13px; line-height: 1.5; color: #62626B">Heures calmes de 21:00 à 08:00 et 5 notifications par jour au plus. Tout se règle ensuite dans Paramètres.</p>
+</div>
+<button type="button" onClick="{{next}}" style="min-height: 50px; border-radius: 14px; border: 0; background: #111113; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer">Continuer</button>
+</sc-if>
+
+<sc-if value="{{isDepart}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 600; letter-spacing: -0.02em">{{welcome}}</h1>
+<p style="margin: 0; font-size: 15px; color: #62626B">{{welcomeSub}}</p>
+</div>
+<a href="NouvelleFormation.dc.html" style="display: flex; align-items: center; gap: 16px; padding: 22px 24px; border-radius: 24px; background: #111113; color: #FFFFFF; text-decoration: none">
+<span aria-hidden="true" style="flex: 0 0 48px; height: 48px; border-radius: 14px; background: #C6F432; color: #111113; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600">+</span>
+<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">Créer ma première formation</span><span style="font-size: 13px; color: #D4D4D8">Dites ce que vous voulez apprendre ; le tuteur pose au plus 5 questions, puis propose un programme.</span></span>
+</a>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 22px 24px; border-radius: 24px; background: #FFFFFF; border: 1px solid #E7E6E1">
+<label for="i-invit" style="font-size: 15px; font-weight: 700">Vous avez reçu une invitation ?</label>
+<p style="margin: 0; font-size: 13px; color: #62626B">Rejoignez une formation à plusieurs : même programme et même agenda, vos apports et vos résultats restent privés.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<input id="i-invit" type="text" placeholder="Code ou lien d'invitation" value="{{invite}}" onChange="{{setInvite}}" style="flex: 1 1 220px; min-height: 46px; padding: 0 12px; border: 1px solid #DAD9D3; border-radius: 12px; font-family: inherit; font-size: 15px; color: #111113">
+<button type="button" onClick="{{joinInvite}}" style="min-height: 46px; padding: 0 18px; border-radius: 12px; border: 0; background: #C6F432; color: #111113; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Rejoindre</button>
+</div>
+<sc-if value="{{joined}}" hint-placeholder-val="{{ false }}"><p role="status" style="margin: 0; padding: 10px 12px; border-radius: 12px; background: #E1F4EF; color: #0B5C4D; font-size: 13px; font-weight: 600">Invitation acceptée : « Gestion de projet agile », avec Camille et Hugo. <a href="Main.dc.html" style="color: #0B5C4D">Ouvrir l'accueil</a></p></sc-if>
+<sc-if value="{{inviteError}}" hint-placeholder-val="{{ false }}"><p role="alert" style="margin: 0; font-size: 13px; font-weight: 600; color: #8F3305">Collez le code ou le lien reçu par e-mail.</p></sc-if>
+</div>
+<a href="Main.dc.html" style="align-self: center; font-size: 14px; font-weight: 600">Découvrir l'accueil d'abord</a>
+</sc-if>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const set = (p) => this.setState(p);
+    const login = st.login !== undefined ? st.login : /connexion/.test(window.location.search);
+    const STEPS = ['compte', 'mail', 'profil', 'rythme', 'ia', 'rappels', 'depart'];
+    const LABELS = ['Compte', 'Vérification', 'Profil', 'Rythme', 'IA', 'Rappels', 'Départ'];
+    const step = st.step || 'compte';
+    const idx = STEPS.indexOf(step);
+    const go = (s) => set({ step: s, error: null, iaError: false });
+    const nextStep = () => go(STEPS[Math.min(idx + 1, STEPS.length - 1)]);
+
+    /* Compte */
+    const method = st.method || 'lien';
+    const email = st.email || '';
+    const pwd = st.pwd || '';
+    const cgu = !!st.cgu;
+    const radio = (on) => 'display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: 14px; font-family: inherit; color: #111113; cursor: pointer; ' + (on ? 'border: 2px solid #111113; background: #F8F8F6' : 'border: 1px solid #DAD9D3; background: #FFFFFF');
+    const dot = (on) => 'flex: 0 0 18px; height: 18px; box-sizing: border-box; border-radius: 50%; ' + (on ? 'border: 6px solid #111113' : 'border: 2px solid #A1A1AA');
+    const methods = [['lien', 'Recevoir un lien de connexion', 'Sans mot de passe : un lien valable 1 heure, envoyé par e-mail.'], ['mdp', login ? 'Avec mon mot de passe' : 'Choisir un mot de passe', login ? 'Connexion immédiate.' : '12 caractères au moins.']].map((m) => ({
+      label: m[1], desc: m[2], checked: method === m[0] ? 'true' : 'false', pick: () => set({ method: m[0], error: null }), style: radio(method === m[0]), dot: dot(method === m[0])
+    }));
+    const strength = Math.min(4, (pwd.length >= 12 ? 2 : (pwd.length >= 8 ? 1 : 0)) + (/[0-9]/.test(pwd) ? 1 : 0) + (/[^A-Za-z0-9]/.test(pwd) ? 1 : 0));
+    const pwdBars = [0, 1, 2, 3].map((i) => ({ style: 'flex: 1; height: 4px; border-radius: 2px; background: ' + (i < strength ? (strength >= 3 ? '#14A38B' : '#F97316') : '#E7E6E1') }));
+    const submitCompte = () => {
+      const s = this.state || {};
+      const em = (s.email || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { set({ error: 'Saisissez une adresse e-mail valide.' }); return; }
+      if ((s.method || 'lien') === 'mdp' && !login && (s.pwd || '').length < 12) { set({ error: 'Le mot de passe doit faire 12 caractères au moins.' }); return; }
+      if ((s.method || 'lien') === 'mdp' && login && !(s.pwd || '')) { set({ error: 'Saisissez votre mot de passe.' }); return; }
+      if (!login && !s.cgu) { set({ error: 'Acceptez les conditions pour créer votre compte.' }); return; }
+      if (login && (s.method || 'lien') === 'mdp') { window.location.href = 'Main.dc.html'; return; }
+      go('mail');
+    };
+
+    /* Profil */
+    const prenom = st.prenom !== undefined ? st.prenom : '';
+    const ton = st.ton || 'vous';
+    const nom = prenom.trim() || 'Alex';
+    const chip = (on) => 'min-height: 40px; min-width: 44px; padding: 0 14px; border-radius: 12px; font-family: inherit; font-size: 14px; cursor: pointer; ' + (on ? 'border: 1px solid #111113; background: #111113; color: #FFFFFF; font-weight: 700' : 'border: 1px solid #DAD9D3; background: #FFFFFF; color: #111113; font-weight: 500');
+    const tons = [['vous', 'Vouvoyant'], ['tu', 'Tutoyant']].map((t) => ({ label: t[1], pressed: ton === t[0] ? 'true' : 'false', pick: () => set({ ton: t[0] }), style: chip(ton === t[0]) }));
+    const tonPreview = ton === 'tu' ? 'Bonjour ' + nom + ', voici tes 3 activités du jour. On commence par un échauffement de 2 minutes ?' : 'Bonjour ' + nom + ', voici vos 3 activités du jour. On commence par un échauffement de 2 minutes ?';
+
+    /* Rythme */
+    const hoursPerDay = st.hours || 2;
+    const studyDays = st.days || [true, true, true, true, true, false, false];
+    const slots = st.slots || { matin: false, apres: false, soir: true };
+    const hoursOpts = [1, 2, 3, 4, 5, 6].map((h) => ({ label: h + ' h', pressed: h === hoursPerDay ? 'true' : 'false', pick: () => set({ hours: h }), style: chip(h === hoursPerDay) }));
+    const DAYS_A = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const daysOpts = ['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((l, i) => ({ label: l, aria: DAYS_A[i], pressed: studyDays[i] ? 'true' : 'false', style: chip(studyDays[i]), pick: () => { const d = studyDays.slice(); d[i] = !d[i]; if (d.some(Boolean)) set({ days: d }); } }));
+    const SL = [['matin', 'Matin'], ['apres', 'Après-midi'], ['soir', 'Soir']];
+    const slotOpts = SL.map((x) => ({ label: x[1], pressed: slots[x[0]] ? 'true' : 'false', style: chip(slots[x[0]]), pick: () => { const s2 = Object.assign({}, slots); s2[x[0]] = !s2[x[0]]; if (Object.keys(s2).some((k) => s2[k])) set({ slots: s2 }); } }));
+    const nDays = studyDays.filter(Boolean).length;
+    const rhythmSummary = hoursPerDay + ' h par jour, ' + nDays + ' jour' + (nDays > 1 ? 's' : '') + ' sur 7, plutôt ' + SL.filter((x) => slots[x[0]]).map((x) => x[1].toLowerCase()).join(' et ') + ' : ' + (hoursPerDay * nDays) + ' h par semaine.';
+
+    /* IA */
+    const ia = st.ia || 'cle';
+    const keyOk = !!st.keyOk;
+    const iaChoices = [
+      ['cle', 'Ma propre clé d’IA', 'Gratuit', 'Vous branchez la clé d’un fournisseur (Anthropic, OpenAI, Mistral…). Learny est gratuit ; vous payez directement votre fournisseur, à l’usage.', 'background: #F1FBD3; color: #3D5200'],
+      ['fournie', 'L’IA fournie par Learny', 'Payant', 'Rien à configurer : le meilleur modèle pour chaque tâche, choisi pour vous.', 'background: #ECECFC; color: #2E2E8F']
+    ].map((c) => ({
+      label: c[1], pill: c[2], desc: c[3], checked: ia === c[0] ? 'true' : 'false', pick: () => set({ ia: c[0], iaError: false }),
+      style: radio(ia === c[0]) + '; align-items: flex-start; padding: 16px 18px', dot: dot(ia === c[0]) + '; margin-top: 3px',
+      pillStyle: 'padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; ' + c[4]
+    }));
+    const testKey = () => {
+      const k = ((this.state || {}).apiKey || '').trim();
+      set(k.length >= 12 ? { keyOk: true, keyTried: true } : { keyOk: false, keyTried: true });
+    };
+
+    /* Rappels */
+    const sw = (on) => ({
+      track: 'flex: 0 0 auto; width: 46px; height: 28px; padding: 3px; box-sizing: border-box; border-radius: 999px; border: 0; display: inline-flex; align-items: center; justify-content: ' + (on ? 'flex-end' : 'flex-start') + '; background: ' + (on ? '#111113' : '#DAD9D3') + '; cursor: pointer',
+      knob: 'width: 22px; height: 22px; border-radius: 50%; background: ' + (on ? '#C6F432' : '#FFFFFF') + '; box-shadow: 0 1px 2px rgba(17, 17, 19, 0.2)'
+    });
+    const rem = st.rem || { nav: true, mail: true, auto: true };
+    const reminders = [
+      ['nav', 'Notifications du navigateur', 'Révisions dues, quiz à venir, cours prêt. Le navigateur vous demandera l’autorisation.'],
+      ['mail', 'Programme du jour par e-mail', 'Chaque matin à 8:00, vos activités du jour.'],
+      ['auto', 'Automatismes recommandés', 'Reprise après une pause, micro-séance de secours, échauffement, révisions lissées.']
+    ].map((r) => Object.assign({ id: 'rap-' + r[0], label: r[1], desc: r[2], checked: rem[r[0]] ? 'true' : 'false', toggle: () => { const n = Object.assign({}, rem); n[r[0]] = !n[r[0]]; set({ rem: n }); } }, sw(rem[r[0]])));
+
+    const stepDots = LABELS.map((l, i) => ({
+      label: 'Étape ' + (i + 1) + ' : ' + l + (i < idx ? ', faite' : (i === idx ? ', en cours' : '')),
+      current: i === idx ? 'step' : null,
+      style: 'position: relative; flex: 1; height: 6px; border-radius: 3px; background: ' + (i < idx ? '#C6F432' : (i === idx ? '#FFFFFF' : '#2E2E34'))
+    }));
+
+    return {
+      stepCounter: login && step === 'compte' ? 'Connexion' : 'Étape ' + (idx + 1) + ' sur ' + STEPS.length + ' · ' + LABELS[idx],
+      stepDots: stepDots,
+      canBack: idx > 0 && step !== 'depart',
+      back: () => go(STEPS[Math.max(0, idx - 1)]),
+      next: nextStep,
+      isCompte: step === 'compte', isMail: step === 'mail', isProfil: step === 'profil', isRythme: step === 'rythme', isIa: step === 'ia', isRappels: step === 'rappels', isDepart: step === 'depart',
+
+      isSignup: !login,
+      compteTitle: login ? 'Bon retour' : 'Créer votre compte',
+      compteSub: login ? 'Connectez-vous pour reprendre là où vous en étiez.' : 'Deux minutes pour démarrer, sans carte bancaire.',
+      compteCta: login ? (method === 'lien' ? 'Recevoir mon lien de connexion' : 'Se connecter') : (method === 'lien' ? 'Recevoir mon lien' : 'Créer mon compte'),
+      switchText: login ? 'Pas encore de compte ?' : 'Déjà un compte ?',
+      switchCta: login ? 'Créer un compte' : 'Se connecter',
+      switchMode: () => set({ login: !login, error: null }),
+      email: email, setEmail: (e) => set({ email: e.target.value, error: null }),
+      methods: methods, withPassword: method === 'mdp',
+      pwd: pwd, setPwd: (e) => set({ pwd: e.target.value, error: null }),
+      pwdAutocomplete: login ? 'current-password' : 'new-password',
+      pwdBars: pwdBars,
+      pwdHint: pwd.length === 0 ? '12 caractères au moins ; une phrase facile à retenir fonctionne bien.' : (strength >= 3 ? 'Mot de passe solide.' : 'Encore un effort : allongez-le, ajoutez un chiffre ou un symbole.'),
+      cgu: cgu, toggleCgu: () => set({ cgu: !cgu, error: null }),
+      hasError: !!st.error, error: st.error || '',
+      submitCompte: submitCompte,
+
+      mailText: (method === 'lien' ? 'Nous avons envoyé un lien de connexion à ' : 'Nous avons envoyé un lien de confirmation à ') + (email.trim() || 'votre adresse') + '. Ouvrez-le sur cet appareil pour continuer.',
+      confirmMail: () => { if (login) { window.location.href = 'Main.dc.html'; } else { go('profil'); } },
+      resend: () => set({ resent: true }), resent: !!st.resent,
+
+      prenom: prenom, setPrenom: (e) => set({ prenom: e.target.value }),
+      tons: tons, tonPreview: tonPreview,
+      langue: st.langue || 'fr', setLangue: (e) => set({ langue: e.target.value }),
+
+      hoursOpts: hoursOpts, daysOpts: daysOpts, slotOpts: slotOpts, rhythmSummary: rhythmSummary,
+
+      iaChoices: iaChoices, ownKey: ia === 'cle', providedIa: ia === 'fournie',
+      provider: st.provider || 'anthropic', setProvider: (e) => set({ provider: e.target.value, keyOk: false, keyTried: false }),
+      apiKey: st.apiKey || '', setKey: (e) => set({ apiKey: e.target.value, keyOk: false, keyTried: false }),
+      testKey: testKey,
+      keyStatus: keyOk ? 'Clé valide · modèle qualifié pour Learny' : (st.keyTried ? 'Clé refusée par le fournisseur. Vérifiez-la.' : 'Pas encore testée'),
+      keyStatusStyle: 'font-size: 13px; font-weight: 700; color: ' + (keyOk ? '#0B5C4D' : (st.keyTried ? '#8F3305' : '#62626B')),
+      hasIaError: !!st.iaError,
+      submitIa: () => { const s = this.state || {}; if ((s.ia || 'cle') === 'cle' && !s.keyOk) { set({ iaError: true }); return; } nextStep(); },
+
+      reminders: reminders,
+
+      welcome: (ton === 'tu' ? 'Bienvenue, ' : 'Bienvenue, ') + nom + ' !',
+      welcomeSub: ton === 'tu' ? 'Ton compte est prêt. Par quoi veux-tu commencer ?' : 'Votre compte est prêt. Par quoi voulez-vous commencer ?',
+      invite: st.invite || '', setInvite: (e) => set({ invite: e.target.value, inviteError: false }),
+      joinInvite: () => { const v = ((this.state || {}).invite || '').trim(); set(v ? { joined: true, inviteError: false } : { inviteError: true, joined: false }); },
+      joined: !!st.joined, inviteError: !!st.inviteError
+    };
+  }
+}
+</script>
+</body>
+</html>

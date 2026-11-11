@@ -1,0 +1,3902 @@
+{
+  "project": "Learny",
+  "version": 1,
+  "generatedOn": "2026-11-11",
+  "phases": [
+    {
+      "id": "P0",
+      "dir": "p0-fondations",
+      "title": "Fondations et infrastructure",
+      "checkpoint": "CP-0"
+    },
+    {
+      "id": "P1",
+      "dir": "p1-donnees",
+      "title": "Base de données, migrations et sécurité",
+      "checkpoint": "CP-1"
+    },
+    {
+      "id": "P2",
+      "dir": "p2-backend",
+      "title": "Backend, API et services transverses",
+      "checkpoint": "CP-2"
+    },
+    {
+      "id": "P3",
+      "dir": "p3-interface",
+      "title": "Design system et coquille de l'application",
+      "checkpoint": "CP-3"
+    },
+    {
+      "id": "P4",
+      "dir": "p4-moteur",
+      "title": "Moteur d'apprentissage (déterministe)",
+      "checkpoint": "CP-4"
+    },
+    {
+      "id": "P5",
+      "dir": "p5-ia",
+      "title": "IA, ingestion et briques",
+      "checkpoint": "CP-5"
+    },
+    {
+      "id": "P6",
+      "dir": "p6-parcours",
+      "title": "Parcours d'apprentissage (fonctionnalités cœur)",
+      "checkpoint": "CP-6"
+    },
+    {
+      "id": "P7",
+      "dir": "p7-engagement",
+      "title": "Révisions, agenda, engagement et réglages",
+      "checkpoint": "CP-7"
+    },
+    {
+      "id": "P8",
+      "dir": "p8-livraison-v1",
+      "title": "Plateforme, qualité et livraison V1",
+      "checkpoint": "CP-8"
+    },
+    {
+      "id": "P9",
+      "dir": "p9-v2",
+      "title": "Fonctionnalités V2 et livraison V2",
+      "checkpoint": "CP-9"
+    }
+  ],
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "phase": "P0",
+      "title": "Monorepo, application web minimale et socle de tests",
+      "priority": "V1",
+      "dependsOn": [],
+      "businessRules": [
+        "BR-PLA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0002",
+        "ADR-0003",
+        "ADR-0004",
+        "ADR-0070"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-001-monorepo-application-web-minimale-et-socle-de-test.md",
+      "scope": "Initialiser le monorepo pnpm/Turborepo (Node 24, TS strict, ESLint plat avec frontières de paquets et interdiction de Date.now, Prettier, EditorConfig), créer apps/web (Next.js App Router, Tailwind 4, page d'accueil provisoire, route /api/v1/health), paquets vides @learny/core et @learny/config, Vitest (projets unit et integration) et Playwright (Chromium, vidéo/captures/traces) avec un test de fumée @SPEC-001, scripts racine (dev, build, lint, typecheck, test:unit, test:int, test:e2e, test:visual, format) et turbo.json. C'est l'amorçage : ses propres validations utilisent ce qu'il installe.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-002",
+      "phase": "P0",
+      "title": "Hooks Git, conventions de commit et protection des secrets",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0051"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-002-hooks-git-conventions-de-commit-et-protection-des-.md",
+      "scope": "Husky (pre-commit lint-staged + gitleaks si présent, commit-msg commitlint, pre-push typecheck + test:unit), commitlint avec portée obligatoire SPEC-xxx|CP-n|sdd et types de docs/engineering/git.md, lint-staged, script de vérification des secrets, CONTRIBUTING.md complété, tests qui vérifient l'acceptation/refus de messages de commit.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-003",
+      "phase": "P0",
+      "title": "Outillage SDD exécutable et intégré",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0001",
+        "ADR-0068",
+        "ADR-0069",
+        "ADR-0050",
+        "ADR-0203"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md",
+      "scope": "Intégrer tools/sdd (déjà présent) au monorepo : scripts pnpm sdd:next, sdd:status, sdd:start, sdd:validate, sdd:complete, sdd:fail, sdd:checkpoint, sdd:audit, sdd:adr ; tests Vitest des outils (sélection de la prochaine spécification, cycles, reprise après échec, blocage après 5 tentatives, génération de PROGRESS.md, audit) ; page /_dev/sdd affichant l'état du référentiel.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-004",
+      "phase": "P0",
+      "title": "Socle de tests complet et collecte des preuves",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001",
+        "SPEC-003"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0047",
+        "ADR-0048",
+        "ADR-0050",
+        "ADR-0070"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-004-socle-de-tests-complet-et-collecte-des-preuves.md",
+      "scope": "Paquet @learny/testing : horloge figée (createFixedClock, CLOCK_FIXED_AT), helpers Playwright (fixture d'horloge 2026-11-11T12:20:00Z, axe, capture), reporters JSON/JUnit/HTML, couverture v8 avec seuils par paquet, MSW, configuration Playwright complète (projets desktop/mobile/cross-browser), helper visual.ts (expectTokens, compareWithReference avec pixelmatch, image côte à côte), intégration avec tools/sdd/evidence.mjs, Git LFS pour les vidéos.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-005",
+      "phase": "P0",
+      "title": "Références visuelles générées depuis les maquettes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-004"
+      ],
+      "businessRules": [
+        "BR-NAV-06"
+      ],
+      "screens": [
+        "SCR-01",
+        "SCR-03",
+        "SCR-04",
+        "SCR-05",
+        "SCR-06",
+        "SCR-07",
+        "SCR-08",
+        "SCR-09",
+        "SCR-10",
+        "SCR-11",
+        "SCR-12",
+        "SCR-13",
+        "SCR-14",
+        "SCR-15"
+      ],
+      "adrs": [
+        "ADR-0034",
+        "ADR-0047"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-005-references-visuelles-generees-depuis-les-maquettes.md",
+      "scope": "Script Playwright qui sert design/maquettes/ en statique, fige l'horloge, et capture chaque maquette et chacun de ses états significatifs (onglets, panneaux ouverts, étapes) en 1440×900 et 390×844 dans design/references/<SCR>-<etat>-<viewport>.png, plus extraction des jetons (couleurs, polices, tailles) dans design/references/tokens.json ; manifeste design/references/manifest.json.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-006",
+      "phase": "P0",
+      "title": "Application web : configuration de base, santé et pages de démonstration",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001"
+      ],
+      "businessRules": [
+        "BR-PLA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0004",
+        "ADR-0049",
+        "ADR-0203"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-006-application-web-configuration-de-base-sante-et-pag.md",
+      "scope": "Structure apps/web (app/, components/, lib/, messages/fr.ts, e2e/), layout racine (langue fr, polices), route /api/v1/health complète (version, commit, état base), page /_dev/sdd et /_dev/sdd/[specId] activées par ENABLE_SDD_PAGES (404 sinon, testé), client API typé minimal, gestion d'erreurs globale.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-007",
+      "phase": "P0",
+      "title": "Worker Inngest et paquet jobs",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0017"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md",
+      "scope": "Paquet @learny/jobs (client Inngest, enregistrement des fonctions, fonction de démonstration), route /api/inngest dans apps/web, apps/worker (Hono) qui sert les mêmes fonctions, tests d'exécution directe d'une fonction à étapes avec reprise.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-008",
+      "phase": "P0",
+      "title": "Environnement local Docker",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-006",
+        "SPEC-007"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0006",
+        "ADR-0053",
+        "ADR-0054"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-008-environnement-local-docker.md",
+      "scope": "supabase/config.toml (Supabase CLI, extensions), docker/compose.dev.yml (Inngest Dev Server, Mailpit), scripts pnpm dev:up / dev:down / db:reset / db:seed:demo, documentation de démarrage dans README, vérification automatisée que la pile démarre (health, base, Mailpit).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-009",
+      "phase": "P0",
+      "title": "Configuration, variables d'environnement et secrets",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-006"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0011",
+        "ADR-0045",
+        "ADR-0073"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-009-configuration-variables-d-environnement-et-secrets.md",
+      "scope": "Paquet @learny/config : schéma Zod de toutes les variables (.env.example exhaustif), séparation serveur/public, modes LLM_MODE/STRIPE_MODE/EMAIL_MODE, constantes produit (product.ts miroir des règles métier), models.ts, pricing.ts ; échec explicite au démarrage si une variable obligatoire manque en production.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-010",
+      "phase": "P0",
+      "title": "Observabilité : journalisation, erreurs, santé",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-006",
+        "SPEC-009"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0043"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md",
+      "scope": "Logger pino (@learny/core) avec requestId propagé, masquage des données sensibles, Sentry (web, worker) activé par SENTRY_DSN, rapport d'erreurs des jobs, endpoint de santé enrichi, tests de non-fuite de données personnelles dans les journaux.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-011",
+      "phase": "P0",
+      "title": "Intégration continue",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-002",
+        "SPEC-004",
+        "SPEC-008"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0052"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-011-integration-continue.md",
+      "scope": "Compléter .github/workflows/ci.yml : jobs audit du référentiel, lint, typecheck, build, unit, intégration (Supabase CLI), e2e Chromium, visuel, upload des rapports/preuves en artefacts, gitleaks, pnpm audit ; cache pnpm/turbo ; workflow de vérification des PR (titre conventionnel) ; test local du workflow avec act si disponible, sinon validation syntaxique (actionlint).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-012",
+      "phase": "P0",
+      "title": "Images Docker et déploiement auto-hébergé",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-007",
+        "SPEC-008"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0053"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md",
+      "scope": "docker/web.Dockerfile (Next.js standalone, utilisateur non root), docker/worker.Dockerfile, docker/compose.selfhost.yml (web, worker, Supabase auto-hébergé, Inngest auto-hébergé, Mailpit optionnel), documentation docs/operations/self-hosting.md, test de construction des images et de démarrage du compose (santé).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-013",
+      "phase": "P0",
+      "title": "Environnements gérés et déploiement continu",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-009",
+        "SPEC-011"
+      ],
+      "businessRules": [
+        "BR-PLA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0006",
+        "ADR-0017"
+      ],
+      "visual": "demo",
+      "path": "specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md",
+      "scope": "vercel.json (région fra1, en-têtes), scripts tools/deploy (migrations Supabase distantes, synchronisation Inngest), workflow deploy.yml (preview sur PR, production sur tag v*), docs/operations/deployment.md ; si les secrets des services gérés sont absents, consigner le blocage externe dans progress/blockers.md et valider uniquement la configuration (lint des fichiers, dry-run).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-101",
+      "phase": "P1",
+      "title": "Paquet db : Drizzle, migrations et harnais de test",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-008"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0006",
+        "ADR-0022"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md",
+      "scope": "Paquet @learny/db : client Drizzle (userDb avec JWT/RLS, serviceDb), drizzle-kit, flux de migration vers supabase/migrations, extensions, trigger set_updated_at, énumérations communes, helpers withRollback et createTestUser, scripts db:generate/db:migrate/db:reset.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-102",
+      "phase": "P1",
+      "title": "Schéma identité et préférences",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-101"
+      ],
+      "businessRules": [
+        "BR-ACC-08",
+        "BR-ACC-12",
+        "BR-NOT-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0022",
+        "ADR-0030"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md",
+      "scope": "Tables profiles, study_preferences, notification_settings, push_subscriptions, automation_settings, pauses ; trigger de création du profil et des lignes par défaut à l'insertion dans auth.users ; valeurs par défaut conformes aux règles métier.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-103",
+      "phase": "P1",
+      "title": "Schéma formations, programme et notions",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-102"
+      ],
+      "businessRules": [
+        "BR-FOR-03",
+        "BR-FOR-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0014",
+        "ADR-0035"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-103-schema-formations-programme-et-notions.md",
+      "scope": "Tables formations, cadrage_messages, programme_imports, programme_change_requests, modules, chapters, chapter_progress, module_progress, notions, notion_links ; contraintes (seuils 60..95, positions uniques, liens sans boucle) ; index FTS des notions.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-104",
+      "phase": "P1",
+      "title": "Schéma ressources et passages vectoriels",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-103"
+      ],
+      "businessRules": [
+        "BR-APP-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0056",
+        "ADR-0039"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-104-schema-ressources-et-passages-vectoriels.md",
+      "scope": "Tables resources et resource_chunks (vector(1024), index HNSW cosinus), contraintes de limites, suppression logique des ressources.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-105",
+      "phase": "P1",
+      "title": "Schéma cours et discussions",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-104"
+      ],
+      "businessRules": [
+        "BR-COU-10"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0040"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-105-schema-cours-et-discussions.md",
+      "scope": "Tables courses (versions, index unique partiel is_current), course_sections, citations, reading_progress, chapter_summaries, tutor_conversations, tutor_messages.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-106",
+      "phase": "P1",
+      "title": "Schéma briques, activités et tentatives",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-103"
+      ],
+      "businessRules": [
+        "BR-BRI-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0021"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-106-schema-briques-activites-et-tentatives.md",
+      "scope": "Tables bricks, brick_versions (empreinte indexée), brick_reports, activities, attempts, answers ; énumérations des 13 types de briques et des types d'activités.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-107",
+      "phase": "P1",
+      "title": "Schéma mémorisation et lacunes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-106"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0024",
+        "ADR-0025"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-107-schema-memorisation-et-lacunes.md",
+      "scope": "Tables notion_states (fsrs jsonb, due_at indexé), review_logs, gap_events.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-108",
+      "phase": "P1",
+      "title": "Schéma agenda, automatismes et série",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-102",
+        "SPEC-103"
+      ],
+      "businessRules": [
+        "BR-AGE-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0029"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-108-schema-agenda-automatismes-et-serie.md",
+      "scope": "Tables schedule_slots, automation_actions, daily_activity, milestones.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-109",
+      "phase": "P1",
+      "title": "Schéma notifications",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-102"
+      ],
+      "businessRules": [
+        "BR-NOT-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0031"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-109-schema-notifications.md",
+      "scope": "Tables notifications (dedupe_key unique par utilisateur) et notification_deliveries.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-110",
+      "phase": "P1",
+      "title": "Schéma IA et facturation",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-102"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0011",
+        "ADR-0012"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-110-schema-ia-et-facturation.md",
+      "scope": "Tables ai_credentials (clé chiffrée bytea), ai_task_models, ai_calls, subscriptions ; vue ai_spend_today par fuseau utilisateur.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-111",
+      "phase": "P1",
+      "title": "Schéma formations à plusieurs",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-103"
+      ],
+      "businessRules": [
+        "BR-GRP-01",
+        "BR-GRP-04",
+        "BR-GRP-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0035"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-111-schema-formations-a-plusieurs.md",
+      "scope": "Tables groups (code LRN-XXXX unique), group_members ; vue group_member_progress ; fonction de comptage des formations actives d'un utilisateur.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-112",
+      "phase": "P1",
+      "title": "Schéma données personnelles, idempotence et recherche",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-105",
+        "SPEC-103"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0044",
+        "ADR-0062",
+        "ADR-0120",
+        "ADR-0219"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-112-schema-donnees-personnelles-idempotence-et-recherc.md",
+      "scope": "Tables data_exports, legal_acceptances, idempotency_keys, rate_limits ; fonction search_user_content (FTS unaccent + trigrammes) avec tests de pertinence.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-113",
+      "phase": "P1",
+      "title": "Politiques RLS et tests d'isolation",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-102",
+        "SPEC-103",
+        "SPEC-104",
+        "SPEC-105",
+        "SPEC-106",
+        "SPEC-107",
+        "SPEC-108",
+        "SPEC-109",
+        "SPEC-110",
+        "SPEC-111",
+        "SPEC-112"
+      ],
+      "businessRules": [
+        "BR-APP-03",
+        "BR-GRP-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0022",
+        "ADR-0035"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-113-politiques-rls-et-tests-d-isolation.md",
+      "scope": "RLS activée sur toutes les tables ; politiques propriétaire, appartenance de groupe (lecture du programme partagé, jamais des données personnelles d'autrui), lecture seule où requis ; tests d'intégration automatiques qui, pour chaque table, vérifient qu'un second utilisateur ne peut ni lire ni écrire les données du premier.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-114",
+      "phase": "P1",
+      "title": "Stockage des fichiers",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-104",
+        "SPEC-113"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0058"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-114-stockage-des-fichiers.md",
+      "scope": "Buckets privés resources et exports, politiques Storage par préfixe utilisateur, helpers d'URL signées, tests d'accès croisé.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-115",
+      "phase": "P1",
+      "title": "Jeu de données de démonstration et fabriques",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-113"
+      ],
+      "businessRules": [],
+      "screens": [
+        "SCR-03",
+        "SCR-05",
+        "SCR-12",
+        "SCR-13",
+        "SCR-14"
+      ],
+      "adrs": [
+        "ADR-0071",
+        "ADR-0047"
+      ],
+      "visual": "demo",
+      "path": "specs/p1-donnees/SPEC-115-jeu-de-donnees-de-demonstration-et-fabriques.md",
+      "scope": "Seed demo idempotent reproduisant exactement les données des maquettes (Alex Perrin, SAP S/4HANA Finance 7 modules 48 notions, Gestion de projet agile en groupe avec Camille et Hugo, Python à valider, 2 formations terminées, lacunes, agenda du 9 au 13 novembre, notifications, automatismes, journal) et fabriques @learny/testing pour les tests.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-201",
+      "phase": "P2",
+      "title": "Socle API v1 et contrats",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-006",
+        "SPEC-101"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0004",
+        "ADR-0063",
+        "ADR-0120",
+        "ADR-0219"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md",
+      "scope": "Paquet @learny/contracts, wrapper handler() (auth, Zod, problem+json, requestId, idempotence, pagination), catalogue des codes d'erreur, client API typé côté web, TanStack Query provider, génération OpenAPI, paquet @learny/services (squelette, contexte utilisateur).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-202",
+      "phase": "P2",
+      "title": "Authentification et sessions",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-201",
+        "SPEC-102"
+      ],
+      "businessRules": [
+        "BR-ACC-01",
+        "BR-ACC-03",
+        "BR-ACC-09"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0007"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-202-authentification-et-sessions.md",
+      "scope": "Supabase Auth avec @supabase/ssr : routes /auth/*, lien magique 1 h, mot de passe ≥ 12, confirmation d'e-mail, renvoi limité (60 s), callback, middleware de protection des routes et redirections (non connecté → /connexion, onboarding inachevé → /premiers-pas/<étape>), déconnexion, événement user/signed-up.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-203",
+      "phase": "P2",
+      "title": "Événements de domaine, jobs et crons",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-007",
+        "SPEC-201"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0017",
+        "ADR-0067"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-203-evenements-de-domaine-jobs-et-crons.md",
+      "scope": "Catalogue typé des événements (docs/architecture/overview.md §5), helper d'émission transactionnelle (après commit), conventions d'idempotence des fonctions, crons hourly-tick (sélection des utilisateurs par heure locale) et nightly, tests d'exécution des handlers.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-204",
+      "phase": "P2",
+      "title": "Service e-mail et gabarits",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-203",
+        "SPEC-009"
+      ],
+      "businessRules": [
+        "BR-NOT-08"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0054",
+        "ADR-0032",
+        "ADR-0010"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-204-service-e-mail-et-gabarits.md",
+      "scope": "Paquet @learny/notifications/email : transports Resend/Mailpit/mémoire, gabarits React Email (bienvenue, programme du jour, rappel, bilan hebdomadaire, export prêt, suppression programmée/effectuée, échec IA), variantes vous/tu, lien de préférences et List-Unsubscribe, aperçu dans la page de démonstration.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-205",
+      "phase": "P2",
+      "title": "Notifications navigateur (Web Push)",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-203",
+        "SPEC-109"
+      ],
+      "businessRules": [
+        "BR-NOT-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0055"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-205-notifications-navigateur-web-push.md",
+      "scope": "Clés VAPID, enregistrement/suppression d'abonnement (API + helper client + service worker push), envoi, nettoyage 404/410 et après 5 échecs, page de démonstration avec permission simulée en test.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-206",
+      "phase": "P2",
+      "title": "Service de fichiers et envois",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-114",
+        "SPEC-201"
+      ],
+      "businessRules": [
+        "BR-APP-02"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0039",
+        "ADR-0058"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-206-service-de-fichiers-et-envois.md",
+      "scope": "Création d'URL d'envoi signées, finalisation (vérification du type MIME réel, taille, pages PDF, quota 2 Go), lecture signée, suppression ; erreurs UPLOAD_TOO_LARGE, UNSUPPORTED_TYPE, QUOTA_EXCEEDED.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-207",
+      "phase": "P2",
+      "title": "Horloge, fuseaux et heures calmes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-101"
+      ],
+      "businessRules": [
+        "BR-ACC-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0030",
+        "ADR-0047"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-207-horloge-fuseaux-et-heures-calmes.md",
+      "scope": "packages/core/clock et time : clock.now injectable, CLOCK_FIXED_AT, conversions de fuseau, début/fin de journée locale, isQuietHours (plages chevauchant minuit), prochain instant hors heures calmes, jour de la semaine local ; tests sur changements d'heure.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-208",
+      "phase": "P2",
+      "title": "Limitation de débit et protections de l'API",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-201"
+      ],
+      "businessRules": [
+        "BR-PLA-08"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0042"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-208-limitation-de-debit-et-protections-de-l-api.md",
+      "scope": "Seau à jetons Postgres (rate_limits), profils par défaut/IA/auth, réponses 429 avec Retry-After, vérification d'origine des mutations, purge des clés d'idempotence.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-209",
+      "phase": "P2",
+      "title": "Service unifié de notifications",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-204",
+        "SPEC-205",
+        "SPEC-207",
+        "SPEC-109"
+      ],
+      "businessRules": [
+        "BR-NOT-03",
+        "BR-NOT-05",
+        "BR-NOT-06",
+        "BR-ACC-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0031",
+        "ADR-0010"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-209-service-unifie-de-notifications.md",
+      "scope": "notify(userId, type, data) : création in-app (déduplication), routage par canal selon préférences et type, heures calmes (report), week-end, plafond quotidien hors application, résumé des envois écartés dans le programme du jour, journal des livraisons.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-210",
+      "phase": "P2",
+      "title": "Abonnement Stripe (service)",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-201",
+        "SPEC-110"
+      ],
+      "businessRules": [
+        "BR-IA-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0011",
+        "ADR-0061"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-210-abonnement-stripe-service.md",
+      "scope": "Création du client Stripe, Checkout, portail, webhook signé et idempotent, statut d'abonnement, droit d'accès à l'IA fournie (hasManagedAi), mode mock pour les tests.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-211",
+      "phase": "P2",
+      "title": "Export des données et suppression du compte",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-203",
+        "SPEC-112",
+        "SPEC-206",
+        "SPEC-204",
+        "SPEC-209"
+      ],
+      "businessRules": [
+        "BR-ACC-10",
+        "BR-ACC-11",
+        "BR-PLA-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0044"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-211-export-des-donnees-et-suppression-du-compte.md",
+      "scope": "Job d'export ZIP (structure ADR-0044), lien signé 7 jours, e-mail ; demande de suppression (J+30), annulation, cron d'exécution (fichiers, données, compte Auth), e-mails.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-212",
+      "phase": "P2",
+      "title": "Recherche globale (service et API)",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-112",
+        "SPEC-201"
+      ],
+      "businessRules": [
+        "BR-NAV-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0062"
+      ],
+      "visual": "demo",
+      "path": "specs/p2-backend/SPEC-212-recherche-globale-service-et-api.md",
+      "scope": "GET /api/v1/search : normalisation de la requête, appel search_user_content, regroupement par type (notions, chapitres, formations), extraits surlignés, liens.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-301",
+      "phase": "P3",
+      "title": "Jetons de design et thème",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-006",
+        "SPEC-005"
+      ],
+      "businessRules": [
+        "BR-NAV-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0034",
+        "ADR-0059"
+      ],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-301-jetons-de-design-et-theme.md",
+      "scope": "@learny/ui/tokens : couleurs, typographies (Inter, Space Grotesk via next/font), tailles en rem (px/16), rayons, ombres, espacements, issus de design/references/tokens.json ; html { font-size: 90% } ; thème Tailwind 4 ; test qui compare les jetons à ceux extraits des maquettes.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-302",
+      "phase": "P3",
+      "title": "Composants de base I : actions et saisie",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-301"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0059",
+        "ADR-0064"
+      ],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-302-composants-de-base-i-actions-et-saisie.md",
+      "scope": "Button (citron, noir, contour, discret, danger ; tailles), IconButton, Link, TextField, Textarea, Select natif, Checkbox, Switch (role switch), SegmentedControl (aria-pressed), Tabs (ARIA), Chip, Badge, FormField avec erreurs ; galerie /_dev/ui.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-303",
+      "phase": "P3",
+      "title": "Composants de base II : structure et retours",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-302"
+      ],
+      "businessRules": [
+        "BR-NAV-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0059"
+      ],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-303-composants-de-base-ii-structure-et-retours.md",
+      "scope": "Card, StatCard (sombre/clair), ProgressBar, ProgressRing, Avatar (initiales), Popover, DropdownMenu, Dialog, AlertDialog, Toast, Tooltip, EmptyState, Skeleton, ErrorState, Breadcrumb, PageHeader, icônes lucide ; galerie /_dev/ui.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-304",
+      "phase": "P3",
+      "title": "Coquille : menu latéral",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-303",
+        "SPEC-202"
+      ],
+      "businessRules": [
+        "BR-NAV-02",
+        "BR-NAV-03",
+        "BR-PRO-04",
+        "BR-FOR-11"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-0075"
+      ],
+      "visual": "mockup",
+      "path": "specs/p3-interface/SPEC-304-coquille-menu-lateral.md",
+      "scope": "Menu latéral conforme à la maquette : logo, Accueil, Agenda, séparateur, section Formation en cours (carte, changer de formation, Programme, Carte des notions, Quiz global + badge, Mes lacunes + badge), série (données fournies par une API provisoire puis SPEC-723), masquage persisté (profil + localStorage), responsive < 900 px en surimpression, état actif par route.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-305",
+      "phase": "P3",
+      "title": "Coquille : en-tête figé et menu Mon compte",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-304"
+      ],
+      "businessRules": [
+        "BR-NAV-01",
+        "BR-ACC-09"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p3-interface/SPEC-305-coquille-en-tete-fige-et-menu-mon-compte.md",
+      "scope": "En-tête collant translucide : bouton afficher le menu, recherche (champ), cloche (bouton), Mon compte (avatar, menu : identité, Paramètres, Mettre en pause, Se déconnecter) ; gestion du focus, Échap, clic extérieur.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-306",
+      "phase": "P3",
+      "title": "Panneau des notifications",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-305",
+        "SPEC-209"
+      ],
+      "businessRules": [
+        "BR-NOT-01"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p3-interface/SPEC-306-panneau-des-notifications.md",
+      "scope": "Panneau de la cloche conforme à la maquette : pastille non lues, groupes Aujourd'hui/Hier/Plus tôt, filtre Toutes/Non lues, tout marquer comme lu, état vide, lien Gérer les notifications, navigation vers la cible et marquage lu ; API notifications (liste, compteur, lecture).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-307",
+      "phase": "P3",
+      "title": "Recherche globale : interface",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-305",
+        "SPEC-212"
+      ],
+      "businessRules": [
+        "BR-NAV-05"
+      ],
+      "screens": [
+        "SCR-18"
+      ],
+      "adrs": [],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-307-recherche-globale-interface.md",
+      "scope": "Champ de recherche de l'en-tête avec liste de résultats (combobox ARIA, clavier), page /recherche complète, états vide et aucun résultat.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-308",
+      "phase": "P3",
+      "title": "Pages système et mise en page d'authentification",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-303"
+      ],
+      "businessRules": [],
+      "screens": [
+        "SCR-20",
+        "SCR-01"
+      ],
+      "adrs": [],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-308-pages-systeme-et-mise-en-page-d-authentification.md",
+      "scope": "not-found, error (avec requestId), chargement global, accès refusé ; mise en page divisée de l'authentification (panneau sombre Learny + carte) reprise de Inscription.dc.html.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-309",
+      "phase": "P3",
+      "title": "Socle d'accessibilité",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-303"
+      ],
+      "businessRules": [
+        "BR-PLA-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0038"
+      ],
+      "visual": "tokens",
+      "path": "specs/p3-interface/SPEC-309-socle-d-accessibilite.md",
+      "scope": "Lien d'évitement, gestion du focus des panneaux, annonces aria-live, prefers-reduced-motion, contrastes vérifiés des jetons, helper axe dans @learny/testing, audit des composants de la galerie.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-401",
+      "phase": "P4",
+      "title": "Paquet learning-engine : structure et types",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-001",
+        "SPEC-004"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0020"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-401-paquet-learning-engine-structure-et-types.md",
+      "scope": "Structure du paquet, types d'entrée/sortie sérialisables (NotionState, Answer, ReviewInput, Availability…), injection de l'horloge, configuration (product.ts), fast-check, conventions de tests.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-402",
+      "phase": "P4",
+      "title": "Répétition espacée FSRS par notion",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-401"
+      ],
+      "businessRules": [
+        "BR-MEM-01",
+        "BR-MEM-02"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0025"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-402-repetition-espacee-fsrs-par-notion.md",
+      "scope": "Intégration ts-fsrs : création de carte, application d'une note, note déduite de la justesse et du temps (médiane par format), auto-évaluation de la carte de rappel, prévisualisation des échéances par note, rétention visée paramétrable.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-403",
+      "phase": "P4",
+      "title": "Calcul de la maîtrise",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-401"
+      ],
+      "businessRules": [
+        "BR-LAC-01"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0024"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-403-calcul-de-la-maitrise.md",
+      "scope": "Maîtrise pondérée par la récence (demi-vie 14 j), scores partiels, seuil, tests par propriétés (bornes, monotonie).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-404",
+      "phase": "P4",
+      "title": "Détection, nature et levée des lacunes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-402",
+        "SPEC-403"
+      ],
+      "businessRules": [
+        "BR-LAC-02",
+        "BR-LAC-03",
+        "BR-LAC-04",
+        "BR-LAC-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0024"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-404-detection-nature-et-levee-des-lacunes.md",
+      "scope": "Détection après tentative, même erreur répétée, nature (oubli, confusion avec notion confondue, incompréhension, application) et priorité, réponse recommandée par nature, levée (2 réussites espacées + seuil).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-405",
+      "phase": "P4",
+      "title": "Tirage des questions d'une tentative",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-404"
+      ],
+      "businessRules": [
+        "BR-QUI-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0014",
+        "ADR-0209"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-405-tirage-des-questions-d-une-tentative.md",
+      "scope": "Sélection dans la banque : couverture de chaque notion, surpondération des lacunes, exclusion par empreinte, taille 10-20, répartition choix/ouvertes, signal d'épuisement par notion.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-406",
+      "phase": "P4",
+      "title": "Tirage de la session de quiz global",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-402",
+        "SPEC-404"
+      ],
+      "businessRules": [
+        "BR-MEM-03",
+        "BR-MEM-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0025"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-406-tirage-de-la-session-de-quiz-global.md",
+      "scope": "Notions dues, lacunes en tête, entrelacement des modules, plafond de durée et lissage (report des moins urgentes), variation des formats, choix du format selon la nature de la lacune (préférences), mode micro-séance, entretien léger.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-407",
+      "phase": "P4",
+      "title": "Planificateur",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-401"
+      ],
+      "businessRules": [
+        "BR-AGE-03",
+        "BR-FOR-14"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0029",
+        "ADR-0016"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-407-planificateur.md",
+      "scope": "Planification gloutonne multi-formations, capacité quotidienne, jours et moments d'étude, marges, quiz global quotidien, examens blancs, sprints, replanification incrémentale, séances manquées, gel de pause, détection de date de fin intenable et calcul des trois options.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-408",
+      "phase": "P4",
+      "title": "Rétention et indicateurs de progression",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-402"
+      ],
+      "businessRules": [
+        "BR-MEM-06",
+        "BR-PRO-01"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0210"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-408-retention-et-indicateurs-de-progression.md",
+      "scope": "Rétention à 30 et 60 jours (fenêtres ± 3 j), avancement des formations, heures prévues/faites, notions maîtrisées.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-409",
+      "phase": "P4",
+      "title": "Série et jalons",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-401"
+      ],
+      "businessRules": [
+        "BR-GAM-01",
+        "BR-GAM-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0033"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-409-serie-et-jalons.md",
+      "scope": "Calcul de la série (jours neutres : non prévus, pause), régularité sur 14 jours, détection des jalons (module validé, 100 notions retenues, 30 jours).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-410",
+      "phase": "P4",
+      "title": "Sélection de l'échauffement",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-402",
+        "SPEC-404"
+      ],
+      "businessRules": [
+        "BR-AUT-03"
+      ],
+      "screens": [],
+      "adrs": [],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-410-selection-de-l-echauffement.md",
+      "scope": "Choix de N notions : vues la veille et prérequis du chapitre à venir (liens prerequisite), portée paramétrable, exclusion des notions non encore vues.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-411",
+      "phase": "P4",
+      "title": "Services de persistance du moteur",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-402",
+        "SPEC-403",
+        "SPEC-404",
+        "SPEC-405",
+        "SPEC-406",
+        "SPEC-407",
+        "SPEC-408",
+        "SPEC-409",
+        "SPEC-410",
+        "SPEC-107",
+        "SPEC-108"
+      ],
+      "businessRules": [
+        "BR-LAC-02"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0020"
+      ],
+      "visual": "demo",
+      "path": "specs/p4-moteur/SPEC-411-services-de-persistance-du-moteur.md",
+      "scope": "packages/services/learning : application transactionnelle des résultats (réponses → review_logs, notion_states, maîtrise, lacunes, gap_events, événements gap/detected|cleared, daily_activity), lecture des notions dues, planification persistée (schedule_slots).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-501",
+      "phase": "P5",
+      "title": "Paquet bricks : registre, schémas et validation",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-106"
+      ],
+      "businessRules": [
+        "BR-BRI-01",
+        "BR-BRI-02",
+        "BR-BRI-03",
+        "BR-BRI-04",
+        "BR-BRI-05",
+        "BR-BRI-06",
+        "BR-BRI-07",
+        "BR-IA-11"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0021",
+        "ADR-0027"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-501-paquet-bricks-registre-schemas-et-validation.md",
+      "scope": "13 schémas Zod (dont consigne avec production tableau et contrôles), règles de validation communes (notion, origine, références, versions), empreinte, service de création/versionnement, signalement et correction par l'apprenant.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-502",
+      "phase": "P5",
+      "title": "Correction automatique des briques",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-501"
+      ],
+      "businessRules": [
+        "BR-BRI-08",
+        "BR-IA-09",
+        "BR-MEM-05"
+      ],
+      "screens": [],
+      "adrs": [],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-502-correction-automatique-des-briques.md",
+      "scope": "grade.ts : question à choix (simple/multiple, distracteur → notion), texte à trous (normalisation casse/accents/espaces, variantes), association, remise en ordre (écarts), classement, contrôle sum_equal des tableaux, barème et minuteur.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-503",
+      "phase": "P5",
+      "title": "Rendu des briques",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-501",
+        "SPEC-303"
+      ],
+      "businessRules": [
+        "BR-BRI-01"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0060"
+      ],
+      "visual": "tokens",
+      "path": "specs/p5-ia/SPEC-503-rendu-des-briques.md",
+      "scope": "view.tsx pour chaque type, conforme aux maquettes Quiz, QuizGlobal, Exercice, Cours : interactions clavier et souris, états répondu/corrigé, explication, accessibilité ; galerie /_dev/bricks.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-504",
+      "phase": "P5",
+      "title": "Paquet llm : fournisseurs, tâches et modèle simulé",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-110",
+        "SPEC-201",
+        "SPEC-009"
+      ],
+      "businessRules": [
+        "BR-IA-01",
+        "BR-IA-06",
+        "BR-IA-09"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0018",
+        "ADR-0019",
+        "ADR-0048"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-504-paquet-llm-fournisseurs-taches-et-modele-simule.md",
+      "scope": "Résolution (utilisateur, tâche) → modèle (IA fournie si abonné, sinon clé qualifiée, sinon AI_UNAVAILABLE), fabrique de fournisseurs AI SDK, generateObject/streamText encapsulés, options Anthropic (cache, réflexion, citations, Files), MockLanguageModel et chargeur de fixtures, journalisation de base.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-505",
+      "phase": "P5",
+      "title": "Clés personnelles chiffrées",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-504"
+      ],
+      "businessRules": [
+        "BR-IA-02",
+        "BR-IA-03",
+        "BR-IA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0019"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-505-cles-personnelles-chiffrees.md",
+      "scope": "Chiffrement AES-256-GCM (APP_ENCRYPTION_KEY, rotation documentée), CRUD des identifiants, masquage, indicateur hors UE par fournisseur, API /me/ai/credentials, jamais de clé renvoyée.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-506",
+      "phase": "P5",
+      "title": "Qualification des modèles personnels",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-505",
+        "SPEC-501"
+      ],
+      "businessRules": [
+        "BR-IA-02",
+        "BR-IA-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0013"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-506-qualification-des-modeles-personnels.md",
+      "scope": "Batterie : connexion, appel d'outils, sortie structurée, une brique valide de chaque type ; rapport détaillé ; statut qualified/failed ; API qualify ; affectation aux tâches seulement si qualifié.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-507",
+      "phase": "P5",
+      "title": "Garde-fou de coût et journal des appels",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-504",
+        "SPEC-210"
+      ],
+      "businessRules": [
+        "BR-IA-07",
+        "BR-IA-08",
+        "BR-IA-13"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0012",
+        "ADR-0073"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-507-garde-fou-de-cout-et-journal-des-appels.md",
+      "scope": "Estimation avant appel, dépense du jour, alerte 80 %, bascule Haiku, report de la tâche programme, calcul du coût réel (cache, lots), table ai_calls, agrégats par formation/jour, API /me/ai/usage, API Batches pour les tâches différées.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-508",
+      "phase": "P5",
+      "title": "Paquet tutor : actions, boucle et consignes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-501",
+        "SPEC-504",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-IA-05",
+        "BR-IA-10",
+        "BR-IA-11",
+        "BR-ACC-05",
+        "BR-ACC-06",
+        "BR-BRI-09",
+        "BR-TUT-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0021",
+        "ADR-0023",
+        "ADR-0072"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-508-paquet-tutor-actions-boucle-et-consignes.md",
+      "scope": "Registre des 10 actions (docs/architecture/ai.md §3), boucle agent avec validation et 2 corrections max, isolation des données (balises), consignes par tâche avec ton et langue, fixtures de test, tests d'injection.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-509",
+      "phase": "P5",
+      "title": "Ingestion : notes et PDF, découpage, embeddings",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-104",
+        "SPEC-203",
+        "SPEC-504",
+        "SPEC-206"
+      ],
+      "businessRules": [
+        "BR-APP-01",
+        "BR-APP-06",
+        "BR-APP-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0056",
+        "ADR-0057"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-509-ingestion-notes-et-pdf-decoupage-embeddings.md",
+      "scope": "Job resource/uploaded : extraction (unpdf), envoi API Files si Anthropic, découpage ~800 tokens avec emplacements, embeddings Voyage (mock déterministe), statuts et erreurs lisibles, réessai.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-510",
+      "phase": "P5",
+      "title": "Ingestion : pages web, YouTube et images",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-509"
+      ],
+      "businessRules": [
+        "BR-APP-01"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0057"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-510-ingestion-pages-web-youtube-et-images.md",
+      "scope": "Récupération sécurisée des pages (anti-SSRF, timeout, taille), Readability ; sous-titres YouTube avec horodatage ; lecture des images par vision (tâche light) ; erreurs explicites (pas de sous-titres, page inaccessible).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-511",
+      "phase": "P5",
+      "title": "Recherche sémantique et sélection du contexte",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-509"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0056"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-511-recherche-semantique-et-selection-du-contexte.md",
+      "scope": "Recherche cosinus filtrée par utilisateur/formation/chapitre, budget de tokens par tâche, déduplication, formatage en balises de données avec identifiants de passage.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-512",
+      "phase": "P5",
+      "title": "Recherche web",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-504"
+      ],
+      "businessRules": [
+        "BR-IA-12",
+        "BR-APP-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0048"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-512-recherche-web.md",
+      "scope": "Outil search_web : recherche serveur Anthropic ou repli Tavily, normalisation des résultats, usage restreint à la tâche programme et aux suggestions de ressources.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-513",
+      "phase": "P5",
+      "title": "Banques de questions",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-508",
+        "SPEC-501",
+        "SPEC-511"
+      ],
+      "businessRules": [
+        "BR-MEM-07",
+        "BR-IA-13"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0026"
+      ],
+      "visual": "demo",
+      "path": "specs/p5-ia/SPEC-513-banques-de-questions.md",
+      "scope": "Génération par notion et format (≥ 4 variantes), en lot nocturne, déclenchement à la génération du cours et à l'épuisement, distracteurs annotés, empreintes, validation des briques.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-601",
+      "phase": "P6",
+      "title": "Inscription, connexion et vérification de l'e-mail",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-202",
+        "SPEC-308",
+        "SPEC-302"
+      ],
+      "businessRules": [
+        "BR-ACC-01",
+        "BR-ACC-02",
+        "BR-ACC-03"
+      ],
+      "screens": [
+        "SCR-01"
+      ],
+      "adrs": [
+        "ADR-0007",
+        "ADR-0045"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-601-inscription-connexion-et-verification-de-l-e-mail.md",
+      "scope": "Écrans /inscription, /connexion (?connexion de la maquette), /verifier-email conformes à Inscription.dc.html : choix lien magique/mot de passe, solidité, CGU obligatoires, erreurs, renvoi, bascule inscription/connexion.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-602",
+      "phase": "P6",
+      "title": "Premiers pas (onboarding)",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-601",
+        "SPEC-505",
+        "SPEC-506",
+        "SPEC-205",
+        "SPEC-210"
+      ],
+      "businessRules": [
+        "BR-ACC-04",
+        "BR-ACC-05",
+        "BR-ACC-06",
+        "BR-ACC-07",
+        "BR-ACC-08"
+      ],
+      "screens": [
+        "SCR-02"
+      ],
+      "adrs": [
+        "ADR-0011"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-602-premiers-pas-onboarding.md",
+      "scope": "Étapes Profil (prénom, ton avec aperçu, langue des cours), Rythme (heures, jours, moments, résumé), IA (propre clé + test obligatoire, ou IA fournie → Stripe Checkout), Rappels (navigateur avec permission, e-mail, automatismes recommandés), Départ (créer une formation, rejoindre par code d'invitation, découvrir l'accueil) ; reprise à l'étape enregistrée.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-603",
+      "phase": "P6",
+      "title": "Accueil",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-304",
+        "SPEC-408",
+        "SPEC-115",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-PRO-02",
+        "BR-PRO-03",
+        "BR-FOR-13",
+        "BR-FOR-16"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-603-accueil.md",
+      "scope": "Écran Main.dc.html sans les blocs d'automatismes (livrés par SPEC-712/714/720/722) : date, titre, Nouvelle formation, Votre journée, rétention, quiz global du jour, Mes formations (onglets En cours/Terminées, actions Reprendre/Continuer/Réviser) ; API /home.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-604",
+      "phase": "P6",
+      "title": "Nouvelle formation : cadrage par chat",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-508",
+        "SPEC-304"
+      ],
+      "businessRules": [
+        "BR-FOR-01",
+        "BR-FOR-02",
+        "BR-FOR-03"
+      ],
+      "screens": [
+        "SCR-04"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-604-nouvelle-formation-cadrage-par-chat.md",
+      "scope": "Écran NouvelleFormation.dc.html : saisie du sujet, dialogue (≤ 5 questions, suggestions simples/multiples, réponse libre), panneau Profil de la formation (n/5, rubriques et états), Générer le programme ; tâche IA tutor avec fixtures.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-605",
+      "phase": "P6",
+      "title": "Programme proposé, import, ajustement et validation",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-604",
+        "SPEC-512",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-FOR-04",
+        "BR-FOR-05",
+        "BR-FOR-06"
+      ],
+      "screens": [
+        "SCR-05"
+      ],
+      "adrs": [
+        "ADR-0014",
+        "ADR-0209"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-605-programme-propose-import-ajustement-et-validation.md",
+      "scope": "Génération du programme (tâche programme + recherche web), écran Programme en mode proposé (?proposition de la maquette : étape 2 sur 2, source proposé/importé, calendrier proposé, modules et chapitres), import fichier/texte structuré par le tuteur, Ajuster avec le tuteur, Valider → formation active, modules/notions créés, planification initiale, événement programme-validated, limite de 3 formations.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-606",
+      "phase": "P6",
+      "title": "Programme en cours",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-605"
+      ],
+      "businessRules": [
+        "BR-FOR-07",
+        "BR-FOR-08",
+        "BR-FOR-09",
+        "BR-PRO-01"
+      ],
+      "screens": [
+        "SCR-05"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-606-programme-en-cours.md",
+      "scope": "Écran Programme en cours : statistiques, calendrier de formation (Gantt avec statuts, marqueur Aujourd'hui, losanges de quiz), modules et chapitres (statuts, scores, actions Ouvrir le module, Apports, Lire le cours, Exercice pratique, Passer le quiz, Revoir le cours, verrou expliqué), lien Examen blanc.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-607",
+      "phase": "P6",
+      "title": "Module et apports",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-606",
+        "SPEC-509",
+        "SPEC-510",
+        "SPEC-512"
+      ],
+      "businessRules": [
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-04",
+        "BR-APP-05",
+        "BR-APP-07",
+        "BR-APP-10",
+        "BR-NAV-04"
+      ],
+      "screens": [
+        "SCR-06"
+      ],
+      "adrs": [
+        "ADR-0039",
+        "ADR-0065"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-607-module-et-apports.md",
+      "scope": "Écran Module.dc.html : fil d'Ariane, chapitres et statuts, dépôt (PDF, audio/vidéo masqués en V1, lien web, YouTube, image, note), idées et brouillons, liste des apports avec statut de traitement, renommer/supprimer/réessayer, suggestions du tuteur, J'ai terminé ce chapitre, génération du cours.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-608",
+      "phase": "P6",
+      "title": "Génération du cours",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-607",
+        "SPEC-511",
+        "SPEC-508",
+        "SPEC-513"
+      ],
+      "businessRules": [
+        "BR-COU-01",
+        "BR-COU-02",
+        "BR-COU-03",
+        "BR-COU-04",
+        "BR-COU-05",
+        "BR-COU-06",
+        "BR-COU-10"
+      ],
+      "screens": [
+        "SCR-07"
+      ],
+      "adrs": [
+        "ADR-0026"
+      ],
+      "visual": "demo",
+      "path": "specs/p6-parcours/SPEC-608-generation-du-cours.md",
+      "scope": "Job chapter/contributions-completed : rédaction par chapitre avec citations vérifiées, sections typées (texte, question éclair, ne pas confondre, complété par le tuteur, à retenir avec schéma et moyen mnémotechnique, invitation au résumé), notions et liens (prérequis, confusion), cours de base signalé si aucun apport, version, déclenchement des banques, notification cours prêt.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-609",
+      "phase": "P6",
+      "title": "Lecture du cours",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-608",
+        "SPEC-503"
+      ],
+      "businessRules": [
+        "BR-COU-02",
+        "BR-COU-05",
+        "BR-COU-06",
+        "BR-COU-07",
+        "BR-COU-08",
+        "BR-COU-09",
+        "BR-COU-11",
+        "BR-MEM-09"
+      ],
+      "screens": [
+        "SCR-07"
+      ],
+      "adrs": [
+        "ADR-0060"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-609-lecture-du-cours.md",
+      "scope": "Écran Cours.dc.html (sans le panneau tuteur) : sommaire, métadonnées, sections, extraits cliquables (PDF page, note vocale, vidéo minute), progression de lecture, résumé corrigé, signaler/corriger une section, navigation chapitres, carte quiz.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-610",
+      "phase": "P6",
+      "title": "Discussion contextuelle avec le tuteur",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-609",
+        "SPEC-511"
+      ],
+      "businessRules": [
+        "BR-TUT-01",
+        "BR-TUT-02",
+        "BR-TUT-03",
+        "BR-TUT-04",
+        "BR-TUT-05",
+        "BR-TUT-06",
+        "BR-TUT-07"
+      ],
+      "screens": [
+        "SCR-07"
+      ],
+      "adrs": [
+        "ADR-0040",
+        "ADR-0066"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-610-discussion-contextuelle-avec-le-tuteur.md",
+      "scope": "Carte Demander au tuteur, boutons de passage, barre de sélection, panneau latéral (contexte modifiable et compteur, messages en flux, sources, suites, Teste-moi corrigé, nouvelle discussion, Échap), historique, décalage du contenu sur grand écran, événement tutor/question-asked.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-611",
+      "phase": "P6",
+      "title": "Quiz de validation : passage",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-609",
+        "SPEC-405",
+        "SPEC-502",
+        "SPEC-503"
+      ],
+      "businessRules": [
+        "BR-QUI-01",
+        "BR-QUI-02",
+        "BR-QUI-03",
+        "BR-QUI-04",
+        "BR-QUI-07",
+        "BR-FOR-06"
+      ],
+      "screens": [
+        "SCR-09"
+      ],
+      "adrs": [
+        "ADR-0014"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-611-quiz-de-validation-passage.md",
+      "scope": "Création de tentative (tirage), écran Quiz.dc.html : en-tête (tentative, seuil, fermer), progression, question (type, notion), Vérifier → correction immédiate et explication, Suivant, questions ouvertes, soumission, correction des ouvertes par le tuteur (job), calcul du score.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-612",
+      "phase": "P6",
+      "title": "Résultat, lacunes, remédiation et déblocage",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-611",
+        "SPEC-404"
+      ],
+      "businessRules": [
+        "BR-QUI-05",
+        "BR-QUI-06",
+        "BR-QUI-08",
+        "BR-FOR-07",
+        "BR-LAC-04"
+      ],
+      "screens": [
+        "SCR-09"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-612-resultat-lacunes-remediation-et-deblocage.md",
+      "scope": "Écran de résultat de la maquette Quiz (réussite/échec, score par notion, lacunes, historique des tentatives, actions), remédiation ciblée (activité générée, écran), déblocage du module suivant, événements module/validated et formation/completed, notifications.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-613",
+      "phase": "P6",
+      "title": "Exercice pratique",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-503",
+        "SPEC-508",
+        "SPEC-404"
+      ],
+      "businessRules": [
+        "BR-PRA-01",
+        "BR-LAC-04"
+      ],
+      "screens": [
+        "SCR-08"
+      ],
+      "adrs": [
+        "ADR-0027"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-613-exercice-pratique.md",
+      "scope": "Écran Exercice.dc.html générique : consigne, données, production (tableau avec contrôle en direct, texte, fichier, lien), explication écrite, 2 indices, soumission, correction du tuteur par critère, maîtrise avant/après, étape suivante ; génération des exercices par le tuteur.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-614",
+      "phase": "P6",
+      "title": "Examen blanc",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-611",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-PRA-02",
+        "BR-PRA-03",
+        "BR-PRA-04",
+        "BR-PRA-05"
+      ],
+      "screens": [
+        "SCR-11"
+      ],
+      "adrs": [
+        "ADR-0028"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-614-examen-blanc.md",
+      "scope": "Format (extraction depuis un guide, confirmation, défaut), introduction, épreuve sans aide (coquille masquée, chronomètre serveur, palette, marquage, confirmation, soumission automatique, reprise), résultats (global, étudiés, diagnostic, par module, lacunes, plan), revue filtrable, planification.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-615",
+      "phase": "P6",
+      "title": "Mes lacunes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-404",
+        "SPEC-304",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-LAC-05"
+      ],
+      "screens": [
+        "SCR-13"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-615-mes-lacunes.md",
+      "scope": "Écran Lacunes.dc.html : statistiques, filtres par nature avec compteurs (URL ?nature=), cartes de lacune, S'entraîner (selon la nature : quiz global ciblé ou exercice), Revoir dans le cours (ancre), note explicative, état vide ; API gaps.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-616",
+      "phase": "P6",
+      "title": "Carte des notions",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-404",
+        "SPEC-304",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-CAR-01",
+        "BR-CAR-02",
+        "BR-CAR-03",
+        "BR-CAR-04",
+        "BR-CAR-05"
+      ],
+      "screens": [
+        "SCR-14"
+      ],
+      "adrs": [
+        "ADR-0036"
+      ],
+      "visual": "mockup",
+      "path": "specs/p6-parcours/SPEC-616-carte-des-notions.md",
+      "scope": "API notion-graph, composant graphe SVG (simulation de forces déterministe, déplacement, zoom, recentrage, glisser un nœud, survol, sélection), recherche, filtres, modes de couleur, légende, panneau détail et liste À consolider.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-617",
+      "phase": "P6",
+      "title": "Bilan final et entretien de mémoire",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-612",
+        "SPEC-408"
+      ],
+      "businessRules": [
+        "BR-FOR-12",
+        "BR-PRO-03"
+      ],
+      "screens": [
+        "SCR-16"
+      ],
+      "adrs": [
+        "ADR-0015"
+      ],
+      "visual": "tokens",
+      "path": "specs/p6-parcours/SPEC-617-bilan-final-et-entretien-de-memoire.md",
+      "scope": "Écran /formations/[fid]/bilan (composé selon docs/product/screens.md §3) : acquis, notions fragiles, heures, rétention, carte des notions à date, choix entretien léger/arrêt (modifiable), effets sur le quiz global et les notifications, onglet Terminées.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-618",
+      "phase": "P6",
+      "title": "Gestion des formations : changer, pause, limite de trois",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-603",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-FOR-10",
+        "BR-FOR-11",
+        "BR-FOR-15"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-0016",
+        "ADR-0075"
+      ],
+      "visual": "tokens",
+      "path": "specs/p6-parcours/SPEC-618-gestion-des-formations-changer-pause-limite-de-tro.md",
+      "scope": "Sélecteur Changer de formation, formation courante, mise en pause/reprise/archivage d'une formation (gel et replanification), dialogue de limite de trois formations actives (choix de la formation à mettre en pause).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-701",
+      "phase": "P7",
+      "title": "Quiz global : session du jour et cartes de rappel",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-406",
+        "SPEC-503",
+        "SPEC-411",
+        "SPEC-513"
+      ],
+      "businessRules": [
+        "BR-MEM-03",
+        "BR-MEM-08",
+        "BR-MEM-09",
+        "BR-MEM-10"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [
+        "ADR-0025"
+      ],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md",
+      "scope": "Génération de la session du jour, écran QuizGlobal.dc.html : en-tête (notions, modules mêlés, durée), progression, rail des jeux, encadré Réglé par le tuteur, carte de rappel (retourner, auto-évaluation avec échéances), Passer/Suivant, écran de fin ; mise à jour FSRS.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-702",
+      "phase": "P7",
+      "title": "Jeux : association, remise en ordre, classement, texte à trous",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-701"
+      ],
+      "businessRules": [
+        "BR-MEM-05",
+        "BR-MEM-10"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-702-jeux-association-remise-en-ordre-classement-texte-.md",
+      "scope": "Les quatre jeux interactifs de la maquette (sélection par clic et clavier, vérification, recommencer, réponses attendues), correction par le code, confusions enregistrées.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-703",
+      "phase": "P7",
+      "title": "Micro-séance",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-701"
+      ],
+      "businessRules": [
+        "BR-MEM-08",
+        "BR-AUT-02"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-703-micro-seance.md",
+      "scope": "Sélecteur Séance complète / Micro-séance de l'écran Quiz global, session courte (carte + question), note explicative, fin de session « 5 notions revues en 5 minutes », comptée pour la série.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-704",
+      "phase": "P7",
+      "title": "Agenda : vues, filtres et détail",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-407",
+        "SPEC-304",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-AGE-01",
+        "BR-AGE-02",
+        "BR-AGE-04",
+        "BR-AGE-06",
+        "BR-AGE-07"
+      ],
+      "screens": [
+        "SCR-12"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md",
+      "scope": "Écran Agenda.dc.html : vues Jour/Semaine/Mois, navigation bornée, Aujourd'hui, filtre par formation, mini-calendrier, détail d'activité (Ouvrir vers l'écran cible), légende, totaux, ligne de l'heure, clic sur un jour → vue jour ; API agenda.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-705",
+      "phase": "P7",
+      "title": "Agenda : déplacer et réajuster le planning",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-704"
+      ],
+      "businessRules": [
+        "BR-AGE-05",
+        "BR-FOR-14"
+      ],
+      "screens": [
+        "SCR-12"
+      ],
+      "adrs": [
+        "ADR-0029"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-705-agenda-deplacer-et-reajuster-le-planning.md",
+      "scope": "Déplacer une activité (3 créneaux proposés), options de réajustement d'un module bloqué (décaler la fin, augmenter le volume, alléger) avec accord explicite, replanification.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-706",
+      "phase": "P7",
+      "title": "Notifications : génération des rappels",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-209",
+        "SPEC-306",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-NOT-02",
+        "BR-NOT-07",
+        "BR-NOT-01"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-0031"
+      ],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md",
+      "scope": "Producteurs de notifications pour chaque type de BR-NOT-02 (programme du jour, quiz à venir 40 min, cours prêt, quiz global du jour, nouvelle lacune, séance prévue, module validé, séance à replacer, jalon, export prêt, échec IA, alerte coût, invitation), textes selon le ton, liens profonds.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-707",
+      "phase": "P7",
+      "title": "Paramètres : onglets et Profil",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-304",
+        "SPEC-211"
+      ],
+      "businessRules": [
+        "BR-SET-01",
+        "BR-SET-02",
+        "BR-ACC-05",
+        "BR-ACC-06",
+        "BR-ACC-07",
+        "BR-ACC-08",
+        "BR-ACC-10",
+        "BR-ACC-11",
+        "BR-ACC-12"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-707-parametres-onglets-et-profil.md",
+      "scope": "Écran Parametres.dc.html : onglets ARIA synchronisés avec l'URL, onglet Profil (identité, langue des cours, ton, fuseau, rythme et résumé, Enregistrer), Données et confidentialité (export, suppression avec confirmation et annulation).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-708",
+      "phase": "P7",
+      "title": "Paramètres : Notifications",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-707",
+        "SPEC-209"
+      ],
+      "businessRules": [
+        "BR-SET-03",
+        "BR-NOT-04"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-708-parametres-notifications.md",
+      "scope": "Onglet Notifications : canaux (application verrouillé, e-mail, navigateur avec demande de permission), six types avec compteur, programme du jour, heures calmes, week-end ; persistance immédiate.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-709",
+      "phase": "P7",
+      "title": "Paramètres : Modèles d'IA",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-707",
+        "SPEC-506",
+        "SPEC-507"
+      ],
+      "businessRules": [
+        "BR-SET-05",
+        "BR-IA-02",
+        "BR-IA-03",
+        "BR-IA-04"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-709-parametres-modeles-d-ia.md",
+      "scope": "Onglet Modèles d'IA : bandeau, modèle par tâche (modèles qualifiés seulement, pastilles), revenir aux défauts, fournisseurs (cartes, tester à nouveau, supprimer), ajouter un fournisseur (formulaire selon le type, tester et qualifier, résultat, avertissement données).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-710",
+      "phase": "P7",
+      "title": "Paramètres : Automatismes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-707",
+        "SPEC-711"
+      ],
+      "businessRules": [
+        "BR-SET-04",
+        "BR-AUT-12"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-710-parametres-automatismes.md",
+      "scope": "Onglet Automatismes : bandeau et compteur, trois groupes, interrupteurs et réglages (options construites sans élément dans les select), dernière action, carte Mode pause, garde-fous, journal avec Annuler.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-711",
+      "phase": "P7",
+      "title": "Moteur d'automatismes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-203",
+        "SPEC-209",
+        "SPEC-108",
+        "SPEC-411"
+      ],
+      "businessRules": [
+        "BR-AUT-11",
+        "BR-AUT-12"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0190"
+      ],
+      "visual": "demo",
+      "path": "specs/p7-engagement/SPEC-711-moteur-d-automatismes.md",
+      "scope": "Paquet @learny/automations : définition d'un automatisme (déclencheurs, paramètres, action, explication, annulation), réglages par utilisateur, actions en attente d'accord (accepter/refuser/expirer), journal, annulation, respect des garde-fous, API /me/automations et /me/automation-actions.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-712",
+      "phase": "P7",
+      "title": "Automatisme 1 : reprise après décrochage",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-AUT-01",
+        "BR-AUT-13"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md",
+      "scope": "Détection des séances manquées et de l'inactivité, replacement (automatique ou proposé), reprise de 5 min, proposition d'allègement/décalage ; bandeau d'accueil Le tuteur propose (accepter, autre créneau, annuler).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-713",
+      "phase": "P7",
+      "title": "Automatisme 2 : micro-séance de secours",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-703"
+      ],
+      "businessRules": [
+        "BR-AUT-02"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md",
+      "scope": "Déclenchement à l'heure H si aucune activité, notification, lien vers la micro-séance, effet sur la série, journal.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-714",
+      "phase": "P7",
+      "title": "Automatisme 3 : échauffement",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-410"
+      ],
+      "businessRules": [
+        "BR-AUT-03"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-714-automatisme-3-echauffement.md",
+      "scope": "Activité « Échauffement » ajoutée à la journée, bloc interactif de l'accueil (question, Voir la réponse, Je savais/À revoir, score, suite), notions à revoir envoyées au quiz global du soir, réglages.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-715",
+      "phase": "P7",
+      "title": "Automatisme 4 : remédiation après un quiz raté",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-612"
+      ],
+      "businessRules": [
+        "BR-AUT-04"
+      ],
+      "screens": [
+        "SCR-09"
+      ],
+      "adrs": [],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-715-automatisme-4-remediation-apres-un-quiz-rate.md",
+      "scope": "Préparation de la remédiation, délai de nouvelle tentative (RETRY_NOT_YET_ALLOWED), mode conseillé/obligatoire, affichage de la date de disponibilité, journal.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-716",
+      "phase": "P7",
+      "title": "Automatisme 5 : jeu choisi selon la lacune",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-406"
+      ],
+      "businessRules": [
+        "BR-AUT-05"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-716-automatisme-5-jeu-choisi-selon-la-lacune.md",
+      "scope": "Choix du format par nature de lacune et préférence, raison affichée (« Choisi pour votre oubli »), journal.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-717",
+      "phase": "P7",
+      "title": "Automatisme 6 : questions transformées en cartes",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-610"
+      ],
+      "businessRules": [
+        "BR-AUT-06"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-0190",
+        "ADR-0193"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-717-automatisme-6-questions-transformees-en-cartes.md",
+      "scope": "Transformation d'une question posée au tuteur en carte de rappel (avec confirmation depuis l'accueil ou automatique), intégration au quiz global, journal.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-718",
+      "phase": "P7",
+      "title": "Automatisme 7 : quiz global plafonné et lissé",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-406"
+      ],
+      "businessRules": [
+        "BR-AUT-07"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [
+        "ADR-0190"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-718-automatisme-7-quiz-global-plafonne-et-lisse.md",
+      "scope": "Application du plafond quotidien et du taux visé, report des notions, message sur l'accueil et le quiz global, annulation (toutes les notions aujourd'hui).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-719",
+      "phase": "P7",
+      "title": "Automatisme 8 : sprint avant un jalon",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-AUT-08"
+      ],
+      "screens": [
+        "SCR-12"
+      ],
+      "adrs": [
+        "ADR-0190"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-719-automatisme-8-sprint-avant-un-jalon.md",
+      "scope": "Planification des sprints J-K et J-1 avant chaque quiz de validation et examen blanc, sélection des notions les plus faibles, créneaux agenda, journal.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-720",
+      "phase": "P7",
+      "title": "Automatisme 9 : bilan de la semaine",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-408"
+      ],
+      "businessRules": [
+        "BR-AUT-09"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-0190"
+      ],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-720-automatisme-9-bilan-de-la-semaine.md",
+      "scope": "Génération hebdomadaire (heures, rétention, notions à risque, plan), carte d'accueil dépliable, notification et e-mail selon le canal, lien Mes disponibilités changent.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-721",
+      "phase": "P7",
+      "title": "Automatisme 10 : mode pause et retour",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-407",
+        "SPEC-409"
+      ],
+      "businessRules": [
+        "BR-AUT-10"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [
+        "ADR-0016",
+        "ADR-0190"
+      ],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-721-automatisme-10-mode-pause-et-retour.md",
+      "scope": "Déclaration de pause (date de fin, diagnostic), gel du planning et de la série, reprise anticipée, diagnostic de 10 min au retour, replanification, accès depuis Mon compte et Paramètres.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-722",
+      "phase": "P7",
+      "title": "Accueil : le tuteur a agi pour vous",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-711",
+        "SPEC-603"
+      ],
+      "businessRules": [
+        "BR-AUT-13"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-722-accueil-le-tuteur-a-agi-pour-vous.md",
+      "scope": "Carte de l'accueil listant les actions récentes (annuler, confirmer, ouvrir) et lien Régler ; mise à jour en direct après action.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-723",
+      "phase": "P7",
+      "title": "Série, régularité et jalons : interface",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-409",
+        "SPEC-304"
+      ],
+      "businessRules": [
+        "BR-GAM-02",
+        "BR-GAM-03"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p7-engagement/SPEC-723-serie-regularite-et-jalons-interface.md",
+      "scope": "API série/jalons, bloc Série du menu (n jours, 14 cases), notifications de jalons sobres, jalons dans le bilan final.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-724",
+      "phase": "P7",
+      "title": "Formations à plusieurs",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-111",
+        "SPEC-606",
+        "SPEC-602"
+      ],
+      "businessRules": [
+        "BR-GRP-01",
+        "BR-GRP-02",
+        "BR-GRP-03",
+        "BR-GRP-04",
+        "BR-GRP-05",
+        "BR-APP-03"
+      ],
+      "screens": [
+        "SCR-17"
+      ],
+      "adrs": [
+        "ADR-0035"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-724-formations-a-plusieurs.md",
+      "scope": "Créer le groupe, code et lien d'invitation, page /invitation/[code], rejoindre (onboarding et Paramètres), page Groupe (membres, progression, série), quitter (copie individuelle), retirer un membre, régénérer le code, notifications, planification dans les fenêtres communes.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-725",
+      "phase": "P7",
+      "title": "Abonnement à l'IA fournie : interface et plafond",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-210",
+        "SPEC-507",
+        "SPEC-709"
+      ],
+      "businessRules": [
+        "BR-SET-06",
+        "BR-IA-06",
+        "BR-IA-07"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [
+        "ADR-0011",
+        "ADR-0012"
+      ],
+      "visual": "tokens",
+      "path": "specs/p7-engagement/SPEC-725-abonnement-a-l-ia-fournie-interface-et-plafond.md",
+      "scope": "Bloc Abonnement dans Paramètres (Modèles d'IA) : état, souscrire (Checkout), gérer (portail), consommation du jour/plafond ; messages AI_UNAVAILABLE et AI_CAP_REACHED dans l'interface ; alerte 80 %.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-801",
+      "phase": "P8",
+      "title": "Application installable et révisions hors ligne",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-701",
+        "SPEC-702"
+      ],
+      "businessRules": [
+        "BR-PLA-01"
+      ],
+      "screens": [
+        "SCR-10",
+        "SCR-20"
+      ],
+      "adrs": [
+        "ADR-0037"
+      ],
+      "visual": "tokens",
+      "path": "specs/p8-livraison-v1/SPEC-801-application-installable-et-revisions-hors-ligne.md",
+      "scope": "Manifest et icônes, service worker Serwist, préchargement quotidien de la session et des cartes dans IndexedDB, file d'attente des réponses, synchronisation idempotente, indicateur hors ligne, page /hors-ligne.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-802",
+      "phase": "P8",
+      "title": "Responsive et mobile",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-618",
+        "SPEC-725",
+        "SPEC-724",
+        "SPEC-616"
+      ],
+      "businessRules": [
+        "BR-PLA-02",
+        "BR-NAV-03"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-07",
+        "SCR-10",
+        "SCR-12"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md",
+      "scope": "Revue de tous les écrans à 360, 390, 768, 1024, 1440 px : menu en surimpression, tableaux défilants, panneaux plein écran sur mobile (tuteur, notifications), cibles ≥ 44 px ; comparaisons avec les références mobiles.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-803",
+      "phase": "P8",
+      "title": "Accessibilité WCAG 2.2 AA",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-802"
+      ],
+      "businessRules": [
+        "BR-PLA-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0038"
+      ],
+      "visual": "tokens",
+      "path": "specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md",
+      "scope": "Audit axe de toutes les pages, parcours clavier complets (connexion, quiz, examen, quiz global, carte, paramètres), lecteur d'écran (noms accessibles), corrections, déclaration d'accessibilité.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-804",
+      "phase": "P8",
+      "title": "Performances",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-802"
+      ],
+      "businessRules": [
+        "BR-PLA-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0041"
+      ],
+      "visual": "demo",
+      "path": "specs/p8-livraison-v1/SPEC-804-performances.md",
+      "scope": "Lighthouse CI sur les écrans principaux, budgets, optimisation (images, polices, découpage du code), index de base de données vérifiés (EXPLAIN), test de charge k6 de l'API.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-805",
+      "phase": "P8",
+      "title": "Sécurité",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-802"
+      ],
+      "businessRules": [
+        "BR-PLA-08",
+        "BR-IA-10"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0042",
+        "ADR-0023"
+      ],
+      "visual": "demo",
+      "path": "specs/p8-livraison-v1/SPEC-805-securite.md",
+      "scope": "En-têtes et CSP avec nonce, vérification de la limitation de débit et de RLS de bout en bout, tests d'injection de consignes sur chaque tâche IA, anti-SSRF, audit des dépendances, liste de contrôle ASVS niveau 1.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-806",
+      "phase": "P8",
+      "title": "RGPD et pages légales",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-802",
+        "SPEC-211"
+      ],
+      "businessRules": [
+        "BR-PLA-05",
+        "BR-PLA-06",
+        "BR-ACC-02"
+      ],
+      "screens": [
+        "SCR-19"
+      ],
+      "adrs": [
+        "ADR-0045",
+        "ADR-0204"
+      ],
+      "visual": "tokens",
+      "path": "specs/p8-livraison-v1/SPEC-806-rgpd-et-pages-legales.md",
+      "scope": "Pages /legal/cgu, /legal/confidentialite, /legal/mentions (gabarits avec identité légale en configuration), versionnement et acceptation, docs/legal/registre-traitements.md et sous-traitants.md, liens en pied des pages d'authentification.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-807",
+      "phase": "P8",
+      "title": "Parcours de bout en bout et non-régression globale",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-803",
+        "SPEC-804",
+        "SPEC-805",
+        "SPEC-806",
+        "SPEC-801"
+      ],
+      "businessRules": [],
+      "screens": [
+        "SCR-01",
+        "SCR-03",
+        "SCR-07",
+        "SCR-09",
+        "SCR-10"
+      ],
+      "adrs": [],
+      "visual": "mockup",
+      "path": "specs/p8-livraison-v1/SPEC-807-parcours-de-bout-en-bout-et-non-regression-globale.md",
+      "scope": "Suites Playwright des parcours complets : inscription → première formation → apports → cours → quiz échoué → remédiation → quiz réussi → module suivant ; révisions quotidiennes et automatismes ; formation à plusieurs ; examen blanc ; export/suppression ; ensemble des comparaisons visuelles ; Chromium, Firefox, WebKit.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-808",
+      "phase": "P8",
+      "title": "Mise en production et version 1.0.0",
+      "priority": "V1",
+      "dependsOn": [
+        "SPEC-807",
+        "SPEC-013"
+      ],
+      "businessRules": [
+        "BR-PLA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0051",
+        "ADR-0073"
+      ],
+      "visual": "demo",
+      "path": "specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md",
+      "scope": "Checklist de mise en production (tarifs IA, identité légale, domaines, DNS e-mail, Stripe live, Sentry), migrations production, tests de fumée post-déploiement, CHANGELOG, tag v1.0.0 ; blocages externes consignés sans invention.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-901",
+      "phase": "P9",
+      "title": "Import audio avec transcription",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-509"
+      ],
+      "businessRules": [
+        "BR-APP-08"
+      ],
+      "screens": [
+        "SCR-06"
+      ],
+      "adrs": [
+        "ADR-0008",
+        "ADR-0205"
+      ],
+      "visual": "mockup",
+      "path": "specs/p9-v2/SPEC-901-import-audio-avec-transcription.md",
+      "scope": "Dépôt de fichiers audio, transcription (API Deepgram, DEEPGRAM_API_KEY ; mock en test), passages horodatés, citations à la minute (note vocale), lecture de l'extrait.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-902",
+      "phase": "P9",
+      "title": "Import vidéo avec transcription",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-901"
+      ],
+      "businessRules": [
+        "BR-APP-09"
+      ],
+      "screens": [
+        "SCR-06"
+      ],
+      "adrs": [
+        "ADR-0008",
+        "ADR-0205"
+      ],
+      "visual": "mockup",
+      "path": "specs/p9-v2/SPEC-902-import-video-avec-transcription.md",
+      "scope": "Dépôt de fichiers vidéo, extraction audio et transcription, citations horodatées, lecture de l'extrait vidéo.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-903",
+      "phase": "P9",
+      "title": "Détection des liens entre ressources et entre modules",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-616",
+        "SPEC-511"
+      ],
+      "businessRules": [
+        "BR-CAR-06"
+      ],
+      "screens": [
+        "SCR-14"
+      ],
+      "adrs": [
+        "ADR-0207"
+      ],
+      "visual": "mockup",
+      "path": "specs/p9-v2/SPEC-903-detection-des-liens-entre-ressources-et-entre-modu.md",
+      "scope": "Job qui propose des liens tutor entre notions de modules différents et entre ressources (similarité + validation par le tuteur), affichage dans la carte et le cours.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-904",
+      "phase": "P9",
+      "title": "Explique à un débutant",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-905"
+      ],
+      "businessRules": [
+        "BR-MEM-11"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [
+        "ADR-0208"
+      ],
+      "visual": "tokens",
+      "path": "specs/p9-v2/SPEC-904-explique-a-un-debutant.md",
+      "scope": "Jeu de dialogue où le tuteur joue un novice, évaluation de l'explication, intégration au quiz global et à FSRS.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-905",
+      "phase": "P9",
+      "title": "Mises en situation",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-508",
+        "SPEC-503"
+      ],
+      "businessRules": [
+        "BR-PRA-06"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0208"
+      ],
+      "visual": "tokens",
+      "path": "specs/p9-v2/SPEC-905-mises-en-situation.md",
+      "scope": "Brique dialogue scénarisé jouée en chat (rôle, contexte, objectif, condition de fin), barème, correction, planification selon l'objectif opérationnel/dialogue.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-906",
+      "phase": "P9",
+      "title": "Projet fil rouge",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-613",
+        "SPEC-407"
+      ],
+      "businessRules": [
+        "BR-PRA-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0211"
+      ],
+      "visual": "tokens",
+      "path": "specs/p9-v2/SPEC-906-projet-fil-rouge.md",
+      "scope": "Suite de consignes réparties sur la formation, livrables, évaluations intermédiaires et finale, étapes planifiées dans l'agenda.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-907",
+      "phase": "P9",
+      "title": "Détection fine de la baisse d'engagement",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-711"
+      ],
+      "businessRules": [
+        "BR-AUT-14"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0212"
+      ],
+      "visual": "tokens",
+      "path": "specs/p9-v2/SPEC-907-detection-fine-de-la-baisse-d-engagement.md",
+      "scope": "Signaux (justesse en baisse, réponses trop rapides, sessions écourtées), proposition de pause ou d'allègement via le moteur d'automatismes.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "tokens",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-908",
+      "phase": "P9",
+      "title": "Version 2.0.0",
+      "priority": "V2",
+      "dependsOn": [
+        "SPEC-901",
+        "SPEC-902",
+        "SPEC-903",
+        "SPEC-904",
+        "SPEC-905",
+        "SPEC-906",
+        "SPEC-907"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-0051"
+      ],
+      "visual": "demo",
+      "path": "specs/p9-v2/SPEC-908-version-2-0-0.md",
+      "scope": "Non-régression complète V1+V2, parcours V2, CHANGELOG, tag v2.0.0.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    }
+  ]
+}

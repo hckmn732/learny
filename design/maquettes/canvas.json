@@ -1,0 +1,23 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-11T09:30:00Z"},
+  "title": "Maquettes — Tuteur IA",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1440, "h": 1150, "title": "1 · Accueil", "expand": "fill", "is_interactive": true},
+    "NouvelleFormation.dc.html": {"x": 1520, "y": 0, "w": 1440, "h": 1000, "title": "2 · Nouvelle formation", "expand": "fill", "is_interactive": true},
+    "Programme.dc.html": {"x": 3040, "y": 0, "w": 1440, "h": 1500, "title": "3 · Programme de formation", "expand": "fill", "is_interactive": true},
+    "Module.dc.html": {"x": 4560, "y": 0, "w": 1440, "h": 1250, "title": "4 · Module et apports", "expand": "fill", "is_interactive": true},
+    "Cours.dc.html": {"x": 0, "y": 1620, "w": 1440, "h": 1800, "title": "5 · Cours", "expand": "fill", "is_interactive": true},
+    "Quiz.dc.html": {"x": 1520, "y": 1620, "w": 1440, "h": 1150, "title": "6 · Quiz de validation", "expand": "fill", "is_interactive": true},
+    "QuizGlobal.dc.html": {"x": 3040, "y": 1620, "w": 1440, "h": 1100, "title": "7 · Quiz global et jeux", "expand": "fill", "is_interactive": true},
+    "Agenda.dc.html": {"x": 4560, "y": 1620, "w": 1440, "h": 1050, "title": "8 · Agenda", "expand": "fill", "is_interactive": true},
+    "Parametres.dc.html": {"x": 6080, "y": 0, "w": 1440, "h": 1350, "title": "9 · Paramètres · modèles d'IA", "expand": "fill", "is_interactive": true}
+  },
+  "order": ["Main.dc.html", "NouvelleFormation.dc.html", "Programme.dc.html", "Module.dc.html", "Cours.dc.html", "Quiz.dc.html", "QuizGlobal.dc.html", "Agenda.dc.html", "Parametres.dc.html"],
+  "notes": {
+    "titre": {"x": 0, "y": -300, "text": "Parcours de l'apprenant — 9 écrans", "kind": "title1", "maxW": 7520}
+  },
+  "designSystems": []
+}

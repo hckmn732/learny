@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquettes — Learny</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; background: #F4F4F1; color: #111113; font-family: 'Inter', system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-direction: column; gap: 28px; }
+  h1 { margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 600; letter-spacing: -0.02em; }
+  p.lead { margin: 6px 0 0; font-size: 16px; line-height: 1.55; color: #62626B; max-width: 680px; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  a.card { display: flex; gap: 14px; align-items: flex-start; padding: 20px; border-radius: 22px; background: #FFFFFF; border: 1px solid #E7E6E1; color: #111113; text-decoration: none; }
+  a.card:hover { border-color: #111113; }
+  a.card:focus-visible { outline: 3px solid #5B5BD6; outline-offset: 2px; }
+  .num { flex: 0 0 40px; height: 40px; border-radius: 12px; background: #111113; color: #C6F432; display: inline-flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+  .title { display: block; font-size: 16px; font-weight: 700; }
+  .desc { display: block; margin-top: 4px; font-size: 14px; line-height: 1.45; color: #62626B; }
+  .note { margin: 0; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E7E6E1; font-size: 14px; line-height: 1.55; color: #62626B; }
+</style>
+</head>
+<body>
+<main>
+<div>
+<h1>Maquettes — Learny</h1>
+<p class="lead">Quatorze écrans cliquables, sur l'exemple d'une formation SAP S/4HANA Finance. Commence par l'inscription ou l'accueil : les liens et boutons mènent d'un écran à l'autre.</p>
+</div>
+<ol>
+<li><a class="card" href="Inscription.dc.html"><span class="num">1</span><span><span class="title">Inscription et premiers pas</span><span class="desc">Lien magique ou mot de passe, profil, rythme, IA, rappels, invitation</span></span></a></li>
+<li><a class="card" href="Main.dc.html"><span class="num">2</span><span><span class="title">Accueil</span><span class="desc">Journée du jour, quiz global, rétention, tableau des formations</span></span></a></li>
+<li><a class="card" href="NouvelleFormation.dc.html"><span class="num">3</span><span><span class="title">Nouvelle formation</span><span class="desc">Cadrage par le tuteur, au plus 5 questions, puis programme proposé</span></span></a></li>
+<li><a class="card" href="Programme.dc.html"><span class="num">4</span><span><span class="title">Programme de formation</span><span class="desc">Planning, avancement et accès à chaque module : cours, apports, quiz</span></span></a></li>
+<li><a class="card" href="Module.dc.html"><span class="num">5</span><span><span class="title">Module et apports</span><span class="desc">Chapitres, dépôt des apports, génération du cours</span></span></a></li>
+<li><a class="card" href="Cours.dc.html"><span class="num">6</span><span><span class="title">Cours</span><span class="desc">Question éclair, sources, « À retenir », discussion avec le tuteur</span></span></a></li>
+<li><a class="card" href="Exercice.dc.html"><span class="num">7</span><span><span class="title">Exercice pratique</span><span class="desc">Saisie d'une pièce, équilibre en direct, indices, correction du tuteur</span></span></a></li>
+<li><a class="card" href="Quiz.dc.html"><span class="num">8</span><span><span class="title">Quiz de validation</span><span class="desc">Une question à la fois, résultat, lacunes, tentatives</span></span></a></li>
+<li><a class="card" href="QuizGlobal.dc.html"><span class="num">9</span><span><span class="title">Quiz global et jeux</span><span class="desc">Cinq jeux de mémorisation jouables, puis le bilan</span></span></a></li>
+<li><a class="card" href="ExamenBlanc.dc.html"><span class="num">10</span><span><span class="title">Examen blanc</span><span class="desc">Format officiel, chronomètre, sans aide, résultats par module</span></span></a></li>
+<li><a class="card" href="Agenda.dc.html"><span class="num">11</span><span><span class="title">Agenda</span><span class="desc">Vues jour, semaine et mois, activités par type, marges</span></span></a></li>
+<li><a class="card" href="Lacunes.dc.html"><span class="num">12</span><span><span class="title">Mes lacunes</span><span class="desc">Notions à consolider, par nature de lacune, et entraînement ciblé</span></span></a></li>
+<li><a class="card" href="Carte.dc.html"><span class="num">13</span><span><span class="title">Carte des notions</span><span class="desc">Graphe des notions, de leurs liens et de leur maîtrise</span></span></a></li>
+<li><a class="card" href="Parametres.dc.html"><span class="num">14</span><span><span class="title">Paramètres</span><span class="desc">Depuis « Mon compte » : profil, notifications, automatismes, modèles d'IA</span></span></a></li>
+</ol>
+<p class="note">Sur chaque écran, l'en-tête reste visible au défilement, le bouton à côté du logo masque complètement le menu latéral (le choix est mémorisé d'une page à l'autre) « Mon compte » ouvre un menu avec les Paramètres, et la cloche liste les notifications reçues. Ces pages fonctionnent hors ligne grâce au fichier <code>support.js</code> placé à côté d'elles ; seules les polices viennent d'internet.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,53 @@
+# --- Dépendances et sorties de build ---
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Tests et rapports (les preuves retenues sont copiées dans evidence/) ---
+test-results/
+playwright-report/
+blob-report/
+coverage/
+.vitest/
+*.lcov
+
+# --- Environnement et secrets (seul .env.example est versionné) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+.vercel/
+
+# --- Supabase local ---
+supabase/.temp/
+supabase/.branches/
+supabase/volumes/
+
+# --- Outillage SDD ---
+.sdd/lock.json
+.sdd/tmp/
+
+# --- Systèmes et éditeurs ---
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# --- Journaux ---
+*.log
+npm-debug.log*
+pnpm-debug.log*
+logs/

@@ -1,0 +1,139 @@
+# Intégration continue de Learny (ADR-0052, détaillée et durcie par SPEC-011).
+# - Le job `audit` s'exécute toujours : il vérifie la cohérence du référentiel SDD.
+# - Les jobs applicatifs ne s'exécutent que lorsque le monorepo existe
+#   (présence de pnpm-lock.yaml, créé par SPEC-001).
+name: CI
+
+on:
+  push:
+    branches: [main, 'spec/**', 'fix/**', 'release/**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+  LLM_MODE: mock
+  STRIPE_MODE: mock
+  EMAIL_MODE: memory
+  PUSH_MODE: mock
+  ENABLE_SDD_PAGES: '1'
+  CLOCK_FIXED_AT: '2026-11-11T12:20:00Z'
+
+jobs:
+  audit:
+    name: Audit du référentiel
+    runs-on: ubuntu-latest
+    outputs:
+      has_app: ${{ steps.detect.outputs.has_app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Audit SDD
+        run: node tools/sdd/audit.mjs
+      - name: Détecter le monorepo
+        id: detect
+        run: |
+          if [ -f pnpm-lock.yaml ]; then echo "has_app=true" >> "$GITHUB_OUTPUT"; else echo "has_app=false" >> "$GITHUB_OUTPUT"; fi
+
+  secrets:
+    name: Recherche de secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  quality:
+    name: Lint, types, build, unitaires
+    needs: audit
+    if: needs.audit.outputs.has_app == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm build
+      - run: pnpm test:unit --coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-reports
+          path: |
+            coverage/
+            test-results/
+          if-no-files-found: ignore
+
+  integration:
+    name: Intégration (Supabase local)
+    needs: audit
+    if: needs.audit.outputs.has_app == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: supabase start
+      - run: pnpm db:reset
+      - run: pnpm test:int
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-reports
+          path: test-results/
+          if-no-files-found: ignore
+
+  e2e:
+    name: E2E et conformité visuelle (Chromium)
+    needs: audit
+    if: needs.audit.outputs.has_app == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: supabase start
+      - run: pnpm db:reset
+      - run: pnpm db:seed:demo
+      - run: pnpm build
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-reports
+          path: test-results/
+          if-no-files-found: ignore
