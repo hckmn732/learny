@@ -94,7 +94,7 @@ describe('[SPEC-006] SDD index and guard', () => {
     expect(html).toContain('data-testid="sdd-index-phases"');
     expect(html).toContain('data-testid="sdd-index-specs"');
     expect(html).toContain('href="/_dev/sdd/SPEC-006"');
-    expect(html).not.toContain('href="/_dev/sdd/SPEC-013"');
+    expect(html).not.toContain('href="/_dev/sdd/SPEC-101"');
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 

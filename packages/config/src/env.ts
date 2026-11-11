@@ -80,7 +80,25 @@ export type ServerEnvKey = (typeof SERVER_ENV_KEYS)[number];
  * Variables of the toolchain (pnpm, Playwright, SDD scripts) kept in `.env.example` but outside the
  * runtime schema: the application never reads them (ET-5, ADR-0226).
  */
-export const TOOLING_ENV_KEYS = ['SDD_PUSH', 'E2E_SKIP_BUILD', 'PW_PERF', 'CHROME_PATH'] as const;
+export const TOOLING_ENV_KEYS = [
+  'SDD_PUSH',
+  'E2E_SKIP_BUILD',
+  'PW_PERF',
+  'CHROME_PATH',
+  // Self-hosted stack (SPEC-012): consumed by Docker Compose and the image builds, not by the app.
+  'LEARNY_PUBLIC_APP_URL',
+  'LEARNY_PUBLIC_SUPABASE_URL',
+  'LEARNY_WEB_PORT',
+  'LEARNY_SUPABASE_PORT',
+  'LEARNY_INNGEST_PORT',
+  'LEARNY_MAILPIT_SMTP_PORT',
+  'LEARNY_MAILPIT_UI_PORT',
+  // Supabase Auth SMTP sender name used by the self-hosted Compose file (SPEC-012).
+  'SMTP_SENDER_NAME',
+  'SMTP_ADMIN_EMAIL',
+  // Postgres superuser password consumed by the self-hosted Compose file (SPEC-012).
+  'POSTGRES_PASSWORD',
+] as const;
 
 /** Standard variables of Node and the CI, never part of the documented application contract. */
 export const STANDARD_ENV_KEYS = ['TZ', 'CI', 'PORT', 'NEXT_RUNTIME'] as const;

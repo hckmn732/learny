@@ -30,6 +30,9 @@ const ENV_FILE = path.join(ROOT, '.sdd', 'tmp', `${PROJECT}.env`);
 const EVIDENCE = path.join(ROOT, 'evidence', 'SPEC-012');
 const GIT_COMMIT = 'dc30f2d';
 const APP_VERSION = '0.0.0-spec-012';
+// Explicit placeholders: production validation needs values, no provider is contacted.
+const placeholder = (name: string): string => `selfhost-test-${name}`;
+
 const BUILD_ARGS = {
   GIT_COMMIT,
   APP_VERSION,
@@ -113,8 +116,28 @@ beforeAll(async () => {
   const secrets = generateSecrets(toolNow());
   const values: Record<string, string> = {
     ...secrets,
-    LEARNY_PUBLIC_APP_URL: `http://localhost:${String(webPort)}`,
-    LEARNY_PUBLIC_SUPABASE_URL: `http://localhost:${String(apiPort)}`,
+    APP_ENV: 'production',
+    // SPEC-009 rejects simulated modes and plain-HTTP public URLs in production. The stack is
+    // local, so these are placeholder credentials: no provider is contacted by the probes.
+    LLM_MODE: 'live',
+    ANTHROPIC_API_KEY: placeholder('anthropic'),
+    VOYAGE_API_KEY: placeholder('voyage'),
+    RESEND_API_KEY: placeholder('resend'),
+    STRIPE_MODE: 'test',
+    STRIPE_SECRET_KEY: placeholder('stripe-secret'),
+    STRIPE_WEBHOOK_SECRET: placeholder('stripe-webhook'),
+    STRIPE_PRICE_ID: placeholder('stripe-price'),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: placeholder('stripe-public'),
+    PUSH_MODE: 'live',
+    NEXT_PUBLIC_VAPID_PUBLIC_KEY: placeholder('vapid-public'),
+    VAPID_PRIVATE_KEY: placeholder('vapid-private'),
+    VAPID_SUBJECT: 'mailto:test@learny.example',
+    LEGAL_ENTITY_NAME: 'Learny Test',
+    LEGAL_ENTITY_ADDRESS: '1 rue du Test, Paris',
+    LEGAL_CONTACT_EMAIL: 'test@learny.example',
+    LEGAL_HOST_NAME: 'learny.example',
+    LEARNY_PUBLIC_APP_URL: `https://localhost:${String(webPort)}`,
+    LEARNY_PUBLIC_SUPABASE_URL: `https://localhost:${String(apiPort)}`,
     LEARNY_WEB_PORT: String(webPort),
     LEARNY_SUPABASE_PORT: String(apiPort),
     LEARNY_INNGEST_PORT: String(inngestPort),
@@ -125,7 +148,6 @@ beforeAll(async () => {
     SMTP_HOST: 'mailpit',
     SMTP_PORT: '1025',
     EMAIL_MODE: 'smtp',
-    LLM_MODE: 'mock',
   };
   fs.mkdirSync(path.dirname(ENV_FILE), { recursive: true });
   fs.writeFileSync(
@@ -136,7 +158,9 @@ beforeAll(async () => {
     { mode: 0o600 },
   );
   envFile = ENV_FILE;
-  env = { ...values, ...process.env } as Record<string, string>;
+  // The test values win over the Vitest environment (LLM_MODE=mock, APP_ENV=test…): the
+  // self-hosted stack runs with production semantics.
+  env = { ...process.env, ...values } as Record<string, string>;
 
   // Real, observed image builds (EF-1, ET-1, CA-1).
   for (const [dockerfile, image, log] of [
