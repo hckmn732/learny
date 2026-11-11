@@ -1,0 +1,4 @@
+// Schema barrel consumed by Drizzle and re-exported as `@learny/db/schema` (SPEC-101 ET-1).
+// SPEC-102 to SPEC-112 append their table modules here, after the shared enums.
+export * from './columns';
+export * from './enums';
