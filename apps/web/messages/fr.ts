@@ -315,6 +315,49 @@ export const fr = {
         notePrefix: 'Note',
       },
     },
+    spec101: {
+      extensions: {
+        title: 'Extensions',
+        name: 'Extension',
+        version: 'Version',
+        required: 'obligatoire',
+      },
+      migrations: {
+        title: 'Migrations appliquées',
+        version: 'Version',
+        name: 'Nom',
+        total: (count: number) => `${String(count)} migration(s) appliquée(s)`,
+      },
+      functions: {
+        title: 'Fonctions partagées',
+        name: 'Fonction',
+        status: 'État',
+        result: 'Résultat',
+        sample: 'Écriture comptable',
+        present: 'présente',
+        missing: 'absente',
+      },
+      enums: {
+        title: 'Énumérations',
+        name: 'Énumération',
+        values: 'Valeurs',
+      },
+      rls: {
+        title: 'Identité RLS',
+        intro:
+          'Deux utilisateurs de test sont créés puis annulés (withRollback) ; chaque transaction applique ses propres claims.',
+        actor: 'Acteur',
+        uid: 'auth.uid()',
+        role: 'current_user',
+        userA: 'Utilisateur A',
+        userB: 'Utilisateur B',
+        service: 'serviceDb',
+        none: '(nul)',
+      },
+      conform: 'Conforme',
+      nonConform: 'Non conforme',
+      unavailable: 'Base locale injoignable : lancer pnpm dev:up',
+    },
     spec010: {
       context: {
         title: 'Corrélation',

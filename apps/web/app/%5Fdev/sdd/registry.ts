@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 
 export interface SddDemo {
   title: string;
+  titleTestId?: string;
   load: () => Promise<{ default: ComponentType }>;
 }
 
@@ -33,6 +34,11 @@ export const sddDemos: Record<string, SddDemo> = {
   'SPEC-008': {
     title: 'Environnement local',
     load: () => import('../../../components/sdd-demos/spec-008'),
+  },
+  'SPEC-101': {
+    title: 'SPEC-101 · Paquet db',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-101'),
   },
   'SPEC-009': {
     title: 'Configuration',
