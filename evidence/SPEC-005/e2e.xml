@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="4.1838429999999995">
+<testsuite name="p0/spec-005.spec.ts" timestamp="2026-11-11T20:48:16.971Z" hostname="desktop" tests="2" failures="0" skipped="0" time="1.831" errors="0">
+<testcase name="inspecte les références @SPEC-005" classname="p0/spec-005.spec.ts" time="0.954">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/attachments/axe-383feae0da1a007b9c83f97dc139385a1f770e61.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/attachments/spec-005-final-708746811124efe734bb80c717ae97e30ae60f32.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-inspecte-les-références-SPEC-005-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration des références conforme @SPEC-005 @visual @mobile" classname="p0/spec-005.spec.ts" time="0.877">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-desktop/attachments/axe-62db8af3ca1e73ebc3b8280d45c82566d66d19d7.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p0/spec-005.spec.ts" timestamp="2026-11-11T20:48:16.971Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.867" errors="0">
+<testcase name="démonstration des références conforme @SPEC-005 @visual @mobile" classname="p0/spec-005.spec.ts" time="0.867">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-mobile/attachments/axe-fea4b8298a2c8ce8b3d5c26ac2a1229f925ec464.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-005-démonstration--ee371-orme-SPEC-005-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

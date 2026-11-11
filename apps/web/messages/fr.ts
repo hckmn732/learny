@@ -105,6 +105,23 @@ export const fr = {
         ],
       },
     },
+    spec005: {
+      summary: {
+        title: 'Inventaire des références',
+        mockups: 'Maquettes',
+        states: 'États',
+        captures: 'Captures',
+        tokens: 'Jetons',
+      },
+      gallery: {
+        title: 'Aperçus',
+        choose: 'État de référence',
+        desktop: 'Référence desktop',
+        mobile: 'Référence mobile',
+        hash: 'Empreinte',
+        missing: 'Références non générées',
+      },
+    },
     index: {
       title: 'Progression SDD',
       surtitle: 'SDD',
