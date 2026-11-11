@@ -196,6 +196,16 @@ export default tseslint.config(
     ...jsxA11y.flatConfigs.recommended,
   },
   {
+    files: ['**/*.tsx'],
+    rules: {
+      // Scrollable regions must be keyboard-reachable (WCAG 2.1.1, scrollable-region-focusable).
+      'jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        { tags: [], roles: ['tabpanel', 'region'], allowExpressionValues: true },
+      ],
+    },
+  },
+  {
     files: ['apps/web/**'],
     plugins: { '@next/next': nextPlugin },
     rules: {
