@@ -39,15 +39,21 @@ export function maskSecret(value: string): string {
   return `${value.slice(0, 4)}…`;
 }
 
+// One finding per matched span: the first pattern wins when several overlap
+// (an Anthropic key also matches the broader OpenAI pattern, ADR-0222).
 export function scanText(text: string, file: string): Finding[] {
   const findings: Finding[] = [];
   text.split(/\r?\n/).forEach((content, index) => {
     if (content.includes(SECRET_ALLOW_MARKER)) return;
+    const spans: [number, number][] = [];
     for (const { id, regex } of SECRET_PATTERNS) {
       const match = regex.exec(content);
-      if (match) {
-        findings.push({ file, line: index + 1, rule: id, preview: maskSecret(match[0]) });
-      }
+      if (!match) continue;
+      const start = match.index;
+      const end = start + match[0].length;
+      if (spans.some(([s, e]) => start < e && end > s)) continue;
+      spans.push([start, end]);
+      findings.push({ file, line: index + 1, rule: id, preview: maskSecret(match[0]) });
     }
   });
   return findings;
