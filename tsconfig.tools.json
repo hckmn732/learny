@@ -5,5 +5,5 @@
     "checkJs": false,
     "types": ["node"]
   },
-  "include": ["tools/**/*.ts", "vitest.config.ts", "eslint.config.mjs"]
+  "include": ["tools/**/*.ts", "vitest.config.ts", "commitlint.config.ts", "eslint.config.mjs"]
 }
