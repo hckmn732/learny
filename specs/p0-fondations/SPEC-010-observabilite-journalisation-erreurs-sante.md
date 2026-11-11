@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-006, SPEC-009]
 business_rules: []
 screens: []
-adrs: [ADR-0043]
+adrs: [ADR-0043, ADR-0230]
 visual: demo
 ---
 
@@ -112,3 +112,5 @@ Les conditions de `docs/engineering/testing.md` §7 passent. Les tests inspecten
 ## 15. Décisions et hypothèses
 
 ADR-0043 impose pino, requestId, Sentry conditionnel et la santé. Les champs du journal suivent la minimisation de `conventions.md` §8 ; aucune rétention nouvelle ni outil externe supplémentaire n'est introduit.
+
+ADR-0230 précise l'entrée serveur `@learny/core/server` (pino et `AsyncLocalStorage` hors du bundle navigateur), la forme `components { database, build }` ajoutée à la santé et le chargement conditionnel du SDK Sentry.
