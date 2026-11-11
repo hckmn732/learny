@@ -170,9 +170,18 @@ export default tseslint.config(
     extends: [tseslint.configs.strictTypeChecked],
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ['vitest.config.ts'],
-        },
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    // Root configs and tools have no tsconfig.json of their own: use tsconfig.tools.json.
+    files: ['*.config.ts', 'tools/**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+        project: './tsconfig.tools.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },

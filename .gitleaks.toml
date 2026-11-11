@@ -1,0 +1,14 @@
+title = "Learny"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Valeurs de test documentées"
+paths = [
+  '''pnpm-lock\.yaml''',
+  '''^docs/legacy/''',
+  '''^design/maquettes/''',
+  '''^evidence/.*\.(json|xml)$''',
+]
+stopwords = ['''learny-test-only''']
