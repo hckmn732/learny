@@ -1,7 +1,7 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from worker.Dockerfile
-#1 transferring dockerfile: 2.52kB done
+#1 transferring dockerfile: 2.58kB done
 #1 DONE 0.0s
 
 #2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
@@ -19,79 +19,120 @@
 #5 DONE 0.0s
 
 #6 [internal] load build context
-#6 transferring context: 17.79kB done
+#6 transferring context: 23.86kB 0.0s done
 #6 DONE 0.0s
 
-#7 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:98e4e60b35fd50143e1838da2957488c25aa3a3efbd48bb679923f77d6d3d873
-#7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:98e4e60b35fd50143e1838da2957488c25aa3a3efbd48bb679923f77d6d3d873 0.0s done
+#7 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
+#7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
+#7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 0.0s done
 #7 DONE 0.0s
 
-#8 [builder 4/5] COPY . .
+#8 [runner 2/5] WORKDIR /app
 #8 CACHED
 
-#9 [base 3/3] WORKDIR /repo
+#9 [deps  3/10] COPY apps/worker/package.json ./apps/worker/package.json
 #9 CACHED
 
-#10 [runner 3/5] COPY --from=builder --chown=root:root /repo/apps/worker/dist ./dist
+#10 [deps  8/10] COPY packages/jobs/package.json ./packages/jobs/package.json
 #10 CACHED
 
-#11 [runner 2/5] WORKDIR /app
+#11 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
 #11 CACHED
 
-#12 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#12 [deps  2/10] COPY apps/web/package.json ./apps/web/package.json
 #12 CACHED
 
-#13 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
+#13 [deps  4/10] COPY packages/config/package.json ./packages/config/package.json
 #13 CACHED
 
-#14 [deps 2/9] COPY apps/web/package.json ./apps/web/package.json
+#14 [base 3/3] WORKDIR /repo
 #14 CACHED
 
-#15 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
+#15 [deps  1/10] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 #15 CACHED
 
-#16 [builder 5/5] RUN pnpm --filter @learny/worker build
+#16 [deps  5/10] COPY packages/contracts/package.json ./packages/contracts/package.json
 #16 CACHED
 
-#17 [builder 2/5] COPY --from=deps /repo/apps ./apps
+#17 [deps  6/10] COPY packages/core/package.json ./packages/core/package.json
 #17 CACHED
 
-#18 [deps 1/9] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+#18 [deps  7/10] COPY packages/db/package.json ./packages/db/package.json
 #18 CACHED
 
-#19 [deps 9/9] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/worker...
+#19 [deps  9/10] COPY packages/testing/package.json ./packages/testing/package.json
 #19 CACHED
 
-#20 [deps 7/9] COPY packages/jobs/package.json ./packages/jobs/package.json
-#20 CACHED
+#20 [deps 10/10] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/worker...
+#20 0.463 Scope: 4 of 9 workspace projects
+#20 0.510 Lockfile is up to date, resolution step is skipped
+#20 0.542 Progress: resolved 1, reused 0, downloaded 0, added 0
+#20 0.624 .                                        | +696 ++++++++++++++++++++++++++++++++
+#20 0.841 
+#20 0.841    ╭──────────────────────────────────────────────────────────────────────╮
+#20 0.841    │                                                                      │
+#20 0.841    │                 Update available! 10.34.9 → 12.18.0.                 │
+#20 0.841    │                 Changelog: https://pnpm.io/v/12.18.0                 │
+#20 0.841    │   To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -   │
+#20 0.841    │                                                                      │
+#20 0.841    ╰──────────────────────────────────────────────────────────────────────╯
+#20 0.841 
+#20 1.543 Progress: resolved 696, reused 696, downloaded 0, added 179
+#20 2.543 Progress: resolved 696, reused 696, downloaded 0, added 685
+#20 3.543 Progress: resolved 696, reused 696, downloaded 0, added 695
+#20 3.914 Progress: resolved 696, reused 696, downloaded 0, added 696, done
+#20 4.069 . prepare$ husky
+#20 4.101 . prepare: .git can't be found
+#20 4.102 . prepare: Done
+#20 4.104 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+#20 4.104 │                                                                              │
+#20 4.104 │   Ignored build scripts: esbuild@0.28.2, protobufjs@7.6.6.                   │
+#20 4.104 │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+#20 4.104 │   to run scripts.                                                            │
+#20 4.104 │                                                                              │
+#20 4.104 ╰──────────────────────────────────────────────────────────────────────────────╯
+#20 4.119 Done in 3.9s using pnpm v10.34.9
+#20 DONE 4.3s
 
-#21 [deps 6/9] COPY packages/core/package.json ./packages/core/package.json
-#21 CACHED
+#14 [base 3/3] WORKDIR /repo
+#14 CACHED
 
-#22 [deps 8/9] COPY packages/testing/package.json ./packages/testing/package.json
-#22 CACHED
+#21 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
+#21 DONE 4.3s
 
-#23 [deps 5/9] COPY packages/contracts/package.json ./packages/contracts/package.json
-#23 CACHED
+#22 [builder 2/5] COPY --from=deps /repo/apps ./apps
+#22 DONE 0.3s
 
-#24 [runner 4/5] COPY --from=builder --chown=root:root /repo/apps/worker/package.json ./package.json
-#24 CACHED
+#23 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#23 DONE 0.1s
 
-#25 [deps 4/9] COPY packages/config/package.json ./packages/config/package.json
-#25 CACHED
+#24 [builder 4/5] COPY . .
+#24 DONE 0.1s
 
-#26 [deps 3/9] COPY apps/worker/package.json ./apps/worker/package.json
-#26 CACHED
+#25 [builder 5/5] RUN pnpm --filter @learny/worker build
+#25 0.490 
+#25 0.490 > @learny/worker@0.0.0 build /repo/apps/worker
+#25 0.490 > node build.mjs
+#25 0.490 
+#25 DONE 0.7s
 
-#27 [runner 5/5] COPY --chown=root:root docker/healthcheck-worker.mjs ./healthcheck.mjs
-#27 CACHED
+#26 [runner 3/5] COPY --from=builder --chown=root:root /repo/apps/worker/dist ./dist
+#26 DONE 0.1s
 
-#28 exporting to image
-#28 exporting layers done
-#28 exporting manifest sha256:3a2b131bfb8d99d6851196fdc21b9afb41e823ed61aff62b22519c56369d6ad4 done
-#28 exporting config sha256:0a391626f0f370fd77672a1597c18abfa130c2c63a6b62bdb859b679ff73fcc0 done
-#28 exporting attestation manifest sha256:66a5eb089d3a02b9000c1a1bbea44c7297986b9c177dfc7130e6c0346fb0a35b 0.0s done
-#28 exporting manifest list sha256:90e5929771a07fa7e46e1292564caf28a224f57b1add77e51d74b1c7ab751424 0.0s done
-#28 naming to docker.io/library/*** done
-#28 unpacking to docker.io/library/*** done
+#27 [runner 4/5] COPY --from=builder --chown=root:root /repo/apps/worker/package.json ./package.json
+#27 DONE 0.1s
+
+#28 [runner 5/5] COPY --chown=root:root docker/healthcheck-worker.mjs ./healthcheck.mjs
 #28 DONE 0.1s
+
+#29 exporting to image
+#29 exporting layers
+#29 exporting layers 0.5s done
+#29 exporting manifest sha256:efa9cce6ff0c9cb55fd2ebb72f4063ce9af65d2ff98afadcf2dacfb2039379b9 0.0s done
+#29 exporting config sha256:f9b482fceb54ee9384bb5bac72d1523b0d03cdfa4b2015fc2e81877e95d2ecb5 0.0s done
+#29 exporting attestation manifest sha256:f84683545e8a75039dddec8de9ae7dfd1b545cb6fd6733ad8d1d956c388b504a 0.0s done
+#29 exporting manifest list sha256:58b94218ec8b126f3b4ffa47c74630105af64efc2f9126af891a6fff740f7949 0.0s done
+#29 naming to docker.io/library/***
+#29 naming to docker.io/library/*** done
+#29 unpacking to docker.io/library/*** 0.1s done
+#29 DONE 0.7s
