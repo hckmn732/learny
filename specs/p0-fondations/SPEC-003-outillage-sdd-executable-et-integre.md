@@ -116,3 +116,5 @@ Toutes les conditions de `docs/engineering/testing.md` §7 sont satisfaites. Les
 ## 15. Décisions et hypothèses
 
 ADR-0001 fixe la boucle, ADR-0068 la source de vérité, ADR-0069 la reprise et les checkpoints, ADR-0050 le stockage des vidéos. ADR-0203 répartit la responsabilité de l'index avec SPEC-006 selon l'ordre de réalisation. La page lit un instantané de l'état au chargement ; toute actualisation volontaire recharge la page, sans canal temps réel.
+
+ADR créé pendant l'implémentation : **ADR-0223** (fonctions pures dans `tools/sdd/core.mjs`, `SDD_ROOT`/`SDD_NOW`, écritures atomiques, capture masquée de l'index, vérification des jetons par `toHaveCSS` en attendant `expectTokens`).
