@@ -8,7 +8,11 @@
     "CLOCK_FIXED_AT",
     "LLM_MODE",
     "NODE_ENV",
-    "PORT"
+    "PORT",
+    "INNGEST_DEV",
+    "INNGEST_SIGNING_KEY",
+    "INNGEST_SIGNING_KEY_FALLBACK",
+    "INNGEST_EVENT_KEY"
   ],
   "tasks": {
     "build": {

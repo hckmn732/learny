@@ -10,6 +10,7 @@
   "scripts": {
     "prepare": "husky",
     "dev": "turbo run dev --filter=@learny/web",
+    "dev:worker": "turbo run dev --filter=@learny/worker",
     "build": "turbo run build",
     "lint": "turbo run lint && pnpm run lint:root",
     "lint:root": "eslint --max-warnings=0 tools *.config.ts *.config.mjs",
