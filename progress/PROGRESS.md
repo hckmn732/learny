@@ -1,27 +1,27 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T21:29:56.036Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T21:43:29.046Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 8 |
+| Terminées | 9 |
 | En cours | 0 |
-| Prêtes | 3 |
+| Prêtes | 2 |
 | En attente de dépendances | 121 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **6.1 %** |
-| Avancement V1 | 6.5 % |
+| **Avancement global** | **6.8 %** |
+| Avancement V1 | 7.3 % |
 | Prochaine action | start SPEC-009 — Configuration, variables d'environnement et secrets |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
-| P0 | Fondations et infrastructure | 8/13 | CP-0 | ⏳ |
+| P0 | Fondations et infrastructure | 9/13 | CP-0 | ⏳ |
 | P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
@@ -46,7 +46,7 @@
 | [SPEC-008](../specs/p0-fondations/SPEC-008-environnement-local-docker.md) | Environnement local Docker | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006, SPEC-007 |
 | [SPEC-009](../specs/p0-fondations/SPEC-009-configuration-variables-d-environnement-et-secrets.md) | Configuration, variables d'environnement et secrets | P0 | 🟢 ready | 0 | — | SPEC-006 |
 | [SPEC-010](../specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md) | Observabilité : journalisation, erreurs, santé | P0 | ⏳ waiting | 0 | — | SPEC-006, SPEC-009 |
-| [SPEC-011](../specs/p0-fondations/SPEC-011-integration-continue.md) | Intégration continue | P0 | 🟢 ready | 0 | — | SPEC-002, SPEC-004, SPEC-008 |
+| [SPEC-011](../specs/p0-fondations/SPEC-011-integration-continue.md) | Intégration continue | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-002, SPEC-004, SPEC-008 |
 | [SPEC-012](../specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md) | Images Docker et déploiement auto-hébergé | P0 | 🟢 ready | 0 | — | SPEC-007, SPEC-008 |
 | [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | ⏳ waiting | 0 | — | SPEC-009, SPEC-011 |
 | [SPEC-101](../specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md) | Paquet db : Drizzle, migrations et harnais de test | P1 | ⏳ waiting | 0 | — | SPEC-008 |
