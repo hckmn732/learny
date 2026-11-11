@@ -104,3 +104,6 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0223](ADR-0223-outillage-sdd-testable-et-index-de-progression-spec-003.md) | Outillage SDD testable et index de progression (SPEC-003) | Déduite | SPEC-003, ADR-0068, ADR-0203 |
 | [ADR-0224](ADR-0224-socle-de-tests-spec-004-projets-gardes-et-collecte.md) | Socle de tests SPEC-004 : projets, gardes et collecte | Déduite | SPEC-004, ADR-0047, ADR-0048, ADR-0050, ADR-0101 |
 | [ADR-0225](ADR-0225-captures-de-reference-deterministes.md) | Captures de référence déterministes | Déduite | SPEC-005 |
+| [ADR-0226](ADR-0226-politique-de-validation-de-l-environnement-et-du-fichier-d-e.md) | Politique de validation de l'environnement et du fichier d'exemple | Déduite | SPEC-009 |
+| [ADR-0227](ADR-0227-frontiere-client-serveur-de-la-configuration-et-validation-a.md) | Frontière client/serveur de la configuration et validation au démarrage | Déduite | SPEC-009, SPEC-006 |
+| [ADR-0228](ADR-0228-tarifs-de-l-ia-ecriture-de-cache-et-effort-de-reflexion.md) | Tarifs de l'IA : écriture de cache et effort de réflexion | Déduite | SPEC-009, SPEC-507, ADR-0073 |

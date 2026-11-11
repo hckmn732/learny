@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-006]
 business_rules: []
 screens: []
-adrs: [ADR-0011, ADR-0045, ADR-0073]
+adrs: [ADR-0011, ADR-0045, ADR-0073, ADR-0226, ADR-0227, ADR-0228]
 visual: demo
 ---
 
@@ -71,8 +71,8 @@ Aucune règle `BR-*` n'est attribuée directement dans le catalogue. `product.ts
 
 ## 9. Fichiers et composants concernés
 
-- **Créés** : `packages/config/src/env.ts`, `packages/config/src/env.test.ts`, `packages/config/src/product.ts`, `packages/config/src/product.test.ts`, `packages/config/src/models.ts`, `packages/config/src/pricing.ts`, `packages/config/test/integration/startup.test.ts`, `apps/web/components/sdd-demos/spec-009.tsx`, `apps/web/e2e/specs/p0/spec-009.spec.ts`.
-- **Modifiés** : `.env.example`, `packages/config/src/index.ts`, `packages/config/package.json` (export serveur), points de démarrage de `apps/web` et `apps/worker`, `apps/web/app/%5Fdev/sdd/registry.ts` et `apps/web/messages/fr.ts`.
+- **Créés** : `packages/config/src/env.ts`, `packages/config/src/env-shared.ts`, `packages/config/src/env-public.ts`, `packages/config/src/server.ts`, `packages/config/src/env.test.ts`, `packages/config/src/product.ts`, `packages/config/src/product.test.ts`, `packages/config/src/models.ts`, `packages/config/src/pricing.ts`, `packages/config/test/integration/startup.test.ts`, `apps/web/lib/server-env.ts`, `apps/web/lib/sdd-config-demo.ts`, `apps/web/components/sdd-demos/spec-009.tsx`, `apps/web/e2e/specs/p0/spec-009.spec.ts`, `apps/web/test/integration/config-startup.test.ts`.
+- **Modifiés** : `.env.example`, `packages/config/src/index.ts`, `packages/config/package.json` (export serveur), `packages/config/tsconfig.json`, points de démarrage de `apps/web` (`instrumentation.ts`) et `apps/worker` (`main`), lint de frontière `eslint.config.mjs`, `apps/web/app/%5Fdev/sdd/registry.ts` et `apps/web/messages/fr.ts`.
 - **Lus / réutilisés** : `sddPagesEnabled` de SPEC-001, `HOSTING_REGIONS`, `docs/product/business-rules.md`, `docs/architecture/ai.md`.
 
 ## 10. Interface et conformité visuelle
@@ -114,3 +114,9 @@ Toutes les conditions de `docs/engineering/testing.md` §7 passent. Le test d'é
 ## 15. Décisions et hypothèses
 
 ADR-0011 fixe l'accès à l'IA fournie, ADR-0045 l'identité légale et ADR-0073 les tarifs de référence. Les constantes de `product.ts` sont des miroirs des règles métier et ne créent pas de nouvelles bornes. La correction de l'exemple SDD aligne le dépôt sur la valeur déjà imposée par SPEC-001, SPEC-006 et ADR-0049.
+
+Décisions prises pendant l'implémentation (aucune sollicitation de l'utilisateur) :
+
+- **ADR-0226** — politique de validation de l'environnement : listes de clés (serveur, publiques, outillage, standard), Sentry facultatif, erreurs réduites à des noms et codes sûrs, normalisation limitée aux énumérations, modes simulés interdits en production, `ENABLE_SDD_PAGES` activé par la seule chaîne `true`, `TZ` IANA.
+- **ADR-0227** — frontière client/serveur : sous-entrée `@learny/config/server`, adaptateur unique `apps/web/lib/server-env.ts`, lint `no-restricted-imports` et test de scan des sources, validation au démarrage (`instrumentation.ts`, `main()` du worker) ; le cas production de SPEC-006 vérifie désormais le refus de démarrage.
+- **ADR-0228** — tarifs : écriture de cache à 125 % de l'entrée et effort de réflexion par tâche, en complément d'ADR-0073.
