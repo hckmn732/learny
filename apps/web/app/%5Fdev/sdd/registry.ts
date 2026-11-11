@@ -14,4 +14,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Hooks Git, conventions de commit et protection des secrets',
     load: () => import('../../../components/sdd-demos/spec-002'),
   },
+  'SPEC-007': {
+    title: 'Jobs durables',
+    load: () => import('../../../components/sdd-demos/spec-007'),
+  },
 };
