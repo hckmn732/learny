@@ -38,6 +38,10 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Configuration',
     load: () => import('../../../components/sdd-demos/spec-009'),
   },
+  'SPEC-010': {
+    title: 'Observabilité',
+    load: () => import('../../../components/sdd-demos/spec-010'),
+  },
   'SPEC-011': {
     title: 'Intégration continue',
     load: () => import('../../../components/sdd-demos/spec-011'),
