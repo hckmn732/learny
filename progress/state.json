@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T18:11:51.784Z",
+  "updatedAt": "2026-11-11T19:00:04.653Z",
   "specs": {
     "SPEC-001": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-11T19:00:04.653Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-001-monorepo-application-web-minimale-et-soc",
       "commit": null,
       "lastError": null,
       "validations": {}
