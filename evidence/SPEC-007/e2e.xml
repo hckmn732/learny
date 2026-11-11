@@ -1,0 +1,39 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="2.971953">
+<testsuite name="p0/spec-007.spec.ts" timestamp="2026-11-11T20:57:27.083Z" hostname="desktop" tests="3" failures="0" skipped="0" time="1.971" errors="0">
+<testcase name="exécute un job SDD @SPEC-007" classname="p0/spec-007.spec.ts" time="0.602">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-007-exécute-un-job-SDD-SPEC-007-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-exécute-un-job-SDD-SPEC-007-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-exécute-un-job-SDD-SPEC-007-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="signale les échecs sans détail technique @SPEC-007" classname="p0/spec-007.spec.ts" time="0.449">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-007-signale-les-éc-bf36c-s-détail-technique-SPEC-007-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-signale-les-éc-bf36c-s-détail-technique-SPEC-007-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-signale-les-éc-bf36c-s-détail-technique-SPEC-007-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration des jobs conforme @SPEC-007 @visual" classname="p0/spec-007.spec.ts" time="0.92">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-007-démonstration-des-jobs-conforme-SPEC-007-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-démonstration-des-jobs-conforme-SPEC-007-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-démonstration-des-jobs-conforme-SPEC-007-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-007-démonstration-des-jobs-conforme-SPEC-007-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
