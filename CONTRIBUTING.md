@@ -93,10 +93,24 @@ node tools/sdd/adr.mjs new "Titre" --context "…" --decision "…" --links "SPE
 
 Modifier `design/maquettes/` ou `docs/legacy/` ; inventer une preuve ou un résultat ; affaiblir un test pour le faire passer ; créer un dépôt distant, modifier les remotes, pousser en force, réécrire l'historique de `main` ; committer un secret ; implémenter hors périmètre (ADR-0005).
 
-## 9. Pour le porteur du projet : configuration du dépôt GitHub
+## 9. Intégration continue (SPEC-011)
+
+La CI GitHub Actions (`.github/workflows/ci.yml`, ADR-0052) exécute toujours l’audit SDD, la recherche de secrets (gitleaks sur l’historique + analyseur intégré) et `pnpm audit` (seuil bloquant `high`, variable `AUDIT_LEVEL`). Dès que `pnpm-lock.yaml` existe, elle ajoute lint, typecheck, build, tests unitaires avec couverture, intégration sur Supabase local et e2e Chromium avec axe et tests visuels. Les rapports, captures et vidéos sont publiés en artefacts même en échec (conservation explicite : 14 jours pour les tests, 30 jours pour la sécurité). Aucun job ne prétend à un résultat vert si une commande échoue.
+
+Contrôle local des workflows (aucun appel à l’API GitHub) :
+
+```bash
+pnpm ci:check                # actionlint + invariants des jobs, variables, artefacts et scripts
+```
+
+`actionlint` est requis (installation : <https://github.com/rhysd/actionlint#installation>) ; son absence fait échouer `ci:check` avec l’instruction d’installation (CL-4). Si [`act`](https://github.com/nektos/act) est installé, un essai local du workflow peut être lancé ; sinon `ci:check` le signale sans prétendre qu’une exécution GitHub a eu lieu. Le titre des pull requests est vérifié par `.github/workflows/pr-title.yml` avec la configuration commitlint commune (format de la section 4, y compris `merge(SPEC-xxx): …`).
+
+Les tests de la CI ne contactent aucun service payant : `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`, `LLM_MODE=mock`, `STRIPE_MODE=mock`, `EMAIL_MODE=memory`, `PUSH_MODE=mock`, `ENABLE_SDD_PAGES=true`.
+
+## 10. Pour le porteur du projet : configuration du dépôt GitHub
 
 Le dépôt `https://github.com/hckmn732/learny.git` est créé et administré par le porteur du projet. Réglages recommandés (Settings) :
 
-1. **Branches → Branch protection rule** sur `main` : exiger la réussite des checks `Audit du référentiel`, `Recherche de secrets`, `Lint, types, build, unitaires`, `Intégration (Supabase local)`, `E2E et conformité visuelle (Chromium)` ; interdire les push forcés et la suppression ; conserver l'historique des fusions `--no-ff` (pas de squash ni de rebase à la fusion).
+1. **Branches → Branch protection rule** sur `main` : exiger la réussite des checks `Audit du référentiel`, `Sécurité (secrets et dépendances)`, `Lint, types, build, unitaires`, `Intégration (Supabase local)`, `E2E et conformité visuelle (Chromium)` et `Titre de PR conventionnel` ; interdire les push forcés et la suppression ; conserver l’historique des fusions `--no-ff` (pas de squash ni de rebase à la fusion).
 2. **Secrets and variables → Actions** : ajouter les secrets des services gérés lorsque SPEC-013 les demande (Supabase, Vercel, Anthropic, Voyage, Resend, Stripe, Sentry, Inngest). Leur absence est consignée comme blocage externe dans `progress/blockers.md`, jamais contournée.
 3. **Git LFS** : activé par défaut sur GitHub ; surveiller le quota de stockage des vidéos de preuves.
