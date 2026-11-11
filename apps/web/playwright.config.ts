@@ -84,6 +84,8 @@ export default defineConfig({
       ...TEST_SERVER_ENV,
       ENABLE_SDD_PAGES: 'true',
       APP_ENV: 'test',
+      // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
+      SDD_STACK_DEMO: 'true',
     },
   },
 });
