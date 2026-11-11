@@ -1,0 +1,2 @@
+pnpm exec lint-staged
+pnpm exec tsx tools/security/check-secrets.ts --staged
