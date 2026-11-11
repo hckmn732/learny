@@ -188,5 +188,6 @@ Définition commune de `docs/engineering/testing.md` §7, plus : le dépôt Git 
 
 - ADR appliqués : ADR-0002 (monorepo), ADR-0003 (versions), ADR-0004 (Next.js, API `/api/v1`), ADR-0047 (horloge injectable, `CLOCK_FIXED_AT`), ADR-0049 (pages de démonstration), ADR-0070 (Vitest, Playwright).
 - ADR créés : **ADR-0100** (amorçage Git et identité locale de l'agent), **ADR-0101** (exécution des tests : scripts racine appelant directement Vitest et le lanceur Playwright, projets, port 3100, chemins des rapports, exemption de `tools/sdd/` pour la règle d'horloge), **ADR-0102** (pages de démonstration dans le dossier `app/%5Fdev/`, activation lue à l'exécution, coquille commune).
+- ADR créés pendant l'implémentation : **ADR-0220** (lint de `tools/sdd`, exclusions Prettier, `lib/health.ts`, `globalDependencies` Turborepo), **ADR-0221** (versions compatibles retenues : TypeScript 6.0, ESLint 9, `@types/node` 24).
 - Hypothèse : les paquets internes sont consommés en TypeScript source (`transpilePackages`) ; un paquet n'a une étape `build` que s'il doit être exécuté hors de Next.js (ex. worker, SPEC-007).
 - Hypothèse : si Next.js ≥ 16 est la dernière version stable, les fichiers et API sont ceux de cette version (ex. `proxy.ts` remplace `middleware.ts`) ; la spécification n'utilise aucune API dépréciée.
