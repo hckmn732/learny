@@ -7,13 +7,25 @@ import { expect, test } from '@playwright/test';
 
 import {
   indexCatalog,
+  nextAction,
   normalizeState,
   progressSummary,
+  type DisplayStatus,
   type RawCatalog,
 } from '../../../../../tools/sdd/core.mjs';
 
 const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const FIXED_TIME = new Date('2026-11-11T12:20:00Z');
+
+const STATUS_LABELS: Record<DisplayStatus, string> = {
+  pending: 'En attente',
+  ready: 'Prête',
+  waiting: 'En attente de dépendances',
+  in_progress: 'En cours',
+  done: 'Terminée',
+  blocked: 'Bloquée',
+  dependency_blocked: 'Bloquée par une dépendance',
+};
 
 function expectedSummary() {
   const catalog = indexCatalog(
@@ -23,7 +35,7 @@ function expectedSummary() {
     catalog,
     JSON.parse(fs.readFileSync(path.join(ROOT, 'progress/state.json'), 'utf8')),
   );
-  return progressSummary(catalog, st);
+  return { ...progressSummary(catalog, st), next: nextAction(catalog, st) };
 }
 
 test.beforeEach(async ({ page }) => {
@@ -45,14 +57,20 @@ test('consulte la progression SDD @SPEC-003', async ({ page }) => {
     `${String(sum.done)} spécification(s) terminée(s) sur ${String(sum.total)}`,
   );
 
-  // SPEC-003 is the specification being validated.
-  await expect(page.getByTestId('sdd-index-next')).toContainText('Reprendre SPEC-003');
-  await expect(page.getByTestId('sdd-spec-SPEC-001').getByTestId('sdd-spec-status')).toHaveText(
-    'Terminée',
-  );
-  await expect(page.getByTestId('sdd-spec-SPEC-003').getByTestId('sdd-spec-status')).toHaveText(
-    'En cours',
-  );
+  // Expectations follow the live state: the index must mirror state.json, whatever spec is running.
+  const next = sum.next;
+  if (next.kind === 'resume' || next.kind === 'start') {
+    const verb = next.kind === 'resume' ? 'Reprendre' : 'Démarrer';
+    await expect(page.getByTestId('sdd-index-next')).toContainText(`${verb} ${next.spec.id}`);
+  } else if (next.kind === 'checkpoint') {
+    await expect(page.getByTestId('sdd-index-next')).toContainText(`Checkpoint ${next.checkpoint}`);
+  }
+  for (const id of ['SPEC-001', 'SPEC-003', 'SPEC-013']) {
+    const status = sum.displayStatuses[id] ?? 'pending';
+    await expect(page.getByTestId(`sdd-spec-${id}`).getByTestId('sdd-spec-status')).toHaveText(
+      STATUS_LABELS[status],
+    );
+  }
   await expect(page.getByTestId('sdd-index-specs').getByRole('row')).toHaveCount(sum.total + 1);
 
   // An unregistered demo is not a link.
