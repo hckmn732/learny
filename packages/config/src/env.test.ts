@@ -155,12 +155,13 @@ describe('[SPEC-009] environment', () => {
     expect(parseServerEnv({ ENABLE_SDD_PAGES: 'true' }, 'local').ENABLE_SDD_PAGES).toBe(true);
   });
 
-  it('only accepts the exact string true for ENABLE_SDD_PAGES (EF-4)', () => {
+  it('only enables the SDD pages with the exact string true (EF-4)', () => {
+    expect(parseServerEnv({ ENABLE_SDD_PAGES: 'true' }).ENABLE_SDD_PAGES).toBe(true);
     expect(parseServerEnv({ ENABLE_SDD_PAGES: 'false' }).ENABLE_SDD_PAGES).toBe(false);
     expect(parseServerEnv({}).ENABLE_SDD_PAGES).toBe(false);
+    // Any other value disables the pages, exactly like the runtime guard of SPEC-006.
     for (const value of ['1', 'TRUE', 'yes']) {
-      const error = caught(() => parseServerEnv({ ENABLE_SDD_PAGES: value }));
-      expect(error.names).toEqual(['ENABLE_SDD_PAGES']);
+      expect(parseServerEnv({ ENABLE_SDD_PAGES: value }).ENABLE_SDD_PAGES).toBe(false);
     }
   });
 

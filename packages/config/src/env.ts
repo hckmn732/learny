@@ -245,7 +245,9 @@ const serverFields = {
   LEGAL_CGU_VERSION: isoDate,
   LEGAL_PRIVACY_VERSION: isoDate,
   CLOCK_FIXED_AT: isoInstant.optional(),
-  ENABLE_SDD_PAGES: booleanString,
+  // EF-4: only the exact string `true` enables the demo pages; any other value disables them
+  // (the runtime guard of SPEC-006 keeps answering 404 instead of crashing).
+  ENABLE_SDD_PAGES: z.preprocess(trimmed, z.string()).transform((value) => value === 'true'),
   DEEPGRAM_API_KEY: secret.optional(),
 } as const;
 
