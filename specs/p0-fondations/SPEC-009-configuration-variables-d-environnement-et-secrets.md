@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-006]
 business_rules: []
 screens: []
-adrs: [ADR-0011, ADR-0045, ADR-0073, ADR-0226, ADR-0227, ADR-0228]
+adrs: [ADR-0011, ADR-0045, ADR-0073, ADR-0227, ADR-0228, ADR-0229]
 visual: demo
 ---
 
@@ -117,6 +117,6 @@ ADR-0011 fixe l'accès à l'IA fournie, ADR-0045 l'identité légale et ADR-0073
 
 Décisions prises pendant l'implémentation (aucune sollicitation de l'utilisateur) :
 
-- **ADR-0226** — politique de validation de l'environnement : listes de clés (serveur, publiques, outillage, standard), Sentry facultatif, erreurs réduites à des noms et codes sûrs, normalisation limitée aux énumérations, modes simulés interdits en production, `ENABLE_SDD_PAGES` activé par la seule chaîne `true`, `TZ` IANA.
-- **ADR-0227** — frontière client/serveur : sous-entrée `@learny/config/server`, adaptateur unique `apps/web/lib/server-env.ts`, lint `no-restricted-imports` et test de scan des sources, validation au démarrage (`instrumentation.ts`, `main()` du worker) ; le cas production de SPEC-006 vérifie désormais le refus de démarrage.
-- **ADR-0228** — tarifs : écriture de cache à 125 % de l'entrée et effort de réflexion par tâche, en complément d'ADR-0073.
+- **ADR-0227** — politique de validation de l'environnement : listes de clés (serveur, publiques, outillage, standard), Sentry facultatif, erreurs réduites à des noms et codes sûrs, normalisation limitée aux énumérations, modes simulés interdits en production, `ENABLE_SDD_PAGES` activé par la seule chaîne `true`, `TZ` IANA.
+- **ADR-0228** — frontière client/serveur : sous-entrée `@learny/config/server`, adaptateur unique `apps/web/lib/server-env.ts`, lint `no-restricted-imports` et test de scan des sources, validation au démarrage (`instrumentation.ts`, `main()` du worker) ; le cas production de SPEC-006 vérifie désormais le refus de démarrage.
+- **ADR-0229** — tarifs : écriture de cache à 125 % de l'entrée et effort de réflexion par tâche, en complément d'ADR-0073.
