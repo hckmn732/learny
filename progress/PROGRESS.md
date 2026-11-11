@@ -1,27 +1,27 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T18:11:51.827Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T19:07:36.776Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 0 |
+| Terminées | 1 |
 | En cours | 0 |
-| Prêtes | 1 |
-| En attente de dépendances | 131 |
+| Prêtes | 4 |
+| En attente de dépendances | 127 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **0.0 %** |
-| Avancement V1 | 0.0 % |
-| Prochaine action | start SPEC-001 — Monorepo, application web minimale et socle de tests |
+| **Avancement global** | **0.8 %** |
+| Avancement V1 | 0.8 % |
+| Prochaine action | start SPEC-002 — Hooks Git, conventions de commit et protection des secrets |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
-| P0 | Fondations et infrastructure | 0/13 | CP-0 | ⏳ |
+| P0 | Fondations et infrastructure | 1/13 | CP-0 | ⏳ |
 | P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
@@ -36,13 +36,13 @@
 
 | Spécification | Titre | Phase | Statut | Tentatives | Validations | Dépendances |
 |---|---|---|---|---|---|---|
-| [SPEC-001](../specs/p0-fondations/SPEC-001-monorepo-application-web-minimale-et-socle-de-test.md) | Monorepo, application web minimale et socle de tests | P0 | 🟢 ready | 0 | — | — |
-| [SPEC-002](../specs/p0-fondations/SPEC-002-hooks-git-conventions-de-commit-et-protection-des-.md) | Hooks Git, conventions de commit et protection des secrets | P0 | ⏳ waiting | 0 | — | SPEC-001 |
-| [SPEC-003](../specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md) | Outillage SDD exécutable et intégré | P0 | ⏳ waiting | 0 | — | SPEC-001 |
+| [SPEC-001](../specs/p0-fondations/SPEC-001-monorepo-application-web-minimale-et-socle-de-test.md) | Monorepo, application web minimale et socle de tests | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
+| [SPEC-002](../specs/p0-fondations/SPEC-002-hooks-git-conventions-de-commit-et-protection-des-.md) | Hooks Git, conventions de commit et protection des secrets | P0 | 🟢 ready | 0 | — | SPEC-001 |
+| [SPEC-003](../specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md) | Outillage SDD exécutable et intégré | P0 | 🟢 ready | 0 | — | SPEC-001 |
 | [SPEC-004](../specs/p0-fondations/SPEC-004-socle-de-tests-complet-et-collecte-des-preuves.md) | Socle de tests complet et collecte des preuves | P0 | ⏳ waiting | 0 | — | SPEC-001, SPEC-003 |
 | [SPEC-005](../specs/p0-fondations/SPEC-005-references-visuelles-generees-depuis-les-maquettes.md) | Références visuelles générées depuis les maquettes | P0 | ⏳ waiting | 0 | — | SPEC-004 |
-| [SPEC-006](../specs/p0-fondations/SPEC-006-application-web-configuration-de-base-sante-et-pag.md) | Application web : configuration de base, santé et pages de démonstration | P0 | ⏳ waiting | 0 | — | SPEC-001 |
-| [SPEC-007](../specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md) | Worker Inngest et paquet jobs | P0 | ⏳ waiting | 0 | — | SPEC-001 |
+| [SPEC-006](../specs/p0-fondations/SPEC-006-application-web-configuration-de-base-sante-et-pag.md) | Application web : configuration de base, santé et pages de démonstration | P0 | 🟢 ready | 0 | — | SPEC-001 |
+| [SPEC-007](../specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md) | Worker Inngest et paquet jobs | P0 | 🟢 ready | 0 | — | SPEC-001 |
 | [SPEC-008](../specs/p0-fondations/SPEC-008-environnement-local-docker.md) | Environnement local Docker | P0 | ⏳ waiting | 0 | — | SPEC-006, SPEC-007 |
 | [SPEC-009](../specs/p0-fondations/SPEC-009-configuration-variables-d-environnement-et-secrets.md) | Configuration, variables d'environnement et secrets | P0 | ⏳ waiting | 0 | — | SPEC-006 |
 | [SPEC-010](../specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md) | Observabilité : journalisation, erreurs, santé | P0 | ⏳ waiting | 0 | — | SPEC-006, SPEC-009 |
