@@ -2,6 +2,7 @@
 export const ROOT: string;
 export const CI_WORKFLOW: string;
 export const PR_TITLE_WORKFLOW: string;
+export const DEPLOY_WORKFLOW: string;
 export const REQUIRED_ENV: Readonly<Record<string, string>>;
 export const REQUIRED_SCRIPTS: readonly string[];
 export const REQUIRED_JOBS: readonly string[];

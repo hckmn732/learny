@@ -11,6 +11,7 @@ import { parse } from 'yaml';
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const CI_WORKFLOW = '.github/workflows/ci.yml';
 export const PR_TITLE_WORKFLOW = '.github/workflows/pr-title.yml';
+export const DEPLOY_WORKFLOW = '.github/workflows/deploy.yml';
 
 /** Modes simulés et horloge imposés (EF-8, ADR-0047, ADR-0048). */
 export const REQUIRED_ENV = Object.freeze({
@@ -578,7 +579,9 @@ export function commandExists(command, versionArg = '--version') {
 }
 
 export function runActionlint(root = ROOT) {
-  const files = [CI_WORKFLOW, PR_TITLE_WORKFLOW].map((relative) => path.join(root, relative));
+  const files = [CI_WORKFLOW, PR_TITLE_WORKFLOW, DEPLOY_WORKFLOW].map((relative) =>
+    path.join(root, relative),
+  );
   const result = spawnQuiet('actionlint', ['-no-color', ...files], { cwd: root });
   if (result.error && result.error.code === 'ENOENT')
     return { available: false, code: 1, output: '' };
