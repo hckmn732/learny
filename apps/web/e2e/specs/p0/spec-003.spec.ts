@@ -73,8 +73,8 @@ test('consulte la progression SDD @SPEC-003', async ({ page }) => {
   }
   await expect(page.getByTestId('sdd-index-specs').getByRole('row')).toHaveCount(sum.total + 1);
 
-  // An unregistered demo is not a link.
-  await expect(page.getByTestId('sdd-spec-SPEC-013').getByRole('link')).toHaveCount(0);
+  // A specification without a registered demo is not a link (SPEC-101 is still pending).
+  await expect(page.getByTestId('sdd-spec-SPEC-101').getByRole('link')).toHaveCount(0);
 
   await page.getByTestId('sdd-spec-SPEC-001').getByRole('link', { name: 'SPEC-001' }).click();
   await expect(page).toHaveURL(/\/_dev\/sdd\/SPEC-001$/);
