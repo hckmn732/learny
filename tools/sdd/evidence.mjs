@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { headCommit, nowIso, P, ROOT, shOk, specCriteria } from './lib.mjs';
+import { headCommit, nowIso, P, ROOT, shOk, specCriteria, writeFileAtomic } from './lib.mjs';
 
 function copy(src, dest) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -65,11 +65,11 @@ export function collectEvidence(spec, resultsDir = path.join(ROOT, 'test-results
   const acc = path.join(dir, 'acceptance.md');
   if (!fs.existsSync(acc)) {
     const crit = specCriteria(spec);
-    fs.writeFileSync(acc, `# ${spec.id} — critères d'acceptation\n\nRemplacer ⬜ par ✅ (ou ❌) et indiquer la preuve (test, capture, mesure) pour chaque critère.\n\n${crit.map((c) => `- ⬜ ${c} — preuve : `).join('\n')}\n`, 'utf8');
+    writeFileAtomic(acc, `# ${spec.id} — critères d'acceptation\n\nRemplacer ⬜ par ✅ (ou ❌) et indiquer la preuve (test, capture, mesure) pour chaque critère.\n\n${crit.map((c) => `- ⬜ ${c} — preuve : `).join('\n')}\n`);
   }
 
   const summary = `# Preuves — ${spec.id} : ${spec.title}\n\n- Date : ${nowIso()}\n- Commit : ${headCommit() || 'n/a'}\n- Spécification : \`${spec.path}\`\n\n## Rapports\n\n- \`unit.json\`, \`integration.json\` (Vitest), \`e2e.json\`, \`e2e.xml\` (Playwright), \`checks.json\` (résultat des validations)\n- \`acceptance.md\` (critères d'acceptation)\n\n## Vidéos\n\n${lines.join('\n') || '- aucune'}\n\n## Captures\n\n- \`screenshots/\` : captures finales des tests\n- \`visual/\` : comparaisons maquette ↔ application et diff\n`;
-  fs.writeFileSync(path.join(dir, 'summary.md'), summary, 'utf8');
+  writeFileAtomic(path.join(dir, 'summary.md'), summary);
   return { dir, videos: videos.length };
 }
 
