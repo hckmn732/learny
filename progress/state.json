@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T19:29:30.637Z",
+  "updatedAt": "2026-11-11T19:29:39.535Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -156,11 +156,11 @@
       }
     },
     "SPEC-004": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-11T19:29:39.535Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-004-socle-de-tests-complet-et-collecte-des-p",
       "commit": null,
       "lastError": null,
       "validations": {}
