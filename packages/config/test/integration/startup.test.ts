@@ -98,8 +98,9 @@ describe('[SPEC-009] startup', () => {
     expect(example.ENABLE_SDD_PAGES).toBe('true');
     expect(env.LLM_MODE).toBe('mock');
 
-    // The historical value `1` is refused by the schema and by the runtime guard.
-    expect(() => parseServerEnv({ ...example, ENABLE_SDD_PAGES: '1' })).toThrow(/ENABLE_SDD_PAGES/);
+    // The historical value `1` fails the coherence check above (the file must say `true`) and
+    // disables the pages at runtime, exactly like the guard of SPEC-006 (ADR-0226).
+    expect(parseServerEnv({ ...example, ENABLE_SDD_PAGES: '1' }).ENABLE_SDD_PAGES).toBe(false);
   });
 
   it('versions .env.example without any secret and ignores real env files (ET-5)', () => {

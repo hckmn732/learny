@@ -28,7 +28,8 @@ function sources(dir: string): string[] {
     if (SKIPPED.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) files.push(...sources(full));
-    else if (/\.tsx?$/.test(entry.name)) files.push(full);
+    // Tests may quote an import in a lint probe: they never run in the browser bundle.
+    else if (/\.tsx?$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name)) files.push(full);
   }
   return files;
 }
