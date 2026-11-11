@@ -108,3 +108,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0227](ADR-0227-politique-de-validation-de-l-environnement-et-du-fichier-d-e.md) | Politique de validation de l'environnement et du fichier d'exemple | Déduite | SPEC-009 |
 | [ADR-0228](ADR-0228-frontiere-client-serveur-de-la-configuration-et-validation-a.md) | Frontière client/serveur de la configuration et validation au démarrage | Déduite | SPEC-009, SPEC-006 |
 | [ADR-0229](ADR-0229-tarifs-de-l-ia-ecriture-de-cache-et-effort-de-reflexion.md) | Tarifs de l'IA : écriture de cache et effort de réflexion | Déduite | SPEC-009, SPEC-507, ADR-0073 |
+| [ADR-0230](ADR-0230-entree-serveur-de-learny-core-et-composants-de-sante.md) | Entrée serveur de @learny/core et composants de santé | Déduite | SPEC-010 |
