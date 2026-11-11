@@ -34,4 +34,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Environnement local',
     load: () => import('../../../components/sdd-demos/spec-008'),
   },
+  'SPEC-011': {
+    title: 'Intégration continue',
+    load: () => import('../../../components/sdd-demos/spec-011'),
+  },
 };
