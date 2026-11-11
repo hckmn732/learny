@@ -1,14 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { DemoShell } from '../../../components/sdd/demo-shell';
-import { sddPagesEnabled } from '../../../lib/sdd-pages';
+import { loadSddIndex } from '../../../lib/sdd-index';
 import { readSddStatus, type PublicNextAction, type PublicSpec } from '../../../lib/sdd-status';
 import { fr } from '../../../messages/fr';
 
 import { sddDemos } from './registry';
 
 export const dynamic = 'force-dynamic';
+
+// Demo pages are never indexed (SPEC-006, ET-3).
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const t = fr.sdd.index;
 
@@ -54,8 +58,31 @@ const regionClass = 'mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:
 const cellClass = 'py-2 pr-4 align-top';
 
 export default function SddIndexPage() {
-  if (!sddPagesEnabled()) notFound();
-  const status = readSddStatus();
+  // The guard runs before the catalog is read (SPEC-006, ET-3).
+  const index = loadSddIndex(process.env, sddDemos, readSddStatus);
+  if (index === null) notFound();
+
+  if (index.kind === 'minimal') {
+    // SPEC-003 not delivered yet: explicit minimal state (ADR-0203).
+    return (
+      <DemoShell specId={t.surtitle} title={t.title}>
+        <section data-testid="sdd-index-minimal" className={sectionClass}>
+          <p aria-live="polite">{t.minimal}</p>
+          <ul className="mt-4">
+            {index.demos.map((d) => (
+              <li key={d.id}>
+                <Link href={`/_dev/sdd/${d.id}`} className="font-mono underline">
+                  {d.id}
+                </Link>{' '}
+                — {d.title}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </DemoShell>
+    );
+  }
+  const status = index.status;
 
   if (!status.ok) {
     return (

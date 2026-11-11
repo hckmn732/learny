@@ -117,4 +117,4 @@ Toutes les conditions de `docs/engineering/testing.md` §7 sont vérifiées. La 
 
 ## 15. Décisions et hypothèses
 
-ADR-0047 fixe l'instant, ADR-0048 le mode IA simulé, ADR-0050 les vidéos et ADR-0070 les outils de test. ADR-0034 et `testing.md` §6 fixent les seuils visuels. Les références de maquette arrivent avec SPEC-005 ; l'outil de comparaison est testé sur de petits PNG déterministes créés par le test, sans les présenter comme des preuves produit.
+ADR-0047 fixe l'instant, ADR-0048 le mode IA simulé, ADR-0050 les vidéos et ADR-0070 les outils de test. ADR-0034 et `testing.md` §6 fixent les seuils visuels. Les références de maquette arrivent avec SPEC-005 ; l'outil de comparaison est testé sur de petits PNG déterministes créés par le test, sans les présenter comme des preuves produit. ADR créé pendant l'implémentation : **ADR-0224** (projets Playwright, gardes IA et horloge, `expectScreenshotBaseline`, collecte des pièces jointes réelles, base de données reportée à SPEC-101).

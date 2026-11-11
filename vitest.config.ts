@@ -1,5 +1,20 @@
 import { defineConfig } from 'vitest/config';
 
+import { assertMockLlm } from './packages/testing/src/env';
+
+// A real AI provider is refused before any test starts (ADR-0048, SPEC-004 CL-5).
+assertMockLlm(process.env);
+
+// Line coverage floors (docs/engineering/testing.md §1), enforced from the checkpoint where each
+// package exists: a glob that matches no file is ignored.
+const COVERAGE_FLOORS = {
+  'packages/learning-engine/src/**': { lines: 80 },
+  'packages/bricks/src/**': { lines: 80 },
+  'packages/core/src/**': { lines: 80 },
+  'packages/llm/src/budget/**': { lines: 80 },
+  'packages/services/src/**': { lines: 70 },
+};
+
 export default defineConfig({
   test: {
     passWithNoTests: true,
@@ -11,7 +26,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: 'coverage',
-      reporter: ['text-summary', 'json-summary', 'html'],
+      reporter: ['text', 'text-summary', 'json-summary', 'html'],
+      include: ['packages/*/src/**/*.{ts,tsx}', 'apps/web/{app,components,lib}/**/*.{ts,tsx}'],
+      exclude: ['**/*.test.{ts,tsx}', '**/*.d.ts'],
+      thresholds: COVERAGE_FLOORS,
     },
     projects: [
       {

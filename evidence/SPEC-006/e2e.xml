@@ -1,0 +1,37 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="3.771215">
+<testsuite name="p0/spec-006.spec.ts" timestamp="2026-11-11T20:51:30.913Z" hostname="desktop" tests="3" failures="0" skipped="0" time="2.787" errors="0">
+<testcase name="inspecte la santé @SPEC-006" classname="p0/spec-006.spec.ts" time="0.588">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-006-inspecte-la-santé-SPEC-006-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-inspecte-la-santé-SPEC-006-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-inspecte-la-santé-SPEC-006-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="répond 404 hors garde et pour un identifiant inconnu @SPEC-006" classname="p0/spec-006.spec.ts" time="1.172">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-006-répond-404-hor-c9b17-dentifiant-inconnu-SPEC-006-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-répond-404-hor-c9b17-dentifiant-inconnu-SPEC-006-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-répond-404-hor-c9b17-dentifiant-inconnu-SPEC-006-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration web conforme @SPEC-006 @visual" classname="p0/spec-006.spec.ts" time="1.027">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-006-démonstration-web-conforme-SPEC-006-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-démonstration-web-conforme-SPEC-006-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-006-démonstration-web-conforme-SPEC-006-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

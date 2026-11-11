@@ -156,3 +156,32 @@ export function renderProgressMarkdown(catalog, st, now) {
   md += `\nDétails : [anomalies.md](anomalies.md), [blockers.md](blockers.md).\n`;
   return md;
 }
+
+/** Résultats Playwright des tests étiquetés @tag : réussis, échoués, vidéos, tests @visual réussis. */
+export function summarizePlaywright(report, tag) {
+  const out = { passed: 0, failed: 0, videos: 0, visual: 0 };
+  const walk = (suite) => {
+    for (const sp of suite.specs ?? []) {
+      if (!sp.title.includes(`@${tag}`) && !(sp.tags ?? []).includes(`@${tag}`)) continue;
+      const isVisual = sp.title.includes('@visual') || (sp.tags ?? []).includes('@visual');
+      for (const t of sp.tests ?? []) for (const r of t.results ?? []) {
+        if (r.status === 'passed') { out.passed += 1; if (isVisual) out.visual += 1; }
+        else if (r.status !== 'skipped') out.failed += 1;
+        out.videos += (r.attachments ?? []).filter((a) => a.name === 'video').length;
+      }
+    }
+    for (const sub of suite.suites ?? []) walk(sub);
+  };
+  for (const su of report?.suites ?? []) walk(su);
+  return out;
+}
+
+/** Étape e2e réussie : code 0, aucun échec, au moins un test réussi et au moins une vidéo (CL-6). */
+export function e2eVerdict(code, summary) {
+  return code === 0 && summary.failed === 0 && summary.passed > 0 && summary.videos > 0;
+}
+
+/** Étape visuelle réussie : au moins un test @visual réussi, aucun échec. */
+export function visualVerdict(summary) {
+  return summary.visual > 0 && summary.failed === 0;
+}

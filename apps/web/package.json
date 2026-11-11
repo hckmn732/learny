@@ -14,6 +14,7 @@
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/lint": "^21.2.4",
     "@learny/config": "workspace:*",
+    "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/jobs": "workspace:*",
     "inngest": "^4.26.2",
@@ -23,6 +24,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@learny/testing": "workspace:*",
     "@tailwindcss/postcss": "^4.3.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",

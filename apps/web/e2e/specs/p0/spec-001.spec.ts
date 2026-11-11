@@ -14,7 +14,8 @@ test('accueil provisoire et santé @SPEC-001', async ({ page, request }) => {
   const health = await request.get('/api/v1/health');
   expect(health.status()).toBe(200);
   expect(health.headers()['cache-control']).toBe('no-store');
-  expect(await health.json()).toEqual({ status: 'ok' });
+  // SPEC-006 enriched the body; before SPEC-101 the database is not configured (status degraded).
+  expect(await health.json()).toMatchObject({ status: 'degraded' });
 
   const post = await request.post('/api/v1/health');
   expect(post.status()).toBe(405);
@@ -37,7 +38,7 @@ test('page de démonstration SPEC-001 @SPEC-001', async ({ page }) => {
 
   const health = page.getByTestId('spec-001-health');
   await expect(health.getByRole('heading', { level: 2 })).toHaveText("Santé de l'API");
-  await expect(health).toContainText('status : ok');
+  await expect(health).toContainText('status : degraded');
 
   const regions = page.getByTestId('spec-001-regions');
   await expect(regions.getByRole('heading', { level: 2 })).toHaveText('Hébergement (BR-PLA-04)');

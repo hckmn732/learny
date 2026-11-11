@@ -1,10 +1,9 @@
-import { getHealth } from '../../../../lib/health';
+import { healthResponse } from '../../../../lib/health';
 
 export const dynamic = 'force-dynamic';
 
-export function GET(): Response {
-  return Response.json(getHealth(), {
-    status: 200,
-    headers: { 'cache-control': 'no-store' },
-  });
+// Public route: no session required (docs/architecture/api.md §1). Only GET is exported: other
+// methods answer 405.
+export function GET(): Promise<Response> {
+  return healthResponse();
 }
