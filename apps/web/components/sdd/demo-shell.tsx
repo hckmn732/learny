@@ -1,5 +1,6 @@
-import { clock } from '@learny/core';
 import type { ReactNode } from 'react';
+
+import { clock } from '@learny/core';
 
 import { fr } from '../../messages/fr';
 

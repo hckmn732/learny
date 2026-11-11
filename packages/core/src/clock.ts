@@ -15,9 +15,7 @@ function fixedClock(at: Date): Clock {
 const ISO_DATE =
   /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(T([01]\d|2[0-3]):[0-5]\d(:[0-5]\d(\.\d+)?)?(Z|[+-]([01]\d|2[0-3]):[0-5]\d)?)?$/;
 
-export function createClockFromEnv(
-  env: Record<string, string | undefined> = process.env,
-): Clock {
+export function createClockFromEnv(env: Record<string, string | undefined> = process.env): Clock {
   const value = env.CLOCK_FIXED_AT;
   if (value === undefined || value === '') return systemClock;
   const at = new Date(value);
@@ -27,7 +25,6 @@ export function createClockFromEnv(
   return fixedClock(at);
 }
 
-// eslint-disable-next-line import/no-mutable-exports -- replaced by setClock() in tests
 export let clock: Clock = createClockFromEnv(process.env);
 
 export function setClock(c: Clock): void {

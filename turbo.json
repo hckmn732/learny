@@ -1,6 +1,15 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalPassThroughEnv": ["CI", "APP_ENV", "ENABLE_SDD_PAGES", "CLOCK_FIXED_AT", "LLM_MODE", "NODE_ENV", "PORT"],
+  "globalDependencies": ["eslint.config.mjs", "tsconfig.base.json"],
+  "globalPassThroughEnv": [
+    "CI",
+    "APP_ENV",
+    "ENABLE_SDD_PAGES",
+    "CLOCK_FIXED_AT",
+    "LLM_MODE",
+    "NODE_ENV",
+    "PORT"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

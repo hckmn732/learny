@@ -1,5 +1,5 @@
-import { clock } from '@learny/core';
 import { HOSTING_REGIONS, isEuRegion, type HostingService } from '@learny/config';
+import { clock } from '@learny/core';
 
 import { getHealth } from '../../lib/health';
 import { fr } from '../../messages/fr';
