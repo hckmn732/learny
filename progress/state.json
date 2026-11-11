@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T19:29:39.535Z",
+  "updatedAt": "2026-11-11T19:45:20.276Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -156,14 +156,55 @@
       }
     },
     "SPEC-004": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-11T19:29:39.535Z",
-      "completedAt": null,
+      "completedAt": "2026-11-11T19:45:20.274Z",
       "branch": "spec/SPEC-004-socle-de-tests-complet-et-collecte-des-p",
-      "commit": null,
+      "commit": "5a95845",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:00.310Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:01.394Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:01.704Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:02.501Z",
+          "details": "17 test(s) [SPEC-004] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:06.637Z",
+          "details": "4 test(s) [SPEC-004] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:12.358Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:12.359Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-11T19:45:12.369Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-005": {
       "status": "pending",
