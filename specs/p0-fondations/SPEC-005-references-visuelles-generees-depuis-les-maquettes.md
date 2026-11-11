@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-004]
 business_rules: [BR-NAV-06]
 screens: []
-adrs: [ADR-0034, ADR-0047]
+adrs: [ADR-0034, ADR-0047, ADR-0225]
 visual: demo
 ---
 
@@ -114,4 +114,4 @@ Les exigences de `docs/engineering/testing.md` §7 passent. Chaque maquette poss
 
 ## 15. Décisions et hypothèses
 
-ADR-0034 définit l'échelle 90 % et les seuils de comparaison ; ADR-0047 définit l'instant de capture. La table de scénarios est une déclaration vérifiable des états observés dans les maquettes, sans introduire de nouvel état produit. Les polices externes doivent être disponibles pendant la génération ; aucune substitution n'est acceptée comme référence officielle.
+ADR-0034 définit l'échelle 90 % et les seuils de comparaison ; ADR-0047 définit l'instant de capture ; ADR-0225 fixe les conditions de reproductibilité octet pour octet des captures (polices rejouées localement, premier rendu après chargement des polices, profil de rendu Chromium déterministe). La table de scénarios est une déclaration vérifiable des états observés dans les maquettes, sans introduire de nouvel état produit. Les polices externes doivent être disponibles pendant la génération ; aucune substitution n'est acceptée comme référence officielle.

@@ -3,7 +3,15 @@ import { fileURLToPath } from 'node:url';
 
 import { defineConfig, devices } from '@playwright/test';
 
+import { assertMockLlm, TEST_SERVER_ENV } from '../../packages/testing/src/env';
+
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
+
+// A real AI provider is refused before the server starts (ADR-0048, SPEC-004 CL-5).
+assertMockLlm(process.env);
+
+const COMMON = { locale: 'fr-FR', timezoneId: 'Europe/Paris' } as const;
+const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 1440, height: 900 } };
 
 export default defineConfig({
   testDir: './e2e/specs',
@@ -25,7 +33,14 @@ export default defineConfig({
           path.join(ROOT, 'test-results/playwright.json'),
       },
     ],
-    ['junit', { outputFile: path.join(ROOT, 'test-results/playwright.xml') }],
+    [
+      'junit',
+      {
+        outputFile:
+          process.env.PLAYWRIGHT_JUNIT_OUTPUT_FILE ??
+          path.join(ROOT, 'test-results/playwright.xml'),
+      },
+    ],
     ['html', { outputFolder: path.join(ROOT, 'test-results/html'), open: 'never' }],
   ],
   use: {
@@ -37,10 +52,27 @@ export default defineConfig({
     locale: 'fr-FR',
     timezoneId: 'Europe/Paris',
   },
+  // desktop runs every test; mobile only the @mobile ones; cross-browser (checkpoints) the
+  // Chromium-agnostic suite on Firefox and WebKit (ADR-0101).
   projects: [
+    { name: 'desktop', use: DESKTOP },
     {
-      name: 'desktop',
-      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+      name: 'mobile',
+      grep: /@mobile/,
+      use: {
+        ...devices['Pixel 7'],
+        ...COMMON,
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+      },
+    },
+    {
+      name: 'cross-browser-firefox',
+      use: { ...devices['Desktop Firefox'], ...COMMON, viewport: { width: 1440, height: 900 } },
+    },
+    {
+      name: 'cross-browser-webkit',
+      use: { ...devices['Desktop Safari'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
   ],
   webServer: {
@@ -49,9 +81,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
     env: {
+      ...TEST_SERVER_ENV,
       ENABLE_SDD_PAGES: 'true',
-      CLOCK_FIXED_AT: '2026-11-11T12:20:00Z',
-      LLM_MODE: 'mock',
       APP_ENV: 'test',
     },
   },

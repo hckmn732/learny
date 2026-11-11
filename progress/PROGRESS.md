@@ -1,27 +1,27 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T19:29:30.640Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T20:48:24.579Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 3 |
+| Terminées | 5 |
 | En cours | 0 |
-| Prêtes | 3 |
-| En attente de dépendances | 126 |
+| Prêtes | 2 |
+| En attente de dépendances | 125 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **2.3 %** |
-| Avancement V1 | 2.4 % |
-| Prochaine action | start SPEC-004 — Socle de tests complet et collecte des preuves |
+| **Avancement global** | **3.8 %** |
+| Avancement V1 | 4.0 % |
+| Prochaine action | start SPEC-006 — Application web : configuration de base, santé et pages de démonstration |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
-| P0 | Fondations et infrastructure | 3/13 | CP-0 | ⏳ |
+| P0 | Fondations et infrastructure | 5/13 | CP-0 | ⏳ |
 | P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
@@ -39,8 +39,8 @@
 | [SPEC-001](../specs/p0-fondations/SPEC-001-monorepo-application-web-minimale-et-socle-de-test.md) | Monorepo, application web minimale et socle de tests | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-002](../specs/p0-fondations/SPEC-002-hooks-git-conventions-de-commit-et-protection-des-.md) | Hooks Git, conventions de commit et protection des secrets | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-001 |
 | [SPEC-003](../specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md) | Outillage SDD exécutable et intégré | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-001 |
-| [SPEC-004](../specs/p0-fondations/SPEC-004-socle-de-tests-complet-et-collecte-des-preuves.md) | Socle de tests complet et collecte des preuves | P0 | 🟢 ready | 0 | — | SPEC-001, SPEC-003 |
-| [SPEC-005](../specs/p0-fondations/SPEC-005-references-visuelles-generees-depuis-les-maquettes.md) | Références visuelles générées depuis les maquettes | P0 | ⏳ waiting | 0 | — | SPEC-004 |
+| [SPEC-004](../specs/p0-fondations/SPEC-004-socle-de-tests-complet-et-collecte-des-preuves.md) | Socle de tests complet et collecte des preuves | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-001, SPEC-003 |
+| [SPEC-005](../specs/p0-fondations/SPEC-005-references-visuelles-generees-depuis-les-maquettes.md) | Références visuelles générées depuis les maquettes | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-004 |
 | [SPEC-006](../specs/p0-fondations/SPEC-006-application-web-configuration-de-base-sante-et-pag.md) | Application web : configuration de base, santé et pages de démonstration | P0 | 🟢 ready | 0 | — | SPEC-001 |
 | [SPEC-007](../specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md) | Worker Inngest et paquet jobs | P0 | 🟢 ready | 0 | — | SPEC-001 |
 | [SPEC-008](../specs/p0-fondations/SPEC-008-environnement-local-docker.md) | Environnement local Docker | P0 | ⏳ waiting | 0 | — | SPEC-006, SPEC-007 |

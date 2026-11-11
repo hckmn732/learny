@@ -23,8 +23,17 @@ if (process.env.E2E_SKIP_BUILD !== '1') {
   if (code !== 0) process.exit(code);
 }
 
-const args = process.argv.slice(2);
-if (!args.some((a) => a.startsWith('--project'))) args.push('--project=desktop');
+// Default projects: desktop and mobile (mobile only plays @mobile tests). --project=cross-browser
+// expands to the Firefox and WebKit projects of the checkpoints (ADR-0101).
+const args = process.argv
+  .slice(2)
+  .flatMap((a) =>
+    a === '--project=cross-browser'
+      ? ['--project=cross-browser-firefox', '--project=cross-browser-webkit']
+      : [a],
+  );
+if (!args.some((a) => a.startsWith('--project')))
+  args.push('--project=desktop', '--project=mobile');
 
 const config = path.join('apps', 'web', 'playwright.config.ts');
 process.exit(run(['exec', 'playwright', 'test', '-c', config, ...args]));
