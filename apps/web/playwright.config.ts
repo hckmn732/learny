@@ -15,6 +15,7 @@ const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 14
 
 export default defineConfig({
   testDir: './e2e/specs',
+  globalSetup: './e2e/global-setup.ts',
   outputDir: path.join(ROOT, 'test-results/artifacts'),
   snapshotPathTemplate:
     '{testDir}/../__screenshots__/{testFilePath}/{arg}-{projectName}-{platform}{ext}',

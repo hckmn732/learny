@@ -72,7 +72,9 @@ describe('[SPEC-013] deployment dry-run', () => {
 
   it('performs zero mutation calls in migrate --dry-run and never calls db:reset (CA-2, CL-5)', () => {
     const calls: string[][] = [];
+    const root = tempMigrations({ '0000_extensions.sql': 'select 1;\n' });
     const result = runMigrate({
+      root,
       envName: 'preview',
       dryRun: true,
       env: { APP_ENV: 'preview', SUPABASE_DB_URL: DB_URL },
