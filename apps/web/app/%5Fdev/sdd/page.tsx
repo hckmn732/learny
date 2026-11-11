@@ -48,7 +48,8 @@ function NextActionText({ next }: Readonly<{ next: PublicNextAction }>) {
   }
 }
 
-const sectionClass = 'mt-6 rounded-[16px] border border-solid border-[#E7E6E1] p-6';
+const cardClass = 'rounded-[16px] border border-solid border-[#E7E6E1] p-6';
+const sectionClass = `mt-6 ${cardClass}`;
 const regionClass = 'mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2';
 const cellClass = 'py-2 pr-4 align-top';
 
@@ -85,7 +86,7 @@ export default function SddIndexPage() {
 
       <ul data-testid="sdd-index-indicators" className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
         {indicators.map((i) => (
-          <li key={i.id} data-testid={`sdd-indicator-${i.id}`} className={`${sectionClass} mt-0`}>
+          <li key={i.id} data-testid={`sdd-indicator-${i.id}`} className={cardClass}>
             <p className="text-sm">{i.label}</p>
             <p className="mt-1 text-3xl font-semibold" data-testid="sdd-indicator-value">
               {i.value}
@@ -123,22 +124,22 @@ export default function SddIndexPage() {
       <section data-testid="sdd-index-phases" className={sectionClass}>
         <h2 className="text-xl font-semibold">{t.phases.title}</h2>
         <div role="region" aria-label={t.phases.region} tabIndex={0} className={regionClass}>
-          <table className="w-full min-w-[640px] text-left">
+          <table className="w-full min-w-[640px] table-fixed text-left">
             <thead>
               <tr>
-                <th scope="col" className={cellClass}>
+                <th scope="col" className={`${cellClass} w-[80px]`}>
                   {t.phases.phase}
                 </th>
                 <th scope="col" className={cellClass}>
                   {t.phases.name}
                 </th>
-                <th scope="col" className={cellClass}>
+                <th scope="col" className={`${cellClass} w-[120px]`}>
                   {t.phases.done}
                 </th>
-                <th scope="col" className={cellClass}>
+                <th scope="col" className={`${cellClass} w-[120px]`}>
                   {t.phases.checkpoint}
                 </th>
-                <th scope="col" className={cellClass}>
+                <th scope="col" className={`${cellClass} w-[200px]`}>
                   {t.phases.checkpointStatus}
                 </th>
               </tr>
