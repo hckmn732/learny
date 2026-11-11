@@ -98,3 +98,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0217](ADR-0217-regroupement-et-extraits-de-la-recherche-globale.md) | Regroupement et extraits de la recherche globale | Déduite | SPEC-212 |
 | [ADR-0218](ADR-0218-calendrier-et-exclusions-de-la-detection-de-baisse-d-engagem.md) | Calendrier et exclusions de la detection de baisse d'engagement V2 | Déduite | SPEC-907 |
 | [ADR-0219](ADR-0219-resolution-du-conflit-entre-adr-0120-et-adr-0206-sur-l-idemp.md) | Resolution du conflit entre ADR-0120 et ADR-0206 sur l'idempotence | Déduite | SPEC-112, SPEC-201, SPEC-208 |
+| [ADR-0220](ADR-0220-outillage-spec-001-lint-de-tools-sdd-prettier-et-fichiers-an.md) | Outillage SPEC-001 : lint de tools/sdd, Prettier et fichiers annexes | Déduite | SPEC-001 |
+| [ADR-0221](ADR-0221-versions-retenues-a-l-installation-de-spec-001.md) | Versions retenues à l'installation de SPEC-001 | Déduite | SPEC-001, ADR-0003 |
