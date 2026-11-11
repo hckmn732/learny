@@ -321,11 +321,16 @@ export function parseServerEnv(raw: EnvInput = {}, appEnv?: AppEnv): ServerEnv {
   const input = normalizeEnv(raw);
   const requested = appEnv ?? input.APP_ENV ?? 'local';
   const effectiveEnv = isAppEnv(requested) ? requested : 'local';
+  // Defaults first, then the provided values: an empty variable falls back to its documented
+  // default instead of erasing it (ET-2, EF-3).
   const data: Record<string, string | undefined> = {
     ...envDefaults(effectiveEnv),
-    ...input,
     APP_ENV: requested,
   };
+  for (const [key, value] of Object.entries(input)) {
+    // `requested` already resolved APP_ENV, with or without the explicit override.
+    if (key !== 'APP_ENV' && value !== undefined) data[key] = value;
+  }
   const extra: EnvIssue[] = [];
   const timeZone = input.TZ;
   if (timeZone !== undefined && !isIanaTimeZone(timeZone))
