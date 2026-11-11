@@ -170,6 +170,33 @@ export const fr = {
         unavailable: 'Lancement impossible. Réessayez.',
       },
     },
+    spec008: {
+      services: {
+        title: 'Services locaux',
+        service: 'Service',
+        state: 'État',
+        detail: 'Cause',
+        ok: 'ok',
+        failed: 'failed',
+      },
+      extensions: {
+        title: 'Extensions SQL',
+        required: 'obligatoire',
+        ok: 'présente',
+        missing: 'absente',
+      },
+      commands: {
+        title: 'Commandes',
+        intro: 'Dans l’ordre, depuis la racine du dépôt :',
+        start: 'pnpm dev:up',
+        check: 'pnpm dev:check',
+        stop: 'pnpm dev:down',
+        reset: 'pnpm db:reset --yes',
+        seed: 'pnpm db:seed:demo',
+      },
+      demo: 'Démonstration : état simulé, les preuves réelles viennent de pnpm dev:check.',
+      unavailable: 'Pile locale indisponible',
+    },
     index: {
       title: 'Progression SDD',
       surtitle: 'SDD',

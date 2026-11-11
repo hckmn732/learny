@@ -30,4 +30,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Jobs durables',
     load: () => import('../../../components/sdd-demos/spec-007'),
   },
+  'SPEC-008': {
+    title: 'Environnement local',
+    load: () => import('../../../components/sdd-demos/spec-008'),
+  },
 };

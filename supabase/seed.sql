@@ -1,0 +1,2 @@
+-- Seed minimale (SPEC-008, EF-3). Les données métier arrivent avec SPEC-101/SPEC-115.
+-- La base locale doit rester vide de données produit tant que les migrations n'existent pas.
