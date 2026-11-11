@@ -26,4 +26,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Application web : configuration de base, santé et pages de démonstration',
     load: () => import('../../../components/sdd-demos/spec-006'),
   },
+  'SPEC-007': {
+    title: 'Jobs durables',
+    load: () => import('../../../components/sdd-demos/spec-007'),
+  },
 };
