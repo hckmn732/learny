@@ -15,3 +15,4 @@
 - Aucun run GitHub Actions distant n'a été lancé depuis cet environnement : `ci-check.txt` atteste uniquement la validation YAML et `actionlint` locales (1.7.7), conformément à la section 13 de la spécification.
 - `act` n'est pas installé : l'essai local du workflow est signalé comme non exécuté, jamais présenté comme une exécution GitHub.
 - La protection de la branche `main` reste une action du porteur du projet, documentée dans `CONTRIBUTING.md` §10 (ADR-0052), non simulée par le workflow.
+- Ligne de base visuelle de SPEC-006 actualisée : le registre des démonstrations `/_dev/sdd` gagne la page SPEC-011 (une ligne, +52 px de hauteur) ; les captures `spec-006-demo-desktop-linux.png` et `spec-006-demo-mobile-desktop-linux.png` ont été régénérées à l'identique par ailleurs, conformément à `docs/engineering/testing.md` §6.4. Aucune autre modification d'interface n'a été apportée par cette spécification.
