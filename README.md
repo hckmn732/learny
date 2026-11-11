@@ -51,6 +51,31 @@ Le code applicatif (`apps/`, `packages/`, `supabase/`) est créé par les spéci
 
 Double-cliquer sur `design/maquettes/index.html`, ou servir le dossier : `python -m http.server 8123 --directory design/maquettes` puis ouvrir http://localhost:8123.
 
+## Environnement local
+
+Prérequis : Node 24, pnpm 10, Docker Engine/Compose et Supabase CLI 2. Copier `.env.example` vers `.env.local` (jamais versionné) pour les valeurs locales ; aucun secret de production n'est nécessaire.
+
+```bash
+pnpm install
+pnpm dev:up        # Supabase local, Inngest Dev Server et Mailpit
+pnpm dev:check     # un état par service : supabase, postgres, inngest, mailpit, web
+pnpm dev           # application web sur http://127.0.0.1:3000
+pnpm dev:down      # arrêt sans supprimer les volumes
+```
+
+| Service | URL locale |
+|---|---|
+| Application web | http://127.0.0.1:3000 |
+| Supabase API / Studio | http://127.0.0.1:54321 · http://127.0.0.1:54323 |
+| Postgres | `postgresql://postgres:postgres@127.0.0.1:54322/postgres` |
+| Inngest Dev Server | http://127.0.0.1:8288 |
+| Mailpit (UI / SMTP) | http://127.0.0.1:8025 · `127.0.0.1:1025` |
+
+- **Port occupé** : `pnpm dev:up` et `pnpm dev:check` nomment le service et le port en échec ; aucun port n'est changé silencieusement. Libérez-le puis relancez.
+- **Remise à zéro** : `pnpm db:reset --yes` applique les migrations et la seed minimale. La commande refuse `APP_ENV=production|preview` et toute `DATABASE_URL` non locale. `pnpm db:seed:demo` échoue explicitement jusqu'à SPEC-115.
+- **Données** : `pnpm dev:down` conserve les volumes Docker et la base Supabase ; une seconde invocation de `pnpm dev:up` réutilise les services sains.
+- **Secrets** : seules des valeurs locales publiques figurent dans `.env.example` ; `.env.local`, les clés de signature Inngest et les identifiants Supabase distants ne sont jamais versionnés.
+
 ## Socle technique
 
 Node 24 LTS, pnpm, Turborepo, TypeScript strict, Next.js (App Router, React 19, Tailwind 4), Supabase (Postgres + pgvector, Auth, Storage, RLS), Drizzle, Inngest, AI SDK (Claude par tâche, clé personnelle chiffrée), Voyage, Resend, Web Push, Stripe, Sentry, Vitest, Playwright, Docker pour le développement et l'auto-hébergement. Détails et justifications : [`docs/architecture/overview.md`](docs/architecture/overview.md) et le registre des ADR.

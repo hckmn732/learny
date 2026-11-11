@@ -1,0 +1,51 @@
+# Pile locale de développement (SPEC-008, ADR-0053, ADR-0054).
+# Supabase est lancé par la CLI ; ce fichier ne contient qu'Inngest et Mailpit.
+# Images épinglées, aucun secret, volumes nommés pour les données locales.
+name: learny-dev
+
+services:
+  inngest:
+    image: inngest/inngest:v1.52.0
+    command:
+      - inngest
+      - dev
+      - -u
+      - ${INNGEST_WEB_URL:-http://host.docker.internal:3000/api/inngest}
+    ports:
+      - '8288:8288'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      INNGEST_DEV: '1'
+    healthcheck:
+      test: ['CMD', 'perl', '/healthcheck.pl']
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+    restart: unless-stopped
+    volumes:
+      - inngest-data:/var/lib/inngest
+      - ./inngest-healthcheck.pl:/healthcheck.pl:ro
+
+  mailpit:
+    image: axllent/mailpit:v1.33.1
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: '1'
+      MP_SMTP_AUTH_ALLOW_INSECURE: '1'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O- http://127.0.0.1:8025/api/v1/info >/dev/null || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 5s
+    restart: unless-stopped
+    volumes:
+      - mailpit-data:/data
+
+volumes:
+  inngest-data:
+  mailpit-data:
