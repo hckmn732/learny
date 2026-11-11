@@ -42,6 +42,7 @@ export default defineConfig({
             'apps/web/{app,components,lib,messages}/**/*.test.{ts,tsx}',
             'tools/**/test/unit/**/*.test.ts',
             'tools/ci/*.test.ts',
+            'tools/docker/*.test.ts',
           ],
           environment: 'node',
         },
