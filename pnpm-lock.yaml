@@ -86,6 +86,9 @@ importers:
       '@learny/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@learny/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -116,6 +119,12 @@ importers:
         version: 4.3.5
 
   packages/config: {}
+
+  packages/contracts:
+    dependencies:
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
 
   packages/core: {}
 

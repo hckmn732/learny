@@ -13,8 +13,8 @@ const WORKSPACE_PACKAGES = [
 
 const t = fr.sdd.spec001;
 
-export default function Spec001Demo() {
-  const health = getHealth();
+export default async function Spec001Demo() {
+  const { body: health } = await getHealth();
   const services = Object.keys(HOSTING_REGIONS) as HostingService[];
 
   return (
