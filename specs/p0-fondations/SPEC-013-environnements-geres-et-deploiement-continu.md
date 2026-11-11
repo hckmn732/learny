@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-009, SPEC-011]
 business_rules: [BR-PLA-04]
 screens: []
-adrs: [ADR-0006, ADR-0017]
+adrs: [ADR-0006, ADR-0017, ADR-0230]
 visual: demo
 ---
 
@@ -114,4 +114,4 @@ Les conditions de `docs/engineering/testing.md` §7 passent pour le code et la c
 
 ## 15. Décisions et hypothèses
 
-ADR-0006 fixe Supabase en `eu-central-1`, ADR-0017 Inngest, ADR-0052 la CI. Le montant d'abonnement, l'identité légale et les secrets sont fournis hors dépôt ; cette spécification ne les invente pas. SPEC-808 prendra la décision de mise en production après les contrôles réels.
+ADR-0006 fixe Supabase en `eu-central-1`, ADR-0017 Inngest, ADR-0052 la CI. Le montant d'abonnement, l'identité légale et les secrets sont fournis hors dépôt ; cette spécification ne les invente pas. SPEC-808 prendra la décision de mise en production après les contrôles réels. ADR-0230 précise le déclenchement par `workflow_run` sur la ref exacte, les secrets préfixés `PREVIEW_*` / `PRODUCTION_*`, les codes de sortie des scripts, l'absence de CSP figée avant SPEC-805 et le mode `--dry-run` sans réseau.
