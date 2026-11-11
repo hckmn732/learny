@@ -3,7 +3,10 @@
 // Usage : node tools/sdd/validate.mjs SPEC-xxx [--skip-build]
 import fs from 'node:fs';
 import path from 'node:path';
-import { argSpec, die, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, specCriteria, writeFileAtomic } from './lib.mjs';
+import {
+  argSpec, die, e2eVerdict, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, specCriteria, summarizePlaywright,
+  visualVerdict, writeFileAtomic,
+} from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
 
 const catalog = loadCatalog();
@@ -54,24 +57,9 @@ vitest('integration', 'test:int');
 
 const pwJson = path.join(out, 'e2e.json');
 const e2eCode = run(`pnpm -s test:e2e --grep "@${tag}"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson });
-let e2e = { passed: 0, failed: 0, videos: 0, visual: 0 };
-if (fs.existsSync(pwJson)) {
-  const walk = (suite) => {
-    for (const sp of suite.specs ?? []) {
-      if (!sp.title.includes(`@${tag}`) && !(sp.tags ?? []).includes(`@${tag}`)) continue;
-      const isVisual = sp.title.includes('@visual') || (sp.tags ?? []).includes('@visual');
-      for (const t of sp.tests ?? []) for (const r of t.results ?? []) {
-        if (r.status === 'passed') { e2e.passed += 1; if (isVisual) e2e.visual += 1; }
-        else if (r.status !== 'skipped') e2e.failed += 1;
-        e2e.videos += (r.attachments ?? []).filter((a) => a.name === 'video').length;
-      }
-    }
-    for (const sub of suite.suites ?? []) walk(sub);
-  };
-  for (const su of JSON.parse(fs.readFileSync(pwJson, 'utf8')).suites ?? []) walk(su);
-}
-record('e2e', e2eCode === 0 && e2e.failed === 0 && e2e.passed > 0 && e2e.videos > 0, `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
-record('visual', e2e.visual > 0 && e2e.failed === 0, `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);
+const e2e = summarizePlaywright(fs.existsSync(pwJson) ? JSON.parse(fs.readFileSync(pwJson, 'utf8')) : null, tag);
+record('e2e', e2eVerdict(e2eCode, e2e), `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
+record('visual', visualVerdict(e2e), `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);
 
 collectEvidence(spec, out);
 

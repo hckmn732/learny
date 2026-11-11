@@ -1,4 +1,6 @@
 // Playwright fixtures shared by every e2e test (SPEC-004, ET-2).
+import fs from 'node:fs';
+
 import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
 
@@ -21,10 +23,9 @@ async function axeCheck(page: Page, testInfo: TestInfo): Promise<void> {
   const blocking = results.violations.filter(
     (v) => v.impact === 'serious' || v.impact === 'critical',
   );
-  await testInfo.attach('axe', {
-    body: JSON.stringify(results.violations, null, 2),
-    contentType: 'application/json',
-  });
+  const file = testInfo.outputPath(`axe-${String(testInfo.attachments.length)}.json`);
+  fs.writeFileSync(file, JSON.stringify(results.violations, null, 2));
+  await testInfo.attach('axe', { path: file, contentType: 'application/json' });
   expect(
     blocking.map((v) => `${v.id} (${v.impact ?? ''}) : ${v.help}`),
     'violations axe serious/critical',
@@ -55,10 +56,10 @@ export const test = base.extend<LearnyFixtures>({
   },
   captureEvidence: async ({ page }, provide, testInfo) => {
     await provide(async (name) => {
-      await testInfo.attach(name, {
-        body: await page.screenshot({ fullPage: true }),
-        contentType: 'image/png',
-      });
+      // Written to disk so that tools/sdd/evidence.mjs can copy it (attachments need a path).
+      const file = testInfo.outputPath(`${name}.png`);
+      await page.screenshot({ path: file, fullPage: true });
+      await testInfo.attach(name, { path: file, contentType: 'image/png' });
     });
   },
 });

@@ -9,6 +9,7 @@ import { indexCatalog, normalizeState } from './core.mjs';
 export {
   DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, displayStatus, emptySpecState, indexCatalog, isBlockedTransitively,
   nextAction, nextActionJson, normalizeState, phaseUnlocked, progressSummary, readySpecs, renderProgressMarkdown,
+  e2eVerdict, summarizePlaywright, visualVerdict,
 } from './core.mjs';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
