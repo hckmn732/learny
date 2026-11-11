@@ -75,7 +75,7 @@ test('inspecte la matrice CI @SPEC-011', async ({
   expect(consoleErrors).toEqual([]);
 });
 
-test('matrice CI conforme @SPEC-011 @visual', async ({ page, axeCheck }) => {
+test('matrice CI conforme @SPEC-011 @visual', async ({ page, axeCheck, captureEvidence }) => {
   await page.goto('/_dev/sdd/SPEC-011');
 
   const ids = await page
@@ -106,6 +106,7 @@ test('matrice CI conforme @SPEC-011 @visual', async ({ page, axeCheck }) => {
     body: { color: PROVISIONAL_TOKENS.color.text },
   });
   await axeCheck();
+  await captureEvidence('spec-011-demo-desktop');
   await expectScreenshotBaseline(page, 'spec-011-demo.png', { fullPage: true });
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -115,5 +116,6 @@ test('matrice CI conforme @SPEC-011 @visual', async ({ page, axeCheck }) => {
   ]);
   for (const width of widths) expect(width).toBeLessThanOrEqual(390);
   await axeCheck();
+  await captureEvidence('spec-011-demo-mobile');
   await expectScreenshotBaseline(page, 'spec-011-demo-mobile.png', { fullPage: true });
 });
