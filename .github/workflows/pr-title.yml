@@ -1,0 +1,39 @@
+# Contrôle du titre de pull request (SPEC-011, EF-6, ET-4).
+# - Réutilise la configuration commitlint commune (commitlint.config.ts, ADR-0103).
+# - Le titre est passé par une variable d'environnement : aucune interpolation directe
+#   d'une entrée non fiable dans un script (injection de commandes).
+# - Aucun droit d'écriture, aucun secret tiers, aucun commentaire publié.
+name: Titre de PR
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  title:
+    name: Titre de PR conventionnel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Vérifier le titre avec commitlint
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --config commitlint.config.ts

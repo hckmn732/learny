@@ -1,7 +1,10 @@
-# Intégration continue de Learny (ADR-0052, détaillée et durcie par SPEC-011).
-# - Le job `audit` s'exécute toujours : il vérifie la cohérence du référentiel SDD.
-# - Les jobs applicatifs ne s'exécutent que lorsque le monorepo existe
-#   (présence de pnpm-lock.yaml, créé par SPEC-001).
+# Intégration continue de Learny (ADR-0052, complétée par SPEC-011).
+# - `audit` et `secrets` s'exécutent toujours, même avant l'existence du monorepo.
+# - Les jobs applicatifs ne s'exécutent que si `pnpm-lock.yaml` existe (SPEC-001) ; leur
+#   condition dépend de la détection du job `audit`, ils ne sont jamais omis silencieusement.
+# - Tous les tests tournent en modes simulés, horloge figée (ADR-0047, ADR-0048) : aucun
+#   fournisseur IA, paiement ou e-mail réel n'est contacté.
+# - Les rapports, captures et vidéos sont publiés en artefacts même en cas d'échec.
 name: CI
 
 on:
@@ -19,12 +22,17 @@ permissions:
 
 env:
   NODE_VERSION: '24'
+  CLOCK_FIXED_AT: '2026-11-11T12:20:00Z'
   LLM_MODE: mock
   STRIPE_MODE: mock
   EMAIL_MODE: memory
   PUSH_MODE: mock
-  ENABLE_SDD_PAGES: '1'
-  CLOCK_FIXED_AT: '2026-11-11T12:20:00Z'
+  ENABLE_SDD_PAGES: 'true'
+  # Seuil bloquant de `pnpm audit` (EF-5) : high et critical échouent la CI.
+  AUDIT_LEVEL: high
+  # Conservation des artefacts de test et de sécurité (jours).
+  ARTIFACT_RETENTION_DAYS: '14'
+  SECURITY_ARTIFACT_RETENTION_DAYS: '30'
 
 jobs:
   audit:
@@ -38,22 +46,68 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Audit SDD
-        run: node tools/sdd/audit.mjs
+        run: |
+          mkdir -p audit-reports
+          node tools/sdd/audit.mjs 2>&1 | tee audit-reports/audit.txt
+          exit "${PIPESTATUS[0]}"
       - name: Détecter le monorepo
         id: detect
         run: |
           if [ -f pnpm-lock.yaml ]; then echo "has_app=true" >> "$GITHUB_OUTPUT"; else echo "has_app=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Publier le rapport d'audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-reports
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
   secrets:
-    name: Recherche de secrets
+    name: Sécurité (secrets et dépendances)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
+          persist-credentials: false
+      - name: gitleaks sur l'historique
+        uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          # Aucun commentaire de PR : le jeton reste en lecture seule (ET-1).
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+          # Rapport SARIF masqué conservé en artefact même en cas de fuite (ET-5).
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: 'true'
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - name: Installer les dépendances (lockfile présent)
+        if: always() && hashFiles('pnpm-lock.yaml') != ''
+        run: pnpm install --frozen-lockfile
+      - name: Analyseur intégré de secrets
+        if: always() && hashFiles('pnpm-lock.yaml') != ''
+        run: |
+          mkdir -p security-reports
+          pnpm exec tsx tools/security/check-secrets.ts --all 2>&1 | tee security-reports/secrets.txt
+          exit "${PIPESTATUS[0]}"
+      - name: Audit des dépendances
+        if: always() && hashFiles('pnpm-lock.yaml') != ''
+        run: |
+          mkdir -p security-reports
+          pnpm audit --audit-level="${AUDIT_LEVEL}" 2>&1 | tee security-reports/pnpm-audit.txt
+          exit "${PIPESTATUS[0]}"
+      - name: Publier les rapports de sécurité
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: security-reports/
+          if-no-files-found: warn
+          retention-days: ${{ env.SECURITY_ARTIFACT_RETENTION_DAYS }}
 
   quality:
     name: Lint, types, build, unitaires
@@ -67,19 +121,30 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        continue-on-error: true
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
-      - run: pnpm test:unit --coverage
-      - uses: actions/upload-artifact@v4
+      - name: Tests unitaires avec couverture
+        run: pnpm test:unit --coverage
+      - name: Publier les rapports unitaires
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: unit-reports
           path: |
             coverage/
             test-results/
-          if-no-files-found: ignore
+          if-no-files-found: warn
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
   integration:
     name: Intégration (Supabase local)
@@ -97,15 +162,20 @@ jobs:
         with:
           version: latest
       - run: pnpm install --frozen-lockfile
-      - run: supabase start
-      - run: pnpm db:reset
-      - run: pnpm test:int
-      - uses: actions/upload-artifact@v4
+      - name: Démarrer Supabase local
+        run: supabase start
+      - name: Remettre la base à zéro
+        run: pnpm db:reset
+      - name: Tests d'intégration
+        run: pnpm test:int
+      - name: Publier les rapports d'intégration
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: integration-reports
           path: test-results/
-          if-no-files-found: ignore
+          if-no-files-found: warn
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
   e2e:
     name: E2E et conformité visuelle (Chromium)
@@ -121,19 +191,41 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        continue-on-error: true
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - uses: supabase/setup-cli@v1
         with:
           version: latest
+      - name: Installer Chromium et ses dépendances système
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Locale française et polices
+        run: |
+          sudo locale-gen fr_FR.UTF-8
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-liberation fonts-dejavu-core fonts-noto-core
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: supabase start
-      - run: pnpm db:reset
-      - run: pnpm db:seed:demo
+      - name: Démarrer Supabase local
+        run: supabase start
+      - name: Remettre la base à zéro
+        run: pnpm db:reset
+      - name: Charger le jeu de démonstration
+        run: pnpm db:seed:demo
       - run: pnpm build
-      - run: pnpm test:e2e
-      - uses: actions/upload-artifact@v4
+      - name: Tests e2e, axe et visuels
+        run: pnpm test:e2e
+      - name: Publier les rapports, captures et vidéos e2e
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-reports
-          path: test-results/
-          if-no-files-found: ignore
+          path: |
+            test-results/
+            apps/web/e2e/__screenshots__/
+          if-no-files-found: warn
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
