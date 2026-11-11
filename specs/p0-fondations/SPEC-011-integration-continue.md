@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-002, SPEC-004, SPEC-008]
 business_rules: []
 screens: []
-adrs: [ADR-0052]
+adrs: [ADR-0052, ADR-0226]
 visual: demo
 ---
 
@@ -114,4 +114,4 @@ Les conditions de `docs/engineering/testing.md` §7 passent ; aucune validation 
 
 ## 15. Décisions et hypothèses
 
-ADR-0052 fixe GitHub Actions, la matrice initiale et la propriété de la protection de branche. SPEC-009 impose `ENABLE_SDD_PAGES=true` dans l'exemple ; le workflow utilise la même valeur pour ses tests e2e. Aucun secret de CI de production n'est nécessaire à cette spécification.
+ADR-0052 fixe GitHub Actions, la matrice initiale et la propriété de la protection de branche. SPEC-009 impose `ENABLE_SDD_PAGES=true` dans l'exemple ; le workflow utilise la même valeur pour ses tests e2e. Aucun secret de CI de production n'est nécessaire à cette spécification. ADR-0226 fixe l'emplacement du test unitaire `tools/ci/check-workflows.test.ts` (ajouté au projet Vitest unitaire), les durées de conservation des artefacts (14 jours de test, 30 jours de sécurité) et les modalités d'installation d'`actionlint` (obligatoire) et d'`act` (facultatif).
