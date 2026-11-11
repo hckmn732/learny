@@ -1,27 +1,27 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T22:29:12.918Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T22:42:28.822Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 12 |
+| Terminées | 13 |
 | En cours | 0 |
-| Prêtes | 1 |
+| Prêtes | 0 |
 | En attente de dépendances | 119 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **9.1 %** |
-| Avancement V1 | 9.7 % |
-| Prochaine action | start SPEC-010 — Observabilité : journalisation, erreurs, santé |
+| **Avancement global** | **9.8 %** |
+| Avancement V1 | 10.5 % |
+| Prochaine action | checkpoint CP-0 |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
-| P0 | Fondations et infrastructure | 12/13 | CP-0 | ⏳ |
+| P0 | Fondations et infrastructure | 13/13 | CP-0 | ⏳ |
 | P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
@@ -45,7 +45,7 @@
 | [SPEC-007](../specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md) | Worker Inngest et paquet jobs | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-001 |
 | [SPEC-008](../specs/p0-fondations/SPEC-008-environnement-local-docker.md) | Environnement local Docker | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006, SPEC-007 |
 | [SPEC-009](../specs/p0-fondations/SPEC-009-configuration-variables-d-environnement-et-secrets.md) | Configuration, variables d'environnement et secrets | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006 |
-| [SPEC-010](../specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md) | Observabilité : journalisation, erreurs, santé | P0 | 🟢 ready | 0 | — | SPEC-006, SPEC-009 |
+| [SPEC-010](../specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md) | Observabilité : journalisation, erreurs, santé | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006, SPEC-009 |
 | [SPEC-011](../specs/p0-fondations/SPEC-011-integration-continue.md) | Intégration continue | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-002, SPEC-004, SPEC-008 |
 | [SPEC-012](../specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md) | Images Docker et déploiement auto-hébergé | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-007, SPEC-008 |
 | [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-009, SPEC-011 |

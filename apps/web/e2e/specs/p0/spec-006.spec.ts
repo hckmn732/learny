@@ -58,7 +58,8 @@ test('inspecte la santé @SPEC-006', async ({ page, request }) => {
   page.on('console', (m) => consoleMessages.push(m.text()));
   page.on('pageerror', (e) => consoleMessages.push(`${e.message}\n${e.stack ?? ''}`));
 
-  // Public route: GET without session, uncached, four public fields; POST is refused.
+  // Public route: GET without session, uncached, SPEC-006 fields plus SPEC-010 components;
+  // POST is refused.
   const health = await request.get('/api/v1/health');
   expect(health.status()).toBe(200);
   expect(health.headers()['cache-control']).toBe('no-store');
@@ -69,6 +70,7 @@ test('inspecte la santé @SPEC-006', async ({ page, request }) => {
     version: 'dev',
     commit: 'unknown',
     database: 'not_configured',
+    components: { database: 'not_configured', build: 'not_configured' },
   });
   expect(scanText(JSON.stringify(body), 'health')).toEqual([]);
   expect((await request.post('/api/v1/health')).status()).toBe(405);

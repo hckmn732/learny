@@ -111,3 +111,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0230](ADR-0230-environnements-geres-declenchement-secrets-prefixes-et-dry-r.md) | Environnements gérés : déclenchement, secrets préfixés et dry-run | Déduite | SPEC-013, BR-PLA-04, ADR-0006, ADR-0017, ADR-0052 |
 | [ADR-0231](ADR-0231-composants-versions-et-exposition-reseau-de-la-pile-auto-heb.md) | Composants, versions et exposition réseau de la pile auto-hébergée | Déduite | SPEC-012, ADR-0053 |
 | [ADR-0232](ADR-0232-migrations-sondes-et-preuves-executables-de-l-auto-hebergeme.md) | Migrations, sondes et preuves exécutables de l'auto-hébergement | Déduite | SPEC-012, ADR-0053, ADR-0047 |
+| [ADR-0233](ADR-0233-entree-serveur-de-learny-core-et-composants-de-sante.md) | Entrée serveur de @learny/core et composants de santé | Déduite | SPEC-010 |

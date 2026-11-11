@@ -32,4 +32,10 @@ export type {
 export { createFunctions, functions, sddDemoStore } from './functions';
 export type { JobDeps } from './functions';
 export { silentLogger } from './ports';
-export type { JobLogger, SafeLogFields, StepTools } from './ports';
+export type {
+  JobErrorReport,
+  JobErrorReporter,
+  JobLogger,
+  SafeLogFields,
+  StepTools,
+} from './ports';

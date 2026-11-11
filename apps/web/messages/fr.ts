@@ -315,6 +315,44 @@ export const fr = {
         notePrefix: 'Note',
       },
     },
+    spec010: {
+      context: {
+        title: 'Corrélation',
+        note: 'Une requête, un identifiant : les journaux, l’erreur et la santé ci-dessous le partagent.',
+        requestId: 'Identifiant de requête',
+        userId: 'Apprenant',
+        route: 'Route',
+      },
+      log: {
+        title: 'Journal expurgé',
+        note: 'Sortie JSON réelle de pino : l’adresse et la clé fictives sont remplacées, aucun objet imbriqué n’est sérialisé.',
+        region: 'Journal JSON formaté',
+        demo: 'Démonstration',
+      },
+      error: {
+        title: 'Erreur sûre',
+        note: 'Réponse application/problem+json : aucun contenu d’exception, aucune pile.',
+        status: 'Statut HTTP',
+        code: 'Code',
+        requestId: 'Identifiant de requête',
+        region: 'Corps problem+json',
+      },
+      health: {
+        title: 'Santé',
+        note: 'Sonde à délai borné, sans cache : base et build pour GET /api/v1/health.',
+        component: 'Composant',
+        status: 'État',
+        database: 'Base de données',
+        build: 'Build',
+        probes: 'Sondes simulées',
+        probesNote:
+          'Trois résultats d’une sonde de démonstration : chaque état porte une icône et un texte, pas seulement une couleur.',
+        ok: 'Disponible',
+        unavailable: 'Indisponible',
+        not_configured: 'Non configurée',
+        demo: 'Démonstration',
+      },
+    },
     spec009: {
       environment: {
         title: 'Environnement',

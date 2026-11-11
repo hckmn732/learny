@@ -14,4 +14,7 @@ export async function register(): Promise<void> {
     console.error(`learny web: démarrage refusé. ${message}`);
     process.exit(1);
   }
+  // Telemetry is optional and configured after the environment is known (SPEC-010, ET-4).
+  const { registerServerSentry } = await import('./sentry.server.config');
+  await registerServerSentry(process.env);
 }

@@ -4,6 +4,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@learny/core', '@learny/config', '@learny/contracts', '@learny/jobs'],
+  // Native/Node-only telemetry libraries stay outside the bundle (SPEC-010).
+  serverExternalPackages: ['pino', '@sentry/nextjs'],
   poweredByHeader: false,
   reactStrictMode: true,
   // Docker image (SPEC-012, ET-2): a self-contained server whose traced files include workspace

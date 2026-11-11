@@ -42,6 +42,7 @@ describe('[SPEC-006] health routes', () => {
       version: 'dev',
       commit: 'unknown',
       database: 'ok',
+      components: { database: 'ok', build: 'not_configured' },
     });
   });
 
@@ -56,6 +57,7 @@ describe('[SPEC-006] health routes', () => {
       version: 'dev',
       commit: 'unknown',
       database: 'unavailable',
+      components: { database: 'unavailable', build: 'not_configured' },
     });
     expect(JSON.stringify(body)).not.toMatch(/password|db\.internal|5432/);
   });

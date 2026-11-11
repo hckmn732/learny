@@ -198,3 +198,83 @@ describe('[SPEC-007] demo job', () => {
     expect(JSON.stringify(logger.lines)).not.toMatch(/31337|ECONNRESET/);
   });
 });
+
+describe('[SPEC-010] job correlation', () => {
+  it('carries jobId, function, step, attempt and requestId on every job line (EF-4)', async () => {
+    const logger = recordingLogger();
+    const store = createMemoryDemoStore();
+    const result = await executeDirect(
+      (step) =>
+        runDemoJob(
+          {
+            data: { runId: 'run-job', value: 6 },
+            step,
+            logger,
+            jobId: 'job-1',
+            attempt: 2,
+            requestId: 'req-job',
+          },
+          { store, clock: FIXED },
+        ),
+      { steps: DEMO_STEPS },
+    );
+
+    expect(result.status).toBe('completed');
+    expect(logger.lines).toHaveLength(1);
+    expect(logger.lines[0]).toMatchObject({
+      level: 'info',
+      message: 'job completed',
+      fields: {
+        job: 'sdd/demo-job',
+        jobId: 'job-1',
+        attempt: 2,
+        requestId: 'req-job',
+      },
+    });
+  });
+
+  it('keeps the same jobId with a distinct attempt and never logs a false success (CL-7)', async () => {
+    const jobId = 'job-resume';
+    const flaky = flakyStore(10);
+    const failedLogger = recordingLogger();
+    const failed = await executeDirect(
+      (step) =>
+        runDemoJob(
+          {
+            data: { runId: 'run-resume', value: 3 },
+            step,
+            logger: failedLogger,
+            jobId,
+            attempt: 1,
+          },
+          { store: flaky.store, clock: FIXED },
+        ),
+      { steps: DEMO_STEPS },
+    );
+    expect(failed.status).toBe('failed');
+    expect(failedLogger.lines.filter((line) => line.message === 'job completed')).toEqual([]);
+    expect(failedLogger.lines[0]?.fields).toMatchObject({ jobId, attempt: 1 });
+
+    const successLogger = recordingLogger();
+    const success = await executeDirect(
+      (step) =>
+        runDemoJob(
+          {
+            data: { runId: 'run-resume', value: 3 },
+            step,
+            logger: successLogger,
+            jobId,
+            attempt: 2,
+          },
+          { store: createMemoryDemoStore(), clock: FIXED },
+        ),
+      { steps: DEMO_STEPS },
+    );
+    expect(success.status).toBe('completed');
+    expect(successLogger.lines).toHaveLength(1);
+    expect(successLogger.lines[0]).toMatchObject({
+      message: 'job completed',
+      fields: { jobId, attempt: 2 },
+    });
+  });
+});
