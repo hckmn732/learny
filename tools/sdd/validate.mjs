@@ -3,7 +3,7 @@
 // Usage : node tools/sdd/validate.mjs SPEC-xxx [--skip-build]
 import fs from 'node:fs';
 import path from 'node:path';
-import { argSpec, die, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, specCriteria } from './lib.mjs';
+import { argSpec, die, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, specCriteria, writeFileAtomic } from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
 
 const catalog = loadCatalog();
@@ -92,6 +92,6 @@ s.validations = results;
 const allOk = Object.values(results).every((r) => r.status === 'passed');
 s.lastError = allOk ? null : Object.entries(results).filter(([, r]) => r.status !== 'passed').map(([k, r]) => `${k}: ${r.details}`).join(' | ');
 saveState(st);
-fs.writeFileSync(path.join(P.evidence, spec.id, 'checks.json'), JSON.stringify(results, null, 2) + '\n');
+writeFileAtomic(path.join(P.evidence, spec.id, 'checks.json'), JSON.stringify(results, null, 2) + '\n');
 console.log(allOk ? `\n✔ ${spec.id} : toutes les validations sont réussies.` : `\n✖ ${spec.id} : validations en échec. Corriger puis relancer.`);
 process.exit(allOk ? 0 : 1);

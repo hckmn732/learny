@@ -101,3 +101,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0220](ADR-0220-outillage-spec-001-lint-de-tools-sdd-prettier-et-fichiers-an.md) | Outillage SPEC-001 : lint de tools/sdd, Prettier et fichiers annexes | Déduite | SPEC-001 |
 | [ADR-0221](ADR-0221-versions-retenues-a-l-installation-de-spec-001.md) | Versions retenues à l'installation de SPEC-001 | Déduite | SPEC-001, ADR-0003 |
 | [ADR-0222](ADR-0222-ajustements-d-implementation-de-spec-002.md) | Ajustements d'implémentation de SPEC-002 | Déduite | SPEC-002, ADR-0103 |
+| [ADR-0223](ADR-0223-outillage-sdd-testable-et-index-de-progression-spec-003.md) | Outillage SDD testable et index de progression (SPEC-003) | Déduite | SPEC-003, ADR-0068, ADR-0203 |

@@ -4,7 +4,7 @@
 // Usage : node tools/sdd/checkpoint.mjs CP-n
 import fs from 'node:fs';
 import path from 'node:path';
-import { die, hasRemoteOrigin, isGitRepo, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, shOk } from './lib.mjs';
+import { die, hasRemoteOrigin, isGitRepo, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, shOk, writeFileAtomic } from './lib.mjs';
 import { renderProgress } from './status.mjs';
 
 const catalog = loadCatalog();
@@ -40,7 +40,7 @@ const ok = results.every((r) => r.ok);
 const dir = path.join(P.evidence, 'checkpoints', cpId);
 fs.mkdirSync(dir, { recursive: true });
 const report = `# Checkpoint ${cpId} — ${phase.title}\n\n- Date : ${nowIso()}\n- Résultat : ${ok ? '✅ réussi' : '❌ échec'}\n- Spécifications de la phase : ${specs.map((s) => s.id).join(', ')}\n\n| Contrôle | Commande | Résultat |\n|---|---|---|\n${results.map((r) => `| ${r.name} | \`${r.cmd}\` | ${r.ok ? '✅' : '❌'} |`).join('\n')}\n\nCritères fonctionnels : voir specs/checkpoints.md (${cpId}).\n`;
-fs.writeFileSync(path.join(dir, 'summary.md'), report, 'utf8');
+writeFileAtomic(path.join(dir, 'summary.md'), report);
 
 const cp = st.checkpoints[cpId];
 cp.status = ok ? 'passed' : 'failed';

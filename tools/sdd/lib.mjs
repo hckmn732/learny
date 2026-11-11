@@ -1,122 +1,90 @@
 // Bibliothèque commune de l'outillage SDD. Aucune dépendance externe (Node.js ≥ 20).
+// Racine et horloge injectables (SPEC-003) : SDD_ROOT et SDD_NOW sont réservées aux tests.
 import { execSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { indexCatalog, normalizeState } from './core.mjs';
 
-export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-export const P = {
-  catalog: path.join(ROOT, 'specs', 'catalog.json'),
-  checkpoints: path.join(ROOT, 'specs', 'checkpoints.md'),
-  state: path.join(ROOT, 'progress', 'state.json'),
-  progressMd: path.join(ROOT, 'progress', 'PROGRESS.md'),
-  anomalies: path.join(ROOT, 'progress', 'anomalies.md'),
-  blockers: path.join(ROOT, 'progress', 'blockers.md'),
-  lock: path.join(ROOT, '.sdd', 'lock.json'),
-  evidence: path.join(ROOT, 'evidence'),
-  businessRules: path.join(ROOT, 'docs', 'product', 'business-rules.md'),
-  screens: path.join(ROOT, 'docs', 'product', 'screens.md'),
-  adrDir: path.join(ROOT, 'docs', 'adr'),
-};
+export {
+  DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, displayStatus, emptySpecState, indexCatalog, isBlockedTransitively,
+  nextAction, nextActionJson, normalizeState, phaseUnlocked, progressSummary, readySpecs, renderProgressMarkdown,
+} from './core.mjs';
 
-export const MAX_ATTEMPTS = 5;
-export const STATUSES = ['pending', 'in_progress', 'done', 'blocked'];
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+export const ROOT = process.env.SDD_ROOT ? path.resolve(process.env.SDD_ROOT) : REPO_ROOT;
+
+export function sddPaths(root) {
+  return {
+    catalog: path.join(root, 'specs', 'catalog.json'),
+    checkpoints: path.join(root, 'specs', 'checkpoints.md'),
+    state: path.join(root, 'progress', 'state.json'),
+    progressMd: path.join(root, 'progress', 'PROGRESS.md'),
+    audit: path.join(root, 'progress', 'audit.md'),
+    anomalies: path.join(root, 'progress', 'anomalies.md'),
+    blockers: path.join(root, 'progress', 'blockers.md'),
+    lock: path.join(root, '.sdd', 'lock.json'),
+    evidence: path.join(root, 'evidence'),
+    businessRules: path.join(root, 'docs', 'product', 'business-rules.md'),
+    screens: path.join(root, 'docs', 'product', 'screens.md'),
+    adrDir: path.join(root, 'docs', 'adr'),
+  };
+}
+export const P = sddPaths(ROOT);
 
 export function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
-export function writeJsonAtomic(file, data) {
+/** Écriture atomique : fichier temporaire dans le même répertoire puis renommage. */
+export function writeFileAtomic(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const tmp = `${file}.tmp-${process.pid}`;
-  fs.writeFileSync(tmp, JSON.stringify(data, null, 2) + '\n', 'utf8');
+  fs.writeFileSync(tmp, content, 'utf8');
   fs.renameSync(tmp, file);
 }
 
+export function writeJsonAtomic(file, data) {
+  writeFileAtomic(file, JSON.stringify(data, null, 2) + '\n');
+}
+
+/** Horloge de l'outillage : SDD_NOW (date ISO) la fige, sinon horloge système. */
 export function nowIso() {
+  const fixed = process.env.SDD_NOW;
+  if (fixed) {
+    const d = new Date(fixed);
+    if (Number.isNaN(d.getTime())) die(`SDD_NOW invalide : ${fixed}`);
+    return d.toISOString();
+  }
   return new Date().toISOString();
 }
 
-export function loadCatalog() {
-  const c = readJson(P.catalog);
-  c.byId = Object.fromEntries(c.specs.map((s) => [s.id, s]));
-  return c;
+export function loadCatalog(file = P.catalog) {
+  let raw;
+  try {
+    raw = readJson(file);
+  } catch (e) {
+    die(`Catalogue illisible (${path.relative(ROOT, file)}) : ${e.message}`);
+  }
+  return indexCatalog(raw);
 }
 
-export function emptySpecState() {
-  return {
-    status: 'pending',
-    attempts: 0,
-    startedAt: null,
-    completedAt: null,
-    branch: null,
-    commit: null,
-    lastError: null,
-    validations: {},
-  };
-}
-
-export function loadState(catalog = loadCatalog()) {
-  let st;
-  if (fs.existsSync(P.state)) st = readJson(P.state);
-  else st = { version: 1, updatedAt: null, specs: {}, checkpoints: {}, anomalies: [] };
-  for (const s of catalog.specs) if (!st.specs[s.id]) st.specs[s.id] = emptySpecState();
-  for (const ph of catalog.phases) if (!st.checkpoints[ph.checkpoint]) st.checkpoints[ph.checkpoint] = { status: 'pending', at: null, tag: null, report: null };
-  st.anomalies ??= [];
-  return st;
+/** Lit l'état ; un fichier mal formé n'est jamais recréé ni réinitialisé (CL-8). */
+export function loadState(catalog = loadCatalog(), file = P.state) {
+  let raw = null;
+  if (fs.existsSync(file)) {
+    try {
+      raw = readJson(file);
+    } catch (e) {
+      die(`progress/state.json illisible : ${e.message}. Corrigez le fichier (git diff) ; il n'est pas recréé.`);
+    }
+  }
+  return normalizeState(catalog, raw);
 }
 
 export function saveState(st) {
   st.updatedAt = nowIso();
   writeJsonAtomic(P.state, st);
-}
-
-/** Statut affiché : pending devient waiting (dépendances non terminées) ou dependency_blocked. */
-export function displayStatus(catalog, st, id) {
-  const s = st.specs[id];
-  if (s.status !== 'pending') return s.status;
-  const deps = catalog.byId[id].dependsOn;
-  if (deps.some((d) => isBlockedTransitively(catalog, st, d))) return 'dependency_blocked';
-  if (deps.every((d) => st.specs[d].status === 'done') && phaseUnlocked(catalog, st, catalog.byId[id].phase)) return 'ready';
-  return 'waiting';
-}
-
-export function isBlockedTransitively(catalog, st, id, seen = new Set()) {
-  if (seen.has(id)) return false;
-  seen.add(id);
-  if (st.specs[id].status === 'blocked') return true;
-  return catalog.byId[id].dependsOn.some((d) => isBlockedTransitively(catalog, st, d, seen));
-}
-
-/** Une phase est débloquée quand le checkpoint de la phase précédente est réussi. */
-export function phaseUnlocked(catalog, st, phaseId) {
-  const idx = catalog.phases.findIndex((p) => p.id === phaseId);
-  if (idx <= 0) return true;
-  const prev = catalog.phases[idx - 1];
-  return st.checkpoints[prev.checkpoint]?.status === 'passed';
-}
-
-export function readySpecs(catalog, st) {
-  return catalog.specs.filter((s) => displayStatus(catalog, st, s.id) === 'ready');
-}
-
-/** Prochaine action : reprendre une spécification en cours, sinon checkpoint dû, sinon première spécification prête. */
-export function nextAction(catalog, st) {
-  const inProgress = catalog.specs.find((s) => st.specs[s.id].status === 'in_progress');
-  if (inProgress) return { kind: 'resume', spec: inProgress };
-  for (const ph of catalog.phases) {
-    const specs = catalog.specs.filter((s) => s.phase === ph.id);
-    const cp = st.checkpoints[ph.checkpoint];
-    if (cp.status === 'passed') continue;
-    const allDone = specs.every((s) => st.specs[s.id].status === 'done');
-    if (allDone && phaseUnlocked(catalog, st, ph.id)) return { kind: 'checkpoint', checkpoint: ph.checkpoint, phase: ph };
-    break;
-  }
-  const ready = readySpecs(catalog, st);
-  if (ready.length) return { kind: 'start', spec: ready[0] };
-  const pending = catalog.specs.filter((s) => st.specs[s.id].status !== 'done');
-  if (pending.length === 0) return { kind: 'finished' };
-  return { kind: 'stuck', remaining: pending.map((s) => `${s.id}:${displayStatus(catalog, st, s.id)}`) };
 }
 
 export function readLock() {
