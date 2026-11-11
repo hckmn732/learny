@@ -18,4 +18,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Socle de tests et preuves',
     load: () => import('../../../components/sdd-demos/spec-004'),
   },
+  'SPEC-005': {
+    title: 'Références visuelles',
+    load: () => import('../../../components/sdd-demos/spec-005'),
+  },
 };
