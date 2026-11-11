@@ -117,6 +117,7 @@ export const fr = {
       refresh: 'Actualiser',
       error: "L'état du référentiel est illisible.",
       requestId: 'Identifiant de requête',
+      minimal: "La progression SDD n'est pas encore disponible. Démonstrations enregistrées :",
     },
   },
 } as const;
