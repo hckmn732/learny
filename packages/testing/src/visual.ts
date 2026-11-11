@@ -1,0 +1,143 @@
+// Visual conformity helpers (docs/engineering/testing.md §6, ADR-0034).
+import fs from 'node:fs';
+import path from 'node:path';
+
+import { expect, test, type Page, type PageScreenshotOptions } from '@playwright/test';
+import pixelmatch from 'pixelmatch';
+import { PNG } from 'pngjs';
+
+/** Structural conformity threshold against a mockup reference (≤ 12 %). */
+export const MOCKUP_MAX_DIFF_RATIO = 0.12;
+/** Non-regression threshold of toHaveScreenshot (≤ 1 %). */
+export const BASELINE_MAX_DIFF_RATIO = 0.01;
+
+/**
+ * Provisional tokens of the SDD demo shell (SPEC-001 §10). SPEC-301 replaces them with the
+ * tokens exported by @learny/ui without changing the expectTokens API.
+ */
+export const PROVISIONAL_TOKENS = {
+  color: {
+    text: '#111113',
+    border: '#E7E6E1',
+    background: '#FFFFFF',
+    success: '#1F7A3A',
+    danger: '#B42318',
+  },
+  radius: { card: '16px' },
+} as const;
+
+export type TokenExpectations = Record<string, Record<string, string>>;
+
+function hexToRgb(value: string): string {
+  const m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(value);
+  if (!m) return value;
+  const [r, g, b] = [m[1], m[2], m[3]].map((h) => parseInt(h ?? '0', 16));
+  return `rgb(${String(r)}, ${String(g)}, ${String(b)})`;
+}
+
+/** Computed styles must equal the tokens; hex colours are compared in their rgb() form. */
+export async function expectTokens(page: Page, selectors: TokenExpectations): Promise<void> {
+  for (const [selector, styles] of Object.entries(selectors)) {
+    const locator = page.locator(selector).first();
+    await expect(locator, `élément ${selector}`).toBeVisible();
+    for (const [property, token] of Object.entries(styles)) {
+      await expect(locator, `${selector} ${property}`).toHaveCSS(property, hexToRgb(token));
+    }
+  }
+}
+
+export interface ComparisonResult {
+  width: number;
+  height: number;
+  diffPixels: number;
+  totalPixels: number;
+  ratio: number;
+  sideBySidePath: string;
+  diffPath: string;
+}
+
+function readPng(source: Buffer | string): PNG {
+  return PNG.sync.read(typeof source === 'string' ? fs.readFileSync(source) : source);
+}
+
+function sideBySide(left: PNG, right: PNG): PNG {
+  const out = new PNG({ width: left.width + right.width, height: left.height });
+  PNG.bitblt(left, out, 0, 0, left.width, left.height, 0, 0);
+  PNG.bitblt(right, out, 0, 0, right.width, right.height, left.width, 0);
+  return out;
+}
+
+/**
+ * Compares a capture with its mockup reference. Never resizes: different dimensions fail,
+ * as they reveal a viewport error. A missing reference fails explicitly.
+ */
+export function compareWithReference(
+  actual: Buffer | string,
+  reference: string,
+  outputDir: string,
+  name = 'comparison',
+): ComparisonResult {
+  if (!fs.existsSync(reference)) {
+    throw new Error(`Référence absente : ${reference}`);
+  }
+  const a = readPng(actual);
+  const r = readPng(reference);
+  if (a.width !== r.width || a.height !== r.height) {
+    throw new Error(
+      `Dimensions différentes : capture ${String(a.width)}×${String(a.height)}, référence ${String(r.width)}×${String(r.height)}`,
+    );
+  }
+  const diff = new PNG({ width: a.width, height: a.height });
+  const diffPixels = pixelmatch(r.data, a.data, diff.data, a.width, a.height, { threshold: 0.1 });
+  fs.mkdirSync(outputDir, { recursive: true });
+  const sideBySidePath = path.join(outputDir, `${name}-side-by-side.png`);
+  const diffPath = path.join(outputDir, `${name}-diff.png`);
+  fs.writeFileSync(sideBySidePath, PNG.sync.write(sideBySide(r, a)));
+  fs.writeFileSync(diffPath, PNG.sync.write(diff));
+  const totalPixels = a.width * a.height;
+  return {
+    width: a.width,
+    height: a.height,
+    diffPixels,
+    totalPixels,
+    ratio: diffPixels / totalPixels,
+    sideBySidePath,
+    diffPath,
+  };
+}
+
+export type BaselineOptions = Pick<PageScreenshotOptions, 'fullPage' | 'mask'> & {
+  maxDiffPixelRatio?: number;
+};
+
+/**
+ * toHaveScreenshot with the CI rule of ADR-0101 §5: in CI, a baseline missing for the CI platform
+ * attaches the candidate capture and annotates the test instead of failing; an existing baseline
+ * that differs always fails. Locally, a missing baseline fails (create it with --update-snapshots).
+ */
+export async function expectScreenshotBaseline(
+  page: Page,
+  name: string,
+  options: BaselineOptions = {},
+): Promise<void> {
+  const info = test.info();
+  const baseline = info.snapshotPath(name, { kind: 'screenshot' });
+  if (process.env.CI && !fs.existsSync(baseline)) {
+    const shot: PageScreenshotOptions = {};
+    if (options.fullPage !== undefined) shot.fullPage = options.fullPage;
+    if (options.mask !== undefined) shot.mask = options.mask;
+    await info.attach(`baseline-candidate-${name}`, {
+      body: await page.screenshot(shot),
+      contentType: 'image/png',
+    });
+    info.annotations.push({
+      type: 'baseline-missing',
+      description: `Ligne de base absente pour ${info.project.name} : ${path.basename(baseline)}`,
+    });
+    return;
+  }
+  await expect(page).toHaveScreenshot(name, {
+    maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,
+    ...options,
+  });
+}

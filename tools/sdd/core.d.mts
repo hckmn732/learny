@@ -116,3 +116,13 @@ export function nextAction(catalog: Catalog, st: SddState): NextAction;
 export function nextActionJson(action: NextAction): Record<string, unknown>;
 export function progressSummary(catalog: Catalog, st: SddState): ProgressSummary;
 export function renderProgressMarkdown(catalog: Catalog, st: SddState, now: string): string;
+
+export interface PlaywrightSummary {
+  passed: number;
+  failed: number;
+  videos: number;
+  visual: number;
+}
+export function summarizePlaywright(report: unknown, tag: string): PlaywrightSummary;
+export function e2eVerdict(code: number, summary: PlaywrightSummary): boolean;
+export function visualVerdict(summary: PlaywrightSummary): boolean;

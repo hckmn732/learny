@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="4.558711">
+<testsuite name="p0/spec-004.spec.ts" timestamp="2026-11-11T19:45:08.696Z" hostname="desktop" tests="2" failures="0" skipped="0" time="1.729" errors="0">
+<testcase name="inspecte le socle de tests @SPEC-004" classname="p0/spec-004.spec.ts" time="0.831">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/attachments/axe-ce47a2d52a8b2ad124546ead2489a15589bc1a75.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/attachments/spec-004-final-90774a4e6c73027a8fbd83e921c4cd3710f57fa2.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-inspecte-le-socle-de-tests-SPEC-004-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration de tests conforme @SPEC-004 @visual @mobile" classname="p0/spec-004.spec.ts" time="0.898">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-desktop/attachments/axe-f9f556f2623625c340e56e4853a6afbc06af503e.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p0/spec-004.spec.ts" timestamp="2026-11-11T19:45:08.696Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.923" errors="0">
+<testcase name="démonstration de tests conforme @SPEC-004 @visual @mobile" classname="p0/spec-004.spec.ts" time="0.923">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-mobile/attachments/axe-f162b07e8d5a82081bcfd3b1f46a2485d1568fa5.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-004-démonstration--5e643-orme-SPEC-004-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
