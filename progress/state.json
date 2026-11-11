@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T19:07:36.772Z",
+  "updatedAt": "2026-11-11T19:12:54.176Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -54,11 +54,11 @@
       }
     },
     "SPEC-002": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-11T19:12:54.175Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-002-hooks-git-conventions-de-commit-et-prote",
       "commit": null,
       "lastError": null,
       "validations": {}
