@@ -1,27 +1,27 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T21:57:58.525Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T22:21:43.685Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 10 |
+| Terminées | 11 |
 | En cours | 0 |
-| Prêtes | 3 |
+| Prêtes | 2 |
 | En attente de dépendances | 119 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **7.6 %** |
-| Avancement V1 | 8.1 % |
+| **Avancement global** | **8.3 %** |
+| Avancement V1 | 8.9 % |
 | Prochaine action | start SPEC-010 — Observabilité : journalisation, erreurs, santé |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
-| P0 | Fondations et infrastructure | 10/13 | CP-0 | ⏳ |
+| P0 | Fondations et infrastructure | 11/13 | CP-0 | ⏳ |
 | P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
@@ -48,7 +48,7 @@
 | [SPEC-010](../specs/p0-fondations/SPEC-010-observabilite-journalisation-erreurs-sante.md) | Observabilité : journalisation, erreurs, santé | P0 | 🟢 ready | 0 | — | SPEC-006, SPEC-009 |
 | [SPEC-011](../specs/p0-fondations/SPEC-011-integration-continue.md) | Intégration continue | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-002, SPEC-004, SPEC-008 |
 | [SPEC-012](../specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md) | Images Docker et déploiement auto-hébergé | P0 | 🟢 ready | 0 | — | SPEC-007, SPEC-008 |
-| [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | 🟢 ready | 0 | — | SPEC-009, SPEC-011 |
+| [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-009, SPEC-011 |
 | [SPEC-101](../specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md) | Paquet db : Drizzle, migrations et harnais de test | P1 | ⏳ waiting | 0 | — | SPEC-008 |
 | [SPEC-102](../specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md) | Schéma identité et préférences | P1 | ⏳ waiting | 0 | — | SPEC-101 |
 | [SPEC-103](../specs/p1-donnees/SPEC-103-schema-formations-programme-et-notions.md) | Schéma formations, programme et notions | P1 | ⏳ waiting | 0 | — | SPEC-102 |

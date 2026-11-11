@@ -1,0 +1,193 @@
+# Déploiement continu des environnements gérés (SPEC-013, ADR-0052, ADR-0230).
+# - Un run de CI terminé avec succès pour la ref exacte est la seule porte d'entrée.
+# - `preview` et `production` sont deux environnements GitHub distincts, avec leurs propres
+#   secrets préfixés : aucune clé de production ne peut atteindre une preview (EF-2).
+# - La production exige un tag `v*` appartenant à `main` et une migration réussie avant Inngest,
+#   Vercel puis le contrôle de fumée (EF-3, CL-3, CL-4).
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+concurrency:
+  group: deploy-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+  PNPM_VERSION: '10.34.9'
+  SUPABASE_CLI_VERSION: '2.122.1'
+  VERCEL_CLI_VERSION: '48.2.0'
+
+jobs:
+  preview:
+    name: Preview (pull request)
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch != 'main'
+    runs-on: ubuntu-latest
+    environment:
+      name: preview
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      APP_ENV: preview
+      ENABLE_SDD_PAGES: 'true'
+      GIT_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      NEXT_PUBLIC_APP_URL: ${{ vars.PREVIEW_APP_URL }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.PREVIEW_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PREVIEW_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PREVIEW_SUPABASE_SERVICE_ROLE_KEY }}
+      DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+      SUPABASE_DB_URL: ${{ secrets.PREVIEW_SUPABASE_DB_URL }}
+      APP_ENCRYPTION_KEY: ${{ secrets.PREVIEW_APP_ENCRYPTION_KEY }}
+      INNGEST_EVENT_KEY: ${{ secrets.PREVIEW_INNGEST_EVENT_KEY }}
+      INNGEST_SIGNING_KEY: ${{ secrets.PREVIEW_INNGEST_SIGNING_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.PREVIEW_ANTHROPIC_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.PREVIEW_RESEND_API_KEY }}
+      RATE_LIMIT_IP_SECRET: ${{ secrets.PREVIEW_RATE_LIMIT_IP_SECRET }}
+      EMAIL_LINK_SECRET: ${{ secrets.PREVIEW_EMAIL_LINK_SECRET }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.PREVIEW_SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_REGION: ${{ vars.PREVIEW_SUPABASE_REGION }}
+      INNGEST_REGION: ${{ vars.PREVIEW_INNGEST_REGION }}
+      INNGEST_APP_URL: ${{ vars.PREVIEW_INNGEST_APP_URL }}
+      VERCEL_TOKEN: ${{ secrets.PREVIEW_VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_PROJECT_ID }}
+    steps:
+      - name: Extraire la ref validée par la CI
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Vérifier la ref exacte
+        run: test "$GIT_COMMIT" = "$(git rev-parse HEAD)"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - name: Vérifier la configuration preview
+        run: node tools/deploy/check.mjs --env preview --ref "$GIT_COMMIT" --branch "${{ github.event.workflow_run.head_branch }}" --event "${{ github.event.workflow_run.event }}"
+      - name: Appliquer les migrations preview
+        run: node tools/deploy/migrate.mjs --env preview
+      - name: Synchroniser Inngest (branche)
+        run: node tools/deploy/sync-inngest.mjs --env preview --app-url "$INNGEST_APP_URL" --region "$INNGEST_REGION" --commit "$GIT_COMMIT"
+      - name: Déployer la preview Vercel
+        id: deploy
+        run: |
+          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --token "$VERCEL_TOKEN" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
+          test -n "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Preview fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Contrôle de fumée preview
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          test -n "$DEPLOY_URL"
+          curl --fail --silent --show-error --retry 5 --retry-delay 5 "$DEPLOY_URL/api/v1/health" > /dev/null
+
+  production:
+    name: Production (tag v*)
+    if: >
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      APP_ENV: production
+      ENABLE_SDD_PAGES: 'false'
+      GIT_COMMIT: ${{ github.event.workflow_run.head_sha }}
+      NEXT_PUBLIC_APP_URL: ${{ vars.PRODUCTION_APP_URL }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.PRODUCTION_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.PRODUCTION_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PRODUCTION_SUPABASE_SERVICE_ROLE_KEY }}
+      DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+      SUPABASE_DB_URL: ${{ secrets.PRODUCTION_SUPABASE_DB_URL }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.PRODUCTION_SUPABASE_ACCESS_TOKEN }}
+      PRODUCTION_SUPABASE_BACKUP_REFERENCE: ${{ secrets.PRODUCTION_SUPABASE_BACKUP_REFERENCE }}
+      APP_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_APP_ENCRYPTION_KEY }}
+      INNGEST_EVENT_KEY: ${{ secrets.PRODUCTION_INNGEST_EVENT_KEY }}
+      INNGEST_SIGNING_KEY: ${{ secrets.PRODUCTION_INNGEST_SIGNING_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.PRODUCTION_ANTHROPIC_API_KEY }}
+      VOYAGE_API_KEY: ${{ secrets.PRODUCTION_VOYAGE_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.PRODUCTION_RESEND_API_KEY }}
+      NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ vars.PRODUCTION_VAPID_PUBLIC_KEY }}
+      VAPID_PRIVATE_KEY: ${{ secrets.PRODUCTION_VAPID_PRIVATE_KEY }}
+      VAPID_SUBJECT: ${{ vars.PRODUCTION_VAPID_SUBJECT }}
+      STRIPE_SECRET_KEY: ${{ secrets.PRODUCTION_STRIPE_SECRET_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.PRODUCTION_STRIPE_WEBHOOK_SECRET }}
+      STRIPE_PRICE_ID: ${{ vars.PRODUCTION_STRIPE_PRICE_ID }}
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ vars.PRODUCTION_STRIPE_PUBLISHABLE_KEY }}
+      RATE_LIMIT_IP_SECRET: ${{ secrets.PRODUCTION_RATE_LIMIT_IP_SECRET }}
+      EMAIL_LINK_SECRET: ${{ secrets.PRODUCTION_EMAIL_LINK_SECRET }}
+      LEGAL_ENTITY_NAME: ${{ vars.PRODUCTION_LEGAL_ENTITY_NAME }}
+      LEGAL_ENTITY_ADDRESS: ${{ vars.PRODUCTION_LEGAL_ENTITY_ADDRESS }}
+      LEGAL_CONTACT_EMAIL: ${{ vars.PRODUCTION_LEGAL_CONTACT_EMAIL }}
+      LEGAL_HOST_NAME: ${{ vars.PRODUCTION_LEGAL_HOST_NAME }}
+      SUPABASE_REGION: ${{ vars.PRODUCTION_SUPABASE_REGION }}
+      INNGEST_REGION: ${{ vars.PRODUCTION_INNGEST_REGION }}
+      INNGEST_APP_URL: ${{ vars.PRODUCTION_INNGEST_APP_URL }}
+      VERCEL_TOKEN: ${{ secrets.PRODUCTION_VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_PROJECT_ID }}
+    steps:
+      - name: Extraire la ref validée par la CI
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Vérifier la ref exacte
+        run: test "$GIT_COMMIT" = "$(git rev-parse HEAD)"
+      - name: Vérifier que le tag appartient à main
+        run: |
+          git fetch --force --tags origin main
+          git merge-base --is-ancestor "$GIT_COMMIT" origin/main
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: supabase/setup-cli@v1
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+      - name: Vérifier la configuration production
+        run: node tools/deploy/check.mjs --env production --ref "${{ github.event.workflow_run.head_branch }}" --branch main --event push
+      - name: Vérifier le point de restauration
+        run: test -n "$PRODUCTION_SUPABASE_BACKUP_REFERENCE"
+      - name: Appliquer les migrations production
+        run: node tools/deploy/migrate.mjs --env production --backup "$PRODUCTION_SUPABASE_BACKUP_REFERENCE"
+      - name: Synchroniser Inngest (production)
+        run: node tools/deploy/sync-inngest.mjs --env production --app-url "$INNGEST_APP_URL" --region "$INNGEST_REGION" --commit "$GIT_COMMIT"
+      - name: Déployer Vercel en production
+        id: deploy
+        run: |
+          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --token "$VERCEL_TOKEN" --meta "githubCommitSha=$GIT_COMMIT")"
+          test -n "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Production fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
+      - name: Contrôle de fumée production
+        env:
+          DEPLOY_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          test -n "$DEPLOY_URL"
+          curl --fail --silent --show-error --retry 5 --retry-delay 5 "$DEPLOY_URL/api/v1/health" > /dev/null

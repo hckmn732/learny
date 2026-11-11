@@ -1,0 +1,9 @@
+Synchronisation Inngest — dry-run
+Environnement : preview
+Commit : 0000000
+Région : eu
+Endpoint : https://***.invalid
+Fonctions attendues : sdd-demo-job
+Résultat : aucune synchronisation
+⚠ Synchronisation non exécutée : introspection et PUT seraient envoyés en mode réel.
+Aucun appel réseau (--dry-run).

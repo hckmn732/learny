@@ -238,6 +238,83 @@ export const fr = {
       source: 'Configuration lue dans le dépôt :',
       unavailable: 'Workflows illisibles : aucune configuration affichée.',
     },
+    spec013: {
+      environments: {
+        title: 'Matrice des environnements',
+        intro:
+          'Quatre environnements, quatre composants. Les destinations preview et production restent « Non configuré » tant qu’aucun accès réel n’a été vérifié.',
+        component: 'Composant',
+        environments: {
+          local: 'Local',
+          test: 'Test (CI)',
+          preview: 'Preview',
+          production: 'Production',
+        },
+        components: {
+          web: 'Web',
+          base: 'Base',
+          jobs: 'Jobs',
+          ai: 'IA',
+        },
+        cells: {
+          local: {
+            web: 'pnpm dev (localhost:3000)',
+            base: 'Supabase CLI (Docker)',
+            jobs: 'Inngest Dev Server',
+            ai: 'mock',
+          },
+          test: {
+            web: 'build + next start',
+            base: 'Supabase CLI (Docker)',
+            jobs: 'Inngest Dev Server',
+            ai: 'mock obligatoire',
+          },
+          preview: {
+            web: 'Vercel preview (fra1) — Non configuré',
+            base: 'Supabase preview (UE) — Non configuré',
+            jobs: 'Branche Inngest (UE) — Non configuré',
+            ai: 'réel, plafond bas',
+          },
+          production: {
+            web: 'Vercel production (fra1) — Non configuré',
+            base: 'Supabase production (UE) — Non configuré',
+            jobs: 'Inngest Cloud (UE) — Non configuré',
+            ai: 'réel',
+          },
+        },
+      },
+      regions: {
+        title: 'Régions UE',
+        intro:
+          'La liste EU_REGIONS de @learny/config refuse toute région hors Union européenne avant déploiement.',
+        services: {
+          vercel: 'Vercel',
+          supabase: 'Supabase',
+          inngest: 'Inngest',
+        },
+        expected: 'Région attendue',
+        eu: 'UE',
+        outsideEu: 'hors UE',
+        source: 'Source : packages/config/src/platform.ts',
+      },
+      dryRun: {
+        title: 'Dernier contrôle local (--dry-run)',
+        intro:
+          'Contrôle statique du dépôt : régions, variables, ref, pages SDD et workflow. Aucun fournisseur n’est contacté.',
+        environment: 'Environnement',
+        status: 'Statut',
+        statusOk: 'configuration statique vérifiée',
+        statusKo: 'configuration invalide',
+        actions: 'Actions prévues',
+        action: 'Étape',
+        destination: 'Destination',
+        warnings: 'Avertissements',
+        errors: 'Erreurs',
+        none: 'Aucun',
+        noNetwork: 'Aucun appel réseau, aucune migration, aucun déploiement.',
+        notePrefix: 'Note',
+      },
+    },
     spec009: {
       environment: {
         title: 'Environnement',

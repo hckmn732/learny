@@ -1,0 +1,60 @@
+{
+  "dryRun": true,
+  "envName": "production",
+  "environment": "production",
+  "commit": null,
+  "checkedAt": null,
+  "workflow": ".github/workflows/deploy.yml",
+  "status": "ok",
+  "regions": {
+    "vercel": "fra1",
+    "supabase": "eu-central-1",
+    "inngest": "eu"
+  },
+  "actions": [
+    {
+      "id": "check",
+      "label": "Vérifier régions, variables, ref et pages SDD",
+      "destination": "dépôt local"
+    },
+    {
+      "id": "backup",
+      "label": "Exiger un point de restauration documenté avant migration",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "migrate",
+      "label": "Lister puis appliquer les migrations Supabase en attente",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "sync-inngest",
+      "label": "Synchroniser les fonctions Inngest de la ref déployée",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "vercel",
+      "label": "Déployer Vercel en production (fra1)",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "smoke",
+      "label": "Contrôler la santé /api/v1/health et les parcours critiques",
+      "destination": "Non configuré"
+    }
+  ],
+  "warnings": [
+    "SUPABASE_REGION non fourni : région supabase non vérifiée.",
+    "INNGEST_REGION non fourni : région inngest non vérifiée.",
+    "Ref absente en --dry-run : fournir un tag v* pour un essai réel.",
+    "Branche absente en --dry-run : le tag doit appartenir à main.",
+    "Variables obligatoires manquantes : NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, DATABASE_URL, APP_ENCRYPTION_KEY, INNGEST_EVENT_KEY, INNGEST_SIGNING_KEY, ANTHROPIC_API_KEY, VOYAGE_API_KEY, RESEND_API_KEY, NEXT_PUBLIC_VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_ID, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, RATE_LIMIT_IP_SECRET, EMAIL_LINK_SECRET, LEGAL_ENTITY_NAME, LEGAL_ENTITY_ADDRESS, LEGAL_CONTACT_EMAIL, LEGAL_HOST_NAME. (dépendances externes non configurées, EF-8).",
+    "ENABLE_SDD_PAGES=false doit être explicite en production. (valeur par défaut false dans packages/config)."
+  ],
+  "errors": [],
+  "destinations": {
+    "web": "Non configuré",
+    "database": "Non configuré",
+    "jobs": "Non configuré"
+  }
+}

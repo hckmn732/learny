@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T21:57:58.524Z",
+  "updatedAt": "2026-11-11T22:21:43.684Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -533,14 +533,55 @@
       "validations": {}
     },
     "SPEC-013": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-11T22:07:37.024Z",
+      "completedAt": "2026-11-11T22:21:43.682Z",
+      "branch": "spec/SPEC-013-environnements-geres-et-deploiement-cont",
+      "commit": "80649f2",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:22.723Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:24.016Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:24.250Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:25.056Z",
+          "details": "22 test(s) [SPEC-013] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:27.929Z",
+          "details": "12 test(s) [SPEC-013] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:32.697Z",
+          "details": "2 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:32.697Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-11T22:21:32.707Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-101": {
       "status": "pending",
