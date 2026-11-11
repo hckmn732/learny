@@ -1,0 +1,21 @@
+# Rapport ci:check — validation locale des workflows (SPEC-011)
+# Commande : pnpm ci:check (actionlint local, aucun appel à l'API GitHub)
+
+Validation locale des workflows GitHub Actions (.)
+  job audit : Audit du référentiel
+  job secrets : Sécurité (secrets et dépendances)
+  job quality : Lint, types, build, unitaires — condition : needs.audit.outputs.has_app == 'true'
+  job integration : Intégration (Supabase local) — condition : needs.audit.outputs.has_app == 'true'
+  job e2e : E2E et conformité visuelle (Chromium) — condition : needs.audit.outputs.has_app == 'true'
+  artefacts : audit-reports (14 j), security-reports (30 j), unit-reports (14 j), integration-reports (14 j), e2e-reports (14 j)
+actionlint 1.7.7 : OK
+act : absent (non exécuté)
+⚠ act absent : aucun essai local du workflow, validation syntaxique seulement.
+✔ ci:check : workflows conformes (validation YAML et actionlint locales, aucun run GitHub prétendu).
+
+# actionlint --version
+1.7.7
+installed by downloading from release page
+built with go1.23.4 compiler for linux/amd64
+
+# act : absent (aucun essai local exécuté, aucune exécution GitHub revendiquée)
