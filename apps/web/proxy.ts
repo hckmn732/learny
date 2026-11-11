@@ -9,14 +9,20 @@ import { findSddDemo, sddPagesEnabled } from './lib/sdd-pages';
 // Unmatched internal path: rendered by app/not-found.tsx with a real 404 status.
 const NOT_FOUND_PATH = '/_sdd-not-found';
 
+// Only mockup references listed by the SPEC-005 inventory may pass the guard (SPEC-005, EF-5).
+const REFERENCE_NAME = /^SCR-\d{2}-[a-z0-9-]+-(?:desktop|mobile)\.png$/;
+
 export function proxy(request: NextRequest): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
   const specId = segments[2];
+  const reference =
+    segments.length === 4 && segments[2] === 'reference' && REFERENCE_NAME.test(segments[3] ?? '');
   const allowed =
     sddPagesEnabled(process.env) &&
     segments[1] === 'sdd' &&
-    segments.length <= 3 &&
-    (specId === undefined || findSddDemo(specId, sddDemos) !== undefined);
+    (reference ||
+      (segments.length <= 3 &&
+        (specId === undefined || findSddDemo(specId, sddDemos) !== undefined)));
   if (allowed) return NextResponse.next();
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
 }
