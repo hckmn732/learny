@@ -1,0 +1,28 @@
+# SPEC-010 — critères d'acceptation
+
+Validations du 2026-11-11 (`node tools/sdd/validate.mjs SPEC-010`) : lint, typecheck et build
+réussis ; **12 tests unitaires** `[SPEC-010]`, **8 tests d'intégration** `[SPEC-010]`,
+**2 tests e2e** `@SPEC-010` (4 vidéos), **1 test `@visual`** réussi ; aucune violation axe
+`serious`/`critical` (attachements `attachments/*-axe.json`). Aucun DSN Sentry réel n'était
+fourni : les modes sans DSN et le faux transport sont testés, aucun envoi externe n'est simulé
+comme preuve.
+
+- ✅ CA-1 — Une requête et ses journaux partagent le même `requestId` ; deux requêtes concurrentes restent isolées. Preuves : `packages/core/src/request-context.test.ts` → `[SPEC-010] request context > propagates requestId and userId to the logger created in the context (EF-1, ET-2)` et `> keeps two concurrent requests isolated, identifiers and users never mix (CL-6, CA-1)` (`unit.json`) ; `apps/web/test/integration/observability.test.ts` → `[SPEC-010] observability > gives each concurrent request its own requestId and userId (CA-1, CL-6)` (deux appels HTTP parallèles, un flux pino mémoire) et `> generates a safe identifier when the incoming header is invalid (ET-3, CL-1)` (`integration.json`) ; e2e `inspecte le diagnostic @SPEC-010` vérifie le `requestId` commun aux quatre régions, l'écho de `x-request-id` par `/api/v1/health` et la génération d'un UUID sûr pour un en-tête invalide.
+- ✅ CA-2 — Les sorties JSON de journal et les événements Sentry filtrés ne contiennent aucune valeur des sentinelles e-mail, clé, cookie, apport ou prompt. Preuves : `packages/core/src/logger.test.ts` → `[SPEC-010] logger > drops every nested and non-allow-listed field containing a sentinel (ET-1, CL-2)`, `> serialises an exception as a type and a code only, never its message or stack (EF-3)` et `> redacts e-mail addresses, provider keys and key=value secrets in strings (EF-2)` (`unit.json`) ; `apps/web/test/integration/observability.test.ts` → `> never serialises a sentinel in the pino bytes or the safe 500 (CA-2)` (assertions sur les octets pino et le corps HTTP) et `> filters request, query, cookies and extra data in beforeSend (ET-4, CA-2)` (`integration.json`) ; le journal expurgé `screenshots/05-*.png` affiche `[Redacted]` ; e2e `inspecte le diagnostic @SPEC-010` vérifie l'absence des valeurs fictives dans le HTML (`LEAKS`).
+- ✅ CA-3 — `SENTRY_DSN` absent n'envoie rien ; défini hors test, une erreur inattendue produit un événement sûr sans modifier la réponse utilisateur. Preuves : `apps/web/test/integration/observability.test.ts` → `> sends nothing without a DSN and stays inactive in the test environment (CA-3, CL-4)` (transport factice jamais appelé, DSN vide et `APP_ENV=test`) et `> keeps the user response identical while reporting a safe event (CA-3)` (faux transport : un événement, tags `requestId`/`route`, aucun contenu d'exception, réponse 500 `INTERNAL_ERROR` inchangée) (`integration.json`) ; `apps/web/lib/sentry.ts` initialise le SDK uniquement avec DSN et hors test, `beforeSend` réécrit l'événement sûr. Aucun événement Sentry réel n'est fabriqué.
+- ✅ CA-4 — La santé conserve le contrat SPEC-006 et rend l'indisponibilité base avec délai borné, sans détail sensible. Preuves : `apps/web/test/integration/observability.test.ts` → `> keeps the SPEC-006 health fields and reports a failing base without detail (CA-4)` (503, champs `status/version/commit/database`, `components { database, build }`, aucune chaîne de connexion) (`integration.json`) ; non-régression `[SPEC-006] health routes > answers 503 within the bounded delay when the probe hangs` et `> answers 200 ok with a healthy injected probe…` rejoués ; `apps/web/lib/health.test.ts` → `[SPEC-006] health > validates the contract: five required fields, extra fields allowed` ; e2e `inspecte le diagnostic @SPEC-010` interroge `GET /api/v1/health` et vérifie `components`.
+- ✅ CA-5 — La page SDD montre corrélation, expurgation, erreur et santé, passe axe, vidéo et capture desktop/mobile. Preuves : e2e `inspecte le diagnostic @SPEC-010` (requestId, journal `[Redacted]`, problem+json sûr, états de santé avec icône et texte) et `diagnostic conforme @SPEC-010 @visual` (ordre des quatre régions, cinq titres, jetons `expectTokens`, régions nommées défilables, axe desktop et mobile) ; captures `screenshots/05-diagnostic-conforme-desktop-spec-010-desktop.png` et `screenshots/07-diagnostic-conforme-desktop-spec-010-mobile.png`, vidéos `video/02-*.webm`, `video/09-*.webm`, `video/10-*.webm`, `video/11-*.webm`, axe `attachments/04-diagnostic-conforme-desktop-axe.json` et `attachments/06-diagnostic-conforme-desktop-axe.json`. À 390 px, le JSON défile horizontalement dans la région nommée « Journal JSON formaté » (assertion `scrollWidth > clientWidth`, aucun débordement de page).
+
+## Non-régression
+
+- `@SPEC-006` rejoué sur le build validé : 3 tests e2e réussis. La ligne de base
+  `spec-006-demo.png` (desktop et mobile) a été régénérée : le registre des démonstrations gagne
+  l'entrée SPEC-010, ce qui allonge la page de 26 px malgré le masque du registre
+  (`docs/engineering/testing.md` §6.4). Le test de santé SPEC-006 accepte le champ additif
+  `components` exigé par EF-5, sans retirer aucun champ de SPEC-006.
+- `@SPEC-009` rejoué : 3 tests e2e réussis, dont le test `@visual`.
+- `[SPEC-006]` et `[SPEC-007]` unitaires et d'intégration rejoués : aucun échec.
+- `pnpm test:unit` complet : 347 tests réussis. `pnpm test:int` complet : 95 tests réussis
+  après avoir aligné l'environnement du test de pile SPEC-008 (`EMAIL_MODE=memory` exigé par
+  SPEC-009 CL-3 en environnement `test` ; le test Mailpit continue d'exercer son port SMTP).
+- Aucune autre ligne de base visuelle n'a été modifiée.
