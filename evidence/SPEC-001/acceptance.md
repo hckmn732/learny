@@ -1,0 +1,9 @@
+# SPEC-001 — critères d'acceptation
+
+- ✅ CA-1 — preuve : `manual-checks.md` (clone propre : `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm build` → code 0) ; étapes `lint`, `typecheck`, `build` de `checks.json` ; `integration.json` › `[SPEC-001] tooling` › « declares every root script ».
+- ✅ CA-2 — preuve : `integration.json` › `[SPEC-001] GET /api/v1/health` (200, `{ status: 'ok' }`, `cache-control: no-store`) ; `e2e.json` › « accueil provisoire et santé @SPEC-001 » (GET 200, POST 405) ; vidéo `video/02-accueil-provisoire-et-sant-.webm` ; `manual-checks.md`.
+- ✅ CA-3 — preuve : `unit.json` (17 tests `[SPEC-001]` réussis) et `integration.json` (8 tests `[SPEC-001]` réussis), produits par `--reporter=json --outputFile.json` ; `checks.json` étapes `unit` et `integration`.
+- ✅ CA-4 — preuve : `e2e.json` (3 tests `@SPEC-001` réussis sur Chromium, projet `desktop`), `e2e.xml` (JUnit), 3 vidéos dans `video/`.
+- ✅ CA-5 — preuve : `integration.json` › `[SPEC-001] tooling` › « forbids Date.now() outside packages/core/src/clock.ts », « forbids new Date() without arguments outside the clock », « forbids importing an application from a package » (`import/no-restricted-paths`).
+- ✅ CA-6 — preuve : `unit.json` › `[SPEC-001] sddPagesEnabled` (7 cas) ; `manual-checks.md` (404 sans `ENABLE_SDD_PAGES`) ; `e2e.json` › « page de démonstration SPEC-001 @SPEC-001 » (quatre sections, 404 pour `SPEC-999` et `abc`) et « démonstration SPEC-001 conforme @SPEC-001 @visual » ; capture `screenshots/07-d-monstration-spec-001-conforme-screenshot.png` ; ligne de base `apps/web/e2e/__screenshots__/p0/spec-001.spec.ts/spec-001-demo-desktop-linux.png`.
+- ✅ CA-7 — preuve : `unit.json` › `[SPEC-001] platform regions` (vercel, supabase, inngest en UE ; `iad1` et `us-east-1` refusés) ; `integration.json` › `[SPEC-001] tooling` › « declares … in an EU region ».
