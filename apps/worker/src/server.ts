@@ -7,6 +7,7 @@ import { Hono } from 'hono';
 import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
+import { parseServerEnv } from '@learny/config/server';
 import { functions as sharedFunctions, inngest } from '@learny/jobs';
 
 export const DEFAULT_PORT = 3001;
@@ -84,9 +85,14 @@ export function startServer(app: Hono, port: number, hostname = '0.0.0.0'): Prom
 
 export async function main(env: Env = process.env): Promise<void> {
   try {
+    // Validated before any listener opens: an incomplete production environment never starts
+    // (SPEC-009, EF-1). The error names variables only, never a value.
+    const config = parseServerEnv(env);
     const port = parsePort(env.PORT);
     await startServer(createApp({ env }), port);
-    console.info(`learny worker: http://localhost:${String(port)}${INNGEST_PATH}`);
+    console.info(
+      `learny worker: http://localhost:${String(port)}${INNGEST_PATH} (${config.APP_ENV})`,
+    );
   } catch (error) {
     console.error(error instanceof Error ? error.message : 'Démarrage du worker impossible.');
     process.exit(1);

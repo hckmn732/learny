@@ -138,6 +138,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.7
         version: 2.1.7(hono@4.13.18)
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@learny/core':
         specifier: workspace:*
         version: link:../../packages/core

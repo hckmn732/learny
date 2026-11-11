@@ -217,6 +217,26 @@ export default tseslint.config(
   },
   ...restrictedImportBlocks,
   {
+    // Server configuration never reaches a client component: apps/web has exactly one adapter
+    // (SPEC-009, ET-6). Any other import of the server entry is a lint error.
+    files: ['apps/web/**/*.{ts,tsx}'],
+    ignores: ['apps/web/lib/server-env.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // The clock module and the out-of-product SDD tooling may read the system time (ADR-0101).
     files: ['packages/core/src/clock.ts', 'tools/sdd/**'],
     rules: { 'no-restricted-syntax': 'off' },
