@@ -21,3 +21,18 @@ export function logClientError(error: unknown): SafeErrorInfo {
   console.warn(JSON.stringify({ msg: 'page error', ...info }));
   return info;
 }
+
+/**
+ * In the browser, in production, an Error passed to console.error (Next.js logs every error caught
+ * by an error boundary) is replaced by its safe summary: no message, no stack (SPEC-006, CL-7).
+ */
+export function installSafeConsole(target: Pick<Console, 'error'>): void {
+  const original = target.error.bind(target);
+  target.error = (...args: unknown[]) => {
+    original(
+      ...args.map((arg) =>
+        arg instanceof Error ? JSON.stringify({ msg: 'client error', ...safeErrorInfo(arg) }) : arg,
+      ),
+    );
+  };
+}
