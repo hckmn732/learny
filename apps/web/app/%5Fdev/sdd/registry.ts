@@ -10,4 +10,8 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Monorepo, application web minimale et socle de tests',
     load: () => import('../../../components/sdd-demos/spec-001'),
   },
+  'SPEC-002': {
+    title: 'Hooks Git, conventions de commit et protection des secrets',
+    load: () => import('../../../components/sdd-demos/spec-002'),
+  },
 };

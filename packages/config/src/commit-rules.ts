@@ -39,25 +39,27 @@ export const commitlintRules = {
   'body-max-line-length': [2, 'always', 100],
 } as const satisfies Record<string, RuleConfig>;
 
-export interface ParsedCommit {
-  type?: string | null;
-  scope?: string | null;
-  subject?: string | null;
-}
+// Fields of a commit parsed by conventional-commits-parser (structurally compatible with its Commit).
+export type ParsedCommit = Readonly<Record<string, unknown>>;
+
+const field = (parsed: ParsedCommit, name: string): string => {
+  const value = parsed[name];
+  return typeof value === 'string' ? value : '';
+};
 
 type RuleOutcome = [boolean, string];
 
 export const commitlintPlugin = {
   rules: {
     'learny/scope-pattern': (parsed: ParsedCommit): RuleOutcome => {
-      const scope = parsed.scope ?? '';
+      const scope = field(parsed, 'scope');
       // An empty scope is reported by scope-empty.
       const ok = scope === '' || COMMIT_SCOPE_PATTERN.test(scope);
       return [ok, 'la portée doit être SPEC-xxx, CP-n ou sdd'];
     },
     'learny/subject-max-length': (parsed: ParsedCommit): RuleOutcome => {
-      const max = parsed.type === 'merge' ? MERGE_SUBJECT_MAX : SUBJECT_MAX;
-      const ok = (parsed.subject ?? '').length <= max;
+      const max = field(parsed, 'type') === 'merge' ? MERGE_SUBJECT_MAX : SUBJECT_MAX;
+      const ok = field(parsed, 'subject').length <= max;
       return [ok, 'la description dépasse 72 caractères (100 pour merge)'];
     },
   },
