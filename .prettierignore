@@ -1,0 +1,12 @@
+pnpm-lock.yaml
+design/
+docs/legacy/
+evidence/
+progress/
+test-results/
+coverage/
+.next/
+dist/
+tools/sdd/
+specs/
+docs/adr/
