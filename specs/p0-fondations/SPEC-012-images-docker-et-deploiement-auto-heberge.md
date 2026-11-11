@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-007, SPEC-008]
 business_rules: []
 screens: []
-adrs: [ADR-0053]
+adrs: [ADR-0053, ADR-0227, ADR-0228]
 visual: demo
 ---
 
@@ -111,3 +111,8 @@ Toutes les conditions de `docs/engineering/testing.md` §7 passent, y compris co
 ## 15. Décisions et hypothèses
 
 ADR-0053 fixe les deux usages de Docker et les composants auto-hébergés. La procédure reste une option de déploiement ; le lancement V1 sur services gérés relève de SPEC-013 et SPEC-808.
+
+Décisions prises pendant l'implémentation, sans sollicitation de l'utilisateur :
+
+- **ADR-0227** : images upstream épinglées, Kong DB-less pour exposer Auth/REST/Storage, réseaux `backend` interne et `egress` séparé, rôles Supabase initialisés avec le mot de passe d'exécution.
+- **ADR-0228** : runner de migrations idempotent avec empreintes, sonde conteneur du web couvrant ses dépendances, test d'intégration qui construit et démarre réellement la pile dans un projet isolé.

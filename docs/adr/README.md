@@ -105,3 +105,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0224](ADR-0224-socle-de-tests-spec-004-projets-gardes-et-collecte.md) | Socle de tests SPEC-004 : projets, gardes et collecte | Déduite | SPEC-004, ADR-0047, ADR-0048, ADR-0050, ADR-0101 |
 | [ADR-0225](ADR-0225-captures-de-reference-deterministes.md) | Captures de référence déterministes | Déduite | SPEC-005 |
 | [ADR-0226](ADR-0226-emplacement-des-tests-du-validateur-ci-et-conservation-des-a.md) | Emplacement des tests du validateur CI et conservation des artefacts | Déduite | SPEC-011 |
+| [ADR-0227](ADR-0227-composants-versions-et-exposition-reseau-de-la-pile-auto-heb.md) | Composants, versions et exposition réseau de la pile auto-hébergée | Déduite | SPEC-012, ADR-0053 |
+| [ADR-0228](ADR-0228-migrations-sondes-et-preuves-executables-de-l-auto-hebergeme.md) | Migrations, sondes et preuves exécutables de l'auto-hébergement | Déduite | SPEC-012, ADR-0053, ADR-0047 |
