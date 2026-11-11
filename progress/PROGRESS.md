@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T19:20:38.932Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-11T12:20:00.000Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -8,14 +8,14 @@
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
 | Terminées | 2 |
-| En cours | 0 |
-| Prêtes | 3 |
+| En cours | 1 |
+| Prêtes | 2 |
 | En attente de dépendances | 127 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **1.5 %** |
 | Avancement V1 | 1.6 % |
-| Prochaine action | start SPEC-003 — Outillage SDD exécutable et intégré |
+| Prochaine action | resume SPEC-003 — Outillage SDD exécutable et intégré |
 
 ## Phases et checkpoints
 
@@ -38,7 +38,7 @@
 |---|---|---|---|---|---|---|
 | [SPEC-001](../specs/p0-fondations/SPEC-001-monorepo-application-web-minimale-et-socle-de-test.md) | Monorepo, application web minimale et socle de tests | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-002](../specs/p0-fondations/SPEC-002-hooks-git-conventions-de-commit-et-protection-des-.md) | Hooks Git, conventions de commit et protection des secrets | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-001 |
-| [SPEC-003](../specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md) | Outillage SDD exécutable et intégré | P0 | 🟢 ready | 0 | — | SPEC-001 |
+| [SPEC-003](../specs/p0-fondations/SPEC-003-outillage-sdd-executable-et-integre.md) | Outillage SDD exécutable et intégré | P0 | 🔄 in_progress | 0 | — | SPEC-001 |
 | [SPEC-004](../specs/p0-fondations/SPEC-004-socle-de-tests-complet-et-collecte-des-preuves.md) | Socle de tests complet et collecte des preuves | P0 | ⏳ waiting | 0 | — | SPEC-001, SPEC-003 |
 | [SPEC-005](../specs/p0-fondations/SPEC-005-references-visuelles-generees-depuis-les-maquettes.md) | Références visuelles générées depuis les maquettes | P0 | ⏳ waiting | 0 | — | SPEC-004 |
 | [SPEC-006](../specs/p0-fondations/SPEC-006-application-web-configuration-de-base-sante-et-pag.md) | Application web : configuration de base, santé et pages de démonstration | P0 | 🟢 ready | 0 | — | SPEC-001 |

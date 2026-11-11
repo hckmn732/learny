@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T19:20:38.928Z",
+  "updatedAt": "2026-11-11T12:20:00.000Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -105,11 +105,11 @@
       }
     },
     "SPEC-003": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-11T19:20:54.198Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-003-outillage-sdd-executable-et-integre",
       "commit": null,
       "lastError": null,
       "validations": {}
