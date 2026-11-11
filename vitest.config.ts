@@ -43,6 +43,7 @@ export default defineConfig({
             'tools/**/test/unit/**/*.test.ts',
             'tools/ci/*.test.ts',
             'tools/deploy/*.test.ts',
+            'tools/docker/*.test.ts',
           ],
           environment: 'node',
         },

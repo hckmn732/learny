@@ -42,6 +42,10 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Intégration continue',
     load: () => import('../../../components/sdd-demos/spec-011'),
   },
+  'SPEC-012': {
+    title: 'Auto-hébergement',
+    load: () => import('../../../components/sdd-demos/spec-012'),
+  },
   'SPEC-013': {
     title: 'Déploiement géré',
     load: () => import('../../../components/sdd-demos/spec-013'),

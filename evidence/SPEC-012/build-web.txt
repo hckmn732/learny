@@ -1,0 +1,100 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from web.Dockerfile
+#1 transferring dockerfile: 3.19kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#2 DONE 0.4s
+
+#3 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#3 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/node:24.22.3-alpine3.24
+#4 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 505B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 17.79kB done
+#6 DONE 0.0s
+
+#7 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:98e4e60b35fd50143e1838da2957488c25aa3a3efbd48bb679923f77d6d3d873
+#7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:98e4e60b35fd50143e1838da2957488c25aa3a3efbd48bb679923f77d6d3d873 0.0s done
+#7 DONE 0.0s
+
+#8 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
+#8 CACHED
+
+#9 [builder 4/5] COPY . .
+#9 CACHED
+
+#10 [base 3/3] WORKDIR /repo
+#10 CACHED
+
+#11 [deps 2/9] COPY apps/web/package.json ./apps/web/package.json
+#11 CACHED
+
+#12 [deps 6/9] COPY packages/core/package.json ./packages/core/package.json
+#12 CACHED
+
+#13 [deps 7/9] COPY packages/jobs/package.json ./packages/jobs/package.json
+#13 CACHED
+
+#14 [runner 2/6] WORKDIR /app
+#14 CACHED
+
+#15 [deps 1/9] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+#15 CACHED
+
+#16 [deps 3/9] COPY apps/worker/package.json ./apps/worker/package.json
+#16 CACHED
+
+#17 [deps 8/9] COPY packages/testing/package.json ./packages/testing/package.json
+#17 CACHED
+
+#18 [deps 5/9] COPY packages/contracts/package.json ./packages/contracts/package.json
+#18 CACHED
+
+#19 [runner 4/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/static ./apps/web/.next/static
+#19 CACHED
+
+#20 [builder 5/5] RUN pnpm --filter @learny/web build
+#20 CACHED
+
+#21 [runner 5/6] COPY --from=builder --chown=root:root /repo/apps/web/public ./apps/web/public
+#21 CACHED
+
+#22 [deps 9/9] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/web...
+#22 CACHED
+
+#23 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
+#23 CACHED
+
+#24 [builder 2/5] COPY --from=deps /repo/apps ./apps
+#24 CACHED
+
+#25 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#25 CACHED
+
+#26 [runner 3/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/standalone ./
+#26 CACHED
+
+#27 [deps 4/9] COPY packages/config/package.json ./packages/config/package.json
+#27 CACHED
+
+#28 [runner 6/6] COPY --chown=root:root docker/healthcheck-web.mjs ./healthcheck-web.mjs
+#28 CACHED
+
+#29 exporting to image
+#29 exporting layers done
+#29 exporting manifest sha256:12f4862d373ec4c9ecc46a289b055105a818172736b7c7d7cc268e0cb968fc8d done
+#29 exporting config sha256:bcbc2d608a5e450ba0395a06f0c47cb3e220b715e788c5bbf001ca7727825a49 done
+#29 exporting attestation manifest sha256:1ca9e27b47a748f2c1c7e99f2e36f0e24cbe4e039af1e1905bf90640b4c3774a 0.0s done
+#29 exporting manifest list sha256:cad5b8d0059dfd4e5a7ea8eeb416134c16589ca57a08c2f95a56450e79f21373 0.0s done
+#29 naming to docker.io/library/*** done
+#29 unpacking to docker.io/library/*** done
+#29 DONE 0.1s

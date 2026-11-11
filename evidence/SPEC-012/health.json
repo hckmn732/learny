@@ -1,0 +1,26 @@
+[
+  {
+    "name": "web",
+    "target": "/api/v1/health",
+    "ok": true,
+    "detail": "HTTP 200 · status=degraded · database=not_configured · commit=dc30f2d"
+  },
+  {
+    "name": "worker",
+    "target": "/health",
+    "ok": true,
+    "detail": "✔ worker : ok (port 3001)"
+  },
+  {
+    "name": "postgres",
+    "target": "pg_isready",
+    "ok": true,
+    "detail": "/run/postgresql:5432 - accepting connections"
+  },
+  {
+    "name": "inngest",
+    "target": "/health",
+    "ok": true,
+    "detail": "sans sortie (code 0)"
+  }
+]

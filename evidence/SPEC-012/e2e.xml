@@ -1,0 +1,40 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="3.6535070000000003">
+<testsuite name="p0/spec-012.spec.ts" timestamp="2026-11-11T22:21:14.002Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.545" errors="0">
+<testcase name="inspecte la pile auto-hébergée @SPEC-012" classname="p0/spec-012.spec.ts" time="0.955">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/attachments/axe-fd085f1dff7b966eca82b270b2d54c510a4b86cd.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/attachments/spec-012-final-988f53c105a32de814059dc37e69102ab673a43d.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-inspecte-la-pile-auto-hébergée-SPEC-012-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="auto-hébergement conforme @SPEC-012 @visual" classname="p0/spec-012.spec.ts" time="1.59">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/attachments/axe-264a59c2bc430b2a6e6e25e711c6e1b9e0a699b3.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/attachments/axe-196da16b3936a303863116ad0fa38cb49c8c6817.json]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-012-auto-hébergement-conforme-SPEC-012-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,735 @@
+{
+  "name": "learny-selfhost-it-515861",
+  "networks": {
+    "backend": {
+      "name": "learny-selfhost-it-515861_backend",
+      "ipam": {},
+      "internal": true
+    },
+    "egress": {
+      "name": "learny-selfhost-it-515861_egress",
+      "ipam": {}
+    }
+  },
+  "services": {
+    "auth": {
+      "restart": "unless-stopped",
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "API_EXTERNAL_URL": "***",
+        "GOTRUE_API_HOST": "0.0.0.0",
+        "GOTRUE_API_PORT": "9999",
+        "GOTRUE_DB_DATABASE_URL": "postgres://supabase_auth_admin:***@db:5432/postgres",
+        "GOTRUE_DB_DRIVER": "postgres",
+        "GOTRUE_DB_MIGRATIONS_PATH": "/usr/local/etc/auth/migrations",
+        "GOTRUE_DB_NAMESPACE": "auth",
+        "GOTRUE_DISABLE_SIGNUP": "false",
+        "GOTRUE_JWT_ADMIN_ROLES": "service_role",
+        "GOTRUE_JWT_AUD": "authenticated",
+        "GOTRUE_JWT_DEFAULT_GROUP_NAME": "authenticated",
+        "GOTRUE_JWT_EXP": "3600",
+        "GOTRUE_JWT_SECRET": "***",
+        "GOTRUE_MAILER_AUTOCONFIRM": "false",
+        "GOTRUE_SITE_URL": "***",
+        "GOTRUE_SMTP_ADMIN_EMAIL": "bonjour@learny.example",
+        "GOTRUE_SMTP_HOST": "mailpit",
+        "GOTRUE_SMTP_PASS": "",
+        "GOTRUE_SMTP_PORT": "1025",
+        "GOTRUE_SMTP_SENDER_NAME": "Learny",
+        "GOTRUE_SMTP_USER": "",
+        "GOTRUE_URI_ALLOW_LIST": "***"
+      },
+      "image": "public.ecr.aws/supabase/gotrue:v2.197.0",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null
+      },
+      "depends_on": {
+        "db": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "migrate": {
+          "condition": "service_completed_successfully",
+          "required": true
+        }
+      },
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:9999/health"
+        ],
+        "timeout": "5s",
+        "interval": "5s",
+        "retries": 30,
+        "start_period": "20s"
+      }
+    },
+    "db": {
+      "restart": "unless-stopped",
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "POSTGRES_DB": "postgres",
+        "POSTGRES_PASSWORD": "***"
+      },
+      "image": "public.ecr.aws/supabase/postgres:17.11.0.006",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null
+      },
+      "volumes": [
+        {
+          "type": "volume",
+          "source": "db-data",
+          "target": "/var/lib/postgresql/data",
+          "volume": {}
+        },
+        {
+          "type": "bind",
+          "source": "***/Documents/work/learny-wt-012/docker/selfhost-init-roles.sql",
+          "target": "/docker-entrypoint-initdb.d/init-scripts/99-learny-roles.sql",
+          "read_only": true,
+          "bind": {}
+        }
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "pg_isready -U postgres -h 127.0.0.1 -d postgres"
+        ],
+        "timeout": "5s",
+        "interval": "5s",
+        "retries": 30,
+        "start_period": "30s"
+      }
+    },
+    "inngest": {
+      "restart": "unless-stopped",
+      "command": [
+        "inngest",
+        "start",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8288",
+        "--sdk-url",
+        "http://worker:3001/api/inngest",
+        "--event-key",
+        "***",
+        "--signing-key",
+        "***",
+        "--sqlite-dir",
+        "/var/lib/inngest"
+      ],
+      "entrypoint": null,
+      "image": "inngest/inngest:v1.52.0",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null,
+        "egress": null
+      },
+      "volumes": [
+        {
+          "type": "volume",
+          "source": "inngest-data",
+          "target": "/var/lib/inngest",
+          "volume": {}
+        },
+        {
+          "type": "bind",
+          "source": "***/Documents/work/learny-wt-012/docker/inngest-healthcheck.pl",
+          "target": "/healthcheck.pl",
+          "read_only": true,
+          "bind": {}
+        }
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "perl",
+          "/healthcheck.pl"
+        ],
+        "timeout": "5s",
+        "interval": "5s",
+        "retries": 30,
+        "start_period": "15s"
+      },
+      "ports": [
+        {
+          "mode": "ingress",
+          "target": 8288,
+          "published": "45187",
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "kong": {
+      "restart": "unless-stopped",
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "KONG_ADMIN_ACCESS_LOG": "/dev/stdout",
+        "KONG_ADMIN_ERROR_LOG": "/dev/stderr",
+        "KONG_ADMIN_LISTEN": "127.0.0.1:8001",
+        "KONG_DATABASE": "off",
+        "KONG_DECLARATIVE_CONFIG": "/home/kong/kong.yml",
+        "KONG_PROXY_ACCESS_LOG": "/dev/stdout",
+        "KONG_PROXY_ERROR_LOG": "/dev/stderr",
+        "KONG_PROXY_LISTEN": "0.0.0.0:8000"
+      },
+      "image": "public.ecr.aws/supabase/kong:2.8.1",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null,
+        "egress": null
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "***/Documents/work/learny-wt-012/docker/kong.selfhost.yml",
+          "target": "/home/kong/kong.yml",
+          "read_only": true,
+          "bind": {}
+        }
+      ],
+      "depends_on": {
+        "auth": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "rest": {
+          "condition": "service_started",
+          "required": true
+        },
+        "storage": {
+          "condition": "service_healthy",
+          "required": true
+        }
+      },
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "kong",
+          "health"
+        ],
+        "timeout": "5s",
+        "interval": "10s",
+        "retries": 12,
+        "start_period": "20s"
+      },
+      "ports": [
+        {
+          "mode": "ingress",
+          "target": 8000,
+          "published": "43021",
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "migrate": {
+      "restart": "no",
+      "command": null,
+      "entrypoint": [
+        "/bin/sh",
+        "/apply-migrations.sh"
+      ],
+      "environment": {
+        "DATABASE_URL": "postgresql://postgres:***@db:5432/postgres"
+      },
+      "image": "public.ecr.aws/supabase/postgres:17.11.0.006",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null
+      },
+      "volumes": [
+        {
+          "type": "bind",
+          "source": "***/Documents/work/learny-wt-012/supabase/migrations",
+          "target": "/migrations",
+          "read_only": true,
+          "bind": {}
+        },
+        {
+          "type": "bind",
+          "source": "***/Documents/work/learny-wt-012/docker/apply-migrations.sh",
+          "target": "/apply-migrations.sh",
+          "read_only": true,
+          "bind": {}
+        }
+      ],
+      "depends_on": {
+        "db": {
+          "condition": "service_healthy",
+          "required": true
+        }
+      }
+    },
+    "rest": {
+      "restart": "unless-stopped",
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "PGRST_APP_SETTINGS_JWT_SECRET": "***",
+        "PGRST_DB_ANON_ROLE": "anon",
+        "PGRST_DB_SCHEMAS": "public,storage,graphql_public",
+        "PGRST_DB_URI": "postgres://authenticator:***@db:5432/postgres",
+        "PGRST_DB_USE_LEGACY_GUCS": "false",
+        "PGRST_JWT_SECRET": "***"
+      },
+      "image": "public.ecr.aws/supabase/postgrest:v16.5",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null
+      },
+      "depends_on": {
+        "db": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "migrate": {
+          "condition": "service_completed_successfully",
+          "required": true
+        }
+      }
+    },
+    "storage": {
+      "restart": "unless-stopped",
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "ANON_KEY": "***",
+        "DATABASE_URL": "postgres://supabase_storage_admin:***@db:5432/postgres",
+        "ENABLE_IMAGE_TRANSFORMATION": "false",
+        "FILE_SIZE_LIMIT": "52428800",
+        "FILE_STORAGE_BACKEND_PATH": "/var/lib/storage",
+        "GLOBAL_S3_BUCKET": "stub",
+        "PGRST_JWT_SECRET": "***",
+        "POSTGREST_URL": "http://rest:3000",
+        "REGION": "stub",
+        "SERVICE_KEY": "***",
+        "STORAGE_BACKEND": "file",
+        "TENANT_ID": "stub"
+      },
+      "image": "public.ecr.aws/supabase/storage-api:v1.84.19",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null
+      },
+      "volumes": [
+        {
+          "type": "volume",
+          "source": "storage-data",
+          "target": "/var/lib/storage",
+          "volume": {}
+        }
+      ],
+      "depends_on": {
+        "db": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "migrate": {
+          "condition": "service_completed_successfully",
+          "required": true
+        },
+        "rest": {
+          "condition": "service_started",
+          "required": true
+        }
+      },
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "wget -q -O- http://127.0.0.1:5000/status \u003e/dev/null || exit 1"
+        ],
+        "timeout": "5s",
+        "interval": "5s",
+        "retries": 30,
+        "start_period": "20s"
+      }
+    },
+    "web": {
+      "restart": "unless-stopped",
+      "cap_drop": [
+        "ALL"
+      ],
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "ALLOWED_ORIGINS": "",
+        "ALLOW_LOCAL_MODELS": "false",
+        "ANTHROPIC_API_KEY": "",
+        "APP_ENCRYPTION_KEY": "***",
+        "APP_ENCRYPTION_KEY_PREVIOUS": "",
+        "APP_ENV": "production",
+        "APP_VERSION": "***",
+        "CLOCK_FIXED_AT": "***",
+        "DATABASE_POOL_MAX": "10",
+        "DATABASE_URL": "postgresql://postgres:***@db:5432/postgres",
+        "DB_LOG_QUERIES": "false",
+        "EMAIL_FROM": "Learny \u003cbonjour@learny.example\u003e",
+        "EMAIL_LINK_SECRET": "***",
+        "EMAIL_MODE": "smtp",
+        "EMBEDDING_DIM": "1024",
+        "ENABLE_SDD_PAGES": "false",
+        "GIT_COMMIT": "dc30f2d",
+        "INNGEST_BASE_URL": "http://inngest:8288",
+        "INNGEST_DEV": "0",
+        "INNGEST_EVENT_KEY": "***",
+        "INNGEST_SIGNING_KEY": "***",
+        "JOBS_MODE": "inngest",
+        "LEGAL_CGU_VERSION": "2026-11-11",
+        "LEGAL_CONTACT_EMAIL": "",
+        "LEGAL_ENTITY_ADDRESS": "",
+        "LEGAL_ENTITY_NAME": "",
+        "LEGAL_HOST_NAME": "",
+        "LEGAL_PRIVACY_VERSION": "2026-11-11",
+        "LLM_MODE": "mock",
+        "LOG_LEVEL": "info",
+        "NEXT_PUBLIC_APP_URL": "***",
+        "NEXT_PUBLIC_SENTRY_DSN": "",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY": "***",
+        "NEXT_PUBLIC_SUPABASE_URL": "***",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "",
+        "NODE_ENV": "production",
+        "PUSH_MODE": "mock",
+        "RATE_LIMIT_IP_SECRET": "***",
+        "RESEND_API_KEY": "",
+        "SEARCH_API_KEY": "",
+        "SENTRY_AUTH_TOKEN": "",
+        "SENTRY_DSN": "",
+        "SMTP_HOST": "mailpit",
+        "SMTP_PORT": "1025",
+        "STRIPE_MODE": "mock",
+        "STRIPE_PRICE_ID": "",
+        "STRIPE_SECRET_KEY": "",
+        "STRIPE_WEBHOOK_SECRET": "",
+        "SUPABASE_JWT_SECRET": "***",
+        "SUPABASE_SERVICE_ROLE_KEY": "***",
+        "TRUST_PROXY": "true",
+        "VAPID_PRIVATE_KEY": "",
+        "VAPID_SUBJECT": "mailto:bonjour@learny.example",
+        "VOYAGE_API_KEY": ""
+      },
+      "image": "***",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null,
+        "egress": null
+      },
+      "read_only": true,
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "tmpfs": [
+        "/tmp:size=64m",
+        "/app/apps/web/.next/cache:size=64m"
+      ],
+      "user": "1000:1000",
+      "build": {
+        "context": "***/Documents/work/learny-wt-012",
+        "dockerfile": "docker/web.Dockerfile",
+        "args": {
+          "APP_VERSION": "***",
+          "GIT_COMMIT": "dc30f2d",
+          "NEXT_PUBLIC_APP_URL": "***",
+          "NEXT_PUBLIC_SUPABASE_ANON_KEY": "***",
+          "NEXT_PUBLIC_SUPABASE_URL": "***"
+        }
+      },
+      "depends_on": {
+        "auth": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "db": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "inngest": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "migrate": {
+          "condition": "service_completed_successfully",
+          "required": true
+        },
+        "rest": {
+          "condition": "service_started",
+          "required": true
+        },
+        "storage": {
+          "condition": "service_healthy",
+          "required": true
+        }
+      },
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "node",
+          "/app/healthcheck-web.mjs"
+        ],
+        "timeout": "6s",
+        "interval": "10s",
+        "retries": 6,
+        "start_period": "30s"
+      },
+      "ports": [
+        {
+          "mode": "ingress",
+          "target": 3000,
+          "published": "38207",
+          "protocol": "tcp"
+        }
+      ]
+    },
+    "worker": {
+      "restart": "unless-stopped",
+      "cap_drop": [
+        "ALL"
+      ],
+      "command": null,
+      "entrypoint": null,
+      "environment": {
+        "ALLOWED_ORIGINS": "",
+        "ALLOW_LOCAL_MODELS": "false",
+        "ANTHROPIC_API_KEY": "",
+        "APP_ENCRYPTION_KEY": "***",
+        "APP_ENCRYPTION_KEY_PREVIOUS": "",
+        "APP_ENV": "production",
+        "APP_VERSION": "***",
+        "CLOCK_FIXED_AT": "***",
+        "DATABASE_POOL_MAX": "10",
+        "DATABASE_URL": "postgresql://postgres:***@db:5432/postgres",
+        "DB_LOG_QUERIES": "false",
+        "EMAIL_FROM": "Learny \u003cbonjour@learny.example\u003e",
+        "EMAIL_LINK_SECRET": "***",
+        "EMAIL_MODE": "smtp",
+        "EMBEDDING_DIM": "1024",
+        "ENABLE_SDD_PAGES": "false",
+        "GIT_COMMIT": "dc30f2d",
+        "INNGEST_BASE_URL": "http://inngest:8288",
+        "INNGEST_DEV": "0",
+        "INNGEST_EVENT_KEY": "***",
+        "INNGEST_SIGNING_KEY": "***",
+        "JOBS_MODE": "inngest",
+        "LEGAL_CGU_VERSION": "2026-11-11",
+        "LEGAL_CONTACT_EMAIL": "",
+        "LEGAL_ENTITY_ADDRESS": "",
+        "LEGAL_ENTITY_NAME": "",
+        "LEGAL_HOST_NAME": "",
+        "LEGAL_PRIVACY_VERSION": "2026-11-11",
+        "LLM_MODE": "mock",
+        "LOG_LEVEL": "info",
+        "NEXT_PUBLIC_APP_URL": "***",
+        "NEXT_PUBLIC_SENTRY_DSN": "",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY": "***",
+        "NEXT_PUBLIC_SUPABASE_URL": "***",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "",
+        "NODE_ENV": "production",
+        "PORT": "3001",
+        "PUSH_MODE": "mock",
+        "RATE_LIMIT_IP_SECRET": "***",
+        "RESEND_API_KEY": "",
+        "SEARCH_API_KEY": "",
+        "SENTRY_AUTH_TOKEN": "",
+        "SENTRY_DSN": "",
+        "SMTP_HOST": "mailpit",
+        "SMTP_PORT": "1025",
+        "STRIPE_MODE": "mock",
+        "STRIPE_PRICE_ID": "",
+        "STRIPE_SECRET_KEY": "",
+        "STRIPE_WEBHOOK_SECRET": "",
+        "SUPABASE_JWT_SECRET": "***",
+        "SUPABASE_SERVICE_ROLE_KEY": "***",
+        "TRUST_PROXY": "true",
+        "VAPID_PRIVATE_KEY": "",
+        "VAPID_SUBJECT": "mailto:bonjour@learny.example",
+        "VOYAGE_API_KEY": ""
+      },
+      "image": "***",
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-file": "5",
+          "max-size": "10m"
+        }
+      },
+      "networks": {
+        "backend": null,
+        "egress": null
+      },
+      "read_only": true,
+      "security_opt": [
+        "no-new-privileges:true"
+      ],
+      "tmpfs": [
+        "/tmp:size=16m"
+      ],
+      "user": "1000:1000",
+      "build": {
+        "context": "***/Documents/work/learny-wt-012",
+        "dockerfile": "docker/worker.Dockerfile",
+        "args": {
+          "APP_VERSION": "***",
+          "GIT_COMMIT": "dc30f2d"
+        }
+      },
+      "depends_on": {
+        "inngest": {
+          "condition": "service_healthy",
+          "required": true
+        },
+        "migrate": {
+          "condition": "service_completed_successfully",
+          "required": true
+        }
+      },
+      "expose": [
+        "3001"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD",
+          "node",
+          "/app/healthcheck.mjs"
+        ],
+        "timeout": "5s",
+        "interval": "10s",
+        "retries": 6,
+        "start_period": "15s"
+      }
+    }
+  },
+  "volumes": {
+    "db-data": {
+      "name": "learny-selfhost-it-515861_db-data"
+    },
+    "inngest-data": {
+      "name": "learny-selfhost-it-515861_inngest-data"
+    },
+    "storage-data": {
+      "name": "learny-selfhost-it-515861_storage-data"
+    }
+  },
+  "x-app-environment": {
+    "ALLOWED_ORIGINS": "",
+    "ALLOW_LOCAL_MODELS": "false",
+    "ANTHROPIC_API_KEY": "",
+    "APP_ENCRYPTION_KEY": "***",
+    "APP_ENCRYPTION_KEY_PREVIOUS": "",
+    "APP_ENV": "production",
+    "APP_VERSION": "***",
+    "CLOCK_FIXED_AT": "***",
+    "DATABASE_POOL_MAX": "10",
+    "DATABASE_URL": "postgresql://postgres:***@db:5432/postgres",
+    "DB_LOG_QUERIES": "false",
+    "EMAIL_FROM": "Learny \u003cbonjour@learny.example\u003e",
+    "EMAIL_LINK_SECRET": "***",
+    "EMAIL_MODE": "smtp",
+    "EMBEDDING_DIM": "1024",
+    "ENABLE_SDD_PAGES": "false",
+    "GIT_COMMIT": "dc30f2d",
+    "INNGEST_BASE_URL": "http://inngest:8288",
+    "INNGEST_DEV": "0",
+    "INNGEST_EVENT_KEY": "***",
+    "INNGEST_SIGNING_KEY": "***",
+    "JOBS_MODE": "inngest",
+    "LEGAL_CGU_VERSION": "2026-11-11",
+    "LEGAL_CONTACT_EMAIL": "",
+    "LEGAL_ENTITY_ADDRESS": "",
+    "LEGAL_ENTITY_NAME": "",
+    "LEGAL_HOST_NAME": "",
+    "LEGAL_PRIVACY_VERSION": "2026-11-11",
+    "LLM_MODE": "mock",
+    "LOG_LEVEL": "info",
+    "NEXT_PUBLIC_APP_URL": "***",
+    "NEXT_PUBLIC_SENTRY_DSN": "",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "***",
+    "NEXT_PUBLIC_SUPABASE_URL": "***",
+    "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "",
+    "NODE_ENV": "production",
+    "PUSH_MODE": "mock",
+    "RATE_LIMIT_IP_SECRET": "***",
+    "RESEND_API_KEY": "",
+    "SEARCH_API_KEY": "",
+    "SENTRY_AUTH_TOKEN": "",
+    "SENTRY_DSN": "",
+    "SMTP_HOST": "mailpit",
+    "SMTP_PORT": "1025",
+    "STRIPE_MODE": "mock",
+    "STRIPE_PRICE_ID": "",
+    "STRIPE_SECRET_KEY": "",
+    "STRIPE_WEBHOOK_SECRET": "",
+    "SUPABASE_JWT_SECRET": "***",
+    "SUPABASE_SERVICE_ROLE_KEY": "***",
+    "TRUST_PROXY": "true",
+    "VAPID_PRIVATE_KEY": "",
+    "VAPID_SUBJECT": "mailto:bonjour@learny.example",
+    "VOYAGE_API_KEY": ""
+  },
+  "x-logging": {
+    "driver": "json-file",
+    "options": {
+      "max-file": "5",
+      "max-size": "10m"
+    }
+  }
+}

@@ -380,6 +380,39 @@ export const fr = {
         constants: 'constantes',
       },
     },
+    spec012: {
+      services: {
+        title: 'Composants du Compose',
+        intro:
+          'Chaîne d’appels : le web joint Supabase et Inngest ; le worker sert les fonctions Inngest.',
+        compose: 'Service',
+        state: 'État',
+      },
+      images: {
+        title: 'Images',
+        image: 'Image',
+        version: 'Version',
+        commit: 'Commit',
+        state: 'État',
+        intro:
+          'Les images applicatives partagent le commit du monorepo ; les services tiers restent épinglés.',
+      },
+      health: {
+        title: 'Sondes de santé',
+        probe: 'Sonde',
+        target: 'Cible',
+        state: 'État',
+        intro:
+          'Le contrôle du web échoue si la base, Supabase ou Inngest devient indisponible ; aucun état sain n’est inventé.',
+      },
+      commands: {
+        title: 'Commandes',
+        intro: 'Depuis la racine du dépôt, avec Docker Engine et Compose :',
+      },
+      demo: 'Démonstration : état simulé, les preuves réelles viennent de tools/docker/check-selfhost.mjs --up.',
+      unverified: 'Non vérifié : aucun relevé réel n’a été publié pour cette installation.',
+      volumes: 'Volumes persistants',
+    },
     index: {
       title: 'Progression SDD',
       surtitle: 'SDD',

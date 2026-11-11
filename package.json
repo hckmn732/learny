@@ -13,6 +13,8 @@
     "dev:up": "node tools/dev/up.mjs",
     "dev:down": "node tools/dev/down.mjs",
     "dev:check": "node tools/dev/check.mjs",
+    "docker:check:selfhost": "node tools/docker/check-selfhost.mjs",
+    "docker:secrets:selfhost": "node tools/docker/selfhost-secrets.mjs",
     "db:reset": "node tools/dev/db-reset.mjs",
     "db:seed:demo": "node tools/dev/db-seed-demo.mjs",
     "dev:worker": "turbo run dev --filter=@learny/worker",

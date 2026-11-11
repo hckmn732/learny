@@ -1,0 +1,36 @@
+# Build context hygiene (SPEC-012, ET-1, ET-5, CL-4).
+# Secrets, local environment files, test artifacts and repository metadata never enter an image.
+.git
+.github
+.husky
+.sdd
+.vscode
+.idea
+**/node_modules
+**/.next
+**/dist
+**/coverage
+**/test-results
+**/playwright-report
+**/*.tsbuildinfo
+.next
+dist
+coverage
+test-results
+playwright-report
+evidence
+progress
+design
+docs
+specs
+supabase
+.env
+.env.*
+.env.selfhost
+*.pem
+*.key
+*.p12
+secrets
+*.log
+.DS_Store
+Thumbs.db

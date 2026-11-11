@@ -1,0 +1,380 @@
+# Pile auto-hébergée de Learny (SPEC-012, ADR-0053, ADR-0227, ADR-0228).
+#
+# Elle n'est pas la production gérée de la V1 : c'est une option de déploiement complète
+# (web, worker, Supabase auto-hébergé, Inngest auto-hébergé). Toutes les images tierces sont
+# épinglées ; les secrets viennent de `.env.selfhost` (non versionné) et les substitutions
+# obligatoires échouent explicitement quand une valeur manque.
+#
+# Démarrage : voir docs/operations/self-hosting.md. Les volumes ne sont jamais supprimés par
+# `docker compose down` (ne pas ajouter `-v`).
+name: learny-selfhost
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '5'
+
+x-app-environment: &app-environment
+  NODE_ENV: production
+  APP_ENV: ${APP_ENV:-production}
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  APP_VERSION: ${APP_VERSION:-dev}
+  GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
+  DB_LOG_QUERIES: ${DB_LOG_QUERIES:-false}
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?RATE_LIMIT_IP_SECRET est obligatoire}
+  TRUST_PROXY: ${TRUST_PROXY:-true}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+  LLM_MODE: ${LLM_MODE:-mock}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  JOBS_MODE: ${JOBS_MODE:-inngest}
+  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?INNGEST_EVENT_KEY est obligatoire}
+  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?INNGEST_SIGNING_KEY est obligatoire}
+  INNGEST_BASE_URL: http://inngest:8288
+  INNGEST_DEV: '0'
+  EMAIL_MODE: ${EMAIL_MODE:-smtp}
+  SMTP_HOST: ${SMTP_HOST:-mailpit}
+  SMTP_PORT: ${SMTP_PORT:-1025}
+  EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:bonjour@learny.example}
+  PUSH_MODE: ${PUSH_MODE:-mock}
+  STRIPE_MODE: ${STRIPE_MODE:-mock}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+  SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
+  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:-}
+  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:-}
+  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:-}
+  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:-}
+  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-2026-11-11}
+  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-11-11}
+  ENABLE_SDD_PAGES: 'false'
+  CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-}
+
+services:
+  db:
+    image: public.ecr.aws/supabase/postgres:17.11.0.006
+    environment:
+      # The upstream Supabase image initialises the Supabase roles and schemas with its
+      # supabase_admin superuser; overriding POSTGRES_USER would skip that step.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # Runs once on an empty volume: gives the Supabase login roles their runtime password.
+      - ./selfhost-init-roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-learny-roles.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -h 127.0.0.1 -d postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    networks: [backend]
+    restart: unless-stopped
+    logging: *logging
+
+  migrate:
+    image: public.ecr.aws/supabase/postgres:17.11.0.006
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+    volumes:
+      - ../supabase/migrations:/migrations:ro
+      - ./apply-migrations.sh:/apply-migrations.sh:ro
+    entrypoint: ['/bin/sh', '/apply-migrations.sh']
+    networks: [backend]
+    restart: 'no'
+    logging: *logging
+
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.197.0
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: '9999'
+      API_EXTERNAL_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+      GOTRUE_SITE_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+      GOTRUE_URI_ALLOW_LIST: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+      GOTRUE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+      GOTRUE_JWT_EXP: '3600'
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_DB_NAMESPACE: auth
+      GOTRUE_DB_MIGRATIONS_PATH: /usr/local/etc/auth/migrations
+      GOTRUE_MAILER_AUTOCONFIRM: ${GOTRUE_MAILER_AUTOCONFIRM:-false}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-mailpit}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-1025}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-bonjour@learny.example}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Learny}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_DISABLE_SIGNUP: ${GOTRUE_DISABLE_SIGNUP:-false}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:9999/health']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks: [backend]
+    restart: unless-stopped
+    logging: *logging
+
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v16.5
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,storage,graphql_public}
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_USE_LEGACY_GUCS: 'false'
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+      PGRST_APP_SETTINGS_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+    networks: [backend]
+    restart: unless-stopped
+    logging: *logging
+
+  storage:
+    image: public.ecr.aws/supabase/storage-api:v1.84.19
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      rest:
+        condition: service_started
+    environment:
+      ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT:-52428800}
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: 'false'
+    volumes:
+      - storage-data:/var/lib/storage
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O- http://127.0.0.1:5000/status >/dev/null || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks: [backend]
+    restart: unless-stopped
+    logging: *logging
+
+  inngest:
+    image: inngest/inngest:v1.52.0
+    command:
+      - inngest
+      - start
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8288'
+      - --sdk-url
+      - http://worker:3001/api/inngest
+      - --event-key
+      - ${INNGEST_EVENT_KEY:?INNGEST_EVENT_KEY est obligatoire}
+      - --signing-key
+      - ${INNGEST_SIGNING_KEY:?INNGEST_SIGNING_KEY est obligatoire}
+      - --sqlite-dir
+      - /var/lib/inngest
+    ports:
+      - '${LEARNY_INNGEST_PORT:-8288}:8288'
+    volumes:
+      - inngest-data:/var/lib/inngest
+      - ./inngest-healthcheck.pl:/healthcheck.pl:ro
+    healthcheck:
+      test: ['CMD', 'perl', '/healthcheck.pl']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+  worker:
+    image: ${LEARNY_WORKER_IMAGE:-learny-worker:dev}
+    build:
+      context: ..
+      dockerfile: docker/worker.Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
+        GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+      PORT: '3001'
+    expose:
+      - '3001'
+    depends_on:
+      inngest:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck.mjs']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+  kong:
+    image: public.ecr.aws/supabase/kong:2.8.1
+    depends_on:
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 127.0.0.1:8001
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    volumes:
+      - ./kong.selfhost.yml:/home/kong/kong.yml:ro
+    ports:
+      - '${LEARNY_SUPABASE_PORT:-8000}:8000'
+    healthcheck:
+      test: ['CMD', 'kong', 'health']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+  web:
+    image: ${LEARNY_WEB_IMAGE:-learny-web:dev}
+    build:
+      context: ..
+      dockerfile: docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+        NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
+        APP_VERSION: ${APP_VERSION:-dev}
+        GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+      - /app/apps/web/.next/cache:size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+    ports:
+      - '${LEARNY_WEB_PORT:-8080}:3000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+      inngest:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck-web.mjs']
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 30s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+  # Optional local mail catcher. Production must configure a real SMTP/Resend transport in
+  # `.env.selfhost` before exposing the stack (EF-2, CL-6).
+  mailpit:
+    image: axllent/mailpit:v1.33.1
+    profiles: ['local']
+    ports:
+      - '${LEARNY_MAILPIT_SMTP_PORT:-1025}:1025'
+      - '${LEARNY_MAILPIT_UI_PORT:-8025}:8025'
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: '1'
+      MP_SMTP_AUTH_ALLOW_INSECURE: '1'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O- http://127.0.0.1:8025/api/v1/info >/dev/null || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 5s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+networks:
+  # Data plane: no route to the Internet for the database, Auth, Storage and PostgREST.
+  backend:
+    internal: true
+  # Only web and worker (LLM, e-mail, webhooks) may reach the Internet.
+  egress:
+
+volumes:
+  db-data:
+  storage-data:
+  inngest-data:

@@ -1,0 +1,331 @@
+{
+  "project": "learny-selfhost-it-515861",
+  "webImage": "learny-selfhost-it-515861-web:test",
+  "workerImage": "learny-selfhost-it-515861-worker:test",
+  "commit": "dc30f2d",
+  "services": [
+    {
+      "Command": "\"auth\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "fa1213319d43",
+      "Image": "public.ecr.aws/supabase/gotrue:v2.197.0",
+      "Labels": "com.docker.compose.depends_on=db:service_healthy:false,migrate:service_completed_successfully:false,com.docker.compose.oneoff=False,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.config-hash=fcd5deca84896d644eb6fd9a5e5d308b98459f7899a72c86da09ff95b3995f31,com.docker.compose.container-number=1,com.docker.compose.image=sha256:839f529492d116b4e8b7777c953a27c381d34c15a744b1bcefde5eefaa1f9f9f,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.service=auth,com.docker.compose.version=5.7.1",
+      "LocalVolumes": "0",
+      "Mounts": "",
+      "Name": "learny-selfhost-it-515861-auth-1",
+      "Names": "learny-selfhost-it-515861-auth-1",
+      "Networks": "learny-selfhost-it-515861_backend",
+      "Ports": "",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [],
+      "RunningFor": "22 seconds ago",
+      "Service": "auth",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 14 seconds (healthy)"
+    },
+    {
+      "Command": "\"docker-entrypoint.s…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "bb84cd160237",
+      "Image": "public.ecr.aws/supabase/postgres:17.11.0.006",
+      "Labels": "com.docker.compose.config-hash=02ce00fe4a28e3ee348ca7d0fc88e120a0ab99e19b12661434471f65e610b7e7,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.service=db,com.docker.compose.image=sha256:80700a6f21573b4fdf82927ab9deac3910690fb81b093ce47ee7eaf55ea9761d,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.version=5.7.1",
+      "LocalVolumes": "1",
+      "Mounts": "/home/kbenito/…,learny-selfhos…",
+      "Name": "learny-selfhost-it-515861-db-1",
+      "Names": "learny-selfhost-it-515861-db-1",
+      "Networks": "learny-selfhost-it-515861_backend",
+      "Ports": "5432/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 5432,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "db",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 21 seconds (healthy)"
+    },
+    {
+      "Command": "\"inngest start --hos…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "3f2d4582e35f",
+      "Image": "inngest/inngest:v1.52.0",
+      "Labels": "com.docker.compose.depends_on=,com.docker.compose.service=inngest,org.opencontainers.image.version=1.52.0,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.version=5.7.1,org.opencontainers.image.title=inngest,com.docker.compose.config-hash=10da440f94c0aa01ec19ca5c6ae44f5f07b06bf15c7eb4ec0851c4ba83d3ec2f,com.docker.compose.container-number=1,com.docker.compose.image=sha256:19018ffcc9d96f9e972ce7a9e12f405591f470da10f2a4a1314e669c5961f072,com.docker.compose.oneoff=False,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,org.opencontainers.image.created=2026-11-10T20:09:14Z,org.opencontainers.image.revision=065cbda5bd0f7c714c6c207c4ca3061d2f166ff6",
+      "LocalVolumes": "1",
+      "Mounts": "/home/kbenito/…,learny-selfhos…",
+      "Name": "learny-selfhost-it-515861-inngest-1",
+      "Names": "learny-selfhost-it-515861-inngest-1",
+      "Networks": "learny-selfhost-it-515861_backend,learny-selfhost-it-515861_egress",
+      "Ports": "0.0.0.0:45187->8288/tcp, [::]:45187->8288/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "0.0.0.0",
+          "TargetPort": 8288,
+          "PublishedPort": 45187,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "::",
+          "TargetPort": 8288,
+          "PublishedPort": 45187,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "inngest",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 21 seconds (healthy)"
+    },
+    {
+      "Command": "\"/docker-entrypoint.…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "39e24787f184",
+      "Image": "public.ecr.aws/supabase/kong:2.8.1",
+      "Labels": "com.docker.compose.config-hash=3ea8cef300ed8be50609f5248ccb2b0cec3a7437642009802a0a2cb250f61e5e,com.docker.compose.container-number=1,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.version=5.7.1,maintainer=Kong <support@konghq.com>,com.docker.compose.depends_on=rest:service_started:false,storage:service_healthy:false,auth:service_healthy:false,com.docker.compose.image=sha256:e21b0b793879ab96720ed4188f9441260273f4bf775bcbff8d435e019ffb759a,com.docker.compose.oneoff=False,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.service=kong",
+      "LocalVolumes": "0",
+      "Mounts": "/home/kbenito/…",
+      "Name": "learny-selfhost-it-515861-kong-1",
+      "Names": "learny-selfhost-it-515861-kong-1",
+      "Networks": "learny-selfhost-it-515861_backend,learny-selfhost-it-515861_egress",
+      "Ports": "8001/tcp, 8443-8444/tcp, 0.0.0.0:43021->8000/tcp, [::]:43021->8000/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "0.0.0.0",
+          "TargetPort": 8000,
+          "PublishedPort": 43021,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "::",
+          "TargetPort": 8000,
+          "PublishedPort": 43021,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "",
+          "TargetPort": 8001,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "",
+          "TargetPort": 8443,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "",
+          "TargetPort": 8444,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "kong",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 9 seconds (healthy)"
+    },
+    {
+      "Command": "\"/bin/sh /apply-migr…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "1d78f4159a48",
+      "Image": "public.ecr.aws/supabase/postgres:17.11.0.006",
+      "Labels": "com.docker.compose.service=migrate,com.docker.compose.version=5.7.1,com.docker.compose.container-number=1,com.docker.compose.depends_on=db:service_healthy:false,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.config-hash=804ef2e6a2847f047f294012f8f73dab2cfe613b83b22095c24d67565fe2818f,com.docker.compose.image=sha256:80700a6f21573b4fdf82927ab9deac3910690fb81b093ce47ee7eaf55ea9761d,com.docker.compose.oneoff=False,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml",
+      "LocalVolumes": "0",
+      "Mounts": "/home/kbenito/…,/home/kbenito/…",
+      "Name": "learny-selfhost-it-515861-migrate-1",
+      "Names": "learny-selfhost-it-515861-migrate-1",
+      "Networks": "learny-selfhost-it-515861_backend",
+      "Ports": "",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [],
+      "RunningFor": "22 seconds ago",
+      "Service": "migrate",
+      "Size": "0B",
+      "State": "exited",
+      "Status": "Exited (0) 15 seconds ago"
+    },
+    {
+      "Command": "\"/bin/postgrest\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "79d0a47c601e",
+      "Image": "public.ecr.aws/supabase/postgrest:v16.5",
+      "Labels": "com.docker.compose.container-number=1,com.docker.compose.image=sha256:f3f2a7541965792e51717d10341e09971ea41409dd38e12ea0453042a750c00e,com.docker.compose.project=learny-selfhost-it-515861,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.service=rest,com.docker.compose.depends_on=db:service_healthy:false,migrate:service_completed_successfully:false,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.version=5.7.1,com.docker.compose.config-hash=6f34143f430c5a4b764d028b73a82a72bd0601a541744a7eaccf34ef7f6931c5",
+      "LocalVolumes": "0",
+      "Mounts": "",
+      "Name": "learny-selfhost-it-515861-rest-1",
+      "Names": "learny-selfhost-it-515861-rest-1",
+      "Networks": "learny-selfhost-it-515861_backend",
+      "Ports": "3000/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 3000,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "rest",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 15 seconds"
+    },
+    {
+      "Command": "\"docker-entrypoint.s…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "eab23cd5381a",
+      "Image": "public.ecr.aws/supabase/storage-api:v1.84.19",
+      "Labels": "com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.service=storage,com.docker.compose.image=sha256:09b6d74764b75f5f49787273a9deb840b3132ccb4137a4a4b41a181d915202bd,com.docker.compose.oneoff=False,com.docker.compose.version=5.7.1,com.docker.compose.config-hash=e3cb563647cebffbeff27d48cc2485f5ecf1f5a690cd6a713e930953dd4737f7,com.docker.compose.container-number=1,com.docker.compose.depends_on=db:service_healthy:false,migrate:service_completed_successfully:false,rest:service_started:false,com.docker.compose.project=learny-selfhost-it-515861",
+      "LocalVolumes": "1",
+      "Mounts": "learny-selfhos…",
+      "Name": "learny-selfhost-it-515861-storage-1",
+      "Names": "learny-selfhost-it-515861-storage-1",
+      "Networks": "learny-selfhost-it-515861_backend",
+      "Ports": "5000/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 5000,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "storage",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 14 seconds (healthy)"
+    },
+    {
+      "Command": "\"docker-entrypoint.s…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "f212c7e55b7d",
+      "Image": "learny-selfhost-it-515861-web:test",
+      "Labels": "com.docker.compose.container-number=1,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.version=5.7.1,org.opencontainers.image.version=0.0.0-spec-012,com.docker.compose.project=learny-selfhost-it-515861,org.opencontainers.image.title=learny-web,com.docker.compose.image=sha256:12f4862d373ec4c9ecc46a289b055105a818172736b7c7d7cc268e0cb968fc8d,com.docker.compose.oneoff=False,org.opencontainers.image.revision=dc30f2d,org.opencontainers.image.source=https://github.com/hckmn732/learny,com.docker.compose.config-hash=0574f14d3b290daa25a4e0e435fb9e7783c3c3ca7aa07349f864d4d27baa9768,com.docker.compose.depends_on=db:service_healthy:false,auth:service_healthy:false,rest:service_started:false,storage:service_healthy:false,inngest:service_healthy:false,migrate:service_completed_successfully:false,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.service=web,org.opencontainers.image.description=Learny web application (Next.js standalone, self-hosted)",
+      "LocalVolumes": "0",
+      "Mounts": "",
+      "Name": "learny-selfhost-it-515861-web-1",
+      "Names": "learny-selfhost-it-515861-web-1",
+      "Networks": "learny-selfhost-it-515861_backend,learny-selfhost-it-515861_egress",
+      "Ports": "0.0.0.0:38207->3000/tcp, [::]:38207->3000/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "0.0.0.0",
+          "TargetPort": 3000,
+          "PublishedPort": 38207,
+          "Protocol": "tcp"
+        },
+        {
+          "URL": "::",
+          "TargetPort": 3000,
+          "PublishedPort": 38207,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "web",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 9 seconds (healthy)"
+    },
+    {
+      "Command": "\"docker-entrypoint.s…\"",
+      "CreatedAt": "2026-11-11 22:21:29 +0000 UTC",
+      "Engine": "",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "25ee95440b82",
+      "Image": "learny-selfhost-it-515861-worker:test",
+      "Labels": "com.docker.compose.container-number=1,com.docker.compose.image=sha256:3a2b131bfb8d99d6851196fdc21b9afb41e823ed61aff62b22519c56369d6ad4,com.docker.compose.project.config_files=/home/kbenito/Documents/work/learny-wt-012/docker/compose.selfhost.yml,com.docker.compose.project.working_dir=/home/kbenito/Documents/work/learny-wt-012/docker,com.docker.compose.version=5.7.1,com.docker.compose.oneoff=False,com.docker.compose.project=learny-selfhost-it-515861,org.opencontainers.image.description=Learny Inngest worker (Hono, self-hosted),org.opencontainers.image.revision=dc30f2d,org.opencontainers.image.source=https://github.com/hckmn732/learny,com.docker.compose.config-hash=6beb13ec807ffb4199c5a2e09cb1d2b15cfccbcbe4617c44a89eef35469cea1f,com.docker.compose.project.environment_file=/home/kbenito/Documents/work/learny-wt-012/.sdd/tmp/learny-selfhost-it-515861.env,org.opencontainers.image.title=learny-worker,org.opencontainers.image.version=0.0.0-spec-012,com.docker.compose.depends_on=migrate:service_completed_successfully:false,inngest:service_healthy:false,com.docker.compose.service=worker",
+      "LocalVolumes": "0",
+      "Mounts": "",
+      "Name": "learny-selfhost-it-515861-worker-1",
+      "Names": "learny-selfhost-it-515861-worker-1",
+      "Networks": "learny-selfhost-it-515861_egress,learny-selfhost-it-515861_backend",
+      "Ports": "3001/tcp",
+      "Project": "learny-selfhost-it-515861",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 3001,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "22 seconds ago",
+      "Service": "worker",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 15 seconds (healthy)"
+    }
+  ],
+  "probes": [
+    {
+      "name": "web",
+      "target": "/api/v1/health",
+      "ok": true,
+      "detail": "HTTP 200 · status=degraded · database=not_configured · commit=dc30f2d"
+    },
+    {
+      "name": "worker",
+      "target": "/health",
+      "ok": true,
+      "detail": "✔ worker : ok (port 3001)"
+    },
+    {
+      "name": "postgres",
+      "target": "pg_isready",
+      "ok": true,
+      "detail": "/run/postgresql:5432 - accepting connections"
+    },
+    {
+      "name": "inngest",
+      "target": "/health",
+      "ok": true,
+      "detail": "sans sortie (code 0)"
+    }
+  ],
+  "volumes": [
+    "learny-selfhost-it-515861_db-data",
+    "learny-selfhost-it-515861_inngest-data",
+    "learny-selfhost-it-515861_storage-data"
+  ]
+}
