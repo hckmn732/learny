@@ -67,7 +67,7 @@ test('page de démonstration du paquet db @SPEC-101', async ({
   expect(texts).toEqual(texts.map(() => 'Conforme'));
 
   await axeCheck();
-  await captureEvidence('spec-101-final');
+  await captureEvidence('spec-101-demo');
   expect(consoleErrors).toEqual([]);
 });
 
