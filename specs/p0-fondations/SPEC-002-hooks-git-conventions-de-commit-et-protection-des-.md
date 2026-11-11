@@ -160,4 +160,5 @@ Définition commune (`docs/engineering/testing.md` §7) ; de plus : `git commit 
 
 - ADR appliqués : ADR-0051 (versionnement), ADR-0100 (identité de l'agent).
 - ADR créé : **ADR-0103** — compléments aux conventions de commit (type `merge` autorisé car produit par `complete.mjs`, casse du sujet libre, 100 caractères pour la description d'une fusion, portée par motif), détection des secrets à double contrôle (gitleaks facultatif + analyseur intégré) et mot témoin `learny-test-only` pour les valeurs factices.
+- ADR créé pendant l'implémentation : **ADR-0222** (une trouvaille par secret, démonstration serveur + formulaires client, longueur réelle de CL-1, typage des règles commitlint).
 - Hypothèse : le porteur du projet active lui-même la protection de branche sur GitHub ; la spécification se limite à la documenter.
