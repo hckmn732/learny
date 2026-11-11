@@ -1,0 +1,37 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="3.155678">
+<testsuite name="p0/spec-003.spec.ts" timestamp="2026-11-11T19:29:21.488Z" hostname="desktop" tests="3" failures="0" skipped="0" time="1.897" errors="0">
+<testcase name="consulte la progression SDD @SPEC-003" classname="p0/spec-003.spec.ts" time="0.478">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-003-consulte-la-progression-SDD-SPEC-003-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-consulte-la-progression-SDD-SPEC-003-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-consulte-la-progression-SDD-SPEC-003-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="masque les pages SDD @SPEC-003" classname="p0/spec-003.spec.ts" time="1.032">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-003-masque-les-pages-SDD-SPEC-003-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-masque-les-pages-SDD-SPEC-003-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-masque-les-pages-SDD-SPEC-003-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="index SDD conforme @SPEC-003 @visual" classname="p0/spec-003.spec.ts" time="0.387">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p0-spec-003-index-SDD-conforme-SPEC-003-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-index-SDD-conforme-SPEC-003-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p0-spec-003-index-SDD-conforme-SPEC-003-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
