@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-11T21:43:29.042Z",
+  "updatedAt": "2026-11-11T21:57:58.524Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -411,14 +411,55 @@
       }
     },
     "SPEC-009": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-11T21:52:41.341Z",
+      "completedAt": "2026-11-11T21:55:57.932Z",
+      "branch": "spec/SPEC-009-configuration-variables-d-environnement-",
+      "commit": "dc85974",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:38.704Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:39.776Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:40.032Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:40.754Z",
+          "details": "29 test(s) [SPEC-009] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:45.953Z",
+          "details": "10 test(s) [SPEC-009] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:51.559Z",
+          "details": "3 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:51.559Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-11T21:55:51.570Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-010": {
       "status": "pending",

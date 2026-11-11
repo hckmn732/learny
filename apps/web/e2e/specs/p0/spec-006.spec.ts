@@ -165,11 +165,8 @@ test('répond 404 hors garde et pour un identifiant inconnu @SPEC-006', async ({
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page introuvable');
   await expect(page.getByRole('link', { name: 'Retour à l’accueil' })).toBeVisible();
 
-  // Same build, guard refused: flag not exactly "true", or production.
-  const servers = [
-    { port: 3102, env: { ENABLE_SDD_PAGES: '1', APP_ENV: 'test' } },
-    { port: 3103, env: { ENABLE_SDD_PAGES: 'true', APP_ENV: 'production' } },
-  ];
+  // Same build, guard refused: the flag is not exactly "true".
+  const servers = [{ port: 3102, env: { ENABLE_SDD_PAGES: '1', APP_ENV: 'test' } }];
   for (const { port, env } of servers) {
     const server = await startServer(port, env);
     try {
@@ -182,6 +179,39 @@ test('répond 404 hors garde et pour un identifiant inconnu @SPEC-006', async ({
       }
     } finally {
       if (server.pid) process.kill(-server.pid, 'SIGTERM');
+    }
+  }
+
+  // Production: SPEC-009 refuses the boot outright, so the pages can never be served. The
+  // dedicated start-up check lives in spec-009.spec.ts (ADR-0227).
+  const production = spawn(
+    'pnpm',
+    ['--filter', '@learny/web', 'exec', 'next', 'start', '-p', '3103'],
+    {
+      cwd: ROOT,
+      env: { ...process.env, ENABLE_SDD_PAGES: 'true', APP_ENV: 'production' },
+      stdio: 'ignore',
+      detached: true,
+    },
+  );
+  try {
+    const stopped = await new Promise<boolean>((resolve) => {
+      const timer = setTimeout(() => {
+        resolve(false);
+      }, 30000);
+      production.once('exit', () => {
+        clearTimeout(timer);
+        resolve(true);
+      });
+    });
+    expect(stopped, 'un serveur de production ne démarre pas').toBe(true);
+  } finally {
+    if (production.pid) {
+      try {
+        process.kill(-production.pid, 'SIGTERM');
+      } catch {
+        // Already stopped: SPEC-009 refuses an incomplete production environment.
+      }
     }
   }
 });
