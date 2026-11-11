@@ -1,1 +1,7 @@
 @import 'tailwindcss';
+
+/* Product fonts loaded by app/fonts.ts (SPEC-006, EF-7). */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+}
