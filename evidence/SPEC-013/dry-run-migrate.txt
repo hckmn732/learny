@@ -1,0 +1,9 @@
+Migrations candidates (ordre) : 0000
+Migrations Supabase — dry-run
+Environnement : preview
+Destination : Non configuré
+Point de restauration : Non configuré
+En attente : 0000
+⚠ SUPABASE_DB_URL (ou DATABASE_URL) est absente.
+⚠ Liste distante non consultée : migrations locales candidates, aucune mutation.
+Aucun appel de mutation : db:reset et db push ne sont pas exécutés.

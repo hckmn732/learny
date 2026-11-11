@@ -1,0 +1,54 @@
+{
+  "dryRun": true,
+  "envName": "preview",
+  "environment": "preview",
+  "commit": null,
+  "checkedAt": null,
+  "workflow": ".github/workflows/deploy.yml",
+  "status": "ok",
+  "regions": {
+    "vercel": "fra1",
+    "supabase": "eu-central-1",
+    "inngest": "eu"
+  },
+  "actions": [
+    {
+      "id": "check",
+      "label": "Vérifier régions, variables, ref et pages SDD",
+      "destination": "dépôt local"
+    },
+    {
+      "id": "migrate",
+      "label": "Lister puis appliquer les migrations Supabase en attente",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "sync-inngest",
+      "label": "Synchroniser les fonctions Inngest de la ref déployée",
+      "destination": "Non configuré"
+    },
+    {
+      "id": "vercel",
+      "label": "Déployer la preview Vercel (fra1)",
+      "destination": "Non configuré",
+      "note": "URL fournie par Vercel après déploiement, jamais construite ici."
+    },
+    {
+      "id": "smoke",
+      "label": "Contrôler la santé /api/v1/health et les parcours critiques",
+      "destination": "Non configuré"
+    }
+  ],
+  "warnings": [
+    "SUPABASE_REGION non fourni : région supabase non vérifiée.",
+    "INNGEST_REGION non fourni : région inngest non vérifiée.",
+    "Ref de preview absente : contrôle statique seulement.",
+    "Variables obligatoires manquantes : NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, DATABASE_URL, APP_ENCRYPTION_KEY, INNGEST_EVENT_KEY, INNGEST_SIGNING_KEY, ANTHROPIC_API_KEY, RESEND_API_KEY, RATE_LIMIT_IP_SECRET, EMAIL_LINK_SECRET. (dépendances externes non configurées, EF-8)."
+  ],
+  "errors": [],
+  "destinations": {
+    "web": "Non configuré",
+    "database": "Non configuré",
+    "jobs": "Non configuré"
+  }
+}

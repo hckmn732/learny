@@ -1,0 +1,3 @@
+vercel=fra1 EU=oui
+supabase=eu-central-1 EU=oui
+inngest=eu EU=oui
