@@ -101,6 +101,24 @@ update public.course_sections set content_md = $1 where id = $2;
 sur les huit tables (ADR-0112), la cohérence propriétaire (`owner_mismatch`, 23514) et
 l'horodatage de la discussion à chaque message.
 
+### Briques, activités et tentatives (SPEC-106)
+
+`bricks` porte les treize types de BR-BRI-01, leur objectif, leur statut et leur version courante ;
+`brick_versions` conserve chaque payload (le déclencheur `brick_versions_immutable` refuse toute
+réécriture) et `brick_reports` garde le motif et la résolution. `activities` assemble des versions
+ordonnées ; le garde transactionnel `assert_activity_items_owned` et le déclencheur
+`activities_ready_items` refusent, avant tout commit, une version absente, une brique signalée ou
+retirée, une brique d'un autre propriétaire ou d'une autre formation (BR-BRI-06, ADR-0021,
+ADR-0240). `attempts` numérote les essais par activité et apprenant, `answers` fige la
+`brick_version_id` présentée : publier une version plus récente ne réécrit jamais les réponses
+passées (ADR-0241).
+
+Les repositories de `packages/db/src/repositories/activities.ts` valident les JSON (Zod) puis
+écrivent dans la transaction de l'appelant : `createActivity`, `setActivityStatus`,
+`addBrickVersion`, `createAttempt` (numérotation sérialisée), `recordAnswer` et
+`getAttemptWithAnswers`. Les six tables ont RLS activée et des politiques propriétaire minimales ;
+SPEC-113 livrera la matrice complète.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

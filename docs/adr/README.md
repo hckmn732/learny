@@ -118,3 +118,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0237](ADR-0237-complements-d-implementation-du-schema-formations.md) | Compléments d'implémentation du schéma formations | Déduite | SPEC-103, SPEC-006, ADR-0049, ADR-0113 |
 | [ADR-0238](ADR-0238-complements-d-implementation-du-schema-ressources-et-passage.md) | Compléments d'implémentation du schéma ressources et passages vectoriels | Déduite | SPEC-104, ADR-0056, ADR-0039, ADR-0112, ADR-0113 |
 | [ADR-0239](ADR-0239-version-courante-a-l-insertion-et-coherence-proprietaire-pen.md) | Version courante à l'insertion et cohérence propriétaire pendant les cascades | Déduite | SPEC-105, ADR-0039, ADR-0112, ADR-0113 |
+| [ADR-0240](ADR-0240-garde-d-assemblage-d-activite-et-rls-minimale-des-briques.md) | Garde d'assemblage d'activité et RLS minimale des briques | Déduite | SPEC-106, SPEC-113, ADR-0021, ADR-0112 |
+| [ADR-0241](ADR-0241-numerotation-concurrente-des-tentatives-et-versions-de-briqu.md) | Numérotation concurrente des tentatives et versions de brique immuables | Déduite | SPEC-106, BR-BRI-06, ADR-0021 |

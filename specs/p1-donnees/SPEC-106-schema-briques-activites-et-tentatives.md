@@ -113,3 +113,6 @@ Les exigences de `docs/engineering/testing.md` §7 passent. La migration est ide
 ## 15. Décisions et hypothèses
 
 ADR-0021 impose la validation des actions du tuteur avant toute écriture. La validation détaillée du payload de chaque type sera livrée par SPEC-501 ; cette spécification garantit d'abord intégrité, appartenance et version. SPEC-113 renforcera l'audit RLS transversal.
+
+- **ADR-0240** — garde transactionnel `assert_activity_items_owned`, déclencheur d'activité prête, politiques RLS propriétaire minimales et énumération `report_status` de `data-model.md` §5.
+- **ADR-0241** — numérotation concurrente des tentatives (verrou consultatif, `on conflict do nothing` puis relecture) et immuabilité des versions de brique par déclencheur.
