@@ -327,6 +327,29 @@ export function instantsAtLocalTime(day: string, time: string, timeZone: string)
   return instantsAtWall(wall, zone).map((ms) => new Date(ms));
 }
 
+/**
+ * UTC instant at which the zone's clock reads `time` (`HH:mm`) on the civil day `day`, with the
+ * engine rule of SPEC-401 CL-3: a reading skipped by a spring-forward jump is shifted by the
+ * duration of the jump (02:30 → 03:30 in Paris), and an ambiguous reading takes the first
+ * occurrence. `instantsAtLocalTime` keeps the historical SPEC-207 rule (no occurrence at all), so
+ * both callers keep their own contract (ADR-0277).
+ */
+export function localTimeToShiftedInstant(day: string, time: string, timeZone: string): Date {
+  const zone = parseTimeZone(timeZone);
+  const wall = wallMsOf(parseCivilDay(day)) + parseTimeOfDay(time, 'time') * MS_PER_MINUTE;
+  const direct = instantsAtWall(wall, zone);
+  if (direct[0] !== undefined) return new Date(direct[0]);
+
+  const before = offsetMsAt(zone, wall - MS_PER_DAY);
+  const after = offsetMsAt(zone, wall + MS_PER_DAY);
+  const gap = after - before;
+  if (gap > 0) {
+    const shifted = instantsAtWall(wall + gap, zone);
+    if (shifted[0] !== undefined) return new Date(shifted[0]);
+  }
+  return new Date(instantsFromWall(wall, zone)[0]);
+}
+
 /** BR-NOT-04 — default quiet hours, 21:00 to 08:00 (the range crosses midnight). */
 export const DEFAULT_QUIET_HOURS = { start: '21:00', end: '08:00' } as const;
 

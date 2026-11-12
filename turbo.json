@@ -29,6 +29,9 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "test": {
+      "cache": false
+    },
     "test:unit": {
       "cache": false
     },

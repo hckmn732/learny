@@ -29,7 +29,9 @@ const NODE_GLOBALS = Object.fromEntries(
 
 // Package boundaries (docs/architecture/overview.md §3): target -> packages it may import.
 const ALLOWED_IMPORTS = {
-  'learning-engine': ['core'],
+  // `config` and `testing` are only partially allowed; the dedicated engine blocks below restrict
+  // them to `@learny/config/product` and to fixtures (SPEC-401 ET-9).
+  'learning-engine': ['core', 'config', 'testing'],
   bricks: ['core', 'contracts', 'ui'],
   llm: ['core', 'config', 'contracts', 'db'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
@@ -258,6 +260,97 @@ export default tseslint.config(
     },
   },
   ...restrictedImportBlocks,
+  {
+    // The pure engine may import @learny/core and the side-effect-free @learny/config/product
+    // only (SPEC-401 ET-9, ADR-0140). Node built-ins and network globals are refused in src.
+    files: ['packages/learning-engine/src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config/',
+                '@learny/config/*',
+                '!@learny/config/product',
+              ],
+              message:
+                'packages/learning-engine ne peut importer que @learny/core et @learny/config/product.',
+            },
+            {
+              group: ['node:*'],
+              message: 'packages/learning-engine est pur : aucun module Node (SPEC-401 EF-3).',
+            },
+          ],
+        },
+      ],
+      'no-restricted-globals': [
+        'error',
+        { name: 'fetch', message: 'Le moteur ne fait aucun appel réseau (SPEC-401 EF-3).' },
+        { name: 'process', message: 'Le moteur ne lit pas l’environnement (SPEC-401 EF-3).' },
+      ],
+    },
+  },
+  {
+    // Test fixtures may also import @learny/testing (SPEC-401 ET-9).
+    files: ['packages/learning-engine/src/fixtures/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config/',
+                '@learny/config/*',
+                '!@learny/config/product',
+                '!@learny/testing/',
+              ],
+              message:
+                'packages/learning-engine/src/fixtures ne peut importer que @learny/core, @learny/config/product et @learny/testing.',
+            },
+            {
+              group: ['node:*'],
+              message: 'packages/learning-engine est pur : aucun module Node (SPEC-401 EF-3).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Unit tests may import @learny/testing for the reference instant (ADR-0047).
+    files: ['packages/learning-engine/src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config/',
+                '@learny/config/*',
+                '!@learny/config/product',
+                '!@learny/testing/',
+              ],
+              message:
+                'Les tests du moteur peuvent importer @learny/core, @learny/config/product et @learny/testing.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   {
     // Server configuration never reaches a client component: apps/web has exactly one adapter
     // (SPEC-009, ET-6). `serviceDb` is reserved to the SDD demo pages and the webhooks (SPEC-101,

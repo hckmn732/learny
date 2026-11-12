@@ -15,6 +15,7 @@ import {
   instantsAtLocalTime,
   isQuietHours,
   isValidIanaZone,
+  localTimeToShiftedInstant,
   nextOutsideQuietHours,
   parseTimeZone,
   startOfUserDay,
@@ -564,5 +565,23 @@ describe('[SPEC-207] local time', () => {
       expect(code).not.toMatch(/Intl\.DateTimeFormat\s*\(\s*\)/);
       expect(code).not.toMatch(/getTimezoneOffset|toLocale(Date|Time)?String|getHours\(|getDate\(/);
     });
+  });
+});
+
+describe('[SPEC-401] heure locale décalée par un saut d’horloge', () => {
+  const iso = (value: Date) => value.toISOString();
+
+  it.each([
+    ['2026-11-11', '09:00', 'Europe/Paris', '2026-11-11T08:00:00.000Z'],
+    ['2027-03-28', '02:30', 'Europe/Paris', '2027-03-28T01:30:00.000Z'],
+    ['2026-10-25', '02:30', 'Europe/Paris', '2026-10-25T00:30:00.000Z'],
+    ['2026-03-08', '02:30', 'America/New_York', '2026-03-08T07:30:00.000Z'],
+  ])('%s %s en %s', (day, time, zone, expected) => {
+    expect(iso(localTimeToShiftedInstant(day, time, zone))).toBe(expected);
+  });
+
+  it('refuse une date ou un fuseau invalides', () => {
+    expect(() => localTimeToShiftedInstant('2026-02-30', '09:00', 'Europe/Paris')).toThrow();
+    expect(() => localTimeToShiftedInstant('2026-11-11', '09:00', 'Europe/Pariss')).toThrow();
   });
 });
