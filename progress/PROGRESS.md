@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T21:13:16.213Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T21:40:39.803Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 56 |
+| Terminées | 57 |
 | En cours | 0 |
-| Prêtes | 3 |
+| Prêtes | 2 |
 | En attente de dépendances | 73 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **42.4 %** |
-| Avancement V1 | 45.2 % |
+| **Avancement global** | **43.2 %** |
+| Avancement V1 | 46.0 % |
 | Prochaine action | start SPEC-405 — Tirage des questions d'une tentative |
 
 ## Phases et checkpoints
@@ -25,7 +25,7 @@
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
-| P4 | Moteur d'apprentissage (déterministe) | 7/11 | CP-4 | ⏳ |
+| P4 | Moteur d'apprentissage (déterministe) | 8/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
@@ -90,7 +90,7 @@
 | [SPEC-403](../specs/p4-moteur/SPEC-403-calcul-de-la-maitrise.md) | Calcul de la maîtrise | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-404](../specs/p4-moteur/SPEC-404-detection-nature-et-levee-des-lacunes.md) | Détection, nature et levée des lacunes | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-403 |
 | [SPEC-405](../specs/p4-moteur/SPEC-405-tirage-des-questions-d-une-tentative.md) | Tirage des questions d'une tentative | P4 | 🟢 ready | 0 | — | SPEC-404 |
-| [SPEC-406](../specs/p4-moteur/SPEC-406-tirage-de-la-session-de-quiz-global.md) | Tirage de la session de quiz global | P4 | 🟢 ready | 0 | — | SPEC-402, SPEC-404 |
+| [SPEC-406](../specs/p4-moteur/SPEC-406-tirage-de-la-session-de-quiz-global.md) | Tirage de la session de quiz global | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-404 |
 | [SPEC-407](../specs/p4-moteur/SPEC-407-planificateur.md) | Planificateur | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-408](../specs/p4-moteur/SPEC-408-retention-et-indicateurs-de-progression.md) | Rétention et indicateurs de progression | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402 |
 | [SPEC-409](../specs/p4-moteur/SPEC-409-serie-et-jalons.md) | Série et jalons | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
