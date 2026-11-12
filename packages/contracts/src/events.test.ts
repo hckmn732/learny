@@ -62,6 +62,12 @@ const VALID: Record<EventName, Record<string, unknown>> = {
     formationId: null,
     dedupeKey: null,
   },
+  'notification/delivery-due': {
+    userId: U1,
+    notificationId: U2,
+    deliveryId: U3,
+    channel: 'email',
+  },
   'billing/subscription-changed': { userId: U1, status: 'active', previousStatus: 'none' },
   'billing/payment-failed': { userId: U1 },
   'account/export-requested': { userId: U1, exportId: U2 },
@@ -84,7 +90,7 @@ const VALID: Record<EventName, Record<string, unknown>> = {
 describe('[SPEC-203] catalogue des événements', () => {
   it('décrit un exemple valide pour chacun des événements du catalogue', () => {
     expect(Object.keys(VALID).sort()).toEqual([...EVENT_NAMES_LIST].sort());
-    expect(EVENT_NAMES_LIST).toHaveLength(37);
+    expect(EVENT_NAMES_LIST).toHaveLength(38);
   });
 
   it.each(EVENT_NAMES_LIST)('%s accepte son exemple valide', (name) => {
