@@ -1,0 +1,102 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="38.691672999999994">
+<testsuite name="p3/spec-306.spec.ts" timestamp="2026-11-12T18:46:16.726Z" hostname="desktop" tests="4" failures="0" skipped="1" time="6.055" errors="0">
+<testcase name="Panneau des notifications @SPEC-306" classname="p3/spec-306.spec.ts" time="2.517">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/attachments/spec-306-panneau-non-lues-desktop-63dcc89c932d0f726500295641aba3380bb9f7cd.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/attachments/spec-306-panneau-vide-desktop-2bf6e552ae8c1dec25e0a6c8a75bd6e1ac008476.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/attachments/axe-6a53d7a3b2062af1425fd43aaf3781dd2176727f.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-notifications-SPEC-306-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Panneau des notifications : états vide et erreur @SPEC-306" classname="p3/spec-306.spec.ts" time="1.566">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/attachments/spec-306-panneau-sans-contenu-desktop-d5111fc21882687752c3a58c34220cb3f856c2a8.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/attachments/axe-fa00da931f1ce6700f24df5a28949a9cede257b2.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-061d3-ats-vide-et-erreur-SPEC-306-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Panneau des notifications : conformité @SPEC-306 @visual" classname="p3/spec-306.spec.ts" time="1.753">
+<properties>
+<property name="mockup-diff-ratio" value="0.0469">
+</property>
+<property name="panel-mockup-diff-ratio" value="0.1076">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/reference-5cc46e62851463374c1b079e8501665fb4551178.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/side-by-side-fb010e02615911faf3e1a765fd5d64dedf3472ad.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/diff-284c122b53aa625310d24840f01d079a801d64ca.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/panel-reference-3037775d63c62279ac882a81916222200c4d4708.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/panel-side-by-side-0dae0adc8993310c4c1a63781b70d2c2b2361f8d.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/panel-diff-841822e78835c207c98ac634a58c36a01d49df75.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/attachments/axe-bc5e630e868ce53f0b4c8aca68f604aa43de6a28.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/video-3.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-4fd41--conformité-SPEC-306-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Panneau des notifications : conformité mobile @SPEC-306 @visual @mobile" classname="p3/spec-306.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p3/spec-306.spec.ts" timestamp="2026-11-12T18:46:16.726Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.264" errors="0">
+<testcase name="Panneau des notifications : conformité mobile @SPEC-306 @visual @mobile" classname="p3/spec-306.spec.ts" time="1.264">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-cb279-bile-SPEC-306-visual-mobile-mobile/attachments/axe-8253a83508eab77f405088769616c9448ed6f803.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-cb279-bile-SPEC-306-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-cb279-bile-SPEC-306-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-cb279-bile-SPEC-306-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-306-Panneau-des-no-cb279-bile-SPEC-306-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
