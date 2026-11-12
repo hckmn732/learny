@@ -32,6 +32,37 @@ export const chunkLocationSchema = z
     { message: 'endSec doit être supérieur ou égal à startSec', path: ['endSec'] },
   );
 
+const utcInstant = z.iso.datetime({ offset: true });
+
+/**
+ * `resources.metadata.upload` — bookkeeping of a private file upload (SPEC-206 ET-3, ET-5, ET-6).
+ * A file resource is created `queued` with its declared size and a reservation window; the
+ * finalization adds the measured fingerprint; the event and blob-removal markers make both
+ * follow-up effects exactly-once and resumable. Every key is optional because a resource created
+ * before SPEC-206 (or by another path) has none of them. It never holds a signed URL (ET-4).
+ */
+export const resourceUploadSchema = z.strictObject({
+  /** Size announced when the upload URL was requested: counted as a reservation until finalized. */
+  declaredBytes: z.number().int().min(0).optional(),
+  declaredMime: z.string().min(1).max(127).optional(),
+  /** End of the reservation window, computed with the injected clock (ADR-0047). */
+  reservedUntil: utcInstant.optional(),
+  /** Client key of the creation request: a replay returns the same resource (SPEC-206 ET-4). */
+  idempotencyKey: z.string().min(8).max(128).optional(),
+  finalizedAt: utcInstant.optional(),
+  /** SHA-256 of the measured bytes and Storage `etag` at finalization (SPEC-206 ET-5). */
+  sha256: z
+    .string()
+    .regex(/^[0-9a-f]{64}$/)
+    .optional(),
+  etag: z.string().min(1).max(200).optional(),
+  /** Claim and completion of the single `resource/uploaded` emission (SPEC-206 EF-2, CL-4). */
+  eventClaimedAt: utcInstant.optional(),
+  eventEmittedAt: utcInstant.optional(),
+  /** Set once the blob of a deleted resource has been removed from Storage (SPEC-206 ET-6). */
+  blobRemovedAt: utcInstant.optional(),
+});
+
 /** `resources.metadata` — every key is optional and filled by the ingestion (SPEC-509/510). */
 export const resourceMetadataSchema = z.strictObject({
   pages: z.number().int().min(1).optional(),
@@ -40,7 +71,9 @@ export const resourceMetadataSchema = z.strictObject({
   youtubeId: z.string().min(1).optional(),
   siteName: z.string().min(1).optional(),
   anthropicFileId: z.string().min(1).optional(),
+  upload: resourceUploadSchema.optional(),
 });
 
 export type ChunkLocation = z.infer<typeof chunkLocationSchema>;
 export type ResourceMetadata = z.infer<typeof resourceMetadataSchema>;
+export type ResourceUpload = z.infer<typeof resourceUploadSchema>;
