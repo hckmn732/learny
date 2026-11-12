@@ -1,5 +1,6 @@
 {
   "name": "learny",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.34.9",
@@ -23,7 +24,7 @@
     "db:check": "pnpm --filter @learny/db check",
     "dev:worker": "turbo run dev --filter=@learny/worker",
     "build": "turbo run build",
-    "lint": "turbo run lint && pnpm run lint:root && pnpm run db:check",
+    "lint": "turbo run lint && pnpm run lint:root && pnpm run db:check && pnpm run openapi:check",
     "lint:root": "eslint --max-warnings=0 tools *.config.ts *.config.mjs",
     "typecheck": "turbo run typecheck && tsc -p tsconfig.tools.json --noEmit",
     "test:unit": "vitest run --project unit",
@@ -46,7 +47,9 @@
     "sdd:fail": "node tools/sdd/fail.mjs",
     "sdd:checkpoint": "node tools/sdd/checkpoint.mjs",
     "sdd:audit": "node tools/sdd/audit.mjs",
-    "sdd:adr": "node tools/sdd/adr.mjs"
+    "sdd:adr": "node tools/sdd/adr.mjs",
+    "openapi:generate": "tsx packages/contracts/scripts/generate-openapi.ts",
+    "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -57,6 +60,7 @@
     "@eslint/js": "^9.39.5",
     "@next/eslint-plugin-next": "^16.4.6",
     "@playwright/test": "^1.65.0",
+    "@readme/openapi-parser": "^10.0.0",
     "@types/node": "^24.19.2",
     "@vitest/coverage-v8": "^5.1.0",
     "axe-core": "^4.14.0",
@@ -67,6 +71,7 @@
     "husky": "^9.1.7",
     "jsdom": "^31.0.0",
     "lint-staged": "^17.6.0",
+    "next-test-api-route-handler": "^5.0.7",
     "prettier": "^3.10.0",
     "tsx": "^4.23.15",
     "turbo": "^2.11.11",

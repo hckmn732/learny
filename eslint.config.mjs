@@ -34,6 +34,7 @@ const ALLOWED_IMPORTS = {
   llm: ['core', 'config', 'contracts', 'db'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
+  contracts: ['core'],
 };
 
 const boundaryZones = [
