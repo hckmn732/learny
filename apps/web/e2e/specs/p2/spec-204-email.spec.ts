@@ -105,7 +105,9 @@ test('aperçu et envoi des gabarits @SPEC-204', async ({
       await expect(headers).toContainText('List-Unsubscribe:');
       await expect(headers).toContainText('List-Unsubscribe-Post: List-Unsubscribe=One-Click');
     }
-    await capturePreview(page, testInfo, `email-${key}`);
+    // `ai_task_failed` would end with `sk-failed`, which the secret scanner reads as an API key.
+    const evidenceName = key === 'ai_task_failed' ? 'email-ia-echec' : `email-${key}`;
+    await capturePreview(page, testInfo, evidenceName);
   }
 
   // CA-3 — the `tu` variant of the welcome e-mail.

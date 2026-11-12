@@ -1,0 +1,54 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="33.711589">
+<testsuite name="p2/spec-204-email.spec.ts" timestamp="2026-11-12T10:56:46.376Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.697" errors="0">
+<testcase name="aperçu et envoi des gabarits @SPEC-204" classname="p2/spec-204-email.spec.ts" time="2.424">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-welcome-a49d1fb93b15319eabfb381feb3ed18c75b3df84.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-daily-digest-ae77acc1e0c825e3e59fc941780280b183b13493.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-reminder-549eb3ac4573b3bc5d635b76cd4850fae19ae6a4.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-weekly-review-4905cc6b353a28f6ea195150c363313ad92f7994.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-ia-echec-7440be035e9a2e9f88eff12d340521e37587255d.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-export-ready-c44a4705cb22d11e6d280771db25d893f6a21c54.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-deletion-scheduled-bc2a27755a3682f30e84f35eb32f82eba2e4d816.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-deletion-completed-8e6e54f89ec90a1abc2b2a04e8c86e658f232e7a.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/email-welcome-tu-1d940413fd5fbc00b3505458e972b8423ce18ca5.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/axe-83c62e1a7047476938d7f792924daded671a38dd.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/attachments/spec-204-email-97811b3a1f01af47451f8ff28543bbdedf993704.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-aperçu-et-envoi-des-gabarits-SPEC-204-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page de démonstration SPEC-204 @SPEC-204 @visual" classname="p2/spec-204-email.spec.ts" time="1.273">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-204-email-page-de--dd00e-on-SPEC-204-SPEC-204-visual-desktop/attachments/axe-2d77029d3edcfcb0f061ef15b90459a4709bf742.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-page-de--dd00e-on-SPEC-204-SPEC-204-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-page-de--dd00e-on-SPEC-204-SPEC-204-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-page-de--dd00e-on-SPEC-204-SPEC-204-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-204-email-page-de--dd00e-on-SPEC-204-SPEC-204-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
