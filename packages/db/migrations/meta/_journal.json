@@ -127,6 +127,20 @@
       "when": 1794456153541,
       "tag": "0017_planning_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794458802758,
+      "tag": "0018_groups",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794458815872,
+      "tag": "0019_groups_rules",
+      "breakpoints": true
     }
   ]
 }
