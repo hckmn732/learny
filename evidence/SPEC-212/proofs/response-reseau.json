@@ -1,0 +1,106 @@
+{
+  "query": "réseau",
+  "groups": [
+    {
+      "kind": "notion",
+      "label": "Notions",
+      "items": [
+        {
+          "id": "8f9492e0-220b-481e-9a41-181155b1e03f",
+          "title": "Réseau local",
+          "snippet": "Un réseau local relie des machines proches.",
+          "highlights": [
+            {
+              "start": 3,
+              "end": 9
+            }
+          ],
+          "titleHighlights": [
+            {
+              "start": 0,
+              "end": 6
+            }
+          ],
+          "href": "/formations/8c7a1337-70ea-4169-a67f-6d6f6fb66ae4/programme#notion-8f9492e0-220b-481e-9a41-181155b1e03f"
+        },
+        {
+          "id": "edcc62c8-4c52-4331-a041-b7112c05b63d",
+          "title": "Routage",
+          "snippet": "Le routage choisit le chemin dans le réseau.",
+          "highlights": [
+            {
+              "start": 37,
+              "end": 43
+            }
+          ],
+          "titleHighlights": [],
+          "href": "/formations/8c7a1337-70ea-4169-a67f-6d6f6fb66ae4/programme#notion-edcc62c8-4c52-4331-a041-b7112c05b63d"
+        }
+      ],
+      "total": 2
+    },
+    {
+      "kind": "chapter",
+      "label": "Chapitres",
+      "items": [
+        {
+          "id": "e402ffbf-e5c2-4719-9f43-974676048df8",
+          "title": "Introduction au réseau",
+          "snippet": "Un réseau relie des machines. Texte sûr a b",
+          "highlights": [
+            {
+              "start": 3,
+              "end": 9
+            }
+          ],
+          "titleHighlights": [
+            {
+              "start": 16,
+              "end": 22
+            }
+          ],
+          "href": "/formations/8c7a1337-70ea-4169-a67f-6d6f6fb66ae4/modules/84b532e3-556a-41c3-a34f-56b4080e62f8/cours?chapitre=fe836a58-554e-4dbc-89cc-0bfca2e4d5dd"
+        },
+        {
+          "id": "e18b45ac-1a8e-4c92-a710-203659071f6f",
+          "title": "Topologies",
+          "snippet": "…ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor Le réseau en étoile est courant. lorem ipsum dolor sit amet consectetur adipiscing…",
+          "highlights": [
+            {
+              "start": 75,
+              "end": 81
+            }
+          ],
+          "titleHighlights": [],
+          "href": "/formations/8c7a1337-70ea-4169-a67f-6d6f6fb66ae4/modules/84b532e3-556a-41c3-a34f-56b4080e62f8/cours?chapitre=fe836a58-554e-4dbc-89cc-0bfca2e4d5dd"
+        }
+      ],
+      "total": 2
+    },
+    {
+      "kind": "formation",
+      "label": "Formations",
+      "items": [
+        {
+          "id": "8c7a1337-70ea-4169-a67f-6d6f6fb66ae4",
+          "title": "Réseaux d’entreprise",
+          "snippet": "Formation aux réseaux locaux et à leur sécurité.",
+          "highlights": [
+            {
+              "start": 14,
+              "end": 20
+            }
+          ],
+          "titleHighlights": [
+            {
+              "start": 0,
+              "end": 6
+            }
+          ],
+          "href": "/formations/8c7a1337-70ea-4169-a67f-6d6f6fb66ae4"
+        }
+      ],
+      "total": 1
+    }
+  ]
+}

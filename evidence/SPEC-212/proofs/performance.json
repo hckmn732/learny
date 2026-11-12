@@ -1,0 +1,22 @@
+{
+  "dataset": {
+    "formations": 10,
+    "notions": 2000,
+    "sections": 500
+  },
+  "runs": 60,
+  "unit": "ms",
+  "min": 71.7,
+  "p50": 75,
+  "p95": 90,
+  "max": 92.6,
+  "threshold": 150,
+  "queries": [
+    "réseau",
+    "reseau",
+    "RÉSEAU",
+    "routage sécurité",
+    "comptabilité",
+    "reseua"
+  ]
+}

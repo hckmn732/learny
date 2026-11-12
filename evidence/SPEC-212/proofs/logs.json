@@ -1,0 +1,11 @@
+[
+  {
+    "level": "info",
+    "timestamp": "2026-11-11T12:20:00.000Z",
+    "requestId": "req-log",
+    "operation": "search",
+    "queryLength": 12,
+    "resultCount": 5,
+    "message": "search completed"
+  }
+]
