@@ -2710,6 +2710,47 @@ export const fr = {
         none: 'Aucune réponse pour l’instant.',
       },
     },
+    spec403: {
+      eyebrow: 'Calcul de la maîtrise',
+      title: 'SPEC-403 · Calcul de la maîtrise',
+      inputs: {
+        title: 'Réponses datées',
+        intro:
+          'Chaque réponse notée contribue à la maîtrise avec le poids 0,5^(âge en jours / 14).',
+        formula: 'maîtrise = 100 × Σ(poids × score) / Σ(poids)',
+        answer: 'Réponse',
+        attempt: 'Tentative',
+        answeredAt: 'Réponse le',
+        score: 'Score',
+        age: 'Âge (jours)',
+        weight: 'Poids',
+        add: 'Ajouter une réponse',
+        evaluation: (instant: string) => `Évaluation au ${instant}`,
+        empty: 'Aucune réponse.',
+      },
+      result: {
+        title: 'Maîtrise calculée',
+        mastered: 'Maîtrisée',
+        notMastered: 'Non maîtrisée',
+        threshold: (value: string) => `Seuil ${value}\u00a0%`,
+        bar: 'Maîtrise de la notion',
+        answerCount: (count: number) =>
+          count === 1 ? '1 réponse retenue' : `${String(count)} réponses retenues`,
+        weightSum: (value: string) => `Somme des poids : ${value}`,
+        weightedScore: (value: string) => `Score pondéré : ${value}`,
+      },
+      edge: {
+        title: 'Cas limites',
+        intro: 'Calculs réels sur des entrées minimales, sans écriture.',
+        empty: 'Aucune réponse',
+        below: 'Une réponse à 79,999 %',
+        threshold: 'Une réponse à 80 %',
+        future: 'Une réponse future',
+        rejected: (code: string) => `Rejetée (${code})`,
+        mastered: 'Maîtrisée',
+        notMastered: 'Non maîtrisée',
+      },
+    },
   },
   email: {
     unsubscribe: {

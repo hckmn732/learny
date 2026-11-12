@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="33.813436">
+<testsuite name="p4/spec-403.spec.ts" timestamp="2026-11-12T20:24:49.493Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.064" errors="0">
+<testcase name="Calcul de la maîtrise @SPEC-403" classname="p4/spec-403.spec.ts" time="1.144">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/attachments/axe-2129515c02576aafd8a5d5b83dd4df4150e0c4be.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/attachments/spec-403-demo-3b7a8b48415fc23879e6ac37663f646414be7e15.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Calcul de la maîtrise @SPEC-403 @visual @mobile" classname="p4/spec-403.spec.ts" time="0.92">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/attachments/axe-0f8527f5877a17a73b89e73350d7d3278765da14.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/attachments/spec-403-demo-visual-5cdf6b6d6257b2088f4394012a8549266c5e952c.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-403.spec.ts" timestamp="2026-11-12T20:24:49.493Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.053" errors="0">
+<testcase name="Calcul de la maîtrise @SPEC-403 @visual @mobile" classname="p4/spec-403.spec.ts" time="1.053">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/attachments/axe-3f01fd9afb87a0b31732dbfa4f67c964bd2ba1a7.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/attachments/spec-403-demo-visual-fc366aea5e202bc2070a8ab65e2952328f6a47b8.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-403-Calcul-de-la-maîtrise-SPEC-403-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
