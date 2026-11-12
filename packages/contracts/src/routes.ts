@@ -4,6 +4,7 @@ import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
 import { devEmailRoutes, emailRoutes } from './email';
+import { headerRoutes } from './header';
 import { healthRoutes } from './health';
 import { notificationsDevRoutes } from './notifications';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
@@ -26,6 +27,7 @@ export const ROUTES = {
   ...pushDevRoutes,
   ...devJobsRoutes,
   ...searchRoutes,
+  ...headerRoutes,
   ...sidebarRoutes,
   ...billingRoutes,
   ...billingDevRoutes,

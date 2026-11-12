@@ -19,6 +19,7 @@ export {
   startDemoPipeline,
 } from './dev/events';
 export * from './search';
+export * from './header';
 export * from './sidebar';
 export * from './billing/index';
 export * from './email/index';
