@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="35.737376">
+<testsuite name="p4/spec-406.spec.ts" timestamp="2026-11-12T21:40:24.071Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.254" errors="0">
+<testcase name="Tirage de la session de quiz global @SPEC-406" classname="p4/spec-406.spec.ts" time="1.755">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/attachments/axe-5dc24e9d287274b02fd1b66c4f513a168e520251.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/attachments/spec-406-demo-d792b19300b76801b488c4ad69171236a7399d27.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-session-de-quiz-global-SPEC-406-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Tirage de la session de quiz global @SPEC-406 @visual @mobile" classname="p4/spec-406.spec.ts" time="1.499">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/attachments/axe-98932ecc5301b5f7a02712e1e48274d6665f896e.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/attachments/spec-406-demo-visual-cd4c83e3f04f7f261ce81dc405cbc5edb8c8d991.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-406.spec.ts" timestamp="2026-11-12T21:40:24.071Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.721" errors="0">
+<testcase name="Tirage de la session de quiz global @SPEC-406 @visual @mobile" classname="p4/spec-406.spec.ts" time="1.721">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/attachments/axe-5e1a7c34f3398eb029dc9f6e7326d9d8a50f8deb.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/attachments/spec-406-demo-visual-0c4c7def5b9a6ff6ccbece47c34f86cf62a8fd75.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-406-Tirage-de-la-s-59962-obal-SPEC-406-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
