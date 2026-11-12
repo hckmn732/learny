@@ -237,5 +237,8 @@ Définition commune ; conventions de schéma vertes ; documentation de `learny.a
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0040 (une discussion par ouverture, conservée et privée), ADR-0039, ADR-0112.
+- **ADR-0239** : le déclencheur de version courante ne bascule les autres versions qu'à l'insertion
+  (CL-2 reste refusé par l'index partiel unique) ; la cohérence propriétaire tolère un parent déjà
+  supprimé lors d'une cascade.
 - **ADR-0113** : ajout de `courses.formation_id`, `course_sections.owner_id`, `citations.owner_id`, `tutor_messages.user_id`, `chapter_summaries.course_id`, table `course_section_revisions`, énumération `citation_media` (au lieu d'un texte libre), `citations.label` et `media_kind` obligatoires, `tutor_conversations.updated_at`, réutilisation de `message_role` pour `tutor_messages.role`.
 - Hypothèse : la variable de session `learny.actor` (`tutor` par défaut) identifie l'auteur d'une correction ; elle est positionnée par les services (SPEC-609).

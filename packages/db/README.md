@@ -72,6 +72,35 @@ de BR-APP-02 et les formes par type sont imposées en base ; la suppression logi
 contenu et les passages mais conserve la ligne pour les citations. `createTestProgramme` fournit la
 formation et le chapitre nécessaires aux tests d'intégration.
 
+### Cours et discussions (SPEC-105)
+
+`courses` stocke une version par `(owner_id, module_id)` : l'index partiel unique
+`courses_one_current_idx` garantit une seule version courante et le déclencheur
+`courses_single_current` bascule les autres versions à `is_current = false` à chaque insertion
+(BR-COU-10). `course_sections` porte le contenu ordonné et ancré du cours ; `citations` référence
+le passage et la ressource cités, mis à `null` à leur suppression alors que la citation est
+conservée (« source supprimée », ADR-0039). `reading_progress` et `chapter_summaries` référencent
+la version lue ; `tutor_conversations` et `tutor_messages` gardent une discussion privée par
+ouverture (ADR-0040). `createTestCourse(tx, { ownerId, moduleId, sectionsPerChapter })` crée une
+version prête et ses sections sur les chapitres du module.
+
+#### Auteur d'une correction (`learny.actor`)
+
+Toute mise à jour de `title`, `content_md` ou `data` d'une section archive l'état précédent dans
+`course_section_revisions` et incrémente `course_sections.version` (EF-4). Le déclencheur lit
+`current_setting('learny.actor', true)` pour renseigner `edited_by` : `tutor` par défaut, `learner`
+lorsqu'un service applique une correction de l'apprenant. Le service positionne la variable dans sa
+transaction avant l'écriture :
+
+```sql
+select set_config('learny.actor', 'learner', true); -- portée transactionnelle
+update public.course_sections set content_md = $1 where id = $2;
+```
+
+`reported` peut changer sans créer de révision. La migration `courses_rules` active aussi la RLS
+sur les huit tables (ADR-0112), la cohérence propriétaire (`owner_mismatch`, 23514) et
+l'horodatage de la discussion à chaque message.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |
