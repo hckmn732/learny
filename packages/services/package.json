@@ -20,7 +20,7 @@
     "@learny/jobs": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.2",
     "file-type": "^22.3.0",
     "stripe": "^17.7.0",
     "unpdf": "^2.1.0"

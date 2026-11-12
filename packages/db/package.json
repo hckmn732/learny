@@ -20,7 +20,7 @@
   "dependencies": {
     "@learny/config": "workspace:*",
     "@learny/core": "workspace:*",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.7",
     "zod": "^4.6.7"
   },

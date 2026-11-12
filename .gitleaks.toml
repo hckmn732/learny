@@ -11,4 +11,10 @@ paths = [
   '''^design/maquettes/''',
   '''^evidence/.*\.(json|xml)$''',
 ]
-stopwords = ['''learny-test-only''']
+stopwords = [
+  '''learny-test-only''',
+  '''sk-sentinel-0123456789abcdef''',
+  '''M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg''',
+  '''validation-1400''',
+  '''3f9a2f0e-1c4b-4c5d-8e9f-0a1b2c3d4e5f.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg''',
+]

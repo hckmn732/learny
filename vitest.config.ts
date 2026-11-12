@@ -48,6 +48,8 @@ export default defineConfig({
             'tools/docker/*.test.ts',
           ],
           environment: 'node',
+          // CI runners are slower; the year-long quiet-hours loop needs more than the 5 s default.
+          testTimeout: 20000,
         },
       },
       {
