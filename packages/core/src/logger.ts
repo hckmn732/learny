@@ -37,6 +37,8 @@ export const SAFE_LOG_FIELDS = [
   'runId',
   'operation',
   'outcome',
+  'queryLength',
+  'resultCount',
 ] as const;
 
 export type SafeLogField = (typeof SAFE_LOG_FIELDS)[number];
