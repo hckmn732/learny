@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "demo-timeout",
+  "promptId": "tutor.demo",
+  "promptVersion": 1,
+  "description": "Le fournisseur ne répond pas dans le délai de la tâche.",
+  "match": { "contains": ["[[mock:demo-timeout]]"] },
+  "steps": [
+    {
+      "type": "error",
+      "error": { "kind": "timeout", "message": "request timed out" },
+      "usage": { "inputTokens": 0, "outputTokens": 0, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 30000
+    }
+  ]
+}

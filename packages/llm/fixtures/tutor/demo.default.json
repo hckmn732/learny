@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "demo",
+  "promptId": "tutor.demo",
+  "promptVersion": 1,
+  "description": "Réponse de démonstration du tuteur : un texte court, sans outil.",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Bonjour !",
+      "finishReason": "stop",
+      "usage": { "inputTokens": 24, "outputTokens": 4, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 120
+    }
+  ]
+}
