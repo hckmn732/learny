@@ -1,3 +1,5 @@
+import { writeFile } from 'node:fs/promises';
+
 import type { APIResponse } from '@playwright/test';
 
 import { expect, test } from '@learny/testing/playwright';
@@ -58,7 +60,7 @@ test("cycle d'abonnement simulé @SPEC-210", async ({
   axeCheck,
   captureEvidence,
   consoleErrors,
-}) => {
+}, testInfo) => {
   await page.goto('/_dev/sdd/SPEC-210');
   const title = page.getByTestId('sdd-title');
   await expect(title).toHaveText(TITLE);
@@ -111,6 +113,15 @@ test("cycle d'abonnement simulé @SPEC-210", async ({
   ]);
 
   await axeCheck();
+  // §13 — the journal of the simulated cycle, as processed by the real webhook handler.
+  const journal = await page.request.get('/api/v1/dev/sdd/stripe/events');
+  expect(journal.status()).toBe(200);
+  const journalFile = testInfo.outputPath('webhook-journal.json');
+  await writeFile(journalFile, JSON.stringify(await journal.json(), null, 2));
+  await testInfo.attach('webhook-journal', {
+    path: journalFile,
+    contentType: 'application/json',
+  });
   await captureEvidence('spec-210-cycle');
   expect(consoleErrors).toEqual([]);
 });
@@ -125,7 +136,7 @@ test('annuler le paiement simulé ramène à la page sans abonnement @SPEC-210',
   await expect(page.getByTestId('spec-210-event-row')).toHaveCount(0);
 });
 
-test('contrats de facturation et webhook signé @SPEC-210', async ({ page }) => {
+test('contrats de facturation et webhook signé @SPEC-210', async ({ page }, testInfo) => {
   const request = page.request;
 
   // CA-4 — SPEC-602 reads `{ status }` of the subscription of a learner who never subscribed.
@@ -174,7 +185,11 @@ test('contrats de facturation et webhook signé @SPEC-210', async ({ page }) => 
   expect((await jsonOf(portal)).url).toBe('/_dev/stripe/portal?return=%2Fparametres%23ia');
 
   // CA-2 — the webhook is public but signed: a missing or wrong signature is a 400.
-  for (const headers of [{}, { 'stripe-signature': 't=1,v1=00' }]) {
+  const signatureCases: Array<{ case: string; status: number; code?: string }> = [];
+  for (const [label, headers] of [
+    ['absente', {}],
+    ['malformée', { 'stripe-signature': 't=1,v1=00' }],
+  ] as const) {
     const rejected = await request.post('/api/v1/webhooks/stripe', {
       headers: { 'content-type': 'application/json', ...headers },
       data: '{"id":"evt_x","type":"customer.subscription.deleted","created":1,"data":{"object":{}}}',
@@ -183,7 +198,15 @@ test('contrats de facturation et webhook signé @SPEC-210', async ({ page }) => 
     const problem = await jsonOf(rejected);
     expect(problem.code).toBe('INVALID_SIGNATURE');
     expect(rejected.headers()['content-type']).toContain('application/problem+json');
+    signatureCases.push({ case: label, status: rejected.status(), code: String(problem.code) });
   }
+  // §13 — the signature cases observed on the real route.
+  const casesFile = testInfo.outputPath('signature-cases.json');
+  await writeFile(casesFile, JSON.stringify(signatureCases, null, 2));
+  await testInfo.attach('signature-cases', {
+    path: casesFile,
+    contentType: 'application/json',
+  });
 
   // CA-5 — no Stripe identifier or key in any answer.
   const texts = [JSON.stringify(firstJson), await fresh.text()];
