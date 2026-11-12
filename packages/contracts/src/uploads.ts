@@ -189,7 +189,11 @@ export const uploadsRoutes = {
 export const SIMULATED_UPLOAD_CASES = [
   'pdf-limit',
   'pdf-too-many-pages',
+  'image-limit',
   'image-too-large',
+  'executable-as-png',
+  'note-too-long',
+  'chapter-full',
   'quota-reached',
 ] as const;
 export const SimulatedUploadCase = z.enum(SIMULATED_UPLOAD_CASES);

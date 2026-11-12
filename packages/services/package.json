@@ -11,8 +11,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
-    "@learny/db": "workspace:*"
+    "@learny/db": "workspace:*",
+    "file-type": "^22.3.0",
+    "unpdf": "^2.1.0"
   }
 }

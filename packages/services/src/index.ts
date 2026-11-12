@@ -7,3 +7,5 @@ export {
   listDevItems,
   resetDevEchoCounter,
 } from './dev/echo';
+export * from './resources';
+export { simulateUpload } from './dev/uploads';
