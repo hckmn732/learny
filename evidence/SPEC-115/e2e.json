@@ -1,0 +1,427 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-115/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-115",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-115/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-115/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-115/test-results/sdd/SPEC-115/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-115/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-115/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "APP_ENV": "test",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p1/spec-115.spec.ts",
+      "file": "p1/spec-115.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "inspecte les données de démonstration @SPEC-115",
+          "ok": true,
+          "tags": [
+            "SPEC-115"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T07:02:08.842Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/attachments/axe-5fc1f6f272019a3a6b29c79dec1e4e60e583c56e.json"
+                    },
+                    {
+                      "name": "spec-115-demo",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/attachments/spec-115-demo-f94afe0b18e39deb1236d0246460993ce31751b1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "358b4b434fdab033993f-8f31e0522ec3ea767ee8",
+          "file": "p1/spec-115.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "données de démonstration conformes @SPEC-115 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-115",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T07:02:10.317Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/attachments/axe-6fc25e4a7d413e192c4c0ceb66c0aaa3c6bf1ea2.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1056,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T07:02:11.799Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/attachments/axe-1ed79c254de939264576f4928ddc920f551915bc.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-115/test-results/artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "358b4b434fdab033993f-cbfa3713f28058fcf7eb",
+          "file": "p1/spec-115.spec.ts",
+          "line": 148,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T07:01:40.384Z",
+    "duration": 32648.77,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
