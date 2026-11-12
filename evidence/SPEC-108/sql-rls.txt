@@ -1,0 +1,22 @@
+RLS — lectures avec le JWT d’Alice (rôle authenticated)
+  schedule_slots visibles                          : 1
+  schedule_slots de la formation partagée           : 1 (Alice + Bob sur la même formation)
+  schedule_slots de Bob                             : 0
+  automation_actions visibles                       : 1
+  automation_actions de Bob                         : 0
+  daily_activity visibles                           : 1
+  daily_activity de Bob                             : 0
+  milestones visibles                               : 1
+  milestones de Bob                                 : 0
+  listScheduleSlots(userId = Bob)                   : 0 ligne(s)
+  listMilestones(userId = Bob)                      : 0 ligne(s)
+  lecture du créneau partagé de Bob par son id     : identifiant connu mais filtré par RLS
+
+RLS — écritures avec le JWT d’Alice
+  créer un créneau pour Bob                         : SQLSTATE 42501 (attendu 42501)
+  créer une action du tuteur                        : SQLSTATE 42501 (attendu 42501)
+  créer un jalon                                    : SQLSTATE 42501 (attendu 42501)
+  accepter sa propre action                         : applied
+  mettre à jour l’action de Bob                     : 0 ligne(s)
+
+Contexte préparé puis annulé (withRollback) : deux comptes

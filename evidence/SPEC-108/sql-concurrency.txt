@@ -1,0 +1,7 @@
+Concurrence — deux déplacements simultanés du même créneau
+  transactions réussies                             : 1
+  transactions en conflit                           : 1
+  code du perdant                                   : CONFLICT
+  statut de l’origine                               : moved
+  successeurs actifs                                : 1
+  successeur                                        : planned à 2026-11-12T17:00:00.000Z

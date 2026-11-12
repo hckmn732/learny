@@ -1,0 +1,56 @@
+       table        |                    constraint                    |                                                definition                                                 
+--------------------+--------------------------------------------------+-----------------------------------------------------------------------------------------------------------
+ automation_actions | automation_actions_declined_decided_at_check     | CHECK (((status <> 'declined'::automation_status) OR (decided_at IS NOT NULL)))
+ automation_actions | automation_actions_formation_id_formations_id_fk | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE SET NULL
+ automation_actions | automation_actions_kind_length_check             | CHECK (((char_length(kind) >= 1) AND (char_length(kind) <= 80)))
+ automation_actions | automation_actions_payload_check                 | CHECK ((jsonb_typeof(payload) = 'object'::text))
+ automation_actions | automation_actions_pending_consent_check         | CHECK (((status <> 'pending_consent'::automation_status) OR requires_consent))
+ automation_actions | automation_actions_pending_decided_at_check      | CHECK (((status <> 'pending_consent'::automation_status) OR (decided_at IS NULL)))
+ automation_actions | automation_actions_pkey                          | PRIMARY KEY (id)
+ automation_actions | automation_actions_summary_check                 | CHECK ((((char_length(summary) >= 1) AND (char_length(summary) <= 300)) AND (summary !~ '[\r\n]'::text)))
+ automation_actions | automation_actions_undo_payload_check            | CHECK (((undo_payload IS NULL) OR (jsonb_typeof(undo_payload) = 'object'::text)))
+ automation_actions | automation_actions_user_id_profiles_id_fk        | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ daily_activity     | daily_activity_minutes_check                     | CHECK ((minutes >= 0))
+ daily_activity     | daily_activity_pkey                              | PRIMARY KEY (user_id, day)
+ daily_activity     | daily_activity_sources_check                     | CHECK (((array_position(sources, NULL::text) IS NULL) AND (array_position(sources, ''::text) IS NULL)))
+ daily_activity     | daily_activity_user_id_profiles_id_fk            | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ milestones         | milestones_formation_id_formations_id_fk         | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE SET NULL
+ milestones         | milestones_pkey                                  | PRIMARY KEY (id)
+ milestones         | milestones_user_id_key_ref_id_unique             | UNIQUE NULLS NOT DISTINCT (user_id, key, ref_id)
+ milestones         | milestones_user_id_profiles_id_fk                | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ schedule_slots     | schedule_slots_activity_id_activities_id_fk      | FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE SET NULL
+ schedule_slots     | schedule_slots_formation_id_formations_id_fk     | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE
+ schedule_slots     | schedule_slots_meta_length_check                 | CHECK (((meta IS NULL) OR (char_length(meta) <= 1000)))
+ schedule_slots     | schedule_slots_module_id_modules_id_fk           | FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE SET NULL
+ schedule_slots     | schedule_slots_moved_from_id_fk                  | FOREIGN KEY (moved_from_id) REFERENCES schedule_slots(id)
+ schedule_slots     | schedule_slots_moved_from_not_self_check         | CHECK (((moved_from_id IS NULL) OR (moved_from_id <> id)))
+ schedule_slots     | schedule_slots_pkey                              | PRIMARY KEY (id)
+ schedule_slots     | schedule_slots_title_length_check                | CHECK (((char_length(title) >= 1) AND (char_length(title) <= 200)))
+ schedule_slots     | schedule_slots_user_id_profiles_id_fk            | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ schedule_slots     | schedule_slots_window_check                      | CHECK ((ends_at > starts_at))
+(28 rows)
+
+       table        |                   index                   |                                                                                                                     definition                                                                                                                      
+--------------------+-------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ automation_actions | automation_actions_formation_id_idx       | CREATE INDEX automation_actions_formation_id_idx ON public.automation_actions USING btree (formation_id)
+ automation_actions | automation_actions_pkey                   | CREATE UNIQUE INDEX automation_actions_pkey ON public.automation_actions USING btree (id)
+ automation_actions | automation_actions_user_id_created_at_idx | CREATE INDEX automation_actions_user_id_created_at_idx ON public.automation_actions USING btree (user_id, created_at DESC NULLS LAST)
+ daily_activity     | daily_activity_pkey                       | CREATE UNIQUE INDEX daily_activity_pkey ON public.daily_activity USING btree (user_id, day)
+ milestones         | milestones_formation_id_idx               | CREATE INDEX milestones_formation_id_idx ON public.milestones USING btree (formation_id)
+ milestones         | milestones_pkey                           | CREATE UNIQUE INDEX milestones_pkey ON public.milestones USING btree (id)
+ milestones         | milestones_user_id_achieved_at_idx        | CREATE INDEX milestones_user_id_achieved_at_idx ON public.milestones USING btree (user_id, achieved_at DESC NULLS LAST)
+ milestones         | milestones_user_id_key_ref_id_unique      | CREATE UNIQUE INDEX milestones_user_id_key_ref_id_unique ON public.milestones USING btree (user_id, key, ref_id) NULLS NOT DISTINCT
+ schedule_slots     | schedule_slots_activity_id_idx            | CREATE INDEX schedule_slots_activity_id_idx ON public.schedule_slots USING btree (activity_id)
+ schedule_slots     | schedule_slots_formation_id_idx           | CREATE INDEX schedule_slots_formation_id_idx ON public.schedule_slots USING btree (formation_id)
+ schedule_slots     | schedule_slots_module_id_idx              | CREATE INDEX schedule_slots_module_id_idx ON public.schedule_slots USING btree (module_id)
+ schedule_slots     | schedule_slots_moved_from_active_unique   | CREATE UNIQUE INDEX schedule_slots_moved_from_active_unique ON public.schedule_slots USING btree (moved_from_id) WHERE ((moved_from_id IS NOT NULL) AND (status = ANY (ARRAY['planned'::slot_status, 'done'::slot_status, 'missed'::slot_status])))
+ schedule_slots     | schedule_slots_pkey                       | CREATE UNIQUE INDEX schedule_slots_pkey ON public.schedule_slots USING btree (id)
+ schedule_slots     | schedule_slots_user_id_starts_at_idx      | CREATE INDEX schedule_slots_user_id_starts_at_idx ON public.schedule_slots USING btree (user_id, starts_at)
+(14 rows)
+
+     table      |             trigger             |                                                                                              definition                                                                                              
+----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ schedule_slots | schedule_slots_move_consistency | CREATE TRIGGER schedule_slots_move_consistency BEFORE INSERT OR UPDATE OF moved_from_id, user_id, formation_id ON public.schedule_slots FOR EACH ROW EXECUTE FUNCTION assert_slot_move_consistency()
+ schedule_slots | set_updated_at                  | CREATE TRIGGER set_updated_at BEFORE UPDATE ON public.schedule_slots FOR EACH ROW EXECUTE FUNCTION set_updated_at()
+(2 rows)
+

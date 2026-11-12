@@ -1,28 +1,28 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T03:57:06.165Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T04:23:10.865Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 20 |
+| Terminées | 21 |
 | En cours | 0 |
-| Prêtes | 5 |
+| Prêtes | 4 |
 | En attente de dépendances | 107 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **15.2 %** |
-| Avancement V1 | 16.1 % |
-| Prochaine action | start SPEC-108 — Schéma agenda, automatismes et série |
+| **Avancement global** | **15.9 %** |
+| Avancement V1 | 16.9 % |
+| Prochaine action | start SPEC-109 — Schéma notifications |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
-| P1 | Base de données, migrations et sécurité | 7/15 | CP-1 | ⏳ |
+| P1 | Base de données, migrations et sécurité | 8/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
@@ -56,7 +56,7 @@
 | [SPEC-105](../specs/p1-donnees/SPEC-105-schema-cours-et-discussions.md) | Schéma cours et discussions | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-104 |
 | [SPEC-106](../specs/p1-donnees/SPEC-106-schema-briques-activites-et-tentatives.md) | Schéma briques, activités et tentatives | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-103 |
 | [SPEC-107](../specs/p1-donnees/SPEC-107-schema-memorisation-et-lacunes.md) | Schéma mémorisation et lacunes | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-106 |
-| [SPEC-108](../specs/p1-donnees/SPEC-108-schema-agenda-automatismes-et-serie.md) | Schéma agenda, automatismes et série | P1 | 🟢 ready | 0 | — | SPEC-102, SPEC-103 |
+| [SPEC-108](../specs/p1-donnees/SPEC-108-schema-agenda-automatismes-et-serie.md) | Schéma agenda, automatismes et série | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-102, SPEC-103 |
 | [SPEC-109](../specs/p1-donnees/SPEC-109-schema-notifications.md) | Schéma notifications | P1 | 🟢 ready | 0 | — | SPEC-102 |
 | [SPEC-110](../specs/p1-donnees/SPEC-110-schema-ia-et-facturation.md) | Schéma IA et facturation | P1 | 🟢 ready | 0 | — | SPEC-102 |
 | [SPEC-111](../specs/p1-donnees/SPEC-111-schema-formations-a-plusieurs.md) | Schéma formations à plusieurs | P1 | 🟢 ready | 0 | — | SPEC-103 |

@@ -134,3 +134,58 @@ export type {
 
 // Repositories of the memory/gap domain (SPEC-107 EF-5, ET-5).
 export * from './repositories/notion-states';
+
+// Four tables of the agenda/automation/streak domain and their six enumerations (SPEC-108 EF-1 to
+// EF-5). `automation_key` is shared with `automation_settings` (SPEC-710).
+export {
+  ACTIVE_SLOT_STATUSES,
+  AUTOMATION_STATUSES,
+  MILESTONE_KEYS,
+  MOVABLE_SLOT_STATUSES,
+  SLOT_CREATORS,
+  SLOT_KINDS,
+  SLOT_STATUSES,
+  activityMinutesSchema,
+  activitySourcesSchema,
+  automationActions,
+  automationPayloadSchema,
+  automationStatus,
+  automationSummarySchema,
+  dailyActivity,
+  milestoneKey,
+  milestones,
+  planningDaySchema,
+  planningInstantSchema,
+  scheduleSlots,
+  slotCreator,
+  slotKind,
+  slotStatus,
+  slotWindowSchema,
+} from './schema/planning';
+export type {
+  AutomationAction,
+  AutomationKey,
+  AutomationStatus,
+  DailyActivity,
+  Milestone,
+  MilestoneKey,
+  NewAutomationAction,
+  NewDailyActivity,
+  NewMilestone,
+  NewScheduleSlot,
+  ScheduleSlot,
+  SlotCreator,
+  SlotKind,
+  SlotStatus,
+} from './schema/planning';
+
+// The automation enumeration is declared with the identity schema (SPEC-102) and reused by the
+// action journal (SPEC-108).
+export { AUTOMATION_KEYS, automationKey } from './schema/identity';
+
+// Repositories of the agenda, the automation journal, the daily activity and the milestones
+// (SPEC-108 ET-2, ET-5, EF-2, EF-4, EF-5).
+export * from './repositories/schedule-slots';
+export * from './repositories/automation-actions';
+export * from './repositories/daily-activity';
+export * from './repositories/milestones';
