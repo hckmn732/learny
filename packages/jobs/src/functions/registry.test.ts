@@ -69,6 +69,16 @@ describe('[SPEC-203] registre', () => {
     expect((get('security-purge').opts as { idempotency?: string }).idempotency).toBe(
       'event.data.tickAt',
     );
+
+    // SPEC-209 — one delivery consumer and the two hourly notification jobs.
+    expect(triggersOf(get('notification-delivery'))).toEqual([
+      { event: 'notification/delivery-due' },
+    ]);
+    expect((get('notification-delivery').opts as { idempotency?: string }).idempotency).toBe(
+      'event.data.deliveryId',
+    );
+    expect(triggersOf(get('notifications-deferred-due'))).toEqual([{ event: 'cron/hourly-tick' }]);
+    expect(triggersOf(get('notifications-daily-digest'))).toEqual([{ event: 'cron/hourly-tick' }]);
   });
 
   it('applique la concurrence par utilisateur par défaut aux événements qui portent un userId', async () => {

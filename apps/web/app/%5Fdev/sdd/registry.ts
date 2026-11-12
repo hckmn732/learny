@@ -180,4 +180,9 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-210'),
   },
+  'SPEC-209': {
+    title: 'SPEC-209 — Service unifié de notifications',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-209'),
+  },
 };

@@ -2407,6 +2407,385 @@
         "summary": "Route de démonstration : liste paginée de 57 éléments (SPEC-201)."
       }
     },
+    "/api/v1/dev/sdd/notify": {
+      "post": {
+        "operationId": "dev.notify",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "at": {
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                    "type": "string"
+                  },
+                  "dedupeKey": {
+                    "maxLength": 200,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "settings": {
+                    "properties": {
+                      "channelEmail": {
+                        "type": "boolean"
+                      },
+                      "channelPush": {
+                        "type": "boolean"
+                      },
+                      "maxPerDay": {
+                        "anyOf": [
+                          {
+                            "const": 3,
+                            "type": "number"
+                          },
+                          {
+                            "const": 5,
+                            "type": "number"
+                          },
+                          {
+                            "const": 8,
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "quietEnd": {
+                        "pattern": "^\\d{2}:\\d{2}$",
+                        "type": "string"
+                      },
+                      "quietStart": {
+                        "pattern": "^\\d{2}:\\d{2}$",
+                        "type": "string"
+                      },
+                      "typeCourse": {
+                        "type": "boolean"
+                      },
+                      "typeGap": {
+                        "type": "boolean"
+                      },
+                      "typePlanning": {
+                        "type": "boolean"
+                      },
+                      "typeRelaunch": {
+                        "type": "boolean"
+                      },
+                      "typeRevision": {
+                        "type": "boolean"
+                      },
+                      "typeValidation": {
+                        "type": "boolean"
+                      },
+                      "weekendQuiet": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "channelEmail",
+                      "channelPush",
+                      "typeRevision",
+                      "typeValidation",
+                      "typeCourse",
+                      "typeGap",
+                      "typePlanning",
+                      "typeRelaunch",
+                      "quietStart",
+                      "quietEnd",
+                      "weekendQuiet",
+                      "maxPerDay"
+                    ],
+                    "type": "object"
+                  },
+                  "tone": {
+                    "enum": [
+                      "vous",
+                      "tu"
+                    ],
+                    "type": "string"
+                  },
+                  "type": {
+                    "enum": [
+                      "validation_soon",
+                      "course_ready",
+                      "global_quiz_today",
+                      "new_gap",
+                      "session_planned",
+                      "module_validated",
+                      "session_to_reschedule",
+                      "weekly_review",
+                      "milestone",
+                      "ai_cost_alert",
+                      "ai_task_failed",
+                      "export_ready",
+                      "group_invitation",
+                      "daily_digest",
+                      "relaunch",
+                      "planning_adjusted"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "tone",
+                  "at",
+                  "settings"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "created": {
+                      "type": "boolean"
+                    },
+                    "deliveries": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "channel": {
+                            "enum": [
+                              "email",
+                              "push"
+                            ],
+                            "type": "string"
+                          },
+                          "error": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "scheduledFor": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "enum": [
+                              "scheduled",
+                              "sent",
+                              "deferred_quiet",
+                              "capped",
+                              "failed",
+                              "skipped_pref"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "channel",
+                          "status",
+                          "scheduledFor",
+                          "error"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "digest": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "heldCount": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "heldMaxPerDay": {
+                          "anyOf": [
+                            {
+                              "const": 3,
+                              "type": "number"
+                            },
+                            {
+                              "const": 5,
+                              "type": "number"
+                            },
+                            {
+                              "const": 8,
+                              "type": "number"
+                            }
+                          ]
+                        },
+                        "heldTitles": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "heldCount",
+                        "heldMaxPerDay",
+                        "heldTitles"
+                      ],
+                      "type": "object"
+                    },
+                    "notification": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "body": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        },
+                        "icon": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "enum": [
+                            "validation_soon",
+                            "course_ready",
+                            "global_quiz_today",
+                            "new_gap",
+                            "session_planned",
+                            "module_validated",
+                            "session_to_reschedule",
+                            "weekly_review",
+                            "milestone",
+                            "ai_cost_alert",
+                            "ai_task_failed",
+                            "export_ready",
+                            "group_invitation",
+                            "daily_digest",
+                            "relaunch",
+                            "planning_adjusted"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "icon",
+                        "title",
+                        "body",
+                        "href",
+                        "createdAt"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "notification",
+                    "created",
+                    "deliveries",
+                    "digest"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Route de démonstration : routage unifié d’une notification (SPEC-209)."
+      }
+    },
     "/api/v1/dev/sdd/push/send": {
       "post": {
         "operationId": "dev.pushSend",

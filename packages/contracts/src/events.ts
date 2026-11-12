@@ -194,6 +194,15 @@ export const EVENTS = {
     dedupeKey: z.string().min(1).max(200).nullable(),
     externalChannels: z.boolean().default(true),
   }),
+  // SPEC-209 ET-4 — one committed delivery to send; the identifier makes a replay a no-op.
+  'notification/delivery-due': z.object({
+    userId: Uuid,
+    notificationId: Uuid,
+    deliveryId: Uuid,
+    channel: z.enum(['email', 'push']),
+    /** EF-6 — the payload of the notification, replayed by a deferred e-mail (digest). */
+    data: z.record(z.string(), z.unknown()).optional(),
+  }),
   'billing/subscription-changed': z.object({
     userId: Uuid,
     status: z.enum(EVENT_SUBSCRIPTION_STATUSES),

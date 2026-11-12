@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="35.964138">
+<testsuite name="p2/spec-209.spec.ts" timestamp="2026-11-12T11:31:04.668Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.289" errors="0">
+<testcase name="routage des notifications @SPEC-209" classname="p2/spec-209.spec.ts" time="2.303">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/attachments/axe-0e672ccce9d36032b3130c9961c2b1a7b7d174af.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/attachments/spec-209-routing-1844a22b94c1fe85bf59473005a1a0ce02b92d8c.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-routage-des-notifications-SPEC-209-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="notifications conformes @SPEC-209 @visual @mobile" classname="p2/spec-209.spec.ts" time="0.986">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-desktop/attachments/axe-2b6f93b9f3efa509fe9a53c9836074563de6ecce.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-209.spec.ts" timestamp="2026-11-12T11:31:04.668Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.982" errors="0">
+<testcase name="notifications conformes @SPEC-209 @visual @mobile" classname="p2/spec-209.spec.ts" time="0.982">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-mobile/attachments/axe-734cd0ef114d86244f5042bc577b5588b8590357.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-209-notifications-conformes-SPEC-209-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

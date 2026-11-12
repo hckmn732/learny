@@ -132,5 +132,6 @@ Validations communes de `docs/engineering/testing.md` §7 ; en plus : aucun appe
 ## 15. Décisions et hypothèses
 
 - ADR-0031 (plafond hors application), ADR-0010 (ton), ADR-0032 et ADR-0124 (catégories et préférence e-mail), ADR-0123 (heures calmes, week-end, DST).
+- ADR-0265 (créé pour cette spécification) : canaux du programme du jour et de l’export, données de gabarit portées par l’événement, réservation du plafond sous concurrence, `staleAt` sans migration.
 - ADR-0214 (créé pour cette spécification) : ordre des contrôles, correspondance type → interrupteur, règle du week-end, comptage du plafond, abandon des reports périmés, programme du jour hors plafond.
 - Hypothèse : le rappel 40 minutes avant un quiz (BR-NOT-07) est calculé par SPEC-706, qui transmet `eligibleAt` ; ce service ne connaît pas l'agenda.

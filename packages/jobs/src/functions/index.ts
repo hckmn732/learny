@@ -11,6 +11,9 @@ import { cronNightly } from './cron-nightly';
 import { createDemoJob } from './demo-job';
 import { emailWelcome } from './email-welcome';
 import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
+import { notificationDelivery } from './notification-delivery';
+import { notificationsDailyDigest } from './notifications-daily-digest';
+import { notificationsDeferredDue } from './notifications-deferred-due';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
 import { securityPurge } from './security-purge';
 
@@ -25,6 +28,9 @@ export const learnyFunctions = [
   cronNightly,
   emailWelcome,
   nightlyOutboxCleanup,
+  notificationDelivery,
+  notificationsDailyDigest,
+  notificationsDeferredDue,
   sddDemoPipeline,
   securityPurge,
 ] as const;
