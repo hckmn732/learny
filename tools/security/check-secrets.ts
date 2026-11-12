@@ -14,6 +14,8 @@ type Mode = { kind: 'staged' } | { kind: 'all' } | { kind: 'path'; file: string 
 const REFUSAL =
   "Commit refusé : secret détecté. Retirez-le, utilisez une variable d'environnement (voir .env.example).";
 const BINARY_PROBE_BYTES = 8000;
+/** Absolute path: hooks run from temporary repositories during tests (CL-3). */
+const GITLEAKS_CONFIG = path.resolve(import.meta.dirname, '..', '..', '.gitleaks.toml');
 
 function git(args: string[]): string {
   const r = spawnSync('git', args, { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
@@ -50,7 +52,7 @@ function runGitleaks(mode: Mode): boolean {
     return true;
   }
   const modern = version[0] > 8 || (version[0] === 8 && version[1] >= 19);
-  const config = ['--config', '.gitleaks.toml'];
+  const config = ['--config', GITLEAKS_CONFIG];
   let args: string[];
   if (mode.kind === 'staged') {
     args = modern
