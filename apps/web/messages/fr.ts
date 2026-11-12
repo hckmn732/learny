@@ -578,6 +578,61 @@ export const fr = {
         sources: (labels: string[]) => `Sources : ${labels.join(', ')}`,
       },
     },
+    spec106: {
+      intro:
+        'Chaque chargement crée les treize types de briques, une activité de trois versions ordonnées, une tentative et ses réponses — puis publie une nouvelle version, dans une transaction toujours annulée.',
+      yes: 'oui',
+      no: 'non',
+      missing: '—',
+      types: {
+        title: 'Types de briques',
+        intro:
+          'Les treize types de BR-BRI-01 avec leur objectif et leur statut ; une brique signalée ou retirée ne peut plus entrer dans une nouvelle activité.',
+        region: 'Types de briques (tableau défilant)',
+        type: 'Type',
+        purpose: 'Objectif',
+        status: 'Statut',
+        currentVersion: 'Version courante',
+      },
+      activity: {
+        title: 'Activité',
+        intro:
+          'Une activité prête assemble trois versions ordonnées de la même brique ; chaque item fige le couple brique/version.',
+        region: 'Activité (tableau défilant)',
+        kind: 'Type d’activité',
+        status: 'Statut',
+        position: 'Position',
+        brick: 'Brique',
+        version: 'Version utilisée',
+        available: 'Version disponible',
+        points: 'Points',
+      },
+      attempt: {
+        title: 'Tentative',
+        intro:
+          'La tentative numéro 1 est notée : statut, score sur 100, réussite et nombre de réponses.',
+        number: 'Numéro',
+        status: 'Statut',
+        score: 'Score / 100',
+        passed: 'Réussie',
+        answers: 'Réponses',
+      },
+      answers: {
+        title: 'Réponses',
+        intro:
+          'Chaque réponse garde la version présentée pendant l’essai ; la version 4 publiée ensuite ne réécrit ni l’activité ni les réponses.',
+        region: 'Réponses (tableau défilant)',
+        position: 'Position',
+        brick: 'Brique',
+        version: 'Version de la réponse',
+        frozen: 'Version figée',
+        frozenOn: (used: number, current: number) =>
+          `figée sur la version ${String(used)} · version ${String(current)} publiée`,
+        upToDate: 'à jour',
+        score: 'Score / maximum',
+        grader: 'Correcteur',
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
