@@ -61,7 +61,12 @@ test('routage des notifications @SPEC-209', async ({ page, axeCheck, captureEvid
   );
 
   // CA-3 — cap 3 and four immediate sends: the fourth is capped and summarised for tomorrow.
-  await page.getByTestId('spec-209-cap-3').check({ force: true });
+  // The radio is visually hidden: click its label, as a learner would.
+  await page
+    .locator('label')
+    .filter({ has: page.getByTestId('spec-209-cap-3') })
+    .click();
+  await expect(page.getByTestId('spec-209-cap-3')).toBeChecked();
   await page.getByTestId('spec-209-at').selectOption('wednesday');
   await page.getByTestId('spec-209-type').selectOption('milestone');
   for (let index = 1; index <= 4; index += 1) {
