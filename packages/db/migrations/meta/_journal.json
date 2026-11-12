@@ -99,6 +99,20 @@
       "when": 1794450966993,
       "tag": "0013_bricks_activities_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794453672811,
+      "tag": "0014_memory",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1794453678393,
+      "tag": "0015_memory_rules",
+      "breakpoints": true
     }
   ]
 }
