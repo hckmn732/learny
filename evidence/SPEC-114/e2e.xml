@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="30.559622000000005">
+<testsuite name="p1/spec-114.spec.ts" timestamp="2026-11-12T06:47:52.722Z" hostname="desktop" tests="2" failures="0" skipped="0" time="1.849" errors="0">
+<testcase name="inspecte le stockage privé @SPEC-114" classname="p1/spec-114.spec.ts" time="0.938">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/attachments/axe-f69bb12fa922687b4716f8cc4b69bd991c279fd7.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/attachments/spec-114-storage-575b4d24835135303cced4d0c35ecb8734bd2d01.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-inspecte-le-stockage-privé-SPEC-114-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="stockage conforme @SPEC-114 @visual @mobile" classname="p1/spec-114.spec.ts" time="0.911">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-desktop/attachments/axe-e25f9649e7d448a326d30d7e32c117e119b5d159.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-114.spec.ts" timestamp="2026-11-12T06:47:52.722Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.954" errors="0">
+<testcase name="stockage conforme @SPEC-114 @visual @mobile" classname="p1/spec-114.spec.ts" time="0.954">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-mobile/attachments/axe-f0353d8f2dd15aecd090edd9c2bcb0398b6b3987.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-114-stockage-conforme-SPEC-114-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
