@@ -24,6 +24,11 @@ Import unique : `@learny/learning-engine`.
 - **Erreurs** (`src/errors.ts`) : `EngineError` (`INVALID_INPUT`, `INVALID_INSTANT`,
   `INVALID_PARAM`, `REVIEW_OUT_OF_ORDER`, `UNKNOWN_NOTION`, `INVALID_AVAILABILITY`) et
   `assertValid(schema, value)`. `assertAvailability` porte le code dédié de CL-6.
+- **Série et jalons** (`src/streak/`, SPEC-409) : `calculateStreak` retourne la série courante, les
+  14 cases de régularité et le dernier jour qualifiant ; `detectMilestones` retourne uniquement les
+  jalons nouveaux (`module_validated:<moduleId>`, `notions_100`, `streak_30`). Les deux fonctions
+  reçoivent leurs bornes métier dans `params` (`ENGINE.streak`, `ENGINE.milestones`) et ne lisent
+  jamais `@learny/config` (ADR-0281).
 
 Les dossiers `fsrs/`, `mastery/`, `gaps/`, `draw/`, `global-quiz/`, `planner/`, `progress/`,
 `streak/` et `warmup/` sont les points d'accueil de SPEC-402 à SPEC-410.
