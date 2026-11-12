@@ -257,12 +257,14 @@ test('démonstration web conforme @SPEC-006 @visual', async ({ page }) => {
 
   await expectNoSeriousAxeViolations(page);
 
-  // The list of registered demos grows with every specification: it is masked.
-  const mask = [page.getByTestId('spec-006-sdd-registry')];
+  // The list of registered demos grows with every specification. Masking alone would still let
+  // its height shift the page; hide it so the baseline only covers the stable page chrome.
+  await page
+    .getByTestId('spec-006-sdd-registry')
+    .evaluate((element) => { element.setAttribute('style', 'display:none'); });
   await expect(page).toHaveScreenshot('spec-006-demo.png', {
     fullPage: true,
     maxDiffPixelRatio: 0.01,
-    mask,
   });
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -279,7 +281,6 @@ test('démonstration web conforme @SPEC-006 @visual', async ({ page }) => {
   await expect(page).toHaveScreenshot('spec-006-demo-mobile.png', {
     fullPage: true,
     maxDiffPixelRatio: 0.01,
-    mask,
   });
 
   // Error page capture: French message, retry action, no stack.
