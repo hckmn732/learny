@@ -5,10 +5,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, type RefObject } from 'react';
 
 import type { HeaderDto } from '@learny/contracts';
-import { Icon, IconButton, iconRegistry } from '@learny/ui';
+import { IconButton, iconRegistry } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
+import { GlobalSearch } from '../search/global-search';
 
 import { AccountMenuView, type AccountMenuStatus } from './account-menu';
 
@@ -67,32 +68,11 @@ export const HeaderView = ({
         className={sidebarCollapsed ? undefined : 'shell:hidden'}
       />
 
-      <form
-        role="search"
-        action="/recherche"
-        method="get"
-        data-testid="header-search"
-        className="relative min-w-0 flex-[1_1_320px] max-w-[414px]"
-      >
-        <label htmlFor="recherche-globale" className="sr-only">
-          {t.searchLabel}
-        </label>
-        <Icon
-          name="search"
-          size={18}
-          strokeWidth={1.8}
-          className="pointer-events-none absolute top-12 left-14 text-ink-muted"
-        />
-        <input
-          id="recherche-globale"
-          name="q"
-          type="search"
-          aria-label={t.searchLabel}
-          placeholder={t.searchPlaceholder}
-          data-testid="header-search-input"
-          className="min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 font-sans text-14 text-ink placeholder:text-ink-muted"
-        />
-      </form>
+      <GlobalSearch
+        label={t.searchLabel}
+        placeholder={t.searchPlaceholder}
+        onNavigate={onNavigate}
+      />
 
       <div className="ml-auto flex items-center gap-8">
         <IconButton
