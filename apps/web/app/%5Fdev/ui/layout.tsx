@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { SkipLink } from '@learny/ui';
+
 import { sddPagesEnabled } from '../../../lib/sdd-pages';
 import { fr } from '../../../messages/fr';
 
@@ -20,7 +22,7 @@ const SECTIONS = [
   { id: 'forms', label: t.sections.forms, href: '/_dev/ui/saisie' },
   { id: 'structure', label: t.sections.structure, href: '/_dev/ui/structure' },
   { id: 'feedback', label: t.sections.feedback, href: '/_dev/ui/retours' },
-  { id: 'accessibility', label: t.sections.accessibility },
+  { id: 'accessibility', label: t.sections.accessibility, href: '/_dev/ui/accessibilite' },
 ] as const;
 
 export default function UiGalleryLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -29,6 +31,9 @@ export default function UiGalleryLayout({ children }: Readonly<{ children: React
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
+      <nav aria-label={fr.ui.accessibility.skipNavLabel}>
+        <SkipLink>{fr.ui.accessibility.skipLink}</SkipLink>
+      </nav>
       <div className="mx-auto flex max-w-content flex-col gap-24 px-40 pt-28 pb-56 shell:flex-row shell:gap-40">
         <aside className="shrink-0 shell:w-sidebar">
           <p className="font-display text-21 font-semibold tracking-heading">Learny UI</p>
@@ -44,24 +49,25 @@ export default function UiGalleryLayout({ children }: Readonly<{ children: React
               </li>
               {SECTIONS.map((section) => (
                 <li key={section.id}>
-                  {'href' in section ? (
-                    <Link
-                      href={section.href}
-                      className="inline-block rounded-8 px-8 py-3 text-14 font-medium hover:bg-surface-muted"
-                    >
-                      {section.label}
-                    </Link>
-                  ) : (
-                    <span className="inline-block px-8 py-3 text-14 text-ink-muted">
-                      {section.label} · {t.comingSoon}
-                    </span>
-                  )}
+                  <Link
+                    href={section.href}
+                    className="inline-block rounded-8 px-8 py-3 text-14 font-medium hover:bg-surface-muted"
+                  >
+                    {section.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
         </aside>
-        <main className="min-w-0 flex-1">{children}</main>
+        <main
+          className="learny-focus-target min-w-0 flex-1"
+          data-testid="main-content"
+          id="contenu-principal"
+          tabIndex={-1}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

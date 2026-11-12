@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@learny/ui/theme.css';
+@import '@learny/ui/accessibility.css';
 @source '../../../packages/ui/src';
 
 /*

@@ -5,6 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./accessibility": "./src/accessibility/index.ts",
+    "./accessibility.css": "./src/styles/accessibility.css",
     "./tokens": "./src/tokens/index.ts",
     "./theme.css": "./src/styles/theme.css"
   },

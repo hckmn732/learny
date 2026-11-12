@@ -1,3 +1,4 @@
+export * from './accessibility';
 export { AlertDialog } from './components/AlertDialog';
 export type { AlertDialogProps } from './components/AlertDialog';
 export { Avatar, getInitials } from './components/Avatar';

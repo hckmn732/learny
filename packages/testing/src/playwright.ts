@@ -1,9 +1,9 @@
 // Playwright fixtures shared by every e2e test (SPEC-004, ET-2).
 import fs from 'node:fs';
 
-import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
 
+import { blockingAxeViolations, formatAxeViolations, runAxe } from './axe';
 import { FIXED_TIME_ISO } from './clock';
 import { assertMockLlm } from './env';
 
@@ -24,17 +24,12 @@ export interface LearnyFixtures {
 }
 
 async function axeCheck(page: Page, testInfo: TestInfo): Promise<void> {
-  const results = await new AxeBuilder({ page }).analyze();
-  const blocking = results.violations.filter(
-    (v) => v.impact === 'serious' || v.impact === 'critical',
-  );
+  const violations = await runAxe(page);
+  const blocking = blockingAxeViolations(violations);
   const file = testInfo.outputPath(`axe-${String(testInfo.attachments.length)}.json`);
-  fs.writeFileSync(file, JSON.stringify(results.violations, null, 2));
+  fs.writeFileSync(file, JSON.stringify(violations, null, 2));
   await testInfo.attach('axe', { path: file, contentType: 'application/json' });
-  expect(
-    blocking.map((v) => `${v.id} (${v.impact ?? ''}) : ${v.help}`),
-    'violations axe serious/critical',
-  ).toEqual([]);
+  expect(formatAxeViolations(blocking), 'violations axe serious/critical').toEqual([]);
 }
 
 // Fixture callbacks name their second argument `provide` (Playwright's `use`) so that the
