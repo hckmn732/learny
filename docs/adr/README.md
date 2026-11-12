@@ -144,3 +144,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0266](ADR-0266-canal-push-paquet-notifications-partage-refus-neutre-d-un-en.md) | Canal push : paquet notifications partagé, refus neutre d'un endpoint étranger et mock déterministe | Déduite | SPEC-205, ADR-0055, ADR-0244 |
 | [ADR-0261](ADR-0261-webhooks-stripe-emission-sur-changement-statuts-non-mappes-f.md) | Webhooks Stripe: emission sur changement, statuts non mappes, faux client partage | Déduite | SPEC-210, ADR-0215 |
 | [ADR-0267](ADR-0267-suppression-du-compte-auth-avant-cascade-et-qualification-de.md) | Suppression du compte : Auth avant cascade et qualification des exports | Déduite | SPEC-211, ADR-0044, ADR-0216, ADR-0122, ADR-0047 |
+| [ADR-0268](ADR-0268-jetons-de-design-nommage-echelle-de-1-px-theme-tailwind-ferm.md) | Jetons de design : nommage, échelle de 1 px, thème Tailwind fermé et galerie /_dev/ui | Déduite | SPEC-301, SPEC-005, SPEC-006, ADR-0034, ADR-0059 |

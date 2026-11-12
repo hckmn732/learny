@@ -199,6 +199,5 @@ Définition commune de `docs/engineering/testing.md` §7, plus : `theme.css` ré
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0034 (échelle 90 %, rem), ADR-0059 (`packages/ui`, polices via `next/font`), ADR-0049 (pages de développement derrière `ENABLE_SDD_PAGES`), ADR-0047 (horloge figée des e2e).
-- Décision créée : **ADR-0130 — Jetons de design : nommage, unité d'espacement et thème Tailwind fermé** (noms de la section 5, `--spacing: 0.0625rem`, réinitialisation des espaces de noms Tailwind, point de rupture en px, focus en px).
-- Décision créée : **ADR-0131 — Conventions des composants et galerie /_dev/ui** (structure de la galerie, utilisée ici pour son ouverture).
-- Hypothèse : `design/references/tokens.json` peut avoir n'importe quelle forme JSON ; le test l'explore récursivement (ET-6). Hypothèse : SPEC-006 sert les routes `/_dev/*` depuis un dossier `%5Fdev`.
+- Décision créée : **ADR-0268 — Jetons de design : nommage, échelle de 1 px, thème Tailwind fermé et galerie /_dev/ui** (noms de la section 5, `--spacing: 0.0625rem`, réinitialisation des espaces de noms Tailwind, point de rupture en px, focus en px, vérification des 60 jetons contre les maquettes et `tokens.json`, galerie sous `/_dev/ui`).
+- Hypothèse : `design/references/tokens.json` peut avoir n'importe quelle forme JSON ; le test l'explore récursivement (ET-6). `tokens.json` étant un inventaire d'éléments clés, les couleurs de jetons sont aussi vérifiées contre les sources des maquettes ; les valeurs initiales du navigateur (`#000000`, `rgba(0,0,0,0)`, `13.3333px`) sont exclues de l'inventaire (ADR-0268). Hypothèse : SPEC-006 sert les routes `/_dev/*` depuis un dossier `%5Fdev` et le proxy SDD autorise `/_dev/ui`.
