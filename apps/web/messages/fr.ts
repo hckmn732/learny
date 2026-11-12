@@ -1238,6 +1238,80 @@ export const fr = {
         link: 'Ouvrir openapi.json',
       },
     },
+    spec205: {
+      title: 'SPEC-205 — Notifications navigateur',
+      inApp: 'Canal application : toujours actif, quelle que soit la permission du navigateur.',
+      permission: {
+        title: 'Permission du navigateur',
+        intro:
+          'Permission simulée : aucune demande réelle n’est faite au navigateur pendant la démonstration.',
+        legend: 'Réponse simulée du navigateur',
+        options: {
+          default: 'Pas encore demandée (default)',
+          granted: 'Accordée (granted)',
+          denied: 'Refusée (denied)',
+        } as Record<string, string>,
+        supportLabel: 'Navigateur sans API Push',
+        supportMissing:
+          'Ce navigateur ne prend pas en charge les notifications : le bouton est désactivé et la boîte in-app reste disponible.',
+        requests: (count: number) => `Demandes de permission : ${String(count)}`,
+      },
+      subscription: {
+        title: 'Abonnement',
+        intro:
+          'Le clic sur « Activer » déclenche la demande de permission, l’enregistrement du service worker puis l’abonnement avec la clé VAPID publique.',
+        scenario: 'Réponse simulée du service push',
+        scenarios: {
+          success: 'Succès (201)',
+          missing: 'Abonnement introuvable (404)',
+          gone: 'Abonnement expiré (410)',
+          transient: 'Erreur transitoire (503)',
+        } as Record<string, string>,
+        enable: 'Activer les notifications du navigateur',
+        disable: 'Retirer l’abonnement',
+        state: {
+          none: 'Aucun abonnement',
+          active: 'Abonnement actif',
+        },
+        outcomes: {
+          subscribed: 'Abonnement enregistré.',
+          denied: 'Permission refusée : les notifications in-app restent disponibles.',
+          dismissed: 'Demande ignorée : aucun abonnement, in-app disponible.',
+          unsupported: 'API Push absente : aucun abonnement possible.',
+          unconfigured: 'Clé VAPID publique absente : canal navigateur non configuré.',
+          removed: 'Abonnement retiré.',
+          error: 'L’enregistrement a échoué.',
+        },
+      },
+      preview: {
+        title: 'Aperçu de la notification',
+        intro:
+          'Ce que le service worker afficherait : titre, texte, icône et chemin interne seulement.',
+        receive: 'Recevoir une notification',
+        sending: 'Envoi…',
+        empty: 'Aucune notification reçue pour l’instant.',
+        url: 'Ouvre',
+        inAppKept: 'Sans abonnement, la notification reste dans la boîte in-app.',
+      },
+      delivery: {
+        title: 'Journal de livraison',
+        intro:
+          'Résultat réel de sendPush en mode simulé : statut du journal, réponse du service, abonnements restants.',
+        caption: 'Livraisons push de la démonstration',
+        columns: ['Envoi', 'Journal', 'Service push', 'Abonnements restants'],
+        empty: 'Aucune livraison.',
+        status: {
+          sent: 'Envoyée',
+          failed: 'Échec',
+          skipped_pref: 'Ignorée',
+        } as Record<string, string>,
+        attempt: (outcome: string, statusCode: number, removed: boolean, failures: number) =>
+          `${outcome} · ${String(statusCode)}${removed ? ' · abonnement supprimé' : ` · échecs ${String(failures)}`}`,
+        none: 'aucun appel',
+        announce: (status: string, remaining: number) =>
+          `Livraison : ${status}. Abonnements restants : ${String(remaining)}.`,
+      },
+    },
     spec206: {
       title: 'SPEC-206 — Envois privés',
       limits: {

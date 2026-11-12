@@ -114,3 +114,5 @@ Les validations de `docs/engineering/testing.md` §7 passent ; le mode mock est 
 ## 15. Décisions et hypothèses
 
 ADR-0055 fixe Web Push/VAPID et nettoyage 404/410/cinq échecs. SPEC-209 choisira si et quand envoyer selon préférences, heures calmes et plafond ; cette spécification réalise le canal navigateur.
+
+ADR-0266 (déduit pendant l'implémentation) : création du paquet `@learny/notifications` partagé avec SPEC-204, refus neutre `FORBIDDEN` d'un endpoint déjà enregistré par un autre compte, mock déterministe choisi par le dernier segment de l'endpoint sur `push.mock.learny.test`, journal `skipped_pref`/`no_subscription` sans abonnement et `failed`/`transient` rejouable, `PUSH_MODE=live` refusé en CI.

@@ -1,0 +1,72 @@
+[
+  {
+    "case": "success",
+    "statusCode": 201,
+    "delivery": "sent",
+    "failureCount": 0,
+    "payloadKeys": [
+      "title",
+      "body",
+      "icon",
+      "url",
+      "tag"
+    ]
+  },
+  {
+    "case": "missing",
+    "statusCode": 404,
+    "removed": true,
+    "delivery": "failed",
+    "error": "gone"
+  },
+  {
+    "case": "gone",
+    "statusCode": 410,
+    "removed": true,
+    "delivery": "failed",
+    "error": "gone"
+  },
+  {
+    "case": "five-failures",
+    "beforeSuccess": [
+      1,
+      2,
+      3
+    ],
+    "afterSuccess": 0,
+    "afterwards": [
+      1,
+      2,
+      3,
+      4,
+      "removed"
+    ],
+    "deliveries": [
+      "failed/transient",
+      "failed/transient",
+      "failed/transient"
+    ]
+  },
+  {
+    "case": "retry",
+    "first": "failed",
+    "second": "sent",
+    "journalLines": 1
+  },
+  {
+    "case": "no-subscription",
+    "pushCalls": 0,
+    "delivery": "skipped_pref",
+    "error": "no_subscription",
+    "inboxRows": 1
+  },
+  {
+    "case": "three-subscriptions",
+    "statuses": [
+      410,
+      503,
+      201
+    ],
+    "remaining": 2
+  }
+]

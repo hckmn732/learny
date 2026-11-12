@@ -1,0 +1,64 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="36.58015">
+<testsuite name="p2/spec-205.spec.ts" timestamp="2026-11-12T10:42:09.654Z" hostname="desktop" tests="3" failures="0" skipped="0" time="3.276" errors="0">
+<testcase name="simule les permissions push @SPEC-205" classname="p2/spec-205.spec.ts" time="1.699">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/attachments/axe-0bafdf641a585d1819cf3cc074d884e167a65dd9.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/attachments/spec-205-notifications-navigateur-1501d47700bce06d44a389c26183361b9954e500.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-simule-les-permissions-push-SPEC-205-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="push conforme @SPEC-205 @visual @mobile" classname="p2/spec-205.spec.ts" time="1.172">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-desktop/attachments/axe-4d5ccb35ddde4ff9e7fde2e9965da4e7e9f5de95.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcourt les routes réelles : abonnement, unicité, retrait @SPEC-205" classname="p2/spec-205.spec.ts" time="0.405">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-205-parcourt-les-r-ae252-nt-unicité-retrait-SPEC-205-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-parcourt-les-r-ae252-nt-unicité-retrait-SPEC-205-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-parcourt-les-r-ae252-nt-unicité-retrait-SPEC-205-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-205.spec.ts" timestamp="2026-11-12T10:42:09.654Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.249" errors="0">
+<testcase name="push conforme @SPEC-205 @visual @mobile" classname="p2/spec-205.spec.ts" time="1.249">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-mobile/attachments/axe-dd88b7324f1bb3b440c1d7dc3977c5bf9a6320d8.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-205-push-conforme-SPEC-205-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

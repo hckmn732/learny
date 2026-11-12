@@ -1,0 +1,28 @@
+[
+  {
+    "case": "upsert",
+    "rows": 1,
+    "created": [
+      true,
+      false
+    ]
+  },
+  {
+    "case": "foreign-endpoint",
+    "code": "FORBIDDEN",
+    "rowsOfB": 0,
+    "rowsOfA": 1
+  },
+  {
+    "case": "remove",
+    "byOther": 0,
+    "byOwner": [
+      1,
+      0
+    ]
+  },
+  {
+    "case": "endpoint-validation",
+    "refused": 10
+  }
+]

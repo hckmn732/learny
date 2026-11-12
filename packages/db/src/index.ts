@@ -183,6 +183,14 @@ export type {
 // action journal (SPEC-108).
 export { AUTOMATION_KEYS, automationKey } from './schema/identity';
 
+// Browser push subscriptions of SPEC-102, written by the push channel (SPEC-205).
+export { notificationSettings, pushSubscriptions } from './schema/identity';
+export type {
+  NewPushSubscription,
+  NotificationSettings,
+  PushSubscription,
+} from './schema/identity';
+
 // Repositories of the agenda, the automation journal, the daily activity and the milestones
 // (SPEC-108 ET-2, ET-5, EF-2, EF-4, EF-5).
 export * from './repositories/schedule-slots';
