@@ -126,4 +126,5 @@ Validations communes de `docs/engineering/testing.md` §7 ; en plus : `STRIPE_MO
 - ADR-0011 (gratuit avec sa clé, IA fournie payante, un seul prix), ADR-0061 (Checkout, portail, webhooks, mode mock).
 - ADR-0215 (créé pour cette spécification) : correspondance des statuts, absence de délai de grâce, déduplication par `event.id`, ordre par `event.created`, relecture de l'abonnement, client créé paresseusement, mode mock.
 - Le montant de l'abonnement est une configuration Stripe hors code (ADR-0011) ; le plafond quotidien est appliqué par SPEC-507 à partir de `daily_cap_usd`.
+- ADR-0261 : `billing/subscription-changed` émis seulement sur changement de statut (`billing/payment-failed` à chaque échec appliqué, événement ajouté au catalogue), `paused` lu comme `past_due` et statut inconnu comme `incomplete` (échec fermé), état du faux client partagé par `globalThis` avec compteurs repris après le maximum en base, webhook simulé remis en processus à `handleWebhook` avec une vraie signature.
 - SPEC-725 et `docs/architecture/api.md` utilisent la route `GET /api/v1/billing/subscription` fournie ici.

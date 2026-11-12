@@ -8,7 +8,7 @@ import type { SubscriptionStatus } from '@learny/contracts';
  *
  * `paused` (a trial that ended without a payment method) grants nothing and can be resumed from the
  * portal: it reads as `past_due`. Any status Stripe adds later reads as `incomplete`, which grants
- * nothing either: the entitlement fails closed (ADR-0262).
+ * nothing either: the entitlement fails closed (ADR-0261).
  */
 export function mapStripeStatus(stripeStatus: string): SubscriptionStatus {
   switch (stripeStatus) {
