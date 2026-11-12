@@ -291,6 +291,7 @@ Définition commune ; test générique `[SPEC-101] conventions de schéma` vert 
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0014 (seuil 80, bornes 60..95), ADR-0035 (programme partagé sur la ligne `formations`, avancement personnel), ADR-0062 (FTS `simple` + `unaccent`), ADR-0111, ADR-0112.
+- **ADR-0237** : page de démonstration servie par le registre SDD de SPEC-006 (même URL `/_dev/sdd/SPEC-103`), schémas Zod stricts sans unicité implicite des jours/créneaux, et preuve `EXPLAIN` de `notions_fts_idx` sur une requête globale.
 - **ADR-0113** : ajout de `cadrage_messages.user_id`, `programme_imports.user_id`, `chapters.formation_id`, `updated_at` sur `modules`, `chapters`, `notions`, `chapter_progress`, `module_progress`, `programme_imports`, `programme_change_requests` ; énumération `cadrage_key` ; clés étrangères composites ; unicité `nulls not distinct` ; ordre canonique des liens `confusion` ; refus des cycles de prérequis de programme ; positions uniques différées ; `course_language` par défaut `fr` (copié du profil par le service de création).
 - Hypothèse : Postgres ≥ 15 (Supabase CLI 2) pour `unique nulls not distinct`.
 - `modules.status` reste le miroir de `module_progress` du propriétaire (data-model §2) ; la synchronisation est faite par les services (SPEC-411, SPEC-612), pas par déclencheur.
