@@ -11,9 +11,9 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec211;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 const secondaryClass =
-  'rounded-[12px] border border-solid border-[#E7E6E1] bg-white px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] border border-solid border-border bg-white px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 function label(instant: string | null): string {
   if (instant === null) return '—';
@@ -220,7 +220,13 @@ export default function Spec211Demo() {
           </div>
         </div>
         <h3 className="mt-5 font-semibold">{t.export.tree}</h3>
-        <div data-testid="spec-211-tree" className="mt-2 max-h-96 overflow-auto">
+        <div
+          data-testid="spec-211-tree"
+          role="region"
+          aria-label={t.export.tree}
+          tabIndex={0}
+          className="mt-2 max-h-96 overflow-auto"
+        >
           {tree.length === 0 ? (
             <p className="text-sm">{t.export.treeEmpty}</p>
           ) : (
@@ -277,7 +283,12 @@ export default function Spec211Demo() {
           {busy === 'execution' ? t.execution.running : t.execution.run}
         </button>
         <h3 className="mt-5 font-semibold">{t.execution.table}</h3>
-        <div className="mt-2 overflow-x-auto">
+        <div
+          role="region"
+          aria-label={t.execution.table}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto"
+        >
           {rows.length === 0 ? (
             <p className="text-sm">{t.execution.empty}</p>
           ) : (

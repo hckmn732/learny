@@ -30,7 +30,7 @@ function Figure({
         width={entry.width}
         height={entry.height}
         unoptimized
-        className="h-auto w-full rounded-[16px] border border-solid border-[#E7E6E1] bg-white"
+        className="h-auto w-full rounded-[16px] border border-solid border-border bg-white"
       />
       <figcaption className="mt-2 text-sm">
         <span className="font-semibold">{label}</span>
@@ -56,7 +56,7 @@ export function Spec005Gallery({ states }: Readonly<{ states: ReferenceState[] }
         onChange={(event) => {
           setKey(event.target.value);
         }}
-        className="mt-2 block min-h-11 w-full max-w-md rounded-[12px] border border-solid border-[#DAD9D3] bg-white px-3"
+        className="mt-2 block min-h-11 w-full max-w-md rounded-[12px] border border-solid border-border-strong bg-white px-3"
       >
         {states.map((state) => (
           <option key={state.key} value={state.key}>

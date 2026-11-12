@@ -18,7 +18,7 @@ export default function Spec012Demo() {
           {SELFHOST_CHAINS.map((chain) => (
             <li
               key={chain.source}
-              className="rounded-[12px] border border-solid border-[#E7E6E1] px-4 py-2"
+              className="rounded-[12px] border border-solid border-border px-4 py-2"
             >
               <span className="font-semibold">{chain.source}</span>
               <span aria-hidden="true">{' → '}</span>
@@ -142,7 +142,7 @@ export default function Spec012Demo() {
           tabIndex={0}
           role="region"
           aria-label={t.commands.title}
-          className="mt-3 overflow-x-auto rounded-[12px] bg-[#111113] p-4 text-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="mt-3 overflow-x-auto rounded-[12px] bg-ink p-4 text-sm text-white focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <code>{stack.commands.join('\n')}</code>
         </pre>

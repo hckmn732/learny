@@ -31,13 +31,13 @@ function Buckets() {
             data-testid="spec-114-bucket"
             data-bucket={bucket}
             data-private="true"
-            className="rounded-[8px] border border-solid border-[#E7E6E1] p-4"
+            className="rounded-[8px] border border-solid border-border p-4"
           >
             <div className="flex items-center justify-between gap-3">
               <code className="font-mono text-sm font-semibold">{bucket}</code>
               <span
                 data-testid="spec-114-bucket-badge"
-                className="rounded-full border border-solid border-[#1F7A3A] px-2 py-0.5 text-xs font-semibold text-[#1F7A3A]"
+                className="rounded-full border border-solid border-green px-2 py-0.5 text-xs font-semibold text-green-ink"
               >
                 {t.buckets.private}
               </span>
@@ -56,7 +56,7 @@ function Path() {
       <p className="mb-4 text-sm">{t.path.intro}</p>
       <code
         data-testid="spec-114-path-value"
-        className="block overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-2 font-mono text-sm"
+        className="block overflow-x-auto rounded-[8px] border border-solid border-border px-3 py-2 font-mono text-sm"
       >
         {DEMO_PATH}
       </code>
@@ -112,7 +112,7 @@ function Access() {
         role="region"
         aria-label={t.access.title}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[32rem] text-left">
           <thead>
@@ -137,7 +137,7 @@ function Access() {
                 key={row.key}
                 data-testid="spec-114-access-row"
                 data-key={row.key}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <th scope="row" className="px-3 py-2 font-medium">
                   {t.access.rows[row.key]}

@@ -51,7 +51,7 @@ function Formations({ data }: Readonly<{ data: Spec115Data }>) {
             key={formation.title}
             data-testid="spec-115-formation"
             data-status={formation.status}
-            className="flex items-center justify-between rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-2"
+            className="flex items-center justify-between rounded-[8px] border border-solid border-border px-3 py-2"
           >
             <span>{formation.title}</span>
             <span className="font-mono text-sm">
@@ -100,7 +100,7 @@ function Agenda({ data }: Readonly<{ data: Spec115Data }>) {
             data-testid="spec-115-agenda-day"
             data-date={day.date}
             data-slots={day.slots.length}
-            className="rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-2"
+            className="rounded-[8px] border border-solid border-border px-3 py-2"
           >
             <p className="font-medium">
               {day.label} · {t.agenda.slotCount(day.slots.length)}
@@ -135,7 +135,7 @@ function Checks({ data }: Readonly<{ data: Spec115Data }>) {
         role="region"
         aria-label={t.checks.title}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -164,7 +164,7 @@ function Checks({ data }: Readonly<{ data: Spec115Data }>) {
                 data-testid="spec-115-check"
                 data-key={entry.key}
                 data-ok={entry.ok ? 'true' : 'false'}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <th scope="row" className="px-3 py-2 font-medium">
                   {entry.label}

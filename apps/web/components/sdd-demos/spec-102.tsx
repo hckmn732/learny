@@ -10,7 +10,7 @@ function Badge({ testId, ok }: Readonly<{ testId: string; ok: boolean }>) {
     <span
       data-testid={testId}
       className={`inline-block rounded-full px-2 py-0.5 text-sm whitespace-nowrap ${
-        ok ? 'bg-[#E6F4EA] text-[#1F7A3A]' : 'bg-[#FDECEA] text-[#B42318]'
+        ok ? 'bg-green-soft text-green-ink' : 'bg-orange-soft text-danger'
       }`}
     >
       {ok ? t.constraints.refused : t.constraints.unexpected}
@@ -42,7 +42,7 @@ function Controls({ data }: Readonly<{ data: Spec102Data | null }>) {
           <button
             type="submit"
             data-testid="create-demo-user"
-            className="rounded-full bg-[#111113] px-4 py-2 text-sm font-medium text-white"
+            className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white"
           >
             {t.create}
           </button>
@@ -60,7 +60,7 @@ function Controls({ data }: Readonly<{ data: Spec102Data | null }>) {
         <button
           type="submit"
           data-testid="cleanup"
-          className="rounded-full border border-solid border-[#E7E6E1] px-4 py-2 text-sm font-medium"
+          className="rounded-full border border-solid border-border px-4 py-2 text-sm font-medium"
         >
           {t.cleanup}
         </button>

@@ -9,7 +9,7 @@ function Badge({ testId, ok, label }: Readonly<{ testId: string; ok: boolean; la
     <span
       data-testid={testId}
       className={`inline-block rounded-full px-2 py-0.5 text-sm whitespace-nowrap ${
-        ok ? 'bg-[#E6F4EA] text-[#1F7A3A]' : 'bg-[#FDECEA] text-[#B42318]'
+        ok ? 'bg-green-soft text-green-ink' : 'bg-orange-soft text-danger'
       }`}
     >
       {label}
@@ -24,7 +24,7 @@ function Resource({ data }: Readonly<{ data: Spec104Data }>) {
       <p className="text-sm">
         {t.resource.kind(resource.kind, resource.status, resource.chunks.length)}
       </p>
-      <blockquote className="mt-3 border-l-4 border-solid border-[#E7E6E1] pl-4">
+      <blockquote className="mt-3 border-l-4 border-solid border-border pl-4">
         <p data-testid="resource-content">{resource.contentText}</p>
       </blockquote>
       <table className="mt-4 w-full text-left">
@@ -83,7 +83,7 @@ function VectorSearch({ data }: Readonly<{ data: Spec104Data }>) {
           <li
             key={`neighbour-${String(neighbour.position)}`}
             data-testid="neighbour-row"
-            className="flex flex-col gap-1 rounded-[8px] bg-[#F6F5F2] p-3 sm:flex-row sm:items-baseline sm:gap-3"
+            className="flex flex-col gap-1 rounded-[8px] bg-surface-subtle p-3 sm:flex-row sm:items-baseline sm:gap-3"
           >
             <span data-testid="neighbour-distance" className="font-mono">
               {neighbour.distance.toFixed(4)}
@@ -95,7 +95,7 @@ function VectorSearch({ data }: Readonly<{ data: Spec104Data }>) {
       <p className="mt-4 text-sm">{t.search.planLabel}</p>
       <pre
         data-testid="vector-plan"
-        className="mt-2 rounded-[8px] bg-[#F6F5F2] p-3 text-xs break-all whitespace-pre-wrap"
+        className="mt-2 rounded-[8px] bg-surface-subtle p-3 text-xs break-all whitespace-pre-wrap"
       >
         {search.plan}
       </pre>

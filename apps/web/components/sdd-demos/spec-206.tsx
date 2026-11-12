@@ -16,7 +16,7 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec206;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 /** `100000` → `100 000`, with a plain space so the text is stable across browsers. */
 function groupThousands(value: number): string {
@@ -30,7 +30,7 @@ function Limits() {
       <ul className="grid gap-3 sm:grid-cols-2">
         <li
           data-testid="spec-206-limit-pdf"
-          className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+          className="rounded-[16px] border border-solid border-border p-4"
         >
           <h3 className="font-semibold">{t.limits.pdf.title}</h3>
           <p className="mt-1 text-sm">
@@ -39,7 +39,7 @@ function Limits() {
         </li>
         <li
           data-testid="spec-206-limit-image"
-          className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+          className="rounded-[16px] border border-solid border-border p-4"
         >
           <h3 className="font-semibold">{t.limits.image.title}</h3>
           <p className="mt-1 text-sm">{t.limits.image.value(RESOURCE_RULES.imageMaxMegabytes)}</p>
@@ -47,7 +47,7 @@ function Limits() {
         </li>
         <li
           data-testid="spec-206-limit-note"
-          className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+          className="rounded-[16px] border border-solid border-border p-4"
         >
           <h3 className="font-semibold">{t.limits.note.title}</h3>
           <p className="mt-1 text-sm">
@@ -57,7 +57,7 @@ function Limits() {
         </li>
         <li
           data-testid="spec-206-limit-quota"
-          className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+          className="rounded-[16px] border border-solid border-border p-4"
         >
           <h3 className="font-semibold">{t.limits.quota.title}</h3>
           <p className="mt-1 text-sm">
@@ -138,11 +138,11 @@ function Cases() {
           <tr>
             <th
               scope="col"
-              className="w-[42%] border-b border-solid border-[#E7E6E1] py-2 pr-2 sm:w-[50%]"
+              className="w-[42%] border-b border-solid border-border py-2 pr-2 sm:w-[50%]"
             >
               {t.cases.trialHeader}
             </th>
-            <th scope="col" className="border-b border-solid border-[#E7E6E1] py-2">
+            <th scope="col" className="border-b border-solid border-border py-2">
               {t.cases.resultHeader}
             </th>
           </tr>
@@ -154,7 +154,7 @@ function Cases() {
               <tr key={name} data-testid={`spec-206-case-${name}`}>
                 <th
                   scope="row"
-                  className="break-words border-b border-solid border-[#E7E6E1] py-3 pr-2 align-top font-normal"
+                  className="break-words border-b border-solid border-border py-3 pr-2 align-top font-normal"
                 >
                   <span className="block">{t.cases.labels[name]}</span>
                   <button
@@ -170,7 +170,7 @@ function Cases() {
                 <td
                   data-testid={`spec-206-result-${name}`}
                   data-state={outcome?.state ?? 'pending'}
-                  className="break-words border-b border-solid border-[#E7E6E1] py-3 align-top font-semibold"
+                  className="break-words border-b border-solid border-border py-3 align-top font-semibold"
                 >
                   {describeOutcome(outcome)}
                   {outcome?.state === 'refused' ? (
@@ -191,7 +191,7 @@ function CitationExample({ deleted }: Readonly<{ deleted: boolean }>) {
     <figure
       data-testid="spec-206-citation"
       data-deleted={String(deleted)}
-      className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+      className="rounded-[16px] border border-solid border-border p-4"
     >
       <blockquote className="text-sm">« {t.deletion.quote} »</blockquote>
       <figcaption className="mt-2 text-sm font-semibold">

@@ -1,4 +1,5 @@
 import { clock } from '@learny/core';
+import { colors } from '@learny/ui/tokens';
 
 import { fr } from '../../messages/fr';
 import { DemoSection } from '../sdd/demo-shell';
@@ -28,12 +29,12 @@ const ALTERED = new Set([9, 10, 18]);
 
 function Grid({ kind }: Readonly<{ kind: 'reference' | 'actual' | 'diff' }>) {
   return (
-    <div className="grid w-[160px] grid-cols-8 gap-px border border-solid border-[#E7E6E1] bg-[#E7E6E1]">
+    <div className="grid w-[160px] grid-cols-8 gap-px border border-solid border-border bg-surface-muted">
       {GRID.map((i) => {
         const altered = ALTERED.has(i);
         let color = 'bg-white';
-        if (kind === 'actual' && altered) color = 'bg-[#111113]';
-        if (kind === 'diff') color = altered ? 'bg-[#B42318]' : 'bg-[#F4F3EF]';
+        if (kind === 'actual' && altered) color = 'bg-ink';
+        if (kind === 'diff') color = altered ? 'bg-danger' : 'bg-canvas';
         return <span key={i} className={`block h-[19px] ${color}`} />;
       })}
     </div>
@@ -86,12 +87,12 @@ export default function Spec004Demo() {
       <DemoSection testId="spec-004-tokens" title={t.tokens.title}>
         <div
           data-testid="spec-004-token-sample"
-          className="rounded-[16px] border border-solid border-[#E7E6E1] bg-white p-4 text-[#111113]"
+          className="rounded-[16px] border border-solid border-border bg-white p-4 text-ink"
         >
           <p className="font-semibold">{t.tokens.sample}</p>
           <ul className="mt-2 text-sm">
-            <li>{`${t.tokens.text} : #111113`}</li>
-            <li>{`${t.tokens.border} : #E7E6E1`}</li>
+            <li>{`${t.tokens.text} : ${colors.ink}`}</li>
+            <li>{`${t.tokens.border} : ${colors.border}`}</li>
             <li>{`${t.tokens.radius} : 16px`}</li>
           </ul>
         </div>

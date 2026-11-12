@@ -9,7 +9,7 @@ function Badge({ testId, ok, label }: Readonly<{ testId: string; ok: boolean; la
     <span
       data-testid={testId}
       className={`inline-block rounded-full px-2 py-0.5 text-sm whitespace-nowrap ${
-        ok ? 'bg-[#E6F4EA] text-[#1F7A3A]' : 'bg-[#FDECEA] text-[#B42318]'
+        ok ? 'bg-green-soft text-green-ink' : 'bg-orange-soft text-danger'
       }`}
     >
       {label}
@@ -137,7 +137,10 @@ function FullTextSearch({ data }: Readonly<{ data: Spec103Data }>) {
       <p className="mt-4 text-sm">{t.fts.plan}</p>
       <pre
         data-testid="fts-plan"
-        className="mt-2 max-h-40 overflow-auto rounded-[8px] bg-[#F6F5F2] p-3 text-xs break-all whitespace-pre-wrap"
+        role="region"
+        aria-label={t.fts.plan}
+        tabIndex={0}
+        className="mt-2 max-h-40 overflow-auto rounded-[8px] bg-surface-subtle p-3 text-xs break-all whitespace-pre-wrap"
       >
         {fts.plan}
       </pre>

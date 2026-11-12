@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T13:39:39.219Z",
+  "updatedAt": "2026-11-12T15:17:11.231Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -2043,14 +2043,55 @@
       }
     },
     "SPEC-301": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-12T14:22:43.767Z",
+      "completedAt": "2026-11-12T15:17:11.228Z",
+      "branch": "spec/SPEC-301-jetons-de-design-et-theme",
+      "commit": "d0ea0aa",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T15:15:36.495Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T15:15:43.953Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T15:15:53.215Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T15:15:56.266Z",
+          "details": "8 test(s) [SPEC-301] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T15:16:23.979Z",
+          "details": "4 test(s) [SPEC-301] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T15:17:01.684Z",
+          "details": "4 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T15:17:01.684Z",
+          "details": "2 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T15:17:01.695Z",
+          "details": "6/6 critères ✅"
+        }
+      }
     },
     "SPEC-302": {
       "status": "pending",

@@ -28,7 +28,7 @@ function Categories({ data }: Readonly<{ data: Spec113Data }>) {
             key={entry.category}
             data-testid="spec-113-category"
             data-category={entry.category}
-            className="flex items-center justify-between rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-2"
+            className="flex items-center justify-between rounded-[8px] border border-solid border-border px-3 py-2"
           >
             <span>{t.categories.labels[entry.category]}</span>
             <span className="font-mono text-sm" data-testid="spec-113-category-count">
@@ -67,7 +67,7 @@ function Matrix({ data }: Readonly<{ data: Spec113Data }>) {
         role="region"
         aria-label={t.matrix.title}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -92,7 +92,7 @@ function Matrix({ data }: Readonly<{ data: Spec113Data }>) {
                 key={row.key}
                 data-testid="spec-113-matrix-row"
                 data-key={row.key}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <th scope="row" className="px-3 py-2 font-medium">
                   {t.matrix.rows[row.key]}

@@ -1,5 +1,7 @@
 // French HTML pages of the one-click unsubscribe flow (SPEC-204 EF-5). Static markup, no script,
 // the same base tokens as the e-mails; the token is only echoed inside the form action.
+import { colors, px } from '@learny/ui/tokens';
+
 import { fr } from '../../messages/fr';
 
 const t = fr.email.unsubscribe;
@@ -22,14 +24,14 @@ function page(title: string, body: string): string {
 <meta name="robots" content="noindex, nofollow">
 <title>${escapeHtml(title)} · Learny</title>
 <style>
-body{margin:0;padding:32px 16px;background:#F4F4F1;color:#111113;font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:24px}
-main{max-width:600px;margin:0 auto;background:#FFFFFF;border:1px solid #E7E6E1;border-radius:24px;padding:32px}
-h1{margin:24px 0 12px;font-family:'Space Grotesk',Arial,sans-serif;font-size:24px;line-height:32px}
-p{margin:0 0 16px}.muted{color:#62626B;font-size:13px;line-height:20px}
-.logo{display:inline-block;width:32px;height:32px;border-radius:10px;background:#C6F432;vertical-align:middle}
-.brand{display:inline-block;margin-left:12px;font-family:'Space Grotesk',Arial,sans-serif;font-size:20px;font-weight:700;vertical-align:middle}
-button{display:inline-block;min-height:44px;padding:12px 22px;border:0;border-radius:12px;background:#111113;color:#FFFFFF;font:inherit;font-weight:600;cursor:pointer}
-a{color:#3A3AA8}
+body{margin:0;padding:32px 16px;background:${colors.canvas};color:${colors.ink};font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:${px(15)};line-height:${px(24)}}
+main{max-width:${px(600)};margin:0 auto;background:${colors.surface};border:1px solid ${colors.border};border-radius:${px(24)};padding:${px(32)}}
+h1{margin:${px(24)} 0 ${px(12)};font-family:'Space Grotesk',Arial,sans-serif;font-size:${px(24)};line-height:${px(32)}}
+p{margin:0 0 ${px(16)}}.muted{color:${colors['ink-muted']};font-size:${px(13)};line-height:${px(20)}}
+.logo{display:inline-block;width:${px(32)};height:${px(32)};border-radius:${px(10)};background:${colors.lime};vertical-align:middle}
+.brand{display:inline-block;margin-left:${px(12)};font-family:'Space Grotesk',Arial,sans-serif;font-size:${px(20)};font-weight:700;vertical-align:middle}
+button{display:inline-block;min-height:${px(44)};padding:${px(12)} ${px(22)};border:0;border-radius:${px(12)};background:${colors.ink};color:${colors.white};font:inherit;font-weight:600;cursor:pointer}
+a{color:${colors['indigo-ink']}}
 </style>
 </head>
 <body>

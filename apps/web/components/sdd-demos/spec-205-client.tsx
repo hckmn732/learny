@@ -8,6 +8,7 @@ import {
   type PushDemoSendOutput,
   type PushSubscriptionBody,
 } from '@learny/contracts';
+import { colors } from '@learny/ui/tokens';
 
 import { ApiError, api } from '../../lib/api-client';
 import {
@@ -23,7 +24,7 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec205;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 const PERMISSIONS: BrowserPermission[] = ['default', 'granted', 'denied'];
 // Demonstration VAPID public key (uncompressed P-256 point, base64url): used when the environment
 // has none, so the simulated `subscribe` receives a key like a real browser would. Not a secret.
@@ -194,7 +195,7 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
                   counters.current.answered = null;
                   setRequests(counters.current.requests);
                 }}
-                className="size-4 accent-[#111113]"
+                className="size-4 accent-ink"
               />
               {t.permission.options[value]}
             </label>
@@ -210,8 +211,8 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
             onClick={() => {
               setSupported((value) => !value);
             }}
-            className="relative h-7 w-12 rounded-full border border-solid border-[#E7E6E1] focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{ backgroundColor: supported ? '#E7E6E1' : '#111113' }}
+            className="relative h-7 w-12 rounded-full border border-solid border-border focus-visible:outline-2 focus-visible:outline-offset-2"
+            style={{ backgroundColor: supported ? colors.border : colors.ink }}
           >
             <span
               aria-hidden="true"
@@ -237,7 +238,7 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
             onChange={(event) => {
               setScenario(event.target.value as MockPushOutcome);
             }}
-            className="mt-1 block rounded-[12px] border border-solid border-[#E7E6E1] bg-white px-3 py-2"
+            className="mt-1 block rounded-[12px] border border-solid border-border bg-white px-3 py-2"
           >
             {MOCK_PUSH_OUTCOMES.map((value) => (
               <option key={value} value={value}>
@@ -309,11 +310,11 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
           <figure
             data-testid="spec-205-preview-card"
             data-status={latest.delivery.status}
-            className="mt-4 flex gap-3 rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+            className="mt-4 flex gap-3 rounded-[16px] border border-solid border-border p-4"
           >
             <span
               aria-hidden="true"
-              className="mt-1 inline-block size-8 shrink-0 rounded-full bg-[#111113]"
+              className="mt-1 inline-block size-8 shrink-0 rounded-full bg-ink"
             />
             <figcaption className="text-sm">
               <span data-testid="spec-205-preview-title" className="block font-semibold">
@@ -358,7 +359,7 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
                   <th
                     key={column}
                     scope="col"
-                    className="border-b border-solid border-[#E7E6E1] py-2 pr-2"
+                    className="border-b border-solid border-border py-2 pr-2"
                   >
                     {column}
                   </th>
@@ -373,21 +374,21 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
                 >
                   <th
                     scope="row"
-                    className="border-b border-solid border-[#E7E6E1] py-3 pr-2 align-top font-normal"
+                    className="border-b border-solid border-border py-3 pr-2 align-top font-normal"
                   >
                     {String(sends.length - index)}
                   </th>
                   <td
                     data-testid={`spec-205-delivery-status-${String(sends.length - index)}`}
                     data-status={send.delivery.status}
-                    className="break-words border-b border-solid border-[#E7E6E1] py-3 pr-2 align-top font-semibold"
+                    className="break-words border-b border-solid border-border py-3 pr-2 align-top font-semibold"
                   >
                     {t.delivery.status[send.delivery.status] ?? send.delivery.status}
                     {send.delivery.error === null ? null : (
                       <span className="block text-xs font-normal">{send.delivery.error}</span>
                     )}
                   </td>
-                  <td className="break-words border-b border-solid border-[#E7E6E1] py-3 pr-2 align-top">
+                  <td className="break-words border-b border-solid border-border py-3 pr-2 align-top">
                     {send.attempts.length === 0
                       ? t.delivery.none
                       : send.attempts.map((attempt, position) => (
@@ -401,7 +402,7 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
                           </span>
                         ))}
                   </td>
-                  <td className="border-b border-solid border-[#E7E6E1] py-3 align-top">
+                  <td className="border-b border-solid border-border py-3 align-top">
                     {String(send.remainingSubscriptions)}
                   </td>
                 </tr>

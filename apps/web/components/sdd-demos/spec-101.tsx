@@ -17,7 +17,7 @@ function CheckBadge({ testId, ok }: Readonly<{ testId: string; ok: boolean }>) {
     <span
       data-testid={testId}
       className={`inline-block rounded-full px-2 py-0.5 text-sm whitespace-nowrap ${
-        ok ? 'bg-[#E6F4EA] text-[#1F7A3A]' : 'bg-[#FDECEA] text-[#B42318]'
+        ok ? 'bg-green-soft text-green-ink' : 'bg-orange-soft text-danger'
       }`}
     >
       {ok ? t.conform : t.nonConform}

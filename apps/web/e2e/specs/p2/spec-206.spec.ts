@@ -144,13 +144,13 @@ test('envois conformes @SPEC-206 @visual @mobile', async ({ page, axeCheck }) =>
     '[data-testid="spec-206-limits"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-206-cases"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
-    '[data-testid="spec-206-deletion"]': { 'border-top-left-radius': '24px' },
+    '[data-testid="spec-206-deletion"]': { 'border-top-left-radius': '21.6px' },
     '[data-testid="sdd-title"]': { color: '#111113' },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);

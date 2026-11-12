@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react';
 
-// Base-token layout of the P2 demonstration pages (SPEC-201 §10): page background #F4F4F1, white
-// cards with a #E7E6E1 border and a 24 px radius. SPEC-301 replaces it with @learny/ui tokens.
+import { colors, px } from '@learny/ui/tokens';
+
+// Base-token layout of the P2 demonstration pages (SPEC-201 §10), now sourced from the design
+// tokens (SPEC-301): canvas background, surface cards, standard border and 24 px radius.
 export const BASE_TOKENS = {
-  background: '#F4F4F1',
-  card: '#FFFFFF',
-  border: '#E7E6E1',
-  text: '#111113',
-  radius: '24px',
+  background: colors.canvas,
+  card: colors.surface,
+  border: colors.border,
+  text: colors.ink,
+  radius: px(24),
 } as const;
 
 /** Sets the page background without touching the shared layout used by the other demos. */
@@ -25,7 +27,7 @@ export function BaseCard({
     <section
       data-testid={testId}
       {...(role === undefined ? {} : { role })}
-      className="mt-6 rounded-[24px] border border-solid border-[#E7E6E1] bg-white p-6"
+      className="mt-6 rounded-24 border border-solid border-border bg-surface p-6"
     >
       <h2 className="font-display text-xl font-semibold">{title}</h2>
       <div className="mt-4">{children}</div>

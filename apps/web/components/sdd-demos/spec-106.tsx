@@ -16,7 +16,7 @@ function Types({ data }: Readonly<{ data: Spec106Data }>) {
         role="region"
         aria-label={t.types.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[32rem] text-left">
           <thead>
@@ -37,7 +37,7 @@ function Types({ data }: Readonly<{ data: Spec106Data }>) {
           </thead>
           <tbody>
             {data.types.map((brick) => (
-              <tr key={brick.type} data-testid="type-row" className="border-t border-[#E7E6E1]">
+              <tr key={brick.type} data-testid="type-row" className="border-t border-border">
                 <td className="px-3 py-2 font-mono text-sm" data-testid="type-name">
                   {brick.type}
                 </td>
@@ -75,7 +75,7 @@ function Activity({ data }: Readonly<{ data: Spec106Data }>) {
         role="region"
         aria-label={t.activity.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[32rem] text-left">
           <thead>
@@ -102,7 +102,7 @@ function Activity({ data }: Readonly<{ data: Spec106Data }>) {
               <tr
                 key={`item-${String(item.position)}`}
                 data-testid="activity-item-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2 font-mono text-sm" data-testid="activity-item-position">
                   {item.position}
@@ -162,7 +162,7 @@ function Answers({ data }: Readonly<{ data: Spec106Data }>) {
         role="region"
         aria-label={t.answers.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -192,7 +192,7 @@ function Answers({ data }: Readonly<{ data: Spec106Data }>) {
               <tr
                 key={`answer-${String(answer.position)}`}
                 data-testid="answer-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2 font-mono text-sm" data-testid="answer-position">
                   {answer.position}

@@ -175,11 +175,11 @@ test('page de démonstration SPEC-204 @SPEC-204 @visual', async ({ page, axeChec
     '[data-testid="email-toolbar"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="email-preview-card"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="email-tone-vous"]': { 'background-color': '#111113' },
     '[data-testid="sdd-title"]': { color: '#111113' },

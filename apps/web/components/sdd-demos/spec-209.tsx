@@ -38,9 +38,9 @@ const TIMES = {
 type TimeKey = keyof typeof TIMES;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 const fieldClass =
-  'mt-1 w-full rounded-[8px] border border-solid border-[#E7E6E1] bg-white px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2';
+  'mt-1 w-full rounded-[8px] border border-solid border-border bg-white px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2';
 
 function dateLabel(instant: string | null): string {
   if (instant === null) return t.result.noDate;
@@ -201,12 +201,12 @@ export default function Spec209Demo() {
         </div>
         <fieldset className="mt-4">
           <legend className="text-sm">{t.settings.cap}</legend>
-          <div className="mt-2 inline-flex overflow-hidden rounded-[12px] border border-solid border-[#E7E6E1]">
+          <div className="mt-2 inline-flex overflow-hidden rounded-[12px] border border-solid border-border">
             {([3, 5, 8] as const).map((cap) => (
               <label
                 key={cap}
                 className={`cursor-pointer px-4 py-2 text-sm ${
-                  settings.maxPerDay === cap ? 'bg-[#111113] text-white' : 'bg-white'
+                  settings.maxPerDay === cap ? 'bg-ink text-white' : 'bg-white'
                 }`}
               >
                 <input
@@ -290,7 +290,7 @@ export default function Spec209Demo() {
           {t.send.action}
         </button>
         {error === '' ? null : (
-          <p role="alert" className="mt-3 text-sm text-[#B42318]">
+          <p role="alert" className="mt-3 text-sm text-danger">
             {error}
           </p>
         )}
@@ -301,7 +301,7 @@ export default function Spec209Demo() {
         {!busy && result === null ? <p className="text-sm">{t.result.empty}</p> : null}
         {!busy && result !== null ? (
           <>
-            <article className="rounded-[16px] border border-solid border-[#E7E6E1] p-4">
+            <article className="rounded-[16px] border border-solid border-border p-4">
               <p className="text-xs uppercase tracking-wide">
                 {result.created ? t.result.created : t.result.deduplicated}
               </p>

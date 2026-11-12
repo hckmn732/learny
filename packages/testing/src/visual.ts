@@ -12,15 +12,15 @@ export const MOCKUP_MAX_DIFF_RATIO = 0.12;
 export const BASELINE_MAX_DIFF_RATIO = 0.01;
 
 /**
- * Provisional tokens of the SDD demo shell (SPEC-001 §10). SPEC-301 replaces them with the
- * tokens exported by @learny/ui without changing the expectTokens API.
+ * SDD demo tokens, aligned with @learny/ui (SPEC-301). Keeping the values here avoids a package
+ * dependency from @learny/testing to @learny/ui while preserving the expectTokens API.
  */
 export const PROVISIONAL_TOKENS = {
   color: {
     text: '#111113',
     border: '#E7E6E1',
-    background: '#FFFFFF',
-    success: '#1F7A3A',
+    background: '#F4F4F1',
+    success: '#0F9F7F',
     danger: '#B42318',
   },
   radius: { card: '16px' },

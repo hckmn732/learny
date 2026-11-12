@@ -12,9 +12,9 @@ import { BaseCard, BaseTokenStyle } from './base-tokens';
 const t = fr.sdd.spec210;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 const ghostClass =
-  'rounded-[12px] border border-solid border-[#E7E6E1] bg-white px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] border border-solid border-border bg-white px-4 py-2 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 function go(path: string, fallback: string): void {
   window.location.assign(isSafeRelativePath(path) ? path : fallback);

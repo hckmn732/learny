@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import type { HourlyTickUser } from '@learny/contracts';
 import { zonedParts } from '@learny/core';
+import { colors } from '@learny/ui/tokens';
 
 import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
@@ -14,10 +15,10 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec203;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 // State colours (SPEC-203 §10): decorative indicators only; the state is always written out.
-const COLORS = { waiting: '#E7E6E1', retrying: '#F97316', done: '#0F9F7F' } as const;
+const COLORS = { waiting: colors.border, retrying: colors.orange, done: colors.green } as const;
 type StepState = keyof typeof COLORS;
 
 const STEP_NAMES = ['step-1-prepare', 'step-2-process', 'step-3-finish'] as const;
@@ -40,7 +41,7 @@ function Dot({ state, testId }: Readonly<{ state: StepState; testId?: string }>)
     <span
       aria-hidden="true"
       {...(testId === undefined ? {} : { 'data-testid': testId })}
-      className="inline-block size-3 shrink-0 rounded-full border border-solid border-[#E7E6E1]"
+      className="inline-block size-3 shrink-0 rounded-full border border-solid border-border"
       style={{ backgroundColor: COLORS[state] }}
     />
   );
@@ -91,8 +92,8 @@ function Pipeline() {
           onClick={() => {
             setFail((value) => !value);
           }}
-          className="relative h-7 w-12 rounded-full border border-solid border-[#E7E6E1] focus-visible:outline-2 focus-visible:outline-offset-2"
-          style={{ backgroundColor: fail ? '#111113' : '#E7E6E1' }}
+          className="relative h-7 w-12 rounded-full border border-solid border-border focus-visible:outline-2 focus-visible:outline-offset-2"
+          style={{ backgroundColor: fail ? colors.ink : colors.border }}
         >
           <span
             aria-hidden="true"
@@ -181,7 +182,7 @@ function TickCard() {
         onChange={(event) => {
           setAt(event.target.value);
         }}
-        className="mb-3 mt-1 w-full rounded-[12px] border border-solid border-[#E7E6E1] px-3 py-2"
+        className="mb-3 mt-1 w-full rounded-[12px] border border-solid border-border px-3 py-2"
       />
       <button
         type="button"

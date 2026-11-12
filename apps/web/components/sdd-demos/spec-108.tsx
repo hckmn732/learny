@@ -42,7 +42,7 @@ function Slots({ data }: Readonly<{ data: Spec108Data }>) {
               data-testid="slot-status-legend"
               data-status={status}
               data-used={used ? 'true' : 'false'}
-              className="rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-1 text-sm"
+              className="rounded-[8px] border border-solid border-border px-3 py-1 text-sm"
             >
               {label}
             </li>
@@ -53,7 +53,7 @@ function Slots({ data }: Readonly<{ data: Spec108Data }>) {
         role="region"
         aria-label={t.slots.region}
         tabIndex={0}
-        className="mt-4 overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="mt-4 overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[48rem] text-left">
           <thead>
@@ -87,7 +87,7 @@ function Slots({ data }: Readonly<{ data: Spec108Data }>) {
                 key={slot.id}
                 data-testid="slot-row"
                 data-status={slot.status}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2" data-testid="slot-title">
                   {slot.title}
@@ -159,7 +159,7 @@ function Action({ data }: Readonly<{ data: Spec108Data }>) {
             <summary className="cursor-pointer text-sm">{t.action.payload}</summary>
             <pre
               data-testid="action-payload"
-              className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1] p-3 text-xs"
+              className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-border p-3 text-xs"
             >
               {JSON.stringify(action.payload, null, 2)}
             </pre>
@@ -209,7 +209,7 @@ function Milestones({ data }: Readonly<{ data: Spec108Data }>) {
         role="region"
         aria-label={t.milestones.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -230,7 +230,7 @@ function Milestones({ data }: Readonly<{ data: Spec108Data }>) {
               <tr
                 key={`${milestone.key}-${milestone.refId ?? 'none'}`}
                 data-testid="milestone-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2 font-mono text-sm" data-testid="milestone-key">
                   {label(t.milestones.keys, milestone.key)}

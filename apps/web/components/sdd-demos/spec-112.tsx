@@ -40,7 +40,7 @@ function Search({ data }: Readonly<{ data: Spec112Data }>) {
           type="search"
           defaultValue={data.query}
           aria-describedby="spec-112-query-help"
-          className="mt-2 w-full max-w-md rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-2"
+          className="mt-2 w-full max-w-md rounded-[8px] border border-solid border-border px-3 py-2"
         />
         <p id="spec-112-query-help" className="mt-2 text-sm">
           {t.search.help}
@@ -64,7 +64,7 @@ function Search({ data }: Readonly<{ data: Spec112Data }>) {
                     key={item.id}
                     data-testid="spec-112-result"
                     data-kind={item.kind}
-                    className="rounded-[8px] border border-solid border-[#E7E6E1] p-3"
+                    className="rounded-[8px] border border-solid border-border p-3"
                   >
                     <a
                       href={item.href}
@@ -98,7 +98,7 @@ function Exports({ data }: Readonly<{ data: Spec112Data }>) {
         role="region"
         aria-label={t.export.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -135,7 +135,7 @@ function Exports({ data }: Readonly<{ data: Spec112Data }>) {
                 <tr
                   key={row.id}
                   data-testid="spec-112-export-row"
-                  className="border-t border-[#E7E6E1]"
+                  className="border-t border-border"
                 >
                   <td className="px-3 py-2 font-mono text-xs">{row.id}</td>
                   <td className="px-3 py-2" data-testid="spec-112-export-state">
@@ -168,7 +168,7 @@ function Acceptances({ data }: Readonly<{ data: Spec112Data }>) {
         role="region"
         aria-label={t.acceptance.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[28rem] text-left">
           <thead>
@@ -189,7 +189,7 @@ function Acceptances({ data }: Readonly<{ data: Spec112Data }>) {
               <tr
                 key={row.id}
                 data-testid="spec-112-acceptance-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2" data-testid="spec-112-acceptance-document">
                   {t.acceptance.documents[row.document]}
@@ -221,7 +221,7 @@ function Idempotency({ data }: Readonly<{ data: Spec112Data }>) {
         role="region"
         aria-label={t.idempotency.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[40rem] text-left">
           <thead>
@@ -249,7 +249,7 @@ function Idempotency({ data }: Readonly<{ data: Spec112Data }>) {
                 key={row.key}
                 data-testid="spec-112-idempotency-row"
                 data-state={row.state}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2 font-mono text-sm">{row.key}</td>
                 <td className="px-3 py-2" data-testid="spec-112-idempotency-state">

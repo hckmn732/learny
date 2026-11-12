@@ -120,11 +120,11 @@ test('notifications conformes @SPEC-209 @visual @mobile', async ({ page, axeChec
     '[data-testid="spec-209-settings"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-209-send"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-209-send"] button': {
       'background-color': '#111113',

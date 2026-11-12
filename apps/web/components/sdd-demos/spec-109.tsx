@@ -55,7 +55,7 @@ function Inbox({ data }: Readonly<{ data: Spec109Data }>) {
               data-testid="notification-row"
               data-read={unread ? 'false' : 'true'}
               data-type={notification.type}
-              className="rounded-[8px] border border-solid border-[#E7E6E1] p-4"
+              className="rounded-[8px] border border-solid border-border p-4"
             >
               <div className="flex items-start gap-3">
                 <span
@@ -101,7 +101,7 @@ function Deliveries({ data }: Readonly<{ data: Spec109Data }>) {
         role="region"
         aria-label={t.deliveries.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[42rem] text-left">
           <thead>
@@ -130,7 +130,7 @@ function Deliveries({ data }: Readonly<{ data: Spec109Data }>) {
                 data-testid="delivery-row"
                 data-status={delivery.status}
                 data-channel={delivery.channel}
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2" data-testid="delivery-notification">
                   {delivery.notificationTitle}

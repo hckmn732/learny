@@ -29,10 +29,7 @@ export default function Spec005Demo() {
       <DemoSection testId="spec-005-summary" title={t.summary.title}>
         <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {counters.map((counter) => (
-            <div
-              key={counter.id}
-              className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
-            >
+            <div key={counter.id} className="rounded-[16px] border border-solid border-border p-4">
               <dt className="text-sm">{counter.label}</dt>
               <dd
                 data-testid={`spec-005-count-${counter.id}`}
