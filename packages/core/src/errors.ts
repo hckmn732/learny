@@ -8,7 +8,7 @@ export const ERROR_CATALOG = {
   INVALID_CREDENTIALS: { status: 401, title: 'Identifiants incorrects' },
   FORBIDDEN: { status: 403, title: 'Accès refusé' },
   EMAIL_NOT_CONFIRMED: { status: 403, title: 'Adresse e-mail non vérifiée' },
-  ORIGIN_NOT_ALLOWED: { status: 403, title: 'Origine non autorisée' },
+  ORIGIN_REJECTED: { status: 403, title: 'Origine non autorisée' },
   NOT_FOUND: { status: 404, title: 'Introuvable' },
   CONFLICT: { status: 409, title: 'Conflit' },
   IDEMPOTENCY_IN_PROGRESS: { status: 409, title: 'Requête déjà en cours' },

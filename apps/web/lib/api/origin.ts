@@ -1,5 +1,5 @@
 // Insertion point of the origin guard of mutations (SPEC-201 ET-3 step 3). SPEC-208 registers the
-// real guard with `setOriginGuard`; it throws `AppError('ORIGIN_NOT_ALLOWED')` to refuse.
+// real guard with `setOriginGuard`; it throws `AppError('ORIGIN_REJECTED')` to refuse.
 export interface OriginGuard {
   check(request: Request): void | Promise<void>;
 }

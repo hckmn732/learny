@@ -18,6 +18,7 @@ import {
 import { POST as postEcho } from '../../app/api/v1/dev/sdd/echo/route';
 import { GET as getItems } from '../../app/api/v1/dev/sdd/items/route';
 import { handler } from '../../lib/api/handler';
+import { getRateLimiter, noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
 
 const BASE = 'http://localhost:3000';
@@ -35,6 +36,8 @@ function request(
   } = {},
 ): NextRequest {
   const headers: Record<string, string> = { ...(init.headers ?? {}) };
+  // Mutations come from the application itself (SPEC-208 origin guard).
+  if (init.method !== undefined && init.method !== 'GET') headers.origin = BASE;
   const cookie = init.cookie === undefined ? session.cookieHeader : init.cookie;
   if (cookie !== null) headers.cookie = cookie;
   const body =
@@ -74,6 +77,7 @@ beforeAll(async () => {
   const env = supabaseLocalEnv();
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', env.url);
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', env.anonKey);
+  vi.stubEnv('TRUST_PROXY', 'true');
   session = await createTestSession();
   sessions.push(session);
 });
@@ -454,6 +458,9 @@ describe('[SPEC-201] performance du wrapper (ET-11)', () => {
     const restore = setSessionResolver(() =>
       Promise.resolve({ userId: session.userId, email: session.email, emailConfirmed: true }),
     );
+    // The wrapper alone is measured here; the cost of the limiter is SPEC-208's own measure.
+    const limiter = getRateLimiter();
+    setRateLimiter(noopRateLimiter);
     try {
       const route = defineRoute({
         id: 'test.perf',
@@ -482,6 +489,7 @@ describe('[SPEC-201] performance du wrapper (ET-11)', () => {
       );
       expect(p95).toBeLessThan(15);
     } finally {
+      setRateLimiter(limiter);
       restore();
     }
   });

@@ -33,10 +33,23 @@ function newEmail(): string {
   return email;
 }
 
+// Each request comes from its own address (the proxy header is trusted in this suite), so the
+// IP-keyed `auth` bucket of SPEC-208 never runs dry between unrelated tests.
+let addressCounter = 0;
+function nextAddress(): string {
+  addressCounter += 1;
+  return `10.${String((addressCounter >> 8) & 255)}.${String(addressCounter & 255)}.${String(1 + (addressCounter % 250))}`;
+}
+
 function post(path: string, body: unknown, cookie?: string): NextRequest {
   return new NextRequest(`${BASE}${path}`, {
     method: 'POST',
-    headers: { 'content-type': 'application/json', ...(cookie === undefined ? {} : { cookie }) },
+    headers: {
+      'content-type': 'application/json',
+      origin: BASE,
+      'x-forwarded-for': nextAddress(),
+      ...(cookie === undefined ? {} : { cookie }),
+    },
     body: JSON.stringify(body),
   });
 }
@@ -103,6 +116,7 @@ beforeAll(() => {
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', env.url);
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', env.anonKey);
   vi.stubEnv('ENABLE_SDD_PAGES', 'true');
+  vi.stubEnv('TRUST_PROXY', 'true');
 });
 
 beforeEach(() => {

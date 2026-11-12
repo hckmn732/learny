@@ -8,3 +8,4 @@ export {
   resetDevEchoCounter,
 } from './dev/echo';
 export * from './auth/index';
+export * from './security/index';
