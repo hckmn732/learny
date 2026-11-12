@@ -56,6 +56,15 @@ const planInputSchema = z.object({
   revisionKey: z.string().min(1).max(120),
 });
 
+function validationError(error: z.ZodError, prefix = 'body'): AppError {
+  return new AppError('VALIDATION_FAILED', 'Les données envoyées sont invalides.', {
+    errors: error.issues.map((issue) => ({
+      path: [prefix, ...issue.path.map(String)].join('.'),
+      message: issue.message,
+    })),
+  });
+}
+
 interface ExistingSlot {
   [key: string]: unknown;
   id: string;
@@ -90,8 +99,14 @@ export async function persistPlan(
 ): Promise<Result<PlanPersistenceSummary>> {
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
-    const input = planInputSchema.parse({ formationId, revisionKey });
-    const slots = slotList(plan).map((slot) => plannerSlotSchema.parse(slot));
+    const parsedInput = planInputSchema.safeParse({ formationId, revisionKey });
+    if (!parsedInput.success) throw validationError(parsedInput.error);
+    const input = parsedInput.data;
+    const slots = slotList(plan).map((slot, index) => {
+      const parsed = plannerSlotSchema.safeParse(slot);
+      if (!parsed.success) throw validationError(parsed.error, `body.slots.${String(index)}`);
+      return parsed.data;
+    });
     return db.run(async (tx) => {
       await tx.execute(sql`
         select pg_advisory_xact_lock(hashtextextended('planner:' || ${userId}, 0))
