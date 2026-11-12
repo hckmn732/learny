@@ -1,0 +1,2387 @@
+[
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "profiles",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "study_preferences",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "push_subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "10 ligne(s)"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_settings",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "pauses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "cadrage_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_imports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "programme_change_requests",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "module_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resources",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "resource_chunks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "courses",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_sections",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_revisions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "citations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "reading_progress",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapter_summaries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_conversations",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "tutor_messages",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "bricks",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_versions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "brick_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "activities",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "attempts",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "answers",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notion_states",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "review_logs",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "gap_events",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "schedule_slots",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "automation_actions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "daily_activity",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "milestones",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notifications",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notification_deliveries",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_credentials",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_task_models",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "ai_calls",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "subscriptions",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "data_exports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "legal_acceptances",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
+    "table": "formations",
+    "category": "shared-programme",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "formations",
+    "category": "shared-programme",
+    "role": "B/member",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "formations",
+    "category": "shared-programme",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "modules",
+    "category": "shared-programme",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "2 ligne(s)"
+  },
+  {
+    "table": "modules",
+    "category": "shared-programme",
+    "role": "B/member",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "2 ligne(s)"
+  },
+  {
+    "table": "modules",
+    "category": "shared-programme",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapters",
+    "category": "shared-programme",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "4 ligne(s)"
+  },
+  {
+    "table": "chapters",
+    "category": "shared-programme",
+    "role": "B/member",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "4 ligne(s)"
+  },
+  {
+    "table": "chapters",
+    "category": "shared-programme",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "notions",
+    "category": "shared-programme",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "8 ligne(s)"
+  },
+  {
+    "table": "notions",
+    "category": "shared-programme",
+    "role": "B/member",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "8 ligne(s)"
+  },
+  {
+    "table": "notions",
+    "category": "shared-programme",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "chapters",
+    "category": "shared-programme",
+    "role": "A/owner",
+    "operation": "update",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  }
+]

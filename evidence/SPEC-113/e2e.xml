@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.501365999999997">
+<testsuite name="p1/spec-113.spec.ts" timestamp="2026-11-12T06:25:34.212Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.45" errors="0">
+<testcase name="inspecte la matrice RLS @SPEC-113" classname="p1/spec-113.spec.ts" time="1.228">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/attachments/axe-ed55f75ffad3d8d068facf270c32f1f9c083967c.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/attachments/spec-113-rls-matrix-04902288e8f62b12ad542907acce61bdbba61497.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-inspecte-la-matrice-RLS-SPEC-113-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice RLS conforme @SPEC-113 @visual @mobile" classname="p1/spec-113.spec.ts" time="1.222">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-desktop/attachments/axe-bdbf3867a1316c22a4ba25612ac926e1b6497eae.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-113.spec.ts" timestamp="2026-11-12T06:25:34.212Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.192" errors="0">
+<testcase name="matrice RLS conforme @SPEC-113 @visual @mobile" classname="p1/spec-113.spec.ts" time="1.192">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-mobile/attachments/axe-e4758d7d0497fc20b54a24dc307072c89a079f0e.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-113-matrice-RLS-conforme-SPEC-113-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
