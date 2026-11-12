@@ -10,6 +10,7 @@ import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { pushDevRoutes, pushRoutes } from './push';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
+import { sidebarRoutes } from './sidebar';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
 
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
@@ -25,6 +26,7 @@ export const ROUTES = {
   ...pushDevRoutes,
   ...devJobsRoutes,
   ...searchRoutes,
+  ...sidebarRoutes,
   ...billingRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
