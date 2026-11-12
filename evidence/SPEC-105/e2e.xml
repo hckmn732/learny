@@ -1,0 +1,36 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="29.673188000000003">
+<testsuite name="p1/spec-105-courses.spec.ts" timestamp="2026-11-12T02:31:00.246Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.341" errors="0">
+<testcase name="versions, révisions et citations @SPEC-105" classname="p1/spec-105-courses.spec.ts" time="1.178">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/attachments/axe-7402fba01acbc09d117ea59a87e1aa90f122a5ec.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/attachments/spec-105-demo-468bc5e9cca3d1fa9692f81c0a0f0877a3cd4d05.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-versions-révisions-et-citations-SPEC-105-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page cours conforme @SPEC-105 @visual" classname="p1/spec-105-courses.spec.ts" time="1.163">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-105-courses-page-cours-conforme-SPEC-105-visual-desktop/attachments/axe-ee29579dbc4db1de919ba10520df627746c48e33.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-page-cours-conforme-SPEC-105-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-page-cours-conforme-SPEC-105-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-page-cours-conforme-SPEC-105-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-105-courses-page-cours-conforme-SPEC-105-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
