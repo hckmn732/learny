@@ -63,7 +63,7 @@ Lire `docs/product/business-rules.md` (BR-QUI-03), `docs/architecture/overview.m
 
 ## 9. Fichiers et composants concernés
 
-- **Créés** : `packages/learning-engine/src/questions/draw-attempt.ts`, `packages/learning-engine/src/questions/draw-attempt.test.ts`, `packages/learning-engine/test/integration/draw-attempt.test.ts`, `apps/web/components/sdd-demos/spec-405.tsx`, `apps/web/e2e/specs/p4/spec-405.spec.ts`.
+- **Créés** : `packages/learning-engine/src/draw/draw-attempt.ts` (ADR-0284), `packages/learning-engine/src/draw/draw-attempt.test.ts`, `packages/learning-engine/test/integration/draw-attempt.test.ts`, `apps/web/components/sdd-demos/spec-405.tsx`, `apps/web/e2e/specs/p4/spec-405.spec.ts`.
 - **Modifiés** : `packages/learning-engine/src/index.ts`, `packages/config/src/product.ts` seulement si une constante normative manque, registre de démonstration SDD.
 - **Lus / réutilisés** : `@learny/core`, `@learny/testing`, `ts-fsrs` pour SPEC-402, sorties des dépendances ; dépendances SPEC-404.
 
@@ -81,7 +81,7 @@ Mode `demo`. Page SDD : liste de notions, lacunes marquées, banque disponible, 
 
 ## 12. Plan de tests
 
-- **Unitaires** — `packages/learning-engine/src/questions/draw-attempt.test.ts`, `describe('[SPEC-405] Tirage des questions d'une tentative')` : couverture, ratio, empreintes et déterminisme, cas limites et propriétés de la section 7 (CA-1 à CA-4).
+- **Unitaires** — `packages/learning-engine/src/draw/draw-attempt.test.ts`, `describe('[SPEC-405] Tirage des questions d'une tentative')` : couverture, ratio, empreintes et déterminisme, cas limites et propriétés de la section 7 (CA-1 à CA-4).
 - **Intégration** — `packages/learning-engine/test/integration/draw-attempt.test.ts`, `describe('[SPEC-405] composition')` : composition avec banque et lacunes, entrée/sortie avec les dépendances et invariance à la répétition (CA-2 à CA-4).
 - **End-to-end** — `apps/web/e2e/specs/p4/spec-405.spec.ts`, `test('Tirage des questions d'une tentative @SPEC-405')` : tirage visible et état de banque épuisée dans la démonstration ; conserver vidéo et capture (CA-1, CA-5).
 - **Visuel** — `test('Tirage des questions d'une tentative @SPEC-405 @visual')` : jetons, structure, axe, capture desktop/mobile à 1 % (CA-5).
@@ -105,4 +105,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Décisions appliquées : ADR-0014. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0014, ADR-0143, ADR-0170 et ADR-0284 (contrats d’implémentation du module `src/draw/`, paramètres fournis par l’appelant, formats de la part choix, quotas, rapport d’épuisement et ordre canonique). Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.

@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T21:41:34.673Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T21:43:46.001Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 58 |
+| Terminées | 59 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 73 |
+| En attente de dépendances | 72 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **43.9 %** |
-| Avancement V1 | 46.8 % |
-| Prochaine action | start SPEC-405 — Tirage des questions d'une tentative |
+| **Avancement global** | **44.7 %** |
+| Avancement V1 | 47.6 % |
+| Prochaine action | start SPEC-411 — Services de persistance du moteur |
 
 ## Phases et checkpoints
 
@@ -25,7 +25,7 @@
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
-| P4 | Moteur d'apprentissage (déterministe) | 9/11 | CP-4 | ⏳ |
+| P4 | Moteur d'apprentissage (déterministe) | 10/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
@@ -89,13 +89,13 @@
 | [SPEC-402](../specs/p4-moteur/SPEC-402-repetition-espacee-fsrs-par-notion.md) | Répétition espacée FSRS par notion | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-403](../specs/p4-moteur/SPEC-403-calcul-de-la-maitrise.md) | Calcul de la maîtrise | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-404](../specs/p4-moteur/SPEC-404-detection-nature-et-levee-des-lacunes.md) | Détection, nature et levée des lacunes | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-403 |
-| [SPEC-405](../specs/p4-moteur/SPEC-405-tirage-des-questions-d-une-tentative.md) | Tirage des questions d'une tentative | P4 | 🟢 ready | 0 | — | SPEC-404 |
+| [SPEC-405](../specs/p4-moteur/SPEC-405-tirage-des-questions-d-une-tentative.md) | Tirage des questions d'une tentative | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-404 |
 | [SPEC-406](../specs/p4-moteur/SPEC-406-tirage-de-la-session-de-quiz-global.md) | Tirage de la session de quiz global | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-404 |
 | [SPEC-407](../specs/p4-moteur/SPEC-407-planificateur.md) | Planificateur | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-408](../specs/p4-moteur/SPEC-408-retention-et-indicateurs-de-progression.md) | Rétention et indicateurs de progression | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402 |
 | [SPEC-409](../specs/p4-moteur/SPEC-409-serie-et-jalons.md) | Série et jalons | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-410](../specs/p4-moteur/SPEC-410-selection-de-l-echauffement.md) | Sélection de l'échauffement | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-404 |
-| [SPEC-411](../specs/p4-moteur/SPEC-411-services-de-persistance-du-moteur.md) | Services de persistance du moteur | P4 | ⏳ waiting | 0 | — | SPEC-402, SPEC-403, SPEC-404, SPEC-405, SPEC-406, SPEC-407, SPEC-408, SPEC-409, SPEC-410, SPEC-107, SPEC-108 |
+| [SPEC-411](../specs/p4-moteur/SPEC-411-services-de-persistance-du-moteur.md) | Services de persistance du moteur | P4 | 🟢 ready | 0 | — | SPEC-402, SPEC-403, SPEC-404, SPEC-405, SPEC-406, SPEC-407, SPEC-408, SPEC-409, SPEC-410, SPEC-107, SPEC-108 |
 | [SPEC-501](../specs/p5-ia/SPEC-501-paquet-bricks-registre-schemas-et-validation.md) | Paquet bricks : registre, schémas et validation | P5 | ⏳ waiting | 0 | — | SPEC-106 |
 | [SPEC-502](../specs/p5-ia/SPEC-502-correction-automatique-des-briques.md) | Correction automatique des briques | P5 | ⏳ waiting | 0 | — | SPEC-501 |
 | [SPEC-503](../specs/p5-ia/SPEC-503-rendu-des-briques.md) | Rendu des briques | P5 | ⏳ waiting | 0 | — | SPEC-501, SPEC-303 |

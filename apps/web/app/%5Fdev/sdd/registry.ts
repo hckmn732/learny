@@ -190,6 +190,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-404'),
   },
+  'SPEC-405': {
+    title: 'SPEC-405 · Tirage des questions d’une tentative',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-405'),
+  },
   'SPEC-406': {
     title: 'SPEC-406 · Tirage de la session de quiz global',
     titleTestId: 'sdd-title',

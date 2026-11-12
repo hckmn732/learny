@@ -159,5 +159,6 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0281](ADR-0281-complements-d-implementation-de-la-serie-et-des-jalons.md) | Compléments d'implémentation de la série et des jalons | Déduite | SPEC-409, ADR-0033, ADR-0047, ADR-0140 |
 | [ADR-0282](ADR-0282-complements-d-implementation-de-la-detection-des-lacunes.md) | Compléments d’implémentation de la détection des lacunes | Déduite | SPEC-404, ADR-0024 |
 | [ADR-0283](ADR-0283-complements-d-implementation-de-la-retention-et-des-indicateurs-de-progression.md) | Compléments d'implémentation de la rétention et des indicateurs de progression | Déduite | SPEC-408, BR-MEM-06, BR-PRO-01, ADR-0210, ADR-0047, ADR-0140 |
+| [ADR-0284](ADR-0284-contrats-d-implementation-du-tirage-d-une-tentative.md) | Contrats d’implémentation du tirage d’une tentative | Déduite | SPEC-405, SPEC-611, ADR-0014, ADR-0143, ADR-0170 |
 | [ADR-0286](ADR-0286-complements-d-implementation-de-la-selection-de-l-echauffement.md) | Compléments d’implémentation de la sélection de l’échauffement | Déduite | SPEC-410, SPEC-714, ADR-0148, ADR-0140, ADR-0047 |
 | [ADR-0287](ADR-0287-contrats-d-implementation-du-tirage-de-la-session-de-quiz-gl.md) | Contrats d’implémentation du tirage de la session de quiz global | Déduite | SPEC-406, BR-MEM-03, BR-MEM-04, ADR-0015, ADR-0025 |
