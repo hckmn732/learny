@@ -84,6 +84,21 @@ export default function UiGalleryIndexPage() {
             </span>
           </Link>
         </li>
+        <li>
+          <Link
+            href="/_dev/ui/accessibilite"
+            data-testid="ui-section-accessibilite"
+            className="block rounded-24 border border-solid border-border bg-surface p-24 hover:bg-surface-subtle"
+          >
+            <span className="block font-display text-20 font-semibold">
+              {t.sections.accessibility}
+            </span>
+            <span className="mt-4 block text-14 text-ink-muted">{t.accessibility.intro}</span>
+            <span className="mt-12 inline-block text-14 font-medium text-indigo-ink">
+              {t.openAccessibility}
+            </span>
+          </Link>
+        </li>
       </ul>
     </div>
   );
