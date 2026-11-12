@@ -3,6 +3,7 @@
 export * from './errors';
 export * from './fsrs';
 export * from './gaps';
+export * from './global-quiz';
 export * from './mastery';
 export * from './params';
 export * from './planner';
