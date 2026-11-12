@@ -5158,6 +5158,582 @@
         "summary": "Enregistre ou rafraîchit l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent sur le point de terminaison."
       }
     },
+    "/api/v1/me/sidebar": {
+      "get": {
+        "operationId": "sidebar.get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "collapsed": {
+                      "type": "boolean"
+                    },
+                    "currentFormation": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "accent": {
+                              "enum": [
+                                "indigo",
+                                "green",
+                                "orange",
+                                "violet",
+                                "teal"
+                              ],
+                              "type": "string"
+                            },
+                            "currentModulePosition": {
+                              "anyOf": [
+                                {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "id": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "moduleCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "monogram": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "progressPercent": {
+                              "maximum": 100,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "status": {
+                              "enum": [
+                                "active",
+                                "paused"
+                              ],
+                              "type": "string"
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "monogram",
+                            "accent",
+                            "status",
+                            "progressPercent",
+                            "currentModulePosition",
+                            "moduleCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formations": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "accent": {
+                            "enum": [
+                              "indigo",
+                              "green",
+                              "orange",
+                              "violet",
+                              "teal"
+                            ],
+                            "type": "string"
+                          },
+                          "currentModulePosition": {
+                            "anyOf": [
+                              {
+                                "maximum": 9007199254740991,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          },
+                          "moduleCount": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "monogram": {
+                            "maxLength": 3,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "progressPercent": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "status": {
+                            "enum": [
+                              "active",
+                              "paused"
+                            ],
+                            "type": "string"
+                          },
+                          "title": {
+                            "maxLength": 120,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "monogram",
+                          "accent",
+                          "status",
+                          "progressPercent",
+                          "currentModulePosition",
+                          "moduleCount"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "gapCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "quizDueCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "streak": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "days": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "regularity": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "date": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "status": {
+                                "enum": [
+                                  "done",
+                                  "none",
+                                  "neutral"
+                                ],
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "date",
+                              "status"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 14,
+                          "minItems": 14,
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "days",
+                        "regularity"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "collapsed",
+                    "currentFormation",
+                    "formations",
+                    "quizDueCount",
+                    "gapCount",
+                    "streak"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Menu latéral du seul utilisateur connecté : formation courante, formations actives et en pause, compteurs et série (SPEC-304)."
+      },
+      "patch": {
+        "operationId": "sidebar.update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "collapsed": {
+                    "type": "boolean"
+                  },
+                  "currentFormationId": {
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "collapsed": {
+                      "type": "boolean"
+                    },
+                    "currentFormation": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "accent": {
+                              "enum": [
+                                "indigo",
+                                "green",
+                                "orange",
+                                "violet",
+                                "teal"
+                              ],
+                              "type": "string"
+                            },
+                            "currentModulePosition": {
+                              "anyOf": [
+                                {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "id": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "moduleCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "monogram": {
+                              "maxLength": 3,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "progressPercent": {
+                              "maximum": 100,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "status": {
+                              "enum": [
+                                "active",
+                                "paused"
+                              ],
+                              "type": "string"
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "monogram",
+                            "accent",
+                            "status",
+                            "progressPercent",
+                            "currentModulePosition",
+                            "moduleCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formations": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "accent": {
+                            "enum": [
+                              "indigo",
+                              "green",
+                              "orange",
+                              "violet",
+                              "teal"
+                            ],
+                            "type": "string"
+                          },
+                          "currentModulePosition": {
+                            "anyOf": [
+                              {
+                                "maximum": 9007199254740991,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          },
+                          "moduleCount": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "monogram": {
+                            "maxLength": 3,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "progressPercent": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "status": {
+                            "enum": [
+                              "active",
+                              "paused"
+                            ],
+                            "type": "string"
+                          },
+                          "title": {
+                            "maxLength": 120,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "monogram",
+                          "accent",
+                          "status",
+                          "progressPercent",
+                          "currentModulePosition",
+                          "moduleCount"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "gapCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "quizDueCount": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "streak": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "days": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "regularity": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "date": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "status": {
+                                "enum": [
+                                  "done",
+                                  "none",
+                                  "neutral"
+                                ],
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "date",
+                              "status"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 14,
+                          "minItems": 14,
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "days",
+                        "regularity"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "collapsed",
+                    "currentFormation",
+                    "formations",
+                    "quizDueCount",
+                    "gapCount",
+                    "streak"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Mémorise le masquage du menu ou la formation courante de l’utilisateur connecté, puis renvoie le menu à jour (SPEC-304)."
+      }
+    },
     "/api/v1/resources/{rid}": {
       "delete": {
         "operationId": "resources.delete",

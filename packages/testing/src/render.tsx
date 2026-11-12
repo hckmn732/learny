@@ -1,15 +1,10 @@
 // Rendering factory for React component tests (Testing Library + user-event).
-import {
-  cleanup,
-  render,
-  screen,
-  type RenderOptions,
-  type RenderResult,
-} from '@testing-library/react';
+import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 
-export { cleanup, screen };
+export { cleanup, screen, waitFor, within } from '@testing-library/react';
+export type { RenderOptions, RenderResult } from '@testing-library/react';
 
 export function renderComponent(
   ui: ReactElement,
