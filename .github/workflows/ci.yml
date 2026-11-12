@@ -168,6 +168,11 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Construire l'application (hôtes de test)
         run: pnpm build
+      - name: Installer actionlint (validation des workflows)
+        run: |
+          curl -sSL https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz \
+            | sudo tar -xz -C /usr/local/bin actionlint
+          actionlint --version
       - name: Démarrer Supabase local
         run: supabase start
       - name: Remettre la base à zéro
