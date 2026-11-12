@@ -164,6 +164,10 @@ jobs:
         with:
           version: latest
       - run: pnpm install --frozen-lockfile
+      - name: Installer Chromium (preuves Playwright)
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Construire l'application (hôtes de test)
+        run: pnpm build
       - name: Démarrer Supabase local
         run: supabase start
       - name: Remettre la base à zéro
