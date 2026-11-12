@@ -20,6 +20,7 @@ export * from './security';
 export * from './uploads';
 export * from './push';
 export * from './notifications';
+export * from './personal-data';
 export * from './events';
 export * from './search';
 export * from './billing';

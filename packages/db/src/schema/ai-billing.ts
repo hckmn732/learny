@@ -185,9 +185,8 @@ export const aiCalls = pgTable(
   'ai_calls',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-    userId: uuid('user_id')
-      .notNull()
-      .references(() => profiles.id, { onDelete: 'cascade' }),
+    // SPEC-211 ET-5 — anonymised at account deletion: the row survives with a null owner.
+    userId: uuid('user_id').references(() => profiles.id, { onDelete: 'set null' }),
     formationId: uuid('formation_id').references(() => formations.id, { onDelete: 'set null' }),
     task: aiTask('task').notNull(),
     provider: aiProvider('provider').notNull(),

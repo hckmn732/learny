@@ -18,11 +18,13 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/notifications": "workspace:*",
+    "archiver": "^7.0.1",
     "drizzle-orm": "^0.44.7",
     "inngest": "^4.26.2",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@learny/testing": "workspace:*"
+    "@learny/testing": "workspace:*",
+    "@types/archiver": "^7.0.0"
   }
 }

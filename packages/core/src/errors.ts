@@ -18,6 +18,8 @@ export const ERROR_CATALOG = {
   PAYLOAD_TOO_LARGE: { status: 413, title: 'Requête trop volumineuse' },
   IDEMPOTENCY_KEY_REUSED: { status: 422, title: "Clé d'idempotence déjà utilisée" },
   FORMATION_LIMIT_REACHED: { status: 422, title: 'Trois formations actives au plus' },
+  EXPORT_LIMIT_REACHED: { status: 422, title: 'Trois exports par jour au plus' },
+  EXPORT_EXPIRED: { status: 410, title: 'Export expiré' },
   MODULE_LOCKED: { status: 422, title: 'Module verrouillé' },
   AI_UNAVAILABLE: { status: 422, title: 'IA indisponible pour cette tâche' },
   AI_CAP_REACHED: { status: 422, title: "Plafond d'IA du jour atteint" },
