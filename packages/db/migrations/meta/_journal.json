@@ -253,6 +253,20 @@
       "when": 1794488887058,
       "tag": "0035_rate_limits_trigger_exemption",
       "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1794520634780,
+      "tag": "0036_schedule_slots_planner_key",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1794520641468,
+      "tag": "0037_learning_persistence",
+      "breakpoints": true
     }
   ]
 }

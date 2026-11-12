@@ -41,6 +41,13 @@ const VALID: Record<EventName, Record<string, unknown>> = {
   'quiz/graded': { userId: U1, attemptId: U2, moduleId: U3, score: 82.5, passed: true },
   'module/validated': { userId: U1, formationId: U2, moduleId: U3, score: 100 },
   'gap/detected': { userId: U1, formationId: U2, notionId: U3, nature: 'forgetting' },
+  'gap/nature-changed': {
+    userId: U1,
+    formationId: U2,
+    notionId: U3,
+    nature: 'confusion',
+    previousNature: 'forgetting',
+  },
   'gap/cleared': { userId: U1, formationId: U2, notionId: U3 },
   'review/answered': {
     userId: U1,

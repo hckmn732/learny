@@ -187,6 +187,8 @@ export const scheduleSlots = pgTable(
     activityId: uuid('activity_id').references(() => activities.id, { onDelete: 'set null' }),
     createdBy: slotCreator('created_by').notNull(),
     movedFromId: uuid('moved_from_id'),
+    /** Stable key of the computed slot, used by the idempotent plan reconciliation (ADR-0149). */
+    plannerKey: text('planner_key'),
     groupMilestone: boolean('group_milestone').notNull().default(false),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
@@ -203,6 +205,11 @@ export const scheduleSlots = pgTable(
       .where(
         sql`${table.movedFromId} is not null and ${table.status} in ('planned', 'done', 'missed')`,
       ),
+    // SPEC-411 ET-3, ADR-0149 — one live planner slot per stable key; completed or moved
+    // slots keep their key but leave the partial index, so a replacement can be planned.
+    uniqueIndex('schedule_slots_planner_key_unique')
+      .on(table.userId, table.plannerKey)
+      .where(sql`${table.status} = 'planned' and ${table.plannerKey} is not null`),
     // ET-2, CL-3 — the origin is a slot; deleting it alone is refused.
     foreignKey({
       name: 'schedule_slots_moved_from_id_fk',

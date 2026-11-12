@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.164504">
+<testsuite name="p4/spec-411.spec.ts" timestamp="2026-11-12T22:20:37.264Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.385" errors="0">
+<testcase name="applique un résultat @SPEC-411" classname="p4/spec-411.spec.ts" time="1.233">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/attachments/axe-7d5c1d1bbd1e3ad498c4b7a9b743e3e19579f48c.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/attachments/spec-411-demo-7640a1623693baa37453afe57877ce1de4927517.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-applique-un-résultat-SPEC-411-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="résultat du moteur, conformité visuelle @SPEC-411 @visual @mobile" classname="p4/spec-411.spec.ts" time="1.152">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/attachments/axe-7b4b099097a61a957b8527f31cab84469d2072ae.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/attachments/spec-411-demo-visual-b6adf79b26142feaa609a11d68c32c0f82b283b3.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-411.spec.ts" timestamp="2026-11-12T22:20:37.264Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.246" errors="0">
+<testcase name="résultat du moteur, conformité visuelle @SPEC-411 @visual @mobile" classname="p4/spec-411.spec.ts" time="1.246">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/attachments/axe-8159acd8c99a32aeb76dc8c99abd3bad3ec1f8aa.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/attachments/spec-411-demo-visual-cefe86c4a8a59fbea4d344874131546eaa00a102.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-411-résultat-du-mo-e9ef6-elle-SPEC-411-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

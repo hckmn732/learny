@@ -167,6 +167,15 @@ export const EVENTS = {
     notionId: Uuid,
     nature: z.enum(EVENT_GAP_NATURES),
   }),
+  // SPEC-411 EF-2 — a stricter nature replaces the active one (BR-LAC-03); `previousNature`
+  // keeps two successive changes of the same new nature distinct in the outbox.
+  'gap/nature-changed': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    notionId: Uuid,
+    nature: z.enum(EVENT_GAP_NATURES),
+    previousNature: z.enum(EVENT_GAP_NATURES),
+  }),
   'gap/cleared': z.object({ userId: Uuid, formationId: Uuid, notionId: Uuid }),
   'review/answered': z.object({
     userId: Uuid,
