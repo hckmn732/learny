@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T09:46:49.675Z",
+  "updatedAt": "2026-11-12T10:40:13.050Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -1726,14 +1726,55 @@
       "validations": {}
     },
     "SPEC-210": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-12T09:46:49.675Z",
-      "completedAt": null,
+      "completedAt": "2026-11-12T10:40:13.047Z",
       "branch": "spec/SPEC-210-abonnement-stripe-service",
-      "commit": null,
+      "commit": "ed4bc71",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T10:38:24.242Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T10:38:30.755Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T10:38:38.879Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T10:38:40.977Z",
+          "details": "12 test(s) [SPEC-210] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T10:38:57.621Z",
+          "details": "17 test(s) [SPEC-210] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T10:39:35.210Z",
+          "details": "5 réussi(s), 0 échec(s), 8 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T10:39:35.210Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T10:39:35.221Z",
+          "details": "6/6 critères ✅"
+        }
+      }
     },
     "SPEC-211": {
       "status": "pending",

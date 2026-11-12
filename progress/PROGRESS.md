@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T09:41:05.597Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T10:40:13.051Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 33 |
+| Terminées | 34 |
 | En cours | 0 |
-| Prêtes | 5 |
+| Prêtes | 4 |
 | En attente de dépendances | 94 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **25.0 %** |
-| Avancement V1 | 26.6 % |
+| **Avancement global** | **25.8 %** |
+| Avancement V1 | 27.4 % |
 | Prochaine action | start SPEC-204 — Service e-mail et gabarits |
 
 ## Phases et checkpoints
@@ -23,7 +23,7 @@
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
-| P2 | Backend, API et services transverses | 5/12 | CP-2 | ⏳ |
+| P2 | Backend, API et services transverses | 6/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
@@ -73,7 +73,7 @@
 | [SPEC-207](../specs/p2-backend/SPEC-207-horloge-fuseaux-et-heures-calmes.md) | Horloge, fuseaux et heures calmes | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-101 |
 | [SPEC-208](../specs/p2-backend/SPEC-208-limitation-de-debit-et-protections-de-l-api.md) | Limitation de débit et protections de l'API | P2 | 🟢 ready | 0 | — | SPEC-201 |
 | [SPEC-209](../specs/p2-backend/SPEC-209-service-unifie-de-notifications.md) | Service unifié de notifications | P2 | ⏳ waiting | 0 | — | SPEC-204, SPEC-205, SPEC-207, SPEC-109 |
-| [SPEC-210](../specs/p2-backend/SPEC-210-abonnement-stripe-service.md) | Abonnement Stripe (service) | P2 | 🟢 ready | 0 | — | SPEC-201, SPEC-110 |
+| [SPEC-210](../specs/p2-backend/SPEC-210-abonnement-stripe-service.md) | Abonnement Stripe (service) | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-201, SPEC-110 |
 | [SPEC-211](../specs/p2-backend/SPEC-211-export-des-donnees-et-suppression-du-compte.md) | Export des données et suppression du compte | P2 | ⏳ waiting | 0 | — | SPEC-203, SPEC-112, SPEC-206, SPEC-204, SPEC-209 |
 | [SPEC-212](../specs/p2-backend/SPEC-212-recherche-globale-service-et-api.md) | Recherche globale (service et API) | P2 | 🟢 ready | 0 | — | SPEC-112, SPEC-201 |
 | [SPEC-301](../specs/p3-interface/SPEC-301-jetons-de-design-et-theme.md) | Jetons de design et thème | P3 | ⏳ waiting | 0 | — | SPEC-006, SPEC-005 |
