@@ -5,7 +5,14 @@ import { SidebarUpdateInput } from '@learny/contracts';
 import { TestClock } from '../test/support/fakes';
 
 import type { ServiceContext } from './context';
-import { formationMonogram, getSidebar, lastCivilDays, shiftCivilDay } from './sidebar';
+import {
+  formationMonogram,
+  getSidebar,
+  lastCivilDays,
+  selectCurrentFormation,
+  shiftCivilDay,
+  updateSidebar,
+} from './sidebar';
 
 describe('[SPEC-304] Coquille : menu latéral — dérivations', () => {
   it('calcule le sigle de repli d’une formation (ADR-0162)', () => {
@@ -141,5 +148,118 @@ describe('[SPEC-304] Coquille : menu latéral — dérivations', () => {
     const result = await getSidebar(ctx);
     if (!result.ok) throw new Error('sidebar should succeed');
     expect(result.value.currentFormation).toMatchObject({ id: 'f2', progressPercent: 0 });
+  });
+
+  it('persiste le repli puis renvoie le menu rafraîchi (ET-5, CA-4)', async () => {
+    const execute = vi
+      .fn()
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          current_formation_id: null,
+          sidebar_collapsed: true,
+          timezone: 'UTC',
+          streak_days: 0,
+        },
+      ])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
+
+    const ctx: ServiceContext = {
+      userId: '11111111-1111-4111-8111-111111111111',
+      requestId: 'req-sidebar',
+      db: { run: (flow: (tx: unknown) => Promise<unknown>) => flow({ execute }) } as never,
+      clock: new TestClock(),
+      logger: {} as never,
+    };
+
+    const result = await updateSidebar(ctx, { collapsed: true });
+    if (!result.ok) throw new Error('sidebar update should succeed');
+    expect(result.value).toMatchObject({ collapsed: true, currentFormation: null });
+    expect(result.value.streak.regularity).toHaveLength(14);
+    expect(execute).toHaveBeenCalledTimes(4);
+  });
+
+  it('refuse une mise à jour vide ou une formation inconnue (ET-4)', async () => {
+    const empty = await updateSidebar(
+      {
+        userId: '11111111-1111-4111-8111-111111111111',
+        requestId: 'req-sidebar',
+        db: { run: vi.fn() },
+        clock: new TestClock(),
+        logger: {} as never,
+      },
+      {},
+    );
+    expect(empty).toMatchObject({ ok: false, error: { code: 'VALIDATION_FAILED' } });
+
+    const invalid = await selectCurrentFormation(
+      {
+        userId: '11111111-1111-4111-8111-111111111111',
+        requestId: 'req-sidebar',
+        db: { run: vi.fn() },
+        clock: new TestClock(),
+        logger: {} as never,
+      },
+      'pas-un-uuid',
+    );
+    expect(invalid).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });
+
+    const unknown = await selectCurrentFormation(
+      {
+        userId: '11111111-1111-4111-8111-111111111111',
+        requestId: 'req-sidebar',
+        db: {
+          run: (flow: (tx: unknown) => Promise<unknown>) =>
+            flow({ execute: vi.fn().mockResolvedValue([]) }),
+        } as never,
+        clock: new TestClock(),
+        logger: {} as never,
+      },
+      '22222222-2222-4222-8222-222222222222',
+    );
+    expect(unknown).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });
+  });
+
+  it('sélectionne une formation accessible puis renvoie le menu (ADR-0075)', async () => {
+    const execute = vi
+      .fn()
+      .mockResolvedValueOnce([{ id: 'f1' }])
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          current_formation_id: 'f1',
+          sidebar_collapsed: false,
+          timezone: 'UTC',
+          streak_days: 0,
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          id: 'f1',
+          title: 'Python',
+          status: 'active',
+          module_count: 0,
+          validated_count: 0,
+          open_position: null,
+        },
+      ])
+      .mockResolvedValueOnce([{ due_count: 0, gap_count: 0 }])
+      .mockResolvedValueOnce([]);
+
+    const result = await selectCurrentFormation(
+      {
+        userId: '11111111-1111-4111-8111-111111111111',
+        requestId: 'req-sidebar',
+        db: { run: (flow: (tx: unknown) => Promise<unknown>) => flow({ execute }) } as never,
+        clock: new TestClock(),
+        logger: {} as never,
+      },
+      '22222222-2222-4222-8222-222222222222',
+    );
+
+    if (!result.ok) throw new Error('selection should succeed');
+    expect(result.value.currentFormation).toMatchObject({ id: 'f1', monogram: 'PY' });
+    expect(execute).toHaveBeenCalledTimes(6);
   });
 });
