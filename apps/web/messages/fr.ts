@@ -76,7 +76,8 @@ export const fr = {
         iconButtons: {
           title: 'Boutons d’icône',
           intro: 'Cloche de notifications et actions compactes, sur fond clair ou sombre.',
-          label: 'Notifications',
+          labelWithCount: (count: number) => `Notifications, ${String(count)} non lues`,
+          add: 'Ajouter',
         },
         links: {
           title: 'Liens',

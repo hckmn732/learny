@@ -1,12 +1,13 @@
-import { ArrowRight, Bell, Plus } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 
-import { Badge, Button, CountBadge, IconButton, Link, type BadgeProps } from '@learny/ui';
+import { Badge, Button, CountBadge, Link, type BadgeProps } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
 import { fr } from '../../../../messages/fr';
 
 import { Chips } from './Chips';
+import { IconButtons } from './IconButtons';
 
 export const dynamic = 'force-dynamic';
 
@@ -102,31 +103,7 @@ export default function ActionsGalleryPage() {
         title={t.iconButtons.title}
         intro={t.iconButtons.intro}
       >
-        <div className="flex flex-wrap items-center gap-12">
-          <IconButton
-            badge={<CountBadge data-testid="ui-count-badge-lime" value={3} />}
-            data-testid="ui-icon-button-light"
-            icon={Bell}
-            label={t.iconButtons.label}
-          />
-          <span className="rounded-12 bg-dark-850 p-8">
-            <IconButton
-              badge={
-                <CountBadge
-                  data-testid="ui-count-badge-orange-on-dark"
-                  tone="orange-on-dark"
-                  value={14}
-                />
-              }
-              data-testid="ui-icon-button-dark"
-              icon={Bell}
-              label={t.iconButtons.label}
-              tone="dark"
-            />
-          </span>
-          <IconButton icon={Plus} label="Ajouter" size="sm" />
-          <IconButton icon={Plus} label="Ajouter" size="xs" />
-        </div>
+        <IconButtons />
         <p className="mt-12 text-12 text-ink-muted">{t.sample}</p>
       </GalleryCard>
 

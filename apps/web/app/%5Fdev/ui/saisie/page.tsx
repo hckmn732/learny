@@ -1,4 +1,3 @@
-import { Search } from 'lucide-react';
 import type { Metadata } from 'next';
 
 import {
@@ -17,6 +16,7 @@ import { fr } from '../../../../messages/fr';
 
 import { ExampleForm } from './ExampleForm';
 import { SegmentedControls, Switches } from './SaisieControls';
+import { SearchTextField } from './SearchTextField';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,14 +46,7 @@ export default function SaisieGalleryPage() {
             placeholder="vous@exemple.fr"
             type="email"
           />
-          <TextField
-            data-testid="ui-textfield-search"
-            label={t.textFields.searchLabel}
-            leadingIcon={Search}
-            placeholder={t.textFields.searchPlaceholder}
-            type="search"
-            variant="search"
-          />
+          <SearchTextField />
           <TextField
             data-testid="ui-textfield-error"
             defaultValue="court"
@@ -113,9 +106,15 @@ export default function SaisieGalleryPage() {
               <TabsTrigger value="terminees">{t.tabs.softB}</TabsTrigger>
               <TabsTrigger value="archivees">{t.tabs.softC}</TabsTrigger>
             </TabsList>
-            <TabsContent value="en-cours">{t.tabs.softA}</TabsContent>
-            <TabsContent value="terminees">{t.tabs.softB}</TabsContent>
-            <TabsContent value="archivees">{t.tabs.softC}</TabsContent>
+            <TabsContent data-testid="ui-tabs-soft-panel" value="en-cours">
+              {t.tabs.softA}
+            </TabsContent>
+            <TabsContent data-testid="ui-tabs-soft-panel" value="terminees">
+              {t.tabs.softB}
+            </TabsContent>
+            <TabsContent data-testid="ui-tabs-soft-panel" value="archivees">
+              {t.tabs.softC}
+            </TabsContent>
           </Tabs>
 
           <Tabs defaultValue="profil">
@@ -124,9 +123,15 @@ export default function SaisieGalleryPage() {
               <TabsTrigger value="notifications">{t.tabs.solidB}</TabsTrigger>
               <TabsTrigger value="apprentissage">{t.tabs.solidC}</TabsTrigger>
             </TabsList>
-            <TabsContent value="profil">{t.tabs.panelA}</TabsContent>
-            <TabsContent value="notifications">{t.tabs.panelB}</TabsContent>
-            <TabsContent value="apprentissage">{t.tabs.panelC}</TabsContent>
+            <TabsContent data-testid="ui-tabs-solid-panel" value="profil">
+              {t.tabs.panelA}
+            </TabsContent>
+            <TabsContent data-testid="ui-tabs-solid-panel" value="notifications">
+              {t.tabs.panelB}
+            </TabsContent>
+            <TabsContent data-testid="ui-tabs-solid-panel" value="apprentissage">
+              {t.tabs.panelC}
+            </TabsContent>
           </Tabs>
         </div>
       </GalleryCard>

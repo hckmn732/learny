@@ -40,13 +40,13 @@ export interface FormFieldProps {
  * `aria-describedby` and the Zod error all come from the surrounding `Form`.
  */
 export function FormField({ name, label, hint, hideLabel = false, render }: FormFieldProps) {
-  const { control, formState } = useFormContext();
-  const { field } = useController({ control, name });
+  const { control } = useFormContext();
+  const { field, fieldState } = useController({ control, name });
   const generatedId = useId();
   const id = `field-${name}-${generatedId}`;
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = `${id}-error`;
-  const rawError: unknown = formState.errors[name]?.message;
+  const rawError: unknown = fieldState.error?.message;
   const error = typeof rawError === 'string' ? rawError : undefined;
   const describedBy = [hintId, error ? errorId : undefined].filter(Boolean).join(' ') || undefined;
 

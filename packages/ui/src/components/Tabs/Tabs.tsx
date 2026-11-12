@@ -12,7 +12,7 @@ const TabsVariantContext = createContext<TabsVariant>('soft');
 export const Tabs = TabsPrimitive.Root;
 
 export type TabsListProps = ComponentPropsWithRef<typeof TabsPrimitive.List> & {
-  variant?: TabsVariant;
+  variant?: TabsVariant | undefined;
   /** Mandatory accessible name of the tab list (ET-6). */
   'aria-label': string;
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { z } from 'zod';
+import * as z from 'zod/mini';
 
 import { Button, Form, FormError, FormField, TextField, useZodForm } from '@learny/ui';
 
@@ -11,7 +11,7 @@ const t = fr.ui.gallery.saisie.form;
 
 const schema = z.object({
   email: z.email('Saisissez une adresse e-mail valide.'),
-  password: z.string().min(12, 'Le mot de passe doit faire 12 caractères au moins.'),
+  password: z.string().check(z.minLength(12, 'Le mot de passe doit faire 12 caractères au moins.')),
 });
 
 type ExampleValues = z.infer<typeof schema>;
