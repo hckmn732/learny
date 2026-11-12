@@ -119,6 +119,26 @@ Les repositories de `packages/db/src/repositories/activities.ts` valident les JS
 `getAttemptWithAnswers`. Les six tables ont RLS activée et des politiques propriétaire minimales ;
 SPEC-113 livrera la matrice complète.
 
+### Mémorisation et lacunes (SPEC-107)
+
+`notion_states` porte une carte FSRS sérialisée par `(user_id, notion_id)`, son échéance indexée
+(`due_at`), la maîtrise, les dates de première/dernière vue, le compteur de réussites, les drapeaux
+`suspended`/`in_review` et l'état courant d'une lacune. `review_logs` est le journal append-only des
+révisions (source, note `again|hard|good|easy`, justesse, durée, carte avant/après, `answer_id`
+facultatif) et `gap_events` l'historique `detected|nature_changed|cleared`. La migration
+`0015_memory_rules` active la RLS : `notion_states` appartient à son propriétaire, `review_logs` et
+`gap_events` sont en lecture seule pour l'utilisateur (écritures par le service, ADR-0112), refuse
+toute réécriture du journal et vérifie qu'une confusion désigne une autre notion de la même
+formation (ADR-0242).
+
+`toFsrsCardJson` normalise une carte `ts-fsrs` en ISO UTC et rejette un nombre non fini ; `parseFsrsCard`
+valide une carte déjà sérialisée. Le paquet ne calcule jamais FSRS. Les repositories de
+`src/repositories/notion-states.ts` composent la transaction de l'appelant :
+`getDueNotionStates` (index partiel `notion_states_due_idx`, ordre `due_at, notion_id`),
+`createNotionState`, `applyReview` (verrou de ligne et jeton `revision`, `CONFLICT` sur une révision
+périmée), `detectGap`/`clearGap` (idempotence de la levée) et les lectures d'historique. `ts-fsrs`
+est une dépendance de test figée en 5.4.2 : ET-2 nomme `elapsed_days`, retiré en 6.0.0.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

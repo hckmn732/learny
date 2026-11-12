@@ -1,0 +1,5 @@
+RLS et politiques des trois tables — SPEC-107 ET-4, ADR-0112
+
+gap_events | rls=true | gap_events_owner_select | r | (user_id = ( SELECT auth.uid() AS uid)) | 
+notion_states | rls=true | notion_states_owner_all | * | (user_id = ( SELECT auth.uid() AS uid)) | (user_id = ( SELECT auth.uid() AS uid))
+review_logs | rls=true | review_logs_owner_select | r | (user_id = ( SELECT auth.uid() AS uid)) | 

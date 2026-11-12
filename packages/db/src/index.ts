@@ -76,3 +76,61 @@ export type {
 
 // Repositories validated at the boundary of the database (SPEC-106 ET-4, ET-5).
 export * from './repositories/activities';
+
+// Three tables of the memory/gap domain and their enumerations (SPEC-107 EF-1 to EF-4). The FSRS
+// card schema and its persistence adapter are exported for the learning engine (SPEC-402).
+export {
+  FSRS_GRADES_VALUES,
+  GAP_EVENT_KINDS_VALUES,
+  GAP_NATURES_VALUES,
+  REVIEW_SOURCES_VALUES,
+  fsrsGrade,
+  gapEventKind,
+  gapEvents,
+  gapNature,
+  notionStates,
+  reviewLogs,
+  reviewSource,
+} from './schema/memory';
+export type {
+  FsrsGradeValue,
+  GapEvent,
+  GapEventKindValue,
+  GapNature,
+  NewGapEvent,
+  NewNotionState,
+  NewReviewLog,
+  NotionState,
+  ReviewLog,
+  ReviewSourceValue,
+} from './schema/memory';
+export {
+  FSRS_GRADES,
+  FSRS_STATES,
+  GAP_EVENT_KINDS,
+  GAP_NATURES,
+  REVIEW_SOURCES,
+  fsrsCardSchema,
+  gapEvidenceSchema,
+  masterySchema,
+  parseFsrsCard,
+  revisionSchema,
+  successCountSchema,
+  timeMsSchema,
+  toFsrsCardJson,
+  toUtcIso,
+  utcInstantSchema,
+} from './schema/memory-json';
+export type {
+  FsrsCardInput,
+  FsrsCardJson,
+  FsrsGrade,
+  FsrsState,
+  GapEventKind,
+  GapEvidence,
+  GapNatureValue,
+  ReviewSource,
+} from './schema/memory-json';
+
+// Repositories of the memory/gap domain (SPEC-107 EF-5, ET-5).
+export * from './repositories/notion-states';

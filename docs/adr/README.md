@@ -120,3 +120,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0239](ADR-0239-version-courante-a-l-insertion-et-coherence-proprietaire-pen.md) | Version courante à l'insertion et cohérence propriétaire pendant les cascades | Déduite | SPEC-105, ADR-0039, ADR-0112, ADR-0113 |
 | [ADR-0240](ADR-0240-garde-d-assemblage-d-activite-et-rls-minimale-des-briques.md) | Garde d'assemblage d'activité et RLS minimale des briques | Déduite | SPEC-106, SPEC-113, ADR-0021, ADR-0112 |
 | [ADR-0241](ADR-0241-numerotation-concurrente-des-tentatives-et-versions-de-briqu.md) | Numérotation concurrente des tentatives et versions de brique immuables | Déduite | SPEC-106, BR-BRI-06, ADR-0021 |
+| [ADR-0242](ADR-0242-persistance-fsrs-concurrence-optimiste-et-lecture-seule-des-.md) | Persistance FSRS, concurrence optimiste et lecture seule des journaux | Déduite | SPEC-107, ADR-0022, ADR-0025, ADR-0112, ADR-0149 |

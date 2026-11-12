@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-106]
 business_rules: []
 screens: []
-adrs: [ADR-0024, ADR-0025]
+adrs: [ADR-0024, ADR-0025, ADR-0242]
 visual: demo
 ---
 
@@ -110,4 +110,4 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent. Les trois t
 
 ## 15. Décisions et hypothèses
 
-ADR-0024 fixe le modèle de maîtrise/lacune et ADR-0025 FSRS par notion. Les algorithmes restent dans `@learny/learning-engine` (SPEC-402–404) ; ce schéma stocke leurs entrées/sorties sans recalcul SQL.
+ADR-0024 fixe le modèle de maîtrise/lacune et ADR-0025 FSRS par notion. Les algorithmes restent dans `@learny/learning-engine` (SPEC-402–404) ; ce schéma stocke leurs entrées/sorties sans recalcul SQL. ADR-0242 précise la persistance : jeton `revision` et verrou de ligne pour deux réponses concurrentes, `review_logs`/`gap_events` en lecture seule pour l'utilisateur (écritures par le service, ADR-0112), déclencheurs append-only, confusion limitée à la même formation et `ts-fsrs` figé en 5.4.2 car ET-2 nomme `elapsed_days`.
