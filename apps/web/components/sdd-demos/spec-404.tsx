@@ -354,7 +354,12 @@ export default function Spec404Demo() {
         <p data-testid="gap-evaluation" className="mt-2 text-sm">
           {t.inputs.evaluation(instant(DETECTED_AT))}
         </p>
-        <div className="mt-4 overflow-x-auto">
+        <div
+          className="mt-4 overflow-x-auto"
+          role="region"
+          aria-label={t.inputs.title}
+          tabIndex={0}
+        >
           <table className="w-full border-collapse text-left text-sm">
             <caption className="sr-only">{t.inputs.title}</caption>
             <thead>
@@ -468,7 +473,12 @@ export default function Spec404Demo() {
 
       <BaseCard testId="gap-clearance" title={t.clearance.title} role="status">
         <p className="text-sm text-ink-muted">{t.clearance.intro}</p>
-        <div className="mt-4 overflow-x-auto">
+        <div
+          className="mt-4 overflow-x-auto"
+          role="region"
+          aria-label={t.clearance.title}
+          tabIndex={0}
+        >
           <table className="w-full border-collapse text-left text-sm">
             <caption className="sr-only">{t.clearance.title}</caption>
             <thead>
@@ -565,7 +575,7 @@ export default function Spec404Demo() {
 
       <BaseCard testId="gap-edge" title={t.edge.title}>
         <p className="text-sm text-ink-muted">{t.edge.intro}</p>
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-4 overflow-x-auto" role="region" aria-label={t.edge.title} tabIndex={0}>
           <table className="w-full border-collapse text-left text-sm">
             <caption className="sr-only">{t.edge.title}</caption>
             <thead>
