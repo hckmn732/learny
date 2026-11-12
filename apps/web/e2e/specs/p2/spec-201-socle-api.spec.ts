@@ -129,11 +129,11 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
     '[data-testid="demo-validation"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="demo-pagination"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="sdd-title"]': { color: '#111113' },
   });

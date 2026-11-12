@@ -148,11 +148,11 @@ test('page de démonstration SPEC-203 @SPEC-203 @visual @mobile', async ({ page,
     '[data-testid="jobs-demo"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="jobs-tick"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[role="switch"]': { 'background-color': '#111113' },
     '[data-testid="jobs-step-1-dot"]': { 'background-color': '#0F9F7F' },

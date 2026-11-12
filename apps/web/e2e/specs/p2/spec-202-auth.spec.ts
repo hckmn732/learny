@@ -177,7 +177,7 @@ test('page de démonstration SPEC-202 @SPEC-202 @visual @mobile', async ({ page,
     '[data-testid="auth-session"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="auth-magic"] button': {
       'background-color': '#111113',

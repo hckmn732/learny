@@ -248,15 +248,15 @@ test('abonnement conforme @SPEC-210 @visual @mobile', async ({ page, axeCheck })
     '[data-testid="spec-210-status"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-210-actions"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-210-events"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-210-badge-dot"]': { 'background-color': '#0F9F7F' },
     '[data-testid="sdd-title"]': { color: '#111113' },

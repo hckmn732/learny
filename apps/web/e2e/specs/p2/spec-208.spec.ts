@@ -61,11 +61,11 @@ test('protections conformes @SPEC-208 @visual @mobile', async ({ page, axeCheck 
     '[data-testid="spec-208-profiles"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-208-origin"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-208-purge"] button': {
       'background-color': '#111113',

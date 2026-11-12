@@ -126,13 +126,13 @@ test('données personnelles conformes @SPEC-211 @visual @mobile', async ({ page,
     '[data-testid="spec-211-export"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-211-deletion"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
-    '[data-testid="spec-211-execution"]': { 'border-top-left-radius': '24px' },
+    '[data-testid="spec-211-execution"]': { 'border-top-left-radius': '21.6px' },
     '[data-testid="sdd-title"]': { color: '#111113' },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);

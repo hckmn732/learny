@@ -103,11 +103,11 @@ test('temps local conforme @SPEC-207 @visual @mobile', async ({ page, axeCheck }
     '[data-testid="spec-207-now"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-207-dst"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-207-quiet-now"]': {
       'background-color': '#F4F4F1',

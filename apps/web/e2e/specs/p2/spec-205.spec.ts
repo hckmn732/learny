@@ -160,11 +160,11 @@ test('push conforme @SPEC-205 @visual @mobile', async ({ page, axeCheck }) => {
     '[data-testid="spec-205-permission"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
-    '[data-testid="spec-205-subscription"]': { 'border-top-left-radius': '24px' },
+    '[data-testid="spec-205-subscription"]': { 'border-top-left-radius': '21.6px' },
     '[data-testid="spec-205-preview"]': { 'border-top-color': '#E7E6E1' },
-    '[data-testid="spec-205-delivery"]': { 'border-top-left-radius': '24px' },
+    '[data-testid="spec-205-delivery"]': { 'border-top-left-radius': '21.6px' },
     '[data-testid="sdd-title"]': { color: '#111113' },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);

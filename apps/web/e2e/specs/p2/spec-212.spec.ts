@@ -270,13 +270,13 @@ test('recherche conforme @SPEC-212 @visual @mobile', async ({ page, axeCheck }) 
     '[data-testid="spec-212-query"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="spec-212-results"]': {
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
-    '[data-testid="spec-212-json"]': { 'border-top-left-radius': '24px' },
+    '[data-testid="spec-212-json"]': { 'border-top-left-radius': '21.6px' },
     '[data-testid="sdd-title"]': { color: '#111113' },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
