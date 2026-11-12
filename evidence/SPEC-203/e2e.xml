@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="3" failures="1" skipped="0" errors="1" time="36.977962">
-<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:30:33.381Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.86" errors="1">
-<testcase name="pipeline avec reprise et tick horaire @SPEC-203" classname="p2/spec-203-jobs.spec.ts" time="1.448">
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="36.27158300000001">
+<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:38:57.473Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.649" errors="0">
+<testcase name="pipeline avec reprise et tick horaire @SPEC-203" classname="p2/spec-203-jobs.spec.ts" time="1.428">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/attachments/axe-f1f7c87d53b2070cbdf507b011053587cade2fd9.json]]
@@ -17,156 +17,37 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.412">
+<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.221">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/attachments/axe-e909c47ba01a3b6ceb9c18ebccd54d5817c9a770.json]]
 
-[[ATTACHMENT|../apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png]]
-
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/spec-203-demo-actual.png]]
-
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/test-failed-1.png]]
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/test-finished-1.png]]
 
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video-1.webm]]
 
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video.webm]]
 
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md]]
-
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md]]
-
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/trace.zip]]
 ]]>
 </system-out>
-<error message="A snapshot doesn&apos;t exist at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png, writing actual." type="Error">
-<![CDATA[  [desktop] › p2/spec-203-jobs.spec.ts:125:1 › page de démonstration SPEC-203 @SPEC-203 @visual @mobile 
-
-    Error: A snapshot doesn't exist at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png, writing actual.
-
-       at ../../../../packages/testing/src/visual.ts:139
-
-      137 |     return;
-      138 |   }
-    > 139 |   await expect(page).toHaveScreenshot(name, {
-          |   ^
-      140 |     maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,
-      141 |     ...options,
-      142 |   });
-        at expectScreenshotBaseline (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts:139:3)
-        at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:168:3
-
-    attachment #1: axe (application/json) ──────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/attachments/axe-e909c47ba01a3b6ceb9c18ebccd54d5817c9a770.json
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: spec-203-demo (image/png) ───────────────────────────────────────────────────────
-    Expected: ../__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png
-    Received: ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/spec-203-demo-actual.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video-1.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #5: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md
-
-    Error Context: ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md
-
-    attachment #8: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/trace.zip
-    Usage:
-
-        pnpm exec playwright show-trace ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</error>
 </testcase>
 </testsuite>
-<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:30:33.381Z" hostname="mobile" tests="1" failures="1" skipped="0" time="1.216" errors="0">
-<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.216">
+<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:38:57.473Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.289" errors="0">
+<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.289">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/attachments/axe-f64ac507b1d6549278a00a9d782bd4853f8e5e4c.json]]
 
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/test-failed-1.png]]
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/test-finished-1.png]]
 
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video-1.webm]]
 
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video.webm]]
 
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md]]
-
-[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md]]
-
 [[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/trace.zip]]
 ]]>
 </system-out>
-<failure message="violations axe serious/critical" type="expect.toEqual">
-<![CDATA[  [mobile] › p2/spec-203-jobs.spec.ts:125:1 › page de démonstration SPEC-203 @SPEC-203 @visual @mobile 
-
-    Error: violations axe serious/critical
-
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 1
-    + Received  + 3
-
-    - Array []
-    + Array [
-    +   "scrollable-region-focusable (serious) : Scrollable region must have keyboard access",
-    + ]
-
-       at ../../../../packages/testing/src/playwright.ts:32
-
-      30 |     blocking.map((v) => `${v.id} (${v.impact ?? ''}) : ${v.help}`),
-      31 |     'violations axe serious/critical',
-    > 32 |   ).toEqual([]);
-         |     ^
-      33 | }
-      34 |
-      35 | // Fixture callbacks name their second argument `provide` (Playwright's `use`) so that the
-        at axeCheck (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts:32:5)
-        at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:166:3
-
-    attachment #1: axe (application/json) ──────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/attachments/axe-f64ac507b1d6549278a00a9d782bd4853f8e5e4c.json
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video-1.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md
-
-    Error Context: ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md
-
-    attachment #7: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/trace.zip
-    Usage:
-
-        pnpm exec playwright show-trace ../../../../test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</failure>
 </testcase>
 </testsuite>
 </testsuites>
