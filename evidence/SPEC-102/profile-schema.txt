@@ -1,0 +1,44 @@
+                                        Table "public.profiles"
+         Column          |           Type           | Collation | Nullable |          Default          
+-------------------------+--------------------------+-----------+----------+---------------------------
+ id                      | uuid                     |           | not null | 
+ email                   | text                     |           | not null | 
+ first_name              | text                     |           |          | 
+ last_name               | text                     |           |          | 
+ course_language         | course_language          |           | not null | 'fr'::course_language
+ tutor_tone              | tutor_tone               |           | not null | 'vous'::tutor_tone
+ timezone                | text                     |           | not null | 'Europe/Paris'::text
+ onboarding_step         | onboarding_step          |           | not null | 'profil'::onboarding_step
+ onboarding_completed_at | timestamp with time zone |           |          | 
+ terms_version           | text                     |           |          | 
+ terms_accepted_at       | timestamp with time zone |           |          | 
+ current_formation_id    | uuid                     |           |          | 
+ deletion_requested_at   | timestamp with time zone |           |          | 
+ deletion_scheduled_for  | timestamp with time zone |           |          | 
+ sidebar_collapsed       | boolean                  |           | not null | false
+ streak_days             | integer                  |           | not null | 0
+ streak_computed_on      | date                     |           |          | 
+ created_at              | timestamp with time zone |           | not null | now()
+ updated_at              | timestamp with time zone |           | not null | now()
+Indexes:
+    "profiles_pkey" PRIMARY KEY, btree (id)
+    "profiles_deletion_scheduled_for_idx" btree (deletion_scheduled_for) WHERE deletion_scheduled_for IS NOT NULL
+    "profiles_email_unique" UNIQUE CONSTRAINT, btree (email)
+Check constraints:
+    "profiles_deletion_pair_check" CHECK ((deletion_requested_at IS NULL) = (deletion_scheduled_for IS NULL))
+    "profiles_first_name_length_check" CHECK (char_length(first_name) <= 60)
+    "profiles_last_name_length_check" CHECK (char_length(last_name) <= 60)
+    "profiles_streak_days_check" CHECK (streak_days >= 0)
+Foreign-key constraints:
+    "profiles_id_fkey" FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
+Referenced by:
+    TABLE "automation_settings" CONSTRAINT "automation_settings_user_id_profiles_id_fk" FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+    TABLE "notification_settings" CONSTRAINT "notification_settings_user_id_profiles_id_fk" FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+    TABLE "pauses" CONSTRAINT "pauses_user_id_profiles_id_fk" FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+    TABLE "push_subscriptions" CONSTRAINT "push_subscriptions_user_id_profiles_id_fk" FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+    TABLE "study_preferences" CONSTRAINT "study_preferences_user_id_profiles_id_fk" FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+Policies (row security enabled): (none)
+Triggers:
+    set_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION set_updated_at()
+    validate_profile BEFORE INSERT OR UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION validate_profile()
+

@@ -1,0 +1,36 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="29.726515">
+<testsuite name="p1/spec-102-identity.spec.ts" timestamp="2026-11-12T00:39:31.393Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.442" errors="0">
+<testcase name="initialisation du compte @SPEC-102" classname="p1/spec-102-identity.spec.ts" time="1.335">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/attachments/axe-ec91e0c42f009f50b071195f1fdf19f87bd26325.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/attachments/spec-102-demo-9413658604e1a73e9ccb3a5c0325402b2cb90b96.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-initialisation-du-compte-SPEC-102-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page identité conforme @SPEC-102 @visual" classname="p1/spec-102-identity.spec.ts" time="1.107">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-102-identity-page-identité-conforme-SPEC-102-visual-desktop/attachments/axe-9fb7c0401789d2a30018481ac6184d07118145bb.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-page-identité-conforme-SPEC-102-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-page-identité-conforme-SPEC-102-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-page-identité-conforme-SPEC-102-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-102-identity-page-identité-conforme-SPEC-102-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
