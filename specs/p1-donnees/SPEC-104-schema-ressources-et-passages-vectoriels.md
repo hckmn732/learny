@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-103]
 business_rules: [BR-APP-06]
 screens: []
-adrs: [ADR-0056, ADR-0039, ADR-0008, ADR-0058, ADR-0112, ADR-0113]
+adrs: [ADR-0056, ADR-0039, ADR-0008, ADR-0058, ADR-0112, ADR-0113, ADR-0238]
 visual: demo
 ---
 
@@ -180,4 +180,5 @@ Définition commune ; aucune régression du test générique de conventions ; `f
 
 - ADR appliqués : ADR-0056 (dimension 1024, cosinus, HNSW), ADR-0039 (limites, citations conservées avec `chunk_id` nul), ADR-0008 (`audio`, `video` dans l'énumération dès V1, non proposés par l'interface V1), ADR-0058 (format du chemin), ADR-0112.
 - **ADR-0113** : ajout de `resource_chunks.formation_id` et `resource_chunks.chapter_id` (filtrage de la recherche sans jointure), formes par type, limites en base, conservation de la ligne supprimée logiquement (le contenu est effacé), paramètres HNSW `m = 16`, `ef_construction = 64`.
+- **ADR-0238** : page de démonstration servie par le registre de SPEC-006 ; qualification `extensions.vector(1024)` dans la migration générée ; codes d'erreur levés par le déclencheur avant les CHECK ; preuve HNSW filtrée par `owner_id` avec `hnsw.ef_search = 40` et planificateur contraint localement ; règle de `fakeEmbedding` partagée avec SPEC-509.
 - Hypothèse : la valeur `hnsw.ef_search` est réglée par requête par SPEC-511 (40 par défaut).

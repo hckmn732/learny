@@ -116,3 +116,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0235](ADR-0235-alias-createuserdb-et-harnais-sans-sequence.md) | Alias createUserDb et harnais sans séquence | Déduite | SPEC-101 |
 | [ADR-0236](ADR-0236-complements-d-implementation-du-schema-identite.md) | Compléments d'implémentation du schéma identité | Déduite | SPEC-102 |
 | [ADR-0237](ADR-0237-complements-d-implementation-du-schema-formations.md) | Compléments d'implémentation du schéma formations | Déduite | SPEC-103, SPEC-006, ADR-0049, ADR-0113 |
+| [ADR-0238](ADR-0238-complements-d-implementation-du-schema-ressources-et-passage.md) | Compléments d'implémentation du schéma ressources et passages vectoriels | Déduite | SPEC-104, ADR-0056, ADR-0039, ADR-0112, ADR-0113 |
