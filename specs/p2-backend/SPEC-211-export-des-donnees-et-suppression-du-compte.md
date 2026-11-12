@@ -134,6 +134,7 @@ Validations communes de `docs/engineering/testing.md` §7. En plus : le contrôl
 
 - ADR-0044 : ZIP dans `exports`, lien de 7 jours, suppression à J+30, connexion possible pour annuler, cron nocturne.
 - ADR-0216 (créé pour cette spécification) : arborescence du ZIP, un export en cours et 3 demandes par jour, échec au-delà de 15 minutes, ordre d'effacement, transmission des formations partagées, anonymisation d'`ai_calls`.
+- **ADR-0267** (déduit pendant l'implémentation) : l'événement d'export est `account/export-requested` (nom déjà fixé par le catalogue SPEC-203) ; le job collecte un modèle JSON et écrit le ZIP en flux dans un fichier temporaire avant un envoi en `upsert` ; `auth.admin.deleteUser` précède la cascade `profiles` afin qu'un échec Auth laisse la demande due en place pour la nuit suivante (CL-8), le nettoyage idempotent du profil suivant la cascade. La limite de trois demandes s'appuie sur `data_exports.requested_on` et un verrou consultatif par utilisateur.
 - ADR-0058 fixe des URL signées de 10 minutes : le « lien valable 7 jours » de BR-ACC-10 est donc le lien applicatif authentifié `GET /me/exports/:id?download=1`, qui émet une URL signée neuve à chaque clic tant que `expires_at` n'est pas dépassé.
 - ADR-0122 (boîte d'envoi), ADR-0124 et ADR-0032 (e-mails transactionnels hors préférences, plafond et heures calmes), ADR-0121 (redirection vers `/parametres#profil`).
 - Hypothèse : les journaux Sentry et Inngest conservés par les fournisseurs relèvent de leur propre rétention, documentée dans le registre des traitements de SPEC-806.
