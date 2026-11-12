@@ -9,6 +9,7 @@ import type { JobErrorReporter } from '../ports';
 import { cronHourlyTick } from './cron-hourly-tick';
 import { cronNightly } from './cron-nightly';
 import { createDemoJob } from './demo-job';
+import { emailWelcome } from './email-welcome';
 import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
 
@@ -21,6 +22,7 @@ export interface JobDeps {
 export const learnyFunctions = [
   cronHourlyTick,
   cronNightly,
+  emailWelcome,
   nightlyOutboxCleanup,
   sddDemoPipeline,
 ] as const;

@@ -1267,6 +1267,402 @@
         "summary": "Route de démonstration : écho idempotent (SPEC-201)."
       }
     },
+    "/api/v1/dev/sdd/email/outbox": {
+      "get": {
+        "operationId": "dev.email.outbox",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "at": {
+                            "type": "string"
+                          },
+                          "headers": {
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "subject": {
+                            "type": "string"
+                          },
+                          "template": {
+                            "type": "string"
+                          },
+                          "to": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "to",
+                          "subject",
+                          "headers",
+                          "template",
+                          "at"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Route de démonstration : boîte d’envoi du transport mémoire (SPEC-204)."
+      }
+    },
+    "/api/v1/dev/sdd/email/preview": {
+      "get": {
+        "operationId": "dev.email.preview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "template",
+            "required": true,
+            "schema": {
+              "enum": [
+                "welcome",
+                "daily_digest",
+                "reminder",
+                "weekly_review",
+                "ai_task_failed",
+                "export_ready",
+                "deletion_scheduled",
+                "deletion_completed"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tone",
+            "required": true,
+            "schema": {
+              "enum": [
+                "vous",
+                "tu"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "category": {
+                      "enum": [
+                        "service",
+                        "transactional"
+                      ],
+                      "type": "string"
+                    },
+                    "headers": {
+                      "additionalProperties": {
+                        "type": "string"
+                      },
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "html": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "template": {
+                      "enum": [
+                        "welcome",
+                        "daily_digest",
+                        "reminder",
+                        "weekly_review",
+                        "ai_task_failed",
+                        "export_ready",
+                        "deletion_scheduled",
+                        "deletion_completed"
+                      ],
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "tone": {
+                      "enum": [
+                        "vous",
+                        "tu"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "template",
+                    "tone",
+                    "category",
+                    "subject",
+                    "html",
+                    "text",
+                    "headers"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Route de démonstration : aperçu d’un gabarit avec les données d’exemple (JSON, ou text/html sans Accept: application/json) (SPEC-204)."
+      }
+    },
+    "/api/v1/dev/sdd/email/send": {
+      "post": {
+        "operationId": "dev.email.send",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "template": {
+                    "enum": [
+                      "welcome",
+                      "daily_digest",
+                      "reminder",
+                      "weekly_review",
+                      "ai_task_failed",
+                      "export_ready",
+                      "deletion_scheduled",
+                      "deletion_completed"
+                    ],
+                    "type": "string"
+                  },
+                  "tone": {
+                    "enum": [
+                      "vous",
+                      "tu"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "template",
+                  "tone"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "messageId": {
+                      "type": "string"
+                    },
+                    "transport": {
+                      "enum": [
+                        "resend",
+                        "smtp",
+                        "memory"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "messageId",
+                    "transport"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Route de démonstration : envoie un gabarit à l’utilisateur connecté (SPEC-204)."
+      }
+    },
     "/api/v1/dev/sdd/events/demo": {
       "post": {
         "operationId": "dev.events.demo.start",
@@ -1859,6 +2255,127 @@
           }
         ],
         "summary": "Route de démonstration : essais simulés des limites d’envoi (SPEC-206)."
+      }
+    },
+    "/api/v1/email/unsubscribe": {
+      "get": {
+        "operationId": "email.unsubscribe.page",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Page de désinscription (formulaire POST) ; aucun changement d’état."
+      },
+      "post": {
+        "operationId": "email.unsubscribe",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "ok": {
+                      "const": true,
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "ok"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Désinscription en un clic (RFC 8058) : coupe les e-mails de service ; page HTML de confirmation, ou JSON avec Accept: application/json."
       }
     },
     "/api/v1/health": {

@@ -17,3 +17,4 @@ export {
   previewHourlyTick,
   startDemoPipeline,
 } from './dev/events';
+export * from './email/index';

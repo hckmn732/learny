@@ -17,6 +17,7 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
+    "@learny/notifications": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",
     "drizzle-orm": "^0.44.7",
     "file-type": "^22.3.0",

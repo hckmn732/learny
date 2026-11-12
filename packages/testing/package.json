@@ -10,7 +10,8 @@
     "./msw": "./src/msw.ts",
     "./render": "./src/render.tsx",
     "./supabase": "./src/supabase.ts",
-    "./auth": "./src/auth.ts"
+    "./auth": "./src/auth.ts",
+    "./mail": "./src/mail.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
@@ -20,6 +21,7 @@
     "@axe-core/playwright": "^4.14.0",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
+    "@learny/notifications": "workspace:*",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
     "@testing-library/react": "^16.3.3",

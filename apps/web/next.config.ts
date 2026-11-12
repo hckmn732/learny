@@ -9,9 +9,10 @@ const nextConfig: NextConfig = {
     '@learny/contracts',
     '@learny/db',
     '@learny/jobs',
+    '@learny/notifications',
   ],
   // Native/Node-only telemetry libraries stay outside the bundle (SPEC-010).
-  serverExternalPackages: ['pino', 'postgres', '@sentry/nextjs'],
+  serverExternalPackages: ['pino', 'postgres', '@sentry/nextjs', 'nodemailer'],
   poweredByHeader: false,
   reactStrictMode: true,
   // Docker image (SPEC-012, ET-2): a self-contained server whose traced files include workspace

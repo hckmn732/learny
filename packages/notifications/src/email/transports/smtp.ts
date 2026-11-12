@@ -1,4 +1,6 @@
 // SMTP transport (SPEC-204 ET-5): nodemailer towards Mailpit in local development, without TLS.
+import { randomUUID } from 'node:crypto';
+
 import { createTransport, type Transporter } from 'nodemailer';
 
 import { EmailTransientError } from '../errors';
@@ -24,7 +26,7 @@ export function createSmtpTransport(options: { host: string; port: number }): Em
           text: message.text,
           headers: message.headers,
         })) as { messageId?: string };
-        return { messageId: info.messageId ?? `smtp_${String(Date.parse('1970-01-01'))}` };
+        return { messageId: info.messageId ?? `smtp_${randomUUID()}` };
       } catch (error) {
         // The SMTP server is local infrastructure: any failure is worth a retry.
         throw new EmailTransientError(

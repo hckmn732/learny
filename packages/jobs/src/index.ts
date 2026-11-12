@@ -41,6 +41,7 @@ export {
   cronHourlyTick,
 } from './functions/cron-hourly-tick';
 export { CRON_NIGHTLY_ID, NIGHTLY_CRON, cronNightly } from './functions/cron-nightly';
+export { EMAIL_WELCOME_ID, emailWelcome, welcomeIdempotencyKey } from './functions/email-welcome';
 export {
   NIGHTLY_OUTBOX_CLEANUP_ID,
   OUTBOX_RETENTION_DAYS,

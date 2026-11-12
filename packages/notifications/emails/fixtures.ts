@@ -13,7 +13,7 @@ type FixtureFactory<K extends EmailTemplateKey> = (tone: Tone) => EmailProps<K>;
 
 export const EMAIL_FIXTURES: { [K in EmailTemplateKey]: FixtureFactory<K> } = {
   welcome: () => ({ firstName: FIXTURE_USER.firstName }),
-  daily_digest: () => ({
+  daily_digest: (tone) => ({
     firstName: FIXTURE_USER.firstName,
     dateLabel: 'mercredi 11 novembre',
     plannedLabel: '5 h',
@@ -47,7 +47,10 @@ export const EMAIL_FIXTURES: { [K in EmailTemplateKey]: FixtureFactory<K> } = {
     held: {
       count: 2,
       maxPerDay: 5,
-      titles: ['Une séance à replacer', 'Votre cours est prêt'],
+      titles: [
+        'Une séance à replacer',
+        tone === 'tu' ? 'Ton cours est prêt' : 'Votre cours est prêt',
+      ],
     },
   }),
   reminder: (tone) => ({

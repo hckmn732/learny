@@ -4,7 +4,7 @@
 // to Sentry when it is configured. Authentication stays optional until SPEC-201 wires sessions.
 import type { NextRequest } from 'next/server';
 
-import type { AnyRoute, RouteOutput } from '@learny/contracts';
+import type { AnyRoute } from '@learny/contracts';
 import {
   ERROR_CATALOG,
   AppError,
@@ -14,7 +14,6 @@ import {
   type Clock,
   type ErrorReporter,
   type LearnyLogger,
-  type Result,
 } from '@learny/core';
 import {
   REQUEST_ID_HEADER,
@@ -27,7 +26,7 @@ import {
 
 import { getServerReporter } from '../sentry';
 
-import { routeHandler, type HandlerArgs } from './route-handler';
+import { routeHandler, type HandlerArgs, type RouteOutcome } from './route-handler';
 
 type Env = Readonly<Record<string, string | undefined>>;
 
@@ -140,7 +139,7 @@ export function withRequestId(response: Response, requestId: string): Response {
  */
 export function handler<R extends AnyRoute>(
   route: R,
-  fn: (args: HandlerArgs<R>) => Promise<Result<RouteOutput<R>> | RouteOutput<R>>,
+  fn: (args: HandlerArgs<R>) => Promise<RouteOutcome<R>>,
 ): (
   request: NextRequest,
   segment: { params: Promise<Record<string, string>> },
