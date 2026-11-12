@@ -37,6 +37,9 @@ export const SAFE_LOG_FIELDS = [
   'runId',
   'operation',
   'outcome',
+  // SPEC-204: e-mail sends are logged by template and provider message id, never by address.
+  'template',
+  'messageId',
 ] as const;
 
 export type SafeLogField = (typeof SAFE_LOG_FIELDS)[number];
