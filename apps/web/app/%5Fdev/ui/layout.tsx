@@ -18,8 +18,8 @@ const SECTIONS = [
   { id: 'tokens', label: t.sections.tokens, href: '/_dev/ui/jetons' },
   { id: 'actions', label: t.sections.actions, href: '/_dev/ui/actions' },
   { id: 'forms', label: t.sections.forms, href: '/_dev/ui/saisie' },
-  { id: 'structure', label: t.sections.structure },
-  { id: 'feedback', label: t.sections.feedback },
+  { id: 'structure', label: t.sections.structure, href: '/_dev/ui/structure' },
+  { id: 'feedback', label: t.sections.feedback, href: '/_dev/ui/retours' },
   { id: 'accessibility', label: t.sections.accessibility },
 ] as const;
 

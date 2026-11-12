@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { colors } from '../src/tokens/colors';
 import { controlHeightsPx, layout } from '../src/tokens/layout';
+import { motion } from '../src/tokens/motion';
 import { radiiPx, radiusFull } from '../src/tokens/radii';
 import { shadows } from '../src/tokens/shadows';
 import { px, spacingUnit } from '../src/tokens/spacing';
@@ -16,6 +17,7 @@ import {
   letterSpacings,
   lineHeights,
 } from '../src/tokens/typography';
+import { zIndex } from '../src/tokens/z-index';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const TARGET = path.join(ROOT, 'src', 'styles', 'theme.css');
@@ -93,7 +95,46 @@ export function buildThemeCss(): string {
     `  --container-content: ${px(layout.contentMaxPx)};`,
     `  --container-popover: ${px(layout.popoverWidthPx)};`,
     `  --container-menu: ${px(layout.menuWidthPx)};`,
+    '',
+    '  /* Stacking order (SPEC-303, ET-2). */',
+  );
+  for (const [name, value] of Object.entries(zIndex)) {
+    lines.push(`  --z-${name}: ${String(value)};`);
+  }
+
+  lines.push(
+    '',
+    '  /* Animations (SPEC-303, ADR-0138); reduced motion disables them. */',
+    `  --animate-overlay-in: learny-overlay-in ${String(motion.fastMs)}ms ease-out;`,
+    `  --animate-dialog-in: learny-dialog-in ${String(motion.fastMs)}ms ease-out;`,
+    `  --animate-toast-in: learny-toast-in ${String(motion.fastMs)}ms ease-out;`,
+    `  --animate-skeleton-pulse: learny-skeleton-pulse ${String(motion.skeletonMs)}ms ease-in-out infinite;`,
+    '',
+    '  @keyframes learny-overlay-in {',
+    '    from { opacity: 0; }',
+    '    to { opacity: 1; }',
+    '  }',
+    '  @keyframes learny-dialog-in {',
+    '    from { opacity: 0; transform: translateY(8px); }',
+    '    to { opacity: 1; transform: translateY(0); }',
+    '  }',
+    '  @keyframes learny-toast-in {',
+    '    from { opacity: 0; transform: translateY(8px); }',
+    '    to { opacity: 1; transform: translateY(0); }',
+    '  }',
+    '  @keyframes learny-skeleton-pulse {',
+    '    0%, 100% { opacity: 1; }',
+    '    50% { opacity: 0.55; }',
+    '  }',
     '}',
+    '',
+    '/* Stacking utilities backed by the z-* tokens (SPEC-303, ET-2). */',
+  );
+  for (const name of Object.keys(zIndex)) {
+    lines.push(`@utility z-${name} { z-index: var(--z-${name}); }`);
+  }
+
+  lines.push(
     '',
     '/* Control heights are not a Tailwind namespace; they are consumed through @learny/ui/tokens. */',
     `/* ${controlHeightsPx.join(', ')} mockup px. */`,

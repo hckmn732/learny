@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Loader2, type LucideIcon } from 'lucide-react';
-import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { forwardRef, type ComponentPropsWithRef, type ReactNode } from 'react';
 
 import { cn } from '../../cn';
 
@@ -52,59 +52,67 @@ export type ButtonProps = ComponentPropsWithRef<'button'> &
 const ICON_SIZE = 16;
 const ICON_STROKE = 2.2;
 
-export const Button = ({
-  className,
-  variant,
-  size,
-  fullWidth,
-  loading = false,
-  leadingIcon: LeadingIcon,
-  trailingIcon: TrailingIcon,
-  asChild = false,
-  disabled,
-  type,
-  children,
-  ...props
-}: ButtonProps) => {
-  const classes = cn(buttonVariants({ variant, size, fullWidth }), className);
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      fullWidth,
+      loading = false,
+      leadingIcon: LeadingIcon,
+      trailingIcon: TrailingIcon,
+      asChild = false,
+      disabled,
+      type,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const classes = cn(buttonVariants({ variant, size, fullWidth }), className);
 
-  // Radix Slot requires exactly one child: the caller supplies the link and its content.
-  if (asChild) {
+    // Radix Slot requires exactly one child: the caller supplies the link and its content.
+    if (asChild) {
+      return (
+        <Slot ref={ref} className={classes} aria-busy={loading || undefined} {...props}>
+          {children}
+        </Slot>
+      );
+    }
+
+    let leading: ReactNode = null;
+    if (loading) {
+      leading = (
+        <Loader2
+          aria-hidden="true"
+          className="animate-spin motion-reduce:animate-none"
+          size={ICON_SIZE}
+          strokeWidth={ICON_STROKE}
+        />
+      );
+    } else if (LeadingIcon) {
+      leading = <LeadingIcon aria-hidden="true" size={ICON_SIZE} strokeWidth={ICON_STROKE} />;
+    }
+
     return (
-      <Slot className={classes} aria-busy={loading || undefined} {...props}>
+      <button
+        ref={ref}
+        className={classes}
+        type={type ?? 'button'}
+        disabled={disabled ?? loading}
+        aria-busy={loading || undefined}
+        {...props}
+      >
+        {leading}
         {children}
-      </Slot>
+        {TrailingIcon && !loading ? (
+          <TrailingIcon aria-hidden="true" size={ICON_SIZE} strokeWidth={ICON_STROKE} />
+        ) : null}
+        {loading ? <span className="sr-only">Chargement…</span> : null}
+      </button>
     );
-  }
+  },
+);
 
-  let leading: ReactNode = null;
-  if (loading) {
-    leading = (
-      <Loader2
-        aria-hidden="true"
-        className="animate-spin motion-reduce:animate-none"
-        size={ICON_SIZE}
-        strokeWidth={ICON_STROKE}
-      />
-    );
-  } else if (LeadingIcon) {
-    leading = <LeadingIcon aria-hidden="true" size={ICON_SIZE} strokeWidth={ICON_STROKE} />;
-  }
-
-  return (
-    <button
-      className={classes}
-      type={type ?? 'button'}
-      disabled={disabled ?? loading}
-      aria-busy={loading || undefined}
-      {...props}
-    >
-      {leading}
-      {children}
-      {TrailingIcon && !loading ? (
-        <TrailingIcon aria-hidden="true" size={ICON_SIZE} strokeWidth={ICON_STROKE} />
-      ) : null}
-      {loading ? <span className="sr-only">Chargement…</span> : null}
-    </button>
-  );
-};
+Button.displayName = 'Button';

@@ -58,6 +58,32 @@ export default function UiGalleryIndexPage() {
             </span>
           </Link>
         </li>
+        <li>
+          <Link
+            href="/_dev/ui/structure"
+            data-testid="ui-section-structure"
+            className="block rounded-24 border border-solid border-border bg-surface p-24 hover:bg-surface-subtle"
+          >
+            <span className="block font-display text-20 font-semibold">{t.sections.structure}</span>
+            <span className="mt-4 block text-14 text-ink-muted">{t.structure.intro}</span>
+            <span className="mt-12 inline-block text-14 font-medium text-indigo-ink">
+              {t.openStructure}
+            </span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/_dev/ui/retours"
+            data-testid="ui-section-retours"
+            className="block rounded-24 border border-solid border-border bg-surface p-24 hover:bg-surface-subtle"
+          >
+            <span className="block font-display text-20 font-semibold">{t.sections.feedback}</span>
+            <span className="mt-4 block text-14 text-ink-muted">{t.retours.intro}</span>
+            <span className="mt-12 inline-block text-14 font-medium text-indigo-ink">
+              {t.openRetours}
+            </span>
+          </Link>
+        </li>
       </ul>
     </div>
   );
