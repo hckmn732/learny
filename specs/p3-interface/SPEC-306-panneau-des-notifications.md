@@ -106,3 +106,5 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 ## 15. Décisions et hypothèses
 
 Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+
+- **ADR-0275** — Panneau des notifications : instantané groupé côté service et lecture avant navigation. Le service calcule le groupe civil de chaque ligne avec l’horloge injectée et le fuseau du profil ; le panneau filtre l’instantané chargé et ne navigue qu’après une lecture réussie.
