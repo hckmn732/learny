@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="33.669856">
+<testsuite name="p2/spec-207.spec.ts" timestamp="2026-11-12T09:16:11.790Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.113" errors="0">
+<testcase name="inspecte le fuseau et les heures calmes @SPEC-207" classname="p2/spec-207.spec.ts" time="1.095">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/attachments/axe-cb28380d9aa2b9454ce888a6c517bc036334ed19.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/attachments/spec-207-temps-fuseaux-374135b167fb609fb3e84eb33a719e0fd4db793c.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-inspecte-le-fuseau-et-les-heures-calmes-SPEC-207-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="temps local conforme @SPEC-207 @visual @mobile" classname="p2/spec-207.spec.ts" time="1.018">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-desktop/attachments/axe-2fe6dcbeb586d8849ed3774eb520eced4de2432a.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-207.spec.ts" timestamp="2026-11-12T09:16:11.790Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.039" errors="0">
+<testcase name="temps local conforme @SPEC-207 @visual @mobile" classname="p2/spec-207.spec.ts" time="1.039">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-mobile/attachments/axe-8394d7de3b0abaefe34a2a0542d465d58256c2a5.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-207-temps-local-conforme-SPEC-207-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
