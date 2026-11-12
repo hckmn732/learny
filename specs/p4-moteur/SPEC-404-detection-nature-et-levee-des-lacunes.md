@@ -109,4 +109,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Décisions appliquées : ADR-0024. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0024, ADR-0282. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. ADR-0282 précise la tentative qualifiante retenue, les durées absolues (24 h et 7 × 24 h), la nature résiduelle `misunderstanding`, le sens unique des changements de nature et le filtrage des réussites de levée. Toute ambiguïté d'implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.

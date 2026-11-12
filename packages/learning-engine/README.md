@@ -23,6 +23,15 @@ Import unique : `@learny/learning-engine`.
   Le résultat expose la maîtrise brute (0–100, double précision), le statut, la somme des poids,
   le score pondéré et le détail par réponse (âge, poids). Une réponse future ou un score hors
   `[0, 1]` lève `INVALID_INPUT`.
+- **Lacunes** (`src/gaps/`, SPEC-404) : `detectGap({ notion, attempts, mastery, now, existingGap?,
+fsrsLapsed?, params? })` détecte après une tentative qualifiante sous le seuil ou une erreur
+  répétée sur deux tentatives, classe la nature (`forgetting`, `confusion`, `misunderstanding`,
+  `application`) selon BR-LAC-03 et renvoie l’action BR-LAC-04 ainsi que l’événement
+  `detected|nature_changed|null`. `clearGap({ gap, successes, mastery, now, notion?, params? })`
+  lève la lacune après deux réussites espacées d’au moins 24 h et une maîtrise au seuil, avec
+  l’événement `cleared`. `normalizeError`, `gapErrorKey`, `isGapFailure` et `isGapSuccess` exposent
+  les règles de normalisation et d’échec. Les bornes viennent de l’appelant (`ENGINE.gaps` et
+  `ENGINE.mastery.threshold`), jamais de `@learny/config` dans le module pur (ADR-0282).
 - **Paramètres** (`src/params.ts`) : `withParams('fsrs', { requestRetention: 0.95 })` fusionne les
   défauts `ENGINE` de `@learny/config/product` avec une surcharge partielle. Les tableaux sont
   remplacés, une valeur hors liste `allowed…` lève `INVALID_PARAM`.

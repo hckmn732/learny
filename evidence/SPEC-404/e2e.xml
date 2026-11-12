@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.06179300000001">
+<testsuite name="p4/spec-404.spec.ts" timestamp="2026-11-12T21:12:35.698Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.323" errors="0">
+<testcase name="Détection, nature et levée des lacunes @SPEC-404" classname="p4/spec-404.spec.ts" time="1.219">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/attachments/axe-cf74909a2f76e69a1fb057caf3618867b41f2999.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/attachments/spec-404-demo-6b35319649c5fb30a13deb1b48eb1f4b55e63c3a.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-nature-et-levée-des-lacunes-SPEC-404-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Détection, nature et levée des lacunes @SPEC-404 @visual @mobile" classname="p4/spec-404.spec.ts" time="1.104">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/attachments/axe-22c8c4317136af1bb69254a6df10489061ddd619.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/attachments/spec-404-demo-visual-6d1454264b66699303a40758c4885f33fecc2f9d.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-404.spec.ts" timestamp="2026-11-12T21:12:35.698Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.254" errors="0">
+<testcase name="Détection, nature et levée des lacunes @SPEC-404 @visual @mobile" classname="p4/spec-404.spec.ts" time="1.254">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/attachments/axe-61da99c2235f7b94780963f60614e220d70bda19.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/attachments/spec-404-demo-visual-505e8c4717a435e979a52976b9bf5ab8d4da934e.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-404-Détection-natu-6bdd0-unes-SPEC-404-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
