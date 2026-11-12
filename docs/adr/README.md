@@ -124,3 +124,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0243](ADR-0243-complements-d-implementation-du-schema-agenda-automatismes-e.md) | Compléments d'implémentation du schéma agenda, automatismes et série | Déduite | SPEC-108, ADR-0029, ADR-0033, ADR-0112, ADR-0113, ADR-0022 |
 | [ADR-0244](ADR-0244-complements-d-implementation-du-schema-notifications.md) | Compléments d'implémentation du schéma notifications | Déduite | SPEC-109, ADR-0031, ADR-0112, ADR-0214, ADR-0047 |
 | [ADR-0245](ADR-0245-schema-ia-et-facturation-secrets-chiffres-et-agregat-local.md) | Schéma IA et facturation : secrets chiffrés, RLS et agrégat local | Déduite | SPEC-110, ADR-0011, ADR-0012, ADR-0112, ADR-0215 |
+| [ADR-0247](ADR-0247-donnees-personnelles-idempotence-et-recherche.md) | Données personnelles, idempotence et recherche : isolation des sources et bornes | Déduite | SPEC-112, SPEC-113, SPEC-208, SPEC-211, SPEC-212, ADR-0044, ADR-0062, ADR-0120, ADR-0219 |
+

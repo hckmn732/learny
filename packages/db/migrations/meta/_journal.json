@@ -155,6 +155,20 @@
       "when": 1794462451849,
       "tag": "0021_ai_billing_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1794462647813,
+      "tag": "0022_privacy_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1794462648525,
+      "tag": "0023_privacy_search_rules",
+      "breakpoints": true
     }
   ]
 }

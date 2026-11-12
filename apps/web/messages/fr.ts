@@ -935,6 +935,88 @@ export const fr = {
         },
       },
     },
+    spec112: {
+      intro:
+        'Démonstration : un apprenant, une formation et son cours courant dont les titres et définitions partagent le mot « trésorerie », un second compte qui possède les mêmes mots mais reste invisible, un export encore téléchargeable et un export expiré, trois acceptations légales (une version acceptée deux fois ne double pas l’historique) et les trois états d’une clé d’idempotence. Toutes les données sont fictives et la transaction est annulée à la fin de la requête.',
+      search: {
+        title: 'Recherche privée',
+        intro:
+          'La fonction Postgres recherche dans les formations, notions et sections du cours courant de l’apprenant, sans accent et avec une tolérance aux fautes par trigrammes. Les anciennes versions de cours et les sections signalées sont exclues.',
+        label: 'Rechercher',
+        help: 'Requête préremplie de démonstration : les résultats ne dépendent d’aucune donnée du navigateur.',
+        count: (count: number) =>
+          count === 0
+            ? 'Aucun résultat'
+            : count === 1
+              ? '1 résultat'
+              : `${String(count)} résultats`,
+        noMatch: 'Aucune correspondance pour cette requête.',
+        groups: {
+          formation: 'Formations',
+          notion: 'Notions',
+          section: 'Cours',
+        },
+        isolation: (title: string, visible: number) =>
+          `Un autre compte possède « ${title} » : ${String(visible)} résultat visible ici.`,
+      },
+      export: {
+        title: 'Export',
+        intro:
+          'Un export terminé reste téléchargeable sept jours ; passé ce délai, la ligne est conservée pour l’audit mais aucun lien signé n’est émis.',
+        export: 'Export',
+        region: 'Exports (tableau défilant)',
+        status: 'État',
+        size: 'Taille',
+        created: 'Créé le',
+        expires: 'Expire le',
+        availability: 'Téléchargement',
+        link: 'lien signé disponible',
+        noLink: 'aucun lien',
+        downloadable: 'prêt',
+        expired: 'expiré',
+        missing: '—',
+        note: 'Les états « en attente », « en cours » et « échec » existent aussi ; l’échéance est toujours postérieure à la création.',
+        states: {
+          queued: 'en attente',
+          running: 'en cours',
+          done: 'terminé',
+          failed: 'échec',
+        },
+      },
+      acceptance: {
+        title: 'Documents acceptés',
+        intro:
+          'Chaque version acceptée est une ligne nouvelle : rejouer la même version ne crée aucun doublon et ne réécrit jamais la date d’origine.',
+        region: 'Documents acceptés (tableau défilant)',
+        document: 'Document',
+        version: 'Version',
+        acceptedAt: 'Accepté le',
+        documents: {
+          cgu: 'CGU',
+          privacy: 'Confidentialité',
+        },
+        latest: (version: string) => `Dernière version des CGU acceptée : ${version}.`,
+        missing: '—',
+      },
+      idempotency: {
+        title: 'Idempotence',
+        intro:
+          'Une clé terminée renvoie la réponse et le code d’origine ; une clé encore en cours répond 409, une clé réutilisée pour une autre requête répond 422. Les clés de plus de 24 heures sont purgées.',
+        region: 'Clés d’idempotence (tableau défilant)',
+        key: 'Clé',
+        state: 'État',
+        status: 'Code HTTP',
+        created: 'Créée le',
+        completed: 'Terminée le',
+        missing: '—',
+        note: 'Les clés ne sont jamais exposées à un client : elles sont lues par le rôle service de l’API.',
+        states: {
+          replayed: 'rejouée',
+          in_progress: 'en cours',
+          reused: 'refusée (422)',
+        },
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',

@@ -173,6 +173,31 @@ un instant injecté, exclut BYOK et coûts nuls, et filtre les revendications JW
 lise que sa dépense (ADR-0245). RLS : clés et choix de modèle modifiables par leur propriétaire,
 journal et abonnement en lecture seule (écritures par le rôle service).
 
+### Données personnelles, idempotence et recherche (SPEC-112)
+
+`data_exports` conserve l'état d'un job d'export, son chemin privé (`exports/<user>/…`), son
+échéance et sa taille ; `canDownloadDataExport` n'autorise un lien que pour un export terminé,
+stocké et non expiré (un export expiré reste lisible pour l'audit). `legal_acceptances` est
+l'historique append-only des versions `cgu|privacy` : `recordLegalAcceptance` rejoue la même version
+sans doublon, insère une nouvelle version sans réécrire la précédente et un déclencheur refuse toute
+mise à jour. `idempotency_keys` a `pk(user_id, key)`, un `request_hash` SHA-256 et
+`completed_at` ; `reserveIdempotencyKey` rejoue la réponse originale, lève
+`IDEMPOTENCY_KEY_REUSED` (422) pour une autre route ou empreinte et `IDEMPOTENCY_IN_PROGRESS` (409)
+pendant le traitement, puis `completeIdempotencyKey` / `releaseIdempotencyKey` terminent ou libèrent
+la réservation. `rate_limits` est un seau de jetons service-only ; `consumeRateLimit` soustrait
+atomiquement sans passer sous zéro.
+
+La fonction `public.search_user_content(q, limit_count)` est `security invoker` : appelée via
+`userDb(ctx)`, elle recherche dans les formations, notions et sections du cours courant de
+l'apprenant avec FTS `simple` + `unaccent` et `word_similarity` (seuil 0,45), exclut les anciennes
+versions et les sections signalées, et renvoie `kind, id, title, snippet, href, rank` triés par rang
+puis identifiant stable. Les extraits sont du texte brut borné à 160 caractères (balises et entités
+HTML retirées). `searchUserContent` normalise la requête et borne `limit` entre 1 et 100 ;
+`groupSearchResults` rétablit l'ordre fixe formations, notions, cours. `normalizeSearchQuery`,
+`sanitizeSnippet`, `canonicalJson` et `computeRequestHash` sont purs et testés sans base. Les
+politiques de lecture minimales des tables sources et les index GIN/trigrammes sont versionnés dans
+`0019_privacy_search_rules` (ADR-0247, SPEC-113 les auditera).
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

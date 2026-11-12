@@ -1,0 +1,24 @@
+# ADR-0247 — Données personnelles, idempotence et recherche : isolation des sources et bornes
+
+- **Statut** : Acceptée
+- **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
+- **Date** : 2026-11-12
+- **Liens** : SPEC-112, SPEC-113, SPEC-208, SPEC-211, SPEC-212, ADR-0044, ADR-0062, ADR-0120, ADR-0219
+
+## Contexte
+
+SPEC-112 crée `data_exports`, `legal_acceptances`, `idempotency_keys` et `rate_limits`, puis une fonction `search_user_content` déclarée `security invoker` (ET-2). Or les tables sources de la recherche (`formations`, `notions`, `courses`, `course_sections`) ont la RLS activée mais aucune politique `authenticated` avant SPEC-113 : une fonction invoker appelée sous le JWT de l'apprenant ne verrait donc aucune ligne. Le modèle de données ne précise pas non plus le format des `href`, la forme exacte de la correspondance trigramme, la borne de l'extrait, ni la répartition des politiques des quatre nouvelles tables. Les frontières entre cette spécification et les services de SPEC-208, 211 et 212 doivent rester stables.
+
+## Décision
+
+1. **Politiques de lecture minimales des sources.** La migration `privacy_search_rules` ajoute quatre politiques `select` propriétaire nommées `formations_search_owner_select`, `notions_search_owner_select`, `courses_search_owner_select` et `course_sections_search_owner_select`. Elles rendent la fonction `security invoker` utilisable avant SPEC-113 sans élargir l'écriture ; SPEC-113 pourra les remplacer ou les compléter sans affaiblir l'isolation par `user_id`. Les branches SQL filtrent en outre explicitement `owner_id = auth.uid()`.
+2. **Politiques des nouvelles tables.** `data_exports` est lisible par son propriétaire ; `legal_acceptances` est lisible et insérable par son propriétaire, sans politique de mise à jour ni de suppression ; `idempotency_keys` et `rate_limits` n'ont aucune politique `authenticated` et restent réservées au rôle service de l'API (ET-5). Un déclencheur refuse toute mise à jour d'une acceptation (`legal_acceptance_immutable`, 23514).
+3. **Recherche.** Le terme est normalisé côté SQL par `unaccent`, réduction des blancs, trim et borne à 100 caractères ; `limit_count` est borné entre 1 et 100. Une requête vide ne renvoie aucune ligne. La correspondance combine le FTS `simple` + `unaccent` et `word_similarity` (seuil 0,45) pour une faute courante ; le rang additionne `ts_rank` et `similarity`, puis l'ordre est `rank desc, kind, id`. Les cours non courants (`courses.is_current = false`) et les sections `reported` sont exclus. Les `href` suivent ADR-0046 : `/formations/<fid>`, `/formations/<fid>/programme#notion-<nid>` et `/formations/<fid>/modules/<mid>/cours?chapitre=<cid>`.
+4. **Extraits.** `search_snippet` supprime les balises et entités HTML, remplace les caractères de markup, réduit les blancs et borne le texte à 160 caractères par défaut (400 au maximum) ; aucun HTML de cours ne sort de la fonction (EF-6). Le dépôt applique la même règle TypeScript en défense supplémentaire.
+5. **Idempotence.** `request_hash` est le SHA-256 de la méthode, du chemin du gabarit, du JSON canonique des paramètres et du JSON canonique du corps (ADR-0120, ADR-0219 ; l'utilisateur est déjà porté par `pk(user_id, key)`). Une clé de plus de 24 h est traitée comme absente : le dépôt supprime la ligne expirée et réinsère une réservation. Un rejeu compatible renvoie la réponse et le code d'origine, une autre route ou empreinte lève 422 `IDEMPOTENCY_KEY_REUSED`, une réservation en cours lève 409 `IDEMPOTENCY_IN_PROGRESS`. Un 5xx ou une exception libère la réservation.
+6. **Quotas.** `rate_limits.tokens` est `numeric(12,4)`. La consommation est une instruction unique : l'insertion crée le seau avec `capacity - amount`, le conflit soustrait sous condition `tokens >= amount`, ce qui compte deux débits concurrents sans passer sous zéro. SPEC-208 fournit le remplissage et la purge.
+7. **Exports.** `data_exports` conserve le propriétaire, l'état `job_status`, le chemin privé, l'échéance et la taille. La règle de téléchargement est portée par le dépôt (`isDataExportDownloadable`) : un export expiré reste visible pour l'audit mais aucun lien n'est émis. Un contrôle SQL exige `expires_at > created_at`.
+
+## Conséquences
+
+La recherche privée fonctionne sous `userDb(ctx)` dès SPEC-112 sans `security definer`, et les tests à deux JWT détectent une fuite entre apprenants. SPEC-113 auditera les politiques ajoutées et pourra élargir la lecture aux formations partagées de SPEC-111. SPEC-208 consomme les seaux atomiquement et purge les clés de plus de 24 h ; SPEC-211 crée et complète les exports ; SPEC-212 appelle la fonction avec un paramètre lié et ne reçoit que du texte brut. Les index GIN FTS et trigrammes sont versionnés dans `0019_privacy_search_rules` ; leurs plans sont capturés sans temps absolu dépendant de la machine.
