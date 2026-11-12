@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.318931">
+<testsuite name="p3/spec-309.spec.ts" timestamp="2026-11-12T17:26:47.235Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.956" errors="0">
+<testcase name="Socle d’accessibilité @SPEC-309" classname="p3/spec-309.spec.ts" time="1.83">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/attachments/axe-3e4559b358674e7be1924159af060a02e02ac7df.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/attachments/spec-309-accessibilite-1a8973d172f0d787ab845a5517a22c9d75b763b3.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Socle d’accessibilité @SPEC-309 @visual @mobile" classname="p3/spec-309.spec.ts" time="1.126">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-desktop/attachments/axe-2036881264b06c5694737e63a35a7106aac30905.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p3/spec-309.spec.ts" timestamp="2026-11-12T17:26:47.235Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.044" errors="0">
+<testcase name="Socle d’accessibilité @SPEC-309 @visual @mobile" classname="p3/spec-309.spec.ts" time="1.044">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-mobile/attachments/axe-79d093ae0cdbc29a8daa5d38ad3d18a2ed635825.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-309-Socle-d’accessibilité-SPEC-309-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
