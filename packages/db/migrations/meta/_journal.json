@@ -71,6 +71,20 @@
       "when": 1794447127709,
       "tag": "0009_resources_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794449155974,
+      "tag": "0010_courses_conversations",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794449160845,
+      "tag": "0011_courses_rules",
+      "breakpoints": true
     }
   ]
 }

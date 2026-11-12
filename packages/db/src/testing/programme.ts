@@ -115,3 +115,96 @@ export async function createTestProgramme(
     notionIds,
   };
 }
+
+export interface TestCourseOptions {
+  /** Owner of the course (the profile created for the test). */
+  ownerId: string;
+  /** Module whose chapters receive the course sections. */
+  moduleId: string;
+  /** Number of sections per chapter (default 1). */
+  sectionsPerChapter?: number;
+}
+
+export interface TestCourse {
+  courseId: string;
+  formationId: string;
+  moduleId: string;
+  chapterIds: string[];
+  sectionIds: string[];
+}
+
+interface OwnerRow {
+  formation_id: string;
+  [key: string]: unknown;
+}
+
+/**
+ * Creates a ready, current course version on a module of the test programme (SPEC-105 §8) with
+ * `sectionsPerChapter` text sections per chapter, anchored `section-<chapter>-<position>`.
+ * Callers run it in the same transaction as the programme, typically inside `withRollback`.
+ */
+export async function createTestCourse(tx: DbTx, options: TestCourseOptions): Promise<TestCourse> {
+  const sectionsPerChapter = positive(options.sectionsPerChapter ?? 1, 'sectionsPerChapter');
+
+  const [module] = await tx.execute<OwnerRow>(sql`
+    select formation_id::text as formation_id
+    from public.modules
+    where id = ${options.moduleId}::uuid
+  `);
+  if (module === undefined) throw new Error('createTestCourse : module inconnu.');
+
+  const chapters = await tx.execute<IdRow>(sql`
+    select id::text as id
+    from public.chapters
+    where module_id = ${options.moduleId}::uuid
+    order by position
+  `);
+
+  const [course] = await tx.execute<IdRow>(sql`
+    insert into public.courses (owner_id, formation_id, module_id, version, status)
+    values (
+      ${options.ownerId}::uuid,
+      ${module.formation_id}::uuid,
+      ${options.moduleId}::uuid,
+      1,
+      'ready'
+    )
+    returning id::text as id
+  `);
+  if (course === undefined) throw new Error('createTestCourse : cours non créé.');
+
+  const chapterIds: string[] = [];
+  const sectionIds: string[] = [];
+  for (const [chapterIndex, chapter] of chapters.entries()) {
+    chapterIds.push(chapter.id);
+    for (let position = 1; position <= sectionsPerChapter; position += 1) {
+      const [section] = await tx.execute<IdRow>(sql`
+        insert into public.course_sections (
+          course_id, owner_id, chapter_id, position, kind, anchor, title, content_md, origin
+        )
+        values (
+          ${course.id}::uuid,
+          ${options.ownerId}::uuid,
+          ${chapter.id}::uuid,
+          ${position},
+          'text',
+          ${`section-${String(chapterIndex + 1)}-${String(position)}`},
+          ${`Section ${String(position)}`},
+          ${`Contenu de la section ${String(position)}.`},
+          'tutor'
+        )
+        returning id::text as id
+      `);
+      if (section === undefined) throw new Error('createTestCourse : section non créée.');
+      sectionIds.push(section.id);
+    }
+  }
+
+  return {
+    courseId: course.id,
+    formationId: module.formation_id,
+    moduleId: options.moduleId,
+    chapterIds,
+    sectionIds,
+  };
+}

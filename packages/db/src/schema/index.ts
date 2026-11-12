@@ -7,3 +7,5 @@ export * from './formations';
 export * from './formations.json-schemas';
 export * from './resources';
 export * from './resources.json-schemas';
+export * from './courses';
+export * from './courses.json-schemas';
