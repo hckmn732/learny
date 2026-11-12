@@ -109,6 +109,7 @@ describe('[SPEC-110] AI billing schema', () => {
       'daily_cap_usd',
       'status',
       'stripe_customer_id',
+      'stripe_event_at',
       'stripe_subscription_id',
       'updated_at',
       'user_id',
