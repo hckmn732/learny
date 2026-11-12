@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./destination": "./src/auth/destination.ts"
+    "./destination": "./src/auth/destination.ts",
+    "./billing": "./src/billing/index.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
