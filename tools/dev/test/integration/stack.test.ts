@@ -119,6 +119,14 @@ describe('[SPEC-008] Docker stack', () => {
         // already stopped
       }
     }
+    // The test intentionally stops the stack; restore it so the following integration files
+    // (P1 schema suites) do not fail on a stopped Supabase.
+    spawnSync('node', [path.join('tools', 'dev', 'up.mjs')], {
+      cwd: ROOT,
+      env: { ...process.env, ...ENV },
+      encoding: 'utf8',
+      timeout: 300_000,
+    });
   });
 
   it('démarre, contrôle et arrête la pile réelle sans perdre les volumes (CA-1, CA-2, CA-3, CA-4)', async () => {
