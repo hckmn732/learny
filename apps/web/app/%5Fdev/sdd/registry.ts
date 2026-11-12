@@ -3,6 +3,7 @@ import type { ComponentType } from 'react';
 export interface SddDemo {
   title: string;
   titleTestId?: string;
+  titleClassName?: string;
   load: () => Promise<{ default: ComponentType }>;
 }
 
@@ -164,6 +165,12 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Temps et fuseaux',
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-207'),
+  },
+  'SPEC-401': {
+    title: 'SPEC-401 · Socle du moteur',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-401'),
   },
   'SPEC-203': {
     title: 'SPEC-203 — Événements, jobs et crons',

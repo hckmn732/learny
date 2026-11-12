@@ -16,11 +16,13 @@ export function DemoShell({
   specId,
   title,
   titleTestId = 'sdd-demo-title',
+  titleClassName = 'mt-2 font-display text-3xl font-semibold',
   children,
 }: Readonly<{
   specId: string;
   title: string;
   titleTestId?: string | undefined;
+  titleClassName?: string | undefined;
   children: ReactNode;
 }>) {
   return (
@@ -28,7 +30,7 @@ export function DemoShell({
       <p data-testid="sdd-demo-spec" className="text-sm font-medium uppercase tracking-wide">
         {specId}
       </p>
-      <h1 data-testid={titleTestId} className="mt-2 font-display text-3xl font-semibold">
+      <h1 data-testid={titleTestId} className={titleClassName}>
         {title}
       </h1>
       <p data-testid="sdd-demo-clock" className="mt-2 text-sm">

@@ -21,7 +21,12 @@ export default async function SddDemoPage({
 
   const { default: Demo } = await demo.load();
   return (
-    <DemoShell specId={specId} title={demo.title} titleTestId={demo.titleTestId}>
+    <DemoShell
+      specId={specId}
+      title={demo.title}
+      titleTestId={demo.titleTestId}
+      titleClassName={demo.titleClassName}
+    >
       <Demo />
     </DemoShell>
   );
