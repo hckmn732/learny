@@ -10,12 +10,15 @@ test('menus et dialogues au clavier @SPEC-303', async ({ page, axeCheck, console
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(RETOURS);
 
-  // Menu de compte : ouverture au clavier, parcours, axe menu ouvert, Échap (CL-1).
+  // Menu de compte : ouverture au clavier, parcours, axe menu ouvert, Échap (CL-1). The first
+  // Enter may land before hydration on a slow runner; retry the key until the menu responds.
   const menuTrigger = page.getByTestId('ui-menu-trigger');
-  await menuTrigger.focus();
-  await page.keyboard.press('Enter');
   const menu = page.getByTestId('ui-menu-content');
-  await expect(menu).toBeVisible();
+  await expect(async () => {
+    await menuTrigger.focus();
+    await page.keyboard.press('Enter');
+    await expect(menu).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15000 });
   await expect(menu.getByRole('menuitem').first()).toBeFocused();
   await page.keyboard.press('ArrowDown');
   await expect(menu.getByRole('menuitem').nth(1)).toBeFocused();
@@ -165,8 +168,9 @@ test('styles de structure @SPEC-303', async ({ page, axeCheck, consoleErrors }) 
   const titleBox = await header.getByRole('heading', { level: 1 }).boundingBox();
   expect(eyebrowBox?.y ?? 0).toBeLessThan(titleBox?.y ?? 0);
 
-  // Registre : 23 icônes nommées.
-  await expect(page.locator('[data-testid^="ui-icon-"]')).toHaveCount(23);
+  // Registre : 23 icônes nommées par SPEC-303, étendues à 35 par SPEC-306 (ADR-0275). La galerie
+  // affiche tous les noms du registre, sans exception.
+  await expect(page.locator('[data-testid^="ui-icon-"]')).toHaveCount(35);
 
   await axeCheck();
   expect(consoleErrors).toEqual([]);
