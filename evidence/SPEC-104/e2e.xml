@@ -1,0 +1,36 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="30.048474">
+<testsuite name="p1/spec-104-resources.spec.ts" timestamp="2026-11-12T02:00:13.845Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.714" errors="0">
+<testcase name="apports, passages et recherche vectorielle @SPEC-104" classname="p1/spec-104-resources.spec.ts" time="1.395">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/attachments/axe-2d5d960d0b1c905ce0b9fbc9f18d910db100755a.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/attachments/spec-104-demo-252ed7196d299e9c08992280b46380059d243f77.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-appo-bc9fc-herche-vectorielle-SPEC-104-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page ressources conforme @SPEC-104 @visual" classname="p1/spec-104-resources.spec.ts" time="1.319">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-104-resources-page-95b50-es-conforme-SPEC-104-visual-desktop/attachments/axe-bb67edd1c447de4585c165a38aeb51d036182c99.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-page-95b50-es-conforme-SPEC-104-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-page-95b50-es-conforme-SPEC-104-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-page-95b50-es-conforme-SPEC-104-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-104-resources-page-95b50-es-conforme-SPEC-104-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
