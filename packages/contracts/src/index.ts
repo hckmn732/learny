@@ -15,5 +15,6 @@ export {
 export type { ComponentStatus, DatabaseStatus, HealthComponents, HealthStatus } from './health';
 export * from './openapi';
 export * from './routes';
+export * from './security';
 export * from './uploads';
 export * from './events';

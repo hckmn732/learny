@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T09:41:05.596Z",
+  "updatedAt": "2026-11-12T10:07:32.798Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -1706,14 +1706,55 @@
       }
     },
     "SPEC-208": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-12T09:54:08.951Z",
+      "completedAt": "2026-11-12T10:07:32.796Z",
+      "branch": "spec/SPEC-208-limitation-de-debit-et-protections-de-l-",
+      "commit": "bbb7f13",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T09:57:51.256Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T09:57:52.536Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T09:57:52.868Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T09:57:54.894Z",
+          "details": "36 test(s) [SPEC-208] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T09:58:16.451Z",
+          "details": "31 test(s) [SPEC-208] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T09:58:52.658Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T09:58:52.658Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T09:58:52.669Z",
+          "details": "6/6 critères ✅"
+        }
+      }
     },
     "SPEC-209": {
       "status": "pending",

@@ -1066,6 +1066,45 @@ export const fr = {
         done: 'Vous êtes déconnecté.',
       },
     },
+    spec208: {
+      title: 'SPEC-208 — Limitation de débit et protections de l’API',
+      profiles: {
+        title: 'Profils',
+        intro:
+          'Seau à jetons par profil : chaque requête en consomme un, la recharge est linéaire.',
+        capacity: (count: number) => `Capacité ${String(count)} jetons`,
+        refill: (seconds: number) =>
+          seconds < 1
+            ? `Recharge : 1 jeton toutes les ${String(seconds).replace('.', ',')} s`
+            : `Recharge : 1 jeton toutes les ${String(seconds)} s`,
+        key: { user: 'Clé : utilisateur', ip: 'Clé : adresse IP' },
+        remaining: 'Jetons restants',
+        burst: 'Lancer une rafale',
+        result: (accepted: number, refused: number, retryAfter: number | null) =>
+          `${String(accepted)} acceptées, ${String(refused)} refusées, Retry-After ${
+            retryAfter === null ? '—' : String(retryAfter)
+          } s`,
+        names: { default: 'default', ai: 'ai', auth: 'auth' },
+      },
+      origin: {
+        title: 'Origine',
+        intro: 'Une mutation doit venir de l’application ; une origine étrangère est refusée.',
+        same: 'Mutation même origine',
+        foreign: 'Mutation origine étrangère',
+        accepted: (status: number) => `Mutation acceptée : ${String(status)}`,
+        refused: (status: number, code: string, detail: string) =>
+          `Mutation refusée : ${String(status)} ${code} — ${detail}`,
+      },
+      purge: {
+        title: 'Purge',
+        intro: 'Les clés d’idempotence et les seaux inactifs depuis plus de 24 h sont supprimés.',
+        action: 'Purger maintenant',
+        keys: 'Clés d’idempotence supprimées',
+        buckets: 'Seaux supprimés',
+        none: 'Aucune purge lancée.',
+      },
+      loading: 'Calcul en cours…',
+    },
     spec203: {
       title: 'SPEC-203 — Événements, jobs et crons',
       loading: 'Chargement…',

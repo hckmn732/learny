@@ -29,6 +29,7 @@ import {
   releaseIdempotency,
   IDEMPOTENCY_KEY_HEADER,
 } from './idempotency';
+import './bootstrap-security';
 import { getOriginGuard } from './origin';
 import { apiProblemResponse, problemStatus } from './problem';
 import { getRateLimiter } from './rate-limit';
@@ -70,12 +71,15 @@ function isResult(value: unknown): value is Result<unknown> {
   return value.ok === false && 'error' in value;
 }
 
-function clientIp(request: Request): string {
-  if (process.env.TRUST_PROXY === 'true') {
-    const forwarded = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
-    if (forwarded !== undefined && forwarded !== '') return forwarded;
-  }
-  return request.headers.get('x-real-ip') ?? '0.0.0.0';
+/**
+ * Next does not expose the socket address, and passes a client-supplied `X-Forwarded-For` through
+ * unchanged. The header is therefore trusted only behind a proxy that sets it (`TRUST_PROXY=true`,
+ * Vercel); otherwise the address is unknown and the IP-keyed profiles share one bucket (ADR-0213).
+ */
+function clientIp(request: Request): string | null {
+  if (process.env.TRUST_PROXY !== 'true') return null;
+  const forwarded = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  return forwarded === undefined || forwarded === '' ? null : forwarded;
 }
 
 async function readJsonBody(request: Request): Promise<unknown> {
@@ -149,25 +153,36 @@ export function routeHandler<R extends AnyRoute>(
     };
 
     try {
-      // 2. rate limit
+      // 2. origin: before the limiter and before the body is read; a refusal costs no token
+      await getOriginGuard().check(request);
+
       const profile = route.rateLimit ?? 'default';
       const ip = clientIp(request);
-      if (profile !== 'none') {
+      const limit = async (limitedUserId: string | null): Promise<void> => {
+        if (profile === 'none') return;
         const decision = await getRateLimiter().consume({
           profile,
-          userId: null,
+          userId: limitedUserId,
           ip,
           routeId: route.id,
         });
-        if (!decision.allowed) {
-          throw new AppError('RATE_LIMITED', 'Trop de requêtes : réessayez dans un instant.', {
-            retryAfterSec: decision.retryAfterSec,
-          });
+        if (decision.limit > 0) {
+          responseHeaders.set('ratelimit-limit', String(decision.limit));
+          responseHeaders.set('ratelimit-remaining', String(decision.remaining));
         }
-      }
-
-      // 3. origin
-      await getOriginGuard().check(request);
+        if (!decision.allowed) {
+          const seconds = decision.retryAfterSec ?? 1;
+          throw new AppError(
+            'RATE_LIMITED',
+            `Vous avez envoyé trop de requêtes. Réessayez dans ${String(seconds)} s.`,
+            { retryAfterSec: seconds },
+          );
+        }
+      };
+      // A public route is limited by address before anything else; a learner's bucket needs the
+      // learner, so it is taken right after the session is verified (an anonymous call to a
+      // protected route is a cheap 401 and is answered by the Auth server's own limits).
+      if (route.auth === 'public') await limit(null);
 
       // 4. authentication
       let email: string | null = null;
@@ -187,6 +202,7 @@ export function routeHandler<R extends AnyRoute>(
         }
         userId = session.userId;
         email = session.email;
+        await limit(userId);
       }
 
       // 5. validation
@@ -250,7 +266,7 @@ export function routeHandler<R extends AnyRoute>(
           const ctx: RequestContext = {
             ...createServiceContext({ userId, email, requestId, logger: logger(), clock }),
             request,
-            ip,
+            ip: ip ?? 'unknown',
             responseHeaders,
           };
           const outcome = await fn({ ctx, params, query, body, request, logger: logger() });

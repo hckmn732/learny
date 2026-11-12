@@ -52,6 +52,7 @@ export {
   sddDemoPipeline,
 } from './functions/sdd-demo-pipeline';
 export type { DemoStepName as PipelineStepName } from './functions/sdd-demo-pipeline';
+export { SECURITY_PURGE_ID, securityPurge } from './functions/security-purge';
 export { DEFAULT_RETRIES, defineFunction } from './define';
 export type { FunctionArgs, FunctionConfig, JobEvent, JobStep } from './define';
 export { createJobContext } from './context';

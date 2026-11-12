@@ -110,6 +110,11 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-115'),
   },
+  'SPEC-208': {
+    title: 'SPEC-208 — Limitation de débit et protections de l’API',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-208'),
+  },
   'SPEC-202': {
     title: 'SPEC-202 — Authentification et sessions',
     titleTestId: 'sdd-title',
