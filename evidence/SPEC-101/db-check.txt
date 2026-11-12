@@ -1,0 +1,12 @@
+
+> learny@ db:check /home/kbenito/Documents/work/learny-wt-101
+> pnpm --filter @learny/db check
+
+
+> @learny/db@0.0.0 check /home/kbenito/Documents/work/learny-wt-101/packages/db
+> drizzle-kit check && node scripts/check-migrations.mjs
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/kbenito/Documents/work/learny-wt-101/packages/db/drizzle.config.ts'
+Everything's fine 🐶🔥
+✔ 2 migration(s) source(s) identique(s) dans supabase/migrations.

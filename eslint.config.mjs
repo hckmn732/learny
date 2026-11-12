@@ -33,6 +33,7 @@ const ALLOWED_IMPORTS = {
   bricks: ['core', 'contracts', 'ui'],
   llm: ['core', 'config', 'contracts', 'db'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
+  db: ['core', 'config'],
 };
 
 const boundaryZones = [
@@ -218,9 +219,41 @@ export default tseslint.config(
   ...restrictedImportBlocks,
   {
     // Server configuration never reaches a client component: apps/web has exactly one adapter
-    // (SPEC-009, ET-6). Any other import of the server entry is a lint error.
+    // (SPEC-009, ET-6). `serviceDb` is reserved to the SDD demo pages and the webhooks (SPEC-101,
+    // ET-6); every other web module must use `userDb` and therefore the user's RLS context.
     files: ['apps/web/**/*.{ts,tsx}'],
     ignores: ['apps/web/lib/server-env.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/db',
+              importNames: ['serviceDb'],
+              message:
+                'serviceDb est réservé à apps/web/app/_dev/** et apps/web/app/api/webhooks/** (SPEC-101, ET-6).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // The two web entry points allowed to use the owner-role client (SPEC-101, ET-6). They still
+    // cannot import the server configuration directly.
+    files: [
+      'apps/web/app/%5Fdev/**/*.{ts,tsx}',
+      'apps/web/app/_dev/**/*.{ts,tsx}',
+      'apps/web/app/api/webhooks/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -230,6 +263,35 @@ export default tseslint.config(
               group: ['@learny/config/server', '@learny/config/server/*'],
               message:
                 'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Packages without any service-role use cannot import `serviceDb` (SPEC-101, ET-6).
+    files: [
+      'packages/core/**/*.{ts,tsx}',
+      'packages/config/**/*.{ts,tsx}',
+      'packages/contracts/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/db',
+              importNames: ['serviceDb'],
+              message:
+                'Seul un service, un job, le paquet llm, les tests ou packages/db/src/testing utilise serviceDb (SPEC-101, ET-6).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/web', '@learny/web/*'],
+              message: 'Un paquet ne peut pas importer une application.',
             },
           ],
         },

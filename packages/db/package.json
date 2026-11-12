@@ -1,0 +1,29 @@
+{
+  "name": "@learny/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./testing": "./src/testing/index.ts"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "migration:custom": "node scripts/custom-migration.mjs",
+    "check": "drizzle-kit check && node scripts/check-migrations.mjs",
+    "lint": "eslint --max-warnings=0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@learny/config": "workspace:*",
+    "@learny/core": "workspace:*",
+    "drizzle-orm": "^0.44.7",
+    "postgres": "^3.4.7",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.7",
+    "uuid": "^13.0.0"
+  }
+}

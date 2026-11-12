@@ -2,6 +2,7 @@
 // the web API client; SPEC-201 completes it (one line per code, status and title).
 export const ERROR_CATALOG = {
   VALIDATION_FAILED: { status: 400, title: 'Données invalides' },
+  FORBIDDEN: { status: 403, title: 'Accès refusé' },
   NOT_FOUND: { status: 404, title: 'Introuvable' },
   INTERNAL_ERROR: { status: 500, title: 'Erreur interne' },
   INVALID_RESPONSE: { status: 502, title: 'Réponse invalide' },

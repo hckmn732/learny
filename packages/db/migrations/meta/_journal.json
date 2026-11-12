@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794439744364,
+      "tag": "0000_extensions_and_shared",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794439756721,
+      "tag": "0001_shared_enums",
+      "breakpoints": true
+    }
+  ]
+}

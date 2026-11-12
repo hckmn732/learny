@@ -1,0 +1,39 @@
+{
+  "id": "c03c932d-e9f9-478f-8538-8abb65a39efb",
+  "prevId": "cd2ebdfd-5e86-4023-93c6-3b9e4df70f4b",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {},
+  "enums": {
+    "public.actor": {
+      "name": "actor",
+      "schema": "public",
+      "values": ["tutor", "learner", "import"]
+    },
+    "public.content_origin": {
+      "name": "content_origin",
+      "schema": "public",
+      "values": ["resource", "tutor"]
+    },
+    "public.course_language": {
+      "name": "course_language",
+      "schema": "public",
+      "values": ["fr", "en", "es", "de"]
+    },
+    "public.job_status": {
+      "name": "job_status",
+      "schema": "public",
+      "values": ["queued", "running", "done", "failed"]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

@@ -1,0 +1,36 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="29.334478999999998">
+<testsuite name="p1/spec-101-db.spec.ts" timestamp="2026-11-11T23:48:12.594Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.127" errors="0">
+<testcase name="page de démonstration du paquet db @SPEC-101" classname="p1/spec-101-db.spec.ts" time="1.208">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/attachments/axe-d78042240cc37952b9385a78436203e792422203.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/attachments/spec-101-demo-7e158150ff69bb6b64bc5ddd3124e80fa6d1042b.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-de-démonstration-du-paquet-db-SPEC-101-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page db conforme @SPEC-101 @visual" classname="p1/spec-101-db.spec.ts" time="0.919">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-db-conforme-SPEC-101-visual-desktop/attachments/axe-ab99a14eb88efa84fa88fade4cd8427c9939e902.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-db-conforme-SPEC-101-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-db-conforme-SPEC-101-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-db-conforme-SPEC-101-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-101-db-page-db-conforme-SPEC-101-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
