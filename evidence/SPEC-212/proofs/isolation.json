@@ -1,0 +1,7 @@
+{
+  "aliceItems": 5,
+  "bobItems": 4,
+  "shared": 0,
+  "aliceSeesBobWord": 0,
+  "aliceResponseUnchangedAfterBobExists": true
+}

@@ -1729,6 +1729,45 @@ export const fr = {
             : `${time}\u00a0: ${String(count)} occurrences distinctes`,
       },
     },
+    spec212: {
+      title: 'SPEC-212 — Recherche globale (service et API)',
+      query: {
+        title: 'Requête',
+        label: 'Rechercher',
+        submit: 'Rechercher',
+        examplesLabel: 'Requêtes d’exemple',
+        examples: [
+          { q: 'reseau', note: 'sans accent' },
+          { q: 'RÉSEAU', note: 'casse' },
+          { q: 'reseua', note: 'faute' },
+          { q: 'a', note: 'refusée' },
+          { q: "' OR 1=1 --", note: 'traitée comme texte' },
+        ],
+        example: (q: string, note: string) => `« ${q} » (${note})`,
+      },
+      results: {
+        title: 'Résultats',
+        idle: 'Saisissez une recherche ou choisissez une requête d’exemple.',
+        loading: 'Recherche en cours…',
+        empty: (q: string) => `Aucun résultat pour « ${q} ».`,
+        total: (shown: number, total: number) =>
+          shown === total ? String(total) : `${String(shown)} sur ${String(total)}`,
+        href: 'Lien',
+        error: (detail: string) => `Recherche impossible : ${detail}`,
+        summary: (count: number) =>
+          count === 0
+            ? 'Aucun résultat.'
+            : count === 1
+              ? '1 résultat.'
+              : `${String(count)} résultats.`,
+      },
+      json: {
+        title: 'Réponse brute',
+        summary: 'Afficher la réponse JSON',
+        label: 'Réponse JSON',
+        none: 'Aucune réponse pour l’instant.',
+      },
+    },
   },
   system: {
     error: {

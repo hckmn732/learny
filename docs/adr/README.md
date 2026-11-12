@@ -139,3 +139,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0258](ADR-0258-protections-de-l-api-ordre-des-gardes-horloge-des-seaux-adre.md) | Protections de l'API : ordre des gardes, horloge des seaux, adresse du client | Déduite | SPEC-208 |
 | [ADR-0259](ADR-0259-spec-203-evenements-types-avec-inngest-4-execution-en-ligne-.md) | SPEC-203 : événements typés avec Inngest 4, exécution en ligne et frontières de paquets | Déduite | SPEC-203, ADR-0017, ADR-0122, ADR-0123 |
 | [ADR-0260](ADR-0260-enqueue-event-un-utilisateur-ne-met-en-file-que-ses-propres-.md) | enqueue_event : un utilisateur ne met en file que ses propres événements | Déduite | SPEC-203, ADR-0122, ADR-0035 |
+| [ADR-0264](ADR-0264-liens-des-resultats-de-recherche-alignes-sur-les-routes-d-ec.md) | Liens des résultats de recherche alignés sur les routes d'écran | Déduite | SPEC-212, SPEC-112, SPEC-307, ADR-0046 |

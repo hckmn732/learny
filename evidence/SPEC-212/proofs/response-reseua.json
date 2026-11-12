@@ -1,0 +1,66 @@
+{
+  "query": "reseua",
+  "groups": [
+    {
+      "kind": "notion",
+      "label": "Notions",
+      "items": [
+        {
+          "id": "de4f0fbb-e2c4-4df6-9416-42dd6367bca7",
+          "title": "Réseau local",
+          "snippet": "Un réseau local relie des machines proches.",
+          "highlights": [],
+          "titleHighlights": [],
+          "href": "/formations/9bc46d9d-a3a9-40ef-a632-c0282943c219/programme#notion-de4f0fbb-e2c4-4df6-9416-42dd6367bca7"
+        },
+        {
+          "id": "275fd253-fe7a-4cf9-afaf-ef2c74348f11",
+          "title": "Routage",
+          "snippet": "Le routage choisit le chemin dans le réseau.",
+          "highlights": [],
+          "titleHighlights": [],
+          "href": "/formations/9bc46d9d-a3a9-40ef-a632-c0282943c219/programme#notion-275fd253-fe7a-4cf9-afaf-ef2c74348f11"
+        }
+      ],
+      "total": 2
+    },
+    {
+      "kind": "chapter",
+      "label": "Chapitres",
+      "items": [
+        {
+          "id": "6bb32378-5eb5-4e0f-b5ae-9b3c003602e9",
+          "title": "Introduction au réseau",
+          "snippet": "Un réseau relie des machines. Texte sûr a b",
+          "highlights": [],
+          "titleHighlights": [],
+          "href": "/formations/9bc46d9d-a3a9-40ef-a632-c0282943c219/modules/71f0b3a0-e788-4a13-a3f9-8782a0be686d/cours?chapitre=092674d3-9dca-4810-8428-a571a068c30d"
+        },
+        {
+          "id": "a0583f5b-81fb-4ab4-afb9-c074bcae7977",
+          "title": "Topologies",
+          "snippet": "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor lorem…",
+          "highlights": [],
+          "titleHighlights": [],
+          "href": "/formations/9bc46d9d-a3a9-40ef-a632-c0282943c219/modules/71f0b3a0-e788-4a13-a3f9-8782a0be686d/cours?chapitre=092674d3-9dca-4810-8428-a571a068c30d"
+        }
+      ],
+      "total": 2
+    },
+    {
+      "kind": "formation",
+      "label": "Formations",
+      "items": [
+        {
+          "id": "9bc46d9d-a3a9-40ef-a632-c0282943c219",
+          "title": "Réseaux d’entreprise",
+          "snippet": "Formation aux réseaux locaux et à leur sécurité.",
+          "highlights": [],
+          "titleHighlights": [],
+          "href": "/formations/9bc46d9d-a3a9-40ef-a632-c0282943c219"
+        }
+      ],
+      "total": 1
+    }
+  ]
+}

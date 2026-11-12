@@ -1,0 +1,64 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="35.194978">
+<testsuite name="p2/spec-212.spec.ts" timestamp="2026-11-12T10:32:43.445Z" hostname="desktop" tests="3" failures="0" skipped="0" time="2.979" errors="0">
+<testcase name="recherche groupée @SPEC-212" classname="p2/spec-212.spec.ts" time="1.481">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/attachments/axe-e1494d83ec44770299a7f8e4177c3db1d17e6fda.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/attachments/spec-212-recherche-026e346c1372b4b3413ea01fbaaa7fddc33034b4.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-groupée-SPEC-212-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcourt la route réelle : contrat, erreurs et isolation @SPEC-212" classname="p2/spec-212.spec.ts" time="0.432">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-212-parcourt-la-ro-34793-reurs-et-isolation-SPEC-212-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-parcourt-la-ro-34793-reurs-et-isolation-SPEC-212-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-parcourt-la-ro-34793-reurs-et-isolation-SPEC-212-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="recherche conforme @SPEC-212 @visual @mobile" classname="p2/spec-212.spec.ts" time="1.066">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-desktop/attachments/axe-f890fa755388e45a0d1ed8cd8995ebfad5a1b91a.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-212.spec.ts" timestamp="2026-11-12T10:32:43.445Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.126" errors="0">
+<testcase name="recherche conforme @SPEC-212 @visual @mobile" classname="p2/spec-212.spec.ts" time="1.126">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-mobile/attachments/axe-67970f36eb4c20b8a74d526caf08c822c1f921fc.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-212-recherche-conforme-SPEC-212-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

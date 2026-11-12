@@ -18,3 +18,4 @@ export * from './routes';
 export * from './security';
 export * from './uploads';
 export * from './events';
+export * from './search';

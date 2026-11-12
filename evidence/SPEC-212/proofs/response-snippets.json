@@ -1,0 +1,33 @@
+{
+  "htmlSection": {
+    "id": "7f3c0f90-0d44-42b6-9c6d-616a250816f6",
+    "title": "Introduction au réseau",
+    "snippet": "Un réseau relie des machines. Texte sûr a b",
+    "highlights": [
+      {
+        "start": 3,
+        "end": 9
+      }
+    ],
+    "titleHighlights": [
+      {
+        "start": 16,
+        "end": 22
+      }
+    ],
+    "href": "/formations/b13dc8c9-21c9-4709-8537-5651653cf253/modules/8c483442-7c4d-4f91-8e17-f91bbf225251/cours?chapitre=6dd9fe0f-2d7c-46aa-803f-d3c93c2875f9"
+  },
+  "longSection": {
+    "id": "624da7f7-4801-43c9-abd9-a7643816433e",
+    "title": "Topologies",
+    "snippet": "…ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor Le réseau en étoile est courant. lorem ipsum dolor sit amet consectetur adipiscing…",
+    "highlights": [
+      {
+        "start": 75,
+        "end": 81
+      }
+    ],
+    "titleHighlights": [],
+    "href": "/formations/b13dc8c9-21c9-4709-8537-5651653cf253/modules/8c483442-7c4d-4f91-8e17-f91bbf225251/cours?chapitre=6dd9fe0f-2d7c-46aa-803f-d3c93c2875f9"
+  }
+}
