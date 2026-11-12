@@ -95,6 +95,11 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-111'),
   },
+  'SPEC-113': {
+    title: 'SPEC-113 · Politiques RLS et tests d’isolation',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-113'),
+  },
   'SPEC-009': {
     title: 'Configuration',
     load: () => import('../../../components/sdd-demos/spec-009'),
