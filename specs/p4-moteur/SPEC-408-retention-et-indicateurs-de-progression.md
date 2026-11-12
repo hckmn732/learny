@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-402]
 business_rules: [BR-MEM-06, BR-PRO-01]
 screens: []
-adrs: []
+adrs: [ADR-0210, ADR-0283]
 visual: demo
 ---
 
@@ -106,4 +106,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification. **ADR-0210** fixe la sélection de la première révision d’une notion dans une fenêtre ; **ADR-0283** consigne les compléments d’implémentation : unité du taux, sens de `eligible`, lignes dupliquées, créneaux déplacés et frontière apprenant/formation.
