@@ -1,0 +1,112 @@
+Pager usage is off.
+SPEC-106 — contraintes, index, énumérations et déclencheurs (base locale, migrations 0012 et 0013)
+      enum       |                                                                       values                                                                       
+-----------------+----------------------------------------------------------------------------------------------------------------------------------------------------
+ activity_kind   | course,validation_quiz,global_quiz_session,remediation,exercise,mock_exam,warmup,micro_session,sprint,self_test,scripted_dialogue,project_step
+ activity_status | draft,ready,archived
+ attempt_status  | in_progress,submitted,graded,timed_out,abandoned
+ brick_purpose   | course,validation,bank,remediation,exercise,exam,warmup,review
+ brick_status    | active,reported,retired
+ brick_type      | text,resource_excerpt,choice_question,open_question,cloze,matching,ordering,categorization,recall_card,instruction,scripted_dialogue,timer,scoring
+ grader          | code,tutor
+ report_status   | open,corrected,dismissed
+(8 rows)
+
+     table      |                    constraint                     | kind |                                             definition                                             
+----------------+---------------------------------------------------+------+----------------------------------------------------------------------------------------------------
+ activities     | activities_config_check                           | c    | CHECK ((jsonb_typeof(config) = 'object'::text))
+ activities     | activities_formation_id_formations_id_fk          | f    | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE
+ activities     | activities_items_check                            | c    | CHECK ((jsonb_typeof(items) = 'array'::text))
+ activities     | activities_module_id_modules_id_fk                | f    | FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
+ activities     | activities_owner_id_profiles_id_fk                | f    | FOREIGN KEY (owner_id) REFERENCES profiles(id) ON DELETE CASCADE
+ activities     | activities_pkey                                   | p    | PRIMARY KEY (id)
+ activities     | activities_ready_items_check                      | c    | CHECK (((status <> 'ready'::activity_status) OR (jsonb_array_length(items) > 0)))
+ answers        | answers_attempt_id_attempts_id_fk                 | f    | FOREIGN KEY (attempt_id) REFERENCES attempts(id) ON DELETE CASCADE
+ answers        | answers_attempt_id_position_unique                | u    | UNIQUE (attempt_id, "position")
+ answers        | answers_brick_version_id_brick_versions_id_fk     | f    | FOREIGN KEY (brick_version_id) REFERENCES brick_versions(id) ON DELETE CASCADE
+ answers        | answers_chosen_distractor_notion_id_notions_id_fk | f    | FOREIGN KEY (chosen_distractor_notion_id) REFERENCES notions(id) ON DELETE SET NULL
+ answers        | answers_feedback_check                            | c    | CHECK (((feedback IS NULL) OR (jsonb_typeof(feedback) = 'object'::text)))
+ answers        | answers_max_score_check                           | c    | CHECK (((max_score IS NULL) OR ((max_score >= (0)::numeric) AND (max_score <= (100)::numeric))))
+ answers        | answers_pkey                                      | p    | PRIMARY KEY (id)
+ answers        | answers_position_check                            | c    | CHECK (("position" >= 1))
+ answers        | answers_response_check                            | c    | CHECK ((jsonb_typeof(response) = ANY (ARRAY['object'::text, 'array'::text])))
+ answers        | answers_score_check                               | c    | CHECK (((score IS NULL) OR ((score >= (0)::numeric) AND (score <= (100)::numeric))))
+ answers        | answers_score_max_score_check                     | c    | CHECK (((score IS NULL) OR (max_score IS NULL) OR (score <= max_score)))
+ answers        | answers_time_ms_check                             | c    | CHECK (((time_ms IS NULL) OR (time_ms >= 0)))
+ attempts       | attempts_activity_id_activities_id_fk             | f    | FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE
+ attempts       | attempts_activity_id_user_id_attempt_no_unique    | u    | UNIQUE (activity_id, user_id, attempt_no)
+ attempts       | attempts_attempt_no_check                         | c    | CHECK ((attempt_no >= 1))
+ attempts       | attempts_duration_ms_check                        | c    | CHECK (((duration_ms IS NULL) OR (duration_ms >= 0)))
+ attempts       | attempts_hints_used_check                         | c    | CHECK ((hints_used >= 0))
+ attempts       | attempts_per_notion_check                         | c    | CHECK ((jsonb_typeof(per_notion) = 'object'::text))
+ attempts       | attempts_pkey                                     | p    | PRIMARY KEY (id)
+ attempts       | attempts_review_feedback_check                    | c    | CHECK (((review_feedback IS NULL) OR (jsonb_typeof(review_feedback) = 'object'::text)))
+ attempts       | attempts_score_check                              | c    | CHECK (((score IS NULL) OR ((score >= (0)::numeric) AND (score <= (100)::numeric))))
+ attempts       | attempts_user_id_profiles_id_fk                   | f    | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ brick_reports  | brick_reports_brick_id_bricks_id_fk               | f    | FOREIGN KEY (brick_id) REFERENCES bricks(id) ON DELETE CASCADE
+ brick_reports  | brick_reports_pkey                                | p    | PRIMARY KEY (id)
+ brick_reports  | brick_reports_reason_length_check                 | c    | CHECK (((char_length(reason) >= 1) AND (char_length(reason) <= 500)))
+ brick_reports  | brick_reports_resolution_check                    | c    | CHECK (((resolution IS NULL) OR (jsonb_typeof(resolution) = 'object'::text)))
+ brick_reports  | brick_reports_resolved_at_check                   | c    | CHECK (((status = 'open'::report_status) = (resolved_at IS NULL)))
+ brick_reports  | brick_reports_user_id_profiles_id_fk              | f    | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ brick_reports  | brick_reports_version_brick_fk                    | f    | FOREIGN KEY (brick_version_id, brick_id) REFERENCES brick_versions(id, brick_id) ON DELETE CASCADE
+ brick_versions | brick_versions_brick_id_bricks_id_fk              | f    | FOREIGN KEY (brick_id) REFERENCES bricks(id) ON DELETE CASCADE
+ brick_versions | brick_versions_brick_id_version_unique            | u    | UNIQUE (brick_id, version)
+ brick_versions | brick_versions_fingerprint_check                  | c    | CHECK (((fingerprint IS NULL) OR (fingerprint ~ '^[0-9a-f]{64}$'::text)))
+ brick_versions | brick_versions_id_brick_id_unique                 | u    | UNIQUE (id, brick_id)
+ brick_versions | brick_versions_payload_check                      | c    | CHECK ((jsonb_typeof(payload) = 'object'::text))
+ brick_versions | brick_versions_pkey                               | p    | PRIMARY KEY (id)
+ brick_versions | brick_versions_version_check                      | c    | CHECK ((version >= 1))
+ bricks         | bricks_current_version_check                      | c    | CHECK ((current_version >= 1))
+ bricks         | bricks_formation_id_formations_id_fk              | f    | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE
+ bricks         | bricks_notion_ids_count_check                     | c    | CHECK ((cardinality(notion_ids) <= 50))
+ bricks         | bricks_owner_id_profiles_id_fk                    | f    | FOREIGN KEY (owner_id) REFERENCES profiles(id) ON DELETE CASCADE
+ bricks         | bricks_pkey                                       | p    | PRIMARY KEY (id)
+(48 rows)
+
+     table      |                     index                      |                                                              definition                                                              
+----------------+------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------
+ activities     | activities_for_date_idx                        | CREATE INDEX activities_for_date_idx ON public.activities USING btree (for_date)
+ activities     | activities_formation_id_idx                    | CREATE INDEX activities_formation_id_idx ON public.activities USING btree (formation_id)
+ activities     | activities_module_id_idx                       | CREATE INDEX activities_module_id_idx ON public.activities USING btree (module_id)
+ activities     | activities_owner_id_idx                        | CREATE INDEX activities_owner_id_idx ON public.activities USING btree (owner_id)
+ activities     | activities_owner_status_idx                    | CREATE INDEX activities_owner_status_idx ON public.activities USING btree (owner_id, status)
+ activities     | activities_pkey                                | CREATE UNIQUE INDEX activities_pkey ON public.activities USING btree (id)
+ answers        | answers_attempt_id_idx                         | CREATE INDEX answers_attempt_id_idx ON public.answers USING btree (attempt_id)
+ answers        | answers_attempt_id_position_unique             | CREATE UNIQUE INDEX answers_attempt_id_position_unique ON public.answers USING btree (attempt_id, "position")
+ answers        | answers_brick_version_id_idx                   | CREATE INDEX answers_brick_version_id_idx ON public.answers USING btree (brick_version_id)
+ answers        | answers_chosen_distractor_notion_id_idx        | CREATE INDEX answers_chosen_distractor_notion_id_idx ON public.answers USING btree (chosen_distractor_notion_id)
+ answers        | answers_pkey                                   | CREATE UNIQUE INDEX answers_pkey ON public.answers USING btree (id)
+ attempts       | attempts_activity_id_idx                       | CREATE INDEX attempts_activity_id_idx ON public.attempts USING btree (activity_id)
+ attempts       | attempts_activity_id_user_id_attempt_no_unique | CREATE UNIQUE INDEX attempts_activity_id_user_id_attempt_no_unique ON public.attempts USING btree (activity_id, user_id, attempt_no)
+ attempts       | attempts_pkey                                  | CREATE UNIQUE INDEX attempts_pkey ON public.attempts USING btree (id)
+ attempts       | attempts_user_id_idx                           | CREATE INDEX attempts_user_id_idx ON public.attempts USING btree (user_id)
+ brick_reports  | brick_reports_brick_id_idx                     | CREATE INDEX brick_reports_brick_id_idx ON public.brick_reports USING btree (brick_id)
+ brick_reports  | brick_reports_pkey                             | CREATE UNIQUE INDEX brick_reports_pkey ON public.brick_reports USING btree (id)
+ brick_reports  | brick_reports_user_id_idx                      | CREATE INDEX brick_reports_user_id_idx ON public.brick_reports USING btree (user_id)
+ brick_versions | brick_versions_brick_id_version_unique         | CREATE UNIQUE INDEX brick_versions_brick_id_version_unique ON public.brick_versions USING btree (brick_id, version)
+ brick_versions | brick_versions_fingerprint_idx                 | CREATE INDEX brick_versions_fingerprint_idx ON public.brick_versions USING btree (fingerprint) WHERE (fingerprint IS NOT NULL)
+ brick_versions | brick_versions_id_brick_id_unique              | CREATE UNIQUE INDEX brick_versions_id_brick_id_unique ON public.brick_versions USING btree (id, brick_id)
+ brick_versions | brick_versions_pkey                            | CREATE UNIQUE INDEX brick_versions_pkey ON public.brick_versions USING btree (id)
+ bricks         | bricks_formation_id_idx                        | CREATE INDEX bricks_formation_id_idx ON public.bricks USING btree (formation_id)
+ bricks         | bricks_notion_ids_idx                          | CREATE INDEX bricks_notion_ids_idx ON public.bricks USING gin (notion_ids)
+ bricks         | bricks_owner_id_idx                            | CREATE INDEX bricks_owner_id_idx ON public.bricks USING btree (owner_id)
+ bricks         | bricks_owner_status_idx                        | CREATE INDEX bricks_owner_status_idx ON public.bricks USING btree (owner_id, status)
+ bricks         | bricks_pkey                                    | CREATE UNIQUE INDEX bricks_pkey ON public.bricks USING btree (id)
+(27 rows)
+
+     table      |             trigger             |                                                                                         definition                                                                                          
+----------------+---------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ activities     | activities_ready_items          | CREATE TRIGGER activities_ready_items BEFORE INSERT OR UPDATE OF status, items, owner_id, formation_id ON public.activities FOR EACH ROW EXECUTE FUNCTION assert_ready_activity_items()
+ attempts       | attempts_owner_consistency      | CREATE TRIGGER attempts_owner_consistency BEFORE INSERT OR UPDATE ON public.attempts FOR EACH ROW EXECUTE FUNCTION assert_same_owner('activities', 'owner_id', 'activity_id', 'user_id')
+ brick_reports  | brick_reports_owner_consistency | CREATE TRIGGER brick_reports_owner_consistency BEFORE INSERT OR UPDATE ON public.brick_reports FOR EACH ROW EXECUTE FUNCTION assert_same_owner('bricks', 'owner_id', 'brick_id', 'user_id')
+ brick_versions | brick_versions_immutable        | CREATE TRIGGER brick_versions_immutable BEFORE UPDATE ON public.brick_versions FOR EACH ROW EXECUTE FUNCTION reject_brick_version_update()
+(4 rows)
+
+          function           |                      arguments                      
+-----------------------------+-----------------------------------------------------
+ assert_activity_items_owned | p_owner_id uuid, p_formation_id uuid, p_items jsonb
+ assert_ready_activity_items | 
+ reject_brick_version_update | 
+(3 rows)
+

@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.566299">
+<testsuite name="p1/spec-106.spec.ts" timestamp="2026-11-12T03:12:45.276Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.569" errors="0">
+<testcase name="inspecte les briques et tentatives @SPEC-106" classname="p1/spec-106.spec.ts" time="1.327">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/attachments/axe-594347e982042bce196fd11d7b9c59881305cc4e.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/attachments/spec-106-schema-764b4cf35e7ce67f012b304a1ddef3a85cc12914.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-inspecte-les-briques-et-tentatives-SPEC-106-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="schéma des briques conforme @SPEC-106 @visual @mobile" classname="p1/spec-106.spec.ts" time="1.242">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-desktop/attachments/axe-c0d6d9de8ba6893f2e2e7413cbe3959ca1b78c0e.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-106.spec.ts" timestamp="2026-11-12T03:12:45.276Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.25" errors="0">
+<testcase name="schéma des briques conforme @SPEC-106 @visual @mobile" classname="p1/spec-106.spec.ts" time="1.25">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-mobile/attachments/axe-2d444c4578f3932d3711757dbd633056fd854d4d.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-106-schéma-des-bri-becd9-orme-SPEC-106-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

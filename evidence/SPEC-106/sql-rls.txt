@@ -1,0 +1,26 @@
+Pager usage is off.
+SPEC-106 — RLS et politiques propriétaire minimales (base locale, migration 0013)
+     table      | rls_enabled | rls_forced 
+----------------+-------------+------------
+ activities     | t           | f
+ answers        | t           | f
+ attempts       | t           | f
+ brick_reports  | t           | f
+ brick_versions | t           | f
+ bricks         | t           | f
+(6 rows)
+
+     table      |          policy          | command |     roles     |                                      using_expression                                       |                                    with_check_expression                                    
+----------------+--------------------------+---------+---------------+---------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------
+ activities     | activities_owner_all     | *       | authenticated | (owner_id = ( SELECT auth.uid() AS uid))                                                    | (owner_id = ( SELECT auth.uid() AS uid))
+ answers        | answers_owner_all        | *       | authenticated | (EXISTS ( SELECT 1                                                                         +| (EXISTS ( SELECT 1                                                                         +
+                |                          |         |               |    FROM attempts a                                                                         +|    FROM attempts a                                                                         +
+                |                          |         |               |   WHERE ((a.id = answers.attempt_id) AND (a.user_id = ( SELECT auth.uid() AS uid)))))       |   WHERE ((a.id = answers.attempt_id) AND (a.user_id = ( SELECT auth.uid() AS uid)))))
+ attempts       | attempts_owner_all       | *       | authenticated | (user_id = ( SELECT auth.uid() AS uid))                                                     | (user_id = ( SELECT auth.uid() AS uid))
+ brick_reports  | brick_reports_owner_all  | *       | authenticated | (user_id = ( SELECT auth.uid() AS uid))                                                     | (user_id = ( SELECT auth.uid() AS uid))
+ brick_versions | brick_versions_owner_all | *       | authenticated | (EXISTS ( SELECT 1                                                                         +| (EXISTS ( SELECT 1                                                                         +
+                |                          |         |               |    FROM bricks b                                                                           +|    FROM bricks b                                                                           +
+                |                          |         |               |   WHERE ((b.id = brick_versions.brick_id) AND (b.owner_id = ( SELECT auth.uid() AS uid))))) |   WHERE ((b.id = brick_versions.brick_id) AND (b.owner_id = ( SELECT auth.uid() AS uid)))))
+ bricks         | bricks_owner_all         | *       | authenticated | (owner_id = ( SELECT auth.uid() AS uid))                                                    | (owner_id = ( SELECT auth.uid() AS uid))
+(6 rows)
+
