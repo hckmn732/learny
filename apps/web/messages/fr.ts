@@ -1066,6 +1066,43 @@ export const fr = {
         done: 'Vous êtes déconnecté.',
       },
     },
+    spec203: {
+      title: 'SPEC-203 — Événements, jobs et crons',
+      loading: 'Chargement…',
+      demo: {
+        title: 'Pipeline de démonstration',
+        intro:
+          'Un événement traverse trois étapes ; l’étape 2 peut échouer une fois et être reprise seule.',
+        failSwitch: 'Faire échouer l’étape 2 une fois',
+        emit: 'Émettre l’événement',
+        steps: ['Préparation', 'Traitement', 'Finalisation'],
+        waiting: 'En attente',
+        retrying: 'Échec, nouvelle tentative',
+        done: 'Terminée',
+        attempts: (count: number) => `Exécutions : ${String(count)}`,
+        error: 'L’émission a échoué.',
+      },
+      tick: {
+        title: 'Tick horaire',
+        intro:
+          'Sélection des utilisateurs de fabrique et de leur fenêtre locale [T − 5 min, T + 55 min[.',
+        label: 'Instant du tick (UTC)',
+        action: 'Exécuter le tick',
+        regionLabel: 'Utilisateurs sélectionnés par le tick',
+        columns: ['Utilisateur', 'Fuseau', 'Fenêtre locale', 'Date locale', 'Jour'],
+        empty: 'Aucun utilisateur de fabrique sélectionné.',
+        invalid: 'Instant invalide : utiliser le format 2026-11-11T07:05:00Z.',
+        weekdays: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
+        selected: (count: number) => `${String(count)} utilisateur(s) sélectionné(s)`,
+      },
+      outbox: {
+        title: 'Boîte d’envoi',
+        intro: 'Événements de l’utilisateur courant écrits dans la boîte d’envoi transactionnelle.',
+        pending: 'En attente',
+        sent: 'Envoyés',
+        failed: 'En échec',
+      },
+    },
     spec201: {
       title: 'SPEC-201 — Socle API v1 et contrats',
       loading: 'Chargement…',

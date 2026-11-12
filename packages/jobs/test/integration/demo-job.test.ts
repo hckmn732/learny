@@ -73,7 +73,14 @@ afterEach(() => {
 describe('[SPEC-007] Inngest function', () => {
   it('exposes one shared registry built on the learny client with three retries (EF-1)', () => {
     expect(inngest.id).toBe('learny');
-    expect(functions.map((f) => f.id())).toEqual([DEMO_JOB_ID]);
+    // The registry also holds the functions of SPEC-203 (crons, cleanup, demonstration pipeline).
+    expect(functions.map((f) => f.id())).toEqual([
+      DEMO_JOB_ID,
+      'cron-hourly-tick',
+      'cron-nightly',
+      'nightly-outbox-cleanup',
+      'sdd-demo-pipeline',
+    ]);
     expect(functions[0]?.opts.retries).toBe(JOB_RETRIES);
     expect(JOB_RETRIES).toBe(3);
   });
