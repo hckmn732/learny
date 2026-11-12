@@ -32,6 +32,7 @@ fsrsLapsed?, params? })` détecte après une tentative qualifiante sous le seuil
   l’événement `cleared`. `normalizeError`, `gapErrorKey`, `isGapFailure` et `isGapSuccess` exposent
   les règles de normalisation et d’échec. Les bornes viennent de l’appelant (`ENGINE.gaps` et
   `ENGINE.mastery.threshold`), jamais de `@learny/config` dans le module pur (ADR-0282).
+- **Tirage d’une tentative** (`src/draw/`, SPEC-405) : `drawAttempt({ notions, bank, seenFingerprints, gaps, params, targetCount?, seed })` retourne les références `brickId/brickVersionId` tirées, les quotas par notion, le rapport `exhausted` (capacité, banque épuisée, limite de taille) et les diagnostics d’exclusion. Les paramètres viennent de l’appelant (`ENGINE.draw` et `ENGINE.mastery.threshold`), jamais de `@learny/config` dans le module pur (ADR-0284). La couverture, la surpondération des lacunes, l’exclusion par empreinte et l’ordre canonique sont déterministes à seed égale.
 - **Paramètres** (`src/params.ts`) : `withParams('fsrs', { requestRetention: 0.95 })` fusionne les
   défauts `ENGINE` de `@learny/config/product` avec une surcharge partielle. Les tableaux sont
   remplacés, une valeur hors liste `allowed…` lève `INVALID_PARAM`.
