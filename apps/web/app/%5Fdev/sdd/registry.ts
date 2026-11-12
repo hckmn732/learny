@@ -135,4 +135,9 @@ export const sddDemos: Record<string, SddDemo> = {
     title: 'Déploiement géré',
     load: () => import('../../../components/sdd-demos/spec-013'),
   },
+  'SPEC-207': {
+    title: 'Temps et fuseaux',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-207'),
+  },
 };

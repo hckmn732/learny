@@ -1488,6 +1488,52 @@ export const fr = {
         crashDetail: 'Erreur simulée par la démonstration.',
       },
     },
+    spec207: {
+      title: 'Temps et fuseaux',
+      now: {
+        title: 'Instant de référence',
+        utc: 'Instant UTC',
+        clock: 'Horloge injectée',
+        clockValue: 'clock.now(), figée par CLOCK_FIXED_AT',
+      },
+      local: {
+        title: 'Heure locale',
+        zone: 'Fuseau',
+        time: (zone: string) => `Heure à ${zone}`,
+        date: 'Date locale',
+        weekday: 'Jour ISO',
+        offset: 'Décalage',
+        name: 'Nom du fuseau',
+        dayStart: 'Début du jour local (UTC)',
+        dayEnd: 'Fin exclue du jour local (UTC)',
+      },
+      quiet: {
+        title: (range: string) => `Heures calmes ${range}`,
+        intro:
+          'Début inclus, fin exclue\u00a0: 21:00 est une heure calme, 08:00 autorise l’envoi. Les notifications sont reportées à la première sortie.',
+        now: 'Maintenant',
+        evening: 'Ce soir',
+        state: 'État',
+        next: 'Prochaine sortie',
+        quiet: 'Heures calmes',
+        allowed: 'Envoi permis',
+      },
+      dst: {
+        title: (zone: string, year: number) => `Changements d’heure ${String(year)} · ${zone}`,
+        intro:
+          'Durée de chaque jour local, de la borne de début (incluse) à la borne de fin (exclue), toutes deux en UTC.',
+        spring: 'Passage à l’heure d’été',
+        autumn: 'Passage à l’heure d’hiver',
+        duration: 'Durée du jour',
+        hours: (count: number) => `${String(count)}\u00a0h`,
+        start: 'Début (UTC)',
+        end: 'Fin exclue (UTC)',
+        occurrences: (time: string, count: number) =>
+          count === 0
+            ? `${time}\u00a0: aucune occurrence, l’heure est sautée`
+            : `${time}\u00a0: ${String(count)} occurrences distinctes`,
+      },
+    },
   },
   system: {
     error: {
