@@ -77,9 +77,16 @@ describe('[SPEC-007] Inngest function', () => {
     // and the hourly security purge of SPEC-208.
     expect(functions.map((f) => f.id())).toEqual([
       DEMO_JOB_ID,
+      'account-deletion',
       'cron-hourly-tick',
       'cron-nightly',
+      'data-export',
+      'email-welcome',
+      'exports-purge',
       'nightly-outbox-cleanup',
+      'notification-delivery',
+      'notifications-daily-digest',
+      'notifications-deferred-due',
       'sdd-demo-pipeline',
       'security-purge',
     ]);
