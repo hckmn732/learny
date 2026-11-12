@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-304]
 business_rules: [BR-NAV-01, BR-ACC-09]
 screens: [SCR-03]
-adrs: []
+adrs: [ADR-0274]
 visual: mockup
 ---
 
@@ -105,4 +105,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0274 (DTO HeaderDto et `GET /api/v1/me/header`, cloche sans panneau jusqu’à SPEC-306, déclencheur du menu rendu par l’en-tête, cibles provisoires de Paramètres et Mettre en pause, déconnexion par la route SPEC-202 avec remplacement d’historique). Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
