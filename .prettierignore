@@ -13,3 +13,5 @@ docs/adr/
 # Documentation rédigée à la main (non reformatée, ADR-0220)
 docs/
 /*.md
+# Fichier généré par pnpm openapi:generate (SPEC-201), vérifié par pnpm openapi:check
+apps/web/public/openapi.json

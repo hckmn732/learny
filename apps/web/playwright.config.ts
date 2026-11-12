@@ -4,11 +4,28 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
 
 import { assertMockLlm, TEST_SERVER_ENV } from '../../packages/testing/src/env';
+import { supabaseLocalEnv } from '../../packages/testing/src/supabase';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 // A real AI provider is refused before the server starts (ADR-0048, SPEC-004 CL-5).
 assertMockLlm(process.env);
+
+// Supabase keys of the local stack for the test server (sessions of SPEC-201 and later). A stack
+// that is not running is reported by global-setup, not here.
+// The values go through process.env (inherited by the test server), never through the `webServer`
+// block: the JSON report copies that block and a key must not end up in the evidence files.
+function exportSupabasePublicEnv(): void {
+  try {
+    const { url, anonKey } = supabaseLocalEnv();
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??= url;
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??= anonKey;
+  } catch {
+    // reported by global-setup when the stack is down
+  }
+}
+
+exportSupabasePublicEnv();
 
 const COMMON = { locale: 'fr-FR', timezoneId: 'Europe/Paris' } as const;
 const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 1440, height: 900 } };
