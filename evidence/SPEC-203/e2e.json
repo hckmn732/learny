@@ -1,0 +1,506 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-203",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/sdd/SPEC-203/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p2/spec-203-jobs.spec.ts",
+      "file": "p2/spec-203-jobs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pipeline avec reprise et tick horaire @SPEC-203",
+          "ok": true,
+          "tags": [
+            "SPEC-203"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1448,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:30:33.999Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/attachments/axe-f1f7c87d53b2070cbdf507b011053587cade2fd9.json"
+                    },
+                    {
+                      "name": "spec-203-jobs",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/attachments/spec-203-jobs-dc6460529b53137177a67db5a6375480c54a2765.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bbbb94e02c12756789c1-bb2922f3dbe66c892565",
+          "file": "p2/spec-203-jobs.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "page de démonstration SPEC-203 @SPEC-203 @visual @mobile",
+          "ok": false,
+          "tags": [
+            "SPEC-203",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1412,
+                  "error": {
+                    "message": "Error: A snapshot doesn't exist at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png, writing actual.",
+                    "stack": "Error: A snapshot doesn't exist at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png, writing actual.\n    at expectScreenshotBaseline (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts:139:3)\n    at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:168:3",
+                    "location": {
+                      "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts",
+                      "column": 3,
+                      "line": 139
+                    },
+                    "snippet": "   at ../../../../packages/testing/src/visual.ts:139\n\n  137 |     return;\n  138 |   }\n> 139 |   await expect(page).toHaveScreenshot(name, {\n      |   ^\n  140 |     maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,\n  141 |     ...options,\n  142 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts",
+                        "column": 3,
+                        "line": 139
+                      },
+                      "message": "Error: A snapshot doesn't exist at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png, writing actual.\n\n   at ../../../../packages/testing/src/visual.ts:139\n\n  137 |     return;\n  138 |   }\n> 139 |   await expect(page).toHaveScreenshot(name, {\n      |   ^\n  140 |     maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,\n  141 |     ...options,\n  142 |   });\n    at expectScreenshotBaseline (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts:139:3)\n    at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:168:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:30:36.452Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/attachments/axe-e909c47ba01a3b6ceb9c18ebccd54d5817c9a770.json"
+                    },
+                    {
+                      "name": "spec-203-demo-expected.png",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/__screenshots__/p2/spec-203-jobs.spec.ts/spec-203-demo-desktop-linux.png"
+                    },
+                    {
+                      "name": "spec-203-demo-actual.png",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/spec-203-demo-actual.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/visual.ts",
+                    "column": 3,
+                    "line": 139
+                  }
+                }
+              ],
+              "status": "unexpected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1216,
+                  "error": {
+                    "message": "Error: violations axe serious/critical\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"scrollable-region-focusable (serious) : Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: violations axe serious/critical\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"scrollable-region-focusable (serious) : Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at axeCheck (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts:32:5)\n    at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:166:3",
+                    "location": {
+                      "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts",
+                      "column": 5,
+                      "line": 32
+                    },
+                    "snippet": "   at ../../../../packages/testing/src/playwright.ts:32\n\n  30 |     blocking.map((v) => `${v.id} (${v.impact ?? ''}) : ${v.help}`),\n  31 |     'violations axe serious/critical',\n> 32 |   ).toEqual([]);\n     |     ^\n  33 | }\n  34 |\n  35 | // Fixture callbacks name their second argument `provide` (Playwright's `use`) so that the"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts",
+                        "column": 5,
+                        "line": 32
+                      },
+                      "message": "Error: violations axe serious/critical\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"scrollable-region-focusable (serious) : Scrollable region must have keyboard access\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n   at ../../../../packages/testing/src/playwright.ts:32\n\n  30 |     blocking.map((v) => `${v.id} (${v.impact ?? ''}) : ${v.help}`),\n  31 |     'violations axe serious/critical',\n> 32 |   ).toEqual([]);\n     |     ^\n  33 | }\n  34 |\n  35 | // Fixture callbacks name their second argument `provide` (Playwright's `use`) so that the\n    at axeCheck (/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts:32:5)\n    at /home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/apps/web/e2e/specs/p2/spec-203-jobs.spec.ts:166:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:30:38.631Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/attachments/axe-f64ac507b1d6549278a00a9d782bd4853f8e5e4c.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/test-results/artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-203-events-09cea9/packages/testing/src/playwright.ts",
+                    "column": 5,
+                    "line": 32
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bbbb94e02c12756789c1-652983995702805e41b6",
+          "file": "p2/spec-203-jobs.spec.ts",
+          "line": 125,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T09:30:03.935Z",
+    "duration": 36977.962,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

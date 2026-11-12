@@ -206,7 +206,13 @@ function TickCard() {
             <p data-testid="jobs-tick-count" className="mt-3 text-sm font-semibold">
               {t.tick.selected(users.length)}
             </p>
-            <div className="mt-2 overflow-x-auto">
+            <div
+              role="region"
+              aria-label={t.tick.regionLabel}
+              // Keyboard access to the horizontal scroll of the table on narrow screens (WCAG 2.1.1).
+              tabIndex={0}
+              className="mt-2 overflow-x-auto"
+            >
               <table data-testid="jobs-tick-table" className="w-full text-left text-sm">
                 <thead>
                   <tr>

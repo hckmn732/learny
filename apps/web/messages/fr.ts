@@ -1039,6 +1039,7 @@ export const fr = {
           'Sélection des utilisateurs de fabrique et de leur fenêtre locale [T − 5 min, T + 55 min[.',
         label: 'Instant du tick (UTC)',
         action: 'Exécuter le tick',
+        regionLabel: 'Utilisateurs sélectionnés par le tick',
         columns: ['Utilisateur', 'Fuseau', 'Fenêtre locale', 'Date locale', 'Jour'],
         empty: 'Aucun utilisateur de fabrique sélectionné.',
         invalid: 'Instant invalide : utiliser le format 2026-11-11T07:05:00Z.',
