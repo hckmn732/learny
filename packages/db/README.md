@@ -139,6 +139,25 @@ valide une carte déjà sérialisée. Le paquet ne calcule jamais FSRS. Les repo
 périmée), `detectGap`/`clearGap` (idempotence de la levée) et les lectures d'historique. `ts-fsrs`
 est une dépendance de test figée en 5.4.2 : ET-2 nomme `elapsed_days`, retiré en 6.0.0.
 
+### Notifications et livraisons (SPEC-109)
+
+`notifications` est la boîte in-app d'un apprenant : une ligne existe même si les deux canaux externes
+sont désactivés (BR-NOT-03). `unique(user_id, dedupe_key)` rend un événement idempotent, une clé nulle
+restant distincte ; `read_at` n'est jamais réinitialisé par un rejeu. `notification_deliveries` garde
+la décision par canal `email|push` : `scheduled`, `sent`, `deferred_quiet`, `capped`, `failed` ou
+`skipped_pref`, avec au plus une ligne par `(notification_id, channel)`. `sent` équivaut exactement à
+un `sent_at` non nul et devient final (déclencheur `notification_deliveries_monotone`) ; `error` est un
+code sûr, jamais une adresse ou un endpoint. Un `href` est un chemin interne commençant par un seul `/`
+(schéma, URL protocol-relative et `javascript:` refusés), et `title`/`body` sont bornés à 120/400
+caractères comme le contrat de SPEC-209. La RLS est propriétaire (`all`) sur les notifications et en
+lecture seule sur les livraisons, écrites par le service de notifications (ADR-0112, ADR-0244).
+
+Les repositories de `src/repositories/notifications.ts` exposent `createNotification` (insert `on
+conflict do nothing` puis relecture), `createDelivery`, `getNotification`, `listNotifications`
+(filtre `all|unread`, plus récentes d'abord), `countUnreadNotifications`,
+`markNotificationRead`, `markAllNotificationsRead`, `getDelivery`,
+`listNotificationDeliveries` (restreint au propriétaire) et `updateDeliveryStatus`.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |
