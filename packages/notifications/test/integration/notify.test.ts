@@ -327,7 +327,7 @@ describe('[SPEC-209] notify', () => {
   it('CA-3, EF-7 — un échec de transport passe la livraison failed et ne compte pas au plafond', async () => {
     const learner = await createLearner({ maxPerDay: 3 });
     const failing = {
-      name: 'failing',
+      name: 'memory' as const,
       send: () => Promise.reject(new Error('transport down')),
     };
     setTransport(failing);
