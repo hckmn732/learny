@@ -18,3 +18,5 @@ export { buildSafeSentryEvent, safeErrorType, sanitizeSentryEvent } from './sent
 export type { ErrorContext, ErrorReporter, SafeSentryEvent } from './sentry';
 export type { LearnyLogger, LogLevel, SafeLogField, SafeLogFields } from './logger';
 export type { RequestContext } from './request-context';
+export { localTimeToInstant, zonedParts } from './zoned-time';
+export type { ZonedParts } from './zoned-time';

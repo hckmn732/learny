@@ -27,7 +27,26 @@ export interface JobErrorReport {
   step?: string;
   attempt?: number;
   requestId?: string;
+  /** Inngest event that triggered the function (SPEC-203 ET-4). */
+  eventId?: string;
+  /** Owner of the event, when it has one (SPEC-203 ET-4). */
+  userId?: string;
   error: unknown;
 }
 
 export type JobErrorReporter = (report: JobErrorReport) => void;
+
+let jobErrorReporter: JobErrorReporter | undefined;
+
+/** Registers the telemetry hook of the final failures of `defineFunction` (SPEC-010). */
+export function setJobErrorReporter(reporter: JobErrorReporter | undefined): void {
+  jobErrorReporter = reporter;
+}
+
+export function reportJobError(report: JobErrorReport): void {
+  try {
+    jobErrorReporter?.(report);
+  } catch {
+    // A faulty reporter never breaks a job.
+  }
+}

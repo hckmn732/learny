@@ -1,7 +1,11 @@
 // Typed catalogue of Inngest events (docs/architecture/overview.md §5).
-// Business events are added by SPEC-203; only the SDD demonstration exists for now.
+// The domain events live in `@learny/contracts` (SPEC-203 ET-1) and are re-exported here; this
+// module keeps the SPEC-007 demonstration event (`sdd/demo-job.requested`).
 import { eventType } from 'inngest';
 import { z } from 'zod';
+
+export { EVENTS, EVENT_NAMES_LIST, isEventName, parseEventData } from '@learny/contracts';
+export type { EventData, EventInput, EventName } from '@learny/contracts';
 
 export const DEMO_VALUE_MIN = -1_000_000;
 export const DEMO_VALUE_MAX = 1_000_000;
@@ -31,4 +35,5 @@ export const events = {
   [EVENT_NAMES.sddDemoJobRequested]: sddDemoJobRequested,
 } as const;
 
-export type EventName = keyof typeof events;
+/** Names of the SPEC-007 demonstration events (not part of the domain catalogue). */
+export type DemoEventName = keyof typeof events;

@@ -21,7 +21,8 @@ alter table public.sdd_demo_runs force row level security;
 --
 -- La fonction étant appelable par tout utilisateur connecté (y compris via PostgREST), elle borne ce
 -- qu'un appelant `authenticated` peut mettre en file : uniquement ses propres événements
--- (`p_user_id` = `auth.uid()`, et `data.userId` absent ou identique), jamais un événement `cron/*`.
+-- (`p_user_id` nul ou égal à `auth.uid()` ; `data.userId` absent ou identique), jamais un événement
+-- `cron/*`. Pour un appelant `authenticated`, la ligne appartient toujours à l'acteur.
 -- Un appelant de service (`auth.uid()` nul : jobs, webhooks) n'est pas borné ; un événement dont
 -- `data.userId` désigne un autre utilisateur que l'acteur est donc émis par une transaction de
 -- service.
@@ -37,6 +38,7 @@ create or replace function public.enqueue_event(
   as $$
 declare
   v_actor uuid := auth.uid();
+  v_owner uuid := p_user_id;
 begin
   if p_event_id is null or char_length(p_event_id) not between 1 and 256 then
     raise exception 'enqueue_event : identifiant d''événement invalide' using errcode = '22023';
@@ -48,7 +50,8 @@ begin
     raise exception 'enqueue_event : données invalides' using errcode = '22023';
   end if;
   if v_actor is not null then
-    if p_user_id is distinct from v_actor
+    v_owner := coalesce(p_user_id, v_actor);
+    if v_owner <> v_actor
        or p_name like 'cron/%'
        or (p_data ? 'userId' and p_data ->> 'userId' is distinct from v_actor::text) then
       raise exception 'enqueue_event : événement non autorisé pour cet utilisateur'
@@ -57,7 +60,7 @@ begin
   end if;
 
   insert into public.event_outbox (event_id, name, data, user_id)
-  values (p_event_id, p_name, p_data, p_user_id)
+  values (p_event_id, p_name, p_data, v_owner)
   on conflict (event_id) do nothing;
   return found;
 end;
