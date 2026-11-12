@@ -232,5 +232,6 @@ Définition commune (testing.md §7) ; la migration `identity_triggers` s'appliq
 - ADR appliqués : ADR-0022, ADR-0030 (fuseau IANA, défaut `Europe/Paris`), ADR-0112 (RLS dès la création).
 - **ADR-0113** (compléments au modèle) : ajout de `profiles.streak_days`, `profiles.streak_computed_on` (alimentés par SPEC-411, lus par la vue `group_member_progress` de SPEC-111), `updated_at` sur `push_subscriptions` et `pauses`, `not null` sur `p256dh`/`auth`, contraintes de cohérence de suppression et de pause.
 - **ADR-0114** (initialisation du compte par déclencheur `security definer` sur `auth.users`, valeurs `params` par défaut EF-6 avec noms de paramètres en anglais).
+- **ADR-0236** (compléments d'implémentation) : clé étrangère `profiles.id → auth.users` déclarée dans la migration personnalisée `identity_triggers` (schéma `auth` hors snapshot Drizzle), vérification de CL-9 sous politiques temporaires annulées par `withRollback`, rejeu de CL-7 via une table temporaire exerçant `handle_new_user`.
 - Hypothèse : le détecteur de fuseau navigateur (SPEC-601) transmet `timezone` dans les métadonnées d'inscription ; à défaut, `Europe/Paris`.
 - La ligne `subscriptions` par défaut est ajoutée à `handle_new_user` par SPEC-110 (remplacement de la fonction par une nouvelle migration).
