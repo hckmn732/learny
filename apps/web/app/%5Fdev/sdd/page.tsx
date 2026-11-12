@@ -17,13 +17,13 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 const t = fr.sdd.index;
 
 const STATUS_STYLE: Record<PublicSpec['status'], string> = {
-  pending: 'bg-[#F4F3EF] text-[#111113]',
-  ready: 'bg-[#E6F4EA] text-[#1F7A3A]',
-  waiting: 'bg-[#F4F3EF] text-[#5C5B57]',
-  in_progress: 'bg-[#E8F0FE] text-[#1A4FB3]',
-  done: 'bg-[#E6F4EA] text-[#1F7A3A]',
-  blocked: 'bg-[#FDECEA] text-[#B42318]',
-  dependency_blocked: 'bg-[#FDECEA] text-[#B42318]',
+  pending: 'bg-canvas text-ink',
+  ready: 'bg-green-soft text-green-ink',
+  waiting: 'bg-canvas text-ink-muted',
+  in_progress: 'bg-indigo-soft text-indigo-ink-strong',
+  done: 'bg-green-soft text-green-ink',
+  blocked: 'bg-orange-soft text-danger',
+  dependency_blocked: 'bg-orange-soft text-danger',
 };
 
 function NextActionText({ next }: Readonly<{ next: PublicNextAction }>) {
@@ -52,7 +52,7 @@ function NextActionText({ next }: Readonly<{ next: PublicNextAction }>) {
   }
 }
 
-const cardClass = 'rounded-[16px] border border-solid border-[#E7E6E1] p-6';
+const cardClass = 'rounded-[16px] border border-solid border-border p-6';
 const sectionClass = `mt-6 ${cardClass}`;
 const regionClass = 'mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2';
 const cellClass = 'py-2 pr-4 align-top';
@@ -132,12 +132,9 @@ export default function SddIndexPage() {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={status.globalPercent}
-          className="mt-2 h-3 w-full overflow-hidden rounded-full bg-[#F4F3EF]"
+          className="mt-2 h-3 w-full overflow-hidden rounded-full bg-canvas"
         >
-          <div
-            className="h-full bg-[#1F7A3A]"
-            style={{ width: `${String(status.globalPercent)}%` }}
-          />
+          <div className="h-full bg-green" style={{ width: `${String(status.globalPercent)}%` }} />
         </div>
       </div>
 

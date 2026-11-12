@@ -9,7 +9,7 @@ import { fr } from '../../messages/fr';
 const t = fr.system.error;
 
 export const systemButtonClass =
-  'rounded-[8px] bg-[#111113] px-4 py-2 text-white focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[8px] bg-ink px-4 py-2 text-white focus-visible:outline-2 focus-visible:outline-offset-2';
 
 /** Safe error screen: a French message, a retry action, a way home; never a stack or a detail. */
 export function ErrorView({ error, retry }: Readonly<{ error: unknown; retry: () => void }>) {

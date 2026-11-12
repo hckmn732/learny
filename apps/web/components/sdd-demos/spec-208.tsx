@@ -11,7 +11,7 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec208;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 function messageOf(error: unknown): string {
   return error instanceof ApiError ? `${error.code} : ${error.detail}` : String(error);
@@ -39,7 +39,7 @@ function ProfileCard({ profile }: { profile: RateProfileName }) {
   return (
     <article
       data-testid={`spec-208-profile-${profile}`}
-      className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+      className="rounded-[16px] border border-solid border-border p-4"
     >
       <h3 className="font-display text-lg font-semibold">{t.profiles.names[profile]}</h3>
       <ul className="mt-2 space-y-1 text-sm">

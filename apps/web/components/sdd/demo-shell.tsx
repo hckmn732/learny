@@ -47,7 +47,7 @@ export function DemoSection({
   return (
     <section
       data-testid={testId}
-      className="mt-6 rounded-[16px] border border-solid border-[#E7E6E1] p-6"
+      className="mt-6 rounded-[16px] border border-solid border-border p-6"
     >
       <h2 className="text-xl font-semibold">{title}</h2>
       <div className="mt-4">{children}</div>

@@ -42,7 +42,7 @@ function Credentials({ data }: Readonly<{ data: Spec110Data }>) {
           <li
             key={`${credential.provider}-${credential.label}`}
             data-testid="credential-card"
-            className="rounded-[8px] border border-solid border-[#E7E6E1] p-4"
+            className="rounded-[8px] border border-solid border-border p-4"
           >
             <p className="font-semibold" data-testid="credential-label">
               {credential.label}
@@ -81,7 +81,7 @@ function Tasks({ data }: Readonly<{ data: Spec110Data }>) {
         role="region"
         aria-label={t.tasks.region}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[40rem] text-left">
           <thead>
@@ -106,7 +106,7 @@ function Tasks({ data }: Readonly<{ data: Spec110Data }>) {
                     ? t.tasks.personal(task.credentialLabel)
                     : t.tasks.fallback(task.credentialLabel);
               return (
-                <tr key={task.task} data-testid="task-row" className="border-t border-[#E7E6E1]">
+                <tr key={task.task} data-testid="task-row" className="border-t border-border">
                   <td className="px-3 py-2 font-mono text-sm" data-testid="task-name">
                     {t.tasks.tasks[task.task as keyof typeof t.tasks.tasks]}
                   </td>

@@ -11,7 +11,7 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec201;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 const PAGE_SIZE = 20;
 
@@ -70,7 +70,7 @@ function ProblemCard({
         {result === null ? null : (
           <pre
             data-testid={`${testId}-result`}
-            className="mt-3 whitespace-pre-wrap break-words rounded-[12px] bg-[#F4F4F1] p-3 text-xs"
+            className="mt-3 whitespace-pre-wrap break-words rounded-[12px] bg-canvas p-3 text-xs"
           >
             {result}
           </pre>
@@ -136,7 +136,7 @@ function Idempotency() {
         onChange={(event) => {
           setMessage(event.target.value);
         }}
-        className="mb-3 mt-1 w-full rounded-[12px] border border-solid border-[#E7E6E1] px-3 py-2"
+        className="mb-3 mt-1 w-full rounded-[12px] border border-solid border-border px-3 py-2"
       />
       <button
         type="button"
@@ -249,7 +249,7 @@ function OpenApi() {
       <p data-testid="demo-openapi-count" aria-live="polite" className="text-sm font-semibold">
         {count === null ? t.loading : t.openapi.routes(count)}
       </p>
-      <a href="/openapi.json" className="mt-3 inline-block text-sm text-[#3A3AA8] underline">
+      <a href="/openapi.json" className="mt-3 inline-block text-sm text-indigo-ink underline">
         {t.openapi.link}
       </a>
     </BaseCard>

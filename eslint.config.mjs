@@ -327,6 +327,39 @@ export default tseslint.config(
     },
   },
   {
+    // Interface colours live only in @learny/ui/tokens (SPEC-301, ET-7). Tests and the token
+    // sources themselves legitimately contain hex literals.
+    files: ['apps/web/**/*.{ts,tsx}', 'packages/ui/**/*.{ts,tsx}'],
+    ignores: [
+      'packages/ui/src/tokens/**',
+      'packages/ui/test/**',
+      'packages/ui/scripts/**',
+      'apps/web/e2e/**',
+      '**/*.test.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+          message: CLOCK_MESSAGE,
+        },
+        {
+          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+          message: CLOCK_MESSAGE,
+        },
+        {
+          selector: 'Literal[value=/#[0-9A-Fa-f]{3,8}\\b/]',
+          message: 'Couleur hors jetons : importer @learny/ui/tokens (SPEC-301, ET-7).',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}\\b/]',
+          message: 'Couleur hors jetons : importer @learny/ui/tokens (SPEC-301, ET-7).',
+        },
+      ],
+    },
+  },
+  {
     // The clock module and the out-of-product SDD tooling may read the system time (ADR-0101).
     files: ['packages/core/src/clock.ts', 'tools/sdd/**'],
     rules: { 'no-restricted-syntax': 'off' },

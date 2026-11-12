@@ -29,9 +29,9 @@ interface RunResponse {
 }
 
 const fieldClass =
-  'mt-2 block w-full rounded-[8px] border border-solid border-[#E7E6E1] p-2 font-mono';
+  'mt-2 block w-full rounded-[8px] border border-solid border-border p-2 font-mono';
 const buttonClass =
-  'mt-4 rounded-[8px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'mt-4 rounded-[8px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 function errorMessage(code: string): string {
   return Object.hasOwn(t.result.errors, code)
@@ -147,7 +147,7 @@ export function DemoJobRunner() {
             </dl>
           ) : null}
           {response?.error ? (
-            <p className="text-[#B42318]">
+            <p className="text-danger">
               {`${t.result.failed} : ${errorMessage(response.error.code)}`}
             </p>
           ) : null}

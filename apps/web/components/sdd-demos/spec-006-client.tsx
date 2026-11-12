@@ -11,7 +11,7 @@ import { fr } from '../../messages/fr';
 const t = fr.sdd.spec006.client;
 
 const buttonClass =
-  'rounded-[8px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[8px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 // Transport simulating an API answering with a problem+json error (RFC 9457).
 const problemFetch: typeof fetch = () =>

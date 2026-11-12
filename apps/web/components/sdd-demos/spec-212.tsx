@@ -11,9 +11,9 @@ import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 const t = fr.sdd.spec212;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 const chipClass =
-  'rounded-full border border-solid border-[#E7E6E1] bg-white px-3 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-full border border-solid border-border bg-white px-3 py-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2';
 
 /** EF-6 — cuts `text` at the highlight positions and wraps each match in a `<mark>`. */
 function marked(text: string, highlights: Highlight[]): ReactNode {
@@ -24,7 +24,7 @@ function marked(text: string, highlights: Highlight[]): ReactNode {
     parts.push(
       <mark
         key={`${String(range.start)}-${String(range.end)}`}
-        className="rounded-[4px] bg-[#FFE58A] px-[1px] text-[#111113]"
+        className="rounded-[4px] bg-lime-soft px-[1px] text-ink"
       >
         {text.slice(range.start, range.end)}
       </mark>,
@@ -73,7 +73,7 @@ function Results({ state }: Readonly<{ state: State }>) {
               <li
                 key={item.id}
                 data-testid="spec-212-item"
-                className="rounded-[16px] border border-solid border-[#E7E6E1] p-4"
+                className="rounded-[16px] border border-solid border-border p-4"
               >
                 <p data-testid="spec-212-item-title" className="font-semibold break-words">
                   {marked(item.title, item.titleHighlights)}
@@ -149,7 +149,7 @@ export default function Spec212Demo() {
               onChange={(event) => {
                 setValue(event.target.value);
               }}
-              className="min-w-0 rounded-[12px] border border-solid border-[#E7E6E1] bg-white px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="min-w-0 rounded-[12px] border border-solid border-border bg-white px-3 py-2 focus-visible:outline-2 focus-visible:outline-offset-2"
             />
           </div>
           <button type="submit" className={buttonClass} disabled={state.phase === 'loading'}>
@@ -192,7 +192,7 @@ export default function Spec212Demo() {
             role="region"
             aria-label={t.json.label}
             data-testid="spec-212-json-body"
-            className="mt-3 max-h-[24rem] overflow-auto whitespace-pre-wrap break-all rounded-[12px] bg-[#F4F4F1] p-3 font-mono text-xs"
+            className="mt-3 max-h-[24rem] overflow-auto whitespace-pre-wrap break-all rounded-[12px] bg-canvas p-3 font-mono text-xs"
           >
             {state.phase === 'done' ? JSON.stringify(state.response, null, 2) : t.json.none}
           </pre>

@@ -44,7 +44,7 @@ function States({ data }: Readonly<{ data: Spec107Data }>) {
           <li
             key={card.notionId}
             data-testid="due-card"
-            className="rounded-[8px] border border-solid border-[#E7E6E1] p-4"
+            className="rounded-[8px] border border-solid border-border p-4"
           >
             <p className="font-semibold" data-testid="due-card-label">
               {card.label}
@@ -74,7 +74,7 @@ function States({ data }: Readonly<{ data: Spec107Data }>) {
           <summary className="cursor-pointer text-sm">{t.due.technical}</summary>
           <pre
             data-testid="due-fsrs"
-            className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1] p-3 text-xs"
+            className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-border p-3 text-xs"
           >
             {JSON.stringify(first.fsrs, null, 2)}
           </pre>
@@ -97,7 +97,7 @@ function Gap({ data }: Readonly<{ data: Spec107Data }>) {
               key={nature}
               data-testid="gap-nature-option"
               data-active={isActive ? 'true' : 'false'}
-              className={`rounded-[8px] border border-solid border-[#E7E6E1] px-3 py-1 text-sm ${
+              className={`rounded-[8px] border border-solid border-border px-3 py-1 text-sm ${
                 isActive ? 'font-semibold' : ''
               }`}
             >
@@ -131,7 +131,7 @@ function Gap({ data }: Readonly<{ data: Spec107Data }>) {
           <p className="text-sm font-semibold">{t.gap.evidence}</p>
           <pre
             data-testid="gap-evidence"
-            className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1] p-3 text-xs"
+            className="mt-2 overflow-x-auto rounded-[8px] border border-solid border-border p-3 text-xs"
           >
             {JSON.stringify(data.gap.evidence, null, 2)}
           </pre>
@@ -149,7 +149,7 @@ function History({ data }: Readonly<{ data: Spec107Data }>) {
         role="region"
         aria-label={t.history.title}
         tabIndex={0}
-        className="overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[44rem] text-left">
           <thead>
@@ -182,7 +182,7 @@ function History({ data }: Readonly<{ data: Spec107Data }>) {
               <tr
                 key={`${log.reviewedAt}-${log.grade}`}
                 data-testid="history-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2 font-mono text-sm" data-testid="history-date">
                   {instant(log.reviewedAt)}

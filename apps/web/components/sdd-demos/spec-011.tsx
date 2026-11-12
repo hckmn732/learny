@@ -77,7 +77,7 @@ export default function Spec011Demo() {
             <li
               key={item.key}
               data-testid={`spec-011-security-${item.key}`}
-              className="flex items-center justify-between gap-4 rounded-[12px] border border-solid border-[#E7E6E1] px-4 py-2"
+              className="flex items-center justify-between gap-4 rounded-[12px] border border-solid border-border px-4 py-2"
             >
               <span>{item.label}</span>
               <span className="text-sm font-medium">

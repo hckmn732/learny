@@ -80,7 +80,7 @@ export default function Spec013Demo() {
               <li
                 key={service}
                 data-testid={`spec-013-region-${service}`}
-                className="rounded-[12px] border border-solid border-[#E7E6E1] px-4 py-3"
+                className="rounded-[12px] border border-solid border-border px-4 py-3"
               >
                 <p className="font-semibold">{t.regions.services[service]}</p>
                 <p className="font-mono text-sm">{value}</p>

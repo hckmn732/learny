@@ -10,8 +10,8 @@ import { BaseCard } from '../sdd/base-tokens';
 const t = fr.sdd.spec202;
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
-const inputClass = 'mb-3 mt-1 w-full rounded-[12px] border border-solid border-[#E7E6E1] px-3 py-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+const inputClass = 'mb-3 mt-1 w-full rounded-[12px] border border-solid border-border px-3 py-2';
 
 function timezone(): string | undefined {
   try {
@@ -70,7 +70,7 @@ function ResultLine({
       role="status"
       aria-live="polite"
       data-testid={testId}
-      className={`mt-3 min-h-6 text-sm ${result?.tone === 'error' ? 'text-[#B42318]' : ''}`}
+      className={`mt-3 min-h-6 text-sm ${result?.tone === 'error' ? 'text-danger' : ''}`}
     >
       {text}
     </p>

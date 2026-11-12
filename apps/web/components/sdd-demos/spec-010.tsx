@@ -54,7 +54,7 @@ export default async function Spec010Demo() {
         <div role="region" aria-label={t.log.region} tabIndex={0} className={scrollRegion}>
           <pre
             data-testid="spec-010-log-json"
-            className="w-max rounded-[16px] border border-solid border-[#E7E6E1] p-4 font-mono text-xs"
+            className="w-max rounded-[16px] border border-solid border-border p-4 font-mono text-xs"
           >
             {demo.log}
           </pre>
@@ -80,7 +80,7 @@ export default async function Spec010Demo() {
         <div role="region" aria-label={t.error.region} tabIndex={0} className={scrollRegion}>
           <pre
             data-testid="spec-010-error-json"
-            className="w-max rounded-[16px] border border-solid border-[#E7E6E1] p-4 font-mono text-xs"
+            className="w-max rounded-[16px] border border-solid border-border p-4 font-mono text-xs"
           >
             {demo.errorJson}
           </pre>

@@ -55,7 +55,7 @@ function Progress({ data }: Readonly<{ data: Spec111Data }>) {
         role="region"
         aria-label={t.progress.region}
         tabIndex={0}
-        className="mt-4 overflow-x-auto rounded-[8px] border border-solid border-[#E7E6E1]"
+        className="mt-4 overflow-x-auto rounded-[8px] border border-solid border-border"
       >
         <table className="w-full min-w-[36rem] text-left">
           <thead>
@@ -79,7 +79,7 @@ function Progress({ data }: Readonly<{ data: Spec111Data }>) {
               <tr
                 key={row.userId}
                 data-testid="group-progress-row"
-                className="border-t border-[#E7E6E1]"
+                className="border-t border-border"
               >
                 <td className="px-3 py-2" data-testid="group-progress-name">
                   {row.firstName ?? '—'}

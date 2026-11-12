@@ -28,9 +28,9 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
 }
 
 const fieldClass =
-  'mt-2 block w-full rounded-[8px] border border-solid border-[#E7E6E1] p-2 font-mono';
+  'mt-2 block w-full rounded-[8px] border border-solid border-border p-2 font-mono';
 const buttonClass =
-  'mt-3 rounded-[8px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'mt-3 rounded-[8px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 export function CommitCheckForm() {
   const id = useId();
@@ -77,7 +77,7 @@ export function CommitCheckForm() {
         {failed ? <p>{fr.sdd.spec002.error}</p> : null}
         {result ? (
           <>
-            <p className={result.valid ? 'text-[#1F7A3A]' : 'text-[#B42318]'}>
+            <p className={result.valid ? 'text-green-ink' : 'text-danger'}>
               {result.valid ? t.commit.valid : t.commit.invalid}
             </p>
             {result.errors.length > 0 ? (

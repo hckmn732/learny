@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { SimulateBody, SubscriptionStatus, WebhookResult } from '@learny/contracts';
+import { colors } from '@learny/ui/tokens';
 
 import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
@@ -14,15 +15,15 @@ const t = fr.sdd.spec210;
 const RETURN_PATH = '/_dev/sdd/SPEC-210';
 
 const buttonClass =
-  'rounded-[12px] bg-[#111113] px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
+  'rounded-[12px] bg-ink px-4 py-2 text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2';
 
 // Decorative indicators only (SPEC-210 §10): the status is always written out.
 const BADGE_COLORS: Record<SubscriptionStatus, string> = {
-  none: '#E7E6E1',
-  active: '#0F9F7F',
-  past_due: '#F97316',
-  canceled: '#E7E6E1',
-  incomplete: '#E7E6E1',
+  none: colors.border,
+  active: colors.green,
+  past_due: colors.orange,
+  canceled: colors.border,
+  incomplete: colors.border,
 };
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
@@ -59,7 +60,7 @@ function StatusCard() {
               <span
                 aria-hidden="true"
                 data-testid="spec-210-badge-dot"
-                className="inline-block size-3 shrink-0 rounded-full border border-solid border-[#E7E6E1]"
+                className="inline-block size-3 shrink-0 rounded-full border border-solid border-border"
                 style={{ backgroundColor: BADGE_COLORS[data.status] }}
               />
               <span data-testid="spec-210-badge" className="text-lg font-semibold">

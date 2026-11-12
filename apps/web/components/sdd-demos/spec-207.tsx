@@ -62,7 +62,7 @@ function QuietExample({
   const quiet = isQuietHours(instant, window);
   const next = nextOutsideQuietHours(instant, window);
   return (
-    <li data-testid={testId} className="rounded-[12px] bg-[#F4F4F1] p-4">
+    <li data-testid={testId} className="rounded-[12px] bg-canvas p-4">
       <p className="font-semibold">{`${label} · ${toUserZone(instant, DEFAULT_TIME_ZONE).time}`}</p>
       <dl className="mt-2 space-y-1">
         <Row label={t.quiet.state} testId={`${testId}-state`}>
@@ -83,7 +83,7 @@ function ChangeCard({
 }: Readonly<{ testId: string; title: string; change: ClockChange }>) {
   const occurrences = instantsAtLocalTime(change.day, '02:30', DEFAULT_TIME_ZONE).length;
   return (
-    <article data-testid={testId} className="rounded-[12px] bg-[#F4F4F1] p-4">
+    <article data-testid={testId} className="rounded-[12px] bg-canvas p-4">
       <h3 className="font-semibold">{title}</h3>
       <p className="mt-1 text-sm">
         {formatUserDate(change.start, DEFAULT_TIME_ZONE, { dateStyle: 'full' })}

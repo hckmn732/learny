@@ -50,7 +50,7 @@ export default function Spec008Demo() {
           {stack.extensions.map((extension) => (
             <li
               key={extension.name}
-              className="flex items-center justify-between gap-4 rounded-[12px] border border-solid border-[#E7E6E1] px-4 py-2"
+              className="flex items-center justify-between gap-4 rounded-[12px] border border-solid border-border px-4 py-2"
             >
               <span className="font-mono">{extension.name}</span>
               <span className="text-sm">
@@ -64,7 +64,7 @@ export default function Spec008Demo() {
 
       <DemoSection testId="spec-008-commands" title={t.commands.title}>
         <p>{t.commands.intro}</p>
-        <pre className="mt-3 overflow-x-auto rounded-[12px] bg-[#111113] p-4 text-sm text-white">
+        <pre className="mt-3 overflow-x-auto rounded-[12px] bg-ink p-4 text-sm text-white">
           <code>
             {[
               t.commands.start,

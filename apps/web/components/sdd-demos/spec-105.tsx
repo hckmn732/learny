@@ -9,7 +9,7 @@ function Badge({ testId, ok, label }: Readonly<{ testId: string; ok: boolean; la
     <span
       data-testid={testId}
       className={`inline-block rounded-full px-2 py-0.5 text-sm whitespace-nowrap ${
-        ok ? 'bg-[#E6F4EA] text-[#1F7A3A]' : 'bg-[#F6F5F2] text-[#111113]'
+        ok ? 'bg-green-soft text-green-ink' : 'bg-surface-subtle text-ink'
       }`}
     >
       {label}
@@ -138,7 +138,7 @@ function Conversation({ data }: Readonly<{ data: Spec105Data }>) {
           <li
             key={`message-${String(index)}`}
             data-testid="message-row"
-            className="rounded-[8px] bg-[#F6F5F2] p-3"
+            className="rounded-[8px] bg-surface-subtle p-3"
           >
             <p className="font-mono text-sm" data-testid="message-role">
               {message.role === 'learner' ? t.conversation.learner : t.conversation.tutor}
