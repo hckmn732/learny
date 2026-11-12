@@ -49,13 +49,17 @@ function livePolicies(): string[] {
   const policies = new Set<string>();
   for (const file of migrationFiles()) {
     const sql = fs.readFileSync(path.join(MIGRATIONS, file), 'utf8');
-    for (const match of sql.matchAll(/create policy\s+([a-z0-9_]+)/gi)) {
-      const name = match[1];
-      if (name !== undefined) policies.add(name);
+    // The public-schema matrix only names policies on public tables; Storage policies live on
+    // `storage.objects` and are verified by the SPEC-114 storage integration suite.
+    const isPublicTarget = (target: string | undefined): boolean =>
+      target !== undefined && (target === 'objects' || target.startsWith('public.'));
+    for (const match of sql.matchAll(/create policy\s+([a-z0-9_]+)\s+on\s+([^\s]+)/gi)) {
+      const [, name, target] = match;
+      if (name !== undefined && isPublicTarget(target)) policies.add(name);
     }
-    for (const match of sql.matchAll(/drop policy if exists\s+([a-z0-9_]+)/gi)) {
-      const name = match[1];
-      if (name !== undefined) policies.delete(name);
+    for (const match of sql.matchAll(/drop policy if exists\s+([a-z0-9_]+)\s+on\s+([^\s]+)/gi)) {
+      const [, name, target] = match;
+      if (name !== undefined && isPublicTarget(target)) policies.delete(name);
     }
   }
   return [...policies].sort();
