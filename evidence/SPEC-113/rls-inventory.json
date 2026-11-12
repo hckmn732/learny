@@ -1,0 +1,385 @@
+{
+  "measuredAt": "2026-11-11T12:20:00.000Z",
+  "tableCount": 51,
+  "forcedCount": 51,
+  "categories": {
+    "personal": 42,
+    "shared-programme": 7,
+    "service": 2
+  },
+  "tables": [
+    {
+      "table": "profiles",
+      "category": "personal",
+      "policies": [
+        "profiles_owner_select",
+        "profiles_owner_update"
+      ]
+    },
+    {
+      "table": "study_preferences",
+      "category": "personal",
+      "policies": [
+        "study_preferences_owner_all"
+      ]
+    },
+    {
+      "table": "notification_settings",
+      "category": "personal",
+      "policies": [
+        "notification_settings_owner_all"
+      ]
+    },
+    {
+      "table": "push_subscriptions",
+      "category": "personal",
+      "policies": [
+        "push_subscriptions_owner_all"
+      ]
+    },
+    {
+      "table": "automation_settings",
+      "category": "personal",
+      "policies": [
+        "automation_settings_owner_all"
+      ]
+    },
+    {
+      "table": "pauses",
+      "category": "personal",
+      "policies": [
+        "pauses_owner_all"
+      ]
+    },
+    {
+      "table": "formations",
+      "category": "shared-programme",
+      "policies": [
+        "formations_owner_select",
+        "formations_member_select",
+        "formations_owner_insert",
+        "formations_owner_update",
+        "formations_owner_delete"
+      ]
+    },
+    {
+      "table": "modules",
+      "category": "shared-programme",
+      "policies": [
+        "modules_owner_all",
+        "modules_member_select"
+      ]
+    },
+    {
+      "table": "chapters",
+      "category": "shared-programme",
+      "policies": [
+        "chapters_owner_all",
+        "chapters_member_select"
+      ]
+    },
+    {
+      "table": "notions",
+      "category": "shared-programme",
+      "policies": [
+        "notions_owner_all",
+        "notions_member_select"
+      ]
+    },
+    {
+      "table": "notion_links",
+      "category": "shared-programme",
+      "policies": [
+        "notion_links_owner_all",
+        "notion_links_programme_select",
+        "notion_links_programme_owner_insert",
+        "notion_links_programme_owner_update",
+        "notion_links_programme_owner_delete"
+      ]
+    },
+    {
+      "table": "groups",
+      "category": "shared-programme",
+      "policies": [
+        "groups_member_select",
+        "groups_owner_insert",
+        "groups_owner_update",
+        "groups_owner_delete"
+      ]
+    },
+    {
+      "table": "group_members",
+      "category": "shared-programme",
+      "policies": [
+        "group_members_member_select",
+        "group_members_owner_insert",
+        "group_members_owner_update",
+        "group_members_owner_delete"
+      ]
+    },
+    {
+      "table": "cadrage_messages",
+      "category": "personal",
+      "policies": [
+        "cadrage_messages_owner_all"
+      ]
+    },
+    {
+      "table": "programme_imports",
+      "category": "personal",
+      "policies": [
+        "programme_imports_owner_all"
+      ]
+    },
+    {
+      "table": "programme_change_requests",
+      "category": "personal",
+      "policies": [
+        "programme_change_requests_owner_all"
+      ]
+    },
+    {
+      "table": "chapter_progress",
+      "category": "personal",
+      "policies": [
+        "chapter_progress_owner_all"
+      ]
+    },
+    {
+      "table": "module_progress",
+      "category": "personal",
+      "policies": [
+        "module_progress_owner_all"
+      ]
+    },
+    {
+      "table": "resources",
+      "category": "personal",
+      "policies": [
+        "resources_owner_all"
+      ]
+    },
+    {
+      "table": "resource_chunks",
+      "category": "personal",
+      "policies": [
+        "resource_chunks_owner_select"
+      ]
+    },
+    {
+      "table": "courses",
+      "category": "personal",
+      "policies": [
+        "courses_owner_all"
+      ]
+    },
+    {
+      "table": "course_sections",
+      "category": "personal",
+      "policies": [
+        "course_sections_owner_all"
+      ]
+    },
+    {
+      "table": "course_section_revisions",
+      "category": "personal",
+      "policies": [
+        "course_section_revisions_owner_select"
+      ]
+    },
+    {
+      "table": "citations",
+      "category": "personal",
+      "policies": [
+        "citations_owner_all"
+      ]
+    },
+    {
+      "table": "reading_progress",
+      "category": "personal",
+      "policies": [
+        "reading_progress_owner_all"
+      ]
+    },
+    {
+      "table": "chapter_summaries",
+      "category": "personal",
+      "policies": [
+        "chapter_summaries_owner_all"
+      ]
+    },
+    {
+      "table": "tutor_conversations",
+      "category": "personal",
+      "policies": [
+        "tutor_conversations_owner_all"
+      ]
+    },
+    {
+      "table": "tutor_messages",
+      "category": "personal",
+      "policies": [
+        "tutor_messages_owner_all"
+      ]
+    },
+    {
+      "table": "bricks",
+      "category": "personal",
+      "policies": [
+        "bricks_owner_all"
+      ]
+    },
+    {
+      "table": "brick_versions",
+      "category": "personal",
+      "policies": [
+        "brick_versions_owner_all"
+      ]
+    },
+    {
+      "table": "brick_reports",
+      "category": "personal",
+      "policies": [
+        "brick_reports_owner_all"
+      ]
+    },
+    {
+      "table": "activities",
+      "category": "personal",
+      "policies": [
+        "activities_owner_all"
+      ]
+    },
+    {
+      "table": "attempts",
+      "category": "personal",
+      "policies": [
+        "attempts_owner_all"
+      ]
+    },
+    {
+      "table": "answers",
+      "category": "personal",
+      "policies": [
+        "answers_owner_all"
+      ]
+    },
+    {
+      "table": "notion_states",
+      "category": "personal",
+      "policies": [
+        "notion_states_owner_all"
+      ]
+    },
+    {
+      "table": "review_logs",
+      "category": "personal",
+      "policies": [
+        "review_logs_owner_select"
+      ]
+    },
+    {
+      "table": "gap_events",
+      "category": "personal",
+      "policies": [
+        "gap_events_owner_select"
+      ]
+    },
+    {
+      "table": "schedule_slots",
+      "category": "personal",
+      "policies": [
+        "schedule_slots_owner_all"
+      ]
+    },
+    {
+      "table": "automation_actions",
+      "category": "personal",
+      "policies": [
+        "automation_actions_owner_select",
+        "automation_actions_owner_update"
+      ]
+    },
+    {
+      "table": "daily_activity",
+      "category": "personal",
+      "policies": [
+        "daily_activity_owner_all"
+      ]
+    },
+    {
+      "table": "milestones",
+      "category": "personal",
+      "policies": [
+        "milestones_owner_select"
+      ]
+    },
+    {
+      "table": "notifications",
+      "category": "personal",
+      "policies": [
+        "notifications_owner_all"
+      ]
+    },
+    {
+      "table": "notification_deliveries",
+      "category": "personal",
+      "policies": [
+        "notification_deliveries_owner_select"
+      ]
+    },
+    {
+      "table": "ai_credentials",
+      "category": "personal",
+      "policies": [
+        "ai_credentials_owner_all"
+      ]
+    },
+    {
+      "table": "ai_task_models",
+      "category": "personal",
+      "policies": [
+        "ai_task_models_owner_all"
+      ]
+    },
+    {
+      "table": "ai_calls",
+      "category": "personal",
+      "policies": [
+        "ai_calls_owner_select"
+      ]
+    },
+    {
+      "table": "subscriptions",
+      "category": "personal",
+      "policies": [
+        "subscriptions_owner_select"
+      ]
+    },
+    {
+      "table": "data_exports",
+      "category": "personal",
+      "policies": [
+        "data_exports_owner_select"
+      ]
+    },
+    {
+      "table": "legal_acceptances",
+      "category": "personal",
+      "policies": [
+        "legal_acceptances_owner_select",
+        "legal_acceptances_owner_insert"
+      ]
+    },
+    {
+      "table": "idempotency_keys",
+      "category": "service",
+      "policies": []
+    },
+    {
+      "table": "rate_limits",
+      "category": "service",
+      "policies": []
+    }
+  ]
+}

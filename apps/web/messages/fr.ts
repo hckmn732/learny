@@ -1017,6 +1017,52 @@ export const fr = {
         },
       },
     },
+    spec113: {
+      intro:
+        'Démonstration : le catalogue réel des tables du schéma public, le nombre de politiques mesuré et une matrice d’accès jouée avec trois identités réelles (A propriétaire, B membre du groupe, C non-membre). Les données sont fictives et la transaction est annulée à la fin de la requête.',
+      count: {
+        title: 'Isolation des données',
+        intro:
+          'Chaque table du schéma public active Row Level Security et la force, y compris pour son propriétaire SQL ; seuls les rôles de service explicitement autorisés contournent les politiques.',
+        summary: (tables: number, rls: number, policies: number) =>
+          `${String(tables)} tables publiques, ${String(rls)} avec RLS activée, ${String(policies)} politiques.`,
+        forced: (forced: number) =>
+          `${String(forced)} tables forcent RLS pour le propriétaire SQL.`,
+      },
+      categories: {
+        title: 'Catégories',
+        intro:
+          'Le programme partagé est lisible par les membres et écrit par le propriétaire ; les données personnelles restent privées à leur propriétaire ; les tables de service n’ont aucune politique utilisateur.',
+        list: 'Catégories de tables (liste)',
+        labels: {
+          'shared-programme': 'Programme partagé',
+          personal: 'Personnel',
+          service: 'Service',
+        },
+        count: (count: number) => (count === 1 ? '1 table' : `${String(count)} tables`),
+      },
+      matrix: {
+        title: 'Matrice A / B / C',
+        intro:
+          'Chaque cellule est mesurée en base sous le JWT de l’identité correspondante. Une cellule « refusé » signifie zéro ligne lue ou zéro ligne modifiée, jamais une supposition.',
+        role: 'Accès vérifié',
+        a: 'A · propriétaire',
+        b: 'B · membre',
+        c: 'C · non-membre',
+        allowed: 'autorisé',
+        denied: 'refusé',
+        rows: {
+          'programme-read': 'Lire le programme commun',
+          'programme-write': 'Modifier un chapitre',
+          'resources-read': 'Lire les apports de A',
+          'progress-read': 'Lire la progression personnelle de A',
+          'projection-read': 'Lire la projection des membres',
+          'service-read': 'Lire les clés d’idempotence',
+          'settings-read': 'Lire les réglages de A',
+        },
+        note: 'La matrice complète table × opération × rôle est vérifiée par le test d’intégration ; cette page en montre sept lignes représentatives.',
+      },
+    },
     spec111: {
       intro:
         'Démonstration : une formation partagée, un groupe de trois membres et sa progression limitée. Le code affiché est factice et n’ouvre aucune invitation réelle ; seul le propriétaire peut le régénérer.',

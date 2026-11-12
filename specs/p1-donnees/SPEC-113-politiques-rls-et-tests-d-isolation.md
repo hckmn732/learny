@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-102, SPEC-103, SPEC-104, SPEC-105, SPEC-106, SPEC-107, SPEC-108, SPEC-109, SPEC-110, SPEC-111, SPEC-112]
 business_rules: [BR-APP-03, BR-GRP-03]
 screens: []
-adrs: [ADR-0022, ADR-0035]
+adrs: [ADR-0022, ADR-0035, ADR-0248]
 visual: demo
 ---
 
@@ -112,4 +112,4 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; aucune tab
 
 ## 15. Décisions et hypothèses
 
-ADR-0022 fixe RLS partout ; ADR-0035 fixe la frontière programme partagé/données privées. Les politiques des migrations antérieures sont renforcées par une nouvelle migration, jamais réécrites après fusion.
+ADR-0022 fixe RLS partout ; ADR-0035 fixe la frontière programme partagé/données privées. Les politiques des migrations antérieures sont renforcées par une nouvelle migration, jamais réécrites après fusion. ADR-0248 précise le contenu de cette migration additive (`0026_rls_policies.sql`), les helpers d'appartenance `security definer`, la matrice d'inventaire et le harnais d'isolation A/B/C.
