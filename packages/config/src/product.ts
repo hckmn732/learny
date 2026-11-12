@@ -98,6 +98,86 @@ export const NOTIFICATION_RULES = {
   validationQuizReminderMinutes: 40,
 } as const;
 
+/**
+ * BR-AUT-01 to BR-AUT-10 — automation keys and their default `params` (SPEC-102 EF-6, ET-6).
+ * The SQL mirror is `public.default_automation_params(text)`; `packages/db` compares both.
+ */
+export const AUTOMATION_KEYS = [
+  'reprise',
+  'micro_seance',
+  'echauffement',
+  'remediation',
+  'jeu_lacune',
+  'questions_cartes',
+  'plafond_quiz',
+  'sprint',
+  'bilan',
+  'pause',
+] as const;
+
+export type AutomationKey = (typeof AUTOMATION_KEYS)[number];
+
+/** Admitted values of every automation parameter (SPEC-102 EF-6). */
+export const AUTOMATION_OPTIONS = {
+  reprise: {
+    missedReplace: ['consent', 'auto'],
+    inactiveDays: [1, 2, 3],
+    lightenAfterDays: [4, 5, 7],
+  },
+  micro_seance: { hour: [19, 20, 21], durationMin: [3, 5, 10] },
+  echauffement: {
+    questionCount: [2, 3, 5],
+    scope: ['yesterday_and_prerequisites', 'yesterday'],
+  },
+  remediation: { retryDelayHours: [0, 12, 24, 48], mode: ['advised', 'required'] },
+  jeu_lacune: { preference: ['vary', 'cards', 'matching_categorization'] },
+  questions_cartes: { mode: ['confirm', 'auto'] },
+  plafond_quiz: { maxMinutes: [10, 15, 20, 30], targetRetention: [0.85, 0.9, 0.95] },
+  sprint: { daysBefore: [2, 3, 5], durationMin: [30] },
+  bilan: { weekday: [5, 6, 7], hour: [18, 19, 20], channel: ['app', 'app_email'] },
+  pause: { diagnosticOnReturn: [true, false], diagnosticMinutes: [10] },
+} as const satisfies Record<AutomationKey, Record<string, readonly unknown[]>>;
+
+/** Default `params` of every automation (SPEC-102 EF-6, BR-AUT-01 to BR-AUT-10). */
+export const AUTOMATION_DEFAULTS = {
+  reprise: { missedReplace: 'consent', inactiveDays: 2, lightenAfterDays: 5 },
+  micro_seance: { hour: 20, durationMin: 5 },
+  echauffement: { questionCount: 3, scope: 'yesterday_and_prerequisites' },
+  remediation: { retryDelayHours: 24, mode: 'advised' },
+  jeu_lacune: { preference: 'vary' },
+  questions_cartes: { mode: 'confirm' },
+  plafond_quiz: { maxMinutes: 15, targetRetention: 0.9 },
+  sprint: { daysBefore: 3, durationMin: 30 },
+  bilan: { weekday: 7, hour: 19, channel: 'app' },
+  pause: { diagnosticOnReturn: true, diagnosticMinutes: 10 },
+} as const satisfies Record<AutomationKey, Record<string, unknown>>;
+
+/** BR-ACC-08 — study rhythm defaults (SPEC-102 ET-6). */
+export const STUDY_DEFAULTS = {
+  hoursPerDay: 2,
+  studyDays: [1, 2, 3, 4, 5],
+  preferredSlots: ['soir'],
+} as const;
+
+/** BR-NOT-04, BR-NOT-05 — notification settings defaults (SPEC-102 ET-6). */
+export const NOTIFICATION_DEFAULTS = {
+  channelEmail: true,
+  channelPush: true,
+  types: {
+    revision: true,
+    validation: true,
+    course: true,
+    gap: true,
+    planning: true,
+    relaunch: true,
+  },
+  digestTime: '08:00',
+  quietStart: '21:00',
+  quietEnd: '08:00',
+  weekendQuiet: true,
+  maxPerDay: 5,
+} as const;
+
 /** BR-FOR-*, BR-GAM-03 — formations, programmes and milestones. */
 export const FORMATION_RULES = {
   /** BR-FOR-01 — at most 5 framing questions; the goal is 1 to 120 characters. */
@@ -123,5 +203,8 @@ export type ResourceRules = typeof RESOURCE_RULES;
 export type QuizRules = typeof QUIZ_RULES;
 export type MemoryRules = typeof MEMORY_RULES;
 export type NotificationRules = typeof NOTIFICATION_RULES;
+export type AutomationDefaults = typeof AUTOMATION_DEFAULTS;
+export type StudyDefaults = typeof STUDY_DEFAULTS;
+export type NotificationDefaults = typeof NOTIFICATION_DEFAULTS;
 export type FormationRules = typeof FORMATION_RULES;
 export type GroupRules = typeof GROUP_RULES;

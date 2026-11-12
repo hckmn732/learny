@@ -13,6 +13,7 @@ import {
   type DisplayStatus,
   type RawCatalog,
 } from '../../../../../tools/sdd/core.mjs';
+import { sddDemos } from '../../../app/%5Fdev/sdd/registry';
 
 const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const FIXED_TIME = new Date('2026-11-11T12:20:00Z');
@@ -73,8 +74,10 @@ test('consulte la progression SDD @SPEC-003', async ({ page }) => {
   }
   await expect(page.getByTestId('sdd-index-specs').getByRole('row')).toHaveCount(sum.total + 1);
 
-  // A specification without a registered demo is not a link (SPEC-101 is still pending).
-  await expect(page.getByTestId('sdd-spec-SPEC-101').getByRole('link')).toHaveCount(0);
+  // A specification without a registered demo is not a link; the registry grows with each spec.
+  const unregistered = Object.keys(sum.displayStatuses).find((id) => !Object.hasOwn(sddDemos, id));
+  if (unregistered === undefined) throw new Error('aucune spécification sans démonstration');
+  await expect(page.getByTestId(`sdd-spec-${unregistered}`).getByRole('link')).toHaveCount(0);
 
   await page.getByTestId('sdd-spec-SPEC-001').getByRole('link', { name: 'SPEC-001' }).click();
   await expect(page).toHaveURL(/\/_dev\/sdd\/SPEC-001$/);

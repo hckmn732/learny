@@ -114,3 +114,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0233](ADR-0233-entree-serveur-de-learny-core-et-composants-de-sante.md) | Entrée serveur de @learny/core et composants de santé | Déduite | SPEC-010 |
 | [ADR-0234](ADR-0234-coexistence-de-la-migration-d-amorcage-0000-et-du-miroir-pre.md) | Coexistence de la migration d'amorçage 0000 et du miroir préfixé | Déduite | SPEC-101, ADR-0111 |
 | [ADR-0235](ADR-0235-alias-createuserdb-et-harnais-sans-sequence.md) | Alias createUserDb et harnais sans séquence | Déduite | SPEC-101 |
+| [ADR-0236](ADR-0236-complements-d-implementation-du-schema-identite.md) | Compléments d'implémentation du schéma identité | Déduite | SPEC-102 |

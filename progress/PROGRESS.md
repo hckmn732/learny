@@ -1,28 +1,28 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T00:01:15.824Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T00:39:49.749Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 14 |
+| Terminées | 15 |
 | En cours | 0 |
-| Prêtes | 1 |
-| En attente de dépendances | 117 |
+| Prêtes | 3 |
+| En attente de dépendances | 114 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **10.6 %** |
-| Avancement V1 | 11.3 % |
-| Prochaine action | start SPEC-102 — Schéma identité et préférences |
+| **Avancement global** | **11.4 %** |
+| Avancement V1 | 12.1 % |
+| Prochaine action | start SPEC-103 — Schéma formations, programme et notions |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
-| P1 | Base de données, migrations et sécurité | 1/15 | CP-1 | ⏳ |
+| P1 | Base de données, migrations et sécurité | 2/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
@@ -50,15 +50,15 @@
 | [SPEC-012](../specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md) | Images Docker et déploiement auto-hébergé | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-007, SPEC-008 |
 | [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-009, SPEC-011 |
 | [SPEC-101](../specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md) | Paquet db : Drizzle, migrations et harnais de test | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-008 |
-| [SPEC-102](../specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md) | Schéma identité et préférences | P1 | 🟢 ready | 0 | — | SPEC-101 |
-| [SPEC-103](../specs/p1-donnees/SPEC-103-schema-formations-programme-et-notions.md) | Schéma formations, programme et notions | P1 | ⏳ waiting | 0 | — | SPEC-102 |
+| [SPEC-102](../specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md) | Schéma identité et préférences | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-101 |
+| [SPEC-103](../specs/p1-donnees/SPEC-103-schema-formations-programme-et-notions.md) | Schéma formations, programme et notions | P1 | 🟢 ready | 0 | — | SPEC-102 |
 | [SPEC-104](../specs/p1-donnees/SPEC-104-schema-ressources-et-passages-vectoriels.md) | Schéma ressources et passages vectoriels | P1 | ⏳ waiting | 0 | — | SPEC-103 |
 | [SPEC-105](../specs/p1-donnees/SPEC-105-schema-cours-et-discussions.md) | Schéma cours et discussions | P1 | ⏳ waiting | 0 | — | SPEC-104 |
 | [SPEC-106](../specs/p1-donnees/SPEC-106-schema-briques-activites-et-tentatives.md) | Schéma briques, activités et tentatives | P1 | ⏳ waiting | 0 | — | SPEC-103 |
 | [SPEC-107](../specs/p1-donnees/SPEC-107-schema-memorisation-et-lacunes.md) | Schéma mémorisation et lacunes | P1 | ⏳ waiting | 0 | — | SPEC-106 |
 | [SPEC-108](../specs/p1-donnees/SPEC-108-schema-agenda-automatismes-et-serie.md) | Schéma agenda, automatismes et série | P1 | ⏳ waiting | 0 | — | SPEC-102, SPEC-103 |
-| [SPEC-109](../specs/p1-donnees/SPEC-109-schema-notifications.md) | Schéma notifications | P1 | ⏳ waiting | 0 | — | SPEC-102 |
-| [SPEC-110](../specs/p1-donnees/SPEC-110-schema-ia-et-facturation.md) | Schéma IA et facturation | P1 | ⏳ waiting | 0 | — | SPEC-102 |
+| [SPEC-109](../specs/p1-donnees/SPEC-109-schema-notifications.md) | Schéma notifications | P1 | 🟢 ready | 0 | — | SPEC-102 |
+| [SPEC-110](../specs/p1-donnees/SPEC-110-schema-ia-et-facturation.md) | Schéma IA et facturation | P1 | 🟢 ready | 0 | — | SPEC-102 |
 | [SPEC-111](../specs/p1-donnees/SPEC-111-schema-formations-a-plusieurs.md) | Schéma formations à plusieurs | P1 | ⏳ waiting | 0 | — | SPEC-103 |
 | [SPEC-112](../specs/p1-donnees/SPEC-112-schema-donnees-personnelles-idempotence-et-recherc.md) | Schéma données personnelles, idempotence et recherche | P1 | ⏳ waiting | 0 | — | SPEC-105, SPEC-103 |
 | [SPEC-113](../specs/p1-donnees/SPEC-113-politiques-rls-et-tests-d-isolation.md) | Politiques RLS et tests d'isolation | P1 | ⏳ waiting | 0 | — | SPEC-102, SPEC-103, SPEC-104, SPEC-105, SPEC-106, SPEC-107, SPEC-108, SPEC-109, SPEC-110, SPEC-111, SPEC-112 |

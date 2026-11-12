@@ -2,3 +2,4 @@
 // SPEC-102 to SPEC-112 append their table modules here, after the shared enums.
 export * from './columns';
 export * from './enums';
+export * from './identity';

@@ -42,21 +42,30 @@ export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {
   ACCOUNT_RULES,
+  AUTOMATION_DEFAULTS,
+  AUTOMATION_KEYS,
+  AUTOMATION_OPTIONS,
   FORMATION_RULES,
   GROUP_RULES,
   MEMORY_RULES,
+  NOTIFICATION_DEFAULTS,
   NOTIFICATION_RULES,
   QUIZ_RULES,
   RESOURCE_RULES,
+  STUDY_DEFAULTS,
 } from './product';
 export type {
   AccountRules,
+  AutomationDefaults,
+  AutomationKey,
   FormationRules,
   GroupRules,
   MemoryRules,
+  NotificationDefaults,
   NotificationRules,
   QuizRules,
   ResourceRules,
+  StudyDefaults,
 } from './product';
 export {
   AI_MODEL_IDS,
