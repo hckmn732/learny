@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.104654">
+<testsuite name="p4/spec-410.spec.ts" timestamp="2026-11-12T21:37:58.539Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.434" errors="0">
+<testcase name="Sélection de l’échauffement @SPEC-410" classname="p4/spec-410.spec.ts" time="1.425">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/attachments/axe-0ba6b50d2d45293c8a66e3d7e67252b7e493f32a.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/attachments/spec-410-demo-9a70690aff024f3f24354be9c474cfb46a925ae9.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l’échauffement-SPEC-410-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Sélection de l’échauffement, conformité visuelle @SPEC-410 @visual @mobile" classname="p4/spec-410.spec.ts" time="1.009">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/attachments/axe-3f3ccce656f7d51fa18d5c9a834e0b3c168d89d9.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/attachments/spec-410-demo-visual-a74bc17d160cf770e2b64242effc2d7a3bf5f0d1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-410.spec.ts" timestamp="2026-11-12T21:37:58.539Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.134" errors="0">
+<testcase name="Sélection de l’échauffement, conformité visuelle @SPEC-410 @visual @mobile" classname="p4/spec-410.spec.ts" time="1.134">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/attachments/axe-788ba2f40b52537df8c0f07897c7268a13f1888e.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/attachments/spec-410-demo-visual-491219e35588d220ac9a43deb9761ce3ad7d29fb.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-410-Sélection-de-l-98fff-elle-SPEC-410-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
