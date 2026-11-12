@@ -166,7 +166,46 @@
   --container-content: 72.5rem;
   --container-popover: 25rem;
   --container-menu: 16.25rem;
+
+  /* Stacking order (SPEC-303, ET-2). */
+  --z-header: 30;
+  --z-popover: 40;
+  --z-drawer: 45;
+  --z-dialog: 50;
+  --z-toast: 60;
+  --z-skip: 100;
+
+  /* Animations (SPEC-303, ADR-0138); reduced motion disables them. */
+  --animate-overlay-in: learny-overlay-in 150ms ease-out;
+  --animate-dialog-in: learny-dialog-in 150ms ease-out;
+  --animate-toast-in: learny-toast-in 150ms ease-out;
+  --animate-skeleton-pulse: learny-skeleton-pulse 1500ms ease-in-out infinite;
+
+  @keyframes learny-overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes learny-dialog-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes learny-toast-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes learny-skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
 }
+
+/* Stacking utilities backed by the z-* tokens (SPEC-303, ET-2). */
+@utility z-header { z-index: var(--z-header); }
+@utility z-popover { z-index: var(--z-popover); }
+@utility z-drawer { z-index: var(--z-drawer); }
+@utility z-dialog { z-index: var(--z-dialog); }
+@utility z-toast { z-index: var(--z-toast); }
+@utility z-skip { z-index: var(--z-skip); }
 
 /* Control heights are not a Tailwind namespace; they are consumed through @learny/ui/tokens. */
 /* 28, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52 mockup px. */
