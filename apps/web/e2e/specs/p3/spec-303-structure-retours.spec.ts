@@ -77,10 +77,13 @@ test('menus et dialogues au clavier @SPEC-303', async ({ page, axeCheck, console
   await expect(alert).toBeHidden();
   await expect(alertTrigger).toBeFocused();
 
-  // Infobulle : visible au focus clavier (EF-11). Retry the focus: a closed alert dialog may
-  // restore focus asynchronously on slower CI runners.
+  // Infobulle : visible au focus clavier (EF-11). Retry with an explicit blur: a closed alert
+  // dialog may restore focus asynchronously, and focusing an already-focused trigger emits no
+  // new focus event for Radix to open the tooltip.
+  const tooltipTrigger = page.getByTestId('ui-tooltip-trigger');
   await expect(async () => {
-    await page.getByTestId('ui-tooltip-trigger').focus();
+    await tooltipTrigger.blur();
+    await tooltipTrigger.focus();
     await expect(page.getByTestId('ui-tooltip-content')).toBeVisible({ timeout: 2000 });
   }).toPass({ timeout: 15000 });
 
