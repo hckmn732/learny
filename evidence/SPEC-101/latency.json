@@ -1,0 +1,8 @@
+{
+  "iterations": 50,
+  "unit": "ms",
+  "p50": 0.629,
+  "p95": 0.787,
+  "max": 0.89,
+  "thresholdP95": 15
+}
