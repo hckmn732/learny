@@ -11,3 +11,5 @@ export * from './courses';
 export * from './courses.json-schemas';
 export * from './bricks-activities';
 export * from './bricks-json';
+export * from './memory';
+export * from './memory-json';
