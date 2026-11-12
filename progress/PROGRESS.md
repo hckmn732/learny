@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T07:04:27.452Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T07:59:43.646Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -9,20 +9,20 @@
 | Spécifications | 132 (V1 : 124, V2 : 8) |
 | Terminées | 28 |
 | En cours | 0 |
-| Prêtes | 0 |
-| En attente de dépendances | 104 |
+| Prêtes | 2 |
+| En attente de dépendances | 102 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **21.2 %** |
 | Avancement V1 | 22.6 % |
-| Prochaine action | checkpoint CP-1 |
+| Prochaine action | start SPEC-201 — Socle API v1 et contrats |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
-| P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ⏳ |
+| P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
@@ -64,13 +64,13 @@
 | [SPEC-113](../specs/p1-donnees/SPEC-113-politiques-rls-et-tests-d-isolation.md) | Politiques RLS et tests d'isolation | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-102, SPEC-103, SPEC-104, SPEC-105, SPEC-106, SPEC-107, SPEC-108, SPEC-109, SPEC-110, SPEC-111, SPEC-112 |
 | [SPEC-114](../specs/p1-donnees/SPEC-114-stockage-des-fichiers.md) | Stockage des fichiers | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-104, SPEC-113 |
 | [SPEC-115](../specs/p1-donnees/SPEC-115-jeu-de-donnees-de-demonstration-et-fabriques.md) | Jeu de données de démonstration et fabriques | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-113 |
-| [SPEC-201](../specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md) | Socle API v1 et contrats | P2 | ⏳ waiting | 0 | — | SPEC-006, SPEC-101 |
+| [SPEC-201](../specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md) | Socle API v1 et contrats | P2 | 🟢 ready | 0 | — | SPEC-006, SPEC-101 |
 | [SPEC-202](../specs/p2-backend/SPEC-202-authentification-et-sessions.md) | Authentification et sessions | P2 | ⏳ waiting | 0 | — | SPEC-201, SPEC-102 |
 | [SPEC-203](../specs/p2-backend/SPEC-203-evenements-de-domaine-jobs-et-crons.md) | Événements de domaine, jobs et crons | P2 | ⏳ waiting | 0 | — | SPEC-007, SPEC-201 |
 | [SPEC-204](../specs/p2-backend/SPEC-204-service-e-mail-et-gabarits.md) | Service e-mail et gabarits | P2 | ⏳ waiting | 0 | — | SPEC-203, SPEC-009 |
 | [SPEC-205](../specs/p2-backend/SPEC-205-notifications-navigateur-web-push.md) | Notifications navigateur (Web Push) | P2 | ⏳ waiting | 0 | — | SPEC-203, SPEC-109 |
 | [SPEC-206](../specs/p2-backend/SPEC-206-service-de-fichiers-et-envois.md) | Service de fichiers et envois | P2 | ⏳ waiting | 0 | — | SPEC-114, SPEC-201 |
-| [SPEC-207](../specs/p2-backend/SPEC-207-horloge-fuseaux-et-heures-calmes.md) | Horloge, fuseaux et heures calmes | P2 | ⏳ waiting | 0 | — | SPEC-101 |
+| [SPEC-207](../specs/p2-backend/SPEC-207-horloge-fuseaux-et-heures-calmes.md) | Horloge, fuseaux et heures calmes | P2 | 🟢 ready | 0 | — | SPEC-101 |
 | [SPEC-208](../specs/p2-backend/SPEC-208-limitation-de-debit-et-protections-de-l-api.md) | Limitation de débit et protections de l'API | P2 | ⏳ waiting | 0 | — | SPEC-201 |
 | [SPEC-209](../specs/p2-backend/SPEC-209-service-unifie-de-notifications.md) | Service unifié de notifications | P2 | ⏳ waiting | 0 | — | SPEC-204, SPEC-205, SPEC-207, SPEC-109 |
 | [SPEC-210](../specs/p2-backend/SPEC-210-abonnement-stripe-service.md) | Abonnement Stripe (service) | P2 | ⏳ waiting | 0 | — | SPEC-201, SPEC-110 |

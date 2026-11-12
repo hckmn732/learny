@@ -9,6 +9,112 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.1.0] — 2026-11-12
+
+### Ajouts
+
+- feat(SPEC-115): charge le jeu de démonstration
+- feat(SPEC-114): expose la démonstration et les preuves visuelles
+- feat(SPEC-114): signe les accès aux fichiers
+- feat(SPEC-114): crée les buckets privés
+- feat(SPEC-113): expose la démonstration et les preuves visuelles
+- feat(SPEC-113): impose les politiques RLS
+- feat(SPEC-111): ajoute la page de démonstration et son parcours e2e
+- feat(SPEC-111): expose la progression limitée du groupe
+- feat(SPEC-111): crée groupes et membres
+- feat(SPEC-110): ajoute la démonstration des coûts IA
+- feat(SPEC-112): démontre recherche et données personnelles
+- feat(SPEC-110): crée les tables et l’agrégat IA/facturation
+- feat(SPEC-112): recherche le contenu privé
+- feat(SPEC-112): crée export acceptations et quotas
+- feat(SPEC-109): ajoute la page de démonstration et son parcours e2e
+- feat(SPEC-109): migre et protège les notifications
+- feat(SPEC-109): crée la boîte et les livraisons
+- feat(SPEC-108): ajoute la page de démonstration et son parcours e2e
+- feat(SPEC-108): expose les repositories agenda et automatismes
+- feat(SPEC-108): migre et protège les données de planning
+- feat(SPEC-108): crée agenda actions et série
+- feat(SPEC-107): ajoute la page de démonstration et son parcours e2e
+- feat(SPEC-107): migre et indexe les révisions
+- feat(SPEC-107): crée les états de mémorisation et lacunes
+- feat(SPEC-106): ajoute la page de démonstration et son parcours e2e
+- feat(SPEC-106): valide et persiste les activités et tentatives
+- feat(SPEC-106): crée le schéma des briques et activités
+- feat(SPEC-105): ajoute la page de démonstration
+- feat(SPEC-105): ajoute le schéma des cours et discussions
+- feat(SPEC-104): ajoute la page de démonstration
+- feat(SPEC-104): ajoute ressources et passages vectoriels
+- feat(SPEC-103): ajoute la page de démonstration
+- feat(SPEC-103): ajoute contraintes de liens et index plein texte
+- feat(SPEC-103): ajoute le schéma des formations et du programme
+- feat(SPEC-102): ajoute la page de démonstration
+- feat(SPEC-102): ajoute le schéma identité et préférences
+- feat(SPEC-101): ajoute la page de démonstration
+- feat(SPEC-101): ajoute la synchronisation des migrations
+- feat(SPEC-101): ajoute les clients userDb et serviceDb et le harnais de test
+- feat(SPEC-101): ajoute extensions, fonctions partagées et énumérations
+
+### Corrections
+
+- fix(SPEC-103): isole la démo FTS du seed de démonstration
+- fix(SPEC-012): démarre le stockage avant les migrations
+- fix(SPEC-111): adapte les comptes de test à GoTrue v2.197
+- fix(SPEC-105): ordonne les messages de la démonstration
+
+### Documentation
+
+- docs(SPEC-114): consigne les décisions de stockage
+- docs(SPEC-115): inventorie les données des maquettes
+- docs(SPEC-111): consigne les décisions du schéma à plusieurs
+- docs(SPEC-110): consigne les décisions de schéma IA et facturation
+- docs(SPEC-112): consigne les décisions d'implémentation
+- docs(SPEC-109): consigne les décisions de persistance et de RLS
+- docs(SPEC-108): consigne les décisions de persistance et de RLS
+- docs(SPEC-107): consigne les décisions de persistance et de RLS
+- docs(SPEC-106): consigne les décisions de schéma et de concurrence
+- docs(SPEC-105): consigne les compléments d'implémentation
+- docs(SPEC-104): consigne les compléments d'implémentation
+- docs(SPEC-103): consigne les compléments d'implémentation
+- docs(SPEC-102): consigne les compléments d'implémentation
+- docs(SPEC-101): documente le paquet db et consigne les décisions
+
+### Tests
+
+- test(SPEC-101): actualise les lignes de base après les démos P1
+- test(SPEC-103): isole la recherche FTS sur sa formation
+- test(SPEC-008): restaure la pile après le test d'arrêt
+- test(SPEC-115): ajoute les fabriques et vérifie l'idempotence
+- test(SPEC-113): limite l'inventaire aux politiques publiques
+- test(SPEC-114): prouve l'isolation Storage
+- test(SPEC-113): prouve l'isolation de chaque table
+- test(SPEC-113): inventorie les tables et accès attendus
+- test(SPEC-111): vérifie capacité et confidentialité
+- test(SPEC-110): ajoute les lignes de base visuelles
+- test(SPEC-110): vérifie coût, secret et RLS en base
+- test(SPEC-112): vérifie recherche et idempotence
+- test(SPEC-109): vérifie déduplication et préférences
+- test(SPEC-108): vérifie statuts et traçabilité
+- test(SPEC-107): met à jour la ligne de base de SPEC-101
+- test(SPEC-107): rend l'ordre des événements de lacune déterministe
+- test(SPEC-107): vérifie FSRS persistant, concurrence et isolation
+- test(SPEC-106): met à jour la ligne de base de SPEC-101
+- test(SPEC-106): couvre la persistance et l'isolation RLS
+- test(SPEC-105): couvre versions, citations et discussions
+- test(SPEC-104): couvre limites, cascades et recherche vectorielle
+- test(SPEC-103): actualise les lignes de base après le registre et les migrations
+- test(SPEC-103): couvre contraintes et cascades du programme
+- test(SPEC-006): actualise la ligne de base du registre
+- test(SPEC-003): suit le registre réel des démonstrations
+- test(SPEC-102): ajoute le test e2e et visuel
+- test(SPEC-102): couvre défauts, contraintes et déclencheurs
+- test(SPEC-101): met à jour la ligne de base visuelle SPEC-006
+- test(SPEC-101): nomme la capture de preuve de la page db
+- test(SPEC-101): ajoute le harnais et les tests de la base
+
+### Construction
+
+- build(SPEC-101): crée le paquet db et la configuration drizzle-kit
+
 ## [v0.0.0] — 2026-11-11
 
 ### Ajouts
