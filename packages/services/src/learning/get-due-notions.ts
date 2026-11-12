@@ -22,7 +22,7 @@ interface DueRow {
   module_position: number;
   module_status: string;
   evaluated: boolean;
-  due_at: Date;
+  due_at: Date | string;
   mastery: string;
   gap_nature: string | null;
 }
@@ -112,7 +112,7 @@ export async function getDueNotions(
         modulePosition: row.module_position,
         moduleStatus: moduleStatus(row.module_status),
         evaluated: row.evaluated,
-        dueAt: row.due_at.toISOString(),
+        dueAt: new Date(row.due_at).toISOString(),
         mastery: Number(row.mastery),
         gapNature: gapNature(row.gap_nature),
       }));

@@ -63,8 +63,8 @@ interface ExistingSlot {
   kind: string;
   title: string;
   module_id: string | null;
-  starts_at: Date;
-  ends_at: Date;
+  starts_at: Date | string;
+  ends_at: Date | string;
   status: string;
   created_by: string;
 }
@@ -73,8 +73,8 @@ function slotList(plan: PlanResult | readonly PlannedSlot[]): readonly PlannedSl
   return 'slots' in plan ? plan.slots : plan;
 }
 
-function sameInstant(left: string, right: Date): boolean {
-  return new Date(left).getTime() === right.getTime();
+function sameInstant(left: string, right: Date | string): boolean {
+  return new Date(left).getTime() === new Date(right).getTime();
 }
 
 /**
@@ -192,7 +192,7 @@ export async function persistPlan(
       let cancelled = 0;
       for (const row of existing) {
         if (row.status !== 'planned' || row.created_by !== 'planner') continue;
-        if (row.starts_at.getTime() < now.getTime()) continue;
+        if (new Date(row.starts_at).getTime() < now.getTime()) continue;
         if (row.planner_key !== null && desired.has(row.planner_key)) continue;
         await tx
           .update(scheduleSlots)

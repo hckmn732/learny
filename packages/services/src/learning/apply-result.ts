@@ -399,7 +399,8 @@ export function planNotionReviews(
           mastery: masteryAfter,
           now: answer.answeredAt,
           existingGap: activeGap,
-          fsrsLapsed: decision.rating === 'again',
+          fsrsLapsed:
+            state.fsrs !== null && state.fsrs.state !== 'new' && decision.rating === 'again',
           params: params.gaps,
         });
         gapAfter = detection.gap ?? activeGap;
@@ -419,7 +420,8 @@ export function planNotionReviews(
         mastery: masteryAfter,
         now: answer.answeredAt,
         existingGap: state.gap,
-        fsrsLapsed: decision.rating === 'again',
+        fsrsLapsed:
+          state.fsrs !== null && state.fsrs.state !== 'new' && decision.rating === 'again',
         params: params.gaps,
       });
       gapAfter = detection.gap ?? state.gap;
@@ -483,7 +485,7 @@ export function fromPersistenceCard(card: FsrsCardJson): SerializedFsrsCard {
     difficulty: card.difficulty,
     elapsed_days: card.elapsed_days,
     scheduled_days: card.scheduled_days,
-    learning_steps: card.learning_steps,
+    learning_steps: card.learning_steps ?? 0,
     reps: card.reps,
     lapses: card.lapses,
     state: FSRS_STATE_NAMES[card.state],
@@ -494,17 +496,17 @@ export function fromPersistenceCard(card: FsrsCardJson): SerializedFsrsCard {
 function toGapState(row: {
   gapNature: GapNature | null;
   gapConfusedWith: string | null;
-  gapDetectedAt: Date | null;
+  gapDetectedAt: Date | string | null;
   gapEvidence: string | null;
-  gapClearedAt: Date | null;
+  gapClearedAt: Date | string | null;
 }): GapState | null {
   if (row.gapNature === null || row.gapDetectedAt === null) return null;
   return {
     nature: row.gapNature,
     confusedWith: row.gapConfusedWith,
-    detectedAt: row.gapDetectedAt.toISOString(),
+    detectedAt: new Date(row.gapDetectedAt).toISOString(),
     evidence: row.gapEvidence ?? '',
-    clearedAt: row.gapClearedAt === null ? null : row.gapClearedAt.toISOString(),
+    clearedAt: row.gapClearedAt === null ? null : new Date(row.gapClearedAt).toISOString(),
   };
 }
 
@@ -533,8 +535,8 @@ interface AttemptRow {
   activity_id: string;
   attempt_no: number;
   status: string;
-  started_at: Date;
-  submitted_at: Date | null;
+  started_at: Date | string;
+  submitted_at: Date | string | null;
   duration_ms: number | null;
   activity_kind: string;
   module_id: string | null;
@@ -554,7 +556,7 @@ interface AnswerRow {
   score: string | null;
   max_score: string | null;
   time_ms: number | null;
-  answered_at: Date;
+  answered_at: Date | string;
   chosen_distractor_notion_id: string | null;
   response: unknown;
   feedback: unknown;
@@ -570,16 +572,16 @@ interface NotionStateRow {
   [key: string]: unknown;
   notion_id: string;
   fsrs: FsrsCardJson;
-  due_at: Date | null;
+  due_at: Date | string | null;
   mastery: string;
-  first_seen_at: Date | null;
-  last_seen_at: Date | null;
+  first_seen_at: Date | string | null;
+  last_seen_at: Date | string | null;
   success_count: number;
   gap_nature: string | null;
   gap_confused_with: string | null;
-  gap_detected_at: Date | null;
+  gap_detected_at: Date | string | null;
   gap_evidence: string | null;
-  gap_cleared_at: Date | null;
+  gap_cleared_at: Date | string | null;
   in_review: boolean;
 }
 
@@ -596,7 +598,7 @@ interface HistoryRow {
   score: string | null;
   max_score: string | null;
   time_ms: number | null;
-  answered_at: Date;
+  answered_at: Date | string;
   chosen_distractor_notion_id: string | null;
   response: unknown;
   feedback: unknown;
@@ -689,7 +691,7 @@ function answerRecordOf(row: HistoryRow): AnswerRecord | null {
     maxScore: row.max_score === null ? null : Number(row.max_score),
     selfRating: ratingField(row.response),
     timeMs: row.time_ms ?? 0,
-    answeredAt: row.answered_at.toISOString(),
+    answeredAt: new Date(row.answered_at).toISOString(),
     chosenDistractorNotionId: row.chosen_distractor_notion_id,
     confusedWithNotionId: confusedWithField(row.response),
     normalizedResponse: normalizedResponse(row.response),
@@ -765,7 +767,7 @@ async function loadNotions(
     select id::text as id, formation_id::text as formation_id
     from public.notions
     where formation_id = ${formationId}::uuid
-      and id = any(${JSON.stringify(notionIds)}::uuid[])
+      and id = any(array(select jsonb_array_elements_text(${JSON.stringify(notionIds)}::jsonb)::uuid))
   `);
   return new Map(rows.map((row) => [row.id, row]));
 }
@@ -793,7 +795,7 @@ async function loadStates(
       in_review
     from public.notion_states
     where user_id = ${userId}::uuid
-      and notion_id = any(${JSON.stringify(notionIds)}::uuid[])
+      and notion_id = any(array(select jsonb_array_elements_text(${JSON.stringify(notionIds)}::jsonb)::uuid))
     for update
   `);
   return new Map(rows.map((row) => [row.notion_id, row]));
@@ -832,7 +834,7 @@ async function loadHistory(tx: DbTx, userId: string, notionId: string): Promise<
 async function loadTimedHistory(tx: DbTx, userId: string): Promise<TimedResponse[]> {
   const rows = await tx.execute<{
     answer_id: string;
-    answered_at: Date;
+    answered_at: Date | string;
     time_ms: number | null;
     brick_type: string;
   }>(sql`
@@ -857,7 +859,7 @@ async function loadTimedHistory(tx: DbTx, userId: string): Promise<TimedResponse
     if (format === null) continue;
     timed.push({
       answerId: row.answer_id,
-      answeredAt: row.answered_at.toISOString(),
+      answeredAt: new Date(row.answered_at).toISOString(),
       timeMs: row.time_ms,
       format,
     });
@@ -875,7 +877,7 @@ async function loadAppliedKeys(
     select answer_id::text as answer_id, notion_id::text as notion_id
     from public.review_logs
     where user_id = ${userId}::uuid
-      and answer_id = any(${JSON.stringify(answerIds)}::uuid[])
+      and answer_id = any(array(select jsonb_array_elements_text(${JSON.stringify(answerIds)}::jsonb)::uuid))
   `);
   return new Set(rows.map((row) => reviewKey(row.answer_id, row.notion_id)));
 }
@@ -902,8 +904,8 @@ function previousStateOf(row: NotionStateRow | undefined): PreviousNotionState {
   return {
     fsrs: fromPersistenceCard(row.fsrs),
     mastery: Number(row.mastery),
-    firstSeenAt: row.first_seen_at === null ? null : row.first_seen_at.toISOString(),
-    lastSeenAt: row.last_seen_at === null ? null : row.last_seen_at.toISOString(),
+    firstSeenAt: row.first_seen_at === null ? null : new Date(row.first_seen_at).toISOString(),
+    lastSeenAt: row.last_seen_at === null ? null : new Date(row.last_seen_at).toISOString(),
     successCount: row.success_count,
     gap: toGapState({
       gapNature: row.gap_nature === null ? null : toGapNature(row.gap_nature),
@@ -1135,7 +1137,7 @@ async function applyInTransaction(
       answerId: row.answer_id,
       attemptId: row.attempt_id,
       score: scoreValue(row.score, row.max_score, row.is_correct),
-      answeredAt: row.answered_at.toISOString(),
+      answeredAt: new Date(row.answered_at).toISOString(),
     }));
 
     const reviewAnswers: NotionReviewAnswer[] = notionCandidates.map((candidate) => {
@@ -1154,7 +1156,7 @@ async function applyInTransaction(
         correct: row.is_correct as boolean,
         timeMs: row.time_ms ?? 0,
         selfRating: ratingField(row.response),
-        answeredAt: row.answered_at.toISOString(),
+        answeredAt: new Date(row.answered_at).toISOString(),
         chosenDistractorNotionId: row.chosen_distractor_notion_id,
         confusedWithNotionId: confusedWithField(row.response),
         normalizedResponse: normalizedResponse(row.response),
@@ -1191,7 +1193,7 @@ async function applyInTransaction(
   let dailyActivity: LearningApplicationSummary['dailyActivity'] = null;
   if (steps.length > 0) {
     const timezone = await loadTimezone(tx, userId);
-    const submitted = attempt.submitted_at ?? now;
+    const submitted = attempt.submitted_at === null ? now : new Date(attempt.submitted_at);
     const totalMs =
       attempt.duration_ms ?? answers.reduce((sum, answer) => sum + (answer.time_ms ?? 0), 0);
     const minutes = Math.max(1, Math.ceil(totalMs / 60_000));
