@@ -1,0 +1,541 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-202",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/test-results/sdd/SPEC-202/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "APP_ENV": "test",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p2/spec-202-auth.spec.ts",
+      "file": "p2/spec-202-auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "inscription et connexion par lien magique puis déconnexion @SPEC-202",
+          "ok": true,
+          "tags": [
+            "SPEC-202"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2069,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T08:59:46.007Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-202-connecte",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/attachments/spec-202-connecte-2c52915aca4cc8f3362793a715262ec6e67c5dfb.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/attachments/axe-83d3afb9a4c7007c0bd0221864e8f140c8e84941.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d590affd237ecd1ca67-846d7eb4967464ae2214",
+          "file": "p2/spec-202-auth.spec.ts",
+          "line": 24,
+          "column": 1
+        },
+        {
+          "title": "mot de passe et renvoi limité @SPEC-202",
+          "ok": true,
+          "tags": [
+            "SPEC-202"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1900,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T08:59:48.209Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/attachments/axe-25147ed4d078580fae5df26909c2d4e9be2837f7.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d590affd237ecd1ca67-67973b41dd61fb0d080b",
+          "file": "p2/spec-202-auth.spec.ts",
+          "line": 61,
+          "column": 1
+        },
+        {
+          "title": "le proxy garde les pages et l’onboarding @SPEC-202",
+          "ok": true,
+          "tags": [
+            "SPEC-202"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T08:59:50.204Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d590affd237ecd1ca67-4a20f0abc7bd670fb759",
+          "file": "p2/spec-202-auth.spec.ts",
+          "line": 110,
+          "column": 1
+        },
+        {
+          "title": "page de démonstration SPEC-202 @SPEC-202 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-202",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 900,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T08:59:50.823Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/attachments/axe-5fb7d04157f2f14a37fdff7fea667253dcc78787.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 924,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T08:59:52.448Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/attachments/axe-355b5f9718c403958bf4af1347f253e1c7bb3625.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/test-results/artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5d590affd237ecd1ca67-67d046ccb2a5903531ba",
+          "file": "p2/spec-202-auth.spec.ts",
+          "line": 142,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T08:59:16.527Z",
+    "duration": 37022.046,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
