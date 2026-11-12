@@ -409,3 +409,38 @@ export type {
   RlsScenario,
   RlsTableMatrix,
 } from './rls/matrix';
+
+// Private storage layout and signed access of SPEC-114 (ET-3, ET-4, ADR-0249). Paths bind every
+// object to `<userId>/<uuid>/<name>`; signatures last exactly ten minutes and are only issued after
+// the linked database row proves ownership.
+export {
+  MAX_STORAGE_FILE_NAME_LENGTH,
+  STORAGE_BUCKETS,
+  STORAGE_PATH_SEGMENTS,
+  exportPath,
+  isStorageUuid,
+  normalizeStorageFileName,
+  parseOwnedPath,
+  resourcePath,
+} from './storage/paths';
+export type { OwnedStoragePath, StorageBucket } from './storage/paths';
+export {
+  SIGNED_URL_TTL_MS,
+  SIGNED_URL_TTL_SECONDS,
+  SupabaseStorageGateway,
+  createReadUrl,
+  createUploadUrl,
+  deleteStoredObject,
+  listOwnedObjects,
+  signedUrlExpiresAt,
+} from './storage/signed-urls';
+export type {
+  SignedStorageUrl,
+  SignedUrlRequest,
+  StorageAccess,
+  StorageDb,
+  StorageGateway,
+  StorageObject,
+  StorageRuntime,
+  SupabaseStorageOptions,
+} from './storage/signed-urls';
