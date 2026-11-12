@@ -41,6 +41,63 @@ export {
   cronHourlyTick,
 } from './functions/cron-hourly-tick';
 export { CRON_NIGHTLY_ID, NIGHTLY_CRON, cronNightly } from './functions/cron-nightly';
+export { ACCOUNT_DELETION_ID, DELETION_BATCH, accountDeletion } from './functions/account-deletion';
+export {
+  DATA_EXPORT_ID,
+  EXPORT_TIMEOUT_MS,
+  EXPORT_TTL_MS,
+  dataExport,
+  runDataExport,
+} from './functions/data-export';
+export type { DataExportOutcome, DataExportRunArgs, StepRunner } from './functions/data-export';
+export { EXPORTS_PURGE_ID, exportsPurge } from './functions/exports-purge';
+export {
+  createMemoryExportDeps,
+  defaultDeletionDeps,
+  defaultExportDeps,
+} from './personal-data/deps';
+export type {
+  AccountAdmin,
+  DeletionDeps,
+  ExportDeps,
+  MemoryExportDeps,
+  ZipUploader,
+} from './personal-data/deps';
+export { EXPORT_PURGE_GRACE_MS, runExportsPurge } from './personal-data/purge';
+export type { PurgeOutcome } from './personal-data/purge';
+export { remainingPersonalRows, runAccountDeletion } from './personal-data/deletion';
+export type {
+  AccountDeletionOutcome,
+  AccountDeletionArgs,
+  RemainingRow,
+} from './personal-data/deletion';
+export { collectExportData } from './personal-data/collect';
+export type { CollectedExport, ExportCollection } from './personal-data/collect';
+export {
+  ARCHIVE_CONVERSATIONS,
+  ARCHIVE_README,
+  ARCHIVE_RESULTS,
+  ARCHIVE_SETTINGS,
+  archiveSlug,
+  buildArchiveEntries,
+  buildSettingsJson,
+  formatLongDate,
+  formatSizeLabel,
+  moduleFolder,
+  normalizeArchiveName,
+  reserveEntryName,
+  reserveFolderName,
+} from './personal-data/zip-layout';
+export type {
+  ArchiveApport,
+  ArchiveEntry,
+  ArchiveFormation,
+  ArchiveModel,
+  ArchiveModule,
+  SettingsInput,
+} from './personal-data/zip-layout';
+export { removeArchiveFile, writeArchiveFile } from './personal-data/archive';
+export type { ArchiveObjectReader, WrittenArchive } from './personal-data/archive';
 export { EMAIL_WELCOME_ID, emailWelcome, welcomeIdempotencyKey } from './functions/email-welcome';
 export { NOTIFICATION_DELIVERY_ID, notificationDelivery } from './functions/notification-delivery';
 export {

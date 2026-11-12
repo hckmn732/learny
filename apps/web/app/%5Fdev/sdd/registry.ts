@@ -185,4 +185,9 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-209'),
   },
+  'SPEC-211': {
+    title: 'SPEC-211 — Export des données et suppression du compte',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-211'),
+  },
 };

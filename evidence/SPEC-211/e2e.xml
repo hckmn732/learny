@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.917985">
+<testsuite name="p2/spec-211.spec.ts" timestamp="2026-11-12T12:10:31.951Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.187" errors="0">
+<testcase name="export puis suppression complète @SPEC-211" classname="p2/spec-211.spec.ts" time="2.045">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/attachments/axe-21af872a8bc8460e38fa63ab4d706e63fcd4aba7.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/attachments/spec-211-donnees-personnelles-bfad4848f065ce4e1540ebfea6aa61fc6b82de60.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-export-puis-suppression-complète-SPEC-211-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="données personnelles conformes @SPEC-211 @visual @mobile" classname="p2/spec-211.spec.ts" time="1.142">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-desktop/attachments/axe-4e4bb595375c648644eec4c8371b8360e0a7edc3.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-211.spec.ts" timestamp="2026-11-12T12:10:31.951Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.173" errors="0">
+<testcase name="données personnelles conformes @SPEC-211 @visual @mobile" classname="p2/spec-211.spec.ts" time="1.173">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-mobile/attachments/axe-7255e90097b9fd60a0a7e9563fb06282e8c88c07.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-211-données-person-cb47d-rmes-SPEC-211-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

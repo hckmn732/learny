@@ -5,7 +5,7 @@
 // one statement. The downloadability rule is the pure `isDataExportDownloadable` helper: an expired
 // export stays visible for audit but no signed URL is ever issued (CL-2). Legal acceptances are
 // append-only: accepting the same document version twice returns the first row untouched (CL-1).
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { AppError } from '@learny/core';
@@ -30,6 +30,8 @@ const storagePathSchema = z.string().min(1).max(1024);
 const sizeBytesSchema = z.int().min(0);
 const versionSchema = z.string().min(1).max(40);
 const documentSchema = z.enum(LEGAL_DOCUMENTS);
+const daySchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const exportErrorSchema = z.string().min(1).max(2000);
 
 function validationError(field: string, issues: string[]): AppError {
   return new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide : ${issues.join(' ; ')}`, {
@@ -61,6 +63,7 @@ export interface CreateDataExportInput {
   storagePath?: string | null;
   expiresAt?: Date | null;
   sizeBytes?: number | null;
+  requestedOn?: string | null;
   createdAt?: Date;
 }
 
@@ -85,6 +88,10 @@ export async function createDataExport(
       : parse(sizeBytesSchema, input.sizeBytes, 'sizeBytes');
   const createdAt =
     input.createdAt === undefined ? undefined : parse(instantSchema, input.createdAt, 'createdAt');
+  const requestedOn =
+    input.requestedOn === undefined || input.requestedOn === null
+      ? null
+      : parse(daySchema, input.requestedOn, 'requestedOn');
 
   const [row] = await tx
     .insert(dataExports)
@@ -94,6 +101,7 @@ export async function createDataExport(
       storagePath,
       expiresAt,
       sizeBytes,
+      requestedOn,
       ...(createdAt === undefined ? {} : { createdAt }),
     })
     .returning();
@@ -131,8 +139,8 @@ export async function completeDataExport(
   return row;
 }
 
-/** EF-1 — a failed job keeps its row for audit, without a download path. */
-export async function failDataExport(
+/** EF-1, EF-4 — marks a job running once its first step starts (idempotent replay). */
+export async function startDataExport(
   tx: DbTx,
   input: { userId: string; exportId: string },
 ): Promise<DataExport> {
@@ -140,11 +148,91 @@ export async function failDataExport(
   const exportId = identifier(input.exportId, 'exportId');
   const [row] = await tx
     .update(dataExports)
-    .set({ status: 'failed', storagePath: null, expiresAt: null })
+    .set({ status: 'running', error: null })
     .where(and(eq(dataExports.id, exportId), eq(dataExports.userId, userId)))
     .returning();
   if (row === undefined) throw new AppError('NOT_FOUND', 'Export introuvable.');
   return row;
+}
+
+/** EF-1, EF-4 — a failed job keeps its row for audit, without a download path. */
+export async function failDataExport(
+  tx: DbTx,
+  input: { userId: string; exportId: string; error?: string },
+): Promise<DataExport> {
+  const userId = identifier(input.userId, 'userId');
+  const exportId = identifier(input.exportId, 'exportId');
+  const error = input.error === undefined ? null : parse(exportErrorSchema, input.error, 'error');
+  const [row] = await tx
+    .update(dataExports)
+    .set({ status: 'failed', storagePath: null, expiresAt: null, error })
+    .where(and(eq(dataExports.id, exportId), eq(dataExports.userId, userId)))
+    .returning();
+  if (row === undefined) throw new AppError('NOT_FOUND', 'Export introuvable.');
+  return row;
+}
+
+/** EF-1 — exports of the owner created on one local civil day (daily limit). */
+export async function countDataExportsOn(
+  tx: DbTx,
+  input: { userId: string; requestedOn: string },
+): Promise<number> {
+  const userId = identifier(input.userId, 'userId');
+  const requestedOn = parse(daySchema, input.requestedOn, 'requestedOn');
+  const rows = await tx
+    .select({ id: dataExports.id })
+    .from(dataExports)
+    .where(and(eq(dataExports.userId, userId), eq(dataExports.requestedOn, requestedOn)));
+  return rows.length;
+}
+
+/** EF-1, CL-1 — the export still being produced, if any (one job at a time). */
+export async function findPendingDataExport(
+  tx: DbTx,
+  input: { userId: string },
+): Promise<DataExport | null> {
+  const userId = identifier(input.userId, 'userId');
+  const [row] = await tx
+    .select()
+    .from(dataExports)
+    .where(and(eq(dataExports.userId, userId), sql`${dataExports.status} in ('queued', 'running')`))
+    .orderBy(desc(dataExports.createdAt))
+    .limit(1);
+  return row ?? null;
+}
+
+/** EF-8 — removes one expired export row after its object was removed. */
+export async function deleteDataExport(
+  tx: DbTx,
+  input: { userId: string; exportId: string },
+): Promise<boolean> {
+  const userId = identifier(input.userId, 'userId');
+  const exportId = identifier(input.exportId, 'exportId');
+  const removed = await tx
+    .delete(dataExports)
+    .where(and(eq(dataExports.id, exportId), eq(dataExports.userId, userId)))
+    .returning({ id: dataExports.id });
+  return removed.length > 0;
+}
+
+/** EF-8 — exports expired for more than the grace period, oldest first. */
+export async function listExpiredDataExports(
+  tx: DbTx,
+  input: { before: Date; limit?: number },
+): Promise<DataExport[]> {
+  const before = parse(instantSchema, input.before, 'before');
+  const limit = parse(z.int().min(1).max(1000), input.limit ?? 200, 'limit');
+  return tx
+    .select()
+    .from(dataExports)
+    .where(
+      and(
+        sql`${dataExports.expiresAt} is not null`,
+        sql`${dataExports.expiresAt} < ${before.toISOString()}::timestamptz`,
+      ),
+    )
+    .orderBy(dataExports.expiresAt)
+    .limit(limit);
 }
 
 /** EF-1 — reads one export; another learner's identifier yields `null` under `userDb`. */

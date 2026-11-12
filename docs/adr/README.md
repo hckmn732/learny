@@ -143,3 +143,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0265](ADR-0265-canaux-donnees-et-reservation-du-plafond-du-service-de-notifications.md) | Canaux, données et réservation du plafond du service de notifications | Déduite | SPEC-209, ADR-0214, ADR-0031, ADR-0266 |
 | [ADR-0266](ADR-0266-canal-push-paquet-notifications-partage-refus-neutre-d-un-en.md) | Canal push : paquet notifications partagé, refus neutre d'un endpoint étranger et mock déterministe | Déduite | SPEC-205, ADR-0055, ADR-0244 |
 | [ADR-0261](ADR-0261-webhooks-stripe-emission-sur-changement-statuts-non-mappes-f.md) | Webhooks Stripe: emission sur changement, statuts non mappes, faux client partage | Déduite | SPEC-210, ADR-0215 |
+| [ADR-0267](ADR-0267-suppression-du-compte-auth-avant-cascade-et-qualification-de.md) | Suppression du compte : Auth avant cascade et qualification des exports | Déduite | SPEC-211, ADR-0044, ADR-0216, ADR-0122, ADR-0047 |

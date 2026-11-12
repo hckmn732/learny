@@ -1,0 +1,3 @@
+export_ready | session-4d559e49@test.learny.test | 2026-11-11T12:20:00.000Z
+deletion_scheduled | session-4d559e49@test.learny.test | 2026-11-11T12:20:00.000Z
+deletion_completed | sdd-211-throwaway-59795720-e8cda39b@test.learny.test | 2026-11-11T12:20:00.000Z

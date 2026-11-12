@@ -22,6 +22,7 @@ import { sql } from 'drizzle-orm';
 import {
   bigint,
   check,
+  date,
   index,
   integer,
   jsonb,
@@ -176,6 +177,10 @@ export const dataExports = pgTable(
     storagePath: text('storage_path'),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     sizeBytes: bigint('size_bytes', { mode: 'number' }),
+    /** SPEC-211 EF-4 — bounded failure reason of a job that did not produce an archive. */
+    error: text('error'),
+    /** SPEC-211 EF-1 — local civil day of the request, for the three-exports-a-day limit. */
+    requestedOn: date('requested_on', { mode: 'string' }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -185,6 +190,10 @@ export const dataExports = pgTable(
     index('data_exports_expires_at_idx')
       .on(table.expiresAt)
       .where(sql`${table.expiresAt} is not null`),
+    // EF-1 — the daily limit counts the owner's requests of the local day.
+    index('data_exports_user_id_requested_on_idx')
+      .on(table.userId, table.requestedOn)
+      .where(sql`${table.requestedOn} is not null`),
     check(
       'data_exports_storage_path_check',
       sql`${table.storagePath} is null or char_length(${table.storagePath}) between 1 and 1024`,
@@ -192,6 +201,10 @@ export const dataExports = pgTable(
     check(
       'data_exports_size_bytes_check',
       sql`${table.sizeBytes} is null or ${table.sizeBytes} >= 0`,
+    ),
+    check(
+      'data_exports_error_length_check',
+      sql`${table.error} is null or char_length(${table.error}) <= 2000`,
     ),
     // EF-1 — an expiration is always later than the creation instant.
     check(

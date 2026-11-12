@@ -17,11 +17,14 @@ assertMockLlm(process.env);
 // block: the JSON report copies that block and a key must not end up in the evidence files.
 function exportSupabasePublicEnv(): void {
   try {
-    const { url, anonKey, jwtSecret } = supabaseLocalEnv();
+    const { url, anonKey, serviceRoleKey, jwtSecret } = supabaseLocalEnv();
     process.env.NEXT_PUBLIC_SUPABASE_URL ??= url;
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??= anonKey;
     // SPEC-206: the file service signs Storage tokens server-side (never reaches the browser).
     process.env.SUPABASE_JWT_SECRET ??= jwtSecret;
+    // SPEC-211: the export job writes the private `exports` bucket and deletes the Auth user with
+    // the service role. Server-only, inherited by the test server (never sent to the browser).
+    process.env.SUPABASE_SERVICE_ROLE_KEY ??= serviceRoleKey;
   } catch {
     // reported by global-setup when the stack is down
   }

@@ -7,7 +7,7 @@
 //  - a step never reads `Date`: it reads `ctx.clock.now()` (ADR-0047);
 //  - three retries with the default Inngest backoff; a final failure is reported (SPEC-010) with
 //    `functionId`, `eventId` and `userId`.
-import { NonRetriableError, type Context } from 'inngest';
+import { NonRetriableError, type Context, type TimeStr } from 'inngest';
 
 import { EVENTS, parseEventData, type EventData, type EventName } from '@learny/contracts';
 import type { LearnyLogger } from '@learny/core';
@@ -38,6 +38,8 @@ export interface FunctionConfig<N extends EventName> {
   concurrency?: { key?: string; limit: number };
   /** CEL expression over the event, e.g. `event.data.exportId`. */
   idempotency?: string;
+  /** Inngest finish timeout, e.g. `15m` for the personal-data export (SPEC-211 ET-2). */
+  timeouts?: { finish?: TimeStr };
 }
 
 export interface FunctionArgs<N extends EventName> {
@@ -82,6 +84,7 @@ export function defineFunction<N extends EventName>(
       triggers: [cfg.trigger],
       ...(concurrency === undefined ? {} : { concurrency }),
       ...(cfg.idempotency === undefined ? {} : { idempotency: cfg.idempotency }),
+      ...(cfg.timeouts === undefined ? {} : { timeouts: cfg.timeouts }),
     },
     async ({ event, step, runId, attempt }) => {
       const eventId = typeof event.id === 'string' ? event.id : runId;

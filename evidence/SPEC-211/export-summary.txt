@@ -1,0 +1,6 @@
+statut : done
+taille_octets : 3264
+duree_ms : 0
+cree_le : 2026-11-11T12:20:00.000Z
+expire_le : 2026-11-18T12:20:00.000Z
+fichiers : 7

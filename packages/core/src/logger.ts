@@ -42,6 +42,8 @@ export const SAFE_LOG_FIELDS = [
   // SPEC-204: e-mail sends are logged by template and provider message id, never by address.
   'template',
   'messageId',
+  // SPEC-211: an export job logs its identifier and the size, never a URL or archive content.
+  'exportId',
 ] as const;
 
 export type SafeLogField = (typeof SAFE_LOG_FIELDS)[number];
