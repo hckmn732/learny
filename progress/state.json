@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T12:11:38.475Z",
+  "updatedAt": "2026-11-12T13:39:39.219Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -2977,10 +2977,10 @@
       "report": "evidence/checkpoints/CP-1/summary.md"
     },
     "CP-2": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-12T13:39:39.216Z",
+      "tag": "cp-2 v0.2.0",
+      "report": "evidence/checkpoints/CP-2/summary.md"
     },
     "CP-3": {
       "status": "pending",

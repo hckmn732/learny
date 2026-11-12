@@ -9,6 +9,106 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.2.0] — 2026-11-12
+
+### Ajouts
+
+- feat(SPEC-211): livre export, suppression et jobs nocturnes
+- feat(SPEC-211): prépare export et suppression
+- feat(SPEC-209): page et route de démonstration du routage
+- feat(SPEC-209): jobs de livraison, report et programme du jour
+- feat(SPEC-209): service notify, envoi et programme du jour
+- feat(SPEC-209): gabarits et décision de routage des notifications
+- feat(SPEC-204): bienvenue, désinscription en un clic et démonstration
+- feat(SPEC-205): active les notifications navigateur
+- feat(SPEC-205): contrats et paquet de notifications Web Push
+- feat(SPEC-204): transports et rendu des gabarits
+- feat(SPEC-210): routes de facturation et webhook
+- feat(SPEC-210): passerelle Stripe et service d'abonnement
+- feat(SPEC-210): statuts Stripe et droit à l'IA fournie
+- feat(SPEC-212): API de recherche globale
+- feat(SPEC-212): extraits et surlignage
+- feat(SPEC-210): stockage des événements Stripe
+- feat(SPEC-212): normalise les requêtes de recherche
+- feat(SPEC-208): purge horaire sur le tick de SPEC-203
+- feat(SPEC-208): page de démonstration, e2e et protections actives
+- feat(SPEC-206): ajoute la page de démonstration des envois privés
+- feat(SPEC-203): routes, page de démonstration et documentation
+- feat(SPEC-208): seau à jetons Postgres, garde d'origine et purge
+- feat(SPEC-206): contrôle les limites réelles des envois
+- feat(SPEC-203): émission par boîte d'envoi et mode en ligne
+- feat(SPEC-206): définit les contrats et les codes d'erreur des envois privés
+- feat(SPEC-207): page de démonstration temps et fuseaux
+- feat(SPEC-207): reporte hors heures calmes
+- feat(SPEC-203): tables event_outbox et sdd_demo_runs, fonction enqueue_event
+- feat(SPEC-207): calcule les jours et heures locales
+- feat(SPEC-203): catalogue typé des événements
+- feat(SPEC-202): proxy des pages, page de démonstration et tests
+- feat(SPEC-202): routes d'authentification, client Supabase et tests d'intégration
+- feat(SPEC-202): services d'authentification, contrats et aides de test
+- feat(SPEC-202): configuration et gabarits Supabase Auth
+- feat(SPEC-201): page de démonstration, e2e et tests du socle API
+- feat(SPEC-201): wrapper handler, idempotence, client API typé et TanStack Query
+- feat(SPEC-201): catalogue d'erreurs, contrats communs et squelette services
+
+### Corrections
+
+- fix(SPEC-005): rend les captures strictement déterministes
+- fix(SPEC-208): préserve l'horloge injectable du seau rate_limits
+- fix(SPEC-101): rattrape les conventions de schéma P2
+- fix(SPEC-210): reconnaît le faux client sans instanceof entre bundles
+- fix(SPEC-201): garde la clé Supabase locale hors du rapport Playwright
+
+### Documentation
+
+- docs(SPEC-209): consigne l'ADR-0265 des canaux et du plafond
+- docs(SPEC-205): renumérote l'ADR en 0266
+- docs(SPEC-205): consigne le canal push et ses décisions
+- docs(SPEC-212): publie la route de recherche dans OpenAPI
+- docs(SPEC-212): fixe les liens des résultats par ADR-0264
+- docs(SPEC-210): ADR-0261 et documentation de l'API d'abonnement
+- docs(SPEC-203): consigne les décisions et écarts de la spécification
+- docs(SPEC-207): consigne les décisions de temps et de fuseaux
+- docs(SPEC-202): référence l'ADR-0252 dans la spécification
+
+### Tests
+
+- test(sdd): couvrir recherche, limitation et données personnelles
+- test(sdd): couvrir la création et le cycle de vie des ressources
+- test(sdd): couvrir authentification, contexte et démonstrations
+- test(sdd): couvrir les passerelles Stripe simulée et réelle
+- test(SPEC-007): aligne le registre Inngest sur les jobs P2
+- test(SPEC-112): intègre le cycle de vie des exports de SPEC-211
+- test(SPEC-211): démontre export et suppression
+- test(SPEC-209): consigne les preuves et le contrat OpenAPI
+- test(SPEC-209): intègre et démontre le routage des notifications
+- test(SPEC-110): intègre la colonne Stripe de SPEC-210
+- test(SPEC-204): gabarits, transports et désinscription
+- test(SPEC-210): journal du cycle et cas de signature en preuves
+- test(SPEC-205): flux navigateur, service worker et démonstration
+- test(SPEC-212): démontre la recherche
+- test(SPEC-210): références visuelles desktop et mobile
+- test(SPEC-210): configuration de facturation
+- test(SPEC-212): isolation et performance de la recherche
+- test(SPEC-208): la fonction de purge figure au registre web
+- test(SPEC-203): référence visuelle mobile de la page de démonstration
+- test(SPEC-203): clavier sur la table du tick et critères d'acceptation
+- test(SPEC-208): vérifie le temps par jeton de chaque profil
+- test(SPEC-203): met à jour l'inventaire RLS (53 tables)
+- test(SPEC-206): fige les lignes de base visuelles desktop et mobile
+- test(SPEC-206): enregistre les mesures de bornes, concurrence, isolation et citations
+- test(SPEC-203): événements, boîte d'envoi et crons
+- test(SPEC-206): vérifie les bornes, la concurrence, l'isolation et la suppression
+- test(SPEC-207): e2e et visuel du temps local
+- test(SPEC-207): vérifie le fuseau utilisateur en base
+- test(SPEC-207): vérifie fuseaux et changements d'heure
+- test(SPEC-201): le compte de routes OpenAPI suit le registre
+
+### Construction
+
+- build(SPEC-204): retire la dépendance cyclique vers testing
+- build(SPEC-202): régénère openapi.json avec les routes d'authentification
+
 ## [v0.1.0] — 2026-11-12
 
 ### Ajouts
