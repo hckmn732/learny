@@ -444,9 +444,18 @@ describe('[SPEC-102] identité et préférences', () => {
     }
   });
 
-  it('enables RLS on the six tables and hides their rows from authenticated (CA-7)', async () => {
+  it('enables RLS on the six tables and limits each row to its owner (CA-7)', async () => {
     await withRollback(async (tx) => {
       const user = await createTestUser(tx);
+      const other = await createTestUser(tx);
+      await tx.execute(sql`
+        insert into public.push_subscriptions (user_id, endpoint, p256dh, auth)
+        values (${user.id}::uuid, 'https://push.test.learny.test/spec102', 'p256dh', 'auth')
+      `);
+      await tx.execute(sql`
+        insert into public.pauses (user_id, starts_on, ends_on)
+        values (${user.id}::uuid, '2026-11-12', '2026-11-20')
+      `);
 
       const tables = await tx.execute<Row>(sql`
         select c.relname as table, c.relrowsecurity as enabled
@@ -460,22 +469,37 @@ describe('[SPEC-102] identité et préférences', () => {
       expect(tables).toHaveLength(6);
       expect(tables.every((row) => row.enabled === true)).toBe(true);
 
+      // SPEC-113 adds owner policies; this test keeps only its own six-table scope.
       const policies = await tx.execute<Row>(sql`
         select tablename, policyname from pg_policies
         where schemaname = 'public'
           and tablename in ('profiles', 'study_preferences', 'notification_settings',
                             'push_subscriptions', 'automation_settings', 'pauses')
+        order by tablename, policyname
       `);
-      expect(policies).toEqual([]);
+      expect(policies.map((row) => `${String(row.tablename)}.${String(row.policyname)}`)).toEqual([
+        'automation_settings.automation_settings_owner_all',
+        'notification_settings.notification_settings_owner_all',
+        'pauses.pauses_owner_all',
+        'profiles.profiles_owner_select',
+        'profiles.profiles_owner_update',
+        'push_subscriptions.push_subscriptions_owner_all',
+        'study_preferences.study_preferences_owner_all',
+      ]);
 
       for (const table of TABLES) {
-        const visible = await asUser(tx, user.id, async (inner) => {
-          const result = await inner.execute<{ count: number }>(
-            sql.raw(`select count(*)::int as count from public.${table}`),
-          );
-          return result[0]?.count ?? -1;
-        });
-        expect(visible, table).toBe(0);
+        const column = KEY_COLUMN[table];
+        const count = async (userId: string) =>
+          asUser(tx, userId, async (inner) => {
+            const result = await inner.execute<{ count: number }>(sql`
+              select count(*)::int as count
+              from ${sql.raw(`public.${table}`)}
+              where ${sql.raw(column)} = ${user.id}::uuid
+            `);
+            return result[0]?.count ?? -1;
+          });
+        expect(await count(user.id), table).toBeGreaterThanOrEqual(1);
+        expect(await count(other.id), table).toBe(0);
       }
     });
   });

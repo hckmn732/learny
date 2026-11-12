@@ -368,10 +368,10 @@ describe('[SPEC-112] privacy search SQL', () => {
         'data_exports.data_exports_owner_select',
         'legal_acceptances.legal_acceptances_owner_select',
         'legal_acceptances.legal_acceptances_owner_insert',
-        'formations.formations_search_owner_select',
-        'notions.notions_search_owner_select',
-        'courses.courses_search_owner_select',
-        'course_sections.course_sections_search_owner_select',
+        'formations.formations_owner_select',
+        'notions.notions_owner_all',
+        'courses.courses_owner_all',
+        'course_sections.course_sections_owner_all',
       ]) {
         expect(keys, expected).toContain(expected);
       }
