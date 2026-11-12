@@ -60,6 +60,19 @@ function readPng(source: Buffer | string): PNG {
   return PNG.sync.read(typeof source === 'string' ? fs.readFileSync(source) : source);
 }
 
+/** Crops a PNG (buffer or path) to the top-left region; used by region-level mockup comparisons. */
+export function cropPng(source: Buffer | string, width: number, height: number): Buffer {
+  const image = readPng(source);
+  if (width > image.width || height > image.height) {
+    throw new Error(
+      `Recadrage impossible : ${String(width)}×${String(height)} dépasse ${String(image.width)}×${String(image.height)}`,
+    );
+  }
+  const out = new PNG({ width, height });
+  PNG.bitblt(image, out, 0, 0, width, height, 0, 0);
+  return PNG.sync.write(out);
+}
+
 function sideBySide(left: PNG, right: PNG): PNG {
   const out = new PNG({ width: left.width + right.width, height: left.height });
   PNG.bitblt(left, out, 0, 0, left.width, left.height, 0, 0);
