@@ -127,6 +127,20 @@
       "when": 1794456153541,
       "tag": "0017_planning_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794458774871,
+      "tag": "0018_privacy_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794458808177,
+      "tag": "0019_privacy_search_rules",
+      "breakpoints": true
     }
   ]
 }

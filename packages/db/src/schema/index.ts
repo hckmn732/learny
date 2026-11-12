@@ -14,3 +14,4 @@ export * from './bricks-json';
 export * from './memory';
 export * from './memory-json';
 export * from './planning';
+export * from './privacy-search';
