@@ -42,6 +42,16 @@ export {
 } from './functions/cron-hourly-tick';
 export { CRON_NIGHTLY_ID, NIGHTLY_CRON, cronNightly } from './functions/cron-nightly';
 export { EMAIL_WELCOME_ID, emailWelcome, welcomeIdempotencyKey } from './functions/email-welcome';
+export { NOTIFICATION_DELIVERY_ID, notificationDelivery } from './functions/notification-delivery';
+export {
+  DEFERRED_DUE_BATCH,
+  NOTIFICATIONS_DEFERRED_DUE_ID,
+  notificationsDeferredDue,
+} from './functions/notifications-deferred-due';
+export {
+  NOTIFICATIONS_DAILY_DIGEST_ID,
+  notificationsDailyDigest,
+} from './functions/notifications-daily-digest';
 export {
   NIGHTLY_OUTBOX_CLEANUP_ID,
   OUTBOX_RETENTION_DAYS,
