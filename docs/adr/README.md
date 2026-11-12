@@ -127,3 +127,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0246](ADR-0246-schema-des-formations-a-plusieurs-complements.md) | Compléments d’implémentation du schéma des formations à plusieurs | Déduite | SPEC-111, SPEC-724, ADR-0035, ADR-0112, ADR-0113, ADR-0022 |
 | [ADR-0247](ADR-0247-donnees-personnelles-idempotence-et-recherche.md) | Données personnelles, idempotence et recherche : isolation des sources et bornes | Déduite | SPEC-112, SPEC-113, SPEC-208, SPEC-211, SPEC-212, ADR-0044, ADR-0062, ADR-0120, ADR-0219 |
 | [ADR-0248](ADR-0248-politiques-rls-de-spec-113-et-harnais-d-isolation.md) | Politiques RLS de SPEC-113 et harnais d'isolation | Déduite | SPEC-113 |
+| [ADR-0250](ADR-0250-seed-de-demonstration-deterministe-et-fabriques-partagees.md) | Seed de démonstration déterministe et fabriques partagées | Déduite | SPEC-115 |
