@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     '@learny/db',
     '@learny/jobs',
     '@learny/notifications',
+    '@learny/ui',
   ],
   // Native/Node-only telemetry libraries stay outside the bundle (SPEC-010).
   serverExternalPackages: ['pino', 'postgres', '@sentry/nextjs', 'nodemailer'],
