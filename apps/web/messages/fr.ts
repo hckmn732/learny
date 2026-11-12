@@ -2542,7 +2542,58 @@ export const fr = {
       invalidHint: 'Vous pouvez gérer vos e-mails depuis Paramètres › Notifications.',
     },
   },
+  auth: {
+    layout: {
+      label: 'Learny',
+      tagline: ['Apprenez vite.', 'Retenez longtemps.'],
+      intro:
+        'Un tuteur IA conçoit votre parcours, transforme vos ressources en cours, vous entraîne et vous fait réviser au bon moment.',
+      benefits: [
+        'Des cours construits à partir de vos propres ressources, sources citées',
+        'Des révisions espacées pour ne pas oublier',
+        'Gratuit avec votre propre clé d’IA',
+      ],
+      steps: {
+        compte: 'Compte',
+        verification: 'Vérification',
+        profil: 'Profil',
+        rythme: 'Rythme',
+        ia: 'IA',
+        rappels: 'Rappels',
+        depart: 'Départ',
+      },
+      stepCounter: (position: number, total: number, label: string) =>
+        `Étape ${String(position)} sur ${String(total)} · ${label}`,
+      stepAria: (position: number, label: string, state: 'done' | 'current' | 'upcoming') =>
+        `Étape ${String(position)} : ${label}${
+          state === 'done' ? ', faite' : state === 'current' ? ', en cours' : ''
+        }`,
+      signInCounter: 'Connexion',
+      stepsLabel: 'Étapes de l’inscription',
+    },
+    signup: {
+      title: 'Créer votre compte',
+      subtitle: 'Deux minutes pour démarrer, sans carte bancaire.',
+      body: 'Votre espace réunit vos cours, vos révisions et votre agenda. Le tuteur s’appuie sur vos propres ressources pour construire un parcours adapté.',
+      switchText: 'Déjà un compte ?',
+      switchCta: 'Se connecter',
+    },
+    signIn: {
+      title: 'Bon retour',
+      subtitle: 'Connectez-vous pour reprendre là où vous en étiez.',
+      body: 'Retrouvez votre programme, vos révisions et votre agenda. Le tuteur reprend exactement là où vous vous êtes arrêté.',
+      switchText: 'Pas encore de compte ?',
+      switchCta: 'Créer un compte',
+    },
+    verify: {
+      title: 'Vérifiez votre boîte mail',
+      body: 'Ouvrez le lien reçu par e-mail sur cet appareil pour continuer.',
+      confirm: 'J’ai cliqué sur le lien',
+      back: 'Retour à la connexion',
+    },
+  },
   system: {
+    eyebrow: 'Learny',
     error: {
       title: 'Une erreur est survenue',
       body: 'Cette page n’a pas pu s’afficher. Réessayez ; si le problème persiste, revenez à l’accueil.',
@@ -2553,6 +2604,27 @@ export const fr = {
     notFound: {
       title: 'Page introuvable',
       body: 'Cette page n’existe pas ou n’est plus disponible.',
+      hint: 'Vérifiez l’adresse ou reprenez depuis l’accueil.',
+      home: 'Retour à l’accueil',
+      signIn: 'Se connecter',
+    },
+    accessDenied: {
+      title: 'Accès refusé',
+      body: 'Vous n’avez pas les droits nécessaires pour afficher cette page.',
+      hint: 'Reconnectez-vous avec un compte autorisé ou revenez à l’accueil.',
+      home: 'Retour à l’accueil',
+      signIn: 'Se connecter',
+    },
+    offline: {
+      title: 'Vous êtes hors ligne',
+      body: 'Learny ne peut pas joindre le serveur pour le moment.',
+      hint: 'Vérifiez votre connexion puis réessayez. Vos données restent enregistrées sur le serveur.',
+      retry: 'Réessayer',
+      home: 'Retour à l’accueil',
+    },
+    loadingPage: {
+      title: 'Chargement en cours',
+      body: 'La page est en préparation.',
       home: 'Retour à l’accueil',
     },
     loading: 'Chargement…',

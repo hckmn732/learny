@@ -1,0 +1,704 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-308/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-308",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-308/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-308/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-308/test-results/sdd/SPEC-308/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-308/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-308/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p3/spec-308.spec.ts",
+      "file": "p3/spec-308.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Pages système et mise en page d’authentification @SPEC-308",
+          "ok": true,
+          "tags": [
+            "SPEC-308"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3875,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:37:51.769Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-84c0fcb9fbd7475289e6ded0d7dec4ae1ec180a0.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-226e54f466598683c5f742cf3b4c9d0df0acf45d.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-b21c6f95fdfcba9f14970421cd3460511473620b.json"
+                    },
+                    {
+                      "name": "spec-308-parcours",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/spec-308-parcours-0c5d27e12749ce33b0841b2c6422e9adde437754.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-ce401760451c2b65376719a34ad30280d09152cd.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-024ea9fffc4a41f5b6c7deea314a7edfb5ec772e.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-8eca722c5c983c7b4264b1aa5e73cd9447408cfe.json"
+                    },
+                    {
+                      "name": "spec-308-auth-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/spec-308-auth-desktop-ea96b2ab41e970437e4426a9ae3ef79edd0e435f.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/axe-cfd04e26919cbb68ca7128022e36f8984c100deb.json"
+                    },
+                    {
+                      "name": "spec-308-acces-refuse",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/attachments/spec-308-acces-refuse-3298b5c5d300e78b51dfdd4a351a232614940ca1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-6.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--75e5c-d’authentification-SPEC-308-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "150e755765cfcccdc974-ec8bbe2397ecce5f015a",
+          "file": "p3/spec-308.spec.ts",
+          "line": 65,
+          "column": 1
+        },
+        {
+          "title": "Pages système et mise en page d’authentification @SPEC-308 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-308",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4161,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:37:56.094Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-f2e76c4482f3410e7b15c932bba71e821d420fd4.json"
+                    },
+                    {
+                      "name": "spec-308-inscription",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-inscription-4316ebf9612a4126fe4759a6b35e4726d6a760ca.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-3940bd6edff4898a6a3b65990e01e147dc602682.json"
+                    },
+                    {
+                      "name": "spec-308-connexion",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-connexion-b4265276da76e9f0eb85822e9cfa7487a7cee14c.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-96d265100cd9c2d54a5a8db555783814deaa942e.json"
+                    },
+                    {
+                      "name": "spec-308-verifier-email",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-verifier-email-c8874258eec822a336332392b599347622076772.png"
+                    },
+                    {
+                      "name": "spec-308-auth-panel-reference",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-auth-panel-reference-b4838eea643b74c316c3d2c3d934e15876449383.png"
+                    },
+                    {
+                      "name": "spec-308-auth-panel-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-auth-panel-diff-f0c00d84bd219b213eae7e467d0f9780f0590f75.png"
+                    },
+                    {
+                      "name": "spec-308-auth-panel-ratio",
+                      "contentType": "application/json",
+                      "body": "ewogICJ3aWR0aCI6IDM0MywKICAiaGVpZ2h0IjogOTAwLAogICJkaWZmUGl4ZWxzIjogOTI3NCwKICAidG90YWxQaXhlbHMiOiAzMDg3MDAsCiAgInJhdGlvIjogMC4wMzAwNDIxMTIwODI5Mjg0MSwKICAic2lkZUJ5U2lkZVBhdGgiOiAiL2hvbWUva2Jlbml0by9Eb2N1bWVudHMvd29yay9sZWFybnktd3QtMzA4L3Rlc3QtcmVzdWx0cy9hcnRpZmFjdHMvcDMtc3BlYy0zMDgtUGFnZXMtc3lzdMOobWUtLTM3ZWVmLXRpb24tU1BFQy0zMDgtdmlzdWFsLW1vYmlsZS1kZXNrdG9wL3Zpc3VhbC9zcGVjLTMwOC1hdXRoLXBhbmVsLXNpZGUtYnktc2lkZS5wbmciLAogICJkaWZmUGF0aCI6ICIvaG9tZS9rYmVuaXRvL0RvY3VtZW50cy93b3JrL2xlYXJueS13dC0zMDgvdGVzdC1yZXN1bHRzL2FydGlmYWN0cy9wMy1zcGVjLTMwOC1QYWdlcy1zeXN0w6htZS0tMzdlZWYtdGlvbi1TUEVDLTMwOC12aXN1YWwtbW9iaWxlLWRlc2t0b3AvdmlzdWFsL3NwZWMtMzA4LWF1dGgtcGFuZWwtZGlmZi5wbmciCn0="
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-9fd71de70fa6997c3507935adffa01ded2112c99.json"
+                    },
+                    {
+                      "name": "spec-308-404",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-404-0a86f526d120322347147d17e126ede58c6dc72b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-71f353dd3f277cfea358688934bfd689ddc5259f.json"
+                    },
+                    {
+                      "name": "spec-308-hors-ligne",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-hors-ligne-7f01557f7378f1f3a49f45dbe44a6d7646cb6032.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-00343953e0c6af8c9be799f7ab31ef3fb87c9f9b.json"
+                    },
+                    {
+                      "name": "spec-308-acces-refuse",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-acces-refuse-2031f7d54ea6d8247f6c91fab64eb35984005ef3.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/axe-abae1bfa236d31a11b651e919869f8f8ffcf7ad9.json"
+                    },
+                    {
+                      "name": "spec-308-error",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/attachments/spec-308-error-84d686fcae89579277d9cc618c847ae5793607f7.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/video-6.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4027,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T17:38:00.991Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-1041f4b371797d36147fea2000608a0d57e903ea.json"
+                    },
+                    {
+                      "name": "spec-308-inscription",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-inscription-9c67d48eb76787473f135ae5ce3fe160ce921763.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-6b6072e23316719d85c86ae0e6baeb8a25768770.json"
+                    },
+                    {
+                      "name": "spec-308-connexion",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-connexion-86a8603691652533044bc500ed68c924618b09f3.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-43631f8dd7dd750c73db0843708da39e6f21efea.json"
+                    },
+                    {
+                      "name": "spec-308-verifier-email",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-verifier-email-9bcd5fad8d0a6f480ad38bb2ae1116ecdc6f8bf9.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-71bd22239671a30b1c0073c76ee8c5526c810497.json"
+                    },
+                    {
+                      "name": "spec-308-404",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-404-cc727834b43ec27933ac48c166d604413cb9724a.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-5e22098e3b6e31aa2a9490ddaf50ed1f1608f16f.json"
+                    },
+                    {
+                      "name": "spec-308-hors-ligne",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-hors-ligne-dab4a57eeab9846eb6fdc7bb4d858fd295d250d1.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-4f15cf16b54e6423ef77c832a4427d2d5c0c393e.json"
+                    },
+                    {
+                      "name": "spec-308-acces-refuse",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-acces-refuse-6fcb5da7e9da88d820bafbdbbbb0203762ea5c11.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/axe-2a41a225a564851f63fd452ca93671940ae747df.json"
+                    },
+                    {
+                      "name": "spec-308-error",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/attachments/spec-308-error-f129040ab6aee3e983a3dde9aceb3229e9fadb33.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-6.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-308/test-results/artifacts/p3-spec-308-Pages-système--37eef-tion-SPEC-308-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "150e755765cfcccdc974-efd4ad006ad5892c0bca",
+          "file": "p3/spec-308.spec.ts",
+          "line": 159,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T17:37:22.039Z",
+    "duration": 43528.003000000004,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

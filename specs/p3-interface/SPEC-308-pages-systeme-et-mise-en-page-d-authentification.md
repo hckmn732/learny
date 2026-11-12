@@ -105,3 +105,5 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 ## 15. Décisions et hypothèses
 
 Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+
+- **ADR-0272** — Pages système et layout d’authentification : frontière d’erreur (`reset` unique, identifiant seulement pour un `AppError`), 404 dont l’action principale dépend de la session tout en conservant le lien d’accueil, coquilles `/inscription`, `/connexion` et `/verifier-email` livrées par cette spécification avant leur complétion par SPEC-601, layout `(auth)` partagé et stepper dérivé du chemin, `global-error` testable via `GlobalErrorView`, routes `/hors-ligne` et `/acces-refuse`, comparaison visuelle du panneau gauche de `SCR-01-base-desktop.png` (343 × 900).

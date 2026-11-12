@@ -148,3 +148,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0269](ADR-0269-conventions-des-composants-et-galerie-dev-ui.md) | Conventions des composants et galerie /_dev/ui | Déduite | SPEC-302 |
 | [ADR-0270](ADR-0270-composants-de-structure-et-de-retour-superpositions-toasts-e.md) | Composants de structure et de retour : superpositions, toasts et isolation modale | Déduite | SPEC-303, ADR-0059, ADR-0131, ADR-0138, ADR-0268, ADR-0269 |
 | [ADR-0273](ADR-0273-socle-d-accessibilite-partage-et-galerie-de-demonstration.md) | Socle d’accessibilité partagé et galerie de démonstration | Déduite | SPEC-309 |
+| [ADR-0272](ADR-0272-pages-systeme-et-layout-d-authentification-frontiere-d-erreur-404-selon-session-et-panneau-partage.md) | Pages système et layout d'authentification : frontière d'erreur, 404 selon session et panneau partagé | Déduite | SPEC-308, SPEC-006, SPEC-202, SPEC-303, SPEC-601, ADR-0034, ADR-0047, ADR-0268, ADR-0270 |
