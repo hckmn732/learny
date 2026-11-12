@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-305, SPEC-212]
 business_rules: [BR-NAV-05]
 screens: [SCR-18]
-adrs: []
+adrs: [ADR-0276]
 visual: tokens
 ---
 
@@ -105,4 +105,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0276 (combobox non modal ancré sous le champ avec les jetons du panneau de notifications, requête après deux caractères normalisés avec annulation et garde de séquence, page `/recherche` rendue côté serveur par le service SPEC-212 sous la session et la RLS, extraits en texte sûr). Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
