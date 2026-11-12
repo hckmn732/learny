@@ -242,7 +242,7 @@ export type EngineParams = typeof ENGINE;
 Mode `demo` (ADR-0049) : page `/_dev/sdd/SPEC-401`, rendue seulement si `ENABLE_SDD_PAGES=true`, composée avec `@learny/ui` (en-tête de page « SPEC-401 · Socle du moteur » : sur-titre 14 px gris, titre 34 px Space Grotesk, selon `docs/product/screens.md` §3).
 Régions dans l'ordre (`data-testid`) :
 1. `engine-params` — tableau « Paramètres du moteur » : une ligne par clé de premier niveau de `ENGINE` avec ses valeurs principales (ex. « mastery · demi-vie 14 j · seuil 80 % »).
-2. `sap-reference` — cartes statistiques : première carte sombre « 7 modules », puis « 24 chapitres », « 48 notions », « 64 liens » (valeurs calculées depuis le jeu), puis tableau des modules (n°, titre, dates, heures, chapitres, notions).
+2. `sap-reference` — cartes statistiques : première carte sombre « 7 modules », puis « 24 chapitres », « 48 notions », « 59 liens » (valeurs calculées depuis le jeu), puis tableau des modules (n°, titre, dates, heures, chapitres, notions).
 3. `time-cases` — tableau des cas CL-3 et CL-4 (entrée, sortie attendue, sortie obtenue, ✓/✗ dans un `Badge`).
 4. `random-cases` — `fnv1a32('')`, `fnv1a32('a')`, 5 premiers tirages de `createSeededRandom('SPEC-401')` affichés avec 6 décimales.
 Le nombre de liens affiché est celui du jeu (`SAP_LINKS.length`), vérifié par le test.
@@ -328,5 +328,6 @@ Définition commune de `docs/engineering/testing.md` §7, plus : `ENGINE` prése
 
 - ADR appliqués : ADR-0020 (moteur pur), ADR-0047 (date de référence), ADR-0049 (page de démonstration), ADR-0070 (Vitest, fast-check), ADR-0003 (versions).
 - Décision créée : **ADR-0140** — `ENGINE` dans `product.ts` importable par le moteur via `@learny/config/product` ; représentation du temps en chaînes ISO ; `EngineError` ; aléa à graine unique. Conséquence documentaire : `docs/architecture/overview.md` §3 est à compléter (l'ADR prime).
+- Décision d'implémentation : **ADR-0277** — `REFERENCE_NOW` canonique, `localTimeToShiftedInstant` dans `@learny/core`, `SAP_LINKS` = 59 liens de la maquette, page SDD servie par le registre et test de frontière résolvable.
 - Complément de données : `SerializedFsrsCard` ajoute `learning_steps` (champ de `ts-fsrs` 5) à la forme JSON décrite dans `docs/architecture/data-model.md` §6 ; aucune migration n'est nécessaire (colonne `jsonb`).
 - Hypothèse : `@learny/core` (SPEC-207) fournit les conversions de fuseau ; sinon elles y sont ajoutées par cette spécification, jamais dupliquées dans le moteur.
