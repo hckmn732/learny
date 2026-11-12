@@ -10,7 +10,13 @@ import { serve } from 'inngest/hono';
 import { parseServerEnv } from '@learny/config/server';
 import type { ErrorReporter } from '@learny/core';
 import { resolveRequestId, REQUEST_ID_HEADER } from '@learny/core/server';
-import { createFunctions, functions as sharedFunctions, inngest, sddDemoStore } from '@learny/jobs';
+import {
+  createFunctions,
+  functions as sharedFunctions,
+  inngest,
+  sddDemoStore,
+  setJobErrorReporter,
+} from '@learny/jobs';
 
 import { createWorkerReporter, initWorkerSentry } from './sentry';
 
@@ -47,6 +53,17 @@ export interface AppOptions {
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
   const client = options.client ?? inngest;
+  // Final failures of the functions defined with `defineFunction` (SPEC-203 ET-4, SPEC-010).
+  if (options.reporter !== undefined) {
+    const reporter = options.reporter;
+    setJobErrorReporter((report) => {
+      reporter.capture(report.error, {
+        route: `job:${report.job}`,
+        ...(report.jobId === undefined ? {} : { jobId: report.jobId }),
+        ...(report.userId === undefined ? {} : { userId: report.userId }),
+      });
+    });
+  }
   const registry =
     options.functions ??
     (options.reporter === undefined

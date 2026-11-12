@@ -93,7 +93,13 @@ describe('[SPEC-007] worker', () => {
 
     expect(res.status).toBe(200);
     expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: functions.length });
-    expect(functions.map((f) => f.id(INNGEST_APP_ID))).toEqual([FN_ID]);
+    expect(functions.map((f) => f.id(INNGEST_APP_ID))).toEqual([
+      FN_ID,
+      `${INNGEST_APP_ID}-cron-hourly-tick`,
+      `${INNGEST_APP_ID}-cron-nightly`,
+      `${INNGEST_APP_ID}-nightly-outbox-cleanup`,
+      `${INNGEST_APP_ID}-sdd-demo-pipeline`,
+    ]);
     expect(text).not.toContain('learny-test-only');
     expect(text).not.toMatch(/signkey/i);
   });

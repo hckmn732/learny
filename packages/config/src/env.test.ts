@@ -247,3 +247,24 @@ describe('[SPEC-009] environment', () => {
     for (const key of SERVER_ENV_KEYS) expect(key.startsWith('NEXT_PUBLIC_')).toBe(false);
   });
 });
+
+describe('[SPEC-203] JOBS_MODE', () => {
+  it('vaut inngest par défaut et inline dans l’environnement de test (EF-6)', () => {
+    expect(parseServerEnv({}, 'local').JOBS_MODE).toBe('inngest');
+    expect(parseServerEnv({}, 'preview').JOBS_MODE).toBe('inngest');
+    expect(parseServerEnv({}, 'test').JOBS_MODE).toBe('inline');
+    expect(parseServerEnv({ JOBS_MODE: 'inline' }, 'local').JOBS_MODE).toBe('inline');
+  });
+
+  it('refuse JOBS_MODE=inline en production : échec au démarrage (§14)', () => {
+    const error = caught(() => parseServerEnv({ ...PRODUCTION_ENV, JOBS_MODE: 'inline' }));
+    expect(error.issues).toEqual([{ name: 'JOBS_MODE', code: 'forbidden' }]);
+    expect(error.message).not.toContain('inline');
+    expect(parseServerEnv({ ...PRODUCTION_ENV, JOBS_MODE: 'inngest' }).JOBS_MODE).toBe('inngest');
+  });
+
+  it('refuse une valeur inconnue', () => {
+    const error = caught(() => parseServerEnv({ JOBS_MODE: 'cloud' }, 'local'));
+    expect(error.names).toEqual(['JOBS_MODE']);
+  });
+});

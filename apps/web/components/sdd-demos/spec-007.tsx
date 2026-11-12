@@ -1,4 +1,4 @@
-import { JOB_RETRIES, functions } from '@learny/jobs';
+import { DEMO_JOB_ID, JOB_RETRIES, functions } from '@learny/jobs';
 
 import { fr } from '../../messages/fr';
 import { DemoSection } from '../sdd/demo-shell';
@@ -13,7 +13,11 @@ const HOSTS = [
 ] as const;
 
 export default function Spec007Demo() {
-  const ids = functions.map((f) => f.id()).join(', ');
+  // This page demonstrates the SPEC-007 job: the functions added by SPEC-203 are not listed here.
+  const ids = functions
+    .map((f) => f.id())
+    .filter((id) => id === DEMO_JOB_ID)
+    .join(', ');
 
   return (
     <>

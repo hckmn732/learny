@@ -91,7 +91,7 @@ test('démonstration du socle API @SPEC-201', async ({
   );
 
   // CA-6 — the OpenAPI document lists the three registered routes.
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText('3 routes documentées');
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText('7 routes documentées');
   await expect(page.getByRole('link', { name: 'Ouvrir openapi.json' })).toHaveAttribute(
     'href',
     '/openapi.json',
@@ -113,7 +113,7 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
   await page.getByRole('button', { name: 'Envoyer deux fois avec la même clé' }).click();
   await expect(page.getByTestId('demo-idem-second')).toBeVisible();
   await expect(page.getByTestId('demo-pagination-count')).toHaveText('20 éléments chargés');
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText('3 routes documentées');
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText('7 routes documentées');
 
   const ids = await page
     .locator('main > section[data-testid]')

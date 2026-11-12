@@ -107,31 +107,36 @@ export async function executeFunctionInline(
   const transformCtx = (ctx: { step: Recordable } & Json) => {
     const step = ctx.step;
     const realRun = step.run.bind(step);
+    // A real step: its body runs once, then the engine and `completed` replay its result.
+    const run = (id: unknown, body: () => unknown, ...rest: unknown[]) => {
+      const name = typeof id === 'string' ? id : (id as { id: string }).id;
+      return realRun(
+        id,
+        async () => {
+          stepRuns[name] = (stepRuns[name] ?? 0) + 1;
+          const value = await body();
+          completed.set(name, value);
+          return value;
+        },
+        ...rest,
+      );
+    };
     return {
       ...ctx,
       step: {
         ...step,
-        run: (id: unknown, body: () => unknown, ...rest: unknown[]) => {
-          const name = typeof id === 'string' ? id : (id as { id: string }).id;
-          return realRun(
-            id,
-            async () => {
-              stepRuns[name] = (stepRuns[name] ?? 0) + 1;
-              const value = await body();
-              completed.set(name, value);
-              return value;
-            },
-            ...rest,
-          );
-        },
+        run,
         sleep: () => Promise.resolve(null),
         sleepUntil: () => Promise.resolve(null),
         waitForEvent: () => Promise.resolve(null),
-        sendEvent: async (_id: unknown, payload: unknown) => {
-          const events = normalize(payload);
-          await send(events);
-          return { ids: events.map((sent) => sent.id) };
-        },
+        // `step.sendEvent` is a step too: re-running the handler after the next step must not
+        // send the events again.
+        sendEvent: (id: unknown, payload: unknown) =>
+          run(id, async () => {
+            const events = normalize(payload);
+            await send(events);
+            return { ids: events.map((sent) => sent.id) };
+          }),
       },
     };
   };
