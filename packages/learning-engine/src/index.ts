@@ -5,6 +5,7 @@ export * from './fsrs';
 export * from './mastery';
 export * from './params';
 export * from './planner';
+export * from './progress';
 export * from './random';
 export * from './streak';
 export * from './time';
