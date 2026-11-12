@@ -2,13 +2,14 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState, type RefObject } from 'react';
+import { useState, type ReactNode, type RefObject } from 'react';
 
 import type { HeaderDto } from '@learny/contracts';
 import { Icon, IconButton, iconRegistry } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
+import { NotificationBell } from '../notifications/notification-panel';
 
 import { AccountMenuView, type AccountMenuStatus } from './account-menu';
 
@@ -27,6 +28,8 @@ export interface HeaderViewProps {
   signOutPending?: boolean;
   signOutError?: string | null;
   showTriggerRef?: RefObject<HTMLButtonElement | null> | undefined;
+  /** SPEC-306 notification bell; the fallback keeps the pure header test and non-connected use. */
+  notificationPanel?: ReactNode;
 }
 
 /**
@@ -45,6 +48,7 @@ export const HeaderView = ({
   signOutPending = false,
   signOutError = null,
   showTriggerRef,
+  notificationPanel,
 }: HeaderViewProps) => {
   const [accountOpen, setAccountOpen] = useState(false);
   const unread = data?.unreadNotificationCount ?? 0;
@@ -95,23 +99,25 @@ export const HeaderView = ({
       </form>
 
       <div className="ml-auto flex items-center gap-8">
-        <IconButton
-          tone="light"
-          size="md"
-          label={notificationsLabel}
-          icon={iconRegistry.bell}
-          data-testid="header-notifications"
-          badge={
-            unread > 0 ? (
-              <span
-                data-testid="header-notifications-badge"
-                className="flex h-16 min-w-16 items-center justify-center rounded-full bg-orange px-4 text-10 leading-16 font-700 text-white shadow-ring-white"
-              >
-                {unread > 99 ? '99+' : String(unread)}
-              </span>
-            ) : undefined
-          }
-        />
+        {notificationPanel ?? (
+          <IconButton
+            tone="light"
+            size="md"
+            label={notificationsLabel}
+            icon={iconRegistry.bell}
+            data-testid="header-notifications"
+            badge={
+              unread > 0 ? (
+                <span
+                  data-testid="header-notifications-badge"
+                  className="flex h-16 min-w-16 items-center justify-center rounded-full bg-orange px-4 text-10 leading-16 font-700 text-white shadow-ring-white"
+                >
+                  {unread > 99 ? '99+' : String(unread)}
+                </span>
+              ) : undefined
+            }
+          />
+        )}
         <AccountMenuView
           data={data}
           status={status}
@@ -198,6 +204,19 @@ export const Header = ({
       signOutPending={signOut.isPending}
       signOutError={signOutError}
       showTriggerRef={showTriggerRef}
+      notificationPanel={
+        <NotificationBell
+          unreadCount={query.data?.unreadNotificationCount ?? 0}
+          onNavigate={(href) => {
+            router.push(href);
+          }}
+          onUnreadCountChange={(count) => {
+            queryClient.setQueryData<HeaderDto>(HEADER_QUERY_KEY, (current) =>
+              current === undefined ? current : { ...current, unreadNotificationCount: count },
+            );
+          }}
+        />
+      }
     />
   );
 };
