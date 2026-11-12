@@ -1,0 +1,79 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="36.146871">
+<testsuite name="p2/spec-210.spec.ts" timestamp="2026-11-12T10:39:28.260Z" hostname="desktop" tests="4" failures="0" skipped="0" time="3.843" errors="0">
+<testcase name="cycle d&apos;abonnement simulé @SPEC-210" classname="p2/spec-210.spec.ts" time="1.727">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/attachments/axe-ae15263713f0c527493d50c041fe02199ba2d17e.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/attachments/webhook-journal-57822bcd811d832dcefcde45abc2b5c54c84908b.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/attachments/spec-210-cycle-a063ef48d25a2c38855f42ea1e54291e519ac6c0.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-cycle-d-abonnement-simulé-SPEC-210-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="annuler le paiement simulé ramène à la page sans abonnement @SPEC-210" classname="p2/spec-210.spec.ts" time="0.576">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-210-annuler-le-pai-5dd2b-ge-sans-abonnement-SPEC-210-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-annuler-le-pai-5dd2b-ge-sans-abonnement-SPEC-210-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-annuler-le-pai-5dd2b-ge-sans-abonnement-SPEC-210-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="contrats de facturation et webhook signé @SPEC-210" classname="p2/spec-210.spec.ts" time="0.322">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-210-contrats-de-fa-d4ad3-n-et-webhook-signé-SPEC-210-desktop/attachments/signature-cases-444a71586c02fb8d9dbf6d6a80da1f5717e7495e.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-contrats-de-fa-d4ad3-n-et-webhook-signé-SPEC-210-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-contrats-de-fa-d4ad3-n-et-webhook-signé-SPEC-210-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-contrats-de-fa-d4ad3-n-et-webhook-signé-SPEC-210-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="abonnement conforme @SPEC-210 @visual @mobile" classname="p2/spec-210.spec.ts" time="1.218">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-desktop/attachments/axe-f65aa6a9f0160c07c41edec0b480e6eafd6619e9.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-210.spec.ts" timestamp="2026-11-12T10:39:28.260Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.291" errors="0">
+<testcase name="abonnement conforme @SPEC-210 @visual @mobile" classname="p2/spec-210.spec.ts" time="1.291">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-mobile/attachments/axe-b5f822efd45c50ac0ee832e4fc813c01b4ec769a.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-210-abonnement-conforme-SPEC-210-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
