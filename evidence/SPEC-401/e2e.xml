@@ -1,0 +1,47 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="33.360179">
+<testsuite name="p4/spec-401.spec.ts" timestamp="2026-11-12T20:03:05.135Z" hostname="desktop" tests="3" failures="0" skipped="0" time="3.312" errors="0">
+<testcase name="page de démonstration du socle du moteur @SPEC-401" classname="p4/spec-401.spec.ts" time="1.21">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/attachments/axe-266cdeb42c61c54fa43bbd27262569d1673ad36d.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/attachments/spec-401-demo-b716801846e44f0090c9044d6c68d770253053cd.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-page-de-démons-d1b0c-du-socle-du-moteur-SPEC-401-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="pages de démonstration désactivées @SPEC-401" classname="p4/spec-401.spec.ts" time="1.031">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-401-pages-de-démonstration-désactivées-SPEC-401-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-pages-de-démonstration-désactivées-SPEC-401-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-pages-de-démonstration-désactivées-SPEC-401-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité visuelle du socle @SPEC-401 @visual" classname="p4/spec-401.spec.ts" time="1.071">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-401-conformité-visuelle-du-socle-SPEC-401-visual-desktop/attachments/axe-bcda4ac71e577da9c322b411a7c31909e08ed6f5.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-conformité-visuelle-du-socle-SPEC-401-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-conformité-visuelle-du-socle-SPEC-401-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-conformité-visuelle-du-socle-SPEC-401-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-401-conformité-visuelle-du-socle-SPEC-401-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
