@@ -101,6 +101,9 @@ export default defineConfig({
     env: {
       ...TEST_SERVER_ENV,
       ENABLE_SDD_PAGES: 'true',
+      // The server sits behind a trusted proxy in these tests: each test announces its own address
+      // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.
+      TRUST_PROXY: 'true',
       APP_ENV: 'test',
       // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
       SDD_STACK_DEMO: 'true',

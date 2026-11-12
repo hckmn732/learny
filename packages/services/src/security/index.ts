@@ -20,3 +20,4 @@ export { createOriginGuard, isOriginExempt, parseAllowedOrigins } from './origin
 export type { OriginGuard, OriginGuardOptions, OriginRequest } from './origin-guard';
 export { SECURITY_RETENTION_MS, purgeSecurityRows } from './purge';
 export type { PurgeResult } from './purge';
+export { runBurst, runOriginDemo, runPurgeDemo } from './demo';

@@ -16,6 +16,11 @@ export interface LearnyFixtures {
   axeCheck: (page?: Page) => Promise<void>;
   /** Attaches a full-page capture under a stable name (copied to evidence/). */
   captureEvidence: (name: string) => Promise<void>;
+  /**
+   * Network address announced to the test server (`X-Forwarded-For`, trusted there): each test
+   * has its own, so the IP-keyed rate-limit buckets of SPEC-208 never run dry between tests.
+   */
+  clientAddress: string;
 }
 
 async function axeCheck(page: Page, testInfo: TestInfo): Promise<void> {
@@ -35,6 +40,15 @@ async function axeCheck(page: Page, testInfo: TestInfo): Promise<void> {
 // Fixture callbacks name their second argument `provide` (Playwright's `use`) so that the
 // React hooks lint rule does not mistake it for a hook.
 export const test = base.extend<LearnyFixtures>({
+  clientAddress: [
+    async ({ context }, provide) => {
+      const octet = () => String(Math.floor(Math.random() * 256));
+      const address = `10.${octet()}.${octet()}.${octet()}`;
+      await context.setExtraHTTPHeaders({ 'x-forwarded-for': address });
+      await provide(address);
+    },
+    { auto: true },
+  ],
   fixedTime: [
     async ({ page }, provide) => {
       assertMockLlm();

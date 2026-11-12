@@ -133,3 +133,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0252](ADR-0252-authentification-proxy-next-16-redirection-relative-mail-loc.md) | Authentification : proxy Next 16, redirection relative, mail local et rappel du lien | Déduite | SPEC-202 |
 | [ADR-0253](ADR-0253-validation-des-fuseaux-iana-et-repli-de-detection.md) | Validation des fuseaux IANA et repli de détection | Déduite | SPEC-207, SPEC-202, SPEC-602, ADR-0030 |
 | [ADR-0254](ADR-0254-resolution-des-heures-locales-aux-changements-d-heure.md) | Résolution des heures locales aux changements d'heure | Déduite | SPEC-207, ADR-0030, ADR-0047 |
+| [ADR-0255](ADR-0255-protections-de-l-api-ordre-des-gardes-horloge-des-seaux-adre.md) | Protections de l'API : ordre des gardes, horloge des seaux, adresse du client | Déduite | SPEC-208 |
