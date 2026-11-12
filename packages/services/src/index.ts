@@ -21,3 +21,4 @@ export {
 export * from './search';
 export * from './billing/index';
 export * from './email/index';
+export { runNotifyDemo } from './dev/notifications';
