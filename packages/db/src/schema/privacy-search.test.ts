@@ -49,7 +49,17 @@ function indexColumnNames(index: unknown): string[] {
 describe('[SPEC-112] privacy search schema', () => {
   it('CA-1 — les quatre tables portent les colonnes du modèle de données', () => {
     expect(columns(dataExports)).toEqual(
-      ['created_at', 'expires_at', 'id', 'size_bytes', 'status', 'storage_path', 'user_id'].sort(),
+      [
+        'created_at',
+        'error',
+        'expires_at',
+        'id',
+        'requested_on',
+        'size_bytes',
+        'status',
+        'storage_path',
+        'user_id',
+      ].sort(),
     );
     expect(columns(legalAcceptances)).toEqual(
       ['accepted_at', 'document', 'id', 'user_id', 'version'].sort(),
