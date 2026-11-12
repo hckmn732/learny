@@ -162,7 +162,9 @@ export function createAnthropicFetch(baseFetch?: FetchLike): FetchLike {
     }
     rewriteBody(body, task, fallback);
     removePrivateHeaders(headers);
-    if (fallback) mergeBeta(headers, FALLBACK_BETA);
+    const eligibleFallback =
+      fallback && (body.model === AI_MODEL_IDS.opus || body.model === AI_MODEL_IDS.sonnet);
+    if (eligibleFallback) mergeBeta(headers, FALLBACK_BETA);
     else mergeBeta(headers, null);
     if (request !== undefined) {
       // A Request instance is cloned so the caller's body stream is not consumed twice.

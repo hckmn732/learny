@@ -24,6 +24,7 @@ export function aiUnavailable(
     'AI_UNAVAILABLE',
     'Cette fonction demande un modèle d’IA. Abonnez-vous à l’IA fournie ou ajoutez votre propre clé dans Paramètres › Modèles d’IA.',
     {
+      status: 422,
       reason,
       link: '/parametres#modeles',
       ...(options.credentialId === undefined ? {} : { credentialId: options.credentialId }),

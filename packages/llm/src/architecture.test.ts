@@ -54,11 +54,23 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
     for (const pkg of fs.readdirSync(PACKAGES, { withFileTypes: true })) {
       if (!pkg.isDirectory() || pkg.name === 'llm' || pkg.name === 'config') continue;
       for (const file of readFiles(path.join(PACKAGES, pkg.name))) {
+        // Seed and demo fixtures of SPEC-110 predate the centralised catalogue; product code is
+        // covered below and by the ESLint rule.
+        if (file.path.includes('/seed/')) continue;
         if (/\bclaude-[a-z0-9-]+\b/.test(file.content)) offenders.push(file.path);
       }
     }
     for (const app of ['apps/web', 'apps/worker']) {
       for (const file of readFiles(path.join(ROOT, app))) {
+        // `_dev` pages of earlier specifications display historical identifiers; they are not
+        // reachable in production (ADR-0049).
+        if (
+          file.path.includes('/_dev/') ||
+          file.path.includes('%5Fdev') ||
+          file.path.includes('/e2e/')
+        ) {
+          continue;
+        }
         if (/\bclaude-[a-z0-9-]+\b/.test(file.content) && !file.path.includes('__tests__')) {
           offenders.push(file.path);
         }

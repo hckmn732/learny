@@ -16,7 +16,7 @@ function fixtureNamed(scenario: string) {
 function errorFixture(kind: Exclude<MockErrorKind, 'refusal'>) {
   return parseFixture({
     task: 'tutor',
-    scenario: `error-${kind}`,
+    scenario: `error-${kind.replaceAll('_', '-')}`,
     promptId: 'tutor.demo',
     promptVersion: 1,
     description: `erreur ${kind}`,
