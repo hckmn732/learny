@@ -1,0 +1,100 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="2" errors="0" time="37.848130000000005">
+<testsuite name="p3/spec-305.spec.ts" timestamp="2026-11-12T18:16:41.916Z" hostname="desktop" tests="4" failures="0" skipped="2" time="4.018" errors="0">
+<testcase name="Coquille : en-tête figé et menu Mon compte @SPEC-305" classname="p3/spec-305.spec.ts" time="2.09">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/attachments/spec-305-entete-desktop-2707b5ab579943686fe55442ffb2e10547ebc7c7.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/attachments/spec-305-menu-ouvert-ae769088d91c4a23a779e31ab5347794d8871c85.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/attachments/axe-959c988c668aee97bd7ef827b0ffd3fe2a412deb.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-f681a-et-menu-Mon-compte-SPEC-305-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @mobile" classname="p3/spec-305.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Coquille : en-tête figé et menu Mon compte @SPEC-305 @visual" classname="p3/spec-305.spec.ts" time="1.496">
+<properties>
+<property name="mockup-diff-ratio" value="0.0463">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/attachments/reference-1c028d5c0ad7d03de6facd100f11501b3e5c54d5.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/attachments/side-by-side-c0037bf710f273c0c44b19f76d960626f1bae5cc.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/attachments/diff-9834f71d0a16489f26f170a8033f4ffcb35bc79b.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/attachments/axe-930751fbd8552afbdae6ca643cb40114a245eaae.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-b5b29--Mon-compte-SPEC-305-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @visual @mobile" classname="p3/spec-305.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p3/spec-305.spec.ts" timestamp="2026-11-12T18:16:41.916Z" hostname="mobile" tests="2" failures="0" skipped="0" time="2.489" errors="0">
+<testcase name="Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @mobile" classname="p3/spec-305.spec.ts" time="1.435">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/attachments/spec-305-entete-mobile-130100d355a781d4aabf13937958e4f1aab64d17.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/attachments/axe-01d31bd8f3b22a543b8264654ff082c532bc7eb3.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-00032-mpte-mobile-SPEC-305-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @visual @mobile" classname="p3/spec-305.spec.ts" time="1.054">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-41f24-bile-SPEC-305-visual-mobile-mobile/attachments/axe-15e05ab3316d5822c04d766ef0852012f41c7b7e.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-41f24-bile-SPEC-305-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-41f24-bile-SPEC-305-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-41f24-bile-SPEC-305-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-305-Coquille-en-tê-41f24-bile-SPEC-305-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
