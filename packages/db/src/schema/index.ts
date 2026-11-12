@@ -5,3 +5,5 @@ export * from './enums';
 export * from './identity';
 export * from './formations';
 export * from './formations.json-schemas';
+export * from './resources';
+export * from './resources.json-schemas';
