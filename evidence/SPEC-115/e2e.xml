@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="32.64877">
+<testsuite name="p1/spec-115.spec.ts" timestamp="2026-11-12T07:02:08.574Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.439" errors="0">
+<testcase name="inspecte les données de démonstration @SPEC-115" classname="p1/spec-115.spec.ts" time="1.34">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/attachments/axe-5fc1f6f272019a3a6b29c79dec1e4e60e583c56e.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/attachments/spec-115-demo-f94afe0b18e39deb1236d0246460993ce31751b1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-inspecte-les-données-de-démonstration-SPEC-115-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="données de démonstration conformes @SPEC-115 @visual @mobile" classname="p1/spec-115.spec.ts" time="1.099">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/attachments/axe-6fc25e4a7d413e192c4c0ceb66c0aaa3c6bf1ea2.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-115.spec.ts" timestamp="2026-11-12T07:02:08.574Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.056" errors="0">
+<testcase name="données de démonstration conformes @SPEC-115 @visual @mobile" classname="p1/spec-115.spec.ts" time="1.056">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/attachments/axe-1ed79c254de939264576f4928ddc920f551915bc.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-115-données-de-dém-76c6e-rmes-SPEC-115-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

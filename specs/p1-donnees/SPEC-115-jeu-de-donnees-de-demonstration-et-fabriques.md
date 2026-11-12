@@ -114,4 +114,4 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; seed déte
 
 ## 15. Décisions et hypothèses
 
-ADR-0071 fixe la fidélité au jeu de maquettes, ADR-0047 la date. Les valeurs absentes des maquettes ne sont pas inventées comme références visuelles ; elles sont des fixtures minimales de fonctionnement, explicitement séparées des valeurs observées.
+ADR-0071 fixe la fidélité au jeu de maquettes, ADR-0047 la date, ADR-0250 les identifiants UUID v5 du namespace `learny-demo`, la source `SCR-xx` des fixtures et la stratégie d'idempotence (upsert ciblé, `DO NOTHING` sur les journaux append-only). L'inventaire SCR → tables/valeurs est `docs/engineering/spec-115-demo-inventory.md`. Les valeurs absentes des maquettes ne sont pas inventées comme références visuelles ; elles sont des fixtures minimales de fonctionnement, explicitement séparées des valeurs observées.
