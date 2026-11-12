@@ -1017,6 +1017,47 @@ export const fr = {
         },
       },
     },
+    spec201: {
+      title: 'SPEC-201 — Socle API v1 et contrats',
+      loading: 'Chargement…',
+      retry: 'Réessayer',
+      requestId: 'Identifiant de requête',
+      validation: {
+        title: 'Validation',
+        intro: 'Un message vide est refusé par le contrat : réponse 400 problem+json.',
+        action: 'Envoyer un message vide',
+      },
+      business: {
+        title: 'Erreur métier',
+        intro: 'Le service refuse l’action : réponse 422 avec un code métier.',
+        action: 'Déclencher une erreur métier',
+      },
+      idempotency: {
+        title: 'Idempotence',
+        intro: 'Deux envois avec la même clé : le service ne s’exécute qu’une fois.',
+        label: 'Message',
+        defaultMessage: 'Bonjour Learny',
+        action: 'Envoyer deux fois avec la même clé',
+        first: '1ʳᵉ requête',
+        second: '2ᵉ requête',
+        replayed: 'Idempotent-Replayed',
+        yes: 'oui',
+        no: 'non',
+      },
+      pagination: {
+        title: 'Pagination',
+        intro: 'Liste par curseur : 57 éléments, 20 par page.',
+        next: 'Page suivante',
+        done: 'Tous les éléments sont chargés.',
+        loaded: (count: number) => `${String(count)} éléments chargés`,
+      },
+      openapi: {
+        title: 'OpenAPI',
+        intro: 'Document OpenAPI 3.1 généré depuis le registre des contrats.',
+        routes: (count: number) => `${String(count)} routes documentées`,
+        link: 'Ouvrir openapi.json',
+      },
+    },
     spec115: {
       intro:
         'Démonstration : les lignes réellement chargées par pnpm db:seed:demo (Alex Perrin, SAP S/4HANA Finance à 13:20 à Paris), lues en base et confrontées aux fixtures des maquettes. Aucun compteur n’est codé comme un succès : « Seed absente » remplace toute valeur indisponible.',

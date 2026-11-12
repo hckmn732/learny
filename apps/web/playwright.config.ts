@@ -4,11 +4,23 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
 
 import { assertMockLlm, TEST_SERVER_ENV } from '../../packages/testing/src/env';
+import { supabaseLocalEnv } from '../../packages/testing/src/supabase';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 
 // A real AI provider is refused before the server starts (ADR-0048, SPEC-004 CL-5).
 assertMockLlm(process.env);
+
+// Supabase keys of the local stack for the test server (sessions of SPEC-201 and later). A stack
+// that is not running is reported by global-setup, not here.
+function supabasePublicEnv(): Record<string, string> {
+  try {
+    const { url, anonKey } = supabaseLocalEnv();
+    return { NEXT_PUBLIC_SUPABASE_URL: url, NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey };
+  } catch {
+    return {};
+  }
+}
 
 const COMMON = { locale: 'fr-FR', timezoneId: 'Europe/Paris' } as const;
 const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 1440, height: 900 } };
@@ -83,6 +95,7 @@ export default defineConfig({
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
+      ...supabasePublicEnv(),
       ENABLE_SDD_PAGES: 'true',
       APP_ENV: 'test',
       // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.

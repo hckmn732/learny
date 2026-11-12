@@ -6,7 +6,7 @@ import { ProblemDetails } from './common';
 import type { AnyRoute } from './define-route';
 
 // OpenAPI 3.1 document built from the route registry (SPEC-201 EF-8, ET-8). Zod 4 emits JSON
-// Schema 2020-12, which OpenAPI 3.1 adopts as is: no 3.0 normalisation is needed (ADR-0220).
+// Schema 2020-12, which OpenAPI 3.1 adopts as is: no 3.0 normalisation is needed (ADR-0251).
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
 type JsonObject = { [key: string]: Json };
 

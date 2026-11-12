@@ -22,7 +22,10 @@
                   "type": "string"
                 }
               },
-              "required": ["path", "message"],
+              "required": [
+                "path",
+                "message"
+              ],
               "type": "object"
             },
             "type": "array"
@@ -43,7 +46,14 @@
             "type": "string"
           }
         },
-        "required": ["type", "title", "status", "detail", "code", "requestId"],
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "code",
+          "requestId"
+        ],
         "type": "object"
       }
     },
@@ -81,7 +91,10 @@
               "schema": {
                 "properties": {
                   "fail": {
-                    "enum": ["business", "crash"],
+                    "enum": [
+                      "business",
+                      "crash"
+                    ],
                     "type": "string"
                   },
                   "message": {
@@ -90,7 +103,9 @@
                     "type": "string"
                   }
                 },
-                "required": ["message"],
+                "required": [
+                  "message"
+                ],
                 "type": "object"
               }
             }
@@ -116,7 +131,11 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message", "receivedAt", "counter"],
+                  "required": [
+                    "message",
+                    "receivedAt",
+                    "counter"
+                  ],
                   "type": "object"
                 }
               }
@@ -241,16 +260,26 @@
                             "type": "integer"
                           }
                         },
-                        "required": ["id", "label", "position"],
+                        "required": [
+                          "id",
+                          "label",
+                          "position"
+                        ],
                         "type": "object"
                       },
                       "type": "array"
                     },
                     "nextCursor": {
-                      "type": ["string", "null"]
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "type": "object"
                 }
               }
@@ -325,23 +354,41 @@
                       "additionalProperties": {},
                       "properties": {
                         "build": {
-                          "enum": ["ok", "unavailable", "not_configured"],
+                          "enum": [
+                            "ok",
+                            "unavailable",
+                            "not_configured"
+                          ],
                           "type": "string"
                         },
                         "database": {
-                          "enum": ["ok", "unavailable", "not_configured"],
+                          "enum": [
+                            "ok",
+                            "unavailable",
+                            "not_configured"
+                          ],
                           "type": "string"
                         }
                       },
-                      "required": ["database", "build"],
+                      "required": [
+                        "database",
+                        "build"
+                      ],
                       "type": "object"
                     },
                     "database": {
-                      "enum": ["ok", "unavailable", "not_configured"],
+                      "enum": [
+                        "ok",
+                        "unavailable",
+                        "not_configured"
+                      ],
                       "type": "string"
                     },
                     "status": {
-                      "enum": ["ok", "degraded"],
+                      "enum": [
+                        "ok",
+                        "degraded"
+                      ],
                       "type": "string"
                     },
                     "version": {
@@ -350,7 +397,13 @@
                       "type": "string"
                     }
                   },
-                  "required": ["status", "version", "commit", "database", "components"],
+                  "required": [
+                    "status",
+                    "version",
+                    "commit",
+                    "database",
+                    "components"
+                  ],
                   "type": "object"
                 }
               }
