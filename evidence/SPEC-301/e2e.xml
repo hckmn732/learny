@@ -1,0 +1,64 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="36.581453">
+<testsuite name="p3/spec-301-tokens.spec.ts" timestamp="2026-11-12T15:16:54.508Z" hostname="desktop" tests="3" failures="0" skipped="0" time="4.362" errors="0">
+<testcase name="galerie des jetons conforme @SPEC-301" classname="p3/spec-301-tokens.spec.ts" time="1.693">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/attachments/axe-b650b1555dd8915de03f7febb117de70f5398f1a.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/attachments/spec-301-gallery-50689df9abaa126a693849ae9ad46eec98dfd18b.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-des-jetons-conforme-SPEC-301-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="galerie fermée sans drapeau @SPEC-301" classname="p3/spec-301-tokens.spec.ts" time="0.964">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-fermée-sans-drapeau-SPEC-301-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-fermée-sans-drapeau-SPEC-301-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-fermée-sans-drapeau-SPEC-301-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="galerie des jetons ligne de base @SPEC-301 @visual @mobile" classname="p3/spec-301-tokens.spec.ts" time="1.705">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-desktop/attachments/axe-914776645d155aa5ee3a665ff550e6513e41f8ba.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p3/spec-301-tokens.spec.ts" timestamp="2026-11-12T15:16:54.508Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.633" errors="0">
+<testcase name="galerie des jetons ligne de base @SPEC-301 @visual @mobile" classname="p3/spec-301-tokens.spec.ts" time="1.633">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-mobile/attachments/axe-7f9ca949cdfbb2ce10ab5eff19d4038f2fbdc6ef.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-301-tokens-galerie-9f681-base-SPEC-301-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
