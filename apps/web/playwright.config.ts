@@ -13,14 +13,19 @@ assertMockLlm(process.env);
 
 // Supabase keys of the local stack for the test server (sessions of SPEC-201 and later). A stack
 // that is not running is reported by global-setup, not here.
-function supabasePublicEnv(): Record<string, string> {
+// The values go through process.env (inherited by the test server), never through the `webServer`
+// block: the JSON report copies that block and a key must not end up in the evidence files.
+function exportSupabasePublicEnv(): void {
   try {
     const { url, anonKey } = supabaseLocalEnv();
-    return { NEXT_PUBLIC_SUPABASE_URL: url, NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey };
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??= url;
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??= anonKey;
   } catch {
-    return {};
+    // reported by global-setup when the stack is down
   }
 }
+
+exportSupabasePublicEnv();
 
 const COMMON = { locale: 'fr-FR', timezoneId: 'Europe/Paris' } as const;
 const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 1440, height: 900 } };
@@ -95,7 +100,6 @@ export default defineConfig({
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
-      ...supabasePublicEnv(),
       ENABLE_SDD_PAGES: 'true',
       APP_ENV: 'test',
       // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
