@@ -63,6 +63,12 @@ describe('[SPEC-203] registre', () => {
     expect(triggersOf(get('sdd-demo-pipeline'))).toEqual([{ event: 'sdd/demo-requested' }]);
     expect(retriesOf('sdd-demo-pipeline')).toBe(3);
     expect(byId.has('sdd-demo-job')).toBe(true);
+
+    // SPEC-208 EF-7 — the purge of the security tables follows each hourly tick, once per tick.
+    expect(triggersOf(get('security-purge'))).toEqual([{ event: 'cron/hourly-tick' }]);
+    expect((get('security-purge').opts as { idempotency?: string }).idempotency).toBe(
+      'event.data.tickAt',
+    );
   });
 
   it('applique la concurrence par utilisateur par défaut aux événements qui portent un userId', async () => {

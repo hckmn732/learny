@@ -11,6 +11,7 @@ import { cronNightly } from './cron-nightly';
 import { createDemoJob } from './demo-job';
 import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
+import { securityPurge } from './security-purge';
 
 export interface JobDeps {
   demoStore: DemoResultStore;
@@ -23,6 +24,7 @@ export const learnyFunctions = [
   cronNightly,
   nightlyOutboxCleanup,
   sddDemoPipeline,
+  securityPurge,
 ] as const;
 
 export function createFunctions(client: Inngest, deps: JobDeps) {
