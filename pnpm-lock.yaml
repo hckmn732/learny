@@ -282,6 +282,12 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../db
+      '@learny/jobs':
+        specifier: workspace:*
+        version: link:../jobs
+      drizzle-orm:
+        specifier: ^0.44.7
+        version: 0.44.7(@opentelemetry/api@1.10.0)(@types/pg@8.15.6)(postgres@3.4.9)
 
   packages/testing:
     dependencies:

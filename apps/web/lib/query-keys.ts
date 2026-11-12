@@ -9,4 +9,6 @@ function key(domain: string, id?: string | number): Key {
 export const qk = {
   devItems: (cursor?: string): Key => key('dev-items', cursor),
   health: (): Key => key('health'),
+  devJobsRun: (runId: string): Key => key('dev-jobs-run', runId),
+  devJobsOutbox: (): Key => key('dev-jobs-outbox'),
 } as const;

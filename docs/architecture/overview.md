@@ -115,6 +115,12 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `billing/subscription-changed` | SPEC-210 | droits IA |
 | `account/export-requested` / `account/deletion-requested` | SPEC-211 | jobs d'export et de suppression |
 | `group/member-joined` / `-left` | SPEC-724 | planification, notifications |
+| `cron/hourly-tick` | SPEC-203 (cron `TZ=UTC 5 * * * *`) | consommateurs d'heure globale |
+| `user/local-tick` | SPEC-203 (tick horaire, un par utilisateur actif) | programme du jour (SPEC-209), micro-séance, bilan, fin des heures calmes : fenêtre locale `[T − 5 min, T + 55 min[`, `dueInWindow` + `step.sleepUntil` |
+| `cron/nightly` | SPEC-203 (cron `TZ=UTC 30 1 * * *`) | créneaux manqués (SPEC-411), banques (SPEC-513), suppressions et purge des exports (SPEC-211), purge des clés d'idempotence (SPEC-208), `nightly-outbox-cleanup` (SPEC-203) |
+| `sdd/demo-requested` | SPEC-203 (page de démonstration) | `sdd-demo-pipeline` |
+
+Le catalogue vit dans `packages/contracts/src/events.ts` (`EVENTS` : nom → schéma Zod de `data`), réexporté par `packages/jobs/src/events.ts`. Tout événement est émis par un service via `withTransaction` / `emitAfterCommit` (boîte d'envoi `event_outbox`, ADR-0122) : écrit dans la transaction, envoyé après validation, renvoyé à chaque tick horaire en cas de panne d'Inngest.
 
 Crons (UTC, Inngest) : `cron/hourly-tick` (toutes les heures, :05) → pour chaque utilisateur dont l'heure locale correspond : programme du jour (heure choisie), micro-séance (H), bilan hebdomadaire, fin des heures calmes ; `cron/nightly` (01:30 UTC) → statut « manqué » des créneaux, banques de questions en lot, notions dues du lendemain, suppression des comptes à J+30, purge des exports expirés.
 

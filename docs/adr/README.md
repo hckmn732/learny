@@ -130,3 +130,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0249](ADR-0249-implementation-du-stockage-prive-et-des-url-signees-de-dix-m.md) | Implémentation du stockage privé et des URL signées de dix minutes | Déduite | SPEC-114, SPEC-113, SPEC-206 |
 | [ADR-0250](ADR-0250-seed-de-demonstration-deterministe-et-fabriques-partagees.md) | Seed de démonstration déterministe et fabriques partagées | Déduite | SPEC-115 |
 | [ADR-0251](ADR-0251-socle-api-v1-surcharge-de-handler-openapi-3-1-natif-et-acces.md) | Socle API v1 : surcharge de handler(), OpenAPI 3.1 natif et accès service de l'idempotence | Déduite | SPEC-201 |
+| [ADR-0252](ADR-0252-spec-203-evenements-types-avec-inngest-4-execution-en-ligne-.md) | SPEC-203 : événements typés avec Inngest 4, exécution en ligne et frontières de paquets | Déduite | SPEC-203, ADR-0017, ADR-0122, ADR-0123 |
+| [ADR-0253](ADR-0253-enqueue-event-un-utilisateur-ne-met-en-file-que-ses-propres-.md) | enqueue_event : un utilisateur ne met en file que ses propres événements | Déduite | SPEC-203, ADR-0122, ADR-0035 |

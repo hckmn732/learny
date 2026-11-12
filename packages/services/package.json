@@ -13,6 +13,8 @@
   "dependencies": {
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
-    "@learny/db": "workspace:*"
+    "@learny/db": "workspace:*",
+    "@learny/jobs": "workspace:*",
+    "drizzle-orm": "^0.44.7"
   }
 }

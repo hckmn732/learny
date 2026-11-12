@@ -112,3 +112,38 @@ export async function deleteTestSession(session: Pick<TestSession, 'userId'>): P
   const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } });
   await admin.auth.admin.deleteUser(session.userId);
 }
+
+export interface ProfileUserOptions {
+  email: string;
+  /** IANA zone stored in the profile (read from the sign-up metadata by the SPEC-102 trigger). */
+  timezone?: string;
+  /** Onboarding step of the profile, `done` by default. */
+  onboardingStep?: 'profil' | 'rythme' | 'ia' | 'rappels' | 'depart' | 'done';
+}
+
+/** Creates a confirmed user (no session) with the given zone and onboarding step (SPEC-203). */
+export async function createProfileUser(
+  options: ProfileUserOptions,
+): Promise<{ userId: string; email: string }> {
+  const { url, serviceRoleKey } = supabaseLocalEnv();
+  const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } });
+  const created = await admin.auth.admin.createUser({
+    email: options.email,
+    password: `pw-${randomBytes(12).toString('hex')}`,
+    email_confirm: true,
+    user_metadata: { timezone: options.timezone ?? 'Europe/Paris' },
+  });
+  if (created.error !== null) throw new Error(`createUser : ${created.error.message}`);
+  const { serviceDb, sql } = await import('@learny/db');
+  await serviceDb().execute(sql`
+    update public.profiles set onboarding_step = ${options.onboardingStep ?? 'done'}::onboarding_step
+    where id = ${created.data.user.id}::uuid
+  `);
+  return { userId: created.data.user.id, email: options.email };
+}
+
+/** Deletes every user whose e-mail starts with `prefix` (cascades to their rows). */
+export async function deleteUsersByEmailPrefix(prefix: string): Promise<void> {
+  const { serviceDb, sql } = await import('@learny/db');
+  await serviceDb().execute(sql`delete from auth.users where email like ${`${prefix}%`}`);
+}
