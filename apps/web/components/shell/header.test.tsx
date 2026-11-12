@@ -100,7 +100,7 @@ describe('[SPEC-305] Coquille : en-tête figé et menu Mon compte', () => {
     );
     expect(screen.getByTestId('header-notifications-badge').textContent).toBe('3');
     expect(screen.getByTestId('header-account-trigger').getAttribute('aria-label')).toBe(
-      'Mon compte',
+      'AP Mon compte',
     );
     expect(screen.getByTestId('sidebar-show').getAttribute('aria-label')).toBe(
       fr.shell.sidebar.show,
@@ -275,7 +275,7 @@ describe('[SPEC-305] Coquille : en-tête figé et menu Mon compte', () => {
       'Notifications, 3 non lues',
     );
     expect(screen.getByTestId('header-account-trigger').getAttribute('aria-label')).toBe(
-      'Mon compte',
+      'AP Mon compte',
     );
     expect(screen.getByTestId('header-search-input').getAttribute('aria-label')).toBe('Rechercher');
   });

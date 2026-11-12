@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
   Icon,
   Skeleton,
+  getInitials,
   iconRegistry,
 } from '@learny/ui';
 
@@ -65,8 +66,12 @@ export const AccountMenuView = ({
   contentId = 'contenu',
 }: AccountMenuViewProps) => {
   const routeChanged = useRef(false);
+  const pointerOutside = useRef(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const previousPathname = useRef(pathname);
   const avatarName = data?.firstName ?? data?.emailLabel ?? null;
+  const initials = getInitials(avatarName, data?.lastName);
+  const triggerLabel = `${initials} ${t.accountButton}`;
   const avatarProps = {
     ...(avatarName === null ? {} : { firstName: avatarName }),
     ...(data?.lastName === null || data?.lastName === undefined ? {} : { lastName: data.lastName }),
@@ -81,24 +86,37 @@ export const AccountMenuView = ({
   }, [onOpenChange, open, pathname]);
 
   return (
-    <DropdownMenu open={open} onOpenChange={onOpenChange}>
+    <DropdownMenu
+      open={open}
+      onOpenChange={(next) => {
+        onOpenChange(next);
+        if (next || !pointerOutside.current) return;
+        // CA-2 — an outside click closes the menu and gives the focus back to its trigger.
+        pointerOutside.current = false;
+        window.setTimeout(() => {
+          triggerRef.current?.focus();
+        }, 0);
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <button
+          ref={triggerRef}
           type="button"
-          aria-label={t.accountButton}
+          aria-label={triggerLabel}
           data-testid="header-account-trigger"
           className="inline-flex min-h-42 shrink-0 cursor-pointer items-center gap-10 rounded-full border border-solid border-border bg-surface pr-12 pl-4 font-sans text-14 font-600 text-ink transition-colors hover:bg-surface-subtle"
         >
-          <Avatar {...avatarProps} data-testid="header-account-avatar" />
-          <span className="hidden shell:inline" data-testid="header-account-name">
-            {t.accountButton}
-          </span>
+          <Avatar {...avatarProps} aria-hidden={false} data-testid="header-account-avatar" />{' '}
+          <span data-testid="header-account-name">{t.accountButton}</span>
           <Icon name="chevron-down" size={14} strokeWidth={2.2} className="text-ink-muted" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         data-testid="account-menu"
         aria-label={t.accountMenuLabel}
+        onPointerDownOutside={() => {
+          pointerOutside.current = true;
+        }}
         onCloseAutoFocus={(event) => {
           if (!routeChanged.current) return;
           routeChanged.current = false;
@@ -110,7 +128,7 @@ export const AccountMenuView = ({
           data-testid="account-identity"
           aria-busy={status === 'loading' ? true : undefined}
         >
-          <Avatar {...avatarProps} aria-hidden="true" />
+          <Avatar {...avatarProps} />
           <span className="flex min-w-0 flex-col gap-2">
             {status === 'loading' ? (
               <Skeleton className="h-12 w-24" radius={6} data-testid="account-loading" />
