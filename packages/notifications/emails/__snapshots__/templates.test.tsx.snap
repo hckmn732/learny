@@ -1,0 +1,351 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > ai_task_failed tu 1`] = `
+"Learny
+
+
+LE TUTEUR N’A PAS PU TERMINER : RÉDACTION DU COURS
+
+Le modèle gpt-4.1-mini de ta clé a produit un contenu invalide deux fois de suite pour « Chapitre 4 · Clôture périodique ». La tâche est arrêtée, rien n’a été modifié.
+
+Choisis un autre modèle de ta clé ou utilise l’IA fournie.
+
+Choisir un modèle https://learny.example/parametres#modeles
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > ai_task_failed vous 1`] = `
+"Learny
+
+
+LE TUTEUR N’A PAS PU TERMINER : RÉDACTION DU COURS
+
+Le modèle gpt-4.1-mini de votre clé a produit un contenu invalide deux fois de suite pour « Chapitre 4 · Clôture périodique ». La tâche est arrêtée, rien n’a été modifié.
+
+Choisissez un autre modèle de votre clé ou utilisez l’IA fournie.
+
+Choisir un modèle https://learny.example/parametres#modeles
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > daily_digest tu 1`] = `
+"Learny
+
+
+BONJOUR ALEX,
+
+Voici tes 4 activités du jour, toutes formations confondues : 5 h prévues.
+
+ * 09:00 · Relecture du cours
+   Chapitre 2 · Saisie des pièces comptables · SAP S/4HANA Finance
+ * 13:50 · Échauffement
+   3 questions · 2 min · SAP S/4HANA Finance
+ * 14:00 · Quiz de validation, tentative 2
+   Module 3 · Comptabilité générale · seuil 80 % · SAP S/4HANA Finance
+ * 17:00 · Quiz global
+   14 notions à revoir · environ 10 min · SAP S/4HANA Finance
+
+Quiz global : 14 notions à revoir, environ 10 min.
+
+En attente dans l’application
+
+2 notification(s) n’ont pas été envoyée(s) hier pour respecter ta limite de 5 par jour :
+
+ * Une séance à replacer
+ * Ton cours est prêt
+
+Ouvrir les notifications https://learny.example/accueil?notifications=ouvertes
+
+Ouvrir ma journée https://learny.example/accueil
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > daily_digest vous 1`] = `
+"Learny
+
+
+BONJOUR ALEX,
+
+Voici vos 4 activités du jour, toutes formations confondues : 5 h prévues.
+
+ * 09:00 · Relecture du cours
+   Chapitre 2 · Saisie des pièces comptables · SAP S/4HANA Finance
+ * 13:50 · Échauffement
+   3 questions · 2 min · SAP S/4HANA Finance
+ * 14:00 · Quiz de validation, tentative 2
+   Module 3 · Comptabilité générale · seuil 80 % · SAP S/4HANA Finance
+ * 17:00 · Quiz global
+   14 notions à revoir · environ 10 min · SAP S/4HANA Finance
+
+Quiz global : 14 notions à revoir, environ 10 min.
+
+En attente dans l’application
+
+2 notification(s) n’ont pas été envoyée(s) hier pour respecter votre limite de 5 par jour :
+
+ * Une séance à replacer
+ * Votre cours est prêt
+
+Ouvrir les notifications https://learny.example/accueil?notifications=ouvertes
+
+Ouvrir ma journée https://learny.example/accueil
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > deletion_completed tu 1`] = `
+"Learny
+
+
+TON COMPTE LEARNY A ÉTÉ SUPPRIMÉ
+
+Comme demandé le 11 novembre 2026, ton compte et toutes tes données ont été supprimés définitivement aujourd’hui. Merci d’avoir appris avec Learny.
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > deletion_completed vous 1`] = `
+"Learny
+
+
+VOTRE COMPTE LEARNY A ÉTÉ SUPPRIMÉ
+
+Comme demandé le 11 novembre 2026, votre compte et toutes vos données ont été supprimés définitivement aujourd’hui. Merci d’avoir appris avec Learny.
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > deletion_scheduled tu 1`] = `
+"Learny
+
+
+SUPPRESSION DE TON COMPTE PROGRAMMÉE LE VENDREDI 11 DÉCEMBRE 2026
+
+Tu as demandé la suppression de ton compte. Elle sera effective le vendredi 11 décembre 2026 : formations, apports, cours, résultats et réglages seront alors effacés définitivement.
+
+D’ici là, tu peux l’annuler à tout moment : il suffit de te reconnecter.
+
+Annuler la suppression https://learny.example/parametres#profil Exporter mes données https://learny.example/parametres#profil
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > deletion_scheduled vous 1`] = `
+"Learny
+
+
+SUPPRESSION DE VOTRE COMPTE PROGRAMMÉE LE VENDREDI 11 DÉCEMBRE 2026
+
+Vous avez demandé la suppression de votre compte. Elle sera effective le vendredi 11 décembre 2026 : formations, apports, cours, résultats et réglages seront alors effacés définitivement.
+
+D’ici là, vous pouvez l’annuler à tout moment : il suffit de vous reconnecter.
+
+Annuler la suppression https://learny.example/parametres#profil Exporter mes données https://learny.example/parametres#profil
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > export_ready tu 1`] = `
+"Learny
+
+
+TON EXPORT LEARNY EST PRÊT
+
+Ton archive (42 Mo) est prête. Le lien de téléchargement est valable 7 jours, jusqu’au mercredi 18 novembre à 13:20.
+
+Télécharger mes données https://learny.example/exports/alex-perrin-2026-11-11.zip?token=exemple
+
+
+Ce lien est personnel : ne le transfère pas.
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > export_ready vous 1`] = `
+"Learny
+
+
+VOTRE EXPORT LEARNY EST PRÊT
+
+Votre archive (42 Mo) est prête. Le lien de téléchargement est valable 7 jours, jusqu’au mercredi 18 novembre à 13:20.
+
+Télécharger mes données https://learny.example/exports/alex-perrin-2026-11-11.zip?token=exemple
+
+
+Ce lien est personnel : ne le transférez pas.
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > reminder tu 1`] = `
+"Learny
+
+
+QUIZ DE VALIDATION À 14:00
+
+Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %. Compte 20 minutes.
+
+SAP S/4HANA Finance
+
+Commencer le quiz https://learny.example/formations/sap-s4hana-finance/modules/3/quiz
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > reminder vous 1`] = `
+"Learny
+
+
+QUIZ DE VALIDATION À 14:00
+
+Module 3 · Comptabilité générale, tentative 2. Seuil de validation : 80 %. Comptez 20 minutes.
+
+SAP S/4HANA Finance
+
+Commencer le quiz https://learny.example/formations/sap-s4hana-finance/modules/3/quiz
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > weekly_review tu 1`] = `
+"Learny
+
+
+TON BILAN DU 2 NOVEMBRE AU 8 NOVEMBRE
+
+13 h d’étude86 % retenu à 1 mois3 notions à risque
+
+Réussi : module 2 validé à 92 %, 41 notions consolidées
+
+À risque d’oubli : écritures d’abonnement, ledgers parallèles, clôture périodique. Ils passent dans tes prochains quiz globaux.
+
+Cette semaine : module 3 Comptabilité générale, quiz de validation mercredi, 5 séances prévues
+
+Tes disponibilités changent-elles ?
+
+Voir le bilan https://learny.example/accueil Mes disponibilités changent https://learny.example/parametres#profil
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > weekly_review vous 1`] = `
+"Learny
+
+
+VOTRE BILAN DU 2 NOVEMBRE AU 8 NOVEMBRE
+
+13 h d’étude86 % retenu à 1 mois3 notions à risque
+
+Réussi : module 2 validé à 92 %, 41 notions consolidées
+
+À risque d’oubli : écritures d’abonnement, ledgers parallèles, clôture périodique. Ils passent dans vos prochains quiz globaux.
+
+Cette semaine : module 3 Comptabilité générale, quiz de validation mercredi, 5 séances prévues
+
+Vos disponibilités changent-elles ?
+
+Voir le bilan https://learny.example/accueil Mes disponibilités changent https://learny.example/parametres#profil
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > welcome tu 1`] = `
+"Learny
+
+
+BIENVENUE, ALEX !
+
+Ton compte est prêt. Le tuteur t’attend pour quelques réglages : ton profil, ton rythme et ton IA. Compte deux minutes.
+
+ * Des cours construits à partir de tes propres ressources, sources citées
+ * Des révisions espacées pour ne pas oublier
+ * Gratuit avec ta propre clé d’IA
+
+Continuer mes premiers pas https://learny.example/premiers-pas/profil
+
+----------------------------------------
+
+Tu reçois cet e-mail parce que tu as un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
+
+exports[`[SPEC-204] gabarits > instantanés texte des 16 combinaisons > welcome vous 1`] = `
+"Learny
+
+
+BIENVENUE, ALEX !
+
+Votre compte est prêt. Le tuteur vous attend pour quelques réglages : votre profil, votre rythme et votre IA. Comptez deux minutes.
+
+ * Des cours construits à partir de vos propres ressources, sources citées
+ * Des révisions espacées pour ne pas oublier
+ * Gratuit avec votre propre clé d’IA
+
+Continuer mes premiers pas https://learny.example/premiers-pas/profil
+
+----------------------------------------
+
+Vous recevez cet e-mail parce que vous avez un compte Learny.
+
+Gérer mes notifications https://learny.example/parametres#notifications · Se désabonner des e-mails https://learny.example/api/v1/email/unsubscribe?token=M2Y5YTJmMGUtMWM0Yi00YzVkLThlOWYtMGExYjJjM2Q0ZTVm.WIElDBSm2INsU6KUJfnmu9Cx2MbvhPqvrwdF8DCECxg"
+`;
