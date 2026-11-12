@@ -47,6 +47,14 @@ it('lit les données de l’utilisateur', async () => {
 - `resetSequenceFreeIds()` est un point d'extension : les clés primaires sont des UUID, aucune
   séquence n'est à réinitialiser.
 
+### Programme d'une formation (SPEC-103)
+
+`createTestProgramme(tx, ownerId, { modules, chaptersPerModule, notionsPerChapter })` insère une
+formation `active` et son programme ordonné (modules, chapitres, notions) dans la transaction
+courante. Les positions commencent à 1 et les clés étrangères composites garantissent qu'une notion
+appartient bien au chapitre et au module de sa formation. La fabrique est destinée à
+`withRollback` ; SPEC-115 l'enrichit pour le jeu de démonstration.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |
