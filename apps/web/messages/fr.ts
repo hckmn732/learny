@@ -1063,6 +1063,59 @@ export const fr = {
         note: 'La matrice complète table × opération × rôle est vérifiée par le test d’intégration ; cette page en montre sept lignes représentatives.',
       },
     },
+    spec114: {
+      intro:
+        'Démonstration : deux buckets privés, un chemin de fichier factice et la durée d’une signature. Aucune URL signée réelle, aucun jeton et aucun nom d’apport privé ne sont affichés. Les règles sont vérifiées sur le Supabase local avec des JWT A, B et anonyme.',
+      buckets: {
+        title: 'Buckets privés',
+        intro:
+          'Les apports et les exports vivent dans deux buckets séparés. `public = false` interdit tout lien public permanent ; une lecture anonyme échoue.',
+        label: 'Buckets de stockage (liste)',
+        private: 'Privé',
+        items: {
+          resources: 'Apports : PDF, images, notes et liens',
+          exports: 'Exports personnels : archives ZIP',
+        },
+      },
+      path: {
+        title: 'Chemin de stockage',
+        intro:
+          'Chaque objet suit exactement trois segments : l’identifiant du propriétaire, un UUID de ressource ou d’export, puis un nom nettoyé sans séparateur. Le nom original reste en métadonnée privée.',
+        label: 'Chemin factice',
+        user: 'Propriétaire',
+        object: 'Ressource',
+        name: 'Nom nettoyé',
+        fake: 'UUID factices : ce chemin n’existe pas dans le stockage.',
+      },
+      ttl: {
+        title: 'Durée de signature',
+        intro:
+          'Une URL d’envoi ou de lecture est signée pour dix minutes exactement. La lecture n’est signée qu’après vérification de la ligne DB liée ; une ligne supprimée ou expirée ne produit plus de signature.',
+        value: 'URL signée : 10 min',
+        expiry:
+          'Expiration calculée par l’horloge injectable : 2026-11-11T12:30:00Z pour une signature créée à 12:20:00Z.',
+        secret: 'Le jeton reste côté serveur et n’est jamais journalisé ni rendu dans cette page.',
+      },
+      access: {
+        title: 'Matrice des accès',
+        intro:
+          'Même membre du groupe, un autre compte ne liste, ne lit, n’écrit ni ne supprime les objets du propriétaire. L’anonyme n’obtient rien non plus.',
+        role: 'Opération',
+        owner: 'Propriétaire',
+        member: 'Autre membre',
+        anonymous: 'Anonyme',
+        allowed: 'autorisé',
+        denied: 'refusé',
+        rows: {
+          list: 'Lister les objets du préfixe',
+          upload: 'Obtenir une URL d’envoi',
+          read: 'Signer une lecture',
+          delete: 'Supprimer un objet',
+          export: 'Lire un export personnel',
+        },
+        note: 'Les exports sont écrits par le job avec le rôle de service ; un utilisateur ne reçoit jamais de signature d’envoi pour ce bucket.',
+      },
+    },
     spec111: {
       intro:
         'Démonstration : une formation partagée, un groupe de trois membres et sa progression limitée. Le code affiché est factice et n’ouvre aucune invitation réelle ; seul le propriétaire peut le régénérer.',
