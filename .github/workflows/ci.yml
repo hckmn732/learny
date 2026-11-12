@@ -177,6 +177,26 @@ jobs:
         run: supabase start
       - name: Remettre la base à zéro
         run: pnpm db:reset
+      # Docker Hub rate-limits the shared runner IPs. Pull the two Docker Hub images of the
+      # self-hosted stack through the public Google mirror and tag them locally, so Compose
+      # reuses them instead of hitting Docker Hub again.
+      - name: Précharger les images Docker Hub via le miroir public
+        run: |
+          for image in inngest/inngest:v1.52.0 axllent/mailpit:v1.33.1; do
+            pulled=false
+            for attempt in 1 2 3; do
+              if docker pull "mirror.gcr.io/$image"; then
+                docker tag "mirror.gcr.io/$image" "$image"
+                pulled=true
+                break
+              fi
+              sleep $((attempt * 10))
+            done
+            if [ "$pulled" != true ]; then
+              echo "::error::impossible de précharger $image"
+              exit 1
+            fi
+          done
       - name: Tests d'intégration
         run: pnpm test:int
       - name: Publier les rapports d'intégration
