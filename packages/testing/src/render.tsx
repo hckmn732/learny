@@ -3,6 +3,9 @@ import { render, type RenderOptions, type RenderResult } from '@testing-library/
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { ReactElement } from 'react';
 
+export { cleanup, screen, waitFor, within } from '@testing-library/react';
+export type { RenderOptions, RenderResult } from '@testing-library/react';
+
 export function renderComponent(
   ui: ReactElement,
   options?: RenderOptions,
