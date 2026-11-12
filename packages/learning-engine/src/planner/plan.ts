@@ -131,6 +131,10 @@ function activityKey(formationId: Id, moduleId: Id | null, kind: SlotKind, title
   return `${formationId}|${moduleId ?? ''}|${kind}|${title}`;
 }
 
+function matchKeyOf(activity: ActivitySpec): string {
+  return activityKey(activity.formationId, activity.moduleId, activity.kind, activity.title);
+}
+
 function slotIdentifier(key: string): string {
   return `slot-${fnv1a32(key).toString(36)}`;
 }
@@ -693,7 +697,7 @@ function makeSlot(
   tz: string,
 ): PlannedSlot {
   const instants = instantsOfRange(date, range, tz);
-  const replay = state.missedKeys.get(activity.key) ?? 0;
+  const replay = state.missedKeys.get(matchKeyOf(activity)) ?? 0;
   const finalId = replay > 0 ? `${slotId}-r${String(replay)}` : slotId;
   return {
     slotId: finalId,
@@ -726,7 +730,6 @@ function scheduleSprints(
   input: PlanScheduleInput,
   availability: Availability,
   outcomeSlots: PlannedSlot[],
-  outcomeUnscheduled: UnscheduledActivity[],
 ): void {
   const tz = input.preferences.tz;
   const nowDate = localDateOf(input.now, tz);
@@ -752,33 +755,13 @@ function scheduleSprints(
           break;
         }
       }
-      if (studyDate === null) {
-        outcomeUnscheduled.push({
-          formationId: exam.formationId ?? '',
-          moduleId: exam.moduleId,
-          kind: 'sprint',
-          title: `Sprint — ${exam.title}`,
-          minutes: input.params.sprintMinutes,
-          reason: 'Aucun jour d’étude avant l’épreuve.',
-        });
-        continue;
-      }
+      if (studyDate === null) continue;
       const sprintId = sprintSlotId(exam.slotId, studyDate);
       if (state.usedIds.has(sprintId)) continue;
       const placement = findPlacement(state, input, availability, input.params.sprintMinutes, {
         exactDate: studyDate,
       });
-      if (placement === null) {
-        outcomeUnscheduled.push({
-          formationId: exam.formationId ?? '',
-          moduleId: exam.moduleId,
-          kind: 'sprint',
-          title: `Sprint — ${exam.title}`,
-          minutes: input.params.sprintMinutes,
-          reason: 'Capacité insuffisante sur le jour cible.',
-        });
-        continue;
-      }
+      if (placement === null) continue;
       const range: MinuteRange = {
         start: placement.range.start,
         end: placement.range.start + input.params.sprintMinutes,
@@ -989,9 +972,10 @@ function computeOutcome(input: PlanScheduleInput, overrides: ScheduleOverrides):
     );
     let cursor: string | undefined;
     for (const activity of activities) {
-      const consumed = preserved.consumedKeys.get(activity.key) ?? 0;
+      const matchKey = matchKeyOf(activity);
+      const consumed = preserved.consumedKeys.get(matchKey) ?? 0;
       if (consumed > 0) {
-        preserved.consumedKeys.set(activity.key, consumed - 1);
+        preserved.consumedKeys.set(matchKey, consumed - 1);
         continue;
       }
       const placed = scheduleActivity(preserved, input, availability, activity, cursor);
@@ -1010,7 +994,7 @@ function computeOutcome(input: PlanScheduleInput, overrides: ScheduleOverrides):
       }
     }
   }
-  scheduleSprints(preserved, input, availability, preserved.slots, unscheduled);
+  scheduleSprints(preserved, input, availability, preserved.slots);
   finalizeGlobalQuizzes(preserved, input);
   const deadlines = computeDeadlines(input, preserved.slots);
   const conflicts = computeConflicts(input, preserved.slots, preserved.manualConflicts);
@@ -1080,6 +1064,7 @@ function buildOptions(input: PlanScheduleInput, outcome: Outcome): ReplanOption[
       if (!simulated.missed) {
         volume = {
           ...shift,
+          kind: 'increase_volume',
           feasible: true,
           newHoursPerDay: candidate,
           projectedEndDate: simulated.projectedEndDate,
@@ -1090,6 +1075,7 @@ function buildOptions(input: PlanScheduleInput, outcome: Outcome): ReplanOption[
     options.push(
       volume ?? {
         ...shift,
+        kind: 'increase_volume',
         feasible: false,
         reason: `Capacité insuffisante même à ${String(maxHours)} h/jour.`,
         projectedEndDate: lastProjected,
@@ -1112,6 +1098,7 @@ function buildOptions(input: PlanScheduleInput, outcome: Outcome): ReplanOption[
       if (!simulated.missed) {
         light = {
           ...shift,
+          kind: 'lighten',
           feasible: true,
           projectedEndDate: simulated.projectedEndDate,
           removedMinutes: lastRemoved,
@@ -1122,6 +1109,7 @@ function buildOptions(input: PlanScheduleInput, outcome: Outcome): ReplanOption[
     options.push(
       light ?? {
         ...shift,
+        kind: 'lighten',
         feasible: false,
         reason: 'Même allégé de 90 %, le programme ne tient pas dans l’échéance.',
         projectedEndDate: lastLight,
