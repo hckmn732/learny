@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.520165000000002">
+<testsuite name="p1/spec-108.spec.ts" timestamp="2026-11-12T04:21:25.467Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.614" errors="0">
+<testcase name="inspecte le schéma du planning @SPEC-108" classname="p1/spec-108.spec.ts" time="1.356">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/attachments/axe-828b231491bd1f38dd0c4203fecf7a9cc3d8b1f0.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/attachments/spec-108-planning-d54b01ade5cfc2e9410948fbcce27992ecf158db.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-inspecte-le-schéma-du-planning-SPEC-108-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="planning conforme @SPEC-108 @visual @mobile" classname="p1/spec-108.spec.ts" time="1.258">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-desktop/attachments/axe-33ebf7a51952a00b884d1e118311be9f0d530010.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-108.spec.ts" timestamp="2026-11-12T04:21:25.467Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.246" errors="0">
+<testcase name="planning conforme @SPEC-108 @visual @mobile" classname="p1/spec-108.spec.ts" time="1.246">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-mobile/attachments/axe-ec3320f47c05fbe150e20667514560a45501ed4a.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-108-planning-conforme-SPEC-108-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
