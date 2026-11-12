@@ -1,0 +1,18 @@
+[
+  {
+    "actor": "membre du même groupe",
+    "lecture": "FORBIDDEN",
+    "finalisation": "FORBIDDEN",
+    "suppression": "FORBIDDEN"
+  },
+  {
+    "actor": "tiers sans lien",
+    "lecture": "FORBIDDEN",
+    "finalisation": "FORBIDDEN",
+    "suppression": "FORBIDDEN"
+  },
+  {
+    "actor": "membre du même groupe, SELECT sous RLS sur la ressource d’autrui",
+    "rowsVisible": 0
+  }
+]

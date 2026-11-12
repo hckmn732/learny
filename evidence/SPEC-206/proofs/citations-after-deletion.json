@@ -1,0 +1,28 @@
+[
+  {
+    "before": {
+      "chunkLinked": true,
+      "label": "Guide FI, p. 4",
+      "quote": "Clés de comptabilisation"
+    },
+    "after": {
+      "chunkLinked": false,
+      "label": "source supprimée",
+      "quote": "Clés de comptabilisation",
+      "location": {
+        "page": 4,
+        "charEnd": 24,
+        "charStart": 0
+      }
+    },
+    "chunksRemaining": 0,
+    "resourceDeleted": true,
+    "blobStillInStorage": false
+  },
+  {
+    "case": "Storage en panne pendant la suppression (CL-8)",
+    "accessRevokedAtOnce": true,
+    "blobStillInStorage": true,
+    "citationLabel": "source supprimée"
+  }
+]

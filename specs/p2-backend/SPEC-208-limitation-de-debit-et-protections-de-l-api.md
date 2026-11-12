@@ -127,6 +127,6 @@ Les validations communes de `docs/engineering/testing.md` §7 passent. En plus :
 ## 15. Décisions et hypothèses
 
 - ADR-0042 : seau Postgres et vérification d'origine. ADR-0213 (créé pour cette spécification) : paramètres des profils, clé HMAC de l'IP, fermeture sûre en 503, règle d'origine et exemptions, purges horaires.
-- **Décision créée** : ADR-0255 « Protections de l'API : ordre des gardes, horloge des seaux, adresse du client » (limitation par utilisateur après l'authentification, migration 0028 qui retire `set_updated_at` de `rate_limits`, `X-Forwarded-For` lu seulement avec `TRUST_PROXY=true`, `ORIGIN_REJECTED`, profils dans `@learny/contracts`).
+- **Décision créée** : ADR-0258 « Protections de l'API : ordre des gardes, horloge des seaux, adresse du client » (limitation par utilisateur après l'authentification, migration 0028 qui retire `set_updated_at` de `rate_limits`, `X-Forwarded-For` lu seulement avec `TRUST_PROXY=true`, `ORIGIN_REJECTED`, profils dans `@learny/contracts`).
 - ADR-0120 (confirmée par ADR-0219, qui remplace ADR-0206) : durée de 24 h des clés d'idempotence ; cette spécification n'en modifie pas le traitement, seulement la purge.
 - Hypothèse : en production, le proxy Vercel fournit `X-Forwarded-For` fiable (`TRUST_PROXY=true` dans l'environnement géré de SPEC-013).

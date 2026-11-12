@@ -3,8 +3,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
-// Every route of the registry is documented: the count grows with each specification.
-const ROUTE_COUNT = Object.keys(ROUTES).length;
 const CARDS = [
   'demo-validation',
   'demo-business',
@@ -13,6 +11,8 @@ const CARDS = [
   'demo-openapi',
 ];
 const TITLE = 'SPEC-201 — Socle API v1 et contrats';
+// Every specification that registers routes grows the document: the count follows the registry.
+const ROUTE_COUNT_TEXT = `${String(Object.keys(ROUTES).length)} routes documentées`;
 
 let session: TestSession;
 
@@ -94,9 +94,7 @@ test('démonstration du socle API @SPEC-201', async ({
   );
 
   // CA-6 — the OpenAPI document lists every registered route.
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText(
-    `${String(ROUTE_COUNT)} routes documentées`,
-  );
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText(ROUTE_COUNT_TEXT);
   await expect(page.getByRole('link', { name: 'Ouvrir openapi.json' })).toHaveAttribute(
     'href',
     '/openapi.json',
@@ -118,9 +116,7 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
   await page.getByRole('button', { name: 'Envoyer deux fois avec la même clé' }).click();
   await expect(page.getByTestId('demo-idem-second')).toBeVisible();
   await expect(page.getByTestId('demo-pagination-count')).toHaveText('20 éléments chargés');
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText(
-    `${String(ROUTE_COUNT)} routes documentées`,
-  );
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText(ROUTE_COUNT_TEXT);
 
   const ids = await page
     .locator('main > section[data-testid]')

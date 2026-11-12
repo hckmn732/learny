@@ -1,0 +1,34 @@
+[
+  {
+    "case": "2 créations simultanées avec la même clé d’idempotence",
+    "distinctResources": 1,
+    "rows": 1
+  },
+  {
+    "case": "3 créations simultanées dans un chapitre à 99 apports",
+    "results": [
+      "OK",
+      "QUOTA_EXCEEDED",
+      "QUOTA_EXCEEDED"
+    ],
+    "rowsInChapter": 100
+  },
+  {
+    "case": "2 réservations simultanées de 30 Mo avec 48 Mo disponibles",
+    "results": [
+      "OK",
+      "QUOTA_EXCEEDED"
+    ]
+  },
+  {
+    "case": "Volume compté après la course (octets finalisés + réservations vivantes)",
+    "usedBytes": 2128609280,
+    "quotaBytes": 2147483648
+  },
+  {
+    "case": "3 finalisations simultanées de la même ressource",
+    "distinctStates": 1,
+    "eventsEmitted": 1,
+    "countedResources": 1
+  }
+]

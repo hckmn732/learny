@@ -1,4 +1,4 @@
-# ADR-0255 — Protections de l'API : ordre des gardes, horloge des seaux, adresse du client
+# ADR-0258 — Protections de l'API : ordre des gardes, horloge des seaux, adresse du client
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)

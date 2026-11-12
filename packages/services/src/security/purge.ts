@@ -4,13 +4,13 @@ import { deleteExpiredIdempotencyKeys, deleteStaleRateLimits, type DbTx } from '
 
 export const SECURITY_RETENTION_MS = 24 * 60 * 60 * 1000;
 
-export interface PurgeResult {
+export interface SecurityPurgeResult {
   idempotencyKeys: number;
   rateLimitBuckets: number;
 }
 
 /** Strictly older than 24 h is removed: a key of 23 h 59 min is kept, one of 24 h + 1 s is not. */
-export async function purgeSecurityRows(tx: DbTx, now: Date): Promise<PurgeResult> {
+export async function purgeSecurityRows(tx: DbTx, now: Date): Promise<SecurityPurgeResult> {
   const before = new Date(now.getTime() - SECURITY_RETENTION_MS);
   return {
     idempotencyKeys: await deleteExpiredIdempotencyKeys(tx, { before }),
