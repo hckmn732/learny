@@ -218,6 +218,20 @@
       "when": 1794474465543,
       "tag": "0030_rate_limits_injected_clock",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1794477099683,
+      "tag": "0032_stripe_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1794477110095,
+      "tag": "0032_stripe_events_rules",
+      "breakpoints": true
     }
   ]
 }

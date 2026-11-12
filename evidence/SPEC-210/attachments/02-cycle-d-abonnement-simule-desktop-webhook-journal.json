@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "eventId": "evt_mock_1",
+      "type": "checkout.session.completed",
+      "at": "2026-11-11T12:20:00.000Z",
+      "result": "applied"
+    },
+    {
+      "eventId": "evt_mock_1",
+      "type": "checkout.session.completed",
+      "at": "2026-11-11T12:20:00.000Z",
+      "result": "duplicate"
+    },
+    {
+      "eventId": "evt_mock_2",
+      "type": "invoice.payment_failed",
+      "at": "2026-11-11T12:20:00.000Z",
+      "result": "applied"
+    },
+    {
+      "eventId": "evt_mock_3",
+      "type": "customer.subscription.deleted",
+      "at": "2026-11-11T12:20:00.000Z",
+      "result": "applied"
+    }
+  ]
+}

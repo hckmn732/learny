@@ -1,0 +1,12 @@
+[
+  {
+    "case": "absente",
+    "status": 400,
+    "code": "INVALID_SIGNATURE"
+  },
+  {
+    "case": "malformée",
+    "status": 400,
+    "code": "INVALID_SIGNATURE"
+  }
+]

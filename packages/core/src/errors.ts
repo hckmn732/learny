@@ -4,6 +4,7 @@
 export const ERROR_CATALOG = {
   VALIDATION_FAILED: { status: 400, title: 'Données invalides' },
   IDEMPOTENCY_KEY_REQUIRED: { status: 400, title: "Clé d'idempotence manquante" },
+  INVALID_SIGNATURE: { status: 400, title: 'Signature invalide' },
   UNAUTHENTICATED: { status: 401, title: 'Connexion requise' },
   INVALID_CREDENTIALS: { status: 401, title: 'Identifiants incorrects' },
   FORBIDDEN: { status: 403, title: 'Accès refusé' },
@@ -12,6 +13,7 @@ export const ERROR_CATALOG = {
   NOT_FOUND: { status: 404, title: 'Introuvable' },
   CONFLICT: { status: 409, title: 'Conflit' },
   IDEMPOTENCY_IN_PROGRESS: { status: 409, title: 'Requête déjà en cours' },
+  ALREADY_SUBSCRIBED: { status: 409, title: 'Abonnement déjà actif' },
   PAYLOAD_TOO_LARGE: { status: 413, title: 'Requête trop volumineuse' },
   IDEMPOTENCY_KEY_REUSED: { status: 422, title: "Clé d'idempotence déjà utilisée" },
   FORMATION_LIMIT_REACHED: { status: 422, title: 'Trois formations actives au plus' },

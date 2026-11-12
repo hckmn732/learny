@@ -18,11 +18,13 @@ export function BaseTokenStyle() {
 export function BaseCard({
   testId,
   title,
+  role,
   children,
-}: Readonly<{ testId: string; title: string; children: ReactNode }>) {
+}: Readonly<{ testId: string; title: string; role?: 'status'; children: ReactNode }>) {
   return (
     <section
       data-testid={testId}
+      {...(role === undefined ? {} : { role })}
       className="mt-6 rounded-[24px] border border-solid border-[#E7E6E1] bg-white p-6"
     >
       <h2 className="font-display text-xl font-semibold">{title}</h2>

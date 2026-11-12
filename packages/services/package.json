@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./destination": "./src/auth/destination.ts"
+    "./destination": "./src/auth/destination.ts",
+    "./billing": "./src/billing/index.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
@@ -20,6 +21,7 @@
     "@supabase/supabase-js": "^2.119.0",
     "drizzle-orm": "^0.44.7",
     "file-type": "^22.3.0",
+    "stripe": "^17.7.0",
     "unpdf": "^2.1.0"
   },
   "devDependencies": {

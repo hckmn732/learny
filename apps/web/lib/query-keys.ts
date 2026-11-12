@@ -11,4 +11,6 @@ export const qk = {
   health: (): Key => key('health'),
   devJobsRun: (runId: string): Key => key('dev-jobs-run', runId),
   devJobsOutbox: (): Key => key('dev-jobs-outbox'),
+  billingSubscription: (): Key => key('billing-subscription'),
+  devStripeEvents: (): Key => key('dev-stripe-events'),
 } as const;

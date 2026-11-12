@@ -210,6 +210,10 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
     'sdd_demo_runs',
     'Exécutions du pipeline de démonstration SDD (SPEC-203 ET-7) : réservées au service, jamais exposées au client.',
   ),
+  service(
+    'stripe_events',
+    'Événements Stripe déjà reçus (SPEC-210 ET-3, ADR-0215) : insérés (on conflict do nothing) et marqués traités par le webhook via serviceDb ; aucun accès client.',
+  ),
 ];
 
 export interface RlsCategoryCount {

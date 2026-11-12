@@ -235,6 +235,8 @@ export const subscriptions = pgTable(
     stripeSubscriptionId: text('stripe_subscription_id').unique(),
     status: subscriptionStatus('status').notNull().default('none'),
     currentPeriodEnd: timestamp('current_period_end', { withTimezone: true }),
+    /** SPEC-210 ET-3 — creation instant of the last Stripe event applied (ordering of webhooks). */
+    stripeEventAt: timestamp('stripe_event_at', { withTimezone: true }),
     dailyCapUsd: numeric('daily_cap_usd', { precision: 12, scale: 6 })
       .notNull()
       .default(DEFAULT_DAILY_CAP_USD),
@@ -252,6 +254,22 @@ export const subscriptions = pgTable(
     check('subscriptions_daily_cap_usd_check', sql`${table.dailyCapUsd} > 0`),
   ],
 );
+
+/**
+ * SPEC-210 ET-3 — Stripe events already received, deduplicated by `event.id` (ADR-0215). The table
+ * is reserved to the service role: RLS is enabled in the custom migration `stripe_events_rules`
+ * and no policy is granted to `authenticated`.
+ */
+export const stripeEvents = pgTable('stripe_events', {
+  eventId: text('event_id').primaryKey(),
+  type: text('type').notNull(),
+  /** Instant at which Stripe created the event (not the reception instant). */
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+  /** Set once the event has been applied or consciously ignored. */
+  processedAt: timestamp('processed_at', { withTimezone: true }),
+});
+
+export type StripeEventRow = typeof stripeEvents.$inferSelect;
 
 export type AiCredential = typeof aiCredentials.$inferSelect;
 export type NewAiCredential = typeof aiCredentials.$inferInsert;

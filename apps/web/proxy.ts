@@ -27,12 +27,18 @@ function sddGuard(request: NextRequest): NextResponse {
     segments.length === 4 &&
     segments[2] === 'reference' &&
     /^SCR-\d{2}-[a-z0-9-]+-(?:desktop|mobile)\.png$/.test(segments[3] ?? '');
+  // SPEC-210 EF-7 — the simulated Stripe pages: /_dev/stripe/checkout and /_dev/stripe/portal.
+  const stripePage =
+    segments[1] === 'stripe' &&
+    segments.length === 3 &&
+    (segments[2] === 'checkout' || segments[2] === 'portal');
   const allowed =
     sddPagesEnabled(process.env) &&
-    segments[1] === 'sdd' &&
-    (reference ||
-      (segments.length <= 3 &&
-        (specId === undefined || findSddDemo(specId, sddDemos) !== undefined)));
+    (stripePage ||
+      (segments[1] === 'sdd' &&
+        (reference ||
+          (segments.length <= 3 &&
+            (specId === undefined || findSddDemo(specId, sddDemos) !== undefined)))));
   if (allowed) return NextResponse.next();
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
 }
