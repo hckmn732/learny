@@ -169,8 +169,10 @@ test('push conforme @SPEC-205 @visual @mobile', async ({ page, axeCheck }) => {
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
   await expect(page.getByTestId('sdd-title')).toHaveCSS('font-family', /Space[ _]Grotesk/);
+  // Wait for the swapped webfont: a late font swap can change wrapping by a couple of pixels.
+  await page.evaluate(() => document.fonts.ready);
   const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    () => document.documentElement.scrollWidth - window.innerWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
 

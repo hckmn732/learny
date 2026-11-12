@@ -220,7 +220,13 @@ export default function Spec211Demo() {
           </div>
         </div>
         <h3 className="mt-5 font-semibold">{t.export.tree}</h3>
-        <div data-testid="spec-211-tree" className="mt-2 max-h-96 overflow-auto">
+        <div
+          data-testid="spec-211-tree"
+          role="region"
+          aria-label={t.export.tree}
+          tabIndex={0}
+          className="mt-2 max-h-96 overflow-auto"
+        >
           {tree.length === 0 ? (
             <p className="text-sm">{t.export.treeEmpty}</p>
           ) : (
@@ -277,7 +283,12 @@ export default function Spec211Demo() {
           {busy === 'execution' ? t.execution.running : t.execution.run}
         </button>
         <h3 className="mt-5 font-semibold">{t.execution.table}</h3>
-        <div className="mt-2 overflow-x-auto">
+        <div
+          role="region"
+          aria-label={t.execution.table}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto"
+        >
           {rows.length === 0 ? (
             <p className="text-sm">{t.execution.empty}</p>
           ) : (
