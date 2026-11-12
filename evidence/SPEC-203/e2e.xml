@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="36.27158300000001">
+<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:38:57.473Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.649" errors="0">
+<testcase name="pipeline avec reprise et tick horaire @SPEC-203" classname="p2/spec-203-jobs.spec.ts" time="1.428">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/attachments/axe-f1f7c87d53b2070cbdf507b011053587cade2fd9.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/attachments/spec-203-jobs-dc6460529b53137177a67db5a6375480c54a2765.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-pipeline--9bcc1-se-et-tick-horaire-SPEC-203-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.221">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/attachments/axe-e909c47ba01a3b6ceb9c18ebccd54d5817c9a770.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-203-jobs.spec.ts" timestamp="2026-11-12T09:38:57.473Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.289" errors="0">
+<testcase name="page de démonstration SPEC-203 @SPEC-203 @visual @mobile" classname="p2/spec-203-jobs.spec.ts" time="1.289">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/attachments/axe-f64ac507b1d6549278a00a9d782bd4853f8e5e4c.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-203-jobs-page-de-d-f1e0f--203-SPEC-203-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

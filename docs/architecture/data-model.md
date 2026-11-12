@@ -137,3 +137,9 @@ Fonction `search_user_content(q text, limit int)` (security invoker) : recherche
 **idempotency_keys** — `key text`, `user_id`, `route text`, `request_hash text not null` (empreinte SHA-256, ADR-0120), `response jsonb`, `status_code int` (`0` = en cours), `created_at`, `completed_at timestamptz null`, `pk(user_id, key)` ; purge à 24 h (ADR-0219).
 
 **rate_limits** — `bucket text pk` (`user:<id>:<route>` ou `ip:<hash>:<route>`), `tokens numeric`, `updated_at`.
+
+## 13. Événements de domaine et démonstration des jobs (SPEC-203)
+
+**event_outbox** (ADR-0122) — `id uuid pk`, `event_id text not null unique` (identifiant de déduplication Inngest), `name text not null`, `data jsonb not null`, `user_id uuid null → profiles on delete cascade`, `created_at`, `sent_at timestamptz null`, `attempts smallint not null default 0`, `last_error text null`, `failed boolean not null default false`. Index partiel `event_outbox_pending (created_at) where sent_at is null and not failed`. RLS forcée, aucune politique utilisateur ; écriture par la fonction `security definer` `enqueue_event(p_event_id, p_name, p_data, p_user_id)` (un appelant `authenticated` ne met en file que ses propres événements, jamais `cron/*`) ; lignes envoyées purgées après 7 jours par `nightly-outbox-cleanup`.
+
+**sdd_demo_runs** — `run_id uuid pk`, `steps jsonb not null default '[]'`, `attempts int not null default 0`, `finished_at timestamptz null` ; table de démonstration du pipeline `sdd-demo-pipeline`, accès service uniquement (RLS forcée).

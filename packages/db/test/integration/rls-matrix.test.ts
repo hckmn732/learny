@@ -1321,19 +1321,28 @@ describe('[SPEC-113] RLS isolation', () => {
           return rows[0]?.count ?? -1;
         });
         expect(read, entry.table).toBe(0);
+        const forgedInsert = {
+          rate_limits: sql`
+            insert into public.rate_limits (bucket, tokens)
+            values (${`user:${seed.a.id}:/api/v1/rls`}, 1)
+          `,
+          event_outbox: sql`
+            insert into public.event_outbox (event_id, name, data)
+            values ('rls-forged-event', 'cron/nightly', '{}'::jsonb)
+          `,
+          sdd_demo_runs: sql`
+            insert into public.sdd_demo_runs (run_id) values (gen_random_uuid())
+          `,
+        }[entry.table];
         const write = await attemptUnderUser(tx, seed.a.id, (inner) =>
           inner.execute(
-            entry.table === 'rate_limits'
-              ? sql`
-                  insert into public.rate_limits (bucket, tokens)
-                  values (${`user:${seed.a.id}:/api/v1/rls`}, 1)
-                `
-              : sql`
-                  insert into public.idempotency_keys (user_id, key, route, request_hash)
-                  values (
-                    ${seed.a.id}::uuid, 'rls-forged-01', '/api/v1/rls', ${'a'.repeat(64)}
-                  )
-                `,
+            forgedInsert ??
+              sql`
+                insert into public.idempotency_keys (user_id, key, route, request_hash)
+                values (
+                  ${seed.a.id}::uuid, 'rls-forged-01', '/api/v1/rls', ${'a'.repeat(64)}
+                )
+              `,
           ),
         );
         expect(write.code, entry.table).toBe('42501');

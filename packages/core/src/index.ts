@@ -38,3 +38,5 @@ export {
   userWeekday,
 } from './time';
 export type { Instant, QuietHoursWindow, UserZoneTime } from './time';
+export { localTimeToInstant, zonedParts } from './zoned-time';
+export type { ZonedParts } from './zoned-time';

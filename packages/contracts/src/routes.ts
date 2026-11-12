@@ -1,5 +1,6 @@
 import { authRoutes } from './auth';
 import { devRoutes } from './dev';
+import { devJobsRoutes } from './dev-jobs';
 import { healthRoutes } from './health';
 import { securityRoutes } from './security';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
@@ -13,6 +14,7 @@ export const ROUTES = {
   ...securityRoutes,
   ...uploadsRoutes,
   ...uploadsDevRoutes,
+  ...devJobsRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;

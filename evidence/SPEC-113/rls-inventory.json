@@ -1,11 +1,11 @@
 {
   "measuredAt": "2026-11-11T12:20:00.000Z",
-  "tableCount": 51,
-  "forcedCount": 51,
+  "tableCount": 53,
+  "forcedCount": 53,
   "categories": {
     "personal": 42,
     "shared-programme": 7,
-    "service": 2
+    "service": 4
   },
   "tables": [
     {
@@ -378,6 +378,16 @@
     },
     {
       "table": "rate_limits",
+      "category": "service",
+      "policies": []
+    },
+    {
+      "table": "event_outbox",
+      "category": "service",
+      "policies": []
+    },
+    {
+      "table": "sdd_demo_runs",
       "category": "service",
       "policies": []
     }

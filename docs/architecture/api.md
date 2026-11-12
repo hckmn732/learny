@@ -50,5 +50,6 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/streak` · GET `/milestones` | Série et jalons | SPEC-723 |
 | POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction | SPEC-609, 501 |
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
+| POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.

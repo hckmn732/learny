@@ -1,9 +1,10 @@
 // Production wiring of the file service (SPEC-206): SPEC-114 Storage gateway, object reader,
 // short-lived Storage tokens and the `resource/uploaded` sink. Built once per process from the
 // validated configuration; the Supabase JWT secret stays on the server.
+import { parseEventData } from '@learny/contracts';
 import { AppError, systemClock } from '@learny/core';
 import { SupabaseStorageGateway } from '@learny/db';
-import { EVENT_NAMES, inngest, resourceUploadedSchema } from '@learny/jobs';
+import { inngest } from '@learny/jobs';
 import {
   SupabaseObjectReader,
   mintUserAccessToken,
@@ -13,13 +14,13 @@ import {
 
 import { getPublicEnv, getServerEnv } from '../server-env';
 
-// Until the transactional outbox of SPEC-203 (ADR-0122) takes over, the event goes straight to
-// Inngest with its stable id. In `JOBS_MODE=inline` (tests, CI) no function subscribes to it yet.
+// The payload is checked against the SPEC-203 catalogue; until the service emits through the
+// transactional outbox (`emitAfterCommit`), the event goes straight to Inngest with its stable id. In `JOBS_MODE=inline` (tests, CI) no function subscribes to it yet.
 const eventSink: ResourceEventSink = {
   async emitUploaded(event, { id }) {
-    const data = resourceUploadedSchema.parse(event);
+    const data = parseEventData('resource/uploaded', event);
     if (getServerEnv().JOBS_MODE === 'inline') return;
-    await inngest.send({ id, name: EVENT_NAMES.resourceUploaded, data });
+    await inngest.send({ id, name: 'resource/uploaded', data });
   },
 };
 

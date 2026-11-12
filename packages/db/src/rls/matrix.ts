@@ -202,6 +202,14 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
     'rate_limits',
     'Seaux de limitation de débit réservés au service (SPEC-112 EF-4, SPEC-208) ; aucune lecture ni écriture client.',
   ),
+  service(
+    'event_outbox',
+    'Boîte d’envoi des événements de domaine (SPEC-203 ET-2, ADR-0122) : écrite uniquement par la fonction security definer enqueue_event, lue et mise à jour par le service ; aucun accès client.',
+  ),
+  service(
+    'sdd_demo_runs',
+    'Exécutions du pipeline de démonstration SDD (SPEC-203 ET-7) : réservées au service, jamais exposées au client.',
+  ),
 ];
 
 export interface RlsCategoryCount {

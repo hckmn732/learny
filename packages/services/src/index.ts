@@ -11,3 +11,10 @@ export * from './auth/index';
 export * from './security/index';
 export * from './resources';
 export { simulateUpload } from './dev/uploads';
+export {
+  SDD_203_USER_PREFIX,
+  getDemoRun,
+  getOutboxCounts,
+  previewHourlyTick,
+  startDemoPipeline,
+} from './dev/events';

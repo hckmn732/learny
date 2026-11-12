@@ -34,7 +34,13 @@ describe('[SPEC-007] web /api/inngest', () => {
 
     expect(res.status).toBe(200);
     expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: functions.length });
-    expect(functions.map((f) => f.id())).toEqual([DEMO_JOB_ID]);
+    expect(functions.map((f) => f.id())).toEqual([
+      DEMO_JOB_ID,
+      'cron-hourly-tick',
+      'cron-nightly',
+      'nightly-outbox-cleanup',
+      'sdd-demo-pipeline',
+    ]);
     expect(text).not.toMatch(/signkey|learny-test-only/);
   });
 

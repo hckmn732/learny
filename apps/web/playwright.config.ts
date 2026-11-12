@@ -107,6 +107,8 @@ export default defineConfig({
       // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.
       TRUST_PROXY: 'true',
       APP_ENV: 'test',
+      // SPEC-203: events run in the process, without an Inngest Dev Server (EF-6).
+      JOBS_MODE: 'inline',
       // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
       SDD_STACK_DEMO: 'true',
     },
