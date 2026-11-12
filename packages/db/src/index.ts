@@ -391,3 +391,21 @@ export type {
   RemoveGroupMemberInput,
   RotateInviteCodeInput,
 } from './repositories/groups';
+
+// RLS inventory and policy audit (SPEC-113 EF-6, EF-7, ET-4). The demonstration and the integration
+// suite share the same classification; the unit test keeps every migration policy declared here.
+export {
+  RLS_MATRIX,
+  categoryCounts,
+  findUnjustifiedPermissivePolicies,
+  matrixPolicyNames,
+} from './rls/matrix';
+export type {
+  RlsCategory,
+  RlsCategoryCount,
+  RlsExpectation,
+  RlsOperation,
+  RlsPolicyViolation,
+  RlsScenario,
+  RlsTableMatrix,
+} from './rls/matrix';
