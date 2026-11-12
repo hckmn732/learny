@@ -9,7 +9,7 @@ import { planSchedule } from '../../src/planner/plan';
 import { replanSchedule } from '../../src/planner/replan';
 import type {
   ExistingPlannerSlot,
-  PlanScheduleInput,
+  ReplanScheduleInput,
   PlannerFormation,
 } from '../../src/planner/types';
 
@@ -45,7 +45,7 @@ const FORMATIONS: readonly PlannerFormation[] = [
   },
 ];
 
-function input(overrides: Partial<PlanScheduleInput> = {}): PlanScheduleInput {
+function input(overrides: Partial<ReplanScheduleInput> = {}): ReplanScheduleInput {
   return {
     now: REFERENCE_NOW,
     params: withParams('planner'),

@@ -19,7 +19,7 @@ import { replanSchedule } from './replan';
 import type {
   ExistingPlannerSlot,
   PlanResult,
-  PlanScheduleInput,
+  ReplanScheduleInput,
   PlannedSlot,
   PlannerFormation,
   PlannerPreferences,
@@ -86,7 +86,7 @@ const FORMATIONS: readonly PlannerFormation[] = [
   },
 ];
 
-function input(overrides: Partial<PlanScheduleInput> = {}): PlanScheduleInput {
+function input(overrides: Partial<ReplanScheduleInput> = {}): ReplanScheduleInput {
   return {
     formations: FORMATIONS,
     preferences: preferences(),
