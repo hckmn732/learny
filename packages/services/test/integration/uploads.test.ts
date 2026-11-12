@@ -6,6 +6,8 @@
 // sink is a recorder. Fixtures are committed (the concurrency tests need several connections), so
 // each test builds its own users and the suite removes them, their rows and their blobs at the end.
 import { randomBytes, randomUUID } from 'node:crypto';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 
 import { afterAll, describe, expect, it } from 'vitest';
 
@@ -129,6 +131,24 @@ interface Fixture {
   formationId: string;
   moduleId: string;
   chapters: string[];
+}
+
+/**
+ * Measured outputs of the run, written to `evidence/SPEC-206/proofs/` when the suite ends
+ * (SPEC-206 §13). They only hold counts, codes and sizes: never a URL, a token or a private file.
+ */
+const proofs = new Map<string, Array<Record<string, unknown>>>();
+
+function proof(name: string, entry: Record<string, unknown>): void {
+  proofs.set(name, [...(proofs.get(name) ?? []), entry]);
+}
+
+function writeProofs(): void {
+  const directory = path.resolve(process.cwd(), 'evidence/SPEC-206/proofs');
+  for (const [name, entries] of proofs) {
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(path.join(directory, `${name}.json`), `${JSON.stringify(entries, null, 2)}\n`);
+  }
 }
 
 const createdUsers: string[] = [];
@@ -319,6 +339,7 @@ afterAll(async () => {
     await serviceDb().execute(sql`delete from public.groups where owner_id = ${userId}::uuid`);
     await serviceDb().execute(sql`delete from auth.users where id = ${userId}::uuid`);
   }
+  writeProofs();
   await closeDb();
 });
 
@@ -368,15 +389,32 @@ describe('[SPEC-206] upload service', () => {
           sizeBytes,
           idempotencyKey: randomUUID(),
         });
-      expect(codeOf(await attempt('application/pdf', RESOURCE_LIMITS.pdfMaxBytes + 1))).toBe(
-        'UPLOAD_TOO_LARGE',
-      );
-      expect(codeOf(await attempt('image/png', RESOURCE_LIMITS.imageMaxBytes + 1))).toBe(
-        'UPLOAD_TOO_LARGE',
-      );
-      expect(codeOf(await attempt('video/mp4', 1024))).toBe('UNSUPPORTED_TYPE');
-      expect(codeOf(await attempt('audio/mpeg', 1024))).toBe('UNSUPPORTED_TYPE');
-      expect(codeOf(await attempt('application/zip', 1024))).toBe('UNSUPPORTED_TYPE');
+      const declared: Array<[string, string, number, string]> = [
+        [
+          'PDF annoncé à 50 Mo + 1 octet',
+          'application/pdf',
+          RESOURCE_LIMITS.pdfMaxBytes + 1,
+          'UPLOAD_TOO_LARGE',
+        ],
+        [
+          'Image annoncée à 10 Mo + 1 octet',
+          'image/png',
+          RESOURCE_LIMITS.imageMaxBytes + 1,
+          'UPLOAD_TOO_LARGE',
+        ],
+        ['Vidéo annoncée (V2, ADR-0008)', 'video/mp4', 1024, 'UNSUPPORTED_TYPE'],
+        ['Audio annoncé (V2, ADR-0008)', 'audio/mpeg', 1024, 'UNSUPPORTED_TYPE'],
+        ['Archive ZIP annoncée', 'application/zip', 1024, 'UNSUPPORTED_TYPE'],
+      ];
+      for (const [label, mime, size, expected] of declared) {
+        const result = await attempt(mime, size);
+        expect(codeOf(result), label).toBe(expected);
+        proof('bounds', {
+          case: label,
+          result: codeOf(result),
+          reservation: 'aucune, aucune URL d’envoi',
+        });
+      }
       expect(codeOf(await attempt('application/pdf', 1024, '../secret.pdf'))).toBe(
         'VALIDATION_FAILED',
       );
@@ -454,6 +492,11 @@ describe('[SPEC-206] upload service', () => {
       ]);
       const ids = new Set(results.map((result) => unwrap(result).resourceId));
       expect(ids.size).toBe(1);
+      proof('concurrency', {
+        case: '2 créations simultanées avec la même clé d’idempotence',
+        distinctResources: ids.size,
+        rows: 1,
+      });
       expect(
         await countRows(
           sql`select count(*)::int as total from public.resources where owner_id = ${fixture.a}::uuid`,
@@ -544,9 +587,13 @@ describe('[SPEC-206] upload service', () => {
         bytes: exact,
         name: 'limite.pdf',
       });
-      expect(unwrap(await finalizeUpload(ctx, deps, accepted.resourceId))).toMatchObject({
-        sizeBytes: RESOURCE_LIMITS.pdfMaxBytes,
-        pages: 500,
+      const acceptedPdf = unwrap(await finalizeUpload(ctx, deps, accepted.resourceId));
+      expect(acceptedPdf).toMatchObject({ sizeBytes: RESOURCE_LIMITS.pdfMaxBytes, pages: 500 });
+      proof('bounds', {
+        case: 'PDF réel de 50 Mo exactement et 500 pages, envoyé par Storage',
+        sizeBytes: acceptedPdf.sizeBytes,
+        pages: acceptedPdf.pages,
+        result: 'accepté',
       });
 
       const tooManyPages = await reserveAndUpload(deps, fixture, {
@@ -557,6 +604,11 @@ describe('[SPEC-206] upload service', () => {
       const refused = await finalizeUpload(ctx, deps, tooManyPages.resourceId);
       expect(codeOf(refused)).toBe('UPLOAD_TOO_LARGE');
       expect(refused.ok ? '' : refused.error.detail).toContain('500 pages');
+      proof('bounds', {
+        case: 'PDF réel de 501 pages',
+        result: codeOf(refused),
+        message: refused.ok ? '' : refused.error.detail,
+      });
       // The refused upload is discarded: its row no longer counts and its blob is gone.
       expect((await rowOf(tooManyPages.resourceId))?.deleted_at).not.toBeNull();
       expect(await blobExists(fixture.a, tooManyPages.resourceId, 'trop-de-pages.pdf')).toBe(false);
@@ -573,11 +625,18 @@ describe('[SPEC-206] upload service', () => {
         bytes: buildImage('png', RESOURCE_LIMITS.imageMaxBytes),
         name: 'capture.png',
       });
-      expect(unwrap(await finalizeUpload(ctx, deps, exact.resourceId))).toMatchObject({
+      const acceptedImage = unwrap(await finalizeUpload(ctx, deps, exact.resourceId));
+      expect(acceptedImage).toMatchObject({
         kind: 'image',
         mime: 'image/png',
         sizeBytes: RESOURCE_LIMITS.imageMaxBytes,
         pages: null,
+      });
+      proof('bounds', {
+        case: 'Image PNG réelle de 10 Mo exactement',
+        sizeBytes: acceptedImage.sizeBytes,
+        mime: acceptedImage.mime,
+        result: 'accepté',
       });
 
       // The client announces 1 MB and sends one byte more than the bound.
@@ -587,8 +646,15 @@ describe('[SPEC-206] upload service', () => {
         declaredBytes: MEBIBYTE,
         name: 'triche.png',
       });
-      expect(codeOf(await finalizeUpload(ctx, deps, cheating.resourceId))).toBe('UPLOAD_TOO_LARGE');
+      const cheatingResult = await finalizeUpload(ctx, deps, cheating.resourceId);
+      expect(codeOf(cheatingResult)).toBe('UPLOAD_TOO_LARGE');
       expect(await blobExists(fixture.a, cheating.resourceId, 'triche.png')).toBe(false);
+      proof('bounds', {
+        case: 'Image de 10 Mo + 1 octet annoncée à 1 Mo',
+        sizeBytes: RESOURCE_LIMITS.imageMaxBytes + 1,
+        result: codeOf(cheatingResult),
+        blobRemoved: true,
+      });
     }, 120_000);
 
     it('refuses an executable named .png and discards it (CL-2)', async () => {
@@ -601,6 +667,11 @@ describe('[SPEC-206] upload service', () => {
       });
       const refused = await finalizeUpload(contextOf(fixture.a), deps, hostile.resourceId);
       expect(codeOf(refused)).toBe('UNSUPPORTED_TYPE');
+      proof('bounds', {
+        case: 'Exécutable Windows nommé photo.png annoncé image/png',
+        result: codeOf(refused),
+        message: refused.ok ? '' : refused.error.detail,
+      });
       const row = await rowOf(hostile.resourceId);
       expect(row?.deleted_at).not.toBeNull();
       expect(row?.size_bytes).toBeNull();
@@ -703,6 +774,16 @@ describe('[SPEC-206] upload service', () => {
         text: 'é'.repeat(RESOURCE_LIMITS.noteMaxChars + 1),
       });
       expect(codeOf(tooLong)).toBe('UPLOAD_TOO_LARGE');
+      proof('bounds', {
+        case: 'Note de 100 000 caractères exactement',
+        characters: RESOURCE_LIMITS.noteMaxChars,
+        result: 'accepté (en file, jamais prêt)',
+      });
+      proof('bounds', {
+        case: 'Note de 100 001 caractères',
+        characters: RESOURCE_LIMITS.noteMaxChars + 1,
+        result: codeOf(tooLong),
+      });
       expect(
         await countRows(
           sql`select count(*)::int as total from public.resources where owner_id = ${fixture.a}::uuid`,
@@ -755,6 +836,12 @@ describe('[SPEC-206] upload service', () => {
       });
       expect(codeOf(refused)).toBe('QUOTA_EXCEEDED');
       expect(refused.ok ? '' : refused.error.detail).toContain('100 apports');
+      proof('bounds', {
+        case: '101ᵉ apport d’un chapitre (99 notes + 1 envoi déjà réservé)',
+        result: codeOf(refused),
+        message: refused.ok ? '' : refused.error.detail,
+        uploadUrl: 'aucune',
+      });
       const note = await createResource(contextOf(fixture.a), chapterOf(fixture), {
         kind: 'note',
         title: 'Encore une',
@@ -783,6 +870,11 @@ describe('[SPEC-206] upload service', () => {
         });
       const results = await Promise.all([attempt(), attempt(), attempt()]);
       expect(results.map(codeOf).sort()).toEqual(['OK', 'QUOTA_EXCEEDED', 'QUOTA_EXCEEDED']);
+      proof('concurrency', {
+        case: '3 créations simultanées dans un chapitre à 99 apports',
+        results: results.map(codeOf).sort(),
+        rowsInChapter: 100,
+      });
       for (const result of results) {
         if (result.ok) remember(fixture.a, result.value.resourceId, 'course.pdf');
       }
@@ -809,10 +901,19 @@ describe('[SPEC-206] upload service', () => {
       // One byte beyond the room left is refused, the exact room is accepted.
       expect(codeOf(await ask(QUOTA_REMAINING + 1))).toBe('QUOTA_EXCEEDED');
       expect(QUOTA_REMAINING).toBe(48 * MEBIBYTE);
+      proof('bounds', {
+        case: 'Quota 2 Go : 40 × 50 Mo déjà finalisés, 48 Mo restants, demande de 48 Mo + 1 octet',
+        remainingBytes: QUOTA_REMAINING,
+        result: 'QUOTA_EXCEEDED',
+      });
 
       // Two simultaneous reservations of 30 MB: only one fits in the 48 MB left.
       const results = await Promise.all([ask(30 * MEBIBYTE), ask(30 * MEBIBYTE)]);
       expect(results.map(codeOf).sort()).toEqual(['OK', 'QUOTA_EXCEEDED']);
+      proof('concurrency', {
+        case: '2 réservations simultanées de 30 Mo avec 48 Mo disponibles',
+        results: results.map(codeOf).sort(),
+      });
       const winner = results.find((result) => result.ok);
       if (winner?.ok) remember(fixture.a, winner.value.resourceId, 'volume.pdf');
       const used = await countRows(sql`
@@ -824,6 +925,11 @@ describe('[SPEC-206] upload service', () => {
         from public.resources where owner_id = ${fixture.a}::uuid and deleted_at is null
       `);
       expect(used).toBeLessThanOrEqual(RESOURCE_LIMITS.userQuotaBytes);
+      proof('concurrency', {
+        case: 'Volume compté après la course (octets finalisés + réservations vivantes)',
+        usedBytes: used,
+        quotaBytes: RESOURCE_LIMITS.userQuotaBytes,
+      });
       // 18 MB are still free: a smaller upload passes, the exact remainder does too.
       expect(codeOf(await ask(18 * MEBIBYTE))).toBe('OK');
       expect(codeOf(await ask(1))).toBe('QUOTA_EXCEEDED');
@@ -869,6 +975,12 @@ describe('[SPEC-206] upload service', () => {
       const states = results.map((result) => unwrap(result));
       expect(new Set(states.map((state) => JSON.stringify(state))).size).toBe(1);
       expect(deps.sink.sent).toHaveLength(1);
+      proof('concurrency', {
+        case: '3 finalisations simultanées de la même ressource',
+        distinctStates: new Set(states.map((state) => JSON.stringify(state))).size,
+        eventsEmitted: deps.sink.sent.length,
+        countedResources: 1,
+      });
       expect(
         await countRows(sql`
           select count(*)::int as total from public.resources
@@ -910,6 +1022,11 @@ describe('[SPEC-206] upload service', () => {
       expect(first.expiresAt).toBe('2026-11-11T12:30:00.000Z');
       const claims = jwtClaims(first.url);
       expect(claims.exp - claims.iat).toBe(600);
+      proof('read-url', {
+        case: 'URL de lecture signée du propriétaire',
+        expiresAt: first.expiresAt,
+        tokenLifetimeSeconds: claims.exp - claims.iat,
+      });
       const download = await fetch(first.url);
       expect(download.status).toBe(200);
       expect(new Uint8Array(await download.arrayBuffer())).toEqual(pdf);
@@ -936,11 +1053,16 @@ describe('[SPEC-206] upload service', () => {
       });
       unwrap(await finalizeUpload(contextOf(fixture.a), deps, created.resourceId));
 
-      for (const intruder of [fixture.b, fixture.outsider]) {
+      for (const [actor, intruder] of [
+        ['membre du même groupe', fixture.b],
+        ['tiers sans lien', fixture.outsider],
+      ] as const) {
         const ctx = contextOf(intruder);
-        expect(codeOf(await getSignedReadUrl(ctx, deps, created.resourceId))).toBe('FORBIDDEN');
-        expect(codeOf(await finalizeUpload(ctx, deps, created.resourceId))).toBe('FORBIDDEN');
-        expect(codeOf(await deleteResource(ctx, deps, created.resourceId))).toBe('FORBIDDEN');
+        const read = codeOf(await getSignedReadUrl(ctx, deps, created.resourceId));
+        const finalize = codeOf(await finalizeUpload(ctx, deps, created.resourceId));
+        const remove = codeOf(await deleteResource(ctx, deps, created.resourceId));
+        expect([read, finalize, remove]).toEqual(['FORBIDDEN', 'FORBIDDEN', 'FORBIDDEN']);
+        proof('isolation', { actor, lecture: read, finalisation: finalize, suppression: remove });
       }
       // Row Level Security itself hides the row from the member.
       const visible = await contextOf(fixture.b).db?.run((tx) =>
@@ -949,6 +1071,10 @@ describe('[SPEC-206] upload service', () => {
         ),
       );
       expect(visible).toHaveLength(0);
+      proof('isolation', {
+        actor: 'membre du même groupe, SELECT sous RLS sur la ressource d’autrui',
+        rowsVisible: visible?.length ?? -1,
+      });
       // Nothing happened to the owner's contribution.
       expect((await rowOf(created.resourceId))?.deleted_at).toBeNull();
       expect(await blobExists(fixture.a, created.resourceId, 'guide.pdf')).toBe(true);
@@ -1073,6 +1199,7 @@ describe('[SPEC-206] upload service', () => {
         label: 'Guide FI, p. 4',
       });
 
+      const citationBefore = await citationOf(cited.citationId);
       expect(codeOf(await deleteResource(ctx, deps, cited.resourceId))).toBe('OK');
 
       const row = await rowOf(cited.resourceId);
@@ -1093,6 +1220,25 @@ describe('[SPEC-206] upload service', () => {
         location: { page: 4, charStart: 0, charEnd: 24 },
       });
       expect(await blobExists(fixture.a, cited.resourceId, 'guide.pdf')).toBe(false);
+      proof('citations-after-deletion', {
+        before: {
+          chunkLinked: citationBefore?.chunk_id !== null,
+          label: citationBefore?.label,
+          quote: citationBefore?.quote,
+        },
+        after: await citationOf(cited.citationId).then((citation) => ({
+          chunkLinked: citation?.chunk_id !== null,
+          label: citation?.label,
+          quote: citation?.quote,
+          location: citation?.location,
+        })),
+        chunksRemaining: await countRows(sql`
+          select count(*)::int as total from public.resource_chunks
+          where resource_id = ${cited.resourceId}::uuid
+        `),
+        resourceDeleted: true,
+        blobStillInStorage: await blobExists(fixture.a, cited.resourceId, 'guide.pdf'),
+      });
 
       // A second deletion is a success; the resource stays unreachable.
       expect(codeOf(await deleteResource(ctx, deps, cited.resourceId))).toBe('OK');
@@ -1145,6 +1291,12 @@ describe('[SPEC-206] upload service', () => {
         label: 'source supprimée',
       });
 
+      proof('citations-after-deletion', {
+        case: 'Storage en panne pendant la suppression (CL-8)',
+        accessRevokedAtOnce: true,
+        blobStillInStorage: true,
+        citationLabel: (await citationOf(cited.citationId))?.label,
+      });
       // The cleanup job fails while Storage is down, and keeps the work for later...
       const system = createSystemContext({ requestId: 'req-nettoyage-1', clock });
       expect(await purgeDeletedBlobs(system, deps, { ownerId: fixture.a })).toEqual({

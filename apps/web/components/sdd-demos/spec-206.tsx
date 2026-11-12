@@ -136,14 +136,14 @@ function Cases() {
         <caption className="sr-only">{t.cases.caption}</caption>
         <thead>
           <tr>
-            <th scope="col" className="w-[44%] border-b border-solid border-[#E7E6E1] py-2 pr-2">
+            <th
+              scope="col"
+              className="w-[42%] border-b border-solid border-[#E7E6E1] py-2 pr-2 sm:w-[50%]"
+            >
               {t.cases.trialHeader}
             </th>
-            <th scope="col" className="w-[33%] border-b border-solid border-[#E7E6E1] py-2 pr-2">
+            <th scope="col" className="border-b border-solid border-[#E7E6E1] py-2">
               {t.cases.resultHeader}
-            </th>
-            <th scope="col" className="w-[23%] border-b border-solid border-[#E7E6E1] py-2">
-              {t.cases.actionHeader}
             </th>
           </tr>
         </thead>
@@ -154,30 +154,28 @@ function Cases() {
               <tr key={name} data-testid={`spec-206-case-${name}`}>
                 <th
                   scope="row"
-                  className="break-words border-b border-solid border-[#E7E6E1] py-2 pr-2 font-normal"
+                  className="break-words border-b border-solid border-[#E7E6E1] py-3 pr-2 align-top font-normal"
                 >
-                  {t.cases.labels[name]}
-                </th>
-                <td
-                  data-testid={`spec-206-result-${name}`}
-                  data-state={outcome?.state ?? 'pending'}
-                  className="break-words border-b border-solid border-[#E7E6E1] py-2 pr-2 font-semibold"
-                >
-                  {describeOutcome(outcome)}
-                  {outcome?.state === 'refused' ? (
-                    <span className="block text-xs font-normal">{outcome.detail}</span>
-                  ) : null}
-                </td>
-                <td className="border-b border-solid border-[#E7E6E1] py-2">
+                  <span className="block">{t.cases.labels[name]}</span>
                   <button
                     type="button"
-                    className={`${buttonClass} px-3 py-1`}
+                    className={`${buttonClass} mt-2 px-3 py-1`}
                     disabled={busy !== null}
                     onClick={() => void runOne(name)}
                   >
                     {busy === name ? t.cases.running : t.cases.run}
                     <span className="sr-only"> : {t.cases.labels[name]}</span>
                   </button>
+                </th>
+                <td
+                  data-testid={`spec-206-result-${name}`}
+                  data-state={outcome?.state ?? 'pending'}
+                  className="break-words border-b border-solid border-[#E7E6E1] py-3 align-top font-semibold"
+                >
+                  {describeOutcome(outcome)}
+                  {outcome?.state === 'refused' ? (
+                    <span className="block text-xs font-normal">{outcome.detail}</span>
+                  ) : null}
                 </td>
               </tr>
             );

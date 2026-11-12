@@ -1096,7 +1096,6 @@ export const fr = {
         caption: 'Résultat du service pour chaque essai',
         trialHeader: 'Essai simulé',
         resultHeader: 'Résultat',
-        actionHeader: 'Action',
         pending: 'Pas encore essayé',
         accepted: 'Accepté',
         refused: 'Refusé',
