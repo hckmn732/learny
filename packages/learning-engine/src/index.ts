@@ -2,6 +2,7 @@
 // only: no I/O, no clock read, no network and no AI (ADR-0020, ADR-0140).
 export * from './errors';
 export * from './params';
+export * from './planner';
 export * from './random';
 export * from './time';
 export * from './types';
