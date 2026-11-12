@@ -68,6 +68,7 @@ const SERVICE_DB_ALLOWED = [
 const restrictedImportBlocks = [
   {
     files: ['packages/**'],
+    ignores: ['packages/ui/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -76,6 +77,10 @@ const restrictedImportBlocks = [
             {
               group: ['@learny/web', '@learny/web/*'],
               message: 'Un paquet ne peut pas importer une application.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
           ],
         },
@@ -96,6 +101,10 @@ const restrictedImportBlocks = [
               ],
               message: `packages/${target} ne peut importer que ${allowed.join(', ')}.`,
             },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
           ],
         },
       ],
@@ -115,6 +124,28 @@ const restrictedImportBlocks = [
             {
               group: ['@learny/web', '@learny/web/*'],
               message: 'Un paquet ne peut pas importer une application.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Applications other than the web shell also consume the encapsulated design system.
+    files: ['apps/**'],
+    ignores: ['apps/web/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
           ],
         },
@@ -251,6 +282,10 @@ export default tseslint.config(
               message:
                 'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
             },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
           ],
         },
       ],
@@ -274,6 +309,10 @@ export default tseslint.config(
               message:
                 'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
             },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
           ],
         },
       ],
@@ -291,6 +330,10 @@ export default tseslint.config(
               group: ['@learny/config/server', '@learny/config/server/*'],
               message:
                 'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
           ],
         },
@@ -320,6 +363,10 @@ export default tseslint.config(
             {
               group: ['@learny/web', '@learny/web/*'],
               message: 'Un paquet ne peut pas importer une application.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
           ],
         },
