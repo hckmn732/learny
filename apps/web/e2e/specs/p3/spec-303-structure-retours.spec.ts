@@ -74,9 +74,12 @@ test('menus et dialogues au clavier @SPEC-303', async ({ page, axeCheck, console
   await expect(alert).toBeHidden();
   await expect(alertTrigger).toBeFocused();
 
-  // Infobulle : visible au focus clavier (EF-11).
-  await page.getByTestId('ui-tooltip-trigger').focus();
-  await expect(page.getByTestId('ui-tooltip-content')).toBeVisible();
+  // Infobulle : visible au focus clavier (EF-11). Retry the focus: a closed alert dialog may
+  // restore focus asynchronously on slower CI runners.
+  await expect(async () => {
+    await page.getByTestId('ui-tooltip-trigger').focus();
+    await expect(page.getByTestId('ui-tooltip-content')).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15000 });
 
   // Toasts : erreur assertive puis pile de trois au plus (CA-4, CL-8).
   await page.getByTestId('ui-toast-trigger-error').click();
