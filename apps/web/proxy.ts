@@ -1,15 +1,24 @@
-// Network-level guard of the SDD demo pages (SPEC-006, EF-3). The root loading.tsx makes pages
-// stream, and a streamed page can no longer change its status: the 404 is decided here, before
-// rendering. The pages keep their own guard as a second line of defense.
+// Page proxy of apps/web (Next 16 name of the middleware).
+//
+// 1. SDD demonstration pages (SPEC-006, EF-3): a network-level guard. The root loading.tsx makes
+//    pages stream, and a streamed page can no longer change its status: the 404 is decided here,
+//    before rendering. The pages keep their own guard as a second line of defense.
+// 2. Authentication and onboarding (SPEC-202, EF-9, ET-6): refresh the Supabase session, send an
+//    anonymous visitor of a protected page to `/connexion`, a signed-in one away from the sign-in
+//    pages, and a learner who has not finished the first steps to `/premiers-pas/<step>`.
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { sddDemos } from './app/%5Fdev/sdd/registry';
+import { decideRoute, isApiPath } from './lib/route-guard';
 import { findSddDemo, sddPagesEnabled } from './lib/sdd-pages';
+import { refreshSession } from './lib/supabase/middleware';
+import { ONBOARDED_COOKIE, expireCookie } from './lib/supabase/server';
 
 // Unmatched internal path: rendered by app/not-found.tsx with a real 404 status.
 const NOT_FOUND_PATH = '/_sdd-not-found';
+const ONE_YEAR_SECONDS = 365 * 24 * 60 * 60;
 
-export function proxy(request: NextRequest): NextResponse {
+function sddGuard(request: NextRequest): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
   const specId = segments[2];
   // SPEC-005 reference images live at /_dev/sdd/reference/<manifest file>; the route itself
@@ -28,6 +37,63 @@ export function proxy(request: NextRequest): NextResponse {
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
 }
 
+async function sessionGuard(request: NextRequest): Promise<NextResponse> {
+  const { pathname, search } = request.nextUrl;
+  let session;
+  try {
+    session = await refreshSession(request);
+  } catch {
+    // Auth not configured or unreachable: public pages keep working, protected ones ask to sign in.
+    if (isApiPath(pathname)) return NextResponse.next();
+    session = {
+      userId: null,
+      writes: [],
+      loadProfile: () => Promise.reject(new Error('no session')),
+    };
+  }
+
+  const onboardedCookie = request.cookies.get(ONBOARDED_COOKIE)?.value;
+  const decision = await decideRoute(
+    { pathname, search, userId: session.userId, onboardedCookie },
+    session.loadProfile,
+  );
+
+  const response =
+    decision.kind === 'redirect'
+      ? NextResponse.redirect(new URL(decision.to, request.url), 307)
+      : NextResponse.next();
+  for (const write of session.writes) response.cookies.set(write.name, write.value, write.options);
+  if (decision.markOnboarded !== undefined) {
+    response.cookies.set(ONBOARDED_COOKIE, decision.markOnboarded, {
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+      secure:
+        new URL(request.url).hostname !== 'localhost' &&
+        new URL(request.url).hostname !== '127.0.0.1',
+      maxAge: ONE_YEAR_SECONDS,
+    });
+  }
+  if (session.userId === null && onboardedCookie !== undefined) {
+    // A cookie that outlived its session must not grant anything to the next account.
+    const headers = new Headers();
+    expireCookie(request, headers, ONBOARDED_COOKIE);
+    for (const line of headers.getSetCookie()) response.headers.append('set-cookie', line);
+  }
+  return response;
+}
+
+export function proxy(request: NextRequest): NextResponse | Promise<NextResponse> {
+  const { pathname } = request.nextUrl;
+  if (pathname === '/_dev' || pathname.startsWith('/_dev/')) return sddGuard(request);
+  return sessionGuard(request);
+}
+
 export const config = {
-  matcher: ['/_dev', '/_dev/:path*'],
+  matcher: [
+    '/_dev',
+    '/_dev/:path*',
+    // Everything else except static assets, files with an extension, the job endpoint and webhooks.
+    '/((?!_dev|_next/static|_next/image|.*\\..*|api/inngest|api/v1/webhooks).*)',
+  ],
 };

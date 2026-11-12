@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 import { CallbackQuery } from '@learny/contracts';
 import { clock } from '@learny/core';
@@ -50,7 +50,9 @@ export async function GET(request: NextRequest): Promise<Response> {
     status: 302,
     outcome: destination === INVALID_LINK_DESTINATION ? 'invalid-link' : 'verified',
   });
-  const response = NextResponse.redirect(new URL(destination, base), 302);
+  // Relative `Location`: the browser resolves it against the origin it used (host, port, proxy),
+  // so the session cookies it just received are sent back to the same origin.
+  const response = new Response(null, { status: 302, headers: { location: destination } });
   response.headers.set('cache-control', 'no-store');
   response.headers.set('x-request-id', requestId);
   for (const cookie of responseHeaders.getSetCookie())

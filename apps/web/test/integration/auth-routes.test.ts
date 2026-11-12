@@ -189,7 +189,7 @@ describe('[SPEC-202] authentification — mot de passe', () => {
     expect(link.searchParams.get('type')).toBe('signup');
     const verified = await callback(verify(link));
     expect(verified.status).toBe(302);
-    expect(new URL(verified.headers.get('location') ?? '').pathname).toBe('/premiers-pas/profil');
+    expect(verified.headers.get('location')).toBe('/premiers-pas/profil');
     const sessionCookies = verified.headers.getSetCookie().filter((line) => line.startsWith('sb-'));
     expect(sessionCookies.length).toBeGreaterThan(0);
     for (const line of sessionCookies) {
@@ -273,14 +273,14 @@ describe('[SPEC-202] authentification — lien magique', () => {
     const link = extractAuthLink(mail);
     const first = await callback(verify(link));
     expect(first.status).toBe(302);
-    expect(new URL(first.headers.get('location') ?? '').pathname).toBe('/premiers-pas/profil');
+    expect(first.headers.get('location')).toBe('/premiers-pas/profil');
     expect(first.headers.getSetCookie().some((line) => line.startsWith('sb-'))).toBe(true);
     expect(events).toHaveLength(1);
     expect(events[0]?.data.method).toBe('magic_link');
 
     const second = await callback(verify(link));
     expect(second.status).toBe(302);
-    expect(second.headers.get('location')).toBe(`${BASE}/connexion?erreur=lien-invalide`);
+    expect(second.headers.get('location')).toBe('/connexion?erreur=lien-invalide');
     expect(second.headers.getSetCookie().some((line) => line.startsWith('sb-'))).toBe(false);
     expect(events).toHaveLength(1);
   });
@@ -354,7 +354,7 @@ describe('[SPEC-202] authentification — lien magique', () => {
     ]) {
       const response = await callback(new NextRequest(`${BASE}/api/v1/auth/callback${query}`));
       expect(response.status).toBe(302);
-      expect(response.headers.get('location')).toBe(`${BASE}/connexion?erreur=lien-invalide`);
+      expect(response.headers.get('location')).toBe('/connexion?erreur=lien-invalide');
       expect(response.headers.get('cache-control')).toBe('no-store');
     }
   });
@@ -380,14 +380,14 @@ describe('[SPEC-202] authentification — lien magique', () => {
           headers: { cookie: nextCookie },
         }),
       );
-      expect(new URL(followed.headers.get('location') ?? '').pathname).toBe('/agenda');
+      expect(followed.headers.get('location')).toBe('/agenda');
 
       const external = await callback(
         new NextRequest(
           `${BASE}/api/v1/auth/callback?token_hash=x&type=magiclink&next=//evil.example`,
         ),
       );
-      expect(external.headers.get('location')).toBe(`${BASE}/connexion?erreur=lien-invalide`);
+      expect(external.headers.get('location')).toBe('/connexion?erreur=lien-invalide');
     } finally {
       await deleteTestSession(existing);
     }

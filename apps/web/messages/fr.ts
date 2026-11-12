@@ -1017,6 +1017,55 @@ export const fr = {
         },
       },
     },
+    spec202: {
+      title: 'SPEC-202 — Authentification et sessions',
+      session: {
+        title: 'État de la session',
+        anonymous: 'Non connecté',
+        signedIn: (userId: string, step: string) =>
+          `Connecté : ${userId} · étape d’onboarding ${step}`,
+      },
+      magic: {
+        title: 'Lien magique',
+        intro: 'Un lien valable 1 heure, à usage unique, envoyé par e-mail.',
+        emailLabel: 'Adresse e-mail',
+        signUp: 'Créer un compte par lien',
+        signIn: 'Me connecter par lien',
+        sent: 'Lien envoyé. Il reste valable 1 heure.',
+      },
+      password: {
+        title: 'Mot de passe',
+        intro: 'Douze caractères au moins, sans autre contrainte.',
+        emailLabel: 'Adresse e-mail',
+        passwordLabel: 'Mot de passe (12 caractères au moins)',
+        signUp: 'Créer un compte',
+        signIn: 'Me connecter',
+        created: 'Compte créé : consultez votre boîte mail pour confirmer votre adresse.',
+        signedIn: (destination: string) => `Connexion réussie. Destination : ${destination}`,
+        terms: 'En créant un compte, vous acceptez les CGU et la politique de confidentialité.',
+      },
+      resendIn: (seconds: number) =>
+        `Vous pourrez renvoyer le lien dans ${String(seconds)} secondes.`,
+      destinations: {
+        title: 'Destination',
+        intro: 'Où mène une authentification réussie, selon le profil.',
+        caseHeader: 'Cas',
+        destinationHeader: 'Destination',
+        rows: {
+          profil: 'Onboarding à l’étape profil',
+          rythme: 'Onboarding à l’étape rythme',
+          ia: 'Onboarding à l’étape IA',
+          done: 'Onboarding terminé',
+          next: 'Onboarding terminé, next = /agenda',
+          external: 'Onboarding terminé, next externe (//evil.example)',
+          deletion: 'Suppression de compte programmée',
+        },
+      },
+      signOut: {
+        action: 'Se déconnecter',
+        done: 'Vous êtes déconnecté.',
+      },
+    },
     spec201: {
       title: 'SPEC-201 — Socle API v1 et contrats',
       loading: 'Chargement…',

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { NextRequest } from 'next/server';
+import { NextRequest, type NextResponse } from 'next/server';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -14,7 +14,8 @@ import { proxy } from '../../proxy';
 const ENABLED = { ENABLE_SDD_PAGES: 'true', APP_ENV: 'test' };
 
 function statusOf(path: string): number {
-  return proxy(new NextRequest(`http://localhost${path}`)).status;
+  // The /_dev guard answers synchronously; only the session guard of SPEC-202 is asynchronous.
+  return (proxy(new NextRequest(`http://localhost${path}`)) as NextResponse).status;
 }
 
 afterEach(() => {
