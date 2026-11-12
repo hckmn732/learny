@@ -11,6 +11,8 @@ export interface SupabaseLocalEnv {
   url: string;
   anonKey: string;
   serviceRoleKey: string;
+  /** Server-side JWT secret of the local stack (SPEC-206: Storage tokens); never sent to a browser. */
+  jwtSecret: string;
 }
 
 let cached: SupabaseLocalEnv | undefined;
@@ -31,7 +33,10 @@ export function supabaseLocalEnv(
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
-  if (url && anonKey && serviceRoleKey) return { url, anonKey, serviceRoleKey };
+  const jwtSecret = env.SUPABASE_JWT_SECRET;
+  if (url && anonKey && serviceRoleKey && jwtSecret) {
+    return { url, anonKey, serviceRoleKey, jwtSecret };
+  }
   if (cached !== undefined) return cached;
   let output: string;
   try {
@@ -47,8 +52,9 @@ export function supabaseLocalEnv(
     url: url ?? values.API_URL ?? 'http://127.0.0.1:54321',
     anonKey: anonKey ?? values.ANON_KEY ?? '',
     serviceRoleKey: serviceRoleKey ?? values.SERVICE_ROLE_KEY ?? '',
+    jwtSecret: jwtSecret ?? values.JWT_SECRET ?? '',
   };
-  if (resolved.anonKey === '' || resolved.serviceRoleKey === '') {
+  if (resolved.anonKey === '' || resolved.serviceRoleKey === '' || resolved.jwtSecret === '') {
     throw new Error('Clés Supabase locales introuvables : lancer pnpm dev:up');
   }
   cached = resolved;

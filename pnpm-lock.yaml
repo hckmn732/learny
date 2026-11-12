@@ -269,6 +269,10 @@ importers:
       unpdf:
         specifier: ^2.1.0
         version: 2.1.0
+    devDependencies:
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/testing:
     dependencies:

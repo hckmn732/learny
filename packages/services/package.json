@@ -17,5 +17,8 @@
     "@learny/db": "workspace:*",
     "file-type": "^22.3.0",
     "unpdf": "^2.1.0"
+  },
+  "devDependencies": {
+    "@learny/testing": "workspace:*"
   }
 }

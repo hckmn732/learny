@@ -1,7 +1,7 @@
 // Production wiring of the file service (SPEC-206): SPEC-114 Storage gateway, object reader,
 // short-lived Storage tokens and the `resource/uploaded` sink. Built once per process from the
 // validated configuration; the Supabase JWT secret stays on the server.
-import { AppError } from '@learny/core';
+import { AppError, systemClock } from '@learny/core';
 import { SupabaseStorageGateway } from '@learny/db';
 import { EVENT_NAMES, inngest, resourceUploadedSchema } from '@learny/jobs';
 import {
@@ -35,7 +35,9 @@ export function resourceDeps(): ResourceDeps {
     throw new AppError('SERVICE_UNAVAILABLE', 'Le stockage de fichiers n’est pas configuré.');
   }
   cached = {
-    gateway: new SupabaseStorageGateway({ url, apiKey, jwtSecret }),
+    // Storage checks token expiry against real time: the gateway uses the real clock even when
+    // the application clock is frozen for tests (ADR-0047).
+    gateway: new SupabaseStorageGateway({ url, apiKey, jwtSecret, clock: systemClock }),
     reader: new SupabaseObjectReader({ url, apiKey }),
     events: eventSink,
     accessToken: (userId) => mintUserAccessToken(userId, jwtSecret),

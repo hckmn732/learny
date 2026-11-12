@@ -71,7 +71,7 @@ export interface PurgeResult {
 export async function purgeDeletedBlobs(
   ctx: SystemContext,
   deps: ResourceDeps,
-  options: { limit?: number } = {},
+  options: { limit?: number; ownerId?: string } = {},
 ): Promise<PurgeResult> {
   const limit = options.limit ?? 100;
   if (!Number.isInteger(limit) || limit < 1 || limit > 1000) {
@@ -83,6 +83,7 @@ export async function purgeDeletedBlobs(
     where deleted_at is not null
       and storage_path is not null
       and metadata -> 'upload' ->> 'blobRemovedAt' is null
+      and (${options.ownerId ?? null}::uuid is null or owner_id = ${options.ownerId ?? null}::uuid)
     order by deleted_at
     limit ${limit}
   `);
