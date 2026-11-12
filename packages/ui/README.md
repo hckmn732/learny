@@ -58,6 +58,18 @@ component forwards `ref`, merges `className` last and transmits `data-testid` an
 | `PageHeader`                                    | `eyebrow`, `title`, `breadcrumb`, `actions`                                                                                               | h1 34 px Space Grotesk, eyebrow 14 px muted                                                  |
 | `Icon` / `iconRegistry`                         | `name`, `size`, `strokeWidth`                                                                                                             | 23 named lucide icons, always `aria-hidden`                                                  |
 
+## Accessibility foundations (SPEC-309)
+
+| Export / file                  | Purpose                                                                                                                       |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `@learny/ui/accessibility`     | `SkipLink`, `LiveRegion`, `shouldAnnounce`, `returnFocus`, `focusMainContent`, `resolveFocusTarget`, WCAG contrast helpers.   |
+| `@learny/ui/accessibility.css` | Skip link, visually-hidden live regions, focus target and global `prefers-reduced-motion` neutralisation (ADR-0273).          |
+| `ACCESSIBLE_TOKEN_PAIRS`       | Normal-text token pairs rendered by the accessibility gallery; `contrastRatio`/`pairContrast` enforce the 4.5:1 AA threshold. |
+
+`LiveRegion` suppresses consecutive identical messages (`CL-2`) and uses `role="alert"` with
+`aria-live="assertive"` for errors. `returnFocus` returns to the connected trigger, then to the
+explicit fallback, then to the page title (`[data-page-title]`, `main h1`, `h1`), never to `body`.
+
 ## Tokens
 
 Values come from the mockups in `design/maquettes/` (SPEC-301, ADR-0034). Sizes are expressed in
