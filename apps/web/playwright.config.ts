@@ -34,6 +34,9 @@ exportSupabasePublicEnv();
 
 const COMMON = { locale: 'fr-FR', timezoneId: 'Europe/Paris' } as const;
 const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 1440, height: 900 } };
+// Shared worktrees may already run a server on the default port: allow an isolated run.
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
+const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
 
 export default defineConfig({
   testDir: './e2e/specs',
@@ -67,7 +70,7 @@ export default defineConfig({
     ['html', { outputFolder: path.join(ROOT, 'test-results/html'), open: 'never' }],
   ],
   use: {
-    baseURL: 'http://127.0.0.1:3100',
+    baseURL: BASE_URL,
     trace: 'on',
     video: 'on',
     screenshot: 'on',
@@ -99,9 +102,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm --filter @learny/web exec next start -p 3100',
-    url: 'http://127.0.0.1:3100/api/v1/health',
-    reuseExistingServer: !process.env.CI,
+    command: `pnpm --filter @learny/web exec next start -p ${String(PORT)}`,
+    url: `${BASE_URL}/api/v1/health`,
+    reuseExistingServer: !process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0',
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
