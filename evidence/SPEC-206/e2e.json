@@ -1,0 +1,479 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-206",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/sdd/SPEC-206/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "APP_ENV": "test",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p2/spec-206.spec.ts",
+      "file": "p2/spec-206.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "inspecte les limites d’envoi @SPEC-206",
+          "ok": true,
+          "tags": [
+            "SPEC-206"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1434,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:32:06.219Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/attachments/axe-d5d20019aa3ca8ba463083df727dff14bc9549bd.json"
+                    },
+                    {
+                      "name": "spec-206-envois-prives",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/attachments/spec-206-envois-prives-de3251c985d1fec80ed2b4a0a4f49ac0395843ab.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "53878860d9c8ab986b43-47ef0d9b9fe555175f33",
+          "file": "p2/spec-206.spec.ts",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "title": "envois conformes @SPEC-206 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-206",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1245,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:32:07.794Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/attachments/axe-9175b92d9e7d4f8bf7d29f2f8475278d2fe023c8.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1274,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:32:11.014Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/attachments/axe-ad8fe1cf6e0b660c7647b5c6a6ee3609cd894e4a.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "53878860d9c8ab986b43-43bd3331838d02da4953",
+          "file": "p2/spec-206.spec.ts",
+          "line": 123,
+          "column": 1
+        },
+        {
+          "title": "parcourt les routes réelles : envoi, finalisation, lecture, suppression @SPEC-206",
+          "ok": true,
+          "tags": [
+            "SPEC-206"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 750,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T09:32:09.124Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny/.claude/worktrees/spec-206-files-dbeef9/test-results/artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "53878860d9c8ab986b43-544796c17424602e73da",
+          "file": "p2/spec-206.spec.ts",
+          "line": 166,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T09:31:36.245Z",
+    "duration": 36251.526,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
