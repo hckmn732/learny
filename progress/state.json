@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T20:33:50.502Z",
+  "updatedAt": "2026-11-12T20:41:41.098Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -2685,14 +2685,55 @@
       "validations": {}
     },
     "SPEC-407": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-12T20:05:17.289Z",
+      "completedAt": "2026-11-12T20:40:26.804Z",
+      "branch": "spec/SPEC-407-planificateur",
+      "commit": "8f8b8ab",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T20:38:33.624Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T20:38:47.360Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T20:38:58.264Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T20:39:05.455Z",
+          "details": "20 test(s) [SPEC-407] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T20:39:43.405Z",
+          "details": "6 test(s) [SPEC-407] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T20:40:21.110Z",
+          "details": "4 réussi(s), 0 échec(s), 8 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T20:40:21.110Z",
+          "details": "3 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T20:40:21.123Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-408": {
       "status": "pending",

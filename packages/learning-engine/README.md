@@ -39,6 +39,12 @@ Import unique : `@learny/learning-engine`.
   jalons nouveaux (`module_validated:<moduleId>`, `notions_100`, `streak_30`). Les deux fonctions
   reçoivent leurs bornes métier dans `params` (`ENGINE.streak`, `ENGINE.milestones`) et ne lisent
   jamais `@learny/config` (ADR-0281).
+- **Planificateur** (`src/planner/`) : `planSchedule({ formations, preferences, params,
+existingSlots, now })` place les activités au premier créneau compatible, réserve la marge après
+  chaque quiz et le quiz global quotidien, puis renvoie créneaux triés, conflits, capacité restante
+  et options BR-FOR-14. `replanSchedule` conserve terminés, manqués et déplacements manuels valides.
+  `findCompatibleSlots(activity, calendar, preferences, count = 3)` renvoie les prochains créneaux
+  libres. Les paramètres viennent de l'appelant (miroir de `ENGINE.planner`, ADR-0280).
 
 Les dossiers `fsrs/`, `gaps/`, `draw/`, `global-quiz/`, `planner/`, `progress/`, `streak/` et
 `warmup/` sont les points d'accueil de SPEC-402 et SPEC-404 à SPEC-410.

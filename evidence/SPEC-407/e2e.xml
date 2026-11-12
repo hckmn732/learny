@@ -1,0 +1,72 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="36.207860999999994">
+<testsuite name="p4/spec-407.spec.ts" timestamp="2026-11-12T20:40:14.267Z" hostname="desktop" tests="3" failures="0" skipped="0" time="4.26" errors="0">
+<testcase name="Planificateur @SPEC-407" classname="p4/spec-407.spec.ts" time="1.976">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/attachments/axe-04d86f10cc0826fbf82b9c28a6e600d606b7c291.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/attachments/spec-407-demo-f8ea42f37450cba38f15d05667119985318a947c.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Planificateur @SPEC-407 @visual" classname="p4/spec-407.spec.ts" time="1.128">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-visual-desktop/attachments/axe-1e2f0b7c818acfd9d36954fe0b6847837f772a07.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-SPEC-407-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Planificateur mobile @SPEC-407 @visual @mobile" classname="p4/spec-407.spec.ts" time="1.156">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/attachments/axe-b04d25a982b4fd1dcb4cdd5b5f7da2496fe333aa.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/attachments/spec-407-demo-mobile-2a89dc0a1b318e945ca548ad2da1d8b819d2addd.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-407.spec.ts" timestamp="2026-11-12T20:40:14.267Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.333" errors="0">
+<testcase name="Planificateur mobile @SPEC-407 @visual @mobile" classname="p4/spec-407.spec.ts" time="1.333">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/attachments/axe-1678c549aca0296e20b803f5e4944017276b2ba1.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/attachments/spec-407-demo-mobile-78ffa5b8f4939c0e85e815c52c21ba73c6ccd80d.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-407-Planificateur-mobile-SPEC-407-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
