@@ -534,6 +534,50 @@ export const fr = {
         titleLabel: 'Titre conservé',
       },
     },
+    spec105: {
+      intro:
+        'Chaque chargement génère deux versions d’un cours, corrige deux fois une section, supprime la source d’une citation et ouvre une discussion — dans une transaction toujours annulée.',
+      yes: 'oui',
+      no: 'non',
+      versions: {
+        title: 'Versions du cours',
+        intro:
+          'Générer la version 2 bascule la version 1 à « non courante » : une seule version reste courante par cours.',
+        version: 'Version',
+        status: 'Statut',
+        current: 'Courante',
+      },
+      revisions: {
+        title: 'Révisions d’une section',
+        intro:
+          'Deux corrections de l’apprenant archivent les états précédents ; la section courante passe en version 3.',
+        section: 'Section',
+        currentVersion: 'Version courante',
+        version: 'Version',
+        titleColumn: 'Titre',
+        editedBy: 'Auteur',
+      },
+      citation: {
+        title: 'Citation après suppression',
+        intro:
+          'La suppression logique de la ressource efface ses passages ; la citation est conservée et affiche « source supprimée ».',
+        label: 'Libellé d’origine',
+        displayed: 'Après suppression',
+        chunk: 'Passage cité',
+        nullChunk: 'nul',
+        resource: 'Ressource',
+        nullResource: 'supprimée',
+        resourceKept: 'conservée (supprimée logiquement)',
+      },
+      conversation: {
+        title: 'Discussion',
+        intro:
+          'Une discussion privée par ouverture (ADR-0040) : deux messages ordonnés, chacun avec sa source.',
+        learner: 'Apprenant',
+        tutor: 'Tuteur',
+        sources: (labels: string[]) => `Sources : ${labels.join(', ')}`,
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
