@@ -1,0 +1,2 @@
+ALTER TABLE "schedule_slots" ADD COLUMN "planner_key" text;--> statement-breakpoint
+CREATE UNIQUE INDEX "schedule_slots_planner_key_unique" ON "schedule_slots" USING btree ("user_id","planner_key") WHERE "schedule_slots"."status" = 'planned' and "schedule_slots"."planner_key" is not null;
