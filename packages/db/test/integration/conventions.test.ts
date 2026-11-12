@@ -26,6 +26,9 @@ describe('[SPEC-101] conventions de schéma', () => {
       where c.table_schema = 'public'
         and t.table_type = 'BASE TABLE'
         and c.column_name = 'updated_at'
+        -- rate_limits.updated_at is the injected-clock refill instant, not an audit timestamp;
+        -- the audit trigger would overwrite it with the system clock (SPEC-208 CA-1, ADR-0047).
+        and c.table_name <> 'rate_limits'
         and not exists (
           select 1
           from pg_trigger tg
