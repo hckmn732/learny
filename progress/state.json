@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T02:00:41.080Z",
+  "updatedAt": "2026-11-12T02:31:11.835Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -870,14 +870,55 @@
       }
     },
     "SPEC-105": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-12T02:01:32.469Z",
+      "completedAt": "2026-11-12T02:31:11.832Z",
+      "branch": "spec/SPEC-105-schema-cours-et-discussions",
+      "commit": "0b13206",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T02:30:24.119Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T02:30:25.386Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T02:30:25.685Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T02:30:26.747Z",
+          "details": "7 test(s) [SPEC-105] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T02:30:32.431Z",
+          "details": "9 test(s) [SPEC-105] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T02:31:03.163Z",
+          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T02:31:03.163Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T02:31:03.173Z",
+          "details": "7/7 critères ✅"
+        }
+      }
     },
     "SPEC-106": {
       "status": "pending",
