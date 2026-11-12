@@ -1,0 +1,19 @@
+=== SPEC-110 — dépense du jour local (Europe/Paris), minuit, changement d’heure et BYOK ===
+                                cas                                 | spent_usd 
+--------------------------------------------------------------------+-----------
+ jour Paris 2026-11-11 (0,05+0,40+0,10+0,20 ; BYOK et refus exclus) |  0.750000
+ jour Paris 2026-10-25 (DST automne, 25 h)                          |  0.300000
+ jour Paris 2026-03-29 (DST printemps, 23 h)                        |  0.120000
+ jour Paris 2026-11-12 à 12:00Z (appel 23:30Z inclus)               |  1.150000
+(4 rows)
+
+                            cas                            | spent_usd 
+-----------------------------------------------------------+-----------
+ même instant, fuseau New York (appel 23:30Z vu la veille) |  0.000000
+(1 row)
+
+                      cas                      | spent_usd 
+-----------------------------------------------+-----------
+ retour au fuseau Paris (journal UTC inchangé) |  1.150000
+(1 row)
+
