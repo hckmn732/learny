@@ -57,7 +57,7 @@ export default defineConfig({
         test: {
           name: 'integration',
           include: [
-            'packages/*/test/integration/**/*.test.ts',
+            'packages/*/test/integration/**/*.test.{ts,tsx}',
             'apps/*/test/integration/**/*.test.ts',
             'tools/**/test/integration/**/*.test.ts',
           ],

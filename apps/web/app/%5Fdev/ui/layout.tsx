@@ -16,8 +16,8 @@ const t = fr.ui.gallery;
 // Only sections whose page exists are links; future specifications append their entry here.
 const SECTIONS = [
   { id: 'tokens', label: t.sections.tokens, href: '/_dev/ui/jetons' },
-  { id: 'actions', label: t.sections.actions },
-  { id: 'forms', label: t.sections.forms },
+  { id: 'actions', label: t.sections.actions, href: '/_dev/ui/actions' },
+  { id: 'forms', label: t.sections.forms, href: '/_dev/ui/saisie' },
   { id: 'structure', label: t.sections.structure },
   { id: 'feedback', label: t.sections.feedback },
   { id: 'accessibility', label: t.sections.accessibility },

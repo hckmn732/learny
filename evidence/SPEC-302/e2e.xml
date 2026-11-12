@@ -1,0 +1,82 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="37.560803">
+<testsuite name="p3/spec-302-actions-saisie.spec.ts" timestamp="2026-11-12T15:59:42.805Z" hostname="desktop" tests="3" failures="0" skipped="0" time="4.811" errors="0">
+<testcase name="parcours clavier des contrôles @SPEC-302" classname="p3/spec-302-actions-saisie.spec.ts" time="1.493">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/attachments/axe-c17c08c1d1cf83e51beb7591c0ce9323d75bd08b.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="styles calculés des actions et de la saisie @SPEC-302" classname="p3/spec-302-actions-saisie.spec.ts" time="1.199">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/attachments/axe-7f345c15c032e259031108cd56e21dfbb2c445b2.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="galeries actions et saisie ligne de base @SPEC-302 @visual @mobile" classname="p3/spec-302-actions-saisie.spec.ts" time="2.119">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/axe-b96a5f46279371f8a517e69970505eb4cc6f0aea.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/dev-ui-actions-437b144d11ee368f4bdad2b212a875f1b3a1b5a9.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/axe-68dc1778c8965d163b508b4566cbba65193d5e3e.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/dev-ui-saisie-9e3cdc953622a101183686cf0dac76317557009e.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p3/spec-302-actions-saisie.spec.ts" timestamp="2026-11-12T15:59:42.805Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.251" errors="0">
+<testcase name="galeries actions et saisie ligne de base @SPEC-302 @visual @mobile" classname="p3/spec-302-actions-saisie.spec.ts" time="2.251">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/axe-05cea0c83aaa19caf54902e12ccf4e228d5171c1.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/dev-ui-actions-023b197ece144d2077aa52688f6216b0959e2de3.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/axe-a3a2f3dc4f1a7b0a6a557c413104af63a2abe999.json]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/dev-ui-saisie-c66bd1f7b2200db3a2586d6519c492fb0b5a43d9.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,526 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-302/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-302",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-302/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-302/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-302/test-results/sdd/SPEC-302/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-302/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-302/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p3/spec-302-actions-saisie.spec.ts",
+      "file": "p3/spec-302-actions-saisie.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parcours clavier des contrôles @SPEC-302",
+          "ok": true,
+          "tags": [
+            "SPEC-302"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1493,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:59:43.083Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/attachments/axe-c17c08c1d1cf83e51beb7591c0ce9323d75bd08b.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-9a880-vier-des-contrôles-SPEC-302-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d900c0f15f28291c231c-8a20458b9d76f02ba240",
+          "file": "p3/spec-302-actions-saisie.spec.ts",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "styles calculés des actions et de la saisie @SPEC-302",
+          "ok": true,
+          "tags": [
+            "SPEC-302"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1199,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:59:44.720Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/attachments/axe-7f345c15c032e259031108cd56e21dfbb2c445b2.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-e9cba-ns-et-de-la-saisie-SPEC-302-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d900c0f15f28291c231c-a2d0f927531ab248aabe",
+          "file": "p3/spec-302-actions-saisie.spec.ts",
+          "line": 79,
+          "column": 1
+        },
+        {
+          "title": "galeries actions et saisie ligne de base @SPEC-302 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-302",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2119,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:59:46.014Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/axe-b96a5f46279371f8a517e69970505eb4cc6f0aea.json"
+                    },
+                    {
+                      "name": "dev-ui-actions",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/dev-ui-actions-437b144d11ee368f4bdad2b212a875f1b3a1b5a9.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/axe-68dc1778c8965d163b508b4566cbba65193d5e3e.json"
+                    },
+                    {
+                      "name": "dev-ui-saisie",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/attachments/dev-ui-saisie-9e3cdc953622a101183686cf0dac76317557009e.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2251,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:59:48.620Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/axe-05cea0c83aaa19caf54902e12ccf4e228d5171c1.json"
+                    },
+                    {
+                      "name": "dev-ui-actions",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/dev-ui-actions-023b197ece144d2077aa52688f6216b0959e2de3.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/axe-a3a2f3dc4f1a7b0a6a557c413104af63a2abe999.json"
+                    },
+                    {
+                      "name": "dev-ui-saisie",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/attachments/dev-ui-saisie-c66bd1f7b2200db3a2586d6519c492fb0b5a43d9.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-302/test-results/artifacts/p3-spec-302-actions-saisie-3e32a-base-SPEC-302-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d900c0f15f28291c231c-ff7a9e2cb72615814580",
+          "file": "p3/spec-302-actions-saisie.spec.ts",
+          "line": 194,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T15:59:13.617Z",
+    "duration": 37560.803,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

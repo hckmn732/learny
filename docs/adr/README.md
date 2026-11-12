@@ -145,3 +145,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0261](ADR-0261-webhooks-stripe-emission-sur-changement-statuts-non-mappes-f.md) | Webhooks Stripe: emission sur changement, statuts non mappes, faux client partage | Déduite | SPEC-210, ADR-0215 |
 | [ADR-0267](ADR-0267-suppression-du-compte-auth-avant-cascade-et-qualification-de.md) | Suppression du compte : Auth avant cascade et qualification des exports | Déduite | SPEC-211, ADR-0044, ADR-0216, ADR-0122, ADR-0047 |
 | [ADR-0268](ADR-0268-jetons-de-design-nommage-echelle-de-1-px-theme-tailwind-ferm.md) | Jetons de design : nommage, échelle de 1 px, thème Tailwind fermé et galerie /_dev/ui | Déduite | SPEC-301, SPEC-005, SPEC-006, ADR-0034, ADR-0059 |
+| [ADR-0269](ADR-0269-conventions-des-composants-et-galerie-dev-ui.md) | Conventions des composants et galerie /_dev/ui | Déduite | SPEC-302 |
