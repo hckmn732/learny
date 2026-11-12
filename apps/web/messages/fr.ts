@@ -4,6 +4,49 @@ export const fr = {
     subtitle: 'Application en cours de construction.',
     demoLink: 'Pages de démonstration',
   },
+  ui: {
+    gallery: {
+      surtitle: 'Galerie du design system',
+      title: 'Jetons',
+      intro:
+        'Source unique des couleurs, polices, tailles, espacements, rayons et ombres de Learny.',
+      navLabel: 'Sections de la galerie',
+      indexTitle: 'Galerie du design system',
+      indexIntro:
+        'Les composants et les écrans de Learny se composent avec ces jetons et ces composants.',
+      openTokens: 'Ouvrir les jetons',
+      sections: {
+        tokens: 'Jetons',
+        actions: 'Actions',
+        forms: 'Saisie',
+        structure: 'Structure',
+        feedback: 'Retours',
+        accessibility: 'Accessibilité',
+      },
+      comingSoon: 'À venir',
+      colors: {
+        title: 'Couleurs',
+        intro: 'Chaque pastille affiche son nom et sa valeur exacte.',
+      },
+      typography: {
+        title: 'Typographie',
+        intro: 'Toutes les tailles sont en rem : 1 rem vaut 14,4 px au rendu.',
+        pangram: 'Portez ce vieux whisky au juge blond qui fume',
+      },
+      radii: { title: 'Rayons', intro: 'Rayons exprimés en rem (px maquette / 16).' },
+      shadows: { title: 'Ombres', intro: 'Élévations des panneaux, menus et contrôles.' },
+      spacing: {
+        title: 'Espacements',
+        intro: 'Une unité d’espacement vaut 1 px maquette (0,0625 rem).',
+      },
+      controls: {
+        title: 'Hauteurs de contrôles',
+        intro: 'Hauteurs des boutons, champs et pastilles.',
+      },
+      unitPx: (value: number) => `${String(value)} px maquette`,
+      fullRadius: 'Plein',
+    },
+  },
   sdd: {
     clockLabel: 'Horloge du serveur',
     spec001: {

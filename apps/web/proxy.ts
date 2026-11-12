@@ -21,6 +21,11 @@ const ONE_YEAR_SECONDS = 365 * 24 * 60 * 60;
 function sddGuard(request: NextRequest): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
   const specId = segments[2];
+  // SPEC-301 EF-11: the validated SDD URL answers a real 307 before the streamed root loading
+  // page starts (a redirect rendered by the page would be a 200 with a client-side navigation).
+  if (sddPagesEnabled(process.env) && request.nextUrl.pathname === '/_dev/sdd/SPEC-301') {
+    return NextResponse.redirect(new URL('/_dev/ui/jetons', request.url), 307);
+  }
   // SPEC-005 reference images live at /_dev/sdd/reference/<manifest file>; the route itself
   // checks that the file is listed in the manifest before serving it.
   const reference =
@@ -32,13 +37,19 @@ function sddGuard(request: NextRequest): NextResponse {
     segments[1] === 'stripe' &&
     segments.length === 3 &&
     (segments[2] === 'checkout' || segments[2] === 'portal');
+  // SPEC-301 — the design-system gallery lives under /_dev/ui (not /_dev/sdd).
+  const uiGallery = segments[1] === 'ui' && segments.length <= 3;
   const allowed =
     sddPagesEnabled(process.env) &&
     (stripePage ||
+      uiGallery ||
       (segments[1] === 'sdd' &&
         (reference ||
           (segments.length <= 3 &&
-            (specId === undefined || findSddDemo(specId, sddDemos) !== undefined)))));
+            (specId === undefined ||
+              // SPEC-301 redirects its validated SDD URL to the design-system gallery.
+              specId === 'SPEC-301' ||
+              findSddDemo(specId, sddDemos) !== undefined)))));
   if (allowed) return NextResponse.next();
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
 }
