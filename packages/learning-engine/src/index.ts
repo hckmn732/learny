@@ -3,5 +3,6 @@
 export * from './errors';
 export * from './params';
 export * from './random';
+export * from './streak';
 export * from './time';
 export * from './types';
