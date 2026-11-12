@@ -36,6 +36,11 @@ export { fold, normalizeQuery, queryTerms } from './normalize';
 export const SEARCH_SQL_MAX_ROWS = 100;
 /** ET-2 — rows requested from SQL for each row shown, so that `total` is meaningful. */
 export const SEARCH_SQL_QUOTA_FACTOR = 3;
+/**
+ * ADR-0217 — the quota is per group, but the SQL function has a single overall limit: the three
+ * groups are asked for their quota each, so that one kind of result never crowds out the others.
+ */
+export const SEARCH_GROUP_COUNT = SEARCH_KINDS.length;
 
 export interface SearchInput {
   q: string;
@@ -167,7 +172,10 @@ export function searchUserContent(
   return toResult(async () => {
     const { db } = requireUser(ctx);
     const { q, limit } = parseInput(input);
-    const rowLimit = Math.min(SEARCH_SQL_MAX_ROWS, SEARCH_SQL_QUOTA_FACTOR * limit);
+    const rowLimit = Math.min(
+      SEARCH_SQL_MAX_ROWS,
+      SEARCH_GROUP_COUNT * SEARCH_SQL_QUOTA_FACTOR * limit,
+    );
 
     const response = await db.run(async (tx): Promise<SearchResponse> => {
       const rows = await queryUserContent(tx, { q, limit: rowLimit });

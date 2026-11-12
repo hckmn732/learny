@@ -27,6 +27,9 @@ describe('[SPEC-212] normalisation et surlignage', () => {
       expect(normalizeQuery('  Ｒéseau \t\n  ﬁbre  ')).toBe('Réseau fibre');
       expect(normalizeQuery('réseau')).toBe('réseau');
       expect(normalizeQuery('   ')).toBe('');
+      // A control character (a NUL cannot reach Postgres) is a blank.
+      expect(normalizeQuery('a\u0000b\u0007c')).toBe('a b c');
+      expect(SearchQuery.parse({ q: '\u0000réseau\u0000' }).q).toBe('réseau');
     });
 
     it('refuse une requête de moins de 2 caractères normalisés', () => {

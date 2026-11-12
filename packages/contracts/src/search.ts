@@ -30,9 +30,15 @@ export const SEARCH_GROUP_LABELS: Record<SearchKind, string> = {
   formation: 'Formations',
 };
 
-/** EF-1 — NFKC, repeated whitespace reduced to one space, trimmed. */
+/**
+ * EF-1 — NFKC, control characters (a NUL cannot reach Postgres) and repeated whitespace reduced to
+ * one space, trimmed.
+ */
 export function normalizeSearchText(value: string): string {
-  return value.normalize('NFKC').replace(/\s+/gu, ' ').trim();
+  return value
+    .normalize('NFKC')
+    .replace(/[\p{Cc}\s]+/gu, ' ')
+    .trim();
 }
 
 /**
