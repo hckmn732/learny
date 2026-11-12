@@ -40,6 +40,7 @@ describe('[SPEC-007] web /api/inngest', () => {
       'cron-nightly',
       'nightly-outbox-cleanup',
       'sdd-demo-pipeline',
+      'security-purge',
     ]);
     expect(text).not.toMatch(/signkey|learny-test-only/);
   });
