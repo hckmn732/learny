@@ -633,6 +633,67 @@ export const fr = {
         grader: 'Correcteur',
       },
     },
+    spec107: {
+      intro:
+        'Démonstration : trois notions d’un même programme, deux révisions de la première, une confusion active sur la seconde et une échéance nulle avant la première réponse. Un second compte possède une notion due qui reste invisible ici.',
+      due: {
+        title: 'États de mémorisation',
+        intro:
+          'Chaque carte FSRS est stockée par notion ; l’échéance indexée alimente le quiz global du jour. Les dates sont affichées à l’heure de Paris.',
+        count: (count: number) => (count === 1 ? '1 notion due' : `${String(count)} notions dues`),
+        due: 'Échéance',
+        mastery: 'Maîtrise',
+        status: 'Statut',
+        inReview: 'en révision',
+        notInReview: 'hors révision',
+        technical: 'JSON FSRS (zone technique)',
+        isolation: (isolation: { foreignStates: number; foreignVisible: number }) =>
+          `${String(isolation.foreignStates)} état d’un autre compte, ${String(isolation.foreignVisible)} visible`,
+        missing: '—',
+      },
+      gap: {
+        title: 'Lacune active',
+        intro:
+          'La nature et la preuve sont conservées avec l’état courant ; chaque détection, changement de nature ou levée alimente aussi l’historique des événements.',
+        natures: 'Quatre natures possibles',
+        active: 'Lacune active',
+        none: 'Aucune lacune active',
+        nature: 'Nature',
+        confused: 'Notion confondue',
+        detected: 'Détectée le',
+        evidence: 'Preuve JSON',
+        labels: {
+          confusion: 'confusion',
+          application: 'difficulté d’application',
+          misunderstanding: 'incompréhension',
+          forgetting: 'oubli',
+        },
+      },
+      history: {
+        title: 'Historique de révision',
+        intro:
+          'Chaque révision appliquée conserve la note, la justesse, la durée et la carte FSRS avant puis après. Le journal est append-only.',
+        date: 'Date',
+        source: 'Source',
+        grade: 'Note',
+        correct: 'Juste',
+        time: 'Durée',
+        before: 'Avant',
+        after: 'Après',
+        yes: 'oui',
+        non: 'non',
+        missing: '—',
+        states: {
+          0: 'nouvelle',
+          1: 'apprentissage',
+          2: 'révision',
+          3: 'réapprentissage',
+        },
+        card: (reps: number, state: string) => `reps ${String(reps)} · ${state}`,
+        seconds: (ms: number) =>
+          `${new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 }).format(ms / 1000)} s`,
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
