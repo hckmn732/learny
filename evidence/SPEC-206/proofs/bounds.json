@@ -1,0 +1,76 @@
+[
+  {
+    "case": "PDF annoncé à 50 Mo + 1 octet",
+    "result": "UPLOAD_TOO_LARGE",
+    "reservation": "aucune, aucune URL d’envoi"
+  },
+  {
+    "case": "Image annoncée à 10 Mo + 1 octet",
+    "result": "UPLOAD_TOO_LARGE",
+    "reservation": "aucune, aucune URL d’envoi"
+  },
+  {
+    "case": "Vidéo annoncée (V2, ADR-0008)",
+    "result": "UNSUPPORTED_TYPE",
+    "reservation": "aucune, aucune URL d’envoi"
+  },
+  {
+    "case": "Audio annoncé (V2, ADR-0008)",
+    "result": "UNSUPPORTED_TYPE",
+    "reservation": "aucune, aucune URL d’envoi"
+  },
+  {
+    "case": "Archive ZIP annoncée",
+    "result": "UNSUPPORTED_TYPE",
+    "reservation": "aucune, aucune URL d’envoi"
+  },
+  {
+    "case": "PDF réel de 50 Mo exactement et 500 pages, envoyé par Storage",
+    "sizeBytes": 52428800,
+    "pages": 500,
+    "result": "accepté"
+  },
+  {
+    "case": "PDF réel de 501 pages",
+    "result": "UPLOAD_TOO_LARGE",
+    "message": "Un PDF ne peut pas dépasser 500 pages."
+  },
+  {
+    "case": "Image PNG réelle de 10 Mo exactement",
+    "sizeBytes": 10485760,
+    "mime": "image/png",
+    "result": "accepté"
+  },
+  {
+    "case": "Image de 10 Mo + 1 octet annoncée à 1 Mo",
+    "sizeBytes": 10485761,
+    "result": "UPLOAD_TOO_LARGE",
+    "blobRemoved": true
+  },
+  {
+    "case": "Exécutable Windows nommé photo.png annoncé image/png",
+    "result": "UNSUPPORTED_TYPE",
+    "message": "Ce fichier n’est pas une image JPEG, PNG, WebP ou HEIC valide."
+  },
+  {
+    "case": "Note de 100 000 caractères exactement",
+    "characters": 100000,
+    "result": "accepté (en file, jamais prêt)"
+  },
+  {
+    "case": "Note de 100 001 caractères",
+    "characters": 100001,
+    "result": "UPLOAD_TOO_LARGE"
+  },
+  {
+    "case": "101ᵉ apport d’un chapitre (99 notes + 1 envoi déjà réservé)",
+    "result": "QUOTA_EXCEEDED",
+    "message": "Ce chapitre contient déjà 100 apports : supprimez-en un avant d’en ajouter.",
+    "uploadUrl": "aucune"
+  },
+  {
+    "case": "Quota 2 Go : 40 × 50 Mo déjà finalisés, 48 Mo restants, demande de 48 Mo + 1 octet",
+    "remainingBytes": 50331648,
+    "result": "QUOTA_EXCEEDED"
+  }
+]

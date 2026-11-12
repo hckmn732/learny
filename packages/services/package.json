@@ -17,6 +17,11 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
-    "@supabase/supabase-js": "^2.119.0"
+    "@supabase/supabase-js": "^2.119.0",
+    "file-type": "^22.3.0",
+    "unpdf": "^2.1.0"
+  },
+  "devDependencies": {
+    "@learny/testing": "workspace:*"
   }
 }

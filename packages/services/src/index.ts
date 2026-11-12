@@ -8,3 +8,5 @@ export {
   resetDevEchoCounter,
 } from './dev/echo';
 export * from './auth/index';
+export * from './resources';
+export { simulateUpload } from './dev/uploads';

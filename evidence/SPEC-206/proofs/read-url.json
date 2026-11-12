@@ -1,0 +1,7 @@
+[
+  {
+    "case": "URL de lecture signée du propriétaire",
+    "expiresAt": "2026-11-11T12:30:00.000Z",
+    "tokenLifetimeSeconds": 600
+  }
+]

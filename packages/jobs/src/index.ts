@@ -9,11 +9,14 @@ export {
   DEMO_VALUE_MAX,
   DEMO_VALUE_MIN,
   EVENT_NAMES,
+  RESOURCE_EVENT_KINDS,
   demoJobInputSchema,
   events,
+  resourceUploaded,
+  resourceUploadedSchema,
   sddDemoJobRequested,
 } from './events';
-export type { DemoJobInput, EventName } from './events';
+export type { DemoJobInput, EventName, ResourceUploadedData } from './events';
 export {
   DEMO_JOB_ID,
   DEMO_JOB_NAME,

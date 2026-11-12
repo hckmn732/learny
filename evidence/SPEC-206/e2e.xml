@@ -1,0 +1,64 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="36.251526">
+<testsuite name="p2/spec-206.spec.ts" timestamp="2026-11-12T09:32:05.179Z" hostname="desktop" tests="3" failures="0" skipped="0" time="3.429" errors="0">
+<testcase name="inspecte les limites d’envoi @SPEC-206" classname="p2/spec-206.spec.ts" time="1.434">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/attachments/axe-d5d20019aa3ca8ba463083df727dff14bc9549bd.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/attachments/spec-206-envois-prives-de3251c985d1fec80ed2b4a0a4f49ac0395843ab.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-inspecte-les-limites-d’envoi-SPEC-206-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="envois conformes @SPEC-206 @visual @mobile" classname="p2/spec-206.spec.ts" time="1.245">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/attachments/axe-9175b92d9e7d4f8bf7d29f2f8475278d2fe023c8.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcourt les routes réelles : envoi, finalisation, lecture, suppression @SPEC-206" classname="p2/spec-206.spec.ts" time="0.75">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-parcourt-les-r-38509-ecture-suppression-SPEC-206-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-206.spec.ts" timestamp="2026-11-12T09:32:05.179Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.274" errors="0">
+<testcase name="envois conformes @SPEC-206 @visual @mobile" classname="p2/spec-206.spec.ts" time="1.274">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/attachments/axe-ad8fe1cf6e0b660c7647b5c6a6ee3609cd894e4a.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-206-envois-conformes-SPEC-206-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

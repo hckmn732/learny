@@ -98,7 +98,7 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `formation/programme-validated` | SPEC-605 | planification (SPEC-407), banques initiales, notifications |
 | `formation/paused` / `formation/resumed` | SPEC-618 | planificateur |
 | `formation/completed` | SPEC-612 | bilan final (SPEC-617), jalons |
-| `resource/uploaded` | SPEC-607 | ingestion (SPEC-509/510) |
+| `resource/uploaded` | SPEC-206 (finalisation d'un fichier), SPEC-607 (notes et liens) | ingestion (SPEC-509/510) |
 | `resource/ready` / `resource/failed` | SPEC-509 | UI temps réel, notifications |
 | `chapter/contributions-completed` | SPEC-607 | génération du cours (SPEC-608) |
 | `course/generated` | SPEC-608 | banques de questions, notification « cours prêt » |

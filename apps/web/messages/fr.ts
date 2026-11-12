@@ -1107,6 +1107,76 @@ export const fr = {
         link: 'Ouvrir openapi.json',
       },
     },
+    spec206: {
+      title: 'SPEC-206 — Envois privés',
+      limits: {
+        title: 'Limites d’envoi',
+        intro:
+          'Chaque dépassement est refusé avec un code précis avant que l’objet soit accepté définitivement.',
+        pdf: {
+          title: 'PDF',
+          value: (megabytes: number, pages: number) =>
+            `${String(megabytes)} Mo · ${String(pages)} pages`,
+        },
+        image: {
+          title: 'Image',
+          value: (megabytes: number) => `${String(megabytes)} Mo`,
+          formats: 'JPEG, PNG, WebP ou HEIC',
+        },
+        note: {
+          title: 'Note',
+          value: (characters: string) => `${characters} caractères`,
+          formats: 'Texte ou Markdown',
+        },
+        quota: {
+          title: 'Quota',
+          value: (perChapter: number, gigabytes: number) =>
+            `${String(perChapter)} apports par chapitre · ${String(gigabytes)} Go par apprenant`,
+          formats: 'Réservations comprises',
+        },
+      },
+      cases: {
+        title: 'Essais simulés',
+        intro:
+          'Les tailles sont des entrées simulées au service : aucun fichier n’est créé dans le navigateur.',
+        runAll: 'Lancer tous les essais',
+        run: 'Essayer',
+        running: 'Essai en cours…',
+        caption: 'Résultat du service pour chaque essai',
+        trialHeader: 'Essai simulé',
+        resultHeader: 'Résultat',
+        pending: 'Pas encore essayé',
+        accepted: 'Accepté',
+        refused: 'Refusé',
+        announce: (label: string, outcome: string) => `${label} : ${outcome}`,
+        labels: {
+          'pdf-limit': 'PDF de 50 Mo et 500 pages',
+          'pdf-too-many-pages': 'PDF de 12 Mo et 501 pages',
+          'image-limit': 'Image PNG de 10 Mo',
+          'image-too-large': 'Image PNG de 10 Mo + 1 octet',
+          'executable-as-png': 'Exécutable nommé photo.png',
+          'note-too-long': 'Note de 100 001 caractères',
+          'chapter-full': 'PDF de 1 Mo dans un chapitre de 100 apports',
+          'quota-reached': 'PDF de 10 Mo avec 1 Mo libre sur 2 Go',
+        },
+      },
+      deletion: {
+        title: 'Source supprimée',
+        intro:
+          'Supprimer un apport retire son fichier et ses passages ; les citations restent consultables.',
+        action: 'Supprimer l’apport',
+        reset: 'Rétablir l’exemple',
+        before: 'Avant la suppression',
+        after: 'Après la suppression',
+        quote: 'Clés de comptabilisation : 40 = débit, 50 = crédit',
+        sourceLabel: 'Guide FI, p. 4',
+        chunk: 'Passage lié',
+        chunkKept: 'Passage de l’apport',
+        chunkRemoved: 'aucun passage (chunk_id vide)',
+        status: (deleted: boolean) =>
+          deleted ? 'Apport supprimé, citation conservée.' : 'Apport présent.',
+      },
+    },
     spec115: {
       intro:
         'Démonstration : les lignes réellement chargées par pnpm db:seed:demo (Alex Perrin, SAP S/4HANA Finance à 13:20 à Paris), lues en base et confrontées aux fixtures des maquettes. Aucun compteur n’est codé comme un succès : « Seed absente » remplace toute valeur indisponible.',
