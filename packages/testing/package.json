@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./axe": "./src/axe.ts",
     "./playwright": "./src/playwright.ts",
     "./visual": "./src/visual.ts",
     "./msw": "./src/msw.ts",
