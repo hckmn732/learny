@@ -32,6 +32,32 @@ export default function UiGalleryIndexPage() {
             </span>
           </Link>
         </li>
+        <li>
+          <Link
+            href="/_dev/ui/actions"
+            data-testid="ui-section-actions"
+            className="block rounded-24 border border-solid border-border bg-surface p-24 hover:bg-surface-subtle"
+          >
+            <span className="block font-display text-20 font-semibold">{t.sections.actions}</span>
+            <span className="mt-4 block text-14 text-ink-muted">{t.actions.intro}</span>
+            <span className="mt-12 inline-block text-14 font-medium text-indigo-ink">
+              {t.openActions}
+            </span>
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/_dev/ui/saisie"
+            data-testid="ui-section-saisie"
+            className="block rounded-24 border border-solid border-border bg-surface p-24 hover:bg-surface-subtle"
+          >
+            <span className="block font-display text-20 font-semibold">{t.sections.forms}</span>
+            <span className="mt-4 block text-14 text-ink-muted">{t.saisie.intro}</span>
+            <span className="mt-12 inline-block text-14 font-medium text-indigo-ink">
+              {t.openSaisie}
+            </span>
+          </Link>
+        </li>
       </ul>
     </div>
   );
