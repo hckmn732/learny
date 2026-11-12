@@ -136,4 +136,5 @@ Définition commune (`docs/engineering/testing.md` §7), plus : aucun import dir
 - ADR appliqués : ADR-0059 (Radix pour Dialog, Popover, DropdownMenu, Tooltip ; lucide), ADR-0063 (pas d'état global), ADR-0130, ADR-0131.
 - Décision créée : **ADR-0131** (complément) — `Toast` repose aussi sur Radix (`@radix-ui/react-toast`), non listé par ADR-0059, pour bénéficier de la gestion de focus et des annonces ; correspondance icônes maquette → lucide fixée par le registre EF-17.
 - Décision créée : **ADR-0138 — Mouvement réduit, focus et contrastes** (durées d'animation, désactivation sous `prefers-reduced-motion`), appliquée ici et généralisée par SPEC-309.
+- Décision créée : **ADR-0270 — Composants de structure et de retour : superpositions, toasts et isolation modale** — menus non modaux, `aria-modal` explicite, verrou de défilement et `inert` du fond, voile sous le panneau (49/50), toasts Radix `background`/`foreground`, jetons `z-*` et utilitaires générés, baselines des nouvelles galeries.
 - Hypothèse : le dernier élément du fil d'Ariane reste `ink-muted` comme dans `Cours.dc.html`.
