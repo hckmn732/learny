@@ -1,0 +1,68 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`[SPEC-302] rendu serveur > fige les classes générées pour chaque variante (CA-6) 1`] = `
+{
+  "badgeSmall": "inline-flex items-center rounded-full bg-lime text-ink px-8 py-2 text-12 font-600",
+  "badges": {
+    "default-model": "inline-flex items-center rounded-full bg-surface-muted text-ink-secondary px-10 py-4 text-12 font-700",
+    "green": "inline-flex items-center rounded-full bg-green-soft text-green-ink px-10 py-4 text-12 font-700",
+    "indigo": "inline-flex items-center rounded-full bg-indigo-soft text-indigo-ink-strong px-10 py-4 text-12 font-700",
+    "lime": "inline-flex items-center rounded-full bg-lime text-ink px-10 py-4 text-12 font-700",
+    "lime-soft": "inline-flex items-center rounded-full bg-lime-softer text-lime-ink-strong px-10 py-4 text-12 font-700",
+    "neutral": "inline-flex items-center rounded-full bg-canvas text-ink-secondary px-10 py-4 text-12 font-600",
+    "on-dark": "inline-flex items-center rounded-full bg-dark-700 text-lime px-10 py-4 text-12 font-600",
+    "orange": "inline-flex items-center rounded-full bg-orange-soft text-orange-ink px-10 py-4 text-12 font-700",
+    "violet": "inline-flex items-center rounded-full bg-violet-soft text-violet-ink px-10 py-4 text-12 font-700",
+  },
+  "buttonVariants": {
+    "base": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid font-sans text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-44 rounded-12 px-16 text-14",
+    "lime": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid font-sans text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-lime font-700 text-ink hover:brightness-95 min-h-40 rounded-10 px-14 text-13",
+    "xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid font-sans text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-50 rounded-14 px-20 text-15 w-full",
+  },
+  "buttons": {
+    "danger-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-danger hover:bg-canvas min-h-48 rounded-14 px-20 text-15",
+    "danger-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-danger hover:bg-canvas min-h-44 rounded-12 px-16 text-14",
+    "danger-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-danger hover:bg-canvas min-h-40 rounded-10 px-14 text-13",
+    "danger-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-danger hover:bg-canvas min-h-50 rounded-14 px-20 text-15",
+    "dark-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-48 rounded-14 px-20 text-15",
+    "dark-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-44 rounded-12 px-16 text-14",
+    "dark-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-40 rounded-10 px-14 text-13",
+    "dark-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-ink font-700 text-white hover:bg-dark-700 min-h-50 rounded-14 px-20 text-15",
+    "ghost-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-ink-muted hover:bg-canvas min-h-48 rounded-14 px-20 text-15",
+    "ghost-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-ink-muted hover:bg-canvas min-h-44 rounded-12 px-16 text-14",
+    "ghost-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-ink-muted hover:bg-canvas min-h-40 rounded-10 px-14 text-13",
+    "ghost-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-transparent font-600 text-ink-muted hover:bg-canvas min-h-50 rounded-14 px-20 text-15",
+    "lime-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-lime font-700 text-ink hover:brightness-95 min-h-48 rounded-14 px-20 text-15",
+    "lime-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-lime font-700 text-ink hover:brightness-95 min-h-44 rounded-12 px-16 text-14",
+    "lime-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-lime font-700 text-ink hover:brightness-95 min-h-40 rounded-10 px-14 text-13",
+    "lime-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-transparent bg-lime font-700 text-ink hover:brightness-95 min-h-50 rounded-14 px-20 text-15",
+    "outline-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-border-strong bg-surface font-600 text-ink hover:border-ink min-h-48 rounded-14 px-20 text-15",
+    "outline-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-border-strong bg-surface font-600 text-ink hover:border-ink min-h-44 rounded-12 px-16 text-14",
+    "outline-on-dark-lg": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-dark-500 bg-transparent font-600 text-white hover:bg-dark-600 min-h-48 rounded-14 px-20 text-15",
+    "outline-on-dark-md": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-dark-500 bg-transparent font-600 text-white hover:bg-dark-600 min-h-44 rounded-12 px-16 text-14",
+    "outline-on-dark-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-dark-500 bg-transparent font-600 text-white hover:bg-dark-600 min-h-40 rounded-10 px-14 text-13",
+    "outline-on-dark-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-dark-500 bg-transparent font-600 text-white hover:bg-dark-600 min-h-50 rounded-14 px-20 text-15",
+    "outline-sm": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-border-strong bg-surface font-600 text-ink hover:border-ink min-h-40 rounded-10 px-14 text-13",
+    "outline-xl": "inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-border-strong bg-surface font-600 text-ink hover:border-ink min-h-50 rounded-14 px-20 text-15",
+  },
+  "chips": {
+    "pill": "inline-flex cursor-pointer items-center justify-center gap-6 transition-colors disabled:cursor-not-allowed disabled:opacity-55 min-h-40 rounded-full px-14 text-14 border border-solid border-border-strong bg-surface font-500 text-ink",
+    "rounded": "inline-flex cursor-pointer items-center justify-center gap-6 transition-colors disabled:cursor-not-allowed disabled:opacity-55 min-h-40 min-w-44 rounded-12 px-14 text-14 border border-solid border-ink bg-ink font-700 text-white",
+  },
+  "iconButtons": {
+    "dark": "relative inline-flex shrink-0 cursor-pointer items-center justify-center border border-solid transition-colors disabled:cursor-not-allowed disabled:opacity-55 border-dark-600 bg-transparent text-on-dark-muted hover:bg-dark-700 size-42 rounded-12",
+    "light": "relative inline-flex shrink-0 cursor-pointer items-center justify-center border border-solid transition-colors disabled:cursor-not-allowed disabled:opacity-55 border-border bg-surface text-ink hover:bg-surface-subtle size-42 rounded-12",
+  },
+  "segmented": "inline-flex gap-4 rounded-12 bg-canvas p-4",
+  "switch": "inline-flex h-28 w-46 shrink-0 cursor-pointer items-center rounded-full border-0 p-3 transition-colors data-[state=checked]:bg-ink data-[state=unchecked]:bg-border-strong",
+  "tabs": [
+    "inline-flex items-center gap-4 p-4 rounded-12 bg-canvas",
+    "inline-flex cursor-pointer items-center justify-center rounded-9 border-0 bg-transparent px-14 text-ink-muted min-h-36 text-13 font-500 data-[state=active]:bg-surface data-[state=active]:font-600 data-[state=active]:text-ink data-[state=active]:shadow-segment",
+  ],
+  "textFields": {
+    "error": "min-h-48 w-full rounded-12 border border-solid bg-surface px-14 text-15 text-ink placeholder:text-ink-muted border-orange-ink",
+    "form": "min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-14 text-15 text-ink placeholder:text-ink-muted",
+    "search": "min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 text-14 text-ink placeholder:text-ink-muted",
+  },
+}
+`;
