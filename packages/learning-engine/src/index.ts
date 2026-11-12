@@ -11,3 +11,4 @@ export * from './random';
 export * from './streak';
 export * from './time';
 export * from './types';
+export * from './warmup';
