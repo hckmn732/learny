@@ -45,6 +45,33 @@ export const fr = {
       programmeToValidate: 'Programme à valider',
     },
     skipToContent: 'Aller au contenu principal',
+    header: {
+      searchLabel: 'Rechercher',
+      searchPlaceholder: 'Rechercher une notion, un cours, une formation…',
+      notificationsLabel: (count: number) =>
+        count === 0
+          ? 'Notifications, aucune non lue'
+          : count === 1
+            ? 'Notifications, 1 non lue'
+            : `Notifications, ${String(count)} non lues`,
+      accountButton: 'Mon compte',
+      accountMenuLabel: 'Mon compte',
+      accountFallback: 'Apprenant',
+      activeFormations: (count: number) =>
+        count === 0
+          ? 'Aucune formation en cours'
+          : count === 1
+            ? '1 formation en cours'
+            : `${String(count)} formations en cours`,
+      loadingAccount: 'Chargement du compte…',
+      accountError: 'Impossible de charger le compte.',
+      retry: 'Réessayer',
+      settings: 'Paramètres',
+      pause: 'Mettre en pause',
+      signOut: 'Se déconnecter',
+      signingOut: 'Déconnexion…',
+      signOutError: 'La déconnexion a échoué. Vérifiez votre connexion puis réessayez.',
+    },
     placeholder: {
       accueilTitle: 'Accueil',
       accueilBody: 'L’accueil complet arrive avec SPEC-603.',

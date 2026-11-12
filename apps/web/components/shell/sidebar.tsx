@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -183,6 +184,8 @@ export interface SidebarViewProps {
   onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
   showTriggerRef?: RefObject<HTMLButtonElement | null>;
   asideRef?: RefObject<HTMLElement | null>;
+  /** `external` lets the fixed header own the “Afficher le menu” trigger (SPEC-305 EF-1). */
+  showTrigger?: 'internal' | 'external';
 }
 
 /** Presentational sidebar: also used by the component tests and the state demonstrations. */
@@ -201,6 +204,7 @@ export const SidebarView = ({
   onKeyDown,
   showTriggerRef,
   asideRef,
+  showTrigger = 'internal',
 }: SidebarViewProps) => {
   const currentFormation = data?.currentFormation ?? null;
   const formations = data?.formations ?? [];
@@ -264,7 +268,7 @@ export const SidebarView = ({
           onClick={onCloseOverlay}
         />
       ) : null}
-      {!overlayOpen ? (
+      {!overlayOpen && showTrigger === 'internal' ? (
         <IconButton
           ref={showTriggerRef}
           tone="light"
@@ -517,20 +521,36 @@ export interface SidebarProps {
   /** Server-rendered DTO: the first paint never waits for the browser (ET-3). */
   initialData: SidebarDto | null;
   initialError?: boolean;
+  /** The fixed header renders the trigger when `external` (SPEC-305 EF-1). */
+  showTrigger?: 'internal' | 'external';
+  /** Ref of the external trigger, used to return the focus after the mobile overlay (CL-3). */
+  showTriggerRef?: RefObject<HTMLButtonElement | null> | undefined;
+  /** Header visibility mirror: called whenever the collapse preference changes. */
+  onCollapsedChange?: (collapsed: boolean) => void;
+  /** Registers the show action so the fixed header can reveal the sidebar (SPEC-305 EF-1). */
+  onShowHandler?: (show: () => void) => void;
 }
 
 /**
  * Connected sidebar: server data, client refresh through `/api/v1/me/sidebar`, persisted collapse
  * and mobile overlay with Escape, backdrop, focus trap and focus return (EF-3, CL-3).
  */
-export const Sidebar = ({ initialData, initialError = false }: SidebarProps) => {
+export const Sidebar = ({
+  initialData,
+  initialError = false,
+  showTrigger = 'internal',
+  showTriggerRef,
+  onCollapsedChange,
+  onShowHandler,
+}: SidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const [collapsed, setCollapsed] = useState(initialData?.collapsed ?? false);
   const [overlayOpen, setOverlayOpen] = useState(false);
   const asideRef = useRef<HTMLElement>(null);
-  const showTriggerRef = useRef<HTMLButtonElement>(null);
+  const localTriggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = showTriggerRef ?? localTriggerRef;
   const wasOverlayOpen = useRef(false);
 
   const query = useQuery({
@@ -549,6 +569,10 @@ export const Sidebar = ({ initialData, initialError = false }: SidebarProps) => 
   }, [collapsed]);
 
   useEffect(() => {
+    onCollapsedChange?.(collapsed);
+  }, [collapsed, onCollapsedChange]);
+
+  useEffect(() => {
     if (overlayOpen) {
       wasOverlayOpen.current = true;
       const previous = document.body.style.overflow;
@@ -563,10 +587,10 @@ export const Sidebar = ({ initialData, initialError = false }: SidebarProps) => 
     }
     if (wasOverlayOpen.current) {
       wasOverlayOpen.current = false;
-      showTriggerRef.current?.focus();
+      triggerRef.current?.focus();
     }
     return undefined;
-  }, [overlayOpen]);
+  }, [overlayOpen, triggerRef]);
 
   useEffect(() => {
     if (!overlayOpen) return undefined;
@@ -620,14 +644,20 @@ export const Sidebar = ({ initialData, initialError = false }: SidebarProps) => 
     );
   };
 
-  const show = () => {
+  const show = useCallback(() => {
     if (isCompactViewport()) {
       setOverlayOpen(true);
       return;
     }
     setCollapsed(false);
     update.mutate({ collapsed: false });
-  };
+  }, [update]);
+
+  // SPEC-305 EF-1 — the fixed header owns the visible trigger; it calls the registered action so
+  // the sidebar keeps its own show logic (persisted on desktop, overlay on mobile).
+  useEffect(() => {
+    onShowHandler?.(show);
+  }, [onShowHandler, show]);
 
   const retry = () => {
     void query.refetch();
@@ -692,8 +722,9 @@ export const Sidebar = ({ initialData, initialError = false }: SidebarProps) => 
       onSelectFormation={selectFormation}
       onNavigate={navigate}
       onKeyDown={handleKeyDown}
-      showTriggerRef={showTriggerRef}
+      showTriggerRef={triggerRef}
       asideRef={asideRef}
+      showTrigger={showTrigger}
     />
   );
 };
