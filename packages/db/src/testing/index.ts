@@ -153,3 +153,4 @@ export function resetSequenceFreeIds(): Promise<void> {
 }
 
 export * from './programme';
+export * from './embedding';

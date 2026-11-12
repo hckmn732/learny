@@ -57,6 +57,20 @@
       "when": 1794445244747,
       "tag": "0007_formations_constraints",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794447081093,
+      "tag": "0008_resources_chunks",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794447127709,
+      "tag": "0009_resources_rules",
+      "breakpoints": true
     }
   ]
 }

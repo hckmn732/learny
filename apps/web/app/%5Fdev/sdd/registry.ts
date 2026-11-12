@@ -50,6 +50,11 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-103'),
   },
+  'SPEC-104': {
+    title: 'SPEC-104 · Ressources et passages',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-104'),
+  },
   'SPEC-009': {
     title: 'Configuration',
     load: () => import('../../../components/sdd-demos/spec-009'),

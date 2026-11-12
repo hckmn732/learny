@@ -55,6 +55,23 @@ courante. Les positions commencent à 1 et les clés étrangères composites gar
 appartient bien au chapitre et au module de sa formation. La fabrique est destinée à
 `withRollback` ; SPEC-115 l'enrichit pour le jeu de démonstration.
 
+### Embeddings factices (SPEC-104)
+
+`fakeEmbedding(text)` renvoie un vecteur déterministe de 1 024 composantes (ADR-0056, mode `mock`) :
+les composantes viennent de blocs SHA-256 du texte, ramenées dans `[-1, 1]` puis normalisées en
+norme L2. Même texte → même vecteur, textes différents → vecteurs différents. `toVectorLiteral()`
+produit la forme texte `[0.1,…]` acceptée par un cast `extensions.vector`. La règle est réutilisée
+par l'ingestion (SPEC-509) et la recherche (SPEC-511) en mode simulé.
+
+### Ressources et passages (SPEC-104)
+
+`resources` porte les apports et suggestions avec `status`, `metadata` et suppression logique ;
+`resource_chunks` porte les passages repérés (`location` : page, horodatage, ancre, caractères) et
+l'embedding `vector(1024)` indexé en HNSW cosinus (`m = 16`, `ef_construction = 64`). Les limites
+de BR-APP-02 et les formes par type sont imposées en base ; la suppression logique efface le
+contenu et les passages mais conserve la ligne pour les citations. `createTestProgramme` fournit la
+formation et le chapitre nécessaires aux tests d'intégration.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

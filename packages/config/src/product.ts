@@ -50,6 +50,22 @@ export const RESOURCE_RULES = {
   storageMaxGigabytes: 2,
 } as const;
 
+/**
+ * BR-APP-02, ADR-0039 — exact limits shared by the database constraints (SPEC-104) and the upload
+ * service (SPEC-206). Bytes are the normative unit; `RESOURCE_RULES` keeps the human-readable ones.
+ */
+export const RESOURCE_LIMITS = {
+  pdfMaxBytes: 52_428_800,
+  pdfMaxPages: 500,
+  imageMaxBytes: 10_485_760,
+  noteMaxChars: 100_000,
+  perChapter: 100,
+  userQuotaBytes: 2_147_483_648,
+} as const;
+
+/** ADR-0056 — dimension of every embedding (`resource_chunks.embedding`, Voyage `voyage-4-lite`). */
+export const EMBEDDING_DIM = 1024;
+
 /** BR-QUI-*, BR-PRA-02 — validation quizzes and mock exams. */
 export const QUIZ_RULES = {
   /** BR-QUI-01 — 12 questions by default, between 10 and 20, scored out of 100. */

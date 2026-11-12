@@ -478,6 +478,62 @@ export const fr = {
         no: 'non utilisé',
       },
     },
+    spec104: {
+      intro:
+        'Chaque chargement découpe une note en trois passages repérés, les indexe et les interroge dans une transaction toujours annulée : aucune donnée ne survit à la requête.',
+      resource: {
+        title: 'Apport de démonstration',
+        kind: (kind: string, status: string, count: number) =>
+          `Apport ${kind} · statut ${status} · ${String(count)} passages`,
+        position: 'Position',
+        text: 'Passage',
+        location: 'Caractères',
+        range: (start: number, end: number) => `${String(start)}–${String(end)}`,
+      },
+      search: {
+        title: 'Recherche vectorielle',
+        intro:
+          'La requête « clé débit » est transformée en embedding factice déterministe ; les passages sont classés par distance cosinus croissante.',
+        queryLabel: 'Requête',
+        indexUsed: 'Index HNSW',
+        yes: 'utilisé',
+        no: 'non utilisé',
+        planLabel: 'Plan EXPLAIN',
+        distance: 'Distance',
+      },
+      limits: {
+        title: 'Limites',
+        intro:
+          'Chaque tentative s’exécute dans un point de sauvegarde annulé : la note de démonstration reste intacte.',
+        name: 'Cas',
+        sqlstate: 'SQLSTATE',
+        code: 'Code',
+        result: 'Résultat',
+        refused: 'Refusé comme attendu',
+        unexpected: 'Résultat inattendu',
+        cases: {
+          cl1: 'CL-1 · note de 100 001 caractères',
+          cl2: 'CL-2 · PDF de 501 pages',
+          cl3: 'CL-3 · 101e apport du chapitre',
+          cl8: 'CL-8 · suggestion du tuteur sans URL',
+        },
+      },
+      softDelete: {
+        title: 'Suppression logique',
+        intro:
+          'La suppression efface les passages et le contenu ; la ligne reste pour afficher « source supprimée » dans les citations.',
+        before: 'Passages avant',
+        after: 'Passages après',
+        passages: (count: number) => `${String(count)} passage${count > 1 ? 's' : ''}`,
+        retained: 'Ligne conservée',
+        yes: 'oui',
+        no: 'non',
+        content: 'Contenu',
+        erased: 'effacé',
+        kept: 'conservé',
+        titleLabel: 'Titre conservé',
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
