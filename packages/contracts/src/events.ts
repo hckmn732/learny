@@ -199,6 +199,8 @@ export const EVENTS = {
     status: z.enum(EVENT_SUBSCRIPTION_STATUSES),
     previousStatus: z.enum(EVENT_SUBSCRIPTION_STATUSES),
   }),
+  // SPEC-210 ET-5 — a payment failed (`invoice.payment_failed`): SPEC-725 notifies the learner.
+  'billing/payment-failed': z.object({ userId: Uuid }),
   'account/export-requested': z.object({ userId: Uuid, exportId: Uuid }),
   'account/deletion-requested': z.object({ userId: Uuid, scheduledFor: IsoDateTime }),
   'group/member-joined': groupMember,

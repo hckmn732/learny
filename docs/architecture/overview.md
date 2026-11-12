@@ -113,6 +113,7 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `automation/action-proposed` / `-applied` / `-undone` | SPEC-711 | notifications, journal |
 | `notification/requested` | tous | SPEC-209 |
 | `billing/subscription-changed` | SPEC-210 | droits IA |
+| `billing/payment-failed` | SPEC-210 | notification d'échec de paiement (SPEC-725) |
 | `account/export-requested` / `account/deletion-requested` | SPEC-211 | jobs d'export et de suppression |
 | `group/member-joined` / `-left` | SPEC-724 | planification, notifications |
 | `cron/hourly-tick` | SPEC-203 (cron `TZ=UTC 5 * * * *`) | consommateurs d'heure globale |

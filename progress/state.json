@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T09:41:05.596Z",
+  "updatedAt": "2026-11-12T09:46:49.675Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -1726,11 +1726,11 @@
       "validations": {}
     },
     "SPEC-210": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-12T09:46:49.675Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-210-abonnement-stripe-service",
       "commit": null,
       "lastError": null,
       "validations": {}

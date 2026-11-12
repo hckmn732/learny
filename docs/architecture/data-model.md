@@ -112,7 +112,9 @@ Normatif. Implémenté dans `packages/db/src/schema/*.ts` (Drizzle) par les spé
 
 **ai_calls** — `id`, `user_id`, `formation_id uuid null`, `task ai_task`, `provider ai_provider`, `model text`, `managed bool` (IA fournie), `input_tokens int`, `output_tokens int`, `cache_read_tokens int`, `cache_write_tokens int`, `cost_usd numeric(12,6)`, `latency_ms int`, `status` (`ok|error|refused|capped|invalid_output`), `error_code text`, `batch bool default false`, `created_at`. Index `(user_id, created_at)`.
 
-**subscriptions** — `user_id pk`, `stripe_customer_id text unique`, `stripe_subscription_id text unique null`, `status subscription_status` (`none|active|past_due|canceled|incomplete`), `current_period_end timestamptz`, `daily_cap_usd numeric(12,6) not null default 1.50`, `updated_at`. Vue `ai_spend_today(user_id, spent_usd)` (fuseau utilisateur).
+**subscriptions** — `user_id pk`, `stripe_customer_id text unique`, `stripe_subscription_id text unique null`, `status subscription_status` (`none|active|past_due|canceled|incomplete`), `current_period_end timestamptz`, `stripe_event_at timestamptz null` (création du dernier événement Stripe appliqué : ordre des webhooks, SPEC-210), `daily_cap_usd numeric(12,6) not null default 1.50`, `updated_at`. Vue `ai_spend_today(user_id, spent_usd)` (fuseau utilisateur).
+
+**stripe_events** (SPEC-210) — `event_id text pk` (identifiant Stripe, déduplication), `type text not null`, `created_at timestamptz not null` (création de l'événement chez Stripe), `processed_at timestamptz null`. RLS activée et forcée, **aucune politique utilisateur** : accès `serviceDb` seul (insertion `on conflict do nothing`, mise à jour de `processed_at`).
 
 ## 10. Groupes (SPEC-111)
 

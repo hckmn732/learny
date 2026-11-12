@@ -1333,6 +1333,10 @@ describe('[SPEC-113] RLS isolation', () => {
           sdd_demo_runs: sql`
             insert into public.sdd_demo_runs (run_id) values (gen_random_uuid())
           `,
+          stripe_events: sql`
+            insert into public.stripe_events (event_id, type, created_at)
+            values ('evt_rls_forged', 'invoice.payment_failed', now())
+          `,
         }[entry.table];
         const write = await attemptUnderUser(tx, seed.a.id, (inner) =>
           inner.execute(
