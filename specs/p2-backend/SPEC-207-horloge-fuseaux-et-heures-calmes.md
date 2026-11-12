@@ -113,3 +113,8 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; heures cal
 ## 15. Décisions et hypothèses
 
 ADR-0030 fixe UTC, IANA, `Intl`/`@date-fns/tz` ; ADR-0047 fixe la date de test. La préférence de fuseau est saisie par SPEC-602/707, ces fonctions la consomment sans modifier le profil.
+
+- **ADR-0254** — résolution des heures locales aux changements d'heure : `instantsAtLocalTime` renvoie toutes les occurrences réelles (aucune au printemps, deux en automne) ; le début de jour est la première occurrence de minuit (ou l'instant du saut) ; la fin des heures calmes est la première occurrence postérieure à l'instant, une borne sautée se résolvant à l'instant du saut.
+- **ADR-0253** — validation des fuseaux : `parseTimeZone` accepte les alias que le moteur normalise (`Asia/Kolkata`, `Europe/Kyiv`) et refuse décalages fixes, variantes de casse et noms inconnus ; seul `detectUserTimeZone` se replie sur `Europe/Paris`. `isValidIanaZone` (SPEC-202) est conservée inchangée.
+- Les fonctions de calcul acceptent `Date` ou une chaîne ISO 8601 portant son décalage (`Z`, `+02:00`) ; une chaîne sans désignateur de fuseau est refusée car son sens dépendrait du processus (CL-8).
+- La page SDD parcourt les jours de l'année locale avec `userDayBounds` pour repérer les jours de 23 h et 25 h : aucune durée n'est codée dans le composant.

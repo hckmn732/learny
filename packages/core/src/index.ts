@@ -10,7 +10,6 @@ export {
 } from './errors';
 export type { AppErrorExtra, ErrorCode, ProblemBody } from './errors';
 export { err, ok } from './result';
-export { isValidIanaZone } from './time';
 export type { Result } from './result';
 // Runtime helpers shared with the browser (no Node built-in); the logger and the request context
 // live behind `@learny/core/server` (SPEC-010).
@@ -19,3 +18,23 @@ export { buildSafeSentryEvent, safeErrorType, sanitizeSentryEvent } from './sent
 export type { ErrorContext, ErrorReporter, SafeSentryEvent } from './sentry';
 export type { LearnyLogger, LogLevel, SafeLogField, SafeLogFields } from './logger';
 export type { RequestContext } from './request-context';
+export {
+  DEFAULT_QUIET_HOURS,
+  DEFAULT_TIME_ZONE,
+  detectUserTimeZone,
+  endOfUserDay,
+  formatUserDate,
+  instantsAtLocalTime,
+  isQuietHours,
+  isValidIanaZone,
+  nextOutsideQuietHours,
+  parseTimeZone,
+  startOfUserDay,
+  toInstant,
+  toUserZone,
+  userDayBounds,
+  userLocalDay,
+  userLocalHour,
+  userWeekday,
+} from './time';
+export type { Instant, QuietHoursWindow, UserZoneTime } from './time';
