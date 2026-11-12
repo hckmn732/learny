@@ -25,10 +25,12 @@ describe('[SPEC-201] registre', () => {
     }
   });
 
-  it('uses a null output exactly for 204 answers', () => {
+  it('uses a null output exactly for 204 and 302 answers', () => {
     for (const route of routes) {
       const output: unknown = route.output;
-      expect(output === null, route.id).toBe(route.successStatus === 204);
+      expect(output === null, route.id).toBe(
+        route.successStatus === 204 || route.successStatus === 302,
+      );
     }
   });
 

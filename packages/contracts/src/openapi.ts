@@ -74,6 +74,11 @@ function errorResponses(route: AnyRoute): JsonObject {
   return responses;
 }
 
+/** `Empty` (`z.undefined()`) documents a body-less success such as a 202. */
+function isEmptyOutput(schema: z.ZodType): boolean {
+  return schema._zod.def.type === 'undefined';
+}
+
 function operation(route: AnyRoute): JsonObject {
   const parameters: Json[] = [
     ...parametersOf(route.params as z.ZodType | undefined, 'path'),
@@ -87,8 +92,13 @@ function operation(route: AnyRoute): JsonObject {
       schema: { type: 'string', pattern: '^[A-Za-z0-9_-]{8,128}$' },
     });
   }
-  const success: JsonObject = { description: 'Succès' };
-  if (route.output !== null) {
+  const success: JsonObject = {
+    description: route.successStatus === 302 ? 'Redirection' : 'Succès',
+    ...(route.successStatus === 302
+      ? { headers: { Location: { schema: { type: 'string' } } } }
+      : {}),
+  };
+  if (route.output !== null && !isEmptyOutput(route.output as z.ZodType)) {
     success.content = {
       'application/json': { schema: jsonSchema(route.output as z.ZodType, 'output') },
     };

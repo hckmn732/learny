@@ -1,3 +1,4 @@
+import { authRoutes } from './auth';
 import { devRoutes } from './dev';
 import { healthRoutes } from './health';
 
@@ -5,6 +6,7 @@ import { healthRoutes } from './health';
 // A test checks the uniqueness of `id` and of `method + path`.
 export const ROUTES = {
   ...healthRoutes,
+  ...authRoutes,
   ...devRoutes,
 } as const;
 

@@ -7,3 +7,4 @@ export {
   listDevItems,
   resetDevEchoCounter,
 } from './dev/echo';
+export * from './auth/index';

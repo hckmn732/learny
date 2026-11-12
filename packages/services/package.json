@@ -11,8 +11,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
-    "@learny/db": "workspace:*"
+    "@learny/db": "workspace:*",
+    "@learny/jobs": "workspace:*",
+    "@supabase/supabase-js": "^2.119.0"
   }
 }
