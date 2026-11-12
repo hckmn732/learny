@@ -111,3 +111,5 @@ Les contrôles de `docs/engineering/testing.md` §7 passent ; la migration est c
 ## 15. Décisions et hypothèses
 
 ADR-0029 fixe le planificateur et les moments d'étude ; ce schéma ne calcule ni la replanification ni la série. SPEC-207 fixera les conversions de fuseau et SPEC-113 audite les politiques RLS.
+
+ADR-0243 précise les invariants du schéma : FK auto-référente `on delete no action` et index unique partiel des successeurs actifs, unicité `nulls not distinct` des jalons, `upsert` idempotent par source d'événement, répartition des politiques RLS entre propriétaire et rôle service, et réutilisation de `automation_key` de SPEC-102.
