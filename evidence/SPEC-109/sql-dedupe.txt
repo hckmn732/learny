@@ -1,0 +1,43 @@
+Pager usage is off.
+BEGIN
+== Jeu de démonstration : une notification de digest pour un apprenant ==
+INSERT 0 1
+INSERT 0 1
+== La lecture est enregistrée ==
+UPDATE 1
+== Le même événement est rejoué : on conflict do nothing ==
+INSERT 0 0
+== Deux événements sans clé restent distincts (NULLS DISTINCT) ==
+                  id                  
+--------------------------------------
+ 6dfe949f-73a0-40e6-ab52-e2665c3db2ba
+(1 row)
+
+INSERT 0 1
+                  id                  
+--------------------------------------
+ 4c43083a-d2d7-4c4e-b597-bf217c0fdb5a
+(1 row)
+
+INSERT 0 1
+== Compteur non lu et filtre unread (read_at is null) ==
+ total | non_lues 
+-------+----------
+     3 |        2
+(1 row)
+
+ dedupe_key |        title        
+------------+---------------------
+            | Nouvelle lacune
+            | Bilan de la semaine
+(2 rows)
+
+== Résultat : 3 notifications, une seule ligne pour la clé rejouée, read_at conservé ==
+    dedupe_key     |        read_at         |        created_utc         
+-------------------+------------------------+----------------------------
+ digest:2026-11-11 | 2026-11-11 08:30:00+00 | 2026-11-11 07:00:00
+                   |                        | 2026-11-12 04:36:59.396008
+                   |                        | 2026-11-12 04:36:59.396008
+(3 rows)
+
+ROLLBACK
