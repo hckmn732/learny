@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.725803">
+<testsuite name="p2/spec-208.spec.ts" timestamp="2026-11-12T09:58:47.018Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.955" errors="0">
+<testcase name="rafale, origine et purge @SPEC-208" classname="p2/spec-208.spec.ts" time="2.067">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/attachments/axe-7284bcf6e9803db4fadaa478475b85834e2101e6.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/attachments/spec-208-protections-1d88d823f16f3edea482f54af3162a48af6e753a.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-rafale-origine-et-purge-SPEC-208-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="protections conformes @SPEC-208 @visual @mobile" classname="p2/spec-208.spec.ts" time="0.888">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-desktop/attachments/axe-cab368cc128aff7ad6c2386265d439302fca9ac2.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-208.spec.ts" timestamp="2026-11-12T09:58:47.018Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.915" errors="0">
+<testcase name="protections conformes @SPEC-208 @visual @mobile" classname="p2/spec-208.spec.ts" time="0.915">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-mobile/attachments/axe-3a39157e2284f491bc94365b255b3128002d31ef.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-208-protections-conformes-SPEC-208-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
