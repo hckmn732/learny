@@ -189,3 +189,44 @@ export * from './repositories/schedule-slots';
 export * from './repositories/automation-actions';
 export * from './repositories/daily-activity';
 export * from './repositories/milestones';
+
+// Four tables of the personal-data / idempotency / rate-limit domain and the legal document
+// enumeration (SPEC-112 EF-1 to EF-4). The private search function is exposed by its repository.
+export {
+  IDEMPOTENCY_VALIDITY_MS,
+  LEGAL_DOCUMENTS,
+  SEARCH_QUERY_MAX_LENGTH,
+  SNIPPET_MAX_LENGTH,
+  canonicalJson,
+  computeRequestHash,
+  dataExports,
+  idempotencyKeySchema,
+  idempotencyKeys,
+  isDataExportDownloadable,
+  legalAcceptances,
+  legalDocument,
+  normalizeSearchQuery,
+  rateLimits,
+  requestHashSchema,
+  sanitizeSnippet,
+  searchLimitSchema,
+} from './schema/privacy-search';
+export type {
+  DataExport,
+  DownloadableExport,
+  IdempotencyKey,
+  LegalAcceptance,
+  LegalDocument,
+  NewDataExport,
+  NewIdempotencyKey,
+  NewLegalAcceptance,
+  NewRateLimit,
+  RateLimit,
+  RequestHashInput,
+} from './schema/privacy-search';
+
+// Repositories of exports, legal acceptances (SPEC-112 EF-1, EF-2), idempotency keys and rate
+// limits (EF-3, EF-4), and the private search (EF-5, EF-6).
+export * from './repositories/privacy';
+export * from './repositories/idempotency';
+export * from './repositories/search';
