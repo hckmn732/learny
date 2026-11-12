@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-402, SPEC-404]
 business_rules: [BR-AUT-03]
 screens: []
-adrs: []
+adrs: [ADR-0148, ADR-0286]
 visual: demo
 ---
 
@@ -106,4 +106,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Décisions appliquées : ADR-0148 (veille locale bornée à 7 jours, sens des prérequis, priorité des choix) et ADR-0286 (projection d’entrée, rétrievabilité, tri canonique puis tirage stable à graine, validation des bornes). Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
