@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-104, SPEC-113]
 business_rules: []
 screens: []
-adrs: [ADR-0058]
+adrs: [ADR-0058, ADR-0249]
 visual: demo
 ---
 
@@ -112,4 +112,4 @@ Toutes les conditions de `docs/engineering/testing.md` §7 passent ; les deux bu
 
 ## 15. Décisions et hypothèses
 
-ADR-0058 fixe buckets, chemin et TTL de dix minutes. SPEC-206 applique les limites MIME/taille/quota avant finalisation ; cette spécification fixe l'isolation et la mécanique de stockage.
+ADR-0058 fixe buckets, chemin et TTL de dix minutes. ADR-0249 précise l'implémentation : forme exacte des politiques `storage.objects` (deux dossiers, UUID au second segment, `WITH CHECK` anti-déplacement), écriture de `exports` réservée au rôle de service, vérification de la ligne DB avant toute signature de lecture, normalisation stricte des noms, suppression idempotente et signature d'envoi émise côté serveur avec une expiration réelle de 600 s (l'API Storage locale fixe sinon ses jetons d'envoi à deux heures). SPEC-206 applique les limites MIME/taille/quota avant finalisation ; cette spécification fixe l'isolation et la mécanique de stockage.
