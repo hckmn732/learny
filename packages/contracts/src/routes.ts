@@ -2,6 +2,7 @@ import { authRoutes } from './auth';
 import { devRoutes } from './dev';
 import { devJobsRoutes } from './dev-jobs';
 import { healthRoutes } from './health';
+import { pushDevRoutes, pushRoutes } from './push';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
 
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
@@ -12,6 +13,8 @@ export const ROUTES = {
   ...devRoutes,
   ...uploadsRoutes,
   ...uploadsDevRoutes,
+  ...pushRoutes,
+  ...pushDevRoutes,
   ...devJobsRoutes,
 } as const;
 
