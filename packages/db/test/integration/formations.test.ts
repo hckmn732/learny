@@ -709,8 +709,7 @@ describe('[SPEC-103] formations et programme', () => {
       const plan = await tx.execute<Row>(sql`
         explain (format json)
         select id from public.notions
-        where formation_id = ${programme.formationId}::uuid
-          and to_tsvector(
+        where to_tsvector(
             'simple',
             public.immutable_unaccent(label || ' ' || coalesce(short_definition, ''))
           ) @@ plainto_tsquery('simple', public.immutable_unaccent('ecriture'))

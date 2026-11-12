@@ -239,7 +239,8 @@ export async function loadSpec103Demo(): Promise<Spec103Data> {
     const matches = await tx.execute<Row>(sql`
       select label
       from public.notions
-      where to_tsvector(
+      where formation_id = ${programme.formationId}::uuid
+        and to_tsvector(
         'simple',
         public.immutable_unaccent(label || ' ' || coalesce(short_definition, ''))
       ) @@ plainto_tsquery('simple', public.immutable_unaccent('ecriture'))
