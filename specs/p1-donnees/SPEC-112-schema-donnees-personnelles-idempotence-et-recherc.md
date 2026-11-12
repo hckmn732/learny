@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-105, SPEC-103]
 business_rules: []
 screens: []
-adrs: [ADR-0044, ADR-0062, ADR-0120, ADR-0219]
+adrs: [ADR-0044, ADR-0062, ADR-0120, ADR-0219, ADR-0247]
 visual: demo
 ---
 
@@ -112,4 +112,4 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; migrations
 
 ## 15. Décisions et hypothèses
 
-ADR-0044 fixe le format et l'expiration de l'export, ADR-0062 la recherche Postgres, ADR-0120 l'empreinte de requête et le rejeu concurrent des clés d'idempotence ; ADR-0219 tranche le conflit avec ADR-0206 (remplacée) et attribue la création des colonnes `request_hash` et `completed_at` à cette spécification. Les services de SPEC-208, 211 et 212 prendront la responsabilité des opérations métier ; cette spécification fixe le stockage et la fonction SQL.
+ADR-0044 fixe le format et l'expiration de l'export, ADR-0062 la recherche Postgres, ADR-0120 l'empreinte de requête et le rejeu concurrent des clés d'idempotence ; ADR-0219 tranche le conflit avec ADR-0206 (remplacée) et attribue la création des colonnes `request_hash` et `completed_at` à cette spécification. ADR-0247 consigne les décisions d'implémentation : politiques de lecture minimales des tables sources pour que `security invoker` fonctionne avant SPEC-113, répartition des politiques des quatre nouvelles tables, seuils et ordre de la recherche, nettoyage des extraits, frontière des `href`, validité de 24 h, consommation atomique des seaux et règle de téléchargement d'un export. Les services de SPEC-208, 211 et 212 prendront la responsabilité des opérations métier ; cette spécification fixe le stockage et la fonction SQL.
