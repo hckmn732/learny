@@ -1,0 +1,30 @@
+-- Projection stricte de la vue et compteur, lus avec les JWT réels (SPEC-111, CA-2/CA-3).
+
+## Colonnes de la vue (ordre réel)
+column | type
+--- | ---
+group_id | uuid
+user_id | uuid
+first_name | text
+current_module_position | smallint
+validated_modules | integer
+streak_days | integer
+
+## Alice (propriétaire et membre)
+group_id | user_id | first_name | current_module_position | validated_modules | streak_days
+--- | --- | --- | --- | --- | ---
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | 3bde6046-ae6e-4692-ae81-6270668601e5 | Alice | 2 | 1 | 0
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | d4c50fba-e555-4bbd-8f91-77dc03742771 | Bob | 1 | 1 | 7
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | 1b25754c-6d7c-4c97-ac3a-dbc841242a58 | Carol | 1 | 0 | 3
+compteur formations actives : 1
+
+## Bob (membre)
+group_id | user_id | first_name | current_module_position | validated_modules | streak_days
+--- | --- | --- | --- | --- | ---
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | 3bde6046-ae6e-4692-ae81-6270668601e5 | Alice | 2 | 1 | 0
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | d4c50fba-e555-4bbd-8f91-77dc03742771 | Bob | 1 | 1 | 7
+4eea9f04-eee8-4f2c-9e60-8bcfe608f07e | 1b25754c-6d7c-4c97-ac3a-dbc841242a58 | Carol | 1 | 0 | 3
+compteur formations actives : 1
+
+## Dave (non-membre, aucun accès)
+{"group":{"groups_visible":0},"rows":{"progress_visible":0}}

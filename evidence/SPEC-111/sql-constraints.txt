@@ -1,0 +1,73 @@
+-- Contraintes, index, déclencheurs, politiques et colonnes réels (SPEC-111, CA-1/CA-4).
+
+## Contraintes
+constraint | definition
+--- | ---
+formations_group_id_groups_id_fk | FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
+group_members_group_id_groups_id_fk | FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+group_members_left_at_check | CHECK (((left_at IS NULL) OR (left_at >= joined_at)))
+group_members_member_status_check | CHECK ((member_status = ANY (ARRAY['active'::formation_status, 'paused'::formation_status, 'completed'::formation_status])))
+group_members_pkey | PRIMARY KEY (group_id, user_id)
+group_members_user_id_profiles_id_fk | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+groups_code_rotated_at_check | CHECK ((code_rotated_at >= created_at))
+groups_formation_id_formations_id_fk | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE CASCADE
+groups_formation_id_unique | UNIQUE (formation_id)
+groups_invite_code_format_check | CHECK ((invite_code ~ '^LRN-[A-Z2-9]{4}$'::text))
+groups_invite_code_unique | UNIQUE (invite_code)
+groups_max_members_check | CHECK (((max_members >= 2) AND (max_members <= 10)))
+groups_owner_id_profiles_id_fk | FOREIGN KEY (owner_id) REFERENCES profiles(id) ON DELETE CASCADE
+groups_owner_membership_check | TRIGGER DEFERRABLE INITIALLY DEFERRED
+groups_pkey | PRIMARY KEY (id)
+
+## Index
+index | definition
+--- | ---
+group_members_group_id_active_idx | CREATE INDEX group_members_group_id_active_idx ON public.group_members USING btree (group_id) WHERE (left_at IS NULL)
+group_members_pkey | CREATE UNIQUE INDEX group_members_pkey ON public.group_members USING btree (group_id, user_id)
+group_members_user_id_idx | CREATE INDEX group_members_user_id_idx ON public.group_members USING btree (user_id)
+groups_formation_id_unique | CREATE UNIQUE INDEX groups_formation_id_unique ON public.groups USING btree (formation_id)
+groups_invite_code_unique | CREATE UNIQUE INDEX groups_invite_code_unique ON public.groups USING btree (invite_code)
+groups_owner_id_idx | CREATE INDEX groups_owner_id_idx ON public.groups USING btree (owner_id)
+groups_pkey | CREATE UNIQUE INDEX groups_pkey ON public.groups USING btree (id)
+
+## Déclencheurs
+table | trigger
+--- | ---
+group_members | group_members_owner_not_removed
+group_members | group_members_role_consistency
+groups | groups_owner_membership_check
+
+## Politiques RLS
+table | policy | command
+--- | --- | ---
+group_members | group_members_member_select | select
+group_members | group_members_owner_delete | delete
+group_members | group_members_owner_insert | insert
+group_members | group_members_owner_update | update
+groups | groups_member_select | select
+groups | groups_owner_delete | delete
+groups | groups_owner_insert | insert
+groups | groups_owner_update | update
+
+## Colonnes
+relation | column | type | nullable
+--- | --- | --- | ---
+group_member_progress | group_id | uuid | YES
+group_member_progress | user_id | uuid | YES
+group_member_progress | first_name | text | YES
+group_member_progress | current_module_position | smallint | YES
+group_member_progress | validated_modules | integer | YES
+group_member_progress | streak_days | integer | YES
+group_members | group_id | uuid | NO
+group_members | user_id | uuid | NO
+group_members | role | USER-DEFINED | NO
+group_members | member_status | USER-DEFINED | NO
+group_members | joined_at | timestamp with time zone | NO
+group_members | left_at | timestamp with time zone | YES
+groups | id | uuid | NO
+groups | formation_id | uuid | NO
+groups | owner_id | uuid | NO
+groups | invite_code | text | NO
+groups | max_members | smallint | NO
+groups | created_at | timestamp with time zone | NO
+groups | code_rotated_at | timestamp with time zone | NO

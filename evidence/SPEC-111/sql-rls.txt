@@ -1,0 +1,19 @@
+-- RLS réelle à trois JWT (SPEC-111, CA-4).
+
+Alice (propriétaire) voit :
+["Alice","Bob","Carol"]
+
+Bob (membre) voit les mêmes six champs :
+["Alice","Bob","Carol"]
+
+Dave (non-membre) :
+{"group":{"groups_visible":0},"rows":{"progress_visible":0}}
+
+Dave tente d’insérer une appartenance : 42501 Failed query: 
+          insert into public.group_members (group_id, user_id, role)
+          values ($1::uuid, $2::uuid, 'member')
+        
+params: 4eea9f04-eee8-4f2c-9e60-8bcfe608f07e,0a527cf9-e404-4e86-b3bf-ff4cf1d47321
+
+Politiques appliquées : groups_member_select, groups_owner_insert/update/delete,
+group_members_member_select, group_members_owner_insert/update/delete.
