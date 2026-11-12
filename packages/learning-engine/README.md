@@ -24,6 +24,12 @@ Import unique : `@learny/learning-engine`.
 - **Erreurs** (`src/errors.ts`) : `EngineError` (`INVALID_INPUT`, `INVALID_INSTANT`,
   `INVALID_PARAM`, `REVIEW_OUT_OF_ORDER`, `UNKNOWN_NOTION`, `INVALID_AVAILABILITY`) et
   `assertValid(schema, value)`. `assertAvailability` porte le code dédié de CL-6.
+- **Planificateur** (`src/planner/`) : `planSchedule({ formations, preferences, params,
+existingSlots, now })` place les activités au premier créneau compatible, réserve la marge après
+  chaque quiz et le quiz global quotidien, puis renvoie créneaux triés, conflits, capacité restante
+  et options BR-FOR-14. `replanSchedule` conserve terminés, manqués et déplacements manuels valides.
+  `findCompatibleSlots(activity, calendar, preferences, count = 3)` renvoie les prochains créneaux
+  libres. Les paramètres viennent de l'appelant (miroir de `ENGINE.planner`, ADR-0280).
 
 Les dossiers `fsrs/`, `mastery/`, `gaps/`, `draw/`, `global-quiz/`, `planner/`, `progress/`,
 `streak/` et `warmup/` sont les points d'accueil de SPEC-402 à SPEC-410.
