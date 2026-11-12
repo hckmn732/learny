@@ -331,3 +331,63 @@ export type {
 export * from './repositories/privacy';
 export * from './repositories/idempotency';
 export * from './repositories/search';
+// Two tables of the shared-formation domain and their enumerations (SPEC-111 EF-1, EF-2). The
+// group view, the active-formation counter and the invitation code live in the custom migration
+// `groups_rules` and in the repositories below (ADR-0246).
+export {
+  GROUP_INVITE_CODE_PATTERN,
+  GROUP_MEMBER_PROGRESS_COLUMNS,
+  GROUP_MEMBER_STATUSES,
+  GROUP_ROLES,
+  groupMembers,
+  groupRole,
+  groups,
+} from './schema/groups';
+export type {
+  Group,
+  GroupMember,
+  GroupMemberProgress,
+  GroupMemberStatus,
+  GroupRole,
+  NewGroup,
+  NewGroupMember,
+} from './schema/groups';
+
+// Invitation-code generation and the repository of shared formations (SPEC-111 EF-3 to EF-6,
+// ET-2, ET-3, ET-5).
+export {
+  INVITE_CODE_ALPHABET,
+  cryptoRandomIndex,
+  generateInviteCode,
+  isInviteCode,
+  parseInviteCode,
+} from './repositories/invite-code';
+export type { RandomIndexSource } from './repositories/invite-code';
+export {
+  countActiveFormations,
+  countActiveGroupMembers,
+  createGroup,
+  findGroupByInviteCode,
+  getGroup,
+  getGroupMemberProgress,
+  getGroupMembership,
+  joinGroup,
+  leaveGroup,
+  listGroupMembers,
+  listGroupProgress,
+  removeGroupMember,
+  rotateInviteCode,
+} from './repositories/groups';
+export type {
+  CreateGroupInput,
+  GroupCodeInput,
+  GroupMembershipRef,
+  GroupProgressInput,
+  GroupRef,
+  JoinGroupInput,
+  JoinGroupResult,
+  LeaveGroupInput,
+  LeaveGroupResult,
+  RemoveGroupMemberInput,
+  RotateInviteCodeInput,
+} from './repositories/groups';

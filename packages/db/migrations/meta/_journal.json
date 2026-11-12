@@ -169,6 +169,20 @@
       "when": 1794462648525,
       "tag": "0023_privacy_search_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1794462932545,
+      "tag": "0024_groups",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794462933237,
+      "tag": "0025_groups_rules",
+      "breakpoints": true
     }
   ]
 }

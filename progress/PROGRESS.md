@@ -1,28 +1,28 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T05:50:59.973Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T05:55:44.500Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 24 |
+| Terminées | 25 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 107 |
+| En attente de dépendances | 106 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **18.2 %** |
-| Avancement V1 | 19.4 % |
-| Prochaine action | start SPEC-111 — Schéma formations à plusieurs |
+| **Avancement global** | **18.9 %** |
+| Avancement V1 | 20.2 % |
+| Prochaine action | start SPEC-113 — Politiques RLS et tests d'isolation |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
-| P1 | Base de données, migrations et sécurité | 11/15 | CP-1 | ⏳ |
+| P1 | Base de données, migrations et sécurité | 12/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
@@ -59,9 +59,9 @@
 | [SPEC-108](../specs/p1-donnees/SPEC-108-schema-agenda-automatismes-et-serie.md) | Schéma agenda, automatismes et série | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-102, SPEC-103 |
 | [SPEC-109](../specs/p1-donnees/SPEC-109-schema-notifications.md) | Schéma notifications | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-102 |
 | [SPEC-110](../specs/p1-donnees/SPEC-110-schema-ia-et-facturation.md) | Schéma IA et facturation | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-102 |
-| [SPEC-111](../specs/p1-donnees/SPEC-111-schema-formations-a-plusieurs.md) | Schéma formations à plusieurs | P1 | 🟢 ready | 0 | — | SPEC-103 |
+| [SPEC-111](../specs/p1-donnees/SPEC-111-schema-formations-a-plusieurs.md) | Schéma formations à plusieurs | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-103 |
 | [SPEC-112](../specs/p1-donnees/SPEC-112-schema-donnees-personnelles-idempotence-et-recherc.md) | Schéma données personnelles, idempotence et recherche | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-105, SPEC-103 |
-| [SPEC-113](../specs/p1-donnees/SPEC-113-politiques-rls-et-tests-d-isolation.md) | Politiques RLS et tests d'isolation | P1 | ⏳ waiting | 0 | — | SPEC-102, SPEC-103, SPEC-104, SPEC-105, SPEC-106, SPEC-107, SPEC-108, SPEC-109, SPEC-110, SPEC-111, SPEC-112 |
+| [SPEC-113](../specs/p1-donnees/SPEC-113-politiques-rls-et-tests-d-isolation.md) | Politiques RLS et tests d'isolation | P1 | 🟢 ready | 0 | — | SPEC-102, SPEC-103, SPEC-104, SPEC-105, SPEC-106, SPEC-107, SPEC-108, SPEC-109, SPEC-110, SPEC-111, SPEC-112 |
 | [SPEC-114](../specs/p1-donnees/SPEC-114-stockage-des-fichiers.md) | Stockage des fichiers | P1 | ⏳ waiting | 0 | — | SPEC-104, SPEC-113 |
 | [SPEC-115](../specs/p1-donnees/SPEC-115-jeu-de-donnees-de-demonstration-et-fabriques.md) | Jeu de données de démonstration et fabriques | P1 | ⏳ waiting | 0 | — | SPEC-113 |
 | [SPEC-201](../specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md) | Socle API v1 et contrats | P2 | ⏳ waiting | 0 | — | SPEC-006, SPEC-101 |

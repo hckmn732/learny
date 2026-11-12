@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.132648">
+<testsuite name="p1/spec-111.spec.ts" timestamp="2026-11-12T05:53:44.428Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.253" errors="0">
+<testcase name="inspecte la progression de groupe @SPEC-111" classname="p1/spec-111.spec.ts" time="1.091">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/attachments/axe-3848a2761a29a897da42f49638b00fa51f05ea77.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/attachments/spec-111-group-a19e8ba4edad812d933a4f63a5e62126085e8011.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-inspecte-la-progression-de-groupe-SPEC-111-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="groupe conforme @SPEC-111 @visual @mobile" classname="p1/spec-111.spec.ts" time="1.162">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-desktop/attachments/axe-5b5555b356d5eaeb6bf68f8c5bf13b0839053550.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-111.spec.ts" timestamp="2026-11-12T05:53:44.428Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.18" errors="0">
+<testcase name="groupe conforme @SPEC-111 @visual @mobile" classname="p1/spec-111.spec.ts" time="1.18">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-mobile/attachments/axe-a8f092733c368c0908c73d8d3350a44b99e7ebc9.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-111-groupe-conforme-SPEC-111-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

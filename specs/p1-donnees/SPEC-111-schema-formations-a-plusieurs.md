@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-103]
 business_rules: [BR-GRP-01, BR-GRP-04, BR-GRP-05]
 screens: []
-adrs: [ADR-0035]
+adrs: [ADR-0035, ADR-0246]
 visual: demo
 ---
 
@@ -113,3 +113,5 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent. La capacit�
 ## 15. Décisions et hypothèses
 
 ADR-0035 fixe le programme commun, les données personnelles privées, dix membres et le code d'invitation. La copie du programme à la sortie est une transaction de SPEC-724 ; ce schéma conserve les clés nécessaires sans effectuer une sortie incomplète.
+
+ADR-0246 consigne les compléments d'implémentation : `member_status` réutilise `formation_status` avec un `check` limité à `active|paused|completed`, la clé étrangère croisée `formations.group_id -> groups` est ajoutée dans la migration personnalisée, la vérification du code et l'adhésion passent par la transaction service de SPEC-724, la vue est en `security definer` avec contrôle d'appartenance, et `count_active_formations` reste borné à `auth.uid()` malgré l'absence de politique de lecture sur `formations` avant SPEC-113. La fabrique de test n'écrit plus `email_confirmed_at`, colonne retirée par GoTrue v2.197.0 : les comptes de test sont créés sans confirmation explicite, ce qui ne change ni le profil ni la RLS.

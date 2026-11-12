@@ -167,7 +167,7 @@ export async function ensureDemoUser(): Promise<void> {
   const appMetadata = { provider: 'email', providers: ['email'] };
   await serviceDb().execute(sql`
     insert into auth.users (
-      id, instance_id, aud, role, email, email_confirmed_at,
+      id, instance_id, aud, role, email,
       raw_user_meta_data, raw_app_meta_data, created_at, updated_at
     )
     values (
@@ -176,7 +176,6 @@ export async function ensureDemoUser(): Promise<void> {
       'authenticated',
       'authenticated',
       ${demoEmail()},
-      now(),
       ${JSON.stringify(metadata)}::jsonb,
       ${JSON.stringify(appMetadata)}::jsonb,
       now(),

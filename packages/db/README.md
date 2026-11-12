@@ -198,6 +198,23 @@ HTML retirées). `searchUserContent` normalise la requête et borne `limit` entr
 politiques de lecture minimales des tables sources et les index GIN/trigrammes sont versionnés dans
 `0019_privacy_search_rules` (ADR-0247, SPEC-113 les auditera).
 
+### Formations à plusieurs (SPEC-111)
+
+`groups` relie une formation active à son propriétaire, un code `LRN-XXXX` unique (alphabet
+`A-Z2-9`) et une capacité de dix membres propriétaire inclus ; `group_members` porte
+`role owner|member`, un statut personnel `active|paused|completed` et les dates d'entrée/sortie. La
+clé étrangère croisée `formations.group_id -> groups` est ajoutée par `0019_groups_rules` ; les deux
+tables ont la RLS (lecture propriétaire/membre, écriture propriétaire) et des déclencheurs
+garantissent que l'appartenance du propriétaire existe et ne peut pas être supprimée (ADR-0246).
+
+La vue `group_member_progress` (`security definer`, filtrée par l'appartenance) ne projette que six
+colonnes : `group_id`, `user_id`, `first_name`, `current_module_position`, `validated_modules` et
+`streak_days`. `count_active_formations(user_id)` additionne les formations possédées actives et les
+appartenances actives sans double comptage ; l'adhésion verrouille la ligne du groupe et refuse le
+onzième membre. Les repositories de `src/repositories/groups.ts` fournissent création, recherche de
+code, adhésion, rotation, retrait et sortie avec copie ; `src/repositories/invite-code.ts` génère le
+code par tirage cryptographique avec source injectable.
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

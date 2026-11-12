@@ -1,0 +1,7 @@
+-- Deux adhésions concurrentes pour la dixième place (SPEC-111, CA-1/CL-1).
+-- Exécution réelle de deux transactions serviceDb indépendantes.
+
+Dixième : succès (déjà membre : false)
+Onzième : refus code=CONFLICT message=Le groupe est complet : dix membres au plus.
+membres actifs après la course : 10
+lignes d’appartenance après la course : 10

@@ -1017,6 +1017,44 @@ export const fr = {
         },
       },
     },
+    spec111: {
+      intro:
+        'Démonstration : une formation partagée, un groupe de trois membres et sa progression limitée. Le code affiché est factice et n’ouvre aucune invitation réelle ; seul le propriétaire peut le régénérer.',
+      code: {
+        title: 'Groupe',
+        intro:
+          'Le code identifie le groupe et suit le format LRN-XXXX. Le propriétaire est membre de son groupe et compte dans la capacité.',
+        label: 'Code d’invitation',
+        fake: 'Code factice, non valable pour une vraie invitation.',
+        formation: 'Programme partagé',
+      },
+      capacity: {
+        title: 'Capacité',
+        intro:
+          'Le propriétaire compte dans la limite de dix membres ; une place libérée par une sortie peut être reprise.',
+        gauge: 'Membres actifs',
+        value: (used: number, max: number) => `${String(used)} / ${String(max)} membres`,
+      },
+      progress: {
+        title: 'Progression limitée',
+        intro:
+          'Seuls le prénom, le module en cours, les modules validés et la série sont exposés ; les données personnelles de chaque membre restent privées.',
+        region: 'Progression des membres (tableau défilant)',
+        firstName: 'Prénom',
+        module: 'Module en cours',
+        validated: 'Modules validés',
+        streak: 'Série (jours)',
+        moduleLabel: (position: number) => `Module ${String(position)}`,
+      },
+      active: {
+        title: 'Formations actives',
+        intro:
+          'Le propriétaire est aussi membre de son groupe : sa formation n’est comptée qu’une fois. Une appartenance en pause n’est pas comptée.',
+        count: (value: number) =>
+          value === 1 ? '1 formation active' : `${String(value)} formations actives`,
+        rule: 'Formations possédées actives + appartenances actives, sans doublon.',
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
