@@ -110,3 +110,5 @@ export const billingRoutes = {
     errors: ['INVALID_SIGNATURE'],
   }),
 } as const;
+export const { billingCheckout, billingPortal, billingSubscription, billingWebhook } =
+  billingRoutes;

@@ -1066,6 +1066,61 @@ export const fr = {
         done: 'Vous êtes déconnecté.',
       },
     },
+    spec210: {
+      title: 'SPEC-210 — Abonnement Stripe (service)',
+      status: {
+        title: 'Statut',
+        labels: {
+          none: 'Aucun abonnement',
+          active: 'Actif',
+          past_due: 'Paiement en retard',
+          canceled: 'Résilié',
+          incomplete: 'Incomplet',
+        },
+        periodEnd: (date: string) => `Fin de période : ${date}`,
+        noPeriod: 'Fin de période : —',
+        managedAi: (available: boolean) =>
+          `IA fournie : ${available ? 'disponible' : 'indisponible'}`,
+        loading: 'Chargement du statut…',
+      },
+      actions: {
+        title: 'Actions',
+        subscribe: "S'abonner (simulé)",
+        failPayment: 'Simuler un échec de paiement',
+        cancel: 'Résilier',
+        replay: 'Rejouer le dernier webhook',
+        error: 'L’action a échoué.',
+      },
+      events: {
+        title: 'Événements',
+        columns: ['Type', 'Date', 'Résultat'],
+        empty: 'Aucun événement reçu.',
+        results: {
+          applied: 'Appliqué',
+          duplicate: 'Doublon ignoré',
+          stale: 'Ancien ignoré',
+          ignored: 'Ignoré',
+          unknown_customer: 'Client inconnu',
+        },
+      },
+      checkout: {
+        title: 'Paiement simulé',
+        notice: 'Paiement simulé — aucun débit',
+        intro:
+          'Abonnement à l’IA fournie. Aucune carte n’est demandée : ce parcours remplace Stripe Checkout en mode simulé.',
+        pay: 'Payer',
+        cancel: 'Annuler',
+        missing: 'Session de paiement introuvable ou expirée.',
+        error: 'L’opération a échoué.',
+      },
+      portal: {
+        title: 'Portail client simulé',
+        notice: 'Portail simulé — aucun débit',
+        intro: 'Gérez votre abonnement à l’IA fournie.',
+        cancel: 'Résilier',
+        back: 'Retour',
+      },
+    },
     spec203: {
       title: 'SPEC-203 — Événements, jobs et crons',
       loading: 'Chargement…',

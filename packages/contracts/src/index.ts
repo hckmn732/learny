@@ -18,3 +18,4 @@ export * from './routes';
 export * from './uploads';
 export * from './events';
 export * from './billing';
+export * from './dev-billing';

@@ -155,4 +155,9 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-203'),
   },
+  'SPEC-210': {
+    title: 'SPEC-210 — Abonnement Stripe (service)',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-210'),
+  },
 };
