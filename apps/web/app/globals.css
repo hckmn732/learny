@@ -1,7 +1,35 @@
 @import 'tailwindcss';
+@import '@learny/ui/theme.css';
+@source '../../../packages/ui/src';
 
-/* Product fonts loaded by app/fonts.ts (SPEC-006, EF-7). */
-@theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+/*
+ * Global base (SPEC-301, EF-10). `html { font-size: 90% }` reproduces the 90 % scale of the
+ * mockups (BR-NAV-06, ADR-0034) without `zoom`; every size token is expressed in rem.
+ */
+@layer base {
+  html {
+    font-size: 90%;
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--color-indigo-ink);
+  }
+
+  a:hover {
+    color: var(--color-indigo-ink-hover);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-indigo);
+    outline-offset: 2px;
+  }
 }
