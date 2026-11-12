@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="33.936633">
+<testsuite name="p4/spec-409.spec.ts" timestamp="2026-11-12T20:30:16.341Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.318" errors="0">
+<testcase name="Série et jalons @SPEC-409" classname="p4/spec-409.spec.ts" time="1.243">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/attachments/axe-86cdc8fb27c2711c9604941077adbe0b108e12ad.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/attachments/spec-409-demo-77d6a4b8a5b05ee1b0fdbcebf78a1aad1e564dff.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalons-SPEC-409-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Série et jalons, conformité visuelle @SPEC-409 @visual @mobile" classname="p4/spec-409.spec.ts" time="1.075">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-desktop/attachments/axe-222a3b4a9725fd46ef7193ce44ccac622b952aa4.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-409.spec.ts" timestamp="2026-11-12T20:30:16.341Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.065" errors="0">
+<testcase name="Série et jalons, conformité visuelle @SPEC-409 @visual @mobile" classname="p4/spec-409.spec.ts" time="1.065">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-mobile/attachments/axe-4b742a22302d89ad01a2eeb5d8bdc957a3b8e395.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-409-Série-et-jalon-304c3-elle-SPEC-409-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
