@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.43572">
+<testsuite name="p1/spec-107.spec.ts" timestamp="2026-11-12T03:56:34.938Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.487" errors="0">
+<testcase name="inspecte les états de mémorisation @SPEC-107" classname="p1/spec-107.spec.ts" time="1.273">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/attachments/axe-7e03bf42a7430ff1d56b78c1ff37f9ff9aa5831c.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/attachments/spec-107-memory-9c4b25d85c69c616c5a838259e7cd979681f6ac8.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-inspecte-les-états-de-mémorisation-SPEC-107-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="mémoire conforme @SPEC-107 @visual @mobile" classname="p1/spec-107.spec.ts" time="1.214">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-desktop/attachments/axe-a5bde619ff8ff64f4561296a9bc41c51fc51f01c.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-107.spec.ts" timestamp="2026-11-12T03:56:34.938Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.213" errors="0">
+<testcase name="mémoire conforme @SPEC-107 @visual @mobile" classname="p1/spec-107.spec.ts" time="1.213">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-mobile/attachments/axe-7d63a199819b3307525217d19a5fc71fb12f0721.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-107-mémoire-conforme-SPEC-107-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

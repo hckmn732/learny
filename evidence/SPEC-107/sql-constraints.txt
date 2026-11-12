@@ -1,0 +1,32 @@
+Contraintes des trois tables — SPEC-107 ET-1, ET-3
+
+gap_events | gap_events_evidence_check | CHECK (((evidence IS NULL) OR (jsonb_typeof(evidence) = 'object'::text)))
+gap_events | gap_events_nature_check | CHECK (((kind = 'cleared'::gap_event_kind) OR (nature IS NOT NULL)))
+gap_events | gap_events_notion_id_notions_id_fk | FOREIGN KEY (notion_id) REFERENCES notions(id) ON DELETE CASCADE
+gap_events | gap_events_pkey | PRIMARY KEY (id)
+gap_events | gap_events_user_id_profiles_id_fk | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+notion_states | notion_states_fsrs_check | CHECK (((jsonb_typeof(fsrs) = 'object'::text) AND (fsrs ? 'due'::text) AND (fsrs ? 'stability'::text) AND (fsrs ? 'difficulty'::text) AND (fsrs ? 'elapsed_days'::text) AND (fsrs ? 'scheduled_days'::text) AND (fsrs ? 'reps'::text) AND (fsrs ? 'lapses'::text) AND (fsrs ? 'state'::text) AND (fsrs ? 'last_review'::text) AND (jsonb_typeof((fsrs -> 'due'::text)) = 'string'::text) AND (jsonb_typeof((fsrs -> 'stability'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'difficulty'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'elapsed_days'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'scheduled_days'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'reps'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'lapses'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'state'::text)) = 'number'::text) AND (jsonb_typeof((fsrs -> 'last_review'::text)) = ANY (ARRAY['string'::text, 'null'::text]))))
+notion_states | notion_states_gap_cleared_at_check | CHECK (((gap_cleared_at IS NULL) OR (gap_detected_at IS NULL) OR (gap_cleared_at >= gap_detected_at)))
+notion_states | notion_states_gap_confused_nature_check | CHECK (((gap_confused_with IS NULL) OR (gap_nature = 'confusion'::gap_nature)))
+notion_states | notion_states_gap_confused_not_self_check | CHECK (((gap_confused_with IS NULL) OR (gap_confused_with <> notion_id)))
+notion_states | notion_states_gap_confused_with_notions_id_fk | FOREIGN KEY (gap_confused_with) REFERENCES notions(id) ON DELETE SET NULL
+notion_states | notion_states_gap_detected_at_check | CHECK (((gap_nature IS NULL) OR (gap_detected_at IS NOT NULL)))
+notion_states | notion_states_mastery_check | CHECK (((mastery >= (0)::numeric) AND (mastery <= (100)::numeric)))
+notion_states | notion_states_notion_id_notions_id_fk | FOREIGN KEY (notion_id) REFERENCES notions(id) ON DELETE CASCADE
+notion_states | notion_states_pkey | PRIMARY KEY (user_id, notion_id)
+notion_states | notion_states_revision_check | CHECK ((revision >= 0))
+notion_states | notion_states_success_count_check | CHECK ((success_count >= 0))
+notion_states | notion_states_user_id_profiles_id_fk | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+review_logs | review_logs_answer_id_answers_id_fk | FOREIGN KEY (answer_id) REFERENCES answers(id) ON DELETE SET NULL
+review_logs | review_logs_fsrs_after_check | CHECK (((fsrs_after IS NULL) OR (jsonb_typeof(fsrs_after) = 'object'::text)))
+review_logs | review_logs_fsrs_before_check | CHECK (((fsrs_before IS NULL) OR (jsonb_typeof(fsrs_before) = 'object'::text)))
+review_logs | review_logs_notion_id_notions_id_fk | FOREIGN KEY (notion_id) REFERENCES notions(id) ON DELETE CASCADE
+review_logs | review_logs_pkey | PRIMARY KEY (id)
+review_logs | review_logs_time_ms_check | CHECK (((time_ms IS NULL) OR (time_ms >= 0)))
+review_logs | review_logs_user_id_profiles_id_fk | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+
+Déclencheurs
+gap_events | gap_events_append_only | CREATE TRIGGER gap_events_append_only BEFORE UPDATE ON public.gap_events FOR EACH ROW EXECUTE FUNCTION reject_gap_event_update()
+notion_states | notion_states_confusion_same_formation | CREATE TRIGGER notion_states_confusion_same_formation BEFORE INSERT OR UPDATE OF gap_confused_with, notion_id ON public.notion_states FOR EACH ROW EXECUTE FUNCTION assert_gap_confusion_same_formation()
+notion_states | set_updated_at | CREATE TRIGGER set_updated_at BEFORE UPDATE ON public.notion_states FOR EACH ROW EXECUTE FUNCTION set_updated_at()
+review_logs | review_logs_append_only | CREATE TRIGGER review_logs_append_only BEFORE UPDATE ON public.review_logs FOR EACH ROW EXECUTE FUNCTION reject_review_log_update()
