@@ -1,0 +1,121 @@
+=== SPEC-110 — tables, RLS et politiques (base locale, horloge de référence 2026-11-11T12:20:00Z) ===
+   tablename    | rowsecurity 
+----------------+-------------
+ ai_calls       | t
+ ai_credentials | t
+ ai_task_models | t
+ subscriptions  | t
+(4 rows)
+
+
+=== Énumérations ===
+       typname       |                           labels                            
+---------------------+-------------------------------------------------------------
+ ai_call_status      | {ok,error,refused,capped,invalid_output}
+ ai_provider         | {anthropic,openai,mistral,deepseek,openai_compatible,local}
+ ai_task             | {programme,course,gaps,tutor,light}
+ credential_status   | {untested,qualified,failed}
+ subscription_status | {none,active,past_due,canceled,incomplete}
+(5 rows)
+
+
+=== Colonnes numériques et défauts ===
+  table_name   |    column_name     |  data_type   | numeric_precision | numeric_scale |       column_default        | is_nullable 
+---------------+--------------------+--------------+-------------------+---------------+-----------------------------+-------------
+ ai_calls      | batch              | boolean      |                   |               | false                       | NO
+ ai_calls      | cache_read_tokens  | integer      |                32 |             0 | 0                           | NO
+ ai_calls      | cache_write_tokens | integer      |                32 |             0 | 0                           | NO
+ ai_calls      | cost_usd           | numeric      |                12 |             6 | '0'::numeric                | NO
+ ai_calls      | input_tokens       | integer      |                32 |             0 | 0                           | NO
+ ai_calls      | latency_ms         | integer      |                32 |             0 | 0                           | NO
+ ai_calls      | managed            | boolean      |                   |               | false                       | NO
+ ai_calls      | output_tokens      | integer      |                32 |             0 | 0                           | NO
+ ai_calls      | status             | USER-DEFINED |                   |               |                             | NO
+ subscriptions | daily_cap_usd      | numeric      |                12 |             6 | 1.5                         | NO
+ subscriptions | status             | USER-DEFINED |                   |               | 'none'::subscription_status | NO
+(11 rows)
+
+
+=== Contraintes CHECK des quatre tables ===
+   table_name   |                  conname                   |                                                                 definition                                                                  
+----------------+--------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------
+ ai_calls       | ai_calls_cache_read_tokens_check           | CHECK ((cache_read_tokens >= 0))
+ ai_calls       | ai_calls_cache_write_tokens_check          | CHECK ((cache_write_tokens >= 0))
+ ai_calls       | ai_calls_cost_usd_check                    | CHECK ((cost_usd >= (0)::numeric))
+ ai_calls       | ai_calls_error_code_check                  | CHECK (((error_code IS NULL) OR ((char_length(error_code) >= 1) AND (char_length(error_code) <= 80))))
+ ai_calls       | ai_calls_input_tokens_check                | CHECK ((input_tokens >= 0))
+ ai_calls       | ai_calls_latency_ms_check                  | CHECK ((latency_ms >= 0))
+ ai_calls       | ai_calls_model_check                       | CHECK (((char_length(model) >= 1) AND (char_length(model) <= 200)))
+ ai_calls       | ai_calls_output_tokens_check               | CHECK ((output_tokens >= 0))
+ ai_credentials | ai_credentials_base_url_check              | CHECK (((base_url IS NULL) OR ((char_length(base_url) >= 1) AND (char_length(base_url) <= 2048))))
+ ai_credentials | ai_credentials_encrypted_key_check         | CHECK (((encrypted_key IS NULL) OR (octet_length(encrypted_key) >= 29)))
+ ai_credentials | ai_credentials_key_last4_check             | CHECK ((((encrypted_key IS NULL) AND (key_last4 IS NULL)) OR ((encrypted_key IS NOT NULL) AND (char_length(key_last4) = 4))))
+ ai_credentials | ai_credentials_key_required_check          | CHECK (((provider = 'local'::ai_provider) OR (encrypted_key IS NOT NULL)))
+ ai_credentials | ai_credentials_label_check                 | CHECK (((char_length(label) >= 1) AND (char_length(label) <= 80)))
+ ai_credentials | ai_credentials_qualification_check         | CHECK ((jsonb_typeof(qualification) = 'object'::text))
+ ai_task_models | ai_task_models_model_id_check              | CHECK (((char_length(model_id) >= 1) AND (char_length(model_id) <= 200)))
+ subscriptions  | subscriptions_daily_cap_usd_check          | CHECK ((daily_cap_usd > (0)::numeric))
+ subscriptions  | subscriptions_stripe_customer_id_check     | CHECK (((stripe_customer_id IS NULL) OR ((char_length(stripe_customer_id) >= 1) AND (char_length(stripe_customer_id) <= 255))))
+ subscriptions  | subscriptions_stripe_subscription_id_check | CHECK (((stripe_subscription_id IS NULL) OR ((char_length(stripe_subscription_id) >= 1) AND (char_length(stripe_subscription_id) <= 255))))
+(18 rows)
+
+
+=== Clés étrangères ===
+   table_name   |                      conname                      |                                  definition                                  
+----------------+---------------------------------------------------+------------------------------------------------------------------------------
+ ai_calls       | ai_calls_formation_id_formations_id_fk            | FOREIGN KEY (formation_id) REFERENCES formations(id) ON DELETE SET NULL
+ ai_calls       | ai_calls_user_id_profiles_id_fk                   | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ ai_credentials | ai_credentials_user_id_profiles_id_fk             | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ ai_task_models | ai_task_models_credential_id_ai_credentials_id_fk | FOREIGN KEY (credential_id) REFERENCES ai_credentials(id) ON DELETE SET NULL
+ ai_task_models | ai_task_models_user_id_profiles_id_fk             | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+ subscriptions  | subscriptions_user_id_profiles_id_fk              | FOREIGN KEY (user_id) REFERENCES profiles(id) ON DELETE CASCADE
+(6 rows)
+
+
+=== Index ===
+   tablename    |                  indexname                  |                                                           indexdef                                                           
+----------------+---------------------------------------------+------------------------------------------------------------------------------------------------------------------------------
+ ai_calls       | ai_calls_formation_id_idx                   | CREATE INDEX ai_calls_formation_id_idx ON public.ai_calls USING btree (formation_id)
+ ai_calls       | ai_calls_pkey                               | CREATE UNIQUE INDEX ai_calls_pkey ON public.ai_calls USING btree (id)
+ ai_calls       | ai_calls_user_id_created_at_idx             | CREATE INDEX ai_calls_user_id_created_at_idx ON public.ai_calls USING btree (user_id, created_at)
+ ai_credentials | ai_credentials_pkey                         | CREATE UNIQUE INDEX ai_credentials_pkey ON public.ai_credentials USING btree (id)
+ ai_credentials | ai_credentials_user_id_created_at_idx       | CREATE INDEX ai_credentials_user_id_created_at_idx ON public.ai_credentials USING btree (user_id, created_at)
+ ai_task_models | ai_task_models_credential_id_idx            | CREATE INDEX ai_task_models_credential_id_idx ON public.ai_task_models USING btree (credential_id)
+ ai_task_models | ai_task_models_pkey                         | CREATE UNIQUE INDEX ai_task_models_pkey ON public.ai_task_models USING btree (user_id, task)
+ subscriptions  | subscriptions_pkey                          | CREATE UNIQUE INDEX subscriptions_pkey ON public.subscriptions USING btree (user_id)
+ subscriptions  | subscriptions_stripe_customer_id_unique     | CREATE UNIQUE INDEX subscriptions_stripe_customer_id_unique ON public.subscriptions USING btree (stripe_customer_id)
+ subscriptions  | subscriptions_stripe_subscription_id_unique | CREATE UNIQUE INDEX subscriptions_stripe_subscription_id_unique ON public.subscriptions USING btree (stripe_subscription_id)
+(10 rows)
+
+
+=== Politiques RLS ===
+   tablename    |         policyname         |  cmd   |                  qual                   |               with_check                
+----------------+----------------------------+--------+-----------------------------------------+-----------------------------------------
+ ai_calls       | ai_calls_owner_select      | SELECT | (user_id = ( SELECT auth.uid() AS uid)) | 
+ ai_credentials | ai_credentials_owner_all   | ALL    | (user_id = ( SELECT auth.uid() AS uid)) | (user_id = ( SELECT auth.uid() AS uid))
+ ai_task_models | ai_task_models_owner_all   | ALL    | (user_id = ( SELECT auth.uid() AS uid)) | (user_id = ( SELECT auth.uid() AS uid))
+ subscriptions  | subscriptions_owner_select | SELECT | (user_id = ( SELECT auth.uid() AS uid)) | 
+(4 rows)
+
+
+=== Déclencheurs ===
+   table_name   |          trigger_name           | event_manipulation 
+----------------+---------------------------------+--------------------
+ ai_credentials | set_updated_at                  | UPDATE
+ ai_task_models | ai_task_models_credential_owner | INSERT
+ ai_task_models | ai_task_models_credential_owner | UPDATE
+ subscriptions  | set_updated_at                  | UPDATE
+(4 rows)
+
+
+=== Vue et fonction ai_spend_today ===
+    relname     | relkind | reloptions |  owner   
+----------------+---------+------------+----------
+ ai_spend_today | v       |            | postgres
+(1 row)
+
+    proname     |                      args                      | security_definer | volatility 
+----------------+------------------------------------------------+------------------+------------
+ ai_spend_today | p_user_id uuid, p_now timestamp with time zone | t                | s
+(1 row)
+

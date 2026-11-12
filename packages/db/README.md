@@ -158,6 +158,21 @@ conflict do nothing` puis relecture), `createDelivery`, `getNotification`, `list
 `markNotificationRead`, `markAllNotificationsRead`, `getDelivery`,
 `listNotificationDeliveries` (restreint au propriétaire) et `updateDeliveryStatus`.
 
+### Clés IA, appels et facturation (SPEC-110)
+
+`ai_credentials` ne stocke aucun secret en clair : `encrypted_key` est un `bytea` AES-256-GCM
+`iv‖tag‖ciphertext` (au moins 29 octets), une clé hébergée l'exige et un modèle `local` peut s'en
+passer. Le repository refuse les champs textuels de clé brute et ne projette que `provider`,
+`label`, `key_last4`, `status` et `outside_eu` ; `getCredentialSecret` est le seul accès au chiffré,
+réservé au service de qualification (SPEC-505). `ai_task_models` porte une ligne par tâche et
+apprenant ; `resolveTaskModel` retombe sur l'IA fournie quand la clé est supprimée ou non qualifiée.
+`ai_calls` journalise chaque tentative, y compris un refus ou un plafonnement à coût nul, et
+`subscriptions` fixe le plafond quotidien (1,50 USD par défaut). `ai_spend_today(user_id,
+spent_usd)` agrège le jour civil dans `profiles.timezone` avec des bornes UTC ; la fonction accepte
+un instant injecté, exclut BYOK et coûts nuls, et filtre les revendications JWT pour qu'un compte ne
+lise que sa dépense (ADR-0245). RLS : clés et choix de modèle modifiables par leur propriétaire,
+journal et abonnement en lecture seule (écritures par le rôle service).
+
 ## Scripts
 
 | Commande                         | Effet                                                                                                                                      |

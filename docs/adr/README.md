@@ -123,3 +123,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0242](ADR-0242-persistance-fsrs-concurrence-optimiste-et-lecture-seule-des-.md) | Persistance FSRS, concurrence optimiste et lecture seule des journaux | Déduite | SPEC-107, ADR-0022, ADR-0025, ADR-0112, ADR-0149 |
 | [ADR-0243](ADR-0243-complements-d-implementation-du-schema-agenda-automatismes-e.md) | Compléments d'implémentation du schéma agenda, automatismes et série | Déduite | SPEC-108, ADR-0029, ADR-0033, ADR-0112, ADR-0113, ADR-0022 |
 | [ADR-0244](ADR-0244-complements-d-implementation-du-schema-notifications.md) | Compléments d'implémentation du schéma notifications | Déduite | SPEC-109, ADR-0031, ADR-0112, ADR-0214, ADR-0047 |
+| [ADR-0245](ADR-0245-schema-ia-et-facturation-secrets-chiffres-et-agregat-local.md) | Schéma IA et facturation : secrets chiffrés, RLS et agrégat local | Déduite | SPEC-110, ADR-0011, ADR-0012, ADR-0112, ADR-0215 |

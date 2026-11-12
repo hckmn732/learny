@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-102]
 business_rules: []
 screens: []
-adrs: [ADR-0011, ADR-0012]
+adrs: [ADR-0011, ADR-0012, ADR-0245]
 visual: demo
 ---
 
@@ -111,3 +111,5 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; migrations
 ## 15. Décisions et hypothèses
 
 ADR-0011 fixe BYOK ou abonnement et ADR-0012 le plafond géré. Les tarifs détaillés sont configurés selon ADR-0073 par SPEC-009 ; la vue stocke la dépense réellement journalisée et ne recalcule pas un tarif.
+
+ADR-0245 consigne les compléments d'implémentation : format et redaction du chiffré, répartition des politiques RLS, FK `on delete set null` et garde d'appartenance de la clé, agrégat `ai_spend_today` en fonction/vue `security definer` filtrée par les revendications JWT (le profil n'a pas encore de politique `authenticated`), et identifiants Stripe nuls mais uniques pour un compte gratuit. La réservation atomique du plafond reste livrée par SPEC-507.

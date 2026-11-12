@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.323739">
+<testsuite name="p1/spec-110.spec.ts" timestamp="2026-11-12T05:15:23.595Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.488" errors="0">
+<testcase name="inspecte les coûts IA @SPEC-110" classname="p1/spec-110.spec.ts" time="1.277">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/attachments/axe-a11b2cfe3c2b389a82079289ffc9c1877f697452.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/attachments/spec-110-ai-billing-301e4336faa5dd57c9c3798a255d371a185a1bb1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-inspecte-les-coûts-IA-SPEC-110-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="coûts IA conformes @SPEC-110 @visual @mobile" classname="p1/spec-110.spec.ts" time="1.211">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-desktop/attachments/axe-880868accb706bd4a43660fa29b03ca5d6f8a9b8.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-110.spec.ts" timestamp="2026-11-12T05:15:23.595Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.2" errors="0">
+<testcase name="coûts IA conformes @SPEC-110 @visual @mobile" classname="p1/spec-110.spec.ts" time="1.2">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-mobile/attachments/axe-712b4c97ab7bc421c987d3b13d8718122e8743f4.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-110-coûts-IA-conformes-SPEC-110-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

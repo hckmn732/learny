@@ -1,0 +1,58 @@
+=== SPEC-110 — RLS à deux comptes et absence du chiffré dans les lectures ===
+                                         set_config                                          
+---------------------------------------------------------------------------------------------
+ {"sub":"aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa","role":"authenticated","aud":"authenticated"}
+(1 row)
+
+              set_config              
+--------------------------------------
+ aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
+(1 row)
+
+                controle                 | lignes 
+-----------------------------------------+--------
+ Alice — clés visibles                   |      1
+ Alice — clés de Bob visibles            |      0
+ Alice — appels visibles                 |      1
+ Alice — appels de Bob visibles          |      0
+ Alice — abonnements visibles            |      1
+ Alice — abonnement de Bob visible       |      0
+ Alice — lignes de la vue ai_spend_today |      1
+(7 rows)
+
+            controle             | spent_usd 
+---------------------------------+-----------
+ Alice — dépense propre          |  0.250000
+ Alice — dépense de Bob demandée |         0
+(2 rows)
+
+
+--- Chiffré de Bob lu par Alice (attendu : 0 ligne) ---
+ chiffre_de_bob_visible 
+------------------------
+                      0
+(1 row)
+
+
+--- Écriture d’un appel par le client (attendu : RLS 42501) ---
+ERROR:  new row violates row-level security policy for table "ai_calls"
+
+--- Écriture d’un abonnement par le client (attendu : RLS 42501) ---
+ERROR:  new row violates row-level security policy for table "subscriptions"
+                                         set_config                                          
+---------------------------------------------------------------------------------------------
+ {"sub":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb","role":"authenticated","aud":"authenticated"}
+(1 row)
+
+              set_config              
+--------------------------------------
+ bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb
+(1 row)
+
+         controle          |  lignes  
+---------------------------+----------
+ Bob — clés visibles       |        1
+ Bob — clé d’Alice visible |        0
+ Bob — dépense propre      | 0.300000
+(3 rows)
+

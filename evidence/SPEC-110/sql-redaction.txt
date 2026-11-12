@@ -1,0 +1,13 @@
+=== SPEC-110 — preuve d’absence du chiffré dans les DTO et de clé brute en colonne ===
+--- Projection publique : cinq champs, jamais le chiffré ---
+        label         | key_last4 |  status   | outside_eu | encrypted_bytes | marker_only_in_bytea 
+----------------------+-----------+-----------+------------+-----------------+----------------------
+ Clé de démonstration | a1b2      | qualified | f          |              44 | t
+(1 row)
+
+
+--- Colonnes de clé brute (attendu : 0 ligne) ---
+ column_name 
+-------------
+(0 rows)
+

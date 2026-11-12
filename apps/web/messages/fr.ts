@@ -856,6 +856,85 @@ export const fr = {
         },
       },
     },
+    spec110: {
+      intro:
+        'Démonstration : deux clés personnelles (dont une hors UE et non qualifiée), cinq modèles choisis par tâche, quatre appels du 11 novembre 2026 à Paris et un abonnement actif. Les montants sont en USD ; la clé chiffrée n’est jamais affichée ni exposée.',
+      credentials: {
+        title: 'Clé personnelle',
+        intro:
+          'Chaque carte montre le libellé, les quatre derniers caractères, le statut de qualification et l’hébergement. Le chiffré reste côté serveur.',
+        provider: 'Fournisseur',
+        last4: 'Clé',
+        noKey: 'sans clé (modèle local)',
+        status: 'Statut',
+        region: 'Hébergement',
+        eu: 'UE',
+        outsideEu: 'hors UE',
+        secretNote:
+          'Aucune clé brute n’est stockée : la base ne contient que les octets AES-256-GCM iv‖tag‖ciphertext, jamais rendus au navigateur.',
+        providers: {
+          anthropic: 'Anthropic',
+          openai: 'OpenAI',
+          mistral: 'Mistral',
+          deepseek: 'DeepSeek',
+          openai_compatible: 'OpenAI compatible',
+          local: 'local',
+        },
+        statuses: {
+          untested: 'non testée',
+          qualified: 'qualifiée',
+          failed: 'en échec',
+        },
+      },
+      tasks: {
+        title: 'Modèle par tâche',
+        intro:
+          'Une clé non qualifiée n’est jamais choisie : la tâche bascule sur l’IA fournie, comme le montre la ligne « lacunes ».',
+        region: 'Modèles par tâche (tableau défilant)',
+        task: 'Tâche',
+        model: 'Modèle',
+        source: 'Source',
+        managed: 'IA fournie',
+        personal: (label: string) => `clé personnelle · ${label}`,
+        fallback: (label: string) => `IA fournie · ${label} non qualifiée`,
+        tasks: {
+          programme: 'programme',
+          course: 'cours',
+          gaps: 'lacunes',
+          tutor: 'tuteur',
+          light: 'tâches légères',
+        },
+      },
+      spend: {
+        title: 'Dépense du jour',
+        intro:
+          'Somme des appels gérés réellement facturés du jour civil de l’apprenant, dans son fuseau Europe/Paris.',
+        day: 'Jour local',
+        cap: 'Plafond quotidien',
+        calls: 'Appels',
+        breakdown: (billed: number, byok: number) =>
+          `${String(billed)} facturé(s) · ${String(byok)} BYOK exclu(s)`,
+        note: 'Les appels BYOK et les refus ou plafonnements à coût nul ne consomment pas le plafond de l’IA fournie.',
+      },
+      subscription: {
+        title: 'Abonnement',
+        intro:
+          'Le statut « actif » est la seule base du droit à l’IA fournie ; le plafond par défaut est de 1,50 USD par jour.',
+        status: 'Statut',
+        cap: 'Plafond quotidien',
+        periodEnd: 'Fin de période',
+        noPeriod: '—',
+        none: 'Aucun abonnement enregistré.',
+        note: 'Valeurs de démonstration : aucun paiement réel n’est effectué, aucun client Stripe n’est contacté.',
+        statuses: {
+          none: 'aucun',
+          active: 'actif',
+          past_due: 'en retard',
+          canceled: 'annulé',
+          incomplete: 'incomplet',
+        },
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
