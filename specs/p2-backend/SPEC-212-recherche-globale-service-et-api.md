@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-112, SPEC-201]
 business_rules: [BR-NAV-05]
 screens: []
-adrs: [ADR-0062]
+adrs: [ADR-0062, ADR-0217, ADR-0264]
 visual: demo
 ---
 
@@ -38,7 +38,7 @@ SPEC-112 a livré `search_user_content(q, limit)` (`security invoker`, `simple` 
 - **EF-2** — Réponse `200` : `{ query, groups: [{ kind, label, items: [{ id, title, snippet, highlights: [{ start, end }], href }], total }] }` ; ordre fixe des groupes : `notion` (« Notions »), `chapter` (« Chapitres »), `formation` (« Formations ») ; groupes vides omis ; aucun résultat → `groups: []`.
 - **EF-3** — Dans chaque groupe, items triés par `rank` décroissant puis `id` croissant ; `total` = nombre de lignes de ce type renvoyées par la fonction (avant coupe à `limit`).
 - **EF-4** — `snippet` : texte brut d'au plus 160 caractères centré sur la première correspondance, avec « … » aux coupures ; `highlights` : positions `[start, end[` des correspondances dans `snippet` (et dans `title` via `titleHighlights`), calculées sans casse ni accents. Aucun HTML n'est renvoyé.
-- **EF-5** — `href` : chemins internes en français — notion → `/formations/<fid>/notions/<nid>`, chapitre → `/formations/<fid>/modules/<mid>/cours#<sectionId>`, formation → `/formations/<fid>/programme` — fournis par la fonction SQL et validés (chemin relatif commençant par `/`).
+- **EF-5** — `href` : chemins internes en français — notion → `/formations/<fid>/notions/<nid>`, chapitre → `/formations/<fid>/modules/<mid>/cours#<sectionId>`, formation → `/formations/<fid>/programme` — fournis par la fonction SQL et validés (chemin relatif commençant par `/`) ; les routes effectives de notion et de chapitre sont fixées par ADR-0264.
 - **EF-6** — La page `/_dev/sdd/SPEC-212` propose un champ de recherche sur le jeu de démonstration, affiche la réponse groupée avec surlignage rendu par `<mark>`, et des requêtes d'exemple : « reseau » (sans accent), « RÉSEAU » (casse), « reseua » (faute), « a » (refusée), « ' OR 1=1 -- » (traitée comme texte).
 
 ## 6. Exigences techniques
@@ -123,3 +123,4 @@ Validations communes de `docs/engineering/testing.md` §7 ; en plus : la route f
 - ADR-0062 : recherche Postgres (`simple` + `unaccent`, trigrammes), sans moteur externe.
 - ADR-0217 (créé pour cette spécification) : bornes de `q` et `limit`, format groupé et ordre fixe, quota SQL `3 × limit`, extraits de 160 caractères, positions de surlignage, absence de journalisation du texte.
 - Hypothèse : les chemins `href` suivent les routes en français d'ADR-0046 ; si une route d'écran change dans une spécification ultérieure, la fonction SQL de SPEC-112 et ce contrat sont mis à jour ensemble.
+- ADR-0264 : les `href` sont ceux produits par `search_user_content`, alignés sur les routes d'écran réelles de `docs/product/screens.md` — notion `/formations/<fid>/programme#notion-<nid>`, chapitre `/formations/<fid>/modules/<mid>/cours?chapitre=<chapterId>`, formation `/formations/<fid>/programme`. Les exemples de notion et de chapitre d'EF-5 sont remplacés par cette décision ; le service ne réécrit pas le lien et valide seulement le chemin interne relatif.
