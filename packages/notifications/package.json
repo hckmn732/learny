@@ -6,7 +6,12 @@
   "exports": {
     ".": "./src/index.ts",
     "./email": "./src/email/index.ts",
-    "./push": "./src/push/index.ts"
+    "./push": "./src/push/index.ts",
+    "./notify": "./src/notify.ts",
+    "./routing": "./src/routing.ts",
+    "./templates": "./src/templates/index.ts",
+    "./digest": "./src/digest.ts",
+    "./deliveries": "./src/deliveries.ts"
   },
   "scripts": {
     "dev": "email dev --dir emails --port 3400",
