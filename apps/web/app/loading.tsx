@@ -1,11 +1,7 @@
-import { fr } from '../messages/fr';
+import { SystemLoadingView } from '../components/system/system-page-view';
 
+// Root loading state (SPEC-308 EF-1): a French heading, a skeleton and a way out. It is a server
+// component so the text and the home link stay visible without JavaScript (CL-1).
 export default function Loading() {
-  return (
-    <main className="mx-auto max-w-2xl p-8">
-      <p role="status" aria-live="polite" data-testid="system-loading">
-        {fr.system.loading}
-      </p>
-    </main>
-  );
+  return <SystemLoadingView />;
 }
