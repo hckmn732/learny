@@ -177,22 +177,33 @@ jobs:
         run: supabase start
       - name: Remettre la base à zéro
         run: pnpm db:reset
-      # Docker Hub rate-limits the shared runner IPs. Pull the two Docker Hub images of the
-      # self-hosted stack through the public Google mirror and tag them locally, so Compose
-      # reuses them instead of hitting Docker Hub again.
-      - name: Précharger les images Docker Hub via le miroir public
+      # ECR Public and Docker Hub rate-limit shared runner IPs. Pull every image of the
+      # self-hosted stack sequentially (parallel Compose pulls trigger ECR Public limits too),
+      # through the Google mirror for Docker Hub, so Compose finds them locally.
+      - name: Précharger les images de la pile auto-hébergée
         run: |
-          for image in inngest/inngest:v1.52.0 axllent/mailpit:v1.33.1; do
+          images="public.ecr.aws/supabase/postgres:17.11.0.006
+          public.ecr.aws/supabase/gotrue:v2.197.0
+          public.ecr.aws/supabase/postgrest:v16.5
+          public.ecr.aws/supabase/storage-api:v1.84.19
+          public.ecr.aws/supabase/kong:2.8.1
+          inngest/inngest:v1.52.0
+          axllent/mailpit:v1.33.1"
+          for image in $images; do
+            source="$image"
+            case "$image" in
+              inngest/*|axllent/*) source="mirror.gcr.io/$image" ;;
+            esac
             pulled=false
-            for attempt in 1 2 3; do
-              if docker pull "mirror.gcr.io/$image"; then
-                docker tag "mirror.gcr.io/$image" "$image"
+            for attempt in 1 2 3 4 5; do
+              if docker pull "$source"; then
+                if [ "$source" != "$image" ]; then docker tag "$source" "$image"; fi
                 pulled=true
                 break
               fi
-              sleep $((attempt * 10))
+              sleep $((attempt * 20))
             done
-            if [ "$pulled" != true ]; then
+            if [ "$pulled" != true ] || ! docker image inspect "$image" >/dev/null 2>&1; then
               echo "::error::impossible de précharger $image"
               exit 1
             fi
