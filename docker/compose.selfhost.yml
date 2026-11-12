@@ -99,6 +99,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      # The Storage API creates the `storage` schema and its tables on startup. SPEC-114's
+      # migration touches storage.buckets/storage.objects, so migrations run after it.
+      storage:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
     volumes:
@@ -172,10 +176,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
-      rest:
-        condition: service_started
     environment:
       ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
       SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
