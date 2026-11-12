@@ -7,11 +7,12 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 - Base : `/api/v1`. JSON UTF-8. Noms de champs en `camelCase`. Dates : ISO 8601 avec fuseau (`2026-11-11T13:20:00+01:00`) ; dates civiles `YYYY-MM-DD`.
 - Authentification : cookie de session Supabase (`@supabase/ssr`) ; toute route exige un utilisateur sauf `/health`, `/auth/*`, `/legal/*`, `/webhooks/*`, `/invitations/:code` (lecture publique minimale).
 - Wrapper unique `handler({ auth, input, output, rateLimit, idempotent }, fn)` dans `apps/web/lib/api/handler.ts` : vérifie la session, valide `params`, `query`, `body` avec Zod, applique la limitation de débit, l'idempotence (en-tête `Idempotency-Key` obligatoire sur les POST qui créent), journalise avec `requestId`, convertit les erreurs.
-- Erreurs : `application/problem+json` (RFC 9457) : `{ type, title, status, detail, code, requestId, errors? }`. Codes métier (`code`) en `SCREAMING_SNAKE_CASE`, catalogue dans `packages/core/src/errors.ts` (ex. `FORMATION_LIMIT_REACHED`, `MODULE_LOCKED`, `AI_UNAVAILABLE`, `AI_CAP_REACHED`, `RETRY_NOT_YET_ALLOWED`, `UPLOAD_TOO_LARGE`, `VALIDATION_FAILED`, `NOT_FOUND`, `FORBIDDEN`, `RATE_LIMITED`, `CONFLICT`).
+- Erreurs : `application/problem+json` (RFC 9457) : `{ type, title, status, detail, code, requestId, errors? }`. Codes métier (`code`) en `SCREAMING_SNAKE_CASE`, catalogue dans `packages/core/src/errors.ts` (ex. `FORMATION_LIMIT_REACHED`, `MODULE_LOCKED`, `AI_UNAVAILABLE`, `AI_CAP_REACHED`, `RETRY_NOT_YET_ALLOWED`, `UPLOAD_TOO_LARGE`, `UNSUPPORTED_TYPE`, `QUOTA_EXCEEDED`, `UPLOAD_INCOMPLETE`, `VALIDATION_FAILED`, `NOT_FOUND`, `FORBIDDEN`, `RATE_LIMITED`, `CONFLICT`).
 - Pagination : `?cursor=&limit=` (défaut 20, max 100) → `{ items, nextCursor }`.
 - Codes HTTP : 200 lecture/mise à jour, 201 création, 202 traitement asynchrone lancé (`{ jobId }`), 204 suppression, 400 validation, 401, 403, 404, 409 conflit, 422 règle métier, 429 limitation, 500.
 - Limitation de débit par défaut : 120 requêtes/min/utilisateur ; routes IA (`/tutor/*`, génération) : 20/min ; auth : 10/min/IP.
 - Les routes ne contiennent aucune logique métier : elles appellent `packages/services`.
+- Exception documentée (SPEC-206, ADR-0252) : `POST /chapters/:cid/uploads` exige l'en-tête `Idempotency-Key` mais l'idempotence est portée par le service, pas par le wrapper, car la réponse contient une URL signée qui ne doit jamais être stockée (la même clé renvoie la même ressource avec une URL fraîche).
 
 ## 2. Inventaire des routes
 
@@ -31,7 +32,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage | SPEC-604 |
 | POST `/formations/:fid/programme/generate` · POST `/formations/:fid/programme/import` · POST `/formations/:fid/programme/adjust` · POST `/formations/:fid/programme/validate` · GET `/formations/:fid/programme` | Programme | SPEC-605, 606 |
 | GET `/formations/:fid/modules/:mid` · PATCH `/chapters/:cid/progress` | Module, statut des chapitres | SPEC-607 |
-| POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
+| POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · GET `/resources/:rid/url` (URL de lecture signée) · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
 | POST `/modules/:mid/course/generate` · GET `/modules/:mid/course` · PATCH `/course-sections/:sid` · POST `/course-sections/:sid/report` · PUT `/courses/:cid/progress` · POST `/chapters/:cid/summary` | Cours | SPEC-608, 609 |
 | POST `/courses/:cid/conversations` · GET `/conversations/:id` · POST `/conversations/:id/messages` (flux SSE) · POST `/conversations/:id/self-test/answer` · POST `/tutor/cards` | Discussion tuteur | SPEC-610, 717 |
 | POST `/modules/:mid/quiz/attempts` · GET `/attempts/:aid` · PUT `/attempts/:aid/answers/:pos` · POST `/attempts/:aid/answers/:pos/check` · POST `/attempts/:aid/submit` · GET `/attempts/:aid/result` | Quiz, examen, exercice | SPEC-611, 613, 614 |

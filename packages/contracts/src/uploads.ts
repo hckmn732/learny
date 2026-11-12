@@ -7,6 +7,9 @@ import { defineRoute } from './define-route';
 // never written here: the service reads them from `@learny/config` (BR-APP-02, SPEC-009) and
 // answers a business code, not a generic validation error, when a bound is exceeded.
 
+/** ADR-0039, BR-APP-10 — label of a citation whose source was deleted. */
+export const DELETED_SOURCE_LABEL = 'source supprimée';
+
 /** Kinds of file an upload can carry in V1; audio and video stay V2 (ADR-0008, SPEC-206 ET-7). */
 export const UPLOAD_FILE_KINDS = ['pdf', 'image'] as const;
 export const UploadFileKind = z.enum(UPLOAD_FILE_KINDS);

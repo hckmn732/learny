@@ -114,3 +114,10 @@ Les validations de `docs/engineering/testing.md` §7 passent ; le contrôle port
 ## 15. Décisions et hypothèses
 
 ADR-0039 fixe les bornes et la conservation des citations, ADR-0058 les buckets/chemins/TTL. Les fichiers audio/vidéo restent V2 selon ADR-0008. SPEC-607 fournit le parcours utilisateur de dépôt.
+
+Décisions prises pendant l'implémentation (sans solliciter l'utilisateur) :
+
+- **ADR-0252** — suivi d'envoi dans `resources.metadata.upload` (réservation, empreinte, marqueurs), quota = octets finalisés + réservations vivantes, réservation expirée libérée au prochain envoi, et idempotence de création portée par le service afin qu'aucune URL signée ne soit stockée (`idempotency_keys` mémorise les réponses 24 h).
+- **ADR-0253** — jeton Storage de 60 s émis au nom de l'apprenant, lecture des octets réels par flux borné (`file-type`, `unpdf`), horloge réelle pour Storage et horloge injectable pour les réservations.
+- **ADR-0254** — refus définitifs libèrent l'envoi, objet absent ou tronqué réessayable (`UPLOAD_INCOMPLETE`), émission unique de `resource/uploaded` par revendication, suppression transactionnelle qui conserve les citations « source supprimée » et nettoyage Storage repris par `purgeDeletedBlobs`.
+- Les codes `UNSUPPORTED_TYPE`, `QUOTA_EXCEEDED` (422) et `UPLOAD_INCOMPLETE` (422) sont ajoutés au catalogue d'erreurs ; la lecture signée est exposée par `GET /api/v1/resources/:rid/url`.

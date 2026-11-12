@@ -58,7 +58,12 @@ const boundaryZones = [
 
 // Web modules explicitly allowed to use the owner-role client (ADR-0022, SPEC-201 ET-4): the
 // idempotency store of the API wrapper and the integration tests that inspect the database.
-const SERVICE_DB_ALLOWED = ['apps/web/lib/api/idempotency.ts', 'apps/web/test/integration/**'];
+const SERVICE_DB_ALLOWED = [
+  'apps/web/lib/api/idempotency.ts',
+  'apps/web/test/integration/**',
+  // End-to-end tests build their own committed fixtures (SPEC-206), like the integration tests.
+  'apps/web/e2e/**',
+];
 
 const restrictedImportBlocks = [
   {

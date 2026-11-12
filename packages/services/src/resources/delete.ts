@@ -8,6 +8,7 @@
 //
 // The transaction runs as the table owner because the `authenticated` role cannot delete passages
 // (no policy, SPEC-104): ownership is verified first under the caller's identity.
+import { DELETED_SOURCE_LABEL } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { serviceDb, sql } from '@learny/db';
 
@@ -15,7 +16,6 @@ import type { ServiceContext, SystemContext } from '../context';
 
 import { removeBlob } from './blob';
 import type { ResourceDeps } from './deps';
-import { DELETED_SOURCE_LABEL } from './limits';
 import { denyOrMissing, lockOwner, selectResource } from './queries';
 import { requireUser, toResult } from './result';
 

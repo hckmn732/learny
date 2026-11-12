@@ -232,7 +232,8 @@ export async function callApi<R extends AnyRoute>(
     init.body = JSON.stringify(typed.body);
   }
   if (options.signal !== undefined) init.signal = options.signal;
-  if (route.idempotent === true) {
+  if (route.idempotent === true || options.idempotencyKey !== undefined) {
+    // An explicit key is also sent to a route that handles idempotency itself (SPEC-206 uploads).
     headers['Idempotency-Key'] = options.idempotencyKey ?? crypto.randomUUID();
   }
 

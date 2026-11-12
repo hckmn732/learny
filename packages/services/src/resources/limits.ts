@@ -18,8 +18,7 @@ export const IMAGE_MIME_TYPES = [
 
 export const PDF_MIME_TYPE = 'application/pdf';
 
-/** ADR-0039, BR-APP-10 — label of a citation whose source was deleted. */
-export const DELETED_SOURCE_LABEL = 'source supprimée';
+export { DELETED_SOURCE_LABEL } from '@learny/contracts';
 
 const MEGABYTE = 1024 * 1024;
 
