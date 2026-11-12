@@ -90,11 +90,6 @@ const positiveInteger = () =>
     .refine((value) => Number.isInteger(value), 'Entier requis.')
     .refine((value) => value >= 1, 'Entier positif requis.');
 
-const masteryNumber = () =>
-  percentNumber().refine((value) => Math.abs(value * 100 - Math.round(value * 100)) < 1e-9, {
-    message: 'Maîtrise limitée à deux décimales.',
-  });
-
 /**
  * Business bounds of gap detection and clearance. The service builds them from `ENGINE.gaps` and
  * `ENGINE.mastery.threshold`; the defaults mirror those normative values (ADR-0282).
@@ -160,7 +155,7 @@ export const DetectGapInputSchema = z
   .object({
     notion: IdSchema,
     attempts: z.array(GapAttemptSchema),
-    mastery: masteryNumber(),
+    mastery: percentNumber(),
     now: InstantIsoSchema,
     existingGap: GapStateSchema.nullable().optional(),
     fsrsLapsed: z.boolean().optional(),
@@ -203,7 +198,7 @@ export const ClearGapInputSchema = z
   .object({
     gap: GapStateSchema,
     successes: z.array(AnswerRecordSchema),
-    mastery: masteryNumber(),
+    mastery: percentNumber(),
     now: InstantIsoSchema,
     notion: IdSchema.optional(),
     params: GapParamsSchema.optional(),
