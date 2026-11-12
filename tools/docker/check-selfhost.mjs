@@ -370,7 +370,14 @@ export function composeConfig(envFile, env = {}) {
 
 export function composeUp(project, envFile, env, { build = true } = {}) {
   const args = ['up', '-d', ...(build ? ['--build'] : [])];
-  const result = run('docker', composeCommand(project, envFile, args), { env, stdio: 'inherit' });
+  const command = composeCommand(project, envFile, args);
+  let result = run('docker', command, { env, stdio: 'inherit' });
+  if (result.status !== 0) {
+    // A transient Docker/network failure (observed on shared CI runners) must not leave the
+    // stack half-created: clean the project and retry once with the same images.
+    composeDown(project, envFile, env);
+    result = run('docker', command, { env, stdio: 'inherit' });
+  }
   return result.status === 0;
 }
 

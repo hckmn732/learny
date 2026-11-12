@@ -108,8 +108,11 @@ describe('[SPEC-204] désinscription', () => {
 
   it('CA-4 / CL-5 — un jeton altéré renvoie 400 sans rien changer', async () => {
     const learner = await createLearner();
-    const last = learner.token.at(-1);
-    const altered = `${learner.token.slice(0, -1)}${last === 'A' ? 'B' : 'A'}`;
+    // Alter the first signature character: the last base64url character may encode unused bits,
+    // so changing it can decode to the same bytes (observed on the CI runner).
+    const [payload = '', signature = ''] = learner.token.split('.');
+    const alteredSignature = `${signature[0] === 'A' ? 'B' : 'A'}${signature.slice(1)}`;
+    const altered = `${payload}.${alteredSignature}`;
 
     const json = await POST(
       request(`/api/v1/email/unsubscribe?token=${altered}`, 'POST', 'application/json'),
