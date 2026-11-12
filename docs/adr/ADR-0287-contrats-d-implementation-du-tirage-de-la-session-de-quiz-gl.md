@@ -1,4 +1,4 @@
-# ADR-0284 — Contrats d’implémentation du tirage de la session de quiz global
+# ADR-0287 — Contrats d’implémentation du tirage de la session de quiz global
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
