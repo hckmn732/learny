@@ -9,6 +9,89 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.3.0] — 2026-11-12
+
+### Ajouts
+
+- feat(SPEC-307): livre la page de résultats de recherche
+- feat(SPEC-307): ajoute la recherche globale à l'en-tête
+- feat(SPEC-306): panneau des notifications et cloche de l'en-tête
+- feat(SPEC-306): contrats, service et routes de la boîte de notifications
+- feat(SPEC-305): monte l'en-tête figé et le menu Mon compte
+- feat(SPEC-305): expose le DTO et le service de l'en-tête
+- feat(SPEC-304): documente les routes du menu dans OpenAPI
+- feat(SPEC-304): coquille et menu latéral
+- feat(SPEC-304): contrats et service du menu latéral
+- feat(SPEC-308): pages système et layout d'authentification
+- feat(SPEC-309): démontre le socle dans la galerie
+- feat(SPEC-309): ajoute le helper axe de @learny/testing
+- feat(SPEC-309): ajoute le socle d'accessibilité partagé
+- feat(SPEC-303): complète la galerie (structure, retours)
+- feat(SPEC-303): ajoute panneaux, menus et dialogues
+- feat(SPEC-303): ajoute les états vide, chargement et erreur
+- feat(SPEC-303): ajoute les composants de structure
+- feat(SPEC-302): complète la galerie avec les sections Actions et Saisie
+- feat(SPEC-302): ajoute les composants d'action, de saisie et les formulaires
+- feat(SPEC-301): ouvre la galerie /_dev/ui
+- feat(SPEC-301): branche polices et base globale
+- feat(SPEC-301): génère le thème Tailwind 4
+- feat(SPEC-301): ajoute les jetons de design
+
+### Corrections
+
+- fix(SPEC-305): nomme le déclencheur du compte avec ses initiales
+- fix(SPEC-303): installe @learny/ui dans l'image et résout gitleaks depuis le dépôt
+- fix(SPEC-302): fiabilise formulaires, onglets et frontière serveur/client
+
+### Documentation
+
+- docs(SPEC-307): consigne l'ADR-0276 et les critères d'acceptation
+- docs(SPEC-306): consigne l'ADR-0275 du panneau de notifications
+- docs(SPEC-305): consigne les critères d'acceptation
+- docs(SPEC-305): consigne l'ADR-0274 de l'en-tête
+- docs(SPEC-304): consigne ADR-0271 et complète la spécification
+- docs(SPEC-308): consigne ADR-0272 et les décisions de mise en page
+- docs(SPEC-309): consigne ADR-0273 et complète la section 15
+- docs(SPEC-303): consigne ADR-0270 et complète le README du paquet
+- docs(SPEC-302): consigne ADR-0269, la spec et le README du paquet
+- docs(SPEC-301): consigne ADR-0268 et la vérification des jetons
+
+### Tests
+
+- test(SPEC-306): couvre le groupement des notifications
+- test(SPEC-305): couvre le service de l'en-tête
+- test(SPEC-307): démontre la recherche globale au navigateur
+- test(SPEC-307): couvre la recherche globale et la page
+- test(SPEC-306): unitaires, intégration et e2e du panneau des notifications
+- test(SPEC-305): scénarios e2e, visuels et captures de référence
+- test(sdd): fiabilise l'infobulle SPEC-303 et sa baseline
+- test(SPEC-305): couvre l'en-tête, le menu et la déconnexion
+- test(SPEC-304): couvre le menu latéral et ses états
+- test(SPEC-308): couvre pages système, layout et conformité visuelle
+- test(SPEC-003): fige la mise en page du dashboard dans le visuel
+- test(SPEC-309): rend le port e2e configurable entre worktrees
+- test(SPEC-309): couvre le socle d'accessibilité
+- test(SPEC-303): couvre les composants de structure et de retour
+- test(SPEC-302): couvre les composants d'action et de saisie
+- test(sdd): stabilise les e2e après le thème SPEC-301
+- test(sdd): stabilise les tests d'intégration sur CI
+- test(SPEC-301): met à jour les lignes de base et l'accessibilité
+- test(SPEC-301): couvre jetons, thème et galerie
+
+### Construction
+
+- build(SPEC-303): ajoute les primitives Radix de structure
+- build(SPEC-302): ajoute Radix, cva, lucide et react-hook-form
+- build(SPEC-301): interdit les couleurs hors jetons
+- build(SPEC-301): crée le paquet @learny/ui
+
+### Intégration continue
+
+- ci(sdd): précharge les images Docker Hub via le miroir public
+- ci(sdd): installe actionlint pour le test SPEC-011
+- ci(sdd): prépare Chromium et le build pour l'intégration
+- ci(sdd): répare les jobs de la CI après P2
+
 ## [v0.2.0] — 2026-11-12
 
 ### Ajouts
