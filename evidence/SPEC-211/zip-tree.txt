@@ -1,0 +1,7 @@
+README.txt
+settings.json
+results.json
+conversations.json
+formations/sap-s-4hana-finance/programme.json
+formations/sap-s-4hana-finance/01-comptabilite-generale/cours.md
+apports/sap-s-4hana-finance/01-comptabilite-generale/Memo partie double.txt

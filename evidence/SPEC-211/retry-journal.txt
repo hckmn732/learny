@@ -1,0 +1,18 @@
+Journal de reprise après échec de `auth.admin.deleteUser` (CA-5, CL-8)
+Source : `packages/services/test/integration/personal-data.test.ts`, test
+« CA-5 — annulation à J+29 23:59 et reprise après échec de deleteUser ».
+
+1. Demande de suppression à 2026-11-11T12:20:00Z → échéance 2026-12-11T12:20:00Z.
+2. Horloge avancée à J+29 23:59 locale, puis annulation : les deux colonnes repassent à null.
+3. Exécution nocturne à l'échéance : capture sous verrou, `deletion_scheduled_for` nul → aucun
+   effacement, profil toujours présent.
+4. Nouvelle demande, horloge à J+31 ; l'admin Auth simulé échoue :
+   - étapes déjà faites : groupes, objets de stockage, anonymisation `ai_calls` ;
+   - `deletion_completed` n'est pas envoyé ;
+   - la demande reste due (profil et `deletion_scheduled_for` en place).
+5. Nouvelle exécution nocturne avec un admin Auth fonctionnel :
+   - `auth.admin.deleteUser` réussit, la cascade `profiles` efface les lignes métier ;
+   - `deletion_completed` est envoyé une seule fois à l'adresse capturée ;
+   - le tableau `information_schema` ne renvoie aucune ligne restante.
+
+Résultat observé : test vert, un seul e-mail `deletion_completed`, zéro ligne personnelle restante.

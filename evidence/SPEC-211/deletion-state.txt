@@ -1,0 +1,4 @@
+echeance_programmee : 2026-12-11T12:20:00.000Z
+annulee : oui
+compte_auth : supprimé
+lignes_non_nulles : 0
