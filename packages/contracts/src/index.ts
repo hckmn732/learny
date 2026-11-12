@@ -17,3 +17,4 @@ export * from './openapi';
 export * from './routes';
 export * from './uploads';
 export * from './events';
+export * from './search';
