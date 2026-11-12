@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.993736">
+<testsuite name="p4/spec-405.spec.ts" timestamp="2026-11-12T21:42:50.866Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.796" errors="0">
+<testcase name="Tirage des questions d’une tentative @SPEC-405" classname="p4/spec-405.spec.ts" time="1.379">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/attachments/axe-20bc3a8e872d0b0768f8628eb95b2e017545f947.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/attachments/spec-405-demo-b81317e478212936c0fbeef175a240c7ea4b93ab.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-questions-d’une-tentative-SPEC-405-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Tirage des questions d’une tentative @SPEC-405 @visual @mobile" classname="p4/spec-405.spec.ts" time="1.417">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/attachments/axe-5c7b6aabc4af8f4ce01a63d45eea4de8663c5385.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/attachments/spec-405-demo-visual-a3d360d28802a1afee85d5d210cfaf7da8ca9fa6.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-405.spec.ts" timestamp="2026-11-12T21:42:50.866Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.557" errors="0">
+<testcase name="Tirage des questions d’une tentative @SPEC-405 @visual @mobile" classname="p4/spec-405.spec.ts" time="1.557">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/attachments/axe-b57d17b4f59e8d020ec88ddd89ba11e0923203a3.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/attachments/spec-405-demo-visual-c4efddf27fb2669e5a876435a0be305d686bd117.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-405-Tirage-des-que-bea69-tive-SPEC-405-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
