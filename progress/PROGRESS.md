@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T09:41:05.597Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T10:55:07.010Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 33 |
+| Terminées | 34 |
 | En cours | 0 |
-| Prêtes | 5 |
+| Prêtes | 4 |
 | En attente de dépendances | 94 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **25.0 %** |
-| Avancement V1 | 26.6 % |
-| Prochaine action | start SPEC-204 — Service e-mail et gabarits |
+| **Avancement global** | **25.8 %** |
+| Avancement V1 | 27.4 % |
+| Prochaine action | start SPEC-205 — Notifications navigateur (Web Push) |
 
 ## Phases et checkpoints
 
@@ -23,7 +23,7 @@
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
-| P2 | Backend, API et services transverses | 5/12 | CP-2 | ⏳ |
+| P2 | Backend, API et services transverses | 6/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
@@ -67,7 +67,7 @@
 | [SPEC-201](../specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md) | Socle API v1 et contrats | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006, SPEC-101 |
 | [SPEC-202](../specs/p2-backend/SPEC-202-authentification-et-sessions.md) | Authentification et sessions | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-201, SPEC-102 |
 | [SPEC-203](../specs/p2-backend/SPEC-203-evenements-de-domaine-jobs-et-crons.md) | Événements de domaine, jobs et crons | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-007, SPEC-201 |
-| [SPEC-204](../specs/p2-backend/SPEC-204-service-e-mail-et-gabarits.md) | Service e-mail et gabarits | P2 | 🟢 ready | 0 | — | SPEC-203, SPEC-009 |
+| [SPEC-204](../specs/p2-backend/SPEC-204-service-e-mail-et-gabarits.md) | Service e-mail et gabarits | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-203, SPEC-009 |
 | [SPEC-205](../specs/p2-backend/SPEC-205-notifications-navigateur-web-push.md) | Notifications navigateur (Web Push) | P2 | 🟢 ready | 0 | — | SPEC-203, SPEC-109 |
 | [SPEC-206](../specs/p2-backend/SPEC-206-service-de-fichiers-et-envois.md) | Service de fichiers et envois | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-114, SPEC-201 |
 | [SPEC-207](../specs/p2-backend/SPEC-207-horloge-fuseaux-et-heures-calmes.md) | Horloge, fuseaux et heures calmes | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-101 |
