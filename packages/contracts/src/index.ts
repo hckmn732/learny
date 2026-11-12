@@ -22,6 +22,7 @@ export * from './push';
 export * from './notifications';
 export * from './personal-data';
 export * from './events';
+export * from './header';
 export * from './search';
 export * from './sidebar';
 export * from './billing';

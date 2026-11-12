@@ -33,6 +33,8 @@ export type AvatarProps = VariantProps<typeof avatarVariants> & {
   firstName?: string | null;
   lastName?: string | null;
   className?: string;
+  /** Set to false when the initials themselves carry the accessible name of their control. */
+  'aria-hidden'?: boolean;
   'data-testid'?: string;
 };
 
