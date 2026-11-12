@@ -162,7 +162,11 @@ describe('[SPEC-405] Tirage des questions d’une tentative', () => {
     expect(choices.length).toBe(8);
     expect(opens.length / result.size).toBeGreaterThanOrEqual(0.3);
     expect(opens.every((question) => question.format === 'open_question')).toBe(true);
-    expect(choices.every((question) => CHOICE_FORMATS.includes(question.format))).toBe(true);
+    expect(
+      choices.every((question) =>
+        (CHOICE_FORMATS as readonly BrickFormat[]).includes(question.format),
+      ),
+    ).toBe(true);
 
     expect(result.plan.reduce((sum, entry) => sum + entry.quota, 0)).toBe(12);
     expect(new Set(result.questions.map((question) => question.brickId)).size).toBe(12);
