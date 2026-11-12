@@ -14,7 +14,14 @@ const USER = '4b7c1c8e-6a0f-4d52-9d3e-6f9d1f0a1b11';
 
 describe('[SPEC-208] seau à jetons', () => {
   it('declares the profiles of ADR-0213', () => {
-    expect(RATE_PROFILES.default).toEqual({ capacity: 120, refillPerSecond: 2, key: 'user' });
+    expect(RATE_PROFILES.default).toEqual({
+      capacity: 120,
+      secondsPerToken: 0.5,
+      refillPerSecond: 2,
+      key: 'user',
+    });
+    expect(RATE_PROFILES.ai.secondsPerToken).toBe(3);
+    expect(RATE_PROFILES.auth.secondsPerToken).toBe(6);
     expect(RATE_PROFILES.ai.capacity).toBe(20);
     expect(RATE_PROFILES.ai.refillPerSecond).toBeCloseTo(1 / 3, 10);
     expect(RATE_PROFILES.ai.key).toBe('user');
