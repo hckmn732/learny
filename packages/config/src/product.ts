@@ -217,6 +217,117 @@ export const GROUP_RULES = {
   invitationCodePattern: 'LRN-XXXX',
 } as const;
 
+/**
+ * Defaults and bounds of the pure learning engine (SPEC-401 ET-4, ADR-0140). Every value mirrors a
+ * normative row of docs/product/business-rules.md or an existing constant of this file; when the
+ * same value already exists above, this object references it instead of duplicating it. The engine
+ * imports this object through the side-effect-free `@learny/config/product` subpath only.
+ */
+export const ENGINE = {
+  mastery: {
+    halfLifeDays: MEMORY_RULES.masteryHalfLifeDays,
+    threshold: MEMORY_RULES.masteryThresholdPercent,
+    decimals: 2,
+  },
+  fsrs: {
+    requestRetention: MEMORY_RULES.retentionTargetPercent / 100,
+    allowedRetentions: [0.85, 0.9, 0.95],
+    enableFuzz: false,
+    enableShortTerm: true,
+    medianWindow: 50,
+    medianMinSamples: 5,
+    defaultMedianMs: 20_000,
+    hardFactor: 2,
+    easyFactor: 0.5,
+  },
+  gaps: {
+    failureRatio: 0.5,
+    forgettingMinDays: 7,
+    clearSuccesses: MEMORY_RULES.masteryClearedSuccesses,
+    clearMinDaysApart: MEMORY_RULES.masteryClearedMinDays,
+    repeatedErrorAttempts: 2,
+  },
+  draw: {
+    defaultSize: QUIZ_RULES.defaultQuestionCount,
+    minSize: QUIZ_RULES.minQuestionCount,
+    maxSize: QUIZ_RULES.maxQuestionCount,
+    openShare: 0.3,
+    minOpen: 1,
+    gapWeight: 3,
+    weakWeight: 2,
+    baseWeight: 1,
+    totalPoints: QUIZ_RULES.scoreScale,
+  },
+  globalQuiz: {
+    maxMinutesDefault: MEMORY_RULES.dailyReviewMaxMinutes,
+    allowedMaxMinutes: MEMORY_RULES.dailyReviewOptions,
+    notionCostSec: 60,
+    sessionOverheadSec: 60,
+    microMinutesDefault: AUTOMATION_DEFAULTS.micro_seance.durationMin,
+    allowedMicroMinutes: AUTOMATION_OPTIONS.micro_seance.durationMin,
+    maintenanceMaxMinutes: 5,
+    cardDeckMax: 5,
+    groupMin: 2,
+    groupMax: 4,
+    formatSeconds: {
+      recall_card: 30,
+      choice_question: 45,
+      cloze: 45,
+      ordering: 60,
+      matching: 40,
+      categorization: 40,
+      open_question: 90,
+    },
+    gamePreferenceDefault: AUTOMATION_DEFAULTS.jeu_lacune.preference,
+  },
+  planner: {
+    moments: {
+      matin: { start: '09:00', end: '12:00' },
+      apres_midi: { start: '14:00', end: '17:00' },
+      soir: { start: '18:30', end: '21:00' },
+    },
+    revisionTailMinutes: 60,
+    globalQuizMinutes: 30,
+    sprintMinutes: AUTOMATION_DEFAULTS.sprint.durationMin,
+    sprintDaysBeforeDefault: AUTOMATION_DEFAULTS.sprint.daysBefore,
+    allowedSprintDaysBefore: AUTOMATION_OPTIONS.sprint.daysBefore,
+    validationQuizMinutes: 60,
+    bufferMinutes: 60,
+    contributionShare: 0.6,
+    granularityMinutes: 30,
+    mockExam: {
+      questions: QUIZ_RULES.mockExam.questionCount,
+      minutesPerQuestion: QUIZ_RULES.mockExam.minutesPerQuestion,
+      threshold: QUIZ_RULES.mockExam.thresholdPercent,
+    },
+    blockedDelayDays: 3,
+    blockedModuleExtraDays: 2,
+    maxHoursPerDay: ACCOUNT_RULES.studyHoursPerDay.max,
+    maintenanceGlobalQuizMinutes: 5,
+  },
+  retention: {
+    horizonsDays: [30, 60],
+    toleranceDays: 3,
+    sources: ['global_quiz', 'micro_session', 'offline'],
+  },
+  streak: {
+    readingMinSeconds: 300,
+    regularityDays: 14,
+    maxLookbackDays: 3660,
+  },
+  milestones: {
+    notionsRetained: FORMATION_RULES.milestones.retainedNotions,
+    streakDays: FORMATION_RULES.milestones.streakDays,
+    masteryThreshold: MEMORY_RULES.masteryThresholdPercent,
+  },
+  warmup: {
+    defaultCount: AUTOMATION_DEFAULTS.echauffement.questionCount,
+    allowedCounts: AUTOMATION_OPTIONS.echauffement.questionCount,
+    defaultScope: AUTOMATION_DEFAULTS.echauffement.scope,
+    yesterdayLookbackDays: 7,
+  },
+} as const;
+
 export type AccountRules = typeof ACCOUNT_RULES;
 export type ResourceRules = typeof RESOURCE_RULES;
 export type QuizRules = typeof QUIZ_RULES;
@@ -227,3 +338,4 @@ export type StudyDefaults = typeof STUDY_DEFAULTS;
 export type NotificationDefaults = typeof NOTIFICATION_DEFAULTS;
 export type FormationRules = typeof FORMATION_RULES;
 export type GroupRules = typeof GROUP_RULES;
+export type EngineParams = typeof ENGINE;

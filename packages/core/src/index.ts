@@ -27,6 +27,7 @@ export {
   instantsAtLocalTime,
   isQuietHours,
   isValidIanaZone,
+  localTimeToShiftedInstant,
   nextOutsideQuietHours,
   parseTimeZone,
   startOfUserDay,

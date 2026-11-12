@@ -19,6 +19,8 @@ import {
 } from './pricing';
 import {
   ACCOUNT_RULES,
+  AUTOMATION_DEFAULTS,
+  ENGINE,
   FORMATION_RULES,
   GROUP_RULES,
   MEMORY_RULES,
@@ -304,6 +306,58 @@ describe('[SPEC-009] product', () => {
     const ids = [...new Set(MIRROR.map((entry) => entry.br))];
     expect(ids.length).toBeGreaterThanOrEqual(20);
     for (const id of ids) expect(ruleRow(id)).toContain(id);
+  });
+});
+
+describe('[SPEC-401] concordance ENGINE', () => {
+  it.each([
+    ['mastery.halfLifeDays', ENGINE.mastery.halfLifeDays, 14, 'BR-LAC-01'],
+    ['mastery.threshold', ENGINE.mastery.threshold, 80, 'BR-LAC-01'],
+    ['fsrs.requestRetention', ENGINE.fsrs.requestRetention, 0.9, 'BR-MEM-01'],
+    ['fsrs.allowedRetentions', ENGINE.fsrs.allowedRetentions, [0.85, 0.9, 0.95], 'BR-MEM-01'],
+    ['fsrs.hardFactor', ENGINE.fsrs.hardFactor, 2, 'BR-MEM-02'],
+    ['fsrs.easyFactor', ENGINE.fsrs.easyFactor, 0.5, 'BR-MEM-02'],
+    ['globalQuiz.maxMinutesDefault', ENGINE.globalQuiz.maxMinutesDefault, 15, 'BR-AUT-07'],
+    [
+      'globalQuiz.allowedMaxMinutes',
+      ENGINE.globalQuiz.allowedMaxMinutes,
+      [10, 15, 20, 30],
+      'BR-AUT-07',
+    ],
+    ['globalQuiz.microMinutesDefault', ENGINE.globalQuiz.microMinutesDefault, 5, 'BR-AUT-02'],
+    ['planner.sprintDaysBeforeDefault', ENGINE.planner.sprintDaysBeforeDefault, 3, 'BR-AUT-08'],
+    ['planner.sprintMinutes', ENGINE.planner.sprintMinutes, 30, 'BR-AUT-08'],
+    ['planner.bufferMinutes', ENGINE.planner.bufferMinutes, 60, 'BR-AGE-03'],
+    ['planner.globalQuizMinutes', ENGINE.planner.globalQuizMinutes, 30, 'ADR-0029'],
+    ['warmup.defaultCount', ENGINE.warmup.defaultCount, 3, 'BR-AUT-03'],
+    ['warmup.allowedCounts', ENGINE.warmup.allowedCounts, [2, 3, 5], 'BR-AUT-03'],
+    ['milestones.notionsRetained', ENGINE.milestones.notionsRetained, 100, 'BR-GAM-03'],
+    ['milestones.streakDays', ENGINE.milestones.streakDays, 30, 'BR-GAM-03'],
+    ['retention.horizonsDays', ENGINE.retention.horizonsDays, [30, 60], 'BR-MEM-06'],
+    ['retention.toleranceDays', ENGINE.retention.toleranceDays, 3, 'BR-MEM-06'],
+  ])('%s vaut %j (%s)', (_key, actual, expected, rule) => {
+    expect(rule.length).toBeGreaterThan(0);
+    expect(actual).toEqual(expected);
+  });
+
+  it('references the existing product constants instead of duplicating them', () => {
+    expect(ENGINE.mastery.halfLifeDays).toBe(MEMORY_RULES.masteryHalfLifeDays);
+    expect(ENGINE.mastery.threshold).toBe(MEMORY_RULES.masteryThresholdPercent);
+    expect(ENGINE.fsrs.requestRetention).toBe(MEMORY_RULES.retentionTargetPercent / 100);
+    expect(ENGINE.globalQuiz.maxMinutesDefault).toBe(MEMORY_RULES.dailyReviewMaxMinutes);
+    expect(ENGINE.globalQuiz.allowedMaxMinutes).toBe(MEMORY_RULES.dailyReviewOptions);
+    expect(ENGINE.globalQuiz.microMinutesDefault).toBe(
+      AUTOMATION_DEFAULTS.micro_seance.durationMin,
+    );
+    expect(ENGINE.planner.sprintMinutes).toBe(AUTOMATION_DEFAULTS.sprint.durationMin);
+    expect(ENGINE.planner.sprintDaysBeforeDefault).toBe(AUTOMATION_DEFAULTS.sprint.daysBefore);
+    expect(ENGINE.milestones.notionsRetained).toBe(FORMATION_RULES.milestones.retainedNotions);
+    expect(ENGINE.milestones.streakDays).toBe(FORMATION_RULES.milestones.streakDays);
+    expect(ENGINE.warmup.defaultCount).toBe(AUTOMATION_DEFAULTS.echauffement.questionCount);
+    expect(ENGINE.gaps.clearSuccesses).toBe(MEMORY_RULES.masteryClearedSuccesses);
+    expect(ENGINE.gaps.clearMinDaysApart).toBe(MEMORY_RULES.masteryClearedMinDays);
+    // BR-QUI-06's 24-hour retry delay is a quiz rule, not an engine parameter.
+    expect(QUIZ_RULES.retryDelayHours).toBe(24);
   });
 });
 

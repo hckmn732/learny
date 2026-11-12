@@ -2,6 +2,9 @@ import type { Clock } from '@learny/core';
 
 // Reference instant of every deterministic test (ADR-0047): 13:20 in Europe/Paris.
 export const FIXED_TIME_ISO = '2026-11-11T12:20:00Z';
+// Canonical form of the same instant (SPEC-401 ET-7): instant strings of the engine always carry
+// milliseconds, so fixtures and generated samples compare exactly.
+export const REFERENCE_NOW = '2026-11-11T12:20:00.000Z';
 export const DISPLAY_TIME_ZONE = 'Europe/Paris';
 
 const ISO_INSTANT =

@@ -1,0 +1,28 @@
+{
+  "name": "@learny/learning-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./fixtures": "./src/fixtures/sap-reference.ts",
+    "./fixtures/builders": "./src/fixtures/builders.ts"
+  },
+  "scripts": {
+    "test": "vitest run --coverage",
+    "lint": "eslint --max-warnings=0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@learny/config": "workspace:*",
+    "@learny/core": "workspace:*",
+    "ts-fsrs": "^5.4.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@learny/testing": "workspace:*",
+    "@vitest/coverage-v8": "^5.1.0",
+    "fast-check": "^4.10.2",
+    "vitest": "^5.1.0"
+  }
+}
