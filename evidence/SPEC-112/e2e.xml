@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.792388">
+<testsuite name="p1/spec-112.spec.ts" timestamp="2026-11-12T05:47:44.823Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.687" errors="0">
+<testcase name="inspecte la recherche privée @SPEC-112" classname="p1/spec-112.spec.ts" time="1.363">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/attachments/axe-02e3068cac8ecd3e387d2fc196e58cb5141b4b56.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/attachments/spec-112-privacy-search-79bdfcf498d52ceb458b5f05146785a3636e61b4.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-inspecte-la-recherche-privée-SPEC-112-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="recherche conforme @SPEC-112 @visual @mobile" classname="p1/spec-112.spec.ts" time="1.324">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-desktop/attachments/axe-557188265f42ba66e8761d7340a1770f788a4df0.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-112.spec.ts" timestamp="2026-11-12T05:47:44.823Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.281" errors="0">
+<testcase name="recherche conforme @SPEC-112 @visual @mobile" classname="p1/spec-112.spec.ts" time="1.281">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-mobile/attachments/axe-8b0c8552ff35c4f0e6c556f58a9047accb925381.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-112-recherche-conforme-SPEC-112-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
