@@ -116,6 +116,7 @@ describe('[SPEC-108] planning schema', () => {
         'meta',
         'module_id',
         'moved_from_id',
+        'planner_key',
         'starts_at',
         'status',
         'title',
