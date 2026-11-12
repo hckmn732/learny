@@ -111,6 +111,128 @@ export const DevNotifyOutput = z.object({
 });
 export type DevNotifyOutput = z.infer<typeof DevNotifyOutput>;
 
+// SPEC-306 — inbox panel of the header bell (BR-NOT-01). The service groups each row in the
+// learner's IANA zone with the injected clock, so the browser never guesses a day boundary from
+// UTC (ET-3). One page of rows is enough for the panel; the filter and the counters are computed
+// from the same authenticated snapshot.
+
+export const NOTIFICATION_FILTERS = ['all', 'unread'] as const;
+export const NotificationFilter = z.enum(NOTIFICATION_FILTERS);
+export type NotificationFilter = z.infer<typeof NotificationFilter>;
+
+/** BR-NOT-01 — the three groups of the mockup, already resolved in the profile time zone. */
+export const NOTIFICATION_GROUPS = ['today', 'yesterday', 'earlier'] as const;
+export const NotificationGroup = z.enum(NOTIFICATION_GROUPS);
+export type NotificationGroup = z.infer<typeof NotificationGroup>;
+
+export const NotificationItem = z.object({
+  id: Uuid,
+  type: NotificationType,
+  icon: z.string().min(1).max(40),
+  title: z.string().min(1).max(120),
+  body: z.string().min(1).max(400),
+  /** Internal relative path of the target screen, validated by the database constraint. */
+  href: z.string().min(1).max(2048).startsWith('/'),
+  /** Formation name shown under the body, or null when the notification has no formation. */
+  formationTitle: z.string().min(1).max(120).nullable(),
+  createdAt: IsoDateTime,
+  readAt: IsoDateTime.nullable(),
+  group: NotificationGroup,
+});
+export type NotificationItem = z.infer<typeof NotificationItem>;
+
+/** Query of the paginated inbox read (ET-1): `filter=all|unread`, offset and bounded limit. */
+export const NotificationListQuery = z.object({
+  filter: NotificationFilter.default('all'),
+  limit: z.coerce.number().int().min(1).max(50).default(20),
+  offset: z.coerce.number().int().min(0).default(0),
+});
+export type NotificationListQuery = z.infer<typeof NotificationListQuery>;
+
+export const NotificationListDto = z.object({
+  items: z.array(NotificationItem),
+  /** All notifications of the learner, regardless of the current filter. */
+  total: z.number().int().min(0),
+  /** Unread notifications of the learner, regardless of the current filter (EF-2). */
+  unreadCount: z.number().int().min(0),
+  /** IANA zone used for grouping and for the hour of each row (ET-3, ET-5). */
+  timezone: z.string().min(1),
+});
+export type NotificationListDto = z.infer<typeof NotificationListDto>;
+
+export const NotificationUnreadCountDto = z.object({
+  count: z.number().int().min(0),
+});
+export type NotificationUnreadCountDto = z.infer<typeof NotificationUnreadCountDto>;
+
+/** Answer of both idempotent read mutations: the remaining unread count (EF-3). */
+export const NotificationReadDto = z.object({
+  unreadCount: z.number().int().min(0),
+});
+export type NotificationReadDto = z.infer<typeof NotificationReadDto>;
+
+export const notificationReadParams = z.object({ id: Uuid });
+
+/** ET-1 — paginated inbox of the authenticated learner, newest first. */
+export const notificationsList = defineRoute({
+  id: 'notifications.list',
+  method: 'GET',
+  path: '/api/v1/notifications',
+  auth: 'user',
+  query: NotificationListQuery,
+  output: NotificationListDto,
+  successStatus: 200,
+  summary:
+    'Notifications du seul utilisateur connecté, triées de la plus récente à la plus ancienne et groupées dans son fuseau (SPEC-306).',
+  errors: ['UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR'],
+});
+
+/** ET-1 — the badge count, an integer that is never negative. */
+export const notificationsUnreadCount = defineRoute({
+  id: 'notifications.unreadCount',
+  method: 'GET',
+  path: '/api/v1/notifications/unread-count',
+  auth: 'user',
+  output: NotificationUnreadCountDto,
+  successStatus: 200,
+  summary: 'Nombre de notifications non lues du seul utilisateur connecté (SPEC-306).',
+  errors: ['UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR'],
+});
+
+/** ET-2, CL-1 — marking one owned notification read; repeated calls write nothing more. */
+export const notificationRead = defineRoute({
+  id: 'notifications.read',
+  method: 'POST',
+  path: '/api/v1/notifications/:id/read',
+  auth: 'user',
+  params: notificationReadParams,
+  output: NotificationReadDto,
+  successStatus: 200,
+  summary:
+    'Marque lue une notification du seul utilisateur connecté et renvoie le compteur (SPEC-306).',
+  errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
+});
+
+/** ET-2, EF-3 — one idempotent call for the whole list; a second call creates no write. */
+export const notificationsReadAll = defineRoute({
+  id: 'notifications.readAll',
+  method: 'POST',
+  path: '/api/v1/notifications/read-all',
+  auth: 'user',
+  output: NotificationReadDto,
+  successStatus: 200,
+  summary:
+    'Marque lues toutes les notifications du seul utilisateur connecté, sans écriture au-delà de la première (SPEC-306).',
+  errors: ['UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR'],
+});
+
+export const notificationRoutes = {
+  notificationsList,
+  notificationsUnreadCount,
+  notificationRead,
+  notificationsReadAll,
+} as const;
+
 /** EF-8 — demonstration route: notify the signed-in learner with simulated settings and clock. */
 export const devNotify = defineRoute({
   id: 'dev.notify',

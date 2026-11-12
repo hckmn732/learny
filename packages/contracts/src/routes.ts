@@ -6,7 +6,7 @@ import { devJobsRoutes } from './dev-jobs';
 import { devEmailRoutes, emailRoutes } from './email';
 import { headerRoutes } from './header';
 import { healthRoutes } from './health';
-import { notificationsDevRoutes } from './notifications';
+import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { pushDevRoutes, pushRoutes } from './push';
 import { searchRoutes } from './search';
@@ -33,6 +33,7 @@ export const ROUTES = {
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,
+  ...notificationRoutes,
   ...notificationsDevRoutes,
   ...personalDataRoutes,
   ...personalDataDevRoutes,

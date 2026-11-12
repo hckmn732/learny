@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T18:48:58.445Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T18:50:55.968Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 48 |
+| Terminées | 49 |
 | En cours | 0 |
-| Prêtes | 1 |
+| Prêtes | 0 |
 | En attente de dépendances | 83 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **36.4 %** |
-| Avancement V1 | 38.7 % |
-| Prochaine action | start SPEC-306 — Panneau des notifications |
+| **Avancement global** | **37.1 %** |
+| Avancement V1 | 39.5 % |
+| Prochaine action | checkpoint CP-3 |
 
 ## Phases et checkpoints
 
@@ -24,7 +24,7 @@
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
-| P3 | Design system et coquille de l'application | 8/9 | CP-3 | ⏳ |
+| P3 | Design system et coquille de l'application | 9/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
@@ -81,7 +81,7 @@
 | [SPEC-303](../specs/p3-interface/SPEC-303-composants-de-base-ii-structure-et-retours.md) | Composants de base II : structure et retours | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-302 |
 | [SPEC-304](../specs/p3-interface/SPEC-304-coquille-menu-lateral.md) | Coquille : menu latéral | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-303, SPEC-202 |
 | [SPEC-305](../specs/p3-interface/SPEC-305-coquille-en-tete-fige-et-menu-mon-compte.md) | Coquille : en-tête figé et menu Mon compte | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-304 |
-| [SPEC-306](../specs/p3-interface/SPEC-306-panneau-des-notifications.md) | Panneau des notifications | P3 | 🟢 ready | 0 | — | SPEC-305, SPEC-209 |
+| [SPEC-306](../specs/p3-interface/SPEC-306-panneau-des-notifications.md) | Panneau des notifications | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-305, SPEC-209 |
 | [SPEC-307](../specs/p3-interface/SPEC-307-recherche-globale-interface.md) | Recherche globale : interface | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-305, SPEC-212 |
 | [SPEC-308](../specs/p3-interface/SPEC-308-pages-systeme-et-mise-en-page-d-authentification.md) | Pages système et mise en page d'authentification | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-303 |
 | [SPEC-309](../specs/p3-interface/SPEC-309-socle-d-accessibilite.md) | Socle d'accessibilité | P3 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-303 |

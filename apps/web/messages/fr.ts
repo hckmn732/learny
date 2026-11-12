@@ -72,6 +72,43 @@ export const fr = {
       signingOut: 'Déconnexion…',
       signOutError: 'La déconnexion a échoué. Vérifiez votre connexion puis réessayez.',
     },
+    notifications: {
+      panelTitle: 'Notifications',
+      readAll: 'Tout marquer comme lu',
+      readAllDone: 'Tout est lu',
+      filtersLabel: 'Filtrer les notifications',
+      filterAll: 'Toutes',
+      filterUnread: 'Non lues',
+      groups: {
+        today: 'Aujourd’hui',
+        yesterday: 'Hier',
+        earlier: 'Plus tôt',
+      },
+      unread: 'Non lue',
+      loading: 'Chargement des notifications…',
+      errorTitle: 'Impossible de charger les notifications.',
+      errorDescription: 'Vérifiez votre connexion puis réessayez.',
+      retry: 'Réessayer',
+      readError: 'Impossible de marquer la notification comme lue. Elle reste non lue.',
+      readAllError: 'Impossible de tout marquer comme lu.',
+      emptyAll: 'Aucune notification pour le moment. Les prochains rappels arriveront ici.',
+      emptyUnread: 'Vous avez tout lu. Les prochains rappels arriveront ici.',
+      manage: 'Gérer les notifications',
+      emailNote: 'Rappels aussi envoyés par e-mail',
+      announcement: (count: number) =>
+        count === 0
+          ? 'Aucune notification non lue.'
+          : count === 1
+            ? '1 notification non lue.'
+            : `${String(count)} notifications non lues.`,
+      readAnnouncement: (count: number) =>
+        count === 0
+          ? 'Notification marquée comme lue. Aucune notification non lue.'
+          : count === 1
+            ? 'Notification marquée comme lue. 1 notification non lue.'
+            : `Notification marquée comme lue. ${String(count)} notifications non lues.`,
+      allReadAnnouncement: 'Toutes les notifications sont marquées comme lues.',
+    },
     placeholder: {
       accueilTitle: 'Accueil',
       accueilBody: 'L’accueil complet arrive avec SPEC-603.',
@@ -415,6 +452,18 @@ export const fr = {
             'sign-out': 'Se déconnecter',
             clock: 'Heure',
             book: 'Cours',
+            'book-open': 'Cours ouvert',
+            refresh: 'Révisions',
+            'alert-triangle': 'Lacune',
+            'calendar-x': 'Séance à replacer',
+            'bar-chart': 'Bilan',
+            award: 'Palier',
+            gauge: 'Plafond IA',
+            'alert-circle': 'Tâche échouée',
+            download: 'Export',
+            users: 'Groupe',
+            sun: 'Programme du jour',
+            'play-circle': 'Reprendre',
             'check-circle': 'Validé',
             alert: 'Alerte',
             plus: 'Ajouter',
