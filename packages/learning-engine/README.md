@@ -26,6 +26,11 @@ Import unique : `@learny/learning-engine`.
 - **Paramètres** (`src/params.ts`) : `withParams('fsrs', { requestRetention: 0.95 })` fusionne les
   défauts `ENGINE` de `@learny/config/product` avec une surcharge partielle. Les tableaux sont
   remplacés, une valeur hors liste `allowed…` lève `INVALID_PARAM`.
+- **Répétition espacée** (`src/fsrs/`) : `personalMedianMs` et `recentValidTimes` calculent la
+  médiane personnelle par format sur les 50 réponses valides les plus récentes ; `createNotionCard`,
+  `gradeReview`, `applyReview` et `previewGrades` créent, notent, appliquent et prévisualisent une
+  carte `ts-fsrs` sans I/O. L'appelant fournit `ENGINE.fsrs` (rétention, fenêtre, minimum, défaut,
+  facteurs) ; `gradeReview` renvoie `rating: null` pour une réponse incomplète (CL-4 d'ADR-0278).
 - **Erreurs** (`src/errors.ts`) : `EngineError` (`INVALID_INPUT`, `INVALID_INSTANT`,
   `INVALID_PARAM`, `REVIEW_OUT_OF_ORDER`, `UNKNOWN_NOTION`, `INVALID_AVAILABILITY`) et
   `assertValid(schema, value)`. `assertAvailability` porte le code dédié de CL-6.

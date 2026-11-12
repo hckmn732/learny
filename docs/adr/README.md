@@ -154,4 +154,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0275](ADR-0275-panneau-des-notifications-instantane-groupe-cote-service-et-.md) | Panneau des notifications : instantané groupé côté service et lecture avant navigation | Déduite | SPEC-306 |
 | [ADR-0276](ADR-0276-recherche-globale-panneau-non-modal-et-page-rendue-cote-serveur.md) | Recherche globale : panneau non modal et page rendue côté serveur | Déduite | SPEC-307, SPEC-305, SPEC-212, SPEC-303, ADR-0034, ADR-0270, ADR-0274 |
 | [ADR-0277](ADR-0277-complements-d-implementation-du-socle-du-moteur.md) | Compléments d'implémentation du socle du moteur | Déduite | SPEC-401, ADR-0020, ADR-0140, ADR-0047, ADR-0254 |
+| [ADR-0278](ADR-0278-contrats-d-implementation-de-la-repetition-espacee-fsrs.md) | Contrats d’implémentation de la répétition espacée FSRS | Déduite | SPEC-402, ADR-0025, ADR-0140, ADR-0242 |
 | [ADR-0281](ADR-0281-complements-d-implementation-de-la-serie-et-des-jalons.md) | Compléments d'implémentation de la série et des jalons | Déduite | SPEC-409, ADR-0033, ADR-0047, ADR-0140 |

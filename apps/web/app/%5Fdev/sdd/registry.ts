@@ -172,6 +172,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-401'),
   },
+  'SPEC-402': {
+    title: 'SPEC-402 · Répétition espacée FSRS par notion',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-402'),
+  },
   'SPEC-403': {
     title: 'SPEC-403 · Calcul de la maîtrise',
     titleTestId: 'sdd-title',

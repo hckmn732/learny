@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="37.039466">
+<testsuite name="p4/spec-402.spec.ts" timestamp="2026-11-12T20:32:36.275Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.491" errors="0">
+<testcase name="Répétition espacée FSRS par notion @SPEC-402" classname="p4/spec-402.spec.ts" time="1.451">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/attachments/axe-1a0919a93c6358d30c0e6c917ca8e84b3fed39e6.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/attachments/spec-402-demo-b583914015a1f479fc00f73782e2b5d7fc2749ba.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-espacée-FSRS-par-notion-SPEC-402-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Répétition espacée FSRS par notion @SPEC-402 @visual @mobile" classname="p4/spec-402.spec.ts" time="1.04">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-desktop/attachments/axe-9ea2f722133c21ea8809994273f66da7279eba05.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-402.spec.ts" timestamp="2026-11-12T20:32:36.275Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.146" errors="0">
+<testcase name="Répétition espacée FSRS par notion @SPEC-402 @visual @mobile" classname="p4/spec-402.spec.ts" time="1.146">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-mobile/attachments/axe-ffea514854d2b507e0344997d76579bb631db8a4.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-402-Répétition-esp-c283c-tion-SPEC-402-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
