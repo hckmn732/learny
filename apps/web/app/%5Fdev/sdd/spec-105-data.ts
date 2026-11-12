@@ -236,14 +236,26 @@ export async function loadSpec105Demo(): Promise<Spec105Data> {
     `);
     const conversationId = conversationRows[0]?.id ?? '';
     await tx.execute(sql`
-      insert into public.tutor_messages (conversation_id, user_id, role, content, sources)
-      values
-        (${conversationId}::uuid, ${user.id}::uuid, 'learner',
-         'Comment reconnaître une clé de comptabilisation ?',
-         ${JSON.stringify([{ label: SOURCE_LABEL }])}::jsonb),
-        (${conversationId}::uuid, ${user.id}::uuid, 'tutor',
-         'La clé se lit dans le plan comptable : le premier chiffre indique la classe.',
-         ${JSON.stringify([{ label: SOURCE_LABEL }])}::jsonb)
+      insert into public.tutor_messages (
+        conversation_id, user_id, role, content, sources, created_at
+      )
+      values (
+        ${conversationId}::uuid, ${user.id}::uuid, 'learner',
+        'Comment reconnaître une clé de comptabilisation ?',
+        ${JSON.stringify([{ label: SOURCE_LABEL }])}::jsonb,
+        now()
+      )
+    `);
+    await tx.execute(sql`
+      insert into public.tutor_messages (
+        conversation_id, user_id, role, content, sources, created_at
+      )
+      values (
+        ${conversationId}::uuid, ${user.id}::uuid, 'tutor',
+        'La clé se lit dans le plan comptable : le premier chiffre indique la classe.',
+        ${JSON.stringify([{ label: SOURCE_LABEL }])}::jsonb,
+        now() + interval '1 second'
+      )
     `);
 
     return {
