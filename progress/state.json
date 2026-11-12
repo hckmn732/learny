@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T18:16:55.440Z",
+  "updatedAt": "2026-11-12T18:17:54.923Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -2308,11 +2308,11 @@
       "validations": {}
     },
     "SPEC-307": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-12T18:17:54.923Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-307-recherche-globale-interface",
       "commit": null,
       "lastError": null,
       "validations": {}
