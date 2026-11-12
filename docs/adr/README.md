@@ -154,3 +154,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0275](ADR-0275-panneau-des-notifications-instantane-groupe-cote-service-et-.md) | Panneau des notifications : instantané groupé côté service et lecture avant navigation | Déduite | SPEC-306 |
 | [ADR-0276](ADR-0276-recherche-globale-panneau-non-modal-et-page-rendue-cote-serveur.md) | Recherche globale : panneau non modal et page rendue côté serveur | Déduite | SPEC-307, SPEC-305, SPEC-212, SPEC-303, ADR-0034, ADR-0270, ADR-0274 |
 | [ADR-0277](ADR-0277-complements-d-implementation-du-socle-du-moteur.md) | Compléments d'implémentation du socle du moteur | Déduite | SPEC-401, ADR-0020, ADR-0140, ADR-0047, ADR-0254 |
+| [ADR-0280](ADR-0280-durees-derivees-et-identifiants-du-planificateur.md) | Durées dérivées et identifiants du planificateur | Déduite | SPEC-407 |
