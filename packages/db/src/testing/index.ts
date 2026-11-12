@@ -151,3 +151,5 @@ export async function asService<T>(tx: DbTx, fn: (tx: DbTx) => Promise<T>): Prom
 export function resetSequenceFreeIds(): Promise<void> {
   return Promise.resolve();
 }
+
+export * from './programme';

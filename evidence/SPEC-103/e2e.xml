@@ -1,0 +1,36 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="29.705571">
+<testsuite name="p1/spec-103-formations.spec.ts" timestamp="2026-11-12T01:13:00.942Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.384" errors="0">
+<testcase name="programme et contraintes @SPEC-103" classname="p1/spec-103-formations.spec.ts" time="1.204">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/attachments/axe-46f3bef8f98c84df6738b8793ac0400ae86a26e7.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/attachments/spec-103-demo-adbb5c6f697ecb38f47dfeb6c7f35c1f8d82542e.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-programme-et-contraintes-SPEC-103-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page programme conforme @SPEC-103 @visual" classname="p1/spec-103-formations.spec.ts" time="1.18">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-103-formations-pag-5496c-me-conforme-SPEC-103-visual-desktop/attachments/axe-8e3a70cecbe7856a11b4c42ffc1363bc2257bfdb.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-pag-5496c-me-conforme-SPEC-103-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-pag-5496c-me-conforme-SPEC-103-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-pag-5496c-me-conforme-SPEC-103-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-103-formations-pag-5496c-me-conforme-SPEC-103-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -433,6 +433,51 @@ export const fr = {
         },
       },
     },
+    spec103: {
+      intro:
+        'Chaque chargement construit un programme de 2 modules × 2 chapitres × 2 notions dans une transaction toujours annulée : aucune donnée ne survit à la requête.',
+      programme: {
+        title: 'Programme de démonstration',
+        module: (position: number, title: string, threshold: number) =>
+          `Module ${String(position)} · ${title} · seuil ${String(threshold)} %`,
+        chapter: (title: string) => title,
+        notion: (label: string) => label,
+        empty: 'Aucun module.',
+      },
+      constraints: {
+        title: 'Contraintes',
+        intro:
+          'Chaque tentative s’exécute dans un point de sauvegarde annulé : le programme de démonstration reste intact.',
+        name: 'Contrainte',
+        sqlstate: 'SQLSTATE',
+        expected: 'Attendu',
+        result: 'Résultat',
+        refused: 'Refusé comme attendu',
+        unexpected: 'Résultat inattendu',
+        accepted: 'Réorganisation en transaction acceptée',
+        cases: {
+          cl1: 'CL-1 · seuil de 59 hors bornes',
+          cl2: 'CL-2 · objectifs manquants hors cadrage',
+          cl4: 'CL-4 · notion d’un chapitre d’un autre module',
+          cl5: 'CL-5 · cycle de prérequis de programme',
+          cl6: 'CL-6 · confusion hors ordre canonique',
+          cl7: 'CL-7 · doublon de lien de programme',
+        },
+      },
+      fts: {
+        title: 'Recherche plein texte',
+        intro:
+          'La recherche « ecriture » (sans accent) utilise l’index d’expression notions_fts_idx et un dictionnaire simple.',
+        query: 'Requête',
+        results: 'Résultats',
+        resultLine: (count: number, label: string) =>
+          `${String(count)} résultat · ${label === '' ? 'aucune notion' : label}`,
+        plan: 'Plan EXPLAIN',
+        indexUsed: 'Index notions_fts_idx',
+        yes: 'utilisé',
+        no: 'non utilisé',
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',
