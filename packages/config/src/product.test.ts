@@ -335,7 +335,8 @@ describe('[SPEC-401] concordance ENGINE', () => {
     ['milestones.streakDays', ENGINE.milestones.streakDays, 30, 'BR-GAM-03'],
     ['retention.horizonsDays', ENGINE.retention.horizonsDays, [30, 60], 'BR-MEM-06'],
     ['retention.toleranceDays', ENGINE.retention.toleranceDays, 3, 'BR-MEM-06'],
-  ])('%s vaut %j (%s)', (_key, actual, expected) => {
+  ])('%s vaut %j (%s)', (_key, actual, expected, rule) => {
+    expect(rule.length).toBeGreaterThan(0);
     expect(actual).toEqual(expected);
   });
 
