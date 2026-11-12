@@ -87,7 +87,7 @@ export function toInstant(value: Instant): Date {
   if (Number.isNaN(ms))
     throw invalid('instant', 'Instant invalide : attendu ISO 8601 avec fuseau.');
   // Date.parse rolls an impossible day (2026-02-30) over to the next month in some engines.
-  parseCivilDay(value.slice(0, 10));
+  if (readCivilDay(value.slice(0, 10)) === null) throw invalid('instant', 'Instant invalide.');
   return new Date(ms);
 }
 
@@ -97,22 +97,26 @@ interface CivilDay {
   day: number;
 }
 
-function parseCivilDay(value: unknown): CivilDay {
+/** A strict `YYYY-MM-DD` that is a real calendar day, or null (ET-3). */
+function readCivilDay(value: unknown): CivilDay | null {
   const match = typeof value === 'string' ? CIVIL_DAY.exec(value) : null;
-  const year = Number(match?.[1]);
-  const month = Number(match?.[2]);
-  const day = Number(match?.[3]);
+  if (match === null) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
   const check = new Date(0);
   check.setUTCFullYear(year, month - 1, day);
-  if (
-    match === null ||
-    check.getUTCFullYear() !== year ||
-    check.getUTCMonth() !== month - 1 ||
-    check.getUTCDate() !== day
-  ) {
-    throw invalid('day', 'Date civile invalide : attendu AAAA-MM-JJ.');
-  }
-  return { year, month, day };
+  const real =
+    check.getUTCFullYear() === year &&
+    check.getUTCMonth() === month - 1 &&
+    check.getUTCDate() === day;
+  return real ? { year, month, day } : null;
+}
+
+function parseCivilDay(value: unknown): CivilDay {
+  const parsed = readCivilDay(value);
+  if (parsed === null) throw invalid('day', 'Date civile invalide : attendu AAAA-MM-JJ.');
+  return parsed;
 }
 
 function parseTimeOfDay(value: unknown, path: string): number {
@@ -321,4 +325,70 @@ export function instantsAtLocalTime(day: string, time: string, timeZone: string)
   const zone = parseTimeZone(timeZone);
   const wall = wallMsOf(parseCivilDay(day)) + parseTimeOfDay(time, 'time') * MS_PER_MINUTE;
   return instantsAtWall(wall, zone).map((ms) => new Date(ms));
+}
+
+/** BR-NOT-04 — default quiet hours, 21:00 to 08:00 (the range crosses midnight). */
+export const DEFAULT_QUIET_HOURS = { start: '21:00', end: '08:00' } as const;
+
+export interface QuietHoursWindow {
+  /** `HH:mm`, included. Defaults to 21:00. */
+  start?: string;
+  /** `HH:mm`, excluded. Defaults to 08:00. */
+  end?: string;
+  timeZone: string;
+}
+
+interface ParsedQuietHours {
+  start: number;
+  end: number;
+  timeZone: string;
+}
+
+function parseQuietHours(quiet: QuietHoursWindow): ParsedQuietHours {
+  return {
+    start: parseTimeOfDay(quiet.start ?? DEFAULT_QUIET_HOURS.start, 'start'),
+    end: parseTimeOfDay(quiet.end ?? DEFAULT_QUIET_HOURS.end, 'end'),
+    timeZone: parseTimeZone(quiet.timeZone),
+  };
+}
+
+/** The quiet range is `[start, end)` on the local clock, across midnight when `start > end`. */
+function isQuietAt(ms: number, { start, end, timeZone }: ParsedQuietHours): boolean {
+  if (start === end) return false;
+  const wall = wallOf(ms, timeZone);
+  const minutes = wall.getUTCHours() * 60 + wall.getUTCMinutes();
+  return start < end ? minutes >= start && minutes < end : minutes >= start || minutes < end;
+}
+
+/**
+ * Whether the instant falls in the user's quiet hours (EF-5, BR-NOT-06). The start is included
+ * (21:00 is quiet), the end excluded (08:00 may send); `start = end` means no quiet hours.
+ */
+export function isQuietHours(instant: Instant, quiet: QuietHoursWindow): boolean {
+  const parsed = parseQuietHours(quiet);
+  return isQuietAt(toInstant(instant).getTime(), parsed);
+}
+
+/**
+ * The instant itself when sending is allowed, otherwise the first end of the quiet range that
+ * follows it (EF-6). A boundary skipped by the clock in spring is replaced by the jump instant; an
+ * autumn boundary read twice gives the first reading after `instant`. The result is always a real
+ * instant outside quiet hours, and the search never loops.
+ */
+export function nextOutsideQuietHours(instant: Instant, quiet: QuietHoursWindow): Date {
+  const parsed = parseQuietHours(quiet);
+  const at = toInstant(instant).getTime();
+  if (!isQuietAt(at, parsed)) return new Date(at);
+
+  const today = civilDayOf(wallOf(at, parsed.timeZone));
+  const candidates: number[] = [];
+  for (let offset = 0; offset <= 2; offset += 1) {
+    const wall = wallMsOf(parseCivilDay(addCivilDays(today, offset))) + parsed.end * MS_PER_MINUTE;
+    candidates.push(...instantsFromWall(wall, parsed.timeZone));
+  }
+  const next = candidates.sort((a, b) => a - b).find((ms) => ms > at && !isQuietAt(ms, parsed));
+  if (next === undefined) {
+    throw new AppError('INTERNAL_ERROR', 'Fin des heures calmes introuvable.');
+  }
+  return new Date(next);
 }

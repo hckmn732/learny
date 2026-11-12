@@ -19,12 +19,15 @@ export type { ErrorContext, ErrorReporter, SafeSentryEvent } from './sentry';
 export type { LearnyLogger, LogLevel, SafeLogField, SafeLogFields } from './logger';
 export type { RequestContext } from './request-context';
 export {
+  DEFAULT_QUIET_HOURS,
   DEFAULT_TIME_ZONE,
   detectUserTimeZone,
   endOfUserDay,
   formatUserDate,
   instantsAtLocalTime,
+  isQuietHours,
   isValidIanaZone,
+  nextOutsideQuietHours,
   parseTimeZone,
   startOfUserDay,
   toInstant,
@@ -34,4 +37,4 @@ export {
   userLocalHour,
   userWeekday,
 } from './time';
-export type { Instant, UserZoneTime } from './time';
+export type { Instant, QuietHoursWindow, UserZoneTime } from './time';
