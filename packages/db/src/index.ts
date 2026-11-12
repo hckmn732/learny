@@ -189,3 +189,69 @@ export * from './repositories/schedule-slots';
 export * from './repositories/automation-actions';
 export * from './repositories/daily-activity';
 export * from './repositories/milestones';
+
+// Four tables of the AI/billing domain and their five enumerations (SPEC-110 EF-1 to EF-5). The
+// public credential projection is the only shape allowed to leave the server (ET-5).
+export {
+  AES_GCM_IV_BYTES,
+  AES_GCM_TAG_BYTES,
+  AI_CALL_STATUSES,
+  AI_CALL_STATUSES_VALUES,
+  AI_PROVIDERS,
+  AI_PROVIDERS_VALUES,
+  AI_TASKS,
+  AI_TASKS_VALUES,
+  CREDENTIAL_STATUSES,
+  CREDENTIAL_STATUSES_VALUES,
+  DEFAULT_DAILY_CAP_USD,
+  MIN_ENCRYPTED_KEY_BYTES,
+  PUBLIC_AI_CREDENTIAL_FIELDS,
+  SUBSCRIPTION_STATUSES,
+  SUBSCRIPTION_STATUSES_VALUES,
+  aiCallStatus,
+  aiCallStatusSchema,
+  aiCalls,
+  aiCredentials,
+  aiProvider,
+  aiProviderSchema,
+  aiTask,
+  aiTaskModels,
+  aiTaskSchema,
+  baseUrlSchema,
+  costUsdSchema,
+  credentialLabelSchema,
+  credentialStatus,
+  credentialStatusSchema,
+  dailyCapUsdSchema,
+  encryptedKeySchema,
+  isEncryptedKeyFormat,
+  keyLast4Schema,
+  latencyMsSchema,
+  modelIdSchema,
+  normalizeUsd,
+  qualificationSchema,
+  subscriptionStatus,
+  subscriptionStatusSchema,
+  subscriptions,
+  toPublicCredential,
+  tokenCountSchema,
+} from './schema/ai-billing';
+export type {
+  AiCall,
+  AiCallStatusValue,
+  AiCredential,
+  AiProviderValue,
+  AiTaskModel,
+  AiTaskValue,
+  CredentialStatusValue,
+  NewAiCall,
+  NewAiCredential,
+  NewAiTaskModel,
+  NewSubscription,
+  PublicAiCredential,
+  Subscription,
+  SubscriptionStatusValue,
+} from './schema/ai-billing';
+
+// Repositories of the AI journal, the task choices and the daily spend (SPEC-110 EF-2 to EF-6).
+export * from './repositories/ai-usage';
