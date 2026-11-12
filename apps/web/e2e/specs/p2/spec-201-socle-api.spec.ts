@@ -1,7 +1,10 @@
+import { ROUTES } from '@learny/contracts';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
+// Every route of the registry is documented: the count grows with each specification.
+const ROUTE_COUNT = Object.keys(ROUTES).length;
 const CARDS = [
   'demo-validation',
   'demo-business',
@@ -90,8 +93,10 @@ test('démonstration du socle API @SPEC-201', async ({
     'Tous les éléments sont chargés.',
   );
 
-  // CA-6 — the OpenAPI document lists the three registered routes.
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText('3 routes documentées');
+  // CA-6 — the OpenAPI document lists every registered route.
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText(
+    `${String(ROUTE_COUNT)} routes documentées`,
+  );
   await expect(page.getByRole('link', { name: 'Ouvrir openapi.json' })).toHaveAttribute(
     'href',
     '/openapi.json',
@@ -113,7 +118,9 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
   await page.getByRole('button', { name: 'Envoyer deux fois avec la même clé' }).click();
   await expect(page.getByTestId('demo-idem-second')).toBeVisible();
   await expect(page.getByTestId('demo-pagination-count')).toHaveText('20 éléments chargés');
-  await expect(page.getByTestId('demo-openapi-count')).toHaveText('3 routes documentées');
+  await expect(page.getByTestId('demo-openapi-count')).toHaveText(
+    `${String(ROUTE_COUNT)} routes documentées`,
+  );
 
   const ids = await page
     .locator('main > section[data-testid]')
@@ -138,7 +145,7 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
   await expect(page.getByTestId('sdd-title')).toHaveCSS('font-family', /Space[ _]Grotesk/);
 
   await axeCheck();
-  // Request ids and the execution counter change from one run to the next: masked.
+  // Request ids, the execution counter and the route count change from one run or spec to the next: masked.
   await expectScreenshotBaseline(page, 'spec-201-demo.png', {
     fullPage: true,
     mask: [
@@ -146,6 +153,7 @@ test('page de démonstration SPEC-201 @SPEC-201 @visual @mobile', async ({ page,
       page.getByTestId('demo-business-result'),
       page.getByTestId('demo-idem-first'),
       page.getByTestId('demo-idem-second'),
+      page.getByTestId('demo-openapi-count'),
     ],
   });
 });

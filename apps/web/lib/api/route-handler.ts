@@ -41,6 +41,16 @@ export const MAX_BODY_BYTES = 1024 * 1024;
 export interface RequestContext extends ServiceContext {
   request: NextRequest;
   ip: string;
+  /** Headers merged into the answer (`Set-Cookie` of the authentication routes, SPEC-202). */
+  responseHeaders: Headers;
+}
+
+function mergeResponseHeaders(response: Response, extra: Headers): Response {
+  for (const cookie of extra.getSetCookie()) response.headers.append('set-cookie', cookie);
+  extra.forEach((value, name) => {
+    if (name !== 'set-cookie') response.headers.set(name, value);
+  });
+  return response;
 }
 
 export interface HandlerArgs<R extends AnyRoute> {
@@ -99,6 +109,7 @@ export function routeHandler<R extends AnyRoute>(
   return async (request, segment) => {
     const requestId = resolveApiRequestId(request.headers.get(API_REQUEST_ID_HEADER));
     const startedAt = clock.now().getTime();
+    const responseHeaders = new Headers();
     let userId: string | null = null;
     let reservation: { userId: string; key: string } | null = null;
 
@@ -134,7 +145,7 @@ export function routeHandler<R extends AnyRoute>(
           ...(userId === null ? {} : { userId }),
         });
       }
-      return problem;
+      return mergeResponseHeaders(problem, responseHeaders);
     };
 
     try {
@@ -240,6 +251,7 @@ export function routeHandler<R extends AnyRoute>(
             ...createServiceContext({ userId, email, requestId, logger: logger(), clock }),
             request,
             ip,
+            responseHeaders,
           };
           const outcome = await fn({ ctx, params, query, body, request, logger: logger() });
           if (isResult(outcome) && !outcome.ok) throw outcome.error;
@@ -263,7 +275,10 @@ export function routeHandler<R extends AnyRoute>(
       );
 
       // 10. response
-      const answer = successResponse(route, requestId, route.successStatus, response.payload);
+      const answer = mergeResponseHeaders(
+        successResponse(route, requestId, route.successStatus, response.payload),
+        responseHeaders,
+      );
       if (reservation !== null) {
         await finishIdempotency(reservation, route.successStatus, response.payload ?? null);
         reservation = null;

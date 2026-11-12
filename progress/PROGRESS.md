@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T08:32:16.043Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T08:59:59.301Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 29 |
+| Terminées | 30 |
 | En cours | 0 |
-| Prêtes | 7 |
+| Prêtes | 6 |
 | En attente de dépendances | 96 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **22.0 %** |
-| Avancement V1 | 23.4 % |
-| Prochaine action | start SPEC-202 — Authentification et sessions |
+| **Avancement global** | **22.7 %** |
+| Avancement V1 | 24.2 % |
+| Prochaine action | start SPEC-203 — Événements de domaine, jobs et crons |
 
 ## Phases et checkpoints
 
@@ -23,7 +23,7 @@
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
-| P2 | Backend, API et services transverses | 1/12 | CP-2 | ⏳ |
+| P2 | Backend, API et services transverses | 2/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
@@ -65,7 +65,7 @@
 | [SPEC-114](../specs/p1-donnees/SPEC-114-stockage-des-fichiers.md) | Stockage des fichiers | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-104, SPEC-113 |
 | [SPEC-115](../specs/p1-donnees/SPEC-115-jeu-de-donnees-de-demonstration-et-fabriques.md) | Jeu de données de démonstration et fabriques | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-113 |
 | [SPEC-201](../specs/p2-backend/SPEC-201-socle-api-v1-et-contrats.md) | Socle API v1 et contrats | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-006, SPEC-101 |
-| [SPEC-202](../specs/p2-backend/SPEC-202-authentification-et-sessions.md) | Authentification et sessions | P2 | 🟢 ready | 0 | — | SPEC-201, SPEC-102 |
+| [SPEC-202](../specs/p2-backend/SPEC-202-authentification-et-sessions.md) | Authentification et sessions | P2 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-201, SPEC-102 |
 | [SPEC-203](../specs/p2-backend/SPEC-203-evenements-de-domaine-jobs-et-crons.md) | Événements de domaine, jobs et crons | P2 | 🟢 ready | 0 | — | SPEC-007, SPEC-201 |
 | [SPEC-204](../specs/p2-backend/SPEC-204-service-e-mail-et-gabarits.md) | Service e-mail et gabarits | P2 | ⏳ waiting | 0 | — | SPEC-203, SPEC-009 |
 | [SPEC-205](../specs/p2-backend/SPEC-205-notifications-navigateur-web-push.md) | Notifications navigateur (Web Push) | P2 | ⏳ waiting | 0 | — | SPEC-203, SPEC-109 |

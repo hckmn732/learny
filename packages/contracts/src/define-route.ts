@@ -7,7 +7,8 @@ import type { ErrorCode } from '@learny/core';
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type RouteAuth = 'user' | 'public';
 export type RateLimitProfile = 'default' | 'ai' | 'auth' | 'none';
-export type SuccessStatus = 200 | 201 | 202 | 204;
+/** 302 is for the redirecting routes of the authentication flow (`output: null`). */
+export type SuccessStatus = 200 | 201 | 202 | 204 | 302;
 
 type Schema = z.ZodType | undefined;
 

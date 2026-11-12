@@ -130,3 +130,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0249](ADR-0249-implementation-du-stockage-prive-et-des-url-signees-de-dix-m.md) | Implémentation du stockage privé et des URL signées de dix minutes | Déduite | SPEC-114, SPEC-113, SPEC-206 |
 | [ADR-0250](ADR-0250-seed-de-demonstration-deterministe-et-fabriques-partagees.md) | Seed de démonstration déterministe et fabriques partagées | Déduite | SPEC-115 |
 | [ADR-0251](ADR-0251-socle-api-v1-surcharge-de-handler-openapi-3-1-natif-et-acces.md) | Socle API v1 : surcharge de handler(), OpenAPI 3.1 natif et accès service de l'idempotence | Déduite | SPEC-201 |
+| [ADR-0252](ADR-0252-authentification-proxy-next-16-redirection-relative-mail-loc.md) | Authentification : proxy Next 16, redirection relative, mail local et rappel du lien | Déduite | SPEC-202 |

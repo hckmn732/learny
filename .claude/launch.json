@@ -6,6 +6,24 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8123", "--directory", "design/maquettes"],
       "port": 8123
+    },
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "ENABLE_SDD_PAGES=true",
+        "APP_ENV=local",
+        "pnpm",
+        "--filter",
+        "@learny/web",
+        "exec",
+        "next",
+        "dev",
+        "-p",
+        "3200"
+      ],
+      "port": 3200,
+      "url": "http://localhost:3200"
     }
   ]
 }

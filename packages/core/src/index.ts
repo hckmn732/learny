@@ -10,6 +10,7 @@ export {
 } from './errors';
 export type { AppErrorExtra, ErrorCode, ProblemBody } from './errors';
 export { err, ok } from './result';
+export { isValidIanaZone } from './time';
 export type { Result } from './result';
 // Runtime helpers shared with the browser (no Node built-in); the logger and the request context
 // live behind `@learny/core/server` (SPEC-010).

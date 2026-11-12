@@ -1,0 +1,79 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="37.022046">
+<testsuite name="p2/spec-202-auth.spec.ts" timestamp="2026-11-12T08:59:45.389Z" hostname="desktop" tests="4" failures="0" skipped="0" time="5.475" errors="0">
+<testcase name="inscription et connexion par lien magique puis déconnexion @SPEC-202" classname="p2/spec-202-auth.spec.ts" time="2.069">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/attachments/spec-202-connecte-2c52915aca4cc8f3362793a715262ec6e67c5dfb.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/attachments/axe-83d3afb9a4c7007c0bd0221864e8f140c8e84941.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-inscripti-dd42e-e-puis-déconnexion-SPEC-202-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="mot de passe et renvoi limité @SPEC-202" classname="p2/spec-202-auth.spec.ts" time="1.9">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/attachments/axe-25147ed4d078580fae5df26909c2d4e9be2837f7.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-mot-de-passe-et-renvoi-limité-SPEC-202-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="le proxy garde les pages et l’onboarding @SPEC-202" classname="p2/spec-202-auth.spec.ts" time="0.606">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-le-proxy--18b37-es-et-l’onboarding-SPEC-202-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page de démonstration SPEC-202 @SPEC-202 @visual @mobile" classname="p2/spec-202-auth.spec.ts" time="0.9">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/attachments/axe-5fb7d04157f2f14a37fdff7fea667253dcc78787.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-202-auth.spec.ts" timestamp="2026-11-12T08:59:45.389Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.924" errors="0">
+<testcase name="page de démonstration SPEC-202 @SPEC-202 @visual @mobile" classname="p2/spec-202-auth.spec.ts" time="0.924">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/attachments/axe-355b5f9718c403958bf4af1347f253e1c7bb3625.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-202-auth-page-de-d-a887a--202-SPEC-202-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

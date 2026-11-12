@@ -9,7 +9,8 @@
     "./visual": "./src/visual.ts",
     "./msw": "./src/msw.ts",
     "./render": "./src/render.tsx",
-    "./supabase": "./src/supabase.ts"
+    "./supabase": "./src/supabase.ts",
+    "./auth": "./src/auth.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

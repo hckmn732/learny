@@ -188,4 +188,5 @@ Définition commune (`docs/engineering/testing.md` §7) ; en plus : `supabase db
 
 - ADR appliqués : ADR-0007, ADR-0030 (fuseau détecté à l'inscription), ADR-0045 (acceptation enregistrée), ADR-0032 (lien de préférences dans les e-mails), ADR-0022 (clé service limitée).
 - **Décision créée** : ADR-0121 « Flux d'authentification et redirections » — jeton `token_hash` vérifié côté serveur, non-énumération, acceptation légale et fuseau transmis en métadonnées puis enregistrés à la première vérification, `user/signed-up` émis après vérification (une fois), accès à l'application dès l'étape `rappels`, redirection des comptes en suppression programmée vers `/parametres#profil`.
+- **Décision créée** : ADR-0252 « Authentification : proxy Next 16, redirection relative, mail local et rappel du lien » (`middleware.ts` devient `proxy.ts` fusionné avec la garde SDD, `next` porté par le cookie `lr-next`, rappel en 302 relatif, Mailpit du CLI Supabase en local, `/` public jusqu'à SPEC-601).
 - Hypothèse : la limite de 60 s est appliquée par GoTrue (`max_frequency`) ; la limitation par IP (10/min) devient effective avec SPEC-208 sans modification des routes.

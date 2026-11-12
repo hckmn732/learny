@@ -25,16 +25,20 @@ describe('[SPEC-201] registre', () => {
     }
   });
 
-  it('uses a null output exactly for 204 answers', () => {
+  it('uses a null output exactly for 204 and 302 answers', () => {
     for (const route of routes) {
       const output: unknown = route.output;
-      expect(output === null, route.id).toBe(route.successStatus === 204);
+      expect(output === null, route.id).toBe(
+        route.successStatus === 204 || route.successStatus === 302,
+      );
     }
   });
 
-  it('keeps POST creations at 201 and reads at 200', () => {
+  it('keeps reads at 200, except the redirecting routes of the authentication flow (302)', () => {
     for (const route of routes) {
-      if (route.method === 'GET') expect(route.successStatus, route.id).toBe(200);
+      if (route.method === 'GET') {
+        expect([200, 302], route.id).toContain(route.successStatus);
+      }
     }
   });
 });
