@@ -94,13 +94,13 @@ test('page db conforme @SPEC-101 @visual', async ({ page, axeCheck }) => {
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
 
   await axeCheck();
+  // The migration list grows with every specification; hiding it keeps the visual baseline
+  // stable instead of shifting the page height. Extension versions still vary and are masked.
+  await page
+    .getByTestId('db-migrations')
+    .evaluate((element) => { element.setAttribute('style', 'display:none'); });
   await expectScreenshotBaseline(page, 'spec-101-demo.png', {
     fullPage: true,
-    // UUID, versions, migration list and extension versions vary between environments and resets.
-    mask: [
-      page.getByTestId('db-variable'),
-      page.getByTestId('db-migration-row'),
-      page.getByTestId('db-migrations-total'),
-    ],
+    mask: [page.getByTestId('db-variable')],
   });
 });
