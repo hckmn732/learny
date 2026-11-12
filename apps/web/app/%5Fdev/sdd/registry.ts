@@ -155,4 +155,9 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-203'),
   },
+  'SPEC-212': {
+    title: 'SPEC-212 — Recherche globale (service et API)',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-212'),
+  },
 };
