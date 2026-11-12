@@ -53,5 +53,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
 | POST `/dev/sdd/push/send` (201, notification de démonstration envoyée par le canal push simulé) | Démonstration des notifications navigateur (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-205 |
+| POST `/email/unsubscribe?token=` (public, `rateLimit: auth`, 200 page HTML ou `{ ok: true }` avec `Accept: application/json`, 400 `UNSUBSCRIBE_TOKEN_INVALID`) · GET `/email/unsubscribe?token=` (page de confirmation, aucun changement d'état) | Désinscription en un clic (RFC 8058, ADR-0124) | SPEC-204 |
+| GET `/dev/sdd/email/preview?template=&tone=` (JSON, ou `text/html` sans `Accept: application/json`) · POST `/dev/sdd/email/send` (idempotent, 201 `{ messageId, transport }`) · GET `/dev/sdd/email/outbox` | Démonstration des gabarits d'e-mail (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-204 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.

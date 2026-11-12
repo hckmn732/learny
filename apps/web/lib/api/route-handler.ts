@@ -106,9 +106,11 @@ function successResponse(route: AnyRoute, requestId: string, status: number, bod
   return new Response(JSON.stringify(body), { status, headers });
 }
 
+export type RouteOutcome<R extends AnyRoute> = Result<RouteOutput<R>> | RouteOutput<R> | Response;
+
 export function routeHandler<R extends AnyRoute>(
   route: R,
-  fn: (args: HandlerArgs<R>) => Promise<Result<RouteOutput<R>> | RouteOutput<R>>,
+  fn: (args: HandlerArgs<R>) => Promise<RouteOutcome<R>>,
 ): (request: NextRequest, segment: Segment) => Promise<Response> {
   return async (request, segment) => {
     const requestId = resolveApiRequestId(request.headers.get(API_REQUEST_ID_HEADER));
@@ -270,6 +272,9 @@ export function routeHandler<R extends AnyRoute>(
             responseHeaders,
           };
           const outcome = await fn({ ctx, params, query, body, request, logger: logger() });
+          // A handler may answer with a non-JSON document (HTML page of the unsubscribe flow,
+          // SPEC-204): the response is sent as is, status and headers included.
+          if (outcome instanceof Response) return { payload: undefined, response: outcome };
           if (isResult(outcome) && !outcome.ok) throw outcome.error;
           const value: unknown = isResult(outcome)
             ? (outcome as { value: unknown }).value
@@ -286,13 +291,18 @@ export function routeHandler<R extends AnyRoute>(
             }
             payload = checked.data;
           }
-          return { payload };
+          return { payload, response: undefined };
         },
       );
 
       // 10. response
+      const direct = response.response;
+      if (direct !== undefined) {
+        direct.headers.set(API_REQUEST_ID_HEADER, requestId);
+        if (route.auth === 'user') direct.headers.set('cache-control', 'no-store');
+      }
       const answer = mergeResponseHeaders(
-        successResponse(route, requestId, route.successStatus, response.payload),
+        direct ?? successResponse(route, requestId, route.successStatus, response.payload),
         responseHeaders,
       );
       if (reservation !== null) {

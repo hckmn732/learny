@@ -13,4 +13,7 @@ export const qk = {
   devJobsOutbox: (): Key => key('dev-jobs-outbox'),
   billingSubscription: (): Key => key('billing-subscription'),
   devStripeEvents: (): Key => key('dev-stripe-events'),
+  devEmailPreview: (template: string, tone: string): Key =>
+    key('dev-email-preview', `${template}:${tone}`),
+  devEmailOutbox: (): Key => key('dev-email-outbox'),
 } as const;

@@ -20,3 +20,4 @@ export {
 } from './dev/events';
 export * from './search';
 export * from './billing/index';
+export * from './email/index';

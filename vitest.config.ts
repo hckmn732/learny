@@ -38,6 +38,8 @@ export default defineConfig({
           name: 'unit',
           include: [
             'packages/*/src/**/*.test.{ts,tsx}',
+            // SPEC-204: the e-mail templates live next to the preview server, outside src/.
+            'packages/notifications/emails/**/*.test.{ts,tsx}',
             'apps/*/src/**/*.test.{ts,tsx}',
             'apps/web/{app,components,lib,messages}/**/*.test.{ts,tsx}',
             'tools/**/test/unit/**/*.test.ts',

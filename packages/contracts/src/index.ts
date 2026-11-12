@@ -4,6 +4,7 @@ export * from './cursor';
 export * from './define-route';
 export * from './dev';
 export * from './dev-jobs';
+export * from './email';
 export {
   COMPONENT_STATUSES,
   DATABASE_STATUSES,

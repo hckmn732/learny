@@ -5,6 +5,7 @@ export const ERROR_CATALOG = {
   VALIDATION_FAILED: { status: 400, title: 'Données invalides' },
   IDEMPOTENCY_KEY_REQUIRED: { status: 400, title: "Clé d'idempotence manquante" },
   INVALID_SIGNATURE: { status: 400, title: 'Signature invalide' },
+  UNSUBSCRIBE_TOKEN_INVALID: { status: 400, title: 'Lien de désinscription invalide' },
   UNAUTHENTICATED: { status: 401, title: 'Connexion requise' },
   INVALID_CREDENTIALS: { status: 401, title: 'Identifiants incorrects' },
   FORBIDDEN: { status: 403, title: 'Accès refusé' },

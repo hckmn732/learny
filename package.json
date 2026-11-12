@@ -49,7 +49,8 @@
     "sdd:audit": "node tools/sdd/audit.mjs",
     "sdd:adr": "node tools/sdd/adr.mjs",
     "openapi:generate": "tsx packages/contracts/scripts/generate-openapi.ts",
-    "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check"
+    "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check",
+    "email:dev": "pnpm --filter @learny/notifications dev"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
