@@ -21,7 +21,7 @@ export {
 export type { SimulatedAction, StripeEventLine } from './dev';
 export { hasManagedAi, isManagedAiEntitled } from './entitlement';
 export type { EntitlementInput, HasManagedAiOptions } from './entitlement';
-export { MockStripeGateway, createMockState, mockCheckoutUrl } from './mock-stripe';
+export { MockStripeGateway, createMockState, isMockGateway, mockCheckoutUrl } from './mock-stripe';
 export type { MockCheckoutSession, MockDelivery, MockStripeState } from './mock-stripe';
 export { StripeSdkGateway, translateStripeError } from './stripe-client';
 export type { StripeGateway, StripeSubscriptionState } from './stripe-client';

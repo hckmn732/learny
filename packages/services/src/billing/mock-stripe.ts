@@ -281,6 +281,14 @@ export class MockStripeGateway implements StripeGateway {
   }
 }
 
+/**
+ * True for the simulated gateway. Not `instanceof`: the Next.js server builds every route in its
+ * own bundle, so the class seen by the checkout page is not the one that built the shared instance.
+ */
+export function isMockGateway(gateway: StripeGateway): gateway is MockStripeGateway {
+  return gateway.mode === 'mock' && 'completeCheckout' in gateway && 'state' in gateway;
+}
+
 export function mockCheckoutUrl(sessionId: string): string {
   return `/_dev/stripe/checkout?session=${sessionId}`;
 }

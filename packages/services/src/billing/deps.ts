@@ -12,7 +12,7 @@ import { logger as rootLogger } from '@learny/core/server';
 import { serviceDb, type Db } from '@learny/db';
 
 import { resolveBillingConfig, type BillingConfig } from './config';
-import { MockStripeGateway } from './mock-stripe';
+import { MockStripeGateway, isMockGateway } from './mock-stripe';
 import { StripeSdkGateway, type StripeGateway } from './stripe-client';
 
 export interface JournalEntry {
@@ -126,7 +126,7 @@ export async function resolveBillingDeps(
     }
     holder[GLOBAL_KEY] = shared;
   }
-  if (!shared.seeded && shared.gateway instanceof MockStripeGateway) {
+  if (!shared.seeded && isMockGateway(shared.gateway)) {
     await seedMockCounters(shared.gateway, db);
     shared.seeded = true;
   }

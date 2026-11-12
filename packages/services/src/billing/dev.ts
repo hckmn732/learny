@@ -7,7 +7,12 @@ import { AppError } from '@learny/core';
 import type { ServiceContext } from '../context';
 
 import { resolveBillingDeps, type BillingDeps, type JournalEntry } from './deps';
-import { MockStripeGateway, type MockCheckoutSession, type MockDelivery } from './mock-stripe';
+import {
+  isMockGateway,
+  type MockCheckoutSession,
+  type MockDelivery,
+  type MockStripeGateway,
+} from './mock-stripe';
 import { handleWebhook } from './webhook';
 
 export type SimulatedAction = 'payment-failed' | 'cancel' | 'replay';
@@ -19,7 +24,7 @@ interface MockContext {
 
 async function mockContext(overrides: Partial<BillingDeps>): Promise<MockContext> {
   const deps = await resolveBillingDeps(overrides);
-  if (!(deps.gateway instanceof MockStripeGateway)) {
+  if (!isMockGateway(deps.gateway)) {
     throw new AppError('CONFLICT', 'La simulation n’est disponible qu’avec STRIPE_MODE=mock.');
   }
   return { deps, gateway: deps.gateway };

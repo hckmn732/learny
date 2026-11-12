@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { AppError } from '@learny/core';
 import { getMockCheckoutSession } from '@learny/services/billing';
 
 import { MockCheckout } from '../../../../components/sdd/stripe-mock';
@@ -27,9 +28,10 @@ export default async function MockCheckoutPage({
   if (candidate !== null) {
     try {
       known = (await getMockCheckoutSession(candidate))?.status === 'open';
-    } catch {
-      // Not in simulated mode: the page has nothing to show.
-      notFound();
+    } catch (error) {
+      // Only a real Stripe mode (no simulated sessions) hides the page; anything else is a fault.
+      if (error instanceof AppError && error.code === 'CONFLICT') notFound();
+      throw error;
     }
   }
   return (
