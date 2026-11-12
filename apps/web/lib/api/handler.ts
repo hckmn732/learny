@@ -2,6 +2,9 @@
 // It resolves the request identifier, carries it through AsyncLocalStorage, logs one structured
 // line per request, converts errors to application/problem+json and reports unexpected failures
 // to Sentry when it is configured. Authentication stays optional until SPEC-201 wires sessions.
+import type { NextRequest } from 'next/server';
+
+import type { AnyRoute, RouteOutput } from '@learny/contracts';
 import {
   ERROR_CATALOG,
   AppError,
@@ -11,6 +14,7 @@ import {
   type Clock,
   type ErrorReporter,
   type LearnyLogger,
+  type Result,
 } from '@learny/core';
 import {
   REQUEST_ID_HEADER,
@@ -22,6 +26,8 @@ import {
 } from '@learny/core/server';
 
 import { getServerReporter } from '../sentry';
+
+import { routeHandler, type HandlerArgs } from './route-handler';
 
 type Env = Readonly<Record<string, string | undefined>>;
 
@@ -132,7 +138,34 @@ export function withRequestId(response: Response, requestId: string): Response {
  * Wraps a route handler. The function returns a `Response`, or any JSON-serialisable value.
  * Every log written inside the call carries the request identifier (EF-1, CA-1).
  */
+export function handler<R extends AnyRoute>(
+  route: R,
+  fn: (args: HandlerArgs<R>) => Promise<Result<RouteOutput<R>> | RouteOutput<R>>,
+): (
+  request: NextRequest,
+  segment: { params: Promise<Record<string, string>> },
+) => Promise<Response>;
 export function handler(
+  options: HandlerOptions,
+  fn: (context: HandlerContext) => Response | object | Promise<Response | object>,
+): (request: Request) => Promise<Response>;
+export function handler(first: HandlerOptions | AnyRoute, second: unknown): unknown {
+  // Contract routes (SPEC-201) go through the route wrapper; the legacy options form (SPEC-010,
+  // `/health`) keeps its behaviour unchanged.
+  if (isRouteDefinition(first)) {
+    return routeHandler(first, second as Parameters<typeof routeHandler>[1]);
+  }
+  return optionsHandler(
+    first,
+    second as (context: HandlerContext) => Response | object | Promise<Response | object>,
+  );
+}
+
+function isRouteDefinition(value: HandlerOptions | AnyRoute): value is AnyRoute {
+  return 'id' in value && 'method' in value && 'path' in value;
+}
+
+function optionsHandler(
   options: HandlerOptions,
   fn: (context: HandlerContext) => Response | object | Promise<Response | object>,
 ): (request: Request) => Promise<Response> {

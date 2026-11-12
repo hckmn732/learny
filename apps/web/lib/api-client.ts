@@ -1,6 +1,7 @@
-// Minimal typed client of /api/v1 for the browser (SPEC-006, EF-5/ET-4). SPEC-201 extends it.
+// Typed client of /api/v1 for the browser (SPEC-006 `apiFetch`, SPEC-201 `callApi` and `api`).
 import { z } from 'zod';
 
+import { ROUTES, type AnyRoute, type RouteInput, type RouteOutput } from '@learny/contracts';
 import { AppError, ERROR_CATALOG, type ErrorCode } from '@learny/core';
 
 export const API_BASE = '/api/v1';
@@ -162,3 +163,125 @@ export async function apiFetch<TInput, TOutput>(
   }
   return parsed.data;
 }
+
+// ---------------------------------------------------------------------------------------------
+// SPEC-201: client built on the route contracts.
+
+/** Error of a call through `callApi`: HTTP status, business code, request reference (EF-9). */
+export class ApiError extends AppError {
+  override readonly name = 'ApiError';
+  declare readonly status: number;
+}
+
+export interface CallOptions {
+  /** Reused as is when given; otherwise generated once per call for an idempotent route. */
+  idempotencyKey?: string;
+  signal?: AbortSignal;
+  /** Injectable transport (tests, demonstration); defaults to the global fetch. */
+  fetch?: typeof fetch;
+  /** Network retries of an idempotent call, with the same key (default 2). */
+  networkRetries?: number;
+}
+
+function toApiError(error: AppError): ApiError {
+  return new ApiError(error.code, error.detail, {
+    status: error.status ?? 0,
+    ...(error.requestId === undefined ? {} : { requestId: error.requestId }),
+    ...(error.errors === undefined ? {} : { errors: error.errors }),
+  });
+}
+
+function buildUrl(
+  route: AnyRoute,
+  input: { params?: Record<string, string | number>; query?: Record<string, unknown> },
+): string {
+  const path = route.path.replace(/:([A-Za-z0-9_]+)/g, (_match, name: string) => {
+    const value = input.params?.[name];
+    if (value === undefined) {
+      throw new ApiError('VALIDATION_FAILED', `Paramètre « ${name} » manquant.`, { status: 0 });
+    }
+    return encodeURIComponent(String(value));
+  });
+  const search = new URLSearchParams();
+  for (const [name, value] of Object.entries(input.query ?? {})) {
+    if (value === undefined || value === null) continue;
+    for (const item of Array.isArray(value) ? value : [value]) {
+      search.append(name, String(item as string | number | boolean));
+    }
+  }
+  const query = search.toString();
+  return query === '' ? path : `${path}?${query}`;
+}
+
+/** Calls a route of the registry; returns the typed output or throws an `ApiError`. */
+export async function callApi<R extends AnyRoute>(
+  route: R,
+  input: RouteInput<R>,
+  options: CallOptions = {},
+): Promise<RouteOutput<R>> {
+  const typed = input as {
+    params?: Record<string, string | number>;
+    query?: Record<string, unknown>;
+    body?: unknown;
+  };
+  const url = buildUrl(route, typed);
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  const init: RequestInit = { method: route.method, headers, credentials: 'same-origin' };
+  if (typed.body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+    init.body = JSON.stringify(typed.body);
+  }
+  if (options.signal !== undefined) init.signal = options.signal;
+  if (route.idempotent === true) {
+    headers['Idempotency-Key'] = options.idempotencyKey ?? crypto.randomUUID();
+  }
+
+  const send = options.fetch ?? fetch;
+  const retries = route.idempotent === true ? (options.networkRetries ?? 2) : 0;
+  let response: Response | undefined;
+  for (let attempt = 0; response === undefined; attempt += 1) {
+    try {
+      response = await send(url, init);
+    } catch (cause) {
+      // The same Idempotency-Key is sent again: the server never runs the service twice.
+      if (attempt < retries && options.signal?.aborted !== true) continue;
+      throw new ApiError('NETWORK_ERROR', 'Le serveur est injoignable. Vérifiez votre connexion.', {
+        status: 0,
+        cause,
+      });
+    }
+  }
+
+  if (!response.ok) throw toApiError(await toAppError(response));
+  const requestId = headerRequestId(response);
+  const status = response.status;
+  const invalid = () =>
+    new ApiError('INVALID_RESPONSE', ERROR_CATALOG.INVALID_RESPONSE.title, {
+      status,
+      ...(requestId === undefined ? {} : { requestId }),
+    });
+
+  if (route.output === null || status === 204) return undefined as RouteOutput<R>;
+  const json = await readJson(response);
+  if (!json.ok) throw invalid();
+  const parsed = (route.output as z.ZodType).safeParse(json.value);
+  if (!parsed.success) throw invalid();
+  return parsed.data as RouteOutput<R>;
+}
+
+type ApiRoutes = typeof ROUTES;
+
+export type Api = {
+  [K in keyof ApiRoutes]: (
+    input: RouteInput<ApiRoutes[K]>,
+    options?: CallOptions,
+  ) => Promise<RouteOutput<ApiRoutes[K]>>;
+};
+
+/** `api.devEcho({ body })`, `api.devItems({ query })`… one function per registered route. */
+export const api = Object.fromEntries(
+  Object.entries(ROUTES).map(([name, route]) => [
+    name,
+    (input: never, options?: CallOptions) => callApi(route as AnyRoute, input, options),
+  ]),
+) as unknown as Api;

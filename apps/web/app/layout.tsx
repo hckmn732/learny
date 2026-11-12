@@ -5,6 +5,7 @@ import { fr } from '../messages/fr';
 
 import { fontVariables } from './fonts';
 import './globals.css';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: fr.meta.title,
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="fr" className={fontVariables}>
-      <body className="bg-white font-sans text-[#111113]">{children}</body>
+      <body className="bg-white font-sans text-[#111113]">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

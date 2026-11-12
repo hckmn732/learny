@@ -56,6 +56,10 @@ const boundaryZones = [
   },
 ];
 
+// Web modules explicitly allowed to use the owner-role client (ADR-0022, SPEC-201 ET-4): the
+// idempotency store of the API wrapper and the integration tests that inspect the database.
+const SERVICE_DB_ALLOWED = ['apps/web/lib/api/idempotency.ts', 'apps/web/test/integration/**'];
+
 const restrictedImportBlocks = [
   {
     files: ['packages/**'],
@@ -223,7 +227,7 @@ export default tseslint.config(
     // (SPEC-009, ET-6). `serviceDb` is reserved to the SDD demo pages and the webhooks (SPEC-101,
     // ET-6); every other web module must use `userDb` and therefore the user's RLS context.
     files: ['apps/web/**/*.{ts,tsx}'],
-    ignores: ['apps/web/lib/server-env.ts'],
+    ignores: ['apps/web/lib/server-env.ts', ...SERVICE_DB_ALLOWED],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -255,6 +259,24 @@ export default tseslint.config(
       'apps/web/app/_dev/**/*.{ts,tsx}',
       'apps/web/app/api/webhooks/**/*.{ts,tsx}',
     ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Same server-configuration rule, without the `serviceDb` restriction (SPEC-201 ET-4).
+    files: SERVICE_DB_ALLOWED,
     rules: {
       'no-restricted-imports': [
         'error',
