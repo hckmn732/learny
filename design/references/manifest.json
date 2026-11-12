@@ -18,7 +18,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "13e8fd64dc56628bf624aee6fa9393f5c55c4e62cf6d7c9c3d70cea307c2c4e3"
+      "sha256": "8019fb0bba1ae99eee1366c3f983e02e4a3deb0c8e85a30d43e80da281414578"
     },
     {
       "screenId": "SCR-01",
@@ -29,12 +29,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-01-base-mobile.png",
       "width": 433,
-      "height": 1183,
+      "height": 1186,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "18e2e0be7a86d64481401f39f1963ca5dffada9342c44b50917b40c75351a1fa"
+      "sha256": "0644e98b3c2912576df63f9f8cf9b363d9cc5feccde9ba4be0e07287825571b3"
     },
     {
       "screenId": "SCR-01",
@@ -50,7 +50,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "e12f3241ba67be612d5f5e03e7fff7f73e6495e8be350084e950c9dacb9ca27f"
+      "sha256": "e92457c3789afbbb58e1ade0a2e66785865b71e640820a105607e516073f9e46"
     },
     {
       "screenId": "SCR-01",
@@ -61,12 +61,12 @@
       "source": "design/maquettes/Inscription.dc.html?connexion",
       "file": "design/references/SCR-01-connexion-mobile.png",
       "width": 433,
-      "height": 1087,
+      "height": 1090,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "2c90c527e87e24bae8b07aa523f0a12e2a45a7bd8821119b118badd00f17f471"
+      "sha256": "0c4512c517cd9c88764fc1446a5702f3fcf0feeb8d52bbe8ef9190782b3d00d6"
     },
     {
       "screenId": "SCR-01",
@@ -82,7 +82,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "f021d1f78112d86e182c4243b90d1f9ccb6b0955992688fc669c34c02ccdcc4a"
+      "sha256": "045f3ec2a571a653447cae687dd14ce9115079c6cc61e681558261b97613a92e"
     },
     {
       "screenId": "SCR-01",
@@ -93,12 +93,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-01-verification-mobile.png",
       "width": 433,
-      "height": 1086,
+      "height": 1088,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "ed0c6c06b28cbd9f7027bafdcc6564eebb6cd3d285a8223749b2bf55f9a40758"
+      "sha256": "2cbe0a6483e34176c690afb54c7b7edbe941b835ca2c0e8d0cac4a5f02720a78"
     },
     {
       "screenId": "SCR-02",
@@ -114,7 +114,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "70c20689db48889ce55fb4e68592a28d3821323310cae870d2872aaa0b56bd08"
+      "sha256": "04e1bbd3c8db88eaa481b5fd5985908d02317e94ec6b23b78f5a5884100d2713"
     },
     {
       "screenId": "SCR-02",
@@ -125,12 +125,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-02-depart-mobile.png",
       "width": 433,
-      "height": 1104,
+      "height": 1106,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "8efd33db1423083da1e4eec6554c0e8f416451df3622a96d76419f7bc8c05b79"
+      "sha256": "6c612481c47e7418095e9ae6456d08b183b2ac833de67decdd9b2f93457b8a54"
     },
     {
       "screenId": "SCR-02",
@@ -146,7 +146,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b1ed2576adf14b93c310f068647805d373254b8d5557da045098417efbbc05eb"
+      "sha256": "2ae5a77a358fa2ad45be9f982a3ff33ce52800d8939e8367cb6c8162fd80064d"
     },
     {
       "screenId": "SCR-02",
@@ -157,12 +157,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-02-ia-mobile.png",
       "width": 433,
-      "height": 1427,
+      "height": 1429,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b360f34216dba9c34d55c0d28dfaab7d5d058fd428391389f8f123e80976f2d7"
+      "sha256": "c7a5b89a5aeac763f8dc795e2f705b127ec953e3ad2b81d73ac877d1ff03a1b7"
     },
     {
       "screenId": "SCR-02",
@@ -178,7 +178,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "9a7fcd4baedb5d0ae88e46f8cc82e0632c4d1b5bb0c62df2c0cb6e78ef1b5086"
+      "sha256": "c8824d3ca07f21b2e1a033103609cfa29555f2f2d60ec76cead21a37d73357a4"
     },
     {
       "screenId": "SCR-02",
@@ -189,12 +189,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-02-profil-mobile.png",
       "width": 433,
-      "height": 1243,
+      "height": 1245,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "a414753a186a1d92395fc3d7cd8f6504a5739083bb424953be619a13ace6fe4b"
+      "sha256": "5c3b917ba9a7f16562417d064ce928ec46abcbaa27f470a55e637d84a29fd95a"
     },
     {
       "screenId": "SCR-02",
@@ -210,7 +210,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "2e69666cceadeeb8175d8a92063f81a33faee46c749091e52127d2b8150655fa"
+      "sha256": "8f3f68a2c6ae8863bf581df0a88a1cd7b2263a3eda2b8ce0c3249fc06c326503"
     },
     {
       "screenId": "SCR-02",
@@ -221,12 +221,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-02-rappels-mobile.png",
       "width": 433,
-      "height": 1229,
+      "height": 1231,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "c21a8b6f67fbde702e5c8d0d3a9544481bf356fbd7a3286fb186d606869ddb74"
+      "sha256": "1347eca1f57afbf402df02c3fdcd6e6c15bb618a5239a23bb5ee798ec376805e"
     },
     {
       "screenId": "SCR-02",
@@ -242,7 +242,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "fded6bff98108f2f9437ab70ecd24a2c93d40eef29636c0a351975e7e65ac7f7"
+      "sha256": "ffc00c1ab2c1398eac49f248f0410b54cdd1e226b5817840137bdb329723a51d"
     },
     {
       "screenId": "SCR-02",
@@ -253,12 +253,12 @@
       "source": "design/maquettes/Inscription.dc.html",
       "file": "design/references/SCR-02-rythme-mobile.png",
       "width": 433,
-      "height": 1275,
+      "height": 1277,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "7b43bc00a6c9edd37f7fed42e4d0645de84e06b892d21fa7f50a64ca102fb34a"
+      "sha256": "76f38f608fa3fa95b3348422f5463c284ec2105e046a6037e9f7a2cf168b1dcf"
     },
     {
       "screenId": "SCR-03",
@@ -274,7 +274,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "eb469fc4bfcecad7c1385106b930fa33a0fe14e3073c8220c6b2ad3004ba1a99"
+      "sha256": "16b2f9ae044d48bdb775df1899d1bcd4bcf673f8a862a7cc7f99697fb91313df"
     },
     {
       "screenId": "SCR-03",
@@ -290,7 +290,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "e637a820855d26ed88b941ad7d639e47ad2e0a23c7d9e14b015dedcd01ef64b8"
+      "sha256": "c88e9fe9a74c33ec49bf189da2cd16ff9aac841c83f29bab9be929a35e699e55"
     },
     {
       "screenId": "SCR-03",
@@ -306,7 +306,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b10e237274189554eb242b3d37258cd55ab4a3afed6eecdf16739c245fb3bb66"
+      "sha256": "0b492f501a2426ae3d6ddfc9e71d084d4295905cdde4671d4308b56d2a3deedf"
     },
     {
       "screenId": "SCR-03",
@@ -322,7 +322,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "14de70efc151500a82953632d6cd1b0709e161407803d5a574df71651640ec80"
+      "sha256": "f70b2f93f69bcbbcd5472100c2027058d1307451a70ad6d05835d9bf21381ab5"
     },
     {
       "screenId": "SCR-03",
@@ -338,7 +338,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "d679ea1c0a5961a07d21692490cbf89f63b59794c50238b231a12d70069a9ab7"
+      "sha256": "795200019081bd5ddb67b89cfc4ca6fc23ec236561cf5de1e5daeaafb2c0bd14"
     },
     {
       "screenId": "SCR-03",
@@ -354,7 +354,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "7794b5b213d541de4570dd136e9dd71e42330552a0a5ef2b088c55784d5c9be2"
+      "sha256": "8f239e3b7a745895c94e05a54c471beca6c84e26fa9f60ddd42b998bfea901d8"
     },
     {
       "screenId": "SCR-03",
@@ -370,7 +370,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "38400504592065b60b1c03bcebe70c5097b058db0e194bf19182c581f73de6dc"
+      "sha256": "c8771fd6bd029e83ec795f1a9e1c1dd3c7d8d8ca61d33b8fed4c3c27f50ce0c0"
     },
     {
       "screenId": "SCR-03",
@@ -386,7 +386,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "9b88f7d71ca25efcb76edba64bb3aab2580e5af64b4a19fcf8478adda2121cdd"
+      "sha256": "dac9304671e7b3c09926ef0eff2ad944bb62f8f181fb9be5b26e0d783494a76f"
     },
     {
       "screenId": "SCR-03",
@@ -402,7 +402,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "1785c8842b55aab772293a27465e631338343560b52e5417fbe9eaa2ab2617e7"
+      "sha256": "8666d940a224f3a89384d986a38bd18d2938be6742fe86f14ae87c5bfcce67fc"
     },
     {
       "screenId": "SCR-03",
@@ -418,7 +418,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "177b8abd8b0776deaabd659e1b03e7e17b33c3cab8ee76d226393650995d38bd"
+      "sha256": "8ccff9954c151f53bf636ba2916746eef3fabc1d3479cfde2217ae493377a61d"
     },
     {
       "screenId": "SCR-04",
@@ -434,7 +434,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "aca828d4e14adbab8d88287f746b8f1f1045d666ddae50b3154bb2a5e89e3dd0"
+      "sha256": "5ea3b45669c411bb7aafbbe08883337132622357dc28bc085433d72c047c4f3c"
     },
     {
       "screenId": "SCR-04",
@@ -450,7 +450,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "91062e4d94a7b967f75d4c9967ed398c1d69655311d0a41a0b2a8e5dd9f2d90a"
+      "sha256": "6eaae269cb20f73b03d820ded58162a2036ee28c0031b8e876f40914f3be817e"
     },
     {
       "screenId": "SCR-05",
@@ -466,7 +466,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "8b19dd2a7feb20e33dfc8d1450649fb35c4adc9a4eb2246d2bff1657756a7afa"
+      "sha256": "fc2543ec0dd249c3a49d570134ecf26efe55fd97a044982fe52449c0a820cf40"
     },
     {
       "screenId": "SCR-05",
@@ -482,7 +482,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "021164106f320abf49bb81391abaadb7ff9952df2b01edb23ac624325741b27b"
+      "sha256": "7b171b30ccf83a879f8b5ad6e2dc2b39dc07ee4eda14becae0427d4dab36505b"
     },
     {
       "screenId": "SCR-05",
@@ -498,7 +498,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "ccba17383171ea05743e7b20dd0ce72bb8d45847df7844088ddd74ba6aae1daf"
+      "sha256": "752556f6994a214bda78c736b4ce248d231fc05f5c293df09bd8331568d8b771"
     },
     {
       "screenId": "SCR-05",
@@ -514,7 +514,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "4dc5c19322779990d205d8f3fe7f09bde05f187c3097824dd2892c5a86616d48"
+      "sha256": "95de11ae76a44ba86f0935817c9bc5c902c3e68b515df92f4577ebe4af5e9788"
     },
     {
       "screenId": "SCR-06",
@@ -530,7 +530,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "4e3e9478fe0dd3204234e2a9a31aa9daeeb971d44a2dda97f404b9f71ff61195"
+      "sha256": "81601837289c6469aefee6b741c55408066bd2fd10a90b3c6f445f5f92bd3941"
     },
     {
       "screenId": "SCR-06",
@@ -546,7 +546,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "1ea57dc160349bbc066e767d0639b0e5599f2fbbfd91038648833380492a672a"
+      "sha256": "4fcc834abe8d548d2467c8218d0e4fdc585a81c9e4a06c3942d85c5c9b0e7124"
     },
     {
       "screenId": "SCR-07",
@@ -562,7 +562,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "a4687821cdb6e7a9a6d8650d221eedf21cc875405078a3d946fe387f970d7cb8"
+      "sha256": "081308b1635b1096c564cb2bf52b82ac9c60f8838496046d7b48f1af72e58cce"
     },
     {
       "screenId": "SCR-07",
@@ -578,7 +578,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "0a18068b0920ceef62d3768ef98ede9df48c6b11b60598ebdda3d491aeb7bcf5"
+      "sha256": "d2b0a915b68b73c6246f1f916dfc837742c5e5705c6cb1a3db3490314e7371c0"
     },
     {
       "screenId": "SCR-08",
@@ -594,7 +594,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b9a46a4af591404267e5280834355efe8d0d59a24f864a96121b5fb3150ac8c5"
+      "sha256": "be36a3671e523394f2146ec5f765c5408e536226a2cdcad3f6af440c672a1321"
     },
     {
       "screenId": "SCR-08",
@@ -610,7 +610,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "9a1f31a01396f05b13538b6fc7dab6e0cad77821d2f805d6071130c9effe6494"
+      "sha256": "2525008f4a496456d990a5c113ab401b4aa01572cdc597f845393d1b1cb6bb8b"
     },
     {
       "screenId": "SCR-09",
@@ -626,7 +626,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "e57b3c24cd493bf4902d9ffd388020eceeb5339ac083414c45a7f8a36cd50d69"
+      "sha256": "a64906214cb487558832ae1a772ae91216e6b5e30e8d69c89ce3537f780b3354"
     },
     {
       "screenId": "SCR-09",
@@ -642,7 +642,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "cbf9b3260a7ad8de091d22e7c73a9896b457c6d358d7e6342f404fb50e3d2311"
+      "sha256": "d6b5b9f1a44cc63e96cf6e04206f1fed47dd0d4e0eadab59f8899f709ac01f11"
     },
     {
       "screenId": "SCR-09",
@@ -658,7 +658,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "1c1e4041b0a60ae84fc9e6732a25ce4cb5104a5841d8e827cf7404e157451541"
+      "sha256": "724344113cc23b21c1fc3413a5a142268f9aa760604d1c354dff99d47a78fa18"
     },
     {
       "screenId": "SCR-09",
@@ -674,7 +674,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "15b34a22d09378a0617557c3f3412ad902cf6165f77e6b7102100c93423b4c77"
+      "sha256": "420f0effdc9485b5ae74407dd166faa8d8c529d53d65d8d90bcfdc255b8ff026"
     },
     {
       "screenId": "SCR-10",
@@ -690,7 +690,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "649adcee6fc321dd9bd131c3e4321c71ceea92db5bce58968b9fa4c481d45e13"
+      "sha256": "8954e96b809e34ded2df86956c590605c0b3d3288ba83f719909abc4facd168c"
     },
     {
       "screenId": "SCR-10",
@@ -706,7 +706,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "ebacf0b116d772ed660a6cc515a15859d7d5107a0d2f7d85c52a16590d43db6d"
+      "sha256": "bbcbea2e50ac36e0de5c1fa0f54f0cd3afcd6b757a8933716c3e9b90c8f045b4"
     },
     {
       "screenId": "SCR-10",
@@ -722,7 +722,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "d29295af1beede0a15d0649cb3e3427b7f99f85f904c65028973b8194cdeb932"
+      "sha256": "d1ba24b434a4ef5871fc0c814721c671516a35b3cb151f4a67170f9bd465e5cf"
     },
     {
       "screenId": "SCR-10",
@@ -738,7 +738,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "6874e387ba9844eb6666aa070401d7a2fe680e0cd79e99344800ad466d1e736a"
+      "sha256": "b7158318211c118b04c8f815af67f2b07633f75a68318549e12b8b7587fad6d4"
     },
     {
       "screenId": "SCR-11",
@@ -754,7 +754,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "19523f6789a789126175c865b22fa25d437e1115a369acb573fdf6a3028c3daf"
+      "sha256": "9d1411904c4f6e52f88e3c5ab9ba477334fd10c46f4d19dfd2b7305b6f94ea0b"
     },
     {
       "screenId": "SCR-11",
@@ -770,7 +770,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "3e5a217a572d3638333902c4dce1004c9fb9dcf2e868da53c4954513a99a295d"
+      "sha256": "bbd0067647a116e0a063734b787819a96ce3dea3e96ce7c024bab77991a0fcbe"
     },
     {
       "screenId": "SCR-11",
@@ -786,7 +786,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "9d5d0a4f8a88e101b450b004943f43a194d444148dd820e181c8f16473690698"
+      "sha256": "8ab8708f75f673efa965dfc45b09b6f6fcd4872f181ca4268916cecfca327499"
     },
     {
       "screenId": "SCR-11",
@@ -802,7 +802,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "553417d24ee955f67ce16a2129ef2c87cc533abf0d328a9b538f632c9defb10a"
+      "sha256": "6b18066ce07c08cdbb23356458d5e2a8252e64f9864436d1990fc17c14dce790"
     },
     {
       "screenId": "SCR-12",
@@ -818,7 +818,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "3482a7d635f456861c586b9c9393737a32d586379874801ed3666ca508f98593"
+      "sha256": "f3eab78b703ff2bcfad793101909609b39a7ee740c882d077f3274bf990fe3b7"
     },
     {
       "screenId": "SCR-12",
@@ -834,7 +834,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "edc2598bd752bd9a5cbeb3983f7f0ed622f3b4f67667de9e816108c43947c26b"
+      "sha256": "2616c7162ea684fd08a2ecbb856b4ecd1c5a046797af37981df51b3df85e9e99"
     },
     {
       "screenId": "SCR-12",
@@ -850,7 +850,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "a6912a67af40874256eccf2c4181e6795b7a5f07d2982f87c1941529533cbbd9"
+      "sha256": "60cd366c460f4baf19347789369a6fa50d4a3439593647a3512c2ea759cb2591"
     },
     {
       "screenId": "SCR-12",
@@ -866,7 +866,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "74609da30698c9b4374236af41788e512f0570bf64e75c95e6a2e4bd2284e348"
+      "sha256": "86a590b0cc50655e52dd71e69e8cafee35690d9f0f220cb03101ce4b6e2998db"
     },
     {
       "screenId": "SCR-12",
@@ -882,7 +882,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "5348491d14b054168b099718b453dbf2ff1367ccc1d1527567b0ca5ec236bb3a"
+      "sha256": "651d742cc8c4a1680f83046483b38378802838efd69aa88ff7368400dc4b8581"
     },
     {
       "screenId": "SCR-12",
@@ -898,7 +898,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "e45771ec38921531fe79c8d1dcc6a0e9d2e85147174c8dca896c9d598a168724"
+      "sha256": "d55b3661b555e8b7f03c9294781e540b8b0fce51dd44c7a5cd5d4813ca553f5a"
     },
     {
       "screenId": "SCR-13",
@@ -914,7 +914,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "dcad29d65426033527b743b1a537695e930f4462e2ec2626a19ca77a6627690c"
+      "sha256": "f7300c7f5a7ad716c225e18bd3c02a2ecb31e92c17a966f8f5582695a0d6c8fc"
     },
     {
       "screenId": "SCR-13",
@@ -930,7 +930,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "5885d9a23bef2d23c3ace5af3a4d6f7e90c4391cd3ac882d84c1f01620b4c0ff"
+      "sha256": "d6ef4636b536c4b4d325ae55e6bc966f9c18ea01e7997e93062fb5a6d8afa904"
     },
     {
       "screenId": "SCR-14",
@@ -946,7 +946,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "2962b9a615abb90ba930fc3a1a266ad14bff6a75bc6a425e7896d41eea399fe5"
+      "sha256": "d6a9b972083b55d4939e81fec8a86b3e926c09ca3281f0ccc47a355a502f5419"
     },
     {
       "screenId": "SCR-14",
@@ -962,7 +962,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "03bc2a0b00858fafa5ab265883821deff28344b30eb1ad51770ed517ac13e074"
+      "sha256": "139fd07dc84a22fd6907a34595beaeab2607ee89ac0f35a4c15da049ea2d9d75"
     },
     {
       "screenId": "SCR-15",
@@ -978,7 +978,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "0329384533fc3ac2f8956afd3c4184cd091e419b96b828601315d5bb67f27751"
+      "sha256": "bf9e5d6b3201b55df7969646db7629791dc6ce296de88564d90ff09fd6e6c242"
     },
     {
       "screenId": "SCR-15",
@@ -994,7 +994,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b3a82ca98bf39866924ced43a66edb10e9fb27d5f80779619124c4e26b8f4f2b"
+      "sha256": "e222fc97a86e38ad2a9d0b13e072332b15e67581c335cade8b39c59a9b85aed2"
     },
     {
       "screenId": "SCR-15",
@@ -1010,7 +1010,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "4b72bb118d614539676e0515f5b6e73a5f682b04f5bc06a723fd67a8c195639e"
+      "sha256": "820062cd2f44e79f655b72b7153cfe5d2efd1d8325d0c6b7c2a9663281a156d6"
     },
     {
       "screenId": "SCR-15",
@@ -1026,7 +1026,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "6025214201d8a8f94b4f165498548c4621fcc2c3589681ca708f8fcd1d8009da"
+      "sha256": "31fc087ed7f01f130cd016a71a298465be4755a9e6dd1e6567ddefc4863d3024"
     },
     {
       "screenId": "SCR-15",
@@ -1037,12 +1037,12 @@
       "source": "design/maquettes/Parametres.dc.html#modeles",
       "file": "design/references/SCR-15-modeles-desktop.png",
       "width": 1600,
-      "height": 1469,
+      "height": 1470,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "d9bfda38fc44f2a99b4749acd11870a01fc1876d0143289245590c5c024c87fb"
+      "sha256": "4ba6498749a99dcdeac83e68759317a1ba3bbbb928b504a3cd691754dd02c840"
     },
     {
       "screenId": "SCR-15",
@@ -1053,12 +1053,12 @@
       "source": "design/maquettes/Parametres.dc.html#modeles",
       "file": "design/references/SCR-15-modeles-mobile.png",
       "width": 448,
-      "height": 3217,
+      "height": 3219,
       "fixedAt": "2026-11-11T12:20:00Z",
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "b177d9d54a3c1815f7d6413813ae21487433e90080251d870c7a0f5d54d042bf"
+      "sha256": "1b6b52589f3bb74545f06a646fc74c1b63f08177559818e20418414a36745caf"
     },
     {
       "screenId": "SCR-15",
@@ -1074,7 +1074,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "5d383266f50221351d15fe0893de490bc11f632da1ae470a90ad2fa3260f58ce"
+      "sha256": "1d29efcc83f5108e714da3ca2129e7e1b728f8ff24a3a4fe8816d05b482100fe"
     },
     {
       "screenId": "SCR-15",
@@ -1090,7 +1090,7 @@
       "locale": "fr-FR",
       "timeZone": "Europe/Paris",
       "zoom": 0.9,
-      "sha256": "dc014a5125d4317206ce643e0c73d2554169a34726fcc917b88b7a154237ca82"
+      "sha256": "0cfe3bb062ab58db41321185aa4232e0a3fc1cc6f545f68e37f477830316465d"
     }
   ]
 }

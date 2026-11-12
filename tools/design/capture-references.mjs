@@ -26,6 +26,7 @@ const CHROMIUM_ARGS = [
   '--force-color-profile=srgb',
   '--font-render-hinting=none',
   '--disable-lcd-text',
+  '--disable-font-subpixel-positioning',
   '--disable-gpu',
   '--disable-skia-runtime-opts',
   '--run-all-compositor-stages-before-draw',
@@ -112,6 +113,9 @@ function fontRoutes(cache) {
 
 async function waitForAssets(page, label) {
   const missing = await page.evaluate(async (fonts) => {
+    // Load every declared face (all weights and unicode subsets), not only the probe list: a
+    // late 500/700 face would otherwise swap after the first paint on slower runs (EF-4).
+    await Promise.all([...document.fonts].map((face) => face.load().catch(() => null)));
     await document.fonts.ready;
     const out = [];
     for (const f of fonts) {
