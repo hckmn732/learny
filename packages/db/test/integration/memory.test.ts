@@ -29,6 +29,7 @@ type Queryable = Pick<DbTx, 'execute'>;
 const FIXED = new Date('2026-11-11T12:20:00Z');
 const LATER = new Date('2026-11-18T08:00:00Z');
 const LATER_STILL = new Date('2026-11-25T08:00:00Z');
+const CLEARED_AT = new Date('2026-11-26T08:00:00Z');
 
 const TABLES = ['gap_events', 'notion_states', 'review_logs'];
 
@@ -867,19 +868,19 @@ describe('[SPEC-107] memory persistence', () => {
         userId: base.userId,
         notionId,
         expectedRevision: changed.state.revision,
-        clearedAt: LATER_STILL,
+        clearedAt: CLEARED_AT,
         evidence: { successes: 2 },
       });
       expect(cleared.event?.kind).toBe('cleared');
       expect(cleared.event?.nature).toBe('forgetting');
-      expect(cleared.state.gapClearedAt?.toISOString()).toBe(LATER_STILL.toISOString());
+      expect(cleared.state.gapClearedAt?.toISOString()).toBe(CLEARED_AT.toISOString());
 
       // CL-4 — clearing again is a no-op: no second event, no revision bump.
       const again = await clearGap(tx, {
         userId: base.userId,
         notionId,
         expectedRevision: cleared.state.revision,
-        clearedAt: LATER_STILL,
+        clearedAt: CLEARED_AT,
       });
       expect(again.changed).toBe(false);
       expect(again.event).toBeNull();
