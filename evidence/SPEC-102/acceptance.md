@@ -15,3 +15,4 @@ Toutes les preuves ci-dessous proviennent de l'exécution réelle de `node tools
 
 - Extrait `\d public.profiles` (psql du conteneur local) : `profile-schema.txt`.
 - Décisions : ADR-0236 (clé étrangère `auth.users`, vérification CL-9 sous politiques temporaires annulées, rejeu CL-7 via une table temporaire).
+- Ligne de base SPEC-006 actualisée (`test(SPEC-006): actualise la ligne de base du registre`) : l'entrée SPEC-102 dans le registre ajoute une ligne masquée à la carte « Pages de démonstration », ce qui décale la carte « Client API » ; les captures desktop et mobile de `spec-006-demo` sont régénérées, sans autre écart.
