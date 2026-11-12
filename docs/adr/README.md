@@ -130,3 +130,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0249](ADR-0249-implementation-du-stockage-prive-et-des-url-signees-de-dix-m.md) | Implémentation du stockage privé et des URL signées de dix minutes | Déduite | SPEC-114, SPEC-113, SPEC-206 |
 | [ADR-0250](ADR-0250-seed-de-demonstration-deterministe-et-fabriques-partagees.md) | Seed de démonstration déterministe et fabriques partagées | Déduite | SPEC-115 |
 | [ADR-0251](ADR-0251-socle-api-v1-surcharge-de-handler-openapi-3-1-natif-et-acces.md) | Socle API v1 : surcharge de handler(), OpenAPI 3.1 natif et accès service de l'idempotence | Déduite | SPEC-201 |
+| [ADR-0252](ADR-0252-resolution-des-heures-locales-aux-changements-d-heure.md) | Résolution des heures locales aux changements d'heure | Déduite | SPEC-207, ADR-0030, ADR-0047 |
+| [ADR-0253](ADR-0253-validation-des-fuseaux-iana-et-repli-de-detection.md) | Validation des fuseaux IANA et repli de détection | Déduite | SPEC-207, SPEC-202, SPEC-602, ADR-0030 |
