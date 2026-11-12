@@ -23,6 +23,8 @@ COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
 COPY packages/jobs/package.json ./packages/jobs/package.json
+COPY packages/notifications/package.json ./packages/notifications/package.json
+COPY packages/services/package.json ./packages/services/package.json
 COPY packages/testing/package.json ./packages/testing/package.json
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --frozen-lockfile --filter @learny/worker...

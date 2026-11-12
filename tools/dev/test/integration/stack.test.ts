@@ -17,6 +17,7 @@ const ENV = {
   INNGEST_DEV: '1',
   JOBS_MODE: 'inngest',
   INNGEST_WEB_URL: `http://host.docker.internal:${String(WEB_PORT)}/api/inngest`,
+  NEXT_PUBLIC_APP_URL: `http://127.0.0.1:${String(WEB_PORT)}`,
   MAILPIT_URL: 'http://127.0.0.1:8025',
   // SPEC-009 CL-3: a test environment only accepts the in-memory e-mail transport; Mailpit is
   // exercised below through its SMTP port, independently of the application mode.

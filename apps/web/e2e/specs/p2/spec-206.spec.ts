@@ -11,6 +11,9 @@ import {
 } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
+// Same-origin mutations from the API request context (SPEC-208 origin guard).
+const ORIGIN = 'http://127.0.0.1:3100';
+
 import { buildPdf } from '../../../../../packages/services/test/support/files';
 
 const SECTIONS = ['spec-206-limits', 'spec-206-cases', 'spec-206-deletion'];
@@ -169,6 +172,7 @@ test('parcourt les routes réelles : envoi, finalisation, lecture, suppression @
   const other = await createTestSession();
   const supabase = supabaseLocalEnv();
   const headers = (user: TestSession, extra: Record<string, string> = {}) => ({
+    origin: ORIGIN,
     cookie: user.cookieHeader,
     ...extra,
   });
@@ -187,7 +191,7 @@ test('parcourt les routes réelles : envoi, finalisation, lecture, suppression @
     const pdf = buildPdf({ pages: 3 });
 
     // Without a session: 401 problem+json. Without a key: 400. A video and a huge PDF: 422 codes.
-    const anonymous = await request.post(uploads, { headers: { cookie: '' }, data: {} });
+    const anonymous = await request.post(uploads, { headers: { origin: ORIGIN, cookie: '' }, data: {} });
     expect(anonymous.status()).toBe(401);
     const noKey = await request.post(uploads, {
       headers: headers(session),
