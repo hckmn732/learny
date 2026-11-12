@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T21:13:16.212Z",
+  "updatedAt": "2026-11-12T21:43:05.539Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -2706,14 +2706,55 @@
       }
     },
     "SPEC-405": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-12T21:14:09.252Z",
+      "completedAt": "2026-11-12T21:43:05.537Z",
+      "branch": "spec/SPEC-405-tirage-des-questions-d-une-tentative",
+      "commit": "23c61f4",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-12T21:41:05.604Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-12T21:41:20.586Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-12T21:41:33.171Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-12T21:41:38.665Z",
+          "details": "23 test(s) [SPEC-405] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-12T21:42:19.901Z",
+          "details": "4 test(s) [SPEC-405] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-12T21:42:56.409Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-12T21:42:56.410Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-12T21:42:56.421Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-406": {
       "status": "pending",
