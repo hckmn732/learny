@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T20:41:41.099Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T21:07:25.499Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 54 |
+| Terminées | 55 |
 | En cours | 0 |
-| Prêtes | 2 |
+| Prêtes | 1 |
 | En attente de dépendances | 76 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **40.9 %** |
-| Avancement V1 | 43.5 % |
+| **Avancement global** | **41.7 %** |
+| Avancement V1 | 44.4 % |
 | Prochaine action | start SPEC-404 — Détection, nature et levée des lacunes |
 
 ## Phases et checkpoints
@@ -25,7 +25,7 @@
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
-| P4 | Moteur d'apprentissage (déterministe) | 5/11 | CP-4 | ⏳ |
+| P4 | Moteur d'apprentissage (déterministe) | 6/11 | CP-4 | ⏳ |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
@@ -92,7 +92,7 @@
 | [SPEC-405](../specs/p4-moteur/SPEC-405-tirage-des-questions-d-une-tentative.md) | Tirage des questions d'une tentative | P4 | ⏳ waiting | 0 | — | SPEC-404 |
 | [SPEC-406](../specs/p4-moteur/SPEC-406-tirage-de-la-session-de-quiz-global.md) | Tirage de la session de quiz global | P4 | ⏳ waiting | 0 | — | SPEC-402, SPEC-404 |
 | [SPEC-407](../specs/p4-moteur/SPEC-407-planificateur.md) | Planificateur | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
-| [SPEC-408](../specs/p4-moteur/SPEC-408-retention-et-indicateurs-de-progression.md) | Rétention et indicateurs de progression | P4 | 🟢 ready | 0 | — | SPEC-402 |
+| [SPEC-408](../specs/p4-moteur/SPEC-408-retention-et-indicateurs-de-progression.md) | Rétention et indicateurs de progression | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402 |
 | [SPEC-409](../specs/p4-moteur/SPEC-409-serie-et-jalons.md) | Série et jalons | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-410](../specs/p4-moteur/SPEC-410-selection-de-l-echauffement.md) | Sélection de l'échauffement | P4 | ⏳ waiting | 0 | — | SPEC-402, SPEC-404 |
 | [SPEC-411](../specs/p4-moteur/SPEC-411-services-de-persistance-du-moteur.md) | Services de persistance du moteur | P4 | ⏳ waiting | 0 | — | SPEC-402, SPEC-403, SPEC-404, SPEC-405, SPEC-406, SPEC-407, SPEC-408, SPEC-409, SPEC-410, SPEC-107, SPEC-108 |

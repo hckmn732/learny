@@ -157,3 +157,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0278](ADR-0278-contrats-d-implementation-de-la-repetition-espacee-fsrs.md) | Contrats d’implémentation de la répétition espacée FSRS | Déduite | SPEC-402, ADR-0025, ADR-0140, ADR-0242 |
 | [ADR-0280](ADR-0280-durees-derivees-et-identifiants-du-planificateur.md) | Durées dérivées et identifiants du planificateur | Déduite | SPEC-407 |
 | [ADR-0281](ADR-0281-complements-d-implementation-de-la-serie-et-des-jalons.md) | Compléments d'implémentation de la série et des jalons | Déduite | SPEC-409, ADR-0033, ADR-0047, ADR-0140 |
+| [ADR-0283](ADR-0283-complements-d-implementation-de-la-retention-et-des-indicateurs-de-progression.md) | Compléments d'implémentation de la rétention et des indicateurs de progression | Déduite | SPEC-408, BR-MEM-06, BR-PRO-01, ADR-0210, ADR-0047, ADR-0140 |

@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.045271">
+<testsuite name="p4/spec-408.spec.ts" timestamp="2026-11-12T21:07:10.726Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.402" errors="0">
+<testcase name="Rétention et indicateurs de progression @SPEC-408" classname="p4/spec-408.spec.ts" time="1.264">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/attachments/axe-f11097cfe7382574885b76baf822b99633f6cd15.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/attachments/spec-408-demo-f9829c2e9e2649757629af06169b961188e85811.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-indicateurs-de-progression-SPEC-408-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Rétention et indicateurs de progression, conformité visuelle @SPEC-408 @visual @mobile" classname="p4/spec-408.spec.ts" time="1.138">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-desktop/attachments/axe-86c764c450a3bf27e421119952a9ae6e5d81ac38.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p4/spec-408.spec.ts" timestamp="2026-11-12T21:07:10.726Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.112" errors="0">
+<testcase name="Rétention et indicateurs de progression, conformité visuelle @SPEC-408 @visual @mobile" classname="p4/spec-408.spec.ts" time="1.112">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-mobile/attachments/axe-8d14d048a3c8947ee6e72a69349a70297d7a60ba.json]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p4-spec-408-Rétention-et-i-683e0-elle-SPEC-408-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
