@@ -85,7 +85,7 @@ export function mapProviderError(error: unknown, context: AiErrorContext = {}): 
         { status: 429, cause: error },
       );
     }
-    if (status === 408 || status === 504 || isAbort(error.cause)) {
+    if (status === 408 || status === 504) {
       return withCode('AI_TIMEOUT', 'Le modèle n’a pas répondu dans le délai imparti.', context, {
         status: 504,
         cause: error,

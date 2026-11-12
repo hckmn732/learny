@@ -352,7 +352,7 @@ export async function createSession(
         resolved,
         usage,
         latencyMs,
-        effectiveModel: result.modelId,
+        effectiveModel: mode === 'mock' ? resolved.modelId : result.modelId,
         status: refusedNow ? 'refused' : 'ok',
         errorCode: refusedNow ? 'AI_REFUSED' : null,
       });
@@ -451,7 +451,7 @@ export async function createSession(
         resolved,
         usage: effectiveUsage,
         latencyMs,
-        effectiveModel: modelId,
+        effectiveModel: mode === 'mock' ? resolved.modelId : modelId,
         status: 'ok',
       });
       return ok(object as z.infer<S>);
@@ -535,7 +535,8 @@ export async function createSession(
             resolved,
             usage,
             latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
-            effectiveModel: event.response.modelId ?? resolved.modelId,
+            effectiveModel:
+              mode === 'mock' ? resolved.modelId : (event.response.modelId ?? resolved.modelId),
             status: refusalFrom(event.finishReason, undefined) ? 'refused' : 'ok',
             errorCode: refusalFrom(event.finishReason, undefined) ? 'AI_REFUSED' : null,
           });
