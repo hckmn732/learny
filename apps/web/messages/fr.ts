@@ -800,6 +800,62 @@ export const fr = {
         },
       },
     },
+    spec109: {
+      intro:
+        'Démonstration : trois notifications in-app (un programme du jour déjà lu, une lacune et un bilan non lus) et leur journal de livraison. Le journal ne contient ni adresse e-mail ni endpoint push ; chaque statut porte un texte et une icône, jamais seulement une couleur.',
+      inbox: {
+        title: 'Boîte de réception',
+        intro:
+          'Les notifications sont lues de la plus récente à la plus ancienne. Le compteur non lu repose sur les lignes dont la date de lecture est nulle.',
+        count: (count: number) => (count === 1 ? '1 non lue' : `${String(count)} non lues`),
+        unread: 'non lue',
+        read: 'lue',
+        region: 'Notifications (liste)',
+        icon: 'Icône',
+        types: {
+          validation_soon: 'quiz de validation proche',
+          course_ready: 'cours prêt',
+          global_quiz_today: 'quiz global du jour',
+          new_gap: 'nouvelle lacune',
+          session_planned: 'séance planifiée',
+          module_validated: 'module validé',
+          session_to_reschedule: 'séance à replacer',
+          weekly_review: 'bilan de la semaine',
+          milestone: 'jalon',
+          ai_cost_alert: 'alerte de coût IA',
+          ai_task_failed: 'échec de tâche IA',
+          export_ready: 'export prêt',
+          group_invitation: 'invitation de groupe',
+          daily_digest: 'programme du jour',
+          relaunch: 'reprise',
+          planning_adjusted: 'planning ajusté',
+        },
+      },
+      deliveries: {
+        title: 'Livraisons',
+        intro:
+          'Chaque canal externe garde sa décision : envoyée, reportée à la fin des heures calmes, écartée par le plafond ou non envoyée selon la préférence. Aucune adresse n’est conservée.',
+        region: 'Livraisons (tableau défilant)',
+        notification: 'Notification',
+        channel: 'Canal',
+        status: 'Statut',
+        scheduledFor: 'Réévaluation',
+        sentAt: 'Envoyée le',
+        missing: '—',
+        channels: {
+          email: 'e-mail',
+          push: 'navigateur',
+        },
+        statuses: {
+          scheduled: 'planifiée',
+          sent: 'envoyée',
+          deferred_quiet: 'reportée (heures calmes)',
+          capped: 'écartée (plafond)',
+          failed: 'échec',
+          skipped_pref: 'non envoyée (préférence)',
+        },
+      },
+    },
     spec010: {
       context: {
         title: 'Corrélation',

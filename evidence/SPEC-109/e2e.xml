@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="31.402999">
+<testsuite name="p1/spec-109.spec.ts" timestamp="2026-11-12T04:45:43.579Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.404" errors="0">
+<testcase name="inspecte les notifications @SPEC-109" classname="p1/spec-109.spec.ts" time="1.221">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/attachments/axe-1e30460a88c42a62b6148ec67dfa45e886ef3663.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/attachments/spec-109-notifications-f31e97600a8d33f2d78dc018e7b2408f2f252d89.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-inspecte-les-notifications-SPEC-109-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="notifications conformes @SPEC-109 @visual @mobile" classname="p1/spec-109.spec.ts" time="1.183">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-desktop/attachments/axe-185064e7df11fb9284edc6e3688a6a8e2566de6b.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p1/spec-109.spec.ts" timestamp="2026-11-12T04:45:43.579Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.154" errors="0">
+<testcase name="notifications conformes @SPEC-109 @visual @mobile" classname="p1/spec-109.spec.ts" time="1.154">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-mobile/attachments/axe-0019b12ab9a47fbc489bb00587999a147e1fe86f.json]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p1-spec-109-notifications-conformes-SPEC-109-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

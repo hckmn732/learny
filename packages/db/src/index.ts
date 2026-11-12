@@ -189,3 +189,40 @@ export * from './repositories/schedule-slots';
 export * from './repositories/automation-actions';
 export * from './repositories/daily-activity';
 export * from './repositories/milestones';
+
+// Two tables of the notification domain and their three enumerations (SPEC-109 EF-1 to EF-5).
+// `notification_type` follows `data-model.md` §8; the delivery journal keeps the decision taken for
+// each external channel (ADR-0031, ADR-0214).
+export {
+  DELIVERY_CHANNELS,
+  DELIVERY_STATUSES,
+  ERROR_DELIVERY_STATUSES,
+  NOTIFICATION_FILTERS,
+  NOTIFICATION_TYPES,
+  SCHEDULED_DELIVERY_STATUSES,
+  deliveryChannel,
+  deliveryErrorSchema,
+  deliveryStatus,
+  notificationBodySchema,
+  notificationDedupeKeySchema,
+  notificationDeliveries,
+  notificationHrefSchema,
+  notificationIconSchema,
+  notificationInstantSchema,
+  notificationTitleSchema,
+  notificationType,
+  notifications,
+} from './schema/notifications';
+export type {
+  DeliveryChannel,
+  DeliveryStatus,
+  NewNotification,
+  NewNotificationDelivery,
+  Notification,
+  NotificationDelivery,
+  NotificationFilter,
+  NotificationType,
+} from './schema/notifications';
+
+// Repositories of the inbox and of the delivery journal (SPEC-109 EF-2 to EF-5, ET-3 to ET-5).
+export * from './repositories/notifications';

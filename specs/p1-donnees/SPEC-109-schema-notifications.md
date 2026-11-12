@@ -112,3 +112,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; migration 
 ## 15. Décisions et hypothèses
 
 ADR-0031 fixe le plafond des canaux externes, pas de l'in-app. Les défauts BR-NOT-04 sont stockés par SPEC-102 ; cette spécification les réutilise sans les altérer. SPEC-209 décidera de chaque livraison à partir de ces réglages.
+
+- **ADR-0244** : journal unique par `(notification_id, channel)` (idempotence du rejeu, CL-1) ; `href` interne vérifié en base et par Zod ; `sent` équivalent à `sent_at` non nul et final par déclencheur ; `error` réduit à un code sûr ; RLS `all` sur les notifications du propriétaire et `select` seul sur les livraisons, écrites par le service. Les bornes `title ≤ 120` et `body ≤ 400` reprennent le contrat de SPEC-209 ET-2.
+

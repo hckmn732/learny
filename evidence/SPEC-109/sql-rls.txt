@@ -1,0 +1,57 @@
+Pager usage is off.
+BEGIN
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+== Rôle authenticated avec le JWT d'Alice ==
+SET
+                                   claims                                   
+----------------------------------------------------------------------------
+ {"sub" : "8abe3325-8867-4ce1-a8bb-0524352f4b2e", "role" : "authenticated"}
+(1 row)
+
+              claim_sub               
+--------------------------------------
+ 8abe3325-8867-4ce1-a8bb-0524352f4b2e
+(1 row)
+
+ notifications_visibles 
+------------------------
+                      1
+(1 row)
+
+ livraisons_visibles 
+---------------------
+                   1
+(1 row)
+
+ notifications_de_bob_visibles 
+-------------------------------
+                             0
+(1 row)
+
+== Alice met à jour la notification de Bob : 0 ligne ==
+ id 
+----
+(0 rows)
+
+UPDATE 0
+== Alice tente d'insérer une notification pour Bob : refus RLS ==
+SAVEPOINT
+ERROR:  new row violates row-level security policy for table "notifications"
+ROLLBACK
+== Alice tente d'écrire le journal de livraison : refus RLS ==
+SAVEPOINT
+ERROR:  new row violates row-level security policy for table "notification_deliveries"
+ROLLBACK
+RESET
+== Côté service, la notification de Bob est intacte : non lue ==
+ bob_toujours_non_lue 
+----------------------
+ t
+(1 row)
+
+ROLLBACK
