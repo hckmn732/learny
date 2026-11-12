@@ -6,10 +6,13 @@ import { createMemoryDemoStore, type DemoResultStore } from '../demo-store';
 import { setInlineRegistry } from '../inline';
 import type { JobErrorReporter } from '../ports';
 
+import { accountDeletion } from './account-deletion';
 import { cronHourlyTick } from './cron-hourly-tick';
 import { cronNightly } from './cron-nightly';
+import { dataExport } from './data-export';
 import { createDemoJob } from './demo-job';
 import { emailWelcome } from './email-welcome';
+import { exportsPurge } from './exports-purge';
 import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
@@ -24,9 +27,12 @@ export interface JobDeps {
 
 // Functions of SPEC-203 are created with the shared `inngest` client (see `defineFunction`).
 export const learnyFunctions = [
+  accountDeletion,
   cronHourlyTick,
   cronNightly,
+  dataExport,
   emailWelcome,
+  exportsPurge,
   nightlyOutboxCleanup,
   notificationDelivery,
   notificationsDailyDigest,
