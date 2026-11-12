@@ -1,28 +1,28 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-11T23:21:59.497Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T00:01:15.824Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 13 |
+| Terminées | 14 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 118 |
+| En attente de dépendances | 117 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **9.8 %** |
-| Avancement V1 | 10.5 % |
-| Prochaine action | start SPEC-101 — Paquet db : Drizzle, migrations et harnais de test |
+| **Avancement global** | **10.6 %** |
+| Avancement V1 | 11.3 % |
+| Prochaine action | start SPEC-102 — Schéma identité et préférences |
 
 ## Phases et checkpoints
 
 | Phase | Titre | Terminées | Checkpoint | Statut |
 |---|---|---|---|---|
 | P0 | Fondations et infrastructure | 13/13 | CP-0 | ✅ 2026-11-11 cp-0 v0.0.0 |
-| P1 | Base de données, migrations et sécurité | 0/15 | CP-1 | ⏳ |
+| P1 | Base de données, migrations et sécurité | 1/15 | CP-1 | ⏳ |
 | P2 | Backend, API et services transverses | 0/12 | CP-2 | ⏳ |
 | P3 | Design system et coquille de l'application | 0/9 | CP-3 | ⏳ |
 | P4 | Moteur d'apprentissage (déterministe) | 0/11 | CP-4 | ⏳ |
@@ -49,8 +49,8 @@
 | [SPEC-011](../specs/p0-fondations/SPEC-011-integration-continue.md) | Intégration continue | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-002, SPEC-004, SPEC-008 |
 | [SPEC-012](../specs/p0-fondations/SPEC-012-images-docker-et-deploiement-auto-heberge.md) | Images Docker et déploiement auto-hébergé | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-007, SPEC-008 |
 | [SPEC-013](../specs/p0-fondations/SPEC-013-environnements-geres-et-deploiement-continu.md) | Environnements gérés et déploiement continu | P0 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-009, SPEC-011 |
-| [SPEC-101](../specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md) | Paquet db : Drizzle, migrations et harnais de test | P1 | 🟢 ready | 0 | — | SPEC-008 |
-| [SPEC-102](../specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md) | Schéma identité et préférences | P1 | ⏳ waiting | 0 | — | SPEC-101 |
+| [SPEC-101](../specs/p1-donnees/SPEC-101-paquet-db-drizzle-migrations-et-harnais-de-test.md) | Paquet db : Drizzle, migrations et harnais de test | P1 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-008 |
+| [SPEC-102](../specs/p1-donnees/SPEC-102-schema-identite-et-preferences.md) | Schéma identité et préférences | P1 | 🟢 ready | 0 | — | SPEC-101 |
 | [SPEC-103](../specs/p1-donnees/SPEC-103-schema-formations-programme-et-notions.md) | Schéma formations, programme et notions | P1 | ⏳ waiting | 0 | — | SPEC-102 |
 | [SPEC-104](../specs/p1-donnees/SPEC-104-schema-ressources-et-passages-vectoriels.md) | Schéma ressources et passages vectoriels | P1 | ⏳ waiting | 0 | — | SPEC-103 |
 | [SPEC-105](../specs/p1-donnees/SPEC-105-schema-cours-et-discussions.md) | Schéma cours et discussions | P1 | ⏳ waiting | 0 | — | SPEC-104 |
