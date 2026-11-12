@@ -1,4 +1,4 @@
-# ADR-0261 — Canal push : paquet notifications partagé, refus neutre d'un endpoint étranger et mock déterministe
+# ADR-0266 — Canal push : paquet notifications partagé, refus neutre d'un endpoint étranger et mock déterministe
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
