@@ -1,0 +1,64 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="35.99136">
+<testsuite name="p2/spec-201-socle-api.spec.ts" timestamp="2026-11-12T08:32:02.836Z" hostname="desktop" tests="3" failures="0" skipped="0" time="3.156" errors="0">
+<testcase name="démonstration du socle API @SPEC-201" classname="p2/spec-201-socle-api.spec.ts" time="1.52">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/attachments/axe-35576f6de8f27fa83bbe559b4f026f22794f4052.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/attachments/spec-201-socle-api-c37773894bad8d8b18a3e9a2044c44965b3b968a.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-démonstration-du-socle-API-SPEC-201-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="page de démonstration SPEC-201 @SPEC-201 @visual @mobile" classname="p2/spec-201-socle-api.spec.ts" time="1.4">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-desktop/attachments/axe-d3bb5a51fde9ab8b22a6b3e883ef1d8715451721.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refuse un appel sans session @SPEC-201" classname="p2/spec-201-socle-api.spec.ts" time="0.236">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-refuse-un-appel-sans-session-SPEC-201-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-refuse-un-appel-sans-session-SPEC-201-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-refuse-un-appel-sans-session-SPEC-201-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p2/spec-201-socle-api.spec.ts" timestamp="2026-11-12T08:32:02.836Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.026" errors="0">
+<testcase name="page de démonstration SPEC-201 @SPEC-201 @visual @mobile" classname="p2/spec-201-socle-api.spec.ts" time="2.026">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-mobile/attachments/axe-61951c4ef9478b78cf9cab5c4997ea44f6917385.json]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p2-spec-201-socle-api-page-6a192--201-SPEC-201-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
