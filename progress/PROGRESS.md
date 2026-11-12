@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-12T22:20:51.647Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-12T23:38:42.419Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -9,13 +9,13 @@
 | Spécifications | 132 (V1 : 124, V2 : 8) |
 | Terminées | 60 |
 | En cours | 0 |
-| Prêtes | 0 |
-| En attente de dépendances | 72 |
+| Prêtes | 2 |
+| En attente de dépendances | 70 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **45.5 %** |
 | Avancement V1 | 48.4 % |
-| Prochaine action | checkpoint CP-4 |
+| Prochaine action | start SPEC-501 — Paquet bricks : registre, schémas et validation |
 
 ## Phases et checkpoints
 
@@ -25,7 +25,7 @@
 | P1 | Base de données, migrations et sécurité | 15/15 | CP-1 | ✅ 2026-11-12 cp-1 v0.1.0 |
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
-| P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ⏳ |
+| P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 0/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
@@ -96,10 +96,10 @@
 | [SPEC-409](../specs/p4-moteur/SPEC-409-serie-et-jalons.md) | Série et jalons | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-401 |
 | [SPEC-410](../specs/p4-moteur/SPEC-410-selection-de-l-echauffement.md) | Sélection de l'échauffement | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-404 |
 | [SPEC-411](../specs/p4-moteur/SPEC-411-services-de-persistance-du-moteur.md) | Services de persistance du moteur | P4 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-402, SPEC-403, SPEC-404, SPEC-405, SPEC-406, SPEC-407, SPEC-408, SPEC-409, SPEC-410, SPEC-107, SPEC-108 |
-| [SPEC-501](../specs/p5-ia/SPEC-501-paquet-bricks-registre-schemas-et-validation.md) | Paquet bricks : registre, schémas et validation | P5 | ⏳ waiting | 0 | — | SPEC-106 |
+| [SPEC-501](../specs/p5-ia/SPEC-501-paquet-bricks-registre-schemas-et-validation.md) | Paquet bricks : registre, schémas et validation | P5 | 🟢 ready | 0 | — | SPEC-106 |
 | [SPEC-502](../specs/p5-ia/SPEC-502-correction-automatique-des-briques.md) | Correction automatique des briques | P5 | ⏳ waiting | 0 | — | SPEC-501 |
 | [SPEC-503](../specs/p5-ia/SPEC-503-rendu-des-briques.md) | Rendu des briques | P5 | ⏳ waiting | 0 | — | SPEC-501, SPEC-303 |
-| [SPEC-504](../specs/p5-ia/SPEC-504-paquet-llm-fournisseurs-taches-et-modele-simule.md) | Paquet llm : fournisseurs, tâches et modèle simulé | P5 | ⏳ waiting | 0 | — | SPEC-110, SPEC-201, SPEC-009 |
+| [SPEC-504](../specs/p5-ia/SPEC-504-paquet-llm-fournisseurs-taches-et-modele-simule.md) | Paquet llm : fournisseurs, tâches et modèle simulé | P5 | 🟢 ready | 0 | — | SPEC-110, SPEC-201, SPEC-009 |
 | [SPEC-505](../specs/p5-ia/SPEC-505-cles-personnelles-chiffrees.md) | Clés personnelles chiffrées | P5 | ⏳ waiting | 0 | — | SPEC-504 |
 | [SPEC-506](../specs/p5-ia/SPEC-506-qualification-des-modeles-personnels.md) | Qualification des modèles personnels | P5 | ⏳ waiting | 0 | — | SPEC-505, SPEC-501 |
 | [SPEC-507](../specs/p5-ia/SPEC-507-garde-fou-de-cout-et-journal-des-appels.md) | Garde-fou de coût et journal des appels | P5 | ⏳ waiting | 0 | — | SPEC-504, SPEC-210 |

@@ -9,6 +9,99 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.4.0] — 2026-11-12
+
+### Ajouts
+
+- feat(SPEC-411): démontre la transaction et le plan
+- feat(SPEC-411): applique les résultats et persiste le plan
+- feat(SPEC-411): schéma, index et contrats de persistation
+- feat(SPEC-410): branche la démonstration SDD
+- feat(SPEC-406): branche la démonstration SDD du tirage
+- feat(SPEC-405): expose la démonstration du tirage
+- feat(SPEC-405): ajoute le calcul déterministe du tirage
+- feat(SPEC-410): ajoute le calcul déterministe
+- feat(SPEC-406): ajoute le calcul déterministe de la session
+- feat(SPEC-408): expose la démonstration des métriques
+- feat(SPEC-404): expose la démonstration des lacunes
+- feat(SPEC-404): ajoute le calcul déterministe
+- feat(SPEC-408): ajoute le calcul déterministe
+- feat(SPEC-407): expose la démonstration du planificateur
+- feat(SPEC-402): expose le module et sa démonstration
+- feat(SPEC-407): ajoute le calcul déterministe
+- feat(SPEC-409): branche la démonstration SDD
+- feat(SPEC-403): branche la démonstration SDD
+- feat(SPEC-409): ajoute le calcul déterministe
+- feat(SPEC-402): ajoute le calcul déterministe
+- feat(SPEC-403): ajoute le calcul déterministe
+- feat(SPEC-401): branche la démonstration dans le registre SDD
+- feat(SPEC-401): page de démonstration du socle et e2e
+- feat(SPEC-401): paquet learning-engine, types et jeu de référence
+- feat(SPEC-401): paramètres ENGINE, temps et frontières du moteur
+
+### Corrections
+
+- fix(SPEC-411): convertit les erreurs de validation du plan
+- fix(SPEC-101): fige la hauteur de la liste des migrations
+- fix(SPEC-411): aligne les inventaires contrats et planning
+- fix(SPEC-406): renumérote l'ADR en 0287
+- fix(SPEC-404): rend les tableaux défilables accessibles
+- fix(SPEC-404): accepte la maîtrise calculée sans arrondi
+- fix(SPEC-407): type la raison de replanification
+- fix(SPEC-401): copie learning-engine dans les images Docker
+- fix(SPEC-401): type la table de concordance ENGINE
+
+### Documentation
+
+- docs(SPEC-411): consigne les contrats et le modèle persisté
+- docs(SPEC-410): consigne les décisions en ADR-0286
+- docs(SPEC-406): consigne les contrats du tirage
+- docs(SPEC-405): consigne ADR-0284 et les chemins du module
+- docs(SPEC-408): consigne ADR-0283
+- docs(SPEC-404): consigne ADR-0282 et l’API des lacunes
+- docs(SPEC-407): documente l’API du planificateur
+- docs(SPEC-407): consigne ADR-0280
+- docs(SPEC-402): consigne les contrats d'implémentation
+- docs(SPEC-409): consigne ADR-0281
+- docs(SPEC-401): indexe ADR-0277
+- docs(SPEC-401): consigne ADR-0277 et le nombre réel de liens SAP
+
+### Tests
+
+- test(SPEC-411): porte la couverture services au seuil CP-4
+- test(SPEC-411): vérifie l’orchestration du moteur
+- test(SPEC-405): fige les captures de la démonstration
+- test(SPEC-405): type les formats de la part choix
+- test(SPEC-410): couvre la démonstration e2e et fige les captures
+- test(SPEC-406): filme la démonstration et fige les captures
+- test(SPEC-405): filme et fige la démonstration du tirage
+- test(SPEC-405): compose le tirage avec la maîtrise et les lacunes
+- test(SPEC-405): vérifie les invariants du tirage
+- test(SPEC-410): vérifie les invariants du moteur
+- test(SPEC-406): compose le tirage avec FSRS et les lacunes
+- test(SPEC-406): vérifie les invariants du tirage
+- test(SPEC-404): couvre la démonstration e2e et fige les captures
+- test(SPEC-408): filme la démonstration et fige les captures
+- test(SPEC-404): vérifie les invariants du moteur
+- test(SPEC-408): compose les métriques avec le moteur
+- test(SPEC-408): vérifie les invariants du moteur
+- test(SPEC-407): filme la démonstration et fige les captures
+- test(SPEC-402): compose et filme la démonstration
+- test(SPEC-407): compose le planificateur avec le socle
+- test(SPEC-409): fige les captures de démonstration
+- test(SPEC-407): vérifie les invariants du moteur
+- test(SPEC-409): couvre la démonstration e2e
+- test(SPEC-403): couvre la démonstration filmée
+- test(SPEC-409): vérifie les invariants du moteur
+- test(SPEC-402): vérifie les invariants du moteur
+- test(SPEC-403): vérifie les invariants du moteur
+- test(sdd): fiabilise le focus de l'infobulle SPEC-303
+- test(SPEC-401): tests unitaires, propriétés et frontières du moteur
+
+### Intégration continue
+
+- ci(sdd): précharge séquentiellement les images du self-host
+
 ## [v0.3.0] — 2026-11-12
 
 ### Ajouts
