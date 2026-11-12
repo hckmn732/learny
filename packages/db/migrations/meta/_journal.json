@@ -15,6 +15,27 @@
       "when": 1794439756721,
       "tag": "0001_shared_enums",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794441967181,
+      "tag": "0002_identity_functions",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794441975888,
+      "tag": "0003_identity_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794441980718,
+      "tag": "0004_identity_triggers",
+      "breakpoints": true
     }
   ]
 }

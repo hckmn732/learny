@@ -1,293 +1,107 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from web.Dockerfile
+#1 DONE 0.0s
+
+#1 [internal] load build definition from web.Dockerfile
 #1 transferring dockerfile: 3.25kB done
 #1 DONE 0.0s
 
 #2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
-#2 DONE 0.4s
+#2 DONE 0.5s
 
 #3 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
 #3 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
 #3 CACHED
 
 #4 [internal] load metadata for docker.io/library/node:24.22.3-alpine3.24
-#4 DONE 0.4s
+#4 DONE 0.5s
 
 #5 [internal] load .dockerignore
 #5 transferring context: 505B done
 #5 DONE 0.0s
 
 #6 [internal] load build context
-#6 transferring context: 44.78kB done
+#6 transferring context: 24.84kB done
 #6 DONE 0.0s
 
-#7 [runner 1/6] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
+#7 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
 #7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 0.0s done
 #7 DONE 0.0s
 
-#8 [runner 2/6] WORKDIR /app
+#8 [builder 4/5] COPY . .
 #8 CACHED
 
-#9 [deps  2/10] COPY apps/web/package.json ./apps/web/package.json
+#9 [runner 3/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/standalone ./
 #9 CACHED
 
-#10 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
+#10 [deps  7/10] COPY packages/db/package.json ./packages/db/package.json
 #10 CACHED
 
-#11 [deps  4/10] COPY packages/config/package.json ./packages/config/package.json
+#11 [deps  8/10] COPY packages/jobs/package.json ./packages/jobs/package.json
 #11 CACHED
 
-#12 [base 3/3] WORKDIR /repo
+#12 [builder 5/5] RUN pnpm --filter @learny/web build
 #12 CACHED
 
-#13 [deps  1/10] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+#13 [deps  3/10] COPY apps/worker/package.json ./apps/worker/package.json
 #13 CACHED
 
-#14 [deps  3/10] COPY apps/worker/package.json ./apps/worker/package.json
+#14 [deps  1/10] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 #14 CACHED
 
-#15 [deps  5/10] COPY packages/contracts/package.json ./packages/contracts/package.json
+#15 [runner 4/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/static ./apps/web/.next/static
 #15 CACHED
 
-#16 [deps  6/10] COPY packages/core/package.json ./packages/core/package.json
+#16 [runner 2/6] WORKDIR /app
 #16 CACHED
 
-#17 [deps  7/10] COPY packages/db/package.json ./packages/db/package.json
-#17 DONE 0.0s
+#17 [runner 5/6] COPY --from=builder --chown=root:root /repo/apps/web/public ./apps/web/public
+#17 CACHED
 
-#18 [deps  8/10] COPY packages/jobs/package.json ./packages/jobs/package.json
-#18 DONE 0.1s
+#18 [deps  2/10] COPY apps/web/package.json ./apps/web/package.json
+#18 CACHED
 
-#19 [deps  9/10] COPY packages/testing/package.json ./packages/testing/package.json
-#19 DONE 0.1s
+#19 [deps  5/10] COPY packages/contracts/package.json ./packages/contracts/package.json
+#19 CACHED
 
-#20 [deps 10/10] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/web...
-#20 0.572 Scope: 7 of 9 workspace projects
-#20 0.619 Lockfile is up to date, resolution step is skipped
-#20 0.654 Progress: resolved 1, reused 0, downloaded 0, added 0
-#20 0.740 .                                        | +757 ++++++++++++++++++++++++++++++++
-#20 0.896 
-#20 0.896    ╭──────────────────────────────────────────────────────────────────────╮
-#20 0.896    │                                                                      │
-#20 0.896    │                 Update available! 10.34.9 → 12.18.0.                 │
-#20 0.896    │                 Changelog: https://pnpm.io/v/12.18.0                 │
-#20 0.896    │   To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -   │
-#20 0.896    │                                                                      │
-#20 0.896    ╰──────────────────────────────────────────────────────────────────────╯
-#20 0.896 
-#20 1.654 Progress: resolved 757, reused 741, downloaded 16, added 133
-#20 2.654 Progress: resolved 757, reused 741, downloaded 16, added 755
-#20 2.787 Progress: resolved 757, reused 741, downloaded 16, added 757, done
-#20 3.004 . prepare$ husky
-#20 3.042 . prepare: .git can't be found
-#20 3.043 . prepare: Done
-#20 3.062 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
-#20 3.062 │                                                                              │
-#20 3.062 │   Ignored build scripts: esbuild@0.18.20, esbuild@0.25.12, esbuild@0.28.2,   │
-#20 3.062 │   protobufjs@7.6.6.                                                          │
-#20 3.062 │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
-#20 3.062 │   to run scripts.                                                            │
-#20 3.062 │                                                                              │
-#20 3.062 ╰──────────────────────────────────────────────────────────────────────────────╯
-#20 3.084 Done in 2.8s using pnpm v10.34.9
-#20 DONE 3.2s
+#20 [deps  6/10] COPY packages/core/package.json ./packages/core/package.json
+#20 CACHED
 
-#12 [base 3/3] WORKDIR /repo
-#12 CACHED
+#21 [deps  9/10] COPY packages/testing/package.json ./packages/testing/package.json
+#21 CACHED
 
-#21 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
-#21 DONE 4.9s
+#22 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
+#22 CACHED
 
-#22 [builder 2/5] COPY --from=deps /repo/apps ./apps
-#22 DONE 0.3s
+#23 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
+#23 CACHED
 
-#23 [builder 3/5] COPY --from=deps /repo/packages ./packages
-#23 DONE 0.1s
+#24 [base 3/3] WORKDIR /repo
+#24 CACHED
 
-#24 [builder 4/5] COPY . .
-#24 DONE 0.1s
+#25 [deps 10/10] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/web...
+#25 CACHED
 
-#25 [builder 5/5] RUN pnpm --filter @learny/web build
-#25 0.524 
-#25 0.524 > @learny/web@0.0.0 build /repo/apps/web
-#25 0.524 > next build
-#25 0.524 
-#25 0.812 ▲ Next.js 16.4.6 (Turbopack)
-#25 0.831 ✓ Running next.config.ts took 19ms
-#25 0.838 
-#25 0.854   Creating an optimized *** build ...
-#25 3.875 ✓ Compiled successfully in 3.0s
-#25 3.876   Running TypeScript ...
-#25 7.054   Finished TypeScript in 3.2s ...
-#25 7.055   Collecting page data using 12 workers ...
-#25 7.591   Generating static pages using 12 workers (0/2) ...
-#25 7.870 ✓ Generating static pages using 12 workers (2/2) in 279ms
-#25 7.872 Turbopack build encountered 4 warnings:
-#25 7.872 ./apps/web/instrumentation.ts:15:5
-#25 7.872 Warning: A Node.js API is used (process.exit at line: 15) which is not supported in the Edge Runtime.
-#25 7.872     Learn more: https://nextjs.org/docs/api-reference/edge-runtime
-#25 7.872   [90m13 |[0m     [36mconst[0m message = error [36minstanceof[0m [33mError[0m ? error.message : [32m'Configuration invalide.'[0m;
-#25 7.872   [90m14 |[0m     console.error([32m`learny web: démarrage refusé. [0m${message[32m}`[0m);
-#25 7.872 [33m[1m>[0m [90m15 |[0m     process.exit([35m1[0m);
-#25 7.872   [90m   |[0m     [33m[1m^^^^^^^^^^^^[0m
-#25 7.872   [90m16 |[0m   }
-#25 7.872   [90m17 |[0m   [90m// Telemetry is optional and configured after the environment is known (SPEC-010, ET-4).[0m
-#25 7.872   [90m18 |[0m   [36mconst[0m { registerServerSentry } = [36mawait[0m [36mimport[0m([32m'./sentry.server.config'[0m);
-#25 7.872 
-#25 7.872 Ecmascript file had an error
-#25 7.872 
-#25 7.872 Import trace:
-#25 7.872   App Route:
-#25 7.872     ./apps/web/instrumentation.ts
-#25 7.872     ./apps/web/lib/sdd-status.ts
-#25 7.872     ./apps/web/app/%5Fdev/sdd/reference/[file]/route.ts
-#25 7.872 
-#25 7.872 
-#25 7.872 ./apps/web/lib/sdd-status.ts:62:13
-#25 7.872 Warning: Dynamic filesystem access causes tracing of the whole project
-#25 7.872   [90m60 |[0m [36mexport[0m [36mfunction[0m findRepoRoot(start = process.cwd(), env = process.env): string | [36mnull[0m {
-#25 7.872   [90m61 |[0m   [36mif[0m (env.[33mSDD_ROOT[0m) [36mreturn[0m path.resolve(env.[33mSDD_ROOT[0m);
-#25 7.872 [33m[1m>[0m [90m62 |[0m   [36mlet[0m dir = path.resolve(start);
-#25 7.872   [90m   |[0m             [33m[1m^^^^^^^^^^^^^^^^^^^[0m
-#25 7.872   [90m63 |[0m   [36mfor[0m (;;) {
-#25 7.872   [90m64 |[0m     [36mif[0m (fs.existsSync(path.join(dir, [32m'specs'[0m, [32m'catalog.json'[0m))) [36mreturn[0m dir;
-#25 7.872   [90m65 |[0m     [36mconst[0m parent = path.dirname(dir);
-#25 7.872 
-#25 7.872 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
-#25 7.872 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
-#25 7.872 This can slow down deployments or lead to failures when size limits are exceeded.
-#25 7.872 To resolve this, you can
-#25 7.872 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
-#25 7.872 - only use them in ***, or
-#25 7.872 - opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
-#25 7.872 - remove them.
-#25 7.872 
-#25 7.872 Import traces:
-#25 7.872   App Route:
-#25 7.872     ./apps/web/lib/sdd-status.ts
-#25 7.872     ./apps/web/app/%5Fdev/sdd/reference/[file]/route.ts
-#25 7.872 
-#25 7.872   Server Component:
-#25 7.872     ./apps/web/lib/sdd-status.ts
-#25 7.872     ./apps/web/app/%5Fdev/sdd/page.tsx
-#25 7.872 
-#25 7.872   Middleware:
-#25 7.872     ./apps/web/lib/sdd-status.ts
-#25 7.872     ./apps/web/lib/selfhost-status.ts
-#25 7.872     ./apps/web/components/sdd-demos/spec-012.tsx
-#25 7.872     ./apps/web/app/%5Fdev/sdd/registry.ts
-#25 7.872     ./apps/web/proxy.ts
-#25 7.872 
-#25 7.872 
-#25 7.872 ./tools/ci/check-workflows.mjs:583:5
-#25 7.872 Warning: Dynamic filesystem access causes tracing of the whole project
-#25 7.872   [90m581 |[0m [36mexport[0m [36mfunction[0m runActionlint(root = [33mROOT[0m) {
-#25 7.872   [90m582 |[0m   [36mconst[0m files = [[33mCI_WORKFLOW[0m, [33mPR_TITLE_WORKFLOW[0m, [33mDEPLOY_WORKFLOW[0m].map((relative) =>
-#25 7.872 [33m[1m>[0m [90m583 |[0m     path.join(root, relative),
-#25 7.872   [90m    |[0m     [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
-#25 7.872   [90m584 |[0m   );
-#25 7.872   [90m585 |[0m   [36mconst[0m result = spawnQuiet([32m'actionlint'[0m, [[32m'-no-color'[0m, ...files], { cwd: root });
-#25 7.872   [90m586 |[0m   [36mif[0m (result.error && result.error.code === [32m'ENOENT'[0m)
-#25 7.872 
-#25 7.872 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
-#25 7.872 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
-#25 7.872 This can slow down deployments or lead to failures when size limits are exceeded.
-#25 7.872 To resolve this, you can
-#25 7.872 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
-#25 7.872 - only use them in ***, or
-#25 7.872 - opt out by adding an ignore comment to the highlighted call: path.join(/*turbopackIgnore: true*/ ...), or
-#25 7.872 - remove them.
-#25 7.872 
-#25 7.872 Import traces:
-#25 7.872   Middleware:
-#25 7.872     ./tools/ci/check-workflows.mjs
-#25 7.872     ./apps/web/components/sdd-demos/spec-011.tsx
-#25 7.872     ./apps/web/app/%5Fdev/sdd/registry.ts
-#25 7.872     ./apps/web/proxy.ts
-#25 7.872 
-#25 7.872   Server Component:
-#25 7.872     ./tools/ci/check-workflows.mjs
-#25 7.872     ./apps/web/components/sdd-demos/spec-011.tsx
-#25 7.872     ./apps/web/app/%5Fdev/sdd/registry.ts
-#25 7.872     ./apps/web/app/%5Fdev/sdd/[specId]/page.tsx
-#25 7.872 
-#25 7.872 
-#25 7.872 ./tools/ci/check-workflows.mjs:614:33
-#25 7.872 Warning: Dynamic filesystem access causes tracing of the whole project
-#25 7.872   [90m612 |[0m ) {
-#25 7.872   [90m613 |[0m   [36mconst[0m rootIndex = process.argv.indexOf([32m'--root'[0m);
-#25 7.872 [33m[1m>[0m [90m614 |[0m   [36mconst[0m root = rootIndex >= [35m0[0m ? path.resolve(process.argv[rootIndex + [35m1[0m] ?? [33mROOT[0m) : [33mROOT[0m;
-#25 7.872   [90m    |[0m                                 [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
-#25 7.872   [90m615 |[0m   [36mconst[0m report = checkRepository(root);
-#25 7.872   [90m616 |[0m   [36mconst[0m described = describeCi(report.workflows);
-#25 7.872   [90m617 |[0m   console.log(
-#25 7.872 
-#25 7.872 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
-#25 7.872 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
-#25 7.872 This can slow down deployments or lead to failures when size limits are exceeded.
-#25 7.872 To resolve this, you can
-#25 7.872 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
-#25 7.872 - only use them in ***, or
-#25 7.872 - opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
-#25 7.872 - remove them.
-#25 7.872 
-#25 7.872 Import traces:
-#25 7.872   Middleware:
-#25 7.872     ./tools/ci/check-workflows.mjs
-#25 7.872     ./apps/web/components/sdd-demos/spec-011.tsx
-#25 7.872     ./apps/web/app/%5Fdev/sdd/registry.ts
-#25 7.872     ./apps/web/proxy.ts
-#25 7.872 
-#25 7.872   Server Component:
-#25 7.872     ./tools/ci/check-workflows.mjs
-#25 7.872     ./apps/web/components/sdd-demos/spec-011.tsx
-#25 7.872     ./apps/web/app/%5Fdev/sdd/registry.ts
-#25 7.872     ./apps/web/app/%5Fdev/sdd/[specId]/page.tsx
-#25 7.872 
-#25 7.872 
-#25 7.872   Finalizing page optimization ...
-#25 8.007 
-#25 8.008 Route (app)
-#25 8.008 ┌ ƒ /
-#25 8.008 ├ ƒ /_dev/sdd
-#25 8.008 ├ ƒ /_dev/sdd/[specId]
-#25 8.008 ├ ƒ /_dev/sdd/reference/[file]
-#25 8.008 ├ ○ /_not-found
-#25 8.008 ├ ƒ /api/inngest
-#25 8.008 ├ ƒ /api/v1/_dev/commit-check
-#25 8.008 ├ ƒ /api/v1/_dev/demo-job
-#25 8.008 ├ ƒ /api/v1/_dev/secret-scan
-#25 8.008 └ ƒ /api/v1/health
-#25 8.008 
-#25 8.008 
-#25 8.008 ƒ Proxy (Middleware)
-#25 8.008 
-#25 8.008 ○  (Static)   prerendered as static content
-#25 8.008 ƒ  (Dynamic)  server-rendered on demand
-#25 8.008 
-#25 DONE 8.1s
+#26 [builder 2/5] COPY --from=deps /repo/apps ./apps
+#26 CACHED
 
-#26 [runner 3/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/standalone ./
-#26 DONE 0.3s
+#27 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#27 CACHED
 
-#27 [runner 4/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/static ./apps/web/.next/static
-#27 DONE 0.1s
-
-#28 [runner 5/6] COPY --from=builder --chown=root:root /repo/apps/web/public ./apps/web/public
-#28 DONE 0.1s
+#28 [deps  4/10] COPY packages/config/package.json ./packages/config/package.json
+#28 CACHED
 
 #29 [runner 6/6] COPY --chown=root:root docker/healthcheck-web.mjs ./healthcheck-web.mjs
-#29 DONE 0.1s
+#29 CACHED
 
 #30 exporting to image
-#30 exporting layers
-#30 exporting layers 1.2s done
-#30 exporting manifest sha256:b2a8f371f780f683da2db9afd78734b42937fa1755197ddfbb5f991aebb88f3c 0.0s done
-#30 exporting config sha256:ef5e7559af5b9a2066e237c5e494bd780d820f8363b5b5f02418cde4766489dd 0.0s done
-#30 exporting attestation manifest sha256:8b26b35a7e92169d95a880410021b5ed8eabfb49f871b4ba495f2949264bf949 0.0s done
-#30 exporting manifest list sha256:f466d02551ff2449b3a89ec6674a756de69785ee90fdb6fc6ff62fbc56f3bca8 0.0s done
+#30 exporting layers done
+#30 exporting manifest sha256:5635d05ea5c0f917aec0715aa953f38fbffebac2b9cfcb4185b2a6d547e7efcd done
+#30 exporting config sha256:e11dd0dd65e3b16756cc7263d0acbd8128d764592771d247e5a4145409aa0574 done
+#30 exporting attestation manifest sha256:5c27a09f066e16a27cdc4868238857e276aec4a5e201bd0e5015781f3e3ed880 0.0s done
+#30 exporting manifest list sha256:207b0240ef4ca5cf2b1daeaa535f1a0be6c4e888a19af5201f9fd396c7c23fa7 0.0s done
+#30 naming to docker.io/library/***
 #30 naming to docker.io/library/*** done
-#30 unpacking to docker.io/library/***
-#30 unpacking to docker.io/library/*** 0.4s done
-#30 DONE 1.8s
+#30 unpacking to docker.io/library/*** done
+#30 DONE 0.1s

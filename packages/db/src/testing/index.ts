@@ -49,6 +49,8 @@ export interface TestUserOptions {
   firstName?: string;
   lastName?: string;
   timezone?: string;
+  /** Raw `raw_user_meta_data` entries, merged over the named options (SPEC-102 EF-2, CL-1). */
+  meta?: Record<string, unknown>;
 }
 
 export interface TestUser {
@@ -63,6 +65,7 @@ export async function createTestUser(tx: DbTx, options: TestUserOptions = {}): P
     first_name: options.firstName ?? null,
     last_name: options.lastName ?? null,
     timezone: options.timezone ?? null,
+    ...(options.meta ?? {}),
   };
   const appMetadata = { provider: 'email', providers: ['email'] };
   const rows = await tx.execute<{ id: string; email: string }>(sql`
