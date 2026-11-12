@@ -1017,6 +1017,60 @@ export const fr = {
         },
       },
     },
+    spec115: {
+      intro:
+        'Démonstration : les lignes réellement chargées par pnpm db:seed:demo (Alex Perrin, SAP S/4HANA Finance à 13:20 à Paris), lues en base et confrontées aux fixtures des maquettes. Aucun compteur n’est codé comme un succès : « Seed absente » remplace toute valeur indisponible.',
+      missing: 'Seed absente',
+      profile: {
+        title: 'Données de démonstration',
+        timezone: (timeZone: string) => `Fuseau horaire : ${timeZone}`,
+        streak: (days: number) => `Série : ${String(days)} jours`,
+      },
+      formations: {
+        title: 'Formations',
+        list: 'Formations de démonstration (liste)',
+        summary: (active: number, completed: number) =>
+          `${String(active)} formations en cours ou proposées · ${String(completed)} terminées`,
+        statuses: {
+          cadrage: 'cadrage',
+          programme_proposed: 'programme proposé',
+          active: 'en cours',
+          paused: 'en pause',
+          completed: 'terminée',
+          archived: 'archivée',
+        } as Record<string, string>,
+      },
+      sap: {
+        title: 'Programme SAP',
+        summary: (modules: number, notions: number) =>
+          `SAP : ${String(modules)} modules · ${String(notions)} notions`,
+        chapters: (chapters: number) => `${String(chapters)} chapitres`,
+      },
+      group: {
+        title: 'Groupe',
+        summary: (members: number) => `Groupe : ${String(members)} membres`,
+        names: (names: string) => `Membres : ${names}`,
+      },
+      agenda: {
+        title: 'Agenda 9–13 novembre',
+        list: 'Agenda de démonstration (liste)',
+        slotCount: (count: number) => (count === 1 ? '1 créneau' : `${String(count)} créneaux`),
+        summary: (count: number) =>
+          `${String(count)} créneaux du 9 au 13 novembre 2026, heures locales de Paris.`,
+      },
+      checks: {
+        title: 'Cohérence des captures',
+        intro:
+          'Chaque ligne compare la valeur attendue par la fixture (fichier de maquette cité) à la valeur mesurée dans la base au moment de la requête.',
+        label: 'Contrôle',
+        expected: 'Attendu',
+        observed: 'Mesuré',
+        status: 'État',
+        ok: 'conforme',
+        ko: 'écart',
+        source: 'Source',
+      },
+    },
     spec113: {
       intro:
         'Démonstration : le catalogue réel des tables du schéma public, le nombre de politiques mesuré et une matrice d’accès jouée avec trois identités réelles (A propriétaire, B membre du groupe, C non-membre). Les données sont fictives et la transaction est annulée à la fin de la requête.',

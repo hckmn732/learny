@@ -1,42 +1,25 @@
 #!/usr/bin/env node
-// Loads the SPEC-115 demo dataset when it exists; fails explicitly before that (SPEC-008, CL-6).
-import fs from 'node:fs';
-import path from 'node:path';
-
-import { ROOT, loadEnvFiles, run } from './lib.mjs';
+// Charge le jeu de démonstration SPEC-115 (package/db/src/seed) en local ou en test uniquement.
+// La garde d'environnement et l'horloge figée sont appliquées par la seed elle-même avant toute
+// connexion en écriture (ADR-0047, ADR-0250, CL-3).
+import { loadEnvFiles, run } from './lib.mjs';
 
 loadEnvFiles();
 
-const candidates = [
-  path.join(ROOT, 'supabase', 'seed-demo.sql'),
-  path.join(ROOT, 'supabase', 'seeds', 'demo.sql'),
-];
-const seed = candidates.find((candidate) => fs.existsSync(candidate));
-if (!seed) {
-  console.error('✖ seed de démonstration non disponible (livrée par SPEC-115).');
-  process.exit(1);
-}
+const DATABASE_URL =
+  process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+const CLOCK_FIXED_AT = process.env.CLOCK_FIXED_AT ?? '2026-11-11T12:20:00Z';
 
-const relative = path.relative(ROOT, seed);
-console.log(`→ Chargement du jeu de démonstration ${relative}`);
-const code = run(
-  'docker',
-  [
-    'exec',
-    '-i',
-    'supabase_db_learny',
-    'psql',
-    '-U',
-    'postgres',
-    '-v',
-    'ON_ERROR_STOP=1',
-    '-f',
-    '-',
-  ],
-  { input: fs.readFileSync(seed) },
-);
+console.log('→ Chargement du jeu de démonstration SPEC-115');
+const code = run('pnpm', ['exec', 'tsx', 'packages/db/src/seed/cli.ts'], {
+  env: {
+    ...process.env,
+    DATABASE_URL,
+    CLOCK_FIXED_AT,
+    APP_ENV: process.env.APP_ENV ?? 'local',
+  },
+});
 if (code !== 0) {
   console.error('✖ chargement du jeu de démonstration en échec.');
   process.exit(code);
 }
-console.log('✔ Jeu de démonstration chargé.');
