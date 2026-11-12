@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { clock, createClockFromEnv } from '@learny/core';
+
 import { createFixedClock, FIXED_TIME_ISO } from './clock';
 import { assertMockLlm, assertTestServerEnv } from './env';
 
@@ -56,5 +58,20 @@ describe('[SPEC-004] fixed clock', () => {
     expect(() => {
       assertTestServerEnv({ CLOCK_FIXED_AT: FIXED_TIME_ISO, LLM_MODE: 'mock', TZ: 'Europe/Paris' });
     }).toThrow('TZ doit valoir UTC');
+  });
+});
+
+describe('[SPEC-207] injectable clock', () => {
+  it('gives the same instant through CLOCK_FIXED_AT and createFixedClock (EF-1)', () => {
+    const fromEnv = createClockFromEnv({ CLOCK_FIXED_AT: FIXED_TIME_ISO });
+    expect(fromEnv.now().getTime()).toBe(createFixedClock().now().getTime());
+    expect(clock.now().getTime()).toBe(createFixedClock().now().getTime());
+    expect(clock.now().toISOString()).toBe('2026-11-11T12:20:00.000Z');
+  });
+
+  it('keeps the SPEC-001 Clock interface: no second clock instance (ET-5)', () => {
+    const fixed = createFixedClock('2027-03-28T00:59:59Z');
+    expect(Object.keys(fixed)).toEqual(['now']);
+    expect(Object.keys(createClockFromEnv({ CLOCK_FIXED_AT: FIXED_TIME_ISO }))).toEqual(['now']);
   });
 });
