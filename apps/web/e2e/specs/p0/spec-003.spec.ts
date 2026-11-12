@@ -143,7 +143,17 @@ test('index SDD conforme @SPEC-003 @visual', async ({ page }) => {
   await expect(next).toHaveCSS('border-top-left-radius', '16px');
   await expect(page.locator('body')).toHaveCSS('color', 'rgb(17, 17, 19)');
 
-  // Live values change with every completed specification: they are masked.
+  // Live values change with every completed specification and can change text wrapping:
+  // freeze the table layout and row heights before masking the dynamic cells.
+  await page.addStyleTag({
+    content: `
+      [data-testid="sdd-index-specs"] table,
+      [data-testid="sdd-index-phases"] table { table-layout: fixed; }
+      [data-testid="sdd-index-specs"] tbody tr { height: 44px; }
+      [data-testid="sdd-index-specs"] td,
+      [data-testid="sdd-index-next"] p { white-space: nowrap; overflow: hidden; }
+    `,
+  });
   const mask = [
     page.getByTestId('sdd-index-live'),
     page.getByTestId('sdd-indicator-value'),
