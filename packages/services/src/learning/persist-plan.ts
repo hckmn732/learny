@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { PlanPersistenceSummarySchema, type PlanPersistenceSummary } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
-import { schema } from '@learny/db';
+import { schema, type DbTx } from '@learny/db';
 import type { PlanResult, PlannedSlot } from '@learny/learning-engine';
 
 import type { ServiceContext } from '../context';
@@ -117,120 +117,143 @@ export async function persistPlan(
       if (formation[0] === undefined) {
         throw new AppError('NOT_FOUND', 'Formation introuvable.');
       }
-
-      const existing = await tx.execute<ExistingSlot>(sql`
-        select
-          id::text as id,
-          planner_key,
-          kind::text as kind,
-          title,
-          module_id::text as module_id,
-          starts_at,
-          ends_at,
-          status::text as status,
-          created_by::text as created_by
-        from public.schedule_slots
-        where user_id = ${userId}::uuid
-          and formation_id = ${input.formationId}::uuid
-          and planner_key is not null
-      `);
-      const byKey = new Map(
-        existing
-          .filter((row) => row.planner_key !== null)
-          .map((row) => [row.planner_key as string, row]),
+      const counts = await reconcilePlanSlots(
+        tx,
+        userId,
+        input.formationId,
+        slots,
+        ctx.clock.now(),
       );
-
-      const now = ctx.clock.now();
-      const future = slots.filter(
-        (slot) =>
-          slot.formationId === input.formationId &&
-          new Date(slot.startsAt).getTime() >= now.getTime(),
-      );
-      const desired = new Set<string>();
-      let created = 0;
-      let updated = 0;
-      let unchanged = 0;
-      let preserved = 0;
-
-      for (const slot of future) {
-        desired.add(slot.slotId);
-        const current = byKey.get(slot.slotId);
-        if (current === undefined) {
-          await tx.insert(scheduleSlots).values({
-            userId,
-            formationId: input.formationId,
-            moduleId: slot.moduleId,
-            kind: slot.kind,
-            title: slot.title,
-            startsAt: new Date(slot.startsAt),
-            endsAt: new Date(slot.endsAt),
-            status: 'planned',
-            createdBy: 'planner',
-            plannerKey: slot.slotId,
-          });
-          created += 1;
-          continue;
-        }
-        if (current.status !== 'planned' || current.created_by !== 'planner') {
-          preserved += 1;
-          continue;
-        }
-        const changed =
-          current.kind !== slot.kind ||
-          current.title !== slot.title ||
-          current.module_id !== slot.moduleId ||
-          !sameInstant(slot.startsAt, current.starts_at) ||
-          !sameInstant(slot.endsAt, current.ends_at);
-        if (!changed) {
-          unchanged += 1;
-          continue;
-        }
-        await tx
-          .update(scheduleSlots)
-          .set({
-            moduleId: slot.moduleId,
-            kind: slot.kind,
-            title: slot.title,
-            startsAt: new Date(slot.startsAt),
-            endsAt: new Date(slot.endsAt),
-          })
-          .where(
-            and(
-              eq(scheduleSlots.id, current.id),
-              eq(scheduleSlots.userId, userId),
-              eq(scheduleSlots.status, 'planned'),
-            ),
-          );
-        updated += 1;
-      }
-
-      let cancelled = 0;
-      for (const row of existing) {
-        if (row.status !== 'planned' || row.created_by !== 'planner') continue;
-        if (new Date(row.starts_at).getTime() < now.getTime()) continue;
-        if (row.planner_key !== null && desired.has(row.planner_key)) continue;
-        await tx
-          .update(scheduleSlots)
-          .set({ status: 'cancelled' })
-          .where(
-            and(
-              eq(scheduleSlots.id, row.id),
-              eq(scheduleSlots.userId, userId),
-              eq(scheduleSlots.status, 'planned'),
-            ),
-          );
-        cancelled += 1;
-      }
-
       return PlanPersistenceSummarySchema.parse({
         formationId: input.formationId,
         revisionKey: input.revisionKey,
-        created,
-        updated,
-        unchanged,
-        cancelled,
-        preserved,
+        ...counts,
       });
     });
   });
+}
+
+export interface PlanReconciliationCounts {
+  readonly created: number;
+  readonly updated: number;
+  readonly unchanged: number;
+  readonly cancelled: number;
+  readonly preserved: number;
+}
+
+/**
+ * SPEC-618 ET-2 — the same reconciliation runs inside the resume transaction, once the caller
+ * holds the formation advisory lock. Only future planner slots of the formation are touched;
+ * completed, missed, moved, manual and automation slots stay intact.
+ */
+export async function reconcilePlanSlots(
+  tx: DbTx,
+  userId: string,
+  formationId: string,
+  slots: readonly PlannedSlot[],
+  now: Date,
+): Promise<PlanReconciliationCounts> {
+  const existing = await tx.execute<ExistingSlot>(sql`
+    select
+      id::text as id,
+      planner_key,
+      kind::text as kind,
+      title,
+      module_id::text as module_id,
+      starts_at,
+      ends_at,
+      status::text as status,
+      created_by::text as created_by
+    from public.schedule_slots
+    where user_id = ${userId}::uuid
+      and formation_id = ${formationId}::uuid
+      and planner_key is not null
+  `);
+  const byKey = new Map(
+    existing
+      .filter((row) => row.planner_key !== null)
+      .map((row) => [row.planner_key as string, row]),
+  );
+
+  const future = slots.filter(
+    (slot) =>
+      slot.formationId === formationId && new Date(slot.startsAt).getTime() >= now.getTime(),
+  );
+  const desired = new Set<string>();
+  let created = 0;
+  let updated = 0;
+  let unchanged = 0;
+  let preserved = 0;
+
+  for (const slot of future) {
+    desired.add(slot.slotId);
+    const current = byKey.get(slot.slotId);
+    if (current === undefined) {
+      await tx.insert(scheduleSlots).values({
+        userId,
+        formationId,
+        moduleId: slot.moduleId,
+        kind: slot.kind,
+        title: slot.title,
+        startsAt: new Date(slot.startsAt),
+        endsAt: new Date(slot.endsAt),
+        status: 'planned',
+        createdBy: 'planner',
+        plannerKey: slot.slotId,
+      });
+      created += 1;
+      continue;
+    }
+    if (current.status !== 'planned' || current.created_by !== 'planner') {
+      preserved += 1;
+      continue;
+    }
+    const changed =
+      current.kind !== slot.kind ||
+      current.title !== slot.title ||
+      current.module_id !== slot.moduleId ||
+      !sameInstant(slot.startsAt, current.starts_at) ||
+      !sameInstant(slot.endsAt, current.ends_at);
+    if (!changed) {
+      unchanged += 1;
+      continue;
+    }
+    await tx
+      .update(scheduleSlots)
+      .set({
+        moduleId: slot.moduleId,
+        kind: slot.kind,
+        title: slot.title,
+        startsAt: new Date(slot.startsAt),
+        endsAt: new Date(slot.endsAt),
+      })
+      .where(
+        and(
+          eq(scheduleSlots.id, current.id),
+          eq(scheduleSlots.userId, userId),
+          eq(scheduleSlots.status, 'planned'),
+        ),
+      );
+    updated += 1;
+  }
+
+  let cancelled = 0;
+  for (const row of existing) {
+    if (row.status !== 'planned' || row.created_by !== 'planner') continue;
+    if (new Date(row.starts_at).getTime() < now.getTime()) continue;
+    if (row.planner_key !== null && desired.has(row.planner_key)) continue;
+    await tx
+      .update(scheduleSlots)
+      .set({ status: 'cancelled' })
+      .where(
+        and(
+          eq(scheduleSlots.id, row.id),
+          eq(scheduleSlots.userId, userId),
+          eq(scheduleSlots.status, 'planned'),
+        ),
+      );
+    cancelled += 1;
+  }
+
+  return { created, updated, unchanged, cancelled, preserved };
 }
