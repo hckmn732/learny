@@ -59,7 +59,7 @@ export class AppError extends Error {
   override readonly name: string = 'AppError';
   readonly status: number | undefined;
   readonly requestId: string | undefined;
-  readonly errors: { path: string; message: string }[] | undefined;
+  readonly errors: { code?: string; path: string; message: string }[] | undefined;
   readonly retryAfterSec: number | undefined;
 
   constructor(

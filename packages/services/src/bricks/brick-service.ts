@@ -171,10 +171,18 @@ export async function createBrick(
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
     const createdBy = parseOrThrow(createdBySchema, input.createdBy, 'createdBy');
+    const draft: BrickDraft = {
+      type: input.type,
+      formationId: input.formationId,
+      purpose: input.purpose,
+      notionIds: input.notionIds,
+      origin: input.origin,
+      payload: input.payload,
+    };
     return db.run(async (tx) => {
-      await assertFormation(tx, userId, input.formationId);
-      const resolver = new DbBrickReferenceResolver(tx, userId, input.formationId);
-      const valid = await validateBrick(input, resolver);
+      await assertFormation(tx, userId, draft.formationId);
+      const resolver = new DbBrickReferenceResolver(tx, userId, draft.formationId);
+      const valid = await validateBrick(draft, resolver);
       if (!valid.ok) throw brickInvalid(valid.error);
 
       const rows = await tx.execute<{ id: string }>(sql`
@@ -182,10 +190,10 @@ export async function createBrick(
           owner_id, formation_id, type, notion_ids, purpose, status, current_version
         ) values (
           ${userId}::uuid,
-          ${input.formationId}::uuid,
-          ${input.type},
+          ${draft.formationId}::uuid,
+          ${draft.type},
           ${`{${valid.value.notionIds.join(',')}}`}::uuid[],
-          ${input.purpose},
+          ${draft.purpose},
           'active',
           1
         )
@@ -274,7 +282,7 @@ export async function createBrickVersion(
         set
           status = 'corrected',
           resolution = ${JSON.stringify({ by: createdBy, versionId })}::jsonb,
-          resolved_at = ${ctx.clock.now()}
+          resolved_at = ${ctx.clock.now().toISOString()}
         where brick_id = ${brick.id}::uuid and status = 'open'
       `);
 
