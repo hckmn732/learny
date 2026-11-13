@@ -2,7 +2,12 @@
 // SDK (ET-9, BR-IA-09); learning-engine and bricks must not depend on it.
 export { resolveModel } from './resolve';
 export type { ManagedModelId, ResolvedModel, ResolveInput } from './resolve';
-export { defaultModelForTask, needsProviderStreaming, TASK_CONFIG, TASK_CAPABILITIES } from './tasks';
+export {
+  defaultModelForTask,
+  needsProviderStreaming,
+  TASK_CONFIG,
+  TASK_CAPABILITIES,
+} from './tasks';
 export type { TaskCapability, TaskConfig } from './tasks';
 export {
   buildAnthropicOptions,
@@ -18,7 +23,7 @@ export type {
   AnthropicRequestPreview,
 } from './anthropic-options';
 export { anthropicFetch, createAnthropicFetch, rewriteAnthropicInit } from './anthropic-fetch';
-export { PROVIDER_CATALOG, providerSupports } from './providers/catalog';
+export { PROVIDER_CATALOG, providerRegion, providerSupports } from './providers/catalog';
 export type { ProviderCapabilities, ProviderCatalogEntry } from './providers/catalog';
 export { createLanguageModel } from './providers/factory';
 export type { ProviderSecrets } from './providers/factory';
@@ -31,12 +36,7 @@ export type {
   LlmStreamResult,
   SessionOptions,
 } from './session';
-export {
-  aiUnavailable,
-  invalidOutput,
-  mapProviderError,
-  refused,
-} from './errors';
+export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
 export type { AiErrorContext } from './errors';
 export { logCall, zeroCost } from './log';
 export type { CallUsage, CostCalculator, CostInput, LogCallInput } from './log';

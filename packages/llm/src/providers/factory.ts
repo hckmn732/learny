@@ -6,11 +6,12 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import type { LanguageModel } from 'ai';
 
-import { AppError } from '@learny/core';
-import type { AiProviderValue } from '@learny/db';
+import { AppError, ok, type Result } from '@learny/core';
+import type { AiProviderValue, Db } from '@learny/db';
 
 import { anthropicFetch } from '../anthropic-fetch';
 import { anthropicApiKey } from '../config';
+import { decryptCredentialKey } from '../credentials/read';
 import type { ResolvedModel } from '../resolve';
 
 export interface ProviderSecrets {
@@ -19,6 +20,27 @@ export interface ProviderSecrets {
    * The provided AI reads its key from the server environment instead.
    */
   apiKey: string | null;
+}
+
+/**
+ * Resolves the key of one call. An explicitly supplied secret wins (tests and callers holding a
+ * short-lived key); otherwise a BYOK model is decrypted from its row under the owner's scope.
+ * This function stays internal to @learny/llm: it is never re-exported by the package entry point.
+ */
+export async function providerSecrets(
+  db: Db,
+  userId: string,
+  resolved: ResolvedModel,
+  explicitApiKey: string | null = null,
+): Promise<Result<ProviderSecrets>> {
+  if (explicitApiKey !== null) return ok({ apiKey: explicitApiKey });
+  if (resolved.kind === 'managed') return ok({ apiKey: null });
+  const decrypted = await decryptCredentialKey(db, {
+    userId,
+    credentialId: resolved.credentialId,
+  });
+  if (!decrypted.ok) return decrypted;
+  return ok({ apiKey: decrypted.value });
 }
 
 function missingKey(provider: AiProviderValue): AppError {
@@ -37,7 +59,10 @@ function compatibleBaseUrl(resolved: Extract<ResolvedModel, { kind: 'byok' }>): 
 }
 
 /** ET-3 — one AI SDK language model for a resolved call. */
-export function createLanguageModel(resolved: ResolvedModel, secrets: ProviderSecrets): LanguageModel {
+export function createLanguageModel(
+  resolved: ResolvedModel,
+  secrets: ProviderSecrets,
+): LanguageModel {
   if (resolved.kind === 'managed') {
     const apiKey = anthropicApiKey() ?? secrets.apiKey;
     if (apiKey === null) throw missingKey('anthropic');
