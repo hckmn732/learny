@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.27302">
+<testsuite name="p5/spec-512.spec.ts" timestamp="2026-11-13T01:16:19.782Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.571" errors="0">
+<testcase name="Recherche web @SPEC-512" classname="p5/spec-512.spec.ts" time="1.582">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/attachments/axe-47f7f554808f7b603506865af30d02381fd007c8.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/attachments/spec-512-demo-1189ebcbad38dbab0357307ed84cefcbdb2e30d4.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Recherche web @SPEC-512 @visual @mobile" classname="p5/spec-512.spec.ts" time="0.989">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/attachments/axe-dbcd2d0b37811244d8a3ff3578ea85894dc6ce2c.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/attachments/spec-512-demo-visual-66188c81765e59d0568ece29981a503f85dd92ea.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-512.spec.ts" timestamp="2026-11-13T01:16:19.782Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.081" errors="0">
+<testcase name="Recherche web @SPEC-512 @visual @mobile" classname="p5/spec-512.spec.ts" time="1.081">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/attachments/axe-1d9d7c40c0978c0b6ebd55ed8158eceefb58a541.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/attachments/spec-512-demo-visual-9c0fa6cbcbe6bfc8dabdcc9b93fef65b5c924501.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-512-Recherche-web-SPEC-512-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
