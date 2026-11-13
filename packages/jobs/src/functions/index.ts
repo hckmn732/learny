@@ -13,6 +13,7 @@ import { dataExport } from './data-export';
 import { createDemoJob } from './demo-job';
 import { emailWelcome } from './email-welcome';
 import { exportsPurge } from './exports-purge';
+import { ingestResource } from './ingest-resource';
 import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
@@ -33,6 +34,7 @@ export const learnyFunctions = [
   dataExport,
   emailWelcome,
   exportsPurge,
+  ingestResource,
   nightlyOutboxCleanup,
   notificationDelivery,
   notificationsDailyDigest,

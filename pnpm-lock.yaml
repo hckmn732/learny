@@ -116,6 +116,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:../../packages/ingestion
       '@learny/jobs':
         specifier: workspace:*
         version: link:../../packages/jobs
@@ -277,6 +280,34 @@ importers:
         specifier: ^13.0.0
         version: 13.0.2
 
+  packages/ingestion:
+    dependencies:
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../core
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../db
+      '@learny/llm':
+        specifier: workspace:*
+        version: link:../llm
+      unpdf:
+        specifier: ^2.1.0
+        version: 2.1.0
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../testing
+
   packages/jobs:
     dependencies:
       '@inngest/test':
@@ -294,6 +325,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../db
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:../ingestion
       '@learny/notifications':
         specifier: workspace:*
         version: link:../notifications

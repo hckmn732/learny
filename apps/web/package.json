@@ -13,11 +13,12 @@
   "dependencies": {
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/lint": "^21.2.4",
-    "@learny/config": "workspace:*",
     "@learny/bricks": "workspace:*",
+    "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
+    "@learny/ingestion": "workspace:*",
     "@learny/jobs": "workspace:*",
     "@learny/learning-engine": "workspace:*",
     "@learny/llm": "workspace:*",
