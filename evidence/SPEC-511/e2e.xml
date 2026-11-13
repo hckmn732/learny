@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="35.142339">
+<testsuite name="p5/spec-511.spec.ts" timestamp="2026-11-13T02:24:12.354Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.799" errors="0">
+<testcase name="Recherche sémantique et sélection du contexte @SPEC-511" classname="p5/spec-511.spec.ts" time="1.324">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/attachments/spec-511-demo-f0d6179e9daf2625f024505a26a25cf05fd97abc.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/attachments/axe-362ce28ae5fb80c1baadd0f0dd0d0d66543a98dd.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-3ae6c-ection-du-contexte-SPEC-511-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Recherche sémantique et sélection du contexte @SPEC-511 @visual @mobile" classname="p5/spec-511.spec.ts" time="1.475">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-desktop/attachments/axe-bcc12c31298575cc5e6682a18d042d7484c2842b.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-511.spec.ts" timestamp="2026-11-13T02:24:12.354Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.409" errors="0">
+<testcase name="Recherche sémantique et sélection du contexte @SPEC-511 @visual @mobile" classname="p5/spec-511.spec.ts" time="1.409">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-mobile/attachments/axe-b584682b3beff0029ce9ec47401992eae6fde31c.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-511-Recherche-séma-7a8eb-exte-SPEC-511-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
