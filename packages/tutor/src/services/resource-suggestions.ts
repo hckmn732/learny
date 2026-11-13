@@ -65,7 +65,7 @@ function toSuggestion(row: SuggestionRow, duplicate: boolean): Result<ResourceSu
     url: row.url,
     reason: row.reason ?? 'Ressource suggérée par le tuteur.',
     status: readStatus(row.status),
-    createdAt: row.created_at,
+    createdAt: new Date(row.created_at).toISOString(),
     duplicate,
   });
   if (!parsed.success) {
@@ -106,7 +106,7 @@ export async function suggestResource(
       select c.formation_id::text as formation_id
       from public.chapters c
       join public.formations f on f.id = c.formation_id
-      where c.id = ${input.chapterId}::uuid and f.user_id = ${ctx.userId}::uuid
+      where c.id = ${input.chapterId}::uuid and f.owner_id = ${ctx.userId}::uuid
       limit 1
     `);
     const formationId = chapter[0]?.formation_id;
@@ -137,7 +137,7 @@ export async function suggestResource(
       values (
         ${ctx.userId}::uuid, ${formationId}::uuid, ${input.chapterId}::uuid, 'web',
         'tutor_suggestion', 'pending', ${input.title}, ${input.url}, 'queued',
-        ${JSON.stringify({ suggestionReason: input.reason })}::jsonb, ${now}, ${now}
+        ${JSON.stringify({ suggestionReason: input.reason })}::jsonb, ${now.toISOString()}::timestamptz, ${now.toISOString()}::timestamptz
       )
       returning ${SELECT_COLUMNS}
     `);
@@ -172,7 +172,7 @@ export async function decideResourceSuggestion(
   return ctx.db.run(async (tx): Promise<Result<ResourceSuggestion>> => {
     const updated = await tx.execute<SuggestionRow>(sql`
       update public.resources
-      set suggestion_status = ${target}::public.suggestion_status, updated_at = ${now}
+      set suggestion_status = ${target}::public.suggestion_status, updated_at = ${now.toISOString()}::timestamptz
       where id = ${suggestionId}::uuid
         and owner_id = ${ctx.userId}::uuid
         and origin = 'tutor_suggestion'

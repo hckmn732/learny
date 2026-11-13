@@ -41,7 +41,10 @@ export interface SearchWebSecrets {
 export interface SearchWebContext {
   task: TutorTask;
   userId: string;
-  /** RLS client of the user, used only to resolve the programme model. */
+  /**
+   * Database used only to resolve the programme model, scoped by the explicit user id. Product
+   * callers pass the service client, like every `resolveModel` call (SPEC-504 resolve.ts).
+   */
   db?: Db;
   clock?: Clock;
   logger?: LearnyLogger;
