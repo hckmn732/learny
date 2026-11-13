@@ -16,9 +16,9 @@ function fixtureFiles(dir: string, prefix = ''): string[] {
     .flatMap((entry) => {
       const relative = prefix === '' ? entry.name : `${prefix}/${entry.name}`;
       if (entry.isDirectory()) {
-        // `prompts` declares prompt versions; `search` holds the web-search fixtures of SPEC-512,
-        // which are not language-model fixtures and validate against their own schema.
-        return entry.name === 'prompts' || entry.name === 'search'
+        // `prompts` declares prompt versions; `search` (SPEC-512) and `qualification` (SPEC-506)
+        // hold their own fixtures, validated against their dedicated schemas.
+        return ['prompts', 'search', 'qualification'].includes(entry.name)
           ? []
           : fixtureFiles(path.join(dir, entry.name), relative);
       }

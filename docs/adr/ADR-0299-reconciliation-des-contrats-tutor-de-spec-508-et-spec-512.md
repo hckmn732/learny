@@ -1,4 +1,4 @@
-# ADR-0298 — Réconciliation des contrats tutor de SPEC-508 et SPEC-512
+# ADR-0299 — Réconciliation des contrats tutor de SPEC-508 et SPEC-512
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)

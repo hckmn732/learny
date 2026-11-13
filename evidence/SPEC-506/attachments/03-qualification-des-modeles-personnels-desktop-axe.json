@@ -1,0 +1,73 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "rapport par étape"
+            },
+            "relatedNodes": [
+              {
+                "html": "<div role=\"region\" aria-label=\"Rapport par étape\" tabindex=\"0\" class=\"mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2\">",
+                "target": [
+                  "div[aria-label=\"Rapport par étape\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"spec-506-steps-title\" class=\"box-border min-w-0 border border-solid border-border bg-surface py-22 px-24 rounded-24\" data-testid=\"spec-506-steps\">",
+        "target": [
+          "section[aria-labelledby=\"spec-506-steps-title\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "rapport par type de brique"
+            },
+            "relatedNodes": [
+              {
+                "html": "<div role=\"region\" aria-label=\"Rapport par type de brique\" tabindex=\"0\" class=\"mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2\">",
+                "target": [
+                  "div[aria-label=\"Rapport par type de brique\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"spec-506-bricks-title\" class=\"box-border min-w-0 border border-solid border-border bg-surface py-22 px-24 rounded-24\" data-testid=\"spec-506-bricks\">",
+        "target": [
+          "section[aria-labelledby=\"spec-506-bricks-title\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]
