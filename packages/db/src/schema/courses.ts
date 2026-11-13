@@ -80,6 +80,11 @@ export const courses = pgTable(
     status: courseStatus('status').notNull().default('generating'),
     model: text('model'),
     error: text('error'),
+    /**
+     * SPEC-608 ET-2 — deterministic key of the generation request (`course-generation:<module>:…`).
+     * A replay returns the version created by the first run instead of writing another one.
+     */
+    generationKey: text('generation_key'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -94,6 +99,15 @@ export const courses = pgTable(
       .on(table.ownerId, table.moduleId)
       .where(sql`${table.isCurrent}`),
     index('courses_owner_formation_idx').on(table.ownerId, table.formationId),
+    uniqueIndex('courses_generation_key_idx').on(
+      table.ownerId,
+      table.moduleId,
+      table.generationKey,
+    ),
+    check(
+      'courses_generation_key_length_check',
+      sql`${table.generationKey} is null or char_length(${table.generationKey}) between 1 and 200`,
+    ),
     check('courses_version_check', sql`${table.version} >= 1`),
     check(
       'courses_model_length_check',

@@ -323,6 +323,13 @@
       "when": 1794555516829,
       "tag": "0045_programme_proposals_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1794570338364,
+      "tag": "0046_course_generation",
+      "breakpoints": true
     }
   ]
 }
