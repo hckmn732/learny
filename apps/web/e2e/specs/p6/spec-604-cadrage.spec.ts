@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestProgramme } from '@learny/db/testing';
 import { createNotionState } from '@learny/testing';

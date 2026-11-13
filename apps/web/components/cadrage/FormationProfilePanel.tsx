@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 
 import type { CadrageProfile, CadrageRubricKey } from '@learny/contracts';
+import { colors } from '@learny/ui/tokens';
 
 import { fr } from '../../messages/fr';
 
@@ -39,13 +40,13 @@ function ProfileRing({ asked, max }: Readonly<{ asked: number; max: number }>) {
       role="img"
     >
       <svg aria-hidden="true" className="block" height={64} viewBox="0 0 64 64" width={64}>
-        <circle cx={32} cy={32} fill="none" r={RADIUS} stroke="#F0EFEA" strokeWidth={8} />
+        <circle cx={32} cy={32} fill="none" r={RADIUS} stroke={colors['surface-muted']} strokeWidth={8} />
         <circle
           cx={32}
           cy={32}
           fill="none"
           r={RADIUS}
-          stroke="#111113"
+          stroke={colors.ink}
           strokeDasharray={`${dash} ${CIRCUMFERENCE.toFixed(1)}`}
           strokeLinecap="round"
           strokeWidth={8}

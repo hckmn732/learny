@@ -1,4 +1,4 @@
-import { cadrageRoutes, formationRoutes } from '@learny/contracts';
+import { formationRoutes } from '@learny/contracts';
 import { createFormation, listFormations } from '@learny/services';
 
 import { handler } from '../../../../lib/api/handler';

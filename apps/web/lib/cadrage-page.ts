@@ -6,8 +6,8 @@ import type { CadrageStateDto } from '@learny/contracts';
 import { createServiceContext, getCadragePageState } from '@learny/services';
 
 import { SIGN_IN_PATH } from './route-guard';
-import { readPageSession } from './supabase/page';
 import { loadShellPage, type ShellPageResult } from './sidebar-page';
+import { readPageSession } from './supabase/page';
 
 // Server load of the cadrage page (SPEC-604 EF-1, EF-13). The shell and the cadrage state use the
 // same verified session; a formation that left `cadrage` is redirected to its programme, and a

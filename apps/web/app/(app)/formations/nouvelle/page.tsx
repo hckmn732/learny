@@ -1,5 +1,5 @@
-import { AppShell } from '../../../../components/shell/app-shell';
 import { NewFormationChat } from '../../../../components/cadrage/CadrageChat';
+import { AppShell } from '../../../../components/shell/app-shell';
 import { loadShellPage } from '../../../../lib/sidebar-page';
 
 export const dynamic = 'force-dynamic';

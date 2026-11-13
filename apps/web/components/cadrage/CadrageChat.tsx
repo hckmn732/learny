@@ -312,23 +312,11 @@ export function CadrageChat({ fid, initialState, creationError = null }: Cadrage
   const previousCount = useRef(initialState.messages.length);
 
   useEffect(() => {
-    setTitle(state.title);
-  }, [state.title]);
-
-  useEffect(() => {
-    setSelected(new Set());
-  }, [state.pendingQuestion?.messageId]);
-
-  useEffect(() => {
     if (state.messages.length > previousCount.current) {
       replyRef.current?.focus();
     }
     previousCount.current = state.messages.length;
   }, [state.messages.length]);
-  useEffect(() => {
-    if (state.messages.length > 0) setCreationCode(null);
-  }, [state.messages.length]);
-
   const patch = useMutation({
     mutationFn: (value: string) =>
       api.formationUpdate({ params: { fid }, body: { title: value } }),
@@ -361,23 +349,22 @@ export function CadrageChat({ fid, initialState, creationError = null }: Cadrage
       ? undefined
       : state.messages.find((message) => message.id === pending.messageId);
   const suggestions: readonly CadrageSuggestion[] = pendingMessage?.suggestions ?? [];
-  const multi = pending?.multi === true;
+  const multi = pending !== null && pending.multi;
+  const pendingKey = pending === null ? null : pending.questionKey;
   const labels = new Map(suggestions.map((item) => [item.value, item.label]));
   const preview: Partial<Record<CadrageRubricKey, string>> =
-    multi && pending?.questionKey !== undefined && pending.questionKey !== 'other' && selected.size > 0
+    multi && pendingKey !== null && pendingKey !== 'other' && selected.size > 0
       ? {
-          [pending.questionKey]: [...selected]
+          [pendingKey]: [...selected]
             .map((value) => labels.get(value) ?? value)
             .join(', '),
         }
       : {};
 
+  const creationErrorCode =
+    state.messages.length === 0 && creationCode !== null ? creationCode : undefined;
   const errorCode =
-    completeError ??
-    cadrage.error?.code ??
-    state.error?.code ??
-    (creationCode === null ? undefined : creationCode) ??
-    undefined;
+    completeError ?? cadrage.error?.code ?? state.error?.code ?? creationErrorCode;
   const errorRetry =
     errorCode === 'AI_TASK_FAILED'
       ? () => {
