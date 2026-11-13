@@ -109,11 +109,13 @@ describe('[SPEC-605] lectures du programme', () => {
     await expect(readProfile(tx(execute), USER)).resolves.toEqual({
       tone: 'vous',
       courseLanguage: 'en',
+      timezone: 'Europe/Paris',
     });
     // A missing profile row keeps the documented fallbacks.
     await expect(readProfile(tx(execute), USER)).resolves.toEqual({
       tone: 'vous',
       courseLanguage: 'fr',
+      timezone: 'Europe/Paris',
     });
   });
 

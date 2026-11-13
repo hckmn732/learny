@@ -94,7 +94,7 @@ export function proposalRow(overrides: Partial<ProposalRow> = {}): ProposalRow {
 }
 
 export function profileRow(overrides: Record<string, unknown> = {}) {
-  return { tutor_tone: 'tu', course_language: 'fr', ...overrides };
+  return { tutor_tone: 'tu', course_language: 'fr', timezone: 'Europe/Paris', ...overrides };
 }
 
 export function sequence(rows: readonly unknown[][]): ReturnType<typeof vi.fn> {
