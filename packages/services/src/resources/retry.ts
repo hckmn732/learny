@@ -4,7 +4,7 @@
 // enqueues a fresh `resource/uploaded` event after commit. The event identifier carries the retry
 // number, so two concurrent clicks produce one event while a later failure can be retried again.
 // `queued`, `processing` and `ready` are returned unchanged: a repeat never duplicates an effect.
-import type { RetryResourceOutput, ResourceStatus } from '@learny/contracts';
+import type { ResourceKind, RetryResourceOutput, ResourceStatus } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
@@ -18,12 +18,16 @@ interface RetryRow extends Record<string, unknown> {
   id: string;
   formation_id: string;
   chapter_id: string | null;
-  kind: string;
+  kind: ResourceKind;
   status: string;
   error_code: string | null;
   error_message: string | null;
   metadata: { ingestion?: { attempts?: number } };
-  updated_at: Date;
+  updated_at: Date | string;
+}
+
+function isoOf(value: Date | string): string {
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 }
 
 function dto(row: RetryRow): RetryResourceOutput {
@@ -32,7 +36,7 @@ function dto(row: RetryRow): RetryResourceOutput {
     status: row.status as ResourceStatus,
     errorCode: row.error_code,
     errorMessage: row.error_message,
-    updatedAt: row.updated_at.toISOString(),
+    updatedAt: isoOf(row.updated_at),
   };
 }
 

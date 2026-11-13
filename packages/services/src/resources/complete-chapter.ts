@@ -38,6 +38,11 @@ function statusOf(value: string | null): 'in_progress' | 'done' {
   return value === 'done' ? 'done' : 'in_progress';
 }
 
+function isoOf(value: Date | string | null | undefined): string | null {
+  if (value === null || value === undefined) return null;
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+}
+
 /** Counts the chapters of the module and how many are done for this learner. */
 async function chapterCounts(
   tx: DbTx,
@@ -113,7 +118,7 @@ export function completeChapter(
             chapterId,
             moduleId: chapter.module_id,
             contributionsStatus: target,
-            doneAt: current?.done_at?.toISOString() ?? null,
+            doneAt: isoOf(current?.done_at),
             chaptersDone: countsBefore.done,
             chaptersTotal: countsBefore.total,
             generationRequested: false,

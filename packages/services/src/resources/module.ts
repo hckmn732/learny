@@ -119,8 +119,8 @@ export function getModuleScreen(
                m.id::text as id,
                m.position,
                m.title,
-               m.planned_start::text as planned_start,
-               m.planned_end::text as planned_end,
+               coalesce(m.planned_start, f.start_date)::text as planned_start,
+               coalesce(m.planned_end, f.end_date)::text as planned_end,
                m.threshold,
                coalesce(mp.status, m.status)::text as status,
                (select count(*) from public.modules mm where mm.formation_id = m.formation_id)::int

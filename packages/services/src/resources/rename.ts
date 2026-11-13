@@ -20,7 +20,11 @@ interface RenameRow extends Record<string, unknown> {
   id: string;
   title: string;
   status: string;
-  updated_at: Date;
+  updated_at: Date | string;
+}
+
+function isoOf(value: Date | string): string {
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 }
 
 export function renameResource(
@@ -47,7 +51,7 @@ export function renameResource(
         id: row.id,
         title: row.title,
         status: row.status as ResourceStatus,
-        updatedAt: row.updated_at.toISOString(),
+        updatedAt: isoOf(row.updated_at),
       };
       if (input.expectedUpdatedAt !== undefined && input.expectedUpdatedAt !== current.updatedAt) {
         throw new AppError(
@@ -78,7 +82,7 @@ export function renameResource(
         id: result.id,
         title: result.title,
         status: result.status as ResourceStatus,
-        updatedAt: result.updated_at.toISOString(),
+        updatedAt: isoOf(result.updated_at),
       };
     });
   });
