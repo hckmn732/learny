@@ -1,0 +1,96 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="49.521213">
+<testsuite name="p6/programme-proposal.spec.ts" timestamp="2026-11-13T09:16:41.242Z" hostname="desktop" tests="4" failures="0" skipped="1" time="15.532" errors="0">
+<testcase name="programme proposé, ajusté puis validé @SPEC-605" classname="p6/programme-proposal.spec.ts" time="10.481">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-proposition-e07a7ea5b0ac7bea227db91a49a1767c07732a3c.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-ajustement-37f5034c32bd92b0cd85a896fd4e0bac201e4f8e.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-version-1-348612c2383aa41312010b9a18eb87e4af9defc2.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-actif-17d6a9d23e4c96c19ebbe46fc2891e529686e713.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/axe-0f9d0915f5f67be8ad19db08feafc163f19793b9.json]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="programme importé puis validé @SPEC-605" classname="p6/programme-proposal.spec.ts" time="2.512">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/attachments/programme-importe-d793b3b446f77c7d97b3e0011b0fb93848b3fc39.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/attachments/axe-9273e4574f8a3ca71930141a8a97e83cacb236b1.json]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-05 proposition desktop @SPEC-605 @visual" classname="p6/programme-proposal.spec.ts" time="2.318">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/programme-conformite-5e702b462f061904662004d93954b9382333e31d.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-calendrier-side-by-side-4569f76dd8029fbf48a161d7f58d65ddb0ad1d9f.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-calendrier-diff-204949d70e00b2320719e18ba38ca24550f868a5.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-modules-side-by-side-95141c68479d529e4976960c603564ce6a0b2b9a.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-modules-diff-e5461238b14a600bb2ffa07c02ce8fdd15dfef5b.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/axe-b7aee3657a39474712d7ee0197e9daa25a738a25.json]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-05 proposition mobile @SPEC-605 @visual @mobile" classname="p6/programme-proposal.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/programme-proposal.spec.ts" timestamp="2026-11-13T09:16:41.242Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.696" errors="0">
+<testcase name="conformité SCR-05 proposition mobile @SPEC-605 @visual @mobile" classname="p6/programme-proposal.spec.ts" time="1.696">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/attachments/programme-mobile-7e3cb0108b6da1c3a49fd33e643b307ae5a5cb55.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/attachments/axe-654e630677fb4f2fb9f7af6113a1ec6872dd30e7.json]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
