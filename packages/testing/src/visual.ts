@@ -119,6 +119,83 @@ export function compareWithReference(
   };
 }
 
+export interface ReferenceRegion {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/** Nearest-neighbour crop of the mockup region, scaled to the real capture dimensions. */
+function resizeRegion(image: PNG, region: ReferenceRegion, width: number, height: number): PNG {
+  if (
+    region.x < 0 ||
+    region.y < 0 ||
+    region.width <= 0 ||
+    region.height <= 0 ||
+    region.x + region.width > image.width ||
+    region.y + region.height > image.height
+  ) {
+    throw new Error(
+      `Région de référence invalide : ${String(region.width)}×${String(region.height)} hors de ${String(
+        image.width,
+      )}×${String(image.height)}`,
+    );
+  }
+  const out = new PNG({ width, height });
+  for (let y = 0; y < height; y += 1) {
+    const sourceY =
+      region.y + Math.min(region.height - 1, Math.floor((y * region.height) / height));
+    for (let x = 0; x < width; x += 1) {
+      const sourceX = region.x + Math.min(region.width - 1, Math.floor((x * region.width) / width));
+      const source = (sourceY * image.width + sourceX) << 2;
+      const target = (y * width + x) << 2;
+      out.data[target] = image.data[source] ?? 0;
+      out.data[target + 1] = image.data[source + 1] ?? 0;
+      out.data[target + 2] = image.data[source + 2] ?? 0;
+      out.data[target + 3] = image.data[source + 3] ?? 0;
+    }
+  }
+  return out;
+}
+
+/**
+ * Compares a real capture with a region of a mockup reference, normalised to the capture size.
+ * The reference is never resized beyond the requested region: a missing file or an out-of-bounds
+ * region fails explicitly, so the 12 % structural threshold is never applied to a blank crop.
+ */
+export function compareWithReferenceRegion(
+  actual: Buffer | string,
+  reference: string,
+  region: ReferenceRegion,
+  outputDir: string,
+  name = 'comparison',
+): ComparisonResult {
+  if (!fs.existsSync(reference)) throw new Error(`Référence absente : ${reference}`);
+  const a = readPng(actual);
+  const r = readPng(reference);
+  const cropped = resizeRegion(r, region, a.width, a.height);
+  const diff = new PNG({ width: a.width, height: a.height });
+  const diffPixels = pixelmatch(cropped.data, a.data, diff.data, a.width, a.height, {
+    threshold: 0.1,
+  });
+  fs.mkdirSync(outputDir, { recursive: true });
+  const sideBySidePath = path.join(outputDir, `${name}-side-by-side.png`);
+  const diffPath = path.join(outputDir, `${name}-diff.png`);
+  fs.writeFileSync(sideBySidePath, PNG.sync.write(sideBySide(cropped, a)));
+  fs.writeFileSync(diffPath, PNG.sync.write(diff));
+  const totalPixels = a.width * a.height;
+  return {
+    width: a.width,
+    height: a.height,
+    diffPixels,
+    totalPixels,
+    ratio: diffPixels / totalPixels,
+    sideBySidePath,
+    diffPath,
+  };
+}
+
 export type BaselineOptions = Pick<PageScreenshotOptions, 'fullPage' | 'mask'> & {
   maxDiffPixelRatio?: number;
 };
