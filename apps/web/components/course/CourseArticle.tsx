@@ -23,7 +23,13 @@ function Citations({ section }: { section: CourseSection }) {
   );
 }
 
-function Comparison({ section }: { section: CourseSection }) {
+function Comparison({
+  section,
+  actions,
+}: {
+  section: CourseSection;
+  actions?: SectionActions | undefined;
+}) {
   const data = section.data ?? {};
   const sides = [data.left, data.right].map((value) =>
     value !== null && typeof value === 'object' && !Array.isArray(value)
@@ -59,6 +65,9 @@ function Comparison({ section }: { section: CourseSection }) {
           </div>
         ))}
       </div>
+      {actions === undefined ? null : (
+        <AskPassageButton actions={actions} label="Comparer avec le tuteur" section={section} />
+      )}
     </section>
   );
 }
@@ -133,12 +142,66 @@ function Takeaway({ section }: { section: CourseSection }) {
 }
 
 export interface SectionActions {
+  /** SPEC-610 EF-3 — opens the tutor panel with the section passage. */
+  onAskPassage: (text: string, sectionId: string, label: string) => void;
   onReport: (sectionId: string, reason: string) => Promise<{ ok: boolean; conflict?: boolean }>;
   onEdit: (
     sectionId: string,
     expectedVersion: number,
     contentMd: string,
   ) => Promise<{ ok: boolean; conflict?: boolean }>;
+}
+
+function plainText(value: string): string {
+  return value
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/[#*_>`]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function passageText(section: CourseSection): string {
+  const content = plainText(section.contentMd ?? '');
+  const data = section.data ?? {};
+  const parts = [content, section.title ?? ''];
+  for (const side of ['left', 'right']) {
+    const value = data[side];
+    if (value !== null && typeof value === 'object') {
+      for (const key of ['title', 'body', 'example']) {
+        const text = (value as Record<string, unknown>)[key];
+        if (typeof text === 'string') parts.push(text);
+      }
+    }
+  }
+  return parts
+    .filter((part) => part !== '')
+    .join(' ')
+    .slice(0, 1_000);
+}
+
+function AskPassageButton({
+  section,
+  label,
+  actions,
+}: {
+  section: CourseSection;
+  label: string;
+  actions: SectionActions;
+}): ReactNode {
+  return (
+    <button
+      className="inline-flex min-h-28 cursor-pointer items-center gap-6 rounded-8 border-0 bg-lime-softer px-9 py-3 text-12 font-700 text-lime-ink-strong"
+      data-ask-passage={section.id}
+      data-testid="course-ask-passage"
+      onClick={() => {
+        actions.onAskPassage(passageText(section), section.id, section.title ?? label);
+      }}
+      type="button"
+    >
+      <span aria-hidden="true">✦</span>
+      {label}
+    </button>
+  );
 }
 
 function EditableMarkdown({
@@ -271,6 +334,7 @@ function EditableMarkdown({
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-10 text-12 text-ink-muted">
+          <AskPassageButton actions={actions} label="Demander au tuteur" section={section} />
           <button
             className="cursor-pointer underline"
             data-testid="course-section-report"
@@ -314,8 +378,10 @@ export function CourseArticle({
   return (
     <>
       {sections.map((section) => {
-        if (section.kind === 'flash_question') return <QuickQuestion key={section.id} section={section} />;
-        if (section.kind === 'dont_confuse') return <Comparison key={section.id} section={section} />;
+        if (section.kind === 'flash_question')
+          return <QuickQuestion key={section.id} section={section} />;
+        if (section.kind === 'dont_confuse')
+          return <Comparison actions={actions} key={section.id} section={section} />;
         if (section.kind === 'retain') return <Takeaway key={section.id} section={section} />;
         if (section.kind === 'summary_prompt') return null;
         if (section.kind === 'tutor_completed') {
@@ -331,6 +397,13 @@ export function CourseArticle({
               </span>
               {section.contentMd === null ? null : <MarkdownContent markdown={section.contentMd} />}
               <Citations section={section} />
+              {actions === undefined ? null : (
+                <AskPassageButton
+                  actions={actions}
+                  label="Pourquoi ? Demander au tuteur"
+                  section={section}
+                />
+              )}
             </section>
           );
         }
@@ -338,6 +411,7 @@ export function CourseArticle({
           <EditableMarkdown
             actions={
               actions ?? {
+                onAskPassage: () => undefined,
                 onReport: () => Promise.resolve({ ok: true }),
                 onEdit: () => Promise.resolve({ ok: true }),
               }
