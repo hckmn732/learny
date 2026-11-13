@@ -36,7 +36,8 @@ function toMe(row: MeRow): MeDto {
   };
 }
 
-async function readMe(tx: DbTx, userId: string): Promise<MeDto> {
+/** Profile DTO read inside an existing transaction (SPEC-602 reuses it for its state). */
+export async function readMe(tx: DbTx, userId: string): Promise<MeDto> {
   const rows = await tx.execute<MeRow>(sql`
     select id::text as id,
            email,

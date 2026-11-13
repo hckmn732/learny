@@ -13,10 +13,18 @@ describe('[SPEC-202] destination après authentification', () => {
     expect(resolvePostAuthDestination({ ...done, onboardingStep: step }, '/agenda')).toBe(expected);
   });
 
-  it.each(['rappels', 'depart', 'done'])('lets step %s through to next or the home', (step) => {
-    const profile = { ...done, onboardingStep: step };
-    expect(resolvePostAuthDestination(profile)).toBe('/accueil');
-    expect(resolvePostAuthDestination(profile, '/agenda?semaine=2')).toBe('/agenda?semaine=2');
+  it.each(['rappels', 'depart'])(
+    'SPEC-602 — resumes step %s at its onboarding page after sign-in',
+    (step) => {
+      expect(resolvePostAuthDestination({ ...done, onboardingStep: step })).toBe(
+        `/premiers-pas/${step}`,
+      );
+    },
+  );
+
+  it('lets a finished onboarding through to next or the home', () => {
+    expect(resolvePostAuthDestination(done)).toBe('/accueil');
+    expect(resolvePostAuthDestination(done, '/agenda?semaine=2')).toBe('/agenda?semaine=2');
   });
 
   it('sends an account scheduled for deletion to its profile, before anything else (CL-6)', () => {
@@ -57,9 +65,11 @@ describe('[SPEC-202] destination après authentification', () => {
     },
   );
 
-  it('maps only the blocking steps to the onboarding pages', () => {
+  it('maps every unfinished step to its onboarding page', () => {
     expect(onboardingDestination('rythme')).toBe('/premiers-pas/rythme');
-    expect(onboardingDestination('rappels')).toBeNull();
+    expect(onboardingDestination('rappels')).toBe('/premiers-pas/rappels');
+    expect(onboardingDestination('depart')).toBe('/premiers-pas/depart');
+    expect(onboardingDestination('done')).toBeNull();
     expect(onboardingDestination('inconnu')).toBeNull();
   });
 });

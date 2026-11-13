@@ -8,7 +8,14 @@
 //    pages, and a learner who has not finished the first steps to `/premiers-pas/<step>`.
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { clock } from '@learny/core';
+
 import { sddDemos } from './app/%5Fdev/sdd/registry';
+import {
+  ONBOARDING_TICKET_TTL_MS,
+  createOnboardingTicket,
+  readOnboardingTicket,
+} from './lib/onboarding-ticket';
 import { decideRoute, isApiPath } from './lib/route-guard';
 import { findSddDemo, sddPagesEnabled } from './lib/sdd-pages';
 import { refreshSession } from './lib/supabase/middleware';
@@ -16,7 +23,7 @@ import { ONBOARDED_COOKIE, expireCookie } from './lib/supabase/server';
 
 // Unmatched internal path: rendered by app/not-found.tsx with a real 404 status.
 const NOT_FOUND_PATH = '/_sdd-not-found';
-const ONE_YEAR_SECONDS = 365 * 24 * 60 * 60;
+const TICKET_TTL_SECONDS = Math.ceil(ONBOARDING_TICKET_TTL_MS / 1000);
 
 function sddGuard(request: NextRequest): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
@@ -72,9 +79,19 @@ async function sessionGuard(request: NextRequest): Promise<NextResponse> {
     };
   }
 
-  const onboardedCookie = request.cookies.get(ONBOARDED_COOKIE)?.value;
+  const now = clock.now();
+  const ticketValue = request.cookies.get(ONBOARDED_COOKIE)?.value;
+  const ticket =
+    session.userId === null || ticketValue === undefined
+      ? null
+      : readOnboardingTicket(ticketValue, { userId: session.userId, now });
   const decision = await decideRoute(
-    { pathname, search, userId: session.userId, onboardedCookie },
+    {
+      pathname,
+      search,
+      userId: session.userId,
+      cachedStep: ticket?.step,
+    },
     session.loadProfile,
   );
 
@@ -83,19 +100,26 @@ async function sessionGuard(request: NextRequest): Promise<NextResponse> {
       ? NextResponse.redirect(new URL(decision.to, request.url), 307)
       : NextResponse.next();
   for (const write of session.writes) response.cookies.set(write.name, write.value, write.options);
-  if (decision.markOnboarded !== undefined) {
-    response.cookies.set(ONBOARDED_COOKIE, decision.markOnboarded, {
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/',
-      secure:
-        new URL(request.url).hostname !== 'localhost' &&
-        new URL(request.url).hostname !== '127.0.0.1',
-      maxAge: ONE_YEAR_SECONDS,
+  if (session.userId !== null && decision.cacheStep !== undefined) {
+    const value = createOnboardingTicket({
+      userId: session.userId,
+      step: decision.cacheStep,
+      now,
     });
+    if (value !== null) {
+      response.cookies.set(ONBOARDED_COOKIE, value, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure:
+          new URL(request.url).hostname !== 'localhost' &&
+          new URL(request.url).hostname !== '127.0.0.1',
+        maxAge: TICKET_TTL_SECONDS,
+      });
+    }
   }
-  if (session.userId === null && onboardedCookie !== undefined) {
-    // A cookie that outlived its session must not grant anything to the next account.
+  if (session.userId === null && ticketValue !== undefined) {
+    // A ticket that outlived its session must not grant anything to the next account.
     const headers = new Headers();
     expireCookie(request, headers, ONBOARDED_COOKIE);
     for (const line of headers.getSetCookie()) response.headers.append('set-cookie', line);

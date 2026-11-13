@@ -17,7 +17,7 @@ const profile = () =>
   Promise.resolve({ onboardingStep: 'done', deletionScheduledFor: null } as const);
 
 function input(pathname: string, overrides: Partial<GuardInput> = {}): GuardInput {
-  return { pathname, search: '', userId: USER, onboardedCookie: undefined, ...overrides };
+  return { pathname, search: '', userId: USER, cachedStep: undefined, ...overrides };
 }
 
 afterEach(() => {

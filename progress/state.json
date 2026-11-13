@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:24:57.840Z",
+  "updatedAt": "2026-11-13T08:08:01.535Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3777,14 +3777,55 @@
       }
     },
     "SPEC-602": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T07:01:58.316Z",
+      "completedAt": "2026-11-13T07:55:17.187Z",
+      "branch": "spec/SPEC-602-premiers-pas-onboarding",
+      "commit": "83c9371",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T07:52:16.010Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T07:52:28.097Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T07:52:46.351Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T07:52:55.675Z",
+          "details": "19 test(s) [SPEC-602] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T07:53:50.953Z",
+          "details": "8 test(s) [SPEC-602] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T07:54:45.514Z",
+          "details": "6 réussi(s), 0 échec(s), 14 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T07:54:45.514Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T07:54:45.532Z",
+          "details": "8/8 critères ✅"
+        }
+      }
     },
     "SPEC-603": {
       "status": "done",

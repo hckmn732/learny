@@ -46,3 +46,26 @@ export function isAiTask(value: string): value is AiTask {
 export function isProvidedModel(value: string): value is AiModelId {
   return Object.values(AI_MODEL_IDS).some((model) => model === value);
 }
+
+/** Providers offered by the personal-key screen (SPEC-602 EF-6); `local` stays out of onboarding. */
+export const BYOK_PROVIDERS = ['anthropic', 'openai', 'mistral', 'openai_compatible'] as const;
+export type ByokProvider = (typeof BYOK_PROVIDERS)[number];
+
+function modelList(value: string | undefined): string[] {
+  return (value ?? '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry !== '');
+}
+
+/**
+ * ET-5 — the model tested by default for each provider. Anthropic has a stable recommendation;
+ * the other hosted providers are configured by comma-separated environment lists and are empty by
+ * default (the screen then asks for the model name). `openai_compatible` always asks for it.
+ */
+export const BYOK_RECOMMENDED_MODELS: Record<ByokProvider, readonly string[]> = {
+  anthropic: [AI_MODEL_IDS.sonnet],
+  openai: modelList(process.env.BYOK_MODELS_OPENAI),
+  mistral: modelList(process.env.BYOK_MODELS_MISTRAL),
+  openai_compatible: [],
+};

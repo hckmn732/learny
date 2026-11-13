@@ -5,7 +5,7 @@ import { decideRoute, type GuardInput } from './route-guard';
 const USER = '4b7c1c8e-6a0f-4d52-9d3e-6f9d1f0a1b11';
 
 function input(pathname: string, overrides: Partial<GuardInput> = {}): GuardInput {
-  return { pathname, search: '', userId: USER, onboardedCookie: undefined, ...overrides };
+  return { pathname, search: '', userId: USER, cachedStep: undefined, ...overrides };
 }
 
 const profile = (step: string, deletion: string | null = null) =>
@@ -99,6 +99,7 @@ describe('[SPEC-202] proxy — garde des pages', () => {
       expect(await decideRoute(input('/agenda'), profile(step))).toEqual({
         kind: 'redirect',
         to: `/premiers-pas/${step}`,
+        cacheStep: step,
       });
       expect(await decideRoute(input('/premiers-pas/rythme'), profile(step))).toEqual({
         kind: 'pass',
@@ -111,26 +112,25 @@ describe('[SPEC-202] proxy — garde des pages', () => {
     async (step) => {
       expect(await decideRoute(input('/agenda'), profile(step))).toEqual({
         kind: 'pass',
-        markOnboarded: USER,
+        cacheStep: step,
       });
     },
   );
 
-  it('does not read the profile again when the lr-onboarded cookie matches the user', async () => {
+  it('does not read the profile again when a valid ticket carries the step', async () => {
     const loader = profile('profil');
-    expect(await decideRoute(input('/agenda', { onboardedCookie: USER }), loader)).toEqual({
+    expect(await decideRoute(input('/agenda', { cachedStep: 'rappels' }), loader)).toEqual({
       kind: 'pass',
     });
     expect(loader).not.toHaveBeenCalled();
   });
 
-  it('ignores an lr-onboarded cookie that belongs to another account', async () => {
-    const loader = profile('ia');
-    const decision = await decideRoute(
-      input('/agenda', { onboardedCookie: 'someone-else' }),
-      loader,
-    );
-    expect(decision).toEqual({ kind: 'redirect', to: '/premiers-pas/ia' });
-    expect(loader).toHaveBeenCalledOnce();
+  it('redirects a cached step that has not crossed the IA step', async () => {
+    const loader = profile('done');
+    expect(await decideRoute(input('/agenda', { cachedStep: 'ia' }), loader)).toEqual({
+      kind: 'redirect',
+      to: '/premiers-pas/ia',
+    });
+    expect(loader).not.toHaveBeenCalled();
   });
 });

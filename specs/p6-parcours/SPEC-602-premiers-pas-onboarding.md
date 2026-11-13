@@ -172,5 +172,6 @@ Définition commune (`docs/engineering/testing.md` §7) ; en plus : middleware c
 - ADR appliqués : ADR-0009, ADR-0010, ADR-0011, ADR-0012 (texte du plafond), ADR-0030, ADR-0055, ADR-0061, ADR-0064, ADR-0065.
 - **ADR-0160** (créé) : accès à l'application dès l'étape IA franchie, reprise sur l'étape la plus avancée, Checkout lancé à la fin de l'étape Rappels, correspondance des trois interrupteurs de Rappels avec les colonnes de préférences, modèle testé par défaut, fin d'onboarding à la première action de Départ.
 - **ADR-0161** (créé) : comparaison visuelle (pleine page ici).
+- **ADR-0306** (créé) : reprise après connexion à toutes les étapes non terminées, ticket `learny_ob`, route `PUT /me/ai/task-models` livrée ici, décision de Checkout calculée côté serveur et schéma local d'invitation en attendant SPEC-724.
 - Textes ajoutés (absents de la maquette) : statuts « Test en cours… », non-qualification, délai, champs « Adresse du service » / « Nom du modèle », messages d'invitation d'erreur, retour de paiement, « Indiquez votre prénom. ».
 - Hypothèses inter-spécifications (signalées au rapport) : contrats SPEC-505/506/210 de la section 3 ; route d'acceptation d'invitation livrée par SPEC-724 avec la réponse `{ formationId, formationTitle, memberFirstNames }`.

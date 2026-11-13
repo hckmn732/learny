@@ -7,9 +7,10 @@ import type { CookieOptions } from '@supabase/ssr';
 import { AppError } from '@learny/core';
 import type { AuthClient } from '@learny/services';
 
+import { ONBOARDING_TICKET_COOKIE } from '../onboarding-ticket';
 import { getPublicEnv } from '../server-env';
 
-export const ONBOARDED_COOKIE = 'lr-onboarded';
+export const ONBOARDED_COOKIE = ONBOARDING_TICKET_COOKIE;
 export const NEXT_COOKIE = 'lr-next';
 
 function isLocalHost(hostname: string): boolean {

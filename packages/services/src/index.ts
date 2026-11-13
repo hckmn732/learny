@@ -22,6 +22,7 @@ export * from './search';
 export * from './header';
 export * from './me';
 export * from './home';
+export * from './onboarding/index';
 export * from './sidebar';
 export * from './notifications/list';
 export * from './billing/index';
