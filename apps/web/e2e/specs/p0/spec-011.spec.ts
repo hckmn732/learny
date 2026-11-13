@@ -61,8 +61,10 @@ test('inspecte la matrice CI @SPEC-011', async ({
   const artifacts = page.getByTestId('spec-011-artifacts').getByRole('row');
   await expect(artifacts).toHaveCount(ARTIFACTS.length + 1);
   for (const name of ARTIFACTS) {
-    await expect(page.getByTestId(`spec-011-artifact-${name}`)).toContainText(name);
-    await expect(page.getByTestId(`spec-011-artifact-${name}`)).toContainText('oui');
+    // Sharded jobs suffix the artifact with the matrix shard: match the stable base name.
+    const row = artifacts.filter({ hasText: name });
+    await expect(row, name).toHaveCount(1);
+    await expect(row, name).toContainText('oui');
   }
 
   // No remote run is claimed: only repository paths, never a fictitious Actions URL.
