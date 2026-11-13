@@ -273,7 +273,12 @@ export default function Spec507Demo() {
 
       <BaseCard testId="spec-507-calls" title={t.calls.title}>
         <p className="text-13 text-ink-secondary">{t.calls.intro}</p>
-        <div className="mt-3 overflow-x-auto">
+        <div
+          role="region"
+          aria-label={t.calls.title}
+          tabIndex={0}
+          className="mt-3 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           <table className="w-full min-w-[52rem] text-left text-13">
             <caption className="sr-only">{t.calls.title}</caption>
             <thead>
@@ -338,6 +343,9 @@ export default function Spec507Demo() {
             <h3 className="font-semibold">{t.contract.input}</h3>
             <pre
               data-testid="spec-507-contract-input"
+              role="region"
+              aria-label={t.contract.input}
+              tabIndex={0}
               className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
             >
               {JSON.stringify(validInput, null, 2)}
@@ -347,6 +355,9 @@ export default function Spec507Demo() {
             <h3 className="font-semibold">{t.contract.result}</h3>
             <pre
               data-testid="spec-507-contract-result"
+              role="region"
+              aria-label={t.contract.result}
+              tabIndex={0}
               className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
             >
               {JSON.stringify(decision, null, 2)}
