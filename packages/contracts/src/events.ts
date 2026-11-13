@@ -213,11 +213,17 @@ export const EVENTS = {
   }),
   'exam/submitted': z.object({ userId: Uuid, formationId: Uuid, attemptId: Uuid }),
   'exercise/submitted': z.object({ userId: Uuid, moduleId: Uuid, attemptId: Uuid }),
+  // SPEC-610 ET-8 — a learner question, consumed by SPEC-717. The notion identifiers are the ones
+  // of the selected passage or of the chapter (three at most); the text stays short and untrusted.
   'tutor/question-asked': z.object({
     userId: Uuid,
+    formationId: Uuid,
     courseId: Uuid,
     conversationId: Uuid,
     messageId: Uuid,
+    chapterId: Uuid,
+    notionIds: z.array(Uuid).max(3),
+    text: z.string().min(1).max(500),
   }),
   'automation/action-proposed': automationAction,
   'automation/action-applied': automationAction,

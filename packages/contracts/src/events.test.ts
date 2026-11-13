@@ -68,7 +68,17 @@ const VALID: Record<EventName, Record<string, unknown>> = {
   },
   'exam/submitted': { userId: U1, formationId: U2, attemptId: U3 },
   'exercise/submitted': { userId: U1, moduleId: U2, attemptId: U3 },
-  'tutor/question-asked': { userId: U1, courseId: U2, conversationId: U3, messageId: U1 },
+  'tutor/question-asked': {
+    userId: U1,
+    formationId: U2,
+    courseId: U3,
+    conversationId: U1,
+    messageId: U2,
+    chapterId: U3,
+    notionIds: [U1, U2],
+    text: 'Clé ou type de pièce ?',
+  },
+
   'automation/action-proposed': { userId: U1, actionId: U2, automation: 'reprise' },
   'automation/action-applied': { userId: U1, actionId: U2, automation: 'micro_seance' },
   'automation/action-undone': { userId: U1, actionId: U2, automation: 'pause' },

@@ -26,6 +26,7 @@ import { moduleRoutes } from './resources';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
 import { sidebarRoutes } from './sidebar';
+import { tutorChatRoutes } from './tutor-chat';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
 
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
@@ -66,6 +67,7 @@ export const ROUTES = {
   ...gapRoutes,
   ...notionGraphRoutes,
   ...exerciseRoutes,
+  ...tutorChatRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;

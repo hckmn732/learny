@@ -34,6 +34,7 @@ export * from './gaps';
 export * from './notion-graph';
 export * from './exercises';
 export * from './tutor';
+export * from './tutor-chat';
 export * from './search';
 export * from './search-web';
 export * from './sidebar';
