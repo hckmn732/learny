@@ -120,5 +120,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 
 - **ADR-0016 — Pause d'une formation et limite de trois** : Mettre en pause une formation annule ses créneaux futurs (statut `cancelled`) et suspend ses automatismes ; la reprendre relance le planificateur depuis la date de reprise. La pause globale (automatisme 10) est distincte : elle gèle toutes les formations.
 - **ADR-0075 — Changer de formation et formation courante** : `profiles.current_formation_id` est mis à jour à chaque ouverture d'une page d'une formation active ou en pause ; si null, la première formation active par `last_opened_at` ; si aucune, la section « Formation en cours » propose « Créer une formation ».
+- **ADR-0311 — Contrats et transitions de la gestion des formations** : une reprise sans choix à la limite répond `outcome: limit` sans écriture, la confirmation applique la pause choisie dans la même transaction, les transitions sont sérialisées par verrou utilisateur, la reprise réutilise le planificateur et la réconciliation existants, et le repli de la formation courante suit `last_opened_at` puis `created_at`.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 

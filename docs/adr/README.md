@@ -177,3 +177,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0302](ADR-0302-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |
 | [ADR-0303](ADR-0303-horloge-cliente-profil-minimal-et-messages-de-lien-invalide-.md) | Horloge cliente, profil minimal et messages de lien invalide pour SPEC-601 | Déduite | SPEC-601, ADR-0047, ADR-0168 |
 | [ADR-0309](ADR-0309-normalisation-de-la-comparaison-visuelle-du-cadrage.md) | Normalisation de la comparaison visuelle du cadrage | Déduite | SPEC-604 |
+| [ADR-0311](ADR-0311-contrats-et-transitions-de-la-gestion-des-formations.md) | Contrats et transitions de la gestion des formations | Déduite | SPEC-618, ADR-0016, ADR-0075 |
