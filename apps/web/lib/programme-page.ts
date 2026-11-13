@@ -6,7 +6,7 @@ import type { ProgrammeProposalStateDto } from '@learny/contracts';
 import { createServiceContext, getProgrammePageState } from '@learny/services';
 
 import { SIGN_IN_PATH } from './route-guard';
-import { loadShellForFormation, type ShellPageResult } from './sidebar-page';
+import { loadShellPage, type ShellPageResult } from './sidebar-page';
 import { readPageSession } from './supabase/page';
 
 // Server load of the programme page (SPEC-605). A formation of another owner is a 404; a cadrage
@@ -23,7 +23,7 @@ export async function loadProgrammePage(formationId: string): Promise<ProgrammeP
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
   const [shell, result] = await Promise.all([
-    loadShellForFormation(formationId),
+    loadShellPage(),
     getProgrammePageState(ctx, formationId),
   ]);
   if (!result.ok) {
