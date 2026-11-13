@@ -14,6 +14,16 @@ import {
 import { colors } from '@learny/ui/tokens';
 
 const NOW = '2026-11-11T12:20:00Z';
+/** Planned dates of the seven modules: the course page reads the active programme (SPEC-606). */
+const MODULE_DATES = [
+  ['2026-10-05', '2026-10-11'],
+  ['2026-10-12', '2026-10-18'],
+  ['2026-10-19', '2026-10-25'],
+  ['2026-10-26', '2026-11-01'],
+  ['2026-11-02', '2026-11-08'],
+  ['2026-11-09', '2026-11-15'],
+  ['2026-11-16', '2026-11-22'],
+] as const;
 const REGULARITY_DAYS = [
   '2026-10-31',
   '2026-11-01',
@@ -143,7 +153,9 @@ async function seedGaps(userId: string): Promise<SeededGaps> {
         set title = ${moduleTitles[index] ?? `Module ${String(index + 1)}`},
             status = ${status}::public.module_status,
             opened_at = ${index <= 2 ? NOW : null}::timestamptz,
-            validated_at = ${index < 2 ? NOW : null}::timestamptz
+            validated_at = ${index < 2 ? NOW : null}::timestamptz,
+            planned_start = ${MODULE_DATES[index]?.[0] ?? null}::date,
+            planned_end = ${MODULE_DATES[index]?.[1] ?? null}::date
         where id = ${moduleId}::uuid
       `);
     }
