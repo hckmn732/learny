@@ -339,7 +339,7 @@ export function FormationsTable({
   if (rows.length === 0) return <>{empty}</>;
   return (
     <div
-      className="overflow-x-auto"
+      className="w-full max-w-full min-w-0 overflow-x-auto"
       role="region"
       tabIndex={0}
       aria-label={t.formations.tableLabel}
@@ -429,7 +429,7 @@ export function CompletedTable({
   if (rows.length === 0) return <>{empty}</>;
   return (
     <div
-      className="overflow-x-auto"
+      className="w-full max-w-full min-w-0 overflow-x-auto"
       role="region"
       tabIndex={0}
       aria-label={t.formations.tableLabel}
@@ -626,10 +626,10 @@ export function HomeView({
   };
 
   return (
-    <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pt-24 pb-56 shell:px-40">
+    <main className="mx-auto flex w-full max-w-content flex-col gap-24 overflow-x-hidden px-16 pt-24 pb-56 shell:px-0">
       <header
         data-testid="home-header"
-        className="flex flex-wrap items-center justify-between gap-16"
+        className="flex flex-wrap items-center justify-between gap-16 py-8"
       >
         <div className="flex flex-col gap-4">
           <p className="m-0 text-14 text-ink-muted">{data.today.label}</p>
@@ -663,7 +663,7 @@ export function HomeView({
           id="home-formations"
           data-testid="home-formations"
           aria-labelledby="home-formations-title"
-          className="rounded-24 border border-solid border-border bg-surface p-8"
+          className="min-w-0 overflow-hidden rounded-24 border border-solid border-border bg-surface p-8"
         >
           <div className="flex flex-wrap items-center justify-between gap-12 px-16 pt-16 pb-8">
             <h2

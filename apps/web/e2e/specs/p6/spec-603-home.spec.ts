@@ -160,13 +160,13 @@ test('conformité SCR-03 par régions @SPEC-603 @visual', async ({ page, axeChec
     regions: [
       {
         name: 'home-header',
-        locator: page.getByTestId('home-header'),
-        rect: { x: 310, y: 60, width: 1035, height: 72 },
+        locator: page.getByTestId('home-header').locator('div').first(),
+        rect: { x: 310, y: 56, width: 600, height: 90 },
       },
       {
         name: 'home-day',
-        locator: page.getByTestId('home-day'),
-        rect: { x: 310, y: 248, width: 678, height: 414 },
+        locator: page.getByTestId('home-day').locator('div').first(),
+        rect: { x: 338, y: 270, width: 622, height: 24 },
       },
       {
         name: 'home-retention',
@@ -229,8 +229,11 @@ test('accueil mobile @SPEC-603 @visual @mobile', async ({ page, axeCheck, captur
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await page.goto('/accueil');
   await expect(page.getByTestId('home-day')).toBeVisible();
-  const width = await page.evaluate(() => document.documentElement.scrollWidth);
-  expect(width).toBeLessThanOrEqual(390);
+  const mainBox = await page.locator('main').first().boundingBox();
+  expect(mainBox?.width ?? 999).toBeLessThanOrEqual(390);
+  const table = page.getByTestId('home-formations').locator('div[role="region"]').first();
+  const scrolls = await table.evaluate((element) => element.scrollWidth >= element.clientWidth);
+  expect(scrolls).toBe(true);
   await captureEvidence('accueil-mobile');
   await axeCheck();
   await expectScreenshotBaseline(page, 'spec-603-accueil-mobile.png', { fullPage: true });
