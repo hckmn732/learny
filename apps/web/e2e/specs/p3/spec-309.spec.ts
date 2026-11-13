@@ -1,5 +1,6 @@
 import { expect, test } from '@learny/testing/playwright';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
+import { ACCESSIBLE_TOKEN_PAIRS } from '@learny/ui/accessibility';
 import { colors } from '@learny/ui/tokens';
 
 const GALLERY = '/_dev/ui/accessibilite';
@@ -109,7 +110,9 @@ test('Socle d’accessibilité @SPEC-309 @visual @mobile', async ({ page, axeChe
   await page.goto(GALLERY);
 
   await expect(page.getByRole('heading', { level: 1, name: 'Accessibilité' })).toBeVisible();
-  await expect(page.locator('[data-testid^="a11y-contrast-"]')).toHaveCount(15);
+  await expect(page.locator('[data-testid^="a11y-contrast-"]')).toHaveCount(
+    ACCESSIBLE_TOKEN_PAIRS.length,
+  );
   await expect(page.getByTestId('a11y-control-button')).toHaveText('Action visible');
   await expect(page.getByTestId('a11y-control-icon')).toHaveAttribute(
     'aria-label',

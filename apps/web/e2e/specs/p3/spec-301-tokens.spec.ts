@@ -70,7 +70,9 @@ test('galerie des jetons conforme @SPEC-301', async ({
   await expect(page.getByRole('heading', { level: 2 })).toHaveText(HEADINGS);
 
   // CA-2: all 60 swatches, with visible names and exact values.
-  await expect(page.locator('[data-testid^="swatch-"]')).toHaveCount(60);
+  await expect(page.locator('[data-testid^="swatch-"]')).toHaveCount(
+    Object.keys(colors).length,
+  );
   for (const name of SWATCHES) {
     const swatch = page.getByTestId(`swatch-${name}`);
     await expect(swatch).toContainText(name);
@@ -163,7 +165,9 @@ test('galerie des jetons ligne de base @SPEC-301 @visual @mobile', async ({ page
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
   expect(sectionIds).toEqual(SECTIONS);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Jetons');
-  await expect(page.locator('[data-testid^="swatch-"]')).toHaveCount(60);
+  await expect(page.locator('[data-testid^="swatch-"]')).toHaveCount(
+    Object.keys(colors).length,
+  );
   await expect(page.locator('html')).toHaveCSS('font-size', '14.4px');
 
   const overflow = await page.evaluate(
