@@ -1346,6 +1346,31 @@
                       "maxItems": 100,
                       "type": "array"
                     },
+                    "module": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "position": {
+                          "maximum": 9007199254740991,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "position",
+                        "title"
+                      ],
+                      "type": "object"
+                    },
                     "nextModule": {
                       "anyOf": [
                         {
@@ -1551,6 +1576,7 @@
                   "required": [
                     "attemptId",
                     "attemptNo",
+                    "module",
                     "status",
                     "score",
                     "provisionalScore",
@@ -22857,6 +22883,31 @@
                       },
                       "type": "array"
                     },
+                    "module": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "position": {
+                          "maximum": 9007199254740991,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "position",
+                        "title"
+                      ],
+                      "type": "object"
+                    },
                     "retryAvailableAt": {
                       "anyOf": [
                         {
@@ -22882,6 +22933,7 @@
                   },
                   "required": [
                     "status",
+                    "module",
                     "activityId",
                     "attemptId",
                     "gaps",
