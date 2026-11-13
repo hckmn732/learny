@@ -102,7 +102,7 @@ function ContextList({ state }: { state: TutorChatState }): React.ReactElement {
           <ul className="m-0 mt-6 mb-4 flex list-none flex-col gap-6 p-0" id="contexte-tuteur">
             {state.contextItems.map((item) => (
               <li
-                className={`flex items-center gap-10 rounded-12 border border-divider bg-surface p-8 ${item.included ? '' : 'opacity-55'}`}
+                className={`flex items-center gap-10 rounded-12 border border-divider p-8 ${item.included ? 'bg-surface' : 'bg-surface-muted'}`}
                 data-key={item.key}
                 data-testid="tutor-context-item"
                 key={item.key}
@@ -118,14 +118,12 @@ function ContextList({ state }: { state: TutorChatState }): React.ReactElement {
                   <span className="text-13 leading-1.4">{item.value}</span>
                 </span>
                 <button
-                  aria-label={
-                    item.included ? t.contextRemove(item.label) : t.contextRestore(item.label)
-                  }
+                  aria-label={`${item.included ? t.contextIncluded : t.contextRetired} · ${item.included ? t.contextRemove(item.label) : t.contextRestore(item.label)}`}
                   aria-pressed={item.included}
                   className={`min-h-28 flex-none cursor-pointer rounded-full px-10 text-12 font-700 ${
                     item.included
                       ? 'border-0 bg-ink text-white'
-                      : 'border border-border-strong bg-surface text-ink-muted'
+                      : 'border border-border-strong bg-surface text-ink-secondary'
                   }`}
                   onClick={() => {
                     state.toggleContext(item.key);

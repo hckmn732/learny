@@ -285,6 +285,20 @@ export function useTutorChat(input: {
         }
       }
       setInclude((current) => ({ ...current, passage: true }));
+      setContextItems((current) =>
+        current.some((item) => item.key === 'passage')
+          ? current
+          : [
+              ...current.slice(0, 2),
+              {
+                key: 'passage',
+                label: 'Passage',
+                value: `« ${selection.preview} »`,
+                included: true,
+              },
+              ...current.slice(2),
+            ],
+      );
       await send('Explique-moi ce passage');
     },
     [create, refreshHistory, send],
@@ -292,6 +306,7 @@ export function useTutorChat(input: {
 
   const askSelection = useCallback(async () => {
     if (passage === null) return;
+    setOpenState(true);
     setInclude((current) => ({ ...current, passage: true }));
     await send('Explique-moi ce passage');
   }, [passage, send]);

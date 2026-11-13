@@ -46,8 +46,8 @@ export function sourceLabel(chunk: Pick<SourceCandidate, 'title' | 'kind' | 'loc
   const page = numberAt(chunk.location, 'page');
   const startSec = numberAt(chunk.location, 'startSec');
   if (chunk.kind === 'pdf' && page !== null) return `${title}, p. ${String(page)}`;
-  if (chunk.kind === 'audio' && startSec !== null) {
-    return `votre ${lowerInitial(title)}, ${mmss(startSec)}`;
+  if ((chunk.kind === 'audio' || /^note vocale/i.test(title)) && startSec !== null) {
+    return `votre ${lowerInitial(title.replace(/^note vocale/i, 'note vocale'))}, ${mmss(startSec)}`;
   }
   if ((chunk.kind === 'video' || chunk.kind === 'youtube') && startSec !== null) {
     return `${title}, ${mmss(startSec)}`;
