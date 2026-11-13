@@ -181,13 +181,10 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
     );
     setBusy(null);
     if (!result.ok) {
+      submitKey.current = crypto.randomUUID();
       const nextIssues = result.problem.errors ?? [];
       setIssues(nextIssues);
-      setMessage(
-        nextIssues.length > 0
-          ? (result.problem.detail ?? t.tableError)
-          : (result.problem.detail ?? t.submitError),
-      );
+      setMessage(nextIssues[0]?.message ?? result.problem.detail ?? t.submitError);
       focusFirst(nextIssues);
       return;
     }

@@ -195,7 +195,8 @@ export function toProblem(error: unknown, requestId: string): ProblemBody {
     detail,
     code,
     requestId,
-    ...((code === 'VALIDATION_FAILED' || code === 'BRICK_INVALID') && appError?.errors !== undefined
+    ...((code === 'VALIDATION_FAILED' || code === 'BRICK_INVALID' || code === 'RESPONSE_INVALID') &&
+    appError?.errors !== undefined
       ? { errors: appError.errors }
       : {}),
   };

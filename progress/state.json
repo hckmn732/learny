@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:00:28.215Z",
+  "updatedAt": "2026-11-13T07:59:07.113Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3887,14 +3887,55 @@
       "validations": {}
     },
     "SPEC-613": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T07:02:02.413Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-613-exercice-pratique",
       "commit": null,
-      "lastError": null,
-      "validations": {}
+      "lastError": "e2e: 4 réussi(s), 1 échec(s), 9 vidéo(s) | visual: 2 test(s) @visual réussi(s) (mode mockup) | acceptance: 0/5 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5 ; 1 ❌",
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T07:56:08.331Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T07:56:47.353Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T07:57:07.803Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T07:57:16.181Z",
+          "details": "12 test(s) [SPEC-613] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T07:58:15.564Z",
+          "details": "6 test(s) [SPEC-613] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "failed",
+          "at": "2026-11-13T07:59:07.099Z",
+          "details": "4 réussi(s), 1 échec(s), 9 vidéo(s)"
+        },
+        "visual": {
+          "status": "failed",
+          "at": "2026-11-13T07:59:07.099Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "failed",
+          "at": "2026-11-13T07:59:07.112Z",
+          "details": "0/5 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5 ; 1 ❌"
+        }
+      }
     },
     "SPEC-614": {
       "status": "pending",

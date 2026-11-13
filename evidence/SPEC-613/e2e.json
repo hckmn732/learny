@@ -1,0 +1,686 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-613/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-613",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-613/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-613/test-results/sdd/SPEC-613/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-613/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-613/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/practice-exercise.spec.ts",
+      "file": "p6/practice-exercise.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "résout un exercice structuré @SPEC-613",
+          "ok": false,
+          "tags": [
+            "SPEC-613"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6341,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n\n    at /home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts:182:54",
+                    "location": {
+                      "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
+                      "column": 54,
+                      "line": 182
+                    },
+                    "snippet": " \u001b[90m 180 |\u001b[39m   \u001b[90m// CA-1 — an unbalanced piece is refused before any tutor call.\u001b[39m\n \u001b[90m 181 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-submit'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 182 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-message'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Écart : 20 €'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 183 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-feedback'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 184 |\u001b[39m\n \u001b[90m 185 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-cell-0-montant'\u001b[39m)\u001b[33m.\u001b[39mfill(\u001b[32m'120'\u001b[39m)\u001b[33m;\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
+                        "column": 54,
+                        "line": 182
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n\n\n  180 |   // CA-1 — an unbalanced piece is refused before any tutor call.\n  181 |   await page.getByTestId('exercise-submit').click();\n> 182 |   await expect(page.getByTestId('exercise-message')).toContainText('Écart : 20 €');\n      |                                                      ^\n  183 |   await expect(page.getByTestId('exercise-feedback')).toHaveCount(0);\n  184 |\n  185 |   await page.getByTestId('exercise-cell-0-montant').fill('120');\n    at /home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts:182:54"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:58:48.889Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
+                    "column": 54,
+                    "line": 182
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cf9f4631fdc2dd2e5f15-3b8540ffc085f355fcbc",
+          "file": "p6/practice-exercise.spec.ts",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "reprend une production @SPEC-613",
+          "ok": true,
+          "tags": [
+            "SPEC-613"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2272,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:58:56.724Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/attachments/axe-12ace6f38c2b90e143cd3938cb24b760d11fb981.json"
+                    },
+                    {
+                      "name": "spec-613-reprise-brouillon",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/attachments/spec-613-reprise-brouillon-69c8e4b6db3cde2c3caa023af6c3d9e6938ce133.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cf9f4631fdc2dd2e5f15-eac3b636d8478840ac76",
+          "file": "p6/practice-exercise.spec.ts",
+          "line": 217,
+          "column": 1
+        },
+        {
+          "title": "refuse l’exercice d’un autre apprenant @SPEC-613",
+          "ok": true,
+          "tags": [
+            "SPEC-613"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:58:59.177Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/video.webm"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cf9f4631fdc2dd2e5f15-80460075f0f75e4fbe20",
+          "file": "p6/practice-exercise.spec.ts",
+          "line": 238,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-613 @SPEC-613 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-613",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "spec-613-desktop:0.1192"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2901,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:58:59.798Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "spec-613-desktop:0.1192"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "spec-613-desktop-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/spec-613-desktop-side-by-side-e16b2d04597d6ffdb6b22a8dd2b86dca50c73b71.png"
+                    },
+                    {
+                      "name": "spec-613-desktop-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/spec-613-desktop-diff-fb91ffc902b669fe965daf5117a84c61dfec6c8d.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/axe-ad4c33bf7e81e0fff6f312fcfd48cdae746df232.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cf9f4631fdc2dd2e5f15-1ed38bf0e74e063909e6",
+          "file": "p6/practice-exercise.spec.ts",
+          "line": 284,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-613 mobile @SPEC-613 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-613",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
+                    "line": 328,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 223,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:59:02.820Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
+                        "line": 328,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "spec-613-mobile:0.1080"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2314,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:59:04.427Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "spec-613-mobile:0.1080"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "spec-613-mobile-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/spec-613-mobile-side-by-side-c3d4751998c0afecf5a9bc9e69d5e01835646950.png"
+                    },
+                    {
+                      "name": "spec-613-mobile-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/spec-613-mobile-diff-558953f5dbd6aba3cd5e61c85e715b855d2b693b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/axe-99ba17c1d22caa7a7c48ac1d9d30cff8b9b22ecd.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cf9f4631fdc2dd2e5f15-11258a2b9bad51b9392a",
+          "file": "p6/practice-exercise.spec.ts",
+          "line": 324,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T07:58:17.084Z",
+    "duration": 49909.914,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

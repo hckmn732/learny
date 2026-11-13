@@ -410,17 +410,28 @@ export async function submitExercise(
       applied,
     );
     if (!outcome.alreadyGraded) {
-      await ctx.db?.run(async (tx) => {
-        await tx.execute(sql`
-          update public.attempts
-          set review_feedback = jsonb_set(
-            coalesce(review_feedback, '{}'::jsonb),
-            '{masteryAfter}',
-            to_jsonb(${masteryAfter}::numeric)
-          )
-          where id = ${outcome.attemptId}::uuid
-        `);
-      });
+      try {
+        await ctx.db?.run(async (tx) => {
+          await tx.execute(sql`
+            update public.attempts
+            set review_feedback = jsonb_set(
+              coalesce(review_feedback, '{}'::jsonb),
+              '{masteryAfter}',
+              to_jsonb(${masteryAfter}::numeric)
+            )
+            where id = ${outcome.attemptId}::uuid
+          `);
+        });
+      } catch (error) {
+        ctx.logger.warn(
+          'exercise feedback enrichment failed',
+          {
+            outcome: 'exercise_feedback_deferred',
+            code: 'INTERNAL_ERROR',
+          },
+          error,
+        );
+      }
     }
     return ExerciseSubmissionResult.parse({
       attemptId: outcome.attemptId,

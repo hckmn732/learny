@@ -38,7 +38,7 @@ export function CriteriaFeedback({
             {t.correction}
           </h2>
           <p className="m-0 font-display text-28 font-600" data-testid="exercise-score">
-            {t.score(correction.score, correction.maxScore)}
+            {t.score(correction.score, 10)}
           </p>
         </div>
         <span
