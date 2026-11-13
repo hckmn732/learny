@@ -76,6 +76,7 @@ test('cadrage complet jusqu’à la génération du programme @SPEC-604', async 
     'Utilisateur autonome, Certification SAP',
   );
   await expect(page.getByTestId('cadrage-send')).toBeEnabled();
+  await captureEvidence('cadrage-q3-multi');
   await page.getByTestId('cadrage-send').click();
   await expect(page.getByTestId('cadrage-log')).toContainText(Q4);
   await captureEvidence('cadrage-q3-apercu');
@@ -258,10 +259,11 @@ test('conformité SCR-04 cadrage @SPEC-604 @visual', async ({ page, axeCheck }) 
   await axeCheck();
 });
 
-test('conformité SCR-04 cadrage mobile @SPEC-604 @visual @mobile', async ({ page, axeCheck }) => {
+test('conformité SCR-04 cadrage mobile @SPEC-604 @visual @mobile', async ({ page, axeCheck, captureEvidence }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await seedSidebar(session.userId);
   await reachThirdQuestion(page);
+  await captureEvidence('cadrage-mobile');
   const offenders = await page.evaluate(() =>
     [...document.querySelectorAll('*')]
       .filter((element) => element.getBoundingClientRect().right > window.innerWidth + 1)
