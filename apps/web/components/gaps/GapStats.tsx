@@ -25,17 +25,20 @@ export function GapStats({ summary, nextReviewAt, generatedAt, timezone }: GapSt
     <StatRow data-testid="gaps-summary">
       <StatCard
         data-testid="gaps-stat-open"
+        style={{ flexBasis: 'auto' }}
         tone="dark"
         value={t.stats.notionCount(summary.openGaps)}
         label={t.stats.openLabel(gapModules)}
       />
       <StatCard
         data-testid="gaps-stat-mastered"
+        style={{ flexBasis: 'auto' }}
         value={t.stats.notionCount(summary.masteredNotions)}
         label={t.stats.masteredLabel(masteredModules)}
       />
       <StatCard
         data-testid="gaps-stat-next"
+        style={{ flexBasis: 'auto' }}
         value={formatNextReview(nextReviewAt, generatedAt, timezone, {
           now: t.stats.nextNow,
           none: t.stats.nextNone,

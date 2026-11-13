@@ -64,6 +64,7 @@ export default async function LacunesPage({ params, searchParams }: LacunesPageP
                 gaps.data.summary.openGaps === 0 ? undefined : (
                   <NextLink
                     data-testid="gaps-train-all"
+                    prefetch={false}
                     href={`/formations/${encodeURIComponent(gaps.data.formationId)}/quiz-global?cible=lacunes`}
                     className="inline-flex min-h-48 items-center rounded-14 bg-lime px-20 text-15 font-700 text-ink no-underline transition-[filter] hover:brightness-95"
                   >

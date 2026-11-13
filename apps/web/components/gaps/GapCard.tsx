@@ -102,6 +102,7 @@ export function GapCard({ item, timezone }: GapCardProps) {
           <NextLink
             data-testid="gap-train"
             href={item.training.href}
+            prefetch={false}
             aria-label={`${t.train} : ${item.notionLabel}`}
             className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline transition-colors hover:bg-dark-700"
           >
@@ -120,7 +121,8 @@ export function GapCard({ item, timezone }: GapCardProps) {
             <NextLink
               data-testid="gap-course-link"
               href={item.course.href}
-              aria-label={t.openCourse(item.notionLabel)}
+              prefetch={false}
+              aria-label={`${t.course} : ${item.notionLabel}`}
               className="inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink no-underline transition-colors hover:border-ink"
             >
               {t.course}

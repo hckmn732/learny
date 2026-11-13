@@ -34,14 +34,14 @@ describe('[SPEC-615] filtres par nature', () => {
     expect(screen.getByTestId('gaps-filter-count-application').textContent).toBe('1');
     expect(screen.getByTestId('gaps-filter-count-forgetting').textContent).toBe('1');
     expect(
-      screen.getByRole('button', { name: 'Toutes, 4 lacunes' }).getAttribute('aria-pressed'),
+      screen.getByRole('button', { name: 'Toutes 4 lacunes' }).getAttribute('aria-pressed'),
     ).toBe('true');
   });
 
   it('pousse ?nature=confusion et marque le filtre actif (EF-2, CL-4)', async () => {
     const { user } = renderComponent(<GapFilters countsByNature={COUNTS} activeNature={null} />);
 
-    await user.click(screen.getByRole('button', { name: 'Confusion, 1 lacune' }));
+    await user.click(screen.getByRole('button', { name: 'Confusion 1 lacune' }));
     await waitFor(() => {
       expect(push).toHaveBeenCalledWith('/formations/f/lacunes?nature=confusion', {
         scroll: false,
@@ -54,8 +54,8 @@ describe('[SPEC-615] filtres par nature', () => {
       <GapFilters countsByNature={COUNTS} activeNature="confusion" />,
     );
 
-    const all = screen.getByRole('button', { name: 'Toutes, 4 lacunes' });
-    const confusion = screen.getByRole('button', { name: 'Confusion, 1 lacune' });
+    const all = screen.getByRole('button', { name: 'Toutes 4 lacunes' });
+    const confusion = screen.getByRole('button', { name: 'Confusion 1 lacune' });
     expect(confusion.getAttribute('aria-pressed')).toBe('true');
     expect(all.getAttribute('aria-pressed')).toBe('false');
 

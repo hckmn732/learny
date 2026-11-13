@@ -78,7 +78,6 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
             type="button"
             data-testid={`gaps-filter-${option.key}`}
             aria-pressed={active}
-            aria-label={t.countLabel(option.label, option.count)}
             onClick={() => {
               select(option.key === 'all' ? null : option.key);
             }}
@@ -91,7 +90,6 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
           >
             <span>{option.label}</span>
             <span
-              aria-hidden="true"
               data-testid={`gaps-filter-count-${option.key}`}
               className={cn(
                 'min-w-20 rounded-full px-6 py-1 text-12 font-700',
@@ -100,6 +98,7 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
             >
               {option.count}
             </span>
+            <span className="sr-only">{option.count === 1 ? 'lacune' : 'lacunes'}</span>
           </button>
         );
       })}

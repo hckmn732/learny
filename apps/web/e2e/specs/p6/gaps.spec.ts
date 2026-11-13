@@ -1,4 +1,4 @@
-import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestCourse, createTestProgramme } from '@learny/db/testing';
@@ -7,7 +7,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {
   MOCKUP_MAX_DIFF_RATIO,
-  compareWithReference,
+  compareWithReferenceRegion,
   expectScreenshotBaseline,
   expectTokens,
 } from '@learny/testing/visual';
@@ -32,7 +32,9 @@ const REGULARITY_DAYS = [
 /** Content region of `SCR-13-base-desktop.png` (1600 × 1341): eyebrow to explanatory note. */
 const REFERENCE_DESKTOP = { x: 311, y: 86, width: 1042, height: 1072 } as const;
 /** Content region of `SCR-13-base-mobile.png` (433 × 3260): eyebrow to explanatory note. */
-const REFERENCE_MOBILE = { x: 14, y: 628, width: 362, height: 2258 } as const;
+const REFERENCE_MOBILE = { x: 36, y: 628, width: 317, height: 2262 } as const;
+
+const REFERENCE_DIR = fileURLToPath(new URL('../../../../../design/references/', import.meta.url));
 
 let session: TestSession;
 
@@ -313,6 +315,8 @@ test('filtre et entraîne une lacune @SPEC-615', async ({
     'confondue avec le type de pièce dans 2 réponses',
   );
 
+  expect(consoleErrors).toEqual([]);
+
   // CA-3 — the targeted global quiz of the stored nature.
   await page.getByTestId('gap-train').click();
   await expect(page).toHaveURL(
@@ -330,15 +334,14 @@ test('filtre et entraîne une lacune @SPEC-615', async ({
     order by gap_nature
   `);
   expect(rows).toEqual([
-    { nature: 'confusion', count: 1 },
-    { nature: 'application', count: 1 },
-    { nature: 'misunderstanding', count: 1 },
     { nature: 'forgetting', count: 1 },
+    { nature: 'confusion', count: 1 },
+    { nature: 'misunderstanding', count: 1 },
+    { nature: 'application', count: 1 },
   ]);
 
   await axeCheck();
   await captureEvidence('spec-615-lacunes-filtre');
-  expect(consoleErrors).toEqual([]);
 });
 
 test('revoit la lacune dans le cours @SPEC-615', async ({ page, axeCheck, captureEvidence }) => {
@@ -388,7 +391,7 @@ test('refuse les lacunes d’un autre apprenant @SPEC-615', async ({ browser, ba
   }
 });
 
-/** Compares the real content element with a crop of the mockup reference, same internal scale. */
+/** Compares the real content element with the normalised region of the mockup reference. */
 async function compareContent(
   page: import('@playwright/test').Page,
   referenceName: string,
@@ -397,38 +400,14 @@ async function compareContent(
   name: string,
 ): Promise<number> {
   const content = page.getByTestId('gaps-content');
-  const box = await content.boundingBox();
-  if (box === null) throw new Error('contenu des lacunes non mesurable');
-  const actual = await content.screenshot({ animations: 'disabled' });
-  const referencePage = await page.context().newPage();
-  await referencePage.setViewportSize({
-    width: Math.ceil(box.width),
-    height: Math.ceil(box.height),
-  });
-  const scaleX = box.width / reference.width;
-  const scaleY = box.height / reference.height;
-  const url = new URL(`/_dev/sdd/reference/${referenceName}`, page.url()).toString();
-  await referencePage.setContent(
-    `<div id="ref" style="width:${String(Math.ceil(box.width))}px;height:${String(
-      Math.ceil(box.height),
-    )}px;background-image:url('${url}');background-repeat:no-repeat;background-size:${String(
-      reference.width * scaleX,
-    )}px ${String(reference.height * scaleY)}px;background-position:${String(
-      -reference.x * scaleX,
-    )}px ${String(-reference.y * scaleY)}px"></div><img id="ref-img" src="${url}" alt="" style="position:absolute;width:1px;height:1px;opacity:0">`,
+  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
+  const comparison = compareWithReferenceRegion(
+    actual,
+    `${REFERENCE_DIR}${referenceName}`,
+    reference,
+    testInfo.outputPath('visual'),
+    name,
   );
-  await referencePage.waitForFunction(() => {
-    const image = document.getElementById('ref-img');
-    return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-  });
-  const referencePath = testInfo.outputPath(`${name}-reference.png`);
-  const referenceShot = await referencePage.screenshot({
-    clip: { x: 0, y: 0, width: Math.ceil(box.width), height: Math.ceil(box.height) },
-  });
-  await referencePage.close();
-  fs.writeFileSync(referencePath, referenceShot);
-  const comparison = compareWithReference(actual, referencePath, testInfo.outputPath('visual'), name);
-  await testInfo.attach(`${name}-reference`, { path: referencePath, contentType: 'image/png' });
   await testInfo.attach(`${name}-side-by-side`, {
     path: comparison.sideBySidePath,
     contentType: 'image/png',
@@ -465,7 +444,7 @@ test('conformité SPEC-615 @SPEC-615 @visual', async ({ page, axeCheck }, testIn
       'background-color': colors.ink,
       color: colors.white,
     },
-    '[data-testid="gaps-filter-all"] span:last-child': {
+    '[data-testid="gaps-filter-count-all"]': {
       'background-color': colors.lime,
       color: colors.ink,
     },
@@ -514,6 +493,7 @@ test('conformité SPEC-615 mobile @SPEC-615 @visual @mobile', async ({
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(gapUrl(seed.formationId));
+  await expect(page.getByTestId('gaps-content')).toBeVisible();
   await expect(page.getByTestId('gap-card')).toHaveCount(4);
   await expect(page.getByTestId('gaps-summary')).toContainText('4 notions');
   const overflow = await page.evaluate(
@@ -525,6 +505,7 @@ test('conformité SPEC-615 mobile @SPEC-615 @visual @mobile', async ({
   // Same content at the 390-wide logical viewport of SCR-13-base-mobile.png.
   await page.setViewportSize({ width: 390, height: 3260 });
   await page.goto(gapUrl(seed.formationId));
+  await expect(page.getByTestId('gaps-content')).toBeVisible();
   await expect(page.getByTestId('gap-card')).toHaveCount(4);
   const ratio = await compareContent(
     page,
