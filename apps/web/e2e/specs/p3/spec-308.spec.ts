@@ -294,6 +294,13 @@ test('Pages système et mise en page d’authentification @SPEC-308 @visual @mob
     await page.goto('/acces-refuse');
     await ready(page);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Accès refusé');
+    // The first render can race the Supabase session read on a loaded runner: retry the page
+    // once, then require the signed-in variant of the screen (no sign-in action).
+    if ((await page.getByRole('link', { name: 'Se connecter' }).count()) > 0) {
+      await page.reload();
+      await ready(page);
+    }
+    await expect(page.getByRole('link', { name: 'Se connecter' })).toHaveCount(0);
     await axeCheck();
     await expectScreenshotBaseline(page, 'spec-308-acces-refuse.png', {
       fullPage: true,
