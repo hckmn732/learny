@@ -1,7 +1,7 @@
 // Static gallery data (SPEC-503 ET-5): the SPEC-501 examples, their public projection and the
 // static corrections used until SPEC-502 ships `gradeBrick`.
 import { brickExamples, brickRegistry, type BrickType } from '@learny/bricks';
-import type { CorrectionView as CorrectionViewType } from '@learny/bricks';
+import type { CorrectionView as CorrectionViewType } from '@learny/bricks/view';
 import type {
   BrickVariant,
   BrickViewBrick,

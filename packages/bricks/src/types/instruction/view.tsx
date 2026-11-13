@@ -60,7 +60,10 @@ export function InstructionView(props: BrickViewProps<'instruction'>) {
 
   const table = production.kind === 'table' ? production : null;
   const checkResults = table
-    ? evaluateTableChecks(table, { rows: current.rows.length > 0 ? current.rows : rows })
+    ? evaluateTableChecks(table, {
+        fields,
+        rows: current.rows.length > 0 ? current.rows : rows,
+      })
     : [];
   const derivedColumnLabel =
     table?.checks.find((check) => check.sideColumnLabel !== undefined)?.sideColumnLabel ?? null;
