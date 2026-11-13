@@ -720,8 +720,10 @@ describe('[SPEC-612] remédiation ciblée', () => {
       promptId: 'tutor.remediation-plan',
       mock: { scenario: 'remediation-plan' },
     });
-    const prompt = object.mock.calls[0]?.[0] as { messages: { content: string }[] };
-    expect(prompt.messages[0]?.content).toContain('&lt;double&gt;');
+    const prompt = (
+      object.mock.calls as unknown as Array<[{ messages: { content: string }[] }]>
+    )[0]?.[0];
+    expect(prompt?.messages[0]?.content ?? '').toContain('&lt;double&gt;');
 
     session.mockResolvedValueOnce({ ok: false, error: { code: 'AI_UNAVAILABLE' } });
     await expect(defaultRemediationPlanGenerator(planCtx, input)).resolves.toMatchObject({
