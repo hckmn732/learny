@@ -101,6 +101,9 @@ importers:
       '@commitlint/lint':
         specifier: ^21.2.4
         version: 21.2.4
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../../packages/bricks
       '@learny/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -393,6 +396,9 @@ importers:
 
   packages/services:
     dependencies:
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../bricks
       '@learny/config':
         specifier: workspace:*
         version: link:../config
