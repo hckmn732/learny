@@ -1,11 +1,11 @@
 {
   "measuredAt": "2026-11-11T12:20:00.000Z",
-  "tableCount": 53,
-  "forcedCount": 53,
+  "tableCount": 57,
+  "forcedCount": 57,
   "categories": {
-    "personal": 42,
+    "personal": 44,
     "shared-programme": 7,
-    "service": 4
+    "service": 6
   },
   "tables": [
     {
@@ -132,6 +132,13 @@
       ]
     },
     {
+      "table": "programme_proposals",
+      "category": "personal",
+      "policies": [
+        "programme_proposals_owner_all"
+      ]
+    },
+    {
       "table": "programme_change_requests",
       "category": "personal",
       "policies": [
@@ -241,6 +248,13 @@
       "category": "personal",
       "policies": [
         "brick_reports_owner_all"
+      ]
+    },
+    {
+      "table": "question_bank_jobs",
+      "category": "personal",
+      "policies": [
+        "question_bank_jobs_owner_all"
       ]
     },
     {
@@ -357,6 +371,11 @@
       ]
     },
     {
+      "table": "ai_budget_reservations",
+      "category": "service",
+      "policies": []
+    },
+    {
       "table": "data_exports",
       "category": "personal",
       "policies": [
@@ -388,6 +407,11 @@
     },
     {
       "table": "sdd_demo_runs",
+      "category": "service",
+      "policies": []
+    },
+    {
+      "table": "stripe_events",
       "category": "service",
       "policies": []
     }
