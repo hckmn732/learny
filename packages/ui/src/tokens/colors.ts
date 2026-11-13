@@ -61,6 +61,25 @@ export const colors = {
   'header-glass': 'rgba(244, 244, 241, 0.92)',
   overlay: 'rgba(17, 17, 19, 0.45)',
   'tooltip-glass': 'rgba(28, 28, 32, 0.88)',
+  // Brick states (SPEC-503, ADR-0152): success and soft danger backgrounds. Correction text
+  // colours reuse `green-ink` and `orange-ink`; these two fill the named gaps of ET-2.
+  success: '#14A38B',
+  'danger-soft': '#FFEDE0',
+  // Resource excerpt colours by contribution type (SPEC-503 EF-12, ADR-0152).
+  'excerpt-pdf': '#A13A06',
+  'excerpt-pdf-soft': '#FFEDE0',
+  'excerpt-audio': '#5B21B6',
+  'excerpt-audio-soft': '#F0E9FE',
+  'excerpt-video': '#2E2E8F',
+  'excerpt-video-soft': '#ECECFC',
+  'excerpt-youtube': '#2E2E8F',
+  'excerpt-youtube-soft': '#ECECFC',
+  'excerpt-web': '#0B5C4D',
+  'excerpt-web-soft': '#E1F4EF',
+  'excerpt-note': '#3D5200',
+  'excerpt-note-soft': '#F1FBD3',
+  'excerpt-image': '#3F3F46',
+  'excerpt-image-soft': '#F4F4F1',
 } as const;
 
 export type ColorToken = keyof typeof colors;
