@@ -20,6 +20,21 @@ Pyramide visée : unitaire ≥ 80 % de couverture de lignes sur `learning-engine
 - Playwright : chaque test porte l'étiquette `@SPEC-402` dans son titre (`test('… @SPEC-402', …)`) ; les tests visuels portent aussi `@visual`. Filtre : `pnpm test:e2e --grep @SPEC-402`.
 - Un test peut porter plusieurs étiquettes s'il couvre plusieurs spécifications ; la non-régression d'une spécification antérieure se fait en rejouant ses étiquettes.
 
+### 2.1 Boucle rapide et suites complètes
+
+La boucle de développement ne rejoue pas toute la pyramide à chaque modification :
+
+```bash
+pnpm test:related                 # tests unitaires liés aux fichiers modifiés depuis origin/main
+TEST_INTEGRATION=1 pnpm test:related  # idem + fichiers d'intégration liés
+TEST_BASE=HEAD~5 pnpm test:related    # base de comparaison explicite
+```
+
+- Pendant une spécification : lint/types/build complets, puis uniquement ses tests `[SPEC-xxx]`/`@SPEC-xxx` et les tests liés par le graphe d'imports.
+- À la fusion et au checkpoint : suites complètes. En CI, l'intégration et l'e2e sont **shardées en 4** (`--shard=n/4`) ; le checkpoint local reste la référence non shardée.
+- Le test selfhost de SPEC-012 reste obligatoire au checkpoint. En CI ordinaire, il est ignoré quand aucun fichier Docker, Compose, migration ou workflow n'a changé (`RUN_SELFHOST=0`).
+- Ne jamais abaisser un seuil, ignorer silencieusement un test ou supprimer une preuve pour accélérer : déplacer le test vers l'étage approprié et le documenter.
+
 ## 3. Données et environnement de test
 
 - Base : Supabase local (Docker). `pnpm db:reset` (migrations + `supabase/seed.sql` minimal) avant la suite d'intégration ; chaque test d'intégration s'exécute dans une transaction annulée (`withRollback`) ou utilise des utilisateurs créés par fabrique avec un suffixe unique.

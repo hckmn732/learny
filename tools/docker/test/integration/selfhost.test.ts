@@ -198,7 +198,9 @@ afterAll(() => {
   fs.rmSync(envFile, { force: true });
 }, 300_000);
 
-describe('[SPEC-012] selfhost stack', () => {
+// The checkpoint runs the real stack. Regular CI shards skip it unless Docker/compose/migrations
+// changed, so the fast integration shards do not rebuild the images on every push.
+describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', () => {
   test('construit deux images non root, sans fichier .env et avec le même commit', () => {
     const web = serviceImageInfo(PROJECT, envFile, env, 'web');
     const worker = serviceImageInfo(PROJECT, envFile, env, 'worker');

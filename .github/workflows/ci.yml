@@ -149,10 +149,14 @@ jobs:
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
   integration:
-    name: Intégration (Supabase local)
+    name: Intégration (Supabase local, shard ${{ matrix.shard }}/4)
     needs: audit
     if: needs.audit.outputs.has_app == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -160,6 +164,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      - name: Cache Next
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - uses: supabase/setup-cli@v1
         with:
           version: 2.122.1
@@ -177,10 +187,22 @@ jobs:
         run: supabase start
       - name: Remettre la base à zéro
         run: pnpm db:reset
+      - name: Détecter les changements de la pile auto-hébergée
+        id: selfhost
+        run: |
+          base="${{ github.event.before }}"
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "$base" "${{ github.sha }}" | grep -Eq '^(docker/|tools/docker/|supabase/migrations/|packages/db/migrations/|\.github/workflows/)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
       # ECR Public and Docker Hub rate-limit shared runner IPs. Pull every image of the
       # self-hosted stack sequentially (parallel Compose pulls trigger ECR Public limits too),
       # through the Google mirror for Docker Hub, so Compose finds them locally.
       - name: Précharger les images de la pile auto-hébergée
+        if: steps.selfhost.outputs.run == 'true'
         run: |
           images="public.ecr.aws/supabase/postgres:17.11.0.006
           public.ecr.aws/supabase/gotrue:v2.197.0
@@ -208,22 +230,28 @@ jobs:
               exit 1
             fi
           done
-      - name: Tests d'intégration
-        run: pnpm test:int
+      - name: Tests d'intégration (shard ${{ matrix.shard }}/4)
+        env:
+          RUN_SELFHOST: ${{ steps.selfhost.outputs.run }}
+        run: pnpm test:int --shard=${{ matrix.shard }}/4
       - name: Publier les rapports d'intégration
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: integration-reports
+          name: integration-reports-${{ matrix.shard }}
           path: test-results/
           if-no-files-found: warn
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
 
   e2e:
-    name: E2E et conformité visuelle (Chromium)
+    name: E2E et conformité visuelle (Chromium, shard ${{ matrix.shard }}/4)
     needs: audit
     if: needs.audit.outputs.has_app == 'true'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -241,10 +269,21 @@ jobs:
           key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
           restore-keys: |
             turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+      - name: Cache Next
+        uses: actions/cache@v4
+        with:
+          path: apps/web/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - uses: supabase/setup-cli@v1
         with:
           version: 2.122.1
       - run: pnpm install --frozen-lockfile
+      - name: Cache des navigateurs Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Installer Chromium et ses dépendances système
         run: pnpm exec playwright install --with-deps chromium
       - name: Locale française et polices
@@ -259,13 +298,13 @@ jobs:
       - name: Charger le jeu de démonstration
         run: pnpm db:seed:demo
       - run: pnpm build
-      - name: Tests e2e, axe et visuels
-        run: pnpm test:e2e
+      - name: Tests e2e, axe et visuels (shard ${{ matrix.shard }}/4)
+        run: pnpm test:e2e --shard=${{ matrix.shard }}/4
       - name: Publier les rapports, captures et vidéos e2e
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-reports
+          name: e2e-reports-${{ matrix.shard }}
           path: |
             test-results/
             apps/web/e2e/__screenshots__/
