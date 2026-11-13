@@ -1,0 +1,601 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-606/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-606",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-606/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-606/test-results/sdd/SPEC-606/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-606/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-606/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/active-programme.spec.ts",
+      "file": "p6/active-programme.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "programme actif et module verrouillé @SPEC-606",
+          "ok": true,
+          "tags": [
+            "SPEC-606"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T10:20:11.979Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-en-cours",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/programme-en-cours-9aeadf80d90a573108e589bbfc0b3536ba9c159a.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/axe-9fb47d24a321efa1f4539fd97495b48a532388a3.json"
+                    },
+                    {
+                      "name": "module-verrouille",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/module-verrouille-387fea6020392cf93da8ebd79be9f922e1b14de8.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d8416255e87041ebcfb1-b4087ce1cb8cf64a9d8b",
+          "file": "p6/active-programme.spec.ts",
+          "line": 232,
+          "column": 1
+        },
+        {
+          "title": "navigation vers module et examen blanc @SPEC-606",
+          "ok": true,
+          "tags": [
+            "SPEC-606"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T10:20:15.985Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d8416255e87041ebcfb1-36dcd32ea7c7ac611fc9",
+          "file": "p6/active-programme.spec.ts",
+          "line": 286,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-606 desktop @SPEC-606 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-606",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2518,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T10:20:18.142Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-conformite",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/programme-conformite-48dc1902895d32cf0faae82381a50795e168766b.png"
+                    },
+                    {
+                      "name": "comparaison-statistiques-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-statistiques-side-by-side-db082d44786148c913abaeaee415f464bfeda2bd.png"
+                    },
+                    {
+                      "name": "comparaison-statistiques-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-statistiques-diff-062da8cbc03a06e81bc8234bb8ce70206a71a956.png"
+                    },
+                    {
+                      "name": "comparaison-calendrier-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-calendrier-side-by-side-644dbdaee0ed8eed7dbd0a2e5f56a84ff0508804.png"
+                    },
+                    {
+                      "name": "comparaison-calendrier-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-calendrier-diff-fb5710a9accb4004ff843ec8e59ea3df84bf66f5.png"
+                    },
+                    {
+                      "name": "comparaison-modules-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-modules-side-by-side-54492c9815ac0edb219b951a02bfe60a0637a755.png"
+                    },
+                    {
+                      "name": "comparaison-modules-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-modules-diff-c250ac26389041b07910e7afa106d0ccd3cd3184.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/axe-37b2f5fe1fec0963fd1bd1ecbdc0ef028fe5ff83.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d8416255e87041ebcfb1-c160829a9a85fd2bba2c",
+          "file": "p6/active-programme.spec.ts",
+          "line": 303,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-606 mobile @SPEC-606 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-606",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs/p6/active-programme.spec.ts",
+                    "line": 378,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 209,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T10:20:20.806Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-606/apps/web/e2e/specs/p6/active-programme.spec.ts",
+                        "line": 378,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2257,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T10:20:21.796Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/attachments/programme-mobile-a21dda39843fdc2d4c11f56260707cff5245a40b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/attachments/axe-56228d89483ffec00c60468725a7b5c2b9b76c21.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-606/test-results/artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d8416255e87041ebcfb1-dab06d771c8ceaf64702",
+          "file": "p6/active-programme.spec.ts",
+          "line": 373,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T10:19:40.793Z",
+    "duration": 43506.258,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
