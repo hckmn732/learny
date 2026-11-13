@@ -139,6 +139,20 @@ async function seedMenu(userId: string): Promise<SeededMenu> {
       set last_opened_at = ${NOW}::timestamptz, status = 'active'
       where id = ${sap.formationId}::uuid
     `);
+    for (const formationId of [sap.formationId, agile.formationId]) {
+      await tx.execute(sql`
+        update public.modules
+        set planned_start = date '2026-11-02' + (position - 1) * 7,
+            planned_end = date '2026-11-02' + (position - 1) * 7 + 4
+        where formation_id = ${formationId}::uuid
+      `);
+      await tx.execute(sql`
+        update public.formations
+        set start_date = (select min(planned_start) from public.modules where formation_id = ${formationId}::uuid),
+            end_date = (select max(planned_end) from public.modules where formation_id = ${formationId}::uuid)
+        where id = ${formationId}::uuid
+      `);
+    }
     await tx.execute(sql`
       update public.profiles
       set current_formation_id = ${sap.formationId}::uuid,

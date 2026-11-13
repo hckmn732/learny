@@ -33,8 +33,15 @@ async function seedLearner(userId: string): Promise<Seed> {
     }
     await tx.execute(sql`
       update public.formations
-      set description = 'Formation aux réseaux locaux et à leur sécurité.'
+      set description = 'Formation aux réseaux locaux et à leur sécurité.',
+          start_date = '2026-11-02',
+          end_date = '2026-11-06'
       where id = ${programme.formationId}::uuid
+    `);
+    await tx.execute(sql`
+      update public.modules
+      set planned_start = '2026-11-02', planned_end = '2026-11-06'
+      where formation_id = ${programme.formationId}::uuid
     `);
     await tx.execute(sql`
       update public.notions
