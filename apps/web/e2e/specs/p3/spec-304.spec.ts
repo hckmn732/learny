@@ -414,6 +414,11 @@ test('Coquille : menu latéral mobile @SPEC-304 @visual @mobile', async ({
   await expect
     .poll(async () => page.evaluate(() => document.body.style.overflow))
     .toBe('hidden');
+  // CI runners fall back to their own fonts until the self-hosted ones are ready; the drawer
+  // layout shifts by a few pixels with the fallback metrics.
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
   await expectScreenshotBaseline(page, 'spec-304-menu-mobile.png', { fullPage: false });
   await axeCheck();
 });
