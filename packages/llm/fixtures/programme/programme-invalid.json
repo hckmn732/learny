@@ -1,0 +1,114 @@
+{
+  "task": "programme",
+  "scenario": "programme-invalid",
+  "promptId": "programme.programme",
+  "promptVersion": 2,
+  "description": "Trois sorties qui violent le seuil de 60 à 95 % : corrections épuisées.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "description": null,
+        "volumeHours": 10,
+        "summary": null,
+        "modules": [
+          {
+            "title": "Module invalide",
+            "objectives": ["Tester le seuil"],
+            "plannedStart": "2026-12-01",
+            "plannedEnd": "2026-12-02",
+            "threshold": 59,
+            "chapters": [
+              {
+                "title": "Chapitre unique",
+                "notions": [
+                  {
+                    "label": "Notion unique",
+                    "definition": "Définition courte."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    },
+    {
+      "type": "object",
+      "object": {
+        "description": null,
+        "volumeHours": 10,
+        "summary": null,
+        "modules": [
+          {
+            "title": "Module invalide",
+            "objectives": ["Tester le seuil"],
+            "plannedStart": "2026-12-01",
+            "plannedEnd": "2026-12-02",
+            "threshold": 59,
+            "chapters": [
+              {
+                "title": "Chapitre unique",
+                "notions": [
+                  {
+                    "label": "Notion unique",
+                    "definition": "Définition courte."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    },
+    {
+      "type": "object",
+      "object": {
+        "description": null,
+        "volumeHours": 10,
+        "summary": null,
+        "modules": [
+          {
+            "title": "Module invalide",
+            "objectives": ["Tester le seuil"],
+            "plannedStart": "2026-12-01",
+            "plannedEnd": "2026-12-02",
+            "threshold": 59,
+            "chapters": [
+              {
+                "title": "Chapitre unique",
+                "notions": [
+                  {
+                    "label": "Notion unique",
+                    "definition": "Définition courte."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    }
+  ]
+}

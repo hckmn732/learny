@@ -1,0 +1,615 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-605/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-605",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-605/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-605/test-results/sdd/SPEC-605/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-605/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-605/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/programme-proposal.spec.ts",
+      "file": "p6/programme-proposal.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "programme proposé, ajusté puis validé @SPEC-605",
+          "ok": true,
+          "tags": [
+            "SPEC-605"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10481,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T09:16:41.919Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-proposition",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-proposition-e07a7ea5b0ac7bea227db91a49a1767c07732a3c.png"
+                    },
+                    {
+                      "name": "programme-ajustement",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-ajustement-37f5034c32bd92b0cd85a896fd4e0bac201e4f8e.png"
+                    },
+                    {
+                      "name": "programme-version-1",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-version-1-348612c2383aa41312010b9a18eb87e4af9defc2.png"
+                    },
+                    {
+                      "name": "programme-actif",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/programme-actif-17d6a9d23e4c96c19ebbe46fc2891e529686e713.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/attachments/axe-0f9d0915f5f67be8ad19db08feafc163f19793b9.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-prog-ec2d5-ajusté-puis-validé-SPEC-605-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c27ffbf5c74cb4be36e7-ed8666bd34c7447bfbf6",
+          "file": "p6/programme-proposal.spec.ts",
+          "line": 101,
+          "column": 1
+        },
+        {
+          "title": "programme importé puis validé @SPEC-605",
+          "ok": true,
+          "tags": [
+            "SPEC-605"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2512,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T09:16:52.706Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-importe",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/attachments/programme-importe-d793b3b446f77c7d97b3e0011b0fb93848b3fc39.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/attachments/axe-9273e4574f8a3ca71930141a8a97e83cacb236b1.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-programme-importé-puis-validé-SPEC-605-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c27ffbf5c74cb4be36e7-72fc25e481a3aab5a65e",
+          "file": "p6/programme-proposal.spec.ts",
+          "line": 143,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-05 proposition desktop @SPEC-605 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-605",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T09:16:55.369Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-conformite",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/programme-conformite-5e702b462f061904662004d93954b9382333e31d.png"
+                    },
+                    {
+                      "name": "comparaison-calendrier-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-calendrier-side-by-side-4569f76dd8029fbf48a161d7f58d65ddb0ad1d9f.png"
+                    },
+                    {
+                      "name": "comparaison-calendrier-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-calendrier-diff-204949d70e00b2320719e18ba38ca24550f868a5.png"
+                    },
+                    {
+                      "name": "comparaison-modules-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-modules-side-by-side-95141c68479d529e4976960c603564ce6a0b2b9a.png"
+                    },
+                    {
+                      "name": "comparaison-modules-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/comparaison-modules-diff-e5461238b14a600bb2ffa07c02ce8fdd15dfef5b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/attachments/axe-b7aee3657a39474712d7ee0197e9daa25a738a25.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-9b55d-ion-desktop-SPEC-605-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c27ffbf5c74cb4be36e7-5cd823b076f937fb2202",
+          "file": "p6/programme-proposal.spec.ts",
+          "line": 171,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-05 proposition mobile @SPEC-605 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-605",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs/p6/programme-proposal.spec.ts",
+                    "line": 244,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 221,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T09:16:57.821Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-605/apps/web/e2e/specs/p6/programme-proposal.spec.ts",
+                        "line": 244,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1696,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T09:16:58.843Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "programme-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/attachments/programme-mobile-7e3cb0108b6da1c3a49fd33e643b307ae5a5cb55.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/attachments/axe-654e630677fb4f2fb9f7af6113a1ec6872dd30e7.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-605/test-results/artifacts/p6-programme-proposal-conf-72dbd-bile-SPEC-605-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c27ffbf5c74cb4be36e7-f44714ff4a9c8e9da57e",
+          "file": "p6/programme-proposal.spec.ts",
+          "line": 239,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T09:16:11.265Z",
+    "duration": 49521.213,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

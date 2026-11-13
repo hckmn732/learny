@@ -95,16 +95,16 @@ export type {
   CadrageProfile,
 } from './cadrage/apply-tutor-turn';
 export { buildCadragePrompt, CADRAGE_PROMPT_ID } from './cadrage/prompt';
-export type {
-  BuiltCadragePrompt,
-  CadrageHistoryEntry,
-  CadragePromptInput,
-} from './cadrage/prompt';
+export type { BuiltCadragePrompt, CadrageHistoryEntry, CadragePromptInput } from './cadrage/prompt';
 export { cadrageScenario } from './cadrage/scenario';
 export type { CadrageScenario } from './cadrage/scenario';
 export { runCadrageTurn } from './cadrage/run';
-export type {
-  CadrageRunContext,
-  CadrageTutorState,
-  CadrageTurnResult,
-} from './cadrage/run';
+export type { CadrageRunContext, CadrageTutorState, CadrageTurnResult } from './cadrage/run';
+export { PROGRAMME_PROMPT_ID, buildProgrammePrompt } from './programme/prompt';
+export type { ProgrammePromptInput } from './programme/prompt';
+export { PROGRAMME_DRAFT_SCHEMA, PROGRAMME_MAX_CORRECTIONS } from './programme/schema';
+export type { ProgrammeDraftOutput } from './programme/schema';
+export { programmeScenario } from './programme/scenario';
+export type { ProgrammeOperation, ProgrammeScenario } from './programme/scenario';
+export { programmeRunFailed, runProgrammeDraft } from './programme/run';
+export type { ProgrammeDraftResult, ProgrammeRunContext, ProgrammeRunState } from './programme/run';

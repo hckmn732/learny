@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-604, SPEC-512, SPEC-407]
 business_rules: [BR-FOR-04, BR-FOR-05, BR-FOR-06]
 screens: [SCR-05]
-adrs: [ADR-0014]
+adrs: [ADR-0014, ADR-0310]
 visual: mockup
 ---
 
@@ -122,5 +122,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - **ADR-0014 — Seuils et taille des quiz** : Seuil de validation par défaut 80 %, ajustable par le tuteur entre 60 et 95 % selon l'objectif (examen exigeant → 85 %). Quiz de validation : 12 questions par défaut, entre 10 et 20 (une par notion au minimum, plafonné à 20), environ 70 % questions à choix et 30 % questions ouvertes (au moins une ouverte).
+- **ADR-0310 — Versions de proposition et génération du programme** : table `programme_proposals` (une ligne par version, source `generated|imported`), fichier importé conservé dans `programme_imports.original_content`, génération initiale unique sur la page Programme après un cadrage terminé, ajustement/import créant N+1 sans toucher la structure active, validation sous verrou avec version attendue, limite de trois et événement déterministe, puis planification unique par `plan-programme`.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 

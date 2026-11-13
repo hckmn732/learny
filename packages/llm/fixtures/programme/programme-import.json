@@ -1,0 +1,131 @@
+{
+  "task": "programme",
+  "scenario": "programme-import",
+  "promptId": "programme.programme",
+  "promptVersion": 2,
+  "description": "Programme importé et structuré en trois modules.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "description": "Programme importé depuis un document du tuteur, structuré en trois modules.",
+        "volumeHours": 24,
+        "summary": "Le programme importé conserve les trois modules du document et leurs dates ; le tuteur a regroupé les notions par chapitre.",
+        "modules": [
+          {
+            "title": "Introduction à la finance d’entreprise",
+            "objectives": ["Comprendre le bilan et le compte de résultat"],
+            "plannedStart": "2026-12-01",
+            "plannedEnd": "2026-12-05",
+            "threshold": 80,
+            "chapters": [
+              {
+                "title": "Bilan et compte de résultat",
+                "notions": [
+                  {
+                    "label": "Bilan",
+                    "definition": "Photographie du patrimoine à une date."
+                  },
+                  {
+                    "label": "Compte de résultat",
+                    "definition": "Produits et charges de la période."
+                  }
+                ]
+              },
+              {
+                "title": "Flux de trésorerie",
+                "notions": [
+                  {
+                    "label": "Trésorerie",
+                    "definition": "Disponibilités et flux de la période."
+                  },
+                  {
+                    "label": "Besoin en fonds de roulement",
+                    "definition": "Décalage entre encaissements et décaissements."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Analyse financière",
+            "objectives": ["Calculer les principaux ratios"],
+            "plannedStart": "2026-12-08",
+            "plannedEnd": "2026-12-12",
+            "threshold": 85,
+            "chapters": [
+              {
+                "title": "Ratios de rentabilité",
+                "notions": [
+                  {
+                    "label": "Marge nette",
+                    "definition": "Résultat rapporté au chiffre d’affaires."
+                  },
+                  {
+                    "label": "Rentabilité des capitaux",
+                    "definition": "Résultat rapporté aux capitaux engagés."
+                  }
+                ]
+              },
+              {
+                "title": "Ratios de structure",
+                "notions": [
+                  {
+                    "label": "Endettement",
+                    "definition": "Part des dettes dans le financement."
+                  },
+                  {
+                    "label": "Autonomie financière",
+                    "definition": "Capacité à financer l’actif sans dette."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Préparation de l’examen",
+            "objectives": ["Réviser avec un plan de travail"],
+            "plannedStart": "2026-12-15",
+            "plannedEnd": "2026-12-19",
+            "threshold": 85,
+            "chapters": [
+              {
+                "title": "Plan de révision",
+                "notions": [
+                  {
+                    "label": "Plan de révision",
+                    "definition": "Calendrier des notions à revoir."
+                  },
+                  {
+                    "label": "Auto-évaluation",
+                    "definition": "Mesure personnelle de la maîtrise."
+                  }
+                ]
+              },
+              {
+                "title": "Examen blanc",
+                "notions": [
+                  {
+                    "label": "Examen blanc",
+                    "definition": "Simulation complète de l’épreuve."
+                  },
+                  {
+                    "label": "Correction détaillée",
+                    "definition": "Analyse des erreurs après l’épreuve."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 900,
+        "outputTokens": 1100,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 380
+    }
+  ]
+}

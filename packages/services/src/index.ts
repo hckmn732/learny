@@ -39,3 +39,4 @@ export * from './questions/index';
 export * from './cadrage/index';
 export * from './formations/index';
 export * from './planning';
+export * from './programme/index';

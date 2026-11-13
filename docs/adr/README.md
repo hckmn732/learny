@@ -180,4 +180,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0307](ADR-0307-carte-des-notions-apports-rattaches-aux-notions-de-leur-chap.md) | Carte des notions : apports rattachés aux notions de leur chapitre | Déduite | SPEC-616, BR-CAR-04, ADR-0036 |
 | [ADR-0308](ADR-0308-persistance-et-correction-de-l-exercice-pratique.md) | Persistance et correction de l’exercice pratique | Déduite | SPEC-613, ADR-0027, ADR-0041 |
 | [ADR-0309](ADR-0309-normalisation-de-la-comparaison-visuelle-du-cadrage.md) | Normalisation de la comparaison visuelle du cadrage | Déduite | SPEC-604 |
+| [ADR-0310](ADR-0310-versions-de-proposition-et-generation-du-programme.md) | Versions de proposition et génération du programme | Déduite | SPEC-605 |
 | [ADR-0311](ADR-0311-contrats-et-transitions-de-la-gestion-des-formations.md) | Contrats et transitions de la gestion des formations | Déduite | SPEC-618, ADR-0016, ADR-0075 |

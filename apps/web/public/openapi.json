@@ -9181,6 +9181,2231 @@
         "summary": "Met une formation en pause, gèle ses créneaux futurs et choisit la formation courante restante (SPEC-618)."
       }
     },
+    "/api/v1/formations/{fid}/programme": {
+      "get": {
+        "operationId": "programme.get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cadrageCompleted": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "anyOf": [
+                        {
+                          "maxLength": 2000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationStatus": {
+                      "enum": [
+                        "cadrage",
+                        "programme_proposed",
+                        "active",
+                        "paused",
+                        "completed",
+                        "archived"
+                      ],
+                      "type": "string"
+                    },
+                    "proposal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "activeFormationCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 2000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "formationId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "modules": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "chapters": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "notions": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "definition": {
+                                                "maxLength": 400,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "maxLength": 120,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "definition"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "maxItems": 30,
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "position": {
+                                          "maximum": 100,
+                                          "minimum": 1,
+                                          "type": "integer"
+                                        },
+                                        "title": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "position",
+                                        "title",
+                                        "notions"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "maxItems": 40,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "objectives": {
+                                    "items": {
+                                      "maxLength": 200,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "maxItems": 8,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "plannedEnd": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "plannedStart": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "maximum": 100,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          "locked",
+                                          "open",
+                                          "validated"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "threshold": {
+                                    "default": 80,
+                                    "maximum": 95,
+                                    "minimum": 60,
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "maxLength": 160,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "position",
+                                  "title",
+                                  "objectives",
+                                  "plannedStart",
+                                  "plannedEnd",
+                                  "threshold",
+                                  "chapters",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
+                              "maxItems": 20,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "proposalStatus": {
+                              "enum": [
+                                "proposed",
+                                "active"
+                              ],
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "generated",
+                                "imported"
+                              ],
+                              "type": "string"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 1000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "versions": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "createdAt": {
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                    "type": "string"
+                                  },
+                                  "current": {
+                                    "type": "boolean"
+                                  },
+                                  "source": {
+                                    "enum": [
+                                      "generated",
+                                      "imported"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "version",
+                                  "source",
+                                  "createdAt",
+                                  "current"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "formationId",
+                            "version",
+                            "source",
+                            "proposalStatus",
+                            "title",
+                            "description",
+                            "summary",
+                            "volumeHours",
+                            "createdAt",
+                            "modules",
+                            "versions",
+                            "activeFormationCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "title",
+                    "description",
+                    "formationStatus",
+                    "cadrageCompleted",
+                    "proposal"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Proposition courante, ou version choisie, d’une formation (SPEC-605)."
+      }
+    },
+    "/api/v1/formations/{fid}/programme/adjust": {
+      "post": {
+        "operationId": "programme.adjust",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expectedVersion": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "message": {
+                    "maxLength": 2000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "expectedVersion",
+                  "message"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cadrageCompleted": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "anyOf": [
+                        {
+                          "maxLength": 2000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationStatus": {
+                      "enum": [
+                        "cadrage",
+                        "programme_proposed",
+                        "active",
+                        "paused",
+                        "completed",
+                        "archived"
+                      ],
+                      "type": "string"
+                    },
+                    "proposal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "activeFormationCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 2000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "formationId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "modules": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "chapters": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "notions": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "definition": {
+                                                "maxLength": 400,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "maxLength": 120,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "definition"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "maxItems": 30,
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "position": {
+                                          "maximum": 100,
+                                          "minimum": 1,
+                                          "type": "integer"
+                                        },
+                                        "title": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "position",
+                                        "title",
+                                        "notions"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "maxItems": 40,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "objectives": {
+                                    "items": {
+                                      "maxLength": 200,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "maxItems": 8,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "plannedEnd": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "plannedStart": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "maximum": 100,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          "locked",
+                                          "open",
+                                          "validated"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "threshold": {
+                                    "default": 80,
+                                    "maximum": 95,
+                                    "minimum": 60,
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "maxLength": 160,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "position",
+                                  "title",
+                                  "objectives",
+                                  "plannedStart",
+                                  "plannedEnd",
+                                  "threshold",
+                                  "chapters",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
+                              "maxItems": 20,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "proposalStatus": {
+                              "enum": [
+                                "proposed",
+                                "active"
+                              ],
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "generated",
+                                "imported"
+                              ],
+                              "type": "string"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 1000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "versions": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "createdAt": {
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                    "type": "string"
+                                  },
+                                  "current": {
+                                    "type": "boolean"
+                                  },
+                                  "source": {
+                                    "enum": [
+                                      "generated",
+                                      "imported"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "version",
+                                  "source",
+                                  "createdAt",
+                                  "current"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "formationId",
+                            "version",
+                            "source",
+                            "proposalStatus",
+                            "title",
+                            "description",
+                            "summary",
+                            "volumeHours",
+                            "createdAt",
+                            "modules",
+                            "versions",
+                            "activeFormationCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "title",
+                    "description",
+                    "formationStatus",
+                    "cadrageCompleted",
+                    "proposal"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Ajuste la proposition avec le tuteur et crée une version (SPEC-605)."
+      }
+    },
+    "/api/v1/formations/{fid}/programme/generate": {
+      "post": {
+        "operationId": "programme.generate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expectedVersion": {
+                    "default": 0,
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cadrageCompleted": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "anyOf": [
+                        {
+                          "maxLength": 2000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationStatus": {
+                      "enum": [
+                        "cadrage",
+                        "programme_proposed",
+                        "active",
+                        "paused",
+                        "completed",
+                        "archived"
+                      ],
+                      "type": "string"
+                    },
+                    "proposal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "activeFormationCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 2000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "formationId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "modules": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "chapters": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "notions": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "definition": {
+                                                "maxLength": 400,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "maxLength": 120,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "definition"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "maxItems": 30,
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "position": {
+                                          "maximum": 100,
+                                          "minimum": 1,
+                                          "type": "integer"
+                                        },
+                                        "title": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "position",
+                                        "title",
+                                        "notions"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "maxItems": 40,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "objectives": {
+                                    "items": {
+                                      "maxLength": 200,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "maxItems": 8,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "plannedEnd": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "plannedStart": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "maximum": 100,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          "locked",
+                                          "open",
+                                          "validated"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "threshold": {
+                                    "default": 80,
+                                    "maximum": 95,
+                                    "minimum": 60,
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "maxLength": 160,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "position",
+                                  "title",
+                                  "objectives",
+                                  "plannedStart",
+                                  "plannedEnd",
+                                  "threshold",
+                                  "chapters",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
+                              "maxItems": 20,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "proposalStatus": {
+                              "enum": [
+                                "proposed",
+                                "active"
+                              ],
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "generated",
+                                "imported"
+                              ],
+                              "type": "string"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 1000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "versions": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "createdAt": {
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                    "type": "string"
+                                  },
+                                  "current": {
+                                    "type": "boolean"
+                                  },
+                                  "source": {
+                                    "enum": [
+                                      "generated",
+                                      "imported"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "version",
+                                  "source",
+                                  "createdAt",
+                                  "current"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "formationId",
+                            "version",
+                            "source",
+                            "proposalStatus",
+                            "title",
+                            "description",
+                            "summary",
+                            "volumeHours",
+                            "createdAt",
+                            "modules",
+                            "versions",
+                            "activeFormationCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "title",
+                    "description",
+                    "formationStatus",
+                    "cadrageCompleted",
+                    "proposal"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Génère une proposition de programme depuis le cadrage figé (SPEC-605)."
+      }
+    },
+    "/api/v1/formations/{fid}/programme/import": {
+      "post": {
+        "operationId": "programme.import",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "expectedVersion": {
+                        "default": 0,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "kind": {
+                        "const": "text",
+                        "type": "string"
+                      },
+                      "text": {
+                        "maxLength": 200000,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "text"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "contentBase64": {
+                        "maxLength": 950000,
+                        "minLength": 1,
+                        "pattern": "^[A-Za-z0-9+/]*={0,2}$",
+                        "type": "string"
+                      },
+                      "expectedVersion": {
+                        "default": 0,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "filename": {
+                        "maxLength": 200,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "kind": {
+                        "const": "file",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "filename",
+                      "contentBase64"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cadrageCompleted": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "anyOf": [
+                        {
+                          "maxLength": 2000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationStatus": {
+                      "enum": [
+                        "cadrage",
+                        "programme_proposed",
+                        "active",
+                        "paused",
+                        "completed",
+                        "archived"
+                      ],
+                      "type": "string"
+                    },
+                    "proposal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "activeFormationCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 2000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "formationId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "modules": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "chapters": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "notions": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "definition": {
+                                                "maxLength": 400,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "maxLength": 120,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "definition"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "maxItems": 30,
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "position": {
+                                          "maximum": 100,
+                                          "minimum": 1,
+                                          "type": "integer"
+                                        },
+                                        "title": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "position",
+                                        "title",
+                                        "notions"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "maxItems": 40,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "objectives": {
+                                    "items": {
+                                      "maxLength": 200,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "maxItems": 8,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "plannedEnd": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "plannedStart": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "maximum": 100,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          "locked",
+                                          "open",
+                                          "validated"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "threshold": {
+                                    "default": 80,
+                                    "maximum": 95,
+                                    "minimum": 60,
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "maxLength": 160,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "position",
+                                  "title",
+                                  "objectives",
+                                  "plannedStart",
+                                  "plannedEnd",
+                                  "threshold",
+                                  "chapters",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
+                              "maxItems": 20,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "proposalStatus": {
+                              "enum": [
+                                "proposed",
+                                "active"
+                              ],
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "generated",
+                                "imported"
+                              ],
+                              "type": "string"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 1000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "versions": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "createdAt": {
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                    "type": "string"
+                                  },
+                                  "current": {
+                                    "type": "boolean"
+                                  },
+                                  "source": {
+                                    "enum": [
+                                      "generated",
+                                      "imported"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "version",
+                                  "source",
+                                  "createdAt",
+                                  "current"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "formationId",
+                            "version",
+                            "source",
+                            "proposalStatus",
+                            "title",
+                            "description",
+                            "summary",
+                            "volumeHours",
+                            "createdAt",
+                            "modules",
+                            "versions",
+                            "activeFormationCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "title",
+                    "description",
+                    "formationStatus",
+                    "cadrageCompleted",
+                    "proposal"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Importe un texte ou un fichier et le structure en proposition (SPEC-605)."
+      }
+    },
+    "/api/v1/formations/{fid}/programme/validate": {
+      "post": {
+        "operationId": "programme.validate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "expectedVersion": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "expectedVersion"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "cadrageCompleted": {
+                      "type": "boolean"
+                    },
+                    "description": {
+                      "anyOf": [
+                        {
+                          "maxLength": 2000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationStatus": {
+                      "enum": [
+                        "cadrage",
+                        "programme_proposed",
+                        "active",
+                        "paused",
+                        "completed",
+                        "archived"
+                      ],
+                      "type": "string"
+                    },
+                    "proposal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "activeFormationCount": {
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 2000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "formationId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "modules": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "chapters": {
+                                    "items": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "notions": {
+                                          "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                              "definition": {
+                                                "maxLength": 400,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "label": {
+                                                "maxLength": 120,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              }
+                                            },
+                                            "required": [
+                                              "label",
+                                              "definition"
+                                            ],
+                                            "type": "object"
+                                          },
+                                          "maxItems": 30,
+                                          "minItems": 1,
+                                          "type": "array"
+                                        },
+                                        "position": {
+                                          "maximum": 100,
+                                          "minimum": 1,
+                                          "type": "integer"
+                                        },
+                                        "title": {
+                                          "maxLength": 160,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "position",
+                                        "title",
+                                        "notions"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "maxItems": 40,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "objectives": {
+                                    "items": {
+                                      "maxLength": 200,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "maxItems": 8,
+                                    "minItems": 1,
+                                    "type": "array"
+                                  },
+                                  "plannedEnd": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "plannedStart": {
+                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "maximum": 100,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          "locked",
+                                          "open",
+                                          "validated"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "threshold": {
+                                    "default": 80,
+                                    "maximum": 95,
+                                    "minimum": 60,
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "maxLength": 160,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "position",
+                                  "title",
+                                  "objectives",
+                                  "plannedStart",
+                                  "plannedEnd",
+                                  "threshold",
+                                  "chapters",
+                                  "status"
+                                ],
+                                "type": "object"
+                              },
+                              "maxItems": 20,
+                              "minItems": 1,
+                              "type": "array"
+                            },
+                            "proposalStatus": {
+                              "enum": [
+                                "proposed",
+                                "active"
+                              ],
+                              "type": "string"
+                            },
+                            "source": {
+                              "enum": [
+                                "generated",
+                                "imported"
+                              ],
+                              "type": "string"
+                            },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "maxLength": 1000,
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "title": {
+                              "maxLength": 120,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "version": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "versions": {
+                              "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "createdAt": {
+                                    "format": "date-time",
+                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                    "type": "string"
+                                  },
+                                  "current": {
+                                    "type": "boolean"
+                                  },
+                                  "source": {
+                                    "enum": [
+                                      "generated",
+                                      "imported"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "version",
+                                  "source",
+                                  "createdAt",
+                                  "current"
+                                ],
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "formationId",
+                            "version",
+                            "source",
+                            "proposalStatus",
+                            "title",
+                            "description",
+                            "summary",
+                            "volumeHours",
+                            "createdAt",
+                            "modules",
+                            "versions",
+                            "activeFormationCount"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "title": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "title",
+                    "description",
+                    "formationStatus",
+                    "cadrageCompleted",
+                    "proposal"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Active la proposition : modules, chapitres, notions et planification (SPEC-605)."
+      }
+    },
     "/api/v1/formations/{fid}/resume": {
       "post": {
         "operationId": "formations.resume",

@@ -385,6 +385,9 @@ importers:
       '@learny/ingestion':
         specifier: workspace:*
         version: link:../ingestion
+      '@learny/learning-engine':
+        specifier: workspace:*
+        version: link:../learning-engine
       '@learny/notifications':
         specifier: workspace:*
         version: link:../notifications
