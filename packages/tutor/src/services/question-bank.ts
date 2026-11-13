@@ -676,7 +676,8 @@ async function validateCandidates(
   const issues: string[] = [];
 
   for (const candidate of candidates) {
-    if (candidate.format !== target.format || candidate.notionId !== target.notionId) {
+    const candidateNotionId = candidate.notionId.replaceAll('{{notionId}}', target.notionId);
+    if (candidate.format !== target.format || candidateNotionId !== target.notionId) {
       issues.push(`format ou notion inattendue (${candidate.format})`);
       continue;
     }
