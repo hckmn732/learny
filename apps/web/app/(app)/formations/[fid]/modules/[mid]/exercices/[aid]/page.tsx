@@ -31,7 +31,10 @@ export default async function ExercisePage({ params }: ExercisePageProps) {
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
       sidebarError={!shell.sidebar.ok}
     >
-      <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
+      <main
+        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+        style={{ overflowX: 'hidden' }}
+      >
         {exercise.ok ? (
           <ExerciseWorkspace initial={exercise.data} />
         ) : (

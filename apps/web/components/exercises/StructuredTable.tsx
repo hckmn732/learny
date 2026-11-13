@@ -71,7 +71,8 @@ export function StructuredTable({
     <div className="flex flex-col gap-12">
       <div
         aria-label={t.tableLabel}
-        className="overflow-x-auto"
+        className="w-full max-w-full"
+        style={{ overflowX: 'auto', maxWidth: '100%', contain: 'paint' }}
         data-testid="exercise-table"
         role="region"
         tabIndex={0}

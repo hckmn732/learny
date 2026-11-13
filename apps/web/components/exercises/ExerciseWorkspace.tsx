@@ -223,10 +223,17 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
   const latestHint = revealedHints[revealedHints.length - 1];
 
   return (
-    <div data-testid="exercise-content" className="flex min-w-0 flex-col gap-22">
+    <div
+      data-testid="exercise-content"
+      className="flex min-w-0 flex-col gap-22"
+      style={{ overflowX: 'hidden', maxWidth: '100%' }}
+    >
       <div className="flex flex-col gap-8">
         <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-          <NextLink href={`/formations/${initial.formationId}/programme`}>
+          <NextLink
+            className="text-indigo-ink underline underline-offset-2"
+            href={`/formations/${initial.formationId}/programme`}
+          >
             {t.navigation.programme}
           </NextLink>
           {' / '}
@@ -238,7 +245,7 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
           <div className="flex flex-col gap-6">
             {initial.gapNature === null ? null : (
               <span
-                className="self-start rounded-full bg-orange-soft px-10 py-4 text-12 font-700 text-orange-ink"
+                className="max-w-full self-start rounded-full bg-orange-soft px-10 py-4 text-12 font-700 text-orange-ink"
                 data-testid="exercise-gap-badge"
               >
                 {t.gapBadge(initial.notionLabel)}

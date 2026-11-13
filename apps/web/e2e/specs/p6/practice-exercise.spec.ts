@@ -16,7 +16,7 @@ import { colors } from '@learny/ui/tokens';
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE_DIR = fileURLToPath(new URL('../../../../../design/references/', import.meta.url));
 const REFERENCE_DESKTOP = { x: 309, y: 83, width: 1045, height: 845 } as const;
-const REFERENCE_MOBILE = { x: 36, y: 520, width: 317, height: 1896 } as const;
+const REFERENCE_MOBILE = { x: 36, y: 628, width: 317, height: 1787 } as const;
 
 let session: TestSession;
 
