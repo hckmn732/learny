@@ -182,3 +182,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0309](ADR-0309-normalisation-de-la-comparaison-visuelle-du-cadrage.md) | Normalisation de la comparaison visuelle du cadrage | Déduite | SPEC-604 |
 | [ADR-0310](ADR-0310-versions-de-proposition-et-generation-du-programme.md) | Versions de proposition et génération du programme | Déduite | SPEC-605 |
 | [ADR-0311](ADR-0311-contrats-et-transitions-de-la-gestion-des-formations.md) | Contrats et transitions de la gestion des formations | Déduite | SPEC-618, ADR-0016, ADR-0075 |
+| [ADR-0312](ADR-0312-generation-du-cours-et-reprise-d-un-apport.md) | Génération du cours et reprise d’un apport | Déduite | SPEC-607 |

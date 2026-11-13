@@ -149,10 +149,10 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
   return (
     <main className="mx-auto w-full px-16 pb-40 shell:px-40">
       <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-24" data-testid="module-page">
-        <div className="flex flex-wrap items-center justify-between gap-16">
+        <div className="flex flex-wrap items-center justify-between gap-16" data-testid="module-header">
           <div className="flex flex-1 basis-420 flex-col gap-8">
             <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-              <a href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}>
+              <a className="underline" href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}>
                 {t.breadcrumbProgramme}
               </a>{' '}
               / Module {screen.module.position}
@@ -230,6 +230,7 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
             <section
               aria-labelledby="t-chapitre"
               className="flex flex-col gap-22 rounded-28 border border-border bg-surface p-28"
+              data-testid="module-chapter-panel"
             >
               <div className="flex flex-col gap-8">
                 <h2
@@ -350,10 +351,10 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
                 disabled={pending}
                 onClick={() => {
                   void run(async () => {
-                    const result = await api.chapterComplete(
-                      { params: { cid: screen.selectedChapterId } },
-                      { body: { done: !chapterDone } },
-                    );
+                    const result = await api.chapterComplete({
+                      params: { cid: screen.selectedChapterId },
+                      body: { done: !chapterDone },
+                    });
                     if (result.generationRequested) {
                       return t.generationRequested;
                     }

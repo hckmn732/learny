@@ -45,7 +45,7 @@ export function ResourceSuggestion({
               <span className="flex min-w-0 flex-1 basis-260 flex-col gap-2">
                 <span className="text-14 font-600">{suggestion.title}</span>
                 <a
-                  className="break-all text-13"
+                  className="break-all text-13 underline"
                   href={suggestion.url}
                   rel="noreferrer noopener"
                   target="_blank"

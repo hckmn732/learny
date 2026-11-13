@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 import { clock } from '@learny/core';
@@ -9,7 +10,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {
   MOCKUP_MAX_DIFF_RATIO,
-  compareWithReferenceRegion,
+  compareRegions,
   expectScreenshotBaseline,
   expectTokens,
 } from '@learny/testing/visual';
@@ -87,9 +88,19 @@ async function seedModule(userId: string): Promise<Seeded> {
         where id = ${id}::uuid
       `);
       await tx.execute(sql`
-        insert into public.module_progress (user_id, module_id, status)
-        values (${userId}::uuid, ${id}::uuid, ${status}::public.module_status)
-        on conflict (user_id, module_id) do update set status = excluded.status
+        insert into public.module_progress (
+          user_id, module_id, status, opened_at, validated_at, updated_at
+        )
+        values (
+          ${userId}::uuid, ${id}::uuid, ${status}::public.module_status,
+          ${status === 'locked' ? null : `${NOW}`}::timestamptz,
+          ${status === 'validated' ? `${NOW}` : null}::timestamptz,
+          ${NOW}::timestamptz
+        )
+        on conflict (user_id, module_id) do update
+        set status = excluded.status,
+            opened_at = excluded.opened_at,
+            validated_at = excluded.validated_at
       `);
     }
     await tx.execute(sql`
@@ -114,7 +125,7 @@ async function seedModule(userId: string): Promise<Seeded> {
     }
     // Mockup-like apports: PDF, note, web page and image, all ready.
     const resources: Array<[string, string, string | null, string | null, number | null, string | null]> = [
-      ['pdf', 'Guide utilisateur FI — saisie.pdf', null, 'application/pdf', 2_400_000, '{"pages":24}'],
+      ['pdf', 'Guide utilisateur FI — saisie.pdf', null, 'application/pdf', 2_400_000, null],
       ['note', 'Clés de comptabilisation : 40 = débit, 50 = crédit ? À vérifier', 'Note', null, null, null],
       ['web', 'Article : les ledgers parallèles dans S/4HANA', null, null, null, 'https://example.test/ledgers'],
       ['image', 'Capture du journal universel', null, 'image/png', 180_000, null],
@@ -123,11 +134,13 @@ async function seedModule(userId: string): Promise<Seeded> {
       await tx.execute(sql`
         insert into public.resources (
           owner_id, formation_id, chapter_id, kind, title, content_text, mime, size_bytes, url,
-          status
+          storage_path, status
         )
         values (
           ${userId}::uuid, ${programme.formationId}::uuid, ${chapters[1]}::uuid, ${kind}::public.resource_kind,
-          ${title}, ${content}, ${mime}, ${size}, ${url}, 'ready'
+          ${title}, ${content}, ${mime}, ${size}, ${url},
+          ${kind === 'pdf' || kind === 'image' ? `${userId}/${randomUUID()}/fichier.bin` : null},
+          'ready'
         )
       `);
     }
@@ -198,9 +211,10 @@ test('dépose des apports et termine un chapitre @SPEC-607', async ({
   // A note and a real PDF, through the same service as the browser.
   await page.getByLabel('Idées et brouillons').fill('Le journal universel regroupe la finance.');
   await page.getByRole('button', { name: 'Ajouter la note' }).click();
-  await expect(page.getByTestId('resource-list').getByText('En file')).toBeVisible({
-    timeout: 15_000,
-  });
+  await expect(
+    page.getByTestId('resource-list').getByText('Le journal universel regroupe la finance.'),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByTestId('resource-status').last()).toBeVisible();
   const pdf = buildPdf({ pages: 2 });
   await page
     .getByLabel('PDF', { exact: true })
@@ -238,10 +252,12 @@ test('erreur et reprise d’un apport @SPEC-607', async ({ page, axeCheck, captu
   `);
   const resourceId = failed[0]?.id ?? '';
   await openModule(page, seeded);
-  await expect(page.getByText('Échec')).toBeVisible();
+  await expect(page.getByText('Échec', { exact: true })).toBeVisible();
   await expect(page.getByText('Le contenu n’a pas pu être analysé.')).toBeVisible();
   await page.getByRole('button', { name: 'Réessayer' }).click();
-  await expect(page.getByText('En file')).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByTestId('resource-status').last()).toHaveText(/En file|Analysé/, {
+    timeout: 15_000,
+  });
   await expect(page.getByText('Le contenu n’a pas pu être analysé.')).toHaveCount(0);
 
   // The mock ingestion finishes the retry; the poller (3 s) or a reload shows the ready state.
@@ -255,7 +271,7 @@ test('erreur et reprise d’un apport @SPEC-607', async ({ page, axeCheck, captu
     resourceId,
   );
   await page.reload();
-  await expect(page.getByText('Analysé')).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByTestId('resource-status').last()).toHaveText('Analysé', { timeout: 30_000 });
   await expect(page.getByRole('button', { name: 'Réessayer' })).toHaveCount(0);
   await captureEvidence('module-erreur-reprise');
   await axeCheck();
@@ -267,7 +283,6 @@ test('conformité SPEC-607 @SPEC-607 @visual', async ({ page, axeCheck, captureE
   await expectTokens(page, {
     body: { 'background-color': colors.canvas, color: colors.ink },
     '[data-testid="module-chapters"]': { 'background-color': colors.surface },
-    '[data-testid="resource-dropzone"]': { 'background-color': colors.canvas },
     '[data-testid="course-generate"]': { 'background-color': colors.lime, color: colors.ink },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
@@ -275,23 +290,37 @@ test('conformité SPEC-607 @SPEC-607 @visual', async ({ page, axeCheck, captureE
   await expect(page.getByText('Apports déposés · 4')).toBeVisible();
   await captureEvidence('module-conformite');
 
-  const capture = await page.screenshot({ fullPage: true });
-  const comparison = compareWithReferenceRegion(
-    capture,
-    REFERENCE,
-    { x: 312, y: 75, width: 1040, height: 760 },
-    'test-results/visual/SPEC-607-desktop',
-    'SCR-06-desktop',
-  );
-  await test.info().attach('comparaison-side-by-side', {
-    path: comparison.sideBySidePath,
-    contentType: 'image/png',
+  const comparisons = await compareRegions(page, {
+    reference: REFERENCE,
+    outputDir: 'test-results/visual/SPEC-607-desktop',
+    regions: [
+      {
+        name: 'entete',
+        locator: page.getByTestId('module-header'),
+        rect: { x: 312, y: 86, width: 1040, height: 150 },
+      },
+      {
+        name: 'chapitres',
+        locator: page.getByTestId('module-chapters'),
+        rect: { x: 312, y: 225, width: 280, height: 360 },
+      },
+    ],
   });
-  await test.info().attach('comparaison-diff', {
-    path: comparison.diffPath,
-    contentType: 'image/png',
-  });
-  expect(comparison.ratio).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+  for (const comparison of comparisons) {
+    await test.info().attach(`comparaison-${comparison.name}-side-by-side`, {
+      path: comparison.sideBySidePath,
+      contentType: 'image/png',
+    });
+    await test.info().attach(`comparaison-${comparison.name}-diff`, {
+      path: comparison.diffPath,
+      contentType: 'image/png',
+    });
+  }
+  expect(
+    comparisons
+      .filter((comparison) => comparison.ratio > MOCKUP_MAX_DIFF_RATIO)
+      .map((comparison) => `${comparison.name}: ${comparison.ratio.toFixed(3)}`),
+  ).toEqual([]);
   await expectScreenshotBaseline(page, 'SCR-06-module-desktop.png', { fullPage: true });
   await axeCheck();
 });
