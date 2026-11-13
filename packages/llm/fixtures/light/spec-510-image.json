@@ -1,0 +1,23 @@
+{
+  "task": "light",
+  "scenario": "spec-510-image",
+  "promptId": "ingest-image",
+  "promptVersion": 1,
+  "description": "Lecture simulée de la capture du compte 512 pour l’ingestion SPEC-510.",
+  "match": { "contains": ["[[mock:spec-510-image]]"] },
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "text": "Capture du grand livre : le compte 512 Banque présente un solde débiteur de 1 200,00 € au 31 décembre."
+      },
+      "usage": {
+        "inputTokens": 820,
+        "outputTokens": 28,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 96
+    }
+  ]
+}
