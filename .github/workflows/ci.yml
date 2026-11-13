@@ -162,7 +162,7 @@ jobs:
           cache: pnpm
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.122.1
       - run: pnpm install --frozen-lockfile
       - name: Installer Chromium (preuves Playwright)
         run: pnpm exec playwright install --with-deps chromium
@@ -243,7 +243,7 @@ jobs:
             turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.122.1
       - run: pnpm install --frozen-lockfile
       - name: Installer Chromium et ses dépendances système
         run: pnpm exec playwright install --with-deps chromium
