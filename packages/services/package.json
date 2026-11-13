@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./ai": "./src/ai/index.ts",
     "./destination": "./src/auth/destination.ts",
     "./billing": "./src/billing/index.ts"
   },
@@ -20,6 +21,7 @@
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
     "@learny/learning-engine": "workspace:*",
+    "@learny/llm": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",
     "drizzle-orm": "^0.45.2",
