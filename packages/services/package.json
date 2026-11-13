@@ -8,7 +8,8 @@
     "./ai": "./src/ai/index.ts",
     "./destination": "./src/auth/destination.ts",
     "./billing": "./src/billing/index.ts",
-    "./ai/credentials": "./src/ai/credentials-service.ts"
+    "./ai/credentials": "./src/ai/credentials-service.ts",
+    "./ai/qualify": "./src/ai/qualify-model.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

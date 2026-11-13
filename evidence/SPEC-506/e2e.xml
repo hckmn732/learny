@@ -1,0 +1,59 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="37.447682">
+<testsuite name="p5/spec-506.spec.ts" timestamp="2026-11-13T02:03:36.172Z" hostname="desktop" tests="2" failures="0" skipped="0" time="5.012" errors="0">
+<testcase name="Qualification des modèles personnels @SPEC-506" classname="p5/spec-506.spec.ts" time="3.494">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/attachments/spec-506-success-47e1ab9a3174ddd745de91ac4e7eb8f28d565994.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/attachments/spec-506-invalid-55409c18d68588ea9df1d66272eeb5e7ad9ea037.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/attachments/axe-1cf8b69358440f3423329457027da881f3429953.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-Qualification-des-modèles-personnels-SPEC-506-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration de qualification, conformité visuelle @SPEC-506 @visual @mobile" classname="p5/spec-506.spec.ts" time="1.518">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/attachments/axe-49401e561880fe75e10d37a547d436a5f9181f03.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/attachments/spec-506-demo-visual-9ed788e0d1e3f95e40672e741057ea3e3e0c1b35.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-506.spec.ts" timestamp="2026-11-13T02:03:36.172Z" hostname="mobile" tests="1" failures="0" skipped="0" time="0.933" errors="0">
+<testcase name="démonstration de qualification, conformité visuelle @SPEC-506 @visual @mobile" classname="p5/spec-506.spec.ts" time="0.933">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/attachments/axe-08f69fae09fdf1765230d437eff69fac9d03b192.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/attachments/spec-506-demo-visual-54d37bc4cefa0f3948f6b0bf7f1f8bf0d1678b06.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-506-démonstration--b7802-elle-SPEC-506-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

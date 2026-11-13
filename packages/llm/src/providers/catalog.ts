@@ -12,6 +12,8 @@ export interface ProviderCapabilities {
   readonly cache: boolean;
   readonly batch: boolean;
   readonly thinking: boolean;
+  /** SPEC-506 — image input declared by the provider, used by the `light` task capability. */
+  readonly vision: boolean;
 }
 
 export interface ProviderCatalogEntry {
@@ -41,6 +43,7 @@ const FULL: ProviderCapabilities = {
   cache: true,
   batch: true,
   thinking: true,
+  vision: true,
 };
 
 const COMMON: ProviderCapabilities = {
@@ -52,6 +55,7 @@ const COMMON: ProviderCapabilities = {
   cache: false,
   batch: false,
   thinking: false,
+  vision: false,
 };
 
 const OUTSIDE_EU_NOTE = 'Ce fournisseur traite les données hors de l’Union européenne.';
@@ -69,7 +73,7 @@ export const PROVIDER_CATALOG = {
     keyOptional: false,
   },
   openai: {
-    capabilities: { ...COMMON, cache: true },
+    capabilities: { ...COMMON, cache: true, vision: true },
     dataRegion: 'outside_eu',
     outsideEu: true,
     dataNote: OUTSIDE_EU_NOTE,

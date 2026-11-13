@@ -1,0 +1,23 @@
+{
+  "task": "light",
+  "scenario": "qualification-connection-failure",
+  "promptId": "qualification.run",
+  "promptVersion": 1,
+  "description": "Fournisseur indisponible dès la connexion.",
+  "steps": [
+    {
+      "type": "error",
+      "error": {
+        "kind": "timeout",
+        "message": "Le fournisseur n’a pas répondu à temps."
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 30000
+    }
+  ]
+}

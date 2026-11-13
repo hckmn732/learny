@@ -107,6 +107,82 @@ export type CredentialListDto = z.infer<typeof CredentialListDto>;
 
 export const CredentialParams = z.object({ id: Uuid });
 
+// SPEC-506 — qualification of one personal model. The report contains statuses, durations, safe
+// error codes and schema issues only: never the key, the ciphertext or a prompt.
+export const QUALIFICATION_STEP_KEYS = ['connection', 'tools', 'structured', 'bricks'] as const;
+export const QualificationStepKey = z.enum(QUALIFICATION_STEP_KEYS);
+export type QualificationStepKey = z.infer<typeof QualificationStepKey>;
+
+export const QUALIFICATION_STATUSES = ['passed', 'failed'] as const;
+export const QualificationStatus = z.enum(QUALIFICATION_STATUSES);
+export type QualificationStatus = z.infer<typeof QualificationStatus>;
+
+export const QUALIFICATION_BRICK_COUNT = 13;
+export const QUALIFICATION_STEP_COUNT = QUALIFICATION_STEP_KEYS.length;
+
+export const QualificationIssue = z.object({
+  code: z.string().min(1).max(80),
+  path: z.string().max(300),
+  message: z.string().min(1).max(300),
+});
+export type QualificationIssue = z.infer<typeof QualificationIssue>;
+
+export const QualificationStepResult = z.object({
+  step: QualificationStepKey,
+  status: QualificationStatus,
+  durationMs: z.int().min(0),
+  errorCode: z.string().min(1).max(80).nullable(),
+  modelVersion: z.string().min(1).max(200),
+});
+export type QualificationStepResult = z.infer<typeof QualificationStepResult>;
+
+export const QualificationBrickResult = z.object({
+  type: z.string().min(1).max(64),
+  status: QualificationStatus,
+  durationMs: z.int().min(0),
+  errorCode: z.string().min(1).max(80).nullable(),
+  issues: z.array(QualificationIssue).max(20),
+});
+export type QualificationBrickResult = z.infer<typeof QualificationBrickResult>;
+
+/** Capabilities proven by the battery; task assignment requires every capability of the task. */
+export const QualificationCapabilities = z.object({
+  tools: z.boolean(),
+  structured: z.boolean(),
+  web_search: z.boolean(),
+  passage_refs: z.boolean(),
+  vision: z.boolean(),
+});
+export type QualificationCapabilities = z.infer<typeof QualificationCapabilities>;
+
+export const QualificationReport = z.object({
+  id: Uuid,
+  credentialId: Uuid,
+  modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+  provider: AiCredentialProvider,
+  status: z.enum(['qualified', 'failed']),
+  startedAt: IsoDateTime,
+  finishedAt: IsoDateTime,
+  durationMs: z.int().min(0),
+  modelVersion: z.string().min(1).max(200),
+  steps: z.array(QualificationStepResult).length(QUALIFICATION_STEP_COUNT),
+  bricks: z.array(QualificationBrickResult).length(QUALIFICATION_BRICK_COUNT),
+  capabilities: QualificationCapabilities,
+});
+export type QualificationReport = z.infer<typeof QualificationReport>;
+
+export const AiQualificationBody = z.object({
+  modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+});
+export type AiQualificationBody = z.infer<typeof AiQualificationBody>;
+
+export const TaskModelDto = z.object({
+  task: z.enum(['programme', 'course', 'gaps', 'tutor', 'light']),
+  credentialId: Uuid.nullable(),
+  modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+});
+export type TaskModelDto = z.infer<typeof TaskModelDto>;
+
 export const meAiCredentialsCreate = defineRoute({
   id: 'me.ai.credentials.create',
   method: 'POST',
@@ -155,8 +231,36 @@ export const meAiCredentialsDelete = defineRoute({
   errors: ['NOT_FOUND'],
 });
 
+export const meAiCredentialsQualify = defineRoute({
+  id: 'me.ai.credentials.qualify',
+  method: 'POST',
+  path: '/api/v1/me/ai/credentials/:id/qualify',
+  auth: 'user',
+  params: CredentialParams,
+  body: AiQualificationBody,
+  output: QualificationReport,
+  successStatus: 200,
+  rateLimit: 'ai',
+  validationStatus: 422,
+  summary:
+    'Qualifie un modèle personnel : connexion, outil, sortie structurée et treize briques (SPEC-506).',
+  errors: [
+    'CREDENTIAL_NOT_FOUND',
+    'CREDENTIAL_DECRYPT_FAILED',
+    'QUALIFICATION_IN_PROGRESS',
+    'VALIDATION_FAILED',
+    'AI_KEY_INVALID',
+    'AI_RATE_LIMITED',
+    'AI_PROVIDER_ERROR',
+    'AI_TIMEOUT',
+    'AI_REFUSED',
+    'INVALID_OUTPUT',
+  ],
+});
+
 export const aiCredentialRoutes = {
   meAiCredentialsCreate,
   meAiCredentialsList,
   meAiCredentialsDelete,
+  meAiCredentialsQualify,
 } as const;
