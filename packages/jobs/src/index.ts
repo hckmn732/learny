@@ -35,6 +35,8 @@ export type {
 } from './functions/demo-job';
 export { QUIZ_GRADE_ID, createQuizGradeJob } from './functions/quiz-grade';
 export type { QuizGradeDeps, QuizGradeRunArgs } from './functions/quiz-grade';
+export { EXAM_DEADLINE_ID, createExamDeadlineJob } from './functions/exam-deadline';
+export type { ExamDeadlineDeps, ExamDeadlineRunArgs } from './functions/exam-deadline';
 export { createFunctions, functions, learnyFunctions, sddDemoStore } from './functions';
 export type { JobDeps } from './functions';
 export {

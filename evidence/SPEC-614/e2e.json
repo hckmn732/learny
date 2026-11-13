@@ -1,0 +1,631 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-614/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-614",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-614/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-614/test-results/sdd/SPEC-614/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-614/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-614/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/mock-exam.spec.ts",
+      "file": "p6/mock-exam.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "examen blanc sans aide @SPEC-614",
+          "ok": true,
+          "tags": [
+            "SPEC-614"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4117,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T18:17:20.288Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "introduction",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/introduction-beaf38a8d1d4647da6b77e36432c118c44dbf837.png"
+                    },
+                    {
+                      "name": "epreuve",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/epreuve-7947343e79ee990b9f792af0104c3a510c3730d0.png"
+                    },
+                    {
+                      "name": "resultat",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/resultat-b8941d065cdadfe31456fbfbbca8ed8a648db420.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/axe-1d73e17b5a6c8de384c1b75965b49066c4c394a4.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8a5b33c01c1520f326a-e0de8f638d15a98c4dab",
+          "file": "p6/mock-exam.spec.ts",
+          "line": 300,
+          "column": 1
+        },
+        {
+          "title": "expiration et revue @SPEC-614",
+          "ok": true,
+          "tags": [
+            "SPEC-614"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1541,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T18:17:24.582Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "resultat-expire",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/resultat-expire-a18c9a806b92fd6bfcd7aebe402e73d376c1a799.png"
+                    },
+                    {
+                      "name": "revue-erreurs",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/revue-erreurs-5466e47dcc6b39f8f7b4ccc8adf15531b82d0ca4.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/axe-d06687fac398333a2fb657f9a8253a17fe7150a5.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8a5b33c01c1520f326a-8253a970861e7979e16e",
+          "file": "p6/mock-exam.spec.ts",
+          "line": 339,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-614 @SPEC-614 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-614",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2676,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T18:17:26.220Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "comparaison-introduction-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-introduction-side-by-side-e0a8cecd2848b5e5ab27792429cffb76942c7d33.png"
+                    },
+                    {
+                      "name": "comparaison-introduction-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-introduction-diff-bdd2390be29f6564d09177724f8f5ded5868a57a.png"
+                    },
+                    {
+                      "name": "conformite-introduction",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-introduction-7458786471939542c1e77891fdb47f8af931d909.png"
+                    },
+                    {
+                      "name": "comparaison-epreuve-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-epreuve-side-by-side-fe998e49962be15f22dbd75a49ba6608071ba2a0.png"
+                    },
+                    {
+                      "name": "comparaison-epreuve-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-epreuve-diff-cecf4ac51c3be32caa03994d539322c4764f28a2.png"
+                    },
+                    {
+                      "name": "conformite-epreuve",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-epreuve-2b13621fb46d7084ecfca0129d124a9694c7a521.png"
+                    },
+                    {
+                      "name": "conformite-resultat",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-resultat-eea82baaf0d93ace344c6ea005a111652c9f2c77.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/axe-6be962d3c59676f265d0d8b5ce71cb1d674f2408.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8a5b33c01c1520f326a-5b295dc226cd5301b759",
+          "file": "p6/mock-exam.spec.ts",
+          "line": 359,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-614 mobile @SPEC-614 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-614",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs/p6/mock-exam.spec.ts",
+                    "line": 440,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 211,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T18:17:29.026Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-614/apps/web/e2e/specs/p6/mock-exam.spec.ts",
+                        "line": 440,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1683,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T18:17:30.023Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "conformite-introduction-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/conformite-introduction-mobile-b7210ef6cc7e2f9c287141bd2cc411e4c355b639.png"
+                    },
+                    {
+                      "name": "conformite-epreuve-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/conformite-epreuve-mobile-9eac4a3bdf93354133f16ab339ba5d56d3b62582.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/axe-9b0997a12db37a53e406411b10f0f2490dfc8728.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-614/test-results/artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8a5b33c01c1520f326a-63fc95053a36e3f2bdef",
+          "file": "p6/mock-exam.spec.ts",
+          "line": 435,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T18:16:48.991Z",
+    "duration": 42966.441,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

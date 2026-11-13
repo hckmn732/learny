@@ -543,6 +543,7 @@ interface AttemptRow {
   module_id: string | null;
   formation_id: string;
   owner_id: string;
+  config: unknown;
 }
 
 interface AnswerRow {
@@ -671,11 +672,22 @@ function activityKind(value: string): AttemptKind | null {
   return mapping[value] ?? null;
 }
 
+/** SPEC-614 ET-5 — positions of the diagnostic questions of a mock exam, from its config. */
+function diagnosticPositionsOf(config: unknown): Set<number> {
+  if (typeof config !== 'object' || config === null || Array.isArray(config)) return new Set();
+  const positions = (config as Record<string, unknown>).diagnosticPositions;
+  if (!Array.isArray(positions)) return new Set();
+  return new Set(positions.filter((position): position is number => typeof position === 'number'));
+}
+
 function formatOf(brickType: string): BrickFormat | null {
   return REVIEWABLE_FORMATS.has(brickType) ? (brickType as BrickFormat) : null;
 }
 
-function answerRecordOf(row: HistoryRow): AnswerRecord | null {
+function answerRecordOf(
+  row: HistoryRow,
+  diagnosticAnswerIds: ReadonlySet<string> = new Set(),
+): AnswerRecord | null {
   const attemptKind = activityKind(row.attempt_kind);
   const format = formatOf(row.brick_type);
   if (attemptKind === null || format === null) return null;
@@ -697,7 +709,7 @@ function answerRecordOf(row: HistoryRow): AnswerRecord | null {
     confusedWithNotionId: confusedWithField(row.response),
     normalizedResponse: normalizedResponse(row.response),
     offTopic: offTopicField(row.feedback),
-    countsForGaps: true,
+    countsForGaps: !diagnosticAnswerIds.has(row.answer_id),
   };
 }
 
@@ -719,7 +731,8 @@ async function loadAttemptForUpdate(
       act.kind::text as activity_kind,
       act.module_id::text as module_id,
       act.formation_id::text as formation_id,
-      act.owner_id::text as owner_id
+      act.owner_id::text as owner_id,
+      act.config
     from public.attempts a
     join public.activities act on act.id = a.activity_id
     where a.id = ${attemptId}::uuid
@@ -1036,6 +1049,11 @@ async function applyInTransaction(
   }
 
   const answers = await loadAnswers(tx, attemptId);
+  // SPEC-614 ET-5 — the questions of a module that is only diagnostic never create a gap.
+  const diagnosticPositions = diagnosticPositionsOf(attempt.config);
+  const diagnosticAnswers = answers.filter((answer) => diagnosticPositions.has(answer.position));
+  const diagnosticAnswerIds = new Set(diagnosticAnswers.map((answer) => answer.id));
+  const diagnosticNotionIds = new Set(diagnosticAnswers.flatMap((answer) => answer.notion_ids));
   const selection = selectCorrectedAnswers(
     answers.map((answer) => ({
       answerId: answer.id,
@@ -1095,7 +1113,7 @@ async function applyInTransaction(
         confusedWithNotionId: null,
         normalizedResponse: null,
         offTopic: false,
-        countsForGaps: true,
+        countsForGaps: !diagnosticNotionIds.has(notionId),
       });
     }
   }
@@ -1131,7 +1149,7 @@ async function applyInTransaction(
     const historyRows = await loadHistory(tx, userId, notionId);
     const gapAnswers: AnswerRecord[] = [];
     for (const row of historyRows) {
-      const record = answerRecordOf(row);
+      const record = answerRecordOf(row, diagnosticAnswerIds);
       if (record !== null) gapAnswers.push(record);
     }
     const masteryHistory: MasteryAnswer[] = historyRows.map((row) => ({
@@ -1162,7 +1180,7 @@ async function applyInTransaction(
         confusedWithNotionId: confusedWithField(row.response),
         normalizedResponse: normalizedResponse(row.response),
         offTopic: offTopicField(row.feedback),
-        countsForGaps: true,
+        countsForGaps: !diagnosticNotionIds.has(notionId),
       };
     });
 

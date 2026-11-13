@@ -22,6 +22,8 @@ export const ERROR_CATALOG = {
   EXPORT_LIMIT_REACHED: { status: 422, title: 'Trois exports par jour au plus' },
   EXPORT_EXPIRED: { status: 410, title: 'Export expiré' },
   MODULE_LOCKED: { status: 422, title: 'Module verrouillé' },
+  FORMAT_NOT_CONFIRMED: { status: 409, title: 'Format d’examen non confirmé' },
+  EXAM_TIME_OVER: { status: 409, title: 'Temps d’examen écoulé' },
   URL_INVALID: { status: 422, title: 'Adresse invalide' },
   URL_BLOCKED_HOST: { status: 422, title: 'Adresse réseau refusée' },
   FETCH_TIMEOUT: { status: 504, title: 'Site trop lent' },
