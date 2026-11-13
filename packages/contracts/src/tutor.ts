@@ -57,6 +57,18 @@ export const TUTOR_TOOL_STATUSES = [
 
 export type TutorToolStatus = (typeof TUTOR_TOOL_STATUSES)[number];
 
+/** EF-4 — safe payload of the notification written when the correction budget is exhausted. */
+export const InvalidOutputNoticeSchema = z
+  .object({
+    task: z.enum(TUTOR_TASKS),
+    formationId: Uuid.nullable(),
+    tone: z.enum(TUTOR_TONES),
+    brickKey: z.string().min(1).max(200),
+  })
+  .strict();
+
+export type InvalidOutputNotice = z.infer<typeof InvalidOutputNoticeSchema>;
+
 export const TUTOR_RUN_STATUSES = [
   'completed',
   'invalid_output',
