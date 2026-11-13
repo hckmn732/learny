@@ -1,0 +1,12 @@
+# SPEC-501 — critères d'acceptation
+
+- ✅ CA-1 — Les 13 types sont enregistrés ; chaque exemple valide passe et chaque exemple invalide échoue avec le code attendu. Preuves : `packages/bricks/src/types/*/schema.test.ts` (13 fichiers, `runSchemaSuite`), `packages/bricks/src/registry.test.ts`, 238 tests unitaires `[SPEC-501]`.
+- ✅ CA-2 — Les 28 codes d'erreur d'ET-4/ET-5 sont chacun produits par un cas de test. Preuve : `packages/bricks/src/validate.test.ts` (un `it` par code, de `SCHEMA_INVALID` à `BRICK_REF_NOT_FOUND`).
+- ✅ CA-3 — Empreinte identique pour deux énoncés ne différant que par casse, accents, espaces, apostrophes typographiques et ponctuation finale, et différente si la bonne réponse change. Preuve : `packages/bricks/src/fingerprint.test.ts` et les 20 cas de `normalize.test.ts` + propriété fast-check d'idempotence.
+- ✅ CA-4 — Aucune charge publique ne contient `correct`, `answers`, `expectedElements`, `modelAnswer`, `categoryId` ni `hints`, sur les 13 exemples. Preuve : `packages/bricks/src/public.test.ts` (parcours récursif des clés).
+- ✅ CA-5 — Signalement puis correction par l'apprenant : version 2 `learner`, signalement `corrected`, brique `active` ; la version 1 reste lisible telle quelle. Preuve : `packages/services/test/integration/bricks.test.ts` (test « signale, exclut des tirages puis corrige côté apprenant » et « crée la version suivante… »).
+- ✅ CA-6 — Une référence d'un autre utilisateur est refusée (`NOTION_NOT_FOUND`/`RESOURCE_NOT_FOUND`) et l'API renvoie 404 sur la brique d'autrui. Preuves : `packages/services/test/integration/bricks.test.ts` (isolation) et `apps/web/test/integration/bricks-routes.test.ts` (PATCH 404).
+- ✅ CA-7 — Deux corrections concurrentes : une seule réussit, l'autre reçoit 409. Preuve : `packages/services/test/integration/bricks.test.ts` (deux `createBrickVersion` parallèles, versions finales `[1, 2]`).
+- ✅ CA-8 — La page de démonstration valide, crée, signale et corrige une brique, avec vidéo. Preuve : `apps/web/e2e/specs/p5/spec-501-bricks.spec.ts` (`@SPEC-501`) ; captures `spec-501-valid`, `spec-501-invalid`, `spec-501-corrected` et vidéo dans `evidence/SPEC-501/`.
+- ✅ ET-10 — `validateBrick` sans référence mesure un p95 < 2 ms sur 1 000 exécutions. Preuve : test de performance de `validate.test.ts`, consigné dans `evidence/SPEC-501/summary.md`.
+- ✅ Définition de terminé — lint, typecheck, build, unitaires, intégration, e2e et visuel passent ; aucun import de `db` dans `packages/bricks` (ESLint) ; `docs/architecture/api.md` à jour.

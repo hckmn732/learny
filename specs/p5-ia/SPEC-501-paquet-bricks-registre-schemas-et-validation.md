@@ -225,7 +225,7 @@ Définition commune (`docs/engineering/testing.md` §7) ; en plus : couverture d
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0021, ADR-0027, ADR-0060 (rendu assaini), ADR-0022 (RLS).
-- Décisions créées : **ADR-0150** (schémas normatifs, compléments de la consigne, charge publique), **ADR-0151** (normalisation et empreinte).
+- Décisions créées : **ADR-0150** (schémas normatifs, compléments de la consigne, charge publique), **ADR-0151** (normalisation et empreinte), **ADR-0289** (SHA-256 isomorphe, défaut de `warnAtSec`, borne des valeurs `sum_equal`, sources de la charge publique).
 - Le service vit dans `packages/services` car `bricks` ne peut pas importer `db` (overview §3).
 - Les notions d'une brique sont portées par `bricks.notion_ids` et ne changent pas entre versions ; une correction ne modifie que la charge.
 - `scripted_dialogue` est validable dès la V1 (qualification, BR-BRI-01) ; son usage en activité relève de la V2 (ADR-0074).

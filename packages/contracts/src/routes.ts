@@ -1,5 +1,6 @@
 import { authRoutes } from './auth';
 import { billingRoutes } from './billing';
+import { brickRoutes } from './bricks';
 import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
@@ -30,6 +31,7 @@ export const ROUTES = {
   ...headerRoutes,
   ...sidebarRoutes,
   ...billingRoutes,
+  ...brickRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,

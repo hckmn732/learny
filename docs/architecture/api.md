@@ -49,7 +49,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/formations/:fid/final-review` · POST `/formations/:fid/maintenance` | Bilan final | SPEC-617 |
 | POST `/formations/:fid/group` · GET `/formations/:fid/group` · POST `/groups/:gid/rotate-code` · DELETE `/groups/:gid/members/:uid` · GET `/invitations/:code` · POST `/invitations/:code/accept` · POST `/groups/:gid/leave` | Formations à plusieurs | SPEC-724 |
 | GET `/streak` · GET `/milestones` | Série et jalons | SPEC-723 |
-| POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction | SPEC-609, 501 |
+| POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction : POST 201 `{ reportId, status: 'open' }` (200 si un signalement ouvert existe déjà), PATCH 200 `{ brickId, version, versionId }` ; 404 brique d'autrui, 409 version obsolète, 422 `BRICK_INVALID` avec `errors[{ code, path, message }]`, 422 `BRICK_RETIRED` | SPEC-609, 501 |
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
 | POST `/dev/sdd/push/send` (201, notification de démonstration envoyée par le canal push simulé) | Démonstration des notifications navigateur (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-205 |

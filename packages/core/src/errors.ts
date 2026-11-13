@@ -42,6 +42,8 @@ export const ERROR_CATALOG = {
   UNSUPPORTED_TYPE: { status: 422, title: 'Type de fichier non pris en charge' },
   QUOTA_EXCEEDED: { status: 422, title: 'Quota atteint' },
   UPLOAD_INCOMPLETE: { status: 422, title: 'Envoi incomplet' },
+  BRICK_INVALID: { status: 422, title: 'Brique invalide' },
+  BRICK_RETIRED: { status: 422, title: 'Brique retirée' },
   RATE_LIMITED: { status: 429, title: 'Trop de requêtes' },
   RESEND_TOO_SOON: { status: 429, title: 'Renvoi trop rapproché' },
   INTERNAL_ERROR: { status: 500, title: 'Erreur interne' },
@@ -57,7 +59,7 @@ export interface AppErrorExtra {
   status?: number;
   /** Request identifier given by the server, kept for support. */
   requestId?: string;
-  errors?: { path: string; message: string }[];
+  errors?: { code?: string; path: string; message: string }[];
   /** Seconds to wait before retrying (`Retry-After` header of 409 and 429 answers). */
   retryAfterSec?: number;
   /** Machine-readable reason of a business refusal (`AI_UNAVAILABLE`, SPEC-504 EF-1). */
@@ -77,7 +79,7 @@ export class AppError extends Error {
   override readonly name: string = 'AppError';
   readonly status: number | undefined;
   readonly requestId: string | undefined;
-  readonly errors: { path: string; message: string }[] | undefined;
+  readonly errors: { code?: string; path: string; message: string }[] | undefined;
   readonly retryAfterSec: number | undefined;
   readonly reason: string | undefined;
   readonly link: string | undefined;
@@ -110,7 +112,7 @@ export interface ProblemBody {
   detail: string;
   code: string;
   requestId: string;
-  errors?: { path: string; message: string }[];
+  errors?: { code?: string; path: string; message: string }[];
 }
 
 type CatalogEntry = { status: number; title: string };
@@ -147,7 +149,7 @@ export function toProblem(error: unknown, requestId: string): ProblemBody {
     detail,
     code,
     requestId,
-    ...(code === 'VALIDATION_FAILED' && appError?.errors !== undefined
+    ...((code === 'VALIDATION_FAILED' || code === 'BRICK_INVALID') && appError?.errors !== undefined
       ? { errors: appError.errors }
       : {}),
   };

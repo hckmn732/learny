@@ -27,4 +27,5 @@ export * from './learning';
 export * from './search';
 export * from './sidebar';
 export * from './billing';
+export * from './bricks';
 export * from './dev-billing';

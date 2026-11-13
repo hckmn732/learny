@@ -163,3 +163,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0286](ADR-0286-complements-d-implementation-de-la-selection-de-l-echauffement.md) | Compléments d’implémentation de la sélection de l’échauffement | Déduite | SPEC-410, SPEC-714, ADR-0148, ADR-0140, ADR-0047 |
 | [ADR-0287](ADR-0287-contrats-d-implementation-du-tirage-de-la-session-de-quiz-gl.md) | Contrats d’implémentation du tirage de la session de quiz global | Déduite | SPEC-406, BR-MEM-03, BR-MEM-04, ADR-0015, ADR-0025 |
 | [ADR-0288](ADR-0288-contrats-d-implementation-des-services-de-persistance-du-mot.md) | Contrats d'implémentation des services de persistance du moteur | Déduite | SPEC-411, ADR-0112, ADR-0149, ADR-0242, SPEC-203 |
+| [ADR-0289](ADR-0289-contrats-d-implementation-complementaires-du-paquet-bricks.md) | Contrats d'implémentation complémentaires du paquet bricks | Déduite | SPEC-501 |

@@ -67,7 +67,7 @@ export interface ProblemDetails {
   detail: string;
   code: string;
   requestId: string;
-  errors?: { path: string; message: string }[];
+  errors?: { code?: string; path: string; message: string }[];
 }
 
 const AUTH_TITLE = 'Authentification requise';

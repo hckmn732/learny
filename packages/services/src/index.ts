@@ -27,3 +27,4 @@ export * from './email/index';
 export { runNotifyDemo } from './dev/notifications';
 export * from './personal-data/index';
 export * from './learning/index';
+export * from './bricks/index';
