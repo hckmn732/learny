@@ -27,7 +27,7 @@ Date de validation : 2026-11-13 · Branche `spec/SPEC-614-examen-blanc` · Horlo
 - **Preuve e2e** : scénario « expiration et revue @SPEC-614 » : après l’échéance serveur,
   l’écran affiche les résultats et « Temps écoulé : 40 min » ; un rechargement ne crée pas de
   second résultat.
-- Vidéo : `video/mock-exam-expiration.webm` (e2e avec vidéo Playwright).
+- Vidéos réelles : `video/13-expiration-et-revue-desktop.webm`, `video/14-expiration-et-revue-desktop.webm` (e2e Playwright, échéance serveur).
 
 ## CA-3 — Scores étudiés/diagnostic séparés et lacunes limitées ✅
 
@@ -67,6 +67,8 @@ Date de validation : 2026-11-13 · Branche `spec/SPEC-614-examen-blanc` · Horlo
 
 ## Non-régression
 
-- `[SPEC-611]` et `[SPEC-407]` rejoués par les suites unitaires/intégration complètes ; e2e
-  `@SPEC-611` et `@SPEC-407` inchangés. Le filtre diagnostique ajouté à
-  `applyLearningResult` est neutre quand `activities.config.diagnosticPositions` est absent.
+- Les validations filtrées `[SPEC-614]` / `@SPEC-614` passent (unitaires, intégration, e2e desktop
+  et mobile, `@visual`, axe). Les suites `[SPEC-611]` et `[SPEC-407]` n’ont pas été modifiées par
+  les fichiers de cette spécification ; le filtre diagnostique ajouté à `applyLearningResult` est
+  neutre quand `activities.config.diagnosticPositions` est absent (comportement par défaut
+  inchangé, vérifié par les tests `[SPEC-411]` existants).
