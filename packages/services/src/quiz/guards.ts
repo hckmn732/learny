@@ -3,6 +3,8 @@ import { sql } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 
+import { retryDelayGuard } from './retry-gate';
+
 // Guards evaluated before creating a validation attempt (SPEC-611 ET-6, BR-FOR-08). SPEC-612 adds
 // the retry-delay guard to the same registry: the service only composes them.
 
@@ -47,5 +49,5 @@ export const moduleOpenGuard: QuizAttemptGuard = async (ctx, moduleId) => {
   return ok(undefined);
 };
 
-/** Registry extended by SPEC-612; SPEC-611 registers only the open-module guard (ET-6). */
-export const quizAttemptGuards: QuizAttemptGuard[] = [moduleOpenGuard];
+/** Registry extended by SPEC-612; SPEC-611 registers the open-module guard (ET-6). */
+export const quizAttemptGuards: QuizAttemptGuard[] = [moduleOpenGuard, retryDelayGuard];

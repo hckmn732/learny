@@ -35,6 +35,18 @@ export type {
 } from './functions/demo-job';
 export { QUIZ_GRADE_ID, createQuizGradeJob } from './functions/quiz-grade';
 export type { QuizGradeDeps, QuizGradeRunArgs } from './functions/quiz-grade';
+export { MODULE_UNLOCK_ID, createModuleUnlockJob } from './functions/module-unlock';
+export type { ModuleUnlockDeps, ModuleUnlockRunArgs } from './functions/module-unlock';
+export {
+  REMEDIATION_PREPARE_ID,
+  REMEDIATION_PREPARE_REQUESTED_ID,
+  createRemediationPrepareJob,
+  createRemediationPrepareRequestedJob,
+} from './functions/remediation-prepare';
+export type {
+  RemediationPrepareDeps,
+  RemediationPrepareRunArgs,
+} from './functions/remediation-prepare';
 export { createFunctions, functions, learnyFunctions, sddDemoStore } from './functions';
 export type { JobDeps } from './functions';
 export {

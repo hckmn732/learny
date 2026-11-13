@@ -235,7 +235,7 @@ async function readAttemptRow(tx: DbTx, userId: string, attemptId: string): Prom
     join public.activities act on act.id = at.activity_id
     where at.id = ${attemptId}::uuid
       and at.user_id = ${userId}::uuid
-      and act.kind = 'validation_quiz'
+      and act.kind in ('validation_quiz', 'remediation')
     limit 1
   `);
   const attempt = rows[0];

@@ -64,7 +64,7 @@ const ATTEMPT_KIND_BY_ACTIVITY = {
 const SOURCE_BY_ATTEMPT_KIND: Readonly<Record<AttemptKind, ReviewSource>> = {
   validation_quiz: 'validation',
   global_quiz_session: 'global_quiz',
-  remediation: 'exercise',
+  remediation: 'validation',
   exercise: 'exercise',
   mock_exam: 'exam',
   warmup: 'warmup',
