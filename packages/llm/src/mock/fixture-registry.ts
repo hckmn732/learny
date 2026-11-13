@@ -3,6 +3,10 @@
 import lightInvalidObject from '../../fixtures/light/demo-invalid-object.json' with { type: 'json' };
 import lightObject from '../../fixtures/light/demo-object.json' with { type: 'json' };
 import lightSpec510Image from '../../fixtures/light/spec-510-image.json' with { type: 'json' };
+import programmeAdjust from '../../fixtures/programme/programme-adjust.json' with { type: 'json' };
+import programmeImport from '../../fixtures/programme/programme-import.json' with { type: 'json' };
+import programmeInvalid from '../../fixtures/programme/programme-invalid.json' with { type: 'json' };
+import programmeSap from '../../fixtures/programme/programme-sap.json' with { type: 'json' };
 import cadrageInjection from '../../fixtures/tutor/cadrage-injection.json' with { type: 'json' };
 import cadrageInvalid from '../../fixtures/tutor/cadrage-invalid.json' with { type: 'json' };
 import cadrageSapDone from '../../fixtures/tutor/cadrage-sap-done.json' with { type: 'json' };
@@ -39,6 +43,10 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('light/demo-invalid-object.json', lightInvalidObject),
   entry('light/demo-object.json', lightObject),
   entry('light/spec-510-image.json', lightSpec510Image),
+  entry('programme/programme-adjust.json', programmeAdjust),
+  entry('programme/programme-import.json', programmeImport),
+  entry('programme/programme-invalid.json', programmeInvalid),
+  entry('programme/programme-sap.json', programmeSap),
   entry('tutor/demo-tool-call.json', tutorToolCall),
   entry('tutor/demo-refusal.json', tutorRefusal),
   entry('tutor/demo-stream.json', tutorStream),
