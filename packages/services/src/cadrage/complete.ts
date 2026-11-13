@@ -49,11 +49,15 @@ export function completeCadrage(
       }
       const objectives =
         formation.objectives.length > 0 ? formation.objectives : ['operational'];
+      const objectiveArray = sql`ARRAY[${sql.join(
+        objectives.map((objective) => sql`${objective}`),
+        sql`, `,
+      )}]::public.formation_objective[]`;
       await tx.execute(sql`
         update public.formations
-        set objectives = ${objectives.join(',')}::text[]::public.formation_objective[],
+        set objectives = ${objectiveArray},
             cadrage_profile = ${JSON.stringify(state.profile)}::jsonb,
-            updated_at = ${ctx.clock.now()}::timestamptz
+            updated_at = ${ctx.clock.now().toISOString()}::timestamptz
         where id = ${formationId}::uuid
           and owner_id = ${userId}::uuid
       `);

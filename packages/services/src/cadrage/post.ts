@@ -191,7 +191,7 @@ export function postCadrageMessage(
           null,
           null,
           ${position},
-          ${ctx.clock.now()}::timestamptz
+          ${ctx.clock.now().toISOString()}::timestamptz
         )
       `);
       return {

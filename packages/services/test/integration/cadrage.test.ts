@@ -82,7 +82,7 @@ async function seedCadrage(
         )
         values (
           ${formation.id}::uuid, ${userId}::uuid, 'tutor', ${`Question ${String(index + 1)}`},
-          ${key}::public.cadrage_key, null, ${index + 1}, ${FIXED}::timestamptz
+          ${key}::public.cadrage_key, null, ${index + 1}, ${FIXED.toISOString()}::timestamptz
         )
       `);
     }

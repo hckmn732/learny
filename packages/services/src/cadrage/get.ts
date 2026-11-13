@@ -102,7 +102,7 @@ export function updateFormationTitle(
         update public.formations
         set title = ${parsed.title ?? formation.title},
             monogram = ${formationMonogram(parsed.title ?? formation.title)},
-            updated_at = ${ctx.clock.now()}::timestamptz
+            updated_at = ${ctx.clock.now().toISOString()}::timestamptz
         where id = ${formationId}::uuid
           and owner_id = ${userId}::uuid
         returning id::text as id, title, status::text as status

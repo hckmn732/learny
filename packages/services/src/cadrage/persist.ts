@@ -45,7 +45,7 @@ export async function persistTutorTurn(
     update public.formations
     set cadrage_profile = ${JSON.stringify(applied.profile)}::jsonb,
         objectives = ${objectiveUpdate},
-        updated_at = ${clock.now()}::timestamptz
+        updated_at = ${clock.now().toISOString()}::timestamptz
     where id = ${formation.id}::uuid
   `);
 
@@ -67,7 +67,7 @@ export async function persistTutorTurn(
       ${questionKey}::public.cadrage_key,
       ${suggestions}::jsonb,
       ${position},
-      ${clock.now()}::timestamptz
+      ${clock.now().toISOString()}::timestamptz
     )
     returning id::text as id
   `);

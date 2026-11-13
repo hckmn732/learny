@@ -59,11 +59,11 @@ export function createFormation(
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
     const { title } = FormationCreateInput.parse(input);
-    const now = ctx.clock.now();
+    const now = ctx.clock.now().toISOString();
 
     const created = await db.run(async (tx) => {
       const accounts = await tx.execute<AccountRow>(sql`
-        select tone::text as tone, course_language::text as course_language
+        select tutor_tone::text as tone, course_language::text as course_language
         from public.profiles
         where id = ${userId}::uuid
         limit 1
