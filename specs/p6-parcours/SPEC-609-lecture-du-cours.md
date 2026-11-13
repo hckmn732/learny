@@ -125,6 +125,7 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 
 ## 15. Décisions et hypothèses
 
+- **ADR-0314 — Contrats d’implémentation de la lecture du cours** : progression dérivée des sections visibles et monotone ; un signalement suspend les briques de banque des mêmes notions ; la correction du résumé est une tâche `light` avec repli brouillon.
 - **ADR-0060 — Rendu Markdown sécurisé** : `react-markdown` + `remark-gfm` + `rehype-sanitize` (liste blanche) ; pas de HTML brut ; formules non prises en charge en V1 (texte brut).
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 
