@@ -176,3 +176,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0301](ADR-0301-contrats-et-persistance-des-banques-de-questions.md) | Contrats et persistance des banques de questions | Déduite | SPEC-513, ADR-0026, ADR-0048 |
 | [ADR-0302](ADR-0302-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |
 | [ADR-0303](ADR-0303-horloge-cliente-profil-minimal-et-messages-de-lien-invalide-.md) | Horloge cliente, profil minimal et messages de lien invalide pour SPEC-601 | Déduite | SPEC-601, ADR-0047, ADR-0168 |
+| [ADR-0306](ADR-0306-contrats-d-implementation-du-parcours-premiers-pas.md) | Contrats d'implémentation du parcours « Premiers pas » | Déduite | SPEC-602, ADR-0121, ADR-0160, SPEC-506, SPEC-724 |
