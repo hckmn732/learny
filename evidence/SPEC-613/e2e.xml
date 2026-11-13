@@ -1,0 +1,107 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="1" errors="0" time="43.99796">
+<testsuite name="p6/practice-exercise.spec.ts" timestamp="2026-11-13T08:54:21.737Z" hostname="desktop" tests="5" failures="0" skipped="1" time="8.414" errors="0">
+<testcase name="résout un exercice structuré @SPEC-613" classname="p6/practice-exercise.spec.ts" time="2.993">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/attachments/axe-abc4b786cc0d2bd27151e562302652558d646150.json]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/attachments/spec-613-exercice-resolu-bb7c472cdeac97341b828ee51afb28cc50c7a692.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="reprend une production @SPEC-613" classname="p6/practice-exercise.spec.ts" time="2.205">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/attachments/axe-12ace6f38c2b90e143cd3938cb24b760d11fb981.json]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/attachments/spec-613-reprise-brouillon-69c8e4b6db3cde2c3caa023af6c3d9e6938ce133.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-reprend-une-production-SPEC-613-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refuse l’exercice d’un autre apprenant @SPEC-613" classname="p6/practice-exercise.spec.ts" time="0.589">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-refus-62a57-un-autre-apprenant-SPEC-613-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-613 @SPEC-613 @visual" classname="p6/practice-exercise.spec.ts" time="2.414">
+<properties>
+<property name="mockup-diff-ratio" value="spec-613-desktop:0.1192">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/spec-613-desktop-side-by-side-e16b2d04597d6ffdb6b22a8dd2b86dca50c73b71.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/spec-613-desktop-diff-fb91ffc902b669fe965daf5117a84c61dfec6c8d.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/attachments/axe-ad4c33bf7e81e0fff6f312fcfd48cdae746df232.json]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-conformité-SPEC-613-SPEC-613-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-613 mobile @SPEC-613 @visual @mobile" classname="p6/practice-exercise.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/practice-exercise.spec.ts" timestamp="2026-11-13T08:54:21.737Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.303" errors="0">
+<testcase name="conformité SPEC-613 mobile @SPEC-613 @visual @mobile" classname="p6/practice-exercise.spec.ts" time="2.303">
+<properties>
+<property name="mockup-diff-ratio" value="spec-613-mobile:0.1080">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/spec-613-mobile-side-by-side-c3d4751998c0afecf5a9bc9e69d5e01835646950.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/spec-613-mobile-diff-558953f5dbd6aba3cd5e61c85e715b855d2b693b.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/attachments/axe-99ba17c1d22caa7a7c48ac1d9d30cff8b9b22ecd.json]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-practice-exercise-confo-7da96-bile-SPEC-613-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

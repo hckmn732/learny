@@ -82,6 +82,7 @@ const REVIEWABLE_FORMATS: ReadonlySet<string> = new Set<BrickFormat>([
   'ordering',
   'categorization',
   'recall_card',
+  'instruction',
 ]);
 
 const FSRS_STATE_NAMES = ['new', 'learning', 'review', 'relearning'] as const;

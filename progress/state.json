@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T08:59:03.161Z",
+  "updatedAt": "2026-11-13T09:00:38.041Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4010,14 +4010,55 @@
       "validations": {}
     },
     "SPEC-613": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T07:02:02.413Z",
+      "completedAt": "2026-11-13T08:59:10.999Z",
+      "branch": "spec/SPEC-613-exercice-pratique",
+      "commit": "d2a783b",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T08:52:04.430Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T08:52:47.876Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T08:52:49.228Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T08:52:57.657Z",
+          "details": "12 test(s) [SPEC-613] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T08:53:50.286Z",
+          "details": "6 test(s) [SPEC-613] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T08:54:35.817Z",
+          "details": "5 réussi(s), 0 échec(s), 10 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T08:54:35.817Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T08:54:35.830Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-614": {
       "status": "pending",

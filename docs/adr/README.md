@@ -178,4 +178,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0303](ADR-0303-horloge-cliente-profil-minimal-et-messages-de-lien-invalide-.md) | Horloge cliente, profil minimal et messages de lien invalide pour SPEC-601 | Déduite | SPEC-601, ADR-0047, ADR-0168 |
 | [ADR-0306](ADR-0306-contrats-d-implementation-du-parcours-premiers-pas.md) | Contrats d'implémentation du parcours « Premiers pas » | Déduite | SPEC-602, ADR-0121, ADR-0160, SPEC-506, SPEC-724 |
 | [ADR-0307](ADR-0307-carte-des-notions-apports-rattaches-aux-notions-de-leur-chap.md) | Carte des notions : apports rattachés aux notions de leur chapitre | Déduite | SPEC-616, BR-CAR-04, ADR-0036 |
+| [ADR-0308](ADR-0308-persistance-et-correction-de-l-exercice-pratique.md) | Persistance et correction de l’exercice pratique | Déduite | SPEC-613, ADR-0027, ADR-0041 |
 | [ADR-0309](ADR-0309-normalisation-de-la-comparaison-visuelle-du-cadrage.md) | Normalisation de la comparaison visuelle du cadrage | Déduite | SPEC-604 |

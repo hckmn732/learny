@@ -1,0 +1,100 @@
+[
+  {
+    "id": "aria-allowed-role",
+    "impact": "minor",
+    "tags": [
+      "cat.aria",
+      "best-practice"
+    ],
+    "description": "Ensure role attribute has an appropriate value for the element",
+    "help": "ARIA role should be appropriate for the element",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-allowed-role?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "aria-allowed-role",
+            "data": [
+              "status"
+            ],
+            "relatedNodes": [],
+            "impact": "minor",
+            "message": "ARIA role status is not allowed for given element"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "minor",
+        "html": "<main aria-busy=\"true\" class=\"mx-auto w-full max-w-content px-16 pb-40 shell:px-40\" data-testid=\"exercise-loading\" role=\"status\">",
+        "target": [
+          "main[data-testid=\"exercise-loading\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  ARIA role status is not allowed for given element"
+      }
+    ]
+  },
+  {
+    "id": "landmark-one-main",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure the document has a main landmark",
+    "help": "Document should have one main landmark",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=playwright",
+    "nodes": [
+      {
+        "any": [],
+        "all": [
+          {
+            "id": "page-has-main",
+            "data": null,
+            "relatedNodes": [],
+            "impact": "moderate",
+            "message": "Document does not have a main landmark"
+          }
+        ],
+        "none": [],
+        "impact": "moderate",
+        "html": "<html lang=\"fr\" class=\"W5PPJW_variable _14nu3a_variable\" data-sidebar-collapsed=\"false\">",
+        "target": [
+          "html"
+        ],
+        "failureSummary": "Fix all of the following:\n  Document does not have a main landmark"
+      }
+    ]
+  },
+  {
+    "id": "page-has-heading-one",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+    "help": "Page should contain a level-one heading",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/page-has-heading-one?application=playwright",
+    "nodes": [
+      {
+        "any": [],
+        "all": [
+          {
+            "id": "page-has-heading-one",
+            "data": null,
+            "relatedNodes": [],
+            "impact": "moderate",
+            "message": "Page must have a level-one heading"
+          }
+        ],
+        "none": [],
+        "impact": "moderate",
+        "html": "<html lang=\"fr\" class=\"W5PPJW_variable _14nu3a_variable\" data-sidebar-collapsed=\"false\">",
+        "target": [
+          "html"
+        ],
+        "failureSummary": "Fix all of the following:\n  Page must have a level-one heading"
+      }
+    ]
+  }
+]

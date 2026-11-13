@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-503, SPEC-508, SPEC-404]
 business_rules: [BR-PRA-01, BR-LAC-04]
 screens: [SCR-08]
-adrs: [ADR-0027]
+adrs: [ADR-0027, ADR-0308]
 visual: mockup
 ---
 
@@ -120,5 +120,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - **ADR-0027 — Exercice pratique : production structurée** : La brique `instruction` accepte `production.kind ∈ {text, file, link, table}`. Pour `table` : colonnes `{key, label, type: text|number|select, options?}`, lignes min/max, et contrôles facultatifs `{type:'sum_equal', numberColumn, groupColumn, left:[valeurs], right:[valeurs]}` évalués en direct par le code. Barème sur 10 par critères ; 2 indices max (−1 point chacun).
+- **ADR-0308 — Persistance et correction de l’exercice pratique** : activité `exercise` + brique `instruction` immuable, idempotence par notion et version du cours, brouillon dans la réponse de la tentative en cours, correction `mockTutor` bornée et maîtrise appliquée par SPEC-411 ; aucune migration.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 
