@@ -44,6 +44,8 @@ export const ERROR_CATALOG = {
   UPLOAD_INCOMPLETE: { status: 422, title: 'Envoi incomplet' },
   BRICK_INVALID: { status: 422, title: 'Brique invalide' },
   BRICK_RETIRED: { status: 422, title: 'Brique retirée' },
+  GRADED_BY_TUTOR: { status: 422, title: 'Brique corrigée par le tuteur' },
+  RESPONSE_INVALID: { status: 422, title: 'Réponse invalide' },
   RATE_LIMITED: { status: 429, title: 'Trop de requêtes' },
   RESEND_TOO_SOON: { status: 429, title: 'Renvoi trop rapproché' },
   INTERNAL_ERROR: { status: 500, title: 'Erreur interne' },
