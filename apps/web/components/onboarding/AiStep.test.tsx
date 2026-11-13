@@ -32,7 +32,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 const MODELS = {
-  anthropic: ['claude-sonnet-5-5'],
+  anthropic: ['personal-model'],
   openai: [],
   mistral: [],
   openai_compatible: [],
