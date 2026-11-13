@@ -1,5 +1,6 @@
 import {
   CourseSection,
+  CourseSummaryView,
   ModuleCourseScreen,
   type CourseCitation,
   type CourseSuggestion,
@@ -10,6 +11,8 @@ import { sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
+
+import { coursePercent, estimateReadingMinutes, readProgressByChapter } from './progress';
 
 // SPEC-608 EF-1 to EF-5, ET-1, BR-COU-03, BR-COU-10, BR-COU-11 — read model of SCR-07.
 //
@@ -25,6 +28,7 @@ interface ModuleRow extends Record<string, unknown> {
   module_title: string;
   module_position: number;
   modules_total: number;
+  threshold: number;
 }
 
 interface ChapterRow extends Record<string, unknown> {
@@ -53,6 +57,8 @@ interface SectionRow extends Record<string, unknown> {
   data: unknown;
   origin: string;
   notion_ids: unknown;
+  version: number;
+  reported: boolean;
 }
 
 interface CitationRow extends Record<string, unknown> {
@@ -136,7 +142,7 @@ function sectionText(section: SectionRow): string {
 function readingMinutesOf(sections: readonly SectionRow[]): number {
   const text = sections.map(sectionText).join(' ');
   const words = text.trim() === '' ? 0 : text.trim().split(/\s+/u).length;
-  return Math.max(1, Math.ceil(words / 200));
+  return estimateReadingMinutes(words);
 }
 
 function citationOf(row: CitationRow): CourseCitation {
@@ -163,6 +169,32 @@ function sectionOf(row: SectionRow, citations: readonly CourseCitation[]): Cours
     origin: row.origin === 'resource' ? 'resource' : 'tutor',
     notionIds: asStringArray(row.notion_ids),
     citations,
+    version: row.version,
+    reported: row.reported,
+  });
+}
+
+interface SummaryRow extends Record<string, unknown> {
+  id: string;
+  chapter_id: string;
+  course_id: string;
+  text: string;
+  feedback: unknown;
+  created_at: Date | string;
+}
+
+function summaryOf(row: SummaryRow | undefined): CourseSummaryView | null {
+  if (row === undefined) return null;
+  const parsed = CourseSummaryView.shape.feedback.safeParse(row.feedback);
+  const feedback = parsed.success ? parsed.data : null;
+  return CourseSummaryView.parse({
+    id: row.id,
+    chapterId: row.chapter_id,
+    courseId: row.course_id,
+    text: row.text,
+    feedback,
+    status: feedback === null ? 'deferred' : 'corrected',
+    createdAt: isoOf(row.created_at),
   });
 }
 
@@ -212,7 +244,8 @@ export function getModuleCourse(
           m.title as module_title,
           m.position as module_position,
           (select count(*)::int from public.modules sibling where sibling.formation_id = f.id)
-            as modules_total
+            as modules_total,
+          f.default_threshold as threshold
         from public.modules m
         join public.formations f on f.id = m.formation_id
         where m.id = ${moduleId}::uuid
@@ -275,11 +308,13 @@ export function getModuleCourse(
               group by chapter_id
             `);
       const countByChapter = new Map(counts.map((row) => [row.chapter_id, row.total]));
+      const persisted = current === undefined ? new Map<string, number>() : await readProgressByChapter(tx, userId, current.id);
       const chapterSummaries = chapters.map((chapter) => ({
         id: chapter.id,
         position: chapter.position,
         title: chapter.title,
         hasCourse: (countByChapter.get(chapter.id) ?? 0) > 0,
+        percent: persisted.get(chapter.id) ?? 0,
       }));
 
       if (current === undefined || current.status !== 'ready') {
@@ -309,7 +344,9 @@ export function getModuleCourse(
           content_md,
           data,
           origin::text as origin,
-          notion_ids
+          notion_ids,
+          version,
+          reported
         from public.course_sections
         where course_id = ${current.id}::uuid
           and chapter_id = ${selected.id}::uuid
@@ -357,7 +394,24 @@ export function getModuleCourse(
               order by r.created_at asc, r.id asc
             `);
 
+      const summaries = await tx.execute<SummaryRow>(sql`
+        select
+          id::text as id,
+          chapter_id::text as chapter_id,
+          course_id::text as course_id,
+          text,
+          feedback,
+          created_at
+        from public.chapter_summaries
+        where user_id = ${userId}::uuid
+          and chapter_id = ${selected.id}::uuid
+          and course_id = ${current.id}::uuid
+        order by created_at desc, id desc
+        limit 1
+      `);
+
       const selectedIndex = chapters.findIndex((chapter) => chapter.id === selected.id);
+      const chapterPercent = persisted.get(selected.id) ?? 0;
       const course: CourseView = {
         id: current.id,
         version: current.version,
@@ -372,6 +426,7 @@ export function getModuleCourse(
           position: selected.position,
           title: selected.title,
           hasCourse: sections.length > 0,
+          percent: chapterPercent,
         },
         previousChapterId: chapters[selectedIndex - 1]?.id ?? null,
         nextChapterId: chapters[selectedIndex + 1]?.id ?? null,
@@ -382,6 +437,20 @@ export function getModuleCourse(
           url: row.url,
           reason: row.reason ?? 'Ressource suggérée par le tuteur.',
         })),
+        progress: {
+          chapterPercent,
+          coursePercent: coursePercent(
+            chapterSummaries
+              .filter((chapter) => chapter.hasCourse)
+              .map((chapter) => chapter.percent),
+          ),
+          updatedAt: null,
+        },
+        summary: summaryOf(summaries[0]),
+        quiz: {
+          threshold: module.threshold,
+          href: `/formations/${encodeURIComponent(module.formation_id)}/modules/${encodeURIComponent(module.module_id)}`,
+        },
       };
 
       return {

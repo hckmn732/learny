@@ -1,0 +1,86 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="42.483735">
+<testsuite name="p6/course-reading.spec.ts" timestamp="2026-11-13T13:11:47.660Z" hostname="desktop" tests="4" failures="0" skipped="1" time="7.471" errors="0">
+<testcase name="lit et résume un chapitre @SPEC-609" classname="p6/course-reading.spec.ts" time="2.608">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/attachments/lecture-resume-99fb3629a0358c14fcbb26abbba2e9e829f5bba9.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/attachments/axe-ed5582c8bc9020f38075e7282d30d98279c6ce00.json]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-lit-et-résume-un-chapitre-SPEC-609-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="signale et corrige une section @SPEC-609" classname="p6/course-reading.spec.ts" time="2.181">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/attachments/signalement-correction-5d8d2bfdfb502cbf1b28cec5f1dc12d913a0b8e8.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/attachments/axe-8d4065e1d79a8c6939d128bc0c3d8ef58a129fba.json]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-signale-et-corrige-une-section-SPEC-609-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-609 @SPEC-609 @visual" classname="p6/course-reading.spec.ts" time="2.487">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/attachments/cours-sans-tuteur-49e85dbb3cb26466cccfba642e5360f5fad5a8ca.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/attachments/comparaison-entete-side-by-side-bf49044a94e7ccc34edd83630b1b799c85149338.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/attachments/comparaison-entete-diff-ce7296a9690dce36762723fc5e74cfabf4a1203e.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/attachments/axe-be9cc35cad671f193b7b76c91acad26a7fa29350.json]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformité-SPEC-609-SPEC-609-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-609 mobile @SPEC-609 @visual @mobile" classname="p6/course-reading.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/course-reading.spec.ts" timestamp="2026-11-13T13:11:47.660Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.574" errors="0">
+<testcase name="conformité SPEC-609 mobile @SPEC-609 @visual @mobile" classname="p6/course-reading.spec.ts" time="2.574">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/attachments/cours-sans-tuteur-mobile-ef867ab4f0bf5b69f89479e9d0cdb9a8bcdc44d4.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/attachments/axe-ef8ec00fe3d34ba7d7bc52752eb4130f95ff8fb9.json]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-reading-conformi-ba918-bile-SPEC-609-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

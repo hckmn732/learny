@@ -1,0 +1,24 @@
+{
+  "task": "light",
+  "scenario": "course-summary",
+  "promptId": "course.summary",
+  "promptVersion": 1,
+  "description": "Correction simulée du résumé du chapitre SAP : bon résumé, un point manquant.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "verdict": "partial",
+        "message": "Bon résumé, les notions clés y sont. Il manque un point : une pièce n’est enregistrée que si elle est équilibrée.",
+        "missing": ["Une pièce n’est enregistrée que si le total des débits est égal au total des crédits."]
+      },
+      "usage": {
+        "inputTokens": 180,
+        "outputTokens": 60,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 90
+    }
+  ]
+}

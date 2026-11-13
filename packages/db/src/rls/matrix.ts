@@ -145,6 +145,8 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('courses', 'id', ['courses_owner_all']),
   personal('course_sections', 'id', ['course_sections_owner_all']),
   personal('course_section_revisions', 'id', ['course_section_revisions_owner_select'], READ_ONLY),
+  // SPEC-609 — the learner reports a section; the history stays readable to its owner only.
+  personal('course_section_reports', 'id', ['course_section_reports_owner_all']),
   personal('citations', 'id', ['citations_owner_all']),
   personal('reading_progress', 'user_id', ['reading_progress_owner_all']),
   personal('chapter_summaries', 'id', ['chapter_summaries_owner_all']),

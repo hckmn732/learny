@@ -124,6 +124,13 @@ export const courses = pgTable(
   ],
 );
 
+/** BR-COU-09 — lifecycle of a learner report on a course section (history is kept). */
+export const courseSectionReportStatus = pgEnum('course_section_report_status', [
+  'open',
+  'corrected',
+  'dismissed',
+]);
+
 /** BR-COU-04 — ordered sections of a course version, anchored for the table of contents. */
 export const courseSections = pgTable(
   'course_sections',
@@ -152,6 +159,8 @@ export const courseSections = pgTable(
     origin: contentOrigin('origin').notNull(),
     version: integer('version').notNull().default(1),
     reported: boolean('reported').notNull().default(false),
+    /** ET-2 — key of the learner correction that produced this version; a replay is a no-op. */
+    editRequestKey: text('edit_request_key'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -184,6 +193,13 @@ export const courseSections = pgTable(
       sql`${table.data} is null or jsonb_typeof(${table.data}) = 'object'`,
     ),
     check('course_sections_version_check', sql`${table.version} >= 1`),
+    uniqueIndex('course_sections_edit_request_key_idx')
+      .on(table.ownerId, table.editRequestKey)
+      .where(sql`${table.editRequestKey} is not null`),
+    check(
+      'course_sections_edit_request_key_check',
+      sql`${table.editRequestKey} is null or ${table.editRequestKey} ~ '^[A-Za-z0-9_-]{8,128}$'`,
+    ),
   ],
 );
 
@@ -203,12 +219,68 @@ export const courseSectionRevisions = pgTable(
     contentMd: text('content_md'),
     data: jsonb('data'),
     editedBy: actor('edited_by').notNull(),
+    /** ET-2 — replays of a learner correction return the first version instead of writing again. */
+    requestKey: text('request_key'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
     unique('course_section_revisions_section_id_version_unique').on(table.sectionId, table.version),
+    uniqueIndex('course_section_revisions_request_key_idx')
+      .on(table.ownerId, table.requestKey)
+      .where(sql`${table.requestKey} is not null`),
     index('course_section_revisions_owner_id_idx').on(table.ownerId),
     check('course_section_revisions_version_check', sql`${table.version} >= 1`),
+    check(
+      'course_section_revisions_request_key_check',
+      sql`${table.requestKey} is null or ${table.requestKey} ~ '^[A-Za-z0-9_-]{8,128}$'`,
+    ),
+  ],
+);
+
+/**
+ * BR-COU-09, BR-MEM-09 — one report of a course section. Reporting keeps the content readable,
+ * archives the motivation, excludes the section from new quiz draws until correction and records
+ * the bank bricks that were suspended so a correction can reactivate only those.
+ */
+export const courseSectionReports = pgTable(
+  'course_section_reports',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ownerId: uuid('owner_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    sectionId: uuid('section_id')
+      .notNull()
+      .references(() => courseSections.id, { onDelete: 'cascade' }),
+    reason: text('reason').notNull(),
+    status: courseSectionReportStatus('status').notNull().default('open'),
+    affectedBrickIds: uuid('affected_brick_ids')
+      .array()
+      .notNull()
+      .default(sql`'{}'::uuid[]`),
+    /** ET-2 — a replay with the same key returns the first report and emits no second event. */
+    requestKey: text('request_key'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+  },
+  (table) => [
+    uniqueIndex('course_section_reports_request_key_idx')
+      .on(table.ownerId, table.requestKey)
+      .where(sql`${table.requestKey} is not null`),
+    index('course_section_reports_section_id_idx').on(table.sectionId),
+    index('course_section_reports_owner_id_idx').on(table.ownerId),
+    check(
+      'course_section_reports_reason_length_check',
+      sql`char_length(${table.reason}) between 1 and 500`,
+    ),
+    check(
+      'course_section_reports_affected_bricks_check',
+      sql`cardinality(${table.affectedBrickIds}) <= 500`,
+    ),
+    check(
+      'course_section_reports_request_key_check',
+      sql`${table.requestKey} is null or ${table.requestKey} ~ '^[A-Za-z0-9_-]{8,128}$'`,
+    ),
   ],
 );
 
@@ -290,6 +362,8 @@ export const chapterSummaries = pgTable(
     courseId: uuid('course_id').references(() => courses.id, { onDelete: 'set null' }),
     text: text('text').notNull(),
     feedback: jsonb('feedback').$type<ChapterSummaryFeedback>(),
+    /** ET-2 — a replayed submission returns the first summary instead of duplicating it. */
+    requestKey: text('request_key'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -298,6 +372,9 @@ export const chapterSummaries = pgTable(
       table.chapterId,
       table.createdAt.desc(),
     ),
+    uniqueIndex('chapter_summaries_request_key_idx')
+      .on(table.userId, table.requestKey)
+      .where(sql`${table.requestKey} is not null`),
     check(
       'chapter_summaries_text_length_check',
       sql`char_length(${table.text}) between 1 and 2000`,
@@ -305,6 +382,10 @@ export const chapterSummaries = pgTable(
     check(
       'chapter_summaries_feedback_check',
       sql`${table.feedback} is null or jsonb_typeof(${table.feedback}) = 'object'`,
+    ),
+    check(
+      'chapter_summaries_request_key_check',
+      sql`${table.requestKey} is null or ${table.requestKey} ~ '^[A-Za-z0-9_-]{8,128}$'`,
     ),
   ],
 );
@@ -392,6 +473,8 @@ export type Citation = typeof citations.$inferSelect;
 export type NewCitation = typeof citations.$inferInsert;
 export type ReadingProgress = typeof readingProgress.$inferSelect;
 export type NewReadingProgress = typeof readingProgress.$inferInsert;
+export type CourseSectionReport = typeof courseSectionReports.$inferSelect;
+export type NewCourseSectionReport = typeof courseSectionReports.$inferInsert;
 export type ChapterSummary = typeof chapterSummaries.$inferSelect;
 export type NewChapterSummary = typeof chapterSummaries.$inferInsert;
 export type TutorConversation = typeof tutorConversations.$inferSelect;
@@ -401,3 +484,4 @@ export type NewTutorMessage = typeof tutorMessages.$inferInsert;
 export type CourseStatus = (typeof COURSE_STATUSES)[number];
 export type SectionKind = (typeof SECTION_KINDS)[number];
 export type CitationMedia = (typeof CITATION_MEDIA)[number];
+export type CourseSectionReportStatus = (typeof courseSectionReportStatus.enumValues)[number];

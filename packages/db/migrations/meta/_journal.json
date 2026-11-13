@@ -330,6 +330,27 @@
       "when": 1794570338364,
       "tag": "0046_course_generation",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1794573025354,
+      "tag": "0047_slim_susan_delgado",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794573029471,
+      "tag": "0048_course_reading_rules",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1794574006107,
+      "tag": "0049_heavy_gladiator",
+      "breakpoints": true
     }
   ]
 }

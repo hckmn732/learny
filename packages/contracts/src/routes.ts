@@ -5,6 +5,7 @@ import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
 import { cadrageRoutes, formationRoutes } from './cadrage';
 import { courseRoutes } from './course';
+import { courseReadingRoutes } from './course-reading';
 import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
@@ -53,6 +54,7 @@ export const ROUTES = {
   ...programmeRoutes,
   ...moduleRoutes,
   ...courseRoutes,
+  ...courseReadingRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,

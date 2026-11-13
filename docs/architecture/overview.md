@@ -102,6 +102,7 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `resource/ready` / `resource/failed` | SPEC-509 | UI temps réel, notifications |
 | `chapter/contributions-completed` | SPEC-607 | génération du cours (SPEC-608) |
 | `course/generated` | SPEC-608 | banques de questions, notification « cours prêt » |
+| `course/progress-updated` / `course/summary-submitted` / `course/section-edited` / `course/section-reported` | SPEC-609 | suivi de lecture, historique des corrections et signalements |
 | `quiz/submitted` | SPEC-611 | correction des questions ouvertes, moteur, lacunes |
 | `quiz/graded` | SPEC-611 | résultat, déblocage, automatisme 4 |
 | `module/validated` | SPEC-612 | déblocage, jalons, planification, notification |
