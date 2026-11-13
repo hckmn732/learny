@@ -54,7 +54,7 @@ function isRubricKey(key: CadrageQuestionKey): key is CadrageRubricKey {
 function initialProfile(profile: CadrageProfile): CadrageProfile {
   const next = {} as CadrageProfile;
   for (const key of CADRAGE_RUBRIC_KEYS) {
-    next[key] = profile[key] ?? { value: null, state: 'todo' };
+    next[key] = profile[key];
   }
   return next;
 }
@@ -140,7 +140,7 @@ export function applyTutorTurn(
     };
   }
 
-  const question = turn.next as Extract<CadrageTurn['next'], { kind: 'question' }>;
+  const question = turn.next;
   const questionNumber = questionsAsked + 1;
   if (isRubricKey(question.questionKey) && nextProfile[question.questionKey].state !== 'done') {
     nextProfile[question.questionKey] = {

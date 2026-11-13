@@ -1,8 +1,10 @@
 import type { TutorProfile } from '@learny/contracts';
+import { CADRAGE_RUBRIC_KEYS } from '@learny/contracts';
+
 import { escapeTutorData } from '../context';
 import { PROMPT_SOURCES } from '../prompts.generated';
+
 import type { CadrageProfile } from './apply-tutor-turn';
-import { CADRAGE_RUBRIC_KEYS } from '@learny/contracts';
 
 // Cadrage prompt assembly (SPEC-604 ET-4, ADR-0072, ADR-0023). The prompt source stays English;
 // the learner's title, profile and answers enter as escaped data only. The conversation is

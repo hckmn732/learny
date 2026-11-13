@@ -102,7 +102,7 @@ describe('[SPEC-604] applyTutorTurn', () => {
         }),
         constraints(),
       ),
-    ).toThrowError(AppError);
+    ).toThrow(AppError);
   });
 
   it('ET-3 — les valeurs de suggestions doivent être uniques', () => {
