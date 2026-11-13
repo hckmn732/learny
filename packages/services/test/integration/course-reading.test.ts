@@ -116,11 +116,11 @@ async function fixture(): Promise<Fixture> {
     }
     const resource = await tx.execute<{ id: string }>(sql`
       insert into public.resources (
-        owner_id, formation_id, chapter_id, kind, title, mime, status, storage_path, created_at,
+        owner_id, formation_id, chapter_id, kind, title, mime, status, storage_path, size_bytes, created_at,
         updated_at
       ) values (
         ${a.id}::uuid, ${programme.formationId}::uuid, ${chapterId}::uuid, 'pdf',
-        'Guide FI', 'application/pdf', 'ready', ${`${a.id}/${randomUUID()}/guide.pdf`},
+        'Guide FI', 'application/pdf', 'ready', ${`${a.id}/${randomUUID()}/guide.pdf`}, 1024,
         ${NOW}::timestamptz, ${NOW}::timestamptz
       )
       returning id::text as id

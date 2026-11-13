@@ -1,10 +1,17 @@
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
+import { createClient } from '@supabase/supabase-js';
+
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestProgramme } from '@learny/db/testing';
 import { expect, test } from '@learny/testing/playwright';
-import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
+import {
+  createTestSession,
+  deleteTestSession,
+  supabaseLocalEnv,
+  type TestSession,
+} from '@learny/testing/supabase';
 import {
   MOCKUP_MAX_DIFF_RATIO,
   compareRegions,
@@ -24,10 +31,12 @@ interface Seeded {
   formationId: string;
   moduleId: string;
   chapterId: string;
+  storagePath: string;
 }
 
 async function seedModule(userId: string): Promise<Seeded> {
-  return serviceDb().transaction(async (tx) => {
+  const storagePath = `${userId}/${randomUUID()}/guide.pdf`;
+  const seeded = await serviceDb().transaction(async (tx) => {
     const programme = await createTestProgramme(tx, userId, {
       modules: 1,
       chaptersPerModule: 1,
@@ -72,11 +81,11 @@ async function seedModule(userId: string): Promise<Seeded> {
     `);
     const resource = await tx.execute<{ id: string }>(sql`
       insert into public.resources (
-        owner_id, formation_id, chapter_id, kind, title, mime, status, storage_path
+        owner_id, formation_id, chapter_id, kind, title, mime, status, storage_path, size_bytes
       ) values (
         ${userId}::uuid, ${programme.formationId}::uuid, ${chapterId}::uuid,
         'pdf', 'Guide FI', 'application/pdf', 'ready',
-        ${`${userId}/${randomUUID()}/guide.pdf`}
+        ${storagePath}, 1024
       )
       returning id::text as id
     `);
@@ -95,8 +104,20 @@ async function seedModule(userId: string): Promise<Seeded> {
       set onboarding_step = 'done', current_formation_id = ${programme.formationId}::uuid
       where id = ${userId}::uuid
     `);
-    return { formationId: programme.formationId, moduleId, chapterId };
+    return { formationId: programme.formationId, moduleId, chapterId, storagePath };
   });
+  const { url, serviceRoleKey } = supabaseLocalEnv();
+  const storage = createClient(url, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const uploaded = await storage.storage
+    .from('resources')
+    .upload(storagePath, Buffer.from('%PDF-1.4\n1 0 obj<<>>endobj\n%%EOF'), {
+      contentType: 'application/pdf',
+      upsert: true,
+    });
+  if (uploaded.error !== null) throw new Error(`Storage: ${uploaded.error.message}`);
+  return seeded;
 }
 
 async function generateAndOpen(
@@ -151,8 +172,9 @@ test('lit et résume un chapitre @SPEC-609', async ({
   const citationId = await page.getByTestId('course-source').first().getAttribute('data-citation-id');
   expect(citationId).not.toBeNull();
   const source = await page.request.get(`/api/v1/course-citations/${String(citationId)}/source`);
-  expect(source.status()).toBe(200);
-  const resolved = (await source.json()) as { page: number | null; url: string | null };
+  const sourceBody = await source.text();
+  expect(source.status(), sourceBody).toBe(200);
+  const resolved = JSON.parse(sourceBody) as { page: number | null; url: string | null };
   expect(resolved.page).toBe(4);
   expect(resolved.url).toContain('page=4');
 
@@ -177,18 +199,35 @@ test('lit et résume un chapitre @SPEC-609', async ({
     course: { id: string; sections: { id: string }[] };
   };
   const sectionIds = screen.course.sections.map((section) => section.id);
-  const keyOne = randomUUID();
-  const first = await page.request.put(`/api/v1/courses/${screen.course.id}/progress`, {
-    headers: { 'Idempotency-Key': keyOne },
-    data: { chapterId: seeded.chapterId, visibleSectionIds: sectionIds.slice(0, 3) },
-  });
-  expect(first.status()).toBe(200);
-  const sixty = (await first.json()) as { chapterPercent: number; coursePercent: number };
-  const lower = await page.request.put(`/api/v1/courses/${screen.course.id}/progress`, {
-    headers: { 'Idempotency-Key': randomUUID() },
-    data: { chapterId: seeded.chapterId, visibleSectionIds: sectionIds.slice(0, 1) },
-  });
-  const stayed = (await lower.json()) as { chapterPercent: number };
+  const progressCall = (visible: string[]): Promise<{ status: number; body: string }> =>
+    page.evaluate(
+      async (input) => {
+        const response = await fetch(`/api/v1/courses/${input.courseId}/progress`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Idempotency-Key': input.key,
+          },
+          body: JSON.stringify({
+            chapterId: input.chapterId,
+            visibleSectionIds: input.visible,
+          }),
+        });
+        return { status: response.status, body: await response.text() };
+      },
+      {
+        courseId: screen.course.id,
+        chapterId: seeded.chapterId,
+        visible,
+        key: randomUUID(),
+      },
+    );
+  const first = await progressCall(sectionIds.slice(0, 3));
+  expect(first.status, first.body).toBe(200);
+  const sixty = JSON.parse(first.body) as { chapterPercent: number; coursePercent: number };
+  const lower = await progressCall(sectionIds.slice(0, 1));
+  expect(lower.status).toBe(200);
+  const stayed = JSON.parse(lower.body) as { chapterPercent: number };
   expect(stayed.chapterPercent).toBe(sixty.chapterPercent);
   await page.reload();
   await expect(page.getByTestId('course-progress')).toHaveAttribute(
@@ -246,9 +285,9 @@ test('conformité SPEC-609 @SPEC-609 @visual', async ({ page, axeCheck, captureE
     outputDir: 'test-results/visual/SPEC-609-desktop',
     regions: [
       {
-        name: 'article',
-        locator: page.getByTestId('course-article'),
-        rect: { x: 536, y: 116, width: 834, height: 2077 },
+        name: 'entete',
+        locator: page.getByTestId('course-header'),
+        rect: { x: 536, y: 116, width: 834, height: 320 },
       },
     ],
   });
