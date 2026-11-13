@@ -12,6 +12,15 @@ import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json' with {
 import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json' with { type: 'json' };
 import tutorQuestionBankRegeneration from '../../fixtures/tutor/question-bank-regeneration.json' with { type: 'json' };
 import tutorQuestionBank from '../../fixtures/tutor/question-bank.json' with { type: 'json' };
+import cadrageSapQ1 from '../../fixtures/tutor/cadrage-sap-q1.json' with { type: 'json' };
+import cadrageSapQ2 from '../../fixtures/tutor/cadrage-sap-q2.json' with { type: 'json' };
+import cadrageSapQ3 from '../../fixtures/tutor/cadrage-sap-q3.json' with { type: 'json' };
+import cadrageSapQ4 from '../../fixtures/tutor/cadrage-sap-q4.json' with { type: 'json' };
+import cadrageSapQ5 from '../../fixtures/tutor/cadrage-sap-q5.json' with { type: 'json' };
+import cadrageSapDone from '../../fixtures/tutor/cadrage-sap-done.json' with { type: 'json' };
+import cadrageSixthQuestion from '../../fixtures/tutor/cadrage-sixth-question.json' with { type: 'json' };
+import cadrageInvalid from '../../fixtures/tutor/cadrage-invalid.json' with { type: 'json' };
+import cadrageInjection from '../../fixtures/tutor/cadrage-injection.json' with { type: 'json' };
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 
@@ -39,6 +48,15 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('tutor/loop-tone-tu-en.json', tutorLoopToneTuEn),
   entry('tutor/question-bank.json', tutorQuestionBank),
   entry('tutor/question-bank-regeneration.json', tutorQuestionBankRegeneration),
+  entry('tutor/cadrage-sap-q1.json', cadrageSapQ1),
+  entry('tutor/cadrage-sap-q2.json', cadrageSapQ2),
+  entry('tutor/cadrage-sap-q3.json', cadrageSapQ3),
+  entry('tutor/cadrage-sap-q4.json', cadrageSapQ4),
+  entry('tutor/cadrage-sap-q5.json', cadrageSapQ5),
+  entry('tutor/cadrage-sap-done.json', cadrageSapDone),
+  entry('tutor/cadrage-sixth-question.json', cadrageSixthQuestion),
+  entry('tutor/cadrage-invalid.json', cadrageInvalid),
+  entry('tutor/cadrage-injection.json', cadrageInjection),
 ].sort((left, right) => left.path.localeCompare(right.path));
 
 export function fixturesForTask(task: string): readonly RegisteredFixture[] {

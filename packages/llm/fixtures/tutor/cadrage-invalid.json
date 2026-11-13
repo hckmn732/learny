@@ -1,0 +1,35 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-invalid",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Deux sorties invalides puis une troisième : le tuteur échoue après les corrections.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [],
+        "objectives": [],
+        "next": { "kind": "question", "questionKey": "scope", "text": "" }
+      },
+      "usage": { "inputTokens": 500, "outputTokens": 20, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 180
+    },
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [{ "key": "unknown", "value": "x" }],
+        "objectives": [],
+        "next": { "kind": "done", "text": "" }
+      },
+      "usage": { "inputTokens": 520, "outputTokens": 20, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 180
+    },
+    {
+      "type": "object",
+      "object": { "profileUpdates": [], "objectives": [], "next": { "kind": "done", "text": "" } },
+      "usage": { "inputTokens": 540, "outputTokens": 20, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 180
+    }
+  ]
+}

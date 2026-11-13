@@ -189,4 +189,5 @@ export const PROMPT_VERSIONS = {
   programme: PROMPT_SOURCES.programme.version,
   course: PROMPT_SOURCES.course.version,
   tutor: PROMPT_SOURCES.tutor.version,
+  cadrage: PROMPT_SOURCES.cadrage.version,
 } as const;

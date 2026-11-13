@@ -79,3 +79,32 @@ export type {
   QuestionBankProcessResult,
   QuestionBankStore,
 } from './services/question-bank';
+export { CADRAGE_DONE_FALLBACK, CADRAGE_MAX_QUESTIONS, CadrageTurnSchema } from './cadrage/schema';
+export type {
+  CadrageDone,
+  CadrageObjective,
+  CadrageQuestion,
+  CadrageQuestionKey,
+  CadrageSuggestion,
+  CadrageTurn,
+} from './cadrage/schema';
+export { applyTutorTurn } from './cadrage/apply-tutor-turn';
+export type {
+  AppliedTutorTurn,
+  ApplyTutorTurnConstraints,
+  CadrageProfile,
+} from './cadrage/apply-tutor-turn';
+export { buildCadragePrompt, CADRAGE_PROMPT_ID } from './cadrage/prompt';
+export type {
+  BuiltCadragePrompt,
+  CadrageHistoryEntry,
+  CadragePromptInput,
+} from './cadrage/prompt';
+export { cadrageScenario } from './cadrage/scenario';
+export type { CadrageScenario } from './cadrage/scenario';
+export { runCadrageTurn } from './cadrage/run';
+export type {
+  CadrageRunContext,
+  CadrageTutorState,
+  CadrageTurnResult,
+} from './cadrage/run';

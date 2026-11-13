@@ -1,0 +1,30 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-q2",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Deuxième question SAP : le périmètre est enregistré.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [
+          {
+            "key": "scope",
+            "value": "Comptabilité générale, fournisseurs, clients, immobilisations"
+          }
+        ],
+        "objectives": [],
+        "next": {
+          "kind": "question",
+          "questionKey": "starting_point",
+          "text": "Quel est votre point de départ : connaissez-vous déjà la comptabilité, ou un autre module SAP ?",
+          "multi": false,
+          "suggestions": []
+        }
+      },
+      "usage": { "inputTokens": 520, "outputTokens": 110, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 230
+    }
+  ]
+}

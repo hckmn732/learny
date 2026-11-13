@@ -1,0 +1,41 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-q4",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Niveau visé et objectifs enregistrés ; quatrième question sur le volume.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [
+          {
+            "key": "target_level",
+            "value": "Utilisateur autonome, certification SAP"
+          }
+        ],
+        "objectives": ["operational", "exam"],
+        "next": {
+          "kind": "question",
+          "questionKey": "volume",
+          "text": "Combien de temps pouvez-vous consacrer à cette formation chaque semaine ?",
+          "multi": false,
+          "suggestions": [
+            {
+              "label": "5 h par semaine",
+              "description": "Un rythme léger, étalé sur douze semaines",
+              "value": "5 h par semaine"
+            },
+            {
+              "label": "10 h par semaine",
+              "description": "Un rythme soutenu, étalé sur six semaines",
+              "value": "10 h par semaine"
+            }
+          ]
+        }
+      },
+      "usage": { "inputTokens": 690, "outputTokens": 150, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 240
+    }
+  ]
+}

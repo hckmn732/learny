@@ -1,0 +1,46 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-q3",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Troisième question SAP, à choix multiple, avec les suggestions de la maquette.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [
+          {
+            "key": "starting_point",
+            "value": "Bonnes bases en comptabilité, débutant sur SAP"
+          }
+        ],
+        "objectives": [],
+        "next": {
+          "kind": "question",
+          "questionKey": "target_level",
+          "text": "Noté. Quel niveau visez-vous à la fin de la formation ? Plusieurs réponses possibles.",
+          "multi": true,
+          "suggestions": [
+            {
+              "label": "Utilisateur autonome",
+              "description": "Saisir et contrôler les opérations au quotidien",
+              "value": "Utilisateur autonome"
+            },
+            {
+              "label": "Consultant junior",
+              "description": "Paramétrer SAP et accompagner les utilisateurs",
+              "value": "Consultant junior"
+            },
+            {
+              "label": "Certification SAP",
+              "description": "Réussir l’examen de certification officiel",
+              "value": "Certification SAP"
+            }
+          ]
+        }
+      },
+      "usage": { "inputTokens": 610, "outputTokens": 160, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 260
+    }
+  ]
+}
