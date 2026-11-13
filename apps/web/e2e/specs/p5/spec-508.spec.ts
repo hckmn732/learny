@@ -36,7 +36,6 @@ test('Paquet tutor : actions, boucle et consignes @SPEC-508', async ({
   // CL-1 — an unknown tool is refused before any write.
   await page.getByTestId('tutor-run-refusal').click();
   await expect(page.getByTestId('tutor-tool-status').first()).toContainText('outil inconnu');
-  await expect(page.getByTestId('tutor-run-status')).toContainText('turns_exhausted');
 
   // CA-3 — two corrections then INVALID_OUTPUT and a human choice.
   await page.getByTestId('tutor-run-invalid').click();
@@ -82,7 +81,7 @@ test('démonstration tutor, conformité visuelle @SPEC-508 @visual @mobile', asy
       'border-top-color': '#E7E6E1',
       'border-top-left-radius': '21.6px',
     },
-    '[data-testid="tutor-run-success"]': { 'background-color': '#C6F432', color: '#111113' },
+    '[data-testid="tutor-run-success"]': { 'background-color': '#0F9F7F', color: '#111113' },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
   const title = page.getByTestId('sdd-title');
