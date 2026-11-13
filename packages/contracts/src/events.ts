@@ -192,6 +192,14 @@ export const EVENTS = {
     formationId: Uuid,
     moduleId: Uuid,
     score: Score,
+    nextModuleId: Uuid.nullable(),
+  }),
+  // SPEC-612 ET-2 — explicit preparation of a remediation (automatism disabled or archived plan).
+  'remediation/requested': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    moduleId: Uuid,
+    attemptId: Uuid,
   }),
   'gap/detected': z.object({
     userId: Uuid,

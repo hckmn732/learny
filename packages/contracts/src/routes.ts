@@ -23,6 +23,7 @@ import { notionGraphRoutes } from './notion-graph';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { programmeRoutes } from './programme';
 import { pushDevRoutes, pushRoutes } from './push';
+import { remediationRoutes } from './quiz-result';
 import { moduleRoutes } from './resources';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
@@ -70,6 +71,7 @@ export const ROUTES = {
   ...exerciseRoutes,
   ...tutorChatRoutes,
   ...quizRoutes,
+  ...remediationRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;
