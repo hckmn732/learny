@@ -323,7 +323,7 @@ export function ProgrammeProposal({ fid, initial }: ProgrammeProposalProps) {
 
   if (current === null) {
     return (
-      <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
+      <main className="mx-auto w-full px-16 pb-40 shell:px-40">
         <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-24">
           {generationError === null ? null : (
             <ErrorAlert
@@ -352,7 +352,7 @@ export function ProgrammeProposal({ fid, initial }: ProgrammeProposalProps) {
   const lastGenerated = current.modules.at(-1);
 
   return (
-    <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full px-16 pb-40 shell:px-40">
       <div
         className="mx-auto flex w-full max-w-[1160px] flex-col gap-24"
         data-testid="programme-proposal"

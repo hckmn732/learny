@@ -95,22 +95,34 @@ export async function runProgrammeDraft(
       correction === null
         ? null
         : `Correction: the previous answer violated the ProgrammeDraft contract (${correction}). Return a valid complete ProgrammeDraft now.`;
-    const generated = await session.object({
+    // The programme task streams its answer at the provider level (32k output tokens), so the
+    // structured draft is requested as JSON text and validated here by the same Zod contract.
+    const generated = await session.step({
       system: prompt.system,
       messages:
         correctionMessage === null
           ? prompt.messages
           : [...prompt.messages, { role: 'user' as const, content: correctionMessage }],
-      schema: ProgrammeDraftSchema,
     });
     if (!generated.ok) {
       if (generated.error.code === 'INVALID_OUTPUT') {
-        correction = 'the object does not match the ProgrammeDraft schema';
+        correction = 'the answer was not valid JSON';
         continue;
       }
       return err(mapped(generated.error));
     }
-    const parsed = ProgrammeDraftSchema.safeParse(generated.value);
+    const text = generated.value.text
+      .trim()
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/, '');
+    let value: unknown;
+    try {
+      value = JSON.parse(text);
+    } catch {
+      correction = 'the answer was not valid JSON';
+      continue;
+    }
+    const parsed = ProgrammeDraftSchema.safeParse(value);
     if (parsed.success) {
       return ok({
         draft: parsed.data,

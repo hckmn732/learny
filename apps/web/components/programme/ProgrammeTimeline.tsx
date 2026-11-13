@@ -51,7 +51,7 @@ export function ProgrammeTimeline({ modules }: ProgrammeTimelineProps) {
           </li>
         </ul>
       </div>
-      <div className="overflow-x-auto">
+      <div aria-label={t.calendarTitle} className="overflow-x-auto" role="region" tabIndex={0}>
         <div
           aria-label={t.calendarLabel(
             modules.length,

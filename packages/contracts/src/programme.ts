@@ -185,7 +185,7 @@ export const ImportProgrammeInput = z.discriminatedUnion('kind', [
   z.strictObject({
     ...importBase,
     kind: z.literal('text'),
-    text: z.string().trim().min(1).max(200_000),
+    text: z.string().max(200_000),
   }),
   z.strictObject({
     ...importBase,

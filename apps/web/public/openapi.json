@@ -7953,7 +7953,6 @@
                       },
                       "text": {
                         "maxLength": 200000,
-                        "minLength": 1,
                         "type": "string"
                       }
                     },

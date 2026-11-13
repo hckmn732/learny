@@ -80,10 +80,14 @@ export function adjustProposal(
     const generated = await runProgrammeDraft(runContext, {
       title: prepare.formation.title,
       message: parsed.message,
-      context: JSON.stringify({
-        versionActuelle: prepare.proposal.version,
-        propositionActuelle: prepare.payload,
-      }),
+      context: JSON.stringify({ versionActuelle: prepare.proposal.version }),
+      documents: [
+        {
+          source: 'proposition-actuelle',
+          title: `Version ${String(prepare.proposal.version)} de la proposition`,
+          text: JSON.stringify(prepare.payload),
+        },
+      ],
     });
     if (!generated.ok) {
       await markChangeRequest(
