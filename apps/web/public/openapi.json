@@ -5327,6 +5327,391 @@
         "summary": "Supprime une clé personnelle et les affectations de tâches qui la référencent (SPEC-505)."
       }
     },
+    "/api/v1/me/ai/credentials/{id}/qualify": {
+      "post": {
+        "operationId": "me.ai.credentials.qualify",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "modelId": {
+                    "maxLength": 120,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "modelId"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bricks": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "durationMs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "errorCode": {
+                            "anyOf": [
+                              {
+                                "maxLength": 80,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "issues": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "code": {
+                                  "maxLength": 80,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "message": {
+                                  "maxLength": 300,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "path": {
+                                  "maxLength": 300,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "code",
+                                "path",
+                                "message"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 20,
+                            "type": "array"
+                          },
+                          "status": {
+                            "enum": [
+                              "passed",
+                              "failed"
+                            ],
+                            "type": "string"
+                          },
+                          "type": {
+                            "maxLength": 64,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "status",
+                          "durationMs",
+                          "errorCode",
+                          "issues"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 13,
+                      "minItems": 13,
+                      "type": "array"
+                    },
+                    "capabilities": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "passage_refs": {
+                          "type": "boolean"
+                        },
+                        "structured": {
+                          "type": "boolean"
+                        },
+                        "tools": {
+                          "type": "boolean"
+                        },
+                        "vision": {
+                          "type": "boolean"
+                        },
+                        "web_search": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "tools",
+                        "structured",
+                        "web_search",
+                        "passage_refs",
+                        "vision"
+                      ],
+                      "type": "object"
+                    },
+                    "credentialId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "durationMs": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "finishedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "modelId": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "modelVersion": {
+                      "maxLength": 200,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "provider": {
+                      "enum": [
+                        "anthropic",
+                        "openai",
+                        "mistral",
+                        "deepseek",
+                        "openai_compatible",
+                        "local"
+                      ],
+                      "type": "string"
+                    },
+                    "startedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "qualified",
+                        "failed"
+                      ],
+                      "type": "string"
+                    },
+                    "steps": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "durationMs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "errorCode": {
+                            "anyOf": [
+                              {
+                                "maxLength": 80,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "modelVersion": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "status": {
+                            "enum": [
+                              "passed",
+                              "failed"
+                            ],
+                            "type": "string"
+                          },
+                          "step": {
+                            "enum": [
+                              "connection",
+                              "tools",
+                              "structured",
+                              "bricks"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "step",
+                          "status",
+                          "durationMs",
+                          "errorCode",
+                          "modelVersion"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 4,
+                      "minItems": 4,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "credentialId",
+                    "modelId",
+                    "provider",
+                    "status",
+                    "startedAt",
+                    "finishedAt",
+                    "durationMs",
+                    "modelVersion",
+                    "steps",
+                    "bricks",
+                    "capabilities"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "502": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "504": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Qualifie un modèle personnel : connexion, outil, sortie structurée et treize briques (SPEC-506)."
+      }
+    },
     "/api/v1/me/ai/usage": {
       "get": {
         "operationId": "ai.usage",
