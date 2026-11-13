@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.934868">
+<testsuite name="p5/spec-504-llm.spec.ts" timestamp="2026-11-13T00:08:38.524Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.105" errors="0">
+<testcase name="résolution et scénarios simulés @SPEC-504" classname="p5/spec-504-llm.spec.ts" time="1.898">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/attachments/axe-2b06a2a262c1101c38c2c3049e9ec839e645a47a.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/attachments/spec-504-demo-cfa04a30d152c7bf709c82a6bb3d58b4c648053f.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-résolution-et-scénarios-simulés-SPEC-504-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration llm, conformité visuelle @SPEC-504 @visual @mobile" classname="p5/spec-504-llm.spec.ts" time="1.207">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/attachments/axe-07c275ec28a3b5939b7c427af8ffa6013038e341.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/attachments/spec-504-demo-visual-e79129e4ecf7b13f5fd34e3699b439b5392da0ab.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-504-llm.spec.ts" timestamp="2026-11-13T00:08:38.524Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.279" errors="0">
+<testcase name="démonstration llm, conformité visuelle @SPEC-504 @visual @mobile" classname="p5/spec-504-llm.spec.ts" time="1.279">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/attachments/axe-3f2e0ba0f3cd4799b44fa0074ee36e34970edfcd.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/attachments/spec-504-demo-visual-9ee881c3e7aaf61d6f61767384cc3830b405b5de.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-504-llm-démonstrat-5a292-elle-SPEC-504-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-12T23:38:42.417Z",
+  "updatedAt": "2026-11-13T00:08:44.048Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3093,14 +3093,55 @@
       "validations": {}
     },
     "SPEC-504": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-12T23:39:07.586Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-504-paquet-llm-fournisseurs-taches-et-modele",
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T00:06:37.319Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T00:07:05.863Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T00:07:18.692Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T00:07:24.331Z",
+          "details": "51 test(s) [SPEC-504] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T00:08:07.643Z",
+          "details": "15 test(s) [SPEC-504] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T00:08:44.036Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T00:08:44.036Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T00:08:44.048Z",
+          "details": "7/7 critères ✅"
+        }
+      }
     },
     "SPEC-505": {
       "status": "pending",
