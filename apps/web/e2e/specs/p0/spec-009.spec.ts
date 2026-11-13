@@ -174,6 +174,10 @@ test('refuse le démarrage en production incomplète @SPEC-009', async () => {
         ...process.env,
         APP_ENV: 'production',
         ENABLE_SDD_PAGES: 'true',
+        // Local QA artifacts may provide a key in `.env.local`: an explicit empty value keeps the
+        // production check independent from the developer environment.
+        APP_ENCRYPTION_KEY: '',
+        APP_ENCRYPTION_KEY_PREVIOUS: '',
         DATABASE_URL: 'postgresql://learny:learny-test-only-LEAK@db.example:5432/learny',
         ANTHROPIC_API_KEY: 'sk-ant-learny-test-only-LEAK', // learny-test-only
       },

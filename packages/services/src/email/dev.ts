@@ -7,6 +7,7 @@ import { AppError, type Result } from '@learny/core';
 import { serviceDb } from '@learny/db';
 import {
   EMAIL_TEMPLATES,
+  clearOutbox,
   fixtureFor,
   getTransport,
   listOutbox,
@@ -70,4 +71,13 @@ export function listDemoOutbox(): EmailOutbox {
       at: entry.at,
     })),
   };
+}
+
+/**
+ * Clears the in-memory outbox of the demo transport. The outbox is process-wide, so a visual
+ * capture must not inherit the messages other scenarios sent earlier in the same server.
+ */
+export function purgeDemoOutbox(): EmailOutbox {
+  if (getTransport().name === 'memory') clearOutbox();
+  return { items: [] };
 }

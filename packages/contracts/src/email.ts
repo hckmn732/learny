@@ -128,5 +128,22 @@ export const devEmailOutbox = defineRoute({
   errors: [],
 });
 
+export const devEmailOutboxPurge = defineRoute({
+  id: 'dev.email.outbox.purge',
+  method: 'DELETE',
+  path: '/api/v1/dev/sdd/email/outbox',
+  auth: 'user',
+  output: EmailOutbox,
+  successStatus: 200,
+  summary:
+    'Route de démonstration : vide la boîte d’envoi du transport mémoire (SPEC-204), pour des captures reproductibles.',
+  errors: [],
+});
+
 export const emailRoutes = { emailUnsubscribePost, emailUnsubscribeGet } as const;
-export const devEmailRoutes = { devEmailPreview, devEmailSend, devEmailOutbox } as const;
+export const devEmailRoutes = {
+  devEmailPreview,
+  devEmailSend,
+  devEmailOutbox,
+  devEmailOutboxPurge,
+} as const;

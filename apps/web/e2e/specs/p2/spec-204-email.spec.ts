@@ -159,7 +159,17 @@ test('aperçu et envoi des gabarits @SPEC-204', async ({
 
 test('page de démonstration SPEC-204 @SPEC-204 @visual', async ({ page, axeCheck }) => {
   test.setTimeout(120_000);
+  // The memory outbox is process-wide: empty it so the full-page capture does not depend on the
+  // messages another scenario sent earlier in the same server. The call runs in the page so the
+  // same-origin guard of the API sees the regular browser headers; the reload reads the purged box.
   await page.goto('/_dev/sdd/SPEC-204');
+  const purge = await page.evaluate(async () => {
+    const response = await fetch('/api/v1/dev/sdd/email/outbox', { method: 'DELETE' });
+    return response.status;
+  });
+  expect(purge).toBe(200);
+  await page.reload();
+  await expect(page.getByTestId('email-outbox-empty')).toBeVisible();
   await expect(page.getByTestId('sdd-title')).toHaveText(TITLE);
   await expect(page.getByTestId('email-subject')).toHaveText(SUBJECTS.daily_digest);
 

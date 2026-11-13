@@ -253,7 +253,7 @@ async function selectCurrentFormationInTx(
     from public.formations
     where id = ${formationId}::uuid
       and owner_id = ${userId}::uuid
-      and status in ('active', 'paused')
+      and status in ('active', 'paused', 'completed')
   `);
   if (rows[0] === undefined) {
     throw new AppError('NOT_FOUND', 'Formation introuvable.');

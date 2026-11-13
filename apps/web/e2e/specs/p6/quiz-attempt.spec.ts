@@ -434,7 +434,7 @@ test('passe une tentative complète @SPEC-611', async ({
 
   await expect(page.getByTestId('quiz-result')).toBeVisible({ timeout: 20_000 });
   await expect(page.getByTestId('quiz-result-graded')).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByTestId('quiz-result-score')).toContainText('%');
+  await expect(page.getByTestId('result-score')).toContainText('%');
   await captureEvidence('resultat');
   await axeCheck();
   expect(consoleErrors).toEqual([]);

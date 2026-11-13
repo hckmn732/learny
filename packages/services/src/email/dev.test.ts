@@ -6,19 +6,21 @@ import { AppError } from '@learny/core';
 
 import { silentLogger, TestClock } from '../../test/support/fakes';
 
-import { listDemoOutbox, previewEmail, sendDemoEmail } from './dev';
+import { listDemoOutbox, previewEmail, purgeDemoOutbox, sendDemoEmail } from './dev';
 
 const mocks = vi.hoisted(() => ({
   render: vi.fn(),
   fixture: vi.fn(),
   transport: vi.fn(),
   outbox: vi.fn(),
+  clear: vi.fn(),
   send: vi.fn(),
 }));
 
 vi.mock('@learny/db', () => ({ serviceDb: () => ({}) }));
 vi.mock('@learny/notifications/email', () => ({
   EMAIL_TEMPLATES: { welcome: { category: 'transactional' } },
+  clearOutbox: mocks.clear,
   fixtureFor: mocks.fixture,
   getTransport: mocks.transport,
   listOutbox: mocks.outbox,
@@ -65,6 +67,7 @@ beforeEach(() => {
     },
   ]);
   mocks.send.mockReset();
+  mocks.clear.mockReset();
 });
 
 describe('[SPEC-204] démonstration e-mail', () => {
@@ -156,5 +159,13 @@ describe('[SPEC-204] démonstration e-mail', () => {
     });
     mocks.transport.mockReturnValue({ name: 'smtp' });
     expect(listDemoOutbox()).toEqual({ items: [] });
+  });
+
+  it('vide la boîte mémoire des captures reproductibles (EF-8)', () => {
+    expect(purgeDemoOutbox()).toEqual({ items: [] });
+    expect(mocks.clear).toHaveBeenCalledTimes(1);
+    mocks.transport.mockReturnValue({ name: 'smtp' });
+    expect(purgeDemoOutbox()).toEqual({ items: [] });
+    expect(mocks.clear).toHaveBeenCalledTimes(1);
   });
 });
