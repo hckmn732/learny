@@ -249,7 +249,7 @@ export function gradeOpenAnswers(
             formationId: attempt.formation_id,
             requestId: `${ctx.requestId}:${String(attemptNo)}`,
             llmDb: serviceDb(),
-            ...(ctx.logger === undefined ? {} : { logger: ctx.logger }),
+            logger: ctx.logger,
             ...(options.scenario === undefined ? {} : { scenario: options.scenario }),
           },
           input,
@@ -263,9 +263,9 @@ export function gradeOpenAnswers(
       }
       if (grade === null) {
         failed = true;
-        ctx.logger?.warn('quiz.grade-open.failed', {
+        ctx.logger.warn('quiz.grade-open.failed', {
           outcome: 'ai_task_failed',
-          code: lastError?.code ?? 'AI_UNAVAILABLE',
+          code: lastError.code,
         });
         continue;
       }
@@ -480,7 +480,7 @@ export async function emitGraded(
   attemptId: string,
 ): Promise<void> {
   if (ctx.db === null) return;
-  await withTransaction(ctx.db, async (_tx, outbox) => {
+  await withTransaction(ctx.db, (_tx, outbox) => {
     outbox.add(
       'quiz/graded',
       {
@@ -495,6 +495,7 @@ export async function emitGraded(
       },
       { id: `quiz-graded:${attemptId}` },
     );
+    return Promise.resolve();
   });
 }
 

@@ -25,13 +25,13 @@ import tutorStream from '../../fixtures/tutor/demo-stream.json' with { type: 'js
 import tutorTimeout from '../../fixtures/tutor/demo-timeout.json' with { type: 'json' };
 import tutorToolCall from '../../fixtures/tutor/demo-tool-call.json' with { type: 'json' };
 import tutorDefault from '../../fixtures/tutor/demo.default.json' with { type: 'json' };
+import gradeOpenGood from '../../fixtures/tutor/grade-open-good.json' with { type: 'json' };
+import gradeOpenOfftopic from '../../fixtures/tutor/grade-open-offtopic.json' with { type: 'json' };
+import gradeOpenPartial from '../../fixtures/tutor/grade-open-partial.json' with { type: 'json' };
 import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json' with { type: 'json' };
 import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json' with { type: 'json' };
 import tutorQuestionBankRegeneration from '../../fixtures/tutor/question-bank-regeneration.json' with { type: 'json' };
 import tutorQuestionBank from '../../fixtures/tutor/question-bank.json' with { type: 'json' };
-import gradeOpenGood from '../../fixtures/tutor/grade-open-good.json' with { type: 'json' };
-import gradeOpenPartial from '../../fixtures/tutor/grade-open-partial.json' with { type: 'json' };
-import gradeOpenOfftopic from '../../fixtures/tutor/grade-open-offtopic.json' with { type: 'json' };
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 

@@ -2,8 +2,9 @@ import { createHash } from 'node:crypto';
 
 import { z } from 'zod';
 
-import type { CreateQuizAttemptOutput } from '@learny/contracts';
+import { parseBrickPayload, toPublicBrick } from '@learny/bricks';
 import { ENGINE } from '@learny/config/product';
+import type { CreateQuizAttemptOutput } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
@@ -12,9 +13,7 @@ import {
   type DrawBrick,
   type DrawGap,
   type DrawNotion,
-  type GapNature,
 } from '@learny/learning-engine';
-import { parseBrickPayload, toPublicBrick } from '@learny/bricks';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -217,7 +216,7 @@ function drawNotionsOf(
     position: row.position,
     label: row.label,
     mastery:
-      row.mastery === null || row.mastery === undefined || row.mastery === ''
+      row.mastery === null || row.mastery === ''
         ? null
         : Number(row.mastery),
   }));
@@ -233,7 +232,7 @@ function drawGapsOf(rows: readonly NotionRow[]): DrawGap[] {
       row.gap_nature === 'misunderstanding' ||
       row.gap_nature === 'application'
     ) {
-      gaps.push({ notionId: row.id, nature: row.gap_nature as GapNature });
+      gaps.push({ notionId: row.id, nature: row.gap_nature });
     }
   }
   return gaps;

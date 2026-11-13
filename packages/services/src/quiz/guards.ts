@@ -16,7 +16,7 @@ export interface QuizAttemptGuardContext {
 export type QuizAttemptGuard = (
   ctx: ServiceContext,
   moduleId: string,
-) => Promise<Result<void, AppError>>;
+) => Promise<Result<void>>;
 
 /** BR-FOR-08, CL-7 — a locked module never opens, even from a hand-written URL. */
 export const moduleOpenGuard: QuizAttemptGuard = async (ctx, moduleId) => {

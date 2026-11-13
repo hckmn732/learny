@@ -47,9 +47,10 @@ export function QuizScreen(props: QuizScreenProps) {
   const [value, setValue] = useState<unknown>(null);
   const [checking, setChecking] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
-  const startedAt = useRef(performance.now());
+  const startedAt = useRef(0);
   const draftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const initializedAttempt = useRef<string | null>(null);
+  const draftEnabled = useRef(true);
 
   useEffect(() => {
     if (attempt === null || initializedAttempt.current === attempt.id) return;
@@ -60,7 +61,10 @@ export function QuizScreen(props: QuizScreenProps) {
   const question = attempt?.questions[current];
   useEffect(() => {
     if (question === undefined) return;
+    // Restoring the server response when the displayed question changes is the intended sync.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(question.response ?? emptyResponse(question));
+    draftEnabled.current = question.state !== 'checked';
     startedAt.current = performance.now();
   }, [question]);
 
@@ -75,6 +79,7 @@ export function QuizScreen(props: QuizScreenProps) {
     Math.min(1_800_000, Math.max(0, Math.round(performance.now() - startedAt.current)));
 
   const saveDraft = (next: unknown) => {
+    if (!draftEnabled.current) return;
     if (attemptId === null || question === undefined || question.state === 'checked') return;
     if (draftTimer.current !== null) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
@@ -93,6 +98,8 @@ export function QuizScreen(props: QuizScreenProps) {
     if (attemptId === null || question === undefined) return;
     setChecking(true);
     setActionError(null);
+    draftEnabled.current = false;
+    if (draftTimer.current !== null) clearTimeout(draftTimer.current);
     try {
       await api.checkQuizAnswer({
         params: { aid: attemptId, pos: question.position },

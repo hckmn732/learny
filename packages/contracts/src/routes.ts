@@ -1,6 +1,6 @@
 import { aiRoutes } from './ai';
-import { quizRoutes } from './attempts';
 import { aiCredentialRoutes } from './ai-credentials';
+import { quizRoutes } from './attempts';
 import { authRoutes } from './auth';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';

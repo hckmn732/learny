@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
 import type { QuizFeedback, QuizQuestionDto } from '@learny/contracts';
 import { cn } from '@learny/ui';
@@ -42,7 +42,7 @@ interface ResponseRecord {
 
 function asRecord(value: unknown): ResponseRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? (value as ResponseRecord)
+    ? value
     : {};
 }
 
@@ -80,7 +80,7 @@ function ClozeInputs({
   const parts: ReactNode[] = [];
   let last = 0;
   for (const match of payload.template.matchAll(GAP_TOKEN)) {
-    const index = match.index ?? 0;
+    const index = match.index;
     if (index > last) parts.push(payload.template.slice(last, index));
     const gapId = Number(match[1]);
     const gapIndex = payload.gaps.findIndex((gap) => gap.id === gapId);
@@ -91,7 +91,7 @@ function ClozeInputs({
         className={cn(
           'mx-4 w-150 rounded-10 border-0 px-12 text-center text-18 font-600 text-ink shadow-[inset_0_-2px_0_var(--color-ink)]',
           state?.correct === true && 'bg-green-soft shadow-[inset_0_-2px_0_var(--color-teal)]',
-          state !== null && state.correct === false && 'bg-orange-soft shadow-[inset_0_-2px_0_var(--color-orange)]',
+          state !== null && !state.correct && 'bg-orange-soft shadow-[inset_0_-2px_0_var(--color-orange)]',
           !state && 'bg-canvas',
         )}
         data-testid={`quiz-gap-${String(gapId)}`}
@@ -120,7 +120,7 @@ function AnswerZone({
   disabled: boolean;
   onChange: (next: ResponseRecord) => void;
 }) {
-  const payload = question.payload as unknown;
+  const payload = question.payload;
   if (question.type === 'choice_question') {
     const data = payload as ChoicePayload;
     const selected = value.optionIds ?? [];
@@ -224,7 +224,7 @@ function AnswerZone({
                 'flex flex-wrap items-center gap-12 rounded-18 px-14 py-12',
                 state?.correct === true
                   ? 'border-2 border-teal bg-green-soft'
-                  : state !== null && state.correct === false
+                  : state?.correct === false
                     ? 'border-2 border-orange bg-orange-soft'
                     : 'border border-solid border-border bg-surface-subtle',
               )}
@@ -310,7 +310,7 @@ export function QuestionCard({
   const feedbackRef = useRef<HTMLDivElement>(null);
   const checked = question.state === 'checked';
   const response = asRecord(value);
-  const payload = question.payload as unknown;
+  const payload = question.payload;
   const stem =
     question.type === 'choice_question' || question.type === 'open_question'
       ? (payload as ChoicePayload | OpenPayload).stem

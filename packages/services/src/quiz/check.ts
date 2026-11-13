@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { gradeBrick, parseBrickPayload, toPublicBrick, type BrickType } from '@learny/bricks';
 import {
   AttemptResultDto,
   CheckAnswerOutput,
@@ -12,7 +13,6 @@ import {
 } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql, type DbTx } from '@learny/db';
-import { gradeBrick, parseBrickPayload, toPublicBrick, type BrickType } from '@learny/bricks';
 import { withTransaction } from '@learny/jobs';
 
 import type { ServiceContext } from '../context';
@@ -508,11 +508,12 @@ export function checkAnswer(
         });
       }
       const outcome = graded.value;
+      const correction = outcome.correction as unknown as QuizCorrection;
       const points = Math.round(outcome.score * maxScore * 100) / 100;
       const feedback = {
         isCorrect: outcome.isCorrect,
         title: outcome.feedbackTitle,
-        explanation: outcome.correction.explanation,
+        explanation: correction.explanation,
         correction: outcome.correction,
         scoreRatio: outcome.score,
       };
@@ -534,9 +535,9 @@ export function checkAnswer(
         feedback: toFeedback(
           outcome.isCorrect,
           points,
-          outcome.correction.explanation,
+          correction.explanation,
           outcome.feedbackTitle,
-          outcome.correction as QuizCorrection,
+          correction,
         ),
         locked: true as const,
       };

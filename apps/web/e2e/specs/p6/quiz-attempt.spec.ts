@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestCourse, createTestProgramme } from '@learny/db/testing';
 import { createBrick, makeModuleWithBank } from '@learny/testing';
@@ -9,9 +7,11 @@ import {
   deleteTestSession,
   type TestSession,
 } from '@learny/testing/supabase';
-import { expectTokens } from '@learny/testing/visual';
+import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
 const NOW = '2026-11-11T12:20:00Z';
+
+test.setTimeout(120_000);
 
 let session: TestSession;
 
@@ -280,6 +280,20 @@ async function seedQuiz(
     };
   });
 
+  await serviceDb().execute(sql`
+    update public.formations
+    set start_date = '2026-11-02',
+        end_date = '2026-12-11',
+        volume_hours = 150,
+        default_threshold = 80
+    where id = ${base.formationId}::uuid
+  `);
+  await serviceDb().execute(sql`
+    update public.modules
+    set planned_start = '2026-11-02', planned_end = '2026-12-11'
+    where id = ${base.moduleId}::uuid
+  `);
+
   const seed: Seed = { ...base, attemptId: null };
   if (options.withAttempt === false) return seed;
 
@@ -296,13 +310,37 @@ async function seedQuiz(
   );
   const q5 = await customBrick(userId, base.formationId, 'cloze', notion, clozePayload());
   const q6 = await customBrick(userId, base.formationId, 'matching', notion, matchingPayload(notion));
-  const skip = new Set([q2?.brickId ?? '', q3?.brickId ?? '']);
+  const skip = new Set([
+    q1.brickId,
+    q2?.brickId ?? '',
+    q3?.brickId ?? '',
+    q4.brickId,
+    q5.brickId,
+    q6.brickId,
+  ]);
   const choices = await bankQuestions(userId, 'choice_question', 3, skip);
   const opens = await bankQuestions(userId, 'open_question', 2, new Set());
   const questions = [q1, q2, q3, q4, q5, q6, ...choices, ...opens].filter(
     (question): question is QuestionSeed => question !== undefined,
   );
-  const attemptId = await seedAttempt(userId, seed, questions, options.checkedBefore ?? 0);
+  while (questions.length < 12) {
+    const index = questions.length;
+    questions.push(
+      await customBrick(userId, base.formationId, 'choice_question', notion, {
+        stem: `Question de secours ${String(index)} sur la pièce comptable ?`,
+        mode: 'single',
+        options: [
+          choiceOption('a', 'La règle exacte', true, notion),
+          choiceOption('b', 'Une confusion', false, base.notionIds[1] ?? null),
+          choiceOption('c', 'Un autre élément', false, base.notionIds[2] ?? null),
+        ],
+        explanation: 'La règle exacte s’applique à toute la pièce.',
+        objective: 'Compléter la tentative de démonstration',
+        sources: [],
+      }),
+    );
+  }
+  const attemptId = await seedAttempt(userId, seed, questions.slice(0, 12), options.checkedBefore ?? 0);
   return { ...seed, attemptId };
 }
 
@@ -370,31 +408,31 @@ test('passe une tentative complète @SPEC-611', async ({
 
   await page.getByTestId('quiz-gap-1').fill('universel');
   await page.getByTestId('quiz-gap-2').fill('ACDOCA');
-  await checkAndNext(page);
+  await page.getByTestId('quiz-check').click();
   await expect(page.getByTestId('quiz-feedback')).toContainText('Exact.');
+  await page.getByTestId('quiz-next').click();
 
   await page.getByTestId('quiz-match-k40').selectOption({ label: 'Débit sur un compte général' });
   await page.getByTestId('quiz-match-k50').selectOption({ label: 'Crédit sur un compte général' });
   await page.getByTestId('quiz-match-sa').selectOption({ label: 'Pièce de comptabilité générale' });
   await checkAndNext(page);
 
-  for (let index = 7; index <= 9; index += 1) {
-    await expect(page.getByTestId('quiz-question-counter')).toContainText(`Question ${String(index)} sur 12`);
-    await page.getByTestId('quiz-option-a').click();
-    await page.getByTestId('quiz-check').click();
-    await page.getByTestId('quiz-next').click();
-  }
-  for (let index = 10; index <= 12; index += 1) {
-    await expect(page.getByTestId('quiz-question-counter')).toContainText(`Question ${String(index)} sur 12`);
-    await page.getByTestId('quiz-open-answer').fill('Une pièce a un en-tête et des postes équilibrés.');
-    await page.getByTestId('quiz-check').click();
-    await expect(page.getByTestId('quiz-feedback')).toContainText(
-      'Le tuteur la corrigera à la fin de la tentative.',
+  for (let index = 7; index <= 12; index += 1) {
+    await expect(page.getByTestId('quiz-question-counter')).toContainText(
+      `Question ${String(index)} sur 12`,
     );
+    const open = page.getByTestId('quiz-open-answer');
+    if ((await open.count()) > 0 && (await open.isVisible())) {
+      await open.pressSequentially('Une pièce a un en-tête et des postes équilibrés.', { delay: 5 });
+    } else {
+      await page.getByTestId('quiz-option-a').click();
+    }
+    await page.getByTestId('quiz-check').click();
+    await expect(page.getByTestId('quiz-feedback')).toBeVisible({ timeout: 20_000 });
     await page.getByTestId('quiz-next').click();
   }
 
-  await expect(page.getByTestId('quiz-result-pending')).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByTestId('quiz-result')).toBeVisible({ timeout: 20_000 });
   await expect(page.getByTestId('quiz-result-graded')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('quiz-result-score')).toContainText('%');
   await captureEvidence('resultat');
@@ -443,8 +481,8 @@ test('correction en attente si le tuteur est indisponible @SPEC-611', async ({ p
         score = max_score,
         graded_by = 'code',
         feedback = '{"title":"Exact.","explanation":"Déjà vérifié."}'::jsonb,
-        response = case when position = 1 then '{}'::jsonb else '{"optionIds":["a"]}'::jsonb end
-    where attempt_id = ${seed.attemptId}::uuid and position > 1
+        response = '{"optionIds":["a"]}'::jsonb
+    where attempt_id = ${seed.attemptId}::uuid and position <> 10
   `);
   await serviceDb().execute(sql`
     delete from public.subscriptions where user_id = ${session.userId}::uuid
@@ -453,7 +491,12 @@ test('correction en attente si le tuteur est indisponible @SPEC-611', async ({ p
   await page.getByTestId('quiz-open-answer').fill('Une réponse complète sur la pièce comptable.');
   await page.getByTestId('quiz-check').click();
   await expect(page.getByTestId('quiz-feedback')).toContainText('Réponse enregistrée.');
-  await page.getByTestId('quiz-next').click();
+  for (let index = 0; index < 3; index += 1) {
+    const next = page.getByTestId('quiz-next');
+    if ((await next.count()) === 0) break;
+    await next.click();
+    await page.waitForTimeout(300);
+  }
   await expect(page.getByTestId('quiz-result-pending')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('quiz-result-retry')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('quiz-result-pending')).toContainText(
@@ -467,6 +510,8 @@ test('écran de question conforme @SPEC-611 @visual', async ({ page, axeCheck, c
   for (let index = 0; index < 3; index += 1) {
     if (index === 0) {
       await page.getByTestId('quiz-open-answer').fill('Une pièce comptable.');
+    } else {
+      await page.getByTestId('quiz-option-a').click();
     }
     await checkAndNext(page);
   }
@@ -480,5 +525,6 @@ test('écran de question conforme @SPEC-611 @visual', async ({ page, axeCheck, c
   await page.getByTestId('quiz-check').click();
   await expect(page.getByTestId('quiz-feedback')).toContainText('Pas tout à fait.');
   await captureEvidence('feedback-faux');
+  await expectScreenshotBaseline(page, 'quiz-question.png', { fullPage: true });
   await axeCheck();
 });

@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
+import { parseBrickPayload } from '@learny/bricks';
 import { AppError, err, ok, type LearnyLogger, type Result } from '@learny/core';
 import type { Db } from '@learny/db';
 import { llm } from '@learny/llm';
-import { parseBrickPayload } from '@learny/bricks';
 
 // SPEC-611 ET-8, BR-QUI-04, CL-6 — deferred correction of an open question by the tutor. One
 // structured call per answer, bounded to the question scale. The learner text and the expected

@@ -391,9 +391,6 @@ importers:
       '@learny/notifications':
         specifier: workspace:*
         version: link:../notifications
-      '@learny/services':
-        specifier: workspace:*
-        version: link:../services
       '@learny/tutor':
         specifier: workspace:*
         version: link:../tutor

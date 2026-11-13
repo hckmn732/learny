@@ -24,9 +24,13 @@ import {
   type DestinationStream,
 } from '@learny/core/server';
 
+import { registerInlineJobs } from '../quiz-grade-registry';
 import { getServerReporter } from '../sentry';
 
 import { routeHandler, type HandlerArgs, type RouteOutcome } from './route-handler';
+
+// SPEC-611 — the inline dispatcher must know the injected quiz-grade job in every API process.
+registerInlineJobs();
 
 type Env = Readonly<Record<string, string | undefined>>;
 
