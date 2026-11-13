@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T13:12:33.193Z",
+  "updatedAt": "2026-11-13T14:17:57.581Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4185,11 +4185,11 @@
       }
     },
     "SPEC-610": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T14:17:57.581Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-610-discussion-contextuelle-avec-le-tuteur",
       "commit": null,
       "lastError": null,
       "validations": {}
