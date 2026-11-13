@@ -37,7 +37,7 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
 
     const layout = screen.getByTestId('auth-layout');
     expect(layout.className).toContain('flex-wrap');
-    expect(layout.className).toContain('min-h-[90vh]');
+    expect(layout.className).toContain('min-h-dvh');
     expect(layout.className).toContain('bg-canvas');
 
     const panel = screen.getByTestId('auth-panel');

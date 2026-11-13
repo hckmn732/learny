@@ -81,10 +81,10 @@ export type AuthLayoutProps = {
  */
 export function AuthLayout({ step, children }: Readonly<AuthLayoutProps>) {
   return (
-    <div className="flex min-h-[90vh] flex-wrap bg-canvas text-ink" data-testid="auth-layout">
+    <div className="flex min-h-dvh flex-wrap bg-canvas text-ink" data-testid="auth-layout">
       <aside
         aria-label={t.label}
-        className="flex flex-[1_1_23.75rem] flex-col gap-28 bg-ink p-40 text-white"
+        className="flex flex-[1_1_23.75rem] flex-col gap-28 self-stretch bg-ink p-40 text-white"
         data-testid="auth-panel"
       >
         <AuthLogo />

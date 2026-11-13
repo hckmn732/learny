@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
   // Native/Node-only telemetry libraries stay outside the bundle (SPEC-010).
   serverExternalPackages: ['pino', 'postgres', '@sentry/nextjs', 'nodemailer'],
   poweredByHeader: false,
+  // QA locale: le navigateur ouvre l'app sur 127.0.0.1, pas seulement localhost.
+  allowedDevOrigins: ['127.0.0.1'],
+  devIndicators: false,
   reactStrictMode: true,
   // Docker image (SPEC-012, ET-2): a self-contained server whose traced files include workspace
   // packages. The managed build (SPEC-013) keeps the same output, which Vercel accepts.

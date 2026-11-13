@@ -172,6 +172,6 @@ export const config = {
     '/_dev',
     '/_dev/:path*',
     // Everything else except static assets, files with an extension, the job endpoint and webhooks.
-    '/((?!_dev|_next/static|_next/image|.*\\..*|api/inngest|api/v1/webhooks).*)',
+    '/((?!_dev|_next|.*\\..*|api/inngest|api/v1/webhooks).*)',
   ],
 };
