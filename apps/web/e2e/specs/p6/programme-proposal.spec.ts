@@ -221,6 +221,14 @@ test('conformité SCR-05 proposition desktop @SPEC-605 @visual', async ({
   });
   for (const comparison of comparisons) {
     expect(comparison.ratio, comparison.name).toBeLessThanOrEqual(0.12);
+    await test.info().attach(`comparaison-${comparison.name}-side-by-side`, {
+      path: comparison.sideBySidePath,
+      contentType: 'image/png',
+    });
+    await test.info().attach(`comparaison-${comparison.name}-diff`, {
+      path: comparison.diffPath,
+      contentType: 'image/png',
+    });
   }
 
   await expectScreenshotBaseline(page, 'SCR-05-proposition-desktop.png', { fullPage: true });
