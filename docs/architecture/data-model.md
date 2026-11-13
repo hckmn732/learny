@@ -34,6 +34,10 @@ Normatif. Implémenté dans `packages/db/src/schema/*.ts` (Drizzle) par les spé
 
 **programme_change_requests** — `id`, `formation_id`, `user_id`, `message text not null`, `status job_status`, `result_summary text`, `created_at` (« Ajuster avec le tuteur »).
 
+**programme_proposals** (SPEC-605, ADR-0310) — `id`, `formation_id → formations`, `user_id → profiles`, `version int not null` (`unique(formation_id, version)`), `source programme_source` (`generated|imported`), `description`, `volume_hours smallint`, `summary`, `payload jsonb not null` (modules, chapitres, notions et positions validés par le contrat Zod), `import_id uuid null → programme_imports`, `change_request_id uuid null → programme_change_requests`, `created_at`. Une ancienne version reste lisible ; la structure active (`modules`, `chapters`, `notions`) n'est créée qu'à la validation.
+
+**programme_imports** — colonnes SPEC-605 `original_filename text`, `original_size int`, `original_content text` : le fichier d'origine reste privé côté serveur, n'est jamais renvoyé par l'API et permet une nouvelle tentative après une indisponibilité du modèle.
+
 **modules** — `id`, `formation_id`, `position smallint not null`, `title text not null`, `objectives text[] not null default '{}'`, `planned_start date`, `planned_end date`, `threshold smallint not null check(60..95)`, `status module_status not null default 'locked'` (`locked|open|validated`), `opened_at`, `validated_at`, `unique(formation_id, position)`.
 
 **chapters** — `id`, `module_id`, `position smallint`, `title text not null`, `unique(module_id, position)`. *(le statut d'apports est par utilisateur : voir `chapter_progress`)*
