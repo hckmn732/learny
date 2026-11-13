@@ -19,6 +19,7 @@ import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
 import { notificationsDeferredDue } from './notifications-deferred-due';
 import { prepareQuestionBankForCourse, questionBankNightly } from './prepare-question-bank';
+import { planProgramme } from './programme';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
 import { securityPurge } from './security-purge';
 
@@ -40,6 +41,7 @@ export const learnyFunctions = [
   notificationDelivery,
   notificationsDailyDigest,
   notificationsDeferredDue,
+  planProgramme,
   prepareQuestionBankForCourse,
   questionBankNightly,
   sddDemoPipeline,

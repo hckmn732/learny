@@ -18,6 +18,7 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/ingestion": "workspace:*",
+    "@learny/learning-engine": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@learny/tutor": "workspace:*",
     "archiver": "^7.0.1",
