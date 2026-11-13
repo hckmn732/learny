@@ -66,7 +66,11 @@ function percent(correct: number, total: number): number {
   return Math.round((correct / total) * 100);
 }
 
-function scoreOf(questions: readonly ExamGradedQuestion[]): { correct: number; total: number; score: number } {
+function scoreOf(questions: readonly ExamGradedQuestion[]): {
+  correct: number;
+  total: number;
+  score: number;
+} {
   const correct = questions.filter((question) => question.isCorrect).length;
   return { correct, total: questions.length, score: percent(correct, questions.length) };
 }
@@ -103,7 +107,7 @@ export function gradeExam(input: ExamGradeInput): ExamGradeSummary {
   const gaps: ExamGradeSummary['gaps'] = [];
   const seenGaps = new Set<string>();
   for (const question of ordered) {
-    if (question.studied !== true || question.isCorrect) continue;
+    if (!question.studied || question.isCorrect) continue;
     if (seenGaps.has(question.notionId)) continue;
     seenGaps.add(question.notionId);
     gaps.push({

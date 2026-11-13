@@ -14,14 +14,12 @@ import {
   type BrickType,
   type CorrectionView,
 } from '@learny/bricks';
-import { ENGINE } from '@learny/config/product';
 import {
   ExamAttemptDto,
   ExamResultDto,
   ExamSubmitOutput,
   type ExamFormatSchema as ExamFormat,
   type ExamQuestionDto,
-  type ExamReviewRow,
   type QuizFeedback,
 } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
@@ -32,23 +30,14 @@ import type { ServiceContext } from '../context';
 import { applyLearningResult } from '../learning/apply-result';
 import { requireUser, toResult } from '../resources/result';
 
-import {
-  allocateQuestionCounts,
-  isStudiedModule,
-  proposeExamFormat,
-} from './format';
+import { allocateQuestionCounts, isStudiedModule, proposeExamFormat } from './format';
 import {
   gradeExam,
   type ExamGradedQuestion,
   type ExamGradeSummary,
   type ExamModuleInfo,
 } from './grade';
-import {
-  examAcceptsAnswer,
-  examDeadline,
-  examExpired,
-  examRemainingMs,
-} from './timer';
+import { examAcceptsAnswer, examDeadline, examExpired, examRemainingMs } from './timer';
 
 const UUID = z.uuid();
 const AUTO_GRADED = new Set<BrickType>(['choice_question', 'cloze', 'matching']);
@@ -148,6 +137,14 @@ interface AttemptConfig {
   modules: ExamModuleInfo[];
 }
 
+function textField(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function numberField(value: unknown, fallback = 1): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
 function asObject(value: unknown): Record<string, unknown> | null {
   if (value === null || value === undefined) return null;
   if (typeof value === 'string') {
@@ -175,16 +172,15 @@ function configOf(value: unknown): AttemptConfig {
     diagnosticPositions: Array.isArray(config.diagnosticPositions)
       ? config.diagnosticPositions.filter((entry): entry is number => typeof entry === 'number')
       : [],
-    modules: Array.isArray(config.modules)
-      ? (config.modules as ExamModuleInfo[])
-      : [],
+    modules: Array.isArray(config.modules) ? (config.modules as ExamModuleInfo[]) : [],
   };
 }
 
 function itemsOf(value: unknown): ItemRow[] {
   if (!Array.isArray(value)) return [];
   return value.filter(
-    (entry): entry is ItemRow => typeof entry === 'object' && entry !== null && !Array.isArray(entry),
+    (entry): entry is ItemRow =>
+      typeof entry === 'object' && entry !== null && !Array.isArray(entry),
   );
 }
 
@@ -255,7 +251,7 @@ function validateResponse(item: ItemRow, response: unknown): void {
   if (!parsed.ok) {
     throw new AppError('VALIDATION_FAILED', 'La question jouée est illisible.');
   }
-  const graded = gradeBrick(type, item.payload, response, String(item.brickVersionId ?? ''));
+  const graded = gradeBrick(type, item.payload, response, textField(item.brickVersionId));
   if (!graded.ok && graded.error.code === 'RESPONSE_INVALID') {
     throw new AppError('VALIDATION_FAILED', 'La réponse ne correspond pas à la question.', {
       errors: graded.error.issues.map((issue) => ({
@@ -266,11 +262,7 @@ function validateResponse(item: ItemRow, response: unknown): void {
   }
 }
 
-async function readFormation(
-  tx: DbTx,
-  userId: string,
-  formationId: string,
-): Promise<FormationRow> {
+async function readFormation(tx: DbTx, userId: string, formationId: string): Promise<FormationRow> {
   const rows = await tx.execute<FormationRow>(sql`
     select f.id::text as id, f.title, f.exam_format
     from public.formations f
@@ -290,11 +282,7 @@ async function readFormation(
   return formation;
 }
 
-async function readModules(
-  tx: DbTx,
-  userId: string,
-  formationId: string,
-): Promise<ModuleRow[]> {
+async function readModules(tx: DbTx, userId: string, formationId: string): Promise<ModuleRow[]> {
   return tx.execute<ModuleRow>(sql`
     select m.id::text as module_id,
            m.position,
@@ -535,7 +523,7 @@ export function startExamAttempt(
           .filter((module) =>
             isStudiedModule({
               status: module.status,
-              seenCount: Number(module.seen_count),
+              seenCount: module.seen_count,
             }),
           )
           .map((module) => module.module_id),
@@ -554,7 +542,7 @@ export function startExamAttempt(
         modules.map((module) => ({
           moduleId: module.module_id,
           position: module.position,
-          notionCount: Number(module.notion_count),
+          notionCount: module.notion_count,
         })),
         format.questionCount,
         seed,
@@ -723,16 +711,16 @@ function buildQuestions(
     const feedback = graded && answer !== undefined ? feedbackOf(answer) : null;
     return {
       position,
-      brickVersionId: String(item.brickVersionId ?? ''),
+      brickVersionId: textField(item.brickVersionId),
       type: item.type as ExamQuestionDto['type'],
-      typeLabel: typeLabelOf(String(item.type), item.payload),
-      notionId: String(item.notionId ?? ''),
-      notionLabel: String(item.notionLabel ?? ''),
-      moduleId: String(item.moduleId ?? ''),
-      modulePosition: Number(item.modulePosition ?? 1),
-      moduleLabel: String(item.moduleLabel ?? ''),
-      payload: publicPayload(String(item.type), item.payload, String(item.brickVersionId ?? '')),
-      ...(answer === undefined || !hasResponse(String(item.type), answer.response)
+      typeLabel: typeLabelOf(textField(item.type), item.payload),
+      notionId: textField(item.notionId),
+      notionLabel: textField(item.notionLabel),
+      moduleId: textField(item.moduleId),
+      modulePosition: numberField(item.modulePosition),
+      moduleLabel: textField(item.moduleLabel),
+      payload: publicPayload(textField(item.type), item.payload, textField(item.brickVersionId)),
+      ...(answer === undefined || !hasResponse(textField(item.type), answer.response)
         ? {}
         : { response: answer.response }),
       marked: marked.has(position),
@@ -763,12 +751,8 @@ export function getExamAttempt(
     }
     const attemptId = attemptIdValue;
     const first = await db.run((tx) => readAttempt(tx, userId, attemptId));
-    if (
-      first.status === 'in_progress' &&
-      first.deadline_at !== null &&
-      examExpired(first.deadline_at, ctx.clock.now())
-    ) {
-      const submitted = await submitExam(ctx, attemptId, 'lazy');
+    if (first.status === 'in_progress' && examExpired(first.deadline_at, ctx.clock.now())) {
+      const submitted = await submitExam(ctx, attemptId, { trigger: 'lazy' });
       if (!submitted.ok) throw submitted.error;
     }
     return db.run(async (tx) => {
@@ -799,11 +783,7 @@ export function getExamAttempt(
   });
 }
 
-async function readItemForPosition(
-  tx: DbTx,
-  attempt: AttemptRow,
-  position: number,
-): Promise<ItemRow> {
+function readItemForPosition(tx: DbTx, attempt: AttemptRow, position: number): Promise<ItemRow> {
   const items = itemsOf(attempt.items);
   const item = items[position - 1];
   if (item === undefined) {
@@ -833,7 +813,7 @@ export function saveExamAnswer(
       if (!examAcceptsAnswer(attempt.deadline_at, ctx.clock.now())) {
         throw new AppError('EXAM_TIME_OVER', 'Le temps de l’examen est écoulé.');
       }
-      const item = await readItemForPosition(tx, attempt, position);
+      const item = readItemForPosition(tx, attempt, position);
       validateResponse(item, input.response);
       const now = ctx.clock.now();
       await tx.execute(sql`
@@ -866,7 +846,7 @@ export function markExamQuestion(
       if (attempt.status !== 'in_progress') {
         throw new AppError('CONFLICT', 'Cet examen est terminé.', { status: 409 });
       }
-      await readItemForPosition(tx, attempt, position);
+      void readItemForPosition(tx, attempt, position);
       const current = new Set(markedPositionsOf(attempt.review_feedback));
       if (marked) current.add(position);
       else current.delete(position);
@@ -901,16 +881,22 @@ function correctionLabels(correction: CorrectionView | undefined): {
   }
   if (correction.kind === 'choice_question') {
     return {
-      given: labelList(correction.options.filter((option) => option.chosen).map((option) => option.text)) ?? 'sans réponse',
-      expected: labelList(correction.options.filter((option) => option.correct).map((option) => option.text)),
+      given:
+        labelList(
+          correction.options.filter((option) => option.chosen).map((option) => option.text),
+        ) ?? 'sans réponse',
+      expected: labelList(
+        correction.options.filter((option) => option.correct).map((option) => option.text),
+      ),
       explanation: correction.explanation,
     };
   }
   if (correction.kind === 'cloze') {
     return {
       given:
-        labelList(correction.gaps.map((gap) => (gap.given === '' ? '' : `${String(gap.id)}. ${gap.given}`))) ??
-        'sans réponse',
+        labelList(
+          correction.gaps.map((gap) => (gap.given === '' ? '' : `${String(gap.id)}. ${gap.given}`)),
+        ) ?? 'sans réponse',
       expected: labelList(correction.gaps.map((gap) => `${String(gap.id)}. ${gap.expected}`)),
       explanation: correction.explanation,
     };
@@ -923,9 +909,7 @@ function correctionLabels(correction: CorrectionView | undefined): {
             pair.givenRight === null ? '' : `${pair.left} → ${pair.givenRight}`,
           ),
         ) ?? 'sans réponse',
-      expected: labelList(
-        correction.pairs.map((pair) => `${pair.left} → ${pair.expectedRight}`),
-      ),
+      expected: labelList(correction.pairs.map((pair) => `${pair.left} → ${pair.expectedRight}`)),
       explanation: correction.explanation,
     };
   }
@@ -955,7 +939,7 @@ function expectedFromPayload(type: string, payload: unknown): string | null {
         gaps.map((gap) => {
           const entry = asObject(gap);
           const answers = Array.isArray(entry?.answers) ? entry.answers : [];
-          return `${String(entry?.id ?? '')}. ${String(answers[0] ?? '')}`;
+          return `${textField(entry?.id)}. ${textField(answers[0])}`;
         }),
       ) ?? null
     );
@@ -966,7 +950,7 @@ function expectedFromPayload(type: string, payload: unknown): string | null {
       labelList(
         pairs.map((pair) => {
           const entry = asObject(pair);
-          return `${String(entry?.left ?? '')} → ${String(entry?.right ?? '')}`;
+          return `${textField(entry?.left)} → ${textField(entry?.right)}`;
         }),
       ) ?? null
     );
@@ -980,21 +964,17 @@ interface GradedItem {
   answerId: string;
 }
 
-function gradeItem(
-  item: ItemRow,
-  answer: AnswerRow,
-  studied: boolean,
-): GradedItem {
-  const type = String(item.type);
+function gradeItem(item: ItemRow, answer: AnswerRow, studied: boolean): GradedItem {
+  const type = textField(item.type);
   const payload = item.payload;
-  const maxScore = Number(item.max_score ?? item.points ?? 0);
+  const maxScore = Number(answer.max_score ?? item.points ?? 0);
   const response = answer.response;
   const answered = hasResponse(type, response);
-  const outcome = answered && AUTO_GRADED.has(type as BrickType)
-    ? gradeBrick(type as BrickType, payload, response, answer.brick_version_id)
-    : null;
-  const correction =
-    outcome !== null && outcome.ok ? outcome.value.correction : undefined;
+  const outcome =
+    answered && AUTO_GRADED.has(type as BrickType)
+      ? gradeBrick(type as BrickType, payload, response, answer.brick_version_id)
+      : null;
+  const correction = outcome !== null && outcome.ok ? outcome.value.correction : undefined;
   const labels = correctionLabels(correction);
   const ratio = outcome !== null && outcome.ok ? outcome.value.score : 0;
   const isCorrect = outcome !== null && outcome.ok ? outcome.value.isCorrect : false;
@@ -1017,11 +997,11 @@ function gradeItem(
       brickVersionId: answer.brick_version_id,
       typeLabel: typeLabelOf(type, payload),
       question: questionStem(type, payload),
-      notionId: String(item.notionId ?? ''),
-      notionLabel: String(item.notionLabel ?? ''),
-      moduleId: String(item.moduleId ?? ''),
-      modulePosition: Number(item.modulePosition ?? 1),
-      moduleLabel: String(item.moduleLabel ?? ''),
+      notionId: textField(item.notionId),
+      notionLabel: textField(item.notionLabel),
+      moduleId: textField(item.moduleId),
+      modulePosition: numberField(item.modulePosition),
+      moduleLabel: textField(item.moduleLabel),
       studied,
       isCorrect,
       score: Math.round(ratio * maxScore * 100) / 100,
@@ -1033,10 +1013,9 @@ function gradeItem(
   };
 }
 
-function perNotionOf(questions: readonly ExamGradedQuestion[]): Record<
-  string,
-  { correct: number; total: number; score: number }
-> {
+function perNotionOf(
+  questions: readonly ExamGradedQuestion[],
+): Record<string, { correct: number; total: number; score: number }> {
   const map = new Map<string, { correct: number; total: number }>();
   for (const question of questions) {
     const key = question.notionId;
@@ -1097,13 +1076,13 @@ export function submitExam(
       const marked = markedPositionsOf(attempt.review_feedback);
       const answeredCount = items.filter((item, index) => {
         const answer = answers[index];
-        return answer !== undefined && hasResponse(String(item.type), answer.response);
+        return answer !== undefined && hasResponse(textField(item.type), answer.response);
       }).length;
       const unansweredCount = items.length - answeredCount;
       const timedOut = now.getTime() > new Date(attempt.deadline_at).getTime();
       if (attempt.status !== 'in_progress') {
         return {
-          status: attempt.status as ExamSubmitOutcome['status'],
+          status: attempt.status as SubmitExamOutcome['status'],
           unansweredCount,
           markedCount: marked.length,
           timedOut,
@@ -1155,10 +1134,7 @@ export function submitExam(
       const submittedAt = new Date(attempt.started_at);
       const durationMs = Math.max(
         0,
-        Math.min(
-          config.durationSec * 1000,
-          now.getTime() - submittedAt.getTime(),
-        ),
+        Math.min(config.durationSec * 1000, now.getTime() - submittedAt.getTime()),
       );
       const reviewFeedback = {
         ...(asObject(attempt.review_feedback) ?? {}),
@@ -1243,12 +1219,11 @@ async function readGradedContext(
     summary,
     timedOut: review?.timedOut === true,
     durationMs: attempt.duration_ms ?? 0,
-    answeredCount: gradedItems.filter(
-      (entry) =>
-        hasResponse(
-          String(items[entry.question.position - 1]?.type),
-          answers[entry.question.position - 1]?.response,
-        ),
+    answeredCount: gradedItems.filter((entry) =>
+      hasResponse(
+        String(items[entry.question.position - 1]?.type),
+        answers[entry.question.position - 1]?.response,
+      ),
     ).length,
   };
 }
@@ -1265,12 +1240,8 @@ export function getExamResult(
     }
     const attemptId = attemptIdValue;
     const first = await db.run((tx) => readAttempt(tx, userId, attemptId));
-    if (
-      first.status === 'in_progress' &&
-      first.deadline_at !== null &&
-      examExpired(first.deadline_at, ctx.clock.now())
-    ) {
-      const submitted = await submitExam(ctx, attemptId, 'lazy');
+    if (first.status === 'in_progress' && examExpired(first.deadline_at, ctx.clock.now())) {
+      const submitted = await submitExam(ctx, attemptId, { trigger: 'lazy' });
       if (!submitted.ok) throw submitted.error;
     }
     return db.run(async (tx) => {

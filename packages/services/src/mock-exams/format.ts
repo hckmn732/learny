@@ -70,13 +70,13 @@ const attemptStatusSchema = z.enum([
 
 /** BR-PRA-02 — 20 questions × 2 minutes, threshold 70 %, from the product configuration. */
 export function defaultExamFormat(): ExamFormat {
-  const questions = ENGINE.quiz.mockExam.questionCount;
-  const minutesPerQuestion = ENGINE.quiz.mockExam.minutesPerQuestion;
+  const questions = ENGINE.planner.mockExam.questions;
+  const minutesPerQuestion = ENGINE.planner.mockExam.minutesPerQuestion;
   return {
     questionCount: questions,
     secondsPerQuestion: minutesPerQuestion * 60,
     durationMin: questions * minutesPerQuestion,
-    threshold: ENGINE.quiz.mockExam.thresholdPercent,
+    threshold: ENGINE.planner.mockExam.threshold,
     source: 'default',
     confirmed: true,
   };
@@ -86,16 +86,14 @@ function secondsFromDuration(questionCount: number, durationMin: number): number
   return Math.max(1, Math.round((durationMin * 60) / questionCount));
 }
 
-function formatFromGuide(
-  guide: { id: string; format: z.infer<typeof guideFormatSchema> },
-): ExamFormat {
+function formatFromGuide(guide: {
+  id: string;
+  format: z.infer<typeof guideFormatSchema>;
+}): ExamFormat {
   const questions = guide.format.questions ?? guide.format.questionCount ?? 20;
   const durationMin =
     guide.format.durationMin ??
-    Math.max(
-      1,
-      Math.round((questions * (guide.format.secondsPerQuestion ?? 120)) / 60),
-    );
+    Math.max(1, Math.round((questions * (guide.format.secondsPerQuestion ?? 120)) / 60));
   return {
     questionCount: questions,
     secondsPerQuestion:
@@ -195,11 +193,7 @@ async function readGuide(tx: DbTx, formationId: string): Promise<GuideRow | null
   return rows[0] ?? null;
 }
 
-async function readModules(
-  tx: DbTx,
-  userId: string,
-  formationId: string,
-): Promise<ModuleRow[]> {
+async function readModules(tx: DbTx, userId: string, formationId: string): Promise<ModuleRow[]> {
   return tx.execute<ModuleRow>(sql`
     select m.id::text as module_id,
            m.position,
@@ -221,10 +215,7 @@ async function readModules(
 }
 
 /** A module is studied when it is open/validated or when one of its notions was already seen. */
-export function isStudiedModule(module: {
-  status: string;
-  seenCount: number;
-}): boolean {
+export function isStudiedModule(module: { status: string; seenCount: number }): boolean {
   return module.status !== 'locked' || module.seenCount > 0;
 }
 
@@ -251,7 +242,11 @@ export function allocateQuestionCounts(
   }
   const shares = modules.map((module) => {
     const exact = (questionCount * Math.max(0, module.notionCount)) / totalNotions;
-    return { moduleId: module.moduleId, floor: Math.floor(exact), fraction: exact - Math.floor(exact) };
+    return {
+      moduleId: module.moduleId,
+      floor: Math.floor(exact),
+      fraction: exact - Math.floor(exact),
+    };
   });
   let assigned = shares.reduce((sum, share) => sum + share.floor, 0);
   for (const share of shares) counts.set(share.moduleId, share.floor);
@@ -292,7 +287,10 @@ async function readNextExams(
     limit 2
   `);
   return rows.map((row) => ({
-    startsAt: (row.starts_at instanceof Date ? row.starts_at : new Date(row.starts_at)).toISOString(),
+    startsAt: (row.starts_at instanceof Date
+      ? row.starts_at
+      : new Date(row.starts_at)
+    ).toISOString(),
     label: row.title,
   }));
 }
@@ -327,7 +325,7 @@ export function getExamIntro(
       for (const module of modules) {
         const studied = isStudiedModule({
           status: module.status,
-          seenCount: Number(module.seen_count),
+          seenCount: module.seen_count,
         });
         (studied ? studiedModules : diagnosticModules).push(moduleDto(module));
       }
@@ -335,7 +333,7 @@ export function getExamIntro(
         format.questionCount,
         modules.map((module) => ({
           moduleId: module.module_id,
-          notionCount: Number(module.notion_count),
+          notionCount: module.notion_count,
         })),
       );
       const diagnosticQuestionCount = diagnosticModules.reduce(
