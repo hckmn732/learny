@@ -1,11 +1,11 @@
-import { getQuizResult } from '@learny/contracts';
-import { getAttemptResult } from '@learny/services';
+import { getQuizResult as getQuizResultRoute } from '@learny/contracts';
+import { getQuizResult } from '@learny/services';
 
 import { handler } from '../../../../../../lib/api/handler';
 
 export const dynamic = 'force-dynamic';
 
-// SPEC-611 ET-2 — provisional result until the tutor has corrected the open answers (SPEC-612).
-export const GET = handler(getQuizResult, ({ ctx, params }) =>
-  getAttemptResult(ctx, params.aid),
+// SPEC-612 ET-2 — complete result of a corrected attempt (score, gaps, history, retry, remediation).
+export const GET = handler(getQuizResultRoute, ({ ctx, params }) =>
+  getQuizResult(ctx, params.aid),
 );

@@ -430,3 +430,29 @@ export function ensureMockExamSlots(
     });
   });
 }
+
+/**
+ * SPEC-612 EF-7 — replans every active formation of the learner after a module validation.
+ * Best effort at the caller's boundary: one formation failing to replan never cancels the unlock.
+ */
+export async function replanUser(
+  ctx: ServiceContext,
+  now: Date,
+): Promise<PlanReconciliationCounts[]> {
+  if (ctx.db === null || ctx.userId === null) return [];
+  return ctx.db.run(async (tx) => {
+    const rows = await tx.execute<{ id: string }>(sql`
+      select id::text as id
+      from public.formations
+      where owner_id = ${ctx.userId}::uuid and status = 'active'
+      order by created_at asc, id asc
+    `);
+    const counts: PlanReconciliationCounts[] = [];
+    for (const row of rows) {
+      counts.push(
+        await replanFormationAfterResume(tx, ctx.userId as string, row.id, now, ctx.clock),
+      );
+    }
+    return counts;
+  });
+}

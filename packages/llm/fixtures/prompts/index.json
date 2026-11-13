@@ -11,5 +11,6 @@
   "tutor-chat.tutor-chat": 1,
   "self-test-grade.self-test-grade": 1,
   "self-test-question.self-test-question": 1,
-  "tutor.grade-open": 1
+  "tutor.grade-open": 1,
+  "tutor.remediation-plan": 1
 }

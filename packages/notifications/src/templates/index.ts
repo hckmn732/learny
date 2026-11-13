@@ -164,13 +164,38 @@ export const NOTIFICATION_TEMPLATES: Record<NotificationType, NotificationTempla
   module_validated: definition(
     'check-circle',
     'reminder',
-    (_data, tone) => toneOf(tone, 'Module validé', 'Module validé'),
-    (data, tone) =>
-      toneOf(
+    (data, tone) => {
+      const position = number(data, 'modulePosition', 0);
+      const score = Math.round(number(data, 'score', 0));
+      return toneOf(
+        tone,
+        position > 0 ? `Module ${String(position)} validé · ${String(score)} %` : 'Module validé',
+        position > 0 ? `Module ${String(position)} validé · ${String(score)} %` : 'Module validé',
+      );
+    },
+    (data, tone) => {
+      const nextPosition = number(data, 'nextModulePosition', 0);
+      const nextTitle = data.nextModuleTitle;
+      if (typeof nextTitle === 'string' && nextTitle.trim() !== '') {
+        return toneOf(
+          tone,
+          `Le module ${String(nextPosition)} · ${nextTitle.trim()} est débloqué.`,
+          `Le module ${String(nextPosition)} · ${nextTitle.trim()} est débloqué.`,
+        );
+      }
+      if (data.isLastModule === true) {
+        return toneOf(
+          tone,
+          'Votre formation est terminée : découvrez votre bilan final.',
+          'Ta formation est terminée : découvre ton bilan final.',
+        );
+      }
+      return toneOf(
         tone,
         `« ${moduleLabel(data)} » est validé. Votre progression est enregistrée.`,
         `« ${moduleLabel(data)} » est validé. Ta progression est enregistrée.`,
-      ),
+      );
+    },
     formationHref,
   ),
   session_to_reschedule: definition(

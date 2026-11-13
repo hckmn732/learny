@@ -1,0 +1,41 @@
+{
+  "task": "gaps",
+  "scenario": "remediation-plan",
+  "promptId": "tutor.remediation-plan",
+  "promptVersion": 1,
+  "description": "Remédiation ciblée du module SAP 3 : confusion, incompréhension et difficulté d’application.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "items": [
+          {
+            "notionId": "00000000-0000-0000-0000-000000000001",
+            "textMd": "La clé de comptabilisation n’est pas le type de pièce. Le type de pièce (SA, KR…) classe toute la pièce ; la clé agit poste par poste. Comparez les deux notions sur un même cas : la question ci-dessous oppose la clé au type de pièce.",
+            "proposal": "une question qui oppose les deux notions.",
+            "excerptCitationIds": []
+          },
+          {
+            "notionId": "00000000-0000-0000-0000-000000000002",
+            "textMd": "Un ledger parallèle est une comptabilité tenue en parallèle du grand livre principal pour un besoin spécifique (reporting, groupe). Il ne remplace pas le journal universel : il en dérive. Relisez le passage puis reformulez la différence avec le ledger principal.",
+            "proposal": "une nouvelle explication, sous un autre angle.",
+            "excerptCitationIds": []
+          },
+          {
+            "notionId": "00000000-0000-0000-0000-000000000003",
+            "textMd": "Votre définition est juste, mais l’exercice de saisie a échoué. Un exercice pratique de saisie vous fera vérifier l’équilibre débit/crédit. Contrôlez d’abord les montants, puis l’équilibre de la pièce.",
+            "proposal": "un exercice pratique de saisie.",
+            "excerptCitationIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 180,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 320
+    }
+  ]
+}

@@ -324,24 +324,10 @@ export const submitQuizAttempt = defineRoute({
   errors: [...ATTEMPT_ERRORS],
 });
 
-export const getQuizResult = defineRoute({
-  id: 'quiz.attempts.result',
-  method: 'GET',
-  path: '/api/v1/attempts/:aid/result',
-  auth: 'user',
-  params: QuizAttemptParams,
-  output: AttemptResultDto,
-  successStatus: 200,
-  rateLimit: 'default',
-  summary: 'Renvoie le résultat, provisoire tant que les questions ouvertes ne sont pas corrigées (SPEC-611).',
-  errors: [...ATTEMPT_ERRORS],
-});
-
 export const quizRoutes = {
   startQuizAttempt,
   getQuizAttempt,
   saveQuizAnswer,
   checkQuizAnswer,
   submitQuizAttempt,
-  getQuizResult,
 } as const;

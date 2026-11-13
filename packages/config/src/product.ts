@@ -128,6 +128,33 @@ export const NOTIFICATION_RULES = {
   validationQuizReminderMinutes: 40,
 } as const;
 
+/** BR-LAC-04 — French label of each gap nature (SCR-09, SPEC-612 ET-6). */
+export const GAP_NATURE_LABELS = {
+  confusion: 'Confusion',
+  misunderstanding: 'Incompréhension',
+  application: "Difficulté d'application",
+  forgetting: 'Oubli',
+} as const;
+
+/** BR-LAC-04 — code fallback of the tutor answer, one sentence per nature (SPEC-612 ET-6, CL-5). */
+export const GAP_PROPOSALS = {
+  confusion: 'une question qui oppose les deux notions.',
+  misunderstanding: 'une nouvelle explication, sous un autre angle.',
+  application: 'un exercice pratique.',
+  forgetting: 'une révision dans le quiz global.',
+} as const;
+
+/** ADR-0173 — bounds of the targeted remediation (SPEC-612 ET-4). */
+export const REMEDIATION_RULES = {
+  maxGaps: 3,
+  questionsPerNotion: 2,
+  durationMin: 15,
+  textMaxChars: 1_200,
+  proposalMaxChars: 120,
+  fallbackNotice:
+    'Explication du tuteur indisponible : voici les passages de votre cours et des questions.',
+} as const;
+
 /**
  * BR-AUT-01 to BR-AUT-10 — automation keys and their default `params` (SPEC-102 EF-6, ET-6).
  * The SQL mirror is `public.default_automation_params(text)`; `packages/db` compares both.

@@ -44,3 +44,4 @@ export * from './courses/index';
 export * from './tutor-chat/index';
 export * from './quiz/index';
 export * from './mock-exams/index';
+export * from './remediation/index';

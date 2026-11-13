@@ -65,7 +65,8 @@ const VALID: Record<EventName, Record<string, unknown>> = {
     threshold: 80,
     attemptNo: 2,
   },
-  'module/validated': { userId: U1, formationId: U2, moduleId: U3, score: 100 },
+  'module/validated': { userId: U1, formationId: U2, moduleId: U3, score: 100, nextModuleId: null },
+  'remediation/requested': { userId: U1, formationId: U2, moduleId: U3, attemptId: U2 },
   'gap/detected': { userId: U1, formationId: U2, notionId: U3, nature: 'forgetting' },
   'gap/nature-changed': {
     userId: U1,
@@ -134,7 +135,7 @@ const VALID: Record<EventName, Record<string, unknown>> = {
 describe('[SPEC-203] catalogue des événements', () => {
   it('décrit un exemple valide pour chacun des événements du catalogue', () => {
     expect(Object.keys(VALID).sort()).toEqual([...EVENT_NAMES_LIST].sort());
-    expect(EVENT_NAMES_LIST).toHaveLength(44);
+    expect(EVENT_NAMES_LIST).toHaveLength(45);
   });
 
   it.each(EVENT_NAMES_LIST)('%s accepte son exemple valide', (name) => {

@@ -106,6 +106,7 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `quiz/submitted` | SPEC-611 | correction des questions ouvertes, moteur, lacunes |
 | `quiz/graded` | SPEC-611 | résultat, déblocage, automatisme 4 |
 | `module/validated` | SPEC-612 | déblocage, jalons, planification, notification |
+| `remediation/requested` | SPEC-612 | préparation d'une remédiation à la demande |
 | `gap/detected` / `gap/nature-changed` / `gap/cleared` | SPEC-411 | notifications, automatisme 5 |
 | `review/answered` | SPEC-701 | FSRS, série |
 | `exam/submitted` | SPEC-614 | correction, lacunes |

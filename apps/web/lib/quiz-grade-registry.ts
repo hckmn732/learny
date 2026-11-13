@@ -1,15 +1,24 @@
+import type { Clock, LearnyLogger } from '@learny/core';
 import {
   createExamDeadlineJob,
+  createModuleUnlockJob,
   createQuizGradeJob,
+  createRemediationPrepareJob,
+  createRemediationPrepareRequestedJob,
   functions,
   setInlineRegistry,
 } from '@learny/jobs';
-import { createServiceContext, runQuizGrade, submitExam } from '@learny/services';
+import {
+  createServiceContext,
+  prepareRemediation,
+  runQuizGrade,
+  submitExam,
+  unlockModule,
+} from '@learny/services';
 
-// SPEC-611 ET-8, SPEC-614 ET-4 — the durable jobs need the services package; `@learny/jobs`
-// cannot depend on it (services already imports the transaction/outbox helpers of jobs). The host
-// therefore injects the handlers. The inline dispatcher (JOBS_MODE=inline, tests) must know the
-// functions at boot, not only when the Inngest route is first loaded, hence the registration.
+// SPEC-611/612/614 — the jobs that need services are injected by the host; `@learny/jobs` cannot
+// depend on `@learny/services` (services already imports the transaction/outbox helpers of jobs).
+// The inline dispatcher (JOBS_MODE=inline, tests) must know them at boot.
 
 export const quizGradeJob = createQuizGradeJob({
   run: async ({ userId, attemptId, requestId, clock, logger }) => {
@@ -34,7 +43,69 @@ export const examDeadlineJob = createExamDeadlineJob({
   },
 });
 
-export const jobRegistry = [...functions, quizGradeJob, examDeadlineJob];
+export const moduleUnlockJob = createModuleUnlockJob({
+  run: async ({
+    userId,
+    formationId,
+    moduleId,
+    attemptId,
+    score,
+    passed,
+    requestId,
+    clock,
+    logger,
+  }) => {
+    const outcome = await unlockModule(createServiceContext({ userId, requestId, clock, logger }), {
+      userId,
+      formationId,
+      moduleId,
+      attemptId,
+      score,
+      passed,
+    });
+    if (!outcome.ok) throw outcome.error;
+    return outcome.value;
+  },
+});
+
+async function prepare(args: {
+  userId: string;
+  moduleId: string;
+  requestId: string;
+  clock: Clock;
+  logger: LearnyLogger;
+  trigger: 'auto' | 'manual';
+}): Promise<unknown> {
+  const outcome = await prepareRemediation(
+    createServiceContext({
+      userId: args.userId,
+      requestId: args.requestId,
+      clock: args.clock,
+      logger: args.logger,
+    }),
+    args.moduleId,
+    { trigger: args.trigger },
+  );
+  if (!outcome.ok) throw outcome.error;
+  return outcome.value;
+}
+
+export const remediationPrepareJob = createRemediationPrepareJob({
+  run: (args) => prepare({ ...args, trigger: 'auto' }),
+});
+
+export const remediationPrepareRequestedJob = createRemediationPrepareRequestedJob({
+  run: (args) => prepare({ ...args, trigger: 'manual' }),
+});
+
+export const jobRegistry = [
+  ...functions,
+  quizGradeJob,
+  examDeadlineJob,
+  moduleUnlockJob,
+  remediationPrepareJob,
+  remediationPrepareRequestedJob,
+];
 
 export function registerInlineJobs(): void {
   setInlineRegistry(jobRegistry);

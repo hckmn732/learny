@@ -4302,6 +4302,52 @@ export const fr = {
     resultProvisional: 'Score provisoire',
     resultBack: 'Retour au module',
     resultDetailed: 'Le résultat détaillé et la remédiation arrivent à l’étape suivante.',
+    resultThresholdCaption: (threshold: number) => `trait : seuil ${String(threshold)} %`,
+    resultHeadlinePassed: (modulePosition: number) =>
+      `Le module ${String(modulePosition)} est débloqué.`,
+    resultHeadlineLast: 'La formation est terminée.',
+    resultHeadlineMissing: (points: number) =>
+      points === 1
+        ? 'Encore 1 point pour valider.'
+        : `Encore ${String(points)} points pour valider.`,
+    resultStatusTextPassed: (fragile: number) =>
+      fragile === 0
+        ? 'Bravo. Les notions du module rejoignent votre quiz global ; aucune ne reste fragile.'
+        : fragile === 1
+          ? 'Bravo. Les notions du module rejoignent votre quiz global ; une seule reste fragile.'
+          : `Bravo. Les notions du module rejoignent votre quiz global ; ${String(fragile)} restent fragiles.`,
+    resultStatusTextFailed: (gaps: number) =>
+      `Votre prochaine tentative portera surtout sur les ${String(gaps)} notions ci-dessous, avec de nouvelles questions.`,
+    resultHistoryTitle: 'Vos tentatives',
+    resultHistoryItem: (attemptNo: number, score: number) =>
+      `Tentative ${String(attemptNo)} : ${String(score)} %,`,
+    resultHistoryItemSuffix: (passed: boolean) => (passed ? 'validée' : 'non validée'),
+    resultHistoryAltLabel: 'Historique des tentatives',
+    resultGapsTitle: (count: number) =>
+      count === 1 ? 'Lacunes détectées · 1 notion' : `Lacunes détectées · ${String(count)} notions`,
+    resultFragileTitle: (count: number) =>
+      count === 1 ? 'Encore fragile · 1 notion' : `Encore fragile · ${String(count)} notions`,
+    resultGapsSubtitle: 'Analysées sur toutes vos tentatives · prioritaires dans le quiz global',
+    resultTutorProposal: 'Le tuteur propose :',
+    resultTrain: "S'entraîner",
+    resultMasteredTitle: (count: number) =>
+      count === 1 ? '1 notion maîtrisée' : `${String(count)} notions maîtrisées`,
+    resultPerNotion: 'Détail par notion',
+    resultPerNotionLine: (label: string, correct: number, total: number, score: number) =>
+      `${label} · ${String(correct)}/${String(total)} · ${String(score)} %`,
+    resultReread: 'Relire le cours',
+    resultRetry: 'Nouvelle tentative',
+    resultRetryAvailable: (label: string) => `Disponible ${label}`,
+    resultRetryAfterRemediation: 'Disponible après la remédiation',
+    resultRemediation: 'Remédiation ciblée · 15 min',
+    resultRemediationResume: 'Reprendre la remédiation',
+    resultRemediationDone: 'Remédiation terminée',
+    resultHome: "Retour à l'accueil",
+    resultNextModule: (position: number) => `Ouvrir le module ${String(position)}`,
+    resultFinalReport: 'Voir le bilan final',
+    resultError: 'Le résultat n’a pas pu être chargé.',
+    availableDateFormat: (weekday: string, day: string, month: string, time: string) =>
+      `${weekday} ${day} ${month} à ${time}`,
     lockedTitle: 'Ce module est verrouillé.',
     lockedText: 'Ce module est verrouillé.',
     lockedBack: 'Retour au programme',
@@ -4413,6 +4459,34 @@ export const fr = {
     correctAnswer: ' · Bonne réponse : ',
     noAnswer: 'sans réponse',
     moduleLine: (position: number, label: string) => `Module ${String(position)} · ${label}`,
+  },
+  remediation: {
+    breadcrumb: 'Remédiation',
+    title: 'Remédiation ciblée',
+    duration: '≈ 15 min',
+    notions: (count: number) => (count === 1 ? '1 notion' : `${String(count)} notions`),
+    preparing: 'Le tuteur prépare votre remédiation…',
+    preparingText: 'Cette page se met à jour automatiquement dès qu’elle est prête.',
+    noneTitle: 'Aucune remédiation en cours.',
+    noneText: 'Une remédiation ciblée est proposée après une tentative échouée.',
+    prepare: 'Préparer une remédiation',
+    empty: 'Aucune question n’est disponible pour cette remédiation.',
+    check: 'Vérifier',
+    checking: 'Vérification…',
+    missingAnswer: 'Donnez une réponse avant de vérifier.',
+    answerSaved: 'Réponse enregistrée.',
+    finish: 'Terminer la remédiation',
+    finishing: 'Enregistrement…',
+    unfinished: 'Vérifiez toutes les questions avant de terminer.',
+    doneTitle: 'Remédiation terminée.',
+    doneNow: 'Votre nouvelle tentative est disponible dès maintenant.',
+    doneAt: (label: string) => `Votre nouvelle tentative est disponible le ${label}.`,
+    retry: 'Nouvelle tentative',
+    backToModule: 'Retour au module',
+    progress: (checked: number, total: number) =>
+      `Question ${String(checked)} sur ${String(total)} vérifiée${checked === 1 ? '' : 's'}`,
+    error: 'La remédiation n’a pas pu être chargée.',
+    excerptPrefix: 'Extrait',
   },
 } as const;
 

@@ -1219,12 +1219,189 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": false,
-                  "description": "Résultat de la tentative, provisoire tant que les ouvertes ne sont pas corrigées.",
+                  "description": "Résultat complet de la tentative, prêt pour SCR-09.",
                   "properties": {
                     "attemptId": {
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
                       "type": "string"
+                    },
+                    "attemptNo": {
+                      "maximum": 9007199254740991,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "gaps": {
+                      "items": {
+                        "additionalProperties": false,
+                        "description": "Lacune ouverte du module, avec la réponse proposée par le tuteur (BR-LAC-04).",
+                        "properties": {
+                          "evidence": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "label": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "mastery": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "number"
+                          },
+                          "nature": {
+                            "enum": [
+                              "forgetting",
+                              "confusion",
+                              "misunderstanding",
+                              "application"
+                            ],
+                            "type": "string"
+                          },
+                          "natureLabel": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "notionId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          },
+                          "proposal": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "trainHref": {
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "notionId",
+                          "label",
+                          "nature",
+                          "natureLabel",
+                          "evidence",
+                          "proposal",
+                          "mastery",
+                          "trainHref"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 10,
+                      "type": "array"
+                    },
+                    "history": {
+                      "items": {
+                        "additionalProperties": false,
+                        "description": "Une tentative corrigée, pour le graphique d’historique.",
+                        "properties": {
+                          "attemptNo": {
+                            "maximum": 9007199254740991,
+                            "minimum": 1,
+                            "type": "integer"
+                          },
+                          "passed": {
+                            "type": "boolean"
+                          },
+                          "score": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "attemptNo",
+                          "score",
+                          "passed"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 50,
+                      "type": "array"
+                    },
+                    "isLastModule": {
+                      "type": "boolean"
+                    },
+                    "mastered": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "label": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "notionId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "notionId",
+                          "label"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 100,
+                      "type": "array"
+                    },
+                    "module": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "position": {
+                          "maximum": 9007199254740991,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "position",
+                        "title"
+                      ],
+                      "type": "object"
+                    },
+                    "nextModule": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "id": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "position": {
+                              "maximum": 9007199254740991,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "title": {
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "position",
+                            "title"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "passed": {
                       "type": [
@@ -1238,13 +1415,22 @@
                       "type": "integer"
                     },
                     "perNotion": {
-                      "additionalProperties": {
+                      "items": {
                         "additionalProperties": false,
                         "properties": {
                           "correct": {
                             "maximum": 9007199254740991,
                             "minimum": 0,
                             "type": "integer"
+                          },
+                          "label": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "notionId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
                           },
                           "score": {
                             "maximum": 100,
@@ -1258,18 +1444,28 @@
                           }
                         },
                         "required": [
+                          "notionId",
+                          "label",
                           "correct",
                           "total",
                           "score"
                         ],
                         "type": "object"
                       },
-                      "propertyNames": {
-                        "format": "uuid",
-                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                        "type": "string"
-                      },
-                      "type": "object"
+                      "maxItems": 100,
+                      "type": "array"
+                    },
+                    "pointsMissing": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "provisionalScore": {
                       "anyOf": [
@@ -1282,6 +1478,72 @@
                           "type": "null"
                         }
                       ]
+                    },
+                    "remediation": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "href": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "status": {
+                          "enum": [
+                            "none",
+                            "preparing",
+                            "ready",
+                            "in_progress",
+                            "completed"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "href"
+                      ],
+                      "type": "object"
+                    },
+                    "retry": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowed": {
+                          "type": "boolean"
+                        },
+                        "availableAt": {
+                          "anyOf": [
+                            {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "reason": {
+                          "anyOf": [
+                            {
+                              "enum": [
+                                "delay",
+                                "remediation_required"
+                              ],
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "allowed",
+                        "availableAt",
+                        "reason"
+                      ],
+                      "type": "object"
                     },
                     "score": {
                       "anyOf": [
@@ -1309,20 +1571,27 @@
                       "maximum": 95,
                       "minimum": 60,
                       "type": "integer"
-                    },
-                    "tutorPending": {
-                      "type": "boolean"
                     }
                   },
                   "required": [
                     "attemptId",
+                    "attemptNo",
+                    "module",
                     "status",
                     "score",
                     "provisionalScore",
-                    "passed",
                     "threshold",
-                    "pendingOpenCount",
-                    "tutorPending"
+                    "passed",
+                    "pointsMissing",
+                    "isLastModule",
+                    "nextModule",
+                    "history",
+                    "gaps",
+                    "mastered",
+                    "perNotion",
+                    "retry",
+                    "remediation",
+                    "pendingOpenCount"
                   ],
                   "type": "object"
                 }
@@ -1406,7 +1675,7 @@
             "cookieAuth": []
           }
         ],
-        "summary": "Renvoie le résultat, provisoire tant que les questions ouvertes ne sont pas corrigées (SPEC-611)."
+        "summary": "Renvoie le résultat complet d’une tentative corrigée : score, seuil, lacunes, acquis, historique, nouvelle tentative et remédiation (SPEC-612)."
       }
     },
     "/api/v1/attempts/{aid}/submit": {
@@ -24107,6 +24376,845 @@
           }
         ],
         "summary": "Crée une tentative de quiz de validation à partir de la banque, ou reprend la tentative en cours (SPEC-611)."
+      }
+    },
+    "/api/v1/modules/{mid}/remediation": {
+      "get": {
+        "operationId": "remediation.get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Remédiation en cours du module, telle que l’écran la reçoit.",
+                  "properties": {
+                    "activityId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "attemptId": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "gaps": {
+                      "items": {
+                        "additionalProperties": false,
+                        "description": "Une notion en lacune et sa remédiation ciblée (ADR-0173).",
+                        "properties": {
+                          "excerpts": {
+                            "items": {
+                              "additionalProperties": false,
+                              "description": "Extrait de cours cité dans la remédiation, lien contrôlé.",
+                              "properties": {
+                                "href": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "label",
+                                "href"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 5,
+                            "type": "array"
+                          },
+                          "label": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "nature": {
+                            "enum": [
+                              "forgetting",
+                              "confusion",
+                              "misunderstanding",
+                              "application"
+                            ],
+                            "type": "string"
+                          },
+                          "natureLabel": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "notionId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          },
+                          "questions": {
+                            "items": {
+                              "additionalProperties": false,
+                              "description": "Question d’une tentative, sans aucune bonne réponse avant vérification.",
+                              "properties": {
+                                "brickVersionId": {
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                  "type": "string"
+                                },
+                                "feedback": {
+                                  "additionalProperties": false,
+                                  "description": "Retour immédiat d’une question vérifiée.",
+                                  "properties": {
+                                    "correction": {
+                                      "anyOf": [
+                                        {
+                                          "anyOf": [
+                                            {
+                                              "additionalProperties": false,
+                                              "description": "Correction d’une question à choix : bonne option et option choisie.",
+                                              "properties": {
+                                                "explanation": {
+                                                  "type": "string"
+                                                },
+                                                "kind": {
+                                                  "const": "choice_question",
+                                                  "type": "string"
+                                                },
+                                                "options": {
+                                                  "items": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "chosen": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "correct": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "id": {
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "text": {
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "id",
+                                                      "text",
+                                                      "correct",
+                                                      "chosen"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "type": "array"
+                                                }
+                                              },
+                                              "required": [
+                                                "kind",
+                                                "explanation",
+                                                "options"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "description": "Correction d’un texte à trous, trou par trou.",
+                                              "properties": {
+                                                "explanation": {
+                                                  "type": "string"
+                                                },
+                                                "gaps": {
+                                                  "items": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "correct": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "expected": {
+                                                        "type": "string"
+                                                      },
+                                                      "given": {
+                                                        "type": "string"
+                                                      },
+                                                      "id": {
+                                                        "maximum": 9007199254740991,
+                                                        "minimum": 1,
+                                                        "type": "integer"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "id",
+                                                      "given",
+                                                      "expected",
+                                                      "correct"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "type": "array"
+                                                },
+                                                "kind": {
+                                                  "const": "cloze",
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "kind",
+                                                "explanation",
+                                                "gaps"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "description": "Correction d’une association, paire par paire.",
+                                              "properties": {
+                                                "explanation": {
+                                                  "type": "string"
+                                                },
+                                                "kind": {
+                                                  "const": "matching",
+                                                  "type": "string"
+                                                },
+                                                "pairs": {
+                                                  "items": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "correct": {
+                                                        "type": "boolean"
+                                                      },
+                                                      "expectedRight": {
+                                                        "type": "string"
+                                                      },
+                                                      "givenRight": {
+                                                        "type": [
+                                                          "string",
+                                                          "null"
+                                                        ]
+                                                      },
+                                                      "left": {
+                                                        "type": "string"
+                                                      },
+                                                      "pairId": {
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "pairId",
+                                                      "left",
+                                                      "expectedRight",
+                                                      "givenRight",
+                                                      "correct"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "type": "array"
+                                                }
+                                              },
+                                              "required": [
+                                                "kind",
+                                                "explanation",
+                                                "pairs"
+                                              ],
+                                              "type": "object"
+                                            },
+                                            {
+                                              "additionalProperties": false,
+                                              "description": "Correction différée d’une question ouverte par le tuteur.",
+                                              "properties": {
+                                                "criteria": {
+                                                  "items": {
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                      "comment": {
+                                                        "type": [
+                                                          "string",
+                                                          "null"
+                                                        ]
+                                                      },
+                                                      "key": {
+                                                        "type": "string"
+                                                      },
+                                                      "label": {
+                                                        "type": "string"
+                                                      },
+                                                      "ok": {
+                                                        "type": "boolean"
+                                                      }
+                                                    },
+                                                    "required": [
+                                                      "key",
+                                                      "ok"
+                                                    ],
+                                                    "type": "object"
+                                                  },
+                                                  "type": "array"
+                                                },
+                                                "explanation": {
+                                                  "type": "string"
+                                                },
+                                                "kind": {
+                                                  "const": "open_question",
+                                                  "type": "string"
+                                                },
+                                                "missing": {
+                                                  "items": {
+                                                    "type": "string"
+                                                  },
+                                                  "type": "array"
+                                                }
+                                              },
+                                              "required": [
+                                                "kind",
+                                                "explanation",
+                                                "criteria",
+                                                "missing"
+                                              ],
+                                              "type": "object"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "explanation": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "isCorrect": {
+                                      "type": [
+                                        "boolean",
+                                        "null"
+                                      ]
+                                    },
+                                    "pending": {
+                                      "type": "boolean"
+                                    },
+                                    "score": {
+                                      "anyOf": [
+                                        {
+                                          "maximum": 100,
+                                          "minimum": 0,
+                                          "type": "number"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "title": {
+                                      "anyOf": [
+                                        {
+                                          "enum": [
+                                            "Exact.",
+                                            "Pas tout à fait.",
+                                            "Réponse enregistrée."
+                                          ],
+                                          "type": "string"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "isCorrect",
+                                    "score",
+                                    "explanation"
+                                  ],
+                                  "type": "object"
+                                },
+                                "maxScore": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "number"
+                                },
+                                "notionId": {
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                  "type": "string"
+                                },
+                                "notionLabel": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "payload": {},
+                                "position": {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                "response": {},
+                                "state": {
+                                  "enum": [
+                                    "unanswered",
+                                    "draft",
+                                    "checked"
+                                  ],
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "enum": [
+                                    "choice_question",
+                                    "cloze",
+                                    "matching",
+                                    "open_question"
+                                  ],
+                                  "type": "string"
+                                },
+                                "typeLabel": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "position",
+                                "brickVersionId",
+                                "type",
+                                "typeLabel",
+                                "notionId",
+                                "notionLabel",
+                                "payload",
+                                "state",
+                                "maxScore"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "textMd": {
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "notionId",
+                          "label",
+                          "nature",
+                          "natureLabel",
+                          "textMd",
+                          "excerpts",
+                          "questions"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "module": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "position": {
+                          "maximum": 9007199254740991,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "position",
+                        "title"
+                      ],
+                      "type": "object"
+                    },
+                    "retryAvailableAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "enum": [
+                        "none",
+                        "preparing",
+                        "ready",
+                        "in_progress",
+                        "completed"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "module",
+                    "activityId",
+                    "attemptId",
+                    "gaps",
+                    "retryAvailableAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Renvoie la remédiation en cours du module, ou un statut none (SPEC-612)."
+      },
+      "post": {
+        "operationId": "remediation.prepare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Préparation de la remédiation lancée (202).",
+                  "properties": {
+                    "status": {
+                      "const": "preparing",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Prépare une remédiation à la demande (automatisme désactivé ou remédiation archivée) ; 409 si une remédiation est déjà prête (SPEC-612)."
+      }
+    },
+    "/api/v1/modules/{mid}/remediation/complete": {
+      "post": {
+        "operationId": "remediation.complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Remédiation terminée ; date de la nouvelle tentative.",
+                  "properties": {
+                    "retryAvailableAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "retryAvailableAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Termine la remédiation quand toutes les questions sont vérifiées et renvoie la date de nouvelle tentative (SPEC-612)."
       }
     },
     "/api/v1/notifications": {
