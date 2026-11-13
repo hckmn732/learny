@@ -6,8 +6,8 @@
 // planning commit together.
 
 import { ENGINE } from '@learny/config/product';
-import { userLocalDay, type Clock } from '@learny/core';
-import { sql, type DbTx } from '@learny/db';
+import { AppError, localTimeToInstant, userLocalDay, type Clock } from '@learny/core';
+import { schema, sql, type DbTx } from '@learny/db';
 import {
   planSchedule,
   type ExistingPlannerSlot,
@@ -18,7 +18,9 @@ import {
   type SlotStatus,
 } from '@learny/learning-engine';
 
+import type { ServiceContext } from '../context';
 import { reconcilePlanSlots, type PlanReconciliationCounts } from '../learning/persist-plan';
+import { requireUser, toResult } from '../resources/result';
 
 /** Fallback module volume when the cadrage did not record one; the planner needs a positive hour. */
 const DEFAULT_MODULE_HOURS = 2;
@@ -249,4 +251,178 @@ export async function replanFormationAfterResume(
     now: clock.now().toISOString(),
   });
   return reconcilePlanSlots(tx, userId, formationId, plan.slots, now);
+}
+
+interface MockExamFormationRow {
+  id: string;
+  title: string;
+  status: string;
+  end_date: string | null;
+  objectives: string[];
+  exam_format: unknown;
+  timezone: string;
+  [key: string]: unknown;
+}
+
+interface MockExamModuleRow {
+  id: string;
+  position: number;
+  title: string;
+  planned_end: string | null;
+  [key: string]: unknown;
+}
+
+export interface ScheduledMockExam {
+  position: 1 | 2;
+  startsAt: string;
+  endsAt: string;
+  date: string;
+  durationMin: number;
+  slotId: string;
+}
+
+function mockExamDurationMinutes(examFormat: unknown): number {
+  const parsed = schema.examFormatSchema.safeParse(examFormat);
+  if (parsed.success) return parsed.data.durationMin;
+  return ENGINE.planner.mockExam.questions * ENGINE.planner.mockExam.minutesPerQuestion;
+}
+
+function civilDateOffset(date: string, delta: number): string {
+  const [year = 0, month = 1, day = 1] = date.split('-').map(Number);
+  const shifted = new Date(Date.UTC(year, month - 1, day + delta));
+  const pad = (value: number) => String(value).padStart(2, '0');
+  return `${pad(shifted.getUTCFullYear())}-${pad(shifted.getUTCMonth() + 1)}-${pad(
+    shifted.getUTCDate(),
+  )}`;
+}
+
+/**
+ * BR-PRA-05, ADR-0028 — a formation whose objectives contain `exam` carries two mock exams: at
+ * the end of the penultimate module and on the last day of the formation. The reconciliation is
+ * idempotent (stable `planner_key`) and never touches a completed or moved slot.
+ */
+export function ensureMockExamSlots(
+  ctx: ServiceContext,
+  formationId: string,
+): Promise<Result<ScheduledMockExam[]>> {
+  return toResult(async () => {
+    const { userId, db } = requireUser(ctx);
+    const now = ctx.clock.now();
+    return db.run(async (tx) => {
+      await tx.execute(sql`
+        select pg_advisory_xact_lock(
+          hashtextextended('mock-exams:' || ${userId} || ':' || ${formationId}, 0)
+        )
+      `);
+      const formationRows = await tx.execute<MockExamFormationRow>(sql`
+        select f.id::text as id,
+               f.title,
+               f.status::text as status,
+               f.end_date::text as end_date,
+               f.objectives::text[] as objectives,
+               f.exam_format,
+               p.timezone
+        from public.formations f
+        join public.profiles p on p.id = f.owner_id
+        where f.id = ${formationId}::uuid
+          and (f.owner_id = ${userId}::uuid or exists (
+            select 1
+            from public.groups g
+            join public.group_members gm on gm.group_id = g.id
+            where g.formation_id = f.id
+              and gm.user_id = ${userId}::uuid
+              and gm.member_status = 'active'
+          ))
+        limit 1
+      `);
+      const formation = formationRows[0];
+      if (formation === undefined) {
+        throw new AppError('NOT_FOUND', 'Formation introuvable.');
+      }
+      if (!formation.objectives.includes('exam') || formation.status !== 'active') return [];
+
+      const moduleRows = await tx.execute<MockExamModuleRow>(sql`
+        select id::text as id, position, title, planned_end::text as planned_end
+        from public.modules
+        where formation_id = ${formationId}::uuid
+        order by position asc
+      `);
+      if (moduleRows.length === 0) return [];
+      const endDate = formation.end_date ?? civilDateOffset(userLocalDay(now, formation.timezone), 30);
+      const penultimate = moduleRows.length >= 2 ? moduleRows[moduleRows.length - 2] : undefined;
+      const penultimateDate =
+        penultimate?.planned_end ?? civilDateOffset(endDate, moduleRows.length >= 2 ? -7 : 0);
+      const dates: { position: 1 | 2; date: string }[] =
+        moduleRows.length >= 2
+          ? [
+              { position: 1, date: penultimateDate },
+              { position: 2, date: endDate },
+            ]
+          : [{ position: 2, date: endDate }];
+      const durationMin = mockExamDurationMinutes(formation.exam_format);
+      const scheduled: ScheduledMockExam[] = [];
+
+      for (const entry of dates) {
+        const startsAt = localTimeToInstant(entry.date, '09:00', formation.timezone);
+        const endsAt = new Date(startsAt.getTime() + durationMin * 60_000);
+        const plannerKey = `mock-exam:${formationId}:${String(entry.position)}`;
+        const title = `Examen blanc ${String(entry.position)} — ${formation.title}`;
+        const existing = await tx.execute<{ id: string }>(sql`
+          select id::text as id
+          from public.schedule_slots
+          where user_id = ${userId}::uuid
+            and planner_key = ${plannerKey}
+            and status = 'planned'
+          limit 1
+        `);
+        let slotId = existing[0]?.id;
+        if (slotId === undefined) {
+          const inserted = await tx.execute<{ id: string }>(sql`
+            insert into public.schedule_slots (
+              user_id, formation_id, module_id, kind, title, starts_at, ends_at,
+              status, created_by, planner_key
+            ) values (
+              ${userId}::uuid, ${formationId}::uuid, null, 'mock_exam', ${title},
+              ${startsAt.toISOString()}::timestamptz, ${endsAt.toISOString()}::timestamptz,
+              'planned', 'planner', ${plannerKey}
+            )
+            returning id::text as id
+          `);
+          slotId = inserted[0]?.id;
+        } else {
+          await tx.execute(sql`
+            update public.schedule_slots
+            set title = ${title},
+                starts_at = ${startsAt.toISOString()}::timestamptz,
+                ends_at = ${endsAt.toISOString()}::timestamptz,
+                updated_at = ${now.toISOString()}::timestamptz
+            where id = ${slotId}::uuid
+              and status = 'planned'
+              and created_by <> 'learner'
+          `);
+        }
+        if (slotId === undefined) continue;
+        const storedRows = await tx.execute<{ starts_at: Date | string; ends_at: Date | string }>(sql`
+          select starts_at, ends_at from public.schedule_slots where id = ${slotId}::uuid
+        `);
+        const stored = storedRows[0];
+        if (stored === undefined) continue;
+        scheduled.push({
+          position: entry.position,
+          date: entry.date,
+          startsAt:
+            stored.starts_at instanceof Date
+              ? stored.starts_at.toISOString()
+              : new Date(stored.starts_at).toISOString(),
+          endsAt:
+            stored.ends_at instanceof Date
+              ? stored.ends_at.toISOString()
+              : new Date(stored.ends_at).toISOString(),
+          durationMin,
+          slotId,
+        });
+      }
+      return scheduled;
+    });
+  });
 }

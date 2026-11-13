@@ -1,10 +1,10 @@
-import { createQuizGradeJob, functions, setInlineRegistry } from '@learny/jobs';
-import { createServiceContext, runQuizGrade } from '@learny/services';
+import { createExamDeadlineJob, createQuizGradeJob, functions, setInlineRegistry } from '@learny/jobs';
+import { createServiceContext, runQuizGrade, submitExam } from '@learny/services';
 
-// SPEC-611 ET-8 — the quiz-grade job needs the services package; `@learny/jobs` cannot depend on
-// it (services already imports the transaction/outbox helpers of jobs). The host therefore injects
-// the handler. The inline dispatcher (JOBS_MODE=inline, tests) must know the function at boot, not
-// only when the Inngest route is first loaded, hence the explicit registration below.
+// SPEC-611 ET-8, SPEC-614 ET-4 — the durable jobs need the services package; `@learny/jobs`
+// cannot depend on it (services already imports the transaction/outbox helpers of jobs). The host
+// therefore injects the handlers. The inline dispatcher (JOBS_MODE=inline, tests) must know the
+// functions at boot, not only when the Inngest route is first loaded, hence the registration.
 
 export const quizGradeJob = createQuizGradeJob({
   run: async ({ userId, attemptId, requestId, clock, logger }) => {
@@ -17,7 +17,19 @@ export const quizGradeJob = createQuizGradeJob({
   },
 });
 
-export const jobRegistry = [...functions, quizGradeJob];
+export const examDeadlineJob = createExamDeadlineJob({
+  submit: async ({ userId, attemptId, requestId, clock, logger }) => {
+    const outcome = await submitExam(
+      createServiceContext({ userId, requestId, clock, logger }),
+      attemptId,
+      { trigger: 'deadline' },
+    );
+    if (!outcome.ok) throw outcome.error;
+    return outcome.value;
+  },
+});
+
+export const jobRegistry = [...functions, quizGradeJob, examDeadlineJob];
 
 export function registerInlineJobs(): void {
   setInlineRegistry(jobRegistry);
