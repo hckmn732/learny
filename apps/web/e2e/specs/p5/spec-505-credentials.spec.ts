@@ -98,7 +98,7 @@ test('démonstration des clés, conformité visuelle @SPEC-505 @visual', async (
     .locator('main section[data-testid]')
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
   expect(regions).toEqual(REGIONS);
-  await expect(page.getByTestId('cred-masked')).toHaveText('sk-••••••••b72C');
+  await expect(page.getByTestId('cred-masked').last()).toHaveText('sk-••••••••b72C');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

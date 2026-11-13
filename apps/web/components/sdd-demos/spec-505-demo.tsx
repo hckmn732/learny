@@ -226,24 +226,26 @@ export default function Spec505Demo({
             Aucun chiffré à afficher.
           </p>
         ) : (
-          <dl className="mt-4 grid gap-2 text-14">
-            <div className="flex flex-wrap gap-2">
-              <dt className="font-600">Longueur du chiffré</dt>
-              <dd data-testid="cred-storage-bytes" className="m-0 font-mono">
-                {storage.bytes} octets
-              </dd>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <dt className="font-600">IV (8 premiers octets)</dt>
-              <dd data-testid="cred-storage-iv" className="m-0 font-mono">
-                {storage.ivHex}
-              </dd>
-            </div>
+          <div className="mt-4 grid gap-2 text-14">
+            <dl className="m-0 grid gap-2">
+              <div className="flex flex-wrap gap-2">
+                <dt className="font-600">Longueur du chiffré</dt>
+                <dd data-testid="cred-storage-bytes" className="m-0 font-mono">
+                  {storage.bytes} octets
+                </dd>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <dt className="font-600">IV (8 premiers octets)</dt>
+                <dd data-testid="cred-storage-iv" className="m-0 font-mono">
+                  {storage.ivHex}
+                </dd>
+              </div>
+            </dl>
             <p className="m-0 text-13 text-ink-muted">
               Le chiffré contient l’IV, l’étiquette d’authentification et le texte chiffré. La clé
               n’est jamais stockée en clair et n’est jamais renvoyée au navigateur.
             </p>
-          </dl>
+          </div>
         )}
       </Card>
 
