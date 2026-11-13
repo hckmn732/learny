@@ -631,6 +631,9 @@ importers:
 
   packages/tutor:
     dependencies:
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../bricks
       '@learny/contracts':
         specifier: workspace:*
         version: link:../contracts
@@ -643,9 +646,22 @@ importers:
       '@learny/llm':
         specifier: workspace:*
         version: link:../llm
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.4(@opentelemetry/api@1.10.0)(@types/pg@8.15.6)(postgres@3.4.9)
       zod:
         specifier: ^4.6.7
         version: 4.6.7
+    devDependencies:
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../testing
+      '@vitest/coverage-v8':
+        specifier: ^5.1.0
+        version: 5.1.0(vitest@5.1.0)
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/ui:
     dependencies:

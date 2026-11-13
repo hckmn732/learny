@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "loop-tone-tu-en",
+  "promptId": "tutor.tutor",
+  "promptVersion": 1,
+  "description": "Réponse du tuteur au ton « tu » et en anglais (BR-ACC-05, BR-ACC-06).",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Hello! You are going to learn double-entry accounting.",
+      "finishReason": "stop",
+      "usage": { "inputTokens": 40, "outputTokens": 10, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 140
+    }
+  ]
+}

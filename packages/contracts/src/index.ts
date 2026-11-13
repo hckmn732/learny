@@ -27,6 +27,7 @@ export * from './events';
 export * from './header';
 export * from './ingestion';
 export * from './learning';
+export * from './tutor';
 export * from './search';
 export * from './search-web';
 export * from './sidebar';

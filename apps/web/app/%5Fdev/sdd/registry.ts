@@ -262,6 +262,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-507'),
   },
+  'SPEC-508': {
+    title: 'SPEC-508 · Paquet tutor : actions, boucle et consignes',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-508'),
+  },
   'SPEC-509': {
     title: 'SPEC-509 · Ingestion : notes et PDF',
     titleTestId: 'sdd-title',

@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-13T02:05:22.756Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-13T02:08:49.083Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 69 |
+| Terminées | 70 |
 | En cours | 0 |
-| Prêtes | 3 |
+| Prêtes | 2 |
 | En attente de dépendances | 60 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **52.3 %** |
-| Avancement V1 | 55.6 % |
-| Prochaine action | start SPEC-508 — Paquet tutor : actions, boucle et consignes |
+| **Avancement global** | **53.0 %** |
+| Avancement V1 | 56.5 % |
+| Prochaine action | start SPEC-510 — Ingestion : pages web, YouTube et images |
 
 ## Phases et checkpoints
 
@@ -26,7 +26,7 @@
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
-| P5 | IA, ingestion et briques | 9/13 | CP-5 | ⏳ |
+| P5 | IA, ingestion et briques | 10/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
@@ -103,7 +103,7 @@
 | [SPEC-505](../specs/p5-ia/SPEC-505-cles-personnelles-chiffrees.md) | Clés personnelles chiffrées | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-504 |
 | [SPEC-506](../specs/p5-ia/SPEC-506-qualification-des-modeles-personnels.md) | Qualification des modèles personnels | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-505, SPEC-501 |
 | [SPEC-507](../specs/p5-ia/SPEC-507-garde-fou-de-cout-et-journal-des-appels.md) | Garde-fou de coût et journal des appels | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-504, SPEC-210 |
-| [SPEC-508](../specs/p5-ia/SPEC-508-paquet-tutor-actions-boucle-et-consignes.md) | Paquet tutor : actions, boucle et consignes | P5 | 🟢 ready | 0 | — | SPEC-501, SPEC-504, SPEC-411 |
+| [SPEC-508](../specs/p5-ia/SPEC-508-paquet-tutor-actions-boucle-et-consignes.md) | Paquet tutor : actions, boucle et consignes | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-501, SPEC-504, SPEC-411 |
 | [SPEC-509](../specs/p5-ia/SPEC-509-ingestion-notes-et-pdf-decoupage-embeddings.md) | Ingestion : notes et PDF, découpage, embeddings | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-104, SPEC-203, SPEC-504, SPEC-206 |
 | [SPEC-510](../specs/p5-ia/SPEC-510-ingestion-pages-web-youtube-et-images.md) | Ingestion : pages web, YouTube et images | P5 | 🟢 ready | 0 | — | SPEC-509 |
 | [SPEC-511](../specs/p5-ia/SPEC-511-recherche-semantique-et-selection-du-contexte.md) | Recherche sémantique et sélection du contexte | P5 | 🟢 ready | 0 | — | SPEC-509 |

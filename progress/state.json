@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T02:05:22.755Z",
+  "updatedAt": "2026-11-13T02:08:49.082Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3420,14 +3420,55 @@
       }
     },
     "SPEC-508": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T00:54:10.856Z",
+      "completedAt": "2026-11-13T01:49:32.852Z",
+      "branch": "spec/SPEC-508-paquet-tutor-actions-boucle-et-consignes",
+      "commit": "0a7c0a6",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T01:47:16.497Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T01:47:42.811Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T01:48:00.435Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T01:48:06.798Z",
+          "details": "13 test(s) [SPEC-508] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T01:48:45.193Z",
+          "details": "7 test(s) [SPEC-508] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T01:49:21.678Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T01:49:21.679Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T01:49:21.695Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-509": {
       "status": "done",

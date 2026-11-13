@@ -1,4 +1,5 @@
-// `search_web` action of the tutor (SPEC-512 EF-1, EF-3, EF-5, ET-1; BR-IA-12, ADR-0048).
+// `search_web` action of the tutor: the SPEC-512 engine (EF-1, EF-3, EF-5, ET-1; BR-IA-12,
+// ADR-0048) and its SPEC-508 registry adapter (TutorTool/ToolContext; ADR-0296).
 //
 // The guard runs before anything else: only the `programme` task may search, for programme design
 // or a resource suggestion. The result is normalized and budgeted by `@learny/llm`; this module
@@ -7,7 +8,7 @@ import {
   SEARCH_WEB_EMPTY_MESSAGE,
   SEARCH_WEB_PURPOSES,
   SEARCH_WEB_TOOL_NOT_ALLOWED_MESSAGE,
-  SearchWebOutput,
+  SearchWebOutput as SearchWebResult,
   SearchWebQuery,
   type SearchWebProvider,
 } from '@learny/contracts';
@@ -26,7 +27,10 @@ import {
 
 import { WEB_SEARCH_TASKS, type TutorTask } from '../tasks';
 
-import type { TutorTool } from './tool';
+import { accessibleFormation } from './guard-helpers';
+import type { WebSearchPort } from './runtime';
+import { SearchWebInput, SearchWebOutput as SearchWebActionOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 export const SEARCH_WEB_TOOL_NAME = 'search_web';
 
@@ -37,7 +41,7 @@ export interface SearchWebSecrets {
   apiKey?: string | null | undefined;
 }
 
-/** Context of a tutor action (SPEC-508 completes it with the loop context). */
+/** Context of the SPEC-512 engine; the SPEC-508 loop adaptation lives at the end of this file. */
 export interface SearchWebContext {
   task: TutorTask;
   userId: string;
@@ -124,16 +128,16 @@ async function clientFor(ctx: SearchWebContext): Promise<Result<SearchProviderCl
 function output(
   input: SearchWebQuery,
   provider: SearchWebProvider,
-  result: { results: SearchWebOutput['results']; limited: boolean },
-): Result<SearchWebOutput> {
-  const validated = SearchWebOutput.safeParse({
+  result: { results: SearchWebResult['results']; limited: boolean },
+): Result<SearchWebResult> {
+  const validated = SearchWebResult.safeParse({
     query: input.query,
     purpose: input.purpose,
     provider,
     results: result.results,
     limited: result.limited,
     message: result.results.length === 0 ? SEARCH_WEB_EMPTY_MESSAGE : null,
-  } satisfies SearchWebOutput);
+  } satisfies SearchWebResult);
   if (!validated.success) {
     return err(
       new AppError('INVALID_RESPONSE', 'La recherche web a produit une réponse non conforme.', {
@@ -152,7 +156,7 @@ function output(
 export async function searchWeb(
   ctx: SearchWebContext,
   rawInput: unknown,
-): Promise<Result<SearchWebOutput>> {
+): Promise<Result<SearchWebResult>> {
   const parsed = SearchWebQuery.safeParse(rawInput);
   if (!parsed.success) return err(validationFailed(parsed.error));
   const refusal = guardSearchWeb(ctx, parsed.data);
@@ -184,12 +188,63 @@ export async function searchWeb(
   return output(parsed.data, client.value.provider, result.value);
 }
 
-export const searchWebTool: TutorTool<SearchWebContext, SearchWebQuery, SearchWebOutput> = {
+/**
+ * SPEC-512 ET-4 — descriptor of the engine for callers that declare it directly. The SPEC-508
+ * registry uses `searchWebTutorTool` below, which adapts it to `TutorTool`/`ToolContext`.
+ */
+export const searchWebTool = {
   name: SEARCH_WEB_TOOL_NAME,
   description:
     'Recherche des pages web publiques pour concevoir un programme ou suggérer une ressource à un chapitre. Ne jamais recopier un résultat dans un cours : une ressource n’entre dans le chapitre que si l’apprenant l’importe.',
   inputSchema: SearchWebQuery,
-  outputSchema: SearchWebOutput,
+  outputSchema: SearchWebResult,
   guard: guardSearchWeb,
   execute: searchWeb,
-};
+} as const;
+
+/**
+ * SPEC-508 registry entry. The closed registry is typed by `TutorTool`/`ToolContext`; the action
+ * keeps its own programme-only guard and delegates the provider call to the injected runtime port
+ * (ADR-0296). Without a port, execution refuses safely instead of inventing a result.
+ */
+export const searchWebTutorTool = defineTutorTool({
+  name: TOOL_NAMES.searchWeb,
+  description:
+    'Search the web to design a programme or suggest resources. Only available for the programme task; results can never be inserted into a course as citations.',
+  inputSchema: SearchWebInput,
+  outputSchema: SearchWebActionOutput,
+  async guard(ctx, input) {
+    if (ctx.task !== 'programme') {
+      return refuse('FORBIDDEN', 'Cette action est réservée à la conception du programme.');
+    }
+    const formationId = await accessibleFormation(ctx, input.formationId);
+    if (formationId === null) return notFound();
+    return ALLOW;
+  },
+  async execute(ctx, input) {
+    const result = await ctx.runtime.searchWeb(ctx, input);
+    return { ...result, source: 'web' as const };
+  },
+});
+
+/**
+ * ADR-0296 — wires the SPEC-512 engine as the runtime port consumed by the SPEC-508 registry.
+ * Product callers pass their resolved context; the port maps the normalized result back to the
+ * plain shape of `ToolContext.runtime`.
+ */
+export function createWebSearchPort(ctx: SearchWebContext): WebSearchPort {
+  return {
+    async search(input) {
+      const result = await searchWeb(ctx, {
+        query: input.query,
+        purpose: 'programme',
+        limit: Math.min(input.maxResults, 5),
+      });
+      if (!result.ok) throw result.error;
+      return {
+        results: result.value.results.map(({ title, url, snippet }) => ({ title, url, snippet })),
+        provider: result.value.provider,
+      };
+    },
+  };
+}

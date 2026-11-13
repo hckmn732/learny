@@ -1,0 +1,59 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.988692">
+<testsuite name="p5/spec-508.spec.ts" timestamp="2026-11-13T01:49:16.462Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.764" errors="0">
+<testcase name="Paquet tutor : actions, boucle et consignes @SPEC-508" classname="p5/spec-508.spec.ts" time="1.62">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/attachments/spec-508-success-d4898bc74bf80170be7e32356ee2a7ec1c64a06a.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/attachments/axe-ec336b8cb24179071136da90502ff62a28f63aa9.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/attachments/spec-508-demo-e754a479a09df54755534c9da77440635ce2b11c.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-Paquet-tutor-a-f68e6-oucle-et-consignes-SPEC-508-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration tutor, conformité visuelle @SPEC-508 @visual @mobile" classname="p5/spec-508.spec.ts" time="1.144">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/attachments/axe-83791218e1296ad42031f9a7736ac300e03891a2.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/attachments/spec-508-demo-visual-de65908c67b377712c1588563cf04cfedf491e8b.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-508.spec.ts" timestamp="2026-11-13T01:49:16.462Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.255" errors="0">
+<testcase name="démonstration tutor, conformité visuelle @SPEC-508 @visual @mobile" classname="p5/spec-508.spec.ts" time="1.255">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/attachments/axe-25fe874c98213d715fc2a3b686ae23bc8458690c.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/attachments/spec-508-demo-visual-da4b76280bece7be4f5f949bffece7ae963f07ac.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-508-démonstration--fde06-elle-SPEC-508-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
