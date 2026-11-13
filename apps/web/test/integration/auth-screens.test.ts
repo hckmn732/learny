@@ -88,14 +88,16 @@ describe('[SPEC-601] parcours d’authentification', () => {
     // ET-5 — the two legal acceptances, the version and the transmitted time zone.
     const profile = await serviceDb().execute<{
       terms_version: string | null;
-      terms_accepted_at: Date | null;
+      terms_accepted_at: string | null;
       timezone: string;
     }>(
       sql`select terms_version, terms_accepted_at, timezone
             from public.profiles where email = ${email}`,
     );
     expect(profile[0]?.terms_version).toBe('cgu:2026-11-11;privacy:2026-11-11');
-    expect(profile[0]?.terms_accepted_at).toBeInstanceOf(Date);
+    expect(Date.parse(profile[0]?.terms_accepted_at ?? '')).toBe(
+      Date.parse('2026-11-11T12:20:00Z'),
+    );
     expect(profile[0]?.timezone).toBe('America/New_York');
 
     const acceptances = await serviceDb().execute<{ document: string; version: string }>(
