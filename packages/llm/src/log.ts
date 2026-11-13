@@ -43,6 +43,8 @@ export interface LogCallInput {
   status: AiCallStatusValue;
   errorCode?: string | null;
   costCalculator?: CostCalculator;
+  /** BR-IA-13 — non-urgent provider batch, journaled as such. */
+  batch?: boolean;
   createdAt?: Date;
 }
 
@@ -70,7 +72,7 @@ export async function logCall(db: Db, input: LogCallInput): Promise<AiCall> {
     latencyMs: input.latencyMs,
     status: input.status,
     errorCode: input.errorCode ?? null,
-    batch: false,
+    batch: input.batch ?? false,
     createdAt: input.createdAt ?? clock.now(),
   });
 }

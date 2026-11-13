@@ -281,6 +281,27 @@
       "when": 1794530018059,
       "tag": "0039_ai_budget_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1794537176506,
+      "tag": "0040_question_bank_jobs",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1794537189512,
+      "tag": "0041_question_bank_rules",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1794537697308,
+      "tag": "0042_question_bank_jobs_write",
+      "breakpoints": true
     }
   ]
 }

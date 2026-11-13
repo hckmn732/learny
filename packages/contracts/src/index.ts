@@ -34,4 +34,5 @@ export * from './search-web';
 export * from './sidebar';
 export * from './billing';
 export * from './bricks';
+export * from './questions';
 export * from './dev-billing';

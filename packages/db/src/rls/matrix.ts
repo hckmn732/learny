@@ -154,6 +154,9 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('bricks', 'id', ['bricks_owner_all']),
   personal('brick_versions', 'id', ['brick_versions_owner_all']),
   personal('brick_reports', 'id', ['brick_reports_owner_all']),
+  // SPEC-513 — the job state is written in the learner's RLS transaction by the service; every
+  // row stays scoped to its owner and contains no question content.
+  personal('question_bank_jobs', 'user_id', ['question_bank_jobs_owner_all']),
   personal('activities', 'id', ['activities_owner_all']),
   personal('attempts', 'id', ['attempts_owner_all']),
   personal('answers', 'id', ['answers_owner_all']),

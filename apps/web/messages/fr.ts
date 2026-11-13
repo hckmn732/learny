@@ -3091,6 +3091,62 @@ export const fr = {
         note: 'Schémas Zod de @learny/contracts ; aucune clé ni contenu d’un autre apprenant.',
       },
     },
+    spec513: {
+      intro:
+        'Une banque personnelle est préparée à partir du cours privé : quatre variantes distinctes par notion et format, empreintes dédupliquées et distracteurs annotés.',
+      notion: {
+        title: 'Notion et version de cours',
+        notion: 'Notion',
+        label: 'Écritures comptables — comptes de bilan',
+        course: 'Version du cours',
+        version: 'version 2 · propriétaire unique',
+        formats: 'Formats pertinents',
+        formatLabels: 'question à choix, question ouverte, texte à trous, association',
+        note: 'La banque est propre à cet apprenant : un autre membre du groupe ne lit ni les questions, ni les empreintes, ni les passages source.',
+      },
+      variants: {
+        title: 'Quatre variantes, quatre empreintes distinctes',
+        format: 'Format',
+        stem: 'Énoncé',
+        fingerprint: 'Empreinte masquée',
+        distractors: 'Distracteurs annotés',
+        status: 'Statut',
+        counter: (seen: number, available: number, required: number) =>
+          `${String(seen)} vue(s) · ${String(available)} disponible(s) · ${String(required)} requise(s)`,
+        note: 'Les empreintes sont affichées tronquées ; une seconde variante de même empreinte serait écartée avant insertion.',
+      },
+      formats: {
+        choice_question: 'Question à choix',
+        open_question: 'Question ouverte',
+        cloze: 'Texte à trous',
+        matching: 'Association',
+      },
+      status: {
+        active: 'Active',
+      },
+      exhaustion: {
+        title: 'Épuisement et régénération',
+        available: 'Banque disponible : 0 vue sur 4 variantes.',
+        exhausted:
+          'Toutes les variantes ont été vues : la banque est épuisée, aucune empreinte déjà vue ne sera resservie.',
+        markSeen: 'Marquer les 4 variantes comme vues',
+        regenerate: 'Demander une nouvelle génération',
+        regenerated:
+          'Nouvelle génération demandée : 4 variantes inédites, 0 empreinte déjà vue réutilisée.',
+        note: 'La demande est mise en file pour le lot nocturne ; le fournisseur simulé renvoie quatre variantes déterministes.',
+      },
+      contract: {
+        title: 'Contrat d’entrée et résultat validé',
+        input: 'Entrée validée',
+        output: 'Sortie validée',
+        note: 'Schémas Zod de @learny/contracts ; aucun passage privé ni clé n’est rendu.',
+      },
+      failure: {
+        title: 'Échec lisible',
+        body: 'Sans version de cours privée prête, aucune banque n’est générée et le message reste sûr.',
+        message: 'Aucune version de cours privée n’est disponible.',
+      },
+    },
   },
   email: {
     unsubscribe: {

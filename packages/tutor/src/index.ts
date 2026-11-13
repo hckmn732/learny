@@ -59,3 +59,23 @@ export {
   suggestResource,
 } from './services/resource-suggestions';
 export type { ResourceSuggestionContext } from './services/resource-suggestions';
+export {
+  QUESTION_BANK_MAX_ATTEMPTS,
+  QUESTION_BANK_PASSAGE_LIMIT,
+  QUESTION_BANK_PROMPT_ID,
+  QUESTION_BANK_PROMPT_VERSION,
+  enqueueCourseQuestionBanks,
+  prepareQuestionBank,
+  processQuestionBankJobs,
+  requestQuestionBank,
+} from './services/question-bank';
+export type {
+  QuestionBankCandidate,
+  QuestionBankContext,
+  QuestionBankDeps,
+  QuestionBankGenerationInput,
+  QuestionBankGenerator,
+  QuestionBankPassage,
+  QuestionBankProcessResult,
+  QuestionBankStore,
+} from './services/question-bank';

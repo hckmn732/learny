@@ -10,6 +10,8 @@ import tutorToolCall from '../../fixtures/tutor/demo-tool-call.json' with { type
 import tutorDefault from '../../fixtures/tutor/demo.default.json' with { type: 'json' };
 import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json' with { type: 'json' };
 import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json' with { type: 'json' };
+import tutorQuestionBankRegeneration from '../../fixtures/tutor/question-bank-regeneration.json' with { type: 'json' };
+import tutorQuestionBank from '../../fixtures/tutor/question-bank.json' with { type: 'json' };
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 
@@ -35,6 +37,8 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('tutor/demo.default.json', tutorDefault),
   entry('tutor/loop-completed.json', tutorLoopCompleted),
   entry('tutor/loop-tone-tu-en.json', tutorLoopToneTuEn),
+  entry('tutor/question-bank.json', tutorQuestionBank),
+  entry('tutor/question-bank-regeneration.json', tutorQuestionBankRegeneration),
 ].sort((left, right) => left.path.localeCompare(right.path));
 
 export function fixturesForTask(task: string): readonly RegisteredFixture[] {

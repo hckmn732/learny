@@ -1,0 +1,59 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="34.145186">
+<testsuite name="p5/spec-513.spec.ts" timestamp="2026-11-13T02:55:50.418Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.191" errors="0">
+<testcase name="Banques de questions @SPEC-513" classname="p5/spec-513.spec.ts" time="1.209">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/attachments/spec-513-regeneration-8eba5752a9824a321f9f7685dc44940a744df1c6.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/attachments/axe-41b017bcc5089e545672fc8521e36178b865b2bf.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/attachments/spec-513-demo-1bec71e636a32bb640185dc489578d0ef285e7a9.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-questions-SPEC-513-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Banques de questions, conformité visuelle @SPEC-513 @visual @mobile" classname="p5/spec-513.spec.ts" time="0.982">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/attachments/axe-24d98127c3ff8a596459142e8af327fbb19015e7.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/attachments/spec-513-demo-visual-6c9771500ef9bb6a7e30ca7464c83d5a2ba0432f.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-513.spec.ts" timestamp="2026-11-13T02:55:50.418Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.08" errors="0">
+<testcase name="Banques de questions, conformité visuelle @SPEC-513 @visual @mobile" classname="p5/spec-513.spec.ts" time="1.08">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/attachments/axe-9443d28670240f27b92e7cfc2e94a45afb97324c.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/attachments/spec-513-demo-visual-1b175e4e24adbeb93fab7992ac5ea5536d6cffe8.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-513-Banques-de-que-829bf-elle-SPEC-513-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

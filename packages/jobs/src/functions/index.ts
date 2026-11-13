@@ -18,6 +18,7 @@ import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
 import { notificationsDeferredDue } from './notifications-deferred-due';
+import { prepareQuestionBankForCourse, questionBankNightly } from './prepare-question-bank';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
 import { securityPurge } from './security-purge';
 
@@ -39,6 +40,8 @@ export const learnyFunctions = [
   notificationDelivery,
   notificationsDailyDigest,
   notificationsDeferredDue,
+  prepareQuestionBankForCourse,
+  questionBankNightly,
   sddDemoPipeline,
   securityPurge,
 ] as const;

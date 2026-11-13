@@ -108,4 +108,10 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Décisions appliquées : ADR-0026. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0026, ADR-0301. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+
+Décisions d’implémentation complémentaires (ADR-0301) : les formats pertinents sont la question à
+choix, la question ouverte, le texte à trous et l’association ; la clé d’idempotence de
+`question_bank_jobs` regroupe apprenant, notion, format et version de cours ; les empreintes sont
+dédupliquées sur toutes les briques de la notion, y compris celles déjà vues hors banque ; une
+banque incomplète conserve ses variantes valides mais n’est jamais marquée prête.
