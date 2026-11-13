@@ -2,6 +2,12 @@
 export { createUpload } from './create-upload';
 export type { CreateUploadInput } from './create-upload';
 export { createResource } from './create-resource';
+export { getModuleScreen } from './module';
+export { completeChapter } from './complete-chapter';
+export { generateCourseNow } from './generate';
+export { renameResource } from './rename';
+export { retryResource } from './retry';
+export { dismissSuggestion, importSuggestion } from './suggestions';
 export { finalizeUpload } from './finalize';
 export { getSignedReadUrl } from './read';
 export { deleteResource, purgeDeletedBlobs } from './delete';

@@ -19,6 +19,7 @@ import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { notionGraphRoutes } from './notion-graph';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { programmeRoutes } from './programme';
+import { moduleRoutes } from './resources';
 import { pushDevRoutes, pushRoutes } from './push';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
@@ -49,6 +50,7 @@ export const ROUTES = {
   ...cadrageRoutes,
   ...formationManagementRoutes,
   ...programmeRoutes,
+  ...moduleRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,

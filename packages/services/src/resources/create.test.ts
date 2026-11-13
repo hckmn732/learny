@@ -21,6 +21,16 @@ const mocks = vi.hoisted(() => ({
     [userId, resourceId, name].join('/'),
   ),
   normalize: vi.fn((name: string) => name.trim()),
+  withTransaction: vi.fn(
+    async (
+      database: { run: (fn: (tx: unknown) => Promise<unknown>) => Promise<unknown> },
+      fn: (tx: unknown, outbox: { add: (name: string, data: unknown, opts?: { id?: string }) => void }) => Promise<unknown>,
+    ) => database.run((tx) => fn(tx, { add: vi.fn() })),
+  ),
+}));
+
+vi.mock('@learny/jobs', () => ({
+  withTransaction: mocks.withTransaction,
 }));
 
 vi.mock('@learny/db', () => ({
