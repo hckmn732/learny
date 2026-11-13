@@ -254,6 +254,32 @@ describe('[SPEC-610] discussion contextuelle avec le tuteur', () => {
     expect(injection).not.toContain('system message');
   });
 
+  it('CA-8 — une question sur la lacune suivie reçoit d’abord une question de vérification', async () => {
+    const f = await fixture();
+    const ctx = contextOf(f.a);
+    const conversation = unwrap(await createConversation(ctx, f.courseId, f.chapterId));
+    const streamed = await collect(
+      await streamReply(ctx, conversation.id, {
+        text: 'Je ne comprends pas la clé de comptabilisation',
+        context: { include: {} },
+      }),
+    );
+    expect(streamed).toContain('Avant de réexpliquer');
+    const deltas = streamed
+      .split('\n')
+      .filter((line) => line.startsWith('data: '))
+      .map((line) => {
+        try {
+          return JSON.parse(line.slice(6)) as { type?: string; delta?: string };
+        } catch {
+          return {};
+        }
+      })
+      .filter((chunk) => chunk.type === 'text-delta')
+      .map((chunk) => chunk.delta ?? '');
+    expect(deltas.join('').trimEnd().endsWith('?')).toBe(true);
+  });
+
   it('CA-9 — AI_UNAVAILABLE avant le flux et aucun message tuteur enregistré', async () => {
     const f = await fixture(false);
     const ctx = contextOf(f.a);
