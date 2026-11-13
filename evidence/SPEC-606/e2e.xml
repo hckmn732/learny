@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="43.506258">
-<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:20:11.255Z" hostname="desktop" tests="4" failures="0" skipped="1" time="8.652" errors="0">
-<testcase name="programme actif et module verrouillé @SPEC-606" classname="p6/active-programme.spec.ts" time="3.824">
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="41.831492">
+<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:23:03.171Z" hostname="desktop" tests="4" failures="0" skipped="1" time="7.61" errors="0">
+<testcase name="programme actif et module verrouillé @SPEC-606" classname="p6/active-programme.spec.ts" time="3.42">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/programme-en-cours-9aeadf80d90a573108e589bbfc0b3536ba9c159a.png]]
@@ -19,7 +19,7 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="navigation vers module et examen blanc @SPEC-606" classname="p6/active-programme.spec.ts" time="2.101">
+<testcase name="navigation vers module et examen blanc @SPEC-606" classname="p6/active-programme.spec.ts" time="1.545">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/test-finished-1.png]]
@@ -30,7 +30,7 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="conformité SPEC-606 desktop @SPEC-606 @visual" classname="p6/active-programme.spec.ts" time="2.518">
+<testcase name="conformité SPEC-606 desktop @SPEC-606 @visual" classname="p6/active-programme.spec.ts" time="2.439">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/programme-conformite-48dc1902895d32cf0faae82381a50795e168766b.png]]
@@ -68,8 +68,8 @@
 </skipped>
 </testcase>
 </testsuite>
-<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:20:11.255Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.257" errors="0">
-<testcase name="conformité SPEC-606 mobile @SPEC-606 @visual @mobile" classname="p6/active-programme.spec.ts" time="2.257">
+<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:23:03.171Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.937" errors="0">
+<testcase name="conformité SPEC-606 mobile @SPEC-606 @visual @mobile" classname="p6/active-programme.spec.ts" time="1.937">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/attachments/programme-mobile-a21dda39843fdc2d4c11f56260707cff5245a40b.png]]
