@@ -94,7 +94,7 @@ describe('[SPEC-113] RLS inventory', () => {
     expect(categoryCounts()).toEqual([
       { category: 'shared-programme', count: 7 },
       { category: 'personal', count: 42 },
-      { category: 'service', count: 5 },
+      { category: 'service', count: 6 },
     ]);
 
     for (const entry of RLS_MATRIX) {

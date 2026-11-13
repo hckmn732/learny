@@ -42,6 +42,7 @@ export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {
   ACCOUNT_RULES,
+  AI_RULES,
   AUTOMATION_DEFAULTS,
   AUTOMATION_KEYS,
   AUTOMATION_OPTIONS,

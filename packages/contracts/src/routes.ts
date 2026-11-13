@@ -1,3 +1,4 @@
+import { aiRoutes } from './ai';
 import { authRoutes } from './auth';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
@@ -30,6 +31,7 @@ export const ROUTES = {
   ...searchRoutes,
   ...headerRoutes,
   ...sidebarRoutes,
+  ...aiRoutes,
   ...billingRoutes,
   ...brickRoutes,
   ...billingDevRoutes,
