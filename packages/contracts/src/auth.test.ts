@@ -29,7 +29,7 @@ describe('[SPEC-202] contrats', () => {
 
   it('normalises the e-mail address (trim, lower case) and refuses an invalid one', () => {
     const parsed = SignInInput.parse({ email: `  ${email} `, password: 'x' });
-    expect(parsed.email).toBe('ALEX.PERRIN@EXAMPLE.COM');
+    expect(parsed.email).toBe('alex.perrin@example.com');
     for (const bad of ['', 'pas-un-email', 'a@b', `${'a'.repeat(250)}@example.com`]) {
       expect(SignInInput.safeParse({ email: bad, password: 'x' }).success, bad).toBe(false);
     }
