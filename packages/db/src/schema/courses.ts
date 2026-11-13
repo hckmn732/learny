@@ -159,6 +159,8 @@ export const courseSections = pgTable(
     origin: contentOrigin('origin').notNull(),
     version: integer('version').notNull().default(1),
     reported: boolean('reported').notNull().default(false),
+    /** ET-2 — key of the learner correction that produced this version; a replay is a no-op. */
+    editRequestKey: text('edit_request_key'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
@@ -191,6 +193,13 @@ export const courseSections = pgTable(
       sql`${table.data} is null or jsonb_typeof(${table.data}) = 'object'`,
     ),
     check('course_sections_version_check', sql`${table.version} >= 1`),
+    uniqueIndex('course_sections_edit_request_key_idx')
+      .on(table.ownerId, table.editRequestKey)
+      .where(sql`${table.editRequestKey} is not null`),
+    check(
+      'course_sections_edit_request_key_check',
+      sql`${table.editRequestKey} is null or ${table.editRequestKey} ~ '^[A-Za-z0-9_-]{8,128}$'`,
+    ),
   ],
 );
 

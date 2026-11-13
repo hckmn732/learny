@@ -1,0 +1,3 @@
+ALTER TABLE "course_sections" ADD COLUMN "edit_request_key" text;--> statement-breakpoint
+CREATE UNIQUE INDEX "course_sections_edit_request_key_idx" ON "course_sections" USING btree ("owner_id","edit_request_key") WHERE "course_sections"."edit_request_key" is not null;--> statement-breakpoint
+ALTER TABLE "course_sections" ADD CONSTRAINT "course_sections_edit_request_key_check" CHECK ("course_sections"."edit_request_key" is null or "course_sections"."edit_request_key" ~ '^[A-Za-z0-9_-]{8,128}$');
