@@ -6,5 +6,6 @@
   "programme.programme": 2,
   "course.course": 1,
   "light.demo-object": 1,
-  "ingest-image": 1
+  "ingest-image": 1,
+  "course.summary": 1
 }

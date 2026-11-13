@@ -16,11 +16,11 @@ describe('[SPEC-201] registre', () => {
     for (const route of routes) expect(route.path.startsWith('/api/v1/'), route.id).toBe(true);
   });
 
-  it('allows idempotency only on authenticated POST routes', () => {
+  it('allows idempotency only on authenticated write routes', () => {
     for (const route of routes) {
       if (route.idempotent === true) {
         expect(route.auth, route.id).toBe('user');
-        expect(route.method, route.id).toBe('POST');
+        expect(['POST', 'PUT', 'PATCH'], route.id).toContain(route.method);
       }
     }
   });

@@ -41,6 +41,7 @@ function moduleRow() {
     module_title: 'Comptabilité générale',
     module_position: 3,
     modules_total: 7,
+    threshold: 80,
   };
 }
 
@@ -101,7 +102,9 @@ describe('[SPEC-608] lecture du cours', () => {
       [courseRow()],
       [{ chapter_id: CHAPTER, total: 0 }],
       [],
+      [],
       [{ total: 0 }],
+      [],
       [],
     ]);
 

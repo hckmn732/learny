@@ -6,6 +6,7 @@
 -- Ne jamais modifier après fusion : ajouter une migration.
 
 alter table public.course_section_reports enable row level security;
+alter table public.course_section_reports force row level security;
 
 create policy course_section_reports_owner_all on public.course_section_reports
   for all to authenticated
