@@ -173,3 +173,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0298](ADR-0298-qualification-des-modeles-personnels-batterie-et-capacites.md) | Qualification des modèles personnels : batterie, capacités et exécution | Déduite | SPEC-506 |
 | [ADR-0299](ADR-0299-reconciliation-des-contrats-tutor-de-spec-508-et-spec-512.md) | Réconciliation des contrats tutor de SPEC-508 et SPEC-512 | Déduite | SPEC-508, SPEC-512 |
 | [ADR-0300](ADR-0300-recherche-semantique-budgets-et-formatage-des-passages.md) | Recherche sémantique : budgets, déduplication et formatage des passages | Déduite | SPEC-511, ADR-0056, ADR-0023, ADR-0048, ADR-0238 |
+| [ADR-0302](ADR-0302-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |

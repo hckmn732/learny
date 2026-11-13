@@ -17,9 +17,13 @@ import { chunkText } from './chunk';
 import { defaultIngestionDeps, type IngestionDeps, type IngestionEvents } from './deps';
 import { embedTexts, EMBEDDING_MODEL, toVectorLiteral } from './embeddings';
 import { IngestionError, isIngestionError, sourceMissing } from './errors';
+import { createLlmVisionReader, extractImageDocument } from './extract/image';
 import { extractNote } from './extract/note';
 import { extractPdf } from './extract/pdf';
+import { IMAGE_LIMITS } from './extract/remote';
 import type { ExtractedContent } from './extract/types';
+import { extractWebDocument } from './extract/web';
+import { extractYoutube, youtubeContent } from './extract/youtube';
 
 export const INGESTION_EVENT_CLAIM_STALE_MS = 60_000;
 const CHUNK_INSERT_BATCH = 50;
@@ -47,6 +51,7 @@ interface ResourceRow extends Record<string, unknown> {
   title: string;
   content_text: string | null;
   storage_path: string | null;
+  url: string | null;
   mime: string | null;
   size_bytes: number | null;
   status: string;
@@ -70,6 +75,10 @@ interface IngestionMarker {
   chunkCount?: number;
   embeddingModel?: string;
   embeddingDim?: number;
+  contentOrigin?: 'source' | 'model';
+  visionModel?: string;
+  visionProvider?: string;
+  visionTask?: 'light';
   readyEventClaimedAt?: string;
   readyEventEmittedAt?: string;
   failedEventClaimedAt?: string;
@@ -82,8 +91,10 @@ interface LoadedResource {
   formationId: string;
   chapterId: string | null;
   kind: string;
+  title: string;
   contentText: string | null;
   storagePath: string | null;
+  url: string | null;
   mime: string | null;
   sizeBytes: number | null;
   status: string;
@@ -96,7 +107,7 @@ interface LoadedResource {
 const RESOURCE_COLUMNS = sql`
   r.id::text as id, r.owner_id::text as owner_id, r.formation_id::text as formation_id,
   r.chapter_id::text as chapter_id, r.kind::text as kind, r.title, r.content_text,
-  r.storage_path, r.mime, r.size_bytes::float8 as size_bytes, r.status::text as status,
+  r.storage_path, r.url, r.mime, r.size_bytes::float8 as size_bytes, r.status::text as status,
   r.error_code, r.error_message, r.metadata, r.deleted_at,
   (select count(*)::int from public.resource_chunks c where c.resource_id = r.id) as chunk_count
 `;
@@ -108,8 +119,10 @@ function toLoaded(row: ResourceRow): LoadedResource {
     formationId: row.formation_id,
     chapterId: row.chapter_id,
     kind: row.kind,
+    title: row.title,
     contentText: row.content_text,
     storagePath: row.storage_path,
+    url: row.url,
     mime: row.mime,
     sizeBytes: row.size_bytes,
     status: row.status,
@@ -209,6 +222,73 @@ async function extractResource(
 ): Promise<{ content: ExtractedContent; anthropicFileId: string | null }> {
   if (resource.kind === 'note') {
     return { content: extractNote(resource.contentText), anthropicFileId: null };
+  }
+  if (resource.kind === 'web') {
+    if (resource.url === null) {
+      throw new IngestionError('RESOURCE_URL_MISSING', 'L’adresse de cette page est introuvable.');
+    }
+    const fetched = await extractWebDocument(resource.url, {
+      ...(deps.fetchWeb === undefined ? {} : { fetcher: deps.fetchWeb }),
+    });
+    return { content: fetched.content, anthropicFileId: null };
+  }
+  if (resource.kind === 'youtube') {
+    if (resource.url === null) {
+      throw new IngestionError(
+        'RESOURCE_URL_MISSING',
+        'L’adresse de cette vidéo YouTube est introuvable.',
+      );
+    }
+    const extraction = await extractYoutube(resource.url, {
+      ...(deps.youtube === undefined ? {} : { provider: deps.youtube }),
+      ...(deps.mode === undefined ? {} : { mode: deps.mode }),
+    });
+    return { content: youtubeContent(extraction), anthropicFileId: null };
+  }
+  if (resource.kind === 'image') {
+    if (resource.storagePath === null) throw sourceMissing();
+    if (resource.sizeBytes !== null && resource.sizeBytes > IMAGE_LIMITS.maxBytes) {
+      throw new IngestionError(
+        'IMAGE_TOO_LARGE',
+        `Cette image dépasse la limite de ${String(Math.floor(IMAGE_LIMITS.maxBytes / 1_048_576))} Mo.`,
+      );
+    }
+    const read = deps.readFile ?? deps.readPdf;
+    let bytes: Uint8Array | null;
+    try {
+      bytes = await read({
+        ownerId: resource.ownerId,
+        resourceId: resource.id,
+        storagePath: resource.storagePath,
+        maxBytes: IMAGE_LIMITS.maxBytes,
+      });
+    } catch (error) {
+      if (isIngestionError(error) && error.code === 'PDF_TOO_LARGE') {
+        throw new IngestionError(
+          'IMAGE_TOO_LARGE',
+          `Cette image dépasse la limite de ${String(Math.floor(IMAGE_LIMITS.maxBytes / 1_048_576))} Mo.`,
+        );
+      }
+      throw error;
+    }
+    if (bytes === null || bytes.length === 0) throw sourceMissing();
+    const reader =
+      deps.vision ??
+      createLlmVisionReader({
+        db: ctx.sdb,
+        userId: resource.ownerId,
+        ...(deps.mode === undefined ? {} : { mode: deps.mode }),
+      });
+    const image = await extractImageDocument(
+      { bytes, mime: resource.mime ?? '', title: resource.title },
+      {
+        reader,
+        db: ctx.sdb,
+        userId: resource.ownerId,
+        ...(deps.mode === undefined ? {} : { mode: deps.mode }),
+      },
+    );
+    return { content: image.content, anthropicFileId: null };
   }
   if (resource.kind !== 'pdf') {
     throw new IngestionError(
@@ -310,12 +390,26 @@ async function finalizeReady(
       chunkCount: chunks.length,
       embeddingModel: EMBEDDING_MODEL,
       embeddingDim: embeddings[0]?.length ?? 0,
+      contentOrigin: content.contentOrigin ?? 'source',
     };
     delete ingestion.failedAt;
     delete ingestion.failedEventClaimedAt;
     delete ingestion.failedEventEmittedAt;
-    const metadata: LoadedResource['metadata'] = {
+    if (content.vision === undefined) {
+      delete ingestion.visionModel;
+      delete ingestion.visionProvider;
+      delete ingestion.visionTask;
+    } else {
+      ingestion.visionModel = content.vision.modelId;
+      ingestion.visionProvider = content.vision.provider;
+      ingestion.visionTask = content.vision.task;
+    }
+    const nextTitle = content.title?.trim();
+    const title =
+      nextTitle === undefined || nextTitle === '' ? locked.title : nextTitle.slice(0, 200);
+    const metadata: Record<string, unknown> = {
       ...locked.metadata,
+      ...(content.metadata ?? {}),
       ...(content.pages === null ? {} : { pages: content.pages }),
       ...(anthropicFileId === null ? {} : { anthropicFileId }),
       ingestion,
@@ -323,6 +417,7 @@ async function finalizeReady(
     await tx.execute(sql`
       update public.resources
       set status = 'ready',
+          title = ${title},
           error_code = null,
           error_message = null,
           metadata = ${JSON.stringify(metadata)}::jsonb
@@ -494,7 +589,13 @@ async function processValidated(
   const run: StepRunner['run'] = ctx.step?.run.bind(ctx.step) ?? ((_name, fn) => fn());
   const loaded = await run('load-resource', () => selectResource(ctx.sdb, resourceId));
   if (loaded === null || loaded.deleted) return skipped(resourceId);
-  if (loaded.kind !== 'note' && loaded.kind !== 'pdf') {
+  if (
+    loaded.kind !== 'note' &&
+    loaded.kind !== 'pdf' &&
+    loaded.kind !== 'web' &&
+    loaded.kind !== 'youtube' &&
+    loaded.kind !== 'image'
+  ) {
     ctx.logger.info('resource kind left for its own ingestion', {
       component: 'ingestion',
       operation: loaded.kind,

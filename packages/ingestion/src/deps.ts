@@ -11,8 +11,11 @@ import { resolveModel, uploadDocument } from '@learny/llm';
 
 import { defaultEmbeddingClient, type EmbeddingClient } from './embeddings';
 import { IngestionError } from './errors';
+import type { VisionReader } from './extract/image';
 import { DEFAULT_PDF_LIMITS } from './extract/pdf';
 import type { PdfLimits } from './extract/types';
+import { safeWebFetcher, type WebFetcher } from './extract/web';
+import { defaultYoutubeProvider, type YoutubeProvider } from './extract/youtube';
 
 export interface ReadPdfInput {
   ownerId: string;
@@ -41,10 +44,17 @@ export interface IngestionEvents {
 
 export interface IngestionDeps {
   readPdf: PdfReader;
+  /** Generic private-file reader; defaults to `readPdf` so SPEC-509 callers stay unchanged. */
+  readFile?: PdfReader;
   embedder: EmbeddingClient;
   uploadPdf: PdfUploader;
   events: IngestionEvents;
   limits: PdfLimits;
+  /** SPEC-510 ports; each defaults to its guarded production adapter. */
+  fetchWeb?: WebFetcher;
+  youtube?: YoutubeProvider;
+  vision?: VisionReader;
+  mode?: LlmMode;
 }
 
 type Env = Readonly<Record<string, string | undefined>>;
@@ -199,12 +209,17 @@ export interface DefaultIngestionOptions {
 export function defaultIngestionDeps(options: DefaultIngestionOptions = {}): IngestionDeps {
   const env = options.env ?? process.env;
   const mode: LlmMode = options.mode ?? (env.LLM_MODE === 'live' ? 'live' : 'mock');
+  const readPdf = createSupabasePdfReader(env);
   return {
-    readPdf: createSupabasePdfReader(env),
+    readPdf,
+    readFile: readPdf,
     embedder: defaultEmbeddingClient(env),
     uploadPdf: createAnthropicPdfUploader(mode, options.logger),
     events: options.events ?? noopIngestionEvents,
     limits: options.limits ?? DEFAULT_PDF_LIMITS,
+    fetchWeb: safeWebFetcher(),
+    youtube: defaultYoutubeProvider(mode),
+    mode,
   };
 }
 

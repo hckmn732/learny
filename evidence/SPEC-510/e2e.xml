@@ -1,0 +1,61 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="35.133328">
+<testsuite name="p5/spec-510.spec.ts" timestamp="2026-11-13T02:31:41.656Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.744" errors="0">
+<testcase name="Ingestion : pages web, YouTube et images @SPEC-510" classname="p5/spec-510.spec.ts" time="1.489">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/attachments/spec-510-page-web-a574f3ba4f7b5864c25f3073dc874078f97cd3dd.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/attachments/spec-510-trois-sources-0d3c58f52b6430fd11d89ebc72ecf18747038c47.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/attachments/spec-510-erreurs-9de78c5bf9e7cf1726fcc9db58611b998b81ad63.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/attachments/axe-88813976870c1c70d9c4708161dd49cf740ec08e.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-pages-web-YouTube-et-images-SPEC-510-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Ingestion : pages web, YouTube et images @SPEC-510 @visual @mobile" classname="p5/spec-510.spec.ts" time="1.255">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/attachments/axe-aa652ad76895d95f0bd37f29bc7cc2fbd6bb5954.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/attachments/spec-510-demo-visual-0357132cda67c6b32034cb93132184820f9de8bd.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-510.spec.ts" timestamp="2026-11-13T02:31:41.656Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.353" errors="0">
+<testcase name="Ingestion : pages web, YouTube et images @SPEC-510 @visual @mobile" classname="p5/spec-510.spec.ts" time="1.353">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/attachments/axe-fc1b94d629a6a5eca8615a46198ddfb1e47c2ef3.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/attachments/spec-510-demo-visual-c32c075879aee7bac23c05447b6844e360d975fb.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-510-Ingestion-page-dfbce-ages-SPEC-510-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

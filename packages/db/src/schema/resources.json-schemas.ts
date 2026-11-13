@@ -83,6 +83,11 @@ export const resourceIngestionSchema = z.strictObject({
   chunkCount: z.number().int().min(0).optional(),
   embeddingModel: z.string().min(1).max(64).optional(),
   embeddingDim: z.number().int().min(1).max(8192).optional(),
+  /** SPEC-510 — origin of the extracted content: the source itself or a model reading. */
+  contentOrigin: z.enum(['source', 'model']).optional(),
+  visionModel: z.string().min(1).max(128).optional(),
+  visionProvider: z.string().min(1).max(64).optional(),
+  visionTask: z.literal('light').optional(),
   /** Claims and completion of the single `resource/ready` / `resource/failed` emission. */
   readyEventClaimedAt: utcInstant.optional(),
   readyEventEmittedAt: utcInstant.optional(),

@@ -58,14 +58,20 @@ async function defaultLookup(hostname: string): Promise<readonly ResolvedAddress
   return dnsLookup(hostname, { all: true, order: 'verbatim' });
 }
 
+export interface PublicUrlResolution {
+  url: URL;
+  /** Addresses checked for this host; a literal IP appears as itself, an allowed private host is empty. */
+  addresses: readonly ResolvedAddress[];
+}
+
 /**
- * Parses and validates a user-supplied URL. Without `allowPrivate`, the host name and **every**
- * address it resolves to must be public; a DNS failure is refused rather than retried elsewhere.
+ * Parses and validates a user-supplied URL and returns the addresses that were checked, so
+ * `safeFetch` can pin its connection on exactly the verified address (ADR-0159 point 2).
  */
-export async function assertPublicUrl(
+export async function resolvePublicUrl(
   input: string,
   options: AssertPublicUrlOptions = {},
-): Promise<URL> {
+): Promise<PublicUrlResolution> {
   const raw = input.trim();
   if (raw === '' || raw.length > MAX_URL_LENGTH) {
     throw invalid('L’adresse est vide ou dépasse 2048 caractères.');
@@ -86,7 +92,7 @@ export async function assertPublicUrl(
   }
 
   const allowPrivate = options.allowPrivate === true;
-  if (allowPrivate) return url;
+  if (allowPrivate) return { url, addresses: [] };
 
   if (!PUBLIC_PORTS.has(url.port)) {
     throw invalid('Seuls les ports 80 et 443 sont acceptés.');
@@ -99,7 +105,7 @@ export async function assertPublicUrl(
   }
   if (isIP(hostname) !== 0) {
     if (isBlockedIp(hostname)) throw blocked('Cette adresse réseau n’est pas publique.');
-    return url;
+    return { url, addresses: [{ address: hostname, family: isIP(hostname) }] };
   }
 
   const lookup = options.lookup ?? defaultLookup;
@@ -113,5 +119,16 @@ export async function assertPublicUrl(
   if (addresses.some((entry) => isBlockedIp(entry.address))) {
     throw blocked('L’hôte résout vers une adresse réseau non publique.');
   }
-  return url;
+  return { url, addresses };
+}
+
+/**
+ * Parses and validates a user-supplied URL. Without `allowPrivate`, the host name and **every**
+ * address it resolves to must be public; a DNS failure is refused rather than retried elsewhere.
+ */
+export async function assertPublicUrl(
+  input: string,
+  options: AssertPublicUrlOptions = {},
+): Promise<URL> {
+  return (await resolvePublicUrl(input, options)).url;
 }
