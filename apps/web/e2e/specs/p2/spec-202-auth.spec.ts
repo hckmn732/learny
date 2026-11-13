@@ -131,9 +131,9 @@ test('le proxy garde les pages et l’onboarding @SPEC-202', async ({ page, cont
     await admin.from('profiles').update({ onboarding_step: 'rappels' }).eq('id', session.userId);
     await page.goto('/agenda');
     await expect(page).toHaveURL(`${origin}/agenda`);
-    expect((await context.cookies()).some((cookie) => cookie.name === 'lr-onboarded')).toBe(true);
+    expect((await context.cookies()).some((cookie) => cookie.name === 'learny_ob')).toBe(true);
     await page.goto('/connexion');
-    await expect(page).toHaveURL(`${origin}/accueil`);
+    await expect(page).toHaveURL(`${origin}/premiers-pas/rappels`);
   } finally {
     await deleteTestSession(session);
   }

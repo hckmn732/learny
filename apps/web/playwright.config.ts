@@ -122,6 +122,9 @@ export default defineConfig({
       JOBS_MODE: 'inline',
       // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
       SDD_STACK_DEMO: 'true',
+      // SPEC-602: the onboarding reminders stub a browser whose subscription uses this test key.
+      NEXT_PUBLIC_VAPID_PUBLIC_KEY:
+        'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM',
     },
   },
 });

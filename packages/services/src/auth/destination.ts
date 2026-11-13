@@ -1,7 +1,7 @@
 // Where a learner lands after authenticating (SPEC-202 EF-8, ADR-0121, CL-4, CL-5, CL-6).
 export const DEFAULT_DESTINATION = '/accueil';
 export const PROFILE_DELETION_DESTINATION = '/parametres#profil';
-export const ONBOARDING_BLOCKING_STEPS = ['profil', 'rythme', 'ia'] as const;
+export const ONBOARDING_BLOCKING_STEPS = ['profil', 'rythme', 'ia', 'rappels', 'depart'] as const;
 
 export interface DestinationProfile {
   onboardingStep: string;
