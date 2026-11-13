@@ -73,7 +73,6 @@ function FormationRow({
         type="button"
         data-testid={`sidebar-formation-option-${formation.id}`}
         aria-current={current ? 'true' : undefined}
-        aria-label={t.select(formation.title)}
         onClick={() => {
           onSelect(formation);
         }}

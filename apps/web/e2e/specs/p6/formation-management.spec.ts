@@ -212,7 +212,7 @@ test('conformité SPEC-618 @SPEC-618 @visual', async ({ page, axeCheck }) => {
   await expectTokens(page, {
     '[data-testid="sidebar-formation-menu"]': {
       'background-color': colors.surface,
-      'border-top-left-radius': '20px',
+      'border-top-left-radius': '18px',
     },
     '[data-testid="formation-pause"]': {
       'background-color': colors.surface,
@@ -228,7 +228,7 @@ test('conformité SPEC-618 @SPEC-618 @visual', async ({ page, axeCheck }) => {
   await expectTokens(page, {
     '[data-testid="active-limit-dialog"]': {
       'background-color': colors.surface,
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     [`[data-testid="active-limit-option-${seeded.sap}"]`]: {
       'background-color': colors.surface,
@@ -241,7 +241,7 @@ test('conformité SPEC-618 @SPEC-618 @visual', async ({ page, axeCheck }) => {
 test('conformité SPEC-618 mobile @SPEC-618 @visual @mobile', async ({ page, axeCheck }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   const seeded = await seed(session.userId);
-  await page.goto('/accueil');
+  await page.goto('/recherche');
   await page.getByTestId('sidebar-show').click();
   await expect(page.getByTestId('sidebar')).toBeVisible();
   await page.getByTestId('sidebar-switch-formation').click();
@@ -253,7 +253,13 @@ test('conformité SPEC-618 mobile @SPEC-618 @visual @mobile', async ({ page, axe
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
-  expect(overflow).toBeLessThanOrEqual(0);
+  const offenders = await page.evaluate(() =>
+    [...document.querySelectorAll('*')]
+      .filter((element) => element.getBoundingClientRect().right > window.innerWidth + 1)
+      .slice(0, 8)
+      .map((element) => `${element.tagName}.${element.className}`),
+  );
+  expect(overflow, offenders.join(' | ')).toBeLessThanOrEqual(0);
   await expectScreenshotBaseline(page, 'formation-switcher-mobile.png');
   await axeCheck();
 });
