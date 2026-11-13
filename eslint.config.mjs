@@ -330,6 +330,20 @@ export default tseslint.config(
     },
   },
   {
+    // Every server-side retrieval goes through safeFetch (SPEC-510 ET-1, ADR-0159).
+    files: ['packages/ingestion/src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        {
+          name: 'fetch',
+          message: 'Toute récupération serveur passe par safeFetch de @learny/core/net (ADR-0159).',
+        },
+      ],
+    },
+  },
+  {
     // Test fixtures may also import @learny/testing (SPEC-401 ET-9).
     files: ['packages/learning-engine/src/fixtures/**/*.{ts,tsx}'],
     rules: {

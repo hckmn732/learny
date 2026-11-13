@@ -17,7 +17,10 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/llm": "workspace:*",
+    "@mozilla/readability": "^0.6.0",
+    "linkedom": "^0.18.15",
     "unpdf": "^2.1.0",
+    "youtubei.js": "^18.3.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
