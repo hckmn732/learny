@@ -1,0 +1,40 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="32.558343">
+<testsuite name="p5/spec-501-bricks.spec.ts" timestamp="2026-11-13T00:23:13.115Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.38" errors="0">
+<testcase name="validation et cycle de vie d’une brique @SPEC-501" classname="p5/spec-501-bricks.spec.ts" time="1.576">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/attachments/axe-7ff99cc8e0486b1d41d07dcc437d58fb1730eb74.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/attachments/spec-501-valid-d1988fcc995a34ae64d78cbd7c9dc9ceaafe1329.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/attachments/spec-501-invalid-6384c6ca1520d2b9678104fb8766022ce7ea2423.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/attachments/spec-501-corrected-f7d63d4cb6187a3c162d0d6625dc92cd20ae3337.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-validat-6566c-e-vie-d’une-brique-SPEC-501-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité visuelle de la démonstration SPEC-501 @SPEC-501 @visual" classname="p5/spec-501-bricks.spec.ts" time="0.804">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-conform-b0080-on-SPEC-501-SPEC-501-visual-desktop/attachments/axe-15dc62086fb5c3a50db4dbf2fa4dd539f69c771e.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-conform-b0080-on-SPEC-501-SPEC-501-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-conform-b0080-on-SPEC-501-SPEC-501-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-conform-b0080-on-SPEC-501-SPEC-501-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-501-bricks-conform-b0080-on-SPEC-501-SPEC-501-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
