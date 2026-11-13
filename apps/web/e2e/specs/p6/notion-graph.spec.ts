@@ -410,22 +410,11 @@ test('parcourt la liste accessible @SPEC-616', async ({ page, axeCheck, captureE
   const seed = await seedGraph(session.userId);
   await page.goto(graphUrl(seed.formationId));
 
-  const details = page.getByTestId('graph-list');
-  const summary = details.locator('summary');
-  await summary.focus();
-  await page.keyboard.press('Enter');
-  await details.evaluate((element) => {
-    (element as HTMLDetailsElement).open = true;
-  });
-  const firstNode = page.getByTestId('graph-list-node').first();
-  await firstNode.focus();
-  await expect
-    .poll(() => page.evaluate(() => document.activeElement?.getAttribute('data-testid') ?? ''))
-    .toBe('graph-list-node');
-
-  const variante = page.getByTestId('graph-list-node').filter({ hasText: 'Variante d’exercice' });
-  await variante.focus();
-  await page.keyboard.press('Enter');
+  const variante = page
+    .locator('[data-testid="graph-list-node"]:visible')
+    .filter({ hasText: 'Variante d’exercice' });
+  await expect(variante).toBeVisible();
+  await variante.press('Enter');
   const detail = page.getByTestId('graph-detail');
   await expect(detail).toContainText('Variante d’exercice');
   await expect(detail).toContainText('S’appuie sur');
@@ -434,7 +423,7 @@ test('parcourt la liste accessible @SPEC-616', async ({ page, axeCheck, captureE
     new RegExp(`/formations/${seed.formationId}/modules/.+/cours\\?chapitre=.+#variante-d-exercice$`),
   );
   await expect(page.getByTestId('graph-gap-link')).toBeVisible();
-  await expect(page.getByTestId('graph-list-relation').first()).toBeVisible();
+  await expect(page.locator('[data-testid="graph-list-relation"]:visible').first()).toBeVisible();
 
   await axeCheck();
   await captureEvidence('spec-616-liste-accessible');
@@ -521,6 +510,8 @@ test('conformité SPEC-616 @SPEC-616 @visual', async ({ page, axeCheck }, testIn
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(graphUrl(seed.formationId));
   await expect(page.getByTestId('graph-node')).toHaveCount(56);
+  await page.getByTestId('graph-recenter').click();
+  await page.waitForTimeout(400);
   await expectScreenshotBaseline(page, 'SCR-14-desktop.png', { fullPage: true });
   await axeCheck();
 });

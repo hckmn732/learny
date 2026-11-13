@@ -41,13 +41,12 @@ export function GraphList({ graph, onSelect }: GraphListProps) {
   );
 
   return (
-    <details
+    <section
       data-testid="graph-list"
-      className="sr-only rounded-18 border border-solid border-border bg-surface p-16 focus-within:not-sr-only"
+      aria-label={t.list.title}
+      className="mt-20 rounded-18 border border-solid border-border bg-surface p-16"
     >
-      <summary className="cursor-pointer rounded-9 px-8 py-6 text-14 font-600 text-ink">
-        {t.list.title}
-      </summary>
+      <h2 className="m-0 rounded-9 px-8 py-6 text-14 font-600 text-ink">{t.list.title}</h2>
       <p className="mx-8 mt-8 mb-12 text-13 text-ink-muted">{t.list.description}</p>
       <ul aria-label={t.list.label} className="m-0 flex list-none flex-col gap-8 p-0">
         {ordered.map((node) => {
@@ -107,6 +106,6 @@ export function GraphList({ graph, onSelect }: GraphListProps) {
           );
         })}
       </ul>
-    </details>
+    </section>
   );
 }

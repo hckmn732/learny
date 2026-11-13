@@ -252,10 +252,6 @@ describe('[SPEC-616] panneau détail et liste clavier', () => {
   it('parcourt la liste textuelle au clavier et sélectionne un nœud (ET-5, CA-3)', async () => {
     const onSelect = vi.fn();
     const { user } = renderComponent(<GraphList graph={graph()} onSelect={onSelect} />);
-    const summary = screen.getByText(t.list.title);
-    summary.focus();
-    expect(document.activeElement).toBe(summary);
-    await user.tab();
     const button = screen.getAllByTestId('graph-list-node')[0];
     if (button === undefined) throw new Error('liste vide');
     button.focus();

@@ -116,79 +116,81 @@ export function NotionGraphExperience({ graph }: NotionGraphExperienceProps) {
   const selectedLabel = selected?.label ?? '';
 
   return (
-    <div data-testid="notion-graph-content" className="flex flex-col gap-20">
-      <PageHeader
-        eyebrow={`${graph.formationTitle} · ${t.statsLine(
-          graph.stats.notions,
-          graph.stats.links,
-          graph.stats.modules,
-        )}`}
-        title={t.title}
-        actions={
-          <div className="flex flex-wrap items-center gap-8">
-            <span className="text-13 font-600 text-ink-muted">{t.colorsLabel}</span>
-            <SegmentedControl
-              data-testid="graph-color-modes"
-              aria-label={t.colorsLabel}
-              variant="solid"
-              size="sm"
-              options={[
-                { value: 'module', label: t.modes.module },
-                { value: 'mastery', label: t.modes.mastery },
-              ]}
-              value={mode}
-              onValueChange={(value) => {
-                setMode(value);
-              }}
-            />
-          </div>
-        }
-      />
+    <>
+      <div data-testid="notion-graph-content" className="flex flex-col gap-20">
+        <PageHeader
+          eyebrow={`${graph.formationTitle} · ${t.statsLine(
+            graph.stats.notions,
+            graph.stats.links,
+            graph.stats.modules,
+          )}`}
+          title={t.title}
+          actions={
+            <div className="flex flex-wrap items-center gap-8">
+              <span className="text-13 font-600 text-ink-muted">{t.colorsLabel}</span>
+              <SegmentedControl
+                data-testid="graph-color-modes"
+                aria-label={t.colorsLabel}
+                variant="solid"
+                size="sm"
+                options={[
+                  { value: 'module', label: t.modes.module },
+                  { value: 'mastery', label: t.modes.mastery },
+                ]}
+                value={mode}
+                onValueChange={(value) => {
+                  setMode(value);
+                }}
+              />
+            </div>
+          }
+        />
 
-      <GraphToolbar
-        query={query}
-        results={results}
-        filters={filterState.filters}
-        onQueryChange={setQuery}
-        onSubmit={submit}
-        onPick={pick}
-        onToggleFilter={toggle}
-      />
-
-      <div className="flex flex-wrap items-stretch gap-20">
-        <GraphSvg
-          graph={{ ...graph, links }}
-          layout={layout}
-          positions={positions}
-          visibleIds={visibleIds}
-          selectedId={filterState.selectedId}
-          hoveredId={hoveredId}
-          colorMode={mode}
+        <GraphToolbar
           query={query}
-          view={view}
-          onViewChange={setView}
-          onSelect={(id) => {
-            select(id, false);
-          }}
-          onHover={setHoveredId}
-          onMoveNode={(id, point) => {
-            setPositions((current) => moveNode(current, id, point));
-          }}
-          onRecenter={() => {
-            setView(initialView(layout, viewport, visibleIds));
-          }}
-          onViewportChange={onViewportChange}
+          results={results}
+          filters={filterState.filters}
+          onQueryChange={setQuery}
+          onSubmit={submit}
+          onPick={pick}
+          onToggleFilter={toggle}
         />
-        <GraphDetail
-          graph={graph}
-          selectedId={filterState.selectedId}
-          onSelect={(id) => {
-            select(id, true);
-          }}
-          onClose={() => {
-            setFilterState((current) => ({ ...current, selectedId: null }));
-          }}
-        />
+
+        <div className="flex flex-wrap items-stretch gap-20">
+          <GraphSvg
+            graph={{ ...graph, links }}
+            layout={layout}
+            positions={positions}
+            visibleIds={visibleIds}
+            selectedId={filterState.selectedId}
+            hoveredId={hoveredId}
+            colorMode={mode}
+            query={query}
+            view={view}
+            onViewChange={setView}
+            onSelect={(id) => {
+              select(id, false);
+            }}
+            onHover={setHoveredId}
+            onMoveNode={(id, point) => {
+              setPositions((current) => moveNode(current, id, point));
+            }}
+            onRecenter={() => {
+              setView(initialView(layout, viewport, visibleIds));
+            }}
+            onViewportChange={onViewportChange}
+          />
+          <GraphDetail
+            graph={graph}
+            selectedId={filterState.selectedId}
+            onSelect={(id) => {
+              select(id, true);
+            }}
+            onClose={() => {
+              setFilterState((current) => ({ ...current, selectedId: null }));
+            }}
+          />
+        </div>
       </div>
 
       <p role="status" aria-live="polite" className="sr-only" data-testid="graph-announcement">
@@ -201,6 +203,6 @@ export function NotionGraphExperience({ graph }: NotionGraphExperienceProps) {
           select(id, true);
         }}
       />
-    </div>
+    </>
   );
 }
