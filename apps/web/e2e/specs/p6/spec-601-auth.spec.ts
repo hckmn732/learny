@@ -16,7 +16,7 @@ import {
   MOCKUP_MAX_DIFF_RATIO,
 } from '@learny/testing/visual';
 
-const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
+const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const PASSWORD = `pw-${randomBytes(10).toString('hex')}`;
 
 function uniqueEmail(): string {
@@ -169,7 +169,7 @@ test('inscription par mot de passe et solidité @SPEC-601', async ({
   expectNoEmailInUrls(urls);
 });
 
-test('renvoi limité à 60 s @SPEC-601', async ({ page, axeCheck, captureEvidence }) => {
+test('renvoi limité à 60 s @SPEC-601', async ({ page, fixedTime, axeCheck, captureEvidence }) => {
   const user = await createPasswordUser(uniqueEmail());
   try {
     const urls = collectRequestUrls(page);
@@ -187,7 +187,8 @@ test('renvoi limité à 60 s @SPEC-601', async ({ page, axeCheck, captureEvidenc
     await expect(resend).toHaveText('renvoyez le lien (dans 60 s)');
     await captureEvidence('verification-compte-a-rebours');
 
-    await page.clock.fastForward(60_000);
+    await page.clock.setSystemTime(new Date(fixedTime.getTime() + 60_000));
+    await page.clock.runFor(1000);
     await expect(resend).toBeEnabled();
     await expect(resend).toHaveText('renvoyez le lien');
     await resend.click();
@@ -197,10 +198,15 @@ test('renvoi limité à 60 s @SPEC-601', async ({ page, axeCheck, captureEvidenc
     await expect(resend).toHaveText('renvoyez le lien (dans 60 s)');
     await captureEvidence('verification-renvoi');
 
-    // A forced server call during the countdown receives 429 with Retry-After.
+    // A forced server call during the countdown receives 429 with Retry-After. The first call may
+    // consume the server's allowance (the account was created by the admin API); the next one is
+    // necessarily inside the 60-second window.
+    const origin = new URL(page.url()).origin;
+    const body = { email: user.email, kind: 'magic_link' };
+    await page.request.post('/api/v1/auth/resend', { data: body, headers: { origin } });
     const response = await page.request.post('/api/v1/auth/resend', {
-      data: { email: user.email, kind: 'magic_link' },
-      headers: { origin: new URL(page.url()).origin },
+      data: body,
+      headers: { origin },
     });
     expect(response.status()).toBe(429);
     expect(Number(response.headers()['retry-after'])).toBeGreaterThan(0);
@@ -263,6 +269,7 @@ test('connexion par mot de passe, erreurs et lien expiré @SPEC-601', async ({
 
 test('conformité SCR-01 compte, connexion et vérification @SPEC-601 @visual', async ({
   page,
+  fixedTime,
   axeCheck,
   captureEvidence,
 }) => {
@@ -332,8 +339,9 @@ test('conformité SCR-01 compte, connexion et vérification @SPEC-601 @visual', 
   await captureEvidence('verification');
   await compareScreen(page, 'SCR-01-verification-desktop.png', 'SCR-01-verification');
 
-  await page.clock.fastForward(20_000);
-  await expect(page.getByTestId('verify-resend')).toHaveText('renvoyez le lien (dans 40 s)');
+  await page.clock.setSystemTime(new Date(fixedTime.getTime() + 20_000));
+  await page.clock.runFor(1000);
+  await expect(page.getByTestId('verify-resend')).toHaveText('renvoyez le lien (dans 39 s)');
   await captureEvidence('verification-compte-a-rebours');
 
   await axeCheck();
@@ -345,6 +353,7 @@ test('conformité SCR-01 mobile @SPEC-601 @visual @mobile', async ({
   axeCheck,
   captureEvidence,
 }) => {
+  test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await page.goto('/inscription');
   await expect(page.getByRole('heading', { name: 'Créer votre compte' })).toBeVisible();
   const panel = await page.getByTestId('auth-panel').boundingBox();

@@ -175,3 +175,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0300](ADR-0300-recherche-semantique-budgets-et-formatage-des-passages.md) | Recherche sémantique : budgets, déduplication et formatage des passages | Déduite | SPEC-511, ADR-0056, ADR-0023, ADR-0048, ADR-0238 |
 | [ADR-0301](ADR-0301-contrats-et-persistance-des-banques-de-questions.md) | Contrats et persistance des banques de questions | Déduite | SPEC-513, ADR-0026, ADR-0048 |
 | [ADR-0302](ADR-0302-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |
+| [ADR-0303](ADR-0303-horloge-cliente-profil-minimal-et-messages-de-lien-invalide-.md) | Horloge cliente, profil minimal et messages de lien invalide pour SPEC-601 | Déduite | SPEC-601, ADR-0047, ADR-0168 |
