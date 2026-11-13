@@ -23,9 +23,9 @@ describe('[SPEC-301] jetons', () => {
     expect(spacingUnit).toBe('0.0625rem');
   });
 
-  it('déclare exactement les 60 couleurs de EF-2', () => {
+  it('déclare les 60 couleurs de EF-2 et les 16 couleurs d’états de brique de SPEC-503', () => {
     const entries = Object.entries(colors);
-    expect(entries).toHaveLength(60);
+    expect(entries).toHaveLength(76);
     for (const [name, value] of entries) {
       if (value.startsWith('rgba(')) {
         expect(value, name).toMatch(/^rgba\(\d+, \d+, \d+, \d+(?:\.\d+)?\)$/);

@@ -1,4 +1,7 @@
+import { brickViewLabels } from '@learny/bricks/view';
+
 export const fr = {
+  bricks: brickViewLabels,
   home: {
     title: 'Learny',
     subtitle: 'Application en cours de construction.',
@@ -617,6 +620,15 @@ export const fr = {
             'orange-on-dark-on-dark-850': 'Accent orange sur fond sombre',
             'white-on-indigo': 'Texte blanc sur indigo',
             'white-on-danger': 'Texte blanc sur danger',
+            'ink-on-success': 'Texte encre sur succès',
+            'orange-ink-on-danger-soft': 'Texte orange sur fond danger doux',
+            'excerpt-pdf-on-soft': 'Extrait PDF sur fond orange doux',
+            'excerpt-audio-on-soft': 'Extrait audio sur fond violet doux',
+            'excerpt-video-on-soft': 'Extrait vidéo sur fond indigo doux',
+            'excerpt-youtube-on-soft': 'Extrait YouTube sur fond indigo doux',
+            'excerpt-web-on-soft': 'Extrait web sur fond vert doux',
+            'excerpt-note-on-soft': 'Extrait note sur fond lime doux',
+            'excerpt-image-on-soft': 'Extrait image sur fond neutre',
           },
         },
         states: {

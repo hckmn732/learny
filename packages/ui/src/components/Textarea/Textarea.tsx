@@ -9,6 +9,8 @@ export type TextareaProps = ComponentPropsWithRef<'textarea'> & {
   hint?: string | undefined;
   error?: string | undefined;
   hideLabel?: boolean;
+  /** Custom counter text (SPEC-503 EF-9); defaults to « n / max ». */
+  counterLabel?: (count: number, max: number) => string;
 };
 
 export const Textarea = ({
@@ -19,6 +21,7 @@ export const Textarea = ({
   error,
   hideLabel = false,
   maxLength,
+  counterLabel,
   value,
   defaultValue,
   onChange,
@@ -76,7 +79,9 @@ export const Textarea = ({
       ) : null}
       {maxLength !== undefined ? (
         <p aria-live={announce ? 'polite' : 'off'} className="text-12 text-ink-muted" id={countId}>
-          {`${String(length)} / ${String(maxLength)}`}
+          {counterLabel
+            ? counterLabel(length, maxLength)
+            : `${String(length)} / ${String(maxLength)}`}
         </p>
       ) : null}
     </div>

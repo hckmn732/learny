@@ -1,5 +1,12 @@
 // Server-authoritative exam timer (SPEC-502 EF-7, CL-8, BR-PRA-03). The caller passes the server
 // instant (`clock.now()`); the function never reads the system clock.
+export interface TimerStateInput {
+  startedAt: Date;
+  durationSec: number;
+  warnAtSec: number;
+  now: Date;
+}
+
 export interface TimerState {
   remainingMs: number;
   display: string;

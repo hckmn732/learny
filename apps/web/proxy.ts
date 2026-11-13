@@ -39,10 +39,13 @@ function sddGuard(request: NextRequest): NextResponse {
     (segments[2] === 'checkout' || segments[2] === 'portal');
   // SPEC-301 — the design-system gallery lives under /_dev/ui (not /_dev/sdd).
   const uiGallery = segments[1] === 'ui' && segments.length <= 3;
+  // SPEC-503 — the brick gallery and its four reproduction pages.
+  const bricksGallery = segments[1] === 'bricks' && segments.length <= 3;
   const allowed =
     sddPagesEnabled(process.env) &&
     (stripePage ||
       uiGallery ||
+      bricksGallery ||
       (segments[1] === 'sdd' &&
         (reference ||
           (segments.length <= 3 &&

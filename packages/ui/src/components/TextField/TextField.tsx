@@ -13,6 +13,8 @@ export type TextFieldProps = Omit<ComponentPropsWithRef<'input'>, 'size'> & {
   variant?: 'form' | 'search';
   leadingIcon?: LucideIcon;
   hideLabel?: boolean;
+  /** Numeric table cells align right (SPEC-503 EF-10). */
+  align?: 'left' | 'right';
 };
 
 const FORM_CLASS =
@@ -29,6 +31,7 @@ export const TextField = ({
   variant = 'form',
   leadingIcon: LeadingIcon,
   hideLabel = false,
+  align = 'left',
   'aria-describedby': ariaDescribedBy,
   ...props
 }: TextFieldProps) => {
@@ -57,6 +60,7 @@ export const TextField = ({
           aria-invalid={error ? true : undefined}
           className={cn(
             variant === 'form' ? FORM_CLASS : SEARCH_CLASS,
+            align === 'right' && 'text-right tabular-nums',
             error && 'border-orange-ink',
           )}
           id={inputId}

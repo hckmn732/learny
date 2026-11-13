@@ -58,6 +58,7 @@ export type SegmentedControlProps<T extends string> = Omit<
     onValueChange: (value: T) => void;
     'aria-label': string;
     fullWidth?: boolean;
+    disabled?: boolean;
   };
 
 export function SegmentedControl<T extends string>({
@@ -68,15 +69,15 @@ export function SegmentedControl<T extends string>({
   variant = 'soft',
   size = 'md',
   fullWidth = false,
+  disabled = false,
   ref,
   'aria-label': ariaLabel,
   ...props
 }: SegmentedControlProps<T>) {
   const buttons = useRef<Array<HTMLButtonElement | null>>([]);
-  const selectedIndex = Math.max(
-    0,
-    options.findIndex((option) => option.value === value),
-  );
+  // -1 is valid: a brick classification starts with no answer (SPEC-503 EF-7). In that case no
+  // option is pressed and the first one keeps the group in the tab order.
+  const selectedIndex = options.findIndex((option) => option.value === value);
 
   const moveTo = (index: number) => {
     const option = options[index];
@@ -124,6 +125,7 @@ export function SegmentedControl<T extends string>({
                   : 'bg-ink font-600 text-white'
                 : 'font-500 text-ink-muted hover:bg-surface-muted',
             )}
+            disabled={disabled}
             key={option.value}
             onClick={() => {
               onValueChange(option.value);
@@ -134,7 +136,7 @@ export function SegmentedControl<T extends string>({
             ref={(node) => {
               buttons.current[index] = node;
             }}
-            tabIndex={selected ? 0 : -1}
+            tabIndex={selected || (selectedIndex === -1 && index === 0) ? 0 : -1}
             title={fullWidth ? option.label : undefined}
             type="button"
           >

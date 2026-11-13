@@ -108,3 +108,8 @@ export function evaluateTableChecks(
     };
   });
 }
+
+/** French number used by the inline totals (EF-10). */
+export function formatFrenchNumber(value: number): string {
+  return numberFormat.format(value);
+}
