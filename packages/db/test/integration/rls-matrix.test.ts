@@ -516,6 +516,14 @@ async function createSeed(tx: DbTx): Promise<Seed> {
       returning id::text as id
     `,
   );
+  rows.programme_proposals = await insertId(
+    tx,
+    sql`
+      insert into public.programme_proposals (formation_id, user_id, version, source, payload)
+      values (${programme.formationId}::uuid, ${a.id}::uuid, 1, 'generated', '{}'::jsonb)
+      returning id::text as id
+    `,
+  );
   rows.programme_change_requests = await insertId(
     tx,
     sql`
@@ -600,6 +608,11 @@ const FOREIGN_INSERTS: Record<string, Inserter> = {
     tx.execute(sql`
       insert into public.programme_imports (formation_id, user_id, source_kind, raw_text)
       values (${s.formationId}::uuid, ${s.a.id}::uuid, 'text', 'forgé')
+    `),
+  programme_proposals: (tx, s) =>
+    tx.execute(sql`
+      insert into public.programme_proposals (formation_id, user_id, version, source, payload)
+      values (${s.formationId}::uuid, ${s.a.id}::uuid, 2, 'generated', '{}'::jsonb)
     `),
   programme_change_requests: (tx, s) =>
     tx.execute(sql`

@@ -4,6 +4,7 @@
 -- dont la politique propriétaire existe déjà (SPEC-103).
 
 alter table public.programme_proposals enable row level security;
+alter table public.programme_proposals force row level security;
 
 create policy programme_proposals_owner_all on public.programme_proposals
   for all to authenticated
