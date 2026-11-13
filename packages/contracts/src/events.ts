@@ -142,6 +142,33 @@ export const EVENTS = {
     moduleId: Uuid,
     version: z.number().int().min(1),
   }),
+  // SPEC-609 — reading progress, chapter summary and versioned section corrections. Each event is
+  // emitted once per committed transition; its data stays limited to identifiers and counters.
+  'course/progress-updated': z.object({
+    userId: Uuid,
+    courseId: Uuid,
+    chapterId: Uuid,
+    percent: z.number().int().min(0).max(100),
+  }),
+  'course/summary-submitted': z.object({
+    userId: Uuid,
+    courseId: Uuid,
+    chapterId: Uuid,
+    summaryId: Uuid,
+    corrected: z.boolean(),
+  }),
+  'course/section-edited': z.object({
+    userId: Uuid,
+    courseId: Uuid,
+    sectionId: Uuid,
+    version: z.number().int().min(1),
+  }),
+  'course/section-reported': z.object({
+    userId: Uuid,
+    courseId: Uuid,
+    sectionId: Uuid,
+    reportId: Uuid,
+  }),
   'quiz/submitted': z.object({
     userId: Uuid,
     attemptId: Uuid,

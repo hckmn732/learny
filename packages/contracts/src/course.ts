@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 import { IsoDateTime, Uuid } from './common';
+import { CourseCitationMedia } from './course-media';
+import { CourseReadingProgress, CourseSummaryView } from './course-reading';
 import { defineRoute } from './define-route';
 
 // Read model and routes of the course screen (SCR-07, SPEC-608 EF-1 to EF-5, ET-1, ET-3,
@@ -26,9 +28,8 @@ export const CourseSectionKind = z.enum(COURSE_SECTION_KINDS);
 export type CourseSectionKind = z.infer<typeof CourseSectionKind>;
 
 /** Mirrors the `citation_media` enumeration used to render the source chip. */
-export const COURSE_CITATION_MEDIA = ['pdf', 'audio', 'video', 'web', 'note', 'image'] as const;
-export const CourseCitationMedia = z.enum(COURSE_CITATION_MEDIA);
-export type CourseCitationMedia = z.infer<typeof CourseCitationMedia>;
+export { COURSE_CITATION_MEDIA, CourseCitationMedia } from './course-media';
+export type { CourseCitationMedia as CourseCitationMediaType } from './course-media';
 
 /** BR-COU-06 — one side of the "Ne pas confondre" block. */
 export const CourseComparisonSide = z.strictObject({
@@ -99,6 +100,10 @@ export const CourseSection = z
     origin: z.enum(['resource', 'tutor']),
     notionIds: z.array(Uuid),
     citations: z.array(CourseCitation),
+    /** BR-COU-09 — current version; a PATCH must quote it (optimistic concurrency). */
+    version: z.number().int().min(1),
+    /** BR-COU-09, BR-MEM-09 — reported content leaves the new quiz draws until corrected. */
+    reported: z.boolean(),
   })
   .describe('Section typée d’un chapitre de cours.');
 export type CourseSection = z.infer<typeof CourseSection>;
@@ -117,6 +122,8 @@ export const CourseChapterSummary = z.strictObject({
   position: z.number().int().min(1),
   title: z.string().min(1).max(160),
   hasCourse: z.boolean(),
+  /** BR-COU-08 — persisted percentage of this chapter (0 when it was never opened). */
+  percent: z.number().int().min(0).max(100),
 });
 export type CourseChapterSummary = z.infer<typeof CourseChapterSummary>;
 
@@ -138,6 +145,15 @@ export const CourseView = z
     nextChapterId: Uuid.nullable(),
     sections: z.array(CourseSection),
     suggestions: z.array(CourseSuggestion),
+    /** BR-COU-08 — persisted progress of the selected chapter and of the whole course. */
+    progress: CourseReadingProgress,
+    /** BR-COU-07 — latest summary of this chapter for this course version, if any. */
+    summary: CourseSummaryView.nullable(),
+    /** BR-COU-11 — quiz card of the module. */
+    quiz: z.strictObject({
+      threshold: z.number().int().min(0).max(100),
+      href: z.string().min(1).max(300),
+    }),
   })
   .describe('Version courante du cours, pour un chapitre sélectionné.');
 export type CourseView = z.infer<typeof CourseView>;
