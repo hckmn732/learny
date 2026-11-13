@@ -108,3 +108,22 @@ export { programmeScenario } from './programme/scenario';
 export type { ProgrammeOperation, ProgrammeScenario } from './programme/scenario';
 export { programmeRunFailed, runProgrammeDraft } from './programme/run';
 export type { ProgrammeDraftResult, ProgrammeRunContext, ProgrammeRunState } from './programme/run';
+export { COURSE_MAX_CORRECTIONS, COURSE_PROMPT_ID, buildCoursePrompt } from './course/prompt';
+export type { CoursePromptInput, CoursePromptNotion } from './course/prompt';
+export { courseRunFailed, replaceCoursePlaceholders, runCourseChapter } from './course/run';
+export type { CourseChapterResult, CourseRunContext } from './course/run';
+export { citationFailureSummary, validateCourseCitations } from './course/citations';
+export type {
+  CitationIssue,
+  CitationIssueCode,
+  CitationValidation,
+  KnownChunk,
+  ResolvedCitation,
+} from './course/citations';
+export { generateCourseForModule } from './course/generate';
+export type {
+  CourseGenerationContext,
+  CourseGenerationDeps,
+  CourseGenerationEvents,
+  CourseGenerationResult,
+} from './course/generate';

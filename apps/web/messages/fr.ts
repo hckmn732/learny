@@ -321,8 +321,7 @@ export const fr = {
       `${String(done)} chapitre${done === 1 ? '' : 's'} terminé${done === 1 ? '' : 's'} sur ${String(total)}`,
     chaptersLabel: 'Chapitres du module',
     chapterEyebrow: (position: number) => `Chapitre ${String(position)}`,
-    chapterTitle: (position: number, title: string) =>
-      `Chapitre ${String(position)} · ${title}`,
+    chapterTitle: (position: number, title: string) => `Chapitre ${String(position)} · ${title}`,
     chapterStatusDone: 'Apports terminés',
     chapterStatusInProgress: 'En cours',
     dropIntro:
@@ -396,6 +395,56 @@ export const fr = {
       uploadFailed: 'Le fichier n’a pas pu être envoyé. Réessayez.',
       generic: 'Une erreur est survenue. Réessayez.',
     },
+  },
+  course: {
+    breadcrumbCours: 'Cours',
+    sommaire: 'Sommaire',
+    reading: 'de lecture',
+    builtFrom: (count: number) =>
+      `Construit à partir de ${String(count)} apport${count === 1 ? '' : 's'}`,
+    baseCourse: 'Cours de base · aucun apport',
+    baseCourseTitle: 'Ce chapitre n’a pas encore d’apport',
+    baseCourseText:
+      'Le tuteur a rédigé un cours de base à partir du programme. Il est signalé comme tel et ne cite aucune source inventée.',
+    suggestionsTitle: 'Suggestions de ressources',
+    suggestionsIntro:
+      'Ces ressources peuvent compléter le cours de base. Importez-les ou ignorez-les depuis le module.',
+    chapterBadge: (position: number, total: number) =>
+      `Chapitre ${String(position)} sur ${String(total)}`,
+    quickQuestion: 'Question éclair · avant de lire la suite',
+    reveal: 'Afficher la réponse',
+    hide: 'Masquer la réponse',
+    comparison: 'Ne pas confondre',
+    tutorCompleted: 'Complété par le tuteur · à confirmer dans vos sources',
+    takeaway: 'À retenir',
+    mnemonic: 'Moyen mnémotechnique',
+    summaryTitle: 'Résumez ce chapitre avec vos mots',
+    summaryIntro: 'Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.',
+    summaryAction: 'Envoyer au tuteur',
+    summaryUnavailable: 'Le retour du tuteur arrive avec la lecture guidée.',
+    previous: 'Chapitre précédent',
+    next: 'Chapitre suivant',
+    loadingTitle: 'Le tuteur rédige votre cours',
+    loadingText:
+      'Les chapitres sont rédigés puis vérifiés source par source. La page se met à jour.',
+    emptyTitle: 'Aucun cours pour ce module',
+    emptyText: 'Terminez les apports puis demandez la génération du cours depuis le module.',
+    failedTitle: 'La génération du cours a échoué',
+    failedText:
+      'La version précédente reste disponible. Vous pouvez relancer la génération depuis le module.',
+    generate: 'Générer le cours',
+    generating: 'Génération demandée…',
+    generated: 'Génération du cours demandée.',
+    citationDeleted: 'Source supprimée',
+    sourcePage: (label: string, page: number) => `${label} · p. ${String(page)}`,
+    sourceMinute: (label: string, minute: string) => `${label} · ${minute}`,
+    sourceAnchor: (label: string) => `${label} · extrait`,
+    sourceNote: (label: string) => `${label} · note`,
+    sourceImage: (label: string) => `${label} · image`,
+    sourceWeb: (label: string) => `${label} · page web`,
+    quizTitle: 'Prêt pour le quiz de validation ?',
+    quizText: 'Vérifiez votre compréhension du module avant de passer au suivant.',
+    quizAction: 'Passer au quiz',
   },
   shell: {
     sidebar: {

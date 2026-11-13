@@ -43,5 +43,7 @@ export * from './cadrage';
 export * from './formation-management';
 export * from './programme';
 export * from './questions';
+export * from './course-draft';
+export * from './course';
 export * from './resources';
 export * from './dev-billing';

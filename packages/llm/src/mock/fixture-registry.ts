@@ -1,5 +1,8 @@
 // Static registry of the committed fixtures. JSON imports keep the fixtures available in the Next
 // server bundle without reading the filesystem at runtime (SPEC-504 ET-6, ADR-0153).
+import courseBase from '../../fixtures/course/course-base.json' with { type: 'json' };
+import courseInvalid from '../../fixtures/course/course-invalid.json' with { type: 'json' };
+import courseSourced from '../../fixtures/course/course-sourced.json' with { type: 'json' };
 import lightInvalidObject from '../../fixtures/light/demo-invalid-object.json' with { type: 'json' };
 import lightObject from '../../fixtures/light/demo-object.json' with { type: 'json' };
 import lightSpec510Image from '../../fixtures/light/spec-510-image.json' with { type: 'json' };
@@ -40,6 +43,9 @@ function entry(path: string, value: unknown): RegisteredFixture {
 
 /** Every fixture of the repository, sorted by path (ADR-0153 §2c). */
 export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
+  entry('course/course-base.json', courseBase),
+  entry('course/course-invalid.json', courseInvalid),
+  entry('course/course-sourced.json', courseSourced),
   entry('light/demo-invalid-object.json', lightInvalidObject),
   entry('light/demo-object.json', lightObject),
   entry('light/spec-510-image.json', lightSpec510Image),

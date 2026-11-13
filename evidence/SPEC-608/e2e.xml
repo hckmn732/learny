@@ -1,0 +1,86 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="42.158129">
+<testsuite name="p6/course-generation.spec.ts" timestamp="2026-11-13T12:16:40.462Z" hostname="desktop" tests="4" failures="0" skipped="1" time="7.374" errors="0">
+<testcase name="cours généré avec sources @SPEC-608" classname="p6/course-generation.spec.ts" time="2.498">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/attachments/cours-sources-310000ecb59838f50a428407746f3edd1eaae47b.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/attachments/axe-4d24ef7e26cd18c504da87a035e1b92a0d98d9c2.json]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="cours de base sans apport @SPEC-608" classname="p6/course-generation.spec.ts" time="1.918">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/attachments/cours-base-9da218ee53d017dc1d541e18dde1d6432161dde4.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/attachments/axe-88aebc1f94eb53e4526cb1a6c16375e4696e1a51.json]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-608 @SPEC-608 @visual" classname="p6/course-generation.spec.ts" time="2.752">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/cours-conformite-a2c29fd4130369193f0cda748962f933aecb164c.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/comparaison-article-side-by-side-de29afdd9da78d14bca7e056fe39c7cc6fa3c1d9.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/comparaison-article-diff-9631e1cd2402208c595bcfbf57c0051c9ad0ef34.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/axe-4e6e109b796bc65ace686d54554a406b45503a67.json]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-608 mobile @SPEC-608 @visual @mobile" classname="p6/course-generation.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/course-generation.spec.ts" timestamp="2026-11-13T12:16:40.462Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.397" errors="0">
+<testcase name="conformité SPEC-608 mobile @SPEC-608 @visual @mobile" classname="p6/course-generation.spec.ts" time="2.397">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/attachments/cours-mobile-f62204c636c6fac2a07f0bae397c4a25a4a15fc0.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/attachments/axe-a4f6dee627a9754687d35b88eb897e83f21b9932.json]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

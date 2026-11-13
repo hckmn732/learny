@@ -1,0 +1,90 @@
+{
+  "task": "course",
+  "scenario": "course-invalid",
+  "promptId": "course.course",
+  "promptVersion": 1,
+  "description": "Trois sorties qui violent la fiche À retenir (deux points) : corrections épuisées, aucune version publiée.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": ["{{chunkId}}"],
+        "notionIds": ["{{notionId}}"],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": ["Un seul point", "Un second point"],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    },
+    {
+      "type": "object",
+      "object": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": ["{{chunkId}}"],
+        "notionIds": ["{{notionId}}"],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": ["Un seul point", "Un second point"],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    },
+    {
+      "type": "object",
+      "object": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": ["{{chunkId}}"],
+        "notionIds": ["{{notionId}}"],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": ["Un seul point", "Un second point"],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 300,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    }
+  ]
+}
