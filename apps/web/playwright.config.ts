@@ -3,7 +3,11 @@ import { fileURLToPath } from 'node:url';
 
 import { defineConfig, devices } from '@playwright/test';
 
-import { assertMockLlm, TEST_SERVER_ENV } from '../../packages/testing/src/env';
+import {
+  assertMockLlm,
+  TEST_ENCRYPTION_KEY,
+  TEST_SERVER_ENV,
+} from '../../packages/testing/src/env';
 import { supabaseLocalEnv } from '../../packages/testing/src/supabase';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
@@ -108,6 +112,7 @@ export default defineConfig({
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
+      APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
       ENABLE_SDD_PAGES: 'true',
       // The server sits behind a trusted proxy in these tests: each test announces its own address
       // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.

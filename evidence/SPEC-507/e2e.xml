@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="33.839578">
+<testsuite name="p5/spec-507.spec.ts" timestamp="2026-11-13T01:11:36.502Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.146" errors="0">
+<testcase name="Garde-fou de coût et journal des appels @SPEC-507" classname="p5/spec-507.spec.ts" time="1.139">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/attachments/axe-e619b60d40610ef0207108138b7e9b70d5e7696a.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/attachments/spec-507-demo-386a2167a9d0feef8ffe5094654b6a36016b7303.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-Garde-fou-de-coût-et-journal-des-appels-SPEC-507-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration du garde-fou, conformité visuelle @SPEC-507 @visual @mobile" classname="p5/spec-507.spec.ts" time="1.007">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/attachments/axe-9918ed17d771f0d47a1788d437c947206b92c2b4.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/attachments/spec-507-demo-visual-d7c6ac112867203fbd748bdb038d6dc33a4e746a.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p5/spec-507.spec.ts" timestamp="2026-11-13T01:11:36.502Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.134" errors="0">
+<testcase name="démonstration du garde-fou, conformité visuelle @SPEC-507 @visual @mobile" classname="p5/spec-507.spec.ts" time="1.134">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/attachments/axe-88db0a4f776892b6508a9e2f7a88e606e653d932.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/attachments/spec-507-demo-visual-a93acc68d7f963ef3a68908dc76d1f1e48fd82e1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-507-démonstration--d2687-elle-SPEC-507-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

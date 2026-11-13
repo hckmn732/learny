@@ -161,6 +161,6 @@ Définition commune (`docs/engineering/testing.md` §7) ; `docs/operations/key-r
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0019, ADR-0022, ADR-0042, ADR-0053.
-- Décisions créées : **ADR-0154** (format, AAD, rotation, masquage, régions, modèles locaux) et **ADR-0159** (anti-SSRF, dont la partie validation d'adresse est livrée ici).
+- Décisions créées : **ADR-0154** (format, AAD, rotation, masquage, régions, modèles locaux) et **ADR-0159** (anti-SSRF, dont la partie validation d'adresse est livrée ici) ; **ADR-0293** consigne le statut de validation 422 propre à la route, le recalcul d'empreinte pendant la rotation et l'option de rotation ciblée par apprenant.
 - Pas de route de modification : changer de clé = supprimer puis ajouter (comme la maquette : « Supprimer la clé », « Tester à nouveau »).
 - La pastille « Hors UE » de l'IA fournie n'est pas affichée (maquette) ; ce point est à revérifier lors de la mise en production (SPEC-808).

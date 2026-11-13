@@ -1,0 +1,507 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "quel compte augmente au débit lorsqu’une entreprise encaisse un client ?"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4kfav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-choice_question\">",
+                "target": [
+                  ".gap-18[aria-labelledby=\"_R_4kfav9fivb_\"][data-testid=\"brick-choice_question\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4sfav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-choice_question\">",
+                "target": [
+                  ".gap-18[aria-labelledby=\"_R_4sfav9fivb_\"][data-testid=\"brick-choice_question\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_54fav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-choice_question\">",
+                "target": [
+                  ".gap-18[aria-labelledby=\"_R_54fav9fivb_\"][data-testid=\"brick-choice_question\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4cfav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-choice_question\">",
+        "target": [
+          ".gap-18[aria-labelledby=\"_R_4cfav9fivb_\"][data-testid=\"brick-choice_question\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit."
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4kjav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-open_question\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4kjav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4sjav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-open_question\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4sjav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_54jav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-open_question\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_54jav9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4cjav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-open_question\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4cjav9fivb_\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "complétez de tête, sans liste de choix."
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4knav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-cloze\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4knav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4snav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-cloze\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4snav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_54nav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-cloze\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_54nav9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4cnav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-cloze\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4cnav9fivb_\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "associez chaque document au cycle comptable auquel il se rattache."
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4krav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-matching\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4krav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4srav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-matching\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4srav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_54rav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-matching\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_54rav9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4crav9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-matching\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4crav9fivb_\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "remettez dans l’ordre les étapes de la clôture comptable."
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4kvav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-ordering\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4kvav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4svav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-ordering\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4svav9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_54vav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-ordering\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_54vav9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4cvav9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-ordering\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4cvav9fivb_\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "classez chaque compte dans la catégorie de bilan qui lui correspond."
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4l3av9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-categorization\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4l3av9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4t3av9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-categorization\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4t3av9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_553av9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-categorization\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_553av9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4d3av9fivb_\" class=\"flex flex-col gap-16\" data-testid=\"brick-categorization\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4d3av9fivb_\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "carte de rappel"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4d7av9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-recall_card\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4d7av9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4l7av9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-recall_card\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4l7av9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4t7av9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-recall_card\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4t7av9fivb_\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_557av9fivb_\" class=\"flex flex-col gap-18\" data-testid=\"brick-recall_card\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_557av9fivb_\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section class=\"flex flex-col gap-12\" data-testid=\"gallery-recall_card\" aria-labelledby=\"gallery-title-recall_card\">",
+        "target": [
+          "section[data-testid=\"gallery-recall_card\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "consigne"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4dbav9fivb_-consigne\" class=\"flex flex-col gap-12 rounded-24 bg-ink px-26 py-24 text-white\" data-testid=\"brick-instruction-brief\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4dbav9fivb_-consigne\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4lbav9fivb_-consigne\" class=\"flex flex-col gap-12 rounded-24 bg-ink px-26 py-24 text-white\" data-testid=\"brick-instruction-brief\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4lbav9fivb_-consigne\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4tbav9fivb_-consigne\" class=\"flex flex-col gap-12 rounded-24 bg-ink px-26 py-24 text-white\" data-testid=\"brick-instruction-brief\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4tbav9fivb_-consigne\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_55bav9fivb_-consigne\" class=\"flex flex-col gap-12 rounded-24 bg-ink px-26 py-24 text-white\" data-testid=\"brick-instruction-brief\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_55bav9fivb_-consigne\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section class=\"flex flex-col gap-12\" data-testid=\"gallery-instruction\" aria-labelledby=\"gallery-title-instruction\">",
+        "target": [
+          "section[data-testid=\"gallery-instruction\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "votre saisie"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4lbav9fivb_-saisie\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22\" data-testid=\"brick-instruction-entry\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4lbav9fivb_-saisie\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4tbav9fivb_-saisie\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22\" data-testid=\"brick-instruction-entry\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4tbav9fivb_-saisie\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_55bav9fivb_-saisie\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22\" data-testid=\"brick-instruction-entry\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_55bav9fivb_-saisie\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4dbav9fivb_-saisie\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22\" data-testid=\"brick-instruction-entry\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4dbav9fivb_-saisie\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "postes de la pièce"
+            },
+            "relatedNodes": [
+              {
+                "html": "<div aria-label=\"Postes de la pièce\" class=\"overflow-x-auto\" role=\"region\" tabindex=\"0\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4lbav9fivb_-saisie\"] > .overflow-x-auto[aria-label=\"Postes de la pièce\"][role=\"region\"]"
+                ]
+              },
+              {
+                "html": "<div aria-label=\"Postes de la pièce\" class=\"overflow-x-auto\" role=\"region\" tabindex=\"0\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4tbav9fivb_-saisie\"] > .overflow-x-auto[aria-label=\"Postes de la pièce\"][role=\"region\"]"
+                ]
+              },
+              {
+                "html": "<div aria-label=\"Postes de la pièce\" class=\"overflow-x-auto\" role=\"region\" tabindex=\"0\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_55bav9fivb_-saisie\"] > .overflow-x-auto[aria-label=\"Postes de la pièce\"][role=\"region\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<div aria-label=\"Postes de la pièce\" class=\"overflow-x-auto\" role=\"region\" tabindex=\"0\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4dbav9fivb_-saisie\"] > .overflow-x-auto[aria-label=\"Postes de la pièce\"][role=\"region\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "expliquez avec vos mots"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_4lbav9fivb_-explication\" class=\"flex flex-col gap-10 rounded-24 border border-solid border-border bg-surface px-24 py-22\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4lbav9fivb_-explication\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_4tbav9fivb_-explication\" class=\"flex flex-col gap-10 rounded-24 border border-solid border-border bg-surface px-24 py-22\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_4tbav9fivb_-explication\"]"
+                ]
+              },
+              {
+                "html": "<section aria-labelledby=\"_R_55bav9fivb_-explication\" class=\"flex flex-col gap-10 rounded-24 border border-solid border-border bg-surface px-24 py-22\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_55bav9fivb_-explication\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4dbav9fivb_-explication\" class=\"flex flex-col gap-10 rounded-24 border border-solid border-border bg-surface px-24 py-22\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4dbav9fivb_-explication\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      },
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "correction du tuteur"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_R_55bav9fivb_-correction\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface p-24\" data-testid=\"brick-instruction-review\">",
+                "target": [
+                  "section[aria-labelledby=\"_R_55bav9fivb_-correction\"]"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"_R_4tbav9fivb_-correction\" class=\"flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface p-24\" data-testid=\"brick-instruction-review\">",
+        "target": [
+          "section[aria-labelledby=\"_R_4tbav9fivb_-correction\"]"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]

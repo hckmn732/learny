@@ -35,8 +35,8 @@ test('inspecte la matrice RLS @SPEC-113', async ({ page, axeCheck, captureEviden
     /^\d+ tables publiques, \d+ avec RLS activée, \d+ politiques\.$/,
   );
   const summary = (await page.getByTestId('spec-113-summary').textContent()) ?? '';
-  expect(summary).toContain('54 tables publiques, 54 avec RLS activée');
-  await expect(page.getByTestId('spec-113-forced')).toHaveText('54 tables forcent RLS pour le propriétaire SQL.');
+  expect(summary).toContain('55 tables publiques, 55 avec RLS activée');
+  await expect(page.getByTestId('spec-113-forced')).toHaveText('55 tables forcent RLS pour le propriétaire SQL.');
 
   // Categories: shared programme 7, personal 42, service 4.
   await expect(page.getByTestId('spec-113-category')).toHaveCount(3);

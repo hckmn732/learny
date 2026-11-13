@@ -34,6 +34,7 @@ const ALLOWED_IMPORTS = {
   'learning-engine': ['core', 'config', 'testing'],
   bricks: ['core', 'contracts', 'ui'],
   llm: ['core', 'config', 'contracts', 'db'],
+  ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
   contracts: ['core'],
@@ -67,6 +68,14 @@ const SERVICE_DB_ALLOWED = [
   'apps/web/e2e/**',
 ];
 
+// The `ai` package and its `ai/test` subpath are exact names: a gitignore pattern `ai` would also
+// match an internal folder such as `packages/services/src/ai`, which is not provider code.
+const AI_SDK_MESSAGE = 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).';
+const AI_SDK_PATHS = [
+  { name: 'ai', message: AI_SDK_MESSAGE },
+  { name: 'ai/test', message: AI_SDK_MESSAGE },
+];
+
 const restrictedImportBlocks = [
   {
     files: ['packages/**'],
@@ -75,6 +84,7 @@ const restrictedImportBlocks = [
       'no-restricted-imports': [
         'error',
         {
+          paths: AI_SDK_PATHS,
           patterns: [
             {
               group: ['@learny/web', '@learny/web/*'],
@@ -85,8 +95,8 @@ const restrictedImportBlocks = [
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
             {
-              group: ['ai', 'ai/*', '@ai-sdk/*'],
-              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+              group: ['@ai-sdk/*'],
+              message: AI_SDK_MESSAGE,
             },
           ],
         },
@@ -99,6 +109,7 @@ const restrictedImportBlocks = [
       'no-restricted-imports': [
         'error',
         {
+          ...(target === 'llm' ? {} : { paths: AI_SDK_PATHS }),
           patterns: [
             {
               group: [
@@ -113,11 +124,13 @@ const restrictedImportBlocks = [
             },
             ...(target === 'llm'
               ? []
-              : [{
-                  group: ['ai', 'ai/*', '@ai-sdk/*'],
-                  message:
-                    'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
-                }]),
+              : [
+                  {
+                    group: ['ai', 'ai/*', '@ai-sdk/*'],
+                    message:
+                      'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+                  },
+                ]),
           ],
         },
       ],
@@ -129,6 +142,7 @@ const restrictedImportBlocks = [
       'no-restricted-imports': [
         'error',
         {
+          paths: AI_SDK_PATHS,
           patterns: [
             {
               group: ['@learny/ui', '@learny/ui/*'],
@@ -143,8 +157,8 @@ const restrictedImportBlocks = [
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
             {
-              group: ['ai', 'ai/*', '@ai-sdk/*'],
-              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+              group: ['@ai-sdk/*'],
+              message: AI_SDK_MESSAGE,
             },
           ],
         },
@@ -159,14 +173,15 @@ const restrictedImportBlocks = [
       'no-restricted-imports': [
         'error',
         {
+          paths: AI_SDK_PATHS,
           patterns: [
             {
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
             {
-              group: ['ai', 'ai/*', '@ai-sdk/*'],
-              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+              group: ['@ai-sdk/*'],
+              message: AI_SDK_MESSAGE,
             },
           ],
         },
@@ -510,11 +525,11 @@ export default tseslint.config(
           message: CLOCK_MESSAGE,
         },
         {
-          selector: "Literal[value=/claude-/]",
+          selector: 'Literal[value=/claude-/]',
           message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
         },
         {
-          selector: "TemplateElement[value.raw=/claude-/]",
+          selector: 'TemplateElement[value.raw=/claude-/]',
           message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
         },
       ],

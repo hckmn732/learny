@@ -100,6 +100,14 @@ export const MEMORY_RULES = {
   masteryClearedMinDays: 1,
 } as const;
 
+/** BR-IA-07, ADR-0012 — daily cap of the provided AI and its in-app alert threshold. */
+export const AI_RULES = {
+  /** BR-IA-07 — 1.50 USD per learner and per local day by default. */
+  dailyCapUsd: 1.5,
+  /** BR-IA-07 — one in-app alert when 80 % of the cap is reached. */
+  alertThresholdPercent: 80,
+} as const;
+
 /** BR-NOT-* — notifications. */
 export const NOTIFICATION_RULES = {
   /** BR-NOT-04 — e-mail and browser channels enabled, programme sent at 08:00. */

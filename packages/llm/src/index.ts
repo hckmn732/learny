@@ -2,7 +2,37 @@
 // SDK (ET-9, BR-IA-09); learning-engine and bricks must not depend on it.
 export { resolveModel } from './resolve';
 export type { ManagedModelId, ResolvedModel, ResolveInput } from './resolve';
-export { defaultModelForTask, needsProviderStreaming, TASK_CONFIG, TASK_CAPABILITIES } from './tasks';
+export {
+  BUDGET_DECISIONS,
+  BUDGET_REASONS,
+  budgetCheckSchema,
+  budgetPercent,
+  calculateUsageCost,
+  checkBudget,
+  estimateUsageCost,
+  formatUsdMicros,
+  isBudgetTask,
+  parseUsdMicros,
+  pricesForModel,
+  shouldAlert,
+} from './budget';
+export type {
+  BudgetCheckInput,
+  BudgetCheckResult,
+  BudgetDecision,
+  BudgetReason,
+  EstimatedTokens,
+  ParsedBudgetCheckInput,
+  UsageCost,
+  UsageCostInput,
+  UsageTokens,
+} from './budget';
+export {
+  defaultModelForTask,
+  needsProviderStreaming,
+  TASK_CONFIG,
+  TASK_CAPABILITIES,
+} from './tasks';
 export type { TaskCapability, TaskConfig } from './tasks';
 export {
   buildAnthropicOptions,
@@ -18,7 +48,7 @@ export type {
   AnthropicRequestPreview,
 } from './anthropic-options';
 export { anthropicFetch, createAnthropicFetch, rewriteAnthropicInit } from './anthropic-fetch';
-export { PROVIDER_CATALOG, providerSupports } from './providers/catalog';
+export { PROVIDER_CATALOG, providerRegion, providerSupports } from './providers/catalog';
 export type { ProviderCapabilities, ProviderCatalogEntry } from './providers/catalog';
 export { createLanguageModel } from './providers/factory';
 export type { ProviderSecrets } from './providers/factory';
@@ -31,16 +61,37 @@ export type {
   LlmStreamResult,
   SessionOptions,
 } from './session';
-export {
-  aiUnavailable,
-  invalidOutput,
-  mapProviderError,
-  refused,
-} from './errors';
+export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
 export type { AiErrorContext } from './errors';
 export { logCall, zeroCost } from './log';
 export type { CallUsage, CostCalculator, CostInput, LogCallInput } from './log';
 export { mockFileId, uploadDocument } from './files';
+export {
+  canonicalizeUrl,
+  createAnthropicSearch,
+  createProviderSearch,
+  createTavilySearch,
+  DEFAULT_SEARCH_SCENARIO,
+  fitResultsToBudget,
+  isPublicHttpUrl,
+  normalizeSearchResults,
+  plainText,
+  runSearch,
+  SEARCH_FIXTURES,
+  SEARCH_FIXTURE_SCHEMA,
+  searchFixture,
+  searchProviderForResolved,
+  searchUnavailable,
+  TAVILY_ENDPOINT,
+} from './search';
+export type {
+  CreateSearchProviderOptions,
+  RunSearchOptions,
+  RunSearchResult,
+  SearchProviderClient,
+  SearchProviderRequest,
+} from './search';
+export { llmMode, searchApiKey } from './config';
 export { createMockModel, LearnMockModel } from './mock/mock-model';
 export { selectFixture, canonicalJson, markerScenario, stripMockMarkers } from './mock/select';
 export type { SelectFixtureInput, SelectFixtureOptions } from './mock/select';

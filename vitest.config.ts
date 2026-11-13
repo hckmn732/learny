@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config';
 
-import { assertMockLlm } from './packages/testing/src/env';
+import { assertMockLlm, TEST_ENCRYPTION_KEY } from './packages/testing/src/env';
 
 // A real AI provider is refused before any test starts (ADR-0048, SPEC-004 CL-5).
 assertMockLlm(process.env);
@@ -22,6 +22,7 @@ export default defineConfig({
       CLOCK_FIXED_AT: '2026-11-11T12:20:00Z',
       LLM_MODE: 'mock',
       TZ: 'UTC',
+      APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
     },
     coverage: {
       provider: 'v8',

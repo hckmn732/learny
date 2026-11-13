@@ -108,4 +108,11 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Décisions appliquées : ADR-0012, ADR-0073. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0012, ADR-0073, **ADR-0294**. ADR-0294 consigne la réservation
+transactionnelle du plafond (`ai_budget_reservations`, verrou consultatif par apprenant, bail de
+15 minutes, rejeu idempotent), le bail Haiku explicite au plafond, la ligne `capped` et la
+notification de report dédupliquée par jour local, ainsi que le calcul du coût par défaut dans
+`@learny/llm`. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur
+produit n’est introduite hors du catalogue. Toute ambiguïté d'implémentation découverte ensuite
+suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la
+spécification.

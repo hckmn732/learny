@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="37.089887000000004">
+<testsuite name="p5/spec-505-credentials.spec.ts" timestamp="2026-11-13T01:14:53.207Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.919" errors="0">
+<testcase name="ajouter et supprimer une clé personnelle @SPEC-505" classname="p5/spec-505-credentials.spec.ts" time="1.879">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/attachments/spec-505-credential-fefda4993b0d73ec01dbf21f8e5031bee723f09c.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/attachments/axe-98e6877f5ffedaa7e8091f6b8f02ab3ee5693b1a.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-aj-13c76-ne-clé-personnelle-SPEC-505-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration des clés, conformité visuelle @SPEC-505 @visual" classname="p5/spec-505-credentials.spec.ts" time="1.04">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/attachments/axe-cdf053df8e1adeb392f85b67321161f230c10ef1.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/attachments/spec-505-demo-c28e82fb8240e6349725de7fc983dba39182aa3b.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-505-credentials-dé-7b193-té-visuelle-SPEC-505-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

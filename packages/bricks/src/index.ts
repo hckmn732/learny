@@ -70,8 +70,12 @@ export {
 } from './types/scoring/compute';
 export type { ActivityScore, ExerciseScore } from './types/scoring/compute';
 export { formatRemaining, timerState } from './types/timer/state';
-export type { TimerState } from './types/timer/state';
-export { evaluateTableChecks, parseFrenchNumber } from './types/instruction/table-checks';
+export type { TimerState, TimerStateInput } from './types/timer/state';
+export {
+  evaluateTableChecks,
+  formatFrenchNumber,
+  parseFrenchNumber,
+} from './types/instruction/table-checks';
 export type {
   TableCheckResult,
   TableCheckState,

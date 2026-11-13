@@ -1,0 +1,810 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-503/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-503",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-503/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-503/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-503/test-results/sdd/SPEC-503/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-503/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-503/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p5/spec-503-bricks-render.spec.ts",
+      "file": "p5/spec-503-bricks-render.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "jouer les cinq jeux au clavier @SPEC-503",
+          "ok": true,
+          "tags": [
+            "SPEC-503"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1640,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:16.565Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-503-jeu-1",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/spec-503-jeu-1-421db3f771e707f40bdac7cdb0d83bdb84ba8319.png"
+                    },
+                    {
+                      "name": "spec-503-jeu-2",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/spec-503-jeu-2-7165d7552017372621e178aa19ec0905ec28314a.png"
+                    },
+                    {
+                      "name": "spec-503-jeu-3",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/spec-503-jeu-3-9efbd47fdaa1d50c30e6f7d92ca421d5d7de9dbb.png"
+                    },
+                    {
+                      "name": "spec-503-jeu-4",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/spec-503-jeu-4-097dd1df6ea28ab865941d7de369a8ee043f05d5.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/axe-16b58d5c4273723f8da5e87c65b2f6361955ab96.json"
+                    },
+                    {
+                      "name": "spec-503-jeu-5",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/attachments/spec-503-jeu-5-fd17532209426eb2898d53f807a7c4303fdc2f88.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--0df1f-nq-jeux-au-clavier-SPEC-503-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "db1daa3efc7c78f197a6-6a83b5b5ec76f265be83",
+          "file": "p5/spec-503-bricks-render.spec.ts",
+          "line": 20,
+          "column": 1
+        },
+        {
+          "title": "question à choix corrigée @SPEC-503",
+          "ok": true,
+          "tags": [
+            "SPEC-503"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 867,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:18.347Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/attachments/axe-a6121e51d9876f7cda950e5d6132f90f6b5f0d6d.json"
+                    },
+                    {
+                      "name": "spec-503-quiz",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/attachments/spec-503-quiz-769355b00fb573e458b05e591b30d5baceb38a29.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render-question-à-choix-corrigée-SPEC-503-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "db1daa3efc7c78f197a6-1cd84f5a03a10ec3994e",
+          "file": "p5/spec-503-bricks-render.spec.ts",
+          "line": 78,
+          "column": 1
+        },
+        {
+          "title": "exercice tableau en direct @SPEC-503",
+          "ok": true,
+          "tags": [
+            "SPEC-503"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 894,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:19.297Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/attachments/axe-1d64252b0ec2e6de1356aee558908734fe2ecd2f.json"
+                    },
+                    {
+                      "name": "spec-503-exercice",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/attachments/spec-503-exercice-9cd39804e5b97ee2e1f9d619b8c147df811fab71.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--823d1--tableau-en-direct-SPEC-503-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "db1daa3efc7c78f197a6-c8df51780e902c5f9d9e",
+          "file": "p5/spec-503-bricks-render.spec.ts",
+          "line": 101,
+          "column": 1
+        },
+        {
+          "title": "conformité des briques aux maquettes @SPEC-503 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-503",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "reproduction-quiz:0.0668"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "brick-recall_card:0.0674"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "brick-instruction-brief:0.2342"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "reproduction-examen:0.0684"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3980,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:20.272Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "reproduction-quiz:0.0668"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "brick-recall_card:0.0674"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "brick-instruction-brief:0.2342"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "reproduction-examen:0.0684"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "reproduction-quiz-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/reproduction-quiz-side-by-side-ac18e50a1571b37a2d7d2d5ebd3ae05ed73f42e7.png"
+                    },
+                    {
+                      "name": "reproduction-quiz-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/reproduction-quiz-diff-02d593192717e6354d6f0354b4c2104b419aced8.png"
+                    },
+                    {
+                      "name": "brick-recall_card-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/brick-recall-card-side-by-side-838d14226eb5cb8b33fcdb1c59b1c08e310efc64.png"
+                    },
+                    {
+                      "name": "brick-recall_card-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/brick-recall-card-diff-af8f10ebb78a125c6a913b6b715e8bbd8ed6bd2b.png"
+                    },
+                    {
+                      "name": "brick-instruction-brief-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/brick-instruction-brief-side-by-side-a761d52ba2a5489e682e50f6c2d756dbaa1552a9.png"
+                    },
+                    {
+                      "name": "brick-instruction-brief-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/brick-instruction-brief-diff-85de21f04736235539c1a799243c5ce213dc4fae.png"
+                    },
+                    {
+                      "name": "reproduction-examen-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/reproduction-examen-side-by-side-fc1932a43b877a3b1a2eb9ccb173f384479008c8.png"
+                    },
+                    {
+                      "name": "reproduction-examen-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/attachments/reproduction-examen-diff-cb549288e39db0ada427ad950051bbc5d83738f1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--3bff2-x-maquettes-SPEC-503-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "db1daa3efc7c78f197a6-18b02717873ad33f7b36",
+          "file": "p5/spec-503-bricks-render.spec.ts",
+          "line": 180,
+          "column": 1
+        },
+        {
+          "title": "galerie et reproductions accessibles @SPEC-503 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-503",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4656,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:24.357Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/attachments/axe-31563843c0236e0cb966dbfde8a26a31fc5c0b9b.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/attachments/axe-a62bafc81c3ba2fc9ebf0a96e5ce43ba7957fd3c.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/attachments/axe-f8665089acb140b34c55d86aeaa3f0b6df9f1ed6.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/attachments/axe-0d622de2c6e228cc964f37d09fd4a8932a3a3d37.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/attachments/axe-a8f52da930ee32880db83dee5a8a1e1ac17d96a0.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7935,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T01:45:29.739Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/attachments/axe-d3ab8124941a60aab6edcd3c25a64893e962e247.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/attachments/axe-cb6e78b429294db4cf4a259bc8572dbe0c6713f2.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/attachments/axe-ec717a2804447c2153331ad7787e17cbc4809743.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/attachments/axe-847ff0062d8fa3cba9a7bd54156a93a4324b1951.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/attachments/axe-718152015d53e2a04c3edcfeeb4c154bc2b40f44.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/video-5.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-503/test-results/artifacts/p5-spec-503-bricks-render--5eb97-bles-SPEC-503-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "db1daa3efc7c78f197a6-190e7d71fe99c43e4fcb",
+          "file": "p5/spec-503-bricks-render.spec.ts",
+          "line": 225,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T01:44:46.395Z",
+    "duration": 52665.27,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

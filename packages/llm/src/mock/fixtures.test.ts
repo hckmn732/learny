@@ -16,11 +16,13 @@ function fixtureFiles(dir: string, prefix = ''): string[] {
     .flatMap((entry) => {
       const relative = prefix === '' ? entry.name : `${prefix}/${entry.name}`;
       if (entry.isDirectory()) {
-        return entry.name === 'prompts' ? [] : fixtureFiles(path.join(dir, entry.name), relative);
+        // `prompts` declares prompt versions; `search` holds the web-search fixtures of SPEC-512,
+        // which are not language-model fixtures and validate against their own schema.
+        return entry.name === 'prompts' || entry.name === 'search'
+          ? []
+          : fixtureFiles(path.join(dir, entry.name), relative);
       }
-      return entry.name.endsWith('.json') && entry.name !== 'fixture.schema.json'
-        ? [relative]
-        : [];
+      return entry.name.endsWith('.json') && entry.name !== 'fixture.schema.json' ? [relative] : [];
     })
     .sort();
 }
@@ -56,9 +58,7 @@ describe('[SPEC-504] fixtures du dépôt', () => {
     expect([...types].sort()).toEqual(['error', 'object', 'stream', 'text', 'tool-calls']);
     const errorKinds = new Set(
       FIXTURE_REGISTRY.flatMap((entry) =>
-        entry.fixture.steps.flatMap((step) =>
-          step.type === 'error' ? [step.error.kind] : [],
-        ),
+        entry.fixture.steps.flatMap((step) => (step.type === 'error' ? [step.error.kind] : [])),
       ),
     );
     expect(errorKinds.has('refusal')).toBe(true);

@@ -17,13 +17,7 @@ import {
 import type { z } from 'zod';
 
 import type { AiTask, LlmMode } from '@learny/config';
-import {
-  AppError,
-  clock,
-  err,
-  ok,
-  type Result,
-} from '@learny/core';
+import { AppError, clock, err, ok, type Result } from '@learny/core';
 import type { AiProviderValue, Db } from '@learny/db';
 
 import { LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
@@ -33,13 +27,14 @@ import {
   buildAnthropicSystem,
   documentMessage,
 } from './anthropic-options';
+import { calculateUsageCost } from './budget/price';
 import { llmMode } from './config';
 import { mapProviderError, refused } from './errors';
-import { logCall, zeroCost, type CallUsage, type CostCalculator } from './log';
+import { logCall, type CallUsage, type CostCalculator } from './log';
 import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
 import { selectFixture, stripMockMarkers } from './mock/select';
-import { createLanguageModel } from './providers/factory';
+import { createLanguageModel, providerSecrets } from './providers/factory';
 import { resolveModel, type ResolvedModel } from './resolve';
 import { TASK_CONFIG, needsProviderStreaming } from './tasks';
 import {
@@ -66,10 +61,15 @@ export interface CallEstimate {
   managed: boolean;
 }
 
+export type BudgetSettlement = (input: {
+  usage: CallUsage;
+  status: 'ok' | 'error' | 'refused' | 'invalid_output';
+}) => Promise<void>;
+
 export type BudgetGuard = (
   ctx: LlmContext,
   input: { resolved: ResolvedModel; estimate: CallEstimate },
-) => Promise<Result<{ resolved: ResolvedModel }, AppError>>;
+) => Promise<Result<{ resolved: ResolvedModel; settle?: BudgetSettlement }, AppError>>;
 
 export interface SessionOptions {
   task: AiTask;
@@ -96,6 +96,32 @@ export interface LlmSession {
     input: Omit<StepInput, 'tools'> & { schema: S },
   ): Promise<Result<z.infer<S>, AppError>>;
   stream(input: StepInput): Promise<Result<LlmStreamResult, AppError>>;
+}
+
+/** SPEC-507 ET-2 — the journal uses the configured prices; a personal model stays at zero. */
+const pricedCost: CostCalculator = (input) =>
+  calculateUsageCost({
+    model: input.model,
+    managed: input.managed,
+    usage: {
+      inputTokens: input.usage.inputTokens,
+      outputTokens: input.usage.outputTokens,
+      cacheReadTokens: input.usage.cacheReadTokens,
+      cacheWriteTokens: input.usage.cacheWriteTokens,
+    },
+  }).costUsd;
+
+/** A lease always expires; a settlement failure must never change the outcome of a call. */
+async function settleQuietly(
+  settle: BudgetSettlement | undefined,
+  input: Parameters<BudgetSettlement>[0],
+): Promise<void> {
+  if (settle === undefined) return;
+  try {
+    await settle(input);
+  } catch {
+    // The short lease of the reservation bounds the impact of a failed release.
+  }
 }
 
 function providerOf(resolved: ResolvedModel): AiProviderValue {
@@ -179,20 +205,29 @@ export async function createSession(
   if (!resolvedResult.ok) return resolvedResult;
   let current = resolvedResult.value;
   const mode = opts.mode ?? llmMode();
-  const costCalculator = opts.costCalculator ?? zeroCost;
+  const costCalculator = opts.costCalculator ?? pricedCost;
   const budgetGuard: BudgetGuard =
     opts.budgetGuard ?? ((_, input) => Promise.resolve(ok({ resolved: input.resolved })));
   const mockModels = new Map<string, LearnMockModel>();
 
-  function languageModel(resolved: ResolvedModel): LanguageModel {
-    return createLanguageModel(resolved, { apiKey: opts.secrets?.apiKey ?? null });
+  async function languageModel(resolved: ResolvedModel): Promise<LanguageModel> {
+    const secrets = await providerSecrets(
+      ctx.db,
+      ctx.userId,
+      resolved,
+      opts.secrets?.apiKey ?? null,
+    );
+    if (!secrets.ok) throw secrets.error;
+    return createLanguageModel(resolved, secrets.value);
   }
 
-  async function modelFor(estimate: CallEstimate): Promise<Result<ResolvedModel, AppError>> {
+  async function modelFor(
+    estimate: CallEstimate,
+  ): Promise<Result<{ resolved: ResolvedModel; settle?: BudgetSettlement }, AppError>> {
     const guarded = await budgetGuard(ctx, { resolved: current, estimate });
     if (!guarded.ok) return guarded;
     current = guarded.value.resolved;
-    return ok(current);
+    return ok(guarded.value);
   }
 
   async function persist(input: {
@@ -252,6 +287,7 @@ export async function createSession(
   async function executeStep(
     resolved: ResolvedModel,
     input: StepInput,
+    settle?: BudgetSettlement,
   ): Promise<Result<StepOutput, AppError>> {
     assertCitationsCompatible({ citations: input.citations, structured: false });
     const started = clock.now();
@@ -275,7 +311,7 @@ export async function createSession(
         : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-    const currentModel = mock ?? languageModel(resolved);
+    const currentModel = mock ?? (await languageModel(resolved));
     const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
     try {
       let result;
@@ -356,29 +392,30 @@ export async function createSession(
         status: refusedNow ? 'refused' : 'ok',
         errorCode: refusedNow ? 'AI_REFUSED' : null,
       });
+      await settleQuietly(settle, { usage, status: refusedNow ? 'refused' : 'ok' });
       if (refusedNow) return err(refused({ credentialId: credentialOf(resolved) }));
       return ok(output);
     } catch (error) {
       const mapped = mapProviderError(error, {
         modelId: resolved.modelId,
-        ...(credentialOf(resolved) === undefined
-          ? {}
-          : { credentialId: credentialOf(resolved) }),
+        ...(credentialOf(resolved) === undefined ? {} : { credentialId: credentialOf(resolved) }),
       });
       const usage = usageFromError(error);
+      const failedStatus =
+        mapped.code === 'AI_REFUSED'
+          ? 'refused'
+          : mapped.code === 'INVALID_OUTPUT'
+            ? 'invalid_output'
+            : 'error';
       await persist({
         resolved,
         usage,
         latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
         effectiveModel: resolved.modelId,
-        status:
-          mapped.code === 'AI_REFUSED'
-            ? 'refused'
-            : mapped.code === 'INVALID_OUTPUT'
-              ? 'invalid_output'
-              : 'error',
+        status: failedStatus,
         errorCode: mapped.code,
       });
+      await settleQuietly(settle, { usage, status: failedStatus });
       return err(mapped);
     }
   }
@@ -386,6 +423,7 @@ export async function createSession(
   async function executeObject<S extends z.ZodType>(
     resolved: ResolvedModel,
     input: Omit<StepInput, 'tools'> & { schema: S },
+    settle?: BudgetSettlement,
   ): Promise<Result<z.infer<S>, AppError>> {
     assertCitationsCompatible({ citations: input.citations, structured: true });
     const started = clock.now();
@@ -408,7 +446,7 @@ export async function createSession(
         : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-    const currentModel = mock ?? languageModel(resolved);
+    const currentModel = mock ?? (await languageModel(resolved));
     const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
     try {
       let object: unknown;
@@ -454,6 +492,7 @@ export async function createSession(
         effectiveModel: mode === 'mock' ? resolved.modelId : modelId,
         status: 'ok',
       });
+      await settleQuietly(settle, { usage: effectiveUsage, status: 'ok' });
       return ok(object as z.infer<S>);
     } catch (error) {
       const mapped = mapProviderError(error, {
@@ -461,14 +500,16 @@ export async function createSession(
         ...(credentialOf(resolved) === undefined ? {} : { credentialId: credentialOf(resolved) }),
       });
       const usage = usageFromError(error);
+      const failedStatus = mapped.code === 'AI_REFUSED' ? 'refused' : 'invalid_output';
       await persist({
         resolved,
         usage,
         latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
         effectiveModel: resolved.modelId,
-        status: mapped.code === 'AI_REFUSED' ? 'refused' : 'invalid_output',
+        status: failedStatus,
         errorCode: mapped.code,
       });
+      await settleQuietly(settle, { usage, status: failedStatus });
       return err(mapped);
     }
   }
@@ -481,19 +522,20 @@ export async function createSession(
       const estimate = estimateFor(input);
       const guarded = await modelFor(estimate);
       if (!guarded.ok) return guarded;
-      return executeStep(guarded.value, input);
+      return executeStep(guarded.value.resolved, input, guarded.value.settle);
     },
     async object(input) {
       const estimate = estimateFor(input);
       const guarded = await modelFor(estimate);
       if (!guarded.ok) return guarded;
-      return executeObject(guarded.value, input);
+      return executeObject(guarded.value.resolved, input, guarded.value.settle);
     },
     async stream(input) {
       const estimate = estimateFor(input);
       const guarded = await modelFor(estimate);
       if (!guarded.ok) return guarded;
-      const resolved = guarded.value;
+      const resolved = guarded.value.resolved;
+      const settle = guarded.value.settle;
       assertCitationsCompatible({ citations: input.citations, structured: false });
       const started = clock.now();
       const system = buildAnthropicSystem(input.system);
@@ -515,7 +557,7 @@ export async function createSession(
             }
           : undefined;
       const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-      const currentModel = mock ?? languageModel(resolved);
+      const currentModel = mock ?? (await languageModel(resolved));
       const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
       let logged = false;
       const result = streamText({
@@ -531,14 +573,15 @@ export async function createSession(
           if (logged) return;
           logged = true;
           const usage = usageOf(event.usage);
+          const status = refusalFrom(event.finishReason, undefined) ? 'refused' : 'ok';
           void persist({
             resolved,
             usage,
             latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
             effectiveModel: mode === 'mock' ? resolved.modelId : event.response.modelId,
-            status: refusalFrom(event.finishReason, undefined) ? 'refused' : 'ok',
-            errorCode: refusalFrom(event.finishReason, undefined) ? 'AI_REFUSED' : null,
-          });
+            status,
+            errorCode: status === 'refused' ? 'AI_REFUSED' : null,
+          }).then(() => settleQuietly(settle, { usage, status }));
         },
         onError: (event) => {
           if (logged) return;
@@ -549,14 +592,16 @@ export async function createSession(
               ? {}
               : { credentialId: credentialOf(resolved) }),
           });
+          const usage = emptyUsage();
+          const status = mapped.code === 'AI_REFUSED' ? 'refused' : 'error';
           void persist({
             resolved,
-            usage: emptyUsage(),
+            usage,
             latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
             effectiveModel: resolved.modelId,
-            status: mapped.code === 'AI_REFUSED' ? 'refused' : 'error',
+            status,
             errorCode: mapped.code,
-          });
+          }).then(() => settleQuietly(settle, { usage, status }));
         },
       });
       return ok(result);
@@ -576,8 +621,7 @@ export function outgoingMessages(
   provider: AiProviderValue,
 ): ModelMessage[] {
   // CL-10: a non-Anthropic personal model receives text only; citations are ignored.
-  const documents =
-    provider === 'anthropic' ? documentMessage(input.documents ?? []) : undefined;
+  const documents = provider === 'anthropic' ? documentMessage(input.documents ?? []) : undefined;
   const base = mode === 'mock' ? stripMockMarkers(input.messages) : [...input.messages];
   return documents === undefined ? base : [documents, ...base];
 }
@@ -610,4 +654,3 @@ function usageFromError(error: unknown): CallUsage {
   }
   return emptyUsage();
 }
-

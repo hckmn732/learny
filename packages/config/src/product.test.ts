@@ -19,6 +19,7 @@ import {
 } from './pricing';
 import {
   ACCOUNT_RULES,
+  AI_RULES,
   AUTOMATION_DEFAULTS,
   ENGINE,
   FORMATION_RULES,
@@ -31,6 +32,7 @@ import {
 
 const RULES = {
   ACCOUNT: ACCOUNT_RULES,
+  AI: AI_RULES,
   RESOURCE: RESOURCE_RULES,
   QUIZ: QUIZ_RULES,
   MEMORY: MEMORY_RULES,
@@ -87,6 +89,8 @@ const MIRROR: readonly Mirror[] = [
   },
   { path: 'ACCOUNT.defaultCourseLanguage', br: 'BR-ACC-06', value: 'fr', text: 'défaut fr' },
   { path: 'ACCOUNT.defaultTimeZone', br: 'BR-ACC-07', value: 'Europe/Paris', text: 'Europe/Paris' },
+  { path: 'AI.dailyCapUsd', br: 'BR-IA-07', value: 1.5, text: '1,50 USD par jour' },
+  { path: 'AI.alertThresholdPercent', br: 'BR-IA-07', value: 80, text: 'Alerte in-app à 80 %' },
   { path: 'ACCOUNT.studyHoursPerDay.min', br: 'BR-ACC-08', value: 1, text: 'entier 1 à 6' },
   { path: 'ACCOUNT.studyHoursPerDay.max', br: 'BR-ACC-08', value: 6, text: 'entier 1 à 6' },
   { path: 'ACCOUNT.studyHoursPerDay.default', br: 'BR-ACC-08', value: 2, text: 'défaut 2' },
@@ -287,6 +291,7 @@ describe('[SPEC-009] product', () => {
   it('covers the seven families required by EF-5', () => {
     expect(Object.keys(RULES)).toEqual([
       'ACCOUNT',
+      'AI',
       'RESOURCE',
       'QUIZ',
       'MEMORY',

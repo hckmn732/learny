@@ -80,6 +80,56 @@ export const ACCESSIBLE_TOKEN_PAIRS = [
   },
   { id: 'white-on-indigo', foreground: 'white', background: 'indigo', minimum: AA_NORMAL_TEXT },
   { id: 'white-on-danger', foreground: 'white', background: 'danger', minimum: AA_NORMAL_TEXT },
+  // Brick views (SPEC-503, ADR-0152).
+  { id: 'ink-on-success', foreground: 'ink', background: 'success', minimum: AA_NORMAL_TEXT },
+  {
+    id: 'orange-ink-on-danger-soft',
+    foreground: 'orange-ink',
+    background: 'danger-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-pdf-on-soft',
+    foreground: 'excerpt-pdf',
+    background: 'excerpt-pdf-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-audio-on-soft',
+    foreground: 'excerpt-audio',
+    background: 'excerpt-audio-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-video-on-soft',
+    foreground: 'excerpt-video',
+    background: 'excerpt-video-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-youtube-on-soft',
+    foreground: 'excerpt-youtube',
+    background: 'excerpt-youtube-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-web-on-soft',
+    foreground: 'excerpt-web',
+    background: 'excerpt-web-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-note-on-soft',
+    foreground: 'excerpt-note',
+    background: 'excerpt-note-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
+  {
+    id: 'excerpt-image-on-soft',
+    foreground: 'excerpt-image',
+    background: 'excerpt-image-soft',
+    minimum: AA_NORMAL_TEXT,
+  },
 ] as const satisfies readonly ContrastPair[];
 
 export type AccessibleTokenPairId = (typeof ACCESSIBLE_TOKEN_PAIRS)[number]['id'];

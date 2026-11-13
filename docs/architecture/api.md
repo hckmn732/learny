@@ -26,7 +26,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
 | POST/GET/DELETE `/me/pause` | Mode pause | SPEC-721 |
 | POST `/me/export` · GET `/me/exports/:id` · POST `/me/deletion` · DELETE `/me/deletion` | Données personnelles | SPEC-211 |
-| GET/PUT `/me/ai/task-models` · GET/POST/DELETE `/me/ai/credentials` · POST `/me/ai/credentials/:id/qualify` · GET `/me/ai/usage` | Modèles d'IA | SPEC-505, 506, 507, 709 |
+| GET/PUT `/me/ai/task-models` · GET/POST/DELETE `/me/ai/credentials` · POST `/me/ai/credentials/:id/qualify` · GET `/me/ai/usage` | Modèles d'IA. Clés personnelles (SPEC-505) : POST 201 DTO masqué (`keyMasked`, `outsideEu`, `dataNote`), GET 200 `{ items }` (10 au plus), DELETE 204 ; 404 pour la clé d'autrui, 409 `CONFLICT` pour un doublon exact, 422 `VALIDATION_FAILED`, `LOCAL_MODELS_DISABLED`, `CREDENTIAL_LIMIT_REACHED`, `URL_INVALID`, `URL_BLOCKED_HOST` ; aucune réponse ne contient `apiKey` ni `encryptedKey` | SPEC-505, 506, 507, 709 |
 | POST `/billing/checkout` · POST `/billing/portal` · GET `/billing/subscription` · POST `/webhooks/stripe` | Abonnement | SPEC-210, 725 |
 | GET `/home` | Données de l'accueil | SPEC-603 |
 | GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · POST `/formations/:fid/(pause|resume|archive|open)` | Formations | SPEC-604, 618 |

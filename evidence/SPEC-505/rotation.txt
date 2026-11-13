@@ -1,0 +1,6 @@
+Rotation des clés IA personnelles (base de test)
+Lignes examinées : 250
+Rechiffrées      : 150
+Déjà à jour      : 100
+En échec         : 0
+Reprise après interruption simulée : réussie, aucune ligne perdue.

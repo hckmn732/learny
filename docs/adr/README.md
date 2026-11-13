@@ -164,4 +164,10 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0287](ADR-0287-contrats-d-implementation-du-tirage-de-la-session-de-quiz-gl.md) | Contrats d’implémentation du tirage de la session de quiz global | Déduite | SPEC-406, BR-MEM-03, BR-MEM-04, ADR-0015, ADR-0025 |
 | [ADR-0288](ADR-0288-contrats-d-implementation-des-services-de-persistance-du-mot.md) | Contrats d'implémentation des services de persistance du moteur | Déduite | SPEC-411, ADR-0112, ADR-0149, ADR-0242, SPEC-203 |
 | [ADR-0289](ADR-0289-contrats-d-implementation-complementaires-du-paquet-bricks.md) | Contrats d'implémentation complémentaires du paquet bricks | Déduite | SPEC-501 |
+| [ADR-0292](ADR-0292-contrat-de-correction-et-extensions-des-vues-de-briques.md) | Contrat de correction et extensions des vues de briques | Déduite | SPEC-503, SPEC-502 |
+| [ADR-0293](ADR-0293-complements-d-implementation-des-cles-personnelles-chiffrees.md) | Compléments d’implémentation des clés personnelles chiffrées | Déduite | SPEC-505 |
+| [ADR-0294](ADR-0294-reservation-transactionnelle-du-plafond-et-journal-des-appels-ia.md) | Réservation transactionnelle du plafond et journal des appels IA | Déduite | SPEC-507, ADR-0012, ADR-0073 |
+| [ADR-0295](ADR-0295-recherche-web-selection-du-fournisseur-canonisation-et-suggestions.md) | Recherche web : sélection du fournisseur, canonisation et suggestions | Déduite | SPEC-512 |
 | [ADR-0296](ADR-0296-contrats-d-implementation-du-paquet-tutor.md) | Contrats d’implémentation du paquet tutor | Déduite | SPEC-508, ADR-0021, ADR-0023, ADR-0072 |
+| [ADR-0297](ADR-0297-complements-d-implementation-de-l-ingestion-des-notes-et-pdf.md) | Compléments d’implémentation de l’ingestion des notes et PDF | Déduite | SPEC-509, ADR-0056, ADR-0057 |
+| [ADR-0298](ADR-0298-reconciliation-des-contrats-tutor-de-spec-508-et-spec-512.md) | Réconciliation des contrats tutor de SPEC-508 et SPEC-512 | Déduite | SPEC-508, SPEC-512 |

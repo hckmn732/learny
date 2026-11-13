@@ -243,6 +243,8 @@ export {
   AI_CALL_STATUSES_VALUES,
   AI_PROVIDERS,
   AI_PROVIDERS_VALUES,
+  AI_RESERVATION_STATUSES,
+  AI_RESERVATION_STATUSES_VALUES,
   AI_TASKS,
   AI_TASKS_VALUES,
   CREDENTIAL_STATUSES,
@@ -252,11 +254,14 @@ export {
   PUBLIC_AI_CREDENTIAL_FIELDS,
   SUBSCRIPTION_STATUSES,
   SUBSCRIPTION_STATUSES_VALUES,
+  aiBudgetReservations,
   aiCallStatus,
   aiCallStatusSchema,
   aiCalls,
   aiCredentials,
   aiProvider,
+  aiReservationStatus,
+  aiReservationStatusSchema,
   aiProviderSchema,
   aiTask,
   aiTaskModels,
@@ -281,13 +286,16 @@ export {
   tokenCountSchema,
 } from './schema/ai-billing';
 export type {
+  AiBudgetReservation,
   AiCall,
   AiCallStatusValue,
   AiCredential,
   AiProviderValue,
+  AiReservationStatusValue,
   AiTaskModel,
   AiTaskValue,
   CredentialStatusValue,
+  NewAiBudgetReservation,
   NewAiCall,
   NewAiCredential,
   NewAiTaskModel,
@@ -299,6 +307,8 @@ export type {
 
 // Repositories of the AI journal, the task choices and the daily spend (SPEC-110 EF-2 to EF-6).
 export * from './repositories/ai-usage';
+// Atomic budget reservations of the provided AI (SPEC-507 ET-1 to ET-3, CL-5).
+export * from './repositories/ai-budget';
 // Four tables of the personal-data / idempotency / rate-limit domain and the legal document
 // enumeration (SPEC-112 EF-1 to EF-4). The private search function is exposed by its repository.
 export {

@@ -1,0 +1,6 @@
+{
+  "provider": "anthropic",
+  "scenario": "empty",
+  "description": "Recherche native sans résultat : la réponse reste une liste vide honnête.",
+  "results": []
+}
