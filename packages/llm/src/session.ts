@@ -85,6 +85,11 @@ export interface SessionOptions {
   mode?: LlmMode;
   /** Test seam for the fixture registry. */
   fixtures?: readonly { path: string; fixture: FixtureFile }[];
+  /**
+   * SPEC-506 — qualification calls a model before it is assigned to a task. The descriptor is
+   * built from the owned credential; resolution of `ai_task_models` is skipped in that case.
+   */
+  resolvedOverride?: ResolvedModel;
 }
 
 export type LlmStreamResult = ReturnType<typeof streamText>;
@@ -201,7 +206,10 @@ export async function createSession(
   ctx: LlmContext,
   opts: SessionOptions,
 ): Promise<Result<LlmSession, AppError>> {
-  const resolvedResult = await resolveModel(ctx.db, { userId: ctx.userId, task: opts.task });
+  const resolvedResult =
+    opts.resolvedOverride === undefined
+      ? await resolveModel(ctx.db, { userId: ctx.userId, task: opts.task })
+      : ok(opts.resolvedOverride);
   if (!resolvedResult.ok) return resolvedResult;
   let current = resolvedResult.value;
   const mode = opts.mode ?? llmMode();

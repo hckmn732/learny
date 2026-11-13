@@ -1,0 +1,510 @@
+{
+  "task": "light",
+  "scenario": "qualification-invalid-brick",
+  "promptId": "qualification.run",
+  "promptVersion": 1,
+  "description": "Batterie avec une seule brique invalide (open_question, total des critères à 30).",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Connexion au modèle établie.",
+      "finishReason": "stop",
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    },
+    {
+      "type": "tool-calls",
+      "toolCalls": [
+        {
+          "toolCallId": "qualification-call-1",
+          "toolName": "qualification_probe",
+          "input": {
+            "value": "ok"
+          }
+        }
+      ],
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 180
+    },
+    {
+      "type": "object",
+      "object": {
+        "ok": true,
+        "summary": "Sortie structurée conforme."
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 160
+    },
+    {
+      "type": "object",
+      "object": {
+        "title": "La comptabilité générale",
+        "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 140
+    },
+    {
+      "type": "object",
+      "object": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "location": {
+          "page": 4,
+          "charStart": 120,
+          "charEnd": 260
+        },
+        "quote": "Le compte de résultat présente les produits et les charges de l’exercice.",
+        "label": "Guide FI, p. 4",
+        "sources": [
+          {
+            "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "quote": "produits et charges de l’exercice"
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 141
+    },
+    {
+      "type": "object",
+      "object": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 142
+    },
+    {
+      "type": "object",
+      "object": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": ["La partie double"],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe",
+            "points": 10,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre",
+            "points": 10,
+            "description": ""
+          },
+          {
+            "key": "limite",
+            "label": "Limites",
+            "points": 10,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Une réponse modèle suffisamment longue pour être acceptée par le schéma.",
+        "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 155
+    },
+    {
+      "type": "object",
+      "object": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 144
+    },
+    {
+      "type": "object",
+      "object": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 145
+    },
+    {
+      "type": "object",
+      "object": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 146
+    },
+    {
+      "type": "object",
+      "object": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 147
+    },
+    {
+      "type": "object",
+      "object": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 148
+    },
+    {
+      "type": "object",
+      "object": {
+        "title": "Justifier un relevé bancaire",
+        "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+        "data": [
+          "Solde du relevé : 12 400 €",
+          "Solde comptable : 12 150 €",
+          "Frais bancaires : 250 €"
+        ],
+        "deliverable": "Un tableau de rapprochement complété et justifié.",
+        "production": {
+          "kind": "table",
+          "fields": [
+            {
+              "key": "libelle",
+              "label": "Libellé",
+              "type": "text"
+            }
+          ],
+          "columns": [
+            {
+              "key": "debit",
+              "label": "Débit",
+              "type": "number"
+            },
+            {
+              "key": "credit",
+              "label": "Crédit",
+              "type": "number"
+            },
+            {
+              "key": "sens",
+              "label": "Sens",
+              "type": "select",
+              "options": [
+                {
+                  "value": "D",
+                  "label": "Débit"
+                },
+                {
+                  "value": "C",
+                  "label": "Crédit"
+                }
+              ]
+            }
+          ],
+          "minRows": 1,
+          "maxRows": 5,
+          "initialRows": 2,
+          "checks": [
+            {
+              "type": "sum_equal",
+              "numberColumn": "debit",
+              "groupColumn": "sens",
+              "left": ["Débit"],
+              "right": ["Crédit"],
+              "leftLabel": "Débit",
+              "rightLabel": "Crédit",
+              "sideColumnLabel": "Sens"
+            }
+          ]
+        },
+        "explanationPrompt": "Expliquez avec vos mots pourquoi les deux soldes diffèrent.",
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "estimatedMinutes": 20,
+        "passPoints": 8,
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 149
+    },
+    {
+      "type": "object",
+      "object": {
+        "role": "Contrôleur de gestion",
+        "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+        "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+        "endCondition": "L’apprenant a distingué les deux effets et proposé une action corrective chiffrée.",
+        "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+        "maxTurns": 12,
+        "criteria": [
+          {
+            "key": "distinction",
+            "label": "Distinction prix / volume",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "action",
+            "label": "Action corrective",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 150
+    },
+    {
+      "type": "object",
+      "object": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 151
+    },
+    {
+      "type": "object",
+      "object": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "usage": {
+        "inputTokens": 32,
+        "outputTokens": 12,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 152
+    }
+  ]
+}

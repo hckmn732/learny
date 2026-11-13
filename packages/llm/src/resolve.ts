@@ -55,14 +55,29 @@ async function hasManagedAi(db: Db, userId: string): Promise<boolean> {
 }
 
 function managed(task: AiTask, requested: string | null): ResolvedModel {
-  const modelId = requested !== null && isProvidedModel(requested) ? requested : DEFAULT_MODEL_BY_TASK[task];
+  const modelId =
+    requested !== null && isProvidedModel(requested) ? requested : DEFAULT_MODEL_BY_TASK[task];
   return { kind: 'managed', provider: 'anthropic', modelId, task };
 }
 
-export async function resolveModel(
-  db: Db,
-  input: ResolveInput,
-): Promise<Result<ResolvedModel>> {
+/**
+ * SPEC-506 EF-4 — a model-specific qualification report gates the assignment. Rows created before
+ * the battery (seeds and demonstrations) keep their credential-level `qualified` status.
+ */
+function modelQualified(
+  status: string | null,
+  qualification: Record<string, unknown> | null,
+  modelId: string,
+): boolean {
+  if (status !== 'qualified') return false;
+  const models = qualification?.models;
+  if (models === null || typeof models !== 'object' || Array.isArray(models)) return true;
+  const report = (models as Record<string, unknown>)[modelId];
+  if (report === null || typeof report !== 'object') return true;
+  return (report as { status?: unknown }).status === 'qualified';
+}
+
+export async function resolveModel(db: Db, input: ResolveInput): Promise<Result<ResolvedModel>> {
   const rows = await db
     .select({
       task: aiTaskModels.task,
@@ -71,6 +86,7 @@ export async function resolveModel(
       provider: aiCredentials.provider,
       status: aiCredentials.status,
       modelIds: aiCredentials.modelIds,
+      qualification: aiCredentials.qualification,
       baseUrl: aiCredentials.baseUrl,
       outsideEu: aiCredentials.outsideEu,
     })
@@ -85,7 +101,7 @@ export async function resolveModel(
     row !== undefined &&
     row.credentialId !== null &&
     row.provider !== null &&
-    row.status === 'qualified' &&
+    modelQualified(row.status, row.qualification, row.modelId) &&
     (row.modelIds ?? []).includes(row.modelId)
   ) {
     return ok({
@@ -109,7 +125,9 @@ export async function resolveModel(
     const deleted = row.credentialId === null && !isProvidedModel(row.modelId);
     return err(
       aiUnavailable(
-        deleted || row.credentialId !== null ? 'credential_not_qualified' : 'no_subscription_no_key',
+        deleted || row.credentialId !== null
+          ? 'credential_not_qualified'
+          : 'no_subscription_no_key',
         row.credentialId === null ? {} : { credentialId: row.credentialId },
       ),
     );

@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./budget": "./src/budget/index.ts",
-    "./credentials": "./src/credentials/index.ts"
+    "./credentials": "./src/credentials/index.ts",
+    "./qualification": "./src/qualification/index.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
