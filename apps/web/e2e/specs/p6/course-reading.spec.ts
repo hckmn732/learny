@@ -274,7 +274,7 @@ test('conformité SPEC-609 @SPEC-609 @visual', async ({ page, axeCheck, captureE
     body: { 'background-color': colors.canvas, color: colors.ink },
     '[data-testid="course-article"]': { 'background-color': colors.surface },
     '[data-testid="course-takeaway"]': { 'background-color': colors.ink, color: colors.white },
-    '[data-testid="course-quiz-card"]': { 'background-color': 'rgba(0, 0, 0, 0)' },
+    '[data-testid="course-quiz-card"]': { 'background-color': colors.lime },
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
   await expect(page.getByTestId('course-title')).toHaveText('Saisie des pièces comptables');

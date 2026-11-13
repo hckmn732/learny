@@ -220,10 +220,14 @@ test('Pages système et mise en page d’authentification @SPEC-308 @visual @mob
     await page.goto('/inscription');
     await ready(page);
     const panelWidth = 343;
+    const panelHeight = 900;
+    // The reference mockup draws a 90 %-high dark panel; the approved layout fills the viewport.
+    // Compare the bottom-aligned content of both panels so the typography and spacing stay checked.
+    const referenceHeight = 798;
     const referencePanel = path.join(visualDir, 'scr-01-panel-reference.png');
-    fs.writeFileSync(referencePanel, cropPng(fileURLToPath(REFERENCE), panelWidth, 900));
+    fs.writeFileSync(referencePanel, cropPng(fileURLToPath(REFERENCE), panelWidth, referenceHeight));
     const actualPanel = await page.screenshot({
-      clip: { x: 0, y: 0, width: panelWidth, height: 900 },
+      clip: { x: 0, y: panelHeight - referenceHeight, width: panelWidth, height: referenceHeight },
       animations: 'disabled',
     });
     const comparison = compareWithReference(

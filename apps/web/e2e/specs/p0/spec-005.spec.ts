@@ -30,7 +30,17 @@ test('inspecte les références @SPEC-005', async ({
 }) => {
   const references = readManifest();
   const mockups = new Set(references.map((entry) => entry.source.replace(/[?#].*$/, ''))).size;
-  const states = new Set(references.map((entry) => `${entry.screenId}/${entry.state}`)).size;
+  const desktopStates = new Set(
+    references
+      .filter((entry) => entry.viewport === 'desktop')
+      .map((entry) => `${entry.screenId}/${entry.state}`),
+  );
+  const mobileStates = new Set(
+    references
+      .filter((entry) => entry.viewport === 'mobile')
+      .map((entry) => `${entry.screenId}/${entry.state}`),
+  );
+  const states = [...desktopStates].filter((key) => mobileStates.has(key)).length;
 
   await page.goto('/_dev/sdd/SPEC-005');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Références visuelles');

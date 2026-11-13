@@ -33,7 +33,7 @@ describe('[SPEC-007] web /api/inngest', () => {
     const text = await res.text();
 
     expect(res.status).toBe(200);
-    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: functions.length });
+    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: 19 });
     expect(functions.map((f) => f.id())).toEqual([
       DEMO_JOB_ID,
       'account-deletion',
