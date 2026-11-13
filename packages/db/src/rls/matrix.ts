@@ -183,6 +183,12 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('ai_task_models', 'user_id', ['ai_task_models_owner_all']),
   personal('ai_calls', 'id', ['ai_calls_owner_select'], READ_ONLY),
   personal('subscriptions', 'user_id', ['subscriptions_owner_select'], READ_ONLY),
+  // SPEC-507 — leases of the daily cap written and settled by the AI service only. No
+  // `authenticated` policy: a learner reads his spend through `ai_calls` and `/me/ai/usage`.
+  service(
+    'ai_budget_reservations',
+    'Réservations de budget du service IA (SPEC-507 ET-2, CL-5, ADR-0294) ; aucune lecture ni écriture client.',
+  ),
 
   // Données personnelles et recherche (SPEC-112).
   personal('data_exports', 'id', ['data_exports_owner_select'], READ_ONLY),

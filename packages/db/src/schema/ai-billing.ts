@@ -16,6 +16,7 @@ import {
   boolean,
   check,
   customType,
+  date,
   index,
   integer,
   jsonb,
@@ -51,6 +52,13 @@ export const AI_TASKS = ['programme', 'course', 'gaps', 'tutor', 'light'] as con
 /** EF-3 — outcome of a call, including refusals and caps that never reach a provider. */
 export const AI_CALL_STATUSES = ['ok', 'error', 'refused', 'capped', 'invalid_output'] as const;
 
+/**
+ * SPEC-507 ET-2, CL-5 — lifecycle of a budget reservation. `reserved` is a short-lived lease
+ * counted before the provider call; `consumed` accompanies the journal row; `released` gives the
+ * amount back after a failure that never reached the provider.
+ */
+export const AI_RESERVATION_STATUSES = ['reserved', 'consumed', 'released'] as const;
+
 /** EF-4 — the five subscription statuses mapped from Stripe by ADR-0215. */
 export const SUBSCRIPTION_STATUSES = [
   'none',
@@ -64,18 +72,21 @@ export const aiProvider = pgEnum('ai_provider', AI_PROVIDERS);
 export const credentialStatus = pgEnum('credential_status', CREDENTIAL_STATUSES);
 export const aiTask = pgEnum('ai_task', AI_TASKS);
 export const aiCallStatus = pgEnum('ai_call_status', AI_CALL_STATUSES);
+export const aiReservationStatus = pgEnum('ai_reservation_status', AI_RESERVATION_STATUSES);
 export const subscriptionStatus = pgEnum('subscription_status', SUBSCRIPTION_STATUSES);
 
 export const AI_PROVIDERS_VALUES = aiProvider.enumValues;
 export const CREDENTIAL_STATUSES_VALUES = credentialStatus.enumValues;
 export const AI_TASKS_VALUES = aiTask.enumValues;
 export const AI_CALL_STATUSES_VALUES = aiCallStatus.enumValues;
+export const AI_RESERVATION_STATUSES_VALUES = aiReservationStatus.enumValues;
 export const SUBSCRIPTION_STATUSES_VALUES = subscriptionStatus.enumValues;
 
 export type AiProviderValue = (typeof AI_PROVIDERS)[number];
 export type CredentialStatusValue = (typeof CREDENTIAL_STATUSES)[number];
 export type AiTaskValue = (typeof AI_TASKS)[number];
 export type AiCallStatusValue = (typeof AI_CALL_STATUSES)[number];
+export type AiReservationStatusValue = (typeof AI_RESERVATION_STATUSES)[number];
 export type SubscriptionStatusValue = (typeof SUBSCRIPTION_STATUSES)[number];
 
 /** ET-2 — AES-256-GCM layout: 12-byte IV, 16-byte tag, at least one ciphertext byte. */
@@ -255,6 +266,45 @@ export const subscriptions = pgTable(
 );
 
 /**
+ * SPEC-507 ET-2, CL-5 — a short-lived budget lease written before a provided-AI call. Reservations
+ * are counted with `ai_spend_today` under a per-learner advisory lock, so two simultaneous calls
+ * cannot both reserve the same remaining budget. The table is reserved to the service role: no
+ * `authenticated` policy is granted, and an expired lease is ignored by the reservation query.
+ */
+export const aiBudgetReservations = pgTable(
+  'ai_budget_reservations',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    /** Civil day of the learner's time zone; a day change starts a new budget. */
+    localDay: date('local_day', { mode: 'string' }).notNull(),
+    estimatedUsd: numeric('estimated_usd', { precision: 12, scale: 6 }).notNull(),
+    status: aiReservationStatus('status').notNull().default('reserved'),
+    /** Journal row that consumed the lease, when the call reached the provider. */
+    callId: uuid('call_id').references(() => aiCalls.id, { onDelete: 'set null' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    /** A crashed caller cannot block the learner beyond this instant (15 minutes). */
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+  },
+  (table) => [
+    index('ai_budget_reservations_user_day_idx').on(
+      table.userId,
+      table.localDay,
+      table.status,
+      table.expiresAt,
+    ),
+    index('ai_budget_reservations_call_id_idx').on(table.callId),
+    check('ai_budget_reservations_estimated_usd_check', sql`${table.estimatedUsd} > 0`),
+  ],
+);
+
+export type AiBudgetReservation = typeof aiBudgetReservations.$inferSelect;
+export type NewAiBudgetReservation = typeof aiBudgetReservations.$inferInsert;
+
+/**
  * SPEC-210 ET-3 — Stripe events already received, deduplicated by `event.id` (ADR-0215). The table
  * is reserved to the service role: RLS is enabled in the custom migration `stripe_events_rules`
  * and no policy is granted to `authenticated`.
@@ -336,6 +386,7 @@ export const aiProviderSchema = z.enum(AI_PROVIDERS);
 export const credentialStatusSchema = z.enum(CREDENTIAL_STATUSES);
 export const aiTaskSchema = z.enum(AI_TASKS);
 export const aiCallStatusSchema = z.enum(AI_CALL_STATUSES);
+export const aiReservationStatusSchema = z.enum(AI_RESERVATION_STATUSES);
 export const subscriptionStatusSchema = z.enum(SUBSCRIPTION_STATUSES);
 
 /** EF-1 — a non-empty label, bounded like the SQL check. */
