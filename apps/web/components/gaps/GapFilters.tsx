@@ -78,6 +78,7 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
             type="button"
             data-testid={`gaps-filter-${option.key}`}
             aria-pressed={active}
+            aria-label={`${option.label} ${String(option.count)} ${option.count === 1 ? 'lacune' : 'lacunes'}`}
             onClick={() => {
               select(option.key === 'all' ? null : option.key);
             }}
@@ -98,7 +99,6 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
             >
               {option.count}
             </span>
-            <span className="sr-only">{option.count === 1 ? 'lacune' : 'lacunes'}</span>
           </button>
         );
       })}
