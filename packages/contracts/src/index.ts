@@ -23,6 +23,7 @@ export * from './notifications';
 export * from './personal-data';
 export * from './events';
 export * from './header';
+export * from './ingestion';
 export * from './learning';
 export * from './search';
 export * from './sidebar';

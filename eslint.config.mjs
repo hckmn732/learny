@@ -34,6 +34,7 @@ const ALLOWED_IMPORTS = {
   'learning-engine': ['core', 'config', 'testing'],
   bricks: ['core', 'contracts', 'ui'],
   llm: ['core', 'config', 'contracts', 'db'],
+  ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
   contracts: ['core'],
@@ -113,11 +114,13 @@ const restrictedImportBlocks = [
             },
             ...(target === 'llm'
               ? []
-              : [{
-                  group: ['ai', 'ai/*', '@ai-sdk/*'],
-                  message:
-                    'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
-                }]),
+              : [
+                  {
+                    group: ['ai', 'ai/*', '@ai-sdk/*'],
+                    message:
+                      'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+                  },
+                ]),
           ],
         },
       ],
@@ -510,11 +513,11 @@ export default tseslint.config(
           message: CLOCK_MESSAGE,
         },
         {
-          selector: "Literal[value=/claude-/]",
+          selector: 'Literal[value=/claude-/]',
           message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
         },
         {
-          selector: "TemplateElement[value.raw=/claude-/]",
+          selector: 'TemplateElement[value.raw=/claude-/]',
           message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
         },
       ],

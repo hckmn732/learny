@@ -63,6 +63,33 @@ export const resourceUploadSchema = z.strictObject({
   blobRemovedAt: utcInstant.optional(),
 });
 
+/**
+ * `resources.metadata.ingestion` — bookkeeping of the ingestion pipeline (SPEC-509 ET-1, ET-3,
+ * ADR-0297). The marker of a completed run makes a duplicate delivery a no-op; the event claims
+ * make `resource/ready` and `resource/failed` exactly-once. It never holds the text of the
+ * contribution.
+ */
+export const resourceIngestionSchema = z.strictObject({
+  /** First run that saw the resource, and the number of started runs. */
+  startedAt: utcInstant.optional(),
+  attempts: z.number().int().min(1).optional(),
+  /** Successful run: SHA-256 of the extracted content, passage count and embedding metadata. */
+  contentHash: z
+    .string()
+    .regex(/^[0-9a-f]{64}$/)
+    .optional(),
+  completedAt: utcInstant.optional(),
+  failedAt: utcInstant.optional(),
+  chunkCount: z.number().int().min(0).optional(),
+  embeddingModel: z.string().min(1).max(64).optional(),
+  embeddingDim: z.number().int().min(1).max(8192).optional(),
+  /** Claims and completion of the single `resource/ready` / `resource/failed` emission. */
+  readyEventClaimedAt: utcInstant.optional(),
+  readyEventEmittedAt: utcInstant.optional(),
+  failedEventClaimedAt: utcInstant.optional(),
+  failedEventEmittedAt: utcInstant.optional(),
+});
+
 /** `resources.metadata` — every key is optional and filled by the ingestion (SPEC-509/510). */
 export const resourceMetadataSchema = z.strictObject({
   pages: z.number().int().min(1).optional(),
@@ -72,8 +99,10 @@ export const resourceMetadataSchema = z.strictObject({
   siteName: z.string().min(1).optional(),
   anthropicFileId: z.string().min(1).optional(),
   upload: resourceUploadSchema.optional(),
+  ingestion: resourceIngestionSchema.optional(),
 });
 
 export type ChunkLocation = z.infer<typeof chunkLocationSchema>;
 export type ResourceMetadata = z.infer<typeof resourceMetadataSchema>;
 export type ResourceUpload = z.infer<typeof resourceUploadSchema>;
+export type ResourceIngestion = z.infer<typeof resourceIngestionSchema>;
