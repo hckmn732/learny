@@ -1,6 +1,5 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
-import { accessibleFormation } from './guard-helpers';
 import { GradeAnswerInput, GradeAnswerOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /** ai.md §3, BR-BRI-08 — grades an open answer; the score stays within the question scale. */
 export const gradeAnswerTool = defineTutorTool({

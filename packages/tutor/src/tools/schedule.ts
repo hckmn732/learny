@@ -1,6 +1,6 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import { ScheduleInput, ScheduleOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /** ai.md §3 — the planner places an activity; the guard respects the learner’s availability. */
 export const scheduleTool = defineTutorTool({

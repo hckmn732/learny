@@ -1,4 +1,3 @@
-import { llm, emptyUsage, type StepInput, type StepOutput } from '@learny/llm';
 import {
   TUTOR_MAX_CORRECTIONS,
   TUTOR_MAX_TURNS,
@@ -11,6 +10,7 @@ import {
   type TutorToolCall,
 } from '@learny/contracts';
 import { AppError, err, isAppError, ok, type Result } from '@learny/core';
+import { llm, emptyUsage, type StepInput, type StepOutput } from '@learny/llm';
 
 import { buildTutorPrompt, type TutorContext, type TutorLlmSession } from './context';
 import {
@@ -18,11 +18,10 @@ import {
   createDbNotifier,
   createDbToolRuntime,
   toolDefinitions,
-  tutorToolByName,
   type TutorToolRuntime,
 } from './tools/index';
-import type { ToolScope, TutorTool } from './tools/types';
 import { CreateOrUpdateInput } from './tools/schemas';
+import type { ToolScope, TutorTool } from './tools/types';
 
 // Deterministic agent loop of SPEC-508 (docs/architecture/ai.md §4). One call to `step` per turn;
 // validation, guard and execution of a tool call share one user transaction; the loop stops at the
@@ -235,7 +234,7 @@ function promptLogFields(status: TutorRunStatus): {
  */
 export async function runTutor(
   request: RunTutorRequest,
-): Promise<Result<TutorRunResult, AppError>> {
+): Promise<Result<TutorRunResult>> {
   const { task, input, ctx } = request;
   const parsedInput = TutorInputSchema.parse(input);
   const prompt = buildTutorPrompt(task, parsedInput, ctx.profile);
@@ -295,7 +294,7 @@ export async function runTutor(
       return err(step.error);
     }
     addUsage(usage, step.value);
-    model = step.value.modelId || model;
+    model = session.resolved?.modelId ?? (step.value.modelId || model);
     finishReason = step.value.finishReason;
     messages = [...messages, ...step.value.responseMessages];
     if (step.value.finishReason === 'refusal') {

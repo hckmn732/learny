@@ -1,6 +1,6 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import { CreateOrUpdateInput, CreateOrUpdateOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /**
  * ai.md §3 — creates or updates a structure object or a brick. The payload is validated by Zod,

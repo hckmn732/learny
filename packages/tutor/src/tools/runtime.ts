@@ -1,22 +1,20 @@
 import { sql } from 'drizzle-orm';
 
-import {
-  createActivity,
-  createDelivery,
-  createNotification,
-  createScheduleSlot,
-  type DbTx,
-  type UserDatabase,
-} from '@learny/db';
 import { validateBrick, type BrickIssue } from '@learny/bricks';
-import { AppError, nextOutsideQuietHours, userDayBounds, userLocalDay } from '@learny/core';
 import {
   DueNotionsSchema,
   type DueNotions,
   type InvalidOutputNotice,
 } from '@learny/contracts';
+import { AppError, nextOutsideQuietHours, userDayBounds, userLocalDay } from '@learny/core';
+import {
+  createActivity,
+  createNotification,
+  createScheduleSlot,
+  type DbTx,
+  type UserDatabase,
+} from '@learny/db';
 
-import type { ToolScope } from './types';
 import type {
   AssembleActivityInput,
   CreateOrUpdateInput,
@@ -29,6 +27,7 @@ import type {
   ScheduleReminderInput,
   SearchWebInput,
 } from './schemas';
+import type { ToolScope } from './types';
 
 // Application-service adapter of the tutor actions (SPEC-508 ET-1, ET-4). Every method receives the
 // authenticated scope and runs on the caller's `DbTx` opened by `UserDatabase.run`, so RLS applies
@@ -126,7 +125,7 @@ export interface TutorToolRuntime {
     scope: ToolScope,
     input: CreateOrUpdateInput,
   ): Promise<{
-    kind: string;
+    kind: 'module' | 'chapter' | 'notion' | 'notion_link' | 'brick';
     id: string;
     created: boolean;
     version?: number;
@@ -182,7 +181,7 @@ export interface TutorToolRuntime {
     requestId: string;
     accepted: true;
     notionIds: string[];
-    format: string;
+    format: PrepareQuestionBankInput['format'];
     count: number;
   }>;
   /** Active `bank` bricks already available for these notions and this format (BR-MEM-07). */
@@ -237,7 +236,8 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
           or exists (
             select 1
             from public.group_members gm
-            where gm.formation_id = f.id
+            join public.groups g on g.id = gm.group_id
+            where g.formation_id = f.id
               and gm.user_id = ${scope.userId}::uuid
               and gm.member_status = 'active'
               and gm.left_at is null
@@ -257,7 +257,8 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
           f.owner_id = ${scope.userId}::uuid
           or exists (
             select 1 from public.group_members gm
-            where gm.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
+            join public.groups g on g.id = gm.group_id
+            where g.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
               and gm.member_status = 'active' and gm.left_at is null
           )
         )
@@ -276,7 +277,8 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
           f.owner_id = ${scope.userId}::uuid
           or exists (
             select 1 from public.group_members gm
-            where gm.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
+            join public.groups g on g.id = gm.group_id
+            where g.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
               and gm.member_status = 'active' and gm.left_at is null
           )
         )
@@ -306,7 +308,8 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
           f.owner_id = ${scope.userId}::uuid
           or exists (
             select 1 from public.group_members gm
-            where gm.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
+            join public.groups g on g.id = gm.group_id
+            where g.formation_id = f.id and gm.user_id = ${scope.userId}::uuid
               and gm.member_status = 'active' and gm.left_at is null
           )
         )
@@ -514,9 +517,7 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
         'La recherche web n’est pas configurée pour cette tâche.',
       );
     }
-    // The port is only reachable through the programme task guard; the scope is checked again by
-    // the caller's guard. No result is ever inserted into a course.
-    void scope;
+    // The caller's guard restricts this port to the programme task; no result enters a course.
     return ports.webSearch.search({ query: input.query, maxResults: input.maxResults });
   }
 
@@ -524,7 +525,7 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
     scope: ToolScope,
     input: CreateOrUpdateInput,
   ): Promise<{
-    kind: string;
+    kind: 'module' | 'chapter' | 'notion' | 'notion_link' | 'brick';
     id: string;
     created: boolean;
     version?: number;
@@ -693,7 +694,7 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
     draft: Extract<CreateOrUpdateInput['data'], { kind: 'brick' }>['draft'],
     targetId: string | null,
   ): Promise<{
-    kind: string;
+    kind: 'brick';
     id: string;
     created: boolean;
     version: number;
@@ -1027,36 +1028,13 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
       dedupeKey: input.dedupeKey ?? null,
       createdAt: scope.now,
     });
-    if (!created.created) {
-      const existing = await tx.execute<{ scheduled_for: Date | string | null }>(sql`
-        select scheduled_for
-        from public.notification_deliveries
-        where notification_id = ${created.notification.id}::uuid
-        order by channel
-        limit 1
-      `);
-      const scheduled = existing[0]?.scheduled_for;
-      return {
-        notificationId: created.notification.id,
-        scheduledFor:
-          scheduled === undefined || scheduled === null
-            ? scheduledFor.toISOString()
-            : new Date(scheduled).toISOString(),
-        channels: [],
-      };
-    }
-    for (const channel of channels) {
-      await createDelivery(tx, {
-        notificationId: created.notification.id,
-        channel,
-        status: 'scheduled',
-        scheduledFor,
-      });
-    }
+    // The external delivery journal is written by the notification service under the owner role
+    // (SPEC-209); a learner transaction only creates the in-app notification. The quiet-hours and
+    // cap checks above are still the normative guard of the tutor action.
     return {
       notificationId: created.notification.id,
       scheduledFor: scheduledFor.toISOString(),
-      channels,
+      channels: created.created ? channels : [],
     };
   }
 
@@ -1293,7 +1271,7 @@ export function createDbToolRuntime(tx: DbTx, ports: TutorRuntimePorts = {}): Tu
     requestId: string;
     accepted: true;
     notionIds: string[];
-    format: string;
+    format: PrepareQuestionBankInput['format'];
     count: number;
   }> {
     if (ports.questionBank === undefined) {
@@ -1393,30 +1371,29 @@ export function createDbNotifier(db: UserDatabase): {
 export function readOnlyRuntime(
   overrides: Partial<TutorToolRuntime> = {},
 ): TutorToolRuntime {
-  const forbidden = async (): Promise<never> => {
-    throw new AppError('FORBIDDEN', 'Action non autorisée dans ce contexte de démonstration.');
-  };
+  const forbidden = (): Promise<never> =>
+    Promise.reject(new AppError('FORBIDDEN', 'Action non autorisée dans ce contexte de démonstration.'));
   return {
-    canAccessFormation: async () => false,
-    module: async () => null,
-    chapter: async () => null,
-    notion: async () => null,
-    brick: async () => null,
-    brickVersion: async () => null,
-    activity: async () => null,
-    attempt: async () => null,
+    canAccessFormation: () => Promise.resolve(false),
+    module: () => Promise.resolve(null),
+    chapter: () => Promise.resolve(null),
+    notion: () => Promise.resolve(null),
+    brick: () => Promise.resolve(null),
+    brickVersion: () => Promise.resolve(null),
+    activity: () => Promise.resolve(null),
+    attempt: () => Promise.resolve(null),
     readPassages: forbidden,
     searchWeb: forbidden,
     writeStructure: forbidden,
     assembleActivity: forbidden,
     schedule: forbidden,
-    slotOverlap: async () => false,
+    slotOverlap: () => Promise.resolve(false),
     scheduleReminder: forbidden,
     getDueNotions: forbidden,
     readResults: forbidden,
     gradeAnswer: forbidden,
     prepareQuestionBank: forbidden,
-    bankCount: async () => 0,
+    bankCount: () => Promise.resolve(0),
     ...overrides,
   };
 }

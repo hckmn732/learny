@@ -23,6 +23,7 @@
     "@learny/llm": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@learny/services": "workspace:*",
+    "@learny/tutor": "workspace:*",
     "@learny/ui": "workspace:*",
     "@sentry/nextjs": "^11.12.0",
     "@supabase/ssr": "^0.12.7",

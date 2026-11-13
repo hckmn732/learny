@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     '@learny/jobs',
     '@learny/llm',
     '@learny/notifications',
+    '@learny/tutor',
     '@learny/ui',
   ],
   // Native/Node-only telemetry libraries stay outside the bundle (SPEC-010).

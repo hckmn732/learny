@@ -1,10 +1,10 @@
-import { ALLOW, defineTutorTool, notFound } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import {
   AssembleActivityInput,
   AssembleActivityOutput,
   TOOL_NAMES,
 } from './schemas';
+import { ALLOW, defineTutorTool, notFound } from './types';
 
 /** ai.md §3, BR-BRI-09 — an activity only assembles valid bricks owned by the learner. */
 export const assembleActivityTool = defineTutorTool({

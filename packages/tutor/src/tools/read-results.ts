@@ -1,6 +1,6 @@
-import { ALLOW, defineTutorTool, notFound } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import { ReadResultsInput, ReadResultsOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound } from './types';
 
 /** ai.md §3 — read-only results and memory state; another learner is never visible. */
 export const readResultsTool = defineTutorTool({

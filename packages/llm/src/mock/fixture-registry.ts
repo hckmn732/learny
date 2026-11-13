@@ -7,6 +7,8 @@ import tutorStream from '../../fixtures/tutor/demo-stream.json';
 import tutorTimeout from '../../fixtures/tutor/demo-timeout.json';
 import tutorToolCall from '../../fixtures/tutor/demo-tool-call.json';
 import tutorDefault from '../../fixtures/tutor/demo.default.json';
+import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json';
+import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json';
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 
@@ -29,6 +31,8 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('tutor/demo-stream.json', tutorStream),
   entry('tutor/demo-timeout.json', tutorTimeout),
   entry('tutor/demo.default.json', tutorDefault),
+  entry('tutor/loop-completed.json', tutorLoopCompleted),
+  entry('tutor/loop-tone-tu-en.json', tutorLoopToneTuEn),
 ].sort((left, right) => left.path.localeCompare(right.path));
 
 export function fixturesForTask(task: string): readonly RegisteredFixture[] {

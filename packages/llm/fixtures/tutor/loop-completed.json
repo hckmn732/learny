@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "loop-completed",
+  "promptId": "tutor.tutor",
+  "promptVersion": 1,
+  "description": "Réponse finale du tuteur après lecture des passages, sans nouvel outil.",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Bonjour, vous allez apprendre la société et les écritures.",
+      "finishReason": "stop",
+      "usage": { "inputTokens": 42, "outputTokens": 9, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 150
+    }
+  ]
+}

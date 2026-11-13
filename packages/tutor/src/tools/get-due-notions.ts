@@ -1,8 +1,8 @@
 import { DueNotionsSchema } from '@learny/contracts';
 
-import { ALLOW, defineTutorTool, notFound } from './types';
 import { accessibleFormation } from './guard-helpers';
 import { GetDueNotionsInput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound } from './types';
 
 /** ai.md §3 — due dates come from the engine; the model never computes one. */
 export const getDueNotionsTool = defineTutorTool({

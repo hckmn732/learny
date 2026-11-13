@@ -1,6 +1,6 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation } from './guard-helpers';
 import { SearchWebInput, SearchWebOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /**
  * ai.md §3 — web search is reserved to the programme task and never inserted into a course. The

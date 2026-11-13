@@ -1,6 +1,3 @@
-import type { Db, UserDatabase } from '@learny/db';
-import type { Clock, LearnyLogger, Result, AppError } from '@learny/core';
-import type { StepInput, StepOutput, SystemPart } from '@learny/llm';
 import {
   TutorInputSchema,
   TutorProfileSchema,
@@ -9,6 +6,9 @@ import {
   type TutorProfile,
   type TutorTask,
 } from '@learny/contracts';
+import type { Clock, LearnyLogger, Result } from '@learny/core';
+import type { Db, UserDatabase } from '@learny/db';
+import type { StepInput, StepOutput, SystemPart } from '@learny/llm';
 
 import { PROMPT_SOURCES } from './prompts.generated';
 import type { QuestionBankPort, TutorToolRuntime, WebSearchPort } from './tools/runtime';
@@ -20,7 +20,7 @@ import type { TutorNotifier, TutorTool } from './tools/types';
 
 export interface TutorLlmSession {
   readonly resolved?: { readonly modelId: string };
-  step(input: StepInput): Promise<Result<StepOutput, AppError>>;
+  step(input: StepInput): Promise<Result<StepOutput>>;
 }
 
 export interface TutorContext {

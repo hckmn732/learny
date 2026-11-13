@@ -465,16 +465,7 @@ export const PrepareQuestionBankOutput = z
 export type PrepareQuestionBankOutput = z.infer<typeof PrepareQuestionBankOutput>;
 
 /** `notify_invalid_output` is not a model action; it is the safe notification of EF-4. */
-export const InvalidOutputNotice = z
-  .object({
-    task: z.string().min(1).max(40),
-    formationId: uuid.nullable(),
-    tone: z.enum(['vous', 'tu']),
-    brickKey: z.string().min(1).max(200),
-  })
-  .strict();
-
-export type InvalidOutputNotice = z.infer<typeof InvalidOutputNotice>;
+export type { InvalidOutputNotice } from '@learny/contracts';
 
 export const TOOL_NAMES = {
   readResources: 'read_resources',

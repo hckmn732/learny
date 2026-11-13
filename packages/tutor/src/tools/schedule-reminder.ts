@@ -1,10 +1,10 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation } from './guard-helpers';
 import {
   ScheduleReminderInput,
   ScheduleReminderOutput,
   TOOL_NAMES,
 } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /**
  * ai.md §3, BR-NOT-04/05 — schedules a relance through the notification service. Quiet hours and

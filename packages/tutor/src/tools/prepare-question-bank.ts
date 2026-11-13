@@ -1,10 +1,10 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import {
   PrepareQuestionBankInput,
   PrepareQuestionBankOutput,
   TOOL_NAMES,
 } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /**
  * ai.md §3, BR-MEM-07 — prepares a batch of variants only when the bank is exhausted (fewer than

@@ -1,6 +1,6 @@
-import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 import { accessibleFormation, inFormation } from './guard-helpers';
 import { ReadResourcesInput, ReadResourcesOutput, TOOL_NAMES } from './schemas';
+import { ALLOW, defineTutorTool, notFound, refuse } from './types';
 
 /** ai.md §3 — read the useful passages of a chapter/module/formation; read-only, token-budgeted. */
 export const readResourcesTool = defineTutorTool({

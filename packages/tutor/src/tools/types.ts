@@ -73,9 +73,9 @@ export function defineTutorTool<S extends z.ZodType, O extends z.ZodType>(defini
     inputSchema: definition.inputSchema,
     outputSchema: definition.outputSchema,
     guard: (ctx, input) =>
-      definition.guard(ctx, definition.inputSchema.parse(input) as z.infer<S>),
+      definition.guard(ctx, definition.inputSchema.parse(input)),
     execute: (ctx, input) =>
-      definition.execute(ctx, definition.inputSchema.parse(input) as z.infer<S>),
+      definition.execute(ctx, definition.inputSchema.parse(input)),
   };
 }
 
