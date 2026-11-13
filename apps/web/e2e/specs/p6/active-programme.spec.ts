@@ -290,7 +290,7 @@ test('navigation vers module et examen blanc @SPEC-606', async ({ page }) => {
   await page.getByTestId('programme-open-module').click();
   await expect(page.getByTestId('module-page')).toBeVisible({ timeout: 30_000 });
   await expect(
-    page.getByRole('heading', { level: 1, name: /Module 1 · Fondamentaux de SAP S\/4HANA/ }),
+    page.getByRole('heading', { level: 1, name: 'Fondamentaux de SAP S/4HANA et navigation Fiori' }),
   ).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`/formations/${fresh.formationId}/modules/[0-9a-f-]+$`));
 
