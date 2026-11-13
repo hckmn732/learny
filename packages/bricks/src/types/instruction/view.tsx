@@ -148,7 +148,12 @@ export function InstructionView(props: BrickViewProps<'instruction'>) {
               </div>
             ) : null}
 
-            <div className="overflow-x-auto">
+            <div
+              aria-label="Postes de la pièce"
+              className="overflow-x-auto"
+              role="region"
+              tabIndex={0}
+            >
               <div
                 className="flex min-w-680 flex-col gap-6 text-14"
                 data-testid="brick-table"

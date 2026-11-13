@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T00:24:22.046Z",
+  "updatedAt": "2026-11-13T00:26:17.698Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3124,11 +3124,11 @@
       "validations": {}
     },
     "SPEC-503": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T00:26:17.698Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-503-rendu-des-briques",
       "commit": null,
       "lastError": null,
       "validations": {}

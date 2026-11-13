@@ -2,6 +2,7 @@
 @import '@learny/ui/theme.css';
 @import '@learny/ui/accessibility.css';
 @source '../../../packages/ui/src';
+@source '../../../packages/bricks/src';
 
 /*
  * Global base (SPEC-301, EF-10). `html { font-size: 90% }` reproduces the 90 % scale of the

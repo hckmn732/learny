@@ -28,7 +28,12 @@ const COMPONENTS: Components = {
     </li>
   ),
   table: ({ children }) => (
-    <div className="overflow-x-auto rounded-18 border border-solid border-border">
+    <div
+      aria-label="Tableau"
+      className="overflow-x-auto rounded-18 border border-solid border-border"
+      role="region"
+      tabIndex={0}
+    >
       <table className="w-full min-w-420 border-collapse text-17 leading-1.4">{children}</table>
     </div>
   ),

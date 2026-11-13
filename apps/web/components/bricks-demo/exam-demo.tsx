@@ -43,7 +43,7 @@ export function ExamDemo() {
   const [value, setValue] = useState<{ optionIds: string[] } | null>(null);
   const fixed = clock.now();
   return (
-    <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-20">
+    <div className="mx-auto flex w-full max-w-[72.5rem] flex-col gap-20">
       <div className="flex flex-wrap items-center gap-20 rounded-16 bg-ink px-20 py-12 text-white">
         <span className="font-display text-17 font-600">Examen blanc</span>
         <span className="text-14 text-on-dark-secondary">

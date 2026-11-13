@@ -51,7 +51,7 @@ export function QuizDemo() {
 
   const correct = value?.optionIds[0] === 'type';
   return (
-    <div className="mx-auto flex w-full max-w-[920px] flex-col gap-18">
+    <div className="mx-auto flex w-full max-w-[57.5rem] flex-col gap-18">
       <div className="flex items-center gap-14">
         <div aria-hidden="true" className="flex flex-1 gap-4">
           {SEGMENTS.map((segment) => (

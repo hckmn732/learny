@@ -167,7 +167,7 @@ export function GamesDemo({ game }: Readonly<{ game: number }>) {
 
   const corrected = status === 'corrected';
   return (
-    <div className="mx-auto flex w-full max-w-[874px] flex-col gap-22">
+    <div className="mx-auto flex w-full max-w-[54.625rem] flex-col gap-22">
       {game === 1 ? (
         <RecallCardView
           brick={RECALL}

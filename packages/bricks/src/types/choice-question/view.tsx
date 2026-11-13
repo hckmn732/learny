@@ -5,6 +5,7 @@ import { useEffect, useId } from 'react';
 import { cn } from '@learny/ui';
 
 import type { CorrectionView } from '../../correction-view';
+import { FeedbackBox } from '../../view/feedback-box';
 import { resolveLabels } from '../../view/labels';
 import { QuestionHeader } from '../../view/question-header';
 import type { BrickViewProps } from '../../view-types';
@@ -136,6 +137,14 @@ export function ChoiceQuestionView(props: BrickViewProps<'choice_question'>) {
           );
         })}
       </div>
+      {corrected && correction ? (
+        <FeedbackBox
+          tone={correction.isCorrect ? 'success' : 'error'}
+          title={correction.isCorrect ? t.exact : t.almost}
+        >
+          {correction.explanation ? <p className="m-0">{correction.explanation}</p> : null}
+        </FeedbackBox>
+      ) : null}
     </section>
   );
 }

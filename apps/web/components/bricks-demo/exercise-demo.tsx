@@ -96,7 +96,7 @@ export function ExerciseDemo() {
   const [value, setValue] = useState<InstructionResponse | null>(null);
   const [hintsUsed, setHintsUsed] = useState(0);
   return (
-    <div className="mx-auto w-full max-w-[857px]" data-testid="reproduction-exercice">
+    <div className="mx-auto w-full max-w-[53.5625rem]" data-testid="reproduction-exercice">
       <h1 className="mb-12 font-display text-34 font-600 tracking-title">
         Saisir une pièce équilibrée
       </h1>
