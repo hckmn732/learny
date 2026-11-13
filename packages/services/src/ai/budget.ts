@@ -306,6 +306,9 @@ export async function checkAndReserveAiBudget(
             capUsd,
             at,
             expiresAt: new Date(at.getTime() + BUDGET_RESERVATION_TTL_MS),
+            // BR-IA-07: the explicit Haiku fallback keeps working at the cap; the premium
+            // estimate is still refused. The lease remains serialised by the advisory lock.
+            allowOverCap: check.model === AI_MODEL_IDS.haiku,
           }),
         );
         if (candidate.reservation !== null) {

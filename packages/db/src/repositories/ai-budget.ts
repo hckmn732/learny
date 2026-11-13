@@ -65,6 +65,11 @@ export interface ReserveBudgetInput {
   /** Instant of the decision; the daily spend is evaluated in the learner's zone. */
   at: Date;
   expiresAt: Date;
+  /**
+   * BR-IA-07 — the explicit Haiku fallback continues at the cap; the premium estimate never does.
+   * The lease is still written under the lock, so the fallback is counted and bounded.
+   */
+  allowOverCap?: boolean;
 }
 
 export interface ReserveBudgetResult {
@@ -85,6 +90,7 @@ const reserveSchema = z.object({
   capUsd: dailyCapUsdSchema,
   at: z.date(),
   expiresAt: z.date(),
+  allowOverCap: z.boolean().default(false),
 });
 
 /**
@@ -104,7 +110,7 @@ export async function reserveBudget(
     at: value.at,
   });
   const projected = micros(spentUsd) + micros(reservedUsd) + micros(value.estimatedUsd);
-  if (projected > micros(value.capUsd)) {
+  if (!value.allowOverCap && projected > micros(value.capUsd)) {
     return { reservation: null, spentUsd, reservedUsd };
   }
   const [row] = await tx
