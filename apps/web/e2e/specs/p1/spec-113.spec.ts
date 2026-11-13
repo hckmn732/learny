@@ -35,8 +35,8 @@ test('inspecte la matrice RLS @SPEC-113', async ({ page, axeCheck, captureEviden
     /^\d+ tables publiques, \d+ avec RLS activée, \d+ politiques\.$/,
   );
   const summary = (await page.getByTestId('spec-113-summary').textContent()) ?? '';
-  expect(summary).toContain('57 tables publiques, 57 avec RLS activée');
-  await expect(page.getByTestId('spec-113-forced')).toHaveText('57 tables forcent RLS pour le propriétaire SQL.');
+  expect(summary).toContain('58 tables publiques, 58 avec RLS activée');
+  await expect(page.getByTestId('spec-113-forced')).toHaveText('58 tables forcent RLS pour le propriétaire SQL.');
 
   // Categories: shared programme 7, personal 44, service 6.
   await expect(page.getByTestId('spec-113-category')).toHaveCount(3);
@@ -50,7 +50,7 @@ test('inspecte la matrice RLS @SPEC-113', async ({ page, axeCheck, captureEviden
     .allTextContents();
   expect(categoryLabels).toEqual(['Programme partagé', 'Personnel', 'Service']);
   const counts = await page.getByTestId('spec-113-category-count').allTextContents();
-  expect(counts).toEqual(['7 tables', '44 tables', '6 tables']);
+  expect(counts).toEqual(['7 tables', '45 tables', '6 tables']);
 
   // Matrix — each cell is the observed outcome for A, B and C.
   const keys = await page

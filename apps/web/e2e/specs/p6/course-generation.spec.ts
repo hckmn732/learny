@@ -148,7 +148,7 @@ test('cours généré avec sources @SPEC-608', async ({
   await generateAndOpen(page, seeded);
 
   await expect(page.getByTestId('course-title')).toHaveText('Saisie des pièces comptables');
-  await expect(page.getByTestId('course-citation').first()).toContainText(
+  await expect(page.getByTestId('course-source').first()).toContainText(
     'Guide utilisateur FI — saisie.pdf · p. 2',
   );
   await expect(page.getByTestId('course-tutor-complement')).toContainText(
@@ -178,7 +178,7 @@ test('cours de base sans apport @SPEC-608', async ({ page, axeCheck, captureEvid
   await expect(page.getByTestId('course-suggestions')).toContainText(
     'Guide officiel de la notion',
   );
-  await expect(page.getByTestId('course-citation')).toHaveCount(0);
+  await expect(page.getByTestId('course-source')).toHaveCount(0);
   await captureEvidence('cours-base');
   await axeCheck();
 });
@@ -197,14 +197,17 @@ test('conformité SPEC-608 @SPEC-608 @visual', async ({ page, axeCheck, captureE
   await expect(page.getByTestId('course-title')).toHaveText('Saisie des pièces comptables');
   await captureEvidence('cours-conformite');
 
+  // SPEC-609 replaced the single Markdown reader with typed sections (citations, report and edit
+  // actions, summary). The mockup header remains the stable SCR-07 reference; the new sections are
+  // covered by the SPEC-609 visual suite.
   const comparisons = await compareRegions(page, {
     reference: REFERENCE,
     outputDir: 'test-results/visual/SPEC-608-desktop',
     regions: [
       {
-        name: 'article',
-        locator: page.getByTestId('course-article'),
-        rect: { x: 536, y: 116, width: 834, height: 2077 },
+        name: 'header',
+        locator: page.getByTestId('course-header'),
+        rect: { x: 536, y: 116, width: 834, height: 340 },
       },
     ],
   });

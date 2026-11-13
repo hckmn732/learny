@@ -270,7 +270,10 @@ function EditableMarkdown({
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap items-center gap-10 text-12 text-ink-muted">
+        <div
+          className="flex flex-wrap items-center gap-10 text-12 text-ink-muted"
+          data-testid="course-section-actions"
+        >
           <button
             className="cursor-pointer underline"
             data-testid="course-section-report"
@@ -314,8 +317,10 @@ export function CourseArticle({
   return (
     <>
       {sections.map((section) => {
-        if (section.kind === 'flash_question') return <QuickQuestion key={section.id} section={section} />;
-        if (section.kind === 'dont_confuse') return <Comparison key={section.id} section={section} />;
+        if (section.kind === 'flash_question')
+          return <QuickQuestion key={section.id} section={section} />;
+        if (section.kind === 'dont_confuse')
+          return <Comparison key={section.id} section={section} />;
         if (section.kind === 'retain') return <Takeaway key={section.id} section={section} />;
         if (section.kind === 'summary_prompt') return null;
         if (section.kind === 'tutor_completed') {

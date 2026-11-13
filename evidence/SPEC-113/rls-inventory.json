@@ -1,9 +1,9 @@
 {
   "measuredAt": "2026-11-11T12:20:00.000Z",
-  "tableCount": 57,
-  "forcedCount": 57,
+  "tableCount": 58,
+  "forcedCount": 58,
   "categories": {
-    "personal": 44,
+    "personal": 45,
     "shared-programme": 7,
     "service": 6
   },
@@ -192,6 +192,13 @@
       "category": "personal",
       "policies": [
         "course_section_revisions_owner_select"
+      ]
+    },
+    {
+      "table": "course_section_reports",
+      "category": "personal",
+      "policies": [
+        "course_section_reports_owner_all"
       ]
     },
     {

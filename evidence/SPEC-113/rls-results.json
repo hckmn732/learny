@@ -918,6 +918,60 @@
     "detail": "42501"
   },
   {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "A/owner",
+    "operation": "select",
+    "expected": true,
+    "observed": true,
+    "detail": "1 ligne(s)"
+  },
+  {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "C/non-member",
+    "operation": "select",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "update",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "delete",
+    "expected": false,
+    "observed": true,
+    "detail": "0 ligne(s)"
+  },
+  {
+    "table": "course_section_reports",
+    "category": "personal",
+    "role": "B/member",
+    "operation": "insert",
+    "expected": false,
+    "observed": true,
+    "detail": "42501"
+  },
+  {
     "table": "citations",
     "category": "personal",
     "role": "A/owner",

@@ -280,6 +280,14 @@ async function createSeed(tx: DbTx): Promise<Seed> {
       returning id::text as id
     `,
   );
+  rows.course_section_reports = await insertId(
+    tx,
+    sql`
+      insert into public.course_section_reports (owner_id, section_id, reason)
+      values (${a.id}::uuid, ${sectionId}::uuid, 'Signalement de test')
+      returning id::text as id
+    `,
+  );
   rows.citations = await insertId(
     tx,
     sql`
@@ -678,6 +686,11 @@ const FOREIGN_INSERTS: Record<string, Inserter> = {
         section_id, owner_id, version, title, edited_by
       )
       values (${s.sectionId}::uuid, ${s.a.id}::uuid, 99, 'forgée', 'learner')
+    `),
+  course_section_reports: (tx, s) =>
+    tx.execute(sql`
+      insert into public.course_section_reports (owner_id, section_id, reason)
+      values (${s.a.id}::uuid, ${s.sectionId}::uuid, 'Signalement forgé')
     `),
   citations: (tx, s) =>
     tx.execute(sql`
