@@ -276,6 +276,7 @@ test('Coquille : menu latéral mobile @SPEC-304 @mobile', async ({
   captureEvidence,
 }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await seedMenu(session.userId);
   await page.goto(ACCUEIL);
@@ -402,11 +403,17 @@ test('Coquille : menu latéral mobile @SPEC-304 @visual @mobile', async ({
   axeCheck,
 }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await seedMenu(session.userId);
   await page.goto(ACCUEIL);
   await page.getByTestId('sidebar-show').click();
   await expect(page.getByTestId('sidebar')).toBeVisible();
+  // The drawer locks the page scroll; wait for that lock so the scrollbar never changes the
+  // layout viewport between two captures.
+  await expect
+    .poll(async () => page.evaluate(() => document.body.style.overflow))
+    .toBe('hidden');
   await expectScreenshotBaseline(page, 'spec-304-menu-mobile.png', { fullPage: false });
   await axeCheck();
 });
