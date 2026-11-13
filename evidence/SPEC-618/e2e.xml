@@ -1,0 +1,82 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="41.675836000000004">
+<testsuite name="p6/formation-management.spec.ts" timestamp="2026-11-13T09:10:28.009Z" hostname="desktop" tests="4" failures="0" skipped="1" time="7.923" errors="0">
+<testcase name="change et met en pause une formation @SPEC-618" classname="p6/formation-management.spec.ts" time="3.561">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/attachments/formation-en-pause-9de03ca760f333d1acbace7a90f92bd999c56c82.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/attachments/axe-6ac9e72d1ef9726795ecfc67e5d12247fa9abbb2.json]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/attachments/formation-reprise-638e8defe1446d952c879a56eea1c4111be04cf2.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-ch-26cfc-ause-une-formation-SPEC-618-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="limite de trois formations @SPEC-618" classname="p6/formation-management.spec.ts" time="2.493">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/attachments/limite-trois-formations-0bee92e06e2c3260db21b23b2736ad861678bd06.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/attachments/axe-39c03d7620fda685096022f7091ab7df78bb24ad.json]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/attachments/limite-confirmee-d296ea6c39a09107dd3311a13ba31c8cd13118e6.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-limite-de-trois-formations-SPEC-618-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-618 @SPEC-618 @visual" classname="p6/formation-management.spec.ts" time="1.665">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-formation-management-conformité-SPEC-618-SPEC-618-visual-desktop/attachments/axe-9b4b89f9f5ff4c00dbb8213fccdc6de5e8f812f1.json]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-conformité-SPEC-618-SPEC-618-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-conformité-SPEC-618-SPEC-618-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-conformité-SPEC-618-SPEC-618-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-conformité-SPEC-618-SPEC-618-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-618 mobile @SPEC-618 @visual @mobile" classname="p6/formation-management.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/formation-management.spec.ts" timestamp="2026-11-13T09:10:28.009Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.48" errors="0">
+<testcase name="conformité SPEC-618 mobile @SPEC-618 @visual @mobile" classname="p6/formation-management.spec.ts" time="1.48">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-formation-management-co-ccb53-bile-SPEC-618-visual-mobile-mobile/attachments/axe-c2b3670cf0cfb1b8337e9363341870142e46d084.json]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-co-ccb53-bile-SPEC-618-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-co-ccb53-bile-SPEC-618-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-co-ccb53-bile-SPEC-618-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-formation-management-co-ccb53-bile-SPEC-618-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
