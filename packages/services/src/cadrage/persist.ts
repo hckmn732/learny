@@ -1,6 +1,6 @@
-import type { AppliedTutorTurn, CadrageObjective } from '@learny/tutor';
 import type { Clock } from '@learny/core';
 import { sql, type DbTx } from '@learny/db';
+import type { AppliedTutorTurn, CadrageObjective } from '@learny/tutor';
 
 import type { FormationRow } from './state';
 import { nextPosition, suggestionsJson } from './state';

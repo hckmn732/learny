@@ -2,7 +2,6 @@ import {
   CADRAGE_RUBRIC_KEYS,
   type CadrageMessage,
   type CadrageProfile,
-  type CadrageRubricKey,
   type CadrageStateDto,
   type CadrageSuggestion,
 } from '@learny/contracts';
@@ -22,10 +21,8 @@ export const CADRAGE_ERROR_MESSAGES = {
 } as const;
 
 export function cadrageErrorMessage(code: string): string {
-  return (
-    CADRAGE_ERROR_MESSAGES[code as keyof typeof CADRAGE_ERROR_MESSAGES] ??
-    CADRAGE_ERROR_MESSAGES.AI_TASK_FAILED
-  );
+  const messages = CADRAGE_ERROR_MESSAGES as Record<string, string | undefined>;
+  return messages[code] ?? CADRAGE_ERROR_MESSAGES.AI_TASK_FAILED;
 }
 
 export interface FormationRow {
@@ -68,7 +65,7 @@ export function readProfile(value: unknown): CadrageProfile {
         ? record.state
         : 'todo';
     const rawValue = typeof record.value === 'string' ? record.value : null;
-    base[key as CadrageRubricKey] = { value: rawValue, state };
+    base[key] = { value: rawValue, state };
   }
   return base;
 }

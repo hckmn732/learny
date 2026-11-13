@@ -1,7 +1,6 @@
 import {
   FormationPatchInput,
   type CadrageStateDto,
-  type FormationPatchInput as FormationPatchInputType,
   type FormationSummary,
   type FormationsList,
 } from '@learny/contracts';
@@ -85,7 +84,7 @@ export function listFormations(ctx: ServiceContext): Promise<Result<FormationsLi
 export function updateFormationTitle(
   ctx: ServiceContext,
   formationId: string,
-  input: FormationPatchInputType | unknown,
+  input: unknown,
 ): Promise<Result<FormationSummary>> {
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);

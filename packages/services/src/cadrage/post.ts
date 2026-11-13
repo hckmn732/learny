@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm';
+
 import {
   CadrageMessageCreateInput,
   type CadrageQuestionKey,
@@ -5,7 +7,6 @@ import {
   type TutorProfile,
 } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
-import { eq } from 'drizzle-orm';
 import { schema, serviceDb, sql, type DbTx } from '@learny/db';
 import { cadrageScenario, runCadrageTurn } from '@learny/tutor';
 
