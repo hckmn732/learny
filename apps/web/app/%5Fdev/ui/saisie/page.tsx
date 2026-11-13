@@ -14,6 +14,7 @@ import {
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
 import { fr } from '../../../../messages/fr';
 
+import { ChoiceCards } from './ChoiceCards';
 import { ExampleForm } from './ExampleForm';
 import { SegmentedControls, Switches } from './SaisieControls';
 import { SearchTextField } from './SearchTextField';
@@ -96,6 +97,10 @@ export default function SaisieGalleryPage() {
           <Checkbox error={t.checkbox.error} label={t.checkbox.errorLabel} />
           <Checkbox disabled label={t.checkbox.label} />
         </div>
+      </GalleryCard>
+
+      <GalleryCard intro={t.choice.intro} testId="ui-saisie-choice" title={t.choice.title}>
+        <ChoiceCards />
       </GalleryCard>
 
       <GalleryCard intro={t.tabs.intro} testId="ui-saisie-tabs" title={t.tabs.title}>

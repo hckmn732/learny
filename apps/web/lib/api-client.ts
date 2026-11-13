@@ -46,11 +46,24 @@ function headerRequestId(response: Response): string | undefined {
   return response.headers.get('x-request-id') ?? undefined;
 }
 
-function withRequestId(
+/** Seconds of `Retry-After`, when the answer carries one (SPEC-601 EF-9). */
+function headerRetryAfter(response: Response): number | undefined {
+  const value = response.headers.get('retry-after');
+  if (value === null) return undefined;
+  const seconds = Number(value);
+  return Number.isFinite(seconds) && seconds >= 0 ? Math.ceil(seconds) : undefined;
+}
+
+function withResponseHeaders(
   status: number,
   requestId: string | undefined,
-): { status: number; requestId?: string } {
-  return requestId === undefined ? { status } : { status, requestId };
+  retryAfterSec: number | undefined,
+): { status: number; requestId?: string; retryAfterSec?: number } {
+  return {
+    status,
+    ...(requestId === undefined ? {} : { requestId }),
+    ...(retryAfterSec === undefined ? {} : { retryAfterSec }),
+  };
 }
 
 async function readJson(response: Response): Promise<{ ok: true; value: unknown } | { ok: false }> {
@@ -72,7 +85,11 @@ async function toAppError(response: Response): Promise<AppError> {
       const p = problem.data;
       const code = p.code ?? codeForStatus(response.status);
       const detail = p.detail ?? p.title ?? ERROR_CATALOG[codeForStatus(response.status)].title;
-      const extra = withRequestId(response.status, p.requestId ?? fallbackRequestId);
+      const extra = withResponseHeaders(
+        response.status,
+        p.requestId ?? fallbackRequestId,
+        headerRetryAfter(response),
+      );
       return new AppError(
         code,
         detail,
@@ -82,14 +99,14 @@ async function toAppError(response: Response): Promise<AppError> {
     return new AppError(
       'INVALID_RESPONSE',
       ERROR_CATALOG.INVALID_RESPONSE.title,
-      withRequestId(response.status, fallbackRequestId),
+      withResponseHeaders(response.status, fallbackRequestId, headerRetryAfter(response)),
     );
   }
   const code = codeForStatus(response.status);
   return new AppError(
     code,
     ERROR_CATALOG[code].title,
-    withRequestId(response.status, fallbackRequestId),
+    withResponseHeaders(response.status, fallbackRequestId, headerRetryAfter(response)),
   );
 }
 
@@ -148,7 +165,7 @@ export async function apiFetch<TInput, TOutput>(
       throw new AppError(
         'INVALID_RESPONSE',
         ERROR_CATALOG.INVALID_RESPONSE.title,
-        withRequestId(response.status, requestId),
+        withResponseHeaders(response.status, requestId, headerRetryAfter(response)),
       );
     }
     value = json.value;
@@ -158,7 +175,7 @@ export async function apiFetch<TInput, TOutput>(
     throw new AppError(
       'INVALID_RESPONSE',
       ERROR_CATALOG.INVALID_RESPONSE.title,
-      withRequestId(response.status, requestId),
+      withResponseHeaders(response.status, requestId, headerRetryAfter(response)),
     );
   }
   return parsed.data;
