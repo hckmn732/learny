@@ -166,4 +166,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0289](ADR-0289-contrats-d-implementation-complementaires-du-paquet-bricks.md) | Contrats d'implémentation complémentaires du paquet bricks | Déduite | SPEC-501 |
 | [ADR-0293](ADR-0293-complements-d-implementation-des-cles-personnelles-chiffrees.md) | Compléments d’implémentation des clés personnelles chiffrées | Déduite | SPEC-505 |
 | [ADR-0294](ADR-0294-reservation-transactionnelle-du-plafond-et-journal-des-appels-ia.md) | Réservation transactionnelle du plafond et journal des appels IA | Déduite | SPEC-507, ADR-0012, ADR-0073 |
->>>>>>> spec/SPEC-505-cles-personnelles-chiffrees
+| [ADR-0295](ADR-0295-recherche-web-selection-du-fournisseur-canonisation-et-suggestions.md) | Recherche web : sélection du fournisseur, canonisation et suggestions | Déduite | SPEC-512 |

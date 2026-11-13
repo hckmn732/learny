@@ -11,10 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@commitlint/config-conventional": "^21.2.4",
-    "@commitlint/lint": "^21.2.4",
-    "@learny/config": "workspace:*",
     "@learny/bricks": "workspace:*",
+    "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
@@ -23,7 +21,10 @@
     "@learny/llm": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@learny/services": "workspace:*",
+    "@learny/tutor": "workspace:*",
     "@learny/ui": "workspace:*",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/lint": "^21.2.4",
     "@sentry/nextjs": "^11.12.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",

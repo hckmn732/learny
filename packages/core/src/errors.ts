@@ -42,6 +42,8 @@ export const ERROR_CATALOG = {
   MOCK_FIXTURE_NOT_FOUND: { status: 500, title: 'Fixture du modèle simulé introuvable' },
   MOCK_STEPS_EXHAUSTED: { status: 500, title: 'Étapes du modèle simulé épuisées' },
   AI_CAP_REACHED: { status: 422, title: "Plafond d'IA du jour atteint" },
+  TOOL_NOT_ALLOWED: { status: 403, title: 'Action non autorisée pour cette tâche' },
+  SEARCH_UNAVAILABLE: { status: 503, title: 'Recherche web indisponible' },
   RETRY_NOT_YET_ALLOWED: { status: 422, title: 'Nouvelle tentative pas encore possible' },
   UPLOAD_TOO_LARGE: { status: 422, title: 'Fichier trop volumineux' },
   UNSUPPORTED_TYPE: { status: 422, title: 'Type de fichier non pris en charge' },

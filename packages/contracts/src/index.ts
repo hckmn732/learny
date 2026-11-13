@@ -27,6 +27,7 @@ export * from './events';
 export * from './header';
 export * from './learning';
 export * from './search';
+export * from './search-web';
 export * from './sidebar';
 export * from './billing';
 export * from './bricks';
