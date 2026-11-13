@@ -12,6 +12,7 @@ import { headerRoutes } from './header';
 import { healthRoutes } from './health';
 import { meRoutes } from './me';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
+import { notionGraphRoutes } from './notion-graph';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { pushDevRoutes, pushRoutes } from './push';
 import { searchRoutes } from './search';
@@ -47,6 +48,7 @@ export const ROUTES = {
   ...personalDataDevRoutes,
   ...aiCredentialRoutes,
   ...gapRoutes,
+  ...notionGraphRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;
