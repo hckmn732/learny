@@ -112,6 +112,12 @@ export { COURSE_MAX_CORRECTIONS, COURSE_PROMPT_ID, buildCoursePrompt } from './c
 export type { CoursePromptInput, CoursePromptNotion } from './course/prompt';
 export { courseRunFailed, replaceCoursePlaceholders, runCourseChapter } from './course/run';
 export type { CourseChapterResult, CourseRunContext } from './course/run';
+export {
+  correctChapterSummary,
+  COURSE_SUMMARY_PROMPT_ID,
+  COURSE_SUMMARY_PROMPT_VERSION,
+} from './course/summary';
+export type { SummaryCorrectionContext, SummaryCorrectionInput } from './course/summary';
 export { citationFailureSummary, validateCourseCitations } from './course/citations';
 export type {
   CitationIssue,

@@ -4,6 +4,7 @@ import courseBase from '../../fixtures/course/course-base.json' with { type: 'js
 import courseInvalid from '../../fixtures/course/course-invalid.json' with { type: 'json' };
 import courseSourced from '../../fixtures/course/course-sourced.json' with { type: 'json' };
 import lightInvalidObject from '../../fixtures/light/demo-invalid-object.json' with { type: 'json' };
+import courseSummary from '../../fixtures/light/course-summary.json' with { type: 'json' };
 import lightObject from '../../fixtures/light/demo-object.json' with { type: 'json' };
 import lightSpec510Image from '../../fixtures/light/spec-510-image.json' with { type: 'json' };
 import programmeAdjust from '../../fixtures/programme/programme-adjust.json' with { type: 'json' };
@@ -46,6 +47,7 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('course/course-base.json', courseBase),
   entry('course/course-invalid.json', courseInvalid),
   entry('course/course-sourced.json', courseSourced),
+  entry('light/course-summary.json', courseSummary),
   entry('light/demo-invalid-object.json', lightInvalidObject),
   entry('light/demo-object.json', lightObject),
   entry('light/spec-510-image.json', lightSpec510Image),
