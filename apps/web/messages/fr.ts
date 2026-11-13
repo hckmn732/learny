@@ -1882,6 +1882,50 @@ export const fr = {
         back: 'Retour',
       },
     },
+    spec507: {
+      title: 'SPEC-507 · Garde-fou de coût et journal des appels',
+      budget: {
+        title: 'Dépense simulée du jour',
+        intro:
+          'Scénario déterministe : la dépense est simulée dans le navigateur, aucun fournisseur n’est appelé.',
+        spend: 'Dépense du jour (USD)',
+        task: 'Tâche',
+        cap: (value: string) => `Plafond : ${value} USD`,
+        percent: (value: number) => `${String(value)} % du plafond`,
+        alert: 'Alerte à 80 % : une notification sera créée pour ce jour local.',
+        noAlert: 'Aucune alerte : la dépense reste sous 80 % du plafond.',
+        decision: 'Décision',
+        model: 'Modèle effectif',
+        estimate: 'Coût estimé',
+        resets: 'Prochain minuit local',
+        decisions: { allow: 'Appel autorisé', downgrade: 'Bascule sur Haiku', defer: 'Reporté' },
+        tasks: {
+          programme: 'Programme',
+          course: 'Cours',
+          gaps: 'Lacunes',
+          tutor: 'Tuteur',
+          light: 'Tâche légère',
+        },
+      },
+      calls: {
+        title: 'Journal et agrégats factices',
+        intro: 'Chaque ligne est calculée avec les tarifs de packages/config (ADR-0073).',
+        columns: ['Jour', 'Formation', 'Tâche', 'Modèle', 'Tokens', 'Coût USD', 'Statut', 'Lot'],
+        aggregates: 'Agrégats par formation et par jour',
+        aggregateColumns: ['Jour', 'Formation', 'Appels', 'Coût USD'],
+        none: 'Hors formation',
+        batchYes: 'Oui',
+        batchNo: 'Non',
+      },
+      contract: {
+        title: 'Contrat d’entrée et échec lisible',
+        intro:
+          'L’entrée est validée par Zod ; aucune clé, aucun contenu d’apport et aucun résultat inventé.',
+        input: 'Entrée validée',
+        result: 'Décision validée',
+        error: 'Échec sûr',
+      },
+    },
     spec211: {
       title: 'SPEC-211 — Export des données et suppression du compte',
       export: {
