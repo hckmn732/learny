@@ -42,6 +42,6 @@ export * from './bricks';
 export * from './cadrage';
 export * from './formation-management';
 export * from './programme';
-export * from './resources';
 export * from './questions';
+export * from './resources';
 export * from './dev-billing';

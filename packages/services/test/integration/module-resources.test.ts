@@ -7,7 +7,7 @@ import { randomUUID } from 'node:crypto';
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { AppError, type Result } from '@learny/core';
+import type { Result } from '@learny/core';
 import {
   closeDb,
   createGroup,

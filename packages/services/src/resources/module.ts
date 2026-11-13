@@ -17,6 +17,7 @@ import { AppError, type Result } from '@learny/core';
 import { sql } from '@learny/db';
 
 import type { ServiceContext } from '../context';
+
 import { requireUser, toResult } from './result';
 
 const ACTIVE_FORMATION_STATUSES = new Set(['active', 'paused', 'completed']);

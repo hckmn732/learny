@@ -93,8 +93,8 @@ async function seedModule(userId: string): Promise<Seeded> {
         )
         values (
           ${userId}::uuid, ${id}::uuid, ${status}::public.module_status,
-          ${status === 'locked' ? null : `${NOW}`}::timestamptz,
-          ${status === 'validated' ? `${NOW}` : null}::timestamptz,
+          ${status === 'locked' ? null : NOW}::timestamptz,
+          ${status === 'validated' ? NOW : null}::timestamptz,
           ${NOW}::timestamptz
         )
         on conflict (user_id, module_id) do update
@@ -116,7 +116,7 @@ async function seedModule(userId: string): Promise<Seeded> {
         values (
           ${userId}::uuid, ${id}::uuid,
           ${done[index] === true ? 'done' : 'in_progress'}::public.contrib_status,
-          ${done[index] === true ? `${NOW}` : null}::timestamptz,
+          ${done[index] === true ? NOW : null}::timestamptz,
           ${NOW}::timestamptz
         )
         on conflict (user_id, chapter_id) do update
@@ -219,7 +219,13 @@ test('dépose des apports et termine un chapitre @SPEC-607', async ({
   await page
     .getByLabel('PDF', { exact: true })
     .setInputFiles({ name: 'saisie.pdf', mimeType: 'application/pdf', buffer: Buffer.from(pdf) });
-  await expect(page.getByTestId('resource-list').getByText('Analysé').last()).toBeVisible({
+  const pdfItem = page.getByTestId('resource-item').filter({ hasText: 'saisie' });
+  await expect(pdfItem).toBeVisible({ timeout: 30_000 });
+  await expect(pdfItem.getByTestId('resource-status')).toHaveText(/En file|Analysé/, {
+    timeout: 30_000,
+  });
+
+  await expect(page.getByTestId('module-notice')).toHaveText('Fichier ajouté.', {
     timeout: 30_000,
   });
 

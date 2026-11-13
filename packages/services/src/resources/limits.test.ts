@@ -35,34 +35,32 @@ function code(fn: () => unknown): string {
 describe('[SPEC-607] limites des apports', () => {
   it('CA-1 — PDF : 50 Mo et 500 pages acceptés, un octet ou une page au-delà refusés', () => {
     expect(RESOURCE_LIMITS.pdfMaxBytes).toBe(50 * MEBIBYTE);
-    expect(code(() => assertFileSize('pdf', 50 * MEBIBYTE))).toBe('OK');
-    expect(code(() => assertFileSize('pdf', 50 * MEBIBYTE + 1))).toBe('UPLOAD_TOO_LARGE');
-    expect(code(() => assertPdfPages(500))).toBe('OK');
-    expect(code(() => assertPdfPages(501))).toBe('UPLOAD_TOO_LARGE');
+    expect(code(() => { assertFileSize('pdf', 50 * MEBIBYTE); })).toBe('OK');
+    expect(code(() => { assertFileSize('pdf', 50 * MEBIBYTE + 1); })).toBe('UPLOAD_TOO_LARGE');
+    expect(code(() => { assertPdfPages(500); })).toBe('OK');
+    expect(code(() => { assertPdfPages(501); })).toBe('UPLOAD_TOO_LARGE');
   });
 
   it('CA-1 — image : 10 Mo acceptés, un octet au-delà refusé', () => {
     expect(RESOURCE_LIMITS.imageMaxBytes).toBe(10 * MEBIBYTE);
-    expect(code(() => assertFileSize('image', 10 * MEBIBYTE))).toBe('OK');
-    expect(code(() => assertFileSize('image', 10 * MEBIBYTE + 1))).toBe('UPLOAD_TOO_LARGE');
+    expect(code(() => { assertFileSize('image', 10 * MEBIBYTE); })).toBe('OK');
+    expect(code(() => { assertFileSize('image', 10 * MEBIBYTE + 1); })).toBe('UPLOAD_TOO_LARGE');
   });
 
   it('CA-1 — note : 100 000 caractères acceptés, un caractère au-delà refusé', () => {
     expect(RESOURCE_LIMITS.noteMaxChars).toBe(100_000);
-    expect(code(() => assertNoteText('a'.repeat(100_000)))).toBe('OK');
-    expect(code(() => assertNoteText('a'.repeat(100_001)))).toBe('UPLOAD_TOO_LARGE');
+    expect(code(() => { assertNoteText('a'.repeat(100_000)); })).toBe('OK');
+    expect(code(() => { assertNoteText('a'.repeat(100_001)); })).toBe('UPLOAD_TOO_LARGE');
   });
 
   it('CA-1 — 100 apports par chapitre, le 101e refusé avec un message explicite', () => {
     expect(RESOURCE_LIMITS.perChapter).toBe(100);
     expect(
-      code(() =>
-        assertCapacity({ chapterCount: 99, usedBytes: 0, addedBytes: 0 }),
+      code(() => { assertCapacity({ chapterCount: 99, usedBytes: 0, addedBytes: 0 }); },
       ),
     ).toBe('OK');
     expect(
-      code(() =>
-        assertCapacity({ chapterCount: 100, usedBytes: 0, addedBytes: 0 }),
+      code(() => { assertCapacity({ chapterCount: 100, usedBytes: 0, addedBytes: 0 }); },
       ),
     ).toBe('QUOTA_EXCEEDED');
   });
@@ -70,21 +68,19 @@ describe('[SPEC-607] limites des apports', () => {
   it('CA-1 — quota de 2 Go par utilisateur, le premier octet au-delà refusé', () => {
     expect(RESOURCE_LIMITS.userQuotaBytes).toBe(2 * 1024 * MEBIBYTE);
     expect(
-      code(() =>
-        assertCapacity({
+      code(() => { assertCapacity({
           chapterCount: 0,
           usedBytes: RESOURCE_LIMITS.userQuotaBytes - 1,
           addedBytes: 1,
-        }),
+        }); },
       ),
     ).toBe('OK');
     expect(
-      code(() =>
-        assertCapacity({
+      code(() => { assertCapacity({
           chapterCount: 0,
           usedBytes: RESOURCE_LIMITS.userQuotaBytes,
           addedBytes: 1,
-        }),
+        }); },
       ),
     ).toBe('QUOTA_EXCEEDED');
   });

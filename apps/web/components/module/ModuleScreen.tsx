@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import type { ModuleScreen as ModuleScreenDto } from '@learny/contracts';
+import { colors } from '@learny/ui/tokens';
+
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
 import { formatRange } from '../programme/dates';
@@ -65,13 +67,13 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
       }),
     initialData: initial,
     refetchInterval: (current) => {
-      const data = current.state.data as ModuleScreenDto | undefined;
+      const data = current.state.data;
       return data?.resources.some((resource) => PENDING_STATUSES.has(resource.status)) === true
         ? 3000
         : false;
     },
   });
-  const screen = query.data ?? initial;
+  const screen = query.data;
   const selected = screen.chapters.find((chapter) => chapter.id === screen.selectedChapterId);
   const chapterDone = selected?.contributionsStatus === 'done';
 
@@ -177,14 +179,14 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
               role="img"
             >
               <svg aria-hidden="true" className="block" height="56" viewBox="0 0 56 56" width="56">
-                <circle cx="28" cy="28" fill="none" r="22" stroke="#F0EFEA" strokeWidth="7" />
+                <circle cx="28" cy="28" fill="none" r="22" stroke={colors["surface-muted"]} strokeWidth="7" />
                 <circle
                   cx="28"
                   cy="28"
                   fill="none"
                   r="22"
-                  stroke="#111113"
-                  strokeDasharray={`${(138.2 * screen.counts.chaptersDone) / Math.max(1, screen.counts.chaptersTotal)} 138.2`}
+                  stroke={colors.ink}
+                  strokeDasharray={`${String((138.2 * screen.counts.chaptersDone) / Math.max(1, screen.counts.chaptersTotal))} 138.2`}
                   strokeLinecap="round"
                   strokeWidth="7"
                   transform="rotate(-90 28 28)"
