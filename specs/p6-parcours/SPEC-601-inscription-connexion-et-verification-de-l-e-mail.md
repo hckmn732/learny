@@ -174,5 +174,6 @@ Définition commune (`docs/engineering/testing.md` §7) ; en plus : `ChoiceCard`
 - ADR appliqués : ADR-0007 (méthodes, 1 h, 12 caractères, 60 s), ADR-0045 (pages légales, version), ADR-0034 (échelle 90 %), ADR-0046 (routes françaises), ADR-0064 (formulaires), ADR-0047 (horloge).
 - **ADR-0168** (créé) : messages d'authentification neutres (anti-énumération) et conservation de l'adresse en `sessionStorage` plutôt que dans l'URL.
 - **ADR-0161** (créé) : méthode de comparaison visuelle ; ici l'écran est livré entièrement, la comparaison est en pleine page.
+- **ADR-0303** (créé) : `useClock` reste dans `apps/web` pour ne pas ajouter React à `@learny/core` ; `GET /api/v1/me` est livré avec le DTO complet que SPEC-602 étendra ; `lien-expire` et `lien-invalide` affichent le même message d'expiration.
 - Textes ajoutés (absents de la maquette, nécessaires aux états) : messages EF-10, EF-11, EF-12, compte à rebours EF-9, `<noscript>`.
 - Hypothèse : le contrat `/auth/*` de SPEC-202 correspond au tableau de la section 3 ; tout écart de nommage est absorbé par le client sans changement de comportement.

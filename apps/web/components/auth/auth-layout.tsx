@@ -3,13 +3,11 @@
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import { cn } from '@learny/ui';
-
 import { fr } from '../../messages/fr';
 
-const t = fr.auth.layout;
+import { AUTH_STEPS, AuthStepper } from './AuthStepper';
 
-const STEPS = ['compte', 'verification', 'profil', 'rythme', 'ia', 'rappels', 'depart'] as const;
+const t = fr.auth.layout;
 
 export type AuthStep = {
   /** Zero-based current step, or null when the page is outside the stepper. */
@@ -41,7 +39,7 @@ export function authStepForPath(pathname: string | null): AuthStep {
   const current = BY_SEGMENT[segment] ?? 0;
   return {
     current,
-    label: t.stepCounter(current + 1, STEPS.length, t.steps[STEPS[current] ?? 'compte']),
+    label: t.stepCounter(current + 1, AUTH_STEPS.length, t.steps[AUTH_STEPS[current] ?? 'compte']),
   };
 }
 
@@ -108,47 +106,21 @@ export function AuthLayout({ step, children }: Readonly<AuthLayoutProps>) {
             </li>
           ))}
         </ul>
-        <div className="flex flex-col gap-8" data-testid="auth-stepper">
-          <span
-            className="text-12 font-600 tracking-eyebrow text-on-dark-muted uppercase leading-1.2"
-            data-testid="auth-step-counter"
-          >
-            {step.label}
-          </span>
-          <ol aria-label={t.stepsLabel} className="m-0 flex list-none gap-6 p-0">
-            {STEPS.map((name, index) => {
-              const state =
-                step.current === null
-                  ? 'upcoming'
-                  : index < step.current
-                    ? 'done'
-                    : index === step.current
-                      ? 'current'
-                      : 'upcoming';
-              return (
-                <li
-                  aria-current={state === 'current' ? 'step' : undefined}
-                  className={cn(
-                    'relative h-6 flex-1 rounded-3',
-                    state === 'done' && 'bg-lime',
-                    state === 'current' && 'bg-white',
-                    state === 'upcoming' && 'bg-dark-600',
-                  )}
-                  data-testid={`auth-step-${String(index + 1)}`}
-                  key={name}
-                >
-                  <span className="sr-only">{t.stepAria(index + 1, t.steps[name], state)}</span>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+        <AuthStepper current={step.current ?? 0} label={step.label} />
       </aside>
       <main
         className="flex min-w-0 flex-[999_1_35rem] items-center justify-center px-24 py-32 sm:px-40 sm:py-48"
         data-testid="auth-main"
       >
         <div className="flex w-full max-w-[35rem] flex-col gap-24" data-testid="auth-content">
+          <noscript>
+            <p
+              className="rounded-12 bg-orange-soft px-12 py-10 text-13 font-600 text-orange-ink"
+              role="status"
+            >
+              {fr.auth.noscript}
+            </p>
+          </noscript>
           {children}
         </div>
       </main>
