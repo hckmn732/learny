@@ -71,6 +71,8 @@ export const resourceMetadataSchema = z.strictObject({
   youtubeId: z.string().min(1).optional(),
   siteName: z.string().min(1).optional(),
   anthropicFileId: z.string().min(1).optional(),
+  /** BR-APP-05 — reason given by the tutor for a web resource suggestion (SPEC-512). */
+  suggestionReason: z.string().min(1).max(500).optional(),
   upload: resourceUploadSchema.optional(),
 });
 
