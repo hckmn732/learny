@@ -120,6 +120,12 @@ export {
   sddDemoPipeline,
 } from './functions/sdd-demo-pipeline';
 export type { DemoStepName as PipelineStepName } from './functions/sdd-demo-pipeline';
+export {
+  PREPARE_QUESTION_BANK_ID,
+  prepareQuestionBankForCourse,
+  QUESTION_BANK_NIGHTLY_ID,
+  questionBankNightly,
+} from './functions/prepare-question-bank';
 export { SECURITY_PURGE_ID, securityPurge } from './functions/security-purge';
 export { DEFAULT_RETRIES, defineFunction } from './define';
 export type { FunctionArgs, FunctionConfig, JobEvent, JobStep } from './define';
