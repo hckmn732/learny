@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:00:28.215Z",
+  "updatedAt": "2026-11-13T07:01:58.316Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3777,11 +3777,11 @@
       }
     },
     "SPEC-602": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T07:01:58.316Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-602-premiers-pas-onboarding",
       "commit": null,
       "lastError": null,
       "validations": {}

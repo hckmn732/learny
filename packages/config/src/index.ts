@@ -75,13 +75,15 @@ export type {
 export {
   AI_MODEL_IDS,
   AI_TASKS,
+  BYOK_PROVIDERS,
+  BYOK_RECOMMENDED_MODELS,
   DEFAULT_MODEL_BY_TASK,
   THINKING_EFFORT_BY_TASK,
   WEB_SEARCH_TASKS,
   isAiTask,
   isProvidedModel,
 } from './models';
-export type { AiModelId, AiTask, ThinkingEffort } from './models';
+export type { AiModelId, AiTask, ByokProvider, ThinkingEffort } from './models';
 export {
   BATCH_DISCOUNT_RATIO,
   CACHE_READ_RATIO,
