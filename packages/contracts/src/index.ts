@@ -38,5 +38,6 @@ export * from './sidebar';
 export * from './billing';
 export * from './bricks';
 export * from './cadrage';
+export * from './formation-management';
 export * from './questions';
 export * from './dev-billing';
