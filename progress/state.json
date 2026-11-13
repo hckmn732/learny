@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T11:24:01.842Z",
+  "updatedAt": "2026-11-13T11:30:46.886Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4083,11 +4083,11 @@
       }
     },
     "SPEC-608": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T11:30:46.886Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-608-generation-du-cours",
       "commit": null,
       "lastError": null,
       "validations": {}
