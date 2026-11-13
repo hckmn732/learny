@@ -1,4 +1,4 @@
-# ADR-0304 — Normalisation de la comparaison visuelle du cadrage
+# ADR-0309 — Normalisation de la comparaison visuelle du cadrage
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
