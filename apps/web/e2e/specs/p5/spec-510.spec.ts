@@ -18,9 +18,9 @@ test('Ingestion : pages web, YouTube et images @SPEC-510', async ({
   await expect(page.getByTestId('ingestion-web-panel')).toContainText(
     'Comptabilité de gestion — le compte de résultat',
   );
-  await expect(page.locator('[data-testid^="ingestion-web-chunk-"]').first()).toContainText(
-    'ancre',
-  );
+  await expect(
+    page.locator('[data-testid^="ingestion-web-chunk-"]').filter({ hasText: 'ancre' }).first(),
+  ).toContainText('ancre marge-brute');
   await expect(page.getByTestId('ingestion-web-panel')).not.toContainText('navigation');
   await captureEvidence('spec-510-page-web');
 

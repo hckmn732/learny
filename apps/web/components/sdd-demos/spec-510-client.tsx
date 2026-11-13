@@ -172,7 +172,12 @@ export function Spec510View({ data }: Readonly<{ data: Spec510Data }>) {
       </BaseCard>
 
       <BaseCard testId="ingestion-contract-card" title="Contrat d’entrée et résultat validé">
-        <pre className="overflow-x-auto rounded-12 bg-canvas p-4 text-12">
+        <pre
+          role="region"
+          aria-label="Contrat et résultat de la démonstration"
+          tabIndex={0}
+          className="overflow-x-auto rounded-12 bg-canvas p-4 text-12 focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
           {JSON.stringify({ input: data.input, output: data.contractOutput }, null, 2)}
         </pre>
         <p className="mt-2 text-12 text-ink-muted">
