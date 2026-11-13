@@ -33,7 +33,7 @@ test('Banques de questions @SPEC-513', async ({
 
   // CA-1, CA-5 — four distinct masked fingerprints and annotated distractors.
   await expect(page.getByTestId('spec-513-variant-0')).toContainText('Question à choix');
-  await expect(page.getByTestId('spec-513-variant-0')).toContainText('Distracteur 1');
+  await expect(page.getByTestId('spec-513-variant-0')).toContainText('Notion voisine');
   const fingerprints = await page.locator('[data-testid^="spec-513-fingerprint-"]').allTextContents();
   expect(fingerprints).toHaveLength(4);
   for (const fingerprint of fingerprints) {
