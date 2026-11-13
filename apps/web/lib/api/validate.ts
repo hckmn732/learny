@@ -18,10 +18,16 @@ export function queryToObject(search: URLSearchParams): Record<string, string | 
 const frenchMessages = z.locales.fr().localeError;
 
 /** Parses `value`; on failure throws `VALIDATION_FAILED` with paths prefixed by the location. */
-export function validateInput<T>(schema: z.ZodType<T>, value: unknown, location: InputLocation): T {
+export function validateInput<T>(
+  schema: z.ZodType<T>,
+  value: unknown,
+  location: InputLocation,
+  status?: number,
+): T {
   const parsed = schema.safeParse(value, { error: frenchMessages });
   if (parsed.success) return parsed.data;
   throw new AppError('VALIDATION_FAILED', 'Les données envoyées sont invalides.', {
+    ...(status === undefined ? {} : { status }),
     errors: parsed.error.issues.map((issue) => ({
       path: [location, ...issue.path.map(String)].join('.'),
       message: issue.message,

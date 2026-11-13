@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./destination": "./src/auth/destination.ts",
-    "./billing": "./src/billing/index.ts"
+    "./billing": "./src/billing/index.ts",
+    "./ai/credentials": "./src/ai/credentials-service.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
@@ -20,6 +21,7 @@
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
     "@learny/learning-engine": "workspace:*",
+    "@learny/llm": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",
     "drizzle-orm": "^0.45.2",

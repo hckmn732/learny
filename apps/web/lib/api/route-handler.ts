@@ -212,7 +212,7 @@ export function routeHandler<R extends AnyRoute>(
       const params = (
         route.params === undefined
           ? undefined
-          : validateInput(route.params as z.ZodType, rawParams, 'params')
+          : validateInput(route.params as z.ZodType, rawParams, 'params', route.validationStatus)
       ) as RouteParams<R>;
       const query = (
         route.query === undefined
@@ -221,12 +221,18 @@ export function routeHandler<R extends AnyRoute>(
               route.query as z.ZodType,
               queryToObject(new URL(request.url).searchParams),
               'query',
+              route.validationStatus,
             )
       ) as RouteQuery<R>;
       const body = (
         route.body === undefined
           ? undefined
-          : validateInput(route.body as z.ZodType, await readJsonBody(request), 'body')
+          : validateInput(
+              route.body as z.ZodType,
+              await readJsonBody(request),
+              'body',
+              route.validationStatus,
+            )
       ) as RouteBody<R>;
 
       // 6. idempotency
