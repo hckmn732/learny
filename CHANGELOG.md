@@ -9,6 +9,125 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.5.0] — 2026-11-13
+
+### Ajouts
+
+- feat(SPEC-513): génération et jobs des banques de questions
+- feat(SPEC-513): contrats, schéma et fixtures des banques
+- feat(SPEC-510): service d’ingestion distant et démonstration SDD
+- feat(SPEC-511): démonstration SDD et parcours e2e
+- feat(SPEC-511): recherche cosinus et sélection du contexte
+- feat(SPEC-510): fixture simulée de lecture d’image par la tâche light
+- feat(SPEC-510): extraction des pages web, sous-titres YouTube et images
+- feat(SPEC-510): contrats Zod des extractions web, YouTube et image
+- feat(SPEC-510): récupération réseau sûre anti-SSRF et robots.txt
+- feat(SPEC-506): démonstration SDD et parcours e2e
+- feat(SPEC-508): livre actions, tests et demonstration du tuteur
+- feat(SPEC-506): service de qualification et route API
+- feat(SPEC-506): batterie de qualification et fixtures
+- feat(SPEC-506): contrats et capacités de qualification
+- feat(SPEC-509): page de démonstration et parcours e2e
+- feat(SPEC-509): service d'ingestion et job resource/uploaded
+- feat(SPEC-509): extraction, découpage et embeddings déterministes
+- feat(SPEC-509): contrats et suivi d'ingestion
+- feat(SPEC-508): ajoute le registre et la boucle du tuteur
+- feat(SPEC-512): démonstration SDD, e2e et conformité visuelle
+- feat(SPEC-503): galerie et pages de reproduction
+- feat(SPEC-507): démontre le plafond, l'alerte et le report
+- feat(SPEC-505): démonstration des clés personnelles
+- feat(SPEC-505): service, contrats et routes des clés personnelles
+- feat(SPEC-505): chiffrement AES-256-GCM et rotation des clés
+- feat(SPEC-505): contrôle d'adresse publique anti-SSRF
+- feat(SPEC-502): page de démonstration et parcours e2e
+- feat(SPEC-502): service de correction d'une version enregistrée
+- feat(SPEC-507): expose le journal et l'API de dépense IA
+- feat(SPEC-502): correction par le code des six types
+- feat(SPEC-503): vues des treize briques
+- feat(SPEC-507): ajoute le garde-fou de coût et les tarifs d'appel
+- feat(SPEC-507): ajoute les réservations transactionnelles de budget
+- feat(SPEC-512): outil search_web et suggestions de ressources
+- feat(SPEC-512): fournisseurs de recherche web et normalisation
+- feat(SPEC-503): jetons des états de brique
+- feat(SPEC-501): ajoute la démonstration, les routes et l'ADR-0289
+- feat(SPEC-504): ajoute la démonstration et les frontières ESLint
+- feat(SPEC-501): crée le paquet bricks et ses schémas normatifs
+- feat(SPEC-504): crée le paquet llm et ses fournisseurs
+
+### Corrections
+
+- fix(SPEC-513): aligne le compte RLS à 56 tables
+- fix(SPEC-510): déclare la version de consigne ingest-image
+- fix(SPEC-510): renumérote l'ADR en 0302
+- fix(SPEC-511): validation lisible et régions défilantes accessibles
+- fix(SPEC-511): attributs JSON des fixtures de recherche web
+- fix(SPEC-506): exclut les fixtures de qualification du registre LLM
+- fix(SPEC-503): réconcilie les correctifs des briques
+- fix(sdd): aligne le compte RLS et les images Docker
+- fix(SPEC-509): attributs JSON explicites des fixtures LLM
+- fix(SPEC-509): transpile le paquet ingestion dans la démo
+- fix(SPEC-505): retire le nom du déchiffreur de la surface publique
+- fix(SPEC-507): aligne les inventaires produit et RLS
+- fix(SPEC-505): corrige la liste de stockage et la capture visuelle
+- fix(SPEC-505): limite la rotation à un apprenant en test
+- fix(SPEC-504): retire une valeur de test ressemblant à une clé
+- fix(SPEC-507): autorise le repli Haiku explicite au plafond
+- fix(SPEC-501): aligne le typage générique des exemples de schéma
+
+### Documentation
+
+- docs(SPEC-513): consigne l'ADR-0301 et les critères
+- docs(SPEC-510): ADR-0299 et critères d’acceptation
+- docs(SPEC-511): consigne l'ADR-0300 et les critères d'acceptation
+- docs(SPEC-508): référence ADR-0299
+- docs(SPEC-506): régénère la spécification OpenAPI
+- docs(SPEC-506): consigne les décisions de qualification
+- docs(SPEC-508): consigne les decisions et les criteres d acceptation
+- docs(SPEC-509): précise les preuves visuelles
+- docs(SPEC-509): référence l'ADR-0297
+- docs(SPEC-505): consigne l'ADR-0293 et les critères
+- docs(SPEC-507): régénère la spécification OpenAPI
+- docs(SPEC-512): consigne l’ADR-0295 et les limites de recherche
+- docs(SPEC-507): consigne la réservation du plafond et l'ADR-0294
+- docs(SPEC-501): aligne le compte de tests unitaires sur la preuve
+- docs(SPEC-504): documente le paquet et les preuves d'acceptation
+
+### Tests
+
+- test(sdd): aligne les registres de jobs et la matrice RLS
+- test(SPEC-301): dérive les compteurs de jetons et de contrastes
+- test(SPEC-513): précise les distracteurs observés
+- test(SPEC-513): unitaires, RLS et démonstration des banques
+- test(SPEC-510): e2e filmé, visuel desktop/mobile et correctif JSON
+- test(SPEC-511): unitaires et intégration RLS de la recherche
+- test(SPEC-506): couvre la qualification et l’affectation
+- test(SPEC-506): lignes de base visuelles desktop et mobile
+- test(SPEC-506): route de qualification et refus inter-utilisateur
+- test(SPEC-506): intégration de la qualification et de l’affectation
+- test(sdd): couvre les services IA et la correction des briques
+- test(SPEC-508): ajuste le scenario de refus et la reference visuelle
+- test(SPEC-503): ajuste la comparaison visuelle et les preuves
+- test(SPEC-509): ligne de base visuelle et critères d'acceptation
+- test(SPEC-509): aligne le rayon attendu sur le jeton
+- test(SPEC-509): compare le vecteur stocké avec tolérance
+- test(SPEC-509): découpage, extraction et service d'ingestion
+- test(SPEC-507): fige les captures et rend les tables accessibles
+- test(SPEC-503): vues, galerie et parcours clavier
+- test(SPEC-507): intègre le budget, le journal et les agrégats
+- test(SPEC-505): chiffrement, rotation, sécurité et parcours e2e
+- test(SPEC-502): ligne de base visuelle et critères d'acceptation
+- test(SPEC-512): intégration RLS des suggestions et fournisseurs
+- test(SPEC-502): tables de cas des six correcteurs
+- test(SPEC-501): intègre le service, les versions et les routes
+- test(SPEC-504): fige les captures de référence de la démonstration
+- test(SPEC-501): couvre registre, schémas, validation et charge publique
+- test(SPEC-504): intègre résolution, journal et erreurs Anthropic
+- test(SPEC-504): couvre tâches, erreurs, options et modèle simulé
+
+### Intégration continue
+
+- ci(sdd): fige la version de la CLI Supabase
+
 ## [v0.4.0] — 2026-11-12
 
 ### Ajouts
