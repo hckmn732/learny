@@ -32,6 +32,7 @@ export { runNotifyDemo } from './dev/notifications';
 export * from './personal-data/index';
 export * from './learning/index';
 export * from './gaps/index';
+export * from './notion-graph/index';
 export * from './bricks/index';
 export * from './questions/index';
 export * from './cadrage/index';

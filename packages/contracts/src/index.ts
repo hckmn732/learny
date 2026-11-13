@@ -31,6 +31,7 @@ export * from './ingestion';
 export * from './learning';
 export * from './me';
 export * from './gaps';
+export * from './notion-graph';
 export * from './tutor';
 export * from './search';
 export * from './search-web';

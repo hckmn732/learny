@@ -1,0 +1,107 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="1" errors="0" time="46.306652">
+<testsuite name="p6/notion-graph.spec.ts" timestamp="2026-11-13T08:58:04.767Z" hostname="desktop" tests="5" failures="0" skipped="1" time="11.307" errors="0">
+<testcase name="explore la carte des notions @SPEC-616" classname="p6/notion-graph.spec.ts" time="3.391">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/attachments/axe-6e21356bd173bfa152525f8a72606d7f32b92d00.json]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/attachments/spec-616-carte-exploree-365d7c7d3aa2efb5c05cffdcd965337f5cd3ce77.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-explore-la-carte-des-notions-SPEC-616-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcourt la liste accessible @SPEC-616" classname="p6/notion-graph.spec.ts" time="2.596">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/attachments/axe-17cac967af0f408ea7f0c7b4651a2ead79c74f1c.json]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/attachments/spec-616-liste-accessible-7f6ceda0bc29c4d18ca34fd3c29e44a816c4de31.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-parcourt-la-liste-accessible-SPEC-616-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refuse la carte d’un autre apprenant @SPEC-616" classname="p6/notion-graph.spec.ts" time="0.664">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-notion-graph-refuse-la--7cd5b-un-autre-apprenant-SPEC-616-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-refuse-la--7cd5b-un-autre-apprenant-SPEC-616-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-refuse-la--7cd5b-un-autre-apprenant-SPEC-616-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-refuse-la--7cd5b-un-autre-apprenant-SPEC-616-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-616 @SPEC-616 @visual" classname="p6/notion-graph.spec.ts" time="4.428">
+<properties>
+<property name="mockup-diff-ratio" value="spec-616-desktop:0.0871">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/attachments/spec-616-desktop-side-by-side-1e2d3b0bfbbf08f1723376087c3bc32ce7dd2374.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/attachments/spec-616-desktop-diff-cdff0e9825b505c0fd155510e76832a4bd59d91e.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/attachments/axe-f32b87bb19da25bb790250e89e348fde25c2b118.json]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-SPEC-616-SPEC-616-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-616 mobile @SPEC-616 @visual @mobile" classname="p6/notion-graph.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/notion-graph.spec.ts" timestamp="2026-11-13T08:58:04.767Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.76" errors="0">
+<testcase name="conformité SPEC-616 mobile @SPEC-616 @visual @mobile" classname="p6/notion-graph.spec.ts" time="2.76">
+<properties>
+<property name="mockup-diff-ratio" value="spec-616-mobile:0.0968">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/attachments/spec-616-mobile-side-by-side-3b73127ce32fd009802f10e853308970d5794df8.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/attachments/spec-616-mobile-diff-164df3127a49a95ca6bb7d5a60daf79dd72cd14b.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/attachments/axe-a5e278fcbbf2827d351d55b3dadfff774ca62fbe.json]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-notion-graph-conformité-38eff-bile-SPEC-616-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
