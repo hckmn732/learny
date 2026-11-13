@@ -27,7 +27,9 @@ export const ProblemDetails = z.object({
   detail: z.string(),
   code: z.string().regex(/^[A-Z][A-Z0-9_]+$/),
   requestId: z.string(),
-  errors: z.array(z.object({ path: z.string(), message: z.string() })).optional(),
+  errors: z
+    .array(z.object({ code: z.string().optional(), path: z.string(), message: z.string() }))
+    .optional(),
 });
 export type ProblemDetails = z.infer<typeof ProblemDetails>;
 

@@ -7,7 +7,7 @@
 const TYPOGRAPHIC_REPLACEMENTS: ReadonlyArray<readonly [RegExp, string]> = [
   [/[\u2019\u2018\u201B\u02BC]/g, "'"],
   [/[\u00AB\u00BB\u201C\u201D\u201E]/g, '"'],
-  [/[\u2013\u2014\u2011]/g, '-'],
+  [/[\u2010\u2011\u2013\u2014]/g, '-'],
   [/[\u00A0\u2009\u202F]/g, ' '],
 ];
 
