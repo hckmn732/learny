@@ -167,3 +167,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0293](ADR-0293-complements-d-implementation-des-cles-personnelles-chiffrees.md) | Compléments d’implémentation des clés personnelles chiffrées | Déduite | SPEC-505 |
 | [ADR-0294](ADR-0294-reservation-transactionnelle-du-plafond-et-journal-des-appels-ia.md) | Réservation transactionnelle du plafond et journal des appels IA | Déduite | SPEC-507, ADR-0012, ADR-0073 |
 | [ADR-0295](ADR-0295-recherche-web-selection-du-fournisseur-canonisation-et-suggestions.md) | Recherche web : sélection du fournisseur, canonisation et suggestions | Déduite | SPEC-512 |
+| [ADR-0298](ADR-0298-qualification-des-modeles-personnels-batterie-et-capacites.md) | Qualification des modèles personnels : batterie, capacités et exécution | Déduite | SPEC-506 |
