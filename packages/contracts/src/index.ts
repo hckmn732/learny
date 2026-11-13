@@ -24,6 +24,7 @@ export * from './personal-data';
 export * from './events';
 export * from './header';
 export * from './learning';
+export * from './tutor';
 export * from './search';
 export * from './sidebar';
 export * from './billing';
