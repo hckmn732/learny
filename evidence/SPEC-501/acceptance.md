@@ -1,6 +1,6 @@
 # SPEC-501 — critères d'acceptation
 
-- ✅ CA-1 — Les 13 types sont enregistrés ; chaque exemple valide passe et chaque exemple invalide échoue avec le code attendu. Preuves : `packages/bricks/src/types/*/schema.test.ts` (13 fichiers, `runSchemaSuite`), `packages/bricks/src/registry.test.ts`, 239 tests unitaires `[SPEC-501]`.
+- ✅ CA-1 — Les 13 types sont enregistrés ; chaque exemple valide passe et chaque exemple invalide échoue avec le code attendu. Preuves : `packages/bricks/src/types/*/schema.test.ts` (13 fichiers, `runSchemaSuite`), `packages/bricks/src/registry.test.ts`, 238 tests unitaires `[SPEC-501]`.
 - ✅ CA-2 — Les 28 codes d'erreur d'ET-4/ET-5 sont chacun produits par un cas de test. Preuve : `packages/bricks/src/validate.test.ts` (un `it` par code, de `SCHEMA_INVALID` à `BRICK_REF_NOT_FOUND`).
 - ✅ CA-3 — Empreinte identique pour deux énoncés ne différant que par casse, accents, espaces, apostrophes typographiques et ponctuation finale, et différente si la bonne réponse change. Preuve : `packages/bricks/src/fingerprint.test.ts` et les 20 cas de `normalize.test.ts` + propriété fast-check d'idempotence.
 - ✅ CA-4 — Aucune charge publique ne contient `correct`, `answers`, `expectedElements`, `modelAnswer`, `categoryId` ni `hints`, sur les 13 exemples. Preuve : `packages/bricks/src/public.test.ts` (parcours récursif des clés).
