@@ -37,3 +37,5 @@ export * from './exercises/index';
 export * from './bricks/index';
 export * from './questions/index';
 export * from './cadrage/index';
+export * from './formations/index';
+export * from './planning';

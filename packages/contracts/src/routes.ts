@@ -9,6 +9,7 @@ import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
 import { devEmailRoutes, emailRoutes } from './email';
 import { exerciseRoutes } from './exercises';
+import { formationManagementRoutes } from './formation-management';
 import { gapRoutes } from './gaps';
 import { headerRoutes } from './header';
 import { healthRoutes } from './health';
@@ -45,6 +46,7 @@ export const ROUTES = {
   ...brickRoutes,
   ...formationRoutes,
   ...cadrageRoutes,
+  ...formationManagementRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,

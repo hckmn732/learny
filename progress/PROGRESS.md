@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-13T09:00:38.043Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-13T09:11:23.838Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 80 |
+| Terminées | 81 |
 | En cours | 0 |
-| Prêtes | 2 |
+| Prêtes | 1 |
 | En attente de dépendances | 50 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **60.6 %** |
-| Avancement V1 | 64.5 % |
+| **Avancement global** | **61.4 %** |
+| Avancement V1 | 65.3 % |
 | Prochaine action | start SPEC-605 — Programme proposé, import, ajustement et validation |
 
 ## Phases et checkpoints
@@ -27,7 +27,7 @@
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
-| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 7/18 | CP-6 | ⏳ |
+| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 8/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
@@ -126,7 +126,7 @@
 | [SPEC-615](../specs/p6-parcours/SPEC-615-mes-lacunes.md) | Mes lacunes | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-404, SPEC-304, SPEC-411 |
 | [SPEC-616](../specs/p6-parcours/SPEC-616-carte-des-notions.md) | Carte des notions | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-404, SPEC-304, SPEC-411 |
 | [SPEC-617](../specs/p6-parcours/SPEC-617-bilan-final-et-entretien-de-memoire.md) | Bilan final et entretien de mémoire | P6 | ⏳ waiting | 0 | — | SPEC-612, SPEC-408 |
-| [SPEC-618](../specs/p6-parcours/SPEC-618-gestion-des-formations-changer-pause-limite-de-tro.md) | Gestion des formations : changer, pause, limite de trois | P6 | 🟢 ready | 0 | — | SPEC-603, SPEC-407 |
+| [SPEC-618](../specs/p6-parcours/SPEC-618-gestion-des-formations-changer-pause-limite-de-tro.md) | Gestion des formations : changer, pause, limite de trois | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-603, SPEC-407 |
 | [SPEC-701](../specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md) | Quiz global : session du jour et cartes de rappel | P7 | ⏳ waiting | 0 | — | SPEC-406, SPEC-503, SPEC-411, SPEC-513 |
 | [SPEC-702](../specs/p7-engagement/SPEC-702-jeux-association-remise-en-ordre-classement-texte-.md) | Jeux : association, remise en ordre, classement, texte à trous | P7 | ⏳ waiting | 0 | — | SPEC-701 |
 | [SPEC-703](../specs/p7-engagement/SPEC-703-micro-seance.md) | Micro-séance | P7 | ⏳ waiting | 0 | — | SPEC-701 |
