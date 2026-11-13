@@ -27,7 +27,7 @@ export function runSchemaSuite<T extends BrickType>(
 
     it(`refuse l’exemple invalide avec ${example.invalidCode}`, async () => {
       const result = await validateBrick(
-        draftFor(type, { payload: example.invalid }),
+        draftFor(type, { payload: example.invalid as BrickPayload<T> }),
         memoryResolver(),
       );
       expect(result.ok).toBe(false);
@@ -38,7 +38,7 @@ export function runSchemaSuite<T extends BrickType>(
 
     for (const bound of bounds) {
       it(`refuse une valeur hors borne : ${bound.name}`, () => {
-        expectSchemaRejects(type, bound.make(structuredClone(example.valid)));
+        expectSchemaRejects(type, bound.make(structuredClone(example.valid as BrickPayload<T>)));
       });
     }
   });
