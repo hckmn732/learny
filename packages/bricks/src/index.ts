@@ -18,6 +18,22 @@ export {
   zodIssuesToBrickIssues,
 } from './common';
 export type { BrickDraft } from './common';
+export type {
+  CategorizationCorrection,
+  ChoiceQuestionCorrection,
+  ClozeCorrection,
+  CorrectionView,
+  CorrectionViewMap,
+  CriterionCorrection,
+  FeedbackTitle,
+  InstructionCorrection,
+  MatchingCorrection,
+  OpenQuestionCorrection,
+  OrderingCorrection,
+  RecallCardCorrection,
+  ScriptedDialogueCorrection,
+  SelfGrade,
+} from './correction-view';
 export { brickExamples } from './examples';
 export { brickFingerprint, canonicalAnswer, stemText } from './fingerprint';
 export { BRICK_ISSUE_CODES, brickIssue, uniqueIssues } from './issues';
@@ -47,3 +63,7 @@ export type {
 } from './validate';
 export type { BrickPublic, PublicBrickInput } from './public-brick';
 export { BRICK_PUBLIC_REQUIRED_ABSENT_FIELDS, toPublicBrick } from './public-brick';
+export { evaluateTableChecks, parseFrenchNumber } from './types/instruction/table-checks';
+export type { TableCheckResult, TableResponse } from './types/instruction/table-checks';
+export { timerState } from './types/timer/state';
+export type { TimerState, TimerStateInput } from './types/timer/state';
