@@ -5,6 +5,8 @@ export { Avatar, getInitials } from './components/Avatar';
 export type { AvatarProps } from './components/Avatar';
 export { Badge } from './components/Badge';
 export type { BadgeProps } from './components/Badge';
+export { formationAccentClass, formationAccents } from './tokens/formation-accents';
+export { slotKindLabel, slotKinds } from './tokens/slot-kinds';
 export { Breadcrumb } from './components/Breadcrumb';
 export type { BreadcrumbProps } from './components/Breadcrumb';
 export { Button, buttonVariants } from './components/Button';

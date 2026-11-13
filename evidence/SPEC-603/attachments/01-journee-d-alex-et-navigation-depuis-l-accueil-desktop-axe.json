@@ -1,0 +1,44 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "mes formations"
+            },
+            "relatedNodes": [
+              {
+                "html": "<div class=\"w-full max-w-full min-w-0 overflow-x-auto\" role=\"region\" tabindex=\"0\" aria-label=\"Mes formations\" data-testid=\"home-table-completed\">",
+                "target": [
+                  ".max-w-full"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section id=\"home-formations\" data-testid=\"home-formations\" aria-labelledby=\"home-formations-title\" class=\"min-w-0 overflow-hidden rounded-24 border border-solid border-border bg-surface p-8\">",
+        "target": [
+          "#home-formations"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]

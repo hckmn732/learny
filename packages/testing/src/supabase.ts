@@ -112,6 +112,46 @@ export async function createTestSession(options: TestSessionOptions = {}): Promi
   };
 }
 
+/**
+ * Signs in a seeded demonstration user. The SPEC-115 seed inserts `auth.users` directly, so the
+ * e-mail identity is completed here and a random password is set before the password grant.
+ */
+export async function createDemoSession(userId: string, email: string): Promise<TestSession> {
+  const { url, anonKey, serviceRoleKey } = supabaseLocalEnv();
+  const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } });
+  const password = `pw-${randomBytes(12).toString('hex')}`;
+  const { serviceDb, sql } = await import('@learny/db');
+  await serviceDb().execute(sql`
+    insert into auth.identities (id, user_id, provider, provider_id, identity_data, created_at, updated_at)
+    values (
+      gen_random_uuid(), ${userId}::uuid, 'email', ${userId}::text,
+      jsonb_build_object('sub', ${userId}::text, 'email', ${email}::text, 'email_verified', true),
+      now(), now()
+    )
+    on conflict (provider_id, provider) do nothing
+  `);
+  const updated = await admin.auth.admin.updateUserById(userId, { password });
+  if (updated.error !== null) throw new Error(`updateUserById : ${updated.error.message}`);
+  const jar = new Map<string, string>();
+  const client = createServerClient(url, anonKey, {
+    cookies: {
+      getAll: () => [...jar].map(([name, value]) => ({ name, value })),
+      setAll: (items) => {
+        for (const item of items) jar.set(item.name, item.value);
+      },
+    },
+  });
+  const signedIn = await client.auth.signInWithPassword({ email, password });
+  if (signedIn.error !== null) throw new Error(`signIn : ${signedIn.error.message}`);
+  const cookies = [...jar].map(([name, value]) => ({ name, value }));
+  return {
+    userId,
+    email,
+    cookies,
+    cookieHeader: cookies.map((c) => `${c.name}=${encodeURIComponent(c.value)}`).join('; '),
+  };
+}
+
 /** Deletes a session user created by `createTestSession` (cascades to its rows). */
 export async function deleteTestSession(session: Pick<TestSession, 'userId'>): Promise<void> {
   const { url, serviceRoleKey } = supabaseLocalEnv();

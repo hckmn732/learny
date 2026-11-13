@@ -10,6 +10,7 @@ import { devEmailRoutes, emailRoutes } from './email';
 import { gapRoutes } from './gaps';
 import { headerRoutes } from './header';
 import { healthRoutes } from './health';
+import { homeRoutes } from './home';
 import { meRoutes } from './me';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
@@ -34,6 +35,7 @@ export const ROUTES = {
   ...devJobsRoutes,
   ...searchRoutes,
   ...headerRoutes,
+  ...homeRoutes,
   ...sidebarRoutes,
   ...aiRoutes,
   ...billingRoutes,

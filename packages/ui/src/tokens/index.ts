@@ -1,6 +1,10 @@
 // Public token API of @learny/ui (SPEC-301, ET-1).
 export { colors } from './colors';
 export type { ColorToken } from './colors';
+export { formationAccentClass, formationAccents } from './formation-accents';
+export type { FormationAccentColors, FormationAccentToken } from './formation-accents';
+export { SLOT_KIND_ORDER, slotKindColor, slotKindLabel, slotKinds } from './slot-kinds';
+export type { SlotKindToken } from './slot-kinds';
 export { fontFamilies, fontSizesPx, fontWeights, letterSpacings, lineHeights } from './typography';
 export type {
   FontFamilyToken,

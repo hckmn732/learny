@@ -26,6 +26,7 @@ export * from './personal-data';
 export * from './retrieval';
 export * from './events';
 export * from './header';
+export * from './home';
 export * from './ingestion';
 export * from './learning';
 export * from './me';

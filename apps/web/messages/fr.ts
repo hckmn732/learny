@@ -6,6 +6,118 @@ export const fr = {
     title: 'Learny',
     subtitle: 'Application en cours de construction.',
     demoLink: 'Pages de démonstration',
+    header: {
+      newFormation: 'Nouvelle formation',
+      title: "Votre journée d'apprentissage",
+    },
+    day: {
+      title: (count: number) => `Aujourd'hui · ${String(count)} activité${count === 1 ? '' : 's'}`,
+      summary: (planned: string, done: string) => `${planned} prévues · ${done} faites`,
+      empty: "Aucune activité prévue aujourd'hui.",
+      agenda: "Ouvrir l'agenda",
+      done: 'Fait',
+      missed: 'Manqué',
+      upcoming: 'À venir',
+      ongoing: 'En cours',
+      inMinutes: (minutes: number) => `Dans ${String(minutes)} min`,
+      doIt: 'Faire',
+      statusLabel: (title: string) => `Statut de ${title}`,
+    },
+    retention: {
+      title: 'Notions retenues à 1 mois',
+      twoMonths: (percent: number) =>
+        `${String(percent)} % à 2 mois. Mesuré par le quiz global sur les modules validés.`,
+      noTwoMonths:
+        'Pas encore de mesure à 2 mois. Mesuré par le quiz global sur les modules validés.',
+      noMeasure:
+        "Pas encore de mesure : la rétention apparaît 30 jours après la validation d'un premier module.",
+      ringLabel: (percent: number | null) =>
+        percent === null
+          ? 'Aucune mesure de rétention à 1 mois'
+          : `Notions retenues à 1 mois : ${String(percent)} %`,
+    },
+    quiz: {
+      title: 'Quiz global du jour',
+      notions: (count: number) =>
+        count === 1 ? '1 notion à revoir' : `${String(count)} notions à revoir`,
+      line: (formation: string, games: number, minutes: number) =>
+        `${formation} · ${String(games)} jeu${games === 1 ? '' : 'x'} · ${String(minutes)} min`,
+      gaps: 'lacunes en priorité',
+      deferred: (due: number, deferred: number, day: string, cap: number) =>
+        `${String(due)} notions étaient dues : ${String(deferred)} reportées à ${day} pour rester sous ${String(cap)} min.`,
+      play: 'Jouer maintenant',
+      nothing: "Rien à revoir aujourd'hui",
+      nextReview: (day: string) => `Prochaine révision : ${day}`,
+      startAfterModule: "Les révisions commencent après la validation d'un premier module.",
+    },
+    formations: {
+      title: 'Mes formations',
+      tabLabel: 'Mes formations',
+      ongoing: (count: number) => `En cours · ${String(count)}`,
+      completed: (count: number) => `Terminées · ${String(count)}`,
+      tableLabel: 'Mes formations',
+      columns: {
+        formation: 'Formation',
+        progress: 'Progression',
+        module: 'Module en cours',
+        next: 'Prochaine activité',
+        end: 'Fin prévue',
+        action: 'Action',
+        result: 'Résultat',
+        memory: 'Mémorisation',
+        revisions: 'Révisions dues',
+        completedOn: 'Terminée le',
+      },
+      progress: (percent: number, position: number | null, count: number) =>
+        position === null
+          ? `${String(percent)} %`
+          : `Module ${String(position)} sur ${String(count)}`,
+      programmeToValidate: 'Programme à valider',
+      cadrage: 'Cadrage en cours',
+      paused: 'En pause',
+      noModule: '—',
+      emptyOngoingTitle: 'Aucune formation en cours',
+      emptyOngoingDescription:
+        'Dites ce que vous voulez apprendre : le tuteur conçoit votre programme.',
+      createFormation: 'Créer une formation',
+      emptyCompleted: "Aucune formation terminée pour l'instant.",
+      completedHint:
+        'Au bilan final, vous choisissez de garder un entretien de mémoire léger, ou d’arrêter les révisions.',
+      validated: (score: number | null) =>
+        score === null ? 'Validée' : `Validée · ${String(score)} %`,
+      retained: 'notions retenues à 1 mois',
+      measurementComing: 'mesure à venir',
+      dueToday: (count: number) =>
+        count === 0 ? "Aucune aujourd'hui" : `${String(count)} notions aujourd'hui`,
+      memoryInterview: 'entretien de mémoire',
+      stopped: 'Entretien arrêté',
+      stoppedDetail: 'à votre demande, au bilan final',
+      reportToDo: 'Bilan à faire',
+      reportDetail: 'choisissez au bilan final',
+      weeks: (weeks: number) => `${String(weeks)} semaines`,
+      revision: 'Réviser',
+      viewReport: 'Voir le bilan',
+      ringLabel: (title: string, percent: number) =>
+        `Avancement de ${title} : ${String(percent)} %`,
+    },
+    slots: {
+      contributions: 'Apports',
+      course: 'Cours',
+      exercise: 'Exercice',
+      validation_quiz: 'Quiz de validation',
+      global_quiz: 'Quiz global',
+      revision: 'Révision',
+      sprint: 'Sprint',
+      micro_session: 'Micro-séance',
+      warmup: 'Échauffement',
+      mock_exam: 'Examen blanc',
+      buffer: 'Marge de rattrapage',
+      weekly_review: 'Bilan',
+    },
+    loading: 'Chargement de votre journée…',
+    errorTitle: 'Impossible de charger votre journée.',
+    retry: 'Réessayer',
+    networkLost: 'Connexion perdue : les données peuvent être anciennes.',
   },
   shell: {
     sidebar: {

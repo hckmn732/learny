@@ -213,6 +213,10 @@ export interface DemoModuleFixture {
 export interface DemoFormationFixture {
   key: DemoFormationKey;
   title: string;
+  /** ADR-0162 — stored sigil shown on the home and sidebar cards. */
+  monogram: string;
+  /** ADR-0162 — stable accent of the cards and progress rings. */
+  accentColor: 'indigo' | 'green' | 'orange' | 'violet' | 'teal';
   description: string;
   objectives: readonly ('operational' | 'exam' | 'dialogue' | 'project')[];
   status: 'cadrage' | 'programme_proposed' | 'active' | 'paused' | 'completed' | 'archived';
@@ -802,6 +806,8 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'sap',
     title: 'SAP S/4HANA Finance',
+    monogram: 'SAP',
+    accentColor: 'indigo',
     description:
       'Devenir opérationnel sur les processus financiers de SAP S/4HANA et préparer la certification.',
     objectives: ['operational', 'exam'],
@@ -830,6 +836,8 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'agile',
     title: 'Gestion de projet agile',
+    monogram: 'AG',
+    accentColor: 'green',
     description: 'Dialoguer avec des experts et piloter des rétrospectives utiles au collectif.',
     objectives: ['dialogue'],
     status: 'active',
@@ -856,6 +864,8 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'python',
     title: "Python pour l'analyse de données",
+    monogram: 'PY',
+    accentColor: 'orange',
     description: 'Livrer un projet d’analyse de données avec Python et Pandas.',
     objectives: ['project'],
     status: 'programme_proposed',
@@ -882,6 +892,8 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'excel',
     title: "Excel pour l'analyse financière",
+    monogram: 'XL',
+    accentColor: 'teal',
     description: 'Automatiser ses tableaux de bord financiers.',
     objectives: ['operational'],
     status: 'completed',
@@ -908,6 +920,8 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'english',
     title: 'Anglais professionnel B2',
+    monogram: 'EN',
+    accentColor: 'violet',
     description: 'Mener une réunion en anglais.',
     objectives: ['dialogue'],
     status: 'completed',
