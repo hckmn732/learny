@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T18:34:44.825Z",
+  "updatedAt": "2026-11-13T18:37:33.419Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4542,11 +4542,11 @@
       }
     },
     "SPEC-617": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T18:37:33.418Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-617-bilan-final-et-entretien-de-memoire",
       "commit": null,
       "lastError": null,
       "validations": {}
