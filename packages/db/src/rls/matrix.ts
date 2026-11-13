@@ -154,6 +154,9 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('bricks', 'id', ['bricks_owner_all']),
   personal('brick_versions', 'id', ['brick_versions_owner_all']),
   personal('brick_reports', 'id', ['brick_reports_owner_all']),
+  // SPEC-513 — the batch state is written by the explicitly authorized service only; the learner
+  // reads their own jobs, which contain no question content.
+  personal('question_bank_jobs', 'user_id', ['question_bank_jobs_owner_select'], READ_ONLY),
   personal('activities', 'id', ['activities_owner_all']),
   personal('attempts', 'id', ['attempts_owner_all']),
   personal('answers', 'id', ['answers_owner_all']),

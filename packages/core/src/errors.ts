@@ -67,6 +67,8 @@ export const ERROR_CATALOG = {
   EMBEDDING_UNAVAILABLE: { status: 503, title: 'Service d’embeddings indisponible' },
   EMBEDDING_KEY_INVALID: { status: 422, title: 'Clé d’embeddings invalide' },
   BRICK_INVALID: { status: 422, title: 'Brique invalide' },
+  COURSE_NOT_READY: { status: 422, title: 'Cours non prêt' },
+  INCOMPLETE_BANK: { status: 422, title: 'Banque incomplète' },
   BRICK_RETIRED: { status: 422, title: 'Brique retirée' },
   GRADED_BY_TUTOR: { status: 422, title: 'Brique corrigée par le tuteur' },
   RESPONSE_INVALID: { status: 422, title: 'Réponse invalide' },

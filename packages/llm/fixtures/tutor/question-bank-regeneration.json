@@ -1,0 +1,467 @@
+{
+  "task": "tutor",
+  "scenario": "question-bank-regeneration",
+  "promptId": "tutor.question-bank",
+  "promptVersion": 1,
+  "description": "Régénération après épuisement : quatre nouvelles variantes par format.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "variants": [
+          {
+            "notionId": "{{notionId}}",
+            "format": "choice_question",
+            "payload": {
+              "stem": "Quelle affirmation illustre la notion ? (variante 1 B)",
+              "mode": "single",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "La réponse exacte",
+                  "correct": true,
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "text": "Une notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                },
+                {
+                  "id": "c",
+                  "text": "Une autre notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                }
+              ],
+              "explanation": "L’explication rappelle la règle essentielle et le raisonnement attendu.",
+              "objective": "Vérifier la compréhension de la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "choice_question",
+            "payload": {
+              "stem": "Quelle affirmation illustre la notion ? (variante 2 B)",
+              "mode": "single",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "La réponse exacte",
+                  "correct": true,
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "text": "Une notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                },
+                {
+                  "id": "c",
+                  "text": "Une autre notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                }
+              ],
+              "explanation": "L’explication rappelle la règle essentielle et le raisonnement attendu.",
+              "objective": "Vérifier la compréhension de la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "choice_question",
+            "payload": {
+              "stem": "Quelle affirmation illustre la notion ? (variante 3 B)",
+              "mode": "single",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "La réponse exacte",
+                  "correct": true,
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "text": "Une notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                },
+                {
+                  "id": "c",
+                  "text": "Une autre notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                }
+              ],
+              "explanation": "L’explication rappelle la règle essentielle et le raisonnement attendu.",
+              "objective": "Vérifier la compréhension de la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "choice_question",
+            "payload": {
+              "stem": "Quelle affirmation illustre la notion ? (variante 4 B)",
+              "mode": "single",
+              "options": [
+                {
+                  "id": "a",
+                  "text": "La réponse exacte",
+                  "correct": true,
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "text": "Une notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                },
+                {
+                  "id": "c",
+                  "text": "Une autre notion voisine",
+                  "correct": false,
+                  "notionId": "{{distractorNotionId}}",
+                  "rationale": "Confusion fréquente à éviter."
+                }
+              ],
+              "explanation": "L’explication rappelle la règle essentielle et le raisonnement attendu.",
+              "objective": "Vérifier la compréhension de la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "open_question",
+            "payload": {
+              "stem": "Expliquez la notion avec vos mots. (variante 1 B)",
+              "expectedElements": ["L’élément attendu", "La justification"],
+              "criteria": [
+                {
+                  "key": "exactitude",
+                  "label": "Exactitude",
+                  "points": 6,
+                  "description": "Réponse conforme au cours."
+                },
+                {
+                  "key": "justification",
+                  "label": "Justification",
+                  "points": 4,
+                  "description": "Raisonnement explicite."
+                }
+              ],
+              "answerMaxChars": 1500,
+              "modelAnswer": "Une réponse modèle complète qui reprend les éléments attendus.",
+              "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+              "objective": "Restituer et justifier la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "open_question",
+            "payload": {
+              "stem": "Expliquez la notion avec vos mots. (variante 2 B)",
+              "expectedElements": ["L’élément attendu", "La justification"],
+              "criteria": [
+                {
+                  "key": "exactitude",
+                  "label": "Exactitude",
+                  "points": 6,
+                  "description": "Réponse conforme au cours."
+                },
+                {
+                  "key": "justification",
+                  "label": "Justification",
+                  "points": 4,
+                  "description": "Raisonnement explicite."
+                }
+              ],
+              "answerMaxChars": 1500,
+              "modelAnswer": "Une réponse modèle complète qui reprend les éléments attendus.",
+              "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+              "objective": "Restituer et justifier la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "open_question",
+            "payload": {
+              "stem": "Expliquez la notion avec vos mots. (variante 3 B)",
+              "expectedElements": ["L’élément attendu", "La justification"],
+              "criteria": [
+                {
+                  "key": "exactitude",
+                  "label": "Exactitude",
+                  "points": 6,
+                  "description": "Réponse conforme au cours."
+                },
+                {
+                  "key": "justification",
+                  "label": "Justification",
+                  "points": 4,
+                  "description": "Raisonnement explicite."
+                }
+              ],
+              "answerMaxChars": 1500,
+              "modelAnswer": "Une réponse modèle complète qui reprend les éléments attendus.",
+              "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+              "objective": "Restituer et justifier la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "open_question",
+            "payload": {
+              "stem": "Expliquez la notion avec vos mots. (variante 4 B)",
+              "expectedElements": ["L’élément attendu", "La justification"],
+              "criteria": [
+                {
+                  "key": "exactitude",
+                  "label": "Exactitude",
+                  "points": 6,
+                  "description": "Réponse conforme au cours."
+                },
+                {
+                  "key": "justification",
+                  "label": "Justification",
+                  "points": 4,
+                  "description": "Raisonnement explicite."
+                }
+              ],
+              "answerMaxChars": 1500,
+              "modelAnswer": "Une réponse modèle complète qui reprend les éléments attendus.",
+              "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+              "objective": "Restituer et justifier la notion",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "cloze",
+            "payload": {
+              "template": "Complétez la phrase sur la notion (variante 1 B). L’élément clé est {{1}} et la conséquence est {{2}}.",
+              "gaps": [
+                {
+                  "id": 1,
+                  "answers": ["attendu"],
+                  "hint": "Premier élément"
+                },
+                {
+                  "id": 2,
+                  "answers": ["conséquence"],
+                  "hint": "Second élément"
+                }
+              ],
+              "explanation": "Le texte à trous vérifie la mémorisation des deux éléments essentiels.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "cloze",
+            "payload": {
+              "template": "Complétez la phrase sur la notion (variante 2 B). L’élément clé est {{1}} et la conséquence est {{2}}.",
+              "gaps": [
+                {
+                  "id": 1,
+                  "answers": ["attendu"],
+                  "hint": "Premier élément"
+                },
+                {
+                  "id": 2,
+                  "answers": ["conséquence"],
+                  "hint": "Second élément"
+                }
+              ],
+              "explanation": "Le texte à trous vérifie la mémorisation des deux éléments essentiels.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "cloze",
+            "payload": {
+              "template": "Complétez la phrase sur la notion (variante 3 B). L’élément clé est {{1}} et la conséquence est {{2}}.",
+              "gaps": [
+                {
+                  "id": 1,
+                  "answers": ["attendu"],
+                  "hint": "Premier élément"
+                },
+                {
+                  "id": 2,
+                  "answers": ["conséquence"],
+                  "hint": "Second élément"
+                }
+              ],
+              "explanation": "Le texte à trous vérifie la mémorisation des deux éléments essentiels.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "cloze",
+            "payload": {
+              "template": "Complétez la phrase sur la notion (variante 4 B). L’élément clé est {{1}} et la conséquence est {{2}}.",
+              "gaps": [
+                {
+                  "id": 1,
+                  "answers": ["attendu"],
+                  "hint": "Premier élément"
+                },
+                {
+                  "id": 2,
+                  "answers": ["conséquence"],
+                  "hint": "Second élément"
+                }
+              ],
+              "explanation": "Le texte à trous vérifie la mémorisation des deux éléments essentiels.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "matching",
+            "payload": {
+              "instruction": "Associez les éléments de la notion (variante 1 B).",
+              "pairs": [
+                {
+                  "id": "a",
+                  "left": "Élément A",
+                  "right": "Correspondance A",
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "left": "Élément B",
+                  "right": "Correspondance B",
+                  "notionId": "{{distractorNotionId}}"
+                },
+                {
+                  "id": "c",
+                  "left": "Élément C",
+                  "right": "Correspondance C",
+                  "notionId": "{{distractorNotionId}}"
+                }
+              ],
+              "extraRights": [],
+              "explanation": "Chaque élément est associé à une seule correspondance du cours.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "matching",
+            "payload": {
+              "instruction": "Associez les éléments de la notion (variante 2 B).",
+              "pairs": [
+                {
+                  "id": "a",
+                  "left": "Élément A",
+                  "right": "Correspondance A",
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "left": "Élément B",
+                  "right": "Correspondance B",
+                  "notionId": "{{distractorNotionId}}"
+                },
+                {
+                  "id": "c",
+                  "left": "Élément C",
+                  "right": "Correspondance C",
+                  "notionId": "{{distractorNotionId}}"
+                }
+              ],
+              "extraRights": [],
+              "explanation": "Chaque élément est associé à une seule correspondance du cours.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "matching",
+            "payload": {
+              "instruction": "Associez les éléments de la notion (variante 3 B).",
+              "pairs": [
+                {
+                  "id": "a",
+                  "left": "Élément A",
+                  "right": "Correspondance A",
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "left": "Élément B",
+                  "right": "Correspondance B",
+                  "notionId": "{{distractorNotionId}}"
+                },
+                {
+                  "id": "c",
+                  "left": "Élément C",
+                  "right": "Correspondance C",
+                  "notionId": "{{distractorNotionId}}"
+                }
+              ],
+              "extraRights": [],
+              "explanation": "Chaque élément est associé à une seule correspondance du cours.",
+              "sources": []
+            }
+          },
+          {
+            "notionId": "{{notionId}}",
+            "format": "matching",
+            "payload": {
+              "instruction": "Associez les éléments de la notion (variante 4 B).",
+              "pairs": [
+                {
+                  "id": "a",
+                  "left": "Élément A",
+                  "right": "Correspondance A",
+                  "notionId": "{{notionId}}"
+                },
+                {
+                  "id": "b",
+                  "left": "Élément B",
+                  "right": "Correspondance B",
+                  "notionId": "{{distractorNotionId}}"
+                },
+                {
+                  "id": "c",
+                  "left": "Élément C",
+                  "right": "Correspondance C",
+                  "notionId": "{{distractorNotionId}}"
+                }
+              ],
+              "extraRights": [],
+              "explanation": "Chaque élément est associé à une seule correspondance du cours.",
+              "sources": []
+            }
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 900,
+        "cacheReadTokens": 800,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 300
+    }
+  ]
+}

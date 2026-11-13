@@ -86,6 +86,11 @@ export interface SessionOptions {
   /** Test seam for the fixture registry. */
   fixtures?: readonly { path: string; fixture: FixtureFile }[];
   /**
+   * BR-IA-13 — marks the call as part of a non-urgent provider batch: the journal row carries
+   * `batch = true` and the price calculator applies the documented discount.
+   */
+  batch?: boolean;
+  /**
    * SPEC-506 — qualification calls a model before it is assigned to a task. The descriptor is
    * built from the owned credential; resolution of `ai_task_models` is skipped in that case.
    */
@@ -257,6 +262,7 @@ export async function createSession(
       latencyMs: input.latencyMs,
       status: input.status,
       errorCode: input.errorCode ?? null,
+      batch: opts.batch ?? false,
       costCalculator,
     });
   }
