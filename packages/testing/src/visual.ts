@@ -119,7 +119,7 @@ export function compareWithReference(
   };
 }
 
-export interface ReferenceRegion {
+export interface ReferenceCrop {
   x: number;
   y: number;
   width: number;
@@ -127,7 +127,7 @@ export interface ReferenceRegion {
 }
 
 /** Nearest-neighbour crop of the mockup region, scaled to the real capture dimensions. */
-function resizeRegion(image: PNG, region: ReferenceRegion, width: number, height: number): PNG {
+function resizeRegion(image: PNG, region: ReferenceCrop, width: number, height: number): PNG {
   if (
     region.x < 0 ||
     region.y < 0 ||
@@ -167,7 +167,7 @@ function resizeRegion(image: PNG, region: ReferenceRegion, width: number, height
 export function compareWithReferenceRegion(
   actual: Buffer | string,
   reference: string,
-  region: ReferenceRegion,
+  region: ReferenceCrop,
   outputDir: string,
   name = 'comparison',
 ): ComparisonResult {
