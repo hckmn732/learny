@@ -74,7 +74,7 @@ describe('[SPEC-606] carte de module', () => {
     expect(screen.queryByTestId('programme-module-2-action')).toBeNull();
     expect(screen.queryByText('Ouvrir le module')).toBeNull();
     expect(screen.queryByText('Passer le quiz de validation')).toBeNull();
-    expect(screen.getAllByRole('link')).toEqual([]);
+    expect(screen.queryAllByRole('link')).toHaveLength(0);
     expect(screen.getByTestId('programme-chapter-1')).toBeTruthy();
   });
 

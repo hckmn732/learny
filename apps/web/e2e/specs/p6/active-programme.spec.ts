@@ -337,7 +337,7 @@ test('conformité SPEC-606 desktop @SPEC-606 @visual', async ({
       {
         name: 'statistiques',
         locator: page.getByTestId('programme-stats'),
-        rect: { x: 300, y: 175, width: 1290, height: 120 },
+        rect: { x: 300, y: 218, width: 1290, height: 95 },
       },
       {
         name: 'calendrier',
