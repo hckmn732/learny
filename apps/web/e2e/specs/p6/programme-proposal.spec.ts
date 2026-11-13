@@ -195,6 +195,9 @@ test('conformité SCR-05 proposition desktop @SPEC-605 @visual', async ({
   });
   await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
   await expect(page.getByTestId('programme-source')).toHaveText('Proposé par le tuteur');
+  await expect(page.getByRole('heading', { level: 1, name: 'SAP S/4HANA Finance' })).toBeVisible();
+  await expect(page.getByTestId('programme-adjust')).toHaveText('Ajuster avec le tuteur');
+  await expect(page.getByTestId('programme-validate')).toHaveText('Valider le programme');
   await expect(page.getByText('Modules et chapitres')).toBeVisible();
   await captureEvidence('programme-conformite');
 
@@ -202,11 +205,6 @@ test('conformité SCR-05 proposition desktop @SPEC-605 @visual', async ({
     reference: REFERENCE,
     outputDir: 'test-results/visual/SPEC-605-desktop',
     regions: [
-      {
-        name: 'resume',
-        locator: page.getByTestId('programme-summary'),
-        rect: { x: 300, y: 60, width: 1300, height: 190 },
-      },
       {
         name: 'calendrier',
         locator: page.getByTestId('programme-timeline'),
