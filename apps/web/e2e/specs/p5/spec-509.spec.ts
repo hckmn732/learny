@@ -67,7 +67,7 @@ test('Ingestion : notes et PDF, découpage, embeddings @SPEC-509 @visual', async
     '[data-testid="ingestion-note-card"]': {
       'background-color': '#FFFFFF',
       'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '24px',
+      'border-top-left-radius': '21.6px',
     },
     '[data-testid="ingestion-note-status"]': {
       'background-color': '#E1F4EF',
