@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T00:08:44.048Z",
+  "updatedAt": "2026-11-13T00:08:51.464Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3093,12 +3093,12 @@
       "validations": {}
     },
     "SPEC-504": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-12T23:39:07.586Z",
-      "completedAt": null,
+      "completedAt": "2026-11-13T00:08:51.461Z",
       "branch": "spec/SPEC-504-paquet-llm-fournisseurs-taches-et-modele",
-      "commit": null,
+      "commit": "72a19f4",
       "lastError": null,
       "validations": {
         "lint": {
