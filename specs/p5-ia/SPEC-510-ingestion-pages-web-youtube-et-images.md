@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-509]
 business_rules: [BR-APP-01]
 screens: []
-adrs: [ADR-0057, ADR-0299]
+adrs: [ADR-0057, ADR-0302]
 visual: demo
 ---
 
@@ -105,4 +105,4 @@ La définition commune de `docs/engineering/testing.md` §7 est remplie : lint, 
 
 ## 15. Décisions et hypothèses
 
-Décisions appliquées : ADR-0057, ADR-0299. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.
+Décisions appliquées : ADR-0057, ADR-0302. Les valeurs normatives viennent des règles métier et de la maquette ; aucune valeur produit n’est introduite hors du catalogue. Toute ambiguïté d’implémentation découverte ensuite suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification de la spécification.

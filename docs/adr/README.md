@@ -169,4 +169,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0294](ADR-0294-reservation-transactionnelle-du-plafond-et-journal-des-appels-ia.md) | Réservation transactionnelle du plafond et journal des appels IA | Déduite | SPEC-507, ADR-0012, ADR-0073 |
 | [ADR-0295](ADR-0295-recherche-web-selection-du-fournisseur-canonisation-et-suggestions.md) | Recherche web : sélection du fournisseur, canonisation et suggestions | Déduite | SPEC-512 |
 | [ADR-0297](ADR-0297-complements-d-implementation-de-l-ingestion-des-notes-et-pdf.md) | Compléments d’implémentation de l’ingestion des notes et PDF | Déduite | SPEC-509, ADR-0056, ADR-0057 |
-| [ADR-0299](ADR-0299-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |
+| [ADR-0302](ADR-0302-complements-d-implementation-de-l-ingestion-des-pages-web-yo.md) | Compléments d’implémentation de l’ingestion des pages web, YouTube et images | Déduite | SPEC-510, ADR-0057, ADR-0159, ADR-0048 |
