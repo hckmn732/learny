@@ -312,7 +312,7 @@ export function GraphSvg({
                   (near && focused !== null) ||
                   match ||
                   isSelected ||
-                  (view.k >= 1.35 && node.kind === 'notion') ||
+                  (view.k >= 1.6 && node.kind === 'notion') ||
                   view.k >= 1.9;
                 const fontSize =
                   (node.kind === 'notion' || node.kind === 'source' ? 10 : 12) /
@@ -321,14 +321,6 @@ export function GraphSvg({
                   node.kind === 'module' || node.kind === 'formation'
                     ? colors.white
                     : colors['on-dark-secondary'];
-                const kindLabel =
-                  node.kind === 'notion'
-                    ? `Module ${String(node.modulePosition ?? 0)}`
-                    : node.kind === 'module'
-                      ? 'Module'
-                      : node.kind === 'source'
-                        ? 'Apport'
-                        : 'Formation';
                 return (
                   <g
                     key={node.id}
@@ -337,7 +329,6 @@ export function GraphSvg({
                     data-kind={node.kind}
                     data-status={node.masteryStatus ?? undefined}
                     data-selected={isSelected ? 'true' : undefined}
-                    aria-label={t.graph.nodeLabel(node.label, kindLabel)}
                     opacity={dim ? 0.18 : faded ? 0.5 : 1}
                     className="cursor-pointer"
                     onPointerDown={(event) => {

@@ -29,7 +29,7 @@ export default function CarteLoading() {
         <div className="flex flex-wrap gap-20">
           <Skeleton className="h-[540px] min-w-0 flex-[999_1_560px] rounded-24 shell:h-[594px]" />
           <SkeletonGroup label={t.loading}>
-            <div className="flex min-w-0 flex-1 basis-[300px] flex-col gap-16">
+            <div className="flex min-w-0 flex-1 basis-[240px] flex-col gap-16">
               {[0, 1].map((index) => (
                 <div
                   key={index}

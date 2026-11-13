@@ -125,5 +125,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - **ADR-0036 — Carte des notions : rendu SVG et disposition déterministe** : Rendu SVG dans un composant client ; simulation de forces implémentée dans `apps/web/components/notion-graph/layout.ts` (répulsion, ressorts, gravité, 420 itérations, graine fixe) sans dépendance ; positions initiales par module en cercle. Interactions impératives hors rendu React (pointer events). Données servies par `/api/v1/formations/:fid/notion-graph`.
+- **ADR-0307 — Carte des notions : apports rattachés aux notions de leur chapitre** : le modèle ne porte pas de lien apport→notion ; un apport prêt et non supprimé de l’apprenant alimente les notions de son chapitre, les liens personnels et les apports d’un autre membre restant filtrés par RLS (voir ADR-0307).
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 

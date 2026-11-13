@@ -61,6 +61,7 @@ export function GraphToolbar({
     <div className="flex flex-wrap items-center gap-10">
       <form
         role="search"
+        aria-label={t.search.label}
         onSubmit={submit}
         className="relative min-w-0 flex-[1_1_280px] max-w-[420px]"
       >
@@ -80,7 +81,7 @@ export function GraphToolbar({
           autoComplete="off"
           value={query}
           placeholder={t.search.placeholder}
-          aria-controls={listId}
+          {...(open ? { 'aria-controls': listId } : {})}
           onChange={(event) => {
             onQueryChange(event.target.value);
           }}
@@ -140,7 +141,11 @@ export function GraphToolbar({
         ) : null}
       </form>
 
-      <div role="group" aria-label={t.filters.label} className="flex flex-wrap gap-6">
+      <div
+        role="group"
+        aria-label={t.filters.label}
+        className="flex max-w-[300px] flex-wrap gap-6 shell:max-w-none"
+      >
         {FILTERS.map((filter) => {
           const pressed = filters[filter.key];
           return (

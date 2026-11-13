@@ -42,7 +42,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | POST `/formations/:fid/mock-exams` · PATCH `/formations/:fid/exam-format` | Examen blanc | SPEC-614 |
 | GET `/formations/:fid/global-quiz/today?mode=full|micro` · POST `/review-sessions/:sid/answers` · POST `/review-sessions/:sid/complete` · POST `/sync/offline-answers` | Quiz global, hors ligne | SPEC-701, 703, 801 |
 | GET `/formations/:fid/gaps?nature=` | Mes lacunes | SPEC-615 |
-| GET `/formations/:fid/notion-graph` | Carte des notions | SPEC-616 |
+| GET `/formations/:fid/notion-graph` | Carte des notions : nœuds formation/module/notion/apport, liens typés (contient, prérequis, confusion, tuteur, source), maîtrise, lacunes ouvertes et statistiques ; 404 pour la formation d’un autre apprenant, apports et liens personnels filtrés par RLS | SPEC-616 |
 | GET `/agenda?from=&to=&formation=` · POST `/slots/:id/move` · GET `/slots/:id/alternatives` · POST `/formations/:fid/replan-options` · POST `/formations/:fid/replan` | Agenda | SPEC-704, 705 |
 | GET `/notifications?filter=` · POST `/notifications/:id/read` · POST `/notifications/read-all` · GET `/notifications/unread-count` | Notifications | SPEC-706 |
 | GET `/search?q=` | Recherche globale | SPEC-212, 307 |

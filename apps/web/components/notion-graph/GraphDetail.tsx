@@ -89,7 +89,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
       <aside
         data-testid="graph-detail"
         aria-label={t.detail.label}
-        className="flex min-w-0 flex-1 basis-[300px] flex-col gap-16"
+        className="flex min-w-0 flex-1 basis-[240px] flex-col gap-16"
       >
         <section className="flex flex-col gap-14 rounded-24 border border-solid border-border bg-surface p-20">
           <h2 className="m-0 text-17 font-600">{t.detail.emptyTitle}</h2>
@@ -236,7 +236,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
     <aside
       data-testid="graph-detail"
       aria-label={t.detail.label}
-      className="flex min-w-0 flex-1 basis-[300px] flex-col gap-16"
+      className="flex min-w-0 flex-1 basis-[240px] flex-col gap-16"
     >
       <section className="flex flex-col gap-14 rounded-24 border border-solid border-border bg-surface p-20">
         <div className="flex items-start justify-between gap-10">

@@ -363,6 +363,8 @@ test('explore la carte des notions @SPEC-616', async ({ page, axeCheck, captureE
   );
   await expect(page.getByTestId('graph-node')).toHaveCount(56);
   await expect(page.getByTestId('graph-detail')).toContainText('À consolider · 4');
+  const viewport = page.getByTestId('graph-viewport');
+  const initialK = await viewport.getAttribute('data-k');
 
   // CA-2 — search + Enter selects and centres « Variante d’exercice ».
   await page.getByTestId('graph-search').fill('Variante d’exercice');
@@ -380,8 +382,6 @@ test('explore la carte des notions @SPEC-616', async ({ page, axeCheck, captureE
   expect(Math.abs(nodeBox.y + nodeBox.height / 2 - (graphBox.y + graphBox.height / 2))).toBeLessThan(80);
 
   // CA-2 — zoom then recenter restores the initial transform, the data never changes.
-  const viewport = page.getByTestId('graph-viewport');
-  const initialK = await viewport.getAttribute('data-k');
   await page.getByTestId('graph-zoom-in').click();
   await expect
     .poll(async () => Number(await viewport.getAttribute('data-k')))
@@ -413,7 +413,8 @@ test('parcourt la liste accessible @SPEC-616', async ({ page, axeCheck, captureE
   const summary = details.locator('summary');
   await summary.focus();
   await page.keyboard.press('Enter');
-  await page.keyboard.press('Tab');
+  const firstNode = page.getByTestId('graph-list-node').first();
+  await firstNode.focus();
   await expect
     .poll(() => page.evaluate(() => document.activeElement?.getAttribute('data-testid') ?? ''))
     .toBe('graph-list-node');

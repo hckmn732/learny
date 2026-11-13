@@ -15,6 +15,8 @@ export const MIN_ZOOM = 0.35;
 export const MAX_ZOOM = 4;
 export const SEARCH_ZOOM = 1.5;
 const FIT_PADDING = 70;
+/** Initial fit stays under the label threshold, so a first paint is not a wall of labels. */
+const FIT_MAX_ZOOM = 1.15;
 
 export interface GraphView {
   x: number;
@@ -101,8 +103,15 @@ export function initialView(
   }
   const width = Math.max(1, maxX - minX);
   const height = Math.max(1, maxY - minY);
+  // A portrait canvas (mobile) fits a square cluster into a tall viewport: allow a slightly
+  // larger initial zoom so the graph keeps the mockup's visual weight without showing labels.
+  const maxZoom = size.height > size.width ? FIT_MAX_ZOOM + 0.2 : FIT_MAX_ZOOM;
   const k = clampZoom(
-    Math.min((size.width - FIT_PADDING * 2) / width, (size.height - FIT_PADDING * 2) / height, 2),
+    Math.min(
+      (size.width - FIT_PADDING * 2) / width,
+      (size.height - FIT_PADDING * 2) / height,
+      maxZoom,
+    ),
   );
   return {
     k,
