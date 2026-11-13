@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T02:31:46.887Z",
+  "updatedAt": "2026-11-13T02:31:55.846Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3440,12 +3440,12 @@
       }
     },
     "SPEC-510": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-13T01:56:46.035Z",
-      "completedAt": null,
+      "completedAt": "2026-11-13T02:31:55.843Z",
       "branch": "spec/SPEC-510-ingestion-pages-web-youtube-et-images",
-      "commit": null,
+      "commit": "43e3578",
       "lastError": null,
       "validations": {
         "lint": {
