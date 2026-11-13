@@ -39,6 +39,7 @@ export const ERROR_CATALOG = {
   AI_UNAVAILABLE: { status: 422, title: 'IA indisponible pour cette tâche' },
   AI_TASK_FAILED: { status: 503, title: 'Le tuteur n’a pas pu répondre' },
   CADRAGE_INCOMPLETE: { status: 422, title: 'Cadrage incomplet' },
+  PROGRAMME_INCOMPLETE: { status: 422, title: 'Programme incomplet' },
   AI_KEY_INVALID: { status: 422, title: 'Clé IA invalide' },
   AI_RATE_LIMITED: { status: 429, title: 'Fournisseur IA saturé' },
   AI_PROVIDER_ERROR: { status: 503, title: 'Fournisseur IA indisponible' },

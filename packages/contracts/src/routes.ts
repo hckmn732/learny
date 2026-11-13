@@ -15,6 +15,7 @@ import { homeRoutes } from './home';
 import { meRoutes } from './me';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
+import { programmeRoutes } from './programme';
 import { pushDevRoutes, pushRoutes } from './push';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
@@ -43,6 +44,7 @@ export const ROUTES = {
   ...brickRoutes,
   ...formationRoutes,
   ...cadrageRoutes,
+  ...programmeRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,
