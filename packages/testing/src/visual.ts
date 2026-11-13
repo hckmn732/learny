@@ -2,7 +2,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { expect, test, type Page, type PageScreenshotOptions } from '@playwright/test';
+import {
+  expect,
+  test,
+  type Locator,
+  type Page,
+  type PageScreenshotOptions,
+} from '@playwright/test';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 
@@ -206,7 +212,7 @@ export type BaselineOptions = Pick<PageScreenshotOptions, 'fullPage' | 'mask'> &
  * that differs always fails. Locally, a missing baseline fails (create it with --update-snapshots).
  */
 export async function expectScreenshotBaseline(
-  page: Page,
+  target: Page | Locator,
   name: string,
   options: BaselineOptions = {},
 ): Promise<void> {
@@ -217,7 +223,7 @@ export async function expectScreenshotBaseline(
     if (options.fullPage !== undefined) shot.fullPage = options.fullPage;
     if (options.mask !== undefined) shot.mask = options.mask;
     await info.attach(`baseline-candidate-${name}`, {
-      body: await page.screenshot(shot),
+      body: await target.screenshot(shot),
       contentType: 'image/png',
     });
     info.annotations.push({
@@ -226,7 +232,7 @@ export async function expectScreenshotBaseline(
     });
     return;
   }
-  await expect(page).toHaveScreenshot(name, {
+  await expect(target).toHaveScreenshot(name, {
     maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,
     ...options,
   });

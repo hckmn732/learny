@@ -414,23 +414,31 @@ test('Coquille : menu latéral mobile @SPEC-304 @visual @mobile', async ({
   await expect
     .poll(async () => page.evaluate(() => document.body.style.overflow))
     .toBe('hidden');
-  // CI runners fall back to their own fonts until the self-hosted ones are ready; the drawer
-  // layout shifts by a few pixels with the fallback metrics.
+  // The drawer can still be sliding when the scroll lock is set: wait until two consecutive frames
+  // report the same box, then for the self-hosted fonts (CI fallbacks shift the text metrics).
+  await page.waitForFunction(() => {
+    const element = document.querySelector('[data-testid="sidebar"]');
+    if (element === null) return false;
+    const key = JSON.stringify(element.getBoundingClientRect());
+    const store = window as unknown as { __learnySidebarBox?: string };
+    if (store.__learnySidebarBox === key) return true;
+    store.__learnySidebarBox = key;
+    return false;
+  });
   await page.evaluate(async () => {
     await document.fonts.ready;
+    // Removing the page scrollbar reflows the content behind the fixed drawer: let two frames pass
+    // so the capture never lands between the scroll lock and that reflow.
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      });
+    });
   });
-  console.log('[304-debug]', JSON.stringify(await page.evaluate(() => {
-    const el = document.querySelector('[data-testid="sidebar"]');
-    const r = el?.getBoundingClientRect();
-    const cs = el === null ? null : getComputedStyle(el);
-    return {
-      rect: r === undefined ? null : [r.x, r.y, r.width, r.height],
-      scroll: el === null ? null : [el.scrollTop, el.scrollWidth, el.clientWidth, el.scrollHeight, el.clientHeight],
-      transform: cs?.transform,
-      font: getComputedStyle(document.body).fontFamily,
-      inter: document.fonts.check('16px Inter'),
-    };
-  })));
-  await expectScreenshotBaseline(page, 'spec-304-menu-mobile.png', { fullPage: false });
+  // The drawer is fixed: capturing the element keeps the page behind (whose scrollbar disappears
+  // when the drawer opens) out of the baseline.
+  await expectScreenshotBaseline(page.getByTestId('sidebar'), 'spec-304-menu-mobile.png');
   await axeCheck();
 });
