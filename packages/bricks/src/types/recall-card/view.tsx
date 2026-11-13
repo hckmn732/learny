@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, type KeyboardEvent } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { cn } from '@learny/ui';
 
@@ -41,30 +41,37 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
     onChange({ selfGrade: next });
   }
 
-  function onKeyDown(event: KeyboardEvent<HTMLElement>) {
+  useEffect(() => {
     if (locked) return;
-    if (event.key === ' ' || event.key === 'Enter') {
-      if (!showBack) {
-        event.preventDefault();
-        flip();
+    function onKeyDown(event: globalThis.KeyboardEvent) {
+      const target = event.target;
+      if (target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) {
+        return;
       }
-      return;
+      if (event.key === ' ' || event.key === 'Enter') {
+        if (!flipped) {
+          event.preventDefault();
+          setFlipped(true);
+        }
+        return;
+      }
+      const next = GRADE_KEYS[event.key];
+      if (next && (flipped || selected !== undefined)) {
+        event.preventDefault();
+        grade(next);
+      }
     }
-    const next = GRADE_KEYS[event.key];
-    if (next && showBack) {
-      event.preventDefault();
-      grade(next);
-    }
-  }
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  });
 
   return (
-    // Space/Enter flip and the 1-4 shortcuts are scoped to the card (EF-8).
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
       aria-labelledby={titleId}
       className="flex flex-col gap-18"
       data-testid="brick-recall_card"
-      onKeyDown={onKeyDown}
     >
       <h2 className="sr-only" id={titleId}>
         {t.type('recall_card')}

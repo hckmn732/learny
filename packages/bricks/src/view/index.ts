@@ -12,10 +12,24 @@ export { MarkdownContent } from './markdown';
 export { QuestionHeader } from './question-header';
 export { brickViews } from './registry';
 export type { BrickView } from './registry';
+export { CategorizationView } from '../types/categorization/view';
+export { ChoiceQuestionView } from '../types/choice-question/view';
+export { ClozeView } from '../types/cloze/view';
+export { InstructionView } from '../types/instruction/view';
+export { MatchingView } from '../types/matching/view';
+export { OpenQuestionView } from '../types/open-question/view';
+export { OrderingView } from '../types/ordering/view';
+export { RecallCardView } from '../types/recall-card/view';
+export { ResourceExcerptView } from '../types/resource-excerpt/view';
+export { ScoringView } from '../types/scoring/view';
+export { ScriptedDialogueView } from '../types/scripted-dialogue/view';
+export { TextView } from '../types/text/view';
+export { TimerView } from '../types/timer/view';
 export type {
   BrickResponse,
   BrickResponseMap,
   BrickVariant,
+  BrickViewBrick,
   BrickViewProps,
   BrickViewStatus,
   CategorizationResponse,

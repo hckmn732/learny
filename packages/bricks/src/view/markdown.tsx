@@ -22,11 +22,8 @@ const COMPONENTS: Components = {
       {children}
     </ol>
   ),
-  li: ({ children, ...props }) => (
-    <li
-      className="relative pl-18 text-17 leading-1.7 before:absolute before:top-11 before:left-0 before:size-8 before:rounded-2 before:bg-ink before:content-['']"
-      {...props}
-    >
+  li: ({ children }) => (
+    <li className="relative pl-18 text-17 leading-1.7 before:absolute before:top-11 before:left-0 before:size-8 before:rounded-2 before:bg-ink before:content-['']">
       {children}
     </li>
   ),

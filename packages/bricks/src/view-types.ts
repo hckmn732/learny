@@ -83,29 +83,29 @@ export interface BrickViewProps<T extends BrickType> {
   brick: BrickViewBrick<T>;
   variant: BrickVariant;
   value: BrickResponse<T> | null;
-  onChange?: (value: BrickResponse<T>) => void;
+  onChange?: ((value: BrickResponse<T>) => void) | undefined;
   status: BrickViewStatus;
-  correction?: CorrectionView<T>;
-  onExcerptOpen?: (ref: ExcerptOpenRef) => void;
-  labelledBy?: string;
+  correction?: CorrectionView<T> | undefined;
+  onExcerptOpen?: ((ref: ExcerptOpenRef) => void) | undefined;
+  labelledBy?: string | undefined;
   /** Screen-level labels override (ET-1). */
-  labels?: BrickViewLabelsOverride;
+  labels?: BrickViewLabelsOverride | undefined;
   /** Verification requested by an internal game button (CL-4). */
-  onCheck?: () => void;
+  onCheck?: (() => void) | undefined;
   /** Internal “Recommencer” of the game variants (EF-5). */
-  onReset?: () => void;
+  onReset?: (() => void) | undefined;
   /** Due labels of the four self-assessment buttons (EF-8), supplied by the screen. */
-  dueLabels?: Partial<Record<SelfGrade, string>>;
+  dueLabels?: Partial<Record<SelfGrade, string>> | undefined;
   /** Hints revealed by the screen (EF-10); the public payload only carries their count. */
-  hints?: readonly string[];
-  hintsUsed?: number;
-  onHintRequest?: () => void;
+  hints?: readonly string[] | undefined;
+  hintsUsed?: number | undefined;
+  onHintRequest?: (() => void) | undefined;
   /** File production callback (EF-10); the view never uploads by itself. */
-  onFileSelect?: (file: File | null) => void;
+  onFileSelect?: ((file: File | null) => void) | undefined;
   /** Resources still available; a missing id renders « Source supprimée » (EF-12). */
-  availableResourceIds?: readonly string[];
+  availableResourceIds?: readonly string[] | undefined;
   /** Deterministic “now” for the timer; omitted in the browser, the injected clock ticks. */
-  now?: Date;
+  now?: Date | undefined;
   /** Timer start instant; optional for the exam screen (EF-13). */
-  startedAt?: Date | string;
+  startedAt?: Date | string | undefined;
 }
