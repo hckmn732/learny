@@ -4754,6 +4754,638 @@
         "summary": "Désinscription en un clic (RFC 8058) : coupe les e-mails de service ; page HTML de confirmation, ou JSON avec Accept: application/json."
       }
     },
+    "/api/v1/exercises/{aid}/draft": {
+      "put": {
+        "operationId": "exercises.saveDraft",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "submission": {
+                    "oneOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "text",
+                            "type": "string"
+                          },
+                          "text": {
+                            "maxLength": 10000,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "text"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "file",
+                            "type": "string"
+                          },
+                          "resourceId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "resourceId"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "link",
+                            "type": "string"
+                          },
+                          "url": {
+                            "format": "uri",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "url"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "fields": {
+                            "additionalProperties": {
+                              "maxLength": 2000,
+                              "type": "string"
+                            },
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "kind": {
+                            "const": "table",
+                            "type": "string"
+                          },
+                          "rows": {
+                            "items": {
+                              "additionalProperties": {
+                                "maxLength": 2000,
+                                "type": "string"
+                              },
+                              "propertyNames": {
+                                "type": "string"
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "fields",
+                          "rows"
+                        ],
+                        "type": "object"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "submission"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attemptId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "savedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "attemptId",
+                    "savedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Enregistre le brouillon d’une production sans correction ni appel au tuteur (SPEC-613)."
+      }
+    },
+    "/api/v1/exercises/{aid}/submissions": {
+      "post": {
+        "operationId": "exercises.submit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "submission": {
+                    "oneOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "text",
+                            "type": "string"
+                          },
+                          "text": {
+                            "maxLength": 10000,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "text"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "file",
+                            "type": "string"
+                          },
+                          "resourceId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "resourceId"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "const": "link",
+                            "type": "string"
+                          },
+                          "url": {
+                            "format": "uri",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "url"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "explanation": {
+                            "maxLength": 2000,
+                            "type": "string"
+                          },
+                          "fields": {
+                            "additionalProperties": {
+                              "maxLength": 2000,
+                              "type": "string"
+                            },
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "kind": {
+                            "const": "table",
+                            "type": "string"
+                          },
+                          "rows": {
+                            "items": {
+                              "additionalProperties": {
+                                "maxLength": 2000,
+                                "type": "string"
+                              },
+                              "propertyNames": {
+                                "type": "string"
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "fields",
+                          "rows"
+                        ],
+                        "type": "object"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "submission"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attemptId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "correction": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "criteria": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "comment": {
+                                "maxLength": 1000,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "earned": {
+                                "maximum": 10,
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "key": {
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "label": {
+                                "maxLength": 120,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "ok": {
+                                "type": "boolean"
+                              },
+                              "points": {
+                                "maximum": 10,
+                                "minimum": 0,
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "label",
+                              "points",
+                              "earned",
+                              "ok",
+                              "comment"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 8,
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "maxScore": {
+                          "maximum": 10,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "nextStep": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "href": {
+                              "maxLength": 2048,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "label": {
+                              "maxLength": 300,
+                              "minLength": 1,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "label",
+                            "href"
+                          ],
+                          "type": "object"
+                        },
+                        "score": {
+                          "maximum": 10,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "summary": {
+                          "maxLength": 4000,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "verdict": {
+                          "enum": [
+                            "passed",
+                            "retry"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "score",
+                        "maxScore",
+                        "verdict",
+                        "criteria",
+                        "summary",
+                        "nextStep"
+                      ],
+                      "type": "object"
+                    },
+                    "masteryAfter": {
+                      "maximum": 100,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "masteryBefore": {
+                      "maximum": 100,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "status": {
+                      "const": "graded",
+                      "type": "string"
+                    },
+                    "submittedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "attemptId",
+                    "status",
+                    "correction",
+                    "masteryBefore",
+                    "masteryAfter",
+                    "submittedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Valide la production, applique les contrôles automatiques puis rend la correction du tuteur par critère (SPEC-613)."
+      }
+    },
     "/api/v1/formations/{fid}/gaps": {
       "get": {
         "operationId": "gaps.list",
@@ -5148,6 +5780,991 @@
           }
         ],
         "summary": "Lacunes ouvertes d’une formation avec statistiques, compteurs par nature, cartes et prochaine révision (SPEC-615)."
+      }
+    },
+    "/api/v1/formations/{fid}/modules/{mid}/exercises/{aid}": {
+      "get": {
+        "operationId": "exercises.detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attempt": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "attemptId": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "correction": {
+                              "anyOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "criteria": {
+                                      "items": {
+                                        "additionalProperties": false,
+                                        "properties": {
+                                          "comment": {
+                                            "maxLength": 1000,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "earned": {
+                                            "maximum": 10,
+                                            "minimum": 0,
+                                            "type": "integer"
+                                          },
+                                          "key": {
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "label": {
+                                            "maxLength": 120,
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "ok": {
+                                            "type": "boolean"
+                                          },
+                                          "points": {
+                                            "maximum": 10,
+                                            "minimum": 0,
+                                            "type": "integer"
+                                          }
+                                        },
+                                        "required": [
+                                          "key",
+                                          "label",
+                                          "points",
+                                          "earned",
+                                          "ok",
+                                          "comment"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "maxItems": 8,
+                                      "minItems": 1,
+                                      "type": "array"
+                                    },
+                                    "maxScore": {
+                                      "maximum": 10,
+                                      "minimum": 0,
+                                      "type": "integer"
+                                    },
+                                    "nextStep": {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "href": {
+                                          "maxLength": 2048,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "label": {
+                                          "maxLength": 300,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "label",
+                                        "href"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    "score": {
+                                      "maximum": 10,
+                                      "minimum": 0,
+                                      "type": "integer"
+                                    },
+                                    "summary": {
+                                      "maxLength": 4000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "verdict": {
+                                      "enum": [
+                                        "passed",
+                                        "retry"
+                                      ],
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "score",
+                                    "maxScore",
+                                    "verdict",
+                                    "criteria",
+                                    "summary",
+                                    "nextStep"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "durationMs": {
+                              "anyOf": [
+                                {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "hintsUsed": {
+                              "maximum": 2,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "masteryAfter": {
+                              "anyOf": [
+                                {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "number"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "masteryBefore": {
+                              "maximum": 100,
+                              "minimum": 0,
+                              "type": "number"
+                            },
+                            "maxScore": {
+                              "maximum": 10,
+                              "minimum": 0,
+                              "type": "integer"
+                            },
+                            "startedAt": {
+                              "format": "date-time",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                              "type": "string"
+                            },
+                            "status": {
+                              "enum": [
+                                "in_progress",
+                                "graded"
+                              ],
+                              "type": "string"
+                            },
+                            "submission": {
+                              "anyOf": [
+                                {
+                                  "oneOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "explanation": {
+                                          "maxLength": 2000,
+                                          "type": "string"
+                                        },
+                                        "kind": {
+                                          "const": "text",
+                                          "type": "string"
+                                        },
+                                        "text": {
+                                          "maxLength": 10000,
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "text"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "explanation": {
+                                          "maxLength": 2000,
+                                          "type": "string"
+                                        },
+                                        "kind": {
+                                          "const": "file",
+                                          "type": "string"
+                                        },
+                                        "resourceId": {
+                                          "format": "uuid",
+                                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "resourceId"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "explanation": {
+                                          "maxLength": 2000,
+                                          "type": "string"
+                                        },
+                                        "kind": {
+                                          "const": "link",
+                                          "type": "string"
+                                        },
+                                        "url": {
+                                          "format": "uri",
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "url"
+                                      ],
+                                      "type": "object"
+                                    },
+                                    {
+                                      "additionalProperties": false,
+                                      "properties": {
+                                        "explanation": {
+                                          "maxLength": 2000,
+                                          "type": "string"
+                                        },
+                                        "fields": {
+                                          "additionalProperties": {
+                                            "maxLength": 2000,
+                                            "type": "string"
+                                          },
+                                          "propertyNames": {
+                                            "type": "string"
+                                          },
+                                          "type": "object"
+                                        },
+                                        "kind": {
+                                          "const": "table",
+                                          "type": "string"
+                                        },
+                                        "rows": {
+                                          "items": {
+                                            "additionalProperties": {
+                                              "maxLength": 2000,
+                                              "type": "string"
+                                            },
+                                            "propertyNames": {
+                                              "type": "string"
+                                            },
+                                            "type": "object"
+                                          },
+                                          "type": "array"
+                                        }
+                                      },
+                                      "required": [
+                                        "kind",
+                                        "fields",
+                                        "rows"
+                                      ],
+                                      "type": "object"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "submittedAt": {
+                              "anyOf": [
+                                {
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "attemptId",
+                            "status",
+                            "hintsUsed",
+                            "maxScore",
+                            "submission",
+                            "correction",
+                            "masteryBefore",
+                            "masteryAfter",
+                            "startedAt",
+                            "submittedAt",
+                            "durationMs"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "exerciseId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationTitle": {
+                      "maxLength": 160,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "gapNature": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "forgetting",
+                            "confusion",
+                            "misunderstanding",
+                            "application"
+                          ],
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "hintsLeft": {
+                      "maximum": 2,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "hintsUsed": {
+                      "maximum": 2,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "instruction": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "criteria": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "description": {
+                                "maxLength": 400,
+                                "minLength": 2,
+                                "type": "string"
+                              },
+                              "key": {
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "label": {
+                                "maxLength": 120,
+                                "minLength": 2,
+                                "type": "string"
+                              },
+                              "points": {
+                                "maximum": 10,
+                                "minimum": 1,
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "label",
+                              "points",
+                              "description"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 8,
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "data": {
+                          "default": [],
+                          "items": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "maxItems": 8,
+                          "type": "array"
+                        },
+                        "deliverable": {
+                          "maxLength": 300,
+                          "minLength": 3,
+                          "type": "string"
+                        },
+                        "estimatedMinutes": {
+                          "maximum": 120,
+                          "minimum": 5,
+                          "type": "integer"
+                        },
+                        "explanationPrompt": {
+                          "anyOf": [
+                            {
+                              "maxLength": 300,
+                              "minLength": 3,
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "hints": {
+                          "default": [],
+                          "items": {
+                            "maxLength": 400,
+                            "minLength": 5,
+                            "type": "string"
+                          },
+                          "maxItems": 2,
+                          "type": "array"
+                        },
+                        "passPoints": {
+                          "default": 8,
+                          "maximum": 10,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "production": {
+                          "oneOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "kind": {
+                                  "const": "text",
+                                  "type": "string"
+                                },
+                                "maxChars": {
+                                  "maximum": 10000,
+                                  "minimum": 50,
+                                  "type": "integer"
+                                },
+                                "minChars": {
+                                  "default": 0,
+                                  "maximum": 2000,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "minChars",
+                                "maxChars"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "accept": {
+                                  "items": {
+                                    "enum": [
+                                      "application/pdf",
+                                      "image/png",
+                                      "image/jpeg",
+                                      "image/webp",
+                                      "text/plain",
+                                      "text/markdown"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "maxItems": 6,
+                                  "minItems": 1,
+                                  "type": "array"
+                                },
+                                "kind": {
+                                  "const": "file",
+                                  "type": "string"
+                                },
+                                "maxSizeMb": {
+                                  "maximum": 50,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "accept",
+                                "maxSizeMb"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "kind": {
+                                  "const": "link",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "kind"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "checks": {
+                                  "default": [],
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "groupColumn": {
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "left": {
+                                        "items": {
+                                          "maxLength": 80,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "maxItems": 10,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "leftLabel": {
+                                        "maxLength": 20,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "numberColumn": {
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "right": {
+                                        "items": {
+                                          "maxLength": 80,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "maxItems": 10,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "rightLabel": {
+                                        "maxLength": 20,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "sideColumnLabel": {
+                                        "maxLength": 20,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "const": "sum_equal",
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "type",
+                                      "numberColumn",
+                                      "groupColumn",
+                                      "left",
+                                      "right"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "maxItems": 3,
+                                  "type": "array"
+                                },
+                                "columns": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "key": {
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "label": {
+                                        "maxLength": 60,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "options": {
+                                        "items": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "label": {
+                                              "maxLength": 80,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "maxLength": 40,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "value",
+                                            "label"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "maxItems": 20,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          "text",
+                                          "number",
+                                          "select"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "key",
+                                      "label",
+                                      "type"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "maxItems": 8,
+                                  "minItems": 1,
+                                  "type": "array"
+                                },
+                                "fields": {
+                                  "default": [],
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "key": {
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "label": {
+                                        "maxLength": 60,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "options": {
+                                        "items": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "label": {
+                                              "maxLength": 80,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "maxLength": 40,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "value",
+                                            "label"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "maxItems": 20,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "type": {
+                                        "enum": [
+                                          "text",
+                                          "number",
+                                          "select"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "key",
+                                      "label",
+                                      "type"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "maxItems": 4,
+                                  "type": "array"
+                                },
+                                "initialRows": {
+                                  "maximum": 50,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                "kind": {
+                                  "const": "table",
+                                  "type": "string"
+                                },
+                                "maxRows": {
+                                  "maximum": 50,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                "minRows": {
+                                  "maximum": 20,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "kind",
+                                "fields",
+                                "columns",
+                                "minRows",
+                                "maxRows",
+                                "initialRows",
+                                "checks"
+                              ],
+                              "type": "object"
+                            }
+                          ]
+                        },
+                        "sources": {
+                          "default": [],
+                          "items": {
+                            "additionalProperties": {},
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "maxItems": 20,
+                          "type": "array"
+                        },
+                        "taskMd": {
+                          "maxLength": 4000,
+                          "minLength": 10,
+                          "type": "string"
+                        },
+                        "title": {
+                          "maxLength": 120,
+                          "minLength": 3,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "taskMd",
+                        "data",
+                        "deliverable",
+                        "production",
+                        "explanationPrompt",
+                        "hints",
+                        "criteria",
+                        "estimatedMinutes",
+                        "passPoints",
+                        "sources"
+                      ],
+                      "type": "object"
+                    },
+                    "mastery": {
+                      "maximum": 100,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "masteryThreshold": {
+                      "maximum": 95,
+                      "minimum": 60,
+                      "type": "integer"
+                    },
+                    "maxScore": {
+                      "maximum": 10,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "moduleId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "modulePosition": {
+                      "maximum": 9007199254740991,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "moduleTitle": {
+                      "maxLength": 160,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "notionId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "notionLabel": {
+                      "maxLength": 120,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "revealedHints": {
+                      "items": {
+                        "maxLength": 400,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 2,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "exerciseId",
+                    "formationId",
+                    "formationTitle",
+                    "moduleId",
+                    "moduleTitle",
+                    "modulePosition",
+                    "notionId",
+                    "notionLabel",
+                    "instruction",
+                    "attempt",
+                    "mastery",
+                    "masteryThreshold",
+                    "hintsUsed",
+                    "hintsLeft",
+                    "maxScore",
+                    "revealedHints",
+                    "gapNature"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Renvoie l’exercice pratique, sa dernière tentative, les indices révélés et la maîtrise (SPEC-613)."
       }
     },
     "/api/v1/health": {
@@ -7774,6 +9391,350 @@
           }
         ],
         "summary": "Mémorise le masquage du menu ou la formation courante de l’utilisateur connecté, puis renvoie le menu à jour (SPEC-304)."
+      }
+    },
+    "/api/v1/modules/{mid}/exercises/{aid}/attempts": {
+      "post": {
+        "operationId": "exercises.start",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {},
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attemptId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "hintsUsed": {
+                      "maximum": 2,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "maxScore": {
+                      "maximum": 10,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "status": {
+                      "enum": [
+                        "in_progress",
+                        "graded"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "attemptId",
+                    "status",
+                    "hintsUsed",
+                    "maxScore"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Démarre ou reprend l’unique tentative en cours d’un exercice (SPEC-613)."
+      }
+    },
+    "/api/v1/modules/{mid}/exercises/{aid}/hint": {
+      "post": {
+        "operationId": "exercises.hint",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "aid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "mid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {},
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "attemptId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "hintIndex": {
+                      "maximum": 2,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "hintText": {
+                      "maxLength": 400,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "hintsLeft": {
+                      "maximum": 2,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "hintsUsed": {
+                      "maximum": 2,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "maxScore": {
+                      "maximum": 10,
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "attemptId",
+                    "hintIndex",
+                    "hintText",
+                    "hintsUsed",
+                    "hintsLeft",
+                    "maxScore"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Révèle le prochain indice d’un exercice, plafonné à deux (SPEC-613)."
       }
     },
     "/api/v1/notifications": {
