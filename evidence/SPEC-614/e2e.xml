@@ -1,0 +1,102 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="42.966440999999996">
+<testsuite name="p6/mock-exam.spec.ts" timestamp="2026-11-13T18:17:19.584Z" hostname="desktop" tests="4" failures="0" skipped="1" time="8.545" errors="0">
+<testcase name="examen blanc sans aide @SPEC-614" classname="p6/mock-exam.spec.ts" time="4.117">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/introduction-beaf38a8d1d4647da6b77e36432c118c44dbf837.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/epreuve-7947343e79ee990b9f792af0104c3a510c3730d0.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/resultat-b8941d065cdadfe31456fbfbbca8ed8a648db420.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/attachments/axe-1d73e17b5a6c8de384c1b75965b49066c4c394a4.json]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-examen-blanc-sans-aide-SPEC-614-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="expiration et revue @SPEC-614" classname="p6/mock-exam.spec.ts" time="1.541">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/resultat-expire-a18c9a806b92fd6bfcd7aebe402e73d376c1a799.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/revue-erreurs-5466e47dcc6b39f8f7b4ccc8adf15531b82d0ca4.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/attachments/axe-d06687fac398333a2fb657f9a8253a17fe7150a5.json]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-expiration-et-revue-SPEC-614-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-614 @SPEC-614 @visual" classname="p6/mock-exam.spec.ts" time="2.676">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-introduction-side-by-side-e0a8cecd2848b5e5ab27792429cffb76942c7d33.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-introduction-diff-bdd2390be29f6564d09177724f8f5ded5868a57a.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-introduction-7458786471939542c1e77891fdb47f8af931d909.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-epreuve-side-by-side-fe998e49962be15f22dbd75a49ba6608071ba2a0.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/comparaison-epreuve-diff-cecf4ac51c3be32caa03994d539322c4764f28a2.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-epreuve-2b13621fb46d7084ecfca0129d124a9694c7a521.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/conformite-resultat-eea82baaf0d93ace344c6ea005a111652c9f2c77.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/attachments/axe-6be962d3c59676f265d0d8b5ce71cb1d674f2408.json]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SPEC-614-SPEC-614-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-614 mobile @SPEC-614 @visual @mobile" classname="p6/mock-exam.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/mock-exam.spec.ts" timestamp="2026-11-13T18:17:19.584Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.683" errors="0">
+<testcase name="conformité SPEC-614 mobile @SPEC-614 @visual @mobile" classname="p6/mock-exam.spec.ts" time="1.683">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/conformite-introduction-mobile-b7210ef6cc7e2f9c287141bd2cc411e4c355b639.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/conformite-epreuve-mobile-9eac4a3bdf93354133f16ab339ba5d56d3b62582.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/attachments/axe-9b0997a12db37a53e406411b10f0f2490dfc8728.json]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-mock-exam-conformité-SP-6423a-bile-SPEC-614-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
