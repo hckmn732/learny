@@ -39,6 +39,15 @@ import { fr } from '../../messages/fr';
 
 const t = fr.shell.sidebar;
 
+/** ADR-0162 — accent of the sigil, shared by the switcher and the current-formation card. */
+const FORMATION_ACCENT_CLASS = {
+  indigo: 'bg-indigo-soft text-indigo-ink',
+  green: 'bg-green-soft text-green-ink-alt',
+  orange: 'bg-orange-soft text-orange-ink-strong',
+  violet: 'bg-violet-soft text-violet-ink',
+  teal: 'bg-green-soft text-green-ink',
+} as const;
+
 export const SIDEBAR_COLLAPSED_STORAGE_KEY = 'learny.sidebar.collapsed';
 const SIDEBAR_QUERY_KEY = ['sidebar'] as const;
 const SHELL_BREAKPOINT_QUERY = '(max-width: 899px)';
@@ -150,7 +159,10 @@ const FormationSwitcher = ({
         >
           <span
             aria-hidden="true"
-            className="flex size-28 shrink-0 items-center justify-center rounded-8 bg-indigo-soft font-display text-11 font-700 text-indigo-ink"
+            className={cn(
+              'flex size-28 shrink-0 items-center justify-center rounded-8 font-display text-11 font-700',
+              FORMATION_ACCENT_CLASS[formation.accent],
+            )}
           >
             {formation.monogram}
           </span>
@@ -421,7 +433,10 @@ export const SidebarView = ({
                   >
                     <span
                       aria-hidden="true"
-                      className="flex size-34 shrink-0 items-center justify-center rounded-10 bg-indigo-soft font-display text-12 font-700 text-indigo-ink"
+                      className={cn(
+                        'flex size-34 shrink-0 items-center justify-center rounded-10 font-display text-12 font-700',
+                        FORMATION_ACCENT_CLASS[currentFormation.accent],
+                      )}
                     >
                       {currentFormation.monogram}
                     </span>

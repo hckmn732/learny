@@ -193,6 +193,12 @@ export type {
 
 // Repositories of the agenda, the automation journal, the daily activity and the milestones
 // (SPEC-108 ET-2, ET-5, EF-2, EF-4, EF-5).
+export {
+  FORMATION_MONOGRAM_MAX_LENGTH,
+  formationMonogram,
+  nextFormationAccent,
+} from './formation-monogram';
+export type { FormationAccentValue, FormationMonogramInput } from './formation-monogram';
 export * from './repositories/schedule-slots';
 export * from './repositories/automation-actions';
 export * from './repositories/daily-activity';

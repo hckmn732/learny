@@ -7,13 +7,14 @@
 // recently opened active formation is used, then the first active one. Paused formations stay in
 // the switcher but are never rendered as the current formation (ET-1).
 import {
+  FORMATION_ACCENTS,
   SidebarUpdateInput,
   type SidebarDto,
   type SidebarFormation,
   type StreakDay,
 } from '@learny/contracts';
 import { AppError, toUserZone, type Clock, type Result } from '@learny/core';
-import { sql, type DbTx } from '@learny/db';
+import { formationMonogram, sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from './context';
 import { requireUser, toResult } from './resources/result';
@@ -21,8 +22,12 @@ import { requireUser, toResult } from './resources/result';
 /** Number of regularity boxes of the sidebar (BR-GAM-02). */
 export const STREAK_REGULARITY_DAYS = 14;
 
-/** Stable visual accent until SPEC-603 adds `formations.accent_color` (ADR-0162). */
-const DEFAULT_ACCENT = 'indigo' as const;
+/** ADR-0162 — the stored accent wins, `indigo` is the defensive fallback. */
+function accentOf(value: string): SidebarFormation['accent'] {
+  return (FORMATION_ACCENTS as readonly string[]).includes(value)
+    ? (value as SidebarFormation['accent'])
+    : 'indigo';
+}
 
 interface ProfileRow {
   current_formation_id: string | null;
@@ -35,6 +40,8 @@ interface ProfileRow {
 interface FormationRow {
   id: string;
   title: string;
+  monogram: string;
+  accent_color: string;
   status: 'active' | 'paused';
   module_count: number;
   validated_count: number;
@@ -60,15 +67,8 @@ interface IdRow {
   [key: string]: unknown;
 }
 
-/** ADR-0162 fallback: two first alphanumeric characters, without accents, in capitals. */
-export function formationMonogram(title: string): string {
-  const folded = title
-    .normalize('NFKD')
-    .replace(/\p{M}/gu, '')
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, '');
-  return folded.slice(0, 2) === '' ? '?' : folded.slice(0, 2);
-}
+/** ADR-0162 fallback, re-exported for the screens that still compute a sigil. */
+export { formationMonogram } from '@learny/db';
 
 /** Civil day shifted by `delta` days without going through the process time zone. */
 export function shiftCivilDay(day: string, delta: number): string {
@@ -89,8 +89,8 @@ function toFormation(row: FormationRow): SidebarFormation {
   return {
     id: row.id,
     title: row.title,
-    monogram: formationMonogram(row.title),
-    accent: DEFAULT_ACCENT,
+    monogram: formationMonogram(row.title, row.monogram),
+    accent: accentOf(row.accent_color),
     status: row.status,
     progressPercent,
     currentModulePosition: row.open_position,
@@ -118,6 +118,8 @@ async function readFormations(tx: DbTx, userId: string): Promise<SidebarFormatio
   const rows = await tx.execute<FormationRow>(sql`
     select f.id::text as id,
            f.title,
+           f.monogram,
+           f.accent_color::text as accent_color,
            f.status::text as status,
            count(m.id)::int as module_count,
            count(m.id) filter (where m.status = 'validated')::int as validated_count,
@@ -126,7 +128,7 @@ async function readFormations(tx: DbTx, userId: string): Promise<SidebarFormatio
     left join public.modules m on m.formation_id = f.id
     where f.owner_id = ${userId}::uuid
       and f.status in ('active', 'paused')
-    group by f.id, f.title, f.status, f.last_opened_at, f.created_at
+    group by f.id, f.title, f.monogram, f.accent_color, f.status, f.last_opened_at, f.created_at
     order by f.last_opened_at desc nulls last, f.created_at desc
   `);
   return rows.map(toFormation);
