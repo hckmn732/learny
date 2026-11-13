@@ -36,8 +36,11 @@ export const ACCOUNT_RULES = {
   accountDeletionDays: 30,
 } as const;
 
-/** Versions of the legal documents accepted at sign-up (SPEC-202 ET-4; SPEC-806 makes them evolve). */
+/** Versions of the legal documents accepted at sign-up (SPEC-202 ET-4; SPEC-601 ET-5; SPEC-806 makes them evolve). */
 export const LEGAL_VERSIONS = { cgu: '2026-11-11', privacy: '2026-11-11' } as const;
+
+/** Version sent with a sign-up and stored in `profiles.terms_version` (SPEC-601 ET-5). */
+export const LEGAL_DOCUMENTS_VERSION = LEGAL_VERSIONS.cgu;
 
 /** BR-APP-* — contributions (documents, pages, videos, images, notes). */
 export const RESOURCE_RULES = {
