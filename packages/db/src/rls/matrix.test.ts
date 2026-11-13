@@ -72,7 +72,7 @@ function byTable(): Map<string, RlsTableMatrix> {
 describe('[SPEC-113] RLS inventory', () => {
   it('CA-1 — every table created by SPEC-102–112 has exactly one scenario', () => {
     const tables = declaredTables();
-    expect(tables.length).toBe(55);
+    expect(tables.length).toBe(56);
     expect(RLS_MATRIX).toHaveLength(tables.length);
     expect([...byTable().keys()].sort()).toEqual(tables);
 
@@ -93,7 +93,7 @@ describe('[SPEC-113] RLS inventory', () => {
   it('CA-1 — categories and role expectations are exhaustive and coherent', () => {
     expect(categoryCounts()).toEqual([
       { category: 'shared-programme', count: 7 },
-      { category: 'personal', count: 42 },
+      { category: 'personal', count: 43 },
       { category: 'service', count: 6 },
     ]);
 
