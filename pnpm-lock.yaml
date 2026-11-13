@@ -131,6 +131,9 @@ importers:
       '@learny/services':
         specifier: workspace:*
         version: link:../../packages/services
+      '@learny/tutor':
+        specifier: workspace:*
+        version: link:../../packages/tutor
       '@learny/ui':
         specifier: workspace:*
         version: link:../../packages/ui
