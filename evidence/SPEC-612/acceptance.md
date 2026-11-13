@@ -1,0 +1,12 @@
+# SPEC-612 — critères d'acceptation
+
+Preuves produites par `node tools/sdd/validate.mjs SPEC-612` (horloge figée, `LLM_MODE=mock`).
+
+- ✅ CA-1 — Preuve : `packages/services/src/quiz/result.test.ts` (points manquants, singulier/pluriel, statuts) ; `apps/web/components/quiz-result/ScoreCard.test.tsx` et `AttemptHistory.test.tsx` (textes, seuil, barres) ; e2e `échec, lacunes puis remédiation @SPEC-612` (72 %, « Pas encore validé », « Encore 8 points pour valider. », « trait : seuil 80 % », bouton désactivé et date de disponibilité) ; capture `screenshots/result-fail.png`.
+- ✅ CA-2 — Preuve : `packages/services/test/integration/quiz-result.test.ts` « la garde refuse avant 24 h puis autorise au délai, puis le déblocage est idempotent » : module validé, module suivant `open`, 12 notions `in_review`, un jalon, une notification, un seul événement `module/validated` après deux exécutions.
+- ✅ CA-3 — Preuve : même test d'intégration, second appel sur le dernier module : `formation/completed` émis une seule fois et `formationCompleted=true`.
+- ✅ CA-4 — Preuve : `packages/services/test/integration/quiz-result.test.ts` « la remédiation prépare trois notions… » (texte de la fixture, 2 questions par notion au plus, banque filtrée) et « un tuteur indisponible produit les textes de repli » ; e2e ouvre la remédiation préparée et vérifie ses cartes.
+- ✅ CA-5 — Preuve : `packages/services/src/quiz/retry-gate.test.ts` (délais 0/12/24/48, désactivé, obligatoire) ; intégration : 422 `RETRY_NOT_YET_ALLOWED` avec `availableAt`, 201 après avance d'horloge, pas de remédiation automatique si l'automatisme est désactivé.
+- ✅ CA-6 — Preuve : `packages/services/test/integration/quiz-result.test.ts` « la remédiation prépare trois notions, se termine et alimente la révision » : `review_logs` avec `source='validation'` et statut `completed` après vérification de toutes les questions.
+- ✅ CA-7 — Preuve : `apps/web/components/quiz-result/gap-proposals.test.ts` et `packages/services/src/quiz/result.test.ts` (propositions par nature) ; intégration vérifie les liens `trainHref` ; e2e vérifie « S'entraîner » et la proposition de la carte de lacune.
+- ✅ CA-8 — Preuve : e2e `résultat échec conforme @SPEC-612 @visual` : jetons (`result-score`, `result-status`), police Inter, capture `screenshots/result-pass.png`, `axeCheck` sans violation serious/critical ; comparaisons de maquette dans `visual/` selon la disponibilité des références SCR-09 générées.

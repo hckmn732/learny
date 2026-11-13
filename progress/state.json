@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T17:06:38.609Z",
+  "updatedAt": "2026-11-13T18:24:55.485Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4293,8 +4293,49 @@
       "completedAt": null,
       "branch": "spec/SPEC-612-resultat-lacunes-remediation-et-deblocag",
       "commit": null,
-      "lastError": null,
-      "validations": {}
+      "lastError": "lint:  | e2e: 0 réussi(s), 0 échec(s), 0 vidéo(s) | visual: 0 test(s) @visual réussi(s) (mode mockup) | acceptance: 0/8 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7, CA-8 ; 1 ❌",
+      "validations": {
+        "lint": {
+          "status": "failed",
+          "at": "2026-11-13T18:22:17.240Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T18:23:02.218Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T18:23:27.590Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T18:23:40.730Z",
+          "details": "14 test(s) [SPEC-612] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T18:24:51.984Z",
+          "details": "7 test(s) [SPEC-612] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "failed",
+          "at": "2026-11-13T18:24:55.465Z",
+          "details": "0 réussi(s), 0 échec(s), 0 vidéo(s)"
+        },
+        "visual": {
+          "status": "failed",
+          "at": "2026-11-13T18:24:55.465Z",
+          "details": "0 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "failed",
+          "at": "2026-11-13T18:24:55.481Z",
+          "details": "0/8 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7, CA-8 ; 1 ❌"
+        }
+      }
     },
     "SPEC-613": {
       "status": "done",
