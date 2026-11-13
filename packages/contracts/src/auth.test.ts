@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import { MagicLinkInput, ResendInput, SignInInput, SignUpInput } from './auth';
+import {
+  accountFormSchema,
+  loginAccountFormSchema,
+  MagicLinkInput,
+  ResendInput,
+  SignInInput,
+  SignUpInput,
+} from './auth';
 
 const email = 'Alex.Perrin@Example.com';
 // Run-time values: no credential literal in the repository.
@@ -60,5 +67,43 @@ describe('[SPEC-202] contrats', () => {
     expect(ResendInput.safeParse({ email, kind: 'signup' }).success).toBe(true);
     expect(ResendInput.safeParse({ email, kind: 'magic_link' }).success).toBe(true);
     expect(ResendInput.safeParse({ email, kind: 'recovery' }).success).toBe(false);
+  });
+});
+
+describe('[SPEC-601] formulaires de compte', () => {
+  it('oriente les messages d’erreur par méthode (ET-2, EF-6)', () => {
+    const base = { email, method: 'magic' as const, termsAccepted: true as const };
+    expect(
+      accountFormSchema.safeParse({ ...base, email: 'invalide' }).error?.issues[0]?.message,
+    ).toBe('Saisissez une adresse e-mail valide.');
+    expect(
+      accountFormSchema.safeParse({
+        email,
+        method: 'password',
+        password: 'x'.repeat(11),
+        termsAccepted: true,
+      }).error?.issues[0]?.message,
+    ).toBe('Le mot de passe doit faire 12 caractères au moins.');
+    expect(
+      accountFormSchema.safeParse({ email, method: 'magic', termsAccepted: false }).error?.issues[0]
+        ?.message,
+    ).toBe('Acceptez les conditions pour créer votre compte.');
+  });
+
+  it('ne demande ni conditions ni mot de passe long en connexion par lien (EF-4)', () => {
+    expect(loginAccountFormSchema.safeParse({ email, method: 'magic' }).success).toBe(true);
+    expect(
+      loginAccountFormSchema.safeParse({ email, method: 'password', password: '' }).success,
+    ).toBe(false);
+    expect(
+      loginAccountFormSchema.safeParse({ email, method: 'password', password: 'x' }).success,
+    ).toBe(true);
+    expect(
+      accountFormSchema.safeParse({
+        email: `  ${email.toUpperCase()} `,
+        method: 'magic',
+        termsAccepted: true,
+      }).data?.email,
+    ).toBe('ALEX.PERRIN@EXAMPLE.COM');
   });
 });

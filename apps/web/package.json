@@ -11,6 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/lint": "^21.2.4",
+    "@hookform/resolvers": "^7.0.6",
     "@learny/bricks": "workspace:*",
     "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
@@ -24,8 +27,6 @@
     "@learny/services": "workspace:*",
     "@learny/tutor": "workspace:*",
     "@learny/ui": "workspace:*",
-    "@commitlint/config-conventional": "^21.2.4",
-    "@commitlint/lint": "^21.2.4",
     "@sentry/nextjs": "^11.12.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.0",
@@ -35,11 +36,13 @@
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "react-hook-form": "^7.92.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
     "@learny/testing": "workspace:*",
     "@tailwindcss/postcss": "^4.3.5",
+    "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "tailwindcss": "^4.3.5"

@@ -1,0 +1,779 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-601/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-601",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-601/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-601/test-results/sdd/SPEC-601/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-601/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-601/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/spec-601-auth.spec.ts",
+      "file": "p6/spec-601-auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "inscription par lien magique jusqu’aux premiers pas @SPEC-601",
+          "ok": true,
+          "tags": [
+            "SPEC-601"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1577,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:17.046Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "inscription-verification",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/attachments/inscription-verification-3ec4f7ce99cb96f20577344c3930466d9824a4b9.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/attachments/axe-a3c1956681594b57281f291e2017f8e554a4cdfe.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-39e01-u’aux-premiers-pas-SPEC-601-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-30c85772f81ca0954e82",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 88,
+          "column": 1
+        },
+        {
+          "title": "inscription par mot de passe et solidité @SPEC-601",
+          "ok": true,
+          "tags": [
+            "SPEC-601"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1023,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:18.773Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "inscription-mot-de-passe",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/attachments/inscription-mot-de-passe-3c13a333155463a28c873a1f6397eb6e69b60782.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/attachments/axe-c81db2a3ace31179fc591c7f2fc8dd600522b2e8.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-inscripti-0a62b--passe-et-solidité-SPEC-601-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-bfef10a49b3a81589213",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 131,
+          "column": 1
+        },
+        {
+          "title": "renvoi limité à 60 s @SPEC-601",
+          "ok": true,
+          "tags": [
+            "SPEC-601"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 963,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:19.878Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "verification-compte-a-rebours",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/attachments/verification-compte-a-rebours-21baa70a21b2579652df77761caec08cb9217a28.png"
+                    },
+                    {
+                      "name": "verification-renvoi",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/attachments/verification-renvoi-29440223cd993ad6575646839623b4b6250e84a2.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/attachments/axe-b04b3deddecf1015ce8f54b508cb966e889b35b9.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-renvoi-limité-à-60-s-SPEC-601-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-017e5cbf8873747d4fd7",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 172,
+          "column": 1
+        },
+        {
+          "title": "connexion par mot de passe, erreurs et lien expiré @SPEC-601",
+          "ok": true,
+          "tags": [
+            "SPEC-601"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1626,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:20.915Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "connexion-accueil",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/attachments/connexion-accueil-6faff09a81f9bf97f21819cffbe3ea4caf6828e5.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/attachments/axe-ebdb579b63ea3cc9cc33070560b22b1a6a96b241.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-connexion-a5a81-urs-et-lien-expiré-SPEC-601-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-ba810e3027acea418f4e",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 221,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-01 compte, connexion et vérification @SPEC-601 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-601",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3436,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:22.633Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "inscription-compte",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/inscription-compte-50fdefc4602c29d850bf397674261598af2f60b5.png"
+                    },
+                    {
+                      "name": "SCR-01-inscription-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-inscription-side-by-side-6f96c2dfae17648a8024d45909d2b729058e4a5e.png"
+                    },
+                    {
+                      "name": "SCR-01-inscription-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-inscription-diff-10bcfd5492b2b3bc0f348ff2c98b9d8fac50405f.png"
+                    },
+                    {
+                      "name": "SCR-01-inscription-ratio",
+                      "contentType": "application/json",
+                      "body": "ewogICJ3aWR0aCI6IDE0NDAsCiAgImhlaWdodCI6IDkwMCwKICAiZGlmZlBpeGVscyI6IDQyNzE5LAogICJ0b3RhbFBpeGVscyI6IDEyOTYwMDAsCiAgInJhdGlvIjogMC4wMzI5NjIxOTEzNTgwMjQ2OSwKICAic2lkZUJ5U2lkZVBhdGgiOiAiL2hvbWUva2Jlbml0by9Eb2N1bWVudHMvd29yay9sZWFybnktd3QtNjAxL3Rlc3QtcmVzdWx0cy9hcnRpZmFjdHMvcDYtc3BlYy02MDEtYXV0aC1jb25mb3JtaXQtM2Q2NjEtw6lyaWZpY2F0aW9uLVNQRUMtNjAxLXZpc3VhbC1kZXNrdG9wL3Zpc3VhbC9TQ1ItMDEtaW5zY3JpcHRpb24tc2lkZS1ieS1zaWRlLnBuZyIsCiAgImRpZmZQYXRoIjogIi9ob21lL2tiZW5pdG8vRG9jdW1lbnRzL3dvcmsvbGVhcm55LXd0LTYwMS90ZXN0LXJlc3VsdHMvYXJ0aWZhY3RzL3A2LXNwZWMtNjAxLWF1dGgtY29uZm9ybWl0LTNkNjYxLcOpcmlmaWNhdGlvbi1TUEVDLTYwMS12aXN1YWwtZGVza3RvcC92aXN1YWwvU0NSLTAxLWluc2NyaXB0aW9uLWRpZmYucG5nIgp9"
+                    },
+                    {
+                      "name": "connexion",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/connexion-5522a41c227eff8ce4728dac10dc605a3b428f41.png"
+                    },
+                    {
+                      "name": "SCR-01-connexion-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-connexion-side-by-side-fa1890b71f84f5fad05f3925ca85bb2b6941ae6d.png"
+                    },
+                    {
+                      "name": "SCR-01-connexion-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-connexion-diff-458bbd51f99559a236436048a98cf495c9ff3511.png"
+                    },
+                    {
+                      "name": "SCR-01-connexion-ratio",
+                      "contentType": "application/json",
+                      "body": "ewogICJ3aWR0aCI6IDE0NDAsCiAgImhlaWdodCI6IDkwMCwKICAiZGlmZlBpeGVscyI6IDM4NzIxLAogICJ0b3RhbFBpeGVscyI6IDEyOTYwMDAsCiAgInJhdGlvIjogMC4wMjk4NzczMTQ4MTQ4MTQ4MTUsCiAgInNpZGVCeVNpZGVQYXRoIjogIi9ob21lL2tiZW5pdG8vRG9jdW1lbnRzL3dvcmsvbGVhcm55LXd0LTYwMS90ZXN0LXJlc3VsdHMvYXJ0aWZhY3RzL3A2LXNwZWMtNjAxLWF1dGgtY29uZm9ybWl0LTNkNjYxLcOpcmlmaWNhdGlvbi1TUEVDLTYwMS12aXN1YWwtZGVza3RvcC92aXN1YWwvU0NSLTAxLWNvbm5leGlvbi1zaWRlLWJ5LXNpZGUucG5nIiwKICAiZGlmZlBhdGgiOiAiL2hvbWUva2Jlbml0by9Eb2N1bWVudHMvd29yay9sZWFybnktd3QtNjAxL3Rlc3QtcmVzdWx0cy9hcnRpZmFjdHMvcDYtc3BlYy02MDEtYXV0aC1jb25mb3JtaXQtM2Q2NjEtw6lyaWZpY2F0aW9uLVNQRUMtNjAxLXZpc3VhbC1kZXNrdG9wL3Zpc3VhbC9TQ1ItMDEtY29ubmV4aW9uLWRpZmYucG5nIgp9"
+                    },
+                    {
+                      "name": "verification",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/verification-ba76c53f558c023755d17a965d905be58efcc45f.png"
+                    },
+                    {
+                      "name": "SCR-01-verification-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-verification-side-by-side-06a6dc815b682a7608ec8c9d917949521618bfed.png"
+                    },
+                    {
+                      "name": "SCR-01-verification-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/SCR-01-verification-diff-bbabccd539910db3d3eb48cfa156f59533422808.png"
+                    },
+                    {
+                      "name": "SCR-01-verification-ratio",
+                      "contentType": "application/json",
+                      "body": "ewogICJ3aWR0aCI6IDE0NDAsCiAgImhlaWdodCI6IDkwMCwKICAiZGlmZlBpeGVscyI6IDE5MDY0LAogICJ0b3RhbFBpeGVscyI6IDEyOTYwMDAsCiAgInJhdGlvIjogMC4wMTQ3MDk4NzY1NDMyMDk4NzcsCiAgInNpZGVCeVNpZGVQYXRoIjogIi9ob21lL2tiZW5pdG8vRG9jdW1lbnRzL3dvcmsvbGVhcm55LXd0LTYwMS90ZXN0LXJlc3VsdHMvYXJ0aWZhY3RzL3A2LXNwZWMtNjAxLWF1dGgtY29uZm9ybWl0LTNkNjYxLcOpcmlmaWNhdGlvbi1TUEVDLTYwMS12aXN1YWwtZGVza3RvcC92aXN1YWwvU0NSLTAxLXZlcmlmaWNhdGlvbi1zaWRlLWJ5LXNpZGUucG5nIiwKICAiZGlmZlBhdGgiOiAiL2hvbWUva2Jlbml0by9Eb2N1bWVudHMvd29yay9sZWFybnktd3QtNjAxL3Rlc3QtcmVzdWx0cy9hcnRpZmFjdHMvcDYtc3BlYy02MDEtYXV0aC1jb25mb3JtaXQtM2Q2NjEtw6lyaWZpY2F0aW9uLVNQRUMtNjAxLXZpc3VhbC1kZXNrdG9wL3Zpc3VhbC9TQ1ItMDEtdmVyaWZpY2F0aW9uLWRpZmYucG5nIgp9"
+                    },
+                    {
+                      "name": "verification-compte-a-rebours",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/verification-compte-a-rebours-ebd66201251d4e1ecf6d2f1f6717cf8a7b16dd73.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/attachments/axe-13bfdd7106102eca372aedf2bd66903eb835e1a1.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-3d661-érification-SPEC-601-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-f667cef44e00085fd892",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 270,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-01 mobile @SPEC-601 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-601",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs/p6/spec-601-auth.spec.ts",
+                    "line": 356,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 102,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:26.187Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-601/apps/web/e2e/specs/p6/spec-601-auth.spec.ts",
+                        "line": 356,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 967,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T06:07:26.615Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "mobile-inscription",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/attachments/mobile-inscription-ed93281734950ace779187bf58e4fc445f14d067.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/attachments/axe-836ba2cb0c3f9298dd077ce2a57a3b7c3946d622.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-601/test-results/artifacts/p6-spec-601-auth-conformit-e30db-bile-SPEC-601-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "debe1c698dc4c08696f4-56b200c9ad59924a0cc9",
+          "file": "p6/spec-601-auth.spec.ts",
+          "line": 351,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T06:06:46.609Z",
+    "duration": 41170.581,
+    "expected": 6,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

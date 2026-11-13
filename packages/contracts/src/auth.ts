@@ -9,6 +9,63 @@ import { defineRoute } from './define-route';
 export const PASSWORD_MIN_LENGTH = 12;
 export const PASSWORD_MAX_LENGTH = 72;
 
+/** Client-side address check of the account form (SPEC-601 EF-6). */
+export const ACCOUNT_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export interface AccountFormMessages {
+  email: string;
+  passwordSignup: string;
+  passwordLogin: string;
+  terms: string;
+}
+
+/** Default messages; `apps/web` passes the exact texts of `messages.auth` (ET-2). */
+export const ACCOUNT_FORM_MESSAGES: AccountFormMessages = {
+  email: 'Saisissez une adresse e-mail valide.',
+  passwordSignup: 'Le mot de passe doit faire 12 caractères au moins.',
+  passwordLogin: 'Saisissez votre mot de passe.',
+  terms: 'Acceptez les conditions pour créer votre compte.',
+};
+
+/**
+ * Account form of the sign-up screen (SPEC-601 ET-2). The union is discriminated on `method` so
+ * the password is only required when that method is chosen.
+ */
+export function createSignupAccountFormSchema(
+  messages: AccountFormMessages = ACCOUNT_FORM_MESSAGES,
+) {
+  const email = z.string().trim().regex(ACCOUNT_EMAIL_RE, { error: messages.email });
+  const termsAccepted = z.literal(true, { error: messages.terms });
+  return z.discriminatedUnion('method', [
+    z.object({ method: z.literal('magic'), email, termsAccepted }),
+    z.object({
+      method: z.literal('password'),
+      email,
+      password: z.string().min(PASSWORD_MIN_LENGTH, { error: messages.passwordSignup }),
+      termsAccepted,
+    }),
+  ]);
+}
+
+/** Same form in sign-in mode: no terms, a password only checked for presence (EF-4). */
+export function createLoginAccountFormSchema(
+  messages: AccountFormMessages = ACCOUNT_FORM_MESSAGES,
+) {
+  const email = z.string().trim().regex(ACCOUNT_EMAIL_RE, { error: messages.email });
+  return z.discriminatedUnion('method', [
+    z.object({ method: z.literal('magic'), email }),
+    z.object({
+      method: z.literal('password'),
+      email,
+      password: z.string().min(1, { error: messages.passwordLogin }),
+    }),
+  ]);
+}
+
+export const accountFormSchema = createSignupAccountFormSchema();
+export const loginAccountFormSchema = createLoginAccountFormSchema();
+export type AccountFormValues = z.infer<typeof accountFormSchema>;
+
 export const Email = z.string().trim().toLowerCase().pipe(z.email().max(254));
 export const Timezone = z
   .string()
