@@ -154,3 +154,81 @@ export async function expectScreenshotBaseline(
     ...options,
   });
 }
+
+export interface ReferenceRegion {
+  name: string;
+  locator: import('@playwright/test').Locator;
+  /** Rectangle of the same region in the reference capture, in reference pixels. */
+  rect: { x: number; y: number; width: number; height: number };
+}
+
+function resizePng(source: PNG, width: number, height: number): PNG {
+  const out = new PNG({ width, height });
+  for (let y = 0; y < height; y += 1) {
+    const sy = Math.min(source.height - 1, Math.floor((y / height) * source.height));
+    for (let x = 0; x < width; x += 1) {
+      const sx = Math.min(source.width - 1, Math.floor((x / width) * source.width));
+      const from = (sy * source.width + sx) * 4;
+      const to = (y * width + x) * 4;
+      out.data[to] = source.data[from] ?? 0;
+      out.data[to + 1] = source.data[from + 1] ?? 0;
+      out.data[to + 2] = source.data[from + 2] ?? 0;
+      out.data[to + 3] = source.data[from + 3] ?? 0;
+    }
+  }
+  return out;
+}
+
+/**
+ * ADR-0161 — compares the regions a specification owns with the same regions of the reference
+ * capture. The reference crop is resized to the actual region when the 90 % scale or a scrollbar
+ * makes the two captures differ by a few pixels; a structural difference stays visible in the diff.
+ */
+export async function compareRegions(
+  page: import('@playwright/test').Page,
+  options: {
+    reference: string;
+    regions: readonly ReferenceRegion[];
+    outputDir: string;
+  },
+): Promise<Array<{ name: string; ratio: number; sideBySidePath: string; diffPath: string }>> {
+  const reference = readPng(path.resolve(options.reference));
+  fs.mkdirSync(options.outputDir, { recursive: true });
+  const results: Array<{ name: string; ratio: number; sideBySidePath: string; diffPath: string }> =
+    [];
+  for (const region of options.regions) {
+    const actual = readPng(await region.locator.screenshot({ animations: 'disabled' }));
+    const { x, y, width, height } = region.rect;
+    if (x + width > reference.width || y + height > reference.height) {
+      throw new Error(`Région ${region.name} hors de la référence`);
+    }
+    const crop = new PNG({ width, height });
+    PNG.bitblt(reference, crop, x, y, width, height, 0, 0);
+    const resized =
+      crop.width === actual.width && crop.height === actual.height
+        ? crop
+        : resizePng(crop, actual.width, actual.height);
+    const diff = new PNG({ width: actual.width, height: actual.height });
+    const diffPixels = pixelmatch(
+      resized.data,
+      actual.data,
+      diff.data,
+      actual.width,
+      actual.height,
+      {
+        threshold: 0.1,
+      },
+    );
+    const sideBySidePath = path.join(options.outputDir, `${region.name}-side-by-side.png`);
+    const diffPath = path.join(options.outputDir, `${region.name}-diff.png`);
+    fs.writeFileSync(sideBySidePath, PNG.sync.write(sideBySide(resized, actual)));
+    fs.writeFileSync(diffPath, PNG.sync.write(diff));
+    results.push({
+      name: region.name,
+      ratio: diffPixels / (actual.width * actual.height),
+      sideBySidePath,
+      diffPath,
+    });
+  }
+  return results;
+}

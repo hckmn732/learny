@@ -3,13 +3,15 @@ import { cn } from '../../cn';
 type ProgressRingSize = 'md' | 'xs';
 
 export type ProgressRingProps = {
-  /** Percentage, clamped to 0–100 (CL-7). */
-  value: number;
+  /** Percentage, clamped to 0–100; null draws the empty ring with « — » (SPEC-603 EF-3). */
+  value: number | null;
   /** Full accessible text, e.g. « Notions retenues à 1 mois : 86 % ». */
   label: string;
   /** `md` = 112 px (default), `xs` = 36 px (EF-4). */
   size?: ProgressRingSize;
   tone?: 'indigo' | 'teal';
+  /** Explicit accent colour of the arc (ADR-0162). */
+  color?: string;
   className?: string;
   'data-testid'?: string;
 };
@@ -25,12 +27,14 @@ export const ProgressRing = ({
   label,
   size = 'md',
   tone = 'indigo',
+  color,
   className,
   ...props
 }: ProgressRingProps) => {
-  const clamped = Math.min(100, Math.max(0, value));
+  const clamped = value === null ? 0 : Math.min(100, Math.max(0, value));
   const geometry = GEOMETRY[size];
-  const dash = ((2 * Math.PI * geometry.radius * clamped) / 100).toFixed(1);
+  const dash =
+    value === null ? '0.0' : ((2 * Math.PI * geometry.radius * clamped) / 100).toFixed(1);
   const track = tone === 'indigo' ? 'stroke-indigo-soft' : 'stroke-border';
   const progress = tone === 'indigo' ? 'stroke-indigo' : 'stroke-teal';
 
@@ -65,6 +69,7 @@ export const ProgressRing = ({
           strokeWidth={geometry.stroke}
           strokeDasharray={`${dash} ${String(geometry.circumference)}`}
           className={progress}
+          style={color === undefined ? undefined : { stroke: color }}
           transform={`rotate(-90 ${String(geometry.px / 2)} ${String(geometry.px / 2)})`}
         />
       </svg>
@@ -76,7 +81,7 @@ export const ProgressRing = ({
             geometry.text,
           )}
         >
-          {clamped} %
+          {value === null ? '—' : `${String(clamped)} %`}
         </span>
       ) : null}
     </span>

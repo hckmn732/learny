@@ -1,15 +1,18 @@
-import { PageHeader } from '@learny/ui';
-
+import { HomeView } from '../../../components/home/home-view';
 import { AppShell } from '../../../components/shell/app-shell';
+import { loadHomePage } from '../../../lib/home-page';
 import { loadShellPage } from '../../../lib/sidebar-page';
-import { fr } from '../../../messages/fr';
 
 export const dynamic = 'force-dynamic';
 
-// SPEC-304/305 mount the shell on the route of SCR-03. The home content itself is delivered by
-// SPEC-603; this page only proves the shell integration.
-export default async function AccueilPage() {
-  const shell = await loadShellPage();
+interface AccueilPageProps {
+  searchParams: Promise<{ onglet?: string | string[] }>;
+}
+
+/** SCR-03 — accueil of the connected learner (SPEC-603). */
+export default async function AccueilPage({ searchParams }: AccueilPageProps) {
+  const [shell, home, params] = await Promise.all([loadShellPage(), loadHomePage(), searchParams]);
+  const raw = Array.isArray(params.onglet) ? params.onglet[0] : params.onglet;
   return (
     <AppShell
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
@@ -17,10 +20,12 @@ export default async function AccueilPage() {
       header={shell.header.ok ? shell.header.data : null}
       headerError={!shell.header.ok}
     >
-      <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
-        <PageHeader title={fr.shell.placeholder.accueilTitle} />
-        <p className="mt-8 text-14 text-ink-muted">{fr.shell.placeholder.accueilBody}</p>
-      </main>
+      <HomeView
+        initialData={home.ok ? home.data : null}
+        initialError={!home.ok}
+        {...(home.ok || home.requestId === undefined ? {} : { requestId: home.requestId })}
+        initialTab={raw === 'terminees' ? 'terminees' : 'en-cours'}
+      />
     </AppShell>
   );
 }
