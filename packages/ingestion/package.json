@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./fixtures": "./fixtures/pdf.ts",
-    "./fixtures/youtube": "./fixtures/youtube.ts"
+    "./fixtures/youtube": "./fixtures/youtube.ts",
+    "./fixtures/web": "./fixtures/web.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

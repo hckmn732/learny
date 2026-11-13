@@ -268,6 +268,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-509'),
   },
+  'SPEC-510': {
+    title: 'SPEC-510 · Ingestion : pages web, YouTube et images',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-510'),
+  },
   'SPEC-512': {
     title: 'SPEC-512 · Recherche web',
     titleTestId: 'sdd-title',
