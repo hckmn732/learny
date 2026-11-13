@@ -117,6 +117,13 @@ export const CourseSuggestion = z.strictObject({
 });
 export type CourseSuggestion = z.infer<typeof CourseSuggestion>;
 
+/** SPEC-610 EF-2 — a starter question computed by the code from the current chapter. */
+export const CourseStarter = z.strictObject({
+  label: z.string().min(1).max(120),
+  prompt: z.string().min(1).max(300),
+});
+export type CourseStarter = z.infer<typeof CourseStarter>;
+
 export const CourseChapterSummary = z.strictObject({
   id: Uuid,
   position: z.number().int().min(1),
@@ -145,6 +152,10 @@ export const CourseView = z
     nextChapterId: Uuid.nullable(),
     sections: z.array(CourseSection),
     suggestions: z.array(CourseSuggestion),
+    /** SPEC-610 EF-2 — the three questions suggested by the tutor card. */
+    tutorStarters: z.array(CourseStarter).max(3),
+    /** SPEC-610 EF-1 — the open gap of the module shown by the tutor card, if any. */
+    tutorGap: z.string().max(200).nullable(),
     /** BR-COU-08 — persisted progress of the selected chapter and of the whole course. */
     progress: CourseReadingProgress,
     /** BR-COU-07 — latest summary of this chapter for this course version, if any. */

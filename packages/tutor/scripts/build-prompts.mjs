@@ -11,7 +11,16 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const promptsDir = path.join(root, 'prompts');
 const outFile = path.join(root, 'src', 'prompts.generated.ts');
 
-const TASKS = ['programme', 'course', 'tutor', 'cadrage'];
+const TASKS = [
+  'programme',
+  'course',
+  'tutor',
+  'cadrage',
+  // SPEC-610 — opened from the course screen; `task: tutor` remains the model task.
+  'tutor-chat',
+  'self-test-question',
+  'self-test-grade',
+];
 
 function parsePrompt(file) {
   const raw = fs.readFileSync(file, 'utf8');
@@ -20,7 +29,7 @@ function parsePrompt(file) {
   const header = match[1];
   const content = match[2].trim();
   const version = /^version:\s*(\d+)$/m.exec(header)?.[1];
-  const task = /^task:\s*([a-z]+)$/m.exec(header)?.[1];
+  const task = /^task:\s*([a-z-]+)$/m.exec(header)?.[1];
   if (version === undefined || task === undefined) {
     throw new Error(`${file} : version ou task absente`);
   }

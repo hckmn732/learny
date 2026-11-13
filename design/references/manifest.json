@@ -581,6 +581,22 @@
       "sha256": "d2b0a915b68b73c6246f1f916dfc837742c5e5705c6cb1a3db3490314e7371c0"
     },
     {
+      "screenId": "SCR-07",
+      "state": "tuteur-ouvert",
+      "viewport": "desktop",
+      "viewportWidth": 1440,
+      "viewportHeight": 900,
+      "source": "design/maquettes/Cours.dc.html",
+      "file": "design/references/SCR-07-tuteur-ouvert-desktop.png",
+      "width": 1600,
+      "height": 3448,
+      "fixedAt": "2026-11-11T12:20:00Z",
+      "locale": "fr-FR",
+      "timeZone": "Europe/Paris",
+      "zoom": 0.9,
+      "sha256": "408a75b6e0f42f5f9300c7f168a26a7d95379504ed3bf8124d206ef530fb4233"
+    },
+    {
       "screenId": "SCR-08",
       "state": "base",
       "viewport": "desktop",

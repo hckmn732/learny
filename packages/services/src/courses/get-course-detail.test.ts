@@ -159,6 +159,7 @@ describe('[SPEC-608] lecture détaillée du cours', () => {
           created_at: NOW,
         },
       ],
+      [],
     ]);
 
     const result = await getModuleCourse(context(execute), MODULE);
@@ -225,6 +226,7 @@ describe('[SPEC-608] lecture détaillée du cours', () => {
       [{ chapter_id: CHAPTER, percent: 100 }],
       [],
       [{ total: 0 }],
+      [],
       [],
       [],
     ]);

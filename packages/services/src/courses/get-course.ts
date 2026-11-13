@@ -11,6 +11,7 @@ import { sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
+import { startersOf } from '../tutor-chat/starters';
 
 import { coursePercent, estimateReadingMinutes, readProgressByChapter } from './progress';
 
@@ -308,7 +309,10 @@ export function getModuleCourse(
               group by chapter_id
             `);
       const countByChapter = new Map(counts.map((row) => [row.chapter_id, row.total]));
-      const persisted = current === undefined ? new Map<string, number>() : await readProgressByChapter(tx, userId, current.id);
+      const persisted =
+        current === undefined
+          ? new Map<string, number>()
+          : await readProgressByChapter(tx, userId, current.id);
       const chapterSummaries = chapters.map((chapter) => ({
         id: chapter.id,
         position: chapter.position,
@@ -410,6 +414,40 @@ export function getModuleCourse(
         limit 1
       `);
 
+      const notionRows = await tx.execute<{
+        id: string;
+        label: string;
+        mastery: string | null;
+        gap_nature: string | null;
+      }>(sql`
+        select n.id::text as id, n.label, ns.mastery::text as mastery, ns.gap_nature::text as gap_nature
+        from public.notions n
+        left join public.notion_states ns
+          on ns.notion_id = n.id and ns.user_id = ${userId}::uuid
+        where n.chapter_id = ${selected.id}::uuid
+        order by n.position, n.id
+      `);
+      const gapNotion =
+        notionRows
+          .filter((notion) => notion.gap_nature !== null)
+          .sort((left, right) => Number(left.mastery ?? 101) - Number(right.mastery ?? 101))[0] ??
+        null;
+      const gapNotionId = gapNotion?.id ?? null;
+      const tutorStarters = startersOf({
+        sections: sectionRows.map((row) => ({
+          kind: row.kind,
+          contentMd: row.content_md,
+          data: asObject(row.data),
+          notionIds: asStringArray(row.notion_ids),
+        })),
+        notions: notionRows.map((notion) => ({
+          id: notion.id,
+          label: notion.label,
+          ...(notion.mastery === null ? {} : { mastery: Number(notion.mastery) }),
+        })),
+        gapNotionId,
+      });
+
       const selectedIndex = chapters.findIndex((chapter) => chapter.id === selected.id);
       const chapterPercent = persisted.get(selected.id) ?? 0;
       const course: CourseView = {
@@ -437,6 +475,8 @@ export function getModuleCourse(
           url: row.url,
           reason: row.reason ?? 'Ressource suggérée par le tuteur.',
         })),
+        tutorStarters,
+        tutorGap: gapNotion?.label ?? null,
         progress: {
           chapterPercent,
           coursePercent: coursePercent(

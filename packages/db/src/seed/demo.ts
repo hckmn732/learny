@@ -358,7 +358,8 @@ async function seedFormations(tx: DbTx, catalog: SeededCatalog): Promise<void> {
       json({
         scope: { value: formation.description, state: 'done' },
         starting_point: {
-          value: formation.key === 'sap' ? 'Module 2 validé' : 'Début',
+          value:
+            formation.key === 'sap' ? 'Bonnes bases en comptabilité, débutant sur SAP' : 'Début',
           state: 'done',
         },
         target_level: { value: 'Opérationnel', state: 'done' },

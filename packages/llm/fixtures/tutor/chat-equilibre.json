@@ -1,0 +1,22 @@
+{
+  "task": "tutor",
+  "scenario": "chat-equilibre",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Réponse « Pourquoi cette règle ? » (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "Parce que c’est le principe de la partie double : tout montant qui entre quelque part sort d’ailleurs. Si les débits et les crédits d’une pièce ne sont pas égaux, une partie de l’opération manque.\n\nSAP bloque donc l’enregistrement et affiche l’écart à corriger. C’est aussi pour cela qu’une pièce a toujours au moins deux postes.\n\n[[sources:tutor]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

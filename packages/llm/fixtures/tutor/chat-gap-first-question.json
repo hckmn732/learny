@@ -1,0 +1,22 @@
+{
+  "task": "tutor",
+  "scenario": "chat-gap-first-question",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Première réponse sur la notion en lacune : question de vérification avant réexplication (BR-TUT-05).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "Avant de réexpliquer, vérifions ce que vous retenez déjà : sur un poste de fournisseur, quelle clé de comptabilisation choisissez-vous et dans quel sens va le montant ?\n\n[[sources:22222222-2222-4222-8222-222222222222]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

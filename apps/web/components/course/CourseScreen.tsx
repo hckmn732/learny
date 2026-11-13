@@ -7,6 +7,7 @@ import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contract
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
+import { TutorChat } from '../tutor-chat/TutorChat';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';
@@ -35,8 +36,9 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
   const screen = query.data;
   const course = screen.course;
   const [liveProgress, setLiveProgress] = useState<CourseReadingProgress | null>(null);
-  const displayProgress =
-    liveProgress ?? course?.progress ?? { chapterPercent: 0, coursePercent: 0, updatedAt: null };
+  const [chatOpen, setChatOpen] = useState(false);
+  const displayProgress = liveProgress ??
+    course?.progress ?? { chapterPercent: 0, coursePercent: 0, updatedAt: null };
   const visibleRef = useRef<Set<string>>(new Set());
   const reportedRef = useRef<Set<string>>(new Set());
 
@@ -91,6 +93,11 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
   }, [course]);
 
   const actions: SectionActions = {
+    onAskPassage: (text, sectionId, label) => {
+      window.dispatchEvent(
+        new CustomEvent('tutor:ask-passage', { detail: { text, sectionId, label } }),
+      );
+    },
     onReport: async (sectionId, reason) => {
       try {
         await api.courseSectionReport(
@@ -118,7 +125,11 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
   };
 
   return (
-    <main className="mx-auto w-full px-16 pb-40 shell:px-40" data-testid="course-page">
+    <main
+      className={`mx-auto w-full px-16 pb-40 shell:px-40 ${chatOpen ? 'min-[1200px]:pr-[500px]' : ''}`}
+      data-chat-open={chatOpen ? 'true' : undefined}
+      data-testid="course-page"
+    >
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-20">
         <div className="flex flex-wrap items-center justify-between gap-12">
           <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
@@ -189,6 +200,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
 
             <article
               className="flex min-w-0 flex-1 basis-560 flex-col gap-20 rounded-28 border border-border bg-surface p-28 shell:p-40"
+              data-cours="true"
               data-testid="course-article"
             >
               <div className="flex flex-col gap-14" data-testid="course-header">
@@ -282,13 +294,21 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
             </article>
 
             <aside
-              aria-label="Quiz de validation"
+              aria-label="Tuteur et quiz"
               className="flex flex-1 basis-260 flex-col gap-16"
-              data-testid="course-quiz-card"
+              data-testid="course-tutor-aside"
             >
+              <TutorChat
+                chapterPosition={course.chapter.position}
+                chapterTitle={course.chapter.title}
+                course={course}
+                formationTitle={screen.formation.title}
+                onOpenChange={setChatOpen}
+              />
               <section
                 aria-labelledby="t-quiz"
                 className="flex flex-col gap-10 rounded-24 bg-lime p-22 text-ink"
+                data-testid="course-quiz-card"
               >
                 <h2 className="m-0 font-display text-22 font-600" id="t-quiz">
                   {t.quizTitle}

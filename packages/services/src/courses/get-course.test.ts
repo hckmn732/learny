@@ -106,6 +106,7 @@ describe('[SPEC-608] lecture du cours', () => {
       [{ total: 0 }],
       [],
       [],
+      [],
     ]);
 
     await expect(getModuleCourse(context(execute), MODULE)).resolves.toMatchObject({

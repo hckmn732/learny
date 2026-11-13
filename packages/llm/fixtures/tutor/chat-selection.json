@@ -1,0 +1,22 @@
+{
+  "task": "tutor",
+  "scenario": "chat-selection",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Réponse à partir d’un passage sélectionné (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "Je pars du passage que vous avez sélectionné. Dans ce chapitre, il se rattache à la règle centrale : une pièce a un en-tête et des postes, et chaque poste porte une clé qui en fixe le sens.\n\nDites-moi ce qui vous bloque dans ce passage, ou choisissez :\n\n[[sources:course]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

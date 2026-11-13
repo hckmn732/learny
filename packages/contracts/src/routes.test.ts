@@ -27,6 +27,8 @@ describe('[SPEC-201] registre', () => {
 
   it('uses a null output exactly for 204 and 302 answers', () => {
     for (const route of routes) {
+      // SPEC-610: the tutor answer is a 200 SSE stream, described by no JSON output schema.
+      if (route.id === 'conversations.messages') continue;
       const output: unknown = route.output;
       expect(output === null, route.id).toBe(
         route.successStatus === 204 || route.successStatus === 302,

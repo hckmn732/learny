@@ -7,5 +7,8 @@
   "course.course": 1,
   "light.demo-object": 1,
   "ingest-image": 1,
-  "course.summary": 1
+  "course.summary": 1,
+  "tutor-chat.tutor-chat": 1,
+  "self-test-grade.self-test-grade": 1,
+  "self-test-question.self-test-question": 1
 }
