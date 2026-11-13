@@ -4,7 +4,7 @@ import type { ProgrammeProposalDto } from '@learny/contracts';
 
 import { fr } from '../../messages/fr';
 
-import { formatLongDate, formatRange, weeksBetween } from './dates';
+import { formatDay, formatLongDate, weeksBetween } from './dates';
 
 const t = fr.programme;
 
@@ -113,9 +113,7 @@ export function ProposalHeader({ proposal, isCurrent, onAdjust, onValidate }: Pr
         <StatCard big={`${String(proposal.volumeHours ?? 0)} h`} dark small={t.statsHours} />
         <StatCard
           big={t.statsWeeks(weeks)}
-          small={
-            from === '' || to === '' ? '' : t.statsDates(formatRange(from, to), formatLongDate(to))
-          }
+          small={from === '' || to === '' ? '' : t.statsDates(formatDay(from), formatLongDate(to))}
         />
         <StatCard big={t.statsModules(proposal.modules.length)} small={t.statsChapters(chapters)} />
         <StatCard big={`${String(threshold)} %`} small={t.statsThreshold} />
