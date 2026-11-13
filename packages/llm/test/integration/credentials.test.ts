@@ -194,6 +194,7 @@ describe('[SPEC-505] chiffrement, lecture serveur et rotation', () => {
     try {
       await rotateCredentialKeys(serviceDb(), NEW_RING, {
         batchSize: 100,
+        userId,
         onBatch: (index) => {
           if (index === 0) throw new Error('interruption simulée');
         },
@@ -204,7 +205,10 @@ describe('[SPEC-505] chiffrement, lecture serveur et rotation', () => {
     }
     expect(interrupted).toBe(true);
 
-    const report = await rotateCredentialKeys(serviceDb(), NEW_RING, { batchSize: 100 });
+    const report = await rotateCredentialKeys(serviceDb(), NEW_RING, {
+      batchSize: 100,
+      userId,
+    });
     expect(report.total).toBe(250);
     expect(report.failed).toEqual([]);
     expect(report.rotated + report.upToDate).toBe(250);

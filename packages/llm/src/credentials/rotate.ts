@@ -28,6 +28,8 @@ export interface RotationReport {
 
 export interface RotationOptions {
   batchSize?: number;
+  /** Restricts the rotation to one learner (tests and targeted operations). */
+  userId?: string;
   /** Test hook called after each committed batch; throwing simulates an interruption. */
   onBatch?: (batchIndex: number, size: number) => void;
 }
@@ -54,7 +56,11 @@ export async function rotateCredentialKeys(
       qualification: aiCredentials.qualification,
     })
     .from(aiCredentials)
-    .where(isNotNull(aiCredentials.encryptedKey))
+    .where(
+      options.userId === undefined
+        ? isNotNull(aiCredentials.encryptedKey)
+        : and(isNotNull(aiCredentials.encryptedKey), eq(aiCredentials.userId, options.userId)),
+    )
     .orderBy(asc(aiCredentials.id));
 
   const report: RotationReport = {
