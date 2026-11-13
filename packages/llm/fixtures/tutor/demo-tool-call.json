@@ -1,0 +1,29 @@
+{
+  "task": "tutor",
+  "scenario": "demo-tool-call",
+  "promptId": "tutor.demo",
+  "promptVersion": 1,
+  "description": "Le tuteur demande la lecture des ressources du chapitre avant de répondre.",
+  "match": { "contains": ["[[mock:demo-tool-call]]"] },
+  "steps": [
+    {
+      "type": "tool-calls",
+      "toolCalls": [
+        {
+          "toolCallId": "call_demo_1",
+          "toolName": "read_resources",
+          "input": { "chapterId": "sap-m1-c1", "query": "société et écritures" }
+        }
+      ],
+      "usage": { "inputTokens": 48, "outputTokens": 18, "cacheReadTokens": 12, "cacheWriteTokens": 0 },
+      "latencyMs": 240
+    },
+    {
+      "type": "text",
+      "text": "Voici les passages utiles.",
+      "finishReason": "stop",
+      "usage": { "inputTokens": 64, "outputTokens": 6, "cacheReadTokens": 12, "cacheWriteTokens": 0 },
+      "latencyMs": 180
+    }
+  ]
+}

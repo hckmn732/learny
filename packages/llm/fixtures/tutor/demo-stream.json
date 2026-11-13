@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "demo-stream",
+  "promptId": "tutor.demo",
+  "promptVersion": 1,
+  "description": "Réponse en flux découpée en morceaux.",
+  "match": { "contains": ["[[mock:demo-stream]]"] },
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": ["Bonjour", " !"],
+      "usage": { "inputTokens": 20, "outputTokens": 4, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 45
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-opus-5-5",
+  "max_tokens": 16000,
+  "thinking": {
+    "type": "adaptive"
+  },
+  "output_config": {
+    "effort": "medium"
+  },
+  "tool_choice": {
+    "type": "auto"
+  },
+  "tools": [
+    {
+      "name": "read_resources",
+      "description": "Lit les passages utiles",
+      "input_schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  ],
+  "system": [
+    {
+      "type": "text",
+      "text": "Consigne stable",
+      "cache_control": {
+        "type": "ephemeral"
+      }
+    },
+    {
+      "type": "text",
+      "text": "Question courante"
+    }
+  ],
+  "messages": [],
+  "fallbacks": "default"
+}

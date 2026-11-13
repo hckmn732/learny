@@ -22,6 +22,20 @@ export const ERROR_CATALOG = {
   EXPORT_EXPIRED: { status: 410, title: 'Export expiré' },
   MODULE_LOCKED: { status: 422, title: 'Module verrouillé' },
   AI_UNAVAILABLE: { status: 422, title: 'IA indisponible pour cette tâche' },
+  AI_KEY_INVALID: { status: 422, title: 'Clé IA invalide' },
+  AI_RATE_LIMITED: { status: 429, title: 'Fournisseur IA saturé' },
+  AI_PROVIDER_ERROR: { status: 503, title: 'Fournisseur IA indisponible' },
+  AI_TIMEOUT: { status: 504, title: 'Fournisseur IA trop lent' },
+  AI_REFUSED: { status: 422, title: 'Réponse refusée par le modèle' },
+  AI_CONTEXT_TOO_LONG: { status: 422, title: 'Contexte trop long pour le modèle' },
+  INVALID_OUTPUT: { status: 502, title: 'Sortie du modèle invalide' },
+  FILES_UNSUPPORTED: { status: 422, title: 'Documents non pris en charge par ce modèle' },
+  CITATIONS_WITH_STRUCTURED_OUTPUT: {
+    status: 422,
+    title: 'Citations incompatibles avec une sortie structurée',
+  },
+  MOCK_FIXTURE_NOT_FOUND: { status: 500, title: 'Fixture du modèle simulé introuvable' },
+  MOCK_STEPS_EXHAUSTED: { status: 500, title: 'Étapes du modèle simulé épuisées' },
   AI_CAP_REACHED: { status: 422, title: "Plafond d'IA du jour atteint" },
   RETRY_NOT_YET_ALLOWED: { status: 422, title: 'Nouvelle tentative pas encore possible' },
   UPLOAD_TOO_LARGE: { status: 422, title: 'Fichier trop volumineux' },
@@ -46,6 +60,12 @@ export interface AppErrorExtra {
   errors?: { path: string; message: string }[];
   /** Seconds to wait before retrying (`Retry-After` header of 409 and 429 answers). */
   retryAfterSec?: number;
+  /** Machine-readable reason of a business refusal (`AI_UNAVAILABLE`, SPEC-504 EF-1). */
+  reason?: string;
+  /** Product link explaining how to restore the service (SPEC-504 EF-2). */
+  link?: string;
+  /** Personal key that caused the failure, for the qualification flow (SPEC-504 CL-2). */
+  credentialId?: string;
   cause?: unknown;
 }
 
@@ -59,6 +79,9 @@ export class AppError extends Error {
   readonly requestId: string | undefined;
   readonly errors: { path: string; message: string }[] | undefined;
   readonly retryAfterSec: number | undefined;
+  readonly reason: string | undefined;
+  readonly link: string | undefined;
+  readonly credentialId: string | undefined;
 
   constructor(
     readonly code: ErrorCode | (string & {}),
@@ -70,6 +93,9 @@ export class AppError extends Error {
     this.requestId = extra.requestId;
     this.errors = extra.errors;
     this.retryAfterSec = extra.retryAfterSec;
+    this.reason = extra.reason;
+    this.link = extra.link;
+    this.credentialId = extra.credentialId;
   }
 }
 

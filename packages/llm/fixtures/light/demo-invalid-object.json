@@ -1,0 +1,16 @@
+{
+  "task": "light",
+  "scenario": "demo-invalid-object",
+  "promptId": "light.demo-object",
+  "promptVersion": 1,
+  "description": "Objet ne respectant pas le schéma : le titre est un nombre (CL-5).",
+  "match": { "contains": ["[[mock:demo-invalid-object]]"] },
+  "steps": [
+    {
+      "type": "object",
+      "object": { "title": 42, "confidence": "haute" },
+      "usage": { "inputTokens": 40, "outputTokens": 10, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 60
+    }
+  ]
+}

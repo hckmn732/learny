@@ -84,6 +84,10 @@ const restrictedImportBlocks = [
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
           ],
         },
       ],
@@ -107,6 +111,13 @@ const restrictedImportBlocks = [
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
+            ...(target === 'llm'
+              ? []
+              : [{
+                  group: ['ai', 'ai/*', '@ai-sdk/*'],
+                  message:
+                    'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+                }]),
           ],
         },
       ],
@@ -131,6 +142,10 @@ const restrictedImportBlocks = [
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
           ],
         },
       ],
@@ -148,6 +163,10 @@ const restrictedImportBlocks = [
             {
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
             },
           ],
         },
@@ -462,6 +481,41 @@ export default tseslint.config(
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
           ],
+        },
+      ],
+    },
+  },
+  {
+    // Model identifiers are data of @learny/config only (SPEC-504, BR-IA-01). Seeds, tests and the
+    // SDD demo pages of earlier specifications keep historical identifiers and are excluded.
+    files: [
+      'packages/{core,db,contracts,services,tutor,ingestion,jobs,notifications,automations,bricks,learning-engine,testing,ui}/src/**/*.{ts,tsx}',
+      'apps/web/{app,components,lib}/**/*.{ts,tsx}',
+    ],
+    ignores: [
+      'packages/*/src/seed/**',
+      '**/*.test.{ts,tsx}',
+      'apps/web/app/%5Fdev/**',
+      'apps/web/components/sdd-demos/**',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+          message: CLOCK_MESSAGE,
+        },
+        {
+          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+          message: CLOCK_MESSAGE,
+        },
+        {
+          selector: "Literal[value=/claude-/]",
+          message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
+        },
+        {
+          selector: "TemplateElement[value.raw=/claude-/]",
+          message: 'Identifiant de modèle hors @learny/config (SPEC-504, BR-IA-01).',
         },
       ],
     },

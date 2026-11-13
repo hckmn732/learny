@@ -1,0 +1,16 @@
+{
+  "task": "tutor",
+  "scenario": "demo-refusal",
+  "promptId": "tutor.demo",
+  "promptVersion": 1,
+  "description": "Le modèle refuse de répondre (stop_reason refusal).",
+  "match": { "contains": ["[[mock:demo-refusal]]"] },
+  "steps": [
+    {
+      "type": "error",
+      "error": { "kind": "refusal", "message": "refusal" },
+      "usage": { "inputTokens": 32, "outputTokens": 0, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 90
+    }
+  ]
+}

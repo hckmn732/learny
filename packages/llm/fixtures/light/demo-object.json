@@ -1,0 +1,16 @@
+{
+  "task": "light",
+  "scenario": "demo-object",
+  "promptId": "light.demo-object",
+  "promptVersion": 1,
+  "description": "Sortie structurée valide attendue par la page de démonstration.",
+  "match": { "contains": ["[[mock:demo-object]]"] },
+  "steps": [
+    {
+      "type": "object",
+      "object": { "title": "Société et écritures", "confidence": 0.92 },
+      "usage": { "inputTokens": 40, "outputTokens": 12, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 75
+    }
+  ]
+}
