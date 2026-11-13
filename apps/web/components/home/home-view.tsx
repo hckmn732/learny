@@ -194,11 +194,13 @@ export function DayCard({
       <div className="flex flex-wrap gap-10">
         {primaryAction === null ? null : (
           <Button asChild variant="lime" size="lg">
-            <NextLink href={primaryAction.href}>{primaryAction.label}</NextLink>
+            <NextLink prefetch={false} href={primaryAction.href}>
+              {primaryAction.label}
+            </NextLink>
           </Button>
         )}
         <Button asChild variant="outline-on-dark" size="lg">
-          <NextLink href="/agenda" prefetch={false}>
+          <NextLink prefetch={false} href="/agenda">
             {t.day.agenda}
           </NextLink>
         </Button>
@@ -273,7 +275,9 @@ export function GlobalQuizCard({ data }: Readonly<{ data: HomeGlobalQuiz }>) {
             </p>
           )}
           <Button asChild variant="dark" size="md" className="mt-6 self-start">
-            <NextLink href={`/formations/${data.formationId}/quiz-global`}>{t.quiz.play}</NextLink>
+            <NextLink prefetch={false} href={`/formations/${data.formationId}/quiz-global`}>
+              {t.quiz.play}
+            </NextLink>
           </Button>
         </>
       )}
@@ -413,7 +417,9 @@ export function FormationsTable({
                   variant={row.primaryAction ? 'dark' : 'outline'}
                   size="md"
                 >
-                  <NextLink href={row.action.href}>{row.action.label}</NextLink>
+                  <NextLink prefetch={false} href={row.action.href}>
+                    {row.action.label}
+                  </NextLink>
                 </Button>
               </td>
             </tr>
@@ -524,7 +530,9 @@ export function CompletedTable({
                   variant="outline"
                   size="md"
                 >
-                  <NextLink href={row.action.href}>{row.action.label}</NextLink>
+                  <NextLink prefetch={false} href={row.action.href}>
+                    {row.action.label}
+                  </NextLink>
                 </Button>
               </td>
             </tr>
@@ -638,7 +646,9 @@ export function HomeView({
           <h1 className="m-0 font-display text-34 font-600 tracking-title">{t.header.title}</h1>
         </div>
         <Button asChild variant="lime" size="md">
-          <NextLink href="/formations/nouvelle">{t.header.newFormation}</NextLink>
+          <NextLink prefetch={false} href="/formations/nouvelle">
+            {t.header.newFormation}
+          </NextLink>
         </Button>
       </header>
 
@@ -693,7 +703,7 @@ export function HomeView({
                   title={t.formations.emptyOngoingTitle}
                   action={
                     <Button asChild variant="lime" size="md">
-                      <NextLink href="/formations/nouvelle">
+                      <NextLink prefetch={false} href="/formations/nouvelle">
                         {t.formations.createFormation}
                       </NextLink>
                     </Button>

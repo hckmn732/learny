@@ -162,7 +162,7 @@ test('Coquille : menu latéral @SPEC-304', async ({
   const sidebar = page.getByTestId('sidebar');
   await expect(sidebar).toBeVisible();
   await expect(page.getByTestId('sidebar-empty')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Créer une formation' })).toHaveAttribute(
+  await expect(sidebar.getByRole('link', { name: 'Créer une formation' })).toHaveAttribute(
     'href',
     '/formations/nouvelle',
   );
@@ -207,7 +207,8 @@ test('Coquille : menu latéral @SPEC-304', async ({
   await expect(page.getByTestId('sidebar-formation-menu')).toBeVisible();
   const switched = page.waitForResponse(
     (response) =>
-      response.url().includes('/api/v1/me/sidebar') && response.request().method() === 'PATCH',
+      response.url().includes('/api/v1/me/current-formation') &&
+      response.request().method() === 'PATCH',
   );
   await page.getByTestId(`sidebar-formation-option-${seeded.agileId}`).click();
   await switched;
@@ -218,7 +219,8 @@ test('Coquille : menu latéral @SPEC-304', async ({
   await page.getByTestId('sidebar-switch-formation').click();
   const switchedBack = page.waitForResponse(
     (response) =>
-      response.url().includes('/api/v1/me/sidebar') && response.request().method() === 'PATCH',
+      response.url().includes('/api/v1/me/current-formation') &&
+      response.request().method() === 'PATCH',
   );
   await page.getByTestId(`sidebar-formation-option-${seeded.sapId}`).click();
   await switchedBack;

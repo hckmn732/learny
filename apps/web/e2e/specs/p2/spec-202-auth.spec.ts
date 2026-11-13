@@ -127,11 +127,14 @@ test('le proxy garde les pages et l’onboarding @SPEC-202', async ({ page, cont
     await page.goto('/connexion');
     await expect(page).toHaveURL(`${origin}/premiers-pas/rythme`);
 
-    // Once the AI step is behind, the application opens (the cookie is remembered).
+    // Once the AI step is behind, the application opens (CL-2) even before Rappels is finished.
+    // The stale ticket must be dropped: the profile is the source of truth after the PATCH.
     await admin.from('profiles').update({ onboarding_step: 'rappels' }).eq('id', session.userId);
+    await context.clearCookies({ name: 'learny_ob' });
     await page.goto('/agenda');
     await expect(page).toHaveURL(`${origin}/agenda`);
     expect((await context.cookies()).some((cookie) => cookie.name === 'learny_ob')).toBe(true);
+    // A later sign-in returns to the step recorded in the profile (EF-1, CL-2).
     await page.goto('/connexion');
     await expect(page).toHaveURL(`${origin}/premiers-pas/rappels`);
   } finally {

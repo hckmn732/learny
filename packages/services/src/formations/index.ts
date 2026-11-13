@@ -1,4 +1,5 @@
 // Public API of the formation-management services (SPEC-618).
+export { canAccessFormation } from './access';
 export {
   MAX_ACTIVE_FORMATIONS,
   activeFormationsForLimit,

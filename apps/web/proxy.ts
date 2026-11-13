@@ -3,12 +3,18 @@
 // 1. SDD demonstration pages (SPEC-006, EF-3): a network-level guard. The root loading.tsx makes
 //    pages stream, and a streamed page can no longer change its status: the 404 is decided here,
 //    before rendering. The pages keep their own guard as a second line of defense.
-// 2. Authentication and onboarding (SPEC-202, EF-9, ET-6): refresh the Supabase session, send an
+// 2. Formation pages (SPEC-615 ET-1, CL-1): the same streaming constraint applies to a formation
+//    of another learner. A fast access read decides the 404 before the loading skeleton starts; the
+//    page service repeats the check under RLS as the second line of defense.
+// 3. Authentication and onboarding (SPEC-202, EF-9, ET-6): refresh the Supabase session, send an
 //    anonymous visitor of a protected page to `/connexion`, a signed-in one away from the sign-in
 //    pages, and a learner who has not finished the first steps to `/premiers-pas/<step>`.
+import { randomUUID } from 'node:crypto';
+
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { clock } from '@learny/core';
+import { canAccessFormation, createServiceContext } from '@learny/services';
 
 import { sddDemos } from './app/%5Fdev/sdd/registry';
 import {
@@ -24,6 +30,7 @@ import { ONBOARDED_COOKIE, expireCookie } from './lib/supabase/server';
 // Unmatched internal path: rendered by app/not-found.tsx with a real 404 status.
 const NOT_FOUND_PATH = '/_sdd-not-found';
 const TICKET_TTL_SECONDS = Math.ceil(ONBOARDING_TICKET_TTL_MS / 1000);
+const FORMATION_PATH = /^\/formations\/([^/]+)(?:\/|$)/;
 
 function sddGuard(request: NextRequest): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
@@ -64,6 +71,29 @@ function sddGuard(request: NextRequest): NextResponse {
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
 }
 
+/**
+ * ET-1, CL-1 — a formation page of another learner must answer a real 404. The root loading page
+ * already streamed the skeleton, so the status has to be fixed before rendering. The read is a
+ * single indexed visibility check, not the page content.
+ */
+async function formationGuard(request: NextRequest, userId: string): Promise<NextResponse | null> {
+  const match = FORMATION_PATH.exec(request.nextUrl.pathname);
+  if (match === null) return null;
+  const formationId = match[1] ?? '';
+  // `/formations/nouvelle` is not a formation id; the page keeps its own validation.
+  if (formationId === 'nouvelle') return null;
+  try {
+    const ctx = createServiceContext({ userId, requestId: randomUUID() });
+    const access = await canAccessFormation(ctx, formationId);
+    if (access.ok && access.value) return null;
+    // A transient read failure lets the page show its controlled error state.
+    if (!access.ok && access.error.code !== 'NOT_FOUND') return null;
+  } catch {
+    return null;
+  }
+  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
+}
+
 async function sessionGuard(request: NextRequest): Promise<NextResponse> {
   const { pathname, search } = request.nextUrl;
   let session;
@@ -95,10 +125,14 @@ async function sessionGuard(request: NextRequest): Promise<NextResponse> {
     session.loadProfile,
   );
 
-  const response =
+  let response =
     decision.kind === 'redirect'
       ? NextResponse.redirect(new URL(decision.to, request.url), 307)
       : NextResponse.next();
+  if (decision.kind !== 'redirect' && session.userId !== null) {
+    const denied = await formationGuard(request, session.userId);
+    if (denied !== null) response = denied;
+  }
   for (const write of session.writes) response.cookies.set(write.name, write.value, write.options);
   if (session.userId !== null && decision.cacheStep !== undefined) {
     const value = createOnboardingTicket({

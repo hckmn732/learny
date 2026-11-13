@@ -377,7 +377,7 @@ describe('[SPEC-202] authentification — lien magique', () => {
     const existing = await createTestSession();
     try {
       await serviceDb().execute(
-        sql`update public.profiles set onboarding_step = 'rappels' where id = ${existing.userId}::uuid`,
+        sql`update public.profiles set onboarding_step = 'done' where id = ${existing.userId}::uuid`,
       );
       const sent = await call(magicLink, '/api/v1/auth/magic-link', {
         mode: 'sign-in',
@@ -413,7 +413,7 @@ describe('[SPEC-202] destination et déconnexion', () => {
     ['profil', null, undefined, '/premiers-pas/profil'],
     ['rythme', null, '/agenda', '/premiers-pas/rythme'],
     ['ia', null, undefined, '/premiers-pas/ia'],
-    ['rappels', null, '/agenda', '/agenda'],
+    ['rappels', null, '/agenda', '/premiers-pas/rappels'],
     ['done', null, undefined, '/accueil'],
     ['done', null, '//evil.example', '/accueil'],
     ['done', null, 'https://evil.example', '/accueil'],
@@ -467,12 +467,12 @@ describe('[SPEC-202] destination et déconnexion', () => {
       signOut,
       '/api/v1/auth/sign-out',
       {},
-      `${cookies}; lr-onboarded=1; lr-next=%2Fagenda`,
+      `${cookies}; learny_ob=1; lr-next=%2Fagenda`,
     );
     expect(out.status).toBe(204);
     const cleared = out.headers.getSetCookie();
     expect(cleared.some((line) => /^sb-.*Max-Age=0/i.test(line))).toBe(true);
-    expect(cleared.some((line) => /^lr-onboarded=;.*Max-Age=0/i.test(line))).toBe(true);
+    expect(cleared.some((line) => /^learny_ob=;.*Max-Age=0/i.test(line))).toBe(true);
     expect(cleared.some((line) => /^lr-next=;.*Max-Age=0/i.test(line))).toBe(true);
 
     const withOldToken = await getItems(

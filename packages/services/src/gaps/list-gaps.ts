@@ -89,6 +89,18 @@ async function readFormation(tx: DbTx, userId: string, formationId: string): Pro
     from public.formations f
     join public.profiles p on p.id = ${userId}::uuid
     where f.id = ${formationId}::uuid
+      and (
+        f.owner_id = ${userId}::uuid
+        or exists (
+          select 1
+          from public.groups g
+          join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = ${userId}::uuid
+            and gm.member_status = 'active'
+            and gm.left_at is null
+        )
+      )
   `);
   const formation = rows[0];
   if (formation === undefined) {
