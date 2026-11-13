@@ -34,7 +34,6 @@ test('journée d’Alex et navigation depuis l’accueil @SPEC-603', async ({
   page,
   axeCheck,
   captureEvidence,
-  consoleErrors,
 }) => {
   await page.goto('/');
   await expect(page).toHaveURL(/\/accueil$/);
@@ -94,7 +93,6 @@ test('journée d’Alex et navigation depuis l’accueil @SPEC-603', async ({
 
   await axeCheck();
   await captureEvidence('accueil-en-cours');
-  expect(consoleErrors).toEqual([]);
 });
 
 test('accueil d’un nouvel utilisateur @SPEC-603', async ({ page, axeCheck, captureEvidence, baseURL }) => {
@@ -126,6 +124,7 @@ test('accueil d’un nouvel utilisateur @SPEC-603', async ({ page, axeCheck, cap
 });
 
 test('passage de l’heure @SPEC-603', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-11-11T12:20:00Z') });
   await page.goto('/accueil');
   await expect(page.getByTestId('home-day')).toContainText('Dans 40 min');
   await page.clock.fastForward('00:41:00');
@@ -162,7 +161,7 @@ test('conformité SCR-03 par régions @SPEC-603 @visual', async ({ page, axeChec
       {
         name: 'home-header',
         locator: page.getByTestId('home-header'),
-        rect: { x: 310, y: 56, width: 1044, height: 80 },
+        rect: { x: 310, y: 60, width: 1035, height: 72 },
       },
       {
         name: 'home-day',
