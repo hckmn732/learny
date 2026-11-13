@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T10:23:20.694Z",
+  "updatedAt": "2026-11-13T10:25:36.509Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4032,11 +4032,11 @@
       }
     },
     "SPEC-607": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T10:25:36.509Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-607-module-et-apports",
       "commit": null,
       "lastError": null,
       "validations": {}
