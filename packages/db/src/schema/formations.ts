@@ -83,6 +83,9 @@ export const cadrageKey = pgEnum('cadrage_key', [
 /** BR-FOR-04 — a programme is proposed by the tutor or imported by the learner. */
 export const importKind = pgEnum('import_kind', ['file', 'text']);
 
+/** BR-FOR-04 — origin of a stored programme proposal version. */
+export const programmeSource = pgEnum('programme_source', ['generated', 'imported']);
+
 /** BR-FOR-07 — module status (mirror of the owner's `module_progress`). */
 export const moduleStatus = pgEnum('module_status', ['locked', 'open', 'validated']);
 
@@ -99,6 +102,7 @@ export const MAINTENANCE_MODES = maintenanceMode.enumValues;
 export const MESSAGE_ROLES = messageRole.enumValues;
 export const CADRAGE_KEYS = cadrageKey.enumValues;
 export const IMPORT_KINDS = importKind.enumValues;
+export const PROGRAMME_SOURCES = programmeSource.enumValues;
 export const MODULE_STATUSES = moduleStatus.enumValues;
 export const CONTRIB_STATUSES = contribStatus.enumValues;
 export const LINK_KINDS = linkKind.enumValues;
@@ -146,7 +150,6 @@ export const formations = pgTable(
       .where(sql`${table.groupId} is not null`),
     check('formations_monogram_length_check', sql`char_length(${table.monogram}) <= 3`),
     check('formations_title_length_check', sql`char_length(${table.title}) between 1 and 120`),
-    check('formations_monogram_length_check', sql`char_length(${table.monogram}) <= 3`),
     check('formations_description_length_check', sql`char_length(${table.description}) <= 2000`),
     check(
       'formations_cadrage_profile_check',
@@ -233,6 +236,10 @@ export const programmeImports = pgTable(
     resourceId: uuid('resource_id'),
     rawText: text('raw_text'),
     parsed: jsonb('parsed'),
+    /** EF-2 — original file kept private: name, size and bytes stay server-side. */
+    originalFilename: text('original_filename'),
+    originalSize: integer('original_size'),
+    originalContent: text('original_content'),
     status: jobStatus('status').notNull().default('queued'),
     error: text('error'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -245,6 +252,22 @@ export const programmeImports = pgTable(
     check(
       'programme_imports_source_kind_check',
       sql`(${table.sourceKind} = 'text') = (${table.rawText} is not null)`,
+    ),
+    check(
+      'programme_imports_original_check',
+      sql`(${table.sourceKind} = 'file') = (${table.originalContent} is not null)`,
+    ),
+    check(
+      'programme_imports_original_filename_length_check',
+      sql`${table.originalFilename} is null or char_length(${table.originalFilename}) <= 200`,
+    ),
+    check(
+      'programme_imports_original_content_length_check',
+      sql`${table.originalContent} is null or char_length(${table.originalContent}) <= 950000`,
+    ),
+    check(
+      'programme_imports_original_size_check',
+      sql`${table.originalSize} is null or ${table.originalSize} between 1 and 1000000`,
     ),
   ],
 );
@@ -275,6 +298,55 @@ export const programmeChangeRequests = pgTable(
     check(
       'programme_change_requests_result_summary_length_check',
       sql`char_length(${table.resultSummary}) <= 4000`,
+    ),
+  ],
+);
+
+/**
+ * BR-FOR-04, EF-3 — one immutable version of a proposed programme. The active structure only
+ * exists in `modules`/`chapters`/`notions` after validation; a proposal never touches them.
+ */
+export const programmeProposals = pgTable(
+  'programme_proposals',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    formationId: uuid('formation_id')
+      .notNull()
+      .references(() => formations.id, { onDelete: 'cascade' }),
+    /** ADR-0113 — direct RLS scope without joining the formation. */
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    version: integer('version').notNull(),
+    source: programmeSource('source').notNull(),
+    description: text('description'),
+    volumeHours: smallint('volume_hours'),
+    summary: text('summary'),
+    /** Ordered modules, chapters and notions (positions included), validated by the contract. */
+    payload: jsonb('payload').notNull(),
+    importId: uuid('import_id').references(() => programmeImports.id, { onDelete: 'set null' }),
+    changeRequestId: uuid('change_request_id').references(() => programmeChangeRequests.id, {
+      onDelete: 'set null',
+    }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique('programme_proposals_formation_version_unique').on(table.formationId, table.version),
+    index('programme_proposals_formation_idx').on(table.formationId),
+    index('programme_proposals_user_id_idx').on(table.userId),
+    check('programme_proposals_version_check', sql`${table.version} >= 1`),
+    check('programme_proposals_payload_check', sql`jsonb_typeof(${table.payload}) = 'object'`),
+    check(
+      'programme_proposals_description_length_check',
+      sql`${table.description} is null or char_length(${table.description}) <= 2000`,
+    ),
+    check(
+      'programme_proposals_volume_hours_check',
+      sql`${table.volumeHours} is null or ${table.volumeHours} between 1 and 2000`,
+    ),
+    check(
+      'programme_proposals_summary_length_check',
+      sql`${table.summary} is null or char_length(${table.summary}) <= 1000`,
     ),
   ],
 );
@@ -491,3 +563,5 @@ export type ProgrammeImport = typeof programmeImports.$inferSelect;
 export type NewProgrammeImport = typeof programmeImports.$inferInsert;
 export type ProgrammeChangeRequest = typeof programmeChangeRequests.$inferSelect;
 export type NewProgrammeChangeRequest = typeof programmeChangeRequests.$inferInsert;
+export type ProgrammeProposal = typeof programmeProposals.$inferSelect;
+export type NewProgrammeProposal = typeof programmeProposals.$inferInsert;
