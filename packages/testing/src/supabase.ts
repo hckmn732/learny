@@ -124,8 +124,8 @@ export async function createDemoSession(userId: string, email: string): Promise<
   await serviceDb().execute(sql`
     insert into auth.identities (id, user_id, provider, provider_id, identity_data, created_at, updated_at)
     values (
-      gen_random_uuid(), ${userId}::uuid, 'email', ${userId},
-      jsonb_build_object('sub', ${userId}, 'email', ${email}, 'email_verified', true),
+      gen_random_uuid(), ${userId}::uuid, 'email', ${userId}::text,
+      jsonb_build_object('sub', ${userId}::text, 'email', ${email}::text, 'email_verified', true),
       now(), now()
     )
     on conflict (provider_id, provider) do nothing
