@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-13T10:23:20.695Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-13T11:24:01.843Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 83 |
+| Terminées | 84 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 48 |
+| En attente de dépendances | 47 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **62.9 %** |
-| Avancement V1 | 66.9 % |
-| Prochaine action | start SPEC-607 — Module et apports |
+| **Avancement global** | **63.6 %** |
+| Avancement V1 | 67.7 % |
+| Prochaine action | start SPEC-608 — Génération du cours |
 
 ## Phases et checkpoints
 
@@ -27,7 +27,7 @@
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
-| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 10/18 | CP-6 | ⏳ |
+| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 11/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
@@ -115,8 +115,8 @@
 | [SPEC-604](../specs/p6-parcours/SPEC-604-nouvelle-formation-cadrage-par-chat.md) | Nouvelle formation : cadrage par chat | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-508, SPEC-304 |
 | [SPEC-605](../specs/p6-parcours/SPEC-605-programme-propose-import-ajustement-et-validation.md) | Programme proposé, import, ajustement et validation | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-604, SPEC-512, SPEC-407 |
 | [SPEC-606](../specs/p6-parcours/SPEC-606-programme-en-cours.md) | Programme en cours | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-605 |
-| [SPEC-607](../specs/p6-parcours/SPEC-607-module-et-apports.md) | Module et apports | P6 | 🟢 ready | 0 | — | SPEC-606, SPEC-509, SPEC-510, SPEC-512 |
-| [SPEC-608](../specs/p6-parcours/SPEC-608-generation-du-cours.md) | Génération du cours | P6 | ⏳ waiting | 0 | — | SPEC-607, SPEC-511, SPEC-508, SPEC-513 |
+| [SPEC-607](../specs/p6-parcours/SPEC-607-module-et-apports.md) | Module et apports | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-606, SPEC-509, SPEC-510, SPEC-512 |
+| [SPEC-608](../specs/p6-parcours/SPEC-608-generation-du-cours.md) | Génération du cours | P6 | 🟢 ready | 0 | — | SPEC-607, SPEC-511, SPEC-508, SPEC-513 |
 | [SPEC-609](../specs/p6-parcours/SPEC-609-lecture-du-cours.md) | Lecture du cours | P6 | ⏳ waiting | 0 | — | SPEC-608, SPEC-503 |
 | [SPEC-610](../specs/p6-parcours/SPEC-610-discussion-contextuelle-avec-le-tuteur.md) | Discussion contextuelle avec le tuteur | P6 | ⏳ waiting | 0 | — | SPEC-609, SPEC-511 |
 | [SPEC-611](../specs/p6-parcours/SPEC-611-quiz-de-validation-passage.md) | Quiz de validation : passage | P6 | ⏳ waiting | 0 | — | SPEC-609, SPEC-405, SPEC-502, SPEC-503 |
