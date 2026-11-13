@@ -44,12 +44,19 @@ interface ChunkRow extends Record<string, unknown> {
 }
 
 function invalidInput(error: { issues: { path: PropertyKey[]; message: string }[] }): AppError {
-  return new AppError('VALIDATION_FAILED', 'La recherche de passages est invalide.', {
-    errors: error.issues.map((issue) => ({
-      path: issue.path.map(String).join('.'),
-      message: issue.message,
-    })),
-  });
+  const first = error.issues[0]?.message;
+  return new AppError(
+    'VALIDATION_FAILED',
+    first === undefined
+      ? 'La recherche de passages est invalide.'
+      : `La recherche de passages est invalide : ${first}`,
+    {
+      errors: error.issues.map((issue) => ({
+        path: issue.path.map(String).join('.'),
+        message: issue.message,
+      })),
+    },
+  );
 }
 
 function parseLocation(value: ChunkRow['location']): RetrievalLocation {

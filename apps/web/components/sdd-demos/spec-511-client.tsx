@@ -184,12 +184,16 @@ export function Spec511View({ data }: Readonly<{ data: Spec511Data }>) {
           {t.selection.omitted(data.selection.omitted)}
         </p>
         <h3 className="mt-4 font-display text-base font-semibold">{t.selection.preview}</h3>
-        <pre
-          data-testid="spec-511-context-preview"
-          className="mt-2 max-h-96 overflow-auto rounded-12 bg-canvas p-4 text-12"
+        <div
+          role="region"
+          aria-label={t.selection.preview}
+          tabIndex={0}
+          className="mt-2 max-h-96 overflow-auto rounded-12 bg-canvas p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {data.selection.preview}
-        </pre>
+          <pre data-testid="spec-511-context-preview" className="m-0 text-12">
+            {data.selection.preview}
+          </pre>
+        </div>
         {data.selection.truncated ? (
           <p className="mt-2 text-12 text-ink-muted" data-testid="spec-511-context-truncated">
             {t.selection.truncated}
@@ -199,19 +203,27 @@ export function Spec511View({ data }: Readonly<{ data: Spec511Data }>) {
 
       <BaseCard testId="spec-511-trap-card" title={t.trap.title}>
         <h3 className="mt-0 font-display text-base font-semibold">{t.trap.raw}</h3>
-        <pre
-          data-testid="spec-511-trap-raw"
-          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
+        <div
+          role="region"
+          aria-label={t.trap.raw}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {data.trap.raw}
-        </pre>
+          <pre data-testid="spec-511-trap-raw" className="m-0 text-12">
+            {data.trap.raw}
+          </pre>
+        </div>
         <h3 className="mt-4 font-display text-base font-semibold">{t.trap.formatted}</h3>
-        <pre
-          data-testid="spec-511-trap-formatted"
-          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
+        <div
+          role="region"
+          aria-label={t.trap.formatted}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {data.trap.formatted}
-        </pre>
+          <pre data-testid="spec-511-trap-formatted" className="m-0 text-12">
+            {data.trap.formatted}
+          </pre>
+        </div>
         <p className="mt-3 text-12 text-ink-muted">{t.trap.note}</p>
       </BaseCard>
 
@@ -239,19 +251,27 @@ export function Spec511View({ data }: Readonly<{ data: Spec511Data }>) {
 
       <BaseCard testId="spec-511-contract-card" title={t.contract.title}>
         <h3 className="mt-0 font-display text-base font-semibold">{t.contract.input}</h3>
-        <pre
-          data-testid="spec-511-contract-input"
-          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
+        <div
+          role="region"
+          aria-label={t.contract.input}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {JSON.stringify(data.contractInput, null, 2)}
-        </pre>
+          <pre data-testid="spec-511-contract-input" className="m-0 text-12">
+            {JSON.stringify(data.contractInput, null, 2)}
+          </pre>
+        </div>
         <h3 className="mt-4 font-display text-base font-semibold">{t.contract.output}</h3>
-        <pre
-          data-testid="spec-511-contract-output"
-          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 text-12"
+        <div
+          role="region"
+          aria-label={t.contract.output}
+          tabIndex={0}
+          className="mt-2 overflow-x-auto rounded-12 bg-canvas p-4 focus-visible:outline-2 focus-visible:outline-offset-2"
         >
-          {JSON.stringify(data.contractOutput, null, 2)}
-        </pre>
+          <pre data-testid="spec-511-contract-output" className="m-0 text-12">
+            {JSON.stringify(data.contractOutput, null, 2)}
+          </pre>
+        </div>
         <p className="mt-3 text-12 text-ink-muted">{t.contract.note}</p>
       </BaseCard>
     </>
