@@ -1,2 +1,40 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="1.9322099999999998">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="36.230455">
+<testsuite name="p6/quiz-result.spec.ts" timestamp="2026-11-13T18:32:02.116Z" hostname="desktop" tests="2" failures="0" skipped="0" time="4.614" errors="0">
+<testcase name="échec, lacunes puis remédiation @SPEC-612" classname="p6/quiz-result.spec.ts" time="3.003">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/attachments/result-fail-564b0e365f3af1e1b5f82f7da246b26038e65f30.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/attachments/remediation-ready-10d181352c0da774ce483efec5f5e1efa90bc3c5.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/attachments/axe-ac0f3e80db42825fa4ae83763288780a29b7ca6a.json]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-échec-lacunes-puis-remédiation-SPEC-612-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="résultat échec conforme @SPEC-612 @visual" classname="p6/quiz-result.spec.ts" time="1.611">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/attachments/result-pass-cb2f1c496c95db3294194b8db1d0d7c6383f57e3.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/attachments/axe-5fe824694ee57e4621283d92392c735a85ca738a.json]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-result-résultat-échec-conforme-SPEC-612-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
 </testsuites>
