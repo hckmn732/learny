@@ -237,7 +237,7 @@
       "specs": [
         {
           "title": "résout un exercice structuré @SPEC-613",
-          "ok": false,
+          "ok": true,
           "tags": [
             "SPEC-613"
           ],
@@ -252,38 +252,34 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 6341,
-                  "error": {
-                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n\n    at /home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts:182:54",
-                    "location": {
-                      "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
-                      "column": 54,
-                      "line": 182
-                    },
-                    "snippet": " \u001b[90m 180 |\u001b[39m   \u001b[90m// CA-1 — an unbalanced piece is refused before any tutor call.\u001b[39m\n \u001b[90m 181 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-submit'\u001b[39m)\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 182 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-message'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Écart : 20 €'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 183 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-feedback'\u001b[39m))\u001b[33m.\u001b[39mtoHaveCount(\u001b[35m0\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 184 |\u001b[39m\n \u001b[90m 185 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByTestId(\u001b[32m'exercise-cell-0-montant'\u001b[39m)\u001b[33m.\u001b[39mfill(\u001b[32m'120'\u001b[39m)\u001b[33m;\u001b[39m"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
-                        "column": 54,
-                        "line": 182
-                      },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('exercise-message')\nExpected substring: \u001b[32m\"Écart : 20 €\"\u001b[39m\nReceived string:    \u001b[31m\"La production envoyée est invalide.\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('exercise-message') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('exercise-message')\u001b[22m\n\u001b[2m    12 × locator resolved to <p role=\"alert\" data-testid=\"exercise-message\" class=\"m-0 text-13 font-600 text-orange-ink\">La production envoyée est invalide.</p>\u001b[22m\n\u001b[2m       - unexpected value \"La production envoyée est invalide.\"\u001b[22m\n\n\n  180 |   // CA-1 — an unbalanced piece is refused before any tutor call.\n  181 |   await page.getByTestId('exercise-submit').click();\n> 182 |   await expect(page.getByTestId('exercise-message')).toContainText('Écart : 20 €');\n      |                                                      ^\n  183 |   await expect(page.getByTestId('exercise-feedback')).toHaveCount(0);\n  184 |\n  185 |   await page.getByTestId('exercise-cell-0-montant').fill('120');\n    at /home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts:182:54"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 2993,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:58:48.889Z",
+                  "startTime": "2026-11-13T08:54:22.999Z",
                   "annotations": [],
                   "attachments": [
                     {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/attachments/axe-abc4b786cc0d2bd27151e562302652558d646150.json"
+                    },
+                    {
+                      "name": "spec-613-exercice-resolu",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/attachments/spec-613-exercice-resolu-bb7c472cdeac97341b828ee51afb28cc50c7a692.png"
+                    },
+                    {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/test-failed-1.png"
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/video-1.webm"
                     },
                     {
                       "name": "video",
@@ -291,29 +287,14 @@
                       "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/video.webm"
                     },
                     {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/error-context.md"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/error-context.md"
-                    },
-                    {
                       "name": "trace",
                       "contentType": "application/zip",
                       "path": "/home/kbenito/Documents/work/learny-wt-613/test-results/artifacts/p6-practice-exercise-résout-un-exercice-structuré-SPEC-613-desktop/trace.zip"
                     }
-                  ],
-                  "errorLocation": {
-                    "file": "/home/kbenito/Documents/work/learny-wt-613/apps/web/e2e/specs/p6/practice-exercise.spec.ts",
-                    "column": 54,
-                    "line": 182
-                  }
+                  ]
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "cf9f4631fdc2dd2e5f15-3b8540ffc085f355fcbc",
@@ -336,15 +317,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2272,
+                  "duration": 2205,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:58:56.724Z",
+                  "startTime": "2026-11-13T08:54:26.212Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -403,15 +384,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 606,
+                  "duration": 589,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:58:59.177Z",
+                  "startTime": "2026-11-13T08:54:28.531Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -466,15 +447,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2901,
+                  "duration": 2414,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:58:59.798Z",
+                  "startTime": "2026-11-13T08:54:29.134Z",
                   "annotations": [
                     {
                       "type": "mockup-diff-ratio",
@@ -555,15 +536,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "skipped",
-                  "duration": 223,
+                  "duration": 213,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:59:02.820Z",
+                  "startTime": "2026-11-13T08:54:31.665Z",
                   "annotations": [
                     {
                       "type": "skip",
@@ -609,15 +590,15 @@
               "projectName": "mobile",
               "results": [
                 {
-                  "workerIndex": 2,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2314,
+                  "duration": 2303,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-13T07:59:04.427Z",
+                  "startTime": "2026-11-13T08:54:33.186Z",
                   "annotations": [
                     {
                       "type": "mockup-diff-ratio",
@@ -676,11 +657,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-13T07:58:17.084Z",
-    "duration": 49909.914,
-    "expected": 4,
+    "startTime": "2026-11-13T08:53:51.729Z",
+    "duration": 43997.96,
+    "expected": 5,
     "skipped": 1,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }
