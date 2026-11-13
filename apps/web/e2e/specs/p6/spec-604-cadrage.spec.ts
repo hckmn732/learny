@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
+import { createTestProgramme } from '@learny/db/testing';
+import { createNotionState } from '@learny/testing';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {
@@ -159,19 +161,38 @@ async function compareFullPage(
   await expectScreenshotBaseline(page, `cadrage-${width === 390 ? 'mobile' : 'desktop'}.png`, {
     fullPage: true,
   });
-  const actual = await page.screenshot({ fullPage: true, animations: 'disabled' });
-  const height = Math.max(1, Math.floor(await page.evaluate(() => document.documentElement.scrollHeight)));
+  const chat = await page.getByTestId('cadrage-chat').boundingBox();
+  const profile = await page.getByTestId('cadrage-profile').boundingBox();
+  if (chat === null || profile === null) throw new Error('zone de cadrage non mesurable');
+  const x = Math.floor(Math.min(chat.x, profile.x));
+  const y = Math.floor(Math.min(chat.y, profile.y));
+  const right = Math.ceil(Math.max(chat.x + chat.width, profile.x + profile.width));
+  const bottom = Math.ceil(Math.max(chat.y + chat.height, profile.y + profile.height));
+  const actualWidth = right - x;
+  const actualHeight = bottom - y;
+  const actual = await page.screenshot({
+    animations: 'disabled',
+    clip: { x, y, width: actualWidth, height: actualHeight },
+  });
   const referencePage = await page.context().newPage();
-  await referencePage.setViewportSize({ width, height });
+  await referencePage.setViewportSize({ width: actualWidth, height: actualHeight });
   const url = new URL(`/_dev/sdd/reference/${referenceName}`, page.url()).toString();
+  const mobile = width === 390;
+  const ref = mobile
+    ? { x: 0, y: 130, width: 433, height: 2329 }
+    : { x: 311, y: 144, width: 1042, height: 779 };
+  const scaleX = actualWidth / ref.width;
+  const scaleY = actualHeight / ref.height;
+  const imageWidth = (mobile ? 433 : 1600) * scaleX;
+  const imageHeight = (mobile ? 2585 : 1083) * scaleY;
   await referencePage.setContent(
-    `<body style="margin:0;background:#F4F4F1"><img id="ref" src="${url}" width="${String(width)}" style="display:block;margin:0"></body>`,
+    `<body style="margin:0"><div style="width:${String(actualWidth)}px;height:${String(actualHeight)}px;background:#F4F4F1 url('${url}') no-repeat;background-size:${String(imageWidth)}px ${String(imageHeight)}px;background-position:${String(-ref.x * scaleX)}px ${String(-ref.y * scaleY)}px"></div><img id="ref-img" src="${url}" alt="" style="position:absolute;width:1px;height:1px;opacity:0"></body>`,
   );
   await referencePage.waitForFunction(() => {
-    const image = document.getElementById('ref');
+    const image = document.getElementById('ref-img');
     return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
   });
-  const reference = await referencePage.screenshot({ fullPage: false });
+  const reference = await referencePage.screenshot({ fullPage: false, animations: 'disabled' });
   await referencePage.close();
   const referencePath = testInfo.outputPath(`cadrage-reference-${String(width)}.png`);
   fs.writeFileSync(referencePath, reference);
@@ -193,6 +214,72 @@ async function compareFullPage(
   return comparison.ratio;
 }
 
+async function seedSidebar(userId: string): Promise<void> {
+  const days = Array.from({ length: 14 }, (_value, index) => {
+    const date = new Date(Date.UTC(2026, 9, 29 + index));
+    return date.toISOString().slice(0, 10);
+  });
+  await serviceDb().transaction(async (tx) => {
+    const sap = await createTestProgramme(tx, userId, {
+      modules: 7,
+      chaptersPerModule: 1,
+      notionsPerChapter: 2,
+      title: 'SAP S/4HANA Finance',
+    });
+    for (let index = 0; index < 2; index += 1) {
+      const moduleId = sap.moduleIds[index];
+      if (moduleId === undefined) throw new Error('module SAP absent');
+      await tx.execute(sql`
+        update public.modules set status = 'validated', validated_at = '2026-11-11T12:20:00Z'::timestamptz
+        where id = ${moduleId}::uuid
+      `);
+    }
+    const openModule = sap.moduleIds[2];
+    if (openModule !== undefined) {
+      await tx.execute(sql`
+        update public.modules set status = 'open', opened_at = '2026-11-11T12:20:00Z'::timestamptz
+        where id = ${openModule}::uuid
+      `);
+    }
+    for (let index = 0; index < 14; index += 1) {
+      const notionId = sap.notionIds[index];
+      if (notionId === undefined) throw new Error('notion SAP absente');
+      const gaps = ['forgetting', 'confusion', 'misunderstanding', 'application'] as const;
+      const gapNature = gaps[index];
+      await createNotionState(tx, {
+        userId,
+        notionId,
+        gapNature: gapNature ?? null,
+        ...(gapNature === 'confusion'
+          ? { confusedWith: sap.notionIds[0] ?? null, evidence: 'Confondue avec la notion voisine.' }
+          : gapNature === undefined
+            ? {}
+            : { evidence: 'Lacune observée en quiz.' }),
+        inReview: true,
+        dueAt: new Date('2026-11-11T08:00:00Z'),
+      });
+    }
+    await tx.execute(sql`
+      insert into public.daily_activity (user_id, day, minutes, qualifying, sources)
+      values ${sql.join(
+        days.map((day) => sql`(${userId}::uuid, ${day}::date, 60, true, array['e2e']::text[])`),
+        sql`, `,
+      )}
+      on conflict (user_id, day) do nothing
+    `);
+    await tx.execute(sql`
+      update public.formations
+      set last_opened_at = '2026-11-11T12:20:00Z'::timestamptz, status = 'active'
+      where id = ${sap.formationId}::uuid
+    `);
+    await tx.execute(sql`
+      update public.profiles
+      set current_formation_id = ${sap.formationId}::uuid, onboarding_step = 'done', streak_days = 12
+      where id = ${userId}::uuid
+    `);
+  });
+}
+
 async function reachThirdQuestion(page: import('@playwright/test').Page): Promise<void> {
   await page.goto(NEW);
   await page.getByTestId('cadrage-title-input').fill('SAP S/4HANA Finance');
@@ -205,6 +292,7 @@ async function reachThirdQuestion(page: import('@playwright/test').Page): Promis
 }
 
 test('conformité SCR-04 cadrage @SPEC-604 @visual', async ({ page, axeCheck }, testInfo) => {
+  await seedSidebar(session.userId);
   await reachThirdQuestion(page);
   await expectTokens(page, {
     body: { 'background-color': colors.canvas, color: colors.ink },
@@ -243,6 +331,7 @@ test('conformité SCR-04 cadrage mobile @SPEC-604 @visual @mobile', async ({
   axeCheck,
 }, testInfo) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
+  await seedSidebar(session.userId);
   await reachThirdQuestion(page);
   const ratio = await compareFullPage(page, testInfo, 'SCR-04-base-mobile.png', 390);
   expect(ratio).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
