@@ -33,6 +33,8 @@ export type {
   DemoJobResult,
   DemoStepName,
 } from './functions/demo-job';
+export { QUIZ_GRADE_ID, createQuizGradeJob } from './functions/quiz-grade';
+export type { QuizGradeDeps, QuizGradeRunArgs } from './functions/quiz-grade';
 export { createFunctions, functions, learnyFunctions, sddDemoStore } from './functions';
 export type { JobDeps } from './functions';
 export {

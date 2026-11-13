@@ -1,0 +1,73 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="47.7241">
+<testsuite name="p6/quiz-attempt.spec.ts" timestamp="2026-11-13T16:46:06.059Z" hostname="desktop" tests="5" failures="0" skipped="0" time="15.522" errors="0">
+<testcase name="passe une tentative complète @SPEC-611" classname="p6/quiz-attempt.spec.ts" time="5.111">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/attachments/question-4-00551cd5dd7fe6eed6bedc5b10fcd8b3adc6ee50.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/attachments/resultat-6d9f2e485f7cf96353b03b5061300f48c651c296.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/attachments/axe-73ccf404325ba46a4cf5ed1efd530118b966f09c.json]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-passe-une-tentative-complète-SPEC-611-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="reprise après rechargement @SPEC-611" classname="p6/quiz-attempt.spec.ts" time="3.535">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-attempt-reprise-après-rechargement-SPEC-611-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-reprise-après-rechargement-SPEC-611-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-reprise-après-rechargement-SPEC-611-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="banque épuisée puis préparée @SPEC-611" classname="p6/quiz-attempt.spec.ts" time="2.365">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-attempt-banque-épuisée-puis-préparée-SPEC-611-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-banque-épuisée-puis-préparée-SPEC-611-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-banque-épuisée-puis-préparée-SPEC-611-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="correction en attente si le tuteur est indisponible @SPEC-611" classname="p6/quiz-attempt.spec.ts" time="2.032">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-attempt-correction-9e083-r-est-indisponible-SPEC-611-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-correction-9e083-r-est-indisponible-SPEC-611-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-correction-9e083-r-est-indisponible-SPEC-611-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="écran de question conforme @SPEC-611 @visual" classname="p6/quiz-attempt.spec.ts" time="2.479">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/attachments/feedback-faux-f3b8f491fc7ee301190846554646b3703165da9e.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/attachments/axe-058f89bd1485eb8b17f527a9a7a7e4b7548aeffa.json]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-quiz-attempt-écran-de-question-conforme-SPEC-611-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

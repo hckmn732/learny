@@ -34,6 +34,9 @@ import tutorStream from '../../fixtures/tutor/demo-stream.json' with { type: 'js
 import tutorTimeout from '../../fixtures/tutor/demo-timeout.json' with { type: 'json' };
 import tutorToolCall from '../../fixtures/tutor/demo-tool-call.json' with { type: 'json' };
 import tutorDefault from '../../fixtures/tutor/demo.default.json' with { type: 'json' };
+import gradeOpenGood from '../../fixtures/tutor/grade-open-good.json' with { type: 'json' };
+import gradeOpenOfftopic from '../../fixtures/tutor/grade-open-offtopic.json' with { type: 'json' };
+import gradeOpenPartial from '../../fixtures/tutor/grade-open-partial.json' with { type: 'json' };
 import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json' with { type: 'json' };
 import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json' with { type: 'json' };
 import tutorQuestionBankRegeneration from '../../fixtures/tutor/question-bank-regeneration.json' with { type: 'json' };
@@ -75,6 +78,9 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('tutor/demo.default.json', tutorDefault),
   entry('tutor/loop-completed.json', tutorLoopCompleted),
   entry('tutor/loop-tone-tu-en.json', tutorLoopToneTuEn),
+  entry('tutor/grade-open-good.json', gradeOpenGood),
+  entry('tutor/grade-open-partial.json', gradeOpenPartial),
+  entry('tutor/grade-open-offtopic.json', gradeOpenOfftopic),
   entry('tutor/question-bank.json', tutorQuestionBank),
   entry('tutor/question-bank-regeneration.json', tutorQuestionBankRegeneration),
   entry('tutor/cadrage-sap-q1.json', cadrageSapQ1),

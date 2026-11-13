@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T16:30:15.042Z",
+  "updatedAt": "2026-11-13T16:47:39.409Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4236,14 +4236,55 @@
       }
     },
     "SPEC-611": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T14:18:17.326Z",
+      "completedAt": "2026-11-13T16:46:36.440Z",
+      "branch": "spec/SPEC-611-quiz-de-validation-passage",
+      "commit": "81b28af2",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T16:43:36.574Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T16:43:56.572Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T16:43:56.973Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T16:44:08.960Z",
+          "details": "11 test(s) [SPEC-611] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T16:45:33.732Z",
+          "details": "6 test(s) [SPEC-611] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T16:46:23.021Z",
+          "details": "5 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T16:46:23.021Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T16:46:23.032Z",
+          "details": "9/9 critères ✅"
+        }
+      }
     },
     "SPEC-612": {
       "status": "pending",

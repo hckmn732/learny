@@ -186,3 +186,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0313](ADR-0313-contrats-et-pipeline-de-generation-du-cours.md) | Contrats et pipeline de génération du cours | Déduite | SPEC-608 |
 | [ADR-0314](ADR-0314-contrats-d-implementation-de-la-lecture-du-cours.md) | Contrats d'implémentation de la lecture du cours | Déduite | SPEC-609 |
 | [ADR-0315](ADR-0315-contexte-sse-et-teste-moi-de-la-discussion.md) | Contexte, SSE et Teste-moi de la discussion | Déduite | — |
+| [ADR-0316](ADR-0316-correction-differee-des-questions-ouvertes-par-appel-structu.md) | Correction différée des questions ouvertes par appel structuré | Déduite | SPEC-611,SPEC-508,ADR-0017,ADR-0170 |

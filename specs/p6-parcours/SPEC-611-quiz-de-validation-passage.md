@@ -167,6 +167,6 @@ Définition commune (`docs/engineering/testing.md` §7), plus : le score n'est j
 ## 15. Décisions et hypothèses
 
 - ADR appliqués : ADR-0014 (taille, seuil, répartition), ADR-0024 (maîtrise, réussite partielle), ADR-0025 (note FSRS par la justesse et le temps), ADR-0026 (banques personnelles), ADR-0017 (reprises), ADR-0065 (interrogation périodique), ADR-0013 (échec du modèle personnel).
-- Décision créée : **ADR-0170** (formats corrigés par le code inclus dans la part « à choix », barème égal, retour des ouvertes, réussite partielle).
+- Décision créée : **ADR-0170** (formats corrigés par le code inclus dans la part « à choix », barème égal, retour des ouvertes, réussite partielle) ; **ADR-0316** (correction différée par appel structuré `tutor.grade-open`, bornage et reprises).
 - Décisions locales : une activité `validation_quiz` par tentative (items figés) ; garde extensible `quizAttemptGuards` (le délai est ajouté par SPEC-612) ; 202 de préparation avec relance client ; relance de correction par `POST submit` (aucune route nouvelle).
 - Hypothèses : SPEC-405 accepte `formatMix` et `seed` ; SPEC-513 expose `banks.requestRegeneration` ; le seed SPEC-115 contient pour Alex une tentative 1 (58 %) et une banque suffisante pour le module 3.

@@ -634,6 +634,13 @@ export function drawAttempt(rawInput: DrawAttemptInput): DrawAttemptResult {
   const random = createSeededRandom(input.seed);
   const used = new Set<Candidate>();
   const selected: SelectedCandidate[] = [];
+  // ADR-0170 §1 — at least the majority of the code-corrected questions are `choice_question`.
+  // The share alone does not guarantee it when the bank carries as many cloze and matching
+  // variants; the draw therefore prefers a choice question until this floor is reached.
+  const choiceShareTarget = Math.max(0, targetCount - openTarget);
+  const choiceQuestionFloor = Math.ceil(choiceShareTarget * 0.6);
+  const choiceQuestionCount = (): number =>
+    selected.filter((entry) => entry.candidate.brick.format === 'choice_question').length;
   const shortageByNotion = new Map<Id, Set<DrawShare>>();
   const markShortage = (notionId: Id, share: DrawShare): void => {
     const set = shortageByNotion.get(notionId);
@@ -654,6 +661,12 @@ export function drawAttempt(rawInput: DrawAttemptInput): DrawAttemptResult {
     const pool = (candidateSet.byNotion.get(notionId) ?? []).filter(
       (candidate) => !used.has(candidate) && candidate.share === share,
     );
+    if (share === 'choice' && choiceQuestionCount() < choiceQuestionFloor) {
+      const preferred = pool.filter(
+        (candidate) => candidate.brick.format === 'choice_question',
+      );
+      if (preferred.length > 0) return pickUniform(preferred, random);
+    }
     return pickUniform(pool, random);
   };
 
@@ -691,7 +704,15 @@ export function drawAttempt(rawInput: DrawAttemptInput): DrawAttemptResult {
       if (openPool.length > 0) pool = openPool;
     } else if (choices < choiceTarget) {
       const choicePool = remaining.filter((candidate) => candidate.share === 'choice');
-      if (choicePool.length > 0) pool = choicePool;
+      if (choicePool.length > 0) {
+        const preferred = choicePool.filter(
+          (candidate) => candidate.brick.format === 'choice_question',
+        );
+        pool =
+          choiceQuestionCount() < choiceQuestionFloor && preferred.length > 0
+            ? preferred
+            : choicePool;
+      }
     }
     const picked = pickWeighted(pool, random);
     if (picked === undefined) break;

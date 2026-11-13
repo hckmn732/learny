@@ -2,8 +2,9 @@
 // No user session: the SDK verifies Inngest's signature (signing key stays server side).
 import { serve } from 'inngest/next';
 
-import { functions, inngest, setJobErrorReporter } from '@learny/jobs';
+import { inngest, setJobErrorReporter } from '@learny/jobs';
 
+import { jobRegistry } from '../../../lib/quiz-grade-registry';
 import { getServerReporter } from '../../../lib/sentry';
 
 export const dynamic = 'force-dynamic';
@@ -17,4 +18,4 @@ setJobErrorReporter((report) => {
   });
 });
 
-export const { GET, POST, PUT } = serve({ client: inngest, functions });
+export const { GET, POST, PUT } = serve({ client: inngest, functions: jobRegistry });

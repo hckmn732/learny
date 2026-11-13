@@ -17,4 +17,7 @@ export async function register(): Promise<void> {
   // Telemetry is optional and configured after the environment is known (SPEC-010, ET-4).
   const { registerServerSentry } = await import('./sentry.server.config');
   await registerServerSentry(process.env);
+  // SPEC-611 — the inline dispatcher must know the injected quiz-grade job before the first emit.
+  const { registerInlineJobs } = await import('./lib/quiz-grade-registry');
+  registerInlineJobs();
 }
