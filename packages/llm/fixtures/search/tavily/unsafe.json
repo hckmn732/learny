@@ -1,0 +1,55 @@
+{
+  "provider": "tavily",
+  "scenario": "unsafe",
+  "description": "Repli simulé contenant liens dangereux, adresses privées et doublons canoniques à exclure.",
+  "results": [
+    {
+      "title": "Lien actif",
+      "url": "javascript:alert(1)",
+      "content": "Cette entrée ne doit jamais atteindre le modèle."
+    },
+    {
+      "title": "Boucle locale",
+      "url": "http://127.0.0.1:8080/secret",
+      "content": "Adresse privée."
+    },
+    {
+      "title": "Hôte du réseau local",
+      "url": "http://192.168.1.10/notes",
+      "content": "Adresse privée."
+    },
+    {
+      "title": "Intranet",
+      "url": "http://serveur.local/notes",
+      "content": "Nom d’hôte privé."
+    },
+    {
+      "title": "Fichier local",
+      "url": "file:///etc/passwd",
+      "content": "Schéma non HTTP."
+    },
+    {
+      "title": "Identifiants dans l’URL",
+      "url": "https://utilisateur:motdepasse@example.org/prive",
+      "content": "Identifiants interdits."
+    },
+    {
+      "title": "Fractions avec suivi",
+      "url": "https://www.ressources.example.org/fractions/?utm_source=news#top",
+      "content": "<script>alert(1)</script>Une fraction est un quotient de deux nombres.",
+      "published_date": "2026-09-14"
+    },
+    {
+      "title": "Fractions — doublon canonique",
+      "url": "https://ressources.example.org/fractions",
+      "content": "Une fraction est un quotient de deux nombres.",
+      "published_date": "2026-09-14"
+    },
+    {
+      "title": "Page publique",
+      "url": "https://example.org/page-publique",
+      "content": "Contenu <em>lisible</em> et sans script.",
+      "published_date": "2026-10-01"
+    }
+  ]
+}

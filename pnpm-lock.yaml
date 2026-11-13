@@ -368,6 +368,9 @@ importers:
       '@learny/config':
         specifier: workspace:*
         version: link:../config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@learny/core':
         specifier: workspace:*
         version: link:../core

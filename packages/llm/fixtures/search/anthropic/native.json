@@ -1,0 +1,24 @@
+{
+  "provider": "anthropic",
+  "scenario": "native",
+  "description": "Recherche web serveur simulée : trois sources publiques, dont une avec balises et paramètres de suivi.",
+  "results": [
+    {
+      "title": "Comprendre les fractions — fiche méthode",
+      "url": "https://ressources.example.org/fractions/?utm_source=infolettre#exercices",
+      "snippet": "<p>Une fraction représente une part d’un tout : numérateur, dénominateur et simplification.</p><script>alert(1)</script>",
+      "publishedAt": "2026-09-14T08:30:00.000Z"
+    },
+    {
+      "title": "Comptabilité : le compte de banque",
+      "url": "https://www.etudes-exemple.org/comptabilite/compte-banque",
+      "snippet": "Le débit augmente un compte d’actif ; le crédit augmente un compte de passif.",
+      "publishedAt": "2026-10-02"
+    },
+    {
+      "title": "Construire un programme de révision en douze semaines",
+      "url": "https://ressources.example.org/programme-revision",
+      "snippet": "Découper l’objectif en modules, chapitres et notions, puis placer les révisions."
+    }
+  ]
+}

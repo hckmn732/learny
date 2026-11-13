@@ -1,0 +1,6 @@
+{
+  "provider": "tavily",
+  "scenario": "unavailable",
+  "description": "Panne simulée du repli : erreur explicite, aucune source inventée et aucune bascule payante.",
+  "error": "rate_limited"
+}

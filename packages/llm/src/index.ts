@@ -2,7 +2,12 @@
 // SDK (ET-9, BR-IA-09); learning-engine and bricks must not depend on it.
 export { resolveModel } from './resolve';
 export type { ManagedModelId, ResolvedModel, ResolveInput } from './resolve';
-export { defaultModelForTask, needsProviderStreaming, TASK_CONFIG, TASK_CAPABILITIES } from './tasks';
+export {
+  defaultModelForTask,
+  needsProviderStreaming,
+  TASK_CONFIG,
+  TASK_CAPABILITIES,
+} from './tasks';
 export type { TaskCapability, TaskConfig } from './tasks';
 export {
   buildAnthropicOptions,
@@ -31,16 +36,37 @@ export type {
   LlmStreamResult,
   SessionOptions,
 } from './session';
-export {
-  aiUnavailable,
-  invalidOutput,
-  mapProviderError,
-  refused,
-} from './errors';
+export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
 export type { AiErrorContext } from './errors';
 export { logCall, zeroCost } from './log';
 export type { CallUsage, CostCalculator, CostInput, LogCallInput } from './log';
 export { mockFileId, uploadDocument } from './files';
+export {
+  canonicalizeUrl,
+  createAnthropicSearch,
+  createProviderSearch,
+  createTavilySearch,
+  DEFAULT_SEARCH_SCENARIO,
+  fitResultsToBudget,
+  isPublicHttpUrl,
+  normalizeSearchResults,
+  plainText,
+  runSearch,
+  SEARCH_FIXTURES,
+  SEARCH_FIXTURE_SCHEMA,
+  searchFixture,
+  searchProviderForResolved,
+  searchUnavailable,
+  TAVILY_ENDPOINT,
+} from './search';
+export type {
+  CreateSearchProviderOptions,
+  RunSearchOptions,
+  RunSearchResult,
+  SearchProviderClient,
+  SearchProviderRequest,
+} from './search';
+export { llmMode, searchApiKey } from './config';
 export { createMockModel, LearnMockModel } from './mock/mock-model';
 export { selectFixture, canonicalJson, markerScenario, stripMockMarkers } from './mock/select';
 export type { SelectFixtureInput, SelectFixtureOptions } from './mock/select';

@@ -1,0 +1,25 @@
+{
+  "provider": "tavily",
+  "scenario": "fallback",
+  "description": "Repli Tavily simulé : même schéma normalisé que la recherche native, avec dates et extraits.",
+  "results": [
+    {
+      "title": "Gérer son temps de révision",
+      "url": "https://etudes-exemple.org/gestion-du-temps?utm_campaign=demo",
+      "content": "<b>Planifier</b> des séances courtes et régulières vaut mieux qu’une session unique.",
+      "published_date": "2026-10-21"
+    },
+    {
+      "title": "Méthodes actives pour apprendre",
+      "url": "https://www.ressources.example.org/methodes-actives",
+      "content": "Se tester avant de relire renforce la mémorisation à long terme.",
+      "published_date": "2026-11-02T10:00:00.000Z"
+    },
+    {
+      "title": "Construire un programme de révision en douze semaines",
+      "url": "https://ressources.example.org/programme-revision",
+      "content": "Découper l’objectif en modules, chapitres et notions, puis placer les révisions.",
+      "published_date": "2026-11-08"
+    }
+  ]
+}
