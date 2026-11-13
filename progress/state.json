@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T13:12:33.193Z",
+  "updatedAt": "2026-11-13T14:18:17.326Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4195,11 +4195,11 @@
       "validations": {}
     },
     "SPEC-611": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T14:18:17.326Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-611-quiz-de-validation-passage",
       "commit": null,
       "lastError": null,
       "validations": {}
