@@ -1,0 +1,90 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="41.831492">
+<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:23:03.171Z" hostname="desktop" tests="4" failures="0" skipped="1" time="7.61" errors="0">
+<testcase name="programme actif et module verrouillé @SPEC-606" classname="p6/active-programme.spec.ts" time="3.42">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/programme-en-cours-9aeadf80d90a573108e589bbfc0b3536ba9c159a.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/axe-9fb47d24a321efa1f4539fd97495b48a532388a3.json]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/attachments/module-verrouille-387fea6020392cf93da8ebd79be9f922e1b14de8.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-progra-ee689--module-verrouillé-SPEC-606-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="navigation vers module et examen blanc @SPEC-606" classname="p6/active-programme.spec.ts" time="1.545">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-naviga-3c7a1-le-et-examen-blanc-SPEC-606-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-606 desktop @SPEC-606 @visual" classname="p6/active-programme.spec.ts" time="2.439">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/programme-conformite-48dc1902895d32cf0faae82381a50795e168766b.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-statistiques-side-by-side-db082d44786148c913abaeaee415f464bfeda2bd.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-statistiques-diff-062da8cbc03a06e81bc8234bb8ce70206a71a956.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-calendrier-side-by-side-644dbdaee0ed8eed7dbd0a2e5f56a84ff0508804.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-calendrier-diff-fb5710a9accb4004ff843ec8e59ea3df84bf66f5.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-modules-side-by-side-54492c9815ac0edb219b951a02bfe60a0637a755.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/comparaison-modules-diff-c250ac26389041b07910e7afa106d0ccd3cd3184.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/attachments/axe-37b2f5fe1fec0963fd1bd1ecbdc0ef028fe5ff83.json]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-36ac5-606-desktop-SPEC-606-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-606 mobile @SPEC-606 @visual @mobile" classname="p6/active-programme.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/active-programme.spec.ts" timestamp="2026-11-13T10:23:03.171Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.937" errors="0">
+<testcase name="conformité SPEC-606 mobile @SPEC-606 @visual @mobile" classname="p6/active-programme.spec.ts" time="1.937">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/attachments/programme-mobile-a21dda39843fdc2d4c11f56260707cff5245a40b.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/attachments/axe-56228d89483ffec00c60468725a7b5c2b9b76c21.json]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-active-programme-confor-d04eb-bile-SPEC-606-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

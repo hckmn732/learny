@@ -101,9 +101,13 @@ export async function readFormation(
 export async function readProfile(
   tx: DbTx,
   userId: string,
-): Promise<{ tone: 'tu' | 'vous'; courseLanguage: string }> {
-  const rows = await tx.execute<{ tutor_tone: 'tu' | 'vous'; course_language: string }>(sql`
-    select tutor_tone::text as tutor_tone, course_language::text as course_language
+): Promise<{ tone: 'tu' | 'vous'; courseLanguage: string; timezone: string }> {
+  const rows = await tx.execute<{
+    tutor_tone: 'tu' | 'vous';
+    course_language: string;
+    timezone: string;
+  }>(sql`
+    select tutor_tone::text as tutor_tone, course_language::text as course_language, timezone
     from public.profiles
     where id = ${userId}::uuid
     limit 1
@@ -112,6 +116,7 @@ export async function readProfile(
   return {
     tone: row?.tutor_tone ?? 'vous',
     courseLanguage: row?.course_language ?? 'fr',
+    timezone: row?.timezone ?? 'Europe/Paris',
   };
 }
 

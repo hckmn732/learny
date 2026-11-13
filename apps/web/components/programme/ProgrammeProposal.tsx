@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
 import type { ImportProgrammeInput, ProgrammeProposalStateDto } from '@learny/contracts';
+import { isActiveProgramme } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { Button } from '@learny/ui';
 
@@ -257,6 +258,7 @@ export function ProgrammeProposal({ fid, initial }: ProgrammeProposalProps) {
         params: { fid },
         ...(version === null ? {} : { query: { version } }),
       });
+      if (isActiveProgramme(data)) return;
       setState(data);
       setViewVersion(version);
       setDialogError(null);
