@@ -216,6 +216,12 @@ export const EVENTS = {
     correct: z.boolean(),
     reviewedAt: IsoDateTime,
   }),
+  'exam/started': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    attemptId: Uuid,
+    deadlineAt: IsoDateTime,
+  }),
   'exam/submitted': z.object({ userId: Uuid, formationId: Uuid, attemptId: Uuid }),
   'exercise/submitted': z.object({ userId: Uuid, moduleId: Uuid, attemptId: Uuid }),
   // SPEC-610 ET-8 — a learner question, consumed by SPEC-717. The notion identifiers are the ones
