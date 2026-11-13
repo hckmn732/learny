@@ -74,7 +74,7 @@ async function saveLearnerMessage(
     `);
     await tx.execute(sql`
       update public.tutor_conversations
-      set title = coalesce(title, ${input.text.slice(0, 60)}), updated_at = ${ctx.clock.now()}::timestamptz
+      set title = coalesce(title, ${input.text.slice(0, 60)}), updated_at = ${ctx.clock.now().toISOString()}::timestamptz
       where id = ${conversationId}::uuid and user_id = ${userId}::uuid
     `);
     const row = rows[0];

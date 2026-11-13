@@ -27,7 +27,8 @@ export function shortNotion(label: string): string {
 }
 
 export function compareLabel(pair: ConfusionPair): string {
-  const label = `${shortNotion(pair.left)} ou ${shortNotion(pair.right).charAt(0).toLowerCase()}${shortNotion(pair.right).slice(1)} ?`;
+  const right = pair.right.charAt(0).toLowerCase() + pair.right.slice(1);
+  const label = `${shortNotion(pair.left)} ou ${right} ?`;
   return label.length > 32 ? `${label.slice(0, 29)}…` : label;
 }
 

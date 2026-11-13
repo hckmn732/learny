@@ -168,7 +168,12 @@ async function conversationRef(ctx: ServiceContext, id: string): Promise<Convers
   const rows = await db.run((tx) =>
     tx.execute<{ id: string; course_id: string; chapter_id: string }>(sql`
       select conv.id::text as id, conv.course_id::text as course_id,
-        coalesce(conv.chapter_id::text, ch.id::text) as chapter_id
+        coalesce(
+          (select m.context->>'chapterId' from public.tutor_messages m
+           where m.conversation_id = conv.id and m.context ? 'chapterId'
+           order by m.created_at asc limit 1),
+          ch.id::text
+        ) as chapter_id
       from public.tutor_conversations conv
       join public.courses c on c.id = conv.course_id
       left join public.chapters ch on ch.module_id = c.module_id
@@ -191,8 +196,8 @@ export async function createConversation(
     const { userId, db } = requireUser(ctx);
     const created = await db.run(async (tx) => {
       const rows = await tx.execute<{ id: string }>(sql`
-        insert into public.tutor_conversations (user_id, course_id, chapter_id, title)
-        select ${userId}::uuid, c.id, ch.id, null
+        insert into public.tutor_conversations (user_id, course_id, title)
+        select ${userId}::uuid, c.id, null
         from public.courses c
         join public.chapters ch on ch.id = ${chapterId}::uuid and ch.module_id = c.module_id
         where c.id = ${courseId}::uuid and c.owner_id = ${userId}::uuid
@@ -211,7 +216,7 @@ export async function createConversation(
           conversation_id, user_id, role, content, context, sources, follow_ups
         ) values (
           ${created}::uuid, ${userId}::uuid, 'tutor', ${greeting.content},
-          ${JSON.stringify({ followUpLabels: Object.fromEntries(greeting.followUps.map((entry) => [entry.key, entry.label])) })}::jsonb,
+          ${JSON.stringify({ chapterId, followUpLabels: Object.fromEntries(greeting.followUps.map((entry) => [entry.key, entry.label])) })}::jsonb,
           '[]'::jsonb, ${`{${greeting.followUps.map((entry) => entry.key).join(',')}}`}::text[]
         )
       `);
@@ -346,7 +351,12 @@ export async function conversationByCourse(
   const rows = await db.run((tx) =>
     tx.execute<{ id: string; course_id: string; chapter_id: string }>(sql`
       select conv.id::text as id, conv.course_id::text as course_id,
-        coalesce(conv.chapter_id::text, ch.id::text) as chapter_id
+        coalesce(
+          (select m.context->>'chapterId' from public.tutor_messages m
+           where m.conversation_id = conv.id and m.context ? 'chapterId'
+           order by m.created_at asc limit 1),
+          ch.id::text
+        ) as chapter_id
       from public.tutor_conversations conv
       join public.courses c on c.id = conv.course_id
       left join public.chapters ch on ch.id = ${chapterId}::uuid and ch.module_id = c.module_id

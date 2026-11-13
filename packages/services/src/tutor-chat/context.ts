@@ -452,9 +452,10 @@ export async function buildContext(
       anchor: string;
       title: string | null;
       content_md: string | null;
+      data: unknown;
       notion_ids: unknown;
     }>(sql`
-      select s.id::text as id, s.kind::text as kind, s.anchor, s.title, s.content_md, s.notion_ids
+      select s.id::text as id, s.kind::text as kind, s.anchor, s.title, s.content_md, s.data, s.notion_ids
       from public.course_sections s
       where s.course_id = ${head.course_id}::uuid and s.chapter_id = ${head.chapter_id}::uuid
       order by s.position, s.id
@@ -520,6 +521,7 @@ export async function buildContext(
       anchor: section.anchor,
       title: section.title,
       contentMd: section.content_md,
+      data: asRecord(section.data),
       notionIds: asStringArray(section.notion_ids),
     })),
     notions: rows.notions,

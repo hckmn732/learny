@@ -21,7 +21,7 @@ export function normalizeSelection(value: string): string {
 }
 
 export function selectionPreview(text: string): string {
-  return text.length > SELECTION_PREVIEW ? `${text.slice(0, SELECTION_PREVIEW - 2)}…` : text;
+  return text.length > SELECTION_PREVIEW ? `${text.slice(0, SELECTION_PREVIEW - 1)}…` : text;
 }
 
 export function passageTextOf(text: string): string {

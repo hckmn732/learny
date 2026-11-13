@@ -256,7 +256,7 @@ async function globalQuizTime(
       join public.profiles p on p.id = s.user_id
       where s.user_id = ${userId}::uuid and s.formation_id = ${formationId}::uuid
         and s.kind = 'global_quiz'
-        and s.starts_at >= ${ctx.clock.now()}::timestamptz
+        and s.starts_at >= ${ctx.clock.now().toISOString()}::timestamptz
       order by s.starts_at asc
       limit 1
     `),
@@ -325,7 +325,7 @@ export async function answerSelfTest(
           update public.notion_states
           set in_review = true,
               due_at = least(coalesce(due_at, ${end}::timestamptz), ${end}::timestamptz),
-              updated_at = ${ctx.clock.now()}::timestamptz
+              updated_at = ${ctx.clock.now().toISOString()}::timestamptz
           where user_id = ${userId}::uuid and notion_id = ${pending.notionId}::uuid
         `);
       });
@@ -421,7 +421,7 @@ async function gradeAnswer(
     });
     await tx.execute(sql`
       update public.attempts
-      set status = 'graded', submitted_at = ${ctx.clock.now()}::timestamptz,
+      set status = 'graded', submitted_at = ${ctx.clock.now().toISOString()}::timestamptz,
           duration_ms = 0, score = ${verdict.score * 100},
           passed = ${verdict.score >= 0.6}
       where id = ${pending.attemptId}::uuid and user_id = ${userId}::uuid

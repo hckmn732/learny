@@ -87,7 +87,7 @@ export function startersOf(input: StarterInput): CourseStarter[] {
   starters.push({ label: example, prompt: example });
   if (confusion !== null) {
     const left = shortLeft(confusion.left);
-    const right = shortLeft(confusion.right);
+    const right = confusion.right;
     const label = `${left} ou ${right.charAt(0).toLowerCase()}${right.slice(1)} : quelle différence ?`;
     starters.push({ label, prompt: label });
   }
