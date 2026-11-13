@@ -429,6 +429,11 @@ export function getQuizResult(
       return QuizResultDto.parse({
         attemptId,
         attemptNo: attempt.attempt_no,
+        module: {
+          id: attempt.module_id,
+          position: attempt.position,
+          title: attempt.module_title,
+        },
         status: attempt.status,
         score: graded ? score : null,
         provisionalScore: graded ? score : provisional,

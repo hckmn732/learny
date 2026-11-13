@@ -60,6 +60,7 @@ async function prepare(args: {
   requestId: string;
   clock: Clock;
   logger: LearnyLogger;
+  trigger: 'auto' | 'manual';
 }): Promise<unknown> {
   const outcome = await prepareRemediation(
     createServiceContext({
@@ -69,18 +70,18 @@ async function prepare(args: {
       logger: args.logger,
     }),
     args.moduleId,
-    { trigger: 'auto' },
+    { trigger: args.trigger },
   );
   if (!outcome.ok) throw outcome.error;
   return outcome.value;
 }
 
 export const remediationPrepareJob = createRemediationPrepareJob({
-  run: (args) => prepare(args),
+  run: (args) => prepare({ ...args, trigger: 'auto' }),
 });
 
 export const remediationPrepareRequestedJob = createRemediationPrepareRequestedJob({
-  run: (args) => prepare(args),
+  run: (args) => prepare({ ...args, trigger: 'manual' }),
 });
 
 export const jobRegistry = [

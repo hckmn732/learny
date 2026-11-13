@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
+import { QuizAttemptParams, QuizModuleParams, QuizQuestionDto } from './attempts';
 import { IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 import { LEARNING_GAP_NATURES } from './learning';
-import { QuizAttemptParams, QuizModuleParams, QuizQuestionDto } from './attempts';
 
 // Result of a corrected validation attempt and the targeted remediation (SCR-09, SPEC-612 EF-1 to
 // EF-8, ET-1, ET-2, BR-QUI-05, BR-QUI-06, BR-QUI-08, BR-LAC-04, ADR-0173, ADR-0179). Everything the
@@ -17,13 +17,7 @@ export const GAP_NATURE_LABELS = {
   forgetting: 'Oubli',
 } as const;
 
-export const RemediationStatus = z.enum([
-  'none',
-  'preparing',
-  'ready',
-  'in_progress',
-  'completed',
-]);
+export const RemediationStatus = z.enum(['none', 'preparing', 'ready', 'in_progress', 'completed']);
 export type RemediationStatus = z.infer<typeof RemediationStatus>;
 
 export const RetryReason = z.enum(['delay', 'remediation_required']);
@@ -55,6 +49,11 @@ export const QuizResultDto = z
   .strictObject({
     attemptId: Uuid,
     attemptNo: z.number().int().min(1),
+    module: z.strictObject({
+      id: Uuid,
+      position: z.number().int().min(1),
+      title: z.string().min(1),
+    }),
     status: z.enum(['in_progress', 'submitted', 'graded', 'timed_out', 'abandoned']),
     score: z.number().min(0).max(100).nullable(),
     provisionalScore: z.number().min(0).max(100).nullable(),
@@ -119,6 +118,11 @@ export type RemediationGapDto = z.infer<typeof RemediationGapDto>;
 export const RemediationDto = z
   .strictObject({
     status: RemediationStatus,
+    module: z.strictObject({
+      id: Uuid,
+      position: z.number().int().min(1),
+      title: z.string().min(1),
+    }),
     activityId: Uuid.nullable(),
     attemptId: Uuid.nullable(),
     gaps: z.array(RemediationGapDto),

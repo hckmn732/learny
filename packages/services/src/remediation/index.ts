@@ -508,15 +508,13 @@ export function prepareRemediation(
         });
       }
       const existing = await existingRemediation(tx, userId, moduleId, attempt.id);
-      if (existing !== null) {
+      if (existing !== null && !existing.preparing) {
         const status: RemediationStatus =
           existing.attempt_status === 'graded'
             ? 'completed'
-            : existing.preparing
-              ? 'preparing'
-              : existing.checked > 0
-                ? 'in_progress'
-                : 'ready';
+            : existing.checked > 0
+              ? 'in_progress'
+              : 'ready';
         return {
           done: true as const,
           outcome: { status, activityId: existing.id, prepared: false, fallback: false },
@@ -711,10 +709,16 @@ export function getRemediation(
       throw new AppError('VALIDATION_FAILED', 'Identifiant de module invalide.');
     }
     const moduleId = moduleIdValue;
-    const row = await db.run((tx) => readLatestActivity(tx, userId, moduleId));
+    const [row, module] = await db.run(async (tx) => {
+      const current = await readLatestActivity(tx, userId, moduleId);
+      const info = await readModule(tx, userId, moduleId);
+      return [current, info] as const;
+    });
+    const moduleInfo = { id: module.id, position: module.position, title: module.title };
     if (row === null) {
       return RemediationDto.parse({
         status: 'none',
+        module: moduleInfo,
         activityId: null,
         attemptId: null,
         gaps: [],
@@ -726,6 +730,7 @@ export function getRemediation(
     if (row.status === 'archived' && row.attempt_status !== 'graded') {
       return RemediationDto.parse({
         status: 'none',
+        module: moduleInfo,
         activityId: null,
         attemptId: null,
         gaps: [],
@@ -754,6 +759,7 @@ export function getRemediation(
             : 'ready';
     return RemediationDto.parse({
       status,
+      module: moduleInfo,
       activityId: row.id,
       attemptId: row.attempt_id,
       gaps: config.plan.map((item) => ({

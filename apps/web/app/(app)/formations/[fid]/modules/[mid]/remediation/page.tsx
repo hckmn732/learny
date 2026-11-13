@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getActiveProgramme, getRemediation } from '@learny/services';
+import { createServiceContext, getRemediation } from '@learny/services';
 
 import { RemediationScreen } from '../../../../../../../components/remediation/RemediationScreen';
 import { AppShell } from '../../../../../../../components/shell/app-shell';
@@ -22,21 +22,14 @@ export default async function RemediationPage({ params }: RemediationPageProps) 
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, programme, remediation] = await Promise.all([
+  const [shell, remediation] = await Promise.all([
     loadShellForFormation(fid),
-    getActiveProgramme(ctx, fid),
     getRemediation(ctx, mid),
   ]);
   if (!remediation.ok) {
     if (remediation.error.code === 'NOT_FOUND') notFound();
     throw remediation.error;
   }
-  if (!programme.ok) {
-    if (programme.error.code === 'NOT_FOUND') notFound();
-    throw programme.error;
-  }
-  const selected = programme.value.modules.find((entry) => entry.id === mid);
-  if (selected === undefined) notFound();
   return (
     <AppShell
       header={shell.header.ok ? shell.header.data : null}
@@ -48,8 +41,8 @@ export default async function RemediationPage({ params }: RemediationPageProps) 
         formationId={fid}
         initial={remediation.value}
         moduleId={mid}
-        modulePosition={selected.position}
-        moduleTitle={selected.title}
+        modulePosition={remediation.value.module.position}
+        moduleTitle={remediation.value.module.title}
       />
     </AppShell>
   );

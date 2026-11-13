@@ -4,6 +4,11 @@ export function resultFixture(overrides: Partial<QuizResultDto> = {}): QuizResul
   return {
     attemptId: '9d1c8a5e-5d0e-4a0b-9a6e-7b2c4d9e1f02',
     attemptNo: 2,
+    module: {
+      id: '1a2b3c4d-5e6f-4a0b-8c1d-2e3f4a5b6c7e',
+      position: 3,
+      title: 'Comptabilité générale',
+    },
     status: 'graded',
     score: 72,
     provisionalScore: 72,

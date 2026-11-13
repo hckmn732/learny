@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getActiveProgramme, getQuizResult } from '@learny/services';
+import { createServiceContext, getQuizResult } from '@learny/services';
 
 import { QuizResultScreen } from '../../../../../../../../../components/quiz-result/QuizResultScreen';
 import { AppShell } from '../../../../../../../../../components/shell/app-shell';
@@ -26,21 +26,14 @@ export default async function QuizResultPage({ params }: QuizResultPageProps) {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, programme, result] = await Promise.all([
+  const [shell, result] = await Promise.all([
     loadShellForFormation(fid),
-    getActiveProgramme(ctx, fid),
     getQuizResult(ctx, attemptId),
   ]);
   if (!result.ok) {
     if (result.error.code === 'NOT_FOUND') notFound();
     throw result.error;
   }
-  if (!programme.ok) {
-    if (programme.error.code === 'NOT_FOUND') notFound();
-    throw programme.error;
-  }
-  const selected = programme.value.modules.find((entry) => entry.id === mid);
-  if (selected === undefined) notFound();
   return (
     <AppShell
       header={shell.header.ok ? shell.header.data : null}
@@ -53,8 +46,8 @@ export default async function QuizResultPage({ params }: QuizResultPageProps) {
         formationId={fid}
         initial={result.value}
         moduleId={mid}
-        modulePosition={selected.position}
-        moduleTitle={selected.title}
+        modulePosition={result.value.module.position}
+        moduleTitle={result.value.module.title}
       />
     </AppShell>
   );
