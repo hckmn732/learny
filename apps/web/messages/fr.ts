@@ -3020,6 +3020,77 @@ export const fr = {
         application: 'Difficulté d’application',
       },
     },
+    spec511: {
+      intro:
+        'Les passages sont réellement lus dans la base, filtrés par propriétaire et formation sous RLS, classés par cosinus puis découpés par budget. Les vecteurs sont simulés et déterministes : aucun appel fournisseur, aucune clé et aucune donnée privée ne sont utilisés.',
+      query: {
+        title: 'Requête fictive et vecteur simulé',
+        label: 'Requête',
+        vector: 'Vecteur de requête',
+        dimensions: (count: number) => `vector(${String(count)}) · norme 1`,
+        note: 'La requête est une fixture ; son vecteur vient de fakeEmbedding en mode mock.',
+      },
+      results: {
+        title: 'Passages classés par similarité cosinus',
+        source: 'Source',
+        position: 'Position',
+        score: 'Score',
+        tokens: 'Jetons',
+        location: 'Emplacement',
+        excerpt: 'Extrait',
+        memberExcluded: (count: number) =>
+          `${String(count)} passage(s) du second membre du groupe exclu(s) par la RLS.`,
+        empty: 'Aucun passage admissible.',
+      },
+      budgets: {
+        title: 'Budgets de contexte par tâche',
+        task: 'Tâche',
+        budget: 'Budget',
+        used: 'Utilisé',
+        selected: 'Passages',
+        duplicates: 'Doublons',
+        omitted: 'Omis',
+        labels: {
+          programme: 'Programme',
+          course: 'Cours',
+          gaps: 'Lacunes',
+          tutor: 'Tuteur',
+        },
+        within: (used: number, budget: number) => `${String(used)} / ${String(budget)} jetons`,
+        note: 'Les balises, attributs, identifiants et séparateurs sont comptés dans le budget.',
+      },
+      selection: {
+        title: 'Contexte retenu pour la tâche programme',
+        summary: (selected: number, used: number, budget: number) =>
+          `${String(selected)} passage(s) retenu(s) · ${String(used)} / ${String(budget)} jetons`,
+        duplicates: (count: number) => `${String(count)} doublon(s) écarté(s)`,
+        omitted: (count: number) => `${String(count)} passage(s) omis faute de budget`,
+        preview: 'Aperçu des balises de données',
+        truncated: 'Aperçu limité aux trois premiers passages complets.',
+      },
+      trap: {
+        title: 'Passage piégé : injection neutralisée',
+        raw: 'Texte de l’apport (donnée brute)',
+        formatted: 'Balise produite (texte échappé)',
+        note: 'La fermeture </document> de l’apport devient &lt;/document&gt; : elle reste une donnée et ne ferme aucune balise.',
+      },
+      noMatches: {
+        title: 'Aucun passage admissible',
+        body: 'Un chapitre vide renvoie une liste vide et la raison no_matches ; la tâche appelante décide de continuer sans source.',
+      },
+      failure: {
+        title: 'Échec lisible avant SQL',
+        body: 'Un vecteur de deux dimensions est refusé par la validation Zod ; aucune requête n’est exécutée.',
+        code: 'Code',
+        message: 'Message sûr',
+      },
+      contract: {
+        title: 'Contrat d’entrée et résultat validé',
+        input: 'Entrée validée',
+        output: 'Sortie validée',
+        note: 'Schémas Zod de @learny/contracts ; aucune clé ni contenu d’un autre apprenant.',
+      },
+    },
   },
   email: {
     unsubscribe: {

@@ -274,6 +274,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-509'),
   },
+  'SPEC-511': {
+    title: 'SPEC-511 · Recherche sémantique et sélection du contexte',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-511'),
+  },
   'SPEC-512': {
     title: 'SPEC-512 · Recherche web',
     titleTestId: 'sdd-title',

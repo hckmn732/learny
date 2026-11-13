@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-13T02:08:49.083Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-13T02:25:02.975Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 70 |
+| Terminées | 71 |
 | En cours | 0 |
 | Prêtes | 2 |
-| En attente de dépendances | 60 |
+| En attente de dépendances | 59 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **53.0 %** |
-| Avancement V1 | 56.5 % |
+| **Avancement global** | **53.8 %** |
+| Avancement V1 | 57.3 % |
 | Prochaine action | start SPEC-510 — Ingestion : pages web, YouTube et images |
 
 ## Phases et checkpoints
@@ -26,7 +26,7 @@
 | P2 | Backend, API et services transverses | 12/12 | CP-2 | ✅ 2026-11-12 cp-2 v0.2.0 |
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
-| P5 | IA, ingestion et briques | 10/13 | CP-5 | ⏳ |
+| P5 | IA, ingestion et briques | 11/13 | CP-5 | ⏳ |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 0/18 | CP-6 | ⏳ |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
@@ -106,9 +106,9 @@
 | [SPEC-508](../specs/p5-ia/SPEC-508-paquet-tutor-actions-boucle-et-consignes.md) | Paquet tutor : actions, boucle et consignes | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-501, SPEC-504, SPEC-411 |
 | [SPEC-509](../specs/p5-ia/SPEC-509-ingestion-notes-et-pdf-decoupage-embeddings.md) | Ingestion : notes et PDF, découpage, embeddings | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-104, SPEC-203, SPEC-504, SPEC-206 |
 | [SPEC-510](../specs/p5-ia/SPEC-510-ingestion-pages-web-youtube-et-images.md) | Ingestion : pages web, YouTube et images | P5 | 🟢 ready | 0 | — | SPEC-509 |
-| [SPEC-511](../specs/p5-ia/SPEC-511-recherche-semantique-et-selection-du-contexte.md) | Recherche sémantique et sélection du contexte | P5 | 🟢 ready | 0 | — | SPEC-509 |
+| [SPEC-511](../specs/p5-ia/SPEC-511-recherche-semantique-et-selection-du-contexte.md) | Recherche sémantique et sélection du contexte | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-509 |
 | [SPEC-512](../specs/p5-ia/SPEC-512-recherche-web.md) | Recherche web | P5 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-504 |
-| [SPEC-513](../specs/p5-ia/SPEC-513-banques-de-questions.md) | Banques de questions | P5 | ⏳ waiting | 0 | — | SPEC-508, SPEC-501, SPEC-511 |
+| [SPEC-513](../specs/p5-ia/SPEC-513-banques-de-questions.md) | Banques de questions | P5 | 🟢 ready | 0 | — | SPEC-508, SPEC-501, SPEC-511 |
 | [SPEC-601](../specs/p6-parcours/SPEC-601-inscription-connexion-et-verification-de-l-e-mail.md) | Inscription, connexion et vérification de l'e-mail | P6 | ⏳ waiting | 0 | — | SPEC-202, SPEC-308, SPEC-302 |
 | [SPEC-602](../specs/p6-parcours/SPEC-602-premiers-pas-onboarding.md) | Premiers pas (onboarding) | P6 | ⏳ waiting | 0 | — | SPEC-601, SPEC-505, SPEC-506, SPEC-205, SPEC-210 |
 | [SPEC-603](../specs/p6-parcours/SPEC-603-accueil.md) | Accueil | P6 | ⏳ waiting | 0 | — | SPEC-304, SPEC-408, SPEC-115, SPEC-411 |
