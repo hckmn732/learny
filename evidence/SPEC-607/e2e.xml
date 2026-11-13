@@ -1,0 +1,90 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="1" errors="0" time="40.832750999999995">
+<testsuite name="p6/module-resources.spec.ts" timestamp="2026-11-13T11:23:39.036Z" hostname="desktop" tests="4" failures="0" skipped="1" time="6.127" errors="0">
+<testcase name="dépose des apports et termine un chapitre @SPEC-607" classname="p6/module-resources.spec.ts" time="2.486">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/attachments/module-apports-ff1cdc1c428aea6ec69ccbe8b7f948dc5a7bb999.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/attachments/axe-487cc200f4efaa441a99c0fc9d0aea6e76e05592.json]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-dépose-a0f6a-ermine-un-chapitre-SPEC-607-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="erreur et reprise d’un apport @SPEC-607" classname="p6/module-resources.spec.ts" time="1.447">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/attachments/module-erreur-reprise-32872d83cb2643a72c2867bdba2fe96aa76b9646.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/attachments/axe-386b630b29d8be6986da8992c0b5bd3da2a36583.json]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-erreur-et-reprise-d’un-apport-SPEC-607-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-607 @SPEC-607 @visual" classname="p6/module-resources.spec.ts" time="1.996">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/module-conformite-a46ab178fc5eb1b711d4b52f0b182755e9871324.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/comparaison-entete-side-by-side-e0e2e6f79e273f684e4efb05f6e829f2bdd6217e.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/comparaison-entete-diff-646269b847bc78306b18bda1951fb98d2ac4e157.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/comparaison-chapitres-side-by-side-297b27be4b2f4574428b23188d3a972e7aee38a7.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/comparaison-chapitres-diff-ef058ae4baefe609cfe0d44a31cf9aa1a106fb48.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/attachments/axe-cc6334f4a38cdbe7fd2a0ff8a010600fc91c7ffd.json]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-conformité-SPEC-607-SPEC-607-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-607 mobile @SPEC-607 @visual @mobile" classname="p6/module-resources.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/module-resources.spec.ts" timestamp="2026-11-13T11:23:39.036Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.828" errors="0">
+<testcase name="conformité SPEC-607 mobile @SPEC-607 @visual @mobile" classname="p6/module-resources.spec.ts" time="1.828">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/attachments/module-mobile-b118867e32b4ca5df7618414c689e5d0a03366e6.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/attachments/axe-fcdd9dc9576aec1d7a058c6f43ce69605d300f4e.json]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-module-resources-confor-f49e6-bile-SPEC-607-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

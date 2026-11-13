@@ -1,14 +1,18 @@
-// EF-3 — contributions without a blob: a note, a web page or a YouTube video (SPEC-206).
+// EF-3 — contributions without a blob: a note, a web page or a YouTube video (SPEC-206, SPEC-607).
 //
 // Same ownership, chapter and capacity rules as a file; the resource is created `queued` and never
 // `ready` here: the ingestion (SPEC-509/510) is what makes it ready. A note is bounded to 100 000
-// characters and answered with a business code, not a generic validation error.
-import type { CreateResourceBody, CreatedResource } from '@learny/contracts';
+// characters and answered with a business code, not a generic validation error. The
+// `resource/uploaded` event is written in the same transaction (SPEC-607 ET-4): a rollback writes
+// no event, a commit delivers it after the row exists.
+import { CreateResourceBody, CreatedResource } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql } from '@learny/db';
+import { withTransaction } from '@learny/jobs';
 
 import type { ServiceContext } from '../context';
 
+import { uploadedEventId } from './deps';
 import { assertCapacity, assertNoteText } from './limits';
 import {
   chapterResourceCount,
@@ -57,30 +61,45 @@ export function createResource(
     }
 
     try {
-      return await db.run(async (tx): Promise<CreatedResource> => {
-        await lockOwner(tx, userId);
-        const chapter = await selectChapterFormation(tx, chapterId);
-        if (chapter === null) return denyOrMissing('chapters', chapterId);
-        await releaseExpiredReservations(tx, userId, ctx.clock.now());
-        assertCapacity({
-          chapterCount: await chapterResourceCount(tx, userId, chapterId),
-          usedBytes: 0,
-          addedBytes: 0,
-        });
-        const created = await tx.execute<{ id: string }>(sql`
-          insert into public.resources (
-            owner_id, formation_id, chapter_id, kind, title, content_text, url, status
-          )
-          values (
-            ${userId}::uuid, ${chapter.formation_id}::uuid, ${chapterId}::uuid,
-            ${body.kind}::public.resource_kind, ${title}, ${text}, ${url}, 'queued'
-          )
-          returning id::text as id
-        `);
-        const id = created[0]?.id;
-        if (id === undefined) throw new Error('resource insert returned no row');
-        return { id, kind: body.kind, status: 'queued', title };
-      });
+      return await withTransaction(
+        db,
+        async (tx, outbox): Promise<CreatedResource> => {
+          await lockOwner(tx, userId);
+          const chapter = await selectChapterFormation(tx, chapterId);
+          if (chapter === null) return denyOrMissing('chapters', chapterId);
+          await releaseExpiredReservations(tx, userId, ctx.clock.now());
+          assertCapacity({
+            chapterCount: await chapterResourceCount(tx, userId, chapterId),
+            usedBytes: 0,
+            addedBytes: 0,
+          });
+          const created = await tx.execute<{ id: string }>(sql`
+            insert into public.resources (
+              owner_id, formation_id, chapter_id, kind, title, content_text, url, status
+            )
+            values (
+              ${userId}::uuid, ${chapter.formation_id}::uuid, ${chapterId}::uuid,
+              ${body.kind}::public.resource_kind, ${title}, ${text}, ${url}, 'queued'
+            )
+            returning id::text as id
+          `);
+          const id = created[0]?.id;
+          if (id === undefined) throw new Error('resource insert returned no row');
+          outbox.add(
+            'resource/uploaded',
+            {
+              userId,
+              resourceId: id,
+              formationId: chapter.formation_id,
+              chapterId,
+              kind: body.kind,
+            },
+            { id: uploadedEventId(id) },
+          );
+          return { id, kind: body.kind, status: 'queued', title };
+        },
+        { clock: ctx.clock, logger: ctx.logger },
+      );
     } catch (error) {
       throw translateLimitError(error);
     }

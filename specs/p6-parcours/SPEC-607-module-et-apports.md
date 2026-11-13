@@ -128,5 +128,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 
 - **ADR-0039 — Limites d'import et suppression d'apports** : Limites de BR-APP-02. Suppression d'un apport : suppression du fichier et des passages ; les citations qui y pointaient sont conservées avec `chunk_id = null` et affichées « source supprimée ».
 - **ADR-0065 — Suivi des traitements asynchrones dans l'interface** : Interrogation périodique (TanStack Query, intervalle 3 s tant que le statut est `queued|processing|generating|running`), pas de temps réel WebSocket en V1.
+- **ADR-0312 — Génération du cours et reprise d’un apport** : émission unique à la transition vers tous les chapitres terminés ou sur demande explicite, identifiant d’événement déterministe par version, reprise d’un apport en échec avec un événement suffixé par la tentative, guide d’examen V1 marqué sur un PDF ou une page web, fichiers audio/vidéo absents de l’interface.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 

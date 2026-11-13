@@ -79,6 +79,7 @@ function row(overrides: Partial<ResourceRow> = {}): ResourceRow {
     status: 'queued',
     metadata: { upload: { declaredBytes: PDF.length } },
     deleted_at: null,
+    updated_at: new Date('2026-11-11T12:20:00Z'),
     ...overrides,
   };
 }

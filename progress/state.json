@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T10:23:20.694Z",
+  "updatedAt": "2026-11-13T11:24:01.842Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4032,14 +4032,55 @@
       }
     },
     "SPEC-607": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T10:25:36.509Z",
+      "completedAt": "2026-11-13T11:24:01.839Z",
+      "branch": "spec/SPEC-607-module-et-apports",
+      "commit": "ef3c69af",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T11:20:50.771Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T11:21:33.235Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T11:21:53.190Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T11:22:03.431Z",
+          "details": "9 test(s) [SPEC-607] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T11:23:07.053Z",
+          "details": "4 test(s) [SPEC-607] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T11:23:49.455Z",
+          "details": "4 réussi(s), 0 échec(s), 9 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T11:23:49.455Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T11:23:49.468Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-608": {
       "status": "pending",

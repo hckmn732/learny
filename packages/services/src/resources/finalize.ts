@@ -168,7 +168,7 @@ export function finalizeUpload(
             r.id::text as id, r.owner_id::text as owner_id, r.formation_id::text as formation_id,
             r.chapter_id::text as chapter_id, r.kind::text as kind, r.title, r.storage_path,
             r.mime, r.size_bytes::float8 as size_bytes, r.status::text as status, r.metadata,
-            r.deleted_at
+            r.deleted_at, r.updated_at
         `);
         const result = updated[0];
         if (result === undefined) {
