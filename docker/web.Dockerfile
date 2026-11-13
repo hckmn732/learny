@@ -30,6 +30,7 @@ COPY packages/llm/package.json ./packages/llm/package.json
 COPY packages/notifications/package.json ./packages/notifications/package.json
 COPY packages/services/package.json ./packages/services/package.json
 COPY packages/testing/package.json ./packages/testing/package.json
+COPY packages/tutor/package.json ./packages/tutor/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --frozen-lockfile --filter @learny/web...
