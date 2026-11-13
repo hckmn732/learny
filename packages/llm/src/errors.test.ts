@@ -7,7 +7,7 @@ function apiError(statusCode: number, responseBody?: string, message = 'failure'
   return new APICallError({
     message,
     url: 'https://api.anthropic.com/v1/messages',
-    requestBodyValues: { secret: 'sk-ant-never-logged' },
+    requestBodyValues: { requestSample: 'test-placeholder-never-logged' },
     statusCode,
     ...(responseBody === undefined ? {} : { responseBody }),
     isRetryable: statusCode === 429 || statusCode >= 500,
@@ -50,9 +50,7 @@ describe('[SPEC-504] conversion des erreurs', () => {
     });
     const mapped = mapProviderError(validation);
     expect(mapped.code).toBe('INVALID_OUTPUT');
-    expect(mapped.errors).toEqual([
-      { path: 'title', message: 'Expected string, received number' },
-    ]);
+    expect(mapped.errors).toEqual([{ path: 'title', message: 'Expected string, received number' }]);
   });
 
   it('EF-2 — AI_UNAVAILABLE porte la raison et le lien des paramètres', () => {

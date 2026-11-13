@@ -18,12 +18,14 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/worker/package.json ./apps/worker/package.json
+COPY packages/bricks/package.json ./packages/bricks/package.json
 COPY packages/config/package.json ./packages/config/package.json
 COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
 COPY packages/jobs/package.json ./packages/jobs/package.json
 COPY packages/learning-engine/package.json ./packages/learning-engine/package.json
+COPY packages/llm/package.json ./packages/llm/package.json
 COPY packages/notifications/package.json ./packages/notifications/package.json
 COPY packages/services/package.json ./packages/services/package.json
 COPY packages/testing/package.json ./packages/testing/package.json
