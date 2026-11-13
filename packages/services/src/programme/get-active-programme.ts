@@ -6,6 +6,7 @@ import {
   type ActiveProgrammeDto as ActiveProgrammeDtoType,
   type ActiveProgrammeFormationStatus,
   type ActiveProgrammeModuleDto,
+  ProgrammeGetQuery,
   type ProgrammeModuleStatus,
   type ProgrammeScreenStateDto,
 } from '@learny/contracts';
@@ -272,17 +273,21 @@ export function getActiveProgramme(
 export function getProgrammeScreenState(
   ctx: ServiceContext,
   formationId: string,
+  query: unknown = {},
 ): Promise<Result<ProgrammeScreenStateDto>> {
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
     const fid = parseFormationId(formationId);
+    const parsed = ProgrammeGetQuery.parse(query);
     return db.run(async (tx) => {
       const formation = await readFormation(tx, userId, fid);
       if (formation === null) throw new AppError('NOT_FOUND', 'Formation introuvable.');
       if ((ACTIVE_STATUSES as ReadonlySet<string>).has(formation.status)) {
         return readActiveProgramme(tx, userId, fid, ctx.clock.now(), formation);
       }
-      return readProgrammeState(tx, userId, fid);
+      return readProgrammeState(tx, userId, fid, {
+        ...(parsed.version === undefined ? {} : { version: parsed.version }),
+      });
     });
   });
 }

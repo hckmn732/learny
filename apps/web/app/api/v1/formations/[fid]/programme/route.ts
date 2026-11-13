@@ -7,6 +7,6 @@ export const dynamic = 'force-dynamic';
 
 // SPEC-605, SPEC-606 — GET /formations/:fid/programme answers the proposal state while the
 // programme is being prepared, then the active programme read model once it is validated.
-export const GET = handler(programmeRoutes.programmeGet, ({ ctx, params }) =>
-  getProgrammeScreenState(ctx, params.fid),
+export const GET = handler(programmeRoutes.programmeGet, ({ ctx, params, query }) =>
+  getProgrammeScreenState(ctx, params.fid, query),
 );
