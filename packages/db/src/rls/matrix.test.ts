@@ -72,7 +72,7 @@ function byTable(): Map<string, RlsTableMatrix> {
 describe('[SPEC-113] RLS inventory', () => {
   it('CA-1 — every table created by SPEC-102–112 has exactly one scenario', () => {
     const tables = declaredTables();
-    expect(tables.length).toBe(54);
+    expect(tables.length).toBe(55);
     expect(RLS_MATRIX).toHaveLength(tables.length);
     expect([...byTable().keys()].sort()).toEqual(tables);
 

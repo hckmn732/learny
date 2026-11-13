@@ -291,6 +291,7 @@ describe('[SPEC-009] product', () => {
   it('covers the seven families required by EF-5', () => {
     expect(Object.keys(RULES)).toEqual([
       'ACCOUNT',
+      'AI',
       'RESOURCE',
       'QUIZ',
       'MEMORY',
