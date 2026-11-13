@@ -219,7 +219,7 @@ async function readNextReview(
   userId: string,
   formationId: string,
   now: Date,
-): Promise<Date | null> {
+): Promise<string | null> {
   const rows = await tx.execute<NextReviewRow>(sql`
     select min(ns.due_at) as next_review_at
     from public.notion_states ns
@@ -230,7 +230,8 @@ async function readNextReview(
       and ns.due_at is not null
       and ns.due_at >= ${now.toISOString()}::timestamptz
   `);
-  return rows[0]?.next_review_at ?? null;
+  const value = rows[0]?.next_review_at ?? null;
+  return value === null ? null : new Date(value).toISOString();
 }
 
 function toCard(row: GapRow, formationId: string, now: Date): GapCard {
@@ -314,7 +315,7 @@ export function listGaps(ctx: ServiceContext, input: ListGapsInput): Promise<Res
         },
         countsByNature: counts,
         items: rows.map((row) => toCard(row, formation.id, now)),
-        nextReviewAt: nextReviewAt === null ? null : new Date(nextReviewAt).toISOString(),
+        nextReviewAt,
         timezone: formation.timezone,
         generatedAt: now.toISOString(),
       });
