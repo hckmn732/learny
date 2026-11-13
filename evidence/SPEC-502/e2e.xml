@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="36.10045099999999">
+<testsuite name="p5/spec-502-grading.spec.ts" timestamp="2026-11-13T00:52:24.298Z" hostname="desktop" tests="2" failures="0" skipped="0" time="4.365" errors="0">
+<testcase name="correction par le code des six types @SPEC-502" classname="p5/spec-502-grading.spec.ts" time="2.116">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/attachments/spec-502-matching-confusion-05127fd6f54a2e1a482d44c86de541734659e1c4.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/attachments/spec-502-table-balanced-fafa1c3f253c0b423f60832fd8b86245c39c5382.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/attachments/axe-76a7a23981e37b165926fcbf084769f5397277be.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-correc-037f3-code-des-six-types-SPEC-502-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration de correction @SPEC-502 @visual" classname="p5/spec-502-grading.spec.ts" time="2.249">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-502-grading-démons-c2352--correction-SPEC-502-visual-desktop/attachments/axe-0fff52ef5b05dc9727e063f521b11d2ed6751cfb.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-démons-c2352--correction-SPEC-502-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-démons-c2352--correction-SPEC-502-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-démons-c2352--correction-SPEC-502-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-502-grading-démons-c2352--correction-SPEC-502-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
