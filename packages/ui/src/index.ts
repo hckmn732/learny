@@ -15,6 +15,10 @@ export { Checkbox } from './components/Checkbox';
 export type { CheckboxProps } from './components/Checkbox';
 export { Chip } from './components/Chip';
 export type { ChipProps } from './components/Chip';
+export { ChoiceCard } from './components/ChoiceCard';
+export type { ChoiceCardProps } from './components/ChoiceCard';
+export { ChoiceGroup } from './components/ChoiceGroup';
+export type { ChoiceGroupProps, ChoiceOption } from './components/ChoiceGroup';
 export { CountBadge } from './components/CountBadge';
 export type { CountBadgeProps } from './components/CountBadge';
 export {
