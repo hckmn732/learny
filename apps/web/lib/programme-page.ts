@@ -6,7 +6,7 @@ import { isActiveProgramme, type ProgrammeScreenStateDto } from '@learny/contrac
 import { createServiceContext, getProgrammeScreenState } from '@learny/services';
 
 import { SIGN_IN_PATH } from './route-guard';
-import { loadShellForFormation, type ShellPageResult } from './sidebar-page';
+import { loadShellForFormation, loadShellPage, type ShellPageResult } from './sidebar-page';
 import { readPageSession } from './supabase/page';
 
 // Server load of the programme page (SPEC-605, SPEC-606). A formation of another owner is a 404;
@@ -22,14 +22,16 @@ export async function loadProgrammePage(formationId: string): Promise<ProgrammeP
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, result] = await Promise.all([
-    loadShellForFormation(formationId),
-    getProgrammeScreenState(ctx, formationId),
-  ]);
+  const result = await getProgrammeScreenState(ctx, formationId);
   if (!result.ok) {
     if (result.error.code === 'NOT_FOUND') notFound();
     throw result.error;
   }
+  // A proposal is not yet an active formation: selecting it through the formation switcher would
+  // answer NOT_FOUND (ADR-0075), so only the active screen makes it current.
+  const shell = isActiveProgramme(result.value)
+    ? await loadShellForFormation(formationId)
+    : await loadShellPage();
   if (isActiveProgramme(result.value)) return { shell, state: result.value };
   if (result.value.formationStatus === 'archived') redirect('/accueil');
   if (result.value.formationStatus === 'cadrage' && !result.value.cadrageCompleted) {
