@@ -1,0 +1,28 @@
+{
+  "task": "tutor",
+  "scenario": "grade-open-good",
+  "promptId": "tutor.grade-open",
+  "promptVersion": 1,
+  "description": "Réponse ouverte complète et juste : note maximale et explication de la règle.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "score": 1,
+        "explanation": "Le type de pièce, par exemple SA, classe toute la pièce ; la clé de comptabilisation agit poste par poste.",
+        "criteria": [
+          {
+            "key": "comprehension",
+            "label": "Compréhension de la notion",
+            "ok": true,
+            "comment": "La distinction est correctement explicitée."
+          }
+        ],
+        "missing": [],
+        "offTopic": false
+      },
+      "usage": { "inputTokens": 120, "outputTokens": 48, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 240
+    }
+  ]
+}

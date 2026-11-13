@@ -10,6 +10,7 @@ export * from './module';
 export * from './notion';
 export * from './notion-state';
 export * from './notification';
+export * from './quiz';
 export * from './resource';
 export * from './schedule-slot';
 export * from './user';

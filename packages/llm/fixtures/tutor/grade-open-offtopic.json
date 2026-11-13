@@ -1,0 +1,28 @@
+{
+  "task": "tutor",
+  "scenario": "grade-open-offtopic",
+  "promptId": "tutor.grade-open",
+  "promptVersion": 1,
+  "description": "Réponse ouverte hors sujet : note très basse et indicateur offTopic (BR-LAC-03).",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "score": 0,
+        "explanation": "La réponse ne traite pas la question posée sur la pièce comptable.",
+        "criteria": [
+          {
+            "key": "comprehension",
+            "label": "Compréhension de la notion",
+            "ok": false,
+            "comment": "Aucun élément attendu n’est présent."
+          }
+        ],
+        "missing": ["Le lien avec la pièce comptable et ses postes"],
+        "offTopic": true
+      },
+      "usage": { "inputTokens": 118, "outputTokens": 40, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 240
+    }
+  ]
+}

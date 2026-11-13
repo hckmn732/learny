@@ -1,0 +1,28 @@
+{
+  "task": "tutor",
+  "scenario": "grade-open-partial",
+  "promptId": "tutor.grade-open",
+  "promptVersion": 1,
+  "description": "Réponse ouverte partielle : une partie de la règle manque, note médiane.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "score": 0.5,
+        "explanation": "La réponse reprend l’idée de pièce comptable mais ne distingue pas la clé de comptabilisation du type de pièce.",
+        "criteria": [
+          {
+            "key": "comprehension",
+            "label": "Compréhension de la notion",
+            "ok": false,
+            "comment": "La distinction entre la pièce et ses postes reste implicite."
+          }
+        ],
+        "missing": ["La distinction entre le type de pièce et la clé de comptabilisation"],
+        "offTopic": false
+      },
+      "usage": { "inputTokens": 120, "outputTokens": 52, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 240
+    }
+  ]
+}

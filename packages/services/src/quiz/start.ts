@@ -67,6 +67,19 @@ function attemptSeed(userId: string, moduleId: string, attemptNo: number): strin
     .digest('hex');
 }
 
+/** BR-QUI-01 — N = min(20, max(12, nombre de notions)), bounded by the engine configuration. */
+export function validationQuizSize(notionCount: number): number {
+  return Math.min(
+    ENGINE.draw.maxSize,
+    Math.max(ENGINE.draw.defaultSize, Math.max(1, Math.trunc(notionCount))),
+  );
+}
+
+/** Deterministic seed of one attempt (hash of learner, module and attempt number). */
+export function quizAttemptSeed(userId: string, moduleId: string, attemptNo: number): string {
+  return attemptSeed(userId, moduleId, attemptNo);
+}
+
 function asArray(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value.filter((entry): entry is string => typeof entry === 'string');
@@ -298,7 +311,7 @@ export function startValidationAttempt(
         throw new AppError('CONFLICT', 'Ce module n’a pas encore de notions.', { status: 409 });
       }
 
-      const size = Math.min(ENGINE.draw.maxSize, Math.max(ENGINE.draw.defaultSize, notionRows.length));
+      const size = validationQuizSize(notionRows.length);
       const attemptNo = await nextAttemptNo(tx, userId, moduleId);
       const { bank, payloads } = await readBank(tx, userId, module.formation_id);
       const seen = await readSeenFingerprints(tx, userId);
@@ -307,7 +320,7 @@ export function startValidationAttempt(
         bank,
         seenFingerprints: seen,
         gaps: drawGapsOf(notionRows),
-        params: ENGINE.draw,
+        params: { ...ENGINE.draw, masteryThreshold: ENGINE.mastery.threshold },
         targetCount: size,
         seed: attemptSeed(userId, moduleId, attemptNo),
       });

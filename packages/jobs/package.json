@@ -20,6 +20,7 @@
     "@learny/ingestion": "workspace:*",
     "@learny/learning-engine": "workspace:*",
     "@learny/notifications": "workspace:*",
+    "@learny/services": "workspace:*",
     "@learny/tutor": "workspace:*",
     "archiver": "^7.0.1",
     "drizzle-orm": "^0.45.2",
