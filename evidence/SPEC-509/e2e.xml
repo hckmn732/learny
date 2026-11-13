@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="33.314282999999996">
+<testsuite name="p5/spec-509.spec.ts" timestamp="2026-11-13T01:39:47.576Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.915" errors="0">
+<testcase name="Ingestion : notes et PDF, découpage, embeddings @SPEC-509" classname="p5/spec-509.spec.ts" time="1.711">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/attachments/spec-509-note-et-pdf-80f326f2f394e6caa468ab9a202902283876fef2.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/attachments/spec-509-echec-lisible-25e204c4f1933d286319ae8381bce18624cc19b1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/attachments/axe-9a98dc4032b62a941f7cf17eaa779189563c9e3a.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-efe0e-coupage-embeddings-SPEC-509-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Ingestion : notes et PDF, découpage, embeddings @SPEC-509 @visual" classname="p5/spec-509.spec.ts" time="1.204">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-0f7ba--embeddings-SPEC-509-visual-desktop/attachments/axe-6a339f9ce0796b636346edfa8244b7829ade7a54.json]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-0f7ba--embeddings-SPEC-509-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-0f7ba--embeddings-SPEC-509-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-0f7ba--embeddings-SPEC-509-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p5-spec-509-Ingestion-note-0f7ba--embeddings-SPEC-509-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

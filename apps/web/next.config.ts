@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     '@learny/config',
     '@learny/contracts',
     '@learny/db',
+    '@learny/ingestion',
     '@learny/jobs',
     '@learny/llm',
     '@learny/notifications',

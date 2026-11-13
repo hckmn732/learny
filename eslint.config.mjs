@@ -34,6 +34,7 @@ const ALLOWED_IMPORTS = {
   'learning-engine': ['core', 'config', 'testing'],
   bricks: ['core', 'contracts', 'ui'],
   llm: ['core', 'config', 'contracts', 'db'],
+  ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
   contracts: ['core'],
@@ -125,8 +126,9 @@ const restrictedImportBlocks = [
               ? []
               : [
                   {
-                    group: ['@ai-sdk/*'],
-                    message: AI_SDK_MESSAGE,
+                    group: ['ai', 'ai/*', '@ai-sdk/*'],
+                    message:
+                      'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
                   },
                 ]),
           ],

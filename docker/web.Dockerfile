@@ -24,6 +24,7 @@ COPY packages/config/package.json ./packages/config/package.json
 COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
+COPY packages/ingestion/package.json ./packages/ingestion/package.json
 COPY packages/jobs/package.json ./packages/jobs/package.json
 COPY packages/learning-engine/package.json ./packages/learning-engine/package.json
 COPY packages/llm/package.json ./packages/llm/package.json
