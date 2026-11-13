@@ -2,9 +2,9 @@ import { randomUUID } from 'node:crypto';
 
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getAttemptResult } from '@learny/services';
+import { createServiceContext, getActiveProgramme, getQuizResult } from '@learny/services';
 
-import { QuizResultScreen } from '../../../../../../../../../components/quiz/QuizResultScreen';
+import { QuizResultScreen } from '../../../../../../../../../components/quiz-result/QuizResultScreen';
 import { AppShell } from '../../../../../../../../../components/shell/app-shell';
 import { SIGN_IN_PATH } from '../../../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../../../lib/sidebar-page';
@@ -17,22 +17,30 @@ interface QuizResultPageProps {
 }
 
 /**
- * SCR-09 result (partial until SPEC-612): the tutor correction is tracked by polling every three
- * seconds (ADR-0065); the full detailed screen, unlock and remediation belong to SPEC-612.
+ * SCR-09 result (SPEC-612): score, threshold, attempts, gaps, mastered notions and actions. The
+ * pending correction is polled every three seconds (ADR-0065); the module header comes from the
+ * RLS programme read model so a foreign attempt stays a 404.
  */
 export default async function QuizResultPage({ params }: QuizResultPageProps) {
   const { fid, mid, attemptId } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, result] = await Promise.all([
+  const [shell, programme, result] = await Promise.all([
     loadShellForFormation(fid),
-    getAttemptResult(ctx, attemptId),
+    getActiveProgramme(ctx, fid),
+    getQuizResult(ctx, attemptId),
   ]);
   if (!result.ok) {
     if (result.error.code === 'NOT_FOUND') notFound();
     throw result.error;
   }
+  if (!programme.ok) {
+    if (programme.error.code === 'NOT_FOUND') notFound();
+    throw programme.error;
+  }
+  const selected = programme.value.modules.find((entry) => entry.id === mid);
+  if (selected === undefined) notFound();
   return (
     <AppShell
       header={shell.header.ok ? shell.header.data : null}
@@ -42,8 +50,11 @@ export default async function QuizResultPage({ params }: QuizResultPageProps) {
     >
       <QuizResultScreen
         attemptId={attemptId}
+        formationId={fid}
         initial={result.value}
-        moduleHref={`/formations/${encodeURIComponent(fid)}/modules/${encodeURIComponent(mid)}`}
+        moduleId={mid}
+        modulePosition={selected.position}
+        moduleTitle={selected.title}
       />
     </AppShell>
   );

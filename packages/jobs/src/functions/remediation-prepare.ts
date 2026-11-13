@@ -34,7 +34,7 @@ export function createRemediationPrepareJob(deps: RemediationPrepareDeps) {
     },
     async ({ event, step, ctx }) => {
       const { userId, formationId, moduleId, attemptId, passed } = event.data;
-      if (passed !== false) return { skipped: true as const };
+      if (passed) return { skipped: true as const };
       return step.run('prepare-remediation', () =>
         deps.run({
           userId,

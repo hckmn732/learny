@@ -1,16 +1,8 @@
 import { z } from 'zod';
 
 import { parseBrickPayload, toPublicBrick } from '@learny/bricks';
-import {
-  ENGINE,
-  GAP_PROPOSALS,
-  REMEDIATION_RULES,
-} from '@learny/config/product';
-import {
-  RemediationDto,
-  type QuizQuestionDto,
-  type RemediationStatus,
-} from '@learny/contracts';
+import { ENGINE, GAP_PROPOSALS, REMEDIATION_RULES } from '@learny/config/product';
+import { RemediationDto, type QuizQuestionDto, type RemediationStatus } from '@learny/contracts';
 import { AppError, type LearnyLogger, type Result } from '@learny/core';
 import { serviceDb, sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
@@ -18,10 +10,10 @@ import { llm } from '@learny/llm';
 
 import type { ServiceContext } from '../context';
 import { applyLearningResult } from '../learning/apply-result';
-import { requireUser, toResult } from '../resources/result';
 import { getAttempt } from '../quiz/check';
-import { readRetryGate } from '../quiz/retry-gate';
 import { natureLabelOf, proposalOf } from '../quiz/result';
+import { retryGate } from '../quiz/retry-gate';
+import { requireUser, toResult } from '../resources/result';
 
 // Targeted remediation of a failed validation attempt (SCR-09, SPEC-612 EF-6, ET-2, ET-4, ET-5,
 // BR-QUI-06, BR-LAC-04, CL-5, CL-6, CL-9, CL-12, ADR-0173, ADR-0179).
@@ -76,10 +68,7 @@ export type RemediationPlanGenerator = (
 ) => Promise<Result<RemediationPlan>>;
 
 function escapeData(value: string): string {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+  return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
 export const defaultRemediationPlanGenerator: RemediationPlanGenerator = async (ctx, input) => {
@@ -124,12 +113,23 @@ export const defaultRemediationPlanGenerator: RemediationPlanGenerator = async (
   });
   if (!generated.ok) return generated;
   const parsed = RemediationPlanSchema.safeParse(generated.value);
-  return parsed.success
-    ? { ok: true, value: parsed.data }
-    : {
-        ok: false,
-        error: new AppError('INVALID_OUTPUT', 'La remédiation du tuteur est invalide.'),
-      };
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: new AppError('INVALID_OUTPUT', 'La remédiation du tuteur est invalide.'),
+    };
+  }
+  // The simulated model cannot know the runtime notion identifiers: an unknown identifier is
+  // aligned on the input order, which is the order the prompt used. A live model returns the ids
+  // it received and is left untouched.
+  const known = new Set(input.gaps.map((gap) => gap.notionId));
+  const items = parsed.data.items.map((item, index) => ({
+    ...item,
+    notionId: known.has(item.notionId)
+      ? item.notionId
+      : (input.gaps[index]?.notionId ?? item.notionId),
+  }));
+  return { ok: true, value: { items } };
 };
 
 interface GapRow extends Record<string, unknown> {
@@ -192,14 +192,15 @@ export interface PrepareOutcome {
   fallback: boolean;
 }
 
-function questionType(value: string): 'choice_question' | 'cloze' | 'matching' | 'open_question' | null {
-  return value === 'choice_question' || value === 'cloze' || value === 'matching'
-    ? value
-    : null;
+function questionType(
+  value: string,
+): 'choice_question' | 'cloze' | 'matching' | 'open_question' | null {
+  return value === 'choice_question' || value === 'cloze' || value === 'matching' ? value : null;
 }
 
 function asArray(value: unknown): string[] {
-  if (Array.isArray(value)) return value.filter((entry): entry is string => typeof entry === 'string');
+  if (Array.isArray(value))
+    return value.filter((entry): entry is string => typeof entry === 'string');
   if (typeof value === 'string') {
     return value
       .replace(/^\{|\}$/g, '')
@@ -210,7 +211,11 @@ function asArray(value: unknown): string[] {
   return [];
 }
 
-async function readModule(tx: DbTx, userId: string, moduleId: string): Promise<{
+async function readModule(
+  tx: DbTx,
+  userId: string,
+  moduleId: string,
+): Promise<{
   id: string;
   formation_id: string;
   position: number;
@@ -313,7 +318,10 @@ async function seenFingerprints(tx: DbTx, userId: string): Promise<Set<string>> 
 function preference(nature: string, row: BankRow, gap: GapRow): number {
   const type = questionType(row.type);
   if (type === null) return 99;
-  const confused = gap.confused_with !== null && row.payload !== null && JSON.stringify(row.payload).includes(gap.confused_with);
+  const confused =
+    gap.confused_with !== null &&
+    row.payload !== null &&
+    JSON.stringify(row.payload).includes(gap.confused_with);
   if (nature === 'confusion') {
     if (type === 'matching') return confused ? 0 : 1;
     if (type === 'choice_question') return confused ? 2 : 3;
@@ -325,7 +333,11 @@ function preference(nature: string, row: BankRow, gap: GapRow): number {
   return 3;
 }
 
-function selectQuestions(gaps: readonly GapRow[], bank: readonly BankRow[], seen: ReadonlySet<string>): {
+function selectQuestions(
+  gaps: readonly GapRow[],
+  bank: readonly BankRow[],
+  seen: ReadonlySet<string>,
+): {
   question: BankRow;
   gap: GapRow;
 }[] {
@@ -362,7 +374,7 @@ function publicQuestion(row: BankRow, gap: GapRow, position: number) {
     versionId: row.version_id,
     type,
     notionIds: [gap.notion_id],
-    payload: row.payload,
+    payload: row.payload as never,
   });
   return {
     position,
@@ -512,17 +524,26 @@ export function prepareRemediation(
       }
       const enabled = await isAutomationEnabled(tx, userId);
       if (trigger === 'auto' && !enabled) {
-        return { done: true as const, outcome: { status: 'none' as const, activityId: null, prepared: false, fallback: false } };
+        return {
+          done: true as const,
+          outcome: { status: 'none' as const, activityId: null, prepared: false, fallback: false },
+        };
       }
       const gaps = await readGaps(tx, userId, moduleId);
       if (gaps.length === 0) {
-        return { done: true as const, outcome: { status: 'none' as const, activityId: null, prepared: false, fallback: false } };
+        return {
+          done: true as const,
+          outcome: { status: 'none' as const, activityId: null, prepared: false, fallback: false },
+        };
       }
       const bank = await readBank(tx, userId, module.formation_id);
       const seen = await seenFingerprints(tx, userId);
       return { done: false as const, module, attempt, gaps, bank, seen };
     });
-    if (base === null || base.done) return base?.outcome ?? { status: 'none', activityId: null, prepared: false, fallback: false };
+    if (base === null || base.done)
+      return (
+        base?.outcome ?? { status: 'none', activityId: null, prepared: false, fallback: false }
+      );
 
     let plan: RemediationPlan | null = null;
     let fallback = false;
@@ -551,7 +572,7 @@ export function prepareRemediation(
       else fallback = true;
     } catch (cause) {
       fallback = true;
-      ctx.logger?.warn('remediation.plan.failed', { outcome: 'ai_task_failed' }, cause);
+      ctx.logger.warn('remediation.plan.failed', { outcome: 'ai_task_failed' }, cause);
     }
 
     const outcome = await withTransaction(db, async (tx): Promise<PrepareOutcome> => {
@@ -798,14 +819,13 @@ function parseConfig(value: unknown): { plan: StoredPlanItem[]; sourceAttemptId:
     const item = entry as Record<string, unknown>;
     if (typeof item.notionId !== 'string' || typeof item.label !== 'string') continue;
     const excerpts = Array.isArray(item.excerpts)
-      ? item.excerpts
-          .filter(
-            (excerpt): excerpt is { label: string; href: string } =>
-              typeof excerpt === 'object' &&
-              excerpt !== null &&
-              typeof (excerpt as Record<string, unknown>).label === 'string' &&
-              typeof (excerpt as Record<string, unknown>).href === 'string',
-          )
+      ? item.excerpts.filter(
+          (excerpt): excerpt is { label: string; href: string } =>
+            typeof excerpt === 'object' &&
+            excerpt !== null &&
+            typeof (excerpt as Record<string, unknown>).label === 'string' &&
+            typeof (excerpt as Record<string, unknown>).href === 'string',
+        )
       : [];
     plan.push({
       notionId: item.notionId,
@@ -828,7 +848,10 @@ async function retryGateOf(ctx: ServiceContext, moduleId: string): Promise<strin
   return gate;
 }
 
-async function readRetryGateInContext(ctx: ServiceContext, moduleId: string): Promise<string | null> {
+async function readRetryGateInContext(
+  ctx: ServiceContext,
+  moduleId: string,
+): Promise<string | null> {
   if (ctx.db === null || ctx.userId === null) return null;
   const gate = await retryGate(ctx, moduleId);
   return gate.ok ? gate.value.availableAt : null;

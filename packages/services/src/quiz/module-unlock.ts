@@ -1,13 +1,14 @@
 import { ENGINE } from '@learny/config/product';
 import { AppError, type Result } from '@learny/core';
-import { serviceDb, sql, toFsrsCardJson, type DbTx } from '@learny/db';
+import { serviceDb, sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
 import { createNotionCard } from '@learny/learning-engine';
 import { notify } from '@learny/notifications';
 
 import type { ServiceContext } from '../context';
+import { toPersistenceCard } from '../learning/apply-result';
 import { replanUser } from '../planning';
-import { requireUser, toResult } from '../resources/result';
+import { toResult } from '../resources/result';
 
 // Unlock of the next module after a passed validation quiz (SPEC-612 EF-7, ET-3, BR-QUI-05,
 // BR-FOR-07, CL-2, CL-3, CL-4, CL-10). One transaction performs every domain write and queues
@@ -108,11 +109,11 @@ async function validateModule(
     insert into public.module_progress (
       user_id, module_id, status, opened_at, validated_at, best_score, updated_at
     ) values (
-      ${userId}::uuid, ${module.id}::uuid, 'validated', ${now.toISOString()}::timestamptz,
+      ${userId}::uuid, ${module.id}::uuid, 'validated'::public.module_status, ${now.toISOString()}::timestamptz,
       ${now.toISOString()}::timestamptz, ${score}, ${now.toISOString()}::timestamptz
     )
     on conflict (user_id, module_id) do update set
-      status = 'validated',
+      status = 'validated'::public.module_status,
       opened_at = coalesce(module_progress.opened_at, excluded.opened_at),
       validated_at = coalesce(module_progress.validated_at, excluded.validated_at),
       best_score = greatest(coalesce(module_progress.best_score, 0), excluded.best_score),
@@ -122,7 +123,7 @@ async function validateModule(
     // BR-FOR-07 — an individual formation mirrors the owner's progress on the shared module row.
     await tx.execute(sql`
       update public.modules
-      set status = 'validated'
+      set status = 'validated'::public.module_status
       where id = ${module.id}::uuid and status <> 'validated'
     `);
   }
@@ -139,18 +140,18 @@ async function openNextModule(
     insert into public.module_progress (
       user_id, module_id, status, opened_at, updated_at
     ) values (
-      ${userId}::uuid, ${next.id}::uuid, 'open', ${now.toISOString()}::timestamptz,
+      ${userId}::uuid, ${next.id}::uuid, 'open'::public.module_status, ${now.toISOString()}::timestamptz,
       ${now.toISOString()}::timestamptz
     )
     on conflict (user_id, module_id) do update set
-      status = case when module_progress.status = 'validated' then 'validated' else 'open' end,
+      status = (case when module_progress.status = 'validated' then 'validated' else 'open' end)::public.module_status,
       opened_at = coalesce(module_progress.opened_at, excluded.opened_at),
       updated_at = excluded.updated_at
   `);
   if (module.group_id === null) {
     await tx.execute(sql`
       update public.modules
-      set status = 'open'
+      set status = 'open'::public.module_status
       where id = ${next.id}::uuid and status = 'locked'
     `);
   }
@@ -163,7 +164,7 @@ async function addNotionsToReview(
   now: Date,
 ): Promise<void> {
   const card = JSON.stringify(
-    toFsrsCardJson(createNotionCard(now, ENGINE.fsrs.requestRetention)),
+    toPersistenceCard(createNotionCard(now.toISOString(), ENGINE.fsrs.requestRetention)),
   );
   await tx.execute(sql`
     insert into public.notion_states (
@@ -178,22 +179,6 @@ async function addNotionsToReview(
     on conflict (user_id, notion_id) do update set
       in_review = true,
       revision = notion_states.revision + 1
-  `);
-}
-
-async function addMilestone(
-  tx: DbTx,
-  userId: string,
-  module: ModuleRow,
-  now: Date,
-): Promise<void> {
-  await tx.execute(sql`
-    insert into public.milestones (user_id, formation_id, key, ref_id, achieved_at)
-    values (
-      ${userId}::uuid, ${module.formation_id}::uuid, 'module_validated',
-      ${module.id}::uuid, ${now.toISOString()}::timestamptz
-    )
-    on conflict (user_id, key, ref_id) do nothing
   `);
 }
 
@@ -250,7 +235,7 @@ export function unlockModule(
     if (ctx.db === null) {
       throw new AppError('INTERNAL_ERROR', 'Client base de données manquant.');
     }
-    if (input.passed !== true) {
+    if (!input.passed) {
       return {
         unlocked: false,
         revisionOnly: false,
@@ -289,7 +274,6 @@ export function unlockModule(
         await openNextModule(tx, input.userId, module, next, now);
       }
       await addNotionsToReview(tx, input.userId, module.id, now);
-      await addMilestone(tx, input.userId, module, now);
       outbox.add(
         'module/validated',
         {
@@ -323,6 +307,16 @@ export function unlockModule(
     });
 
     if (outcome.unlocked) {
+      // Milestones are written by the services through the owner-role client (SPEC-408 policy);
+      // the unique key keeps the replay idempotent even outside the unlock transaction.
+      await serviceDb().execute(sql`
+        insert into public.milestones (user_id, formation_id, key, ref_id, achieved_at)
+        values (
+          ${input.userId}::uuid, ${input.formationId}::uuid, 'module_validated',
+          ${input.moduleId}::uuid, ${now.toISOString()}::timestamptz
+        )
+        on conflict (user_id, key, ref_id) do nothing
+      `);
       await sendNotification(
         ctx,
         input.userId,

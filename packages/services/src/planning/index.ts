@@ -18,8 +18,8 @@ import {
   type SlotStatus,
 } from '@learny/learning-engine';
 
-import { reconcilePlanSlots, type PlanReconciliationCounts } from '../learning/persist-plan';
 import type { ServiceContext } from '../context';
+import { reconcilePlanSlots, type PlanReconciliationCounts } from '../learning/persist-plan';
 
 /** Fallback module volume when the cadrage did not record one; the planner needs a positive hour. */
 const DEFAULT_MODULE_HOURS = 2;

@@ -1,5 +1,9 @@
-import { sql, type DbTx } from '@learny/db';
-import { ENGINE, GAP_NATURE_LABELS, GAP_PROPOSALS, REMEDIATION_RULES } from '@learny/config/product';
+import {
+  ENGINE,
+  GAP_NATURE_LABELS,
+  GAP_PROPOSALS,
+  REMEDIATION_RULES,
+} from '@learny/config/product';
 import {
   GapCardDto,
   QuizResultDto,
@@ -7,13 +11,14 @@ import {
   type RemediationStatus,
 } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
+import { sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 import { trainingTarget } from '../gaps/links';
 import { requireUser, toResult } from '../resources/result';
 
-import { computeScore, type ScoredAnswer } from './score';
 import { readRetryGate } from './retry-gate';
+import { computeScore, type ScoredAnswer } from './score';
 
 // Read model of SCR-09 after correction (SPEC-612 EF-1 to EF-5, ET-1, BR-QUI-05, BR-QUI-06,
 // BR-QUI-08, BR-LAC-04, ADR-0179). Every value comes from the persisted attempt, the module, the
@@ -103,7 +108,9 @@ function itemsOf(value: unknown): Record<string, unknown>[] {
   );
 }
 
-function perNotionOf(value: unknown): Record<string, { correct: number; total: number; score: number }> {
+function perNotionOf(
+  value: unknown,
+): Record<string, { correct: number; total: number; score: number }> {
   const raw = asObject(value);
   if (raw === null) return {};
   const out: Record<string, { correct: number; total: number; score: number }> = {};
@@ -330,15 +337,17 @@ async function readRemediation(
   return { status: row.checked > 0 ? 'in_progress' : 'ready', href };
 }
 
-function scoredOf(answers: readonly AnswerRow[], items: readonly Record<string, unknown>[]): ScoredAnswer[] {
+function scoredOf(
+  answers: readonly AnswerRow[],
+  items: readonly Record<string, unknown>[],
+): ScoredAnswer[] {
   return answers
     .filter((answer) => answer.is_correct !== null)
     .map((answer) => {
       const item = items[answer.position - 1];
       return {
         position: answer.position,
-        notionId:
-          typeof item?.notionId === 'string' ? item.notionId : answer.brick_version_id,
+        notionId: typeof item?.notionId === 'string' ? item.notionId : answer.brick_version_id,
         score: answer.score === null ? 0 : Number(answer.score),
         maxScore: answer.max_score === null ? 0 : Number(answer.max_score),
         isCorrect: answer.is_correct,
@@ -375,7 +384,8 @@ export function getQuizResult(
       const orderedGaps = [...openGaps].sort(
         (left, right) => Number(left.mastery ?? 0) - Number(right.mastery ?? 0),
       );
-      const shownGaps = passed === true ? orderedGaps : orderedGaps.slice(0, REMEDIATION_RULES.maxGaps);
+      const shownGaps =
+        passed === true ? orderedGaps : orderedGaps.slice(0, REMEDIATION_RULES.maxGaps);
       const gaps: GapCardDto[] = shownGaps.map((notion) => {
         const nature = notion.gap_nature ?? 'forgetting';
         return GapCardDto.parse({
@@ -396,12 +406,14 @@ export function getQuizResult(
       });
       const mastered = notions
         .filter(
-          (notion) => Number(notion.mastery ?? 0) >= ENGINE.mastery.threshold && notion.gap_nature === null,
+          (notion) =>
+            Number(notion.mastery ?? 0) >= ENGINE.mastery.threshold && notion.gap_nature === null,
         )
         .map((notion) => ({ notionId: notion.id, label: notion.label }));
 
       const perNotion = perNotionOf(attempt.per_notion);
-      const latestFailed = passed === false ? attemptId : await readLatestFailedAttempt(tx, userId, attempt.module_id);
+      const latestFailed =
+        passed === false ? attemptId : await readLatestFailedAttempt(tx, userId, attempt.module_id);
       const remediation = await readRemediation(tx, userId, attempt.module_id, latestFailed);
       const remediationHref =
         remediation.status === 'none'
@@ -413,7 +425,6 @@ export function getQuizResult(
       const labelOf = new Map(notions.map((notion) => [notion.id, notion.label]));
       const pointsMissing =
         passed === false && score !== null ? pointsMissingOf(score, attempt.threshold) : null;
-      const fragile = orderedGaps.length;
 
       return QuizResultDto.parse({
         attemptId,

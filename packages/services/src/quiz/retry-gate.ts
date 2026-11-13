@@ -1,6 +1,6 @@
-import { sql, type DbTx } from '@learny/db';
 import { AUTOMATION_DEFAULTS, AUTOMATION_OPTIONS } from '@learny/config/product';
 import { AppError, type Result } from '@learny/core';
+import { sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -63,7 +63,11 @@ export async function readRetrySettings(tx: DbTx, userId: string): Promise<Retry
   `);
   const row = rows[0];
   if (row === undefined) {
-    return { ...AUTOMATION_DEFAULTS.remediation, mode: 'advised' };
+    return {
+      enabled: true,
+      delayHours: AUTOMATION_DEFAULTS.remediation.retryDelayHours,
+      mode: 'advised',
+    };
   }
   const params =
     typeof row.params === 'object' && row.params !== null && !Array.isArray(row.params)
@@ -118,7 +122,7 @@ export async function readRetryGate(
   const latest = graded[0];
   const settings = await readRetrySettings(tx, userId);
   let remediationCompleted = false;
-  if (latest !== undefined && latest.passed === false) {
+  if (latest !== undefined && !latest.passed) {
     const completed = await tx.execute<RemediationRow>(sql`
       select act.id::text as id
       from public.activities act

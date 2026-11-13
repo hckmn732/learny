@@ -41,9 +41,7 @@ interface ResponseRecord {
 }
 
 function asRecord(value: unknown): ResponseRecord {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-    ? value
-    : {};
+  return typeof value === 'object' && value !== null && !Array.isArray(value) ? value : {};
 }
 
 function correctionOption(
@@ -91,7 +89,9 @@ function ClozeInputs({
         className={cn(
           'mx-4 w-150 rounded-10 border-0 px-12 text-center text-18 font-600 text-ink shadow-[inset_0_-2px_0_var(--color-ink)]',
           state?.correct === true && 'bg-green-soft shadow-[inset_0_-2px_0_var(--color-teal)]',
-          state !== null && !state.correct && 'bg-orange-soft shadow-[inset_0_-2px_0_var(--color-orange)]',
+          state !== null &&
+            !state.correct &&
+            'bg-orange-soft shadow-[inset_0_-2px_0_var(--color-orange)]',
           !state && 'bg-canvas',
         )}
         data-testid={`quiz-gap-${String(gapId)}`}
@@ -166,7 +166,8 @@ function AnswerZone({
                 }
               }}
               onKeyDown={(event) => {
-                if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) return;
+                if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key))
+                  return;
                 event.preventDefault();
                 const group = event.currentTarget.closest('[role="radiogroup"]');
                 const buttons = [...(group?.querySelectorAll<HTMLButtonElement>('button') ?? [])];
@@ -296,6 +297,10 @@ export interface QuestionCardProps {
   onValueChange: (value: ResponseRecord) => void;
   onCheck: () => void;
   onNext: () => void;
+  /** SPEC-612 — a remediation checks every question in place and hides the quiz navigation. */
+  showNext?: boolean;
+  testId?: string;
+  headingId?: string;
 }
 
 export function QuestionCard({
@@ -306,6 +311,9 @@ export function QuestionCard({
   onValueChange,
   onCheck,
   onNext,
+  showNext = true,
+  testId = 'quiz-question',
+  headingId = 't-question',
 }: QuestionCardProps) {
   const feedbackRef = useRef<HTMLDivElement>(null);
   const checked = question.state === 'checked';
@@ -327,9 +335,9 @@ export function QuestionCard({
 
   return (
     <section
-      aria-labelledby="t-question"
+      aria-labelledby={headingId}
       className="flex flex-col gap-22 rounded-28 border border-border bg-surface p-32"
-      data-testid="quiz-question"
+      data-testid={testId}
       ref={feedbackRef}
     >
       <div className="flex flex-wrap gap-8">
@@ -348,7 +356,7 @@ export function QuestionCard({
       </div>
       <h2
         className="m-0 font-display text-26 font-600 leading-1.3 tracking-heading text-ink"
-        id="t-question"
+        id={headingId}
       >
         {stem}
       </h2>
@@ -367,14 +375,16 @@ export function QuestionCard({
       <div className="flex flex-wrap items-center justify-between gap-12 pt-6">
         <span className="text-13 text-ink-muted">{t.note}</span>
         {checked ? (
-          <button
-            className="inline-flex min-h-48 items-center rounded-14 bg-lime px-24 text-15 font-700 text-ink disabled:opacity-60"
-            data-testid="quiz-next"
-            onClick={onNext}
-            type="button"
-          >
-            {isLast ? t.finish : t.next}
-          </button>
+          showNext ? (
+            <button
+              className="inline-flex min-h-48 items-center rounded-14 bg-lime px-24 text-15 font-700 text-ink disabled:opacity-60"
+              data-testid="quiz-next"
+              onClick={onNext}
+              type="button"
+            >
+              {isLast ? t.finish : t.next}
+            </button>
+          ) : null
         ) : (
           <button
             className="inline-flex min-h-48 items-center rounded-14 bg-ink px-24 text-15 font-700 text-white disabled:cursor-not-allowed disabled:opacity-50"
