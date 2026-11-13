@@ -1,0 +1,697 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-603/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-603",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-603/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-603/test-results/sdd/SPEC-603/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-603/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-603/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/spec-603-home.spec.ts",
+      "file": "p6/spec-603-home.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "journée d’Alex et navigation depuis l’accueil @SPEC-603",
+          "ok": true,
+          "tags": [
+            "SPEC-603"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3676,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:48.084Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/attachments/axe-76eec8a2ebed17dbf80dc138b21e29fd9b9b9b00.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/attachments/axe-b455f6e01fd43c4e474c7840f8088ebdd65669aa.json"
+                    },
+                    {
+                      "name": "accueil-en-cours",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/attachments/accueil-en-cours-dbcfc5f4abe56985a8e828317c47aeee4bd6e250.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-journée-d-e3213-n-depuis-l’accueil-SPEC-603-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b74e25f7f9bccf4792-dfad9f30d4ffcfd206f5",
+          "file": "p6/spec-603-home.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "accueil d’un nouvel utilisateur @SPEC-603",
+          "ok": true,
+          "tags": [
+            "SPEC-603"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1315,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:52.022Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "accueil-vide",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/attachments/accueil-vide-0167c52d0d4f04f704668fe072d22c4b2f12b375.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/attachments/axe-d452269e9599d37edfd3b516d383cf9e09a733a6.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-d’un-nouvel-utilisateur-SPEC-603-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b74e25f7f9bccf4792-7b158d45629cce15d193",
+          "file": "p6/spec-603-home.spec.ts",
+          "line": 98,
+          "column": 1
+        },
+        {
+          "title": "passage de l’heure @SPEC-603",
+          "ok": true,
+          "tags": [
+            "SPEC-603"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 879,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:53.412Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-passage-de-l’heure-SPEC-603-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-passage-de-l’heure-SPEC-603-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-passage-de-l’heure-SPEC-603-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b74e25f7f9bccf4792-44a20d933d479d71783e",
+          "file": "p6/spec-603-home.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-03 par régions @SPEC-603 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-603",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2383,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:54.320Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "home-header-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-header-side-by-side-4cd2f07a8a8f2e085df6a96b4c89c2bac8634fd7.png"
+                    },
+                    {
+                      "name": "home-header-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-header-diff-ac50766cb6b5780e76189ffede6dce95f313f0d2.png"
+                    },
+                    {
+                      "name": "home-day-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-day-side-by-side-20f21e3e47fed216b63417c3a20397de0880c3ef.png"
+                    },
+                    {
+                      "name": "home-day-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-day-diff-9d21b7678707c962f022438ed21d63e10100680c.png"
+                    },
+                    {
+                      "name": "home-retention-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-retention-side-by-side-c7512628d28af2d669fd8e6f48b1b0030316b34b.png"
+                    },
+                    {
+                      "name": "home-retention-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-retention-diff-b7d788ab4b0200b48801ea3237b2ea46e2ff2159.png"
+                    },
+                    {
+                      "name": "home-global-quiz-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-global-quiz-side-by-side-75a1bc013cda37839b25b46bd61755cae466112c.png"
+                    },
+                    {
+                      "name": "home-global-quiz-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-global-quiz-diff-da6da41aa137ed838bbdbb3a6d34022530dcde2e.png"
+                    },
+                    {
+                      "name": "home-formations-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-formations-side-by-side-28e33dcd0b30aadb5f20fffc2d815f0cd9691bdc.png"
+                    },
+                    {
+                      "name": "home-formations-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-formations-diff-725ed515117fe99f9a3c9652f17a985eba7901db.png"
+                    },
+                    {
+                      "name": "home-formations-terminees-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-formations-terminees-side-by-side-440ab781dc28e5b09008e7fd2554a57b41c47ec7.png"
+                    },
+                    {
+                      "name": "home-formations-terminees-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/home-formations-terminees-diff-81e15a299c7bacc2d167986a71c57a18601aaeec.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/attachments/axe-7ed33ec209212a5a862d014a13e410faeb943e2f.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-conformit-6ea4f-par-régions-SPEC-603-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b74e25f7f9bccf4792-f37d0d69ad2c2e346d1d",
+          "file": "p6/spec-603-home.spec.ts",
+          "line": 134,
+          "column": 1
+        },
+        {
+          "title": "accueil mobile @SPEC-603 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-603",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs/p6/spec-603-home.spec.ts",
+                    "line": 229,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 180,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:56.832Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-603/apps/web/e2e/specs/p6/spec-603-home.spec.ts",
+                        "line": 229,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1831,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T07:06:57.735Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "accueil-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/attachments/accueil-mobile-d36dbe3b0ff54dbaa68563df1afa6212a316ad31.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/attachments/axe-2cde123cb0866a0c3746f7fbc1d145e6776d327c.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-603/test-results/artifacts/p6-spec-603-home-accueil-mobile-SPEC-603-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b74e25f7f9bccf4792-65c8ec154971a2e3ef4f",
+          "file": "p6/spec-603-home.spec.ts",
+          "line": 228,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T07:06:17.216Z",
+    "duration": 42579.93,
+    "expected": 5,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
