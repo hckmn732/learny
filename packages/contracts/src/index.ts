@@ -45,6 +45,7 @@ export * from './billing';
 export * from './bricks';
 export * from './cadrage';
 export * from './formation-management';
+export * from './final-review';
 export * from './programme';
 export * from './questions';
 export * from './course-draft';
