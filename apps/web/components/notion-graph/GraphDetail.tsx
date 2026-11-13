@@ -314,7 +314,6 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-course-link"
                   prefetch={false}
                   href={selected.courseHref}
-                  aria-label={t.detail.openCourse(selected.label)}
                   className="inline-flex min-h-40 items-center rounded-12 bg-ink px-14 text-14 font-700 text-white no-underline"
                 >
                   {t.detail.actions.course}
@@ -325,7 +324,6 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-train-link"
                   prefetch={false}
                   href={selected.trainingHref}
-                  aria-label={t.detail.openTraining(selected.label)}
                   className="inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-14 font-700 text-ink no-underline"
                 >
                   {t.detail.actions.train}
@@ -336,8 +334,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-gap-link"
                   prefetch={false}
                   href={selected.gapHref}
-                  aria-label={t.detail.openGap(selected.label)}
-                  className="inline-flex min-h-40 items-center rounded-12 bg-orange px-14 text-14 font-700 text-white no-underline"
+                  className="inline-flex min-h-40 items-center rounded-12 bg-orange px-14 text-14 font-700 text-ink no-underline"
                 >
                   {t.detail.actions.gap}
                 </NextLink>
