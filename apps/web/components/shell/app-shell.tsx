@@ -7,7 +7,7 @@ import type { HeaderDto, SidebarDto } from '@learny/contracts';
 import { fr } from '../../messages/fr';
 
 import { Header } from './header';
-import { Sidebar, SIDEBAR_COLLAPSED_STORAGE_KEY } from './sidebar';
+import { Sidebar } from './sidebar';
 
 export interface AppShellProps {
   sidebar: SidebarDto | null;
@@ -36,24 +36,8 @@ export const AppShell = ({
   }, []);
   const showTriggerRef = useRef<HTMLButtonElement>(null);
 
-  // ET-3 — the preference is already in localStorage before hydration: the first paint can use the
-  // server value without waiting for the client query. The attribute also hides the sidebar in the
-  // tiny window before React hydrates when the profile says it is collapsed.
-  const sidebarBootstrap =
-    sidebar === null
-      ? ''
-      : `try{localStorage.setItem(${JSON.stringify(SIDEBAR_COLLAPSED_STORAGE_KEY)},${JSON.stringify(
-          sidebar.collapsed ? '1' : '0',
-        )});}catch(e){}
-document.documentElement.setAttribute('data-sidebar-collapsed', ${JSON.stringify(
-          sidebar.collapsed ? 'true' : 'false',
-        )});`;
-
   return (
     <div className="flex min-h-screen bg-canvas">
-      {sidebarBootstrap === '' ? null : (
-        <script dangerouslySetInnerHTML={{ __html: sidebarBootstrap }} />
-      )}
       <a
         href="#contenu"
         className="sr-only z-skip rounded-10 bg-surface px-14 py-10 text-14 font-600 text-ink focus:not-sr-only focus:fixed focus:top-8 focus:left-8"
