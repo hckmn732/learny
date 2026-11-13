@@ -1,0 +1,91 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="1" errors="0" time="41.566796">
+<testsuite name="p6/final-review.spec.ts" timestamp="2026-11-13T19:03:50.485Z" hostname="desktop" tests="5" failures="0" skipped="1" time="7.288" errors="0">
+<testcase name="consulte son bilan final et choisit l’entretien léger @SPEC-617" classname="p6/final-review.spec.ts" time="2.139">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/attachments/axe-02858f4a3a2f0d272519cc3dc3eb72f59c349094.json]]
+
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/attachments/spec-617-bilan-final-92ea9e4aadc09d93356076944a2205405adeb2f9.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-consulte-s-e13c0--l’entretien-léger-SPEC-617-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="arrête et reprend l’entretien @SPEC-617" classname="p6/final-review.spec.ts" time="2.25">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/attachments/axe-5b15f7ba9e0fa3f68b46306e654995d2eb8b9d50.json]]
+
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/attachments/spec-617-entretien-choisi-83482db9bc42dcc54fc87dcb59473d3fdad6d31b.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-arrête-et-reprend-l’entretien-SPEC-617-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refuse le bilan à 6 modules validés et à un autre apprenant @SPEC-617" classname="p6/final-review.spec.ts" time="1.004">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-final-review-refuse-le--0f6d3-un-autre-apprenant-SPEC-617-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-refuse-le--0f6d3-un-autre-apprenant-SPEC-617-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-refuse-le--0f6d3-un-autre-apprenant-SPEC-617-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-refuse-le--0f6d3-un-autre-apprenant-SPEC-617-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-617 @SPEC-617 @visual" classname="p6/final-review.spec.ts" time="1.672">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-final-review-conformité-SPEC-617-SPEC-617-visual-desktop/attachments/axe-42b79e72edb3d596b11f3a554aee7b1a8417406b.json]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-SPEC-617-SPEC-617-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-SPEC-617-SPEC-617-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-SPEC-617-SPEC-617-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-SPEC-617-SPEC-617-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-617 mobile @SPEC-617 @visual @mobile" classname="p6/final-review.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/final-review.spec.ts" timestamp="2026-11-13T19:03:50.485Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.521" errors="0">
+<testcase name="conformité SPEC-617 mobile @SPEC-617 @visual @mobile" classname="p6/final-review.spec.ts" time="1.521">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-final-review-conformité-22603-bile-SPEC-617-visual-mobile-mobile/attachments/axe-feb6885254c713d31529b907e695f10cf69cca51.json]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-22603-bile-SPEC-617-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-22603-bile-SPEC-617-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-22603-bile-SPEC-617-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-final-review-conformité-22603-bile-SPEC-617-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

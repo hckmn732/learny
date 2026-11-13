@@ -117,6 +117,13 @@ export const EVENTS = {
     formationId: Uuid,
     completedAt: IsoDateTime,
   }),
+  // SPEC-617 — the learner chose or changed the memory interview after completion (BR-FOR-12).
+  'formation/maintenance-changed': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    mode: z.enum(['light', 'stopped']),
+    changedAt: IsoDateTime,
+  }),
   'resource/uploaded': z.object({
     userId: Uuid,
     resourceId: Uuid,

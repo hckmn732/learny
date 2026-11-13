@@ -26,6 +26,12 @@ const VALID: Record<EventName, Record<string, unknown>> = {
   'formation/paused': { userId: U1, formationId: U2, pausedAt: AT },
   'formation/resumed': { userId: U1, formationId: U2, resumedOn: DAY },
   'formation/completed': { userId: U1, formationId: U2, completedAt: AT },
+  'formation/maintenance-changed': {
+    userId: U1,
+    formationId: U2,
+    mode: 'light',
+    changedAt: AT,
+  },
   'resource/uploaded': {
     userId: U1,
     resourceId: U2,

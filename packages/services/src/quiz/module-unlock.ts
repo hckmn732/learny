@@ -286,6 +286,18 @@ export function unlockModule(
         { id: `module-validated:${module.id}` },
       );
       if (next === null) {
+        // SPEC-617, BR-FOR-12 — the last validated module closes the formation once. The
+        // completion instant is kept on replay and maintenance stays unset until the learner
+        // chooses at the final review.
+        await tx.execute(sql`
+          update public.formations
+          set status = 'completed',
+              completed_at = coalesce(completed_at, ${now.toISOString()}::timestamptz),
+              updated_at = ${now.toISOString()}::timestamptz
+          where id = ${module.formation_id}::uuid
+            and owner_id = ${input.userId}::uuid
+            and status <> 'archived'
+        `);
         outbox.add(
           'formation/completed',
           {

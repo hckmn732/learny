@@ -15,6 +15,15 @@ export type {
   TransitionDecision,
 } from './active-limit';
 export { archiveFormation } from './archive';
+export {
+  buildFinalReview,
+  dueCountFor,
+  isFormationComplete,
+  maintenanceEffects,
+  retentionDisplay,
+} from './final-review';
+export { getFinalReview } from './get-final-review';
+export { setMaintenance } from './set-maintenance';
 export { pauseFormation } from './pause';
 export { resumeFormation } from './resume';
 export { switchCurrentFormation } from './switch-current';
