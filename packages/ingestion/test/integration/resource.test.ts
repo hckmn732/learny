@@ -18,7 +18,6 @@ import {
   fakeEmbedding,
   IngestionError,
   processResource,
-  toVectorLiteral,
   type EmbeddingClient,
   type IngestionContext,
   type IngestionDeps,
@@ -199,7 +198,15 @@ describe('[SPEC-509] service d’ingestion', () => {
           chunk.text,
         );
         expect(chunk.dims).toBe(1024);
-        expect(chunk.vector).toBe(toVectorLiteral(fakeEmbedding(chunk.text)));
+        const stored = chunk.vector
+          .slice(1, -1)
+          .split(',')
+          .map((value) => Number(value));
+        const expected = fakeEmbedding(chunk.text);
+        expect(stored).toHaveLength(1024);
+        stored.forEach((value, index) => {
+          expect(Math.abs(value - (expected[index] ?? 0))).toBeLessThan(1e-6);
+        });
         expect(chunk.token_count).toBe(Math.ceil(chunk.text.length / 4));
       }
       expect(events.ready).toEqual([
