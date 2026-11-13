@@ -1,0 +1,108 @@
+{
+  "task": "course",
+  "scenario": "course-sourced",
+  "promptId": "course.course",
+  "promptVersion": 1,
+  "description": "Chapitre SAP S/4HANA rédigé depuis un apport PDF prêt : citation résolue, question éclair, comparaison, complément tuteur et fiche À retenir.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "chapterId": "{{chapterId}}",
+        "title": "Saisie des pièces comptables",
+        "baseCourse": false,
+        "sourceChunkIds": ["{{chunkId}}"],
+        "notionIds": ["{{notionId}}"],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "Toute écriture comptable dans SAP S/4HANA est enregistrée sous forme de pièce. Une pièce réunit un en-tête, qui décrit l’opération, et des postes, qui portent les montants au débit et au crédit.",
+            "sourceChunkIds": ["{{chunkId}}"],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Où le sens débit ou crédit est-il indiqué : dans l’en-tête ou dans chaque poste ?",
+            "answer": "Dans chaque poste, grâce à la clé de comptabilisation. La suite du chapitre explique comment.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "markdown",
+            "title": "L’en-tête de pièce",
+            "contentMd": "## L’en-tête de pièce\n\n- La **date de pièce**, celle du document d’origine, et la **date comptable**, qui fixe la période.\n- Le **type de pièce**, qui classe toute l’opération : par exemple SA pour une écriture de comptabilité générale.\n- La **société** et la **devise**.",
+            "sourceChunkIds": ["{{chunkId}}"],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "markdown",
+            "title": "Les postes et les clés de comptabilisation",
+            "contentMd": "Chaque poste porte une clé de comptabilisation, qui indique le sens de l’écriture et le type de compte concerné.\n\n| Clé | Sens | Type de compte |\n|---|---|---|\n| 40 | Débit | Compte général |\n| 50 | Crédit | Compte général |",
+            "sourceChunkIds": ["{{chunkId}}"],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "comparison",
+            "title": "Ne pas confondre",
+            "left": {
+              "title": "Type de pièce",
+              "body": "Classe toute la pièce.",
+              "example": "Exemple : SA"
+            },
+            "right": {
+              "title": "Clé de comptabilisation",
+              "body": "Agit poste par poste.",
+              "example": "Exemples : 40, 50"
+            },
+            "sourceChunkIds": [],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Une pièce n’est enregistrée que si le total des débits est égal au total des crédits.",
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce = un en-tête + des postes.",
+              "Le type de pièce classe la pièce ; la clé de comptabilisation agit sur chaque poste.",
+              "Clé 40 = débit, clé 50 = crédit, sur un compte général.",
+              "Une pièce n’est enregistrée que si elle est équilibrée."
+            ],
+            "diagram": {
+              "blocks": [
+                { "id": "piece", "label": "Pièce comptable" },
+                { "id": "entete", "label": "En-tête" },
+                { "id": "postes", "label": "Postes" }
+              ],
+              "arrows": [
+                { "from": "piece", "to": "entete" },
+                { "from": "piece", "to": "postes" }
+              ]
+            },
+            "mnemonic": "4 vient avant 5, comme le débit avant le crédit.",
+            "sourceChunkIds": [],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 1800,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 240
+    }
+  ]
+}

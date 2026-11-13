@@ -99,6 +99,7 @@ export type {
 export { removeArchiveFile, writeArchiveFile } from './personal-data/archive';
 export type { ArchiveObjectReader, WrittenArchive } from './personal-data/archive';
 export { EMAIL_WELCOME_ID, emailWelcome, welcomeIdempotencyKey } from './functions/email-welcome';
+export { GENERATE_COURSE_ID, generateCourseJob } from './functions/generate-course';
 export { NOTIFICATION_DELIVERY_ID, notificationDelivery } from './functions/notification-delivery';
 export {
   DEFERRED_DUE_BATCH,

@@ -1,0 +1,72 @@
+{
+  "task": "course",
+  "scenario": "course-base",
+  "promptId": "course.course",
+  "promptVersion": 1,
+  "description": "Chapitre sans apport : cours de base explicitement signalé, avec deux suggestions de ressources et aucune citation inventée.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "chapterId": "{{chapterId}}",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sourceChunkIds": [],
+        "notionIds": ["{{notionId}}"],
+        "links": [],
+        "resourceSuggestions": [
+          {
+            "title": "Guide officiel de la notion",
+            "url": "https://example.test/guide-notion",
+            "reason": "Une référence courte pour vérifier les bases avant de déposer vos apports."
+          },
+          {
+            "title": "Fiche de synthèse",
+            "url": "https://example.test/synthese-notion",
+            "reason": "Un résumé en une page pour compléter ce cours de base."
+          }
+        ],
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "title": "Ce que le tuteur peut déjà expliquer",
+            "contentMd": "Aucun apport n’a encore été déposé pour ce chapitre. Le tuteur présente donc les bases : repérez les notions du programme, notez vos questions et déposez vos ressources pour obtenir un cours sourcé.",
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Que faut-il déposer pour que ce cours cite vos sources ?",
+            "answer": "Une note, un PDF, une page web ou une image dans ce chapitre : le tuteur les lira et les citera.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Ce chapitre n’a pas encore d’apport.",
+              "Le cours de base est rédigé par le tuteur et signalé comme tel.",
+              "Déposez une ressource pour obtenir un cours sourcé."
+            ],
+            "mnemonic": "Zéro apport, zéro citation : le tuteur signale son complément.",
+            "sourceChunkIds": [],
+            "notionIds": ["{{notionId}}"]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 600,
+        "outputTokens": 700,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 180
+    }
+  ]
+}
