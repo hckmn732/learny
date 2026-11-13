@@ -7,11 +7,13 @@ import {
   USER,
   context,
   formationRow,
+  profileRow,
   proposalRow,
   sequence,
 } from '../../test/support/programme';
 
 import { getProgrammePageState, getProgrammeState } from './get';
+import { getProgrammeScreenState } from './get-active-programme';
 
 const mocks = vi.hoisted(() => {
   const serviceExecute = vi.fn();
@@ -70,6 +72,25 @@ describe('[SPEC-605] lecture du programme', () => {
 
     const result = await getProgrammePageState(context(execute), FORMATION);
     expect(result.ok && result.value.proposal?.version).toBe(1);
+  });
+
+  it('SPEC-606 — refuse un identifiant invalide sans transaction', async () => {
+    const execute = sequence([]);
+
+    await expect(getProgrammeScreenState(context(execute), 'pas-un-uuid')).resolves.toMatchObject({
+      ok: false,
+      error: { code: 'VALIDATION_FAILED' },
+    });
+    expect(execute).not.toHaveBeenCalled();
+  });
+
+  it('SPEC-606 — refuse un programme actif sans module', async () => {
+    const execute = sequence([[formationRow({ status: 'active' })], [profileRow()], [], []]);
+
+    await expect(getProgrammeScreenState(context(execute), FORMATION)).resolves.toMatchObject({
+      ok: false,
+      error: { code: 'CONFLICT', detail: 'Aucun module n’est planifié pour ce programme.' },
+    });
   });
 
   it('refuse un appelant anonyme et une version invalide', async () => {
