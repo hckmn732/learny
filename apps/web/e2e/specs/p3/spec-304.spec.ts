@@ -419,6 +419,18 @@ test('Coquille : menu latéral mobile @SPEC-304 @visual @mobile', async ({
   await page.evaluate(async () => {
     await document.fonts.ready;
   });
+  console.log('[304-debug]', JSON.stringify(await page.evaluate(() => {
+    const el = document.querySelector('[data-testid="sidebar"]');
+    const r = el?.getBoundingClientRect();
+    const cs = el === null ? null : getComputedStyle(el);
+    return {
+      rect: r === undefined ? null : [r.x, r.y, r.width, r.height],
+      scroll: el === null ? null : [el.scrollTop, el.scrollWidth, el.clientWidth, el.scrollHeight, el.clientHeight],
+      transform: cs?.transform,
+      font: getComputedStyle(document.body).fontFamily,
+      inter: document.fonts.check('16px Inter'),
+    };
+  })));
   await expectScreenshotBaseline(page, 'spec-304-menu-mobile.png', { fullPage: false });
   await axeCheck();
 });
