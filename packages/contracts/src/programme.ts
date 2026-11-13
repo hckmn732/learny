@@ -171,6 +171,110 @@ export const ProgrammeProposalStateDto = z.strictObject({
 });
 export type ProgrammeProposalStateDto = z.infer<typeof ProgrammeProposalStateDto>;
 
+// Active programme screen (SPEC-606 EF-1 to EF-4, ET-3, ET-5; BR-FOR-07 to BR-FOR-09, BR-PRO-01).
+// The DTO is computed from persisted rows only: module_progress is the source of truth for the
+// learner's module statuses, chapters come from the ordered structure, and the calendar entries
+// carry the civil dates and quiz markers used by the Gantt.
+
+export const ACTIVE_PROGRAMME_FORMATION_STATUSES = ['active', 'paused', 'completed'] as const;
+export const ActiveProgrammeFormationStatus = z.enum(ACTIVE_PROGRAMME_FORMATION_STATUSES);
+export type ActiveProgrammeFormationStatus = z.infer<typeof ActiveProgrammeFormationStatus>;
+
+/** BR-PRO-01 — the exact counts stay in the API; `percent` is the rounded display value. */
+export const ProgrammeProgressSchema = z.strictObject({
+  validated: z.number().int().min(0),
+  total: z.number().int().min(0),
+  percent: z.number().int().min(0).max(100),
+});
+export type ProgrammeProgress = z.infer<typeof ProgrammeProgressSchema>;
+
+export const ActiveProgrammeFormationSchema = z.strictObject({
+  id: Uuid,
+  title: z.string().min(1).max(120),
+  description: z.string().max(2000).nullable(),
+  objectives: z.array(z.string().min(1).max(200)),
+  volumeHours: z.number().int().min(1).max(2000).nullable(),
+  startDate: CivilDate.nullable(),
+  endDate: CivilDate.nullable(),
+  threshold: z.number().int().min(PROGRAMME_THRESHOLD.min).max(PROGRAMME_THRESHOLD.max),
+  status: ActiveProgrammeFormationStatus,
+});
+export type ActiveProgrammeFormationDto = z.infer<typeof ActiveProgrammeFormationSchema>;
+
+export const ActiveProgrammeIndicatorsSchema = z.strictObject({
+  progress: ProgrammeProgressSchema,
+  weeks: z.number().int().min(1).max(104),
+  volumeHours: z.number().int().min(1).max(2000).nullable(),
+  threshold: z.number().int().min(PROGRAMME_THRESHOLD.min).max(PROGRAMME_THRESHOLD.max),
+  hoursPerDay: z.number().int().min(1).max(6),
+  studyDaysPerWeek: z.number().int().min(1).max(7),
+});
+export type ActiveProgrammeIndicatorsDto = z.infer<typeof ActiveProgrammeIndicatorsSchema>;
+
+export const ProgrammeQuizKind = z.enum(['quiz', 'exam']);
+export type ProgrammeQuizKind = z.infer<typeof ProgrammeQuizKind>;
+
+export const ActiveProgrammeModuleSchema = z.strictObject({
+  id: Uuid,
+  position: z.number().int().min(1).max(100),
+  title: z.string().min(1).max(160),
+  objectives: z.array(z.string().min(1).max(200)),
+  plannedStart: CivilDate,
+  plannedEnd: CivilDate,
+  threshold: z.number().int().min(PROGRAMME_THRESHOLD.min).max(PROGRAMME_THRESHOLD.max),
+  status: ProgrammeModuleStatus,
+  score: z.number().min(0).max(100).nullable(),
+  quizOn: CivilDate,
+  quizKind: ProgrammeQuizKind,
+  /** BR-FOR-08 — the module whose quiz unlocks this locked module, null when not locked. */
+  unlockAfterPosition: z.number().int().min(1).max(99).nullable(),
+  /** ET-4 — null for a locked module: no active access link reaches it. */
+  href: z.string().min(1).max(512).nullable(),
+});
+export type ActiveProgrammeModuleDto = z.infer<typeof ActiveProgrammeModuleSchema>;
+
+export const ActiveProgrammeChapterSchema = z.strictObject({
+  id: Uuid,
+  moduleId: Uuid,
+  position: z.number().int().min(1).max(100),
+  title: z.string().min(1).max(160),
+  contributionsStatus: z.enum(['in_progress', 'done']),
+  courseHref: z.string().min(1).max(512),
+});
+export type ActiveProgrammeChapterDto = z.infer<typeof ActiveProgrammeChapterSchema>;
+
+export const ProgrammeCalendarEntrySchema = z.strictObject({
+  moduleId: Uuid,
+  position: z.number().int().min(1).max(100),
+  title: z.string().min(1).max(160),
+  start: CivilDate,
+  end: CivilDate,
+  status: ProgrammeModuleStatus,
+  quizOn: CivilDate,
+  quizKind: ProgrammeQuizKind,
+});
+export type ProgrammeCalendarEntryDto = z.infer<typeof ProgrammeCalendarEntrySchema>;
+
+export const ActiveProgrammeDto = z.strictObject({
+  formation: ActiveProgrammeFormationSchema,
+  indicators: ActiveProgrammeIndicatorsSchema,
+  modules: z.array(ActiveProgrammeModuleSchema).min(1).max(20),
+  chapters: z.array(ActiveProgrammeChapterSchema).max(1000),
+  calendar: z.array(ProgrammeCalendarEntrySchema).min(1).max(20),
+  /** ET-2, CL-5 — local civil day of the learner, in the profile IANA zone. */
+  today: CivilDate,
+  timeZone: z.string().min(1).max(64),
+});
+export type ActiveProgrammeDto = z.infer<typeof ActiveProgrammeDto>;
+
+/** GET /formations/:fid/programme answers the proposal state or the active programme. */
+export const ProgrammeScreenStateDto = z.union([ProgrammeProposalStateDto, ActiveProgrammeDto]);
+export type ProgrammeScreenStateDto = z.infer<typeof ProgrammeScreenStateDto>;
+
+export function isActiveProgramme(value: ProgrammeScreenStateDto): value is ActiveProgrammeDto {
+  return 'formation' in value && 'calendar' in value;
+}
+
 export const GenerateProgrammeInput = z.strictObject({
   expectedVersion: z.number().int().min(0).default(0),
 });
@@ -237,9 +341,9 @@ export const programmeRoutes = {
     auth: 'user',
     params: idParams,
     query: ProgrammeGetQuery,
-    output: ProgrammeProposalStateDto,
+    output: ProgrammeScreenStateDto,
     successStatus: 200,
-    summary: 'Proposition courante, ou version choisie, d’une formation (SPEC-605).',
+    summary: 'Proposition courante, ou programme en cours, d’une formation (SPEC-605, SPEC-606).',
     errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
   }),
   programmeGenerate: defineRoute({

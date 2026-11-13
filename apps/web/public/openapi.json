@@ -9211,53 +9211,431 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "cadrageCompleted": {
-                      "type": "boolean"
-                    },
-                    "description": {
-                      "anyOf": [
-                        {
-                          "maxLength": 2000,
-                          "type": "string"
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "cadrageCompleted": {
+                          "type": "boolean"
                         },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
-                    "formationId": {
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                      "type": "string"
-                    },
-                    "formationStatus": {
-                      "enum": [
-                        "cadrage",
-                        "programme_proposed",
-                        "active",
-                        "paused",
-                        "completed",
-                        "archived"
-                      ],
-                      "type": "string"
-                    },
-                    "proposal": {
-                      "anyOf": [
-                        {
-                          "additionalProperties": false,
-                          "properties": {
-                            "activeFormationCount": {
-                              "maximum": 9007199254740991,
-                              "minimum": 0,
-                              "type": "integer"
-                            },
-                            "createdAt": {
-                              "format": "date-time",
-                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                        "description": {
+                          "anyOf": [
+                            {
+                              "maxLength": 2000,
                               "type": "string"
                             },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "formationId": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "formationStatus": {
+                          "enum": [
+                            "cadrage",
+                            "programme_proposed",
+                            "active",
+                            "paused",
+                            "completed",
+                            "archived"
+                          ],
+                          "type": "string"
+                        },
+                        "proposal": {
+                          "anyOf": [
+                            {
+                              "additionalProperties": false,
+                              "properties": {
+                                "activeFormationCount": {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "createdAt": {
+                                  "format": "date-time",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "anyOf": [
+                                    {
+                                      "maxLength": 2000,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "formationId": {
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                  "type": "string"
+                                },
+                                "modules": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "chapters": {
+                                        "items": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "notions": {
+                                              "items": {
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                  "definition": {
+                                                    "maxLength": 400,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  },
+                                                  "label": {
+                                                    "maxLength": 120,
+                                                    "minLength": 1,
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "required": [
+                                                  "label",
+                                                  "definition"
+                                                ],
+                                                "type": "object"
+                                              },
+                                              "maxItems": 30,
+                                              "minItems": 1,
+                                              "type": "array"
+                                            },
+                                            "position": {
+                                              "maximum": 100,
+                                              "minimum": 1,
+                                              "type": "integer"
+                                            },
+                                            "title": {
+                                              "maxLength": 160,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "position",
+                                            "title",
+                                            "notions"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "maxItems": 40,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "objectives": {
+                                        "items": {
+                                          "maxLength": 200,
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "maxItems": 8,
+                                        "minItems": 1,
+                                        "type": "array"
+                                      },
+                                      "plannedEnd": {
+                                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                        "type": "string"
+                                      },
+                                      "plannedStart": {
+                                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                        "type": "string"
+                                      },
+                                      "position": {
+                                        "maximum": 100,
+                                        "minimum": 1,
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "anyOf": [
+                                          {
+                                            "enum": [
+                                              "locked",
+                                              "open",
+                                              "validated"
+                                            ],
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "threshold": {
+                                        "default": 80,
+                                        "maximum": 95,
+                                        "minimum": 60,
+                                        "type": "integer"
+                                      },
+                                      "title": {
+                                        "maxLength": 160,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "position",
+                                      "title",
+                                      "objectives",
+                                      "plannedStart",
+                                      "plannedEnd",
+                                      "threshold",
+                                      "chapters",
+                                      "status"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "maxItems": 20,
+                                  "minItems": 1,
+                                  "type": "array"
+                                },
+                                "proposalStatus": {
+                                  "enum": [
+                                    "proposed",
+                                    "active"
+                                  ],
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "enum": [
+                                    "generated",
+                                    "imported"
+                                  ],
+                                  "type": "string"
+                                },
+                                "summary": {
+                                  "anyOf": [
+                                    {
+                                      "maxLength": 1000,
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "title": {
+                                  "maxLength": 120,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "version": {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                "versions": {
+                                  "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "createdAt": {
+                                        "format": "date-time",
+                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                        "type": "string"
+                                      },
+                                      "current": {
+                                        "type": "boolean"
+                                      },
+                                      "source": {
+                                        "enum": [
+                                          "generated",
+                                          "imported"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "version": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 1,
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": [
+                                      "version",
+                                      "source",
+                                      "createdAt",
+                                      "current"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                },
+                                "volumeHours": {
+                                  "anyOf": [
+                                    {
+                                      "maximum": 2000,
+                                      "minimum": 1,
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "formationId",
+                                "version",
+                                "source",
+                                "proposalStatus",
+                                "title",
+                                "description",
+                                "summary",
+                                "volumeHours",
+                                "createdAt",
+                                "modules",
+                                "versions",
+                                "activeFormationCount"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "title": {
+                          "maxLength": 120,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "formationId",
+                        "title",
+                        "description",
+                        "formationStatus",
+                        "cadrageCompleted",
+                        "proposal"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "calendar": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "end": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "moduleId": {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              "position": {
+                                "maximum": 100,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              "quizKind": {
+                                "enum": [
+                                  "quiz",
+                                  "exam"
+                                ],
+                                "type": "string"
+                              },
+                              "quizOn": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "start": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "status": {
+                                "enum": [
+                                  "locked",
+                                  "open",
+                                  "validated"
+                                ],
+                                "type": "string"
+                              },
+                              "title": {
+                                "maxLength": 160,
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "moduleId",
+                              "position",
+                              "title",
+                              "start",
+                              "end",
+                              "status",
+                              "quizOn",
+                              "quizKind"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 20,
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "chapters": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "contributionsStatus": {
+                                "enum": [
+                                  "in_progress",
+                                  "done"
+                                ],
+                                "type": "string"
+                              },
+                              "courseHref": {
+                                "maxLength": 512,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "id": {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              "moduleId": {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              "position": {
+                                "maximum": 100,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              "title": {
+                                "maxLength": 160,
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "moduleId",
+                              "position",
+                              "title",
+                              "contributionsStatus",
+                              "courseHref"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 1000,
+                          "type": "array"
+                        },
+                        "formation": {
+                          "additionalProperties": false,
+                          "properties": {
                             "description": {
                               "anyOf": [
                                 {
@@ -9269,150 +9647,10 @@
                                 }
                               ]
                             },
-                            "formationId": {
-                              "format": "uuid",
-                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                              "type": "string"
-                            },
-                            "modules": {
-                              "items": {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "chapters": {
-                                    "items": {
-                                      "additionalProperties": false,
-                                      "properties": {
-                                        "notions": {
-                                          "items": {
-                                            "additionalProperties": false,
-                                            "properties": {
-                                              "definition": {
-                                                "maxLength": 400,
-                                                "minLength": 1,
-                                                "type": "string"
-                                              },
-                                              "label": {
-                                                "maxLength": 120,
-                                                "minLength": 1,
-                                                "type": "string"
-                                              }
-                                            },
-                                            "required": [
-                                              "label",
-                                              "definition"
-                                            ],
-                                            "type": "object"
-                                          },
-                                          "maxItems": 30,
-                                          "minItems": 1,
-                                          "type": "array"
-                                        },
-                                        "position": {
-                                          "maximum": 100,
-                                          "minimum": 1,
-                                          "type": "integer"
-                                        },
-                                        "title": {
-                                          "maxLength": 160,
-                                          "minLength": 1,
-                                          "type": "string"
-                                        }
-                                      },
-                                      "required": [
-                                        "position",
-                                        "title",
-                                        "notions"
-                                      ],
-                                      "type": "object"
-                                    },
-                                    "maxItems": 40,
-                                    "minItems": 1,
-                                    "type": "array"
-                                  },
-                                  "objectives": {
-                                    "items": {
-                                      "maxLength": 200,
-                                      "minLength": 1,
-                                      "type": "string"
-                                    },
-                                    "maxItems": 8,
-                                    "minItems": 1,
-                                    "type": "array"
-                                  },
-                                  "plannedEnd": {
-                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-                                    "type": "string"
-                                  },
-                                  "plannedStart": {
-                                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
-                                    "type": "string"
-                                  },
-                                  "position": {
-                                    "maximum": 100,
-                                    "minimum": 1,
-                                    "type": "integer"
-                                  },
-                                  "status": {
-                                    "anyOf": [
-                                      {
-                                        "enum": [
-                                          "locked",
-                                          "open",
-                                          "validated"
-                                        ],
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ]
-                                  },
-                                  "threshold": {
-                                    "default": 80,
-                                    "maximum": 95,
-                                    "minimum": 60,
-                                    "type": "integer"
-                                  },
-                                  "title": {
-                                    "maxLength": 160,
-                                    "minLength": 1,
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "position",
-                                  "title",
-                                  "objectives",
-                                  "plannedStart",
-                                  "plannedEnd",
-                                  "threshold",
-                                  "chapters",
-                                  "status"
-                                ],
-                                "type": "object"
-                              },
-                              "maxItems": 20,
-                              "minItems": 1,
-                              "type": "array"
-                            },
-                            "proposalStatus": {
-                              "enum": [
-                                "proposed",
-                                "active"
-                              ],
-                              "type": "string"
-                            },
-                            "source": {
-                              "enum": [
-                                "generated",
-                                "imported"
-                              ],
-                              "type": "string"
-                            },
-                            "summary": {
+                            "endDate": {
                               "anyOf": [
                                 {
-                                  "maxLength": 1000,
+                                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
                                   "type": "string"
                                 },
                                 {
@@ -9420,50 +9658,47 @@
                                 }
                               ]
                             },
+                            "id": {
+                              "format": "uuid",
+                              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                              "type": "string"
+                            },
+                            "objectives": {
+                              "items": {
+                                "maxLength": 200,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "type": "array"
+                            },
+                            "startDate": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "status": {
+                              "enum": [
+                                "active",
+                                "paused",
+                                "completed"
+                              ],
+                              "type": "string"
+                            },
+                            "threshold": {
+                              "maximum": 95,
+                              "minimum": 60,
+                              "type": "integer"
+                            },
                             "title": {
                               "maxLength": 120,
                               "minLength": 1,
                               "type": "string"
-                            },
-                            "version": {
-                              "maximum": 9007199254740991,
-                              "minimum": 1,
-                              "type": "integer"
-                            },
-                            "versions": {
-                              "items": {
-                                "additionalProperties": false,
-                                "properties": {
-                                  "createdAt": {
-                                    "format": "date-time",
-                                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
-                                    "type": "string"
-                                  },
-                                  "current": {
-                                    "type": "boolean"
-                                  },
-                                  "source": {
-                                    "enum": [
-                                      "generated",
-                                      "imported"
-                                    ],
-                                    "type": "string"
-                                  },
-                                  "version": {
-                                    "maximum": 9007199254740991,
-                                    "minimum": 1,
-                                    "type": "integer"
-                                  }
-                                },
-                                "required": [
-                                  "version",
-                                  "source",
-                                  "createdAt",
-                                  "current"
-                                ],
-                                "type": "object"
-                              },
-                              "type": "array"
                             },
                             "volumeHours": {
                               "anyOf": [
@@ -9479,41 +9714,229 @@
                             }
                           },
                           "required": [
-                            "formationId",
-                            "version",
-                            "source",
-                            "proposalStatus",
+                            "id",
                             "title",
                             "description",
-                            "summary",
+                            "objectives",
                             "volumeHours",
-                            "createdAt",
-                            "modules",
-                            "versions",
-                            "activeFormationCount"
+                            "startDate",
+                            "endDate",
+                            "threshold",
+                            "status"
                           ],
                           "type": "object"
                         },
-                        {
-                          "type": "null"
+                        "indicators": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "hoursPerDay": {
+                              "maximum": 6,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "progress": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "percent": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "total": {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "validated": {
+                                  "maximum": 9007199254740991,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "validated",
+                                "total",
+                                "percent"
+                              ],
+                              "type": "object"
+                            },
+                            "studyDaysPerWeek": {
+                              "maximum": 7,
+                              "minimum": 1,
+                              "type": "integer"
+                            },
+                            "threshold": {
+                              "maximum": 95,
+                              "minimum": 60,
+                              "type": "integer"
+                            },
+                            "volumeHours": {
+                              "anyOf": [
+                                {
+                                  "maximum": 2000,
+                                  "minimum": 1,
+                                  "type": "integer"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "weeks": {
+                              "maximum": 104,
+                              "minimum": 1,
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "progress",
+                            "weeks",
+                            "volumeHours",
+                            "threshold",
+                            "hoursPerDay",
+                            "studyDaysPerWeek"
+                          ],
+                          "type": "object"
+                        },
+                        "modules": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "href": {
+                                "anyOf": [
+                                  {
+                                    "maxLength": 512,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "id": {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              "objectives": {
+                                "items": {
+                                  "maxLength": 200,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "plannedEnd": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "plannedStart": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "position": {
+                                "maximum": 100,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              "quizKind": {
+                                "enum": [
+                                  "quiz",
+                                  "exam"
+                                ],
+                                "type": "string"
+                              },
+                              "quizOn": {
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                                "type": "string"
+                              },
+                              "score": {
+                                "anyOf": [
+                                  {
+                                    "maximum": 100,
+                                    "minimum": 0,
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "status": {
+                                "enum": [
+                                  "locked",
+                                  "open",
+                                  "validated"
+                                ],
+                                "type": "string"
+                              },
+                              "threshold": {
+                                "maximum": 95,
+                                "minimum": 60,
+                                "type": "integer"
+                              },
+                              "title": {
+                                "maxLength": 160,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "unlockAfterPosition": {
+                                "anyOf": [
+                                  {
+                                    "maximum": 99,
+                                    "minimum": 1,
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "position",
+                              "title",
+                              "objectives",
+                              "plannedStart",
+                              "plannedEnd",
+                              "threshold",
+                              "status",
+                              "score",
+                              "quizOn",
+                              "quizKind",
+                              "unlockAfterPosition",
+                              "href"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 20,
+                          "minItems": 1,
+                          "type": "array"
+                        },
+                        "timeZone": {
+                          "maxLength": 64,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "today": {
+                          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                          "type": "string"
                         }
-                      ]
-                    },
-                    "title": {
-                      "maxLength": 120,
-                      "minLength": 1,
-                      "type": "string"
+                      },
+                      "required": [
+                        "formation",
+                        "indicators",
+                        "modules",
+                        "chapters",
+                        "calendar",
+                        "today",
+                        "timeZone"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "formationId",
-                    "title",
-                    "description",
-                    "formationStatus",
-                    "cadrageCompleted",
-                    "proposal"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -9575,7 +9998,7 @@
             "cookieAuth": []
           }
         ],
-        "summary": "Proposition courante, ou version choisie, d’une formation (SPEC-605)."
+        "summary": "Proposition courante, ou programme en cours, d’une formation (SPEC-605, SPEC-606)."
       }
     },
     "/api/v1/formations/{fid}/programme/adjust": {
