@@ -58,6 +58,15 @@ export const formationStatus = pgEnum('formation_status', [
 /** BR-FOR-12 — memory interview after completion (ADR-0015). */
 export const maintenanceMode = pgEnum('maintenance_mode', ['light', 'stopped']);
 
+/** ADR-0162 — visible sigil and accent of a formation. */
+export const formationAccent = pgEnum('formation_accent', [
+  'indigo',
+  'green',
+  'orange',
+  'violet',
+  'teal',
+]);
+
 /** Cadrage is a conversation between the tutor and the learner. */
 export const messageRole = pgEnum('message_role', ['tutor', 'learner']);
 
@@ -85,6 +94,7 @@ export const linkKind = pgEnum('link_kind', ['prerequisite', 'confusion', 'tutor
 
 export const FORMATION_OBJECTIVES = formationObjective.enumValues;
 export const FORMATION_STATUSES = formationStatus.enumValues;
+export const FORMATION_ACCENTS = formationAccent.enumValues;
 export const MAINTENANCE_MODES = maintenanceMode.enumValues;
 export const MESSAGE_ROLES = messageRole.enumValues;
 export const CADRAGE_KEYS = cadrageKey.enumValues;
@@ -104,6 +114,10 @@ export const formations = pgTable(
     /** Foreign key to `groups` added by SPEC-111. */
     groupId: uuid('group_id'),
     title: text('title').notNull(),
+    /** ADR-0162 — stored sigil; the service writes the fallback from the title. */
+    monogram: text('monogram').notNull().default(''),
+    /** ADR-0162 — accent of the formation card and of the progress ring. */
+    accentColor: formationAccent('accent_color').notNull().default('indigo'),
     description: text('description'),
     objectives: formationObjective('objectives')
       .array()
@@ -130,6 +144,7 @@ export const formations = pgTable(
     index('formations_group_id_idx')
       .on(table.groupId)
       .where(sql`${table.groupId} is not null`),
+    check('formations_monogram_length_check', sql`char_length(${table.monogram}) <= 3`),
     check('formations_title_length_check', sql`char_length(${table.title}) between 1 and 120`),
     check('formations_description_length_check', sql`char_length(${table.description}) <= 2000`),
     check(

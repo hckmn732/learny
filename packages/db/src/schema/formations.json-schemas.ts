@@ -40,7 +40,10 @@ export const examFormatSchema = z.strictObject({
 export const cadrageSuggestionSchema = z.strictObject({
   label: z.string().max(80),
   value: z.string().max(200),
+  /** Suggestion group is multiple choice (SPEC-604 EF-6). */
   multi: z.boolean().optional(),
+  /** Short explanation shown under the label (SPEC-604 EF-6). */
+  description: z.string().max(120).optional(),
 });
 
 export const cadrageSuggestionsSchema = z.array(cadrageSuggestionSchema).max(8);

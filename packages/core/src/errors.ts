@@ -37,6 +37,8 @@ export const ERROR_CATALOG = {
   QUALIFICATION_IN_PROGRESS: { status: 409, title: 'Qualification déjà en cours' },
   AI_MODEL_NOT_QUALIFIED: { status: 422, title: 'Modèle personnel non qualifié' },
   AI_UNAVAILABLE: { status: 422, title: 'IA indisponible pour cette tâche' },
+  AI_TASK_FAILED: { status: 503, title: 'Le tuteur n’a pas pu répondre' },
+  CADRAGE_INCOMPLETE: { status: 422, title: 'Cadrage incomplet' },
   AI_KEY_INVALID: { status: 422, title: 'Clé IA invalide' },
   AI_RATE_LIMITED: { status: 429, title: 'Fournisseur IA saturé' },
   AI_PROVIDER_ERROR: { status: 503, title: 'Fournisseur IA indisponible' },

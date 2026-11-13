@@ -3,6 +3,7 @@ import { aiCredentialRoutes } from './ai-credentials';
 import { authRoutes } from './auth';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
+import { cadrageRoutes, formationRoutes } from './cadrage';
 import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
@@ -35,6 +36,8 @@ export const ROUTES = {
   ...aiRoutes,
   ...billingRoutes,
   ...brickRoutes,
+  ...formationRoutes,
+  ...cadrageRoutes,
   ...billingDevRoutes,
   ...emailRoutes,
   ...devEmailRoutes,

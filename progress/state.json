@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T05:21:58.117Z",
+  "updatedAt": "2026-11-13T05:24:31.142Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3756,11 +3756,11 @@
       "validations": {}
     },
     "SPEC-604": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T05:24:31.142Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-604-nouvelle-formation-cadrage-par-chat",
       "commit": null,
       "lastError": null,
       "validations": {}
