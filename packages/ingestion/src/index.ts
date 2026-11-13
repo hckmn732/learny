@@ -35,3 +35,19 @@ export { INGESTION_EVENT_CLAIM_STALE_MS, processResource } from './process-resou
 export type { IngestionContext, StepRunner } from './process-resource';
 export { IngestionError, isIngestionError, sourceMissing, unsupportedKind } from './errors';
 export type { IngestionErrorOptions } from './errors';
+export {
+  escapeDocumentAttribute,
+  escapeDocumentText,
+  formatChunkLocation,
+  formatDocumentChunk,
+} from './retrieval/format-document';
+export {
+  compareRetrievalChunks,
+  deduplicateChunks,
+  normalizeDocumentText,
+  selectContext,
+  textOverlapRatio,
+} from './retrieval/select-context';
+export type { DeduplicatedChunks } from './retrieval/select-context';
+export { RETRIEVAL_HNSW_EF_SEARCH, searchRelevantChunks } from './retrieval/search-context';
+export type { RetrievalContext } from './retrieval/search-context';
