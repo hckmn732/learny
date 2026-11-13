@@ -84,7 +84,7 @@ export function StructuredTable({
           <div
             className="grid items-center gap-8 text-12 font-600 text-ink-muted"
             role="row"
-            style={{ gridTemplateColumns: columns }}
+            style={{ display: 'grid', gridTemplateColumns: columns }}
           >
             <span role="columnheader">{t.row}</span>
             {production.columns.map((column) => (
@@ -99,10 +99,11 @@ export function StructuredTable({
           </div>
           {rows.map((row, rowIndex) => (
             <div
-              className="grid items-center gap-8"
+              className="items-center gap-8"
               data-testid={`exercise-row-${String(rowIndex)}`}
               key={`row-${String(rowIndex)}`}
               role="row"
+              style={{ display: 'grid', gridTemplateColumns: columns }}
             >
               <span className="font-700 tabular-nums" role="cell">
                 {String(rowIndex + 1)}
@@ -112,7 +113,7 @@ export function StructuredTable({
                 const error = issueFor(issues, path);
                 const label = `${column.label} du poste ${String(rowIndex + 1)}`;
                 return (
-                  <span key={column.key} role="cell">
+                  <div key={column.key} role="cell">
                     {column.type === 'select' ? (
                       <Select
                         aria-invalid={error === undefined ? undefined : true}
@@ -150,11 +151,11 @@ export function StructuredTable({
                         value={row[column.key] ?? ''}
                       />
                     )}
-                  </span>
+                  </div>
                 );
               })}
               {hasDerivedColumn ? (
-                <span
+                <div
                   className={cn(
                     'text-13 font-700',
                     results[0]?.sideByRow[rowIndex] === 'Débit'
@@ -166,9 +167,9 @@ export function StructuredTable({
                   role="cell"
                 >
                   {results[0]?.sideByRow[rowIndex] ?? '—'}
-                </span>
+                </div>
               ) : null}
-              <span role="cell">
+              <div role="cell">
                 {rows.length > production.minRows && !locked ? (
                   <button
                     aria-label={`${t.removeRow} ${String(rowIndex + 1)}`}
@@ -182,7 +183,7 @@ export function StructuredTable({
                     ×
                   </button>
                 ) : null}
-              </span>
+              </div>
             </div>
           ))}
         </div>

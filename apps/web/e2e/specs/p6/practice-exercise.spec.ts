@@ -76,7 +76,7 @@ async function seedExercise(): Promise<ExerciseSeed> {
         where id = ${moduleId}::uuid
       `);
     }
-    const notionId = programme.notionIds[20];
+    const notionId = programme.notionIds[6];
     const moduleId = programme.moduleIds[2];
     if (notionId === undefined || moduleId === undefined) throw new Error('programme SAP incomplet');
     await tx.execute(sql`

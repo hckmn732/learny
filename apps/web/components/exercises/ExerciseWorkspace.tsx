@@ -223,7 +223,7 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
   const latestHint = revealedHints[revealedHints.length - 1];
 
   return (
-    <div data-testid="exercise-content" className="flex flex-col gap-22">
+    <div data-testid="exercise-content" className="flex min-w-0 flex-col gap-22">
       <div className="flex flex-col gap-8">
         <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
           <NextLink href={`/formations/${initial.formationId}/programme`}>
@@ -265,7 +265,7 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-start gap-20">
+      <div className="flex min-w-0 flex-wrap items-start gap-20">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-18">
           <section
             aria-labelledby="exercise-brief"
@@ -294,7 +294,7 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
 
           <section
             aria-labelledby="exercise-entry"
-            className="flex flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22"
+            className="flex min-w-0 flex-col gap-16 rounded-24 border border-solid border-border bg-surface px-24 py-22"
           >
             <h2 className="m-0 text-18 font-600" id="exercise-entry">
               {t.entry}
