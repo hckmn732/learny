@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T14:17:57.581Z",
+  "updatedAt": "2026-11-13T16:29:37.018Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4192,7 +4192,48 @@
       "branch": "spec/SPEC-610-discussion-contextuelle-avec-le-tuteur",
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T16:27:06.519Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T16:27:20.150Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T16:27:38.060Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T16:27:49.910Z",
+          "details": "15 test(s) [SPEC-610] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T16:28:57.021Z",
+          "details": "4 test(s) [SPEC-610] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T16:29:37.005Z",
+          "details": "3 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T16:29:37.005Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T16:29:37.018Z",
+          "details": "9/9 critères ✅"
+        }
+      }
     },
     "SPEC-611": {
       "status": "pending",

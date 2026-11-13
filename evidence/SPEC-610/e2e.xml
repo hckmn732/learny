@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="38.406462">
+<testsuite name="p6/tutor-chat.spec.ts" timestamp="2026-11-13T16:29:28.738Z" hostname="desktop" tests="3" failures="0" skipped="0" time="7.005" errors="0">
+<testcase name="ouvre la discussion, retire la lacune et répond avec sources @SPEC-610" classname="p6/tutor-chat.spec.ts" time="2.953">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/attachments/tuteur-reponse-44ac9a0589261f4a82292df20862db65a3aa3069.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/attachments/axe-010d84b80cc790254fe120df514e6a1a0577f473.json]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-ouvre-la-dis-a3269-épond-avec-sources-SPEC-610-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="sélection, clavier, Échap et nouvelle discussion @SPEC-610" classname="p6/tutor-chat.spec.ts" time="1.282">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-tutor-chat-sélection-cl-d73fc-ouvelle-discussion-SPEC-610-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-sélection-cl-d73fc-ouvelle-discussion-SPEC-610-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-sélection-cl-d73fc-ouvelle-discussion-SPEC-610-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="panneau tuteur conforme à la maquette @SPEC-610 @visual" classname="p6/tutor-chat.spec.ts" time="2.77">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/attachments/tuteur-ouvert-9b7cdd19e80199d495031b26feefbf3459444c45.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/attachments/comparaison-panneau-side-by-side-092fc0962cc45920c936396277b172f00fcd5d93.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/attachments/comparaison-panneau-diff-3b0ef4ce1725d39498c3d64e42494ed6d3a89818.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/attachments/axe-67c8b3e85e6e9511c612cec6b8972d1e582dbb7d.json]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-tutor-chat-panneau-tute-83380-la-maquette-SPEC-610-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

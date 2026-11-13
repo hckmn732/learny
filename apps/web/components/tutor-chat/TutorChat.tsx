@@ -75,8 +75,7 @@ export function TutorChat({
         <SelectionBar
           onAsk={() => {
             if (selection.selection === null) return;
-            state.setPassage(selection.selection);
-            void state.askSelection();
+            void state.askPassage(selection.selection.text);
             selection.dismiss();
           }}
           onDismiss={selection.dismiss}

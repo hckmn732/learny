@@ -225,7 +225,7 @@ export async function streamReply(
         controller.enqueue(sse(chunk));
       };
       try {
-        write({ type: 'start' });
+        write({ type: 'start', messageId: crypto.randomUUID() });
         if (testMe) {
           const asked = await askSelfTest(
             ctx,
@@ -253,6 +253,7 @@ export async function streamReply(
             selfTest: { status: 'pending', ...asked.pending },
           });
           write({ type: 'finish' });
+          controller.enqueue('data: [DONE]\n\n');
           controller.close();
           return;
         }
@@ -301,6 +302,7 @@ export async function streamReply(
         write({ type: 'data-follow-ups', data: { followUps } });
         await saveTutorMessage(ctx, conversationId, { content: visible, sources, followUps });
         write({ type: 'finish' });
+        controller.enqueue('data: [DONE]\n\n');
         controller.close();
       } catch (error) {
         const code = error instanceof AppError ? error.code : 'AI_TASK_FAILED';

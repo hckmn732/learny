@@ -442,7 +442,7 @@ export async function buildContext(
       join public.notions n on n.id = ns.notion_id
       left join public.notions other on other.id = ns.gap_confused_with
       where ns.user_id = ${userId}::uuid and ns.gap_nature is not null and ns.gap_cleared_at is null
-        and n.module_id = ${head.module_id}::uuid
+        and n.chapter_id = ${head.chapter_id}::uuid
       order by ns.mastery asc, ns.notion_id
       limit 1
     `);
