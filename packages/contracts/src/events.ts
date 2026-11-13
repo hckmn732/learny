@@ -171,16 +171,21 @@ export const EVENTS = {
   }),
   'quiz/submitted': z.object({
     userId: Uuid,
+    formationId: Uuid,
     attemptId: Uuid,
     activityId: Uuid,
     moduleId: Uuid,
+    openCount: z.number().int().min(0),
   }),
   'quiz/graded': z.object({
     userId: Uuid,
+    formationId: Uuid,
     attemptId: Uuid,
     moduleId: Uuid,
     score: Score,
     passed: z.boolean(),
+    threshold: z.number().int().min(60).max(95),
+    attemptNo: z.number().int().min(1),
   }),
   'module/validated': z.object({
     userId: Uuid,

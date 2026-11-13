@@ -1,4 +1,5 @@
 import { aiRoutes } from './ai';
+import { quizRoutes } from './attempts';
 import { aiCredentialRoutes } from './ai-credentials';
 import { authRoutes } from './auth';
 import { billingRoutes } from './billing';
@@ -66,6 +67,7 @@ export const ROUTES = {
   ...gapRoutes,
   ...notionGraphRoutes,
   ...exerciseRoutes,
+  ...quizRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;

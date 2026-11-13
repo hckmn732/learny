@@ -33,6 +33,7 @@ export * from './me';
 export * from './gaps';
 export * from './notion-graph';
 export * from './exercises';
+export * from './attempts';
 export * from './tutor';
 export * from './search';
 export * from './search-web';
