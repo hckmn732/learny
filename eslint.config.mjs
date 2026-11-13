@@ -334,10 +334,10 @@ export default tseslint.config(
     files: ['packages/ingestion/src/**/*.{ts,tsx}'],
     ignores: ['**/*.test.{ts,tsx}'],
     rules: {
-      'no-restricted-globals': [
+      'no-restricted-syntax': [
         'error',
         {
-          name: 'fetch',
+          selector: "CallExpression[callee.name='fetch']",
           message: 'Toute récupération serveur passe par safeFetch de @learny/core/net (ADR-0159).',
         },
       ],

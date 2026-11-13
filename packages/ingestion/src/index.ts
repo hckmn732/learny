@@ -12,9 +12,47 @@ export {
   voyageEmbeddingClient,
 } from './embeddings';
 export type { EmbeddingClient, VoyageOptions } from './embeddings';
+export {
+  IMAGE_PROMPT_ID,
+  IMAGE_SCENARIO,
+  createLlmVisionReader,
+  extractImage,
+  extractImageDocument,
+  imageContent,
+} from './extract/image';
+export type {
+  ImageExtractedDocument,
+  ImageExtractionOptions,
+  ImageResourceInput,
+  VisionReader,
+  VisionReading,
+} from './extract/image';
 export { extractNote } from './extract/note';
 export { DEFAULT_PDF_LIMITS, extractPdf } from './extract/pdf';
-export type { ExtractedContent, PdfLimits } from './extract/types';
+export {
+  IMAGE_LIMITS,
+  RemoteUrlInput,
+  WEB_LIMITS,
+  YOUTUBE_LIMITS,
+  remoteError,
+} from './extract/remote';
+export { extractWeb, extractWebDocument, safeWebFetcher } from './extract/web';
+export type {
+  WebExtractedDocument,
+  WebExtractionOptions,
+  WebFetcher,
+  WebFetchResult,
+} from './extract/web';
+export {
+  defaultYoutubeProvider,
+  extractYoutube,
+  liveYoutubeProvider,
+  mockYoutubeProvider,
+  parseYoutubeUrl,
+  youtubeContent,
+} from './extract/youtube';
+export type { YoutubeCaptions, YoutubeExtractionOptions, YoutubeProvider } from './extract/youtube';
+export type { ExtractedContent, PdfLimits, VisionOrigin } from './extract/types';
 export {
   createAnthropicPdfUploader,
   createSupabasePdfReader,
