@@ -677,16 +677,17 @@ function diagnosticPositionsOf(config: unknown): Set<number> {
   if (typeof config !== 'object' || config === null || Array.isArray(config)) return new Set();
   const positions = (config as Record<string, unknown>).diagnosticPositions;
   if (!Array.isArray(positions)) return new Set();
-  return new Set(
-    positions.filter((position): position is number => typeof position === 'number'),
-  );
+  return new Set(positions.filter((position): position is number => typeof position === 'number'));
 }
 
 function formatOf(brickType: string): BrickFormat | null {
   return REVIEWABLE_FORMATS.has(brickType) ? (brickType as BrickFormat) : null;
 }
 
-function answerRecordOf(row: HistoryRow): AnswerRecord | null {
+function answerRecordOf(
+  row: HistoryRow,
+  diagnosticAnswerIds: ReadonlySet<string> = new Set(),
+): AnswerRecord | null {
   const attemptKind = activityKind(row.attempt_kind);
   const format = formatOf(row.brick_type);
   if (attemptKind === null || format === null) return null;
@@ -708,7 +709,7 @@ function answerRecordOf(row: HistoryRow): AnswerRecord | null {
     confusedWithNotionId: confusedWithField(row.response),
     normalizedResponse: normalizedResponse(row.response),
     offTopic: offTopicField(row.feedback),
-    countsForGaps: true,
+    countsForGaps: !diagnosticAnswerIds.has(row.answer_id),
   };
 }
 
@@ -1050,11 +1051,9 @@ async function applyInTransaction(
   const answers = await loadAnswers(tx, attemptId);
   // SPEC-614 ET-5 — the questions of a module that is only diagnostic never create a gap.
   const diagnosticPositions = diagnosticPositionsOf(attempt.config);
-  const diagnosticNotionIds = new Set(
-    answers
-      .filter((answer) => diagnosticPositions.has(answer.position))
-      .flatMap((answer) => answer.notion_ids),
-  );
+  const diagnosticAnswers = answers.filter((answer) => diagnosticPositions.has(answer.position));
+  const diagnosticAnswerIds = new Set(diagnosticAnswers.map((answer) => answer.id));
+  const diagnosticNotionIds = new Set(diagnosticAnswers.flatMap((answer) => answer.notion_ids));
   const selection = selectCorrectedAnswers(
     answers.map((answer) => ({
       answerId: answer.id,
@@ -1150,7 +1149,7 @@ async function applyInTransaction(
     const historyRows = await loadHistory(tx, userId, notionId);
     const gapAnswers: AnswerRecord[] = [];
     for (const row of historyRows) {
-      const record = answerRecordOf(row);
+      const record = answerRecordOf(row, diagnosticAnswerIds);
       if (record !== null) gapAnswers.push(record);
     }
     const masteryHistory: MasteryAnswer[] = historyRows.map((row) => ({

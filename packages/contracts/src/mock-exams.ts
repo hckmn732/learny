@@ -247,7 +247,8 @@ export const getExamIntro = defineRoute({
   output: ExamIntroDto,
   successStatus: 200,
   rateLimit: 'default',
-  summary: 'Renvoie le format proposé, les modules étudiés et les prochains examens blancs (SPEC-614).',
+  summary:
+    'Renvoie le format proposé, les modules étudiés et les prochains examens blancs (SPEC-614).',
   errors: [...EXAM_ERRORS],
 });
 
@@ -275,7 +276,8 @@ export const startExamAttempt = defineRoute({
   successStatus: 201,
   idempotent: true,
   rateLimit: 'default',
-  summary: 'Lance un examen blanc ou reprend la tentative en cours avec son temps restant (SPEC-614).',
+  summary:
+    'Lance un examen blanc ou reprend la tentative en cours avec son temps restant (SPEC-614).',
   errors: [...EXAM_ERRORS, 'IDEMPOTENCY_KEY_REQUIRED'],
 });
 
@@ -288,7 +290,8 @@ export const getExamAttempt = defineRoute({
   output: ExamAttemptDto,
   successStatus: 200,
   rateLimit: 'default',
-  summary: 'Renvoie la tentative d’examen, ses réponses, ses marqueurs et le temps restant serveur (SPEC-614).',
+  summary:
+    'Renvoie la tentative d’examen, ses réponses, ses marqueurs et le temps restant serveur (SPEC-614).',
   errors: [...EXAM_ERRORS],
 });
 
@@ -329,7 +332,8 @@ export const submitExamAttempt = defineRoute({
   output: ExamSubmitOutput,
   successStatus: 200,
   rateLimit: 'default',
-  summary: 'Termine l’examen, corrige toutes les réponses et calcule les scores séparés (SPEC-614).',
+  summary:
+    'Termine l’examen, corrige toutes les réponses et calcule les scores séparés (SPEC-614).',
   errors: [...EXAM_ERRORS],
 });
 
@@ -342,7 +346,8 @@ export const getExamResult = defineRoute({
   output: ExamResultDto,
   successStatus: 200,
   rateLimit: 'default',
-  summary: 'Renvoie les résultats, les lacunes des modules étudiés et la revue filtrable (SPEC-614).',
+  summary:
+    'Renvoie les résultats, les lacunes des modules étudiés et la revue filtrable (SPEC-614).',
   errors: [...EXAM_ERRORS],
 });
 

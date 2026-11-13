@@ -6,7 +6,7 @@
 // planning commit together.
 
 import { ENGINE } from '@learny/config/product';
-import { AppError, localTimeToInstant, userLocalDay, type Clock } from '@learny/core';
+import { AppError, localTimeToInstant, userLocalDay, type Clock, type Result } from '@learny/core';
 import { schema, sql, type DbTx } from '@learny/db';
 import {
   planSchedule,
@@ -348,7 +348,8 @@ export function ensureMockExamSlots(
         order by position asc
       `);
       if (moduleRows.length === 0) return [];
-      const endDate = formation.end_date ?? civilDateOffset(userLocalDay(now, formation.timezone), 30);
+      const endDate =
+        formation.end_date ?? civilDateOffset(userLocalDay(now, formation.timezone), 30);
       const penultimate = moduleRows.length >= 2 ? moduleRows[moduleRows.length - 2] : undefined;
       const penultimateDate =
         penultimate?.planned_end ?? civilDateOffset(endDate, moduleRows.length >= 2 ? -7 : 0);
@@ -402,7 +403,10 @@ export function ensureMockExamSlots(
           `);
         }
         if (slotId === undefined) continue;
-        const storedRows = await tx.execute<{ starts_at: Date | string; ends_at: Date | string }>(sql`
+        const storedRows = await tx.execute<{
+          starts_at: Date | string;
+          ends_at: Date | string;
+        }>(sql`
           select starts_at, ends_at from public.schedule_slots where id = ${slotId}::uuid
         `);
         const stored = storedRows[0];
