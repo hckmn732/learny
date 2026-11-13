@@ -136,8 +136,16 @@ async function seedActive(
       `);
     }
     await tx.execute(sql`
-      insert into public.chapter_progress (user_id, chapter_id, contributions_status)
-      values (${userId}::uuid, ${programme.chapterIds[0] ?? ''}::uuid, 'done')
+      insert into public.chapter_progress (
+        user_id, chapter_id, contributions_status, done_at, updated_at
+      )
+      values (
+        ${userId}::uuid,
+        ${programme.chapterIds[0] ?? ''}::uuid,
+        'done',
+        ${FIXED.toISOString()}::timestamptz,
+        ${FIXED.toISOString()}::timestamptz
+      )
       on conflict do nothing
     `);
     return programme;
@@ -310,8 +318,13 @@ describe('[SPEC-606] programme en cours', () => {
     const fx = await learner('proposal');
     const formationId = await serviceDb().transaction(async (tx) => {
       const rows = await tx.execute<{ id: string }>(sql`
-        insert into public.formations (owner_id, title, status)
-        values (${fx.userId}::uuid, 'Programme non validé', 'programme_proposed')
+        insert into public.formations (owner_id, title, status, objectives)
+        values (
+          ${fx.userId}::uuid,
+          'Programme non validé',
+          'programme_proposed',
+          '{operational}'::public.formation_objective[]
+        )
         returning id::text as id
       `);
       return rows[0]?.id ?? '';
