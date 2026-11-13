@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T00:26:17.698Z",
+  "updatedAt": "2026-11-13T01:45:45.493Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3124,14 +3124,55 @@
       "validations": {}
     },
     "SPEC-503": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-13T00:26:17.698Z",
-      "completedAt": null,
+      "completedAt": "2026-11-13T01:45:45.490Z",
       "branch": "spec/SPEC-503-rendu-des-briques",
-      "commit": null,
+      "commit": "c5e147b",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T01:43:19.851Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T01:43:40.801Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T01:44:00.299Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T01:44:07.530Z",
+          "details": "33 test(s) [SPEC-503] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T01:44:45.342Z",
+          "details": "3 test(s) [SPEC-503] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T01:45:39.298Z",
+          "details": "6 réussi(s), 0 échec(s), 23 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T01:45:39.298Z",
+          "details": "3 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T01:45:39.330Z",
+          "details": "7/7 critères ✅"
+        }
+      }
     },
     "SPEC-504": {
       "status": "done",
