@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T09:48:13.973Z",
+  "updatedAt": "2026-11-13T09:48:56.007Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -3981,11 +3981,11 @@
       }
     },
     "SPEC-606": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T09:48:56.007Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-606-programme-en-cours",
       "commit": null,
       "lastError": null,
       "validations": {}
