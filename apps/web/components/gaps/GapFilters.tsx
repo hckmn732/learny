@@ -89,7 +89,7 @@ export function GapFilters({ countsByNature, activeNature }: GapFiltersProps) {
                 : 'border border-solid border-border-strong bg-surface font-500 text-ink hover:border-ink',
             )}
           >
-            <span>{option.label}</span>
+            <span>{option.label}</span>{' '}
             <span
               data-testid={`gaps-filter-count-${option.key}`}
               className={cn(
