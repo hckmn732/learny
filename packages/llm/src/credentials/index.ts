@@ -1,5 +1,5 @@
 // Public surface of the credential crypto used by @learny/services (SPEC-505 ET-1, ET-4).
-// `decryptCredentialKey` is deliberately absent: server-side reads stay inside @learny/llm.
+// Decryption of stored envelopes is deliberately absent: server-side reads stay inside @learny/llm.
 export {
   AES_GCM_ENVELOPE_BYTES,
   AES_GCM_IV_BYTES,
