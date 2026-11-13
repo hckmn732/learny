@@ -427,7 +427,10 @@ export function validateWorkflows({ workflows, scripts, actionlint, act }) {
     // EF-3 : artefacts complets, conservés et publiés même en échec.
     const artifacts = Object.values(ciJobs).flatMap((job) => artifactsOf(job, ci.env));
     for (const name of REQUIRED_ARTIFACTS) {
-      const artifact = artifacts.find((candidate) => candidate.name === name);
+      // A sharded job suffixes its artifact with the shard number (`integration-reports-1`).
+      const artifact = artifacts.find(
+        (candidate) => candidate.name === name || candidate.name.startsWith(`${name}-`),
+      );
       if (artifact === undefined) {
         errors.push(`Artefact obligatoire absent : ${name} (EF-3).`);
         continue;
@@ -438,7 +441,9 @@ export function validateWorkflows({ workflows, scripts, actionlint, act }) {
       }
       if (artifact.paths.trim() === '') errors.push(`L’artefact ${name} doit définir un chemin.`);
     }
-    const e2eArtifact = artifacts.find((candidate) => candidate.name === 'e2e-reports');
+    const e2eArtifact = artifacts.find(
+      (candidate) => candidate.name === 'e2e-reports' || candidate.name.startsWith('e2e-reports-'),
+    );
     if (e2eArtifact !== undefined && !e2eArtifact.paths.includes('test-results/')) {
       errors.push('L’artefact e2e-reports doit inclure test-results/ (traces, captures, vidéos).');
     }

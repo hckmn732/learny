@@ -101,14 +101,17 @@ describe('[SPEC-011] workflow rules', () => {
   it('publishes every required artifact with always() and explicit retention (CA-1, EF-3)', () => {
     const described = describeCi(realWorkflows());
     for (const name of REQUIRED_ARTIFACTS) {
-      const artifact = described.artifacts.find((candidate) => candidate.name === name);
+      const artifact = described.artifacts.find(
+        (candidate) => candidate.name === name || candidate.name.startsWith(`${name}-`),
+      );
       expect(artifact, name).toBeDefined();
       expect(artifact?.always, name).toBe(true);
       expect(artifact?.retentionDays, name).toBeGreaterThan(0);
     }
-    expect(described.artifacts.find((a) => a.name === 'e2e-reports')?.paths).toContain(
-      'test-results/',
-    );
+    expect(
+      described.artifacts.find((a) => a.name === 'e2e-reports' || a.name.startsWith('e2e-reports-'))
+        ?.paths,
+    ).toContain('test-results/');
   });
 
   it('fixes the simulated modes and the frozen clock, and rejects ENABLE_SDD_PAGES=1 (EF-8, CA-2, CL-3)', () => {
