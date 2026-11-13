@@ -366,6 +366,7 @@ async function readPassages(
     from public.course_sections s
     where s.course_id = ${course.id}::uuid
       and s.notion_ids && array[${notion.id}::uuid]
+      and s.reported = false
     order by s.position asc, s.id asc
     limit ${QUESTION_BANK_PASSAGE_LIMIT}
   `);

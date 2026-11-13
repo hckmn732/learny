@@ -74,7 +74,7 @@ function draftWithSource(kind: 'markdown' | 'tutor_addition' = 'markdown'): Cour
             ? [
                 {
                   title: 'Guide officiel',
-                  url: 'https://example.test/guide',
+                  url: 'https://example.com/guide',
                   reason: 'Pour démarrer.',
                 },
               ]

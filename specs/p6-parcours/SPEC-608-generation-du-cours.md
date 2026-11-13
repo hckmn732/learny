@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-607, SPEC-511, SPEC-508, SPEC-513]
 business_rules: [BR-COU-01, BR-COU-02, BR-COU-03, BR-COU-04, BR-COU-05, BR-COU-06, BR-COU-10]
 screens: [SCR-07]
-adrs: [ADR-0026]
+adrs: [ADR-0026, ADR-0313]
 visual: demo
 ---
 
@@ -128,5 +128,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - **ADR-0026 — Banques de questions propres à chaque apprenant** : Les banques sont générées à partir du cours privé de chaque apprenant et ne sont jamais partagées. 4 variantes minimum par notion et par format pertinent ; génération en lot (API Batches) la nuit ; régénération quand toutes les variantes ont été vues.
+- **ADR-0313 — Contrats et pipeline de génération du cours** : brouillon par chapitre agrégé en `CourseDraft`, sources par section, clé de génération stockée dans `courses.generation_key`, version invalide `failed` non courante et émission après commit des événements de cours et de notification.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 

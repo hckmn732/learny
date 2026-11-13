@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  CourseChapterDraftSchema,
-  CourseDraftSchema,
-  type CourseChapterDraft,
-} from './course-draft';
+import { CourseChapterDraftSchema, CourseDraftSchema } from './course-draft';
 
 const CHAPTER = '6f1d0f2a-0000-4000-8000-000000000001';
 const CHUNK = '6f1d0f2a-0000-4000-8000-000000000002';
@@ -29,7 +25,7 @@ function takeaway(points: string[], extra: Record<string, unknown> = {}) {
   };
 }
 
-function chapter(overrides: Partial<CourseChapterDraft> = {}) {
+function chapter(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     chapterId: CHAPTER,
     title: 'Saisie des pièces comptables',
@@ -63,7 +59,7 @@ function baseChapter(overrides: Record<string, unknown> = {}) {
     resourceSuggestions: [
       {
         title: 'Guide officiel',
-        url: 'https://example.test/guide',
+        url: 'https://example.com/guide',
         reason: 'Une référence courte pour démarrer.',
       },
     ],
@@ -230,7 +226,11 @@ describe('[SPEC-608] contrats du cours', () => {
   });
 
   it('ferme le chapitre par une seule fiche À retenir, suivie au plus du résumé (BR-COU-04)', () => {
-    const summary = { kind: 'summary_prompt' as const, title: 'Résumez ce chapitre' };
+    const summary = {
+      kind: 'summary_prompt' as const,
+      title: 'Résumez ce chapitre',
+      notionIds: [],
+    };
     expect(
       CourseChapterDraftSchema.safeParse(
         chapter({

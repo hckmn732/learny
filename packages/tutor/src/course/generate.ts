@@ -658,7 +658,7 @@ async function persistVersion(
             ${anchor},
             ${section.title ?? null},
             ${contentOf(section)},
-            ${JSON.stringify(dataOf(section))}::jsonb,
+            ${dataOf(section) === null ? null : JSON.stringify(dataOf(section))}::jsonb,
             ${uuidArray(section.notionIds)}::uuid[],
             ${origin}::public.content_origin,
             1,

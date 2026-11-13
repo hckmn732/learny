@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { Uuid } from '@learny/contracts';
-import type { Result } from '@learny/core';
+import { AppError, type Result } from '@learny/core';
 import { serviceDb } from '@learny/db';
 import { emitAfterCommit } from '@learny/jobs';
 import { generateCourseForModule, type CourseGenerationResult } from '@learny/tutor';
@@ -37,7 +37,16 @@ export function generateCourse(
   options: GenerateCourseOptions = {},
 ): Promise<Result<CourseGenerationResult>> {
   return toResult(async () => {
-    const parsed = GenerateCourseInput.parse(input);
+    const checked = GenerateCourseInput.safeParse(input);
+    if (!checked.success) {
+      throw new AppError('VALIDATION_FAILED', 'La demande de génération est invalide.', {
+        errors: checked.error.issues.map((issue) => ({
+          path: issue.path.map(String).join('.') || '(racine)',
+          message: issue.message,
+        })),
+      });
+    }
+    const parsed = checked.data;
     const { userId, db } = requireUser(ctx);
     return generateCourseForModule({
       userId,

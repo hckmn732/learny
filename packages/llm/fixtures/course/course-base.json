@@ -17,12 +17,12 @@
         "resourceSuggestions": [
           {
             "title": "Guide officiel de la notion",
-            "url": "https://example.test/guide-notion",
+            "url": "https://example.com/guide-notion",
             "reason": "Une référence courte pour vérifier les bases avant de déposer vos apports."
           },
           {
             "title": "Fiche de synthèse",
-            "url": "https://example.test/synthese-notion",
+            "url": "https://example.com/synthese-notion",
             "reason": "Un résumé en une page pour compléter ce cours de base."
           }
         ],
