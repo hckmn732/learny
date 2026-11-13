@@ -1,0 +1,591 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-608/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-608",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-608/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-608/test-results/sdd/SPEC-608/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-608/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-608/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec next start -p 3100",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p6/course-generation.spec.ts",
+      "file": "p6/course-generation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "cours généré avec sources @SPEC-608",
+          "ok": true,
+          "tags": [
+            "SPEC-608"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2498,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T12:16:41.171Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "cours-sources",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/attachments/cours-sources-310000ecb59838f50a428407746f3edd1eaae47b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/attachments/axe-4d24ef7e26cd18c504da87a035e1b92a0d98d9c2.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-généré-avec-sources-SPEC-608-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b0936b20d9b821cbd72d-860cbe55cebd469b88c3",
+          "file": "p6/course-generation.spec.ts",
+          "line": 141,
+          "column": 1
+        },
+        {
+          "title": "cours de base sans apport @SPEC-608",
+          "ok": true,
+          "tags": [
+            "SPEC-608"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1918,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T12:16:43.841Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "cours-base",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/attachments/cours-base-9da218ee53d017dc1d541e18dde1d6432161dde4.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/attachments/axe-88aebc1f94eb53e4526cb1a6c16375e4696e1a51.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-cours-de-base-sans-apport-SPEC-608-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b0936b20d9b821cbd72d-d9d079dd0b1a7e70e4ef",
+          "file": "p6/course-generation.spec.ts",
+          "line": 171,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-608 @SPEC-608 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-608",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2752,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T12:16:45.869Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "cours-conformite",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/cours-conformite-a2c29fd4130369193f0cda748962f933aecb164c.png"
+                    },
+                    {
+                      "name": "comparaison-article-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/comparaison-article-side-by-side-de29afdd9da78d14bca7e056fe39c7cc6fa3c1d9.png"
+                    },
+                    {
+                      "name": "comparaison-article-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/comparaison-article-diff-9631e1cd2402208c595bcfbf57c0051c9ad0ef34.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/attachments/axe-4e6e109b796bc65ace686d54554a406b45503a67.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-conformité-SPEC-608-SPEC-608-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b0936b20d9b821cbd72d-716352094d8fa0cf356f",
+          "file": "p6/course-generation.spec.ts",
+          "line": 186,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-608 mobile @SPEC-608 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-608",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs/p6/course-generation.spec.ts",
+                    "line": 235,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T12:16:48.761Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-608/apps/web/e2e/specs/p6/course-generation.spec.ts",
+                        "line": 235,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2397,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-13T12:16:49.728Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "cours-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/attachments/cours-mobile-f62204c636c6fac2a07f0bae397c4a25a4a15fc0.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/attachments/axe-a4f6dee627a9754687d35b88eb897e83f21b9932.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-608/test-results/artifacts/p6-course-generation-confo-f8ac7-bile-SPEC-608-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b0936b20d9b821cbd72d-4c314a8be5fdc277596a",
+          "file": "p6/course-generation.spec.ts",
+          "line": 230,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-13T12:16:10.220Z",
+    "duration": 42158.129,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
