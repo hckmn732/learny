@@ -12,11 +12,11 @@ import {
 } from '@learny/contracts';
 import { AppError, err, ok, type Result } from '@learny/core';
 
-import anthropicEmpty from '../../fixtures/search/anthropic/empty.json';
-import anthropicNative from '../../fixtures/search/anthropic/native.json';
-import tavilyFallback from '../../fixtures/search/tavily/fallback.json';
-import tavilyUnavailable from '../../fixtures/search/tavily/unavailable.json';
-import tavilyUnsafe from '../../fixtures/search/tavily/unsafe.json';
+import anthropicEmpty from '../../fixtures/search/anthropic/empty.json' with { type: 'json' };
+import anthropicNative from '../../fixtures/search/anthropic/native.json' with { type: 'json' };
+import tavilyFallback from '../../fixtures/search/tavily/fallback.json' with { type: 'json' };
+import tavilyUnavailable from '../../fixtures/search/tavily/unavailable.json' with { type: 'json' };
+import tavilyUnsafe from '../../fixtures/search/tavily/unsafe.json' with { type: 'json' };
 
 export const SEARCH_FIXTURE_SCHEMA = z
   .strictObject({
