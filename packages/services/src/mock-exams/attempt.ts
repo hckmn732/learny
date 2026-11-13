@@ -783,7 +783,7 @@ export function getExamAttempt(
   });
 }
 
-function readItemForPosition(tx: DbTx, attempt: AttemptRow, position: number): Promise<ItemRow> {
+function readItemForPosition(tx: DbTx, attempt: AttemptRow, position: number): ItemRow {
   const items = itemsOf(attempt.items);
   const item = items[position - 1];
   if (item === undefined) {
