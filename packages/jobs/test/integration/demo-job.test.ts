@@ -83,6 +83,7 @@ describe('[SPEC-007] Inngest function', () => {
       'data-export',
       'email-welcome',
       'exports-purge',
+      'generate-course',
       'ingest-resource',
       'nightly-outbox-cleanup',
       'notification-delivery',
