@@ -106,6 +106,7 @@ describe('[SPEC-007] worker', () => {
       `${INNGEST_APP_ID}-notification-delivery`,
       `${INNGEST_APP_ID}-notifications-daily-digest`,
       `${INNGEST_APP_ID}-notifications-deferred-due`,
+      `${INNGEST_APP_ID}-plan-programme`,
       `${INNGEST_APP_ID}-prepare-question-bank`,
       `${INNGEST_APP_ID}-question-bank-nightly`,
       `${INNGEST_APP_ID}-sdd-demo-pipeline`,

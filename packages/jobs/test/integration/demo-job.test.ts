@@ -88,6 +88,7 @@ describe('[SPEC-007] Inngest function', () => {
       'notification-delivery',
       'notifications-daily-digest',
       'notifications-deferred-due',
+      'plan-programme',
       'prepare-question-bank',
       'question-bank-nightly',
       'sdd-demo-pipeline',

@@ -243,6 +243,9 @@ test('refuse l’exercice d’un autre apprenant @SPEC-613', async ({ browser, b
     await context.addCookies(
       stranger.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
     );
+    await serviceDb().execute(
+      sql`update public.profiles set onboarding_step = 'done' where id = ${stranger.userId}::uuid`,
+    );
     const page = await context.newPage();
     const response = await page.goto(exerciseUrl(seed));
     expect(response?.status()).toBe(404);
