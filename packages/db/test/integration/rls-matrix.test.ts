@@ -254,6 +254,19 @@ async function createSeed(tx: DbTx): Promise<Seed> {
     `,
   );
   rows.courses = course.courseId;
+  rows.question_bank_jobs = await insertId(
+    tx,
+    sql`
+      insert into public.question_bank_jobs (
+        user_id, formation_id, notion_id, course_id, format, reason
+      )
+      values (
+        ${a.id}::uuid, ${programme.formationId}::uuid, ${notion1}::uuid,
+        ${course.courseId}::uuid, 'choice_question', 'manual'
+      )
+      returning id::text as id
+    `,
+  );
   rows.course_sections = sectionId;
   rows.course_section_revisions = await insertId(
     tx,
@@ -607,6 +620,16 @@ const FOREIGN_INSERTS: Record<string, Inserter> = {
     tx.execute(sql`
       insert into public.resources (owner_id, formation_id, kind, title)
       values (${s.a.id}::uuid, ${s.formationId}::uuid, 'note', 'Ressource forgée')
+    `),
+  question_bank_jobs: (tx, s) =>
+    tx.execute(sql`
+      insert into public.question_bank_jobs (
+        user_id, formation_id, notion_id, course_id, format, reason
+      )
+      values (
+        ${s.a.id}::uuid, ${s.formationId}::uuid, ${s.notionIds[0] ?? ''}::uuid,
+        ${s.courseId}::uuid, 'choice_question', 'manual'
+      )
     `),
   resource_chunks: (tx, s) =>
     tx.execute(sql`

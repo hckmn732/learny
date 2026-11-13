@@ -42,10 +42,13 @@ describe('[SPEC-007] web /api/inngest', () => {
       'data-export',
       'email-welcome',
       'exports-purge',
+      'ingest-resource',
       'nightly-outbox-cleanup',
       'notification-delivery',
       'notifications-daily-digest',
       'notifications-deferred-due',
+      'prepare-question-bank',
+      'question-bank-nightly',
       'sdd-demo-pipeline',
       'security-purge',
     ]);

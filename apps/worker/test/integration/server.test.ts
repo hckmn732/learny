@@ -101,10 +101,13 @@ describe('[SPEC-007] worker', () => {
       `${INNGEST_APP_ID}-data-export`,
       `${INNGEST_APP_ID}-email-welcome`,
       `${INNGEST_APP_ID}-exports-purge`,
+      `${INNGEST_APP_ID}-ingest-resource`,
       `${INNGEST_APP_ID}-nightly-outbox-cleanup`,
       `${INNGEST_APP_ID}-notification-delivery`,
       `${INNGEST_APP_ID}-notifications-daily-digest`,
       `${INNGEST_APP_ID}-notifications-deferred-due`,
+      `${INNGEST_APP_ID}-prepare-question-bank`,
+      `${INNGEST_APP_ID}-question-bank-nightly`,
       `${INNGEST_APP_ID}-sdd-demo-pipeline`,
       `${INNGEST_APP_ID}-security-purge`,
     ]);
