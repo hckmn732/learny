@@ -1,0 +1,9 @@
+# SPEC-504 — critères d'acceptation
+
+- **CA-1** ✅ — Résolution EF-1 sur 8 cas (abonné, clé qualifiée/non qualifiée/supprimée, `past_due`, surcharge Claude, ligne absente, modèle hors `model_ids`) : `packages/llm/test/integration/resolve-and-log.test.ts` (groupe « CA-1 »), tableau de la page de démonstration (`llm-resolution`) vérifié par `apps/web/e2e/specs/p5/spec-504-llm.spec.ts`.
+- **CA-2** ✅ — Corps Anthropic par tâche (`thinking.type=adaptive`, effort, `tool_choice=auto`, outils `strict`, `cache_control` unique, aucun `budget_tokens`/`temperature`, repli Opus/Sonnet) : `packages/llm/src/anthropic-options.test.ts`, `anthropic-fetch.test.ts`, `anthropic-provider.test.ts` (MSW) ; capture `evidence/SPEC-504/anthropic-request-<task>.json`.
+- **CA-3** ✅ — Étapes texte, outils, objet, flux, refus et les 7 erreurs restituées et converties : `packages/llm/src/mock/mock-model.test.ts`, `packages/llm/src/errors.test.ts`, intégration `CL-2`/`CL-3`.
+- **CA-4** ✅ — Sélection ADR-0153 (scénario explicite, marqueur, correspondance, défaut, introuvable) et validité/version de toutes les fixtures : `packages/llm/src/mock/select.test.ts`, `packages/llm/src/mock/fixtures.test.ts`.
+- **CA-5** ✅ — Une ligne `ai_calls` par appel réussi, refusé ou invalide ; aucune ligne pour `AI_UNAVAILABLE` : `packages/llm/test/integration/resolve-and-log.test.ts` (groupes CA-5 et CL-1), dernière ligne affichée par `llm-last-call` dans l’e2e.
+- **CA-6** ✅ — Aucun SDK de fournisseur ni identifiant `claude-` hors `packages/llm`/`@learny/config` : `packages/llm/src/architecture.test.ts`, règles ESLint `no-restricted-imports` et `no-restricted-syntax`.
+- **CA-7** ✅ — Démonstration de la résolution et des six scénarios avec vidéo et capture : `apps/web/e2e/specs/p5/spec-504-llm.spec.ts` (`@SPEC-504`, `@visual`), vidéos dans `evidence/SPEC-504/video/`, captures dans `screenshots/` et `visual/`.

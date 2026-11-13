@@ -18,7 +18,9 @@ function fixtureFiles(dir: string, prefix = ''): string[] {
       if (entry.isDirectory()) {
         return entry.name === 'prompts' ? [] : fixtureFiles(path.join(dir, entry.name), relative);
       }
-      return entry.name.endsWith('.json') ? [relative] : [];
+      return entry.name.endsWith('.json') && entry.name !== 'fixture.schema.json'
+        ? [relative]
+        : [];
     })
     .sort();
 }
