@@ -174,7 +174,7 @@ async function readModel(tx: DbTx, userId: string, formationId: string): Promise
       and r.status = 'ready'
       and r.deleted_at is null
       and r.chapter_id is not null
-    order by r.created_at, r.id
+    order by r.created_at, r.title, r.id
   `);
 
   return { formation, modules, notions, links, resources };

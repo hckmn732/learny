@@ -90,6 +90,12 @@ export function orderedNodes(graph: Pick<NotionGraphDto, 'nodes'>): NotionGraphD
     (left, right) =>
       kindRank(left.kind) - kindRank(right.kind) ||
       left.order - right.order ||
+      // Two notions of different modules often share the same local order: the structural
+      // positions keep the layout stable instead of letting random identifiers shuffle it.
+      (left.modulePosition ?? 0) - (right.modulePosition ?? 0) ||
+      (left.chapterPosition ?? 0) - (right.chapterPosition ?? 0) ||
+      (left.notionPosition ?? 0) - (right.notionPosition ?? 0) ||
+      left.label.localeCompare(right.label) ||
       left.id.localeCompare(right.id),
   );
 }
@@ -178,14 +184,17 @@ export function layoutGraph(
   });
 
   const byId = new Map(nodes.map((node) => [node.id, node]));
+  // The simulation is chaotic: iterating the edges in a stable order (node rank, then kind) is
+  // what makes two runs of the same content produce the same layout. Identifiers are random.
+  const rank = new Map(ordered.map((node, index) => [node.id, index]));
   const links = graph.links
     .map((link) => ({ ...link }))
     .filter((link) => byId.has(link.from) && byId.has(link.to))
     .sort(
       (left, right) =>
         left.kind.localeCompare(right.kind) ||
-        left.from.localeCompare(right.from) ||
-        left.to.localeCompare(right.to) ||
+        (rank.get(left.from) ?? 0) - (rank.get(right.from) ?? 0) ||
+        (rank.get(left.to) ?? 0) - (rank.get(right.to) ?? 0) ||
         left.id.localeCompare(right.id),
     );
 

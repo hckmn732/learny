@@ -527,6 +527,19 @@ test('conformité SPEC-616 mobile @SPEC-616 @visual @mobile', async ({ page, axe
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(graphUrl(seed.formationId));
   await expect(page.getByTestId('graph-node')).toHaveCount(56);
+  await expect(page.getByTestId('notion-graph')).toBeVisible();
+  await expect(page.getByText('Chargement de la carte des notions…')).toHaveCount(0);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    // Two frames: the SVG paints once more after the fonts and the first layout pass.
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve();
+        });
+      });
+    });
+  });
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

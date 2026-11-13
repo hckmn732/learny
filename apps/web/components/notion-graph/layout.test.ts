@@ -178,3 +178,28 @@ describe('[SPEC-616] disposition déterministe', () => {
     expect(layoutGraph(fixture(), 7).positions).toEqual(layoutGraph(fixture(), 7).positions);
   });
 });
+
+describe('[SPEC-616] disposition et identifiants', () => {
+  it('garde les mêmes coordonnées quand seuls les identifiants changent', () => {
+    const graph = fixture();
+    const mapping = new Map(graph.nodes.map((n) => [n.id, `anon:${String(n.order)}`]));
+    const remapped = {
+      nodes: graph.nodes.map((n) => ({
+        ...n,
+        id: mapping.get(n.id) ?? n.id,
+        moduleId: n.moduleId === null ? null : (mapping.get(n.moduleId) ?? n.moduleId),
+      })),
+      links: graph.links.map((l) => ({
+        ...l,
+        id: `anon-link:${l.kind}:${l.from}:${l.to}`,
+        from: mapping.get(l.from) ?? l.from,
+        to: mapping.get(l.to) ?? l.to,
+      })),
+    };
+    const first = layoutGraph(graph, 7);
+    const second = layoutGraph(remapped, 7);
+    const byOrder = (g: typeof graph, positions: typeof first.positions) =>
+      Object.fromEntries(g.nodes.map((n) => [String(n.order), positions.get(n.id)]));
+    expect(byOrder(remapped, second.positions)).toEqual(byOrder(graph, first.positions));
+  });
+});
