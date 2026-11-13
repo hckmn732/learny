@@ -14,15 +14,11 @@ import {
   type RefObject,
 } from 'react';
 
-import type { SidebarDto, SidebarFormation } from '@learny/contracts';
+import type { FormationManagementState, SidebarDto, SidebarFormation } from '@learny/contracts';
 import {
+  AlertDialog,
   Button,
   CountBadge,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
   Icon,
   IconButton,
   ProgressBar,
@@ -36,6 +32,9 @@ import {
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
+import { ActiveLimitDialog } from '../formations/ActiveLimitDialog';
+
+import { FormationSwitcher } from './FormationSwitcher';
 
 const t = fr.shell.sidebar;
 
@@ -125,62 +124,6 @@ function formationModuleLabel(formation: SidebarFormation): string {
   return formation.moduleCount === 0 ? t.programmeToValidate : t.noOpenModule;
 }
 
-const FormationSwitcher = ({
-  formations,
-  currentId,
-  onSelect,
-}: {
-  formations: SidebarFormation[];
-  currentId: string | null;
-  onSelect: (formation: SidebarFormation) => void;
-}) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <IconButton
-        tone="dark"
-        size="xs"
-        label={t.changeFormation}
-        icon={iconRegistry['switch-formation']}
-        data-testid="sidebar-switch-formation"
-      />
-    </DropdownMenuTrigger>
-    <DropdownMenuContent data-testid="sidebar-formation-menu" className="min-w-[260px]">
-      <DropdownMenuLabel className="px-10 pt-8 pb-10 text-12 font-600 uppercase tracking-eyebrow text-ink-muted">
-        {t.chooseFormation}
-      </DropdownMenuLabel>
-      {formations.map((formation) => (
-        <DropdownMenuItem
-          key={formation.id}
-          data-testid={`sidebar-formation-option-${formation.id}`}
-          aria-current={formation.id === currentId ? 'true' : undefined}
-          onSelect={() => {
-            onSelect(formation);
-          }}
-        >
-          <span
-            aria-hidden="true"
-            className={cn(
-              'flex size-28 shrink-0 items-center justify-center rounded-8 font-display text-11 font-700',
-              FORMATION_ACCENT_CLASS[formation.accent],
-            )}
-          >
-            {formation.monogram}
-          </span>
-          <span className="min-w-0 flex-1 truncate">{formation.title}</span>
-          {formation.status === 'paused' ? (
-            <span className="rounded-full bg-canvas px-8 py-2 text-11 font-600 text-ink-muted">
-              {t.paused}
-            </span>
-          ) : null}
-          {formation.id === currentId ? (
-            <Icon name="check-circle" size={16} className="shrink-0 text-indigo-ink" />
-          ) : null}
-        </DropdownMenuItem>
-      ))}
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
-
 export interface SidebarViewProps {
   data: SidebarDto | null;
   status: 'loading' | 'error' | 'ready';
@@ -192,6 +135,10 @@ export interface SidebarViewProps {
   onCloseOverlay: () => void;
   onRetry?: () => void;
   onSelectFormation?: (formation: SidebarFormation) => void;
+  onPauseFormation?: (formation: SidebarFormation) => void;
+  onResumeFormation?: (formation: SidebarFormation) => void;
+  onArchiveFormation?: (formation: SidebarFormation) => void;
+  pendingFormationId?: string | null;
   onNavigate?: ((event: MouseEvent<HTMLAnchorElement>) => void) | undefined;
   onKeyDown?: (event: KeyboardEvent<HTMLElement>) => void;
   showTriggerRef?: RefObject<HTMLButtonElement | null>;
@@ -212,6 +159,10 @@ export const SidebarView = ({
   onCloseOverlay,
   onRetry,
   onSelectFormation,
+  onPauseFormation,
+  onResumeFormation,
+  onArchiveFormation,
+  pendingFormationId = null,
   onNavigate,
   onKeyDown,
   showTriggerRef,
@@ -405,6 +356,10 @@ export const SidebarView = ({
                     formations={formations}
                     currentId={currentFormation?.id ?? null}
                     onSelect={(formation) => onSelectFormation?.(formation)}
+                    onPause={(formation) => onPauseFormation?.(formation)}
+                    onResume={(formation) => onResumeFormation?.(formation)}
+                    onArchive={(formation) => onArchiveFormation?.(formation)}
+                    pendingId={pendingFormationId}
                   />
                 ) : null}
               </div>
@@ -642,6 +597,104 @@ export const Sidebar = ({
     setOverlayOpen(false);
   };
 
+  const [archiveTarget, setArchiveTarget] = useState<SidebarFormation | null>(null);
+  const [limitTarget, setLimitTarget] = useState<SidebarFormation | null>(null);
+  const [limitCandidates, setLimitCandidates] = useState<SidebarFormation[]>([]);
+
+  // SPEC-618 — one transition answer already contains the refreshed management state; patch the
+  // shell view immediately, then refresh the counters and the server-rendered pages.
+  const applyManagementState = (state: FormationManagementState) => {
+    queryClient.setQueryData<SidebarDto>(SIDEBAR_QUERY_KEY, (previous) => {
+      if (previous === undefined) return previous;
+      return {
+        ...previous,
+        currentFormation:
+          state.formations.find(
+            (formation) =>
+              formation.id === state.currentFormationId && formation.status === 'active',
+          ) ?? null,
+        formations: state.formations,
+      };
+    });
+    void queryClient.invalidateQueries({ queryKey: SIDEBAR_QUERY_KEY });
+    void queryClient.invalidateQueries({ queryKey: ['home'] });
+    router.refresh();
+  };
+
+  const notifyError = (error: unknown) => {
+    toast({
+      title: t.formationManagement.errorTitle,
+      description: error instanceof ApiError ? error.detail : t.formationManagement.errorDetail,
+      tone: 'error',
+    });
+  };
+
+  const pause = useMutation({
+    mutationFn: (formation: SidebarFormation) =>
+      api.formationPause({ params: { fid: formation.id }, body: {} }),
+    onSuccess: (data, formation) => {
+      applyManagementState(data.state);
+      if (data.outcome === 'applied') {
+        toast({ title: t.formationManagement.pausedToast(formation.title), tone: 'success' });
+      }
+    },
+    onError: notifyError,
+  });
+
+  const resume = useMutation({
+    mutationFn: (input: { formation: SidebarFormation; pauseFormationId?: string }) =>
+      api.formationResume({
+        params: { fid: input.formation.id },
+        body:
+          input.pauseFormationId === undefined ? {} : { pauseFormationId: input.pauseFormationId },
+      }),
+    onSuccess: (data, input) => {
+      applyManagementState(data.state);
+      if (data.outcome === 'limit') {
+        setLimitTarget(input.formation);
+        setLimitCandidates(
+          data.state.formations.filter((formation) => formation.status === 'active'),
+        );
+        return;
+      }
+      setLimitTarget(null);
+      setLimitCandidates([]);
+      if (data.outcome === 'applied') {
+        toast({
+          title: t.formationManagement.resumedToast(input.formation.title),
+          tone: 'success',
+        });
+      }
+    },
+    onError: notifyError,
+  });
+
+  const archive = useMutation({
+    mutationFn: (formation: SidebarFormation) =>
+      api.formationArchive({ params: { fid: formation.id }, body: {} }),
+    onSuccess: (data, formation) => {
+      applyManagementState(data.state);
+      setArchiveTarget(null);
+      if (data.outcome === 'applied') {
+        toast({ title: t.formationManagement.archivedToast(formation.title), tone: 'success' });
+      }
+    },
+    onError: (error) => {
+      setArchiveTarget(null);
+      notifyError(error);
+    },
+  });
+
+  const switchCurrent = useMutation({
+    mutationFn: (formation: SidebarFormation) =>
+      api.currentFormationUpdate({ body: { formationId: formation.id } }),
+    onSuccess: (state, formation) => {
+      applyManagementState(state);
+      toast({ title: t.formationManagement.currentToast(formation.title), tone: 'success' });
+    },
+    onError: notifyError,
+  });
+
   const hide = () => {
     if (overlayOpen) {
       closeOverlay();
@@ -681,19 +734,34 @@ export const Sidebar = ({
   const selectFormation = (formation: SidebarFormation) => {
     closeOverlay();
     if (formation.status === 'paused') {
-      router.push(`/formations/${formation.id}/programme`);
+      resume.mutate({ formation });
       return;
     }
-    update.mutate(
-      { currentFormationId: formation.id },
-      {
-        onSuccess: (data) => {
-          queryClient.setQueryData(SIDEBAR_QUERY_KEY, data);
-          router.refresh();
-        },
-      },
-    );
+    switchCurrent.mutate(formation);
   };
+
+  const requestPause = (formation: SidebarFormation) => {
+    closeOverlay();
+    pause.mutate(formation);
+  };
+
+  const requestResume = (formation: SidebarFormation) => {
+    closeOverlay();
+    resume.mutate({ formation });
+  };
+
+  const requestArchive = (formation: SidebarFormation) => {
+    closeOverlay();
+    setArchiveTarget(formation);
+  };
+
+  const pendingFormationId = pause.isPending
+    ? pause.variables.id
+    : resume.isPending
+      ? resume.variables.formation.id
+      : archive.isPending
+        ? archive.variables.id
+        : null;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (!overlayOpen || event.key !== 'Tab') return;
@@ -724,22 +792,65 @@ export const Sidebar = ({
     query.data === undefined ? (query.isError ? 'error' : 'loading') : 'ready';
 
   return (
-    <SidebarView
-      data={query.data ?? null}
-      status={initialError && query.data === undefined && !query.isError ? 'error' : status}
-      collapsed={collapsed}
-      overlayOpen={overlayOpen}
-      pathname={pathname}
-      onHide={hide}
-      onShow={show}
-      onCloseOverlay={closeOverlay}
-      onRetry={retry}
-      onSelectFormation={selectFormation}
-      onNavigate={navigate}
-      onKeyDown={handleKeyDown}
-      showTriggerRef={triggerRef}
-      asideRef={asideRef}
-      showTrigger={showTrigger}
-    />
+    <>
+      <SidebarView
+        data={query.data ?? null}
+        status={initialError && query.data === undefined && !query.isError ? 'error' : status}
+        collapsed={collapsed}
+        overlayOpen={overlayOpen}
+        pathname={pathname}
+        onHide={hide}
+        onShow={show}
+        onCloseOverlay={closeOverlay}
+        onRetry={retry}
+        onSelectFormation={selectFormation}
+        onPauseFormation={requestPause}
+        onResumeFormation={requestResume}
+        onArchiveFormation={requestArchive}
+        pendingFormationId={pendingFormationId}
+        onNavigate={navigate}
+        onKeyDown={handleKeyDown}
+        showTriggerRef={triggerRef}
+        asideRef={asideRef}
+        showTrigger={showTrigger}
+      />
+      <AlertDialog
+        open={archiveTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) setArchiveTarget(null);
+        }}
+        trigger={<span aria-hidden="true" />}
+        title={t.formationManagement.archiveTitle(archiveTarget?.title ?? '')}
+        description={t.formationManagement.archiveDescription}
+        confirmLabel={t.formationManagement.archiveConfirm}
+        cancelLabel={t.formationManagement.cancel}
+        destructive
+        data-testid="formation-archive-dialog"
+        onConfirm={async () => {
+          if (archiveTarget === null) return;
+          try {
+            await archive.mutateAsync(archiveTarget);
+          } catch {
+            // The error toast of the mutation explains the refusal; the dialog still closes.
+          }
+        }}
+      />
+      <ActiveLimitDialog
+        open={limitTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setLimitTarget(null);
+            setLimitCandidates([]);
+          }
+        }}
+        targetTitle={limitTarget?.title ?? ''}
+        formations={limitCandidates}
+        pending={resume.isPending}
+        onConfirm={(pauseFormationId) => {
+          if (limitTarget === null) return;
+          resume.mutate({ formation: limitTarget, pauseFormationId });
+        }}
+      />
+    </>
   );
 };
