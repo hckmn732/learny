@@ -64,7 +64,13 @@ async function seedGaps(userId: string): Promise<Seed> {
       title: 'SAP S/4HANA Finance',
     });
     const sectionIds: string[] = [];
-    for (const moduleId of programme.moduleIds) {
+    const course0 = await createTestCourse(tx, {
+      ownerId: userId,
+      moduleId: programme.moduleIds[0] ?? '',
+      sectionsPerChapter: 3,
+    });
+    sectionIds.push(...course0.sectionIds);
+    for (const moduleId of programme.moduleIds.slice(1)) {
       const course = await createTestCourse(tx, { ownerId: userId, moduleId });
       sectionIds.push(...course.sectionIds);
     }
@@ -229,9 +235,9 @@ describe('[SPEC-615] Mes lacunes', () => {
     expect(data.nature).toBeNull();
     expect(data.summary).toEqual({
       openGaps: 4,
-      masteredNotions: 2,
-      gapModules: [1, 2, 3],
-      masteredModules: [1, 3],
+      masteredNotions: 3,
+      gapModules: [1, 2],
+      masteredModules: [2, 3],
     });
     expect(data.countsByNature).toEqual({
       forgetting: 1,

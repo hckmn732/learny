@@ -70,7 +70,7 @@ interface GapRow {
   chapter_title: string;
   threshold: number;
   mastery: number;
-  detected_at: Date | null;
+  detected_at: string | Date | null;
   revealed_by: string;
   section_id: string | null;
   section_anchor: string | null;
@@ -78,7 +78,7 @@ interface GapRow {
 
 interface NextReviewRow {
   [key: string]: unknown;
-  next_review_at: Date | null;
+  next_review_at: string | Date | null;
 }
 
 async function readFormation(tx: DbTx, userId: string, formationId: string): Promise<FormationRow> {
@@ -201,8 +201,8 @@ async function readGapRows(
         and course.module_id = n.module_id
         and course.is_current
         and course.status = 'ready'
-        and (n.id = any(cs.notion_ids) or cs.chapter_id = n.chapter_id)
-      order by (n.id = any(cs.notion_ids)) desc, cs.position
+        and n.id = any(cs.notion_ids)
+      order by cs.position
       limit 1
     ) section on true
     where ns.user_id = ${userId}::uuid
@@ -251,7 +251,7 @@ function toCard(row: GapRow, formationId: string, now: Date): GapCard {
     chapterId: row.chapter_id,
     chapterTitle: row.chapter_title,
     revealedBy: row.revealed_by,
-    detectedAt: (row.detected_at ?? now).toISOString(),
+    detectedAt: (row.detected_at === null ? now : new Date(row.detected_at)).toISOString(),
     mastery: row.mastery,
     threshold: row.threshold,
     training: trainingTarget({
@@ -314,7 +314,7 @@ export function listGaps(ctx: ServiceContext, input: ListGapsInput): Promise<Res
         },
         countsByNature: counts,
         items: rows.map((row) => toCard(row, formation.id, now)),
-        nextReviewAt: nextReviewAt === null ? null : nextReviewAt.toISOString(),
+        nextReviewAt: nextReviewAt === null ? null : new Date(nextReviewAt).toISOString(),
         timezone: formation.timezone,
         generatedAt: now.toISOString(),
       });
