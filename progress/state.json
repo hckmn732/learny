@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T16:47:39.409Z",
+  "updatedAt": "2026-11-13T17:06:52.666Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4348,11 +4348,11 @@
       }
     },
     "SPEC-614": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-13T17:06:52.665Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-614-examen-blanc",
       "commit": null,
       "lastError": null,
       "validations": {}
