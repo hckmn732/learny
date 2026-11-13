@@ -2,7 +2,37 @@
 // SDK (ET-9, BR-IA-09); learning-engine and bricks must not depend on it.
 export { resolveModel } from './resolve';
 export type { ManagedModelId, ResolvedModel, ResolveInput } from './resolve';
-export { defaultModelForTask, needsProviderStreaming, TASK_CONFIG, TASK_CAPABILITIES } from './tasks';
+export {
+  BUDGET_DECISIONS,
+  BUDGET_REASONS,
+  budgetCheckSchema,
+  budgetPercent,
+  calculateUsageCost,
+  checkBudget,
+  estimateUsageCost,
+  formatUsdMicros,
+  isBudgetTask,
+  parseUsdMicros,
+  pricesForModel,
+  shouldAlert,
+} from './budget';
+export type {
+  BudgetCheckInput,
+  BudgetCheckResult,
+  BudgetDecision,
+  BudgetReason,
+  EstimatedTokens,
+  ParsedBudgetCheckInput,
+  UsageCost,
+  UsageCostInput,
+  UsageTokens,
+} from './budget';
+export {
+  defaultModelForTask,
+  needsProviderStreaming,
+  TASK_CONFIG,
+  TASK_CAPABILITIES,
+} from './tasks';
 export type { TaskCapability, TaskConfig } from './tasks';
 export {
   buildAnthropicOptions,
@@ -31,12 +61,7 @@ export type {
   LlmStreamResult,
   SessionOptions,
 } from './session';
-export {
-  aiUnavailable,
-  invalidOutput,
-  mapProviderError,
-  refused,
-} from './errors';
+export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
 export type { AiErrorContext } from './errors';
 export { logCall, zeroCost } from './log';
 export type { CallUsage, CostCalculator, CostInput, LogCallInput } from './log';
