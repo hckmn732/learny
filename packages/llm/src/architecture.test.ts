@@ -87,4 +87,22 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
       expect(imports.map((file) => file.path)).toEqual([]);
     }
   });
+
+  it('ET-3 — le déchiffrement d’une clé personnelle reste interne à @learny/llm', () => {
+    const entry = fs.readFileSync(path.join(ROOT, 'packages/llm/src/index.ts'), 'utf8');
+    const credentials = fs.readFileSync(
+      path.join(ROOT, 'packages/llm/src/credentials/index.ts'),
+      'utf8',
+    );
+    expect(entry).not.toContain('decryptCredentialKey');
+    expect(credentials).not.toContain('decryptCredentialKey');
+    const offenders: string[] = [];
+    for (const pkg of fs.readdirSync(PACKAGES, { withFileTypes: true })) {
+      if (!pkg.isDirectory() || pkg.name === 'llm') continue;
+      for (const file of readFiles(path.join(PACKAGES, pkg.name))) {
+        if (file.content.includes('decryptCredentialKey')) offenders.push(file.path);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
 });
