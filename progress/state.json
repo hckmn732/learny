@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T07:24:57.840Z",
+  "updatedAt": "2026-11-13T09:10:45.020Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4060,14 +4060,55 @@
       "validations": {}
     },
     "SPEC-618": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-13T07:26:32.800Z",
+      "completedAt": "2026-11-13T09:10:45.017Z",
+      "branch": "spec/SPEC-618-gestion-des-formations-changer-pause-lim",
+      "commit": "85863056",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-13T09:07:47.920Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-13T09:08:31.068Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-13T09:08:51.534Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-13T09:09:00.311Z",
+          "details": "4 test(s) [SPEC-618] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-13T09:09:56.472Z",
+          "details": "6 test(s) [SPEC-618] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-13T09:10:39.675Z",
+          "details": "4 réussi(s), 0 échec(s), 9 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-13T09:10:39.675Z",
+          "details": "2 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-13T09:10:39.688Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-701": {
       "status": "pending",
