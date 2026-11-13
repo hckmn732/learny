@@ -42,6 +42,7 @@ export function SourceLink({ citation }: { citation: CourseCitation }) {
   return (
     <button
       className="inline-flex cursor-pointer items-center gap-6 rounded-8 bg-orange-soft px-10 py-4 text-12 font-700 text-orange-ink-strong"
+      data-citation-id={citation.id}
       data-testid="course-source"
       onClick={() => {
         // Opened synchronously so the browser keeps the user gesture, then navigated once the

@@ -1603,6 +1603,234 @@
         "summary": "Crée un apport sans fichier : note, page web ou vidéo YouTube (SPEC-206)."
       }
     },
+    "/api/v1/chapters/{cid}/summary": {
+      "post": {
+        "operationId": "chapters.summary",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "description": "Résumé rédigé avec les mots de l’apprenant (BR-COU-07).",
+                "properties": {
+                  "courseId": {
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "type": "string"
+                  },
+                  "text": {
+                    "maxLength": 2000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "courseId",
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Résumé de fin de chapitre et correction éventuelle du tuteur.",
+                  "properties": {
+                    "chapterId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "courseId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "feedback": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "description": "Retour structuré du tuteur : verdict, message et points manquants.",
+                          "properties": {
+                            "message": {
+                              "maxLength": 1000,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "missing": {
+                              "items": {
+                                "maxLength": 200,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "maxItems": 10,
+                              "type": "array"
+                            },
+                            "verdict": {
+                              "enum": [
+                                "good",
+                                "partial",
+                                "insufficient"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "verdict",
+                            "message",
+                            "missing"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "corrected",
+                        "deferred"
+                      ],
+                      "type": "string"
+                    },
+                    "text": {
+                      "maxLength": 2000,
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "chapterId",
+                    "courseId",
+                    "text",
+                    "feedback",
+                    "status",
+                    "createdAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Enregistre le résumé d’un chapitre, le fait corriger par le tuteur et signale ce qui manque (SPEC-609)."
+      }
+    },
     "/api/v1/chapters/{cid}/uploads": {
       "post": {
         "operationId": "uploads.create",
@@ -1765,6 +1993,683 @@
           }
         ],
         "summary": "Réserve un apport fichier et renvoie une URL d’envoi signée de dix minutes (SPEC-206). La clé Idempotency-Key est obligatoire."
+      }
+    },
+    "/api/v1/course-citations/{cid}/source": {
+      "get": {
+        "operationId": "course-citations.source",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Extrait source résolu pour une citation, ou étiquette « source supprimée ».",
+                  "properties": {
+                    "anchor": {
+                      "anyOf": [
+                        {
+                          "maxLength": 200,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "citationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "type": "boolean"
+                    },
+                    "mediaKind": {
+                      "enum": [
+                        "pdf",
+                        "audio",
+                        "video",
+                        "web",
+                        "note",
+                        "image"
+                      ],
+                      "type": "string"
+                    },
+                    "page": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "startSec": {
+                      "anyOf": [
+                        {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "anyOf": [
+                        {
+                          "format": "uri",
+                          "maxLength": 2048,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "citationId",
+                    "mediaKind",
+                    "deleted",
+                    "url",
+                    "page",
+                    "startSec",
+                    "anchor"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Résout le lien contrôlé d’une citation (page PDF, minute vidéo, ancre web) pour son propriétaire (SPEC-609)."
+      }
+    },
+    "/api/v1/course-sections/{sid}": {
+      "patch": {
+        "operationId": "course-sections.edit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "description": "Correction d’une section à la version attendue par le lecteur.",
+                "properties": {
+                  "contentMd": {
+                    "maxLength": 50000,
+                    "type": "string"
+                  },
+                  "expectedVersion": {
+                    "maximum": 9007199254740991,
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "title": {
+                    "maxLength": 200,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "expectedVersion"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "État courant d’une section après correction.",
+                  "properties": {
+                    "contentMd": {
+                      "anyOf": [
+                        {
+                          "maxLength": 50000,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "reported": {
+                      "type": "boolean"
+                    },
+                    "sectionId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "title": {
+                      "anyOf": [
+                        {
+                          "maxLength": 200,
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "version": {
+                      "maximum": 9007199254740991,
+                      "minimum": 1,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "sectionId",
+                    "version",
+                    "title",
+                    "contentMd",
+                    "reported",
+                    "updatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Corrige ou complète une section du cours en créant la version suivante (SPEC-609)."
+      }
+    },
+    "/api/v1/course-sections/{sid}/report": {
+      "post": {
+        "operationId": "course-sections.report",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "description": "Motif du signalement d’une section.",
+                "properties": {
+                  "reason": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Signalement ouvert d’une section.",
+                  "properties": {
+                    "createdAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "reportId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "reported": {
+                      "const": true,
+                      "type": "boolean"
+                    },
+                    "sectionId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "open",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "reportId",
+                    "sectionId",
+                    "status",
+                    "reported",
+                    "createdAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Signale une section du cours et la retire des nouveaux tirages jusqu’à correction (SPEC-609)."
+      }
+    },
+    "/api/v1/courses/{cid}/progress": {
+      "put": {
+        "operationId": "courses.progress",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "description": "Sections du chapitre effectivement visibles pendant la lecture.",
+                "properties": {
+                  "chapterId": {
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                    "type": "string"
+                  },
+                  "visibleSectionIds": {
+                    "items": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "maxItems": 200,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "chapterId",
+                  "visibleSectionIds"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "description": "Progression de lecture du chapitre et du cours, monotone et bornée à 0–100.",
+                  "properties": {
+                    "chapterPercent": {
+                      "maximum": 100,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "coursePercent": {
+                      "maximum": 100,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "updatedAt": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "chapterPercent",
+                    "coursePercent",
+                    "updatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Enregistre la progression de lecture d’un chapitre sans jamais la faire reculer (SPEC-609)."
       }
     },
     "/api/v1/dev/sdd/cron/hourly-tick": {
@@ -17139,6 +18044,11 @@
                             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
                             "type": "string"
                           },
+                          "percent": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
                           "position": {
                             "maximum": 9007199254740991,
                             "minimum": 1,
@@ -17154,7 +18064,8 @@
                           "id",
                           "position",
                           "title",
-                          "hasCourse"
+                          "hasCourse",
+                          "percent"
                         ],
                         "type": "object"
                       },
@@ -17181,6 +18092,11 @@
                                   "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
                                   "type": "string"
                                 },
+                                "percent": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
                                 "position": {
                                   "maximum": 9007199254740991,
                                   "minimum": 1,
@@ -17196,7 +18112,8 @@
                                 "id",
                                 "position",
                                 "title",
-                                "hasCourse"
+                                "hasCourse",
+                                "percent"
                               ],
                               "type": "object"
                             },
@@ -17244,6 +18161,60 @@
                                   "type": "null"
                                 }
                               ]
+                            },
+                            "progress": {
+                              "additionalProperties": false,
+                              "description": "Progression de lecture du chapitre et du cours, monotone et bornée à 0–100.",
+                              "properties": {
+                                "chapterPercent": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "coursePercent": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                },
+                                "updatedAt": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "chapterPercent",
+                                "coursePercent",
+                                "updatedAt"
+                              ],
+                              "type": "object"
+                            },
+                            "quiz": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "href": {
+                                  "maxLength": 300,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "threshold": {
+                                  "maximum": 100,
+                                  "minimum": 0,
+                                  "type": "integer"
+                                }
+                              },
+                              "required": [
+                                "threshold",
+                                "href"
+                              ],
+                              "type": "object"
                             },
                             "readingMinutes": {
                               "maximum": 9007199254740991,
@@ -17414,6 +18385,9 @@
                                     ],
                                     "type": "string"
                                   },
+                                  "reported": {
+                                    "type": "boolean"
+                                  },
                                   "title": {
                                     "anyOf": [
                                       {
@@ -17424,6 +18398,11 @@
                                         "type": "null"
                                       }
                                     ]
+                                  },
+                                  "version": {
+                                    "maximum": 9007199254740991,
+                                    "minimum": 1,
+                                    "type": "integer"
                                   }
                                 },
                                 "required": [
@@ -17435,7 +18414,9 @@
                                   "data",
                                   "origin",
                                   "notionIds",
-                                  "citations"
+                                  "citations",
+                                  "version",
+                                  "reported"
                                 ],
                                 "type": "object"
                               },
@@ -17485,6 +18466,102 @@
                               },
                               "type": "array"
                             },
+                            "summary": {
+                              "anyOf": [
+                                {
+                                  "additionalProperties": false,
+                                  "description": "Résumé de fin de chapitre et correction éventuelle du tuteur.",
+                                  "properties": {
+                                    "chapterId": {
+                                      "format": "uuid",
+                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                      "type": "string"
+                                    },
+                                    "courseId": {
+                                      "format": "uuid",
+                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                      "type": "string"
+                                    },
+                                    "createdAt": {
+                                      "format": "date-time",
+                                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                      "type": "string"
+                                    },
+                                    "feedback": {
+                                      "anyOf": [
+                                        {
+                                          "additionalProperties": false,
+                                          "description": "Retour structuré du tuteur : verdict, message et points manquants.",
+                                          "properties": {
+                                            "message": {
+                                              "maxLength": 1000,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "missing": {
+                                              "items": {
+                                                "maxLength": 200,
+                                                "minLength": 1,
+                                                "type": "string"
+                                              },
+                                              "maxItems": 10,
+                                              "type": "array"
+                                            },
+                                            "verdict": {
+                                              "enum": [
+                                                "good",
+                                                "partial",
+                                                "insufficient"
+                                              ],
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "verdict",
+                                            "message",
+                                            "missing"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "id": {
+                                      "format": "uuid",
+                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                      "type": "string"
+                                    },
+                                    "status": {
+                                      "enum": [
+                                        "corrected",
+                                        "deferred"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "maxLength": 2000,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "chapterId",
+                                    "courseId",
+                                    "text",
+                                    "feedback",
+                                    "status",
+                                    "createdAt"
+                                  ],
+                                  "type": "object"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
                             "version": {
                               "maximum": 9007199254740991,
                               "minimum": 1,
@@ -17504,7 +18581,10 @@
                             "previousChapterId",
                             "nextChapterId",
                             "sections",
-                            "suggestions"
+                            "suggestions",
+                            "progress",
+                            "summary",
+                            "quiz"
                           ],
                           "type": "object"
                         },

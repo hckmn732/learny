@@ -1,8 +1,9 @@
+import { z } from 'zod';
+
 import { CourseReadingProgress, CourseProgressUpdate } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
-import { z } from 'zod';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';

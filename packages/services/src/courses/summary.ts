@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   ChapterSummaryBody,
   CourseSummaryView,
@@ -7,7 +9,6 @@ import { AppError, isAppError, type Result } from '@learny/core';
 import { serviceDb, sql } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
 import { correctChapterSummary } from '@learny/tutor';
-import { z } from 'zod';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -77,13 +78,22 @@ export function submitChapterSummary(
     if (!z.uuid().safeParse(chapterId).success) {
       throw new AppError('VALIDATION_FAILED', 'Identifiant de chapitre invalide.');
     }
-    const body = ChapterSummaryBody.parse({ courseId: input.courseId, text: input.text });
+    const parsedBody = ChapterSummaryBody.safeParse({ courseId: input.courseId, text: input.text });
+    if (!parsedBody.success) {
+      throw new AppError('VALIDATION_FAILED', 'Le résumé est invalide.', {
+        errors: parsedBody.error.issues.map((issue) => ({
+          path: issue.path.map(String).join('.'),
+          message: issue.message,
+        })),
+      });
+    }
+    const body = parsedBody.data;
     const requestKey = input.requestKey ?? null;
     if (requestKey !== null && !/^[A-Za-z0-9_-]{8,128}$/.test(requestKey)) {
       throw new AppError('VALIDATION_FAILED', 'Clé de demande invalide.');
     }
 
-    const committed = await withTransaction(db, async (tx, outbox) => {
+    const committed = await withTransaction(db, async (tx) => {
       await tx.execute(
         sql`select pg_advisory_xact_lock(hashtextextended(${`chapter-summary:${userId}:${chapterId}`}, 0))`,
       );

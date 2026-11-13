@@ -1,12 +1,13 @@
+import { z } from 'zod';
+
 import { CourseCitationSource, type CourseCitationSource as Source } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
 import { sql } from '@learny/db';
-import { z } from 'zod';
 
 import type { ServiceContext } from '../context';
-import { requireUser, toResult } from '../resources/result';
 import type { ResourceDeps } from '../resources/deps';
 import { getSignedReadUrl } from '../resources/read';
+import { requireUser, toResult } from '../resources/result';
 
 // SPEC-609 EF-2, ET-1, ET-3, CL-3, BR-COU-02 — resolve the controlled link of a citation.
 //

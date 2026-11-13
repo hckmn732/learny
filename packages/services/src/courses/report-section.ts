@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   CourseSectionReportBody,
   CourseSectionReportView,
@@ -6,7 +8,6 @@ import {
 import { AppError, type Result } from '@learny/core';
 import { sql } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
-import { z } from 'zod';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -54,7 +55,7 @@ export function reportCourseSection(
     if (!z.uuid().safeParse(sectionId).success) {
       throw new AppError('VALIDATION_FAILED', 'Identifiant de section invalide.');
     }
-    const body = CourseSectionReportBody.parse(input);
+    const body = CourseSectionReportBody.parse({ reason: input.reason });
     const requestKey = input.requestKey ?? null;
     if (requestKey !== null && !/^[A-Za-z0-9_-]{8,128}$/.test(requestKey)) {
       throw new AppError('VALIDATION_FAILED', 'Clé de demande invalide.');

@@ -34,19 +34,14 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
   });
   const screen = query.data;
   const course = screen.course;
-  const [displayProgress, setDisplayProgress] = useState<CourseReadingProgress>(
-    course?.progress ?? { chapterPercent: 0, coursePercent: 0, updatedAt: null },
-  );
+  const [liveProgress, setLiveProgress] = useState<CourseReadingProgress | null>(null);
+  const displayProgress =
+    liveProgress ?? course?.progress ?? { chapterPercent: 0, coursePercent: 0, updatedAt: null };
   const visibleRef = useRef<Set<string>>(new Set());
   const reportedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (course === null) return;
-    setDisplayProgress((current) => ({
-      chapterPercent: Math.max(current.chapterPercent, course.progress.chapterPercent),
-      coursePercent: Math.max(current.coursePercent, course.progress.coursePercent),
-      updatedAt: course.progress.updatedAt ?? current.updatedAt,
-    }));
     visibleRef.current = new Set();
     reportedRef.current = new Set();
     const sectionIds = course.sections.map((section) => section.id);
@@ -74,10 +69,10 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
             { idempotencyKey: crypto.randomUUID() },
           )
           .then((progress) => {
-            setDisplayProgress((current) => ({
-              chapterPercent: Math.max(current.chapterPercent, progress.chapterPercent),
-              coursePercent: Math.max(current.coursePercent, progress.coursePercent),
-              updatedAt: progress.updatedAt ?? current.updatedAt,
+            setLiveProgress((current) => ({
+              chapterPercent: Math.max(current?.chapterPercent ?? 0, progress.chapterPercent),
+              coursePercent: Math.max(current?.coursePercent ?? 0, progress.coursePercent),
+              updatedAt: progress.updatedAt ?? current?.updatedAt ?? null,
             }));
           })
           .catch(() => {

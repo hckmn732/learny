@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   CourseSectionEditBody,
   CourseSectionView,
@@ -6,7 +8,6 @@ import {
 import { AppError, type Result } from '@learny/core';
 import { sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
-import { z } from 'zod';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -84,7 +85,11 @@ export function editCourseSection(
     if (!z.uuid().safeParse(sectionId).success) {
       throw new AppError('VALIDATION_FAILED', 'Identifiant de section invalide.');
     }
-    const body = CourseSectionEditBody.parse(input);
+    const body = CourseSectionEditBody.parse({
+      expectedVersion: input.expectedVersion,
+      ...(input.title === undefined ? {} : { title: input.title }),
+      ...(input.contentMd === undefined ? {} : { contentMd: input.contentMd }),
+    });
     const requestKey = input.requestKey ?? null;
     if (requestKey !== null && !/^[A-Za-z0-9_-]{8,128}$/.test(requestKey)) {
       throw new AppError('VALIDATION_FAILED', 'Clé de demande invalide.');
@@ -96,9 +101,9 @@ export function editCourseSection(
       );
       if (requestKey !== null) {
         const replay = await tx.execute<{ id: string }>(sql`
-          select r.id::text as id
-          from public.course_section_revisions r
-          where r.owner_id = ${userId}::uuid and r.request_key = ${requestKey}
+          select s.id::text as id
+          from public.course_sections s
+          where s.owner_id = ${userId}::uuid and s.edit_request_key = ${requestKey}
           limit 1
         `);
         if (replay[0] !== undefined) {
@@ -134,19 +139,12 @@ export function editCourseSection(
         set title = ${nextTitle},
             content_md = ${nextContent},
             reported = false,
+            edit_request_key = ${requestKey},
             updated_at = ${now}::timestamptz
         where id = ${sectionId}::uuid and owner_id = ${userId}::uuid
       `);
       const updated = await readSection(tx, userId, sectionId);
       if (updated === undefined) throw new AppError('NOT_FOUND', 'Section introuvable.');
-
-      if (requestKey !== null && updated.version > current.version) {
-        await tx.execute(sql`
-          update public.course_section_revisions
-          set request_key = ${requestKey}
-          where section_id = ${sectionId}::uuid and version = ${current.version}
-        `);
-      }
 
       const resolved = await tx.execute<{ affected_brick_ids: unknown }>(sql`
         update public.course_section_reports
