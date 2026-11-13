@@ -265,7 +265,7 @@ export function gradeOpenAnswers(
         failed = true;
         ctx.logger.warn('quiz.grade-open.failed', {
           outcome: 'ai_task_failed',
-          code: lastError.code,
+          code: lastError === null ? 'AI_UNAVAILABLE' : lastError.code,
         });
         continue;
       }

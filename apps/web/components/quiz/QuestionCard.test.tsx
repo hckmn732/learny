@@ -48,7 +48,7 @@ describe('[SPEC-611] carte question', () => {
       'Quel élément classe l’ensemble d’une pièce comptable ?',
     );
     expect(screen.getByText(/Correction immédiate/)).toBeTruthy();
-    expect(screen.getByTestId('quiz-check').disabled).toBe(true);
+    expect(screen.getByTestId('quiz-check').hasAttribute('disabled')).toBe(true);
     expect(screen.getAllByRole('radio')).toHaveLength(4);
   });
 
@@ -126,7 +126,7 @@ describe('[SPEC-611] carte question', () => {
         value={{ text: 'Une pièce.' }}
       />,
     );
-    expect(screen.getByTestId('quiz-open-answer').disabled).toBe(true);
+    expect(screen.getByTestId('quiz-open-answer').hasAttribute('disabled')).toBe(true);
     expect(screen.getByTestId('quiz-feedback').textContent).toContain(
       'Le tuteur la corrigera à la fin de la tentative.',
     );
