@@ -11,7 +11,7 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const promptsDir = path.join(root, 'prompts');
 const outFile = path.join(root, 'src', 'prompts.generated.ts');
 
-const TASKS = ['programme', 'course', 'tutor'];
+const TASKS = ['programme', 'course', 'tutor', 'cadrage'];
 
 function parsePrompt(file) {
   const raw = fs.readFileSync(file, 'utf8');

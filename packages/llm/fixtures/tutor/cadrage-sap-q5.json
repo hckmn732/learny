@@ -1,0 +1,41 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-q5",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Volume enregistré ; cinquième question sur les dates.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [
+          {
+            "key": "volume",
+            "value": "10 h par semaine pendant 6 semaines"
+          }
+        ],
+        "objectives": ["operational", "exam"],
+        "next": {
+          "kind": "question",
+          "questionKey": "dates",
+          "text": "Quand souhaitez-vous commencer et finir cette formation ?",
+          "multi": false,
+          "suggestions": [
+            {
+              "label": "Démarrer le 18 novembre",
+              "description": "Fin prévue le 31 décembre 2026",
+              "value": "Démarrer le 18 novembre"
+            },
+            {
+              "label": "Démarrer début janvier",
+              "description": "Fin prévue le 15 février 2027",
+              "value": "Démarrer début janvier"
+            }
+          ]
+        }
+      },
+      "usage": { "inputTokens": 760, "outputTokens": 150, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 250
+    }
+  ]
+}

@@ -94,8 +94,8 @@ export const linkKind = pgEnum('link_kind', ['prerequisite', 'confusion', 'tutor
 
 export const FORMATION_OBJECTIVES = formationObjective.enumValues;
 export const FORMATION_STATUSES = formationStatus.enumValues;
-export const MAINTENANCE_MODES = maintenanceMode.enumValues;
 export const FORMATION_ACCENTS = formationAccent.enumValues;
+export const MAINTENANCE_MODES = maintenanceMode.enumValues;
 export const MESSAGE_ROLES = messageRole.enumValues;
 export const CADRAGE_KEYS = cadrageKey.enumValues;
 export const IMPORT_KINDS = importKind.enumValues;
@@ -144,6 +144,7 @@ export const formations = pgTable(
     index('formations_group_id_idx')
       .on(table.groupId)
       .where(sql`${table.groupId} is not null`),
+    check('formations_monogram_length_check', sql`char_length(${table.monogram}) <= 3`),
     check('formations_title_length_check', sql`char_length(${table.title}) between 1 and 120`),
     check('formations_monogram_length_check', sql`char_length(${table.monogram}) <= 3`),
     check('formations_description_length_check', sql`char_length(${table.description}) <= 2000`),

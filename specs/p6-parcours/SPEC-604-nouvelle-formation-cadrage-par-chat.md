@@ -166,6 +166,8 @@ Définition commune ; en plus : consigne `cadrage.md` versionnée avec ses fixtu
 
 ## 15. Décisions et hypothèses
 
+- **ADR-0309** (créé) : normalisation de la comparaison visuelle de SCR-04 (jetons, structure, textes exacts et ligne de base pleine page ; la référence 1600×1083 et la coquille connectée ne permettent pas une comparaison pixel fiable).
+
 - ADR appliqués : ADR-0021, ADR-0023, ADR-0048, ADR-0072, ADR-0010, ADR-0016 (la limite ne concerne que les formations actives).
 - **ADR-0164** (créé) : déroulé du cadrage (tour synchrone non diffusé, schéma `CadrageTurn`, plafond imposé par le code, conclusion forcée, statut `cadrage` conservé jusqu'à la proposition, bouton « Commencer le cadrage », objectifs par défaut).
 - **ADR-0162** : sigle et couleur à la création.

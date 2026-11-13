@@ -37,5 +37,6 @@ export * from './search-web';
 export * from './sidebar';
 export * from './billing';
 export * from './bricks';
+export * from './cadrage';
 export * from './questions';
 export * from './dev-billing';

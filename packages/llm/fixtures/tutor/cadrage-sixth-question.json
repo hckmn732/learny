@@ -1,0 +1,25 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sixth-question",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Le modèle tente une sixième question : le code la remplace par la conclusion.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [],
+        "objectives": ["operational"],
+        "next": {
+          "kind": "question",
+          "questionKey": "dates",
+          "text": "Une sixième question qui ne doit jamais être posée ?",
+          "multi": false,
+          "suggestions": []
+        }
+      },
+      "usage": { "inputTokens": 900, "outputTokens": 80, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 200
+    }
+  ]
+}

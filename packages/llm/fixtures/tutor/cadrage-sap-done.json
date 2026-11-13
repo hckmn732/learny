@@ -1,0 +1,27 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-done",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Conclusion du cadrage SAP après la cinquième réponse.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [
+          {
+            "key": "dates",
+            "value": "Du 18 novembre au 31 décembre 2026"
+          }
+        ],
+        "objectives": ["operational", "exam"],
+        "next": {
+          "kind": "done",
+          "text": "Merci, j’ai ce qu’il me faut. Générez le programme quand vous voulez."
+        }
+      },
+      "usage": { "inputTokens": 830, "outputTokens": 90, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 200
+    }
+  ]
+}

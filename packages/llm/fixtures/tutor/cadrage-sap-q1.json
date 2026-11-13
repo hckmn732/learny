@@ -1,0 +1,25 @@
+{
+  "task": "tutor",
+  "scenario": "cadrage-sap-q1",
+  "promptId": "cadrage.cadrage",
+  "promptVersion": 1,
+  "description": "Première question du cadrage SAP de la maquette, sans suggestion.",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "profileUpdates": [],
+        "objectives": [],
+        "next": {
+          "kind": "question",
+          "questionKey": "scope",
+          "text": "SAP S/4HANA Finance couvre plusieurs domaines. Lesquels voulez-vous maîtriser ?",
+          "multi": false,
+          "suggestions": []
+        }
+      },
+      "usage": { "inputTokens": 420, "outputTokens": 90, "cacheReadTokens": 0, "cacheWriteTokens": 0 },
+      "latencyMs": 210
+    }
+  ]
+}
