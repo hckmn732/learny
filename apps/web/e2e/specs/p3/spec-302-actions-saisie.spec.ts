@@ -153,6 +153,7 @@ test('styles calculés des actions et de la saisie @SPEC-302', async ({ page, ax
     'ui-saisie-textarea',
     'ui-saisie-select',
     'ui-saisie-checkbox',
+    'ui-saisie-choice',
     'ui-saisie-tabs',
     'ui-saisie-switches',
     'ui-saisie-segmented',

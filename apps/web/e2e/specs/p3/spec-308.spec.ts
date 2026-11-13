@@ -115,7 +115,9 @@ test('Pages système et mise en page d’authentification @SPEC-308', async ({
     await expect(page.getByTestId('auth-main')).toBeVisible();
     await expect(page.getByTestId('auth-step-counter')).toHaveText(route.counter);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(route.heading);
-    await expect(page.getByTestId('auth-card')).toBeVisible();
+    await expect(
+      page.getByTestId('auth-card').or(page.getByTestId('verify-card')),
+    ).toBeVisible();
     await expect(page.locator('nav')).toHaveCount(0);
     await expect(page.locator('[data-testid="app-sidebar"]')).toHaveCount(0);
     await axeCheck();
@@ -177,7 +179,7 @@ test('Pages système et mise en page d’authentification @SPEC-308 @visual @mob
       '[data-testid="auth-panel"]': { 'background-color': colors.ink },
       '[data-testid="auth-panel"] p.font-display': { 'font-size': '30.6px' },
       '[data-testid="auth-step-counter"]': { color: colors['on-dark-muted'] },
-      '[data-testid="auth-card"]': {
+      '[data-testid="auth-card"], [data-testid="verify-card"]': {
         'background-color': colors.surface,
         'border-color': colors.border,
         'border-radius': '21.6px',
