@@ -158,7 +158,7 @@ function addCivilDays(day: string, days: number): string {
 }
 
 function civilDayOf(value: Date | string, timeZone: string): string {
-  return toUserZone(value, timeZone).date;
+  return toUserZone(iso(value), timeZone).date;
 }
 
 function objectiveText(objectives: string[]): string {
