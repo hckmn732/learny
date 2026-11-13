@@ -290,7 +290,9 @@ test('Coquille : en-tête figé et menu Mon compte @SPEC-305 @visual', async ({
   await seedHeader(session.userId);
   await page.goto(ACCUEIL);
   // The route streams a loading skeleton first: wait for its content before the visual capture.
-  await expect(page.getByRole('heading', { level: 1, name: 'Accueil' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: "Votre journée d'apprentissage" }),
+  ).toBeVisible();
   const header = page.getByTestId('shell-header');
   await expect(header).toBeVisible();
 
@@ -386,7 +388,9 @@ test('Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @visual @mob
   await seedHeader(session.userId);
   await page.goto(ACCUEIL);
   // The route streams a loading skeleton first: wait for its content before the visual capture.
-  await expect(page.getByRole('heading', { level: 1, name: 'Accueil' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { level: 1, name: "Votre journée d'apprentissage" }),
+  ).toBeVisible();
   await expect(page.getByTestId('header-notifications')).toHaveAttribute(
     'aria-label',
     'Notifications, 3 non lues',

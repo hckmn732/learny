@@ -198,7 +198,9 @@ export function DayCard({
           </Button>
         )}
         <Button asChild variant="outline-on-dark" size="lg">
-          <NextLink href="/agenda">{t.day.agenda}</NextLink>
+          <NextLink href="/agenda" prefetch={false}>
+            {t.day.agenda}
+          </NextLink>
         </Button>
       </div>
     </section>
