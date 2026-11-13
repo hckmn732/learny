@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-13T18:32:07.848Z",
+  "updatedAt": "2026-11-13T18:32:18.615Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4287,12 +4287,12 @@
       }
     },
     "SPEC-612": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-13T17:06:28.147Z",
-      "completedAt": null,
+      "completedAt": "2026-11-13T18:32:18.613Z",
       "branch": "spec/SPEC-612-resultat-lacunes-remediation-et-deblocag",
-      "commit": null,
+      "commit": "eb1f0699",
       "lastError": null,
       "validations": {
         "lint": {
