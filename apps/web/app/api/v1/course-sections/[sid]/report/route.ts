@@ -1,8 +1,8 @@
 import { courseSectionReport } from '@learny/contracts';
 import { reportCourseSection } from '@learny/services';
 
-import { IDEMPOTENCY_KEY_HEADER } from '../../../../../lib/api/idempotency';
-import { handler } from '../../../../../lib/api/handler';
+import { IDEMPOTENCY_KEY_HEADER } from '../../../../../../lib/api/idempotency';
+import { handler } from '../../../../../../lib/api/handler';
 
 export const dynamic = 'force-dynamic';
 
