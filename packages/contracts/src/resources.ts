@@ -10,14 +10,7 @@ import { ResourceStatus } from './uploads';
 // web page as an exam guide (ADR-0008) and is never a free-standing creation form. Audio and video
 // files stay V2 and are therefore absent from every V1 offer.
 
-export const RESOURCE_KINDS_V1 = [
-  'note',
-  'pdf',
-  'web',
-  'youtube',
-  'image',
-  'exam_guide',
-] as const;
+export const RESOURCE_KINDS_V1 = ['note', 'pdf', 'web', 'youtube', 'image', 'exam_guide'] as const;
 export const RESOURCE_KINDS_V2 = ['audio', 'video'] as const;
 export const ALL_RESOURCE_KINDS = [...RESOURCE_KINDS_V1, ...RESOURCE_KINDS_V2] as const;
 
@@ -194,7 +187,6 @@ export const resourcesRename = defineRoute({
   body: RenameResourceBody,
   output: RenameResourceOutput,
   successStatus: 200,
-  idempotent: true,
   summary: 'Renomme un apport sans toucher à ses passages ni à ses citations (SPEC-607).',
   errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'CONFLICT'],
 });
