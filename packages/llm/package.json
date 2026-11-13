@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./budget": "./src/budget/index.ts"
+    "./budget": "./src/budget/index.ts",
+    "./credentials": "./src/credentials/index.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@learny/testing": "workspace:*",
+    "fast-check": "^4.10.2",
     "msw": "^3.0.5"
   }
 }

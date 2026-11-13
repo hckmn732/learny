@@ -34,7 +34,7 @@ import { logCall, type CallUsage, type CostCalculator } from './log';
 import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
 import { selectFixture, stripMockMarkers } from './mock/select';
-import { createLanguageModel } from './providers/factory';
+import { createLanguageModel, providerSecrets } from './providers/factory';
 import { resolveModel, type ResolvedModel } from './resolve';
 import { TASK_CONFIG, needsProviderStreaming } from './tasks';
 import {
@@ -210,8 +210,15 @@ export async function createSession(
     opts.budgetGuard ?? ((_, input) => Promise.resolve(ok({ resolved: input.resolved })));
   const mockModels = new Map<string, LearnMockModel>();
 
-  function languageModel(resolved: ResolvedModel): LanguageModel {
-    return createLanguageModel(resolved, { apiKey: opts.secrets?.apiKey ?? null });
+  async function languageModel(resolved: ResolvedModel): Promise<LanguageModel> {
+    const secrets = await providerSecrets(
+      ctx.db,
+      ctx.userId,
+      resolved,
+      opts.secrets?.apiKey ?? null,
+    );
+    if (!secrets.ok) throw secrets.error;
+    return createLanguageModel(resolved, secrets.value);
   }
 
   async function modelFor(
@@ -304,7 +311,7 @@ export async function createSession(
         : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-    const currentModel = mock ?? languageModel(resolved);
+    const currentModel = mock ?? (await languageModel(resolved));
     const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
     try {
       let result;
@@ -439,7 +446,7 @@ export async function createSession(
         : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-    const currentModel = mock ?? languageModel(resolved);
+    const currentModel = mock ?? (await languageModel(resolved));
     const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
     try {
       let object: unknown;
@@ -550,7 +557,7 @@ export async function createSession(
             }
           : undefined;
       const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
-      const currentModel = mock ?? languageModel(resolved);
+      const currentModel = mock ?? (await languageModel(resolved));
       const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
       let logged = false;
       const result = streamText({

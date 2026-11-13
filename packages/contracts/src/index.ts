@@ -3,6 +3,7 @@ export * from './auth';
 export * from './common';
 export * from './cursor';
 export * from './define-route';
+export * from './ai-credentials';
 export * from './dev';
 export * from './dev-jobs';
 export * from './email';

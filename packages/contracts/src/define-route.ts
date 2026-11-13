@@ -34,6 +34,11 @@ export interface RouteDef<
   idempotent?: boolean;
   /** Defaults to `'default'`. */
   rateLimit?: RateLimitProfile;
+  /**
+   * HTTP status of a schema-validation failure. Defaults to 400 (`VALIDATION_FAILED`); a route
+   * whose specification mandates 422 sets it explicitly.
+   */
+  validationStatus?: 400 | 422;
   /** French summary, used by OpenAPI. */
   summary: string;
   /** Business error codes the route may return (documentation). */

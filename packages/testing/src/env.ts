@@ -7,6 +7,12 @@ export const TEST_SERVER_ENV = {
   TZ: 'UTC',
 } as const;
 
+/**
+ * Fixed AES-256-GCM master key of the test environment (SPEC-505 CL-1). It is public and only
+ * valid in tests; production receives its own key through the deployment secrets.
+ */
+export const TEST_ENCRYPTION_KEY = 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=';
+
 /** Refuses to start a test run with a real AI provider (CL-5), before any network call. */
 export function assertMockLlm(env: Record<string, string | undefined> = process.env): void {
   const mode = env.LLM_MODE;

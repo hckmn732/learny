@@ -48,7 +48,7 @@ export type {
   AnthropicRequestPreview,
 } from './anthropic-options';
 export { anthropicFetch, createAnthropicFetch, rewriteAnthropicInit } from './anthropic-fetch';
-export { PROVIDER_CATALOG, providerSupports } from './providers/catalog';
+export { PROVIDER_CATALOG, providerRegion, providerSupports } from './providers/catalog';
 export type { ProviderCapabilities, ProviderCatalogEntry } from './providers/catalog';
 export { createLanguageModel } from './providers/factory';
 export type { ProviderSecrets } from './providers/factory';
