@@ -5150,6 +5150,454 @@
         "summary": "Lacunes ouvertes d’une formation avec statistiques, compteurs par nature, cartes et prochaine révision (SPEC-615)."
       }
     },
+    "/api/v1/formations/{fid}/notion-graph": {
+      "get": {
+        "operationId": "notionGraph.get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "formationId": {
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                      "type": "string"
+                    },
+                    "formationTitle": {
+                      "maxLength": 160,
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "gaps": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "href": {
+                            "maxLength": 2048,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "label": {
+                            "maxLength": 120,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "mastery": {
+                            "maximum": 100,
+                            "minimum": 0,
+                            "type": "number"
+                          },
+                          "nature": {
+                            "enum": [
+                              "forgetting",
+                              "confusion",
+                              "misunderstanding",
+                              "application"
+                            ],
+                            "type": "string"
+                          },
+                          "notionId": {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "notionId",
+                          "label",
+                          "mastery",
+                          "nature",
+                          "href"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "generatedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    },
+                    "links": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "from": {
+                            "maxLength": 64,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "id": {
+                            "maxLength": 128,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "formation",
+                              "contains",
+                              "prerequisite",
+                              "confusion",
+                              "tutor",
+                              "source"
+                            ],
+                            "type": "string"
+                          },
+                          "to": {
+                            "maxLength": 64,
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "from",
+                          "to",
+                          "kind"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "nodes": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "chapterPosition": {
+                            "anyOf": [
+                              {
+                                "maximum": 9007199254740991,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "courseHref": {
+                            "anyOf": [
+                              {
+                                "maxLength": 2048,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "definition": {
+                            "anyOf": [
+                              {
+                                "maxLength": 400,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "gapHref": {
+                            "anyOf": [
+                              {
+                                "maxLength": 2048,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "gapNature": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "forgetting",
+                                  "confusion",
+                                  "misunderstanding",
+                                  "application"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "maxLength": 64,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "formation",
+                              "module",
+                              "notion",
+                              "source"
+                            ],
+                            "type": "string"
+                          },
+                          "label": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "mastery": {
+                            "anyOf": [
+                              {
+                                "maximum": 100,
+                                "minimum": 0,
+                                "type": "number"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "masteryStatus": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "mastered",
+                                  "to_consolidate",
+                                  "upcoming"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "moduleId": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "modulePosition": {
+                            "anyOf": [
+                              {
+                                "maximum": 9007199254740991,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "moduleTitle": {
+                            "anyOf": [
+                              {
+                                "maxLength": 160,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "notionPosition": {
+                            "anyOf": [
+                              {
+                                "maximum": 9007199254740991,
+                                "minimum": 1,
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "order": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "trainingHref": {
+                            "anyOf": [
+                              {
+                                "maxLength": 2048,
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "kind",
+                          "label",
+                          "order",
+                          "moduleId",
+                          "modulePosition",
+                          "moduleTitle",
+                          "chapterPosition",
+                          "notionPosition",
+                          "definition",
+                          "mastery",
+                          "masteryStatus",
+                          "gapNature",
+                          "courseHref",
+                          "trainingHref",
+                          "gapHref"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "stats": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "links": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "mastered": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "modules": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "notions": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "openGaps": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "upcoming": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "notions",
+                        "links",
+                        "modules",
+                        "mastered",
+                        "upcoming",
+                        "openGaps"
+                      ],
+                      "type": "object"
+                    },
+                    "timezone": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "formationId",
+                    "formationTitle",
+                    "timezone",
+                    "generatedAt",
+                    "nodes",
+                    "links",
+                    "gaps",
+                    "stats"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Graphe des notions d’une formation avec maîtrise, lacunes, apports personnels et liens typés (SPEC-616)."
+      }
+    },
     "/api/v1/health": {
       "get": {
         "operationId": "health.get",
