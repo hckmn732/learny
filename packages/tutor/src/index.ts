@@ -11,6 +11,16 @@ export type {
   TutorLlmSession,
 } from './context';
 export {
+  buildSelfTestGradePrompt,
+  buildSelfTestQuestionPrompt,
+  buildTutorChatPrompt,
+  SELF_TEST_GRADE_PROMPT_ID,
+  SELF_TEST_QUESTION_PROMPT_ID,
+  TUTOR_CHAT_PROMPT_ID,
+  TUTOR_CHAT_PROMPT_VERSIONS,
+} from './chat/prompt';
+export type { BuiltChatPrompt, ChatPromptInput } from './chat/prompt';
+export {
   TUTOR_TOOLS,
   TUTOR_TOOL_LIST,
   toolDefinitions,

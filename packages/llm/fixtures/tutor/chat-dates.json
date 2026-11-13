@@ -1,0 +1,22 @@
+{
+  "task": "tutor",
+  "scenario": "chat-dates",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Réponse sur les deux dates d’une pièce (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "La date de pièce reprend celle du document d’origine, par exemple la date de la facture.\n\nLa date comptable fixe la période où l’écriture compte : une facture du 30 octobre reçue le 3 novembre peut être comptabilisée en novembre.\n\n[[sources:22222222-2222-4222-8222-222222222222]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "task": "tutor",
+  "scenario": "chat-generic",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Réponse générique de la maquette (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "Je réponds à partir du chapitre « Saisie des pièces comptables » et de vos apports.\n\nLa règle à garder en tête : chaque poste porte une clé de comptabilisation qui fixe le sens, débit ou crédit, et le type de compte ; la pièce n’est enregistrée que si les débits égalent les crédits.\n\nSi ce n’est pas votre question, sélectionnez le passage concerné dans le cours : je partirai de lui.\n\n[[sources:course,tutor]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

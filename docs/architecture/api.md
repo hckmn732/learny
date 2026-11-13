@@ -35,7 +35,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/formations/:fid/modules/:mid` · PATCH `/chapters/:cid/progress` | Module, statut des chapitres | SPEC-607 |
 | POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · GET `/resources/:rid/url` (URL de lecture signée) · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
 | POST `/modules/:mid/course/generate` · GET `/modules/:mid/course` · PATCH `/course-sections/:sid` · POST `/course-sections/:sid/report` · PUT `/courses/:cid/progress` · POST `/chapters/:cid/summary` | Cours | SPEC-608, 609 |
-| POST `/courses/:cid/conversations` · GET `/conversations/:id` · POST `/conversations/:id/messages` (flux SSE) · POST `/conversations/:id/self-test/answer` · POST `/tutor/cards` | Discussion tuteur | SPEC-610, 717 |
+| POST `/courses/:cid/conversations` · GET `/courses/:cid/conversations` · GET `/conversations/:id` · POST `/conversations/:id/messages` (flux SSE) · POST `/conversations/:id/self-test/answer` · POST `/tutor/cards` | Discussion tuteur | SPEC-610, 717 |
 | POST `/modules/:mid/quiz/attempts` · GET `/attempts/:aid` · PUT `/attempts/:aid/answers/:pos` · POST `/attempts/:aid/answers/:pos/check` · POST `/attempts/:aid/submit` · GET `/attempts/:aid/result` | Quiz, examen, exercice | SPEC-611, 613, 614 |
 | GET `/modules/:mid/remediation` · POST `/modules/:mid/remediation/complete` | Remédiation | SPEC-612 |
 | POST `/modules/:mid/exercises/:aid/hint` | Indices d'exercice | SPEC-613 |

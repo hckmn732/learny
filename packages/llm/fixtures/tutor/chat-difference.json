@@ -1,0 +1,23 @@
+{
+  "task": "tutor",
+  "scenario": "chat-difference",
+  "promptId": "tutor-chat.tutor-chat",
+  "promptVersion": 1,
+  "description": "Réponse « Clé ou type de pièce : quelle différence ? » de la maquette (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "stream",
+      "chunks": [
+        "Le type de pièce se choisit une seule fois, dans l’en-tête. Il classe toute l’opération et fixe sa numérotation : SA pour une écriture générale, KR pour une facture fournisseur, DR pour une facture client.\n\nLa clé de comptabilisation se choisit sur chaque poste. Elle donne le sens et le type de compte : 40 ou 50 pour un compte général, 31 pour créditer un fournisseur, 01 pour débiter un client.\n\n- Type de pièce = toute la pièce, une fois\n- Clé de comptabilisation = chaque ligne\n\n",
+        "[[sources:33333333-3333-4333-8333-333333333333,22222222-2222-4222-8222-222222222222]]"
+      ],
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 40
+    }
+  ]
+}

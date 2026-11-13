@@ -1,0 +1,23 @@
+{
+  "task": "tutor",
+  "scenario": "self-test-grade-ok",
+  "promptId": "self-test-grade.self-test-grade",
+  "promptVersion": 1,
+  "description": "Correction Teste-moi (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "score": 1,
+        "feedback": "Exact : clé 31, au crédit du compte fournisseur, puisque vous lui devez de l’argent. La charge, elle, passe au débit avec la clé 40."
+      },
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 20
+    }
+  ]
+}

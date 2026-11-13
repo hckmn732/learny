@@ -1,0 +1,21 @@
+{
+  "task": "tutor",
+  "scenario": "self-test-q2",
+  "promptId": "self-test-question.self-test-question",
+  "promptVersion": 1,
+  "description": "Question Teste-moi (fixture SPEC-610).",
+  "steps": [
+    {
+      "type": "text",
+      "text": "Autre cas : une facture client de 1 200 €. Quelle clé pour le poste du client, et dans quel sens ?",
+      "finishReason": "stop",
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 220,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 20
+    }
+  ]
+}

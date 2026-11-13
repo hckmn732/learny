@@ -41,3 +41,4 @@ export * from './formations/index';
 export * from './planning';
 export * from './programme/index';
 export * from './courses/index';
+export * from './tutor-chat/index';

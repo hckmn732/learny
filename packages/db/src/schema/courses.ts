@@ -401,6 +401,8 @@ export const tutorConversations = pgTable(
     courseId: uuid('course_id')
       .notNull()
       .references(() => courses.id, { onDelete: 'cascade' }),
+    /** SPEC-610 — chapter opened when the discussion started (ADR-0040). */
+    chapterId: uuid('chapter_id').references(() => chapters.id, { onDelete: 'cascade' }),
     title: text('title'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
@@ -411,6 +413,7 @@ export const tutorConversations = pgTable(
       table.courseId,
       table.createdAt.desc(),
     ),
+    index('tutor_conversations_chapter_idx').on(table.chapterId),
     check(
       'tutor_conversations_title_length_check',
       sql`${table.title} is null or char_length(${table.title}) <= 200`,

@@ -20,6 +20,15 @@ import cadrageSapQ3 from '../../fixtures/tutor/cadrage-sap-q3.json' with { type:
 import cadrageSapQ4 from '../../fixtures/tutor/cadrage-sap-q4.json' with { type: 'json' };
 import cadrageSapQ5 from '../../fixtures/tutor/cadrage-sap-q5.json' with { type: 'json' };
 import cadrageSixthQuestion from '../../fixtures/tutor/cadrage-sixth-question.json' with { type: 'json' };
+import chatAutrement from '../../fixtures/tutor/chat-autrement.json' with { type: 'json' };
+import chatDates from '../../fixtures/tutor/chat-dates.json' with { type: 'json' };
+import chatDifference from '../../fixtures/tutor/chat-difference.json' with { type: 'json' };
+import chatEquilibre from '../../fixtures/tutor/chat-equilibre.json' with { type: 'json' };
+import chatExemple from '../../fixtures/tutor/chat-exemple.json' with { type: 'json' };
+import chatGapFirst from '../../fixtures/tutor/chat-gap-first-question.json' with { type: 'json' };
+import chatGeneric from '../../fixtures/tutor/chat-generic.json' with { type: 'json' };
+import chatInjection from '../../fixtures/tutor/chat-injection.json' with { type: 'json' };
+import chatSelection from '../../fixtures/tutor/chat-selection.json' with { type: 'json' };
 import tutorRefusal from '../../fixtures/tutor/demo-refusal.json' with { type: 'json' };
 import tutorStream from '../../fixtures/tutor/demo-stream.json' with { type: 'json' };
 import tutorTimeout from '../../fixtures/tutor/demo-timeout.json' with { type: 'json' };
@@ -29,6 +38,10 @@ import tutorLoopCompleted from '../../fixtures/tutor/loop-completed.json' with {
 import tutorLoopToneTuEn from '../../fixtures/tutor/loop-tone-tu-en.json' with { type: 'json' };
 import tutorQuestionBankRegeneration from '../../fixtures/tutor/question-bank-regeneration.json' with { type: 'json' };
 import tutorQuestionBank from '../../fixtures/tutor/question-bank.json' with { type: 'json' };
+import selfTestGradeKo from '../../fixtures/tutor/self-test-grade-ko.json' with { type: 'json' };
+import selfTestGradeOk from '../../fixtures/tutor/self-test-grade-ok.json' with { type: 'json' };
+import selfTestQ1 from '../../fixtures/tutor/self-test-q1.json' with { type: 'json' };
+import selfTestQ2 from '../../fixtures/tutor/self-test-q2.json' with { type: 'json' };
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 
@@ -73,6 +86,19 @@ export const FIXTURE_REGISTRY: readonly RegisteredFixture[] = [
   entry('tutor/cadrage-sixth-question.json', cadrageSixthQuestion),
   entry('tutor/cadrage-invalid.json', cadrageInvalid),
   entry('tutor/cadrage-injection.json', cadrageInjection),
+  entry('tutor/chat-autrement.json', chatAutrement),
+  entry('tutor/chat-dates.json', chatDates),
+  entry('tutor/chat-difference.json', chatDifference),
+  entry('tutor/chat-equilibre.json', chatEquilibre),
+  entry('tutor/chat-exemple.json', chatExemple),
+  entry('tutor/chat-gap-first-question.json', chatGapFirst),
+  entry('tutor/chat-generic.json', chatGeneric),
+  entry('tutor/chat-injection.json', chatInjection),
+  entry('tutor/chat-selection.json', chatSelection),
+  entry('tutor/self-test-grade-ko.json', selfTestGradeKo),
+  entry('tutor/self-test-grade-ok.json', selfTestGradeOk),
+  entry('tutor/self-test-q1.json', selfTestQ1),
+  entry('tutor/self-test-q2.json', selfTestQ2),
 ].sort((left, right) => left.path.localeCompare(right.path));
 
 export function fixturesForTask(task: string): readonly RegisteredFixture[] {
