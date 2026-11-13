@@ -123,5 +123,6 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - **ADR-0028 — Examens blancs** : Le format (questions, durée, seuil) est extrait par le tuteur d'un apport `exam_guide` puis confirmé par l'apprenant ; à défaut : 20 questions, 2 min/question, seuil 70 %. Planification par défaut quand l'objectif `exam` existe : fin de l'avant-dernier module et dernier jour. Examen diagnostic possible à tout moment ; questions des modules non étudiés comptées à part. Soumission automatique à échéance, côté serveur (`deadline_at`).
+- **ADR-0317 — Décisions d’implémentation de l’examen blanc** : questions corrigées par le code uniquement, format respecté dans la limite de la banque, marqueurs dans `attempts.review_feedback`, positions diagnostiques exclues de `gap_events`, réconciliation idempotente des deux créneaux `mock_exam`.
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
 
