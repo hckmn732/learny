@@ -4,8 +4,8 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { FIXTURE_FILE_SCHEMA } from './fixture-schema';
 import { FIXTURE_REGISTRY } from './fixture-registry';
+import { FIXTURE_FILE_SCHEMA } from './fixture-schema';
 
 const ROOT = fileURLToPath(new URL('../../fixtures', import.meta.url));
 const PROMPTS = fileURLToPath(new URL('../../fixtures/prompts/index.json', import.meta.url));

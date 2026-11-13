@@ -119,6 +119,9 @@ importers:
       '@learny/learning-engine':
         specifier: workspace:*
         version: link:../../packages/learning-engine
+      '@learny/llm':
+        specifier: workspace:*
+        version: link:../../packages/llm
       '@learny/notifications':
         specifier: workspace:*
         version: link:../../packages/notifications

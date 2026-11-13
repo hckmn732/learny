@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Vitest matchers are typed as any. */
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { generateText, tool } from 'ai';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { createMockServer, http, HttpResponse } from '@learny/testing/msw';
 
-import { buildAnthropicOptions, buildAnthropicSystem } from './anthropic-options';
 import { createAnthropicFetch, LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
+import { buildAnthropicOptions, buildAnthropicSystem } from './anthropic-options';
 
 const bodies: Record<string, unknown>[] = [];
 const headersSeen: Headers[] = [];
 
-const server = createMockServer(
+const server = setupServer(
   http.post('https://api.anthropic.com/v1/messages', async ({ request }) => {
     const body = (await request.json()) as Record<string, unknown>;
     bodies.push(body);
@@ -30,7 +32,7 @@ const server = createMockServer(
 );
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen();
 });
 afterAll(() => {
   server.close();
@@ -50,13 +52,15 @@ describe('[SPEC-504] corps de requête Anthropic (MSW)', () => {
     bodies.length = 0;
     headersSeen.length = 0;
     const options = buildAnthropicOptions({ task, modelId, managed: true });
+    const system = buildAnthropicSystem([
+      { text: 'Consigne stable', cache: true },
+      { text: 'Question', cache: false },
+    ]);
     const model = PROVIDER(modelId);
     await generateText({
       model,
-      system: buildAnthropicSystem([
-        { text: 'Consigne stable', cache: true },
-        { text: 'Question', cache: false },
-      ]),
+      // eslint-disable-next-line @typescript-eslint/no-deprecated -- AI SDK 7 alias of instructions.
+      ...(system === undefined ? {} : { system }),
       messages: [{ role: 'user', content: 'Bonjour' }],
       tools: {
         read_resources: tool({
@@ -88,10 +92,14 @@ describe('[SPEC-504] corps de requête Anthropic (MSW)', () => {
         input_schema: expect.objectContaining({ additionalProperties: false }),
       }),
     ]);
-    const system = body.system as { type: string; text: string; cache_control?: unknown }[];
-    expect(system.at(-1)?.cache_control).toBeUndefined();
-    expect(system.filter((part) => part.cache_control !== undefined)).toHaveLength(1);
-    expect(system[0]?.text).toBe('Consigne stable');
+    const sentSystem = body.system as {
+      type: string;
+      text: string;
+      cache_control?: unknown;
+    }[];
+    expect(sentSystem.at(-1)?.cache_control).toBeUndefined();
+    expect(sentSystem.filter((part) => part.cache_control !== undefined)).toHaveLength(1);
+    expect(sentSystem[0]?.text).toBe('Consigne stable');
     const expectedFallback = task !== 'light';
     expect(body.fallbacks).toBe(expectedFallback ? 'default' : undefined);
     const beta = headersSeen[0]?.get('anthropic-beta') ?? '';

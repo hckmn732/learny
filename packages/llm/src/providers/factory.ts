@@ -9,8 +9,8 @@ import type { LanguageModel } from 'ai';
 import { AppError } from '@learny/core';
 import type { AiProviderValue } from '@learny/db';
 
-import { anthropicApiKey } from '../config';
 import { anthropicFetch } from '../anthropic-fetch';
+import { anthropicApiKey } from '../config';
 import type { ResolvedModel } from '../resolve';
 
 export interface ProviderSecrets {

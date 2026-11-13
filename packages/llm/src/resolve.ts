@@ -9,7 +9,7 @@ import {
   type AiModelId,
   type AiTask,
 } from '@learny/config';
-import { AppError, clock, err, ok, type Result } from '@learny/core';
+import { clock, err, ok, type Result } from '@learny/core';
 import {
   aiCredentials,
   aiTaskModels,
@@ -62,7 +62,7 @@ function managed(task: AiTask, requested: string | null): ResolvedModel {
 export async function resolveModel(
   db: Db,
   input: ResolveInput,
-): Promise<Result<ResolvedModel, AppError>> {
+): Promise<Result<ResolvedModel>> {
   const rows = await db
     .select({
       task: aiTaskModels.task,

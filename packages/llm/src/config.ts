@@ -1,7 +1,7 @@
 // Server-only view of the LLM environment (SPEC-504 ET-3, ET-9). The values come from the single
 // Zod schema of @learny/config; nothing here is ever imported by a browser component.
-import { parseServerEnv } from '@learny/config/server';
 import type { LlmMode } from '@learny/config';
+import { parseServerEnv } from '@learny/config/server';
 
 /** `LLM_MODE` with the documented fallback: a missing value means `mock` outside production. */
 export function llmMode(env: Record<string, string | undefined> = process.env): LlmMode {

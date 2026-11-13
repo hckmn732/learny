@@ -134,9 +134,11 @@ function rewriteBody(
  */
 export function createAnthropicFetch(baseFetch?: FetchLike): FetchLike {
   return async (input, init) => {
-    const fetchImpl = baseFetch ?? (globalThis.fetch as FetchLike);
+    const fetchImpl = baseFetch ?? (globalThis.fetch);
     const request = input instanceof Request ? input : undefined;
-    const url = request?.url ?? String(input);
+    const url =
+      request?.url ??
+      (typeof input === 'string' ? input : input instanceof URL ? input.href : input.url);
     if (!isMessagesRequest(url)) return fetchImpl(input, init);
 
     const headers = new Headers(request !== undefined ? request.headers : init?.headers);
@@ -185,7 +187,8 @@ export function rewriteAnthropicInit(
   init: RequestInit,
   options: { task: AiTask; fallback: boolean },
 ): { body: string; headers: Headers } {
-  const body = JSON.parse(String(init.body ?? '{}')) as Record<string, unknown>;
+  const rawBody = init.body;
+  const body = JSON.parse(typeof rawBody === 'string' ? rawBody : '{}') as Record<string, unknown>;
   rewriteBody(body, options.task, options.fallback);
   const headers = new Headers(init.headers);
   removePrivateHeaders(headers);

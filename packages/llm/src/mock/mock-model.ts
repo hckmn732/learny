@@ -1,11 +1,11 @@
 // Deterministic simulated model (SPEC-504 ET-6, ADR-0153). Each call consumes the next step of the
 // selected fixture; no network, no clock, no random value. `doStream` replays `chunks`.
-import { APICallError } from 'ai';
 import type {
   LanguageModelV4GenerateResult,
   LanguageModelV4StreamPart,
   LanguageModelV4StreamResult,
 } from '@ai-sdk/provider';
+import { APICallError } from 'ai';
 import { MockLanguageModelV4, convertArrayToReadableStream } from 'ai/test';
 
 import { AppError } from '@learny/core';
@@ -140,7 +140,7 @@ export class LearnMockModel extends MockLanguageModelV4 {
     if (step === undefined) {
       throw new AppError(
         'MOCK_STEPS_EXHAUSTED',
-        `La fixture ${this.fixture.task}/${this.fixture.scenario} n’a plus d’étape (${this.fixture.steps.length} consommée(s)).`,
+        `La fixture ${this.fixture.task}/${this.fixture.scenario} n’a plus d’étape (${String(this.fixture.steps.length)} consommée(s)).`,
       );
     }
     // A provider error is retried by the AI SDK (429: two retries); the same step is served until

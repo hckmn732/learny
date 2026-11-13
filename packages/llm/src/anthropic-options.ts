@@ -3,8 +3,8 @@
 import type { JSONValue, ModelMessage, SystemModelMessage } from 'ai';
 import { z } from 'zod';
 
-import { AppError } from '@learny/core';
 import { AI_MODEL_IDS, type AiModelId, type AiTask } from '@learny/config';
+import { AppError } from '@learny/core';
 
 import { TASK_CONFIG } from './tasks';
 import type { DocumentRef, SystemPart } from './types';
@@ -15,7 +15,7 @@ const CACHE_CONTROL = { type: 'ephemeral' } as const;
 
 export interface AnthropicToolDefinition {
   description: string;
-  inputSchema: z.ZodTypeAny;
+  inputSchema: z.ZodType;
 }
 
 export interface AnthropicRequestInput {
@@ -119,7 +119,7 @@ export function documentMessage(documents: readonly DocumentRef[]): ModelMessage
   };
 }
 
-function jsonSchemaOf(schema: z.ZodTypeAny): Record<string, unknown> {
+function jsonSchemaOf(schema: z.ZodType): Record<string, unknown> {
   const json = z.toJSONSchema(schema, { io: 'input' }) as Record<string, unknown>;
   return { ...json, additionalProperties: false };
 }

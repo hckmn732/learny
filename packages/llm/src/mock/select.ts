@@ -93,7 +93,7 @@ function notFound(input: SelectFixtureInput, tried: string[]): AppError {
 export function selectFixture(
   input: SelectFixtureInput,
   options: SelectFixtureOptions = {},
-): Result<FixtureFile, AppError> {
+): Result<FixtureFile> {
   const candidates = (options.fixtures ?? fixturesForTask(input.task)).filter(
     (candidate) => candidate.fixture.task === input.task,
   );

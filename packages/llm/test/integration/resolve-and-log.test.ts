@@ -3,6 +3,8 @@
 // network call; the journal rows are read from the real `ai_calls` table.
 import { randomUUID } from 'node:crypto';
 
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -14,7 +16,6 @@ import {
   listAiCalls,
 } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
-import { createMockServer, http, HttpResponse } from '@learny/testing/msw';
 
 import {
   createSession,
@@ -101,13 +102,13 @@ async function unavailable(userId: string, task: (typeof TASKS)[number] = 'tutor
 }
 
 async function calls(userId: string) {
-  return listAiCalls(serviceDb(), { userId, limit: 20 });
+  return listAiCalls(serviceDb() as never, { userId, limit: 20 });
 }
 
-let server = createMockServer();
+const server = setupServer();
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen();
 });
 afterAll(async () => {
   server.close();

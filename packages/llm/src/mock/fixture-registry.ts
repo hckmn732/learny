@@ -2,11 +2,11 @@
 // server bundle without reading the filesystem at runtime (SPEC-504 ET-6, ADR-0153).
 import lightInvalidObject from '../../fixtures/light/demo-invalid-object.json';
 import lightObject from '../../fixtures/light/demo-object.json';
-import tutorDefault from '../../fixtures/tutor/demo.default.json';
 import tutorRefusal from '../../fixtures/tutor/demo-refusal.json';
 import tutorStream from '../../fixtures/tutor/demo-stream.json';
 import tutorTimeout from '../../fixtures/tutor/demo-timeout.json';
 import tutorToolCall from '../../fixtures/tutor/demo-tool-call.json';
+import tutorDefault from '../../fixtures/tutor/demo.default.json';
 
 import { parseFixture, type FixtureFile } from './fixture-schema';
 

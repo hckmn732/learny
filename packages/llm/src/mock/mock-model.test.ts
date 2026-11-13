@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Vitest matchers are typed as any. */
 import { convertReadableStreamToArray } from 'ai/test';
 import { describe, expect, it } from 'vitest';
 
@@ -95,7 +96,7 @@ describe('[SPEC-504] modèle simulé', () => {
     const model = createMockModel(errorFixture('context_length'));
     await expect(model.doGenerate({} as never)).rejects.toMatchObject({
       statusCode: 400,
-      message: expect.stringContaining('too long') as unknown as string,
+      message: expect.stringContaining('too long'),
     });
   });
 

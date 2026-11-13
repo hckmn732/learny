@@ -19,6 +19,7 @@
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
     "@learny/learning-engine": "workspace:*",
+    "@learny/llm": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@learny/services": "workspace:*",
     "@learny/ui": "workspace:*",

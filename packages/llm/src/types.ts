@@ -32,7 +32,7 @@ export interface StepInput {
   system: SystemPart[];
   messages: ModelMessage[];
   /** Declared tools; SPEC-504 never executes them (the loop belongs to SPEC-508). */
-  tools?: Record<string, { description: string; inputSchema: z.ZodTypeAny }>;
+  tools?: Record<string, { description: string; inputSchema: z.ZodType }>;
   /** Anthropic documents (ET-4, ET-8); ignored by other providers (CL-10). */
   documents?: DocumentRef[];
   citations?: boolean;

@@ -60,8 +60,8 @@ export type {
 } from './types';
 export { emptyUsage, estimateTokens } from './types';
 
-import { createSession, type LlmSession } from './session';
 import { resolveModel } from './resolve';
+import { createSession, type LlmSession } from './session';
 
 /** ET-5 — the two entry points every consumer uses. */
 export const llm = { session: createSession, resolveModel } satisfies {

@@ -95,13 +95,13 @@ describe('[SPEC-504] options Anthropic', () => {
   });
 
   it('EF-4 — citations et sortie structurée sont refusées avant tout appel', () => {
-    expect(() => assertCitationsCompatible({ citations: true, structured: true })).toThrow(AppError);
+    expect(() => { assertCitationsCompatible({ citations: true, structured: true }); }).toThrow(AppError);
     try {
       assertCitationsCompatible({ citations: true, structured: true });
     } catch (error) {
       expect((error as AppError).code).toBe('CITATIONS_WITH_STRUCTURED_OUTPUT');
     }
-    expect(() => assertCitationsCompatible({ citations: true, structured: false })).not.toThrow();
+    expect(() => { assertCitationsCompatible({ citations: true, structured: false }); }).not.toThrow();
   });
 
   it('EF-4 — un document utilise file_id et active les citations', () => {

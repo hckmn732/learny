@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment -- Vitest matchers are typed as any. */
 import { describe, expect, it } from 'vitest';
 
 import { createAnthropicFetch, rewriteAnthropicInit } from './anthropic-fetch';
@@ -51,7 +52,10 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
   it('CA-2 — pas de repli pour Haiku, aucun en-tête bêta privé ne fuit', async () => {
     let captured: { url: string; init: RequestInit | undefined } | undefined;
     const fetchImpl = createAnthropicFetch((input, init) => {
-      captured = { url: String(input), init };
+      captured = {
+        url: typeof input === 'string' ? input : input instanceof URL ? input.href : input.url,
+        init,
+      };
       return Promise.resolve(new Response('{}', { status: 200 }));
     });
     await fetchImpl('https://api.anthropic.com/v1/messages', {
@@ -68,7 +72,9 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
         messages: [],
       }),
     });
-    const parsed = JSON.parse(String(captured?.init?.body)) as Record<string, unknown>;
+    const parsed = JSON.parse(
+      typeof captured?.init?.body === 'string' ? captured.init.body : '{}',
+    ) as Record<string, unknown>;
     expect(parsed.fallbacks).toBeUndefined();
     expect(parsed.output_config).toEqual({ effort: 'low' });
     const headers = new Headers(captured?.init?.headers);
@@ -80,7 +86,7 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
   it('ET-4 — les autres routes (Files API) ne sont pas réécrites', async () => {
     let captured: string | undefined;
     const fetchImpl = createAnthropicFetch((input) => {
-      captured = String(input);
+      captured = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
       return Promise.resolve(new Response('{}', { status: 200 }));
     });
     const init: RequestInit = { method: 'POST', body: 'raw' };

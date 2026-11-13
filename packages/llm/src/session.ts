@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-deprecated, @typescript-eslint/no-unnecessary-type-arguments, @typescript-eslint/no-unnecessary-condition -- AI SDK 7 still exposes the structured/streaming helpers used by SPEC-504. */
 // Session of calls on one resolved model (SPEC-504 EF-3 to EF-5, ET-5).
 // Resolution happens once; every `step`, `object` and `stream` produces exactly one `ai_calls` row.
 // Tools are declared but never executed: the loop belongs to SPEC-508.
+import { anthropic } from '@ai-sdk/anthropic';
 import {
   NoObjectGeneratedError,
   generateObject,
@@ -10,7 +12,6 @@ import {
   tool,
   type LanguageModel,
   type ModelMessage,
-  type StreamTextResult,
   type ToolSet,
 } from 'ai';
 import type { z } from 'zod';
@@ -25,20 +26,19 @@ import {
 } from '@learny/core';
 import type { AiProviderValue, Db } from '@learny/db';
 
+import { LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
 import {
   assertCitationsCompatible,
   buildAnthropicOptions,
   buildAnthropicSystem,
   documentMessage,
 } from './anthropic-options';
-import { anthropic } from '@ai-sdk/anthropic';
-import { LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
 import { llmMode } from './config';
 import { mapProviderError, refused } from './errors';
 import { logCall, zeroCost, type CallUsage, type CostCalculator } from './log';
+import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
 import { selectFixture, stripMockMarkers } from './mock/select';
-import type { FixtureFile } from './mock/fixture-schema';
 import { createLanguageModel } from './providers/factory';
 import { resolveModel, type ResolvedModel } from './resolve';
 import { TASK_CONFIG, needsProviderStreaming } from './tasks';
@@ -92,7 +92,7 @@ export type LlmStreamResult = ReturnType<typeof streamText>;
 export interface LlmSession {
   resolved: ResolvedModel;
   step(input: StepInput): Promise<Result<StepOutput, AppError>>;
-  object<S extends z.ZodTypeAny>(
+  object<S extends z.ZodType>(
     input: Omit<StepInput, 'tools'> & { schema: S },
   ): Promise<Result<z.infer<S>, AppError>>;
   stream(input: StepInput): Promise<Result<LlmStreamResult, AppError>>;
@@ -165,7 +165,7 @@ function withTimeout(input: StepInput, timeoutMs: number): AbortSignal | undefin
   const timer = setTimeout(() => {
     controller.abort();
   }, timeoutMs);
-  timer.unref?.();
+  timer.unref();
   const signal = controller.signal;
   if (input.abortSignal === undefined) return signal;
   return AbortSignal.any([input.abortSignal, signal]);
@@ -300,7 +300,7 @@ export async function createSession(
           finishReason: finishOf(raw, undefined),
           usage,
           responseMessages: response.messages,
-          modelId: response.modelId ?? resolved.modelId,
+          modelId: response.modelId,
           content: [] as unknown[],
           rawFinishReason: undefined as string | undefined,
         };
@@ -321,7 +321,7 @@ export async function createSession(
           finishReason: finishOf(generated.finishReason, generated.rawFinishReason),
           usage: usageOf(generated.usage),
           responseMessages: generated.responseMessages,
-          modelId: generated.response.modelId ?? resolved.modelId,
+          modelId: generated.response.modelId,
           content: generated.content,
           rawFinishReason: generated.rawFinishReason,
         };
@@ -340,7 +340,7 @@ export async function createSession(
         toolCalls: result.toolCalls.map((call) => ({
           toolCallId: call.toolCallId,
           toolName: call.toolName,
-          input: call.input,
+          input: call.input as unknown,
         })),
         finishReason: result.finishReason,
         usage,
@@ -383,7 +383,7 @@ export async function createSession(
     }
   }
 
-  async function executeObject<S extends z.ZodTypeAny>(
+  async function executeObject<S extends z.ZodType>(
     resolved: ResolvedModel,
     input: Omit<StepInput, 'tools'> & { schema: S },
   ): Promise<Result<z.infer<S>, AppError>> {
@@ -535,8 +535,7 @@ export async function createSession(
             resolved,
             usage,
             latencyMs: Math.max(0, clock.now().getTime() - started.getTime()),
-            effectiveModel:
-              mode === 'mock' ? resolved.modelId : (event.response.modelId ?? resolved.modelId),
+            effectiveModel: mode === 'mock' ? resolved.modelId : event.response.modelId,
             status: refusalFrom(event.finishReason, undefined) ? 'refused' : 'ok',
             errorCode: refusalFrom(event.finishReason, undefined) ? 'AI_REFUSED' : null,
           });
