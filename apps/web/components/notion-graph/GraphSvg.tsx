@@ -245,7 +245,11 @@ export function GraphSvg({
           onPointerUp={endPointer}
           onPointerCancel={endPointer}
         >
-          <g transform={`translate(${String(view.x)} ${String(view.y)}) scale(${String(view.k)})`}>
+          <g
+            data-testid="graph-viewport"
+            data-k={view.k.toFixed(4)}
+            transform={`translate(${String(view.x)} ${String(view.y)}) scale(${String(view.k)})`}
+          >
             <g aria-hidden="true">
               {graph.links.map((link) => {
                 if (!visibleIds.has(link.from) || !visibleIds.has(link.to)) return null;
@@ -332,6 +336,7 @@ export function GraphSvg({
                     data-node-id={node.id}
                     data-kind={node.kind}
                     data-status={node.masteryStatus ?? undefined}
+                    data-selected={isSelected ? 'true' : undefined}
                     aria-label={t.graph.nodeLabel(node.label, kindLabel)}
                     opacity={dim ? 0.18 : faded ? 0.5 : 1}
                     className="cursor-pointer"
