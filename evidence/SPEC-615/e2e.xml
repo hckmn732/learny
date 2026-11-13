@@ -1,0 +1,107 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="1" errors="0" time="42.699447">
+<testsuite name="p6/gaps.spec.ts" timestamp="2026-11-13T06:54:28.391Z" hostname="desktop" tests="5" failures="0" skipped="1" time="7.938" errors="0">
+<testcase name="filtre et entraîne une lacune @SPEC-615" classname="p6/gaps.spec.ts" time="2.716">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/attachments/axe-8f51794e452cefd31541838fa6aa20311249b9d8.json]]
+
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/attachments/spec-615-lacunes-filtre-1881f705a1daf7583bfb13100347613e153baec4.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-filtre-et-entraîne-une-lacune-SPEC-615-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="revoit la lacune dans le cours @SPEC-615" classname="p6/gaps.spec.ts" time="1.373">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/attachments/axe-1630f1ef2103919165cd8f1e2c464647d991f3f7.json]]
+
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/attachments/spec-615-retour-cours-1755909834c6d1da25f03350df009b4be9c5ceb0.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-revoit-la-lacune-dans-le-cours-SPEC-615-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refuse les lacunes d’un autre apprenant @SPEC-615" classname="p6/gaps.spec.ts" time="0.636">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-gaps-refuse-les-lacunes-d’un-autre-apprenant-SPEC-615-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-refuse-les-lacunes-d’un-autre-apprenant-SPEC-615-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-refuse-les-lacunes-d’un-autre-apprenant-SPEC-615-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-refuse-les-lacunes-d’un-autre-apprenant-SPEC-615-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-615 @SPEC-615 @visual" classname="p6/gaps.spec.ts" time="2.991">
+<properties>
+<property name="mockup-diff-ratio" value="spec-615-desktop:0.0805">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/attachments/spec-615-desktop-side-by-side-c7cc93afdbd4fe402a7ff76e5331820478b64683.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/attachments/spec-615-desktop-diff-e327e9924cf99f73994ff7ea4e7a769b5c7a804e.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/attachments/axe-55f6d69a6f7165eda05ce8e5797ed0837a759833.json]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-SPEC-615-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-615 mobile @SPEC-615 @visual @mobile" classname="p6/gaps.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p6/gaps.spec.ts" timestamp="2026-11-13T06:54:28.391Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.888" errors="0">
+<testcase name="conformité SPEC-615 mobile @SPEC-615 @visual @mobile" classname="p6/gaps.spec.ts" time="2.888">
+<properties>
+<property name="mockup-diff-ratio" value="spec-615-mobile:0.1183">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/attachments/spec-615-mobile-side-by-side-dcb295ea073fe30036cd18d8f436d75a6b5973a3.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/attachments/spec-615-mobile-diff-56ae3865d2ca9859cc6a2179fe9aef55d5d4eb27.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/attachments/axe-7c82c6d611f96d35f847f75b246427b0d26790da.json]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p6-gaps-conformité-SPEC-615-mobile-SPEC-615-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
