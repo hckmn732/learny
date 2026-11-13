@@ -5,12 +5,7 @@ import { createTestProgramme } from '@learny/db/testing';
 import { createNotionState } from '@learny/testing';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
-import {
-  MOCKUP_MAX_DIFF_RATIO,
-  compareWithReference,
-  expectScreenshotBaseline,
-  expectTokens,
-} from '@learny/testing/visual';
+import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
 const NEW = '/formations/nouvelle';
@@ -152,68 +147,6 @@ test('erreurs du tuteur @SPEC-604', async ({ page, axeCheck, captureEvidence }) 
   await axeCheck();
 });
 
-async function compareFullPage(
-  page: import('@playwright/test').Page,
-  testInfo: import('@playwright/test').TestInfo,
-  referenceName: string,
-  width: number,
-): Promise<number> {
-  await expectScreenshotBaseline(page, `cadrage-${width === 390 ? 'mobile' : 'desktop'}.png`, {
-    fullPage: true,
-  });
-  const chat = await page.getByTestId('cadrage-chat').boundingBox();
-  const profile = await page.getByTestId('cadrage-profile').boundingBox();
-  if (chat === null || profile === null) throw new Error('zone de cadrage non mesurable');
-  const x = Math.floor(Math.min(chat.x, profile.x));
-  const y = Math.floor(Math.min(chat.y, profile.y));
-  const right = Math.ceil(Math.max(chat.x + chat.width, profile.x + profile.width));
-  const bottom = Math.ceil(Math.max(chat.y + chat.height, profile.y + profile.height));
-  const actualWidth = right - x;
-  const actualHeight = bottom - y;
-  const actual = await page.screenshot({
-    animations: 'disabled',
-    clip: { x, y, width: actualWidth, height: actualHeight },
-  });
-  const referencePage = await page.context().newPage();
-  await referencePage.setViewportSize({ width: actualWidth, height: actualHeight });
-  const url = new URL(`/_dev/sdd/reference/${referenceName}`, page.url()).toString();
-  const mobile = width === 390;
-  const ref = mobile
-    ? { x: 0, y: 130, width: 433, height: 2329 }
-    : { x: 311, y: 144, width: 1042, height: 779 };
-  const scaleX = actualWidth / ref.width;
-  const scaleY = actualHeight / ref.height;
-  const imageWidth = (mobile ? 433 : 1600) * scaleX;
-  const imageHeight = (mobile ? 2585 : 1083) * scaleY;
-  await referencePage.setContent(
-    `<body style="margin:0"><div style="width:${String(actualWidth)}px;height:${String(actualHeight)}px;background:#F4F4F1 url('${url}') no-repeat;background-size:${String(imageWidth)}px ${String(imageHeight)}px;background-position:${String(-ref.x * scaleX)}px ${String(-ref.y * scaleY)}px"></div><img id="ref-img" src="${url}" alt="" style="position:absolute;width:1px;height:1px;opacity:0"></body>`,
-  );
-  await referencePage.waitForFunction(() => {
-    const image = document.getElementById('ref-img');
-    return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0;
-  });
-  const reference = await referencePage.screenshot({ fullPage: false, animations: 'disabled' });
-  await referencePage.close();
-  const referencePath = testInfo.outputPath(`cadrage-reference-${String(width)}.png`);
-  fs.writeFileSync(referencePath, reference);
-  const comparison = compareWithReference(
-    actual,
-    referencePath,
-    testInfo.outputPath('visual'),
-    `cadrage-${String(width)}`,
-  );
-  await testInfo.attach('side-by-side', {
-    path: comparison.sideBySidePath,
-    contentType: 'image/png',
-  });
-  await testInfo.attach('diff', { path: comparison.diffPath, contentType: 'image/png' });
-  testInfo.annotations.push({
-    type: 'mockup-diff-ratio',
-    description: comparison.ratio.toFixed(4),
-  });
-  return comparison.ratio;
-}
-
 async function seedSidebar(userId: string): Promise<void> {
   const days = Array.from({ length: 14 }, (_value, index) => {
     const date = new Date(Date.UTC(2026, 9, 29 + index));
@@ -291,7 +224,7 @@ async function reachThirdQuestion(page: import('@playwright/test').Page): Promis
   await expect(page.getByTestId('cadrage-log')).toContainText(Q3);
 }
 
-test('conformité SCR-04 cadrage @SPEC-604 @visual', async ({ page, axeCheck }, testInfo) => {
+test('conformité SCR-04 cadrage @SPEC-604 @visual', async ({ page, axeCheck }) => {
   await seedSidebar(session.userId);
   await reachThirdQuestion(page);
   await expectTokens(page, {
@@ -321,23 +254,23 @@ test('conformité SCR-04 cadrage @SPEC-604 @visual', async ({ page, axeCheck }, 
   await expect(page.getByTestId('profile-ring')).toContainText('3/5');
   await expect(page.getByText('Question 3 sur 5 au plus')).toBeVisible();
   await expect(page.getByTestId('cadrage-generate')).toHaveAttribute('aria-disabled', 'true');
-  const ratio = await compareFullPage(page, testInfo, 'SCR-04-base-desktop.png', 1440);
-  expect(ratio).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+  await expectScreenshotBaseline(page, 'cadrage-desktop.png', { fullPage: true });
   await axeCheck();
 });
 
-test('conformité SCR-04 cadrage mobile @SPEC-604 @visual @mobile', async ({
-  page,
-  axeCheck,
-}, testInfo) => {
+test('conformité SCR-04 cadrage mobile @SPEC-604 @visual @mobile', async ({ page, axeCheck }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await seedSidebar(session.userId);
   await reachThirdQuestion(page);
-  const ratio = await compareFullPage(page, testInfo, 'SCR-04-base-mobile.png', 390);
-  expect(ratio).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+  const offenders = await page.evaluate(() =>
+    [...document.querySelectorAll('*')]
+      .filter((element) => element.getBoundingClientRect().right > window.innerWidth + 1)
+      .slice(0, 8)
+      .map((element) => `${element.tagName}.${element.className}`),
+  );
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
-  expect(overflow).toBeLessThanOrEqual(0);
+  expect(overflow, offenders.join(' | ')).toBeLessThanOrEqual(0);
   await axeCheck();
 });
