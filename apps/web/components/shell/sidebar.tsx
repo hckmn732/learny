@@ -35,6 +35,7 @@ import { fr } from '../../messages/fr';
 import { ActiveLimitDialog } from '../formations/ActiveLimitDialog';
 
 import { FormationSwitcher } from './FormationSwitcher';
+import { StreakBlock } from './StreakBlock';
 
 const t = fr.shell.sidebar;
 
@@ -62,21 +63,6 @@ function isCompactViewport(): boolean {
 function isActivePath(pathname: string, href: string): boolean {
   if (href === '/accueil') return pathname === '/accueil' || pathname === '/';
   return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function dayLabel(date: string): string {
-  const [year = 0, month = 1, day = 1] = date.split('-').map(Number);
-  return new Intl.DateTimeFormat('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    timeZone: 'UTC',
-  }).format(new Date(Date.UTC(year, month - 1, day)));
-}
-
-function streakStatusLabel(status: SidebarDto['streak']['regularity'][number]['status']): string {
-  if (status === 'done') return t.streakDone;
-  if (status === 'neutral') return t.streakNeutral;
-  return t.streakNone;
 }
 
 interface SidebarLinkProps {
@@ -440,47 +426,7 @@ export const SidebarView = ({
             </section>
           )}
 
-          {status === 'ready' && data !== null ? (
-            <div
-              data-testid="sidebar-streak"
-              className="mt-auto flex flex-col gap-6 rounded-14 bg-dark-800 px-14 py-12"
-            >
-              <div className="flex items-baseline justify-between gap-8">
-                <span className="text-11 font-600 uppercase tracking-eyebrow text-on-dark-muted">
-                  {t.series}
-                </span>
-                <span
-                  data-testid="sidebar-streak-count"
-                  className="font-display text-20 font-600 text-white"
-                >
-                  {t.streakDays(data.streak.days)}
-                </span>
-              </div>
-              <ol aria-label={t.regularity} className="m-0 grid list-none grid-cols-7 gap-4 p-0">
-                {data.streak.regularity.map((day) => (
-                  <li
-                    key={day.date}
-                    data-testid="sidebar-streak-day"
-                    data-date={day.date}
-                    data-status={day.status}
-                    className={cn(
-                      'h-10 rounded-3',
-                      day.status === 'done'
-                        ? 'bg-lime'
-                        : day.status === 'neutral'
-                          ? 'bg-dark-500'
-                          : 'bg-dark-600',
-                    )}
-                  >
-                    <span className="sr-only">
-                      {dayLabel(day.date)}&nbsp;: {streakStatusLabel(day.status)}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-              <p className="m-0 text-11 text-on-dark-muted">{t.regularity}</p>
-            </div>
-          ) : null}
+          {status === 'ready' && data !== null ? <StreakBlock streak={data.streak} /> : null}
         </aside>
       )}
     </>
