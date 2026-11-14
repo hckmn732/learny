@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { CivilDate, IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 import { LEARNING_GAP_NATURES } from './learning';
+import { MilestoneItem } from './serie-regularite-et-jalons-interface';
 
 // Final review of a completed formation (SCR-16, SPEC-617 EF-1 to EF-4, ET-1 to ET-5;
 // BR-FOR-12, BR-PRO-03, ADR-0015).
@@ -117,6 +118,8 @@ export const FinalReviewDto = z
     /** BR-PRO-03 — notions still due in a light interview, zero after stop. */
     dueCount: z.number().int().min(0),
     maintenance: FinalReviewMaintenance,
+    /** SPEC-723 EF-3 — every milestone actually reached, with its local date (BR-GAM-03). */
+    milestones: z.array(MilestoneItem).max(500),
     /** Stable link to the full notion map (SPEC-616), frozen at the completion instant. */
     mapHref: z.string().min(1).max(2048),
     /** Optimistic guard of POST /maintenance (CL-2). */

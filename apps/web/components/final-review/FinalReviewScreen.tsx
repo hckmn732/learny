@@ -6,6 +6,7 @@ import { fr } from '../../messages/fr';
 
 import { FragileNotions } from './FragileNotions';
 import { MaintenanceChoice } from './MaintenanceChoice';
+import { MilestoneList } from './MilestoneList';
 import { NotionMap } from './NotionMap';
 import { FinalReviewStats } from './Stats';
 
@@ -86,6 +87,8 @@ export function FinalReviewScreen({ data }: Readonly<{ data: FinalReviewDto }>) 
           </ul>
         )}
       </section>
+
+      <MilestoneList milestones={data.milestones} timezone={data.timezone} />
 
       <NotionMap modules={data.modules} mapHref={data.mapHref} />
 

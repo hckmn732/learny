@@ -235,6 +235,12 @@ export const fr = {
             : `${String(count)} notions sont solides et rejoignent votre mémoire durable.`,
       empty: 'Aucun acquis mesuré.',
     },
+    milestones: {
+      title: 'Jalons atteints',
+      description: 'Des repères personnels et sobres, sans classement ni récompense de vitesse.',
+      empty: 'Aucun jalon atteint pour l’instant.',
+      achieved: (date: string) => `Atteint le ${date}`,
+    },
     fragile: {
       title: 'Notions fragiles',
       description:

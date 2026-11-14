@@ -1,0 +1,69 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="1" errors="0" time="40.381355000000006">
+<testsuite name="p7/spec-723.spec.ts" timestamp="2026-11-14T11:18:17.699Z" hostname="desktop" tests="3" failures="0" skipped="1" time="5.092" errors="0">
+<testcase name="parcours SPEC-723 @SPEC-723" classname="p7/spec-723.spec.ts" time="2.977">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/attachments/spec-723-serie-jalons-759e3d2aff1a19cbf87eb877e61d817cb3b221b1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/attachments/axe-ae9730be755df7bf8433eb16e8cb79a6c2e377b5.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-parcours-SPEC-723-SPEC-723-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-03 série @SPEC-723 @visual" classname="p7/spec-723.spec.ts" time="1.879">
+<properties>
+<property name="mockup-diff-ratio" value="0.0888">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/attachments/streak-block-side-by-side-4f909f7b565f930a172f6ba00134680d9479441f.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/attachments/streak-block-diff-e109594772997c4db69da56d8bad62587b359d42.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/attachments/axe-ed89cad64561f0f61e5c78319a2fb290f31a7ddd.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-03-série-SPEC-723-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-03 série mobile @SPEC-723 @visual @mobile" classname="p7/spec-723.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-723.spec.ts" timestamp="2026-11-14T11:18:17.699Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.842" errors="0">
+<testcase name="conformité SCR-03 série mobile @SPEC-723 @visual @mobile" classname="p7/spec-723.spec.ts" time="1.842">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-744e2-bile-SPEC-723-visual-mobile-mobile/attachments/axe-0f7e5a7c1120cc42ab18e269c394260bb1cc8604.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-744e2-bile-SPEC-723-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-744e2-bile-SPEC-723-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-744e2-bile-SPEC-723-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-723-conformité-SCR-744e2-bile-SPEC-723-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

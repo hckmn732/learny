@@ -1,12 +1,13 @@
 import { ENGINE, GAP_NATURE_LABELS } from '@learny/config/product';
 import type { FinalReviewDto, FinalReviewMode, FinalReviewNotion } from '@learny/contracts';
-import { AppError } from '@learny/core';
+import { AppError, userLocalDay } from '@learny/core';
 import { formationMonogram } from '@learny/db';
 import { calculateProgress } from '@learny/learning-engine';
 
 import { trainingTarget } from '../gaps/links';
 import { completedSummary } from '../home/derive';
 import { evidenceOf } from '../quiz/result';
+import { milestoneLabel } from '../serie-regularite-et-jalons-interface';
 
 // Pure projection of the final review (SPEC-617 EF-1 to EF-3, ET-5; BR-FOR-12, BR-PRO-03).
 //
@@ -66,11 +67,24 @@ export interface FinalReviewSlotRow {
   [key: string]: unknown;
 }
 
+/** SPEC-723 EF-3 — one milestone of the learner, with its local achievement date. */
+export interface FinalReviewMilestoneRow {
+  id: string;
+  key: string;
+  ref_id: string | null;
+  formation_id: string | null;
+  formation_title: string | null;
+  module_title: string | null;
+  achieved_at: Date | string;
+  [key: string]: unknown;
+}
+
 export interface FinalReviewSource {
   formation: FinalReviewFormationRow;
   modules: readonly FinalReviewModuleRow[];
   notions: readonly FinalReviewNotionRow[];
   slots: readonly FinalReviewSlotRow[];
+  milestones: readonly FinalReviewMilestoneRow[];
   retention: { oneMonth: number | null; twoMonths: number | null };
   programVersion: number | null;
   dueCount: number;
@@ -254,6 +268,22 @@ export function buildFinalReview(source: FinalReviewSource): FinalReviewDto {
     })),
     dueCount: dueCountFor(mode, source.dueCount),
     maintenance: maintenanceEffects(mode),
+    milestones: source.milestones.map((milestone) => {
+      const key =
+        milestone.key === 'module_validated' && milestone.ref_id !== null
+          ? `module_validated:${milestone.ref_id}`
+          : milestone.key;
+      return {
+        id: milestone.id,
+        key,
+        kind: milestone.key as FinalReviewDto['milestones'][number]['kind'],
+        label: milestoneLabel(key, milestone.module_title),
+        formationId: milestone.formation_id,
+        formationTitle: milestone.formation_title,
+        achievedAt: toIso(milestone.achieved_at),
+        achievedOn: userLocalDay(toIso(milestone.achieved_at), source.timezone),
+      };
+    }),
     mapHref: `/formations/${encodeURIComponent(formation.id)}/carte`,
     updatedAt: toIso(formation.updated_at),
     generatedAt: source.now.toISOString(),

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T11:02:49.177Z",
+  "updatedAt": "2026-11-14T11:27:04.615Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5110,14 +5110,55 @@
       "validations": {}
     },
     "SPEC-723": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T10:17:03.042Z",
+      "completedAt": "2026-11-14T11:18:33.367Z",
+      "branch": "spec/SPEC-723-serie-regularite-et-jalons-interface",
+      "commit": "07ff2dc1",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T11:14:40.101Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T11:15:29.684Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T11:16:06.419Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T11:16:22.890Z",
+          "details": "8 test(s) [SPEC-723] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T11:17:45.249Z",
+          "details": "8 test(s) [SPEC-723] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T11:18:26.860Z",
+          "details": "3 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T11:18:26.860Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T11:18:26.873Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-724": {
       "status": "pending",
