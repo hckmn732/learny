@@ -251,6 +251,20 @@ export const EVENTS = {
     notionIds: z.array(Uuid).max(3),
     text: z.string().min(1).max(500),
   }),
+  // SPEC-705 — a learner moved one future activity, or accepted a BR-FOR-14 replanning.
+  'agenda/slot-moved': z.object({
+    userId: Uuid,
+    slotId: Uuid,
+    newSlotId: Uuid,
+    formationId: Uuid.nullable(),
+    startsAt: IsoDateTime,
+  }),
+  'plan/replanned': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    choice: z.enum(['shift_end', 'increase_volume', 'lighten']),
+    planVersion: z.string().min(1),
+  }),
   'automation/action-proposed': automationAction,
   'automation/action-applied': automationAction,
   'automation/action-undone': automationAction,

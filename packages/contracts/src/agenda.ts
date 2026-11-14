@@ -127,6 +127,16 @@ export const AgendaDto = z.object({
   formations: z.array(AgendaFormation),
   slots: z.array(AgendaSlot),
   totals: AgendaTotals,
+  /** SPEC-705 EF-2 — first non-validated module late enough for BR-FOR-14, if any. */
+  blockedModule: z
+    .object({
+      formationId: Uuid,
+      moduleId: Uuid,
+      moduleNumber: z.number().int().min(1),
+      title: z.string().min(1).max(160),
+      reason: z.enum(['delayed', 'quiz_failed']),
+    })
+    .nullable(),
 });
 export type AgendaDto = z.infer<typeof AgendaDto>;
 

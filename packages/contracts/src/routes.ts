@@ -1,4 +1,5 @@
 import { agendaRoutes } from './agenda';
+import { agendaReplanRoutes } from './agenda-deplacer-et-reajuster-le-planning';
 import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
@@ -44,6 +45,7 @@ import { uploadsDevRoutes, uploadsRoutes } from './uploads';
 // A test checks the uniqueness of `id` and of `method + path`.
 export const ROUTES = {
   ...agendaRoutes,
+  ...agendaReplanRoutes,
   ...healthRoutes,
   ...authRoutes,
   ...meRoutes,

@@ -61,3 +61,4 @@ export * from './resources';
 export * from './review';
 export * from './dev-billing';
 export * from './agenda';
+export * from './agenda-deplacer-et-reajuster-le-planning';

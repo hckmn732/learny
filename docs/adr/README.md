@@ -192,3 +192,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0319](ADR-0319-session-du-jour-groupement-des-briques-donnees-de-demonstrat.md) | Session du jour : groupement des briques, donnees de demonstration et estimation | Déduite | SPEC-701 |
 | [ADR-0321](ADR-0321-reconciliation-sobre-et-idempotente-des-jalons-a-la-lecture.md) | Réconciliation sobre et idempotente des jalons à la lecture | Déduite | SPEC-723, SPEC-409, SPEC-209, SPEC-304 |
 | [ADR-0323](ADR-0323-contrats-correction-et-rendu-des-quatre-jeux-de-memorisation.md) | Contrats, correction et rendu des quatre jeux de mémorisation | Déduite | SPEC-702, ADR-0181, ADR-0024, ADR-0025, ADR-0020, ADR-0180 |
+| [ADR-0324](ADR-0324-version-de-plan-alternatives-et-apercu-des-reajustements-de-.md) | Version de plan, alternatives et aperçu des réajustements de l'agenda | Déduite | SPEC-705, SPEC-704, SPEC-407, ADR-0029, BR-AGE-05, BR-FOR-14, BR-AUT-11 |

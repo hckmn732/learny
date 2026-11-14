@@ -67,6 +67,7 @@ describe('[SPEC-704] agenda : contrats', () => {
         },
       ],
       totals: { plannedMinutes: 60, doneMinutes: 0, marginsRemaining: 0 },
+      blockedModule: null,
     };
     expect(AgendaDto.safeParse(dto).success).toBe(true);
     expect(
