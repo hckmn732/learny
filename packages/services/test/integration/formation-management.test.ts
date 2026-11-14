@@ -16,7 +16,8 @@ import {
   resumeFormation,
   switchCurrentFormation,
 } from '../../src/formations';
-import { getSidebar } from '../../src/sidebar';
+import { getProgrammeScreenState } from '../../src/programme';
+import { getSidebar, selectCurrentFormation } from '../../src/sidebar';
 
 const PREFIX = 'sdd-618-';
 const NOW = new Date('2026-11-11T12:20:00Z');
@@ -172,6 +173,14 @@ async function setCurrent(userId: string, formationId: string | null): Promise<v
 }
 
 afterAll(async () => {
+  // The group owner membership cannot be deleted while the group exists (EF-2, CL-4): drop the
+  // test groups first so the auth-user cascade is allowed.
+  await serviceDb().execute(sql`
+    delete from public.groups
+    where owner_id in (
+      select id from auth.users where email like ${`${PREFIX}%@test.learny.test`}
+    )
+  `);
   await serviceDb().execute(
     sql`delete from auth.users where email like ${`${PREFIX}%@test.learny.test`}`,
   );
@@ -379,6 +388,56 @@ describe('[SPEC-618] gestion des formations', () => {
       select status::text as status from public.formations where id = ${seeded.formationId}::uuid
     `);
     expect(untouched[0]?.status).toBe('active');
+  });
+
+  it('un membre de groupe ouvre une formation partagée (menu latéral)', async () => {
+    const owner = await learner('owner-share');
+    const member = await learner('member-share');
+    const seeded = await formation(owner.userId, 'Gestion de projet agile');
+    const inviteCode = `LRN-${randomUUID().replaceAll('-', '').toUpperCase().replaceAll('0', '2').replaceAll('1', '3').slice(0, 4)}`;
+    await serviceDb().transaction(async (tx) => {
+      const groups = await tx.execute<{ id: string }>(sql`
+        insert into public.groups (formation_id, owner_id, invite_code)
+        values (${seeded.formationId}::uuid, ${owner.userId}::uuid, ${inviteCode})
+        returning id::text as id
+      `);
+      const created = groups[0]?.id;
+      if (created === undefined) throw new Error('groupe non créé');
+      // The owner membership is a deferred constraint: both rows commit together.
+      await tx.execute(sql`
+        insert into public.group_members (group_id, user_id, role, member_status)
+        values (${created}::uuid, ${owner.userId}::uuid, 'owner', 'active')
+      `);
+      await tx.execute(sql`
+        insert into public.group_members (group_id, user_id, role, member_status)
+        values (${created}::uuid, ${member.userId}::uuid, 'member', 'active')
+      `);
+      // RLS exposes a shared formation through its `group_id` (formations_member_select).
+      await tx.execute(sql`
+        update public.formations set group_id = ${created}::uuid
+        where id = ${seeded.formationId}::uuid
+      `);
+      return created;
+    });
+
+    const selected = await selectCurrentFormation(member.ctx, seeded.formationId);
+    expect(selected.ok).toBe(true);
+    if (selected.ok) expect(selected.value.currentFormation?.id).toBe(seeded.formationId);
+
+    await serviceDb().execute(sql`
+      update public.modules
+      set planned_start = '2026-11-02'::date, planned_end = '2026-11-08'::date
+      where formation_id = ${seeded.formationId}::uuid
+    `);
+    const programme = await getProgrammeScreenState(member.ctx, seeded.formationId);
+    expect(programme.ok).toBe(true);
+    if (programme.ok)
+      expect(programme.value).toMatchObject({ formation: { id: seeded.formationId } });
+
+    const outsider = await learner('outsider-share');
+    const denied = await selectCurrentFormation(outsider.ctx, seeded.formationId);
+    expect(denied.ok).toBe(false);
+    if (!denied.ok) expect(denied.error.code).toBe('NOT_FOUND');
   });
 
   it('CL-1/CL-2 — les statuts invalides sont refusés et une version obsolète renvoie 409', async () => {

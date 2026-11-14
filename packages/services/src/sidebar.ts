@@ -126,7 +126,10 @@ async function readFormations(tx: DbTx, userId: string): Promise<SidebarFormatio
            max(m.position) filter (where m.status = 'open')::int as open_position
     from public.formations f
     left join public.modules m on m.formation_id = f.id
-    where f.owner_id = ${userId}::uuid
+    where (
+        f.owner_id = ${userId}::uuid
+        or (f.group_id is not null and public.is_group_member(f.group_id))
+      )
       and f.status in ('active', 'paused')
     group by f.id, f.title, f.monogram, f.accent_color, f.status, f.last_opened_at, f.created_at
     order by f.last_opened_at desc nulls last, f.created_at desc
@@ -249,11 +252,22 @@ async function selectCurrentFormationInTx(
   formationId: string,
 ): Promise<void> {
   const rows = await tx.execute<IdRow>(sql`
-    select id::text as id
-    from public.formations
-    where id = ${formationId}::uuid
-      and owner_id = ${userId}::uuid
-      and status in ('active', 'paused', 'completed')
+    select f.id::text as id
+    from public.formations f
+    where f.id = ${formationId}::uuid
+      and (
+        f.owner_id = ${userId}::uuid
+        or exists (
+          select 1
+          from public.groups g
+          join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = ${userId}::uuid
+            and gm.member_status = 'active'
+            and gm.left_at is null
+        )
+      )
+      and f.status in ('active', 'paused', 'completed')
   `);
   if (rows[0] === undefined) {
     throw new AppError('NOT_FOUND', 'Formation introuvable.');

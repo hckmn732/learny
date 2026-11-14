@@ -73,11 +73,18 @@ interface NotionRow {
   short_definition: string | null;
 }
 
+/**
+ * Reads a formation with the caller's RLS client. `owner` (default) is the write/administration
+ * path; `member` also accepts an active group member for the shared read models (RLS already
+ * restricts the row to the owner or a member).
+ */
 export async function readFormation(
   tx: DbTx,
   userId: string,
   formationId: string,
+  access: 'owner' | 'member' = 'owner',
 ): Promise<FormationRow | null> {
+  const ownerFilter = access === 'owner' ? sql`and owner_id = ${userId}::uuid` : sql``;
   const rows = await tx.execute<FormationRow>(sql`
     select id::text as id,
            title,
@@ -92,7 +99,7 @@ export async function readFormation(
            course_language::text as course_language
     from public.formations
     where id = ${formationId}::uuid
-      and owner_id = ${userId}::uuid
+      ${ownerFilter}
     limit 1
   `);
   return rows[0] ?? null;

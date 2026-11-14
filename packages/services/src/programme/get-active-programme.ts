@@ -133,7 +133,7 @@ export async function readActiveProgramme(
   now: Date,
   knownFormation?: FormationRow,
 ): Promise<ActiveProgrammeDtoType> {
-  const formation = knownFormation ?? (await readFormation(tx, userId, formationId));
+  const formation = knownFormation ?? (await readFormation(tx, userId, formationId, 'member'));
   if (formation === null) throw new AppError('NOT_FOUND', 'Formation introuvable.');
   const status = activeStatus(formation.status);
   const profile = await readProfile(tx, userId);
@@ -280,7 +280,7 @@ export function getProgrammeScreenState(
     const fid = parseFormationId(formationId);
     const parsed = ProgrammeGetQuery.parse(query);
     return db.run(async (tx) => {
-      const formation = await readFormation(tx, userId, fid);
+      const formation = await readFormation(tx, userId, fid, 'member');
       if (formation === null) throw new AppError('NOT_FOUND', 'Formation introuvable.');
       if ((ACTIVE_STATUSES as ReadonlySet<string>).has(formation.status)) {
         return readActiveProgramme(tx, userId, fid, ctx.clock.now(), formation);
