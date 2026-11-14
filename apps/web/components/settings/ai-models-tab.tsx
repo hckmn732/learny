@@ -227,7 +227,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         </ul>
       </section>
 
-      <Card as="section" className="p-8" data-testid="ai-task-models">
+      <Card as="section" className="p-8" data-testid="ai-models-tasks">
         <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
           <div className="flex flex-col gap-4">
             <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
@@ -244,7 +244,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
             {t.reset}
           </Button>
         </div>
-        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-task-models-list">
+        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-models-task-list">
           {state.tasks.map((task) => (
             <TaskRow
               busy={busy}

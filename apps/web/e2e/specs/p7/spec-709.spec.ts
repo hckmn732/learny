@@ -312,7 +312,7 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
   await expectTokens(page, {
     body: { 'background-color': '#F4F4F1', color: '#111113' },
     '[data-testid="ai-models-principle"]': { 'background-color': '#111113', color: '#FFFFFF' },
-    '[data-testid="ai-task-models"]': { 'background-color': '#FFFFFF' },
+    '[data-testid="ai-models-tasks"]': { 'background-color': '#FFFFFF' },
     '[data-testid="ai-task-programme"]': { 'background-color': '#F8F8F6' },
     '[data-testid="provider-card"]': { 'background-color': '#FFFFFF' },
   });
@@ -336,8 +336,8 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
         rect: { x: 310, y: 161, width: 1044, height: 121 },
       },
       {
-        name: 'ai-task-models',
-        locator: page.getByTestId('ai-task-models-list'),
+        name: 'ai-models-tasks',
+        locator: page.getByTestId('ai-models-task-list'),
         rect: { x: 311, y: 378, width: 1041, height: 363 },
       },
       {
