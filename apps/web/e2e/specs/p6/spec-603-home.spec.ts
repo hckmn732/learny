@@ -1,6 +1,6 @@
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,
   createTestSession,
@@ -17,6 +17,11 @@ import {
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 
 let session: TestSession;
+
+test.beforeAll(async () => {
+  // The demo dataset is shared by the whole e2e run: restore it before asserting its state.
+  await restoreDemoData();
+});
 
 test.beforeEach(async ({ context, baseURL }) => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
@@ -46,8 +51,8 @@ test('journée d’Alex et navigation depuis l’accueil @SPEC-603', async ({
     'href',
     '/formations/nouvelle',
   );
-  await expect(page.getByTestId('home-day')).toContainText("Aujourd'hui · 4 activités");
-  await expect(page.getByTestId('home-day')).toContainText('5 h prévues · 3 h faites');
+  await expect(page.getByTestId('home-day')).toContainText("Aujourd'hui · 5 activités");
+  await expect(page.getByTestId('home-day')).toContainText('5 h 2 prévues · 3 h faites');
   await expect(page.getByTestId('home-day')).toContainText('Dans 40 min');
   await expect(page.getByTestId('home-day')).toContainText('Commencer le quiz de validation');
   await expect(page.getByTestId('home-retention')).toContainText('Notions retenues à 1 mois');

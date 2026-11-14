@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoId, demoUserId } from '@learny/db/seed/fixtures';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {
   MOCKUP_MAX_DIFF_RATIO,
@@ -63,6 +63,11 @@ async function restoreSeed(): Promise<void> {
     where id = ${ACTION_ID}::uuid
   `);
 }
+
+test.beforeAll(async () => {
+  // The demo dataset is shared by the whole e2e run: restore it before asserting its state.
+  await restoreDemoData();
+});
 
 test.beforeEach(async ({ context, baseURL }) => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');

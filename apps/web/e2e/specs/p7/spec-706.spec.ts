@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,
   createTestSession,
@@ -30,7 +30,13 @@ const QUIZ_ID = '44444444-4444-4444-8444-444444444444';
 
 let session: TestSession;
 
+test.beforeAll(async () => {
+  // The other e2e files mutate the shared demo user: restore before asserting its counts.
+  await restoreDemoData();
+});
+
 test.beforeEach(async ({ context, baseURL }) => {
+  await restoreDemoData();
   session = await createTestSession();
   await serviceDb().execute(sql`
     update public.profiles
@@ -250,6 +256,7 @@ test('producteurs et rappels @SPEC-706', async ({
 });
 
 test('conformité SCR-03 @SPEC-706 @visual @mobile', async ({ page, axeCheck, context, baseURL }, testInfo) => {
+  test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   const alex = DEMO_USERS.find((user) => user.key === 'alex');
   if (alex === undefined) throw new Error('utilisateur démo Alex absent');
   // The demo dataset of SPEC-115 carries the eight rows of the mockup.

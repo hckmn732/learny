@@ -1,7 +1,12 @@
 // Playwright fixtures shared by every e2e test (SPEC-004, ET-2).
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
+
+import { serviceDb, sql } from '@learny/db';
+import { demoUserId } from '@learny/db/seed/fixtures';
 
 import { blockingAxeViolations, formatAxeViolations, runAxe } from './axe';
 import { FIXED_TIME_ISO } from './clock';
@@ -72,6 +77,30 @@ export const test = base.extend<LearnyFixtures>({
     });
   },
 });
+
+/**
+ * Re-applies the SPEC-115 demonstration dataset (idempotent). Specs that assert its pristine
+ * state call it in `beforeAll`: the shared demo user is mutated by the other e2e files of the run.
+ */
+export async function restoreDemoData(): Promise<void> {
+  // Rows created by other specs would make the seed's own counts fail: drop the notifications of
+  // the demo learners first (the seed re-inserts the deterministic ones).
+  await serviceDb().execute(sql`
+    delete from public.notifications
+    where user_id in (
+      ${demoUserId('alex')}::uuid, ${demoUserId('camille')}::uuid, ${demoUserId('hugo')}::uuid
+    )
+  `);
+  const root = fileURLToPath(new URL('../../../', import.meta.url));
+  const seed = spawnSync('pnpm', ['db:seed:demo'], {
+    cwd: root,
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+  });
+  if ((seed.status ?? 1) !== 0) {
+    throw new Error(`Jeu de démonstration indisponible (pnpm db:seed:demo) : ${seed.stderr}`);
+  }
+}
 
 /** The server-rendered instant must match the page clock (fixed on both sides). */
 export async function expectServerTimeMatchesPage(page: Page, serverIso: string): Promise<void> {

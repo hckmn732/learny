@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
 import { createTestProgramme } from '@learny/db/testing';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,
   createTestSession,
@@ -158,6 +158,8 @@ async function restoreDemoSession(): Promise<void> {
 }
 
 test.beforeAll(async () => {
+  // Other e2e files of the run share the demo user: restore the dataset before snapshotting.
+  await restoreDemoData();
   snapshot = await captureSnapshot();
 });
 
@@ -177,6 +179,72 @@ test.afterAll(async () => {
 function quizUrl(formationId = SAP): string {
   return `/formations/${formationId}/quiz-global`;
 }
+
+test('conformité visuelle du quiz global @SPEC-701 @visual', async ({ page, axeCheck }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await page.goto(quizUrl());
+  await expect(page.getByTestId('gq-rail')).toBeVisible();
+
+  await expectTokens(page, {
+    body: { 'background-color': colors.canvas, color: colors.ink },
+    '[data-testid="gq-pill-notions"]': {
+      'background-color': colors.surface,
+      'border-color': colors.border,
+      'border-radius': '999px',
+    },
+    '[data-testid="gq-mode-full"]': {
+      'background-color': colors.ink,
+      color: colors.white,
+    },
+    '[data-testid="gq-rationale"]': { 'background-color': colors.ink },
+    '[data-testid="gq-rationale"] h2': { color: colors.lime },
+    '[data-testid="gq-rail"]': {
+      'background-color': colors.surface,
+      'border-radius': '21.6px',
+    },
+    '[data-testid="gq-game"]': {
+      'background-color': colors.surface,
+      'border-radius': '21.6px',
+    },
+    '[data-testid="gq-game-tech"]': {
+      'background-color': colors['violet-soft'],
+      color: colors['violet-ink'],
+    },
+    '[data-testid="gq-next"]': { 'background-color': colors.lime },
+  });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-size', '30.6px');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-weight', '600');
+
+  const content = page.getByTestId('global-quiz-page');
+  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
+  const comparison = compareWithReferenceRegion(
+    actual,
+    `${REFERENCE_DIR}SCR-10-base-desktop.png`,
+    REFERENCE_DESKTOP,
+    testInfo.outputPath('visual'),
+    'spec-701-desktop',
+  );
+  await testInfo.attach('spec-701-desktop-side-by-side', {
+    path: comparison.sideBySidePath,
+    contentType: 'image/png',
+  });
+  await testInfo.attach('spec-701-desktop-diff', {
+    path: comparison.diffPath,
+    contentType: 'image/png',
+  });
+  testInfo.annotations.push({
+    type: 'mockup-diff-ratio',
+    description: `spec-701-desktop:${comparison.ratio.toFixed(4)}`,
+  });
+  expect(comparison.ratio, 'écart à la maquette').toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(quizUrl());
+  await expect(page.getByTestId('gq-rail')).toBeVisible();
+  await expectScreenshotBaseline(page, 'global-quiz-recto.png');
+  await axeCheck();
+});
 
 test('session du jour et carte de rappel @SPEC-701', async ({
   page,
@@ -401,70 +469,4 @@ test('état vide @SPEC-701', async ({ browser, baseURL }) => {
     await context.close();
     await deleteTestSession(emptySession);
   }
-});
-
-test('conformité visuelle du quiz global @SPEC-701 @visual', async ({ page, axeCheck }, testInfo) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto(quizUrl());
-  await expect(page.getByTestId('gq-rail')).toBeVisible();
-
-  await expectTokens(page, {
-    body: { 'background-color': colors.canvas, color: colors.ink },
-    '[data-testid="gq-pill-notions"]': {
-      'background-color': colors.surface,
-      'border-color': colors.border,
-      'border-radius': '999px',
-    },
-    '[data-testid="gq-mode-full"]': {
-      'background-color': colors.ink,
-      color: colors.white,
-    },
-    '[data-testid="gq-rationale"]': { 'background-color': colors.ink },
-    '[data-testid="gq-rationale"] h2': { color: colors.lime },
-    '[data-testid="gq-rail"]': {
-      'background-color': colors.surface,
-      'border-radius': '21.6px',
-    },
-    '[data-testid="gq-game"]': {
-      'background-color': colors.surface,
-      'border-radius': '21.6px',
-    },
-    '[data-testid="gq-game-tech"]': {
-      'background-color': colors['violet-soft'],
-      color: colors['violet-ink'],
-    },
-    '[data-testid="gq-next"]': { 'background-color': colors.lime },
-  });
-  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-size', '30.6px');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-weight', '600');
-
-  const content = page.getByTestId('global-quiz-page');
-  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
-  const comparison = compareWithReferenceRegion(
-    actual,
-    `${REFERENCE_DIR}SCR-10-base-desktop.png`,
-    REFERENCE_DESKTOP,
-    testInfo.outputPath('visual'),
-    'spec-701-desktop',
-  );
-  await testInfo.attach('spec-701-desktop-side-by-side', {
-    path: comparison.sideBySidePath,
-    contentType: 'image/png',
-  });
-  await testInfo.attach('spec-701-desktop-diff', {
-    path: comparison.diffPath,
-    contentType: 'image/png',
-  });
-  testInfo.annotations.push({
-    type: 'mockup-diff-ratio',
-    description: `spec-701-desktop:${comparison.ratio.toFixed(4)}`,
-  });
-  expect(comparison.ratio, 'écart à la maquette').toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
-
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(quizUrl());
-  await expect(page.getByTestId('gq-rail')).toBeVisible();
-  await expectScreenshotBaseline(page, 'global-quiz-recto.png');
-  await axeCheck();
 });
