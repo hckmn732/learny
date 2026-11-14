@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T13:41:05.008Z",
+  "updatedAt": "2026-11-14T13:56:12.117Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4973,52 +4973,52 @@
       "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-14T12:44:52.133Z",
-      "completedAt": "2026-11-14T13:41:05.005Z",
       "branch": "spec/SPEC-709-parametres-modeles-d-ia",
-      "commit": "b5a76d17",
+      "commit": "7b5a2262",
       "lastError": null,
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-14T13:38:18.148Z",
+          "at": "2026-11-14T13:52:34.413Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-14T13:38:19.513Z",
+          "at": "2026-11-14T13:52:50.683Z",
           "details": ""
         },
         "build": {
           "status": "passed",
-          "at": "2026-11-14T13:38:19.972Z",
+          "at": "2026-11-14T13:53:14.651Z",
           "details": ""
         },
         "unit": {
           "status": "passed",
-          "at": "2026-11-14T13:38:39.180Z",
+          "at": "2026-11-14T13:53:33.239Z",
           "details": "13 test(s) [SPEC-709] réussi(s), 0 échec(s)"
         },
         "integration": {
           "status": "passed",
-          "at": "2026-11-14T13:40:11.129Z",
+          "at": "2026-11-14T13:55:06.189Z",
           "details": "10 test(s) [SPEC-709] réussi(s), 0 échec(s)"
         },
         "e2e": {
           "status": "passed",
-          "at": "2026-11-14T13:40:54.872Z",
+          "at": "2026-11-14T13:55:49.547Z",
           "details": "3 réussi(s), 0 échec(s), 7 vidéo(s)"
         },
         "visual": {
           "status": "passed",
-          "at": "2026-11-14T13:40:54.872Z",
+          "at": "2026-11-14T13:55:49.547Z",
           "details": "2 test(s) @visual réussi(s) (mode mockup)"
         },
         "acceptance": {
           "status": "passed",
-          "at": "2026-11-14T13:40:54.887Z",
+          "at": "2026-11-14T13:55:49.562Z",
           "details": "4/4 critères ✅"
         }
-      }
+      },
+      "completedAt": "2026-11-14T13:56:12.114Z"
     },
     "SPEC-710": {
       "status": "pending",
