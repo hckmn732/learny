@@ -23,3 +23,5 @@ export type {
 } from './apply-result';
 export { getDueNotions } from './get-due-notions';
 export { persistPlan } from './persist-plan';
+export { completeScheduleSlot } from './slots';
+export type { CompleteSlotResult } from './slots';

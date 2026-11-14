@@ -203,11 +203,13 @@ export const NOTIFICATION_TEMPLATES: Record<NotificationType, NotificationTempla
     'reminder',
     () => 'Une séance à replacer',
     (data, tone) =>
-      toneOf(
-        tone,
-        `« ${text(data, 'title', 'Séance de travail')} » n’a pas eu lieu. Vous pouvez la replacer dans l’agenda.`,
-        `« ${text(data, 'title', 'Séance de travail')} » n’a pas eu lieu. Tu peux la replacer dans l’agenda.`,
-      ),
+      typeof data.summary === 'string' && data.summary.trim() !== ''
+        ? data.summary.trim()
+        : toneOf(
+            tone,
+            `« ${text(data, 'title', 'Séance de travail')} » n’a pas eu lieu. Vous pouvez la replacer dans l’agenda.`,
+            `« ${text(data, 'title', 'Séance de travail')} » n’a pas eu lieu. Tu peux la replacer dans l’agenda.`,
+          ),
     (data) => hrefOf(data, '/agenda'),
   ),
   weekly_review: definition(
@@ -297,25 +299,39 @@ export const NOTIFICATION_TEMPLATES: Record<NotificationType, NotificationTempla
   relaunch: definition(
     'play-circle',
     'reminder',
-    (_data, tone) => toneOf(tone, 'Reprenez votre formation', 'Reprends ta formation'),
     (data, tone) =>
       toneOf(
         tone,
-        `« ${formationLabel(data)} » vous attend. Une courte séance suffit pour repartir.`,
-        `« ${formationLabel(data)} » t’attend. Une courte séance suffit pour repartir.`,
+        text(data, 'titleOverride', 'Reprenez votre formation'),
+        text(data, 'titleOverride', 'Reprends ta formation'),
       ),
+    (data, tone) =>
+      typeof data.bodyOverride === 'string' && data.bodyOverride.trim() !== ''
+        ? data.bodyOverride.trim()
+        : toneOf(
+            tone,
+            `« ${formationLabel(data)} » vous attend. Une courte séance suffit pour repartir.`,
+            `« ${formationLabel(data)} » t’attend. Une courte séance suffit pour repartir.`,
+          ),
     formationHref,
   ),
   planning_adjusted: definition(
     'calendar',
     'reminder',
-    (_data, tone) => toneOf(tone, 'Votre planning a été ajusté', 'Ton planning a été ajusté'),
     (data, tone) =>
       toneOf(
         tone,
-        `Les séances de « ${formationLabel(data)} » ont été réorganisées. Consultez l’agenda.`,
-        `Les séances de « ${formationLabel(data)} » ont été réorganisées. Consulte l’agenda.`,
+        text(data, 'titleOverride', 'Votre planning a été ajusté'),
+        text(data, 'titleOverride', 'Ton planning a été ajusté'),
       ),
+    (data, tone) =>
+      typeof data.bodyOverride === 'string' && data.bodyOverride.trim() !== ''
+        ? data.bodyOverride.trim()
+        : toneOf(
+            tone,
+            `Les séances de « ${formationLabel(data)} » ont été réorganisées. Consultez l’agenda.`,
+            `Les séances de « ${formationLabel(data)} » ont été réorganisées. Consulte l’agenda.`,
+          ),
     (data) => hrefOf(data, '/agenda'),
   ),
 };

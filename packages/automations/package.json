@@ -5,17 +5,20 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./moteur-d-automatismes": "./src/moteur-d-automatismes.ts"
+    "./moteur-d-automatismes": "./src/moteur-d-automatismes.ts",
+    "./reprise": "./src/reprise/index.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/jobs": "workspace:*",
+    "@learny/learning-engine": "workspace:*",
     "@learny/notifications": "workspace:*",
     "@learny/services": "workspace:*",
     "drizzle-orm": "^0.45.2",
