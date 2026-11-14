@@ -53,3 +53,4 @@ export * from './question-bank/index';
 export * from './mock-exams/index';
 export * from './remediation/index';
 export * from './automations';
+export * from './agenda-deplacer-et-reajuster-le-planning';
