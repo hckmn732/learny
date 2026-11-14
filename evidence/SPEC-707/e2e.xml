@@ -1,0 +1,81 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="1" errors="0" time="41.395724">
+<testsuite name="p7/spec-707.spec.ts" timestamp="2026-11-14T09:24:15.578Z" hostname="desktop" tests="3" failures="0" skipped="1" time="6.435" errors="0">
+<testcase name="parcours SPEC-707 @SPEC-707" classname="p7/spec-707.spec.ts" time="4.079">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/attachments/spec-707-parametres-profil-0473ca1c9c09fa9112a9018923e082ef1aa8aab7.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/attachments/axe-61b17081937460d2261c565d49dc4bc7db28edbf.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-parcours-SPEC-707-SPEC-707-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-15 @SPEC-707 @visual" classname="p7/spec-707.spec.ts" time="2.097">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/settings-tabs-side-by-side-76d28d5ba65e8e48ee5a290def3baa49e4994c1c.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/settings-tabs-diff-d57c87494dadb3ad63d33edbce56e110148de2a3.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-identity-side-by-side-477ee631aaae889514ca125f5d211fdc634e20c6.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-identity-diff-a88ea263f0f44c823af0108c62fa33a14d98df8a.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-rhythm-side-by-side-21c731ef74eb0fb7f9d5df9a783465c9086340be.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-rhythm-diff-8ec9c536ded9eb31eae01776d3c1f9734ea32256.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/data-privacy-side-by-side-f0d51073a55666ebf075547473530d6a43996d1a.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/data-privacy-diff-a2221da6e195f970d814237c47447560fe10f0aa.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-save-side-by-side-f04539cc205cd1beafd0b43082fcd87b397595b8.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/profile-save-diff-ac411306b9b05de5fb3e7ea3fb3e48d37a5a737f.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/attachments/axe-783b01d752975722ee005998a0f454a5abaffdb2.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-SPEC-707-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-15 mobile @SPEC-707 @visual @mobile" classname="p7/spec-707.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-707.spec.ts" timestamp="2026-11-14T09:24:15.578Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.531" errors="0">
+<testcase name="conformité SCR-15 mobile @SPEC-707 @visual @mobile" classname="p7/spec-707.spec.ts" time="1.531">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-mobile-SPEC-707-visual-mobile-mobile/attachments/axe-bf02e4335d013ee2f9ff4d46780441825372450f.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-mobile-SPEC-707-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-mobile-SPEC-707-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-mobile-SPEC-707-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-707-conformité-SCR-15-mobile-SPEC-707-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
