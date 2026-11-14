@@ -1,0 +1,494 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-712/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-712",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-712/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3115",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-712/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3115",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-712/test-results/sdd/SPEC-712/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-712/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-712/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3115/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3115",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p7/automations/reprise.spec.ts",
+      "file": "p7/automations/reprise.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bandeau de reprise : autre créneau puis annuler @SPEC-712",
+          "ok": true,
+          "tags": [
+            "SPEC-712"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4382,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T12:19:32.851Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "accueil-bandeau-defaut",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-defaut-e340b92e42c9fa7fafe46b5416e295df1154e242.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/axe-896fdaafe942ee5afb3f2c2f96f71f0c1a3fbb95.json"
+                    },
+                    {
+                      "name": "accueil-bandeau-deplie",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-deplie-b960339ade72e4b6b721b3688f33f672282d6f5e.png"
+                    },
+                    {
+                      "name": "accueil-bandeau-replace",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-replace-8bc7e97a5be2a6b9184812da95793ee6dd572cdb.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/axe-7f7279b20ce8009f10b5faaaf6c443f74ebb59f3.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4359854d97d04c713c1-420e290d2df39f0e3402",
+          "file": "p7/automations/reprise.spec.ts",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "title": "refus : ne pas replacer @SPEC-712",
+          "ok": true,
+          "tags": [
+            "SPEC-712"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1929,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T12:19:37.571Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parametres-journal-refus",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/attachments/parametres-journal-refus-3f7d1ac265bf3bab85bcf6267dc465e8988c63af.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/attachments/axe-0b291eac17c721f6f5072295c5aa847ac7b50379.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4359854d97d04c713c1-70aea94ba86d4743a529",
+          "file": "p7/automations/reprise.spec.ts",
+          "line": 156,
+          "column": 1
+        },
+        {
+          "title": "accueil avec bandeau conforme à la maquette @SPEC-712 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-712",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-bandeau:0.0841"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1914,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T12:19:39.613Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-bandeau:0.0841"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/axe-6d0d7d3fbe4a8f52b2c4431cc599f8fbfcd8bcdb.json"
+                    },
+                    {
+                      "name": "accueil-bandeau-visuel",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/accueil-bandeau-visuel-33cf702c7e881de801db40783553acd1b115ff30.png"
+                    },
+                    {
+                      "name": "SCR-03-bandeau-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/SCR-03-bandeau-side-by-side-8867c456868a8cf7a9ce5b72af8cfa25ff177ec3.png"
+                    },
+                    {
+                      "name": "SCR-03-bandeau-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/SCR-03-bandeau-diff-2de3c9dc7c3ddb28872af8c4f9e02deb24e7c82f.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-712/test-results/artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d4359854d97d04c713c1-5fa3ca354a75646db99e",
+          "file": "p7/automations/reprise.spec.ts",
+          "line": 173,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T12:18:56.942Z",
+    "duration": 44808.189,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
