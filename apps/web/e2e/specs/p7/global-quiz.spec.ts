@@ -88,10 +88,10 @@ async function captureSnapshot(): Promise<DemoSnapshot> {
     from public.daily_activity where user_id = ${demoUserId('alex')}::uuid
   `);
   return {
-    states,
+    states: states.map((row) => ({ ...row })),
     streakDays: profiles[0]?.streak_days ?? 0,
     streakComputedOn: profiles[0]?.streak_computed_on ?? null,
-    daily,
+    daily: daily.map((row) => ({ ...row, sources: [...row.sources] })),
   };
 }
 
@@ -107,26 +107,35 @@ async function restoreDemoSession(): Promise<void> {
     where user_id = ${demoUserId('alex')}::uuid
       and reviewed_at >= ${NOW}::timestamptz
   `);
-  for (const state of snapshot.states) {
-    await serviceDb().execute(sql`
-      update public.notion_states set
-        fsrs = ${JSON.stringify(state.fsrs)}::jsonb,
-        due_at = ${state.due_at}::timestamptz,
-        mastery = ${state.mastery}::numeric,
-        first_seen_at = ${state.first_seen_at}::timestamptz,
-        last_seen_at = ${state.last_seen_at}::timestamptz,
-        success_count = ${state.success_count},
-        gap_nature = ${state.gap_nature}::public.gap_nature,
-        gap_confused_with = ${state.gap_confused_with}::uuid,
-        gap_detected_at = ${state.gap_detected_at}::timestamptz,
-        gap_evidence = ${state.gap_evidence},
-        gap_cleared_at = ${state.gap_cleared_at}::timestamptz,
-        suspended = ${state.suspended},
-        in_review = ${state.in_review},
-        revision = ${state.revision}
-      where user_id = ${demoUserId('alex')}::uuid and notion_id = ${state.notion_id}::uuid
+  await serviceDb().transaction(async (tx) => {
+    // Lock the rows first: a late answer transaction of the previous test commits before this one,
+    // so the restored FSRS values are the last write (the test clock is frozen).
+    await tx.execute(sql`
+      select 1 from public.notion_states
+      where user_id = ${demoUserId('alex')}::uuid
+      for update
     `);
-  }
+    for (const state of snapshot.states) {
+      await tx.execute(sql`
+        update public.notion_states set
+          fsrs = ${JSON.stringify(state.fsrs)}::jsonb,
+          due_at = ${state.due_at}::timestamptz,
+          mastery = ${state.mastery}::numeric,
+          first_seen_at = ${state.first_seen_at}::timestamptz,
+          last_seen_at = ${state.last_seen_at}::timestamptz,
+          success_count = ${state.success_count},
+          gap_nature = ${state.gap_nature}::public.gap_nature,
+          gap_confused_with = ${state.gap_confused_with}::uuid,
+          gap_detected_at = ${state.gap_detected_at}::timestamptz,
+          gap_evidence = ${state.gap_evidence},
+          gap_cleared_at = ${state.gap_cleared_at}::timestamptz,
+          suspended = ${state.suspended},
+          in_review = ${state.in_review},
+          revision = ${state.revision}
+        where user_id = ${demoUserId('alex')}::uuid and notion_id = ${state.notion_id}::uuid
+      `);
+    }
+  });
   await serviceDb().execute(sql`
     update public.profiles
     set streak_days = ${snapshot.streakDays},
@@ -186,7 +195,7 @@ test('session du jour et carte de rappel @SPEC-701', async ({
   await expect(page.getByTestId('gq-pill-duration')).toHaveText('≈ 10 min');
 
   await expect(page.getByTestId('gq-mode-full')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByTestId('gq-mode-micro')).toBeDisabled();
+  await expect(page.getByTestId('gq-mode-micro')).toBeEnabled();
   await expect(page.getByTestId('gq-mode-note')).toContainText(
     '18 notions étaient dues aujourd’hui : 4 sont reportées à jeudi pour que vos révisions restent sous 15 min.',
   );
