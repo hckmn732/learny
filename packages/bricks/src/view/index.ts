@@ -42,6 +42,7 @@ export type {
   OpenQuestionResponse,
   OrderingResponse,
   RecallCardResponse,
+  RecallCardTestIds,
 } from '../view-types';
 export type {
   CategorizationCorrection,

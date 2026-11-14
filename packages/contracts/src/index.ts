@@ -56,5 +56,6 @@ export * from './course-media';
 export * from './course';
 export * from './course-reading';
 export * from './resources';
+export * from './review';
 export * from './dev-billing';
 export * from './agenda';

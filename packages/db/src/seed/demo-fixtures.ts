@@ -128,7 +128,8 @@ export const DEMO_PROFILE = {
   courseLanguage: 'fr',
   timezone: DEMO_TIME_ZONE,
   streakDays: 12,
-  streakComputedOn: '2026-11-11',
+  // SPEC-701 CA-8: the streak of 11 November is counted at the closure of the daily quiz.
+  streakComputedOn: '2026-11-10',
   termsVersion: '2026-10-01',
   source: {
     screen: 'SCR-03',
@@ -334,16 +335,16 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
     notions: [
       ...sapNotions(SAP, 1, 1, [
         { key: 's4', label: 'SAP S/4HANA', mastery: 92 },
-        { key: 'fiori', label: 'SAP Fiori', mastery: 90 },
+        { key: 'fiori', label: 'SAP Fiori', mastery: 90, inReview: true },
         { key: 'role', label: 'Rôle utilisateur', mastery: 82, inReview: true },
       ]),
       ...sapNotions(SAP, 1, 2, [
-        { key: 'launchpad', label: 'Launchpad Fiori', mastery: 88 },
-        { key: 'appli', label: 'Application Fiori', mastery: 85 },
+        { key: 'launchpad', label: 'Launchpad Fiori', mastery: 88, inReview: true },
+        { key: 'appli', label: 'Application Fiori', mastery: 85, inReview: true },
       ]),
       ...sapNotions(SAP, 1, 3, [
-        { key: 'bp', label: 'Partenaire (Business Partner)', mastery: 84 },
-        { key: 'donnees', label: 'Données de base', mastery: 86 },
+        { key: 'bp', label: 'Partenaire (Business Partner)', mastery: 84, inReview: true },
+        { key: 'donnees', label: 'Données de base', mastery: 86, inReview: true },
       ]),
     ],
   },
@@ -361,8 +362,8 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
     ],
     notions: [
       ...sapNotions(SAP, 2, 1, [
-        { key: 'societe', label: 'Société', mastery: 90 },
-        { key: 'pc', label: 'Plan comptable', mastery: 88 },
+        { key: 'societe', label: 'Société', mastery: 90, inReview: true },
+        { key: 'pc', label: 'Plan comptable', mastery: 88, inReview: true },
         { key: 'perimetre', label: 'Périmètre analytique', mastery: 81, inReview: true },
         { key: 'segment', label: 'Segment', mastery: 80, inReview: true },
       ]),
@@ -405,7 +406,7 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
         { key: 'partie', label: 'Partie double', mastery: 90 },
       ]),
       ...sapNotions(SAP, 3, 2, [
-        { key: 'piece', label: 'Pièce comptable', mastery: 88, inReview: true },
+        { key: 'piece', label: 'Pièce comptable', mastery: 88 },
         { key: 'entete', label: 'En-tête de pièce', mastery: 86 },
         { key: 'poste', label: 'Poste', mastery: 84 },
         {
@@ -417,10 +418,9 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
             confusedWith: 'type',
             evidence: 'Confondue avec le type de pièce, deux fois (9 et 10 novembre).',
           },
-          inReview: true,
         },
-        { key: 'type', label: 'Type de pièce', mastery: 81, inReview: true },
-        { key: 'dates', label: 'Date comptable', mastery: 83, inReview: true },
+        { key: 'type', label: 'Type de pièce', mastery: 81 },
+        { key: 'dates', label: 'Date comptable', mastery: 83 },
         {
           key: 'equilibre',
           label: 'Équilibre d’une pièce',
@@ -429,11 +429,10 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
             nature: 'application',
             evidence: 'Équilibre non vérifié sur une saisie d’exercice le 10 novembre.',
           },
-          inReview: true,
         },
       ]),
       ...sapNotions(SAP, 3, 3, [
-        { key: 'acdoca', label: 'Journal universel (ACDOCA)', mastery: 82, inReview: true },
+        { key: 'acdoca', label: 'Journal universel (ACDOCA)', mastery: 82 },
       ]),
       ...sapNotions(SAP, 3, 4, [
         {
@@ -444,7 +443,6 @@ const SAP_MODULES: readonly DemoModuleFixture[] = [
             nature: 'misunderstanding',
             evidence: 'Explication non retenue après la séance du 10 novembre.',
           },
-          inReview: true,
         },
       ]),
     ],

@@ -21,5 +21,7 @@ export type {
   PreviousNotionState,
   ReviewAnswerInput,
 } from './apply-result';
+export { applyReviewResult } from './apply-review';
+export type { AppliedReviewResult, ApplyReviewResultInput } from './apply-review';
 export { getDueNotions } from './get-due-notions';
 export { persistPlan } from './persist-plan';

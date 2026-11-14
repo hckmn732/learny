@@ -570,7 +570,7 @@ interface NotionRow {
   formation_id: string;
 }
 
-interface NotionStateRow {
+export interface NotionStateRow {
   [key: string]: unknown;
   notion_id: string;
   fsrs: FsrsCardJson;
@@ -587,7 +587,7 @@ interface NotionStateRow {
   in_review: boolean;
 }
 
-interface HistoryRow {
+export interface HistoryRow {
   [key: string]: unknown;
   answer_id: string;
   attempt_id: string;
@@ -652,7 +652,7 @@ function confusedWithField(value: unknown): string | null {
   return null;
 }
 
-function scoreValue(
+export function scoreValue(
   score: string | null,
   maxScore: string | null,
   correct: boolean | null,
@@ -680,11 +680,11 @@ function diagnosticPositionsOf(config: unknown): Set<number> {
   return new Set(positions.filter((position): position is number => typeof position === 'number'));
 }
 
-function formatOf(brickType: string): BrickFormat | null {
+export function formatOf(brickType: string): BrickFormat | null {
   return REVIEWABLE_FORMATS.has(brickType) ? (brickType as BrickFormat) : null;
 }
 
-function answerRecordOf(
+export function answerRecordOf(
   row: HistoryRow,
   diagnosticAnswerIds: ReadonlySet<string> = new Set(),
 ): AnswerRecord | null {
@@ -771,7 +771,7 @@ async function loadAnswers(tx: DbTx, attemptId: string): Promise<AnswerRow[]> {
   `);
 }
 
-async function loadNotions(
+export async function loadNotions(
   tx: DbTx,
   formationId: string,
   notionIds: readonly string[],
@@ -786,7 +786,7 @@ async function loadNotions(
   return new Map(rows.map((row) => [row.id, row]));
 }
 
-async function loadStates(
+export async function loadStates(
   tx: DbTx,
   userId: string,
   notionIds: readonly string[],
@@ -815,7 +815,11 @@ async function loadStates(
   return new Map(rows.map((row) => [row.notion_id, row]));
 }
 
-async function loadHistory(tx: DbTx, userId: string, notionId: string): Promise<HistoryRow[]> {
+export async function loadHistory(
+  tx: DbTx,
+  userId: string,
+  notionId: string,
+): Promise<HistoryRow[]> {
   return tx.execute<HistoryRow>(sql`
     select
       a.id::text as answer_id,
@@ -845,7 +849,7 @@ async function loadHistory(tx: DbTx, userId: string, notionId: string): Promise<
   `);
 }
 
-async function loadTimedHistory(tx: DbTx, userId: string): Promise<TimedResponse[]> {
+export async function loadTimedHistory(tx: DbTx, userId: string): Promise<TimedResponse[]> {
   const rows = await tx.execute<{
     answer_id: string;
     answered_at: Date | string;
@@ -896,14 +900,14 @@ async function loadAppliedKeys(
   return new Set(rows.map((row) => reviewKey(row.answer_id, row.notion_id)));
 }
 
-async function loadTimezone(tx: DbTx, userId: string): Promise<string> {
+export async function loadTimezone(tx: DbTx, userId: string): Promise<string> {
   const rows = await tx.execute<{ timezone: string }>(sql`
     select timezone from public.profiles where id = ${userId}::uuid
   `);
   return rows[0]?.timezone ?? 'Europe/Paris';
 }
 
-function previousStateOf(row: NotionStateRow | undefined): PreviousNotionState {
+export function previousStateOf(row: NotionStateRow | undefined): PreviousNotionState {
   if (row === undefined) {
     return {
       fsrs: null,
@@ -932,7 +936,11 @@ function previousStateOf(row: NotionStateRow | undefined): PreviousNotionState {
   };
 }
 
-async function persistStep(tx: DbTx, userId: string, step: NotionReviewStep): Promise<boolean> {
+export async function persistStep(
+  tx: DbTx,
+  userId: string,
+  step: NotionReviewStep,
+): Promise<boolean> {
   const gap = step.gapAfter;
   await tx.execute(sql`
     insert into public.notion_states (

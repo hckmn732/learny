@@ -21,10 +21,13 @@ interface MeRow {
   [key: string]: unknown;
 }
 
+function toIso(value: Date | string | null): string | null {
+  if (value === null) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 function toMe(row: MeRow): MeDto {
-  const completed = row.onboarding_completed_at;
-  const completedAt =
-    completed === null ? null : completed instanceof Date ? completed : new Date(completed);
   return {
     id: row.id,
     email: row.email,
@@ -34,10 +37,7 @@ function toMe(row: MeRow): MeDto {
     courseLanguage: row.course_language,
     timezone: row.timezone,
     onboardingStep: row.onboarding_step,
-    onboardingCompletedAt:
-      completedAt === null || Number.isNaN(completedAt.getTime())
-        ? null
-        : completedAt.toISOString(),
+    onboardingCompletedAt: toIso(row.onboarding_completed_at),
     currentFormationId: row.current_formation_id,
   };
 }

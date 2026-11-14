@@ -84,6 +84,25 @@ describe('[SPEC-601] profil authentifié', () => {
     });
   });
 
+  it('normalise une date brute renvoyée par la base (chaîne ISO)', async () => {
+    const result = await getMe(
+      context(
+        vi.fn().mockResolvedValue([row({ onboarding_completed_at: '2026-11-01T10:00:00+00:00' })]),
+      ),
+    );
+    expect(result).toMatchObject({
+      ok: true,
+      value: { onboardingCompletedAt: '2026-11-01T10:00:00.000Z' },
+    });
+  });
+
+  it('rend null une date brute illisible', async () => {
+    const result = await getMe(
+      context(vi.fn().mockResolvedValue([row({ onboarding_completed_at: 'invalide' })])),
+    );
+    expect(result).toMatchObject({ ok: true, value: { onboardingCompletedAt: null } });
+  });
+
   it('refuse un profil introuvable (NOT_FOUND)', async () => {
     const result = await getMe(context(vi.fn().mockResolvedValue([])));
     expect(result).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });

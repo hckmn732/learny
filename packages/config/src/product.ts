@@ -366,6 +366,33 @@ export const ENGINE = {
   },
 } as const;
 
+/**
+ * ET-8 — estimated duration of one review game by brick format (SPEC-701). `30` seconds more
+ * cover every additional notion served by the same brick (ADR-0319 §4): a multi-notion game costs
+ * its format price once, then the extra notions.
+ */
+export const REVIEW_FORMAT_SECONDS = {
+  recall_card: 30,
+  cloze: 45,
+  choice_question: 40,
+  ordering: 60,
+  matching: 90,
+  categorization: 90,
+} as const satisfies Record<string, number>;
+
+export const REVIEW_EXTRA_NOTION_SECONDS = 30;
+
+/** Rail and header names of the review games, by brick format (EF-6, EF-8). */
+export const GAME_LABELS = {
+  recall_card: { name: 'Carte de rappel', tech: 'Rappel actif' },
+  matching: { name: 'Association', tech: 'Notions proches' },
+  ordering: { name: 'Remise en ordre', tech: 'Séquence' },
+  categorization: { name: 'Classement', tech: 'Catégorisation' },
+  cloze: { name: 'Texte à trous', tech: 'Rappel actif' },
+  choice_question: { name: 'Question', tech: 'Question' },
+  open_question: { name: 'Question', tech: 'Question' },
+} as const satisfies Record<string, { name: string; tech: string }>;
+
 export type AccountRules = typeof ACCOUNT_RULES;
 export type ResourceRules = typeof RESOURCE_RULES;
 export type QuizRules = typeof QUIZ_RULES;

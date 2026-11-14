@@ -1,0 +1,78 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="44.210097999999995">
+<testsuite name="p7/global-quiz.spec.ts" timestamp="2026-11-14T10:34:09.410Z" hostname="desktop" tests="4" failures="0" skipped="0" time="10.556" errors="0">
+<testcase name="session du jour et carte de rappel @SPEC-701" classname="p7/global-quiz.spec.ts" time="3.813">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/attachments/spec-701-recto-17d7556b20b704d4beabe49927e0939caaf1838a.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/attachments/spec-701-verso-50bf60a5b9ec2fe8839d5a6467e75b238f72a85e.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/attachments/spec-701-fin-c08c32865f61c063e79b45eebfa491f01b3541c0.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/attachments/axe-65e2df078734354449c984580aa293ae275a4d73.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-session-du-jour-et-carte-de-rappel-SPEC-701-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="écran de fin de démonstration @SPEC-701" classname="p7/global-quiz.spec.ts" time="2.243">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/attachments/spec-701-demo-fin-7f55efb07e05117ad6d8d04a1433ed6bf6a4d6be.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/attachments/axe-53d2fa9e7f7726300f339bc72de52ef13ded02cd.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-écran-de-fin-de-démonstration-SPEC-701-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="état vide @SPEC-701" classname="p7/global-quiz.spec.ts" time="0.954">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-état-vide-SPEC-701-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-état-vide-SPEC-701-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-état-vide-SPEC-701-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-état-vide-SPEC-701-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité visuelle du quiz global @SPEC-701 @visual" classname="p7/global-quiz.spec.ts" time="3.546">
+<properties>
+<property name="mockup-diff-ratio" value="spec-701-desktop:0.1107">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/attachments/spec-701-desktop-side-by-side-da7f9feef403db40ba904f8bf2d81b2a0226bb03.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/attachments/spec-701-desktop-diff-c93c55e37d74eb5c9eeda5710d617986686626da.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/attachments/axe-8df4d07352014def9be5bd2867d674ad51fc209c.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-conformité--70372-quiz-global-SPEC-701-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

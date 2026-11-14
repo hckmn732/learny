@@ -768,7 +768,14 @@ async function seedProgress(tx: DbTx): Promise<void> {
   const notionStatesFor = (
     user: 'alex' | 'camille' | 'hugo',
     formation: DemoFormationFixture,
-    options: { maxModule: number; due: number[]; gaps?: number[] },
+    options: {
+      maxModule: number;
+      due: number[];
+      gaps?: number[];
+      /** Fixed due instants per notion slug, so the daily draw order is reproducible. */
+      dueAtBySlug?: Readonly<Record<string, string>>;
+      gapDetectedAtBySlug?: Readonly<Record<string, string>>;
+    },
   ): void => {
     const seen = formation.modules
       .filter((module) => module.position <= options.maxModule)
@@ -776,9 +783,13 @@ async function seedProgress(tx: DbTx): Promise<void> {
     for (const [index, notion] of seen.entries()) {
       const mastery = notion.mastery ?? 70 + (index % 20);
       const due = options.due.includes(index);
-      const dueAt = due ? parisInstant('2026-11-11', '08:00') : parisInstant('2026-11-18', '08:00');
+      const dueAt = due
+        ? (options.dueAtBySlug?.[notion.slug] ?? parisInstant('2026-11-11', '08:00'))
+        : parisInstant('2026-11-18', '08:00');
       const lastReview = parisInstant('2026-11-09', '18:00');
       const gap = notion.gap;
+      const gapDetectedAt =
+        options.gapDetectedAtBySlug?.[notion.slug] ?? parisInstant('2026-11-10', '16:42');
       states.push([
         demoUserId(user),
         demoNotionId(notion.key),
@@ -792,7 +803,7 @@ async function seedProgress(tx: DbTx): Promise<void> {
         gap?.confusedWith === undefined
           ? null
           : demoId('notion', `sap:m3:c2:n${gap.confusedWith === 'type' ? '5' : '1'}`),
-        gap === undefined ? null : timestamp(parisInstant('2026-11-10', '16:42')),
+        gap === undefined ? null : timestamp(gapDetectedAt),
         gap?.evidence ?? null,
         null,
         false,
@@ -809,7 +820,7 @@ async function seedProgress(tx: DbTx): Promise<void> {
           'detected',
           gap.nature,
           json({ evidence: gap.evidence ?? 'Lacune observée en quiz.' }),
-          timestamp(parisInstant('2026-11-10', '16:42')),
+          timestamp(gapDetectedAt),
         ]);
       }
       if (due) {
@@ -832,23 +843,49 @@ async function seedProgress(tx: DbTx): Promise<void> {
     }
   };
 
+  // SPEC-701 §10 / ADR-0319 §3 — the fourteen notions in review live in modules 1 and 2 only;
+  // the four deferred notions stay due without any review brick (s4, ledger, cle, ledgers). The
+  // staggered due instants fix the draw order, hence the five games and their notions.
   const sapSeen = SAP_FORMATION.modules.flatMap((module) =>
     module.position <= 3 ? module.notions : [],
   );
-  const reviewIndexes = sapSeen
-    .map((notion, index) => (notion.inReview === true ? index : -1))
-    .filter((index) => index >= 0);
-  const deferredIndexes = sapSeen
-    .map((notion, index) =>
-      notion.inReview !== true && notion.mastery !== null && index < 20 ? index : -1,
-    )
-    .filter((index) => index >= 0)
-    .slice(0, 4);
+  const indexOf = (slug: string): number => {
+    const index = sapSeen.findIndex((notion) => notion.slug === slug);
+    if (index < 0) throw new Error(`notion de démonstration introuvable : ${slug}`);
+    return index;
+  };
+  const REVIEW_DUE_SEQUENCE = [
+    ['launchpad', '07:00'],
+    ['segment', '07:01'],
+    ['donnees', '07:02'],
+    ['pc', '07:03'],
+    ['bp', '07:04'],
+    ['perimetre', '07:05'],
+    ['fiori', '07:06'],
+    ['devise', '07:07'],
+    ['role', '07:08'],
+    ['societe', '07:09'],
+    ['appli', '07:10'],
+    ['division', '07:11'],
+    ['cdp', '07:12'],
+  ] as const;
+  const reviewSlugs = ['variante', ...REVIEW_DUE_SEQUENCE.map(([slug]) => slug)];
+  const deferredSlugs = ['s4', 'ledger', 'cle', 'ledgers'];
+  const dueAtBySlug: Record<string, string> = {
+    variante: parisInstant('2026-11-11', '06:55'),
+    ...Object.fromEntries(
+      REVIEW_DUE_SEQUENCE.map(([slug, time]) => [slug, parisInstant('2026-11-11', time)]),
+    ),
+  };
+  const reviewIndexes = reviewSlugs.map(indexOf);
+  const deferredIndexes = deferredSlugs.map(indexOf);
 
   notionStatesFor('alex', SAP_FORMATION, {
     maxModule: 3,
     due: [...reviewIndexes, ...deferredIndexes],
     gaps: reviewIndexes,
+    dueAtBySlug,
+    gapDetectedAtBySlug: { variante: parisInstant('2026-11-06', '16:42') },
   });
   notionStatesFor('alex', DEMO_FORMATIONS[1] as DemoFormationFixture, {
     maxModule: 5,
@@ -1497,8 +1534,19 @@ interface BrickDefinition {
   key: string;
   type: string;
   purpose: string;
+  /** Source of the version (SPEC-501): `tutor` unless the brick comes from a course excerpt. */
+  origin?: 'resource' | 'tutor';
   notionSlugs: readonly string[];
   payload: unknown;
+}
+
+/** Deterministic identifier of a SAP notion from its mockup slug (the fixture key is positional). */
+function sapNotionId(slug: string): string {
+  const notion = SAP_FORMATION.modules
+    .flatMap((module) => module.notions)
+    .find((entry) => entry.slug === slug);
+  if (notion === undefined) throw new Error(`notion SAP introuvable : ${slug}`);
+  return demoNotionId(notion.key);
 }
 
 interface ActivityDefinition {
@@ -1648,34 +1696,116 @@ const BRICKS: readonly BrickDefinition[] = [
       answer: 'Tenir la comptabilité selon plusieurs normes',
     },
   },
-  ...Array.from({ length: 14 }, (_, index) => {
-    const notion = [
-      'cle',
-      'ledgers',
-      'equilibre',
-      'variante',
-      'segment',
-      'perimetre',
-      'type',
-      'division',
-      'role',
-      'acdoca',
-      'cdp',
-      'dates',
-      'devise',
-      'bp',
-    ][index] as string;
-    return {
-      key: `global-${String(index + 1)}`,
-      type: 'recall_card',
-      purpose: 'review',
-      notionSlugs: [notion],
-      payload: {
-        prompt: `Rappeler la notion « ${notion} »`,
-        answer: 'Réponse attendue du jeu de démonstration.',
-      },
-    } satisfies BrickDefinition;
-  }),
+  // SPEC-701 §10 — the five revision games of the demonstration session. Each notion belongs to
+  // exactly one review brick, so the draw format is fixed and the rail order follows the staggered
+  // due dates of the seed; the four deferred notions (s4, ledger, cle, ledgers) get no brick.
+  {
+    key: 'gq-recall-variante',
+    type: 'recall_card',
+    purpose: 'review',
+    origin: 'resource',
+    notionSlugs: ['variante'],
+    payload: {
+      front: 'Que définit une variante d’exercice comptable ?',
+      back: 'Le nombre de périodes comptables d’un exercice, et leurs dates de début et de fin.',
+      sourceLabel: 'votre cours du module 2, chapitre 2',
+      sources: [],
+    },
+  },
+  {
+    key: 'gq-matching-notions',
+    type: 'matching',
+    purpose: 'review',
+    notionSlugs: ['launchpad', 'societe', 'pc'],
+    payload: {
+      instruction: 'Notions de base SAP : reliez chaque notion à sa définition.',
+      pairs: [
+        {
+          id: 'p1',
+          left: 'Société',
+          right: 'Entité juridique qui tient sa propre comptabilité',
+          notionId: sapNotionId('societe'),
+        },
+        {
+          id: 'p2',
+          left: 'Plan comptable',
+          right: 'Liste des comptes généraux utilisables',
+          notionId: sapNotionId('pc'),
+        },
+        {
+          id: 'p3',
+          left: 'Launchpad Fiori',
+          right: 'Page d’accueil qui regroupe les applications',
+          notionId: sapNotionId('launchpad'),
+        },
+      ],
+      extraRights: [],
+      explanation:
+        'La société porte les comptes, le plan comptable les liste et le launchpad les expose.',
+      sources: [],
+    },
+  },
+  {
+    key: 'gq-ordering-niveaux',
+    type: 'ordering',
+    purpose: 'review',
+    notionSlugs: ['perimetre', 'segment', 'division', 'cdp'],
+    payload: {
+      instruction:
+        'Niveaux d’organisation : remettez les niveaux SAP dans l’ordre, du plus large au plus fin.',
+      items: [
+        { id: 'o1', text: 'Mandant' },
+        { id: 'o2', text: 'Société' },
+        { id: 'o3', text: 'Division' },
+        { id: 'o4', text: 'Magasin' },
+      ],
+      explanation:
+        'Le mandant contient les sociétés, qui se découpent en divisions puis en magasins.',
+      sources: [],
+    },
+  },
+  {
+    key: 'gq-categorization-donnees',
+    type: 'categorization',
+    purpose: 'review',
+    notionSlugs: ['donnees', 'bp', 'appli'],
+    payload: {
+      instruction: 'Données de base et opérations : classez chaque élément.',
+      categories: [
+        { id: 'c1', label: 'Donnée de base', notionId: sapNotionId('bp') },
+        { id: 'c2', label: 'Opération', notionId: null },
+      ],
+      items: [
+        { id: 'i1', text: 'Compte général', categoryId: 'c1' },
+        { id: 'i2', text: 'Fournisseur', categoryId: 'c1' },
+        { id: 'i3', text: 'Facture d’achat', categoryId: 'c2' },
+        { id: 'i4', text: 'Paiement', categoryId: 'c2' },
+        { id: 'i5', text: 'Client', categoryId: 'c1' },
+        { id: 'i6', text: 'Écriture de régularisation', categoryId: 'c2' },
+      ],
+      explanation:
+        'Les données de base décrivent les objets ; les opérations les mettent en mouvement.',
+      sources: [],
+    },
+  },
+  {
+    key: 'gq-cloze-fiori-devises',
+    type: 'cloze',
+    purpose: 'review',
+    notionSlugs: ['fiori', 'devise', 'role'],
+    payload: {
+      title: 'Fiori et devises',
+      template:
+        'Dans SAP Fiori, chaque application s’ouvre depuis une {{1}} du launchpad, et une société tient sa comptabilité dans sa devise {{2}}.',
+      gaps: [
+        { id: 1, answers: ['tuile'], hint: 'Élément du launchpad' },
+        { id: 2, answers: ['interne'], hint: 'Devise de tenue des comptes' },
+      ],
+      explanation:
+        'La tuile ouvre l’application ; la devise interne porte la comptabilité de la société.',
+      sources: [],
+    },
+  },
   {
     key: 'exercise-1',
     type: 'open_question',
@@ -1812,14 +1942,6 @@ const ACTIVITIES: readonly ActivityDefinition[] = [
     config: { threshold: 80, questionCount: 5 },
   },
   {
-    key: 'global-quiz',
-    kind: 'global_quiz_session',
-    modulePosition: 3,
-    brickKeys: Array.from({ length: 14 }, (_, index) => `global-${String(index + 1)}`),
-    config: { durationSec: 600, questionCount: 14 },
-    forDate: '2026-11-11',
-  },
-  {
     key: 'exercise',
     kind: 'exercise',
     modulePosition: 3,
@@ -1881,7 +2003,7 @@ async function seedBricksAndActivities(tx: DbTx, catalog: SeededCatalog): Promis
       1,
       json(brick.payload),
       fingerprintOf(brick.payload),
-      'tutor',
+      brick.origin ?? 'tutor',
       'tutor',
       timestamp(parisInstant('2026-11-02', '08:00')),
     ]);
@@ -1986,14 +2108,6 @@ async function seedBricksAndActivities(tx: DbTx, catalog: SeededCatalog): Promis
       score: 58,
       passed: false,
       at: '2026-11-10T16:30:00+01:00',
-    },
-    {
-      key: 'global-attempt',
-      activity: 'global-quiz',
-      attemptNo: 1,
-      score: 86,
-      passed: true,
-      at: '2026-11-10T17:20:00+01:00',
     },
   ] as const;
 

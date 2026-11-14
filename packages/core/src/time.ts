@@ -138,7 +138,8 @@ function civilDayOf(wall: Date): string {
   return `${pad(wall.getUTCFullYear(), 4)}-${pad(wall.getUTCMonth() + 1)}-${pad(wall.getUTCDate())}`;
 }
 
-function addCivilDays(day: string, days: number): string {
+/** Next (or previous) civil day, independent of any time zone (CL-9, ET-7). */
+export function addCivilDays(day: string, days: number): string {
   return civilDayOf(new Date(wallMsOf(parseCivilDay(day)) + days * MS_PER_DAY));
 }
 

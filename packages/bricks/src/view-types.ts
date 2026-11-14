@@ -72,6 +72,14 @@ export interface ExcerptOpenRef {
   location: ExcerptLocation;
 }
 
+/** Test identifiers of the recall-card screen (SPEC-701 §10 reuses its own family). */
+export interface RecallCardTestIds {
+  front: string;
+  back: string;
+  flip: string;
+  grade: (key: SelfGrade) => string;
+}
+
 export interface BrickViewBrick<T extends BrickType> {
   versionId: string;
   type: T;
@@ -86,6 +94,8 @@ export interface BrickViewProps<T extends BrickType> {
   onChange?: ((value: BrickResponse<T>) => void) | undefined;
   status: BrickViewStatus;
   correction?: CorrectionView<T> | undefined;
+  /** Test identifiers of the recall card; defaults to the SPEC-503 `brick-*` family. */
+  recallTestIds?: RecallCardTestIds | undefined;
   onExcerptOpen?: ((ref: ExcerptOpenRef) => void) | undefined;
   labelledBy?: string | undefined;
   /** Screen-level labels override (ET-1). */

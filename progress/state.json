@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T10:29:26.137Z",
+  "updatedAt": "2026-11-14T10:42:39.969Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4644,14 +4644,55 @@
       }
     },
     "SPEC-701": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T07:58:16.966Z",
+      "completedAt": "2026-11-14T10:35:01.889Z",
+      "branch": "spec/SPEC-701-quiz-global-session-du-jour-et-cartes-de",
+      "commit": "c3924bc4",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T10:30:28.753Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T10:31:27.638Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T10:31:57.618Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T10:32:15.298Z",
+          "details": "24 test(s) [SPEC-701] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T10:33:36.381Z",
+          "details": "14 test(s) [SPEC-701] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T10:34:21.921Z",
+          "details": "4 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T10:34:21.921Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T10:34:21.942Z",
+          "details": "10/10 critères ✅"
+        }
+      }
     },
     "SPEC-702": {
       "status": "pending",
