@@ -21,16 +21,21 @@ export type GlobalQuizPageResult =
   { ok: true; data: GlobalQuizPageData } | { ok: false; requestId?: string };
 
 /**
- * Server read of SCR-10 (SPEC-701 ET-9). The page and `GET today` call the same service under the
- * learner's session; a foreign or completed formation is a 404. The due labels are formatted here
- * with the injected clock and the learner's time zone, so hydration is deterministic (ADR-0047).
+ * Server read of SCR-10 (SPEC-701 ET-9; SPEC-703 EF-9). The page and `GET today` call the same
+ * service under the learner's session; a foreign or completed formation is a 404. The due labels
+ * are formatted here with the injected clock and the learner's time zone, so hydration is
+ * deterministic (ADR-0047). The mode is the normalized `?mode=` of the page: `micro` opens the
+ * short session, any other value is ignored (full session).
  */
-export async function loadGlobalQuizPage(formationId: string): Promise<GlobalQuizPageResult> {
+export async function loadGlobalQuizPage(
+  formationId: string,
+  mode: 'full' | 'micro' = 'full',
+): Promise<GlobalQuizPageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
   const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
   const [quiz, me] = await Promise.all([
-    getOrCreateTodaySession(ctx, formationId, 'full'),
+    getOrCreateTodaySession(ctx, formationId, mode),
     getMe(ctx),
   ]);
   if (!quiz.ok) {

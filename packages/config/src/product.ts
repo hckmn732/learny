@@ -382,6 +382,23 @@ export const REVIEW_FORMAT_SECONDS = {
 
 export const REVIEW_EXTRA_NOTION_SECONDS = 30;
 
+/**
+ * ADR-0182 — composition of the micro-session: one recall card then a question for D = 3 and
+ * D = 5, two recall cards then a question for D = 10 (SPEC-703 ET-2).
+ */
+export const MICRO_SESSION_COMPOSITION = {
+  3: { cards: 1 },
+  5: { cards: 1 },
+  10: { cards: 2 },
+} as const;
+
+/**
+ * ET-3 — the four playable games (association, ordering, categorization, cloze) are delivered by
+ * SPEC-702; until then the micro-session question falls back to a choice question. SPEC-702 flips
+ * this flag to `true` in the same commit as the game panel.
+ */
+export const GAMES_ENABLED = false;
+
 /** Rail and header names of the review games, by brick format (EF-6, EF-8). */
 export const GAME_LABELS = {
   recall_card: { name: 'Carte de rappel', tech: 'Rappel actif' },

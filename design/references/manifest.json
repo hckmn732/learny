@@ -757,6 +757,38 @@
       "sha256": "b7158318211c118b04c8f815af67f2b07633f75a68318549e12b8b7587fad6d4"
     },
     {
+      "screenId": "SCR-10",
+      "state": "micro",
+      "viewport": "desktop",
+      "viewportWidth": 1440,
+      "viewportHeight": 900,
+      "source": "design/maquettes/QuizGlobal.dc.html",
+      "file": "design/references/SCR-10-micro-desktop.png",
+      "width": 1600,
+      "height": 1000,
+      "fixedAt": "2026-11-11T12:20:00Z",
+      "locale": "fr-FR",
+      "timeZone": "Europe/Paris",
+      "zoom": 0.9,
+      "sha256": "d39e97afa3114b9526fd2b748c091caaccf9726c4ec9ffa08bc9b344209145ee"
+    },
+    {
+      "screenId": "SCR-10",
+      "state": "micro",
+      "viewport": "mobile",
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "source": "design/maquettes/QuizGlobal.dc.html",
+      "file": "design/references/SCR-10-micro-mobile.png",
+      "width": 433,
+      "height": 2055,
+      "fixedAt": "2026-11-11T12:20:00Z",
+      "locale": "fr-FR",
+      "timeZone": "Europe/Paris",
+      "zoom": 0.9,
+      "sha256": "c3f54f394eb4076b7d4603293ca6ba0002d423bee9960ed134cbbcce5e1abd59"
+    },
+    {
       "screenId": "SCR-11",
       "state": "base",
       "viewport": "desktop",

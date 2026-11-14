@@ -14,6 +14,18 @@ import { api, ApiError } from '../../lib/api-client';
 
 import { GlobalQuizSession } from './GlobalQuizSession';
 
+// SPEC-703 ET-6 — the duration switch uses the app router; the session tests never navigate.
+const router = vi.hoisted(() => ({
+  replace: vi.fn(),
+  push: vi.fn(),
+  refresh: vi.fn(),
+  back: vi.fn(),
+}));
+vi.mock('next/navigation', () => ({
+  useRouter: () => router,
+  usePathname: () => '/formations/fid/quiz-global',
+}));
+
 const NOTION = '0b6f2a7e-9a3c-4c1c-8a55-3d1f6f1d2a01';
 const BRICK = '3f1c8a5e-5d0e-4a0b-9a6e-7b2c4d9e1f02';
 const VERSION = '7c3f1a9e-2b4d-4c6e-9f10-1a2b3c4d5e6f';

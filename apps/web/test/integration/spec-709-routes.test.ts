@@ -21,7 +21,7 @@ import { setSessionResolver } from '../../lib/api/session';
 const PREFIX = 'sdd-709-routes-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
 const MODEL = 'claude-personal-709-routes';
-const SECRET = 'sk-test-709-routes-a91F'; // learny-test-only
+const SECRET = 'sk-sentinel-0123456789abcdef'; // learny-test-only
 
 class TestClock implements Clock {
   now(): Date {

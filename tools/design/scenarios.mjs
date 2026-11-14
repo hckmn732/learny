@@ -63,6 +63,7 @@ export const SCENARIOS = [
   base('SCR-09', 'Quiz.dc.html', 'Quiz de validation'),
   { screenId: 'SCR-09', state: 'reponse-verifiee', source: 'Quiz.dc.html', setup: async (page) => { await page.getByRole('radio').first().click(); await click(page, 'button', 'Vérifier'); }, expect: (page) => page.getByRole('button', { name: 'Vérifier' }).waitFor({ state: 'hidden' }) },
   base('SCR-10', 'QuizGlobal.dc.html', 'Quiz global'),
+  { screenId: 'SCR-10', state: 'micro', source: 'QuizGlobal.dc.html', setup: (page) => click(page, 'button', 'Micro-séance · 5 min'), expect: (page) => page.locator('button[aria-pressed="true"]').filter({ hasText: 'Micro-séance' }).first().waitFor() },
   { screenId: 'SCR-10', state: 'carte-retournee', source: 'QuizGlobal.dc.html', setup: (page) => click(page, 'button', 'Retourner la carte'), expect: (page) => page.getByRole('button', { name: 'Retourner la carte' }).waitFor({ state: 'hidden' }) },
   base('SCR-11', 'ExamenBlanc.dc.html', 'Les règles'),
   { screenId: 'SCR-11', state: 'examen', source: 'ExamenBlanc.dc.html', setup: (page) => click(page, 'button', "Commencer l'examen"), expect: (page) => page.getByRole('heading', { name: 'Les règles' }).waitFor({ state: 'hidden' }) },

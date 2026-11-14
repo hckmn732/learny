@@ -1,0 +1,68 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="40.311403000000006">
+<testsuite name="p7/micro-session.spec.ts" timestamp="2026-11-14T14:18:12.418Z" hostname="desktop" tests="4" failures="0" skipped="0" time="7.742" errors="0">
+<testcase name="micro-séance de démonstration @SPEC-703" classname="p7/micro-session.spec.ts" time="3.474">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/attachments/spec-703-micro-recto-5847e387ee4eafcedd17952c4fd9bcfa296a1be8.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/attachments/spec-703-micro-fin-24b41f10b19d3634f35675b267f6e9112e75c426.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/attachments/axe-e3f6eaf6863dce0f0d61b6b97089bdd38c65d968.json]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-de-démonstration-SPEC-703-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="retour à la séance complète @SPEC-703" classname="p7/micro-session.spec.ts" time="1.149">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-micro-session-retour-à-la-séance-complète-SPEC-703-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-retour-à-la-séance-complète-SPEC-703-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-retour-à-la-séance-complète-SPEC-703-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="lien direct ?mode=micro @SPEC-703" classname="p7/micro-session.spec.ts" time="0.496">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-micro-session-lien-direct-mode-micro-SPEC-703-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-lien-direct-mode-micro-SPEC-703-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-lien-direct-mode-micro-SPEC-703-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="micro-séance conforme @SPEC-703 @visual" classname="p7/micro-session.spec.ts" time="2.623">
+<properties>
+<property name="mockup-diff-ratio" value="spec-703-micro:0.1114">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/attachments/spec-703-micro-side-by-side-4dcb0d479a6e99d6e2d14bebec215f2eba7cae14.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/attachments/spec-703-micro-diff-46e4775fa05bddca015c3a83fd40dfb6f7bd49ec.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/attachments/axe-41a8345b7f4ec7f3c4c093778cf0d8f54bf7a8e8.json]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-micro-session-micro-séance-conforme-SPEC-703-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

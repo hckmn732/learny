@@ -51,17 +51,20 @@ function serverSummary(session: GlobalQuizSessionDto): ReviewSummaryDto | null {
  */
 export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   const { formationId, initial, timeZone } = props;
-  const [mode] = useState<'full' | 'micro'>(initial.mode);
+  // ET-6 — the selected mode drives the query key; the URL is replaced by SessionModeSwitch.
+  const [mode, setMode] = useState<'full' | 'micro'>(initial.mode);
   const query = useQuery({
     queryKey: ['global-quiz', formationId, mode],
     queryFn: () => api.globalQuizToday({ params: { fid: formationId }, query: { mode } }),
-    initialData: initial,
-    staleTime: 0,
+    ...(mode === initial.mode ? { initialData: initial, staleTime: 0 } : {}),
   });
   const session = query.data;
-  const items = session.items;
-
-  const firstItem = items.find((item) => item.position === session.currentPosition) ?? items[0];
+  // ET-6 — while the other mode loads, the previous DTO keeps the header and the switch; only the
+  // game area is replaced by a skeleton. The server DTO of the first render is the fallback.
+  const display = session ?? initial;
+  const modeLoading = mode !== display.mode;
+  const items = session?.items ?? [];
+  const firstItem = items.find((item) => item.position === session?.currentPosition) ?? items[0];
   const [current, setCurrent] = useState<number>(firstItem?.position ?? 0);
   const [summary, setSummary] = useState<ReviewSummaryDto | null>(() => serverSummary(initial));
   const [attempt, setAttempt] = useState<AnswerVariables | null>(null);
@@ -72,14 +75,29 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const firstRender = useRef(true);
 
+  function changeMode(next: 'full' | 'micro'): void {
+    if (next === mode) return;
+    answerIds.current.clear();
+    setAttempt(null);
+    setAnswerError(false);
+    setCompleteError(false);
+    setSummary(null);
+    setCurrent(0);
+    setMode(next);
+  }
+
   const index = Math.max(
     0,
     items.findIndex((item) => item.position === current),
   );
   const item = items[index];
   const last = index === items.length - 1;
-  const effectiveSummary = summary ?? serverSummary(session);
+  const effectiveSummary = summary ?? (session === undefined ? null : serverSummary(session));
   const ended = effectiveSummary !== null;
+  const note =
+    mode === 'micro' && display.mode !== 'micro'
+      ? fr.globalQuiz.micro.note(display.modeOptions.microMinutes)
+      : display.note;
 
   useEffect(() => {
     shownAt.current = performance.now();
@@ -96,7 +114,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   const answer = useMutation({
     mutationFn: (variables: AnswerVariables) =>
       api.reviewAnswer({
-        params: { sid: session.sessionId ?? '' },
+        params: { sid: session?.sessionId ?? '' },
         body: variables.input,
       }),
     onSuccess: async (_result, variables) => {
@@ -119,7 +137,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   });
 
   const complete = useMutation({
-    mutationFn: () => api.reviewComplete({ params: { sid: session.sessionId ?? '' } }),
+    mutationFn: () => api.reviewComplete({ params: { sid: session?.sessionId ?? '' } }),
     onSuccess: async (value) => {
       const parsed = ReviewSummaryDtoSchema.safeParse(value);
       if (parsed.success) setSummary(parsed.data);
@@ -195,7 +213,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   function next(): void {
     if (item === undefined) return;
     if (last) {
-      if (session.sessionId !== null) complete.mutate();
+      if (session !== undefined && session.sessionId !== null) complete.mutate();
       return;
     }
     advanceFrom(item.position);
@@ -207,7 +225,10 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
     answer.mutate(attempt);
   }
 
-  if (session.status === 'empty' || (items.length === 0 && session.status !== 'paused')) {
+  if (
+    session?.status === 'empty' ||
+    (session !== undefined && items.length === 0 && session.status !== 'paused')
+  ) {
     return (
       <EmptyState
         action={
@@ -225,7 +246,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
     );
   }
 
-  if (session.status === 'paused') {
+  if (session?.status === 'paused') {
     return (
       <EmptyState
         data-testid="gq-paused"
@@ -250,102 +271,122 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   return (
     <div className="flex flex-col gap-24">
       <GlobalQuizHeader
-        estimatedMinutes={session.header.estimatedMinutes}
-        modulesLabel={session.header.modulesLabel}
-        notionCount={session.header.notionCount}
-        subtitle={session.header.subtitle}
+        estimatedMinutes={display.header.estimatedMinutes}
+        modulesLabel={display.header.modulesLabel}
+        notionCount={display.header.notionCount}
+        subtitle={display.header.subtitle}
       />
       <SessionModeSwitch
-        fullMinutes={session.modeOptions.fullMinutes}
-        microMinutes={session.modeOptions.microMinutes}
+        fullMinutes={display.modeOptions.fullMinutes}
+        microMinutes={display.modeOptions.microMinutes}
         mode={mode}
-        note={session.note}
+        note={note}
+        onModeChange={changeMode}
       />
-      <SessionProgress
-        currentIndex={ended ? items.length : index}
-        finished={ended}
-        total={items.length}
-      />
-      <div className="flex flex-wrap items-start gap-20">
-        <div className="flex flex-[1_1_260px] flex-col gap-16">
-          <GameRail
-            currentPosition={ended ? -1 : (item?.position ?? -1)}
-            items={items}
-            onSelect={(position) => {
-              setCurrent(position);
-            }}
-          />
-          <TutorRationale rationale={session.rationale} />
+      {modeLoading ? (
+        <div
+          aria-busy="true"
+          className="flex min-h-320 animate-pulse flex-col gap-16 rounded-24 border border-solid border-border bg-surface p-28"
+          data-testid="gq-mode-loading"
+        >
+          <span className="sr-only">{t.micro.loading}</span>
+          <div className="h-24 w-1/2 rounded-8 bg-surface-muted" />
+          <div className="h-96 w-full rounded-16 bg-surface-muted" />
+          <div className="h-44 w-2/3 rounded-12 bg-surface-muted" />
         </div>
+      ) : (
+        <>
+          <SessionProgress
+            currentIndex={ended ? items.length : index}
+            finished={ended}
+            total={items.length}
+          />
+          <div className="flex flex-wrap items-start gap-20">
+            <div className="flex flex-[1_1_260px] flex-col gap-16">
+              <GameRail
+                currentPosition={ended ? -1 : (item?.position ?? -1)}
+                items={items}
+                onSelect={(position) => {
+                  setCurrent(position);
+                }}
+              />
+              <TutorRationale rationale={display.rationale} />
+            </div>
 
-        {effectiveSummary !== null ? (
-          <section
-            aria-labelledby="gq-game-title"
-            className="flex min-w-0 flex-[999_1_560px] flex-col gap-22 rounded-24 border border-solid border-border bg-surface p-28"
-            data-testid="gq-game"
-          >
-            <h2 className="sr-only" id="gq-game-title">
-              {t.end.badge}
-            </h2>
-            <SessionEnd forDate={session.forDate} summary={effectiveSummary} timeZone={timeZone} />
-          </section>
-        ) : item === undefined ? null : (
-          <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-12">
-            {answerError ? (
-              <div
-                className="flex flex-wrap items-center justify-between gap-12 rounded-16 border border-solid border-orange bg-orange-soft px-16 py-12 text-14 text-orange-ink"
-                data-testid="gq-answer-error"
-                role="alert"
+            {effectiveSummary !== null ? (
+              <section
+                aria-labelledby="gq-game-title"
+                className="flex min-w-0 flex-[999_1_560px] flex-col gap-22 rounded-24 border border-solid border-border bg-surface p-28"
+                data-testid="gq-game"
               >
-                <span>{t.answerError}</span>
-                <button
-                  className="min-h-36 cursor-pointer rounded-10 border-0 bg-ink px-14 font-600 text-white"
-                  onClick={retry}
-                  type="button"
-                >
-                  {t.retry}
-                </button>
-              </div>
-            ) : null}
-            {completeError ? (
-              <div
-                className="rounded-16 border border-solid border-orange bg-orange-soft px-16 py-12 text-14 text-orange-ink"
-                data-testid="gq-complete-error"
-                role="alert"
-              >
-                {t.completeError}{' '}
-                <button
-                  className="cursor-pointer border-0 bg-transparent font-600 text-orange-ink underline"
-                  onClick={() => {
-                    complete.mutate();
-                  }}
-                  type="button"
-                >
-                  {t.retry}
-                </button>
-              </div>
-            ) : null}
-            <GamePanel
-              dueLabels={props.dueLabelsByPosition[String(item.position)]}
-              footer={
-                <SessionFooter
-                  isLast={last}
-                  nextDisabled={item.state === 'todo'}
-                  onNext={next}
-                  onSkip={skip}
-                  pending={answer.isPending || complete.isPending}
-                  skipDisabled={item.state !== 'todo'}
+                <h2 className="sr-only" id="gq-game-title">
+                  {t.end.badge}
+                </h2>
+                <SessionEnd
+                  forDate={display.forDate}
+                  summary={effectiveSummary}
+                  timeZone={timeZone}
                 />
-              }
-              item={item}
-              onAnswer={answerGame}
-              onGrade={grade}
-              pending={answer.isPending}
-              titleRef={titleRef}
-            />
+              </section>
+            ) : item === undefined ? null : (
+              <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-12">
+                {answerError ? (
+                  <div
+                    className="flex flex-wrap items-center justify-between gap-12 rounded-16 border border-solid border-orange bg-orange-soft px-16 py-12 text-14 text-orange-ink"
+                    data-testid="gq-answer-error"
+                    role="alert"
+                  >
+                    <span>{t.answerError}</span>
+                    <button
+                      className="min-h-36 cursor-pointer rounded-10 border-0 bg-ink px-14 font-600 text-white"
+                      onClick={retry}
+                      type="button"
+                    >
+                      {t.retry}
+                    </button>
+                  </div>
+                ) : null}
+                {completeError ? (
+                  <div
+                    className="rounded-16 border border-solid border-orange bg-orange-soft px-16 py-12 text-14 text-orange-ink"
+                    data-testid="gq-complete-error"
+                    role="alert"
+                  >
+                    {t.completeError}{' '}
+                    <button
+                      className="cursor-pointer border-0 bg-transparent font-600 text-orange-ink underline"
+                      onClick={() => {
+                        complete.mutate();
+                      }}
+                      type="button"
+                    >
+                      {t.retry}
+                    </button>
+                  </div>
+                ) : null}
+                <GamePanel
+                  dueLabels={props.dueLabelsByPosition[String(item.position)]}
+                  footer={
+                    <SessionFooter
+                      isLast={last}
+                      nextDisabled={item.state === 'todo'}
+                      onNext={next}
+                      onSkip={skip}
+                      pending={answer.isPending || complete.isPending}
+                      skipDisabled={item.state !== 'todo'}
+                    />
+                  }
+                  item={item}
+                  onAnswer={answerGame}
+                  onGrade={grade}
+                  pending={answer.isPending}
+                  titleRef={titleRef}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }

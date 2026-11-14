@@ -10,6 +10,8 @@ export const dynamic = 'force-dynamic';
 
 interface QuizGlobalPageProps {
   params: Promise<{ fid: string }>;
+  /** SPEC-703 EF-9 — `?mode=micro` opens the short session; any other value is the full session. */
+  searchParams: Promise<{ mode?: string | string[] }>;
 }
 
 /**
@@ -19,9 +21,14 @@ interface QuizGlobalPageProps {
  * labels and the due labels of the recall card. A foreign formation is a 404 before rendering;
  * every answer then goes through the idempotent route and refreshes this same query.
  */
-export default async function QuizGlobalPage({ params }: QuizGlobalPageProps) {
+export default async function QuizGlobalPage({ params, searchParams }: QuizGlobalPageProps) {
   const { fid } = await params;
-  const [shell, quiz] = await Promise.all([loadShellForFormation(fid), loadGlobalQuizPage(fid)]);
+  const query = await searchParams;
+  const mode = query.mode === 'micro' ? 'micro' : 'full';
+  const [shell, quiz] = await Promise.all([
+    loadShellForFormation(fid),
+    loadGlobalQuizPage(fid, mode),
+  ]);
 
   return (
     <AppShell

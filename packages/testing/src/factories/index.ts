@@ -4,6 +4,7 @@ export * from './attempt';
 export * from './brick';
 export * from './course';
 export * from './formation';
+export * from './global-quiz';
 export * from './group';
 export * from './helpers';
 export * from './module';

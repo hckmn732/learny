@@ -231,6 +231,16 @@ export const EVENTS = {
     correct: z.boolean(),
     reviewedAt: IsoDateTime,
   }),
+  // SPEC-703 ET-5 — a daily session was closed (SPEC-713 marks its micro-session proposal as
+  // consumed, SPEC-723 notifies the milestones). Counters and identifiers only.
+  'review/session-completed': z.object({
+    userId: Uuid,
+    formationId: Uuid,
+    sessionId: Uuid,
+    mode: z.enum(['full', 'micro']),
+    forDate: CivilDate,
+    reviewedCount: z.number().int().min(0),
+  }),
   'exam/started': z.object({
     userId: Uuid,
     formationId: Uuid,

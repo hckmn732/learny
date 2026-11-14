@@ -1,0 +1,44 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "carte de rappel"
+            },
+            "relatedNodes": [
+              {
+                "html": "<section aria-labelledby=\"_r_0_\" class=\"flex flex-col gap-18\" data-testid=\"brick-recall_card\">",
+                "target": [
+                  ".gap-18"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section aria-labelledby=\"gq-game-title\" class=\"flex min-w-0 flex-[999_1_560px] flex-col gap-22 rounded-24 border border-solid border-border bg-surface p-28\" data-testid=\"gq-game\">",
+        "target": [
+          ".gap-22"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]
