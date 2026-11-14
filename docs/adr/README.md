@@ -188,4 +188,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0315](ADR-0315-contexte-sse-et-teste-moi-de-la-discussion.md) | Contexte, SSE et Teste-moi de la discussion | Déduite | — |
 | [ADR-0316](ADR-0316-correction-differee-des-questions-ouvertes-par-appel-structu.md) | Correction différée des questions ouvertes par appel structuré | Déduite | SPEC-611,SPEC-508,ADR-0017,ADR-0170 |
 | [ADR-0317](ADR-0317-decisions-d-implementation-de-l-examen-blanc.md) | Décisions d'implémentation de l'examen blanc | Déduite | SPEC-614 |
-| [ADR-0318](ADR-0318-session-du-jour-groupement-des-briques-donnees-de-demonstrat.md) | Session du jour : groupement des briques, donnees de demonstration et estimation | Déduite | SPEC-701 |
+| [ADR-0319](ADR-0319-session-du-jour-groupement-des-briques-donnees-de-demonstrat.md) | Session du jour : groupement des briques, donnees de demonstration et estimation | Déduite | SPEC-701 |
