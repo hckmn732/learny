@@ -80,6 +80,7 @@ describe('[SPEC-707] contrats des paramètres', () => {
         studyDays: [1, 2, 3, 4, 5],
         preferredSlots: ['matin', 'apres_midi'],
       },
+      updatedAt: '2026-11-11T12:20:00.000Z',
       deletionScheduledFor: null,
       export: null,
     };

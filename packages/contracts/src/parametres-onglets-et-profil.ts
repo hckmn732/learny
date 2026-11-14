@@ -79,6 +79,8 @@ export type SettingsExportState = z.infer<typeof SettingsExportState>;
 export const SettingsState = z.object({
   me: MeDto,
   rhythm: StudyRhythm,
+  /** ET-3 — current version of the profile row, sent back as `expectedUpdatedAt`. */
+  updatedAt: IsoDateTime,
   /** BR-ACC-11 — deadline of a pending deletion request, null when nothing is scheduled. */
   deletionScheduledFor: IsoDateTime.nullable(),
   /** Latest export of the learner, null when none was requested. */
