@@ -178,6 +178,20 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
     );
   }
 
+  /** EF-1 to EF-5 — response of one of the four games, graded by the server (BR-MEM-05). */
+  function answerGame(response: unknown): void {
+    if (item === undefined || answer.isPending) return;
+    send(
+      {
+        position: item.position,
+        clientAnswerId: answerIdFor(item.position),
+        timeMs: Math.min(3_600_000, Math.max(0, Math.round(performance.now() - shownAt.current))),
+        response,
+      },
+      false,
+    );
+  }
+
   function next(): void {
     if (item === undefined) return;
     if (last) {
@@ -324,6 +338,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
                 />
               }
               item={item}
+              onAnswer={answerGame}
               onGrade={grade}
               pending={answer.isPending}
               titleRef={titleRef}
