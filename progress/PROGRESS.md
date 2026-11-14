@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-14T10:29:26.139Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-14T12:21:14.036Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 95 |
+| Terminées | 96 |
 | En cours | 0 |
-| Prêtes | 17 |
+| Prêtes | 16 |
 | En attente de dépendances | 20 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **72.0 %** |
-| Avancement V1 | 76.6 % |
+| **Avancement global** | **72.7 %** |
+| Avancement V1 | 77.4 % |
 | Prochaine action | start SPEC-701 — Quiz global : session du jour et cartes de rappel |
 
 ## Phases et checkpoints
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 4/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 5/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -138,7 +138,7 @@
 | [SPEC-709](../specs/p7-engagement/SPEC-709-parametres-modeles-d-ia.md) | Paramètres : Modèles d'IA | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-506, SPEC-507 |
 | [SPEC-710](../specs/p7-engagement/SPEC-710-parametres-automatismes.md) | Paramètres : Automatismes | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-711 |
 | [SPEC-711](../specs/p7-engagement/SPEC-711-moteur-d-automatismes.md) | Moteur d'automatismes | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-203, SPEC-209, SPEC-108, SPEC-411 |
-| [SPEC-712](../specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md) | Automatisme 1 : reprise après décrochage | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-407 |
+| [SPEC-712](../specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md) | Automatisme 1 : reprise après décrochage | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-407 |
 | [SPEC-713](../specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md) | Automatisme 2 : micro-séance de secours | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-703 |
 | [SPEC-714](../specs/p7-engagement/SPEC-714-automatisme-3-echauffement.md) | Automatisme 3 : échauffement | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-410 |
 | [SPEC-715](../specs/p7-engagement/SPEC-715-automatisme-4-remediation-apres-un-quiz-rate.md) | Automatisme 4 : remédiation après un quiz raté | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-612 |
