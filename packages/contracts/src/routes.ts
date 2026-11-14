@@ -22,6 +22,7 @@ import { meRoutes } from './me';
 import { examRoutes } from './mock-exams';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { notionGraphRoutes } from './notion-graph';
+import { parametresNotificationsRoutes } from './parametres-notifications';
 import { parametresRoutes } from './parametres-onglets-et-profil';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
 import { programmeRoutes } from './programme';
@@ -52,6 +53,7 @@ export const ROUTES = {
   ...homeRoutes,
   ...sidebarRoutes,
   ...parametresRoutes,
+  ...parametresNotificationsRoutes,
   ...aiRoutes,
   ...billingRoutes,
   ...brickRoutes,
