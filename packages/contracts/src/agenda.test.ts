@@ -33,6 +33,7 @@ describe('[SPEC-704] agenda : contrats', () => {
     const dto = {
       timezone: 'Europe/Paris',
       today: '2026-11-11',
+      currentFormationId: '7f6c2b0e-1f2a-4c3d-8e9f-0a1b2c3d4e5f',
       bounds: { start: '2026-11-02', end: '2026-12-11' },
       captionPeriod: { start: '2026-11-02', end: '2026-12-11' },
       studyDays: [1, 2, 3, 4, 5],

@@ -274,6 +274,7 @@ export function getAgenda(
       return {
         timezone,
         today: userLocalDay(now, timezone),
+        currentFormationId: profile.current_formation_id,
         bounds,
         captionPeriod,
         studyDays,

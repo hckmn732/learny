@@ -116,6 +116,8 @@ export type AgendaTotals = z.infer<typeof AgendaTotals>;
 export const AgendaDto = z.object({
   timezone: z.string().min(1),
   today: CivilDate,
+  /** Formation opened in the menu (ADR-0075); drives the day title and the month chips. */
+  currentFormationId: Uuid.nullable(),
   /** Navigation bounds: union of the visible formations' periods (ADR-0183). */
   bounds: AgendaPeriod.nullable(),
   /** Period written under the mini-calendar: filtered formation, or current one (ADR-0183). */
