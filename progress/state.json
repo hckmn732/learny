@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T09:54:11.206Z",
+  "updatedAt": "2026-11-14T10:58:37.326Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4735,14 +4735,55 @@
       "validations": {}
     },
     "SPEC-706": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T09:58:05.376Z",
+      "completedAt": "2026-11-14T10:58:37.323Z",
+      "branch": "spec/SPEC-706-notifications-generation-des-rappels",
+      "commit": "1e0e704d",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T10:55:21.214Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T10:55:22.559Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T10:55:56.727Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T10:56:13.265Z",
+          "details": "10 test(s) [SPEC-706] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T10:57:32.128Z",
+          "details": "8 test(s) [SPEC-706] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T10:58:16.047Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T10:58:16.047Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T10:58:16.062Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-707": {
       "status": "done",
