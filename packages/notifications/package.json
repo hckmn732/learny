@@ -11,7 +11,9 @@
     "./routing": "./src/routing.ts",
     "./templates": "./src/templates/index.ts",
     "./digest": "./src/digest.ts",
-    "./deliveries": "./src/deliveries.ts"
+    "./deliveries": "./src/deliveries.ts",
+    "./producers": "./src/producers/index.ts",
+    "./producers/reminders": "./src/producers/reminders.ts"
   },
   "scripts": {
     "dev": "email dev --dir emails --port 3400",
