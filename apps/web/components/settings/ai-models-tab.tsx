@@ -353,7 +353,7 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
 
   return (
     <li
-      className="flex flex-wrap items-center gap-x-20 gap-y-12 rounded-18 bg-canvas px-16 py-14"
+      className="flex flex-wrap items-center gap-x-20 gap-y-12 rounded-18 bg-surface-subtle px-16 py-14"
       data-testid={`ai-task-${task.task}`}
     >
       <span className="flex flex-[1_1_260px] flex-col gap-4">
