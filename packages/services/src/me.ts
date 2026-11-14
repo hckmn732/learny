@@ -16,9 +16,15 @@ interface MeRow {
   course_language: 'fr' | 'en' | 'es' | 'de';
   timezone: string;
   onboarding_step: 'profil' | 'rythme' | 'ia' | 'rappels' | 'depart' | 'done';
-  onboarding_completed_at: Date | null;
+  onboarding_completed_at: Date | string | null;
   current_formation_id: string | null;
   [key: string]: unknown;
+}
+
+function toIso(value: Date | string | null): string | null {
+  if (value === null) return null;
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
 function toMe(row: MeRow): MeDto {
@@ -31,7 +37,7 @@ function toMe(row: MeRow): MeDto {
     courseLanguage: row.course_language,
     timezone: row.timezone,
     onboardingStep: row.onboarding_step,
-    onboardingCompletedAt: row.onboarding_completed_at?.toISOString() ?? null,
+    onboardingCompletedAt: toIso(row.onboarding_completed_at),
     currentFormationId: row.current_formation_id,
   };
 }
