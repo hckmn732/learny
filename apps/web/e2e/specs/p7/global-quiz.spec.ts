@@ -297,10 +297,25 @@ test('écran de fin de démonstration @SPEC-701', async ({
     {
       position: 3,
       response: {
-        assignments: { i1: 'c1', i2: 'c1', i3: 'c2', i4: 'c2', i5: 'c1', i6: 'c2' },
+        assignments: [
+          { itemId: 'i1', categoryId: 'c1' },
+          { itemId: 'i2', categoryId: 'c1' },
+          { itemId: 'i3', categoryId: 'c2' },
+          { itemId: 'i4', categoryId: 'c2' },
+          { itemId: 'i5', categoryId: 'c1' },
+          { itemId: 'i6', categoryId: 'c2' },
+        ],
       },
     },
-    { position: 4, response: { gaps: { '1': 'tuile', '2': 'interne' } } },
+    {
+      position: 4,
+      response: {
+        gaps: [
+          { gapId: '1', value: 'tuile' },
+          { gapId: '2', value: 'interne' },
+        ],
+      },
+    },
   ];
   for (const entry of scripted) {
     const response = await page.request.post(answersUrl, {
