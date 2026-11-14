@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T09:24:25.824Z",
+  "updatedAt": "2026-11-14T09:24:42.824Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4704,12 +4704,12 @@
       "validations": {}
     },
     "SPEC-707": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-14T08:00:12.657Z",
-      "completedAt": null,
+      "completedAt": "2026-11-14T09:24:42.821Z",
       "branch": "spec/SPEC-707-parametres-onglets-et-profil",
-      "commit": null,
+      "commit": "a042fc8e",
       "lastError": null,
       "validations": {
         "lint": {
