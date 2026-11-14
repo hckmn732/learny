@@ -15,7 +15,7 @@ import {
   type SettingsState,
 } from '@learny/contracts';
 import { AppError, formatUserDate, type Result } from '@learny/core';
-import { schema, type DbTx } from '@learny/db';
+import { schema, sql, type DbTx } from '@learny/db';
 
 import type { ServiceContext } from './context';
 import { readMe } from './me';
@@ -98,16 +98,35 @@ async function readLatestExport(tx: DbTx, userId: string): Promise<SettingsExpor
 async function readProfileState(
   tx: DbTx,
   userId: string,
-): Promise<{ updatedAt: string; deletionScheduledFor: string | null }> {
-  const [row] = await tx
-    .select({ updatedAt: profiles.updatedAt, scheduledFor: profiles.deletionScheduledFor })
-    .from(profiles)
-    .where(eq(profiles.id, userId))
-    .limit(1);
+): Promise<{
+  updatedAt: Date;
+  createdAt: Date;
+  activeFormationCount: number;
+  deletionScheduledFor: Date | null;
+}> {
+  const rows = await tx.execute<{
+    updated_at: Date;
+    created_at: Date;
+    deletion_scheduled_for: Date | null;
+    active_formation_count: number;
+  }>(sql`
+    select p.updated_at as updated_at,
+           p.created_at as created_at,
+           p.deletion_scheduled_for as deletion_scheduled_for,
+           (select count(*)::int from public.formations f
+             where (f.owner_id = ${userId}::uuid
+                    or (f.group_id is not null and public.is_group_member(f.group_id)))
+               and f.status = 'active') as active_formation_count
+      from public.profiles p
+     where p.id = ${userId}::uuid
+  `);
+  const row = rows[0];
   if (row === undefined) throw new AppError('NOT_FOUND', 'Profil introuvable.');
   return {
-    updatedAt: row.updatedAt.toISOString(),
-    deletionScheduledFor: row.scheduledFor?.toISOString() ?? null,
+    updatedAt: row.updated_at,
+    createdAt: row.created_at,
+    activeFormationCount: row.active_formation_count,
+    deletionScheduledFor: row.deletion_scheduled_for,
   };
 }
 
@@ -121,6 +140,8 @@ export async function readSettingsState(tx: DbTx, userId: string): Promise<Setti
     me,
     rhythm,
     updatedAt: profile.updatedAt,
+    createdAt: profile.createdAt,
+    activeFormationCount: profile.activeFormationCount,
     deletionScheduledFor: profile.deletionScheduledFor,
     export: latest,
   });

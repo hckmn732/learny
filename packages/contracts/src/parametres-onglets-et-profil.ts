@@ -81,6 +81,10 @@ export const SettingsState = z.object({
   rhythm: StudyRhythm,
   /** ET-3 — current version of the profile row, sent back as `expectedUpdatedAt`. */
   updatedAt: IsoDateTime,
+  /** BR-ACC-12 — creation date shown in the identity card (« Compte créé le … »). */
+  createdAt: IsoDateTime,
+  /** Number of active formations shown in the identity card. */
+  activeFormationCount: z.number().int().min(0),
   /** BR-ACC-11 — deadline of a pending deletion request, null when nothing is scheduled. */
   deletionScheduledFor: IsoDateTime.nullable(),
   /** Latest export of the learner, null when none was requested. */

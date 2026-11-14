@@ -81,6 +81,8 @@ describe('[SPEC-707] contrats des paramètres', () => {
         preferredSlots: ['matin', 'apres_midi'],
       },
       updatedAt: '2026-11-11T12:20:00.000Z',
+      createdAt: '2026-10-28T09:00:00.000Z',
+      activeFormationCount: 3,
       deletionScheduledFor: null,
       export: null,
     };
