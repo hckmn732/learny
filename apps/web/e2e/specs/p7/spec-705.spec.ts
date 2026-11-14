@@ -4,7 +4,7 @@
 // seed agenda, and no option is applied without an explicit confirmation.
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {
   expectScreenshotBaseline,
@@ -63,6 +63,8 @@ async function waitForFonts(page: import('@playwright/test').Page): Promise<void
 
 test.beforeAll(async () => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
+  // The other e2e files move slots of the shared demo user: restore its plan first.
+  await restoreDemoData();
   await setModuleLate();
   session = await createDemoSession(demoUserId('alex'), ALEX.email);
 });
@@ -119,6 +121,8 @@ test('parcours SPEC-705 @SPEC-705', async ({ page, axeCheck }) => {
   if (chosen === undefined) throw new Error('deuxième alternative absente');
 
   // CA-1 — « Déplacer » opens the three windows; the second one asks for confirmation.
+  // SPEC-714 — l'échauffement de 13:50 est le premier créneau à venir : on sélectionne le quiz.
+  await page.getByRole('button', { name: /Quiz de validation, 14:00 – 15:00/ }).click();
   await expect(page.getByTestId('agenda-detail-title')).toHaveText('Quiz de validation');
   await page.getByTestId('slot-move').click();
   await expect(page.getByTestId('slot-alternatives')).toBeVisible();

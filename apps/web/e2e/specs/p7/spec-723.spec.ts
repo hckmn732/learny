@@ -1,7 +1,7 @@
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
 import { createTestProgramme } from '@learny/db/testing';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,
   createTestSession,
@@ -33,6 +33,11 @@ const SEED_DAYS = [
 ];
 
 let session: TestSession | null = null;
+
+test.beforeAll(async () => {
+  // The demo dataset is shared by the whole e2e run: restore it before asserting its state.
+  await restoreDemoData();
+});
 
 test.beforeEach(async ({ context, baseURL }) => {
   session = await createTestSession();

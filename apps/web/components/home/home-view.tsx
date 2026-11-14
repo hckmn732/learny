@@ -247,7 +247,7 @@ export function GlobalQuizCard({ data }: Readonly<{ data: HomeGlobalQuiz }>) {
     <section
       data-testid="home-global-quiz"
       aria-labelledby="home-global-quiz-title"
-      className="flex flex-[1_1_auto] flex-col gap-10 rounded-24 bg-lime p-24 text-ink"
+      className="flex flex-col gap-10 rounded-24 bg-lime p-24 text-ink"
     >
       <h2 id="home-global-quiz-title" className="m-0 text-12 font-700 tracking-kicker uppercase">
         {t.quiz.title}
@@ -659,7 +659,7 @@ export function HomeView({
 
       <div className="flex flex-wrap gap-20">
         <DayCard data={data.today} liveSlots={liveSlots} primaryAction={livePrimary} />
-        <div className="flex min-w-0 flex-[1_1_300px] flex-col gap-20">
+        <div className="flex min-w-0 max-w-[353px] flex-[1_1_300px] flex-col gap-20">
           <RetentionCard data={data.retention} />
           {data.globalQuiz === null ? null : <GlobalQuizCard data={data.globalQuiz} />}
         </div>

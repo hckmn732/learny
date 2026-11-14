@@ -1,4 +1,4 @@
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   expectScreenshotBaseline,
   expectTokens,
@@ -30,6 +30,11 @@ const DAYS = [
   '2026-11-12',
   '2026-11-13',
 ];
+
+test.beforeAll(async () => {
+  // The demo dataset is shared by the whole e2e run: restore it before asserting its state.
+  await restoreDemoData();
+});
 
 test('inspecte les données de démonstration @SPEC-115', async ({
   page,
@@ -98,17 +103,18 @@ test('inspecte les données de démonstration @SPEC-115', async ({
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-date')));
   expect(dates).toEqual(DAYS);
   await expect(page.getByTestId('spec-115-agenda-summary')).toHaveText(
-    /^22 créneaux du 9 au 13 novembre 2026/,
+    /^23 créneaux du 9 au 13 novembre 2026/,
   );
   await expect(
     page.locator('[data-testid="spec-115-agenda-day"][data-date="2026-11-11"]'),
-  ).toHaveAttribute('data-slots', '4');
+  ).toHaveAttribute('data-slots', '5');
   const todaySlots = await page
     .locator('[data-testid="spec-115-agenda-day"][data-date="2026-11-11"]')
     .getByTestId('spec-115-agenda-slot')
     .allTextContents();
   expect(todaySlots).toEqual([
     '09:00–12:00 · Relecture ciblée',
+    '13:50–13:52 · Échauffement',
     '14:00–15:00 · Quiz de validation',
     '15:00–16:00 · Marge de remédiation',
     '17:00–17:30 · Quiz global',

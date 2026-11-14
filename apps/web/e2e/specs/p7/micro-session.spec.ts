@@ -5,6 +5,7 @@ import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixture
 import { createBrick } from '@learny/testing';
 import {
   expect,
+  restoreDemoData,
   test,
 } from '@learny/testing/playwright';
 import {
@@ -197,6 +198,8 @@ async function createMicroQuestion(): Promise<void> {
 }
 
 test.beforeAll(async () => {
+  // Other e2e files of the run share the demo user: restore the dataset before snapshotting.
+  await restoreDemoData();
   snapshot = await captureSnapshot();
   await createMicroQuestion();
 });
@@ -218,6 +221,73 @@ test.afterAll(async () => {
 function quizUrl(formationId = SAP): string {
   return `/formations/${formationId}/quiz-global`;
 }
+
+test('micro-séance conforme @SPEC-703 @visual', async ({ page, axeCheck }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await page.goto(quizUrl());
+  await page.getByTestId('gq-mode-micro').click();
+  await expect(page.getByTestId('gq-rail')).toBeVisible();
+  await expect(page.getByTestId('gq-mode-micro')).toHaveAttribute('aria-pressed', 'true');
+
+  await expectTokens(page, {
+    '[data-testid="gq-mode-micro"]': {
+      'background-color': colors.ink,
+      color: colors.white,
+    },
+    '[data-testid="gq-mode-full"]': {
+      'background-color': 'rgba(0, 0, 0, 0)',
+      color: colors['ink-muted'],
+    },
+    '[data-testid="gq-pill-notions"]': {
+      'background-color': colors.surface,
+      'border-color': colors.border,
+      'border-radius': '999px',
+    },
+    '[data-testid="gq-rationale"]': { 'background-color': colors.ink },
+    '[data-testid="gq-rationale"] h2': { color: colors.lime },
+    '[data-testid="gq-rail"]': {
+      'background-color': colors.surface,
+      'border-radius': '21.6px',
+    },
+    '[data-testid="gq-game"]': {
+      'background-color': colors.surface,
+      'border-radius': '21.6px',
+    },
+  });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-size', '30.6px');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-weight', '600');
+
+  const content = page.getByTestId('global-quiz-page');
+  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
+  const comparison = compareWithReferenceRegion(
+    actual,
+    `${REFERENCE_DIR}SCR-10-micro-desktop.png`,
+    REFERENCE_DESKTOP,
+    testInfo.outputPath('visual'),
+    'spec-703-micro',
+  );
+  await testInfo.attach('spec-703-micro-side-by-side', {
+    path: comparison.sideBySidePath,
+    contentType: 'image/png',
+  });
+  await testInfo.attach('spec-703-micro-diff', {
+    path: comparison.diffPath,
+    contentType: 'image/png',
+  });
+  testInfo.annotations.push({
+    type: 'mockup-diff-ratio',
+    description: `spec-703-micro:${comparison.ratio.toFixed(4)}`,
+  });
+  expect(comparison.ratio, 'écart à la maquette').toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(quizUrl());
+  await page.getByTestId('gq-mode-micro').click();
+  await expect(page.getByTestId('gq-rail')).toBeVisible();
+  await expectScreenshotBaseline(page, 'micro-session.png');
+  await axeCheck();
+});
 
 test('micro-séance de démonstration @SPEC-703', async ({
   page,
@@ -327,71 +397,4 @@ test('lien direct ?mode=micro @SPEC-703', async ({ page }) => {
     'Version courte de secours : une carte de rappel et une question.',
   );
   await expect(page.getByTestId('gq-progress-label')).toHaveText('Jeu 1 sur 2');
-});
-
-test('micro-séance conforme @SPEC-703 @visual', async ({ page, axeCheck }, testInfo) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto(quizUrl());
-  await page.getByTestId('gq-mode-micro').click();
-  await expect(page.getByTestId('gq-rail')).toBeVisible();
-  await expect(page.getByTestId('gq-mode-micro')).toHaveAttribute('aria-pressed', 'true');
-
-  await expectTokens(page, {
-    '[data-testid="gq-mode-micro"]': {
-      'background-color': colors.ink,
-      color: colors.white,
-    },
-    '[data-testid="gq-mode-full"]': {
-      'background-color': 'rgba(0, 0, 0, 0)',
-      color: colors['ink-muted'],
-    },
-    '[data-testid="gq-pill-notions"]': {
-      'background-color': colors.surface,
-      'border-color': colors.border,
-      'border-radius': '999px',
-    },
-    '[data-testid="gq-rationale"]': { 'background-color': colors.ink },
-    '[data-testid="gq-rationale"] h2': { color: colors.lime },
-    '[data-testid="gq-rail"]': {
-      'background-color': colors.surface,
-      'border-radius': '21.6px',
-    },
-    '[data-testid="gq-game"]': {
-      'background-color': colors.surface,
-      'border-radius': '21.6px',
-    },
-  });
-  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-size', '30.6px');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-weight', '600');
-
-  const content = page.getByTestId('global-quiz-page');
-  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
-  const comparison = compareWithReferenceRegion(
-    actual,
-    `${REFERENCE_DIR}SCR-10-micro-desktop.png`,
-    REFERENCE_DESKTOP,
-    testInfo.outputPath('visual'),
-    'spec-703-micro',
-  );
-  await testInfo.attach('spec-703-micro-side-by-side', {
-    path: comparison.sideBySidePath,
-    contentType: 'image/png',
-  });
-  await testInfo.attach('spec-703-micro-diff', {
-    path: comparison.diffPath,
-    contentType: 'image/png',
-  });
-  testInfo.annotations.push({
-    type: 'mockup-diff-ratio',
-    description: `spec-703-micro:${comparison.ratio.toFixed(4)}`,
-  });
-  expect(comparison.ratio, 'écart à la maquette').toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
-
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(quizUrl());
-  await page.getByTestId('gq-mode-micro').click();
-  await expect(page.getByTestId('gq-rail')).toBeVisible();
-  await expectScreenshotBaseline(page, 'micro-session.png');
-  await axeCheck();
 });

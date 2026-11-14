@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { closeDb } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
-import { expect, test } from '@learny/testing/playwright';
+import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,
   type TestSession,
@@ -24,6 +24,11 @@ const AGILE = demoFormationId('agile');
 const REFERENCE_DIR = fileURLToPath(new URL('../../../../../design/references/', import.meta.url));
 
 let session: TestSession;
+
+test.beforeAll(async () => {
+  // The demo dataset is shared by the whole e2e run: restore it before asserting its state.
+  await restoreDemoData();
+});
 
 test.beforeEach(async ({ context, baseURL }) => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
@@ -75,6 +80,12 @@ test('vues, navigation et détail @SPEC-704', async ({ page, axeCheck }) => {
   const quiz = page.getByRole('button', {
     name: 'Quiz de validation, 14:00 – 15:00, Tentative 2 · seuil 80 %, Quiz de validation, Mercredi 11 nov., Prévu',
   });
+  // SPEC-714 — l'échauffement de 13:50 est désormais le premier créneau à venir.
+  await expect(page.getByTestId('agenda-detail-type')).toHaveText('Échauffement');
+  await expect(page.getByTestId('agenda-detail-when')).toHaveText(
+    'Mercredi 11 nov. · 13:50 – 13:52',
+  );
+  await quiz.click();
   await expect(quiz).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByTestId('agenda-detail-type')).toHaveText('Quiz de validation');
   await expect(page.getByTestId('agenda-detail-title')).toHaveText('Quiz de validation');
@@ -88,7 +99,7 @@ test('vues, navigation et détail @SPEC-704', async ({ page, axeCheck }) => {
   );
   await expect(page.getByTestId('slot-move')).toBeEnabled();
   // CA-6 — les totaux affichés suivent EF-11 sur les créneaux de la semaine.
-  await expect(page.getByTestId('agenda-totals-planned')).toContainText('24 h prévues');
+  await expect(page.getByTestId('agenda-totals-planned')).toContainText('24 h 02 prévues');
   await expect(page.getByTestId('agenda-totals-done')).toContainText('15 h faites');
   await expect(page.getByTestId('agenda-totals-margins')).toHaveText('3 marges de rattrapage');
 
@@ -156,7 +167,7 @@ test('vues, navigation et détail @SPEC-704', async ({ page, axeCheck }) => {
   await expect(page.getByTestId('agenda-range')).toHaveText('Novembre 2026');
   await expect(page.getByTestId('agenda-month-cell-2026-11-11')).toHaveAttribute(
     'aria-label',
-    'Mercredi 11 nov., 4 activités',
+    'Mercredi 11 nov., 5 activités',
   );
   await page.getByTestId('agenda-month-cell-2026-11-16').click();
   await expect(page).toHaveURL(/vue=jour/);
@@ -193,6 +204,9 @@ test('ouvrir une activité @SPEC-704', async ({ page, axeCheck }) => {
   await page.goto(weekUrl('2026-11-11'));
 
   // CA-7 — « Ouvrir » mène à la cible d'ET-5 pour le quiz de validation sélectionné.
+  await page
+    .getByRole('button', { name: /Quiz de validation, 14:00 – 15:00/ })
+    .click();
   await expect(page.getByTestId('agenda-detail-title')).toHaveText('Quiz de validation');
   await page.getByTestId('agenda-detail-open').click();
   await expect(page).toHaveURL(

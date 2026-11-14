@@ -497,6 +497,76 @@ async function readBricks(tx: DbTx, userId: string, formationId: string): Promis
   `);
 }
 
+/** The session of the day, when it already exists (SPEC-701): the home card mirrors it exactly. */
+async function readTodayQuizCard(
+  tx: DbTx,
+  userId: string,
+  formation: FormationRow,
+  today: string,
+  timeZone: string,
+): Promise<HomeGlobalQuiz | null> {
+  const rows = await tx.execute<{ config: unknown }>(sql`
+    select config
+    from public.activities
+    where owner_id = ${userId}::uuid
+      and formation_id = ${formation.id}::uuid
+      and kind = 'global_quiz_session'
+      and for_date = ${today}::date
+    order by created_at desc
+    limit 1
+  `);
+  const config = rows[0]?.config;
+  if (typeof config !== 'object' || config === null) return null;
+  const raw = config as {
+    estimatedSec?: unknown;
+    items?: unknown;
+    deferredCount?: unknown;
+    dueCount?: unknown;
+    deferredTo?: unknown;
+  };
+  if (!Array.isArray(raw.items) || typeof raw.estimatedSec !== 'number') return null;
+  const items = raw.items.flatMap((item) => {
+    if (typeof item !== 'object' || item === null) return [];
+    const entry = item as {
+      format?: unknown;
+      notionIds?: unknown;
+      reasonKey?: unknown;
+    };
+    return [
+      {
+        format: typeof entry.format === 'string' ? entry.format : '',
+        notionIds: Array.isArray(entry.notionIds)
+          ? entry.notionIds.filter((id): id is string => typeof id === 'string')
+          : [],
+        reasonKey: typeof entry.reasonKey === 'string' ? entry.reasonKey : null,
+      },
+    ];
+  });
+  const notionIds = new Set(items.flatMap((item) => item.notionIds));
+  const deferredCount = typeof raw.deferredCount === 'number' ? raw.deferredCount : 0;
+  const dueCount = typeof raw.dueCount === 'number' ? raw.dueCount : notionIds.size + deferredCount;
+  const deferredTo = typeof raw.deferredTo === 'string' ? raw.deferredTo : null;
+  return {
+    formationId: formation.id,
+    formationTitle: formation.title,
+    notionCount: notionIds.size,
+    gamesCount: new Set(items.map((item) => item.format)).size,
+    durationMin: raw.estimatedSec === 0 ? 0 : Math.ceil(raw.estimatedSec / 60 / 5) * 5,
+    hasGaps: items.some((item) => item.reasonKey !== null),
+    deferred:
+      deferredCount === 0 || deferredTo === null
+        ? null
+        : {
+            dueCount,
+            deferredCount,
+            deferredTo,
+            dayLabel: deferredDayLabel(deferredTo, today, timeZone),
+            capMin: ENGINE.globalQuiz.maxMinutesDefault,
+          },
+    nextReviewOn: null,
+  };
+}
+
 function globalQuiz(
   formation: FormationRow,
   due: DueRow[],
@@ -830,7 +900,8 @@ async function readHome(tx: DbTx, userId: string, now: Date): Promise<HomeDto> {
     currentFormation === undefined ||
     (currentFormation.status !== 'active' && currentFormation.status !== 'paused')
       ? null
-      : globalQuiz(currentFormation, due, bricks, profile, today, now, timeZone);
+      : ((await readTodayQuizCard(tx, userId, currentFormation, today, timeZone)) ??
+        globalQuiz(currentFormation, due, bricks, profile, today, now, timeZone));
 
   return {
     today: {

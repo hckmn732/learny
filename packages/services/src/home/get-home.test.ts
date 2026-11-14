@@ -42,6 +42,8 @@ function context(execute: ReturnType<typeof vi.fn>, userId = USER): ServiceConte
 
 function sequence(rows: readonly unknown[][]) {
   const execute = vi.fn();
+  // Default answer for the queries a new read may add (e.g. the stored session of the day).
+  execute.mockResolvedValue([]);
   for (const value of rows) execute.mockResolvedValueOnce(value);
   return execute;
 }
