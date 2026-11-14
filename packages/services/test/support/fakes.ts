@@ -27,3 +27,28 @@ export class TestClock implements Clock {
 export function silentLogger(): LearnyLogger {
   return createLogger({ destination: createLogCapture().destination, level: 'silent' });
 }
+
+/**
+ * Text of a Drizzle `sql` template, for a fake transaction that dispatches on the query. Bound
+ * parameters are replaced by `?`; whitespace is normalised, so a test can match a stable
+ * fragment such as « from public.profiles ».
+ */
+export function sqlText(query: unknown): string {
+  const chunks = (query as { queryChunks?: unknown[] }).queryChunks;
+  if (!Array.isArray(chunks)) return String(query);
+  return chunks
+    .map((chunk) => chunkText(chunk))
+    .join('')
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
+function chunkText(chunk: unknown): string {
+  if (typeof chunk === 'string') return chunk;
+  if (typeof chunk !== 'object' || chunk === null) return ' ? ';
+  const value = (chunk as { value?: unknown }).value;
+  if (Array.isArray(value)) return value.join('');
+  const nested = (chunk as { queryChunks?: unknown[] }).queryChunks;
+  if (Array.isArray(nested)) return nested.map((entry) => chunkText(entry)).join('');
+  return ' ? ';
+}
