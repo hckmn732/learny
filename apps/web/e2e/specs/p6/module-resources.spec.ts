@@ -130,17 +130,21 @@ async function seedModule(userId: string): Promise<Seeded> {
       ['web', 'Article : les ledgers parallèles dans S/4HANA', null, null, null, 'https://example.test/ledgers'],
       ['image', 'Capture du journal universel', null, 'image/png', 180_000, null],
     ];
-    for (const [kind, title, content, mime, size, url] of resources) {
+    for (const [index, [kind, title, content, mime, size, url]] of resources.entries()) {
+      // Horodatages échelonnés : la requête du module trie par created_at asc et les ids sont
+      // aléatoires, un même created_at rendrait l'ordre de la liste non déterministe.
       await tx.execute(sql`
         insert into public.resources (
           owner_id, formation_id, chapter_id, kind, title, content_text, mime, size_bytes, url,
-          storage_path, status
+          storage_path, status, created_at, updated_at
         )
         values (
           ${userId}::uuid, ${programme.formationId}::uuid, ${chapters[1]}::uuid, ${kind}::public.resource_kind,
           ${title}, ${content}, ${mime}, ${size}, ${url},
           ${kind === 'pdf' || kind === 'image' ? `${userId}/${randomUUID()}/fichier.bin` : null},
-          'ready'
+          'ready',
+          ${NOW}::timestamptz - (interval '1 second' * ${resources.length - index}),
+          ${NOW}::timestamptz
         )
       `);
     }
