@@ -3,7 +3,13 @@
 export * from './moteur-d-automatismes';
 export * from './reprise';
 export { repriseAutomation } from './definitions/reprise';
+export {
+  echauffementAutomation,
+  explainEchauffement,
+  explainWarmupLastAction,
+} from './definitions/echauffement';
 
+import { echauffementAutomation } from './definitions/echauffement';
 import { repriseAutomation } from './definitions/reprise';
 import { automationRegistry } from './moteur-d-automatismes';
 
@@ -11,4 +17,7 @@ import { automationRegistry } from './moteur-d-automatismes';
 // load: a second evaluation (tests, hot reload) keeps the first definition.
 if (automationRegistry.get('reprise') === undefined) {
   automationRegistry.register(repriseAutomation);
+}
+if (automationRegistry.get('echauffement') === undefined) {
+  automationRegistry.register(echauffementAutomation);
 }

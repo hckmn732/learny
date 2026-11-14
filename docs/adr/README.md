@@ -193,3 +193,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0321](ADR-0321-reconciliation-sobre-et-idempotente-des-jalons-a-la-lecture.md) | Réconciliation sobre et idempotente des jalons à la lecture | Déduite | SPEC-723, SPEC-409, SPEC-209, SPEC-304 |
 | [ADR-0322](ADR-0322-decisions-d-implementation-de-l-automatisme-reprise.md) | Décisions d’implémentation de l’automatisme reprise | Déduite | SPEC-712, SPEC-711, SPEC-705, SPEC-407, ADR-0190, ADR-0192 |
 | [ADR-0323](ADR-0323-contrats-correction-et-rendu-des-quatre-jeux-de-memorisation.md) | Contrats, correction et rendu des quatre jeux de mémorisation | Déduite | SPEC-702, ADR-0181, ADR-0024, ADR-0025, ADR-0020, ADR-0180 |
+| [ADR-0327](ADR-0327-decisions-d-implementation-de-l-automatisme-echauffement.md) | Décisions d'implémentation de l'automatisme échauffement | Déduite | SPEC-714, SPEC-711, SPEC-410, SPEC-411, ADR-0190, ADR-0193 |
