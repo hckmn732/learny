@@ -54,14 +54,18 @@ const instantSchema = z
 function instant(value: Date, field: string): Date {
   const parsed = instantSchema.safeParse(value);
   if (!parsed.success) {
-    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`);
+    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`, {
+      errors: [{ path: field, message: 'instant valide attendu' }],
+    });
   }
   return parsed.data;
 }
 
 function identifier(value: string, field: string): string {
   if (!uuidSchema.safeParse(value).success) {
-    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`);
+    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`, {
+      errors: [{ path: field, message: 'identifiant UUID attendu' }],
+    });
   }
   return value;
 }
@@ -256,6 +260,7 @@ export async function createAutomationActionQuiet(
     throw new AppError(
       'VALIDATION_FAILED',
       'Champ « decidedAt » invalide : une action en attente n’a pas encore de décision.',
+      { errors: [{ path: 'decidedAt', message: 'aucune décision attendue' }] },
     );
   }
 
@@ -337,9 +342,12 @@ export async function listAutomationActionsFiltered(
     .limit(input.limit + 1);
   const page = rows.slice(0, input.limit);
   const extra = rows[input.limit];
+  // The cursor is the last row *returned*: the next query filters `(created_at, id) < cursor`,
+  // so pointing at the extra row would skip it silently (and empty the second page).
+  const last = extra === undefined ? undefined : page[page.length - 1];
   return {
     rows: page,
-    nextCursorK: extra === undefined ? null : extra.createdAt.toISOString(),
-    nextCursorId: extra === undefined ? null : extra.id,
+    nextCursorK: last === undefined ? null : last.createdAt.toISOString(),
+    nextCursorId: last === undefined ? null : last.id,
   };
 }

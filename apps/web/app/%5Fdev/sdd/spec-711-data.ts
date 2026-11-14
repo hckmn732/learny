@@ -10,7 +10,6 @@ import { z } from 'zod';
 import {
   acceptAutomationAction,
   createAutomationRegistry,
-  declineAutomationAction,
   defineAutomation,
   listMyAutomationActions,
   markConsumed,
@@ -19,7 +18,7 @@ import {
   undoAutomationAction,
   type AutomationRegistry,
 } from '@learny/automations';
-import { EVENT_AUTOMATION_KEYS } from '@learny/contracts';
+import { EVENT_AUTOMATION_KEYS, type AutomationKey } from '@learny/contracts';
 import { ok, type Clock } from '@learny/core';
 import { createLogger } from '@learny/core/server';
 import { serviceDb, sql } from '@learny/db';
@@ -98,11 +97,11 @@ function createDemoRegistry(effect: { applyCalls: number }): AutomationRegistry 
   return registry;
 }
 
-function engineContext() {
+function engineContext(at: string = AT) {
   return {
     requestId: `sdd-711-${randomUUID().slice(0, 8)}`,
     sdb: serviceDb(),
-    clock: CLOCK,
+    clock: { now: () => new Date(at) } satisfies Clock,
     logger: createLogger({ level: 'error' }),
   };
 }
@@ -143,7 +142,7 @@ export async function loadSpec711Demo(): Promise<Spec711Data> {
     b = fixtureB.userId;
     const effect = { applyCalls: 0 };
     const registry = createDemoRegistry(effect);
-    const engine = engineContext();
+    const engine = engineContext('2026-11-11T12:00:00.000Z');
     const ctxA = userContext(fixtureA.userId);
     const ctxB = userContext(fixtureB.userId);
     const steps: Spec711Step[] = [];
@@ -210,21 +209,59 @@ export async function loadSpec711Demo(): Promise<Spec711Data> {
       code: foreign.ok ? null : foreign.error.code,
     });
 
-    // EF-3, BR-AUT-12 — a second proposal, declined, feeds the weekly journal.
+    // EF-3, BR-AUT-12 — a second proposal, accepted and still applied, offers « Annuler ».
+    const bilanRegistry = createDemoRegistryWithKey('bilan', {
+      kind: 'bilan_demo',
+      dedupeKey: `sdd711-bilan:${fixtureA.userId}`,
+      summary: 'Bilan de la semaine proposé pour faire le point en 10 minutes',
+    });
     const run3 = await runAutomation(
-      engine,
-      {
-        key: 'bilan',
-        userId: fixtureA.userId,
-        trigger: { type: 'direct' },
-      },
-      { registry: createDemoRegistryWithKey(`sdd711-bilan:${fixtureA.userId}`, effect) },
+      engineContext('2026-11-11T12:10:00.000Z'),
+      { key: 'bilan', userId: fixtureA.userId, trigger: { type: 'direct' } },
+      { registry: bilanRegistry },
     );
     if (!run3.ok) throw run3.error;
-    const secondActionId = run3.value.actionIds[0];
-    if (secondActionId === undefined) throw new Error('aucune seconde action proposée');
-    const decline = await declineAutomationAction(ctxA, { actionId: secondActionId }, { registry });
-    if (!decline.ok) throw decline.error;
+    const bilanActionId = run3.value.actionIds[0];
+    if (bilanActionId === undefined) throw new Error('aucune action bilan proposée');
+    const acceptBilan = await acceptAutomationAction(
+      ctxA,
+      { actionId: bilanActionId },
+      {
+        registry: bilanRegistry,
+      },
+    );
+    if (!acceptBilan.ok) throw acceptBilan.error;
+
+    // BR-AUT-11, BR-AUT-12 — a third action is undone: the journal keeps the cancelled row.
+    const sprintRegistry = createDemoRegistryWithKey('sprint', {
+      kind: 'sprint_demo',
+      dedupeKey: `sdd711-sprint:${fixtureA.userId}`,
+      summary: 'Sprint de 20 min proposé avant le jalon de vendredi',
+    });
+    const run4 = await runAutomation(
+      engineContext('2026-11-11T12:15:00.000Z'),
+      { key: 'sprint', userId: fixtureA.userId, trigger: { type: 'direct' } },
+      { registry: sprintRegistry },
+    );
+    if (!run4.ok) throw run4.error;
+    const sprintActionId = run4.value.actionIds[0];
+    if (sprintActionId === undefined) throw new Error('aucune action sprint proposée');
+    const acceptSprint = await acceptAutomationAction(
+      ctxA,
+      { actionId: sprintActionId },
+      {
+        registry: sprintRegistry,
+      },
+    );
+    if (!acceptSprint.ok) throw acceptSprint.error;
+    const undoSprint = await undoAutomationAction(
+      ctxA,
+      { actionId: sprintActionId },
+      {
+        registry: sprintRegistry,
+      },
+    );
+    if (!undoSprint.ok) throw undoSprint.error;
 
     const journal = await listMyAutomationActions(ctxA, { limit: 5 });
     if (!journal.ok) throw journal.error;
@@ -263,34 +300,30 @@ export async function loadSpec711Demo(): Promise<Spec711Data> {
   }
 }
 
-/** Same fake definition with another dedupe key, so the journal shows a declined row too. */
+/** Same fake definition for another key, so the weekly journal shows applied and undone rows. */
 function createDemoRegistryWithKey(
-  dedupeKey: string,
-  effect: { applyCalls: number },
+  key: AutomationKey,
+  options: { kind: string; dedupeKey: string; summary: string },
 ): AutomationRegistry {
   const registry = createAutomationRegistry();
   registry.register(
     defineAutomation({
-      key: 'bilan',
-      triggers: [{ type: 'nightly' }],
+      key,
+      triggers: [{ type: 'direct' }],
       params: z.object({}).default({}),
       run: () =>
         Promise.resolve([
           {
-            kind: 'bilan_demo',
+            kind: options.kind,
             formationId: null,
             requiresConsent: true,
             payload: { minutes: 10 },
-            undoPayload: { restaure: 'aucun bilan' },
-            dedupeKey,
+            undoPayload: { restaure: 'aucune séance' },
+            dedupeKey: options.dedupeKey,
             notification: { type: 'relaunch', href: '/aujourdhui' },
           },
         ]),
-      explain: () => 'Bilan de la semaine proposé pour faire le point en 10 minutes',
-      apply: (_ctx, action) => {
-        effect.applyCalls += 1;
-        return Promise.resolve(ok({ payload: action.payload }));
-      },
+      explain: () => options.summary,
       undo: () => Promise.resolve(ok(null)),
     }),
   );
