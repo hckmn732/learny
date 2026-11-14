@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T02:55:36.402Z",
+  "updatedAt": "2026-11-14T08:00:12.874Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4674,11 +4674,11 @@
       "validations": {}
     },
     "SPEC-704": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-14T08:00:12.874Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-704-agenda-vues-filtres-et-detail",
       "commit": null,
       "lastError": null,
       "validations": {}
