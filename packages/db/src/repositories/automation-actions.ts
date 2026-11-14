@@ -10,7 +10,7 @@ import { z } from 'zod';
 
 import { AppError } from '@learny/core';
 
-import type { DbTx } from '../client';
+import type { Db, DbTx } from '../client';
 import { AUTOMATION_KEYS } from '../schema/identity';
 import {
   AUTOMATION_STATUSES,
@@ -312,13 +312,13 @@ export type ConsumeAutomationActionInput = AutomationActionRef;
  * it can no longer be undone, which is the stated exception of the rule.
  */
 export async function consumeAutomationAction(
-  tx: DbTx,
+  db: Db | DbTx,
   input: ConsumeAutomationActionInput,
 ): Promise<AutomationAction> {
   const userId = identifier(input.userId, 'userId');
   const actionId = identifier(input.actionId, 'actionId');
 
-  const locked = await tx
+  const locked = await db
     .select()
     .from(automationActions)
     .where(and(eq(automationActions.id, actionId), eq(automationActions.userId, userId)))
@@ -330,7 +330,7 @@ export async function consumeAutomationAction(
     throw new AppError('CONFLICT', 'Seule une action appliquée peut être consommée.');
   }
 
-  const updated = await tx
+  const updated = await db
     .update(automationActions)
     .set({ status: 'consumed' })
     .where(eq(automationActions.id, actionId))
@@ -354,4 +354,30 @@ export async function listAutomationActionsAscending(
     .where(and(eq(automationActions.userId, userId), gte(automationActions.createdAt, since)))
     .orderBy(asc(automationActions.createdAt), asc(automationActions.id))
     .limit(limit);
+}
+
+export interface ExpireDueAutomationActionsInput {
+  /** Injected instant of the tick (ADR-0047); never the server clock (ET-4). */
+  now: Date;
+}
+
+/**
+ * SPEC-711 ET-4, ADR-0190 — expires the pending actions whose `payload.expiresAt` has passed.
+ * Called by the hourly tick with its injected instant; a replay after the same instant changes
+ * nothing (the status is no longer `pending_consent`). Returns the expired rows for the journal.
+ */
+export async function expireDueAutomationActions(
+  db: Db | DbTx,
+  input: ExpireDueAutomationActionsInput,
+): Promise<AutomationAction[]> {
+  const now = instant(input.now, 'now');
+  return db
+    .update(automationActions)
+    .set({ status: 'expired', decidedAt: now })
+    .where(
+      sql`${automationActions.status} = 'pending_consent'
+        and ${automationActions.payload} ? 'expiresAt'
+        and (${automationActions.payload} ->> 'expiresAt')::timestamptz <= ${now.toISOString()}::timestamptz`,
+    )
+    .returning();
 }

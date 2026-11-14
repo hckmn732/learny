@@ -287,6 +287,12 @@ export const automationActions = pgTable(
       'automation_actions_declined_decided_at_check',
       sql`${table.status} <> 'declined' or ${table.decidedAt} is not null`,
     ),
+    // SPEC-711 ET-4, ADR-0190 — idempotence of the proposals: one action at most per
+    // `(user_id, automation, payload->>'dedupeKey')`, for the rows that carry a key. A replayed
+    // trigger or a redelivered event therefore creates no second action (CA-2, CL-2).
+    uniqueIndex('automation_actions_dedupe_uq')
+      .on(table.userId, table.automation, sql`(${table.payload} ->> 'dedupeKey')`)
+      .where(sql`${table.payload} ? 'dedupeKey'`),
   ],
 );
 

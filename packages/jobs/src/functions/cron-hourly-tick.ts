@@ -1,6 +1,8 @@
 // Hourly tick (SPEC-203 ET-5, ADR-0067, ADR-0123): at minute 5 of every UTC hour it resends the
 // pending outbox events, then fans out one `user/local-tick` per active user describing the local
 // window `[T − 5 min, T + 55 min[`, and finally emits the global `cron/hourly-tick`.
+import { expireDueAutomationActions } from '@learny/db';
+
 import { defineFunction } from '../define';
 import { dispatchPending } from '../emit';
 import {
@@ -25,6 +27,12 @@ export const cronHourlyTick = defineFunction(
     const tick = new Date(tickAt);
 
     const outbox = await step.run('dispatch-outbox', () => dispatchPending(500));
+
+    // SPEC-711 ET-4 — the pending actions whose `expiresAt` has passed become `expired` at every
+    // tick, with the same injected instant as the rest of the run (a replay changes nothing).
+    const expired = await step.run('expire-actions', () =>
+      expireDueAutomationActions(ctx.sdb, { now: tick }),
+    );
 
     let cursor: string | null = null;
     let users = 0;
@@ -53,6 +61,6 @@ export const cronHourlyTick = defineFunction(
       name: 'cron/hourly-tick',
       data: { tickAt },
     });
-    return { tickAt, users, outbox };
+    return { tickAt, users, outbox, expired: expired.length };
   },
 );

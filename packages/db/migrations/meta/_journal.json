@@ -351,6 +351,13 @@
       "when": 1794574006107,
       "tag": "0049_heavy_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1794643680073,
+      "tag": "0050_pretty_silvermane",
+      "breakpoints": true
     }
   ]
 }
