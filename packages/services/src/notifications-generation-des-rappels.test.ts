@@ -286,7 +286,9 @@ describe('[SPEC-706] règles et calculs', () => {
     expect(validationQuizReminderAt(startsAt).toISOString()).toBe('2026-11-11T13:20:00.000Z');
     expect(reminderKeyOf(SLOT, startsAt)).toBe(schedule.dedupeKey);
 
-    const produced = produceNotificationInput(FIXTURES[0]?.facts ?? {}, NOW);
+    const first = FIXTURES[0];
+    if (first === undefined) throw new Error('fixture de rappel absente');
+    const produced = produceNotificationInput(first.facts, NOW);
     expect(produced.input.eligibleAt).toBe('2026-11-11T13:20:00.000Z');
     expect(produced.input.staleAt).toBe(startsAt);
     expect(produced.input.data.when).toBe('aujourd’hui à 15:00');
@@ -338,7 +340,7 @@ describe('[SPEC-706] règles et calculs', () => {
     ).toThrow();
     expect(() =>
       produceNotificationInput(
-        { ...FIXTURES[0]?.facts, kind: 'unknown' } as unknown as ProducerFacts,
+        { ...(FIXTURES[0]?.facts ?? {}), kind: 'unknown' } as unknown as ProducerFacts,
         NOW,
       ),
     ).toThrow();
