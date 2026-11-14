@@ -114,6 +114,8 @@ test('parcours SPEC-707 @SPEC-707', async ({ page, axeCheck, captureEvidence }) 
   );
   // BR-ACC-12 — the e-mail of the profile is never editable.
   await expect(page.getByTestId('profile-email')).toHaveAttribute('readonly', '');
+  // BR-SET-02 — the identity is saved with the rhythm; the fresh session has no first name yet.
+  await page.getByTestId('profile-first-name').fill('Camille');
 
   const saved = page.waitForResponse(
     (response) =>
@@ -254,8 +256,9 @@ test('conformité SCR-15 @SPEC-707 @visual', async ({
   // The maquette is rendered from the SPEC-115 dataset: Alex Perrin, 5 h par jour, L-V,
   // matin et après-midi. A fresh test session would not carry the shell of the reference.
   await page.goto('/parametres');
-  await expect(page.getByTestId('profile-identity')).toContainText('Alex');
-  await expect(page.getByTestId('profile-identity')).toContainText('alex.perrin@demo.learny.test');
+  await expect(page.getByTestId('profile-first-name')).toHaveValue('Alex');
+  await expect(page.getByTestId('profile-last-name')).toHaveValue('Perrin');
+  await expect(page.getByTestId('profile-email')).toHaveValue('alex.perrin@demo.learny.test');
 
   await expectTokens(page, {
     body: { 'background-color': '#F4F4F1', color: '#111113' },
@@ -292,7 +295,7 @@ test('conformité SCR-15 @SPEC-707 @visual', async ({
       {
         name: 'settings-tabs',
         locator: page.getByTestId('settings-tabs'),
-        rect: { x: 962, y: 99, width: 388, height: 32 },
+        rect: { x: 959, y: 94, width: 395, height: 46 },
       },
       {
         name: 'profile-identity',
@@ -312,7 +315,7 @@ test('conformité SCR-15 @SPEC-707 @visual', async ({
       {
         name: 'profile-save',
         locator: page.getByTestId('profile-save'),
-        rect: { x: 1243, y: 730, width: 108, height: 40 },
+        rect: { x: 1241, y: 728, width: 113, height: 44 },
       },
     ],
   });
@@ -341,7 +344,7 @@ test('conformité SCR-15 mobile @SPEC-707 @visual @mobile', async ({
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await useDemoUser(context, baseURL, page);
   await page.goto('/parametres');
-  await expect(page.getByTestId('profile-identity')).toContainText('Alex');
+  await expect(page.getByTestId('profile-first-name')).toHaveValue('Alex');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
