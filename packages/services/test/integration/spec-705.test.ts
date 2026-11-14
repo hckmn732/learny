@@ -283,6 +283,41 @@ describe('[SPEC-705] service et API', () => {
     expect(unchanged[0]?.end_date).toBe(before[0]?.end_date);
   });
 
+  it('BR-AUT-11 — « alléger » crée une action en attente sans changer le planning', async () => {
+    const options = await getReplanOptions(context(ALEX), SAP);
+    expect(options.ok).toBe(true);
+    if (!options.ok) return;
+    const before = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`
+      select f.end_date::text as end_date,
+             (select count(*)::int from public.schedule_slots ss
+              where ss.user_id = ${ALEX}::uuid and ss.formation_id = f.id) as slots
+      from public.formations f
+      where f.id = ${SAP}::uuid
+    `);
+    const applied = await applyReplan(context(ALEX), SAP, {
+      choice: 'lighten',
+      expectedPlanVersion: options.value.planVersion,
+    });
+    expect(applied.ok).toBe(true);
+    if (!applied.ok) return;
+    expect(applied.value.outcome).toBe('consent_required');
+    expect(applied.value.consentActionId).not.toBe(null);
+    const action = await serviceDb().execute<{ status: string; requires_consent: boolean }>(sql`
+      select status::text as status, requires_consent
+      from public.automation_actions
+      where id = ${applied.value.consentActionId}::uuid
+    `);
+    expect(action[0]).toEqual({ status: 'pending_consent', requires_consent: true });
+    const after = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`
+      select f.end_date::text as end_date,
+             (select count(*)::int from public.schedule_slots ss
+              where ss.user_id = ${ALEX}::uuid and ss.formation_id = f.id) as slots
+      from public.formations f
+      where f.id = ${SAP}::uuid
+    `);
+    expect(after[0]).toEqual(before[0]);
+  });
+
   it('CA-2 — une option confirmée replanifie sans perdre les activités réalisées', async () => {
     const options = await getReplanOptions(context(ALEX), SAP);
     expect(options.ok).toBe(true);
@@ -324,40 +359,5 @@ describe('[SPEC-705] service et API', () => {
       where user_id = ${ALEX}::uuid and name = 'plan/replanned'
     `);
     expect(eventsAfter[0]?.count).toBe(eventsBefore[0]?.count);
-  });
-
-  it('BR-AUT-11 — « alléger » crée une action en attente sans changer le planning', async () => {
-    const options = await getReplanOptions(context(ALEX), SAP);
-    expect(options.ok).toBe(true);
-    if (!options.ok) return;
-    const before = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`
-      select f.end_date::text as end_date,
-             (select count(*)::int from public.schedule_slots ss
-              where ss.user_id = ${ALEX}::uuid and ss.formation_id = f.id) as slots
-      from public.formations f
-      where f.id = ${SAP}::uuid
-    `);
-    const applied = await applyReplan(context(ALEX), SAP, {
-      choice: 'lighten',
-      expectedPlanVersion: options.value.planVersion,
-    });
-    expect(applied.ok).toBe(true);
-    if (!applied.ok) return;
-    expect(applied.value.outcome).toBe('consent_required');
-    expect(applied.value.consentActionId).not.toBe(null);
-    const action = await serviceDb().execute<{ status: string; requires_consent: boolean }>(sql`
-      select status::text as status, requires_consent
-      from public.automation_actions
-      where id = ${applied.value.consentActionId}::uuid
-    `);
-    expect(action[0]).toEqual({ status: 'pending_consent', requires_consent: true });
-    const after = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`
-      select f.end_date::text as end_date,
-             (select count(*)::int from public.schedule_slots ss
-              where ss.user_id = ${ALEX}::uuid and ss.formation_id = f.id) as slots
-      from public.formations f
-      where f.id = ${SAP}::uuid
-    `);
-    expect(after[0]).toEqual(before[0]);
   });
 });
