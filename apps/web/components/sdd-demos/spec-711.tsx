@@ -221,7 +221,7 @@ function Journal({ data }: Readonly<{ data: Spec711Data }>) {
           role="region"
           aria-label={t.journal.title}
           tabIndex={0}
-          className="mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="relative mt-4 overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <table className="w-full min-w-[48rem] text-left text-13">
             <thead>
