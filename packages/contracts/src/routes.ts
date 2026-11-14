@@ -27,6 +27,7 @@ import { programmeRoutes } from './programme';
 import { pushDevRoutes, pushRoutes } from './push';
 import { remediationRoutes } from './quiz-result';
 import { moduleRoutes } from './resources';
+import { reviewRoutes } from './review';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
 import { sidebarRoutes } from './sidebar';
@@ -76,6 +77,7 @@ export const ROUTES = {
   ...quizRoutes,
   ...examRoutes,
   ...remediationRoutes,
+  ...reviewRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;
