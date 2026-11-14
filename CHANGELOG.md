@@ -9,6 +9,220 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+## [v0.6.0] — 2026-11-14
+
+### Ajouts
+
+- feat(SPEC-617): écran du bilan final et choix d'entretien
+- feat(SPEC-617): services du bilan et de l'entretien de mémoire
+- feat(SPEC-617): contrats du bilan final et de l'entretien
+- feat(SPEC-614): écran d'examen isolé, résultats et tests
+- feat(SPEC-612): écrans de résultat et de remédiation
+- feat(SPEC-614): services, planification et routes de l'examen blanc
+- feat(SPEC-614): contrats du format et de la tentative d'examen blanc
+- feat(SPEC-612): déblocage, jalon, remédiation
+- feat(SPEC-612): contrats du résultat et de la remédiation
+- feat(SPEC-610): panneau tuteur de l'écran Cours
+- feat(SPEC-610): service, API SSE et contexte de la discussion
+- feat(SPEC-611): écran et routes du quiz de validation
+- feat(SPEC-611): contrats, service et job du quiz de validation
+- feat(SPEC-610): consignes versionnées de la discussion
+- feat(SPEC-610): contrats de la discussion avec le tuteur
+- feat(SPEC-609): idempotence des corrections de section
+- feat(SPEC-609): construit le parcours de lecture
+- feat(SPEC-609): implémente les services de lecture
+- feat(SPEC-609): définit les contrats de lecture
+- feat(SPEC-609): étend le schéma de lecture du cours
+- feat(SPEC-608): ajoute l'écran et la route de lecture du cours
+- feat(SPEC-608): implémente la génération et le versionnement du cours
+- feat(SPEC-608): définit les contrats du cours
+- feat(SPEC-608): ajoute la clé d'idempotence des versions de cours
+- feat(SPEC-607): construit le parcours et les routes du module
+- feat(SPEC-607): définit les contrats et services du module
+- feat(SPEC-606): construit le parcours du programme en cours
+- feat(SPEC-606): implémente les services du programme actif
+- feat(SPEC-606): définit les contrats du programme en cours
+- feat(SPEC-618): construit le parcours
+- feat(SPEC-618): implémente les services
+- feat(SPEC-618): définit les contrats
+- feat(SPEC-605): construit l'écran du programme proposé
+- feat(SPEC-605): planifie après validation
+- feat(SPEC-605): implémente les services du programme
+- feat(SPEC-605): structure le programme par le tuteur
+- feat(SPEC-605): stocke les versions de proposition
+- feat(SPEC-605): définit les contrats du programme
+- feat(SPEC-613): construit le parcours
+- feat(SPEC-602): service et API de l'onboarding
+- feat(SPEC-616): construit la carte des notions
+- feat(SPEC-616): lit le graphe sous RLS
+- feat(SPEC-616): définit les contrats du graphe
+- feat(SPEC-613): implémente les services
+- feat(SPEC-613): définit les contrats
+- feat(SPEC-603): API et écran d'accueil
+- feat(SPEC-615): construit le parcours Mes lacunes
+- feat(SPEC-615): implémente les services des lacunes
+- feat(SPEC-615): définit les contrats des lacunes
+- feat(SPEC-604): écran de cadrage par chat
+- feat(SPEC-604): API et services du cadrage
+- feat(SPEC-604): règles, consigne et fixtures du cadrage
+- feat(SPEC-604): contrats, erreurs et sigle des formations
+- feat(SPEC-601): livre les écrans d'inscription, connexion et vérification
+- feat(SPEC-601): expose le profil et le contrat du formulaire
+- feat(SPEC-601): ajoute ChoiceCard et ChoiceGroup au design system
+- feat(SPEC-603): sigle et couleur des formations
+
+### Corrections
+
+- fix(SPEC-610): évite une discussion dupliquée à l'ouverture
+- fix(SPEC-202): rend les pages à session dynamiques
+- fix(SPEC-616): stabilise la disposition de la carte des notions
+- fix(SPEC-202): tolère une lecture d'authentification momentanée
+- fix(SPEC-617): stabilise les parcours après la clôture de phase
+- fix(SPEC-614): retire un opérateur void inutile
+- fix(SPEC-614): corrige le type du lecteur de question
+- fix(SPEC-611): corrige le typage des tests et de la correction
+- fix(SPEC-611): fiabilise le parcours e2e et l'exécution inline
+- fix(SPEC-304): retire le script inline de la coquille
+- fix(SPEC-603): normalise l'instant de révision
+- fix(SPEC-601): fiabilise le dev local
+- fix(SPEC-609): corrige les contrats et la RLS post-fusion
+- fix(SPEC-607): retire l'idempotence du renommage PATCH
+- fix(SPEC-606): charge la coquille sans sélectionner une proposition
+- fix(SPEC-606): conserve la version demandée du programme
+- fix(SPEC-605): force la RLS des propositions et complète la matrice
+- fix(SPEC-615): refuse une formation étrangère avant le streaming
+- fix(SPEC-605): fiabilise le tuteur et le rendu visuel
+- fix(SPEC-602): retire un identifiant de modèle codé en dur
+- fix(SPEC-616): fiabilise l’accessibilité et les captures
+- fix(sdd): aligne l'accueil P6 et les baselines de coquille
+- fix(SPEC-605): formate les dates du calendrier
+- fix(SPEC-605): charge la coquille sans sélectionner la formation
+- fix(SPEC-616): aligne la vue et documente l’ADR
+- fix(SPEC-613): corrige le responsive et l’accessibilité
+- fix(SPEC-604): renumérote l'ADR en 0309
+- fix(SPEC-604): lint de l'écran de cadrage
+- fix(SPEC-604): lint des services du cadrage
+- fix(sdd): sépare les types de région visuelle
+- fix(SPEC-604): lint des règles du cadrage
+- fix(sdd): aligne les galeries après SPEC-601
+- fix(SPEC-615): aligne le nom accessible des filtres
+- fix(SPEC-615): nomme les filtres pour les lecteurs d'écran
+- fix(SPEC-601): aligne la normalisation e-mail sur les minuscules
+- fix(SPEC-603): comptes de démonstration connectables
+- fix(SPEC-615): convertit la prochaine révision
+- fix(SPEC-604): horloge injectée et tableau des objectifs
+- fix(SPEC-615): aligne les ancres et les statistiques
+- fix(SPEC-011): accepte les artefacts shardés dans la démo CI
+
+### Documentation
+
+- docs(SPEC-614): consigne l'ADR et les critères d'acceptation
+- docs(SPEC-614): formatage et contrat OpenAPI
+- docs(SPEC-610): met à jour le contrat OpenAPI de la discussion
+- docs(SPEC-609): consigne les décisions de lecture
+- docs(SPEC-608): documente la route de lecture du cours
+- docs(SPEC-605): renseigne les critères d'acceptation
+- docs(SPEC-618): consigne les décisions
+- docs(SPEC-616): régénère le contrat OpenAPI
+- docs(SPEC-613): consigne les décisions et les preuves
+- docs(SPEC-605): consigne les décisions et le modèle de données
+- docs(SPEC-602): consigne les contrats d'implémentation de l'onboarding
+- docs(SPEC-604): contrat OpenAPI et index des ADR
+- docs(SPEC-601): régénère la spécification OpenAPI
+- docs(SPEC-603): critères d'acceptation et contrat OpenAPI
+
+### Tests
+
+- test(SPEC-616): saisit la recherche au clavier pour WebKit
+- test(CP-6): circonscrit le cross-browser aux parcours P6
+- test(CP-6): réserve le cross-browser aux parcours fonctionnels
+- test(SPEC-614): fiabilise le serveur e2e et les écritures de l'examen
+- test(SPEC-615): date les modules du parcours des lacunes
+- test(SPEC-304): capture le tiroir mobile sans le fond
+- test(SPEC-304): diagnostic de la capture mobile
+- test(SPEC-304): attend les polices avant la capture mobile
+- test(SPEC-308): fiabilise la session de l'accès refusé
+- test(SPEC-304): restaure la ligne de base du menu mobile
+- test(SPEC-007): actualise le registre des jobs du web
+- test(SPEC-617): actualise le catalogue d'événements
+- test(SPEC-612): corrige le typage du test de remédiation
+- test(SPEC-617): lignes de base visuelles et OpenAPI
+- test(SPEC-617): vérifie le bilan, les modes et la conformité
+- test(SPEC-612): couvre les services de remédiation
+- test(SPEC-612): couvre les services de remédiation
+- test(SPEC-614): couvre les services de l'examen blanc
+- test(SPEC-614): couvre les services de l'examen blanc
+- test(SPEC-612): parcours e2e du résultat et de la remédiation
+- test(SPEC-610): stabilise les suites après fusion
+- test(SPEC-611): rétablit le seuil de couverture
+- test(SPEC-610): couvre les services du tuteur
+- test(SPEC-610): couvre les services du tuteur
+- test(SPEC-304): fiabilise la capture du menu mobile
+- test(SPEC-610): preuves de validation et décisions de mise en œuvre
+- test(SPEC-610): vérification préalable sur la lacune suivie
+- test(SPEC-610): parcours e2e, référence du panneau et preuves
+- test(SPEC-308): actualise les baselines d'authentification
+- test(SPEC-113): actualise la matrice RLS
+- test(SPEC-610): tests unitaires et d'intégration de la discussion
+- test(SPEC-611): tests, fabriques et correction du tirage
+- test(SPEC-609): couvre les services de lecture
+- test(SPEC-609): couvre les services de lecture
+- test(SPEC-609): fiabilise le parcours e2e et ses captures
+- test(SPEC-609): vérifie progression, résumé, signalement et source
+- test(SPEC-608): inscrit generate-course au registre
+- test(SPEC-608): couvre la lecture du cours
+- test(SPEC-608): vérifie la génération, les citations et la conformité visuelle
+- test(SPEC-606): aligne le titre du module sur SCR-06
+- test(SPEC-607): couvre les actions du module
+- test(SPEC-607): corrige les contrôles de lint et l’OpenAPI
+- test(SPEC-304): date les programmes des fixtures
+- test(SPEC-607): stabilise l’écran et fige la conformité visuelle
+- test(SPEC-607): vérifie les cas du module et des apports
+- test(SPEC-606): adapte le profil au fuseau du programme
+- test(SPEC-605): couvre les services du programme
+- test(SPEC-616): couvre la carte des notions
+- test(SPEC-618): couvre la gestion des formations
+- test(SPEC-605): couvre les services du programme
+- test(SPEC-606): fige la conformité visuelle du programme
+- test(SPEC-605): inscrit plan-programme au registre
+- test(SPEC-113): actualise les compteurs RLS
+- test(SPEC-606): corrige les données du programme actif
+- test(SPEC-606): vérifie le programme actif et le verrouillage
+- test(SPEC-605): stabilise la conformité visuelle
+- test(SPEC-618): ajuste le parcours visuel
+- test(SPEC-616): stabilise la liste accessible
+- test(SPEC-618): vérifie les cas
+- test(SPEC-605): joint les comparaisons visuelles
+- test(SPEC-605): vérifie les cas du programme
+- test(sdd): couvre l’agrégation de l’accueil
+- test(sdd): couvre les services du cadrage
+- test(sdd): couvre profil, lacunes et banques de questions
+- test(SPEC-602): parcours, reprise, paiement et conformité visuelle
+- test(SPEC-613): vérifie les cas
+- test(SPEC-616): ajoute le parcours e2e et le visuel
+- test(SPEC-616): vérifie le graphe sous RLS
+- test(SPEC-616): vérifie disposition, vue et détail
+- test(SPEC-603): accueil e2e, visuel et états vides
+- test(SPEC-604): preuves visuelles et reprise mobile
+- test(SPEC-604): conformité visuelle et critères d'acceptation
+- test(SPEC-615): ajoute les captures de référence
+- test(SPEC-615): fiabilise la conformité visuelle
+- test(SPEC-603): ajuste les seuils et l'horloge e2e
+- test(SPEC-604): aligne la comparaison SCR-04 sur la zone de contenu
+- test(SPEC-005): retente la seconde génération non déterministe
+- test(SPEC-603): session e2e du compte de démonstration
+- test(SPEC-601): ajoute les lignes de base visuelles desktop et mobile
+- test(SPEC-601): force le renvoi au-delà du délai serveur
+- test(SPEC-601): lit la date d'acceptation telle que rendue par le pilote
+- test(SPEC-601): couvre inscription, connexion et vérification
+- test(SPEC-615): vérifie les cas des lacunes
+- test(SPEC-604): unitaires, intégration et parcours du cadrage
+- test(sdd): accepte les artefacts shardés
+
+### Intégration continue
+
+- ci(sdd): sharde intégration/e2e et accélère la boucle
+
 ## [v0.5.0] — 2026-11-13
 
 ### Ajouts

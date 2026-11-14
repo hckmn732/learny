@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-13T19:04:06.424Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-14T02:55:36.404Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -9,13 +9,13 @@
 | Spécifications | 132 (V1 : 124, V2 : 8) |
 | Terminées | 91 |
 | En cours | 0 |
-| Prêtes | 0 |
-| En attente de dépendances | 41 |
+| Prêtes | 7 |
+| En attente de dépendances | 34 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **68.9 %** |
 | Avancement V1 | 73.4 % |
-| Prochaine action | checkpoint CP-6 |
+| Prochaine action | start SPEC-701 — Quiz global : session du jour et cartes de rappel |
 
 ## Phases et checkpoints
 
@@ -27,7 +27,7 @@
 | P3 | Design system et coquille de l'application | 9/9 | CP-3 | ✅ 2026-11-12 cp-3 v0.3.0 |
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
-| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ⏳ |
+| P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
 | P7 | Révisions, agenda, engagement et réglages | 0/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
@@ -127,17 +127,17 @@
 | [SPEC-616](../specs/p6-parcours/SPEC-616-carte-des-notions.md) | Carte des notions | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-404, SPEC-304, SPEC-411 |
 | [SPEC-617](../specs/p6-parcours/SPEC-617-bilan-final-et-entretien-de-memoire.md) | Bilan final et entretien de mémoire | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-612, SPEC-408 |
 | [SPEC-618](../specs/p6-parcours/SPEC-618-gestion-des-formations-changer-pause-limite-de-tro.md) | Gestion des formations : changer, pause, limite de trois | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-603, SPEC-407 |
-| [SPEC-701](../specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md) | Quiz global : session du jour et cartes de rappel | P7 | ⏳ waiting | 0 | — | SPEC-406, SPEC-503, SPEC-411, SPEC-513 |
+| [SPEC-701](../specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md) | Quiz global : session du jour et cartes de rappel | P7 | 🟢 ready | 0 | — | SPEC-406, SPEC-503, SPEC-411, SPEC-513 |
 | [SPEC-702](../specs/p7-engagement/SPEC-702-jeux-association-remise-en-ordre-classement-texte-.md) | Jeux : association, remise en ordre, classement, texte à trous | P7 | ⏳ waiting | 0 | — | SPEC-701 |
 | [SPEC-703](../specs/p7-engagement/SPEC-703-micro-seance.md) | Micro-séance | P7 | ⏳ waiting | 0 | — | SPEC-701 |
-| [SPEC-704](../specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md) | Agenda : vues, filtres et détail | P7 | ⏳ waiting | 0 | — | SPEC-407, SPEC-304, SPEC-411 |
+| [SPEC-704](../specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md) | Agenda : vues, filtres et détail | P7 | 🟢 ready | 0 | — | SPEC-407, SPEC-304, SPEC-411 |
 | [SPEC-705](../specs/p7-engagement/SPEC-705-agenda-deplacer-et-reajuster-le-planning.md) | Agenda : déplacer et réajuster le planning | P7 | ⏳ waiting | 0 | — | SPEC-704 |
-| [SPEC-706](../specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md) | Notifications : génération des rappels | P7 | ⏳ waiting | 0 | — | SPEC-209, SPEC-306, SPEC-411 |
-| [SPEC-707](../specs/p7-engagement/SPEC-707-parametres-onglets-et-profil.md) | Paramètres : onglets et Profil | P7 | ⏳ waiting | 0 | — | SPEC-304, SPEC-211 |
+| [SPEC-706](../specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md) | Notifications : génération des rappels | P7 | 🟢 ready | 0 | — | SPEC-209, SPEC-306, SPEC-411 |
+| [SPEC-707](../specs/p7-engagement/SPEC-707-parametres-onglets-et-profil.md) | Paramètres : onglets et Profil | P7 | 🟢 ready | 0 | — | SPEC-304, SPEC-211 |
 | [SPEC-708](../specs/p7-engagement/SPEC-708-parametres-notifications.md) | Paramètres : Notifications | P7 | ⏳ waiting | 0 | — | SPEC-707, SPEC-209 |
 | [SPEC-709](../specs/p7-engagement/SPEC-709-parametres-modeles-d-ia.md) | Paramètres : Modèles d'IA | P7 | ⏳ waiting | 0 | — | SPEC-707, SPEC-506, SPEC-507 |
 | [SPEC-710](../specs/p7-engagement/SPEC-710-parametres-automatismes.md) | Paramètres : Automatismes | P7 | ⏳ waiting | 0 | — | SPEC-707, SPEC-711 |
-| [SPEC-711](../specs/p7-engagement/SPEC-711-moteur-d-automatismes.md) | Moteur d'automatismes | P7 | ⏳ waiting | 0 | — | SPEC-203, SPEC-209, SPEC-108, SPEC-411 |
+| [SPEC-711](../specs/p7-engagement/SPEC-711-moteur-d-automatismes.md) | Moteur d'automatismes | P7 | 🟢 ready | 0 | — | SPEC-203, SPEC-209, SPEC-108, SPEC-411 |
 | [SPEC-712](../specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md) | Automatisme 1 : reprise après décrochage | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-407 |
 | [SPEC-713](../specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md) | Automatisme 2 : micro-séance de secours | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-703 |
 | [SPEC-714](../specs/p7-engagement/SPEC-714-automatisme-3-echauffement.md) | Automatisme 3 : échauffement | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-410 |
@@ -149,8 +149,8 @@
 | [SPEC-720](../specs/p7-engagement/SPEC-720-automatisme-9-bilan-de-la-semaine.md) | Automatisme 9 : bilan de la semaine | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-408 |
 | [SPEC-721](../specs/p7-engagement/SPEC-721-automatisme-10-mode-pause-et-retour.md) | Automatisme 10 : mode pause et retour | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-407, SPEC-409 |
 | [SPEC-722](../specs/p7-engagement/SPEC-722-accueil-le-tuteur-a-agi-pour-vous.md) | Accueil : le tuteur a agi pour vous | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-603 |
-| [SPEC-723](../specs/p7-engagement/SPEC-723-serie-regularite-et-jalons-interface.md) | Série, régularité et jalons : interface | P7 | ⏳ waiting | 0 | — | SPEC-409, SPEC-304 |
-| [SPEC-724](../specs/p7-engagement/SPEC-724-formations-a-plusieurs.md) | Formations à plusieurs | P7 | ⏳ waiting | 0 | — | SPEC-111, SPEC-606, SPEC-602 |
+| [SPEC-723](../specs/p7-engagement/SPEC-723-serie-regularite-et-jalons-interface.md) | Série, régularité et jalons : interface | P7 | 🟢 ready | 0 | — | SPEC-409, SPEC-304 |
+| [SPEC-724](../specs/p7-engagement/SPEC-724-formations-a-plusieurs.md) | Formations à plusieurs | P7 | 🟢 ready | 0 | — | SPEC-111, SPEC-606, SPEC-602 |
 | [SPEC-725](../specs/p7-engagement/SPEC-725-abonnement-a-l-ia-fournie-interface-et-plafond.md) | Abonnement à l'IA fournie : interface et plafond | P7 | ⏳ waiting | 0 | — | SPEC-210, SPEC-507, SPEC-709 |
 | [SPEC-801](../specs/p8-livraison-v1/SPEC-801-application-installable-et-revisions-hors-ligne.md) | Application installable et révisions hors ligne | P8 | ⏳ waiting | 0 | — | SPEC-701, SPEC-702 |
 | [SPEC-802](../specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md) | Responsive et mobile | P8 | ⏳ waiting | 0 | — | SPEC-618, SPEC-725, SPEC-724, SPEC-616 |
