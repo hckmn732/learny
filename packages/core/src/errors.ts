@@ -104,6 +104,7 @@ export const ERROR_CATALOG = {
   INVALID_RESPONSE: { status: 502, title: 'Réponse invalide' },
   NETWORK_ERROR: { status: 503, title: 'Réseau indisponible' },
   SERVICE_UNAVAILABLE: { status: 503, title: 'Service momentanément indisponible' },
+  AUTOMATION_ACTION_CONSUMED: { status: 422, title: 'Action déjà consommée' },
 } as const satisfies Record<string, { status: number; title: string }>;
 
 export type ErrorCode = keyof typeof ERROR_CATALOG;
