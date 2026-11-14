@@ -105,9 +105,9 @@ async function readProfileState(
   deletionScheduledFor: Date | null;
 }> {
   const rows = await tx.execute<{
-    updated_at: Date;
-    created_at: Date;
-    deletion_scheduled_for: Date | null;
+    updated_at: Date | string;
+    created_at: Date | string;
+    deletion_scheduled_for: Date | string | null;
     active_formation_count: number;
   }>(sql`
     select p.updated_at as updated_at,
@@ -122,11 +122,15 @@ async function readProfileState(
   `);
   const row = rows[0];
   if (row === undefined) throw new AppError('NOT_FOUND', 'Profil introuvable.');
+  const updatedAt = row.updated_at instanceof Date ? row.updated_at : new Date(row.updated_at);
+  const createdAt = row.created_at instanceof Date ? row.created_at : new Date(row.created_at);
+  const scheduled = row.deletion_scheduled_for;
   return {
-    updatedAt: row.updated_at,
-    createdAt: row.created_at,
+    updatedAt,
+    createdAt,
     activeFormationCount: row.active_formation_count,
-    deletionScheduledFor: row.deletion_scheduled_for,
+    deletionScheduledFor:
+      scheduled === null ? null : scheduled instanceof Date ? scheduled : new Date(scheduled),
   };
 }
 
@@ -139,10 +143,10 @@ export async function readSettingsState(tx: DbTx, userId: string): Promise<Setti
   const parsed = SettingsStateSchema.safeParse({
     me,
     rhythm,
-    updatedAt: profile.updatedAt,
-    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt.toISOString(),
+    createdAt: profile.createdAt.toISOString(),
     activeFormationCount: profile.activeFormationCount,
-    deletionScheduledFor: profile.deletionScheduledFor,
+    deletionScheduledFor: profile.deletionScheduledFor?.toISOString() ?? null,
     export: latest,
   });
   if (!parsed.success) {
@@ -188,7 +192,13 @@ export function updateSettingsProfile(
         value.expectedUpdatedAt !== undefined &&
         current.updatedAt.toISOString() !== value.expectedUpdatedAt
       ) {
-        throw new AppError('CONFLICT', 'Le profil a été modifié ailleurs. Rechargez vos réglages.');
+        throw new AppError(
+          'CONFLICT',
+          'Le profil a été modifié ailleurs. Rechargez vos réglages.',
+          {
+            status: 409,
+          },
+        );
       }
       await tx
         .update(profiles)
