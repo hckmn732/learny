@@ -25,6 +25,7 @@ export * from './me';
 export * from './home';
 export * from './onboarding/index';
 export * from './sidebar';
+export * from './serie-regularite-et-jalons-interface';
 export * from './parametres-onglets-et-profil';
 export * from './parametres-notifications';
 export * from './notifications/list';

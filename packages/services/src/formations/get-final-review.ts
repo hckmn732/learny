@@ -16,6 +16,7 @@ import {
   isUuid,
   toIso,
   type FinalReviewFormationRow,
+  type FinalReviewMilestoneRow,
   type FinalReviewModuleRow,
   type FinalReviewNotionRow,
   type FinalReviewSlotRow,
@@ -158,6 +159,35 @@ async function readSlots(
   `);
 }
 
+/**
+ * SPEC-723 EF-3 — sober milestones of the learner: those of the formation plus the global
+ * thresholds (100 notions, 30-day streak). A milestone of another formation never appears.
+ */
+async function readMilestones(
+  tx: DbTx,
+  userId: string,
+  formationId: string,
+): Promise<FinalReviewMilestoneRow[]> {
+  return tx.execute<FinalReviewMilestoneRow>(sql`
+    select ms.id::text as id,
+           ms.key::text as key,
+           ms.ref_id::text as ref_id,
+           ms.formation_id::text as formation_id,
+           f.title as formation_title,
+           m.title as module_title,
+           ms.achieved_at
+    from public.milestones ms
+    left join public.formations f on f.id = ms.formation_id
+    left join public.modules m on m.id = ms.ref_id
+    where ms.user_id = ${userId}::uuid
+      and (
+        ms.formation_id = ${formationId}::uuid
+        or ms.key in ('notions_100', 'streak_30')
+      )
+    order by ms.achieved_at desc, ms.id asc
+  `);
+}
+
 async function readRetention(
   tx: DbTx,
   userId: string,
@@ -277,10 +307,11 @@ export function getFinalReview(
       if (formation.status === 'archived') {
         throw new AppError('NOT_FOUND', 'Formation introuvable.');
       }
-      const [modules, notions, slots, timezone] = await Promise.all([
+      const [modules, notions, slots, milestones, timezone] = await Promise.all([
         readModules(tx, userId, formationId),
         readNotions(tx, userId, formationId),
         readSlots(tx, userId, formationId),
+        readMilestones(tx, userId, formationId),
         readTimezone(tx, userId),
       ]);
       if (
@@ -303,6 +334,7 @@ export function getFinalReview(
         modules,
         notions,
         slots,
+        milestones,
         retention,
         programVersion,
         dueCount,

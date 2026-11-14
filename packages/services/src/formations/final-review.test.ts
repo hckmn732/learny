@@ -127,6 +127,7 @@ function source(overrides: Partial<FinalReviewSource> = {}): FinalReviewSource {
         moved_from_id: null,
       },
     ],
+    milestones: [],
     retention: { oneMonth: null, twoMonths: null },
     programVersion: 2,
     dueCount: 3,
