@@ -32,6 +32,7 @@ import { remediationRoutes } from './quiz-result';
 import { moduleRoutes } from './resources';
 import { searchRoutes } from './search';
 import { securityRoutes } from './security';
+import { seriesMilestoneRoutes } from './serie-regularite-et-jalons-interface';
 import { sidebarRoutes } from './sidebar';
 import { tutorChatRoutes } from './tutor-chat';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
@@ -54,6 +55,7 @@ export const ROUTES = {
   ...headerRoutes,
   ...homeRoutes,
   ...sidebarRoutes,
+  ...seriesMilestoneRoutes,
   ...parametresRoutes,
   ...parametresNotificationsRoutes,
   ...aiRoutes,
