@@ -4961,8 +4961,6 @@ export const fr = {
         'Aucun créneau compatible ne tient dans vos disponibilités. Ajustez votre rythme pour libérer du temps.',
       adjust: 'Ajuster mon rythme',
       choose: 'Choisir ce créneau',
-      alternativeAria: (index: number, day: string, time: string) =>
-        `Créneau ${String(index)} : ${day} ${time}`,
       reasonsLabel: 'Pourquoi ce créneau',
       confirmTitle: (day: string, time: string) => `Déplacer au ${day} · ${time} ?`,
       confirmText: 'Seule cette activité sera déplacée ; les marges seront recalculées.',

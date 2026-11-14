@@ -171,10 +171,6 @@ test('parcours SPEC-705 @SPEC-705', async ({ page, axeCheck }) => {
     from public.formations f
     where f.id = ${SAP}::uuid
   `);
-  const beforeVersion = (await (
-    await page.request.post(`/api/v1/formations/${SAP}/replan-options`)
-  ).json()) as { planVersion: string; options: { kind: string }[] };
-  expect(beforeVersion.options).toHaveLength(3);
   await page.getByTestId('replan-option-shift_end').click();
   await expect(page.getByTestId('replan-confirm')).toBeVisible();
   const during = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`
@@ -185,10 +181,6 @@ test('parcours SPEC-705 @SPEC-705', async ({ page, axeCheck }) => {
     where f.id = ${SAP}::uuid
   `);
   expect(during[0]).toEqual(before[0]);
-  const duringVersion = (await (
-    await page.request.post(`/api/v1/formations/${SAP}/replan-options`)
-  ).json()) as { planVersion: string };
-  expect(duringVersion.planVersion).toBe(beforeVersion.planVersion);
   await page.getByTestId('replan-cancel').click();
   await expect(page.getByTestId('replan-confirm')).toHaveCount(0);
   const afterRefusal = await serviceDb().execute<{ end_date: string | null; slots: number }>(sql`

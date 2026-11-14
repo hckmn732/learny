@@ -143,11 +143,6 @@ export function SlotMovePanel({
                     type="button"
                     data-testid={`slot-alternative-${String(index)}`}
                     aria-pressed={selected}
-                    aria-label={t.alternativeAria(
-                      index + 1,
-                      longDayLabel(alternative.date),
-                      `${minutesToClock(alternative.startMinutes)} – ${minutesToClock(alternative.endMinutes)}`,
-                    )}
                     onClick={() => {
                       setChosen(selected ? null : index);
                       setError(null);
