@@ -189,3 +189,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0316](ADR-0316-correction-differee-des-questions-ouvertes-par-appel-structu.md) | Correction différée des questions ouvertes par appel structuré | Déduite | SPEC-611,SPEC-508,ADR-0017,ADR-0170 |
 | [ADR-0317](ADR-0317-decisions-d-implementation-de-l-examen-blanc.md) | Décisions d'implémentation de l'examen blanc | Déduite | SPEC-614 |
 | [ADR-0318](ADR-0318-nom-accessible-des-creneaux-et-cases-de-l-agenda.md) | Nom accessible des créneaux et cases de l'agenda | Déduite | SPEC-704 |
+| [ADR-0322](ADR-0322-decisions-d-implementation-de-l-automatisme-reprise.md) | Décisions d’implémentation de l’automatisme reprise | Déduite | SPEC-712, SPEC-711, SPEC-705, SPEC-407, ADR-0190, ADR-0192 |
