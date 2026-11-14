@@ -21,6 +21,7 @@ import { healthRoutes } from './health';
 import { homeRoutes } from './home';
 import { meRoutes } from './me';
 import { examRoutes } from './mock-exams';
+import { automationRoutes } from './moteur-d-automatismes';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { notionGraphRoutes } from './notion-graph';
 import { parametresNotificationsRoutes } from './parametres-notifications';
@@ -82,6 +83,7 @@ export const ROUTES = {
   ...quizRoutes,
   ...examRoutes,
   ...remediationRoutes,
+  ...automationRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;

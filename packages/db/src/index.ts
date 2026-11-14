@@ -180,8 +180,9 @@ export type {
 } from './schema/planning';
 
 // The automation enumeration is declared with the identity schema (SPEC-102) and reused by the
-// action journal (SPEC-108).
-export { AUTOMATION_KEYS, automationKey } from './schema/identity';
+// action journal (SPEC-108). The per-learner settings table is read and upserted by the engine
+// (SPEC-711 ET-4).
+export { AUTOMATION_KEYS, automationKey, automationSettings } from './schema/identity';
 
 // Browser push subscriptions of SPEC-102, written by the push channel (SPEC-205).
 export { notificationSettings, pushSubscriptions } from './schema/identity';

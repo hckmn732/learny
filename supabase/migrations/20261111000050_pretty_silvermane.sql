@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "automation_actions_dedupe_uq" ON "automation_actions" USING btree ("user_id","automation",("payload" ->> 'dedupeKey')) WHERE "automation_actions"."payload" ? 'dedupeKey';

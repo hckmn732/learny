@@ -15,6 +15,7 @@
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/lint": "^21.2.4",
     "@hookform/resolvers": "^7.0.6",
+    "@learny/automations": "workspace:*",
     "@learny/bricks": "workspace:*",
     "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",

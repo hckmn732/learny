@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="37.261557">
+<testsuite name="p7/spec-711.spec.ts" timestamp="2026-11-14T10:28:28.014Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.343" errors="0">
+<testcase name="parcours SPEC-711 @SPEC-711" classname="p7/spec-711.spec.ts" time="1.977">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/attachments/axe-e121b444a194e015964ff3c87268b3384c879fd6.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/attachments/spec-711-demo-cb5fb25eb2cf7529f7de2c1c366dd7e5debdbf84.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-parcours-SPEC-711-SPEC-711-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration du moteur, conformité visuelle @SPEC-711 @visual @mobile" classname="p7/spec-711.spec.ts" time="1.366">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/attachments/axe-3b4ee13d6dd4ab157c2d23254aec3466943dc9e1.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/attachments/spec-711-demo-visual-31e987c0511a391726c0e05f14e9e5cd0a0842de.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-711.spec.ts" timestamp="2026-11-14T10:28:28.014Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.528" errors="0">
+<testcase name="démonstration du moteur, conformité visuelle @SPEC-711 @visual @mobile" classname="p7/spec-711.spec.ts" time="1.528">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/attachments/axe-92fb065667af23a2d98540f94a4056a91e153c6b.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/attachments/spec-711-demo-visual-3b1ad19329bc5e3c047b142e2d14e4e43b8b3df9.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-711-démonstration--6a83d-elle-SPEC-711-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
