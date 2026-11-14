@@ -98,10 +98,14 @@ export default defineConfig({
     },
     {
       name: 'cross-browser-firefox',
+      // Cross-browser covers the functional journeys: pixel baselines stay engine-specific and
+      // are validated on the Chromium projects (ADR-0101, CP-6 « parcours principaux »).
+      grepInvert: /@visual/,
       use: { ...devices['Desktop Firefox'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
     {
       name: 'cross-browser-webkit',
+      grepInvert: /@visual/,
       use: { ...devices['Desktop Safari'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
   ],
