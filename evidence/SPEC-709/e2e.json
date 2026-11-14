@@ -1,0 +1,535 @@
+{
+  "config": {
+    "argv": [
+      "/home/kbenito/.local/opt/node-v24.22.3-linux-x64/bin/node",
+      "/home/kbenito/Documents/work/learny-wt-709/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-709",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/kbenito/Documents/work/learny-wt-709/apps/web/playwright.config.ts",
+    "rootDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3126",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "snapshotDir": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3126",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-709/test-results/sdd/SPEC-709/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/kbenito/Documents/work/learny-wt-709/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/kbenito/Documents/work/learny-wt-709/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3126/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3126",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p7/spec-709.spec.ts",
+      "file": "p7/spec-709.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parcours SPEC-709 @SPEC-709",
+          "ok": true,
+          "tags": [
+            "SPEC-709"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4460,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T13:55:39.548Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-709-parametres-modeles",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/attachments/spec-709-parametres-modeles-0c28136415c442fb29cb3310bb402b89e58be81f.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/attachments/axe-02b0ea2face385d75c7a3bc7333567358a70c550.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "427dfade2166f688ad65-0b3f6b4fff90d63edcf7",
+          "file": "p7/spec-709.spec.ts",
+          "line": 175,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-709 @SPEC-709 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-709",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2278,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T13:55:44.261Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "ai-models-principle-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-principle-side-by-side-7c72dd19939c5c400d6162cc68b33b36b3eae21b.png"
+                    },
+                    {
+                      "name": "ai-models-principle-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-principle-diff-490d9be86bee61f065fe030a4108039ebfdf6220.png"
+                    },
+                    {
+                      "name": "ai-models-tasks-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-tasks-side-by-side-0c2901f81586d327694251c6402ebad1f45baa76.png"
+                    },
+                    {
+                      "name": "ai-models-tasks-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-tasks-diff-aac8e53cc17ba1fc48b416b36b4b8b53ac2af284.png"
+                    },
+                    {
+                      "name": "ai-providers-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-providers-side-by-side-a19c8eb919c11b9564237d27a183fb8c1c6bd502.png"
+                    },
+                    {
+                      "name": "ai-providers-diff",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-providers-diff-ecc597601a2793b16669ee4ec38b6a4b410e8147.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/axe-4ddf25ea76ef5a0b3a0e34272c34e1beebfbf144.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "427dfade2166f688ad65-d7ee11c3a3d82d8c8f70",
+          "file": "p7/spec-709.spec.ts",
+          "line": 299,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-709 mobile @SPEC-709 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-709",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "mobile uniquement",
+                  "location": {
+                    "file": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs/p7/spec-709.spec.ts",
+                    "line": 374,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 234,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T13:55:46.676Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "mobile uniquement",
+                      "location": {
+                        "file": "/home/kbenito/Documents/work/learny-wt-709/apps/web/e2e/specs/p7/spec-709.spec.ts",
+                        "line": 374,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1532,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-14T13:55:47.687Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/attachments/axe-fbe68b35b45eef54c94cc2eafca5a0e7d5c1140d.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/kbenito/Documents/work/learny-wt-709/test-results/artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "427dfade2166f688ad65-4ad066c97866e1615a03",
+          "file": "p7/spec-709.spec.ts",
+          "line": 368,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-14T13:55:07.350Z",
+    "duration": 42101.511,
+    "expected": 3,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

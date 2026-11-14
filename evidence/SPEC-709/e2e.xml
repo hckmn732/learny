@@ -1,0 +1,73 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="1" errors="0" time="42.101511">
+<testsuite name="p7/spec-709.spec.ts" timestamp="2026-11-14T13:55:38.842Z" hostname="desktop" tests="3" failures="0" skipped="1" time="6.972" errors="0">
+<testcase name="parcours SPEC-709 @SPEC-709" classname="p7/spec-709.spec.ts" time="4.46">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/attachments/spec-709-parametres-modeles-0c28136415c442fb29cb3310bb402b89e58be81f.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/attachments/axe-02b0ea2face385d75c7a3bc7333567358a70c550.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-parcours-SPEC-709-SPEC-709-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-709 @SPEC-709 @visual" classname="p7/spec-709.spec.ts" time="2.278">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-principle-side-by-side-7c72dd19939c5c400d6162cc68b33b36b3eae21b.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-principle-diff-490d9be86bee61f065fe030a4108039ebfdf6220.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-tasks-side-by-side-0c2901f81586d327694251c6402ebad1f45baa76.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-models-tasks-diff-aac8e53cc17ba1fc48b416b36b4b8b53ac2af284.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-providers-side-by-side-a19c8eb919c11b9564237d27a183fb8c1c6bd502.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/ai-providers-diff-ecc597601a2793b16669ee4ec38b6a4b410e8147.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/attachments/axe-4ddf25ea76ef5a0b3a0e34272c34e1beebfbf144.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPEC-709-SPEC-709-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-709 mobile @SPEC-709 @visual @mobile" classname="p7/spec-709.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-709.spec.ts" timestamp="2026-11-14T13:55:38.842Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.532" errors="0">
+<testcase name="conformité SPEC-709 mobile @SPEC-709 @visual @mobile" classname="p7/spec-709.spec.ts" time="1.532">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/attachments/axe-fbe68b35b45eef54c94cc2eafca5a0e7d5c1140d.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-709-conformité-SPE-0bf37-bile-SPEC-709-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
