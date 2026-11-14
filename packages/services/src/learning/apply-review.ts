@@ -42,6 +42,11 @@ export interface ApplyReviewResultInput {
   attemptId: string;
   attemptNo: number;
   reviewedAt: string;
+  /**
+   * Notion B when the answer attached an element of notion A to B (SPEC-702 ET-5, BR-MEM-05).
+   * Fed to the gap detector as a `confusion`, so a cross-notion mistake becomes a gap.
+   */
+  confusedWithNotionId?: string | null;
 }
 
 export interface AppliedReviewResult {
@@ -62,6 +67,7 @@ const inputSchema = z.object({
   attemptId: z.uuid(),
   attemptNo: z.number().int().min(1),
   reviewedAt: z.iso.datetime(),
+  confusedWithNotionId: z.uuid().nullable().optional(),
 });
 
 /**
@@ -116,7 +122,7 @@ export async function applyReviewResult(
           timeMs: input.timeMs,
           answeredAt: input.reviewedAt,
           chosenDistractorNotionId: null,
-          confusedWithNotionId: null,
+          confusedWithNotionId: input.confusedWithNotionId ?? null,
           normalizedResponse: null,
           offTopic: false,
           countsForGaps: true,

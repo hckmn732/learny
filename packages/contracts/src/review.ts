@@ -123,6 +123,176 @@ export const ReviewAnswerInputSchema = z
   });
 export type ReviewAnswerInput = z.infer<typeof ReviewAnswerInputSchema>;
 
+/**
+ * Response schemas of the four games (SPEC-702 ET-1). Ids are the opaque ids of the public
+ * payload (`p1`, `r3`, `o2`, `c1`): they carry no solution. The service validates the shape
+ * before grading and maps it to the brick response schema of SPEC-502.
+ */
+export const ReviewMatchingResponseSchema = z
+  .object({
+    pairs: z
+      .array(
+        z
+          .object({ leftId: z.string().min(1).max(32), rightId: z.string().min(1).max(32) })
+          .strict(),
+      )
+      .min(1)
+      .max(8),
+  })
+  .strict();
+export type ReviewMatchingResponse = z.infer<typeof ReviewMatchingResponseSchema>;
+
+export const ReviewOrderingResponseSchema = z
+  .object({
+    order: z
+      .array(z.string().min(1).max(32))
+      .min(1)
+      .max(10)
+      .refine((ids) => new Set(ids).size === ids.length, {
+        message: 'Les identifiants d’ordre doivent être uniques.',
+      }),
+  })
+  .strict();
+export type ReviewOrderingResponse = z.infer<typeof ReviewOrderingResponseSchema>;
+
+export const ReviewCategorizationResponseSchema = z
+  .object({
+    assignments: z
+      .array(
+        z
+          .object({ itemId: z.string().min(1).max(32), categoryId: z.string().min(1).max(32) })
+          .strict(),
+      )
+      .min(1)
+      .max(12),
+  })
+  .strict();
+export type ReviewCategorizationResponse = z.infer<typeof ReviewCategorizationResponseSchema>;
+
+export const ReviewClozeResponseSchema = z
+  .object({
+    gaps: z
+      .array(
+        z
+          .object({
+            gapId: z.string().regex(/^\d+$/u, 'Identifiant de trou numérique attendu.'),
+            value: z.string().max(120),
+          })
+          .strict(),
+      )
+      .min(1)
+      .max(10),
+  })
+  .strict();
+export type ReviewClozeResponse = z.infer<typeof ReviewClozeResponseSchema>;
+
+/** Per-type schema table: the service picks the entry from the brick type. */
+export const REVIEW_GAME_RESPONSE_SCHEMAS = {
+  matching: ReviewMatchingResponseSchema,
+  ordering: ReviewOrderingResponseSchema,
+  categorization: ReviewCategorizationResponseSchema,
+  cloze: ReviewClozeResponseSchema,
+} as const;
+
+export type ReviewGameFormat = keyof typeof REVIEW_GAME_RESPONSE_SCHEMAS;
+
+export type ReviewGameResponse =
+  | ReviewMatchingResponse
+  | ReviewOrderingResponse
+  | ReviewCategorizationResponse
+  | ReviewClozeResponse;
+
+/**
+ * Correction schemas of the four games (SPEC-702 ET-2). `kind` discriminates the union so a
+ * browser can validate `ReviewAnswerResultDto.correction` without knowing the item type.
+ */
+export const ReviewMatchingCorrectionSchema = z
+  .object({
+    kind: z.literal('matching'),
+    pairs: z
+      .array(
+        z
+          .object({
+            leftId: z.string().min(1).max(32),
+            rightId: z.string().min(1).max(32).nullable(),
+            ok: z.boolean(),
+            expectedRightId: z.string().min(1).max(32),
+            expectedLeftLabel: z.string().min(1).max(200),
+          })
+          .strict(),
+      )
+      .max(8),
+  })
+  .strict();
+export type ReviewMatchingCorrection = z.infer<typeof ReviewMatchingCorrectionSchema>;
+
+export const ReviewOrderingCorrectionSchema = z
+  .object({
+    kind: z.literal('ordering'),
+    rows: z
+      .array(
+        z
+          .object({
+            stepId: z.string().min(1).max(32),
+            position: z.number().int().min(1).max(10),
+            ok: z.boolean(),
+            expectedPosition: z.number().int().min(1).max(10),
+          })
+          .strict(),
+      )
+      .max(10),
+  })
+  .strict();
+export type ReviewOrderingCorrection = z.infer<typeof ReviewOrderingCorrectionSchema>;
+
+export const ReviewCategorizationCorrectionSchema = z
+  .object({
+    kind: z.literal('categorization'),
+    rows: z
+      .array(
+        z
+          .object({
+            itemId: z.string().min(1).max(32),
+            categoryId: z.string().min(1).max(32).nullable(),
+            ok: z.boolean(),
+            expectedCategoryId: z.string().min(1).max(32),
+            expectedCategoryLabel: z.string().min(1).max(60),
+          })
+          .strict(),
+      )
+      .max(12),
+  })
+  .strict();
+export type ReviewCategorizationCorrection = z.infer<typeof ReviewCategorizationCorrectionSchema>;
+
+export const ReviewClozeCorrectionSchema = z
+  .object({
+    kind: z.literal('cloze'),
+    gaps: z
+      .array(
+        z
+          .object({
+            gapId: z.string().min(1).max(4),
+            ok: z.boolean(),
+            expected: z.string().min(1).max(120),
+            /** Answer given by the learner, replayed read-only after a reload (EF-7). */
+            given: z.string().max(120).optional(),
+          })
+          .strict(),
+      )
+      .max(10),
+  })
+  .strict();
+export type ReviewClozeCorrection = z.infer<typeof ReviewClozeCorrectionSchema>;
+
+export const ReviewGameCorrectionSchema = z.discriminatedUnion('kind', [
+  ReviewMatchingCorrectionSchema,
+  ReviewOrderingCorrectionSchema,
+  ReviewCategorizationCorrectionSchema,
+  ReviewClozeCorrectionSchema,
+]);
+export type ReviewGameCorrection = z.infer<typeof ReviewGameCorrectionSchema>;
+
 /** Immediate result of an answer (BR-MEM-10): correction, explanation and FSRS outcomes. */
 export const ReviewNotionOutcomeSchema = z
   .object({ notionId: Uuid, rating: z.string(), nextDueAt: IsoDateTime.nullable() })
