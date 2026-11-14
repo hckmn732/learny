@@ -4594,6 +4594,66 @@ export const fr = {
       automatismes: 'Les automatismes arrivent avec SPEC-710.',
       modeles: 'Les modèles d’IA arrivent avec SPEC-709.',
     },
+    notificationsTab: {
+      channelsTitle: 'Canaux',
+      channelsDescription:
+        'Où vous recevez les rappels. Le centre de notifications (la cloche) les garde toujours.',
+      channels: {
+        app: {
+          label: 'Dans l’application',
+          description: 'La cloche, en haut de chaque écran',
+        },
+        email: { label: 'E-mail' },
+        browser: { label: 'Navigateur', description: 'Même application fermée' },
+      },
+      typesTitle: 'Ce qui vous est notifié',
+      typesDescription:
+        'Les rappels de mémorisation sont recommandés : ils font le gros du travail contre l’oubli.',
+      typeCount: (active: number) => `${String(active)} sur 6 activés`,
+      recommended: 'Recommandé',
+      types: {
+        revision: {
+          label: 'Révisions et quiz global',
+          description: 'Les notions dues du jour, à l’heure prévue',
+        },
+        validation: {
+          label: 'Quiz de validation à venir',
+          description: 'Un rappel 40 min avant chaque quiz',
+        },
+        course: {
+          label: 'Cours prêt à relire',
+          description: 'Quand le tuteur a fini de rédiger un chapitre',
+        },
+        gap: {
+          label: 'Nouvelle lacune repérée',
+          description: 'Avec la notion concernée et ce que le tuteur propose',
+        },
+        planning: {
+          label: 'Planning réajusté',
+          description: 'Quand une marge est utilisée ou que le tuteur propose des options',
+        },
+        relaunch: {
+          label: 'Relance après une pause',
+          description: 'Progressive et discrète, au bout de 2 jours sans activité',
+        },
+      },
+      whenTitle: 'Quand',
+      whenDescription: 'Aucune notification pendant les heures calmes : elles attendent le matin.',
+      digestLabel: 'Programme du jour envoyé à',
+      quietStartLabel: 'Heures calmes, de',
+      quietEndLabel: 'à',
+      weekendLabel: 'Rien le week-end, sauf les révisions dues',
+      quietEffective: (start: string, end: string, crossesMidnight: boolean) =>
+        `Plage effective : ${start}–${end}${crossesMidnight ? ' (le lendemain)' : ''}.`,
+      quietEmpty: 'Plage effective : aucune heure calme (début = fin).',
+      browserDenied:
+        'Notifications navigateur indisponibles : permission refusée. Les autres canaux restent configurables.',
+      browserUnavailable: 'Notifications navigateur indisponibles sur ce navigateur.',
+      loading: 'Chargement des réglages de notifications…',
+      errorTitle: 'Impossible de charger les réglages de notifications.',
+      saveError: 'Enregistrement impossible. Vérifiez votre réseau puis réessayez.',
+      retry: 'Réessayer',
+    },
     loading: 'Chargement des paramètres…',
     errorTitle: 'Impossible de charger les paramètres.',
     identity: {

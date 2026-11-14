@@ -42,6 +42,7 @@ export * from './search';
 export * from './search-web';
 export * from './sidebar';
 export * from './parametres-onglets-et-profil';
+export * from './parametres-notifications';
 export * from './billing';
 export * from './bricks';
 export * from './cadrage';

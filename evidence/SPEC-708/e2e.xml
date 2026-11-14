@@ -1,0 +1,73 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="1" errors="0" time="41.387873">
+<testsuite name="p7/spec-708.spec.ts" timestamp="2026-11-14T10:11:49.611Z" hostname="desktop" tests="3" failures="0" skipped="1" time="5.962" errors="0">
+<testcase name="parcours SPEC-708 @SPEC-708" classname="p7/spec-708.spec.ts" time="3.581">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/attachments/spec-708-parametres-notifications-067881a8eac16affe83c606fe45a3486e0ff97fa.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/attachments/axe-502002044dba8920f0978809e9b9811652224bf4.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-parcours-SPEC-708-SPEC-708-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-15 notifications @SPEC-708 @visual" classname="p7/spec-708.spec.ts" time="2.125">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/notification-channels-side-by-side-704bdac153d1d8cee0871ae0eefd546b6b55fc71.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/notification-channels-diff-961cf4354c3ea49476f46c2adda11721e492a583.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/notification-types-side-by-side-66b3f9224aac4c179a699a20b5e4686d3cf704bf.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/notification-types-diff-320d3fbdd51d2e70c43539bfcd5d3a12afbc1bff.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/quiet-hours-side-by-side-4ee6c5f25db805b011e2bbdfd52e572d1d863f93.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/quiet-hours-diff-30a14b74d0eb8039b8882ab9e5ef86893d889284.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/attachments/axe-9b307b72a36ea3f9fb3ead80f449ab6d94b6e057.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-15-notifications-SPEC-708-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-15 notifications mobile @SPEC-708 @visual @mobile" classname="p7/spec-708.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-708.spec.ts" timestamp="2026-11-14T10:11:49.611Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.782" errors="0">
+<testcase name="conformité SCR-15 notifications mobile @SPEC-708 @visual @mobile" classname="p7/spec-708.spec.ts" time="1.782">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-40629-bile-SPEC-708-visual-mobile-mobile/attachments/axe-2f5c368fd4401e5aafda7421ad9d7cf6aedc66fe.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-40629-bile-SPEC-708-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-40629-bile-SPEC-708-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-40629-bile-SPEC-708-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-708-conformité-SCR-40629-bile-SPEC-708-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
