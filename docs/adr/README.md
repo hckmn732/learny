@@ -195,3 +195,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0323](ADR-0323-contrats-correction-et-rendu-des-quatre-jeux-de-memorisation.md) | Contrats, correction et rendu des quatre jeux de mémorisation | Déduite | SPEC-702, ADR-0181, ADR-0024, ADR-0025, ADR-0020, ADR-0180 |
 | [ADR-0324](ADR-0324-copie-individuelle-a-la-sortie-d-un-groupe.md) | Copie individuelle à la sortie d’un groupe et notifications | Déduite | SPEC-724, SPEC-111, ADR-0035, ADR-0122, ADR-0246 |
 >>>>>>> spec/SPEC-724-formations-a-plusieurs
+| [ADR-0328](ADR-0328-contrats-et-comportements-de-l-onglet-modeles-d-ia.md) | Contrats et comportements de l'onglet Modèles d'IA | Déduite | SPEC-709, SPEC-504, SPEC-506, ADR-0154, ADR-0013 |
