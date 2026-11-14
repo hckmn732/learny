@@ -27,6 +27,34 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 10. **Versionner** : `complete.mjs` fusionne `--no-ff` dans `main` et pousse sur `origin` si configuré (ADR-0051).
 11. **Passer à la suite** : retour à l'étape 1. Si `CHECKPOINT` : `node tools/sdd/checkpoint.mjs CP-n` ; en cas d'échec, corriger sur `fix/<SPEC>-<slug>` puis relancer.
 
+## 2 bis. Parallélisme contrôlé, surveillance et relance
+
+### 2 bis.1 Quand paralléliser
+
+Une spécification peut être exécutée en parallèle si **toutes** ces conditions sont réunies :
+
+1. elle est `ready` (dépendances `done`, checkpoint de phase précédente réussi) ;
+2. elle ne partage pas de fichier à fort risque de conflit avec une autre spec en cours : `packages/contracts/src/{index,routes,events}.ts`, `packages/services/src/index.ts`, `packages/jobs/src/index.ts`, `apps/web/lib/quiz-grade-registry.ts`, `apps/web/messages/fr.ts`, `packages/services/src/planning/index.ts`, `progress/state.json` ;
+3. elle peut être validée sans lancer deux suites sur la base locale en même temps.
+
+En pratique : deux specs en parallèle au maximum quand elles touchent des domaines distincts ; au-delà, ou dès qu'un fichier commun est modifié, fusionner rapidement puis relancer. En cas de doute, sérialiser.
+
+### 2 bis.2 Isolation
+
+- **Worktree dédié** : `git worktree add ../learny-wt-<id> spec/SPEC-xxx-<slug>`, puis `node tools/sdd/start.mjs SPEC-xxx` **dans ce worktree** (le verrou SDD est local au worktree). Le dépôt principal reste sur `main`.
+- **Variables** : `export PATH="$HOME/.local/bin:$PATH"`, `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres`, `APP_ENV=local`. Aucun test ne dépend d'un artefact local non commité (`apps/web/.env.local`).
+- **Base partagée** : préfixer toute commande base par `flock /tmp/learny-sdd-db.lock`. Ne jamais lancer `test:int` ou `test:e2e` en parallèle, ni pendant un `db:reset`/`db:seed:demo`.
+- **E2E** : `E2E_SKIP_BUILD=1` si le build est à jour, `PLAYWRIGHT_REUSE_SERVER=0` et `PLAYWRIGHT_PORT=31xx` unique pour éviter de réutiliser le serveur d'une autre exécution.
+- **Agents** : chaque agent de spec commite `feat/test/docs/evidence(SPEC-xxx)` dans son worktree, lance `validate.mjs` filtré, complète `evidence/SPEC-xxx/acceptance.md`, puis `complete.mjs SPEC-xxx --no-merge --no-push`.
+
+### 2 bis.3 Surveillance et relance
+
+- **Cadence** : vérifier chaque agent au moins toutes les 15 minutes. Contrôles : `git log --oneline -5`, `git status --short` (nombre de fichiers modifiés), présence et fraîcheur de `evidence/SPEC-xxx/`, et progression des tests dans la réponse de l'agent.
+- **Ne pas dupliquer** : ne pas travailler sur les mêmes fichiers que l'agent, ne pas relire son travail en boucle ; l'agent principal peut avancer sur des tâches indépendantes (CI, QA, documentation, autres specs sérialisées).
+- **Relance** : après **15 minutes sans nouveau commit**, envoyer une consigne courte et concrète : arrêter l'exploration, committer par lots logiques, lancer **une** validation filtrée, corriger uniquement le premier bloquant, compléter `acceptance.md`, puis `complete.mjs --no-merge --no-push`. Maximum deux relances par phase de blocage.
+- **Reprise** : si aucun progrès après ~30 minutes (deux intervalles), l'agent principal reprend la main dans le worktree (inspection de `git status`, commits restants, validation) ou réaffecte la spec. Un agent bloqué sur une dépendance externe applique `fail.mjs SPEC-xxx "raison" --external` et l'agent principal continue les specs indépendantes.
+- **Clôture** : seul l'agent principal fusionne (`git merge --no-ff`), pousse, vérifie la CI et relance l'app QA. Il nettoie ensuite les worktrees terminés (`git worktree remove …`) et ne lance un checkpoint qu'avec toutes les specs de la phase `done` et la CI verte.
+
 ## 3. Reprise automatique après échec
 
 - **Interruption** (crash, contexte épuisé, redémarrage) : `next.mjs` renvoie `REPRENDRE` pour la spécification `in_progress` ; `start.mjs` rebascule sur sa branche ; l'agent relit la spécification, inspecte `git log`/`git status` de la branche et `progress/state.json` (`lastError`, `validations`) puis reprend à l'étape 4.

@@ -13,6 +13,23 @@ Le dépôt est initialisé localement (branche `main`). Le dépôt distant sera 
 
 Fusion : `git merge --no-ff spec/<…>` dans `main`, message `merge(SPEC-xxx): <titre>` ; la branche est ensuite supprimée localement.
 
+### 1.1 Worktrees et travail parallèle
+
+Le parallélisme passe par des worktrees, jamais par des branches partagées ou des commits simultanés sur le même répertoire.
+
+```bash
+git worktree add ../learny-wt-<id> spec/SPEC-xxx-<slug>
+cd ../learny-wt-<id>
+node tools/sdd/start.mjs SPEC-xxx     # verrou SDD propre au worktree
+# … implémentation, commits atomiques, validate.mjs, complete.mjs --no-merge --no-push
+```
+
+- Un worktree par spécification en cours ; le worktree principal reste sur `main` et sert aux fusions, à la CI, aux checkpoints et à l'app QA.
+- Un agent de spec ne fusionne ni ne pousse : `complete.mjs --no-merge --no-push`. Seul l'agent principal fusionne `--no-ff`, pousse et tague.
+- Avant de fusionner : `git status` propre dans le worktree, preuves commitées, branche à jour de `main` si la spec a été longue.
+- Après fusion : `git worktree remove ../learny-wt-<id>` (ajouter `--force` uniquement pour des fichiers non suivis générés et après vérification) puis supprimer la branche locale.
+- Les commandes qui touchent la base partagée restent sérialisées (`flock /tmp/learny-sdd-db.lock`) et les campagnes E2E ne se chevauchent pas (port et serveur isolés). Détail : `docs/engineering/sdd-process.md` §2 bis.
+
 ## 2. Commits (Conventional Commits, imposés par commitlint — SPEC-002)
 
 Format : `<type>(<SPEC-ID>): <description à l'impératif, en français, ≤ 72 caractères>`

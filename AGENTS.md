@@ -35,6 +35,21 @@ node tools/sdd/audit.mjs                # cohérence du référentiel
 
 Répéter jusqu'à `TERMINÉ` (V1 au checkpoint CP-8 → `v1.0.0`, V2 au checkpoint CP-9 → `v2.0.0`).
 
+## Parallélisme, surveillance et relance
+
+Le travail en parallèle est **autorisé et encouragé quand il est sûr**, jamais au détriment du déterminisme.
+
+- **Un worktree par spécification** : `git worktree add ../learny-wt-<id> spec/SPEC-xxx-…`, puis `start.mjs` dans ce worktree (un verrou `.sdd/lock.json` par worktree). Le worktree principal reste sur `main`.
+- **Quand paralléliser** : specs `ready` aux dépendances satisfaites, sans recouvrement de fichiers sensible (contrats/index, routes, `messages/fr.ts`, registres de jobs, planning). En cas de recouvrement probable, limiter à deux specs et fusionner au fur et à mesure ; sinon sérialiser.
+- **Qui fusionne** : seul l'agent principal fusionne (`--no-ff`), pousse, tague et maintient l'app QA. Les agents de spec travaillent uniquement dans leur worktree et terminent par `complete.mjs SPEC-xxx --no-merge --no-push`.
+- **Base locale partagée** : toute commande qui touche la base (tests d'intégration, e2e, reset, seed) est sérialisée avec `flock /tmp/learny-sdd-db.lock <commande>`. Deux suites ne partagent jamais la même base en parallèle.
+- **E2E isolés** : `PLAYWRIGHT_REUSE_SERVER=0` et un `PLAYWRIGHT_PORT` distinct par exécution parallèle ; ne jamais lancer deux campagnes E2E en parallèle sur la même base.
+- **Surveillance** : vérifier chaque agent au moins **toutes les 15 minutes** (`git log --oneline`, `git status --short` et présence de `evidence/SPEC-xxx/` dans son worktree). Ne pas relire son travail en continu ni modifier ses fichiers pendant qu'il travaille.
+- **Relance (« secouer »)** : après **15 minutes sans nouveau commit**, envoyer un message court et actionnable : arrêter l'exploration, committer par lots logiques, lancer une validation filtrée, compléter `acceptance.md`, puis `complete.mjs --no-merge --no-push`. Deux relances au maximum par phase de blocage ; si l'agent ne progresse toujours pas après ~30 minutes, l'agent principal reprend la main dans le worktree (ou réaffecte) et consigne le blocage si nécessaire.
+- **Fin de spec** : l'agent principal fusionne, pousse, vérifie la CI et relance l'app QA. Un checkpoint n'est lancé que lorsque toutes les specs de la phase sont `done` et la CI verte.
+
+Détail opérationnel et critères : `docs/engineering/sdd-process.md` §2 bis et `docs/engineering/git.md` §1.1.
+
 ## Exigences de qualité non négociables
 
 - Une spécification n'est `done` que si **toutes** ses validations passent : lint, typecheck, build, tests unitaires `[SPEC-xxx]`, intégration `[SPEC-xxx]`, e2e Playwright `@SPEC-xxx` avec vidéo, au moins un test `@visual`, tous les critères `CA-x` cochés ✅ avec preuve dans `evidence/SPEC-xxx/acceptance.md`, aucune régression.
