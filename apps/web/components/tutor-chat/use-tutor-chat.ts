@@ -102,6 +102,8 @@ export function useTutorChat(input: {
 }): TutorChatState {
   const [open, setOpenState] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  // Synchronous mirror: `send` runs right after `create`, before React applies the new state.
+  const conversationIdRef = useRef<string | null>(null);
   const [include, setInclude] = useState<ChatContextInput['include']>({});
   const [contextItems, setContextItems] = useState<ContextItemDto[]>([]);
   const [passage, setPassage] = useState<Selection | null>(null);
@@ -144,6 +146,7 @@ export function useTutorChat(input: {
   const loadConversation = useCallback(
     async (id: string) => {
       const dto = await api.conversationGet({ params: { id } });
+      conversationIdRef.current = dto.id;
       setConversationId(dto.id);
       setContextItems(dto.contextItems);
       setInclude(Object.fromEntries(dto.contextItems.map((item) => [item.key, item.included])));
@@ -162,6 +165,7 @@ export function useTutorChat(input: {
         { params: { cid: input.courseId }, body: { chapterId: input.chapterId } },
         { idempotencyKey: crypto.randomUUID() },
       );
+      conversationIdRef.current = dto.id;
       setConversationId(dto.id);
       setContextItems(dto.contextItems);
       setInclude(Object.fromEntries(dto.contextItems.map((item) => [item.key, item.included])));
@@ -239,7 +243,7 @@ export function useTutorChat(input: {
       if (trimmed === '' || streaming) return;
       setSendError(null);
       setLastText(trimmed);
-      let id = conversationId;
+      let id = conversationIdRef.current;
       if (id === null) {
         try {
           const dto = await create();
@@ -261,7 +265,7 @@ export function useTutorChat(input: {
       await chat.sendMessage({ text: trimmed }, { body: { context: contextOf(), followUp } });
       setPassage(null);
     },
-    [answerSelfTestCall, chat, contextOf, conversationId, create, pendingSelfTest, streaming],
+    [answerSelfTestCall, chat, contextOf, create, pendingSelfTest, streaming],
   );
 
   const askPassage = useCallback(

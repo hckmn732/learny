@@ -345,6 +345,9 @@ test('conformité SPEC-607 mobile @SPEC-607 @visual @mobile', async ({
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+  });
   await expectScreenshotBaseline(page, 'SCR-06-module-mobile.png', { fullPage: true });
   await axeCheck();
 });
