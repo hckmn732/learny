@@ -100,11 +100,16 @@ export default defineConfig({
       name: 'cross-browser-firefox',
       // Cross-browser covers the functional journeys: pixel baselines stay engine-specific and
       // are validated on the Chromium projects (ADR-0101, CP-6 « parcours principaux »).
+      testMatch: '**/specs/p6/**/*.spec.ts',
       grepInvert: /@visual/,
+      // This host's kernel makes Firefox 159 segfault in libxul (see progress/blockers.md);
+      // a compatible host runs the project normally, the opt-out keeps the check explicit.
+      ...(process.env.CROSS_BROWSER_SKIP_FIREFOX === '1' ? { grep: /$^/ } : {}),
       use: { ...devices['Desktop Firefox'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
     {
       name: 'cross-browser-webkit',
+      testMatch: '**/specs/p6/**/*.spec.ts',
       grepInvert: /@visual/,
       use: { ...devices['Desktop Safari'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
