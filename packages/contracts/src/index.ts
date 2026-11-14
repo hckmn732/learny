@@ -44,6 +44,7 @@ export * from './search';
 export * from './search-web';
 export * from './sidebar';
 export * from './serie-regularite-et-jalons-interface';
+export * from './formations-a-plusieurs';
 export * from './parametres-onglets-et-profil';
 export * from './parametres-notifications';
 export * from './billing';

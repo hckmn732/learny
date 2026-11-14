@@ -15,6 +15,7 @@ import { devEmailRoutes, emailRoutes } from './email';
 import { exerciseRoutes } from './exercises';
 import { finalReviewRoutes } from './final-review';
 import { formationManagementRoutes } from './formation-management';
+import { formationsAPlusieursRoutes } from './formations-a-plusieurs';
 import { gapRoutes } from './gaps';
 import { headerRoutes } from './header';
 import { healthRoutes } from './health';
@@ -67,6 +68,7 @@ export const ROUTES = {
   ...formationRoutes,
   ...cadrageRoutes,
   ...formationManagementRoutes,
+  ...formationsAPlusieursRoutes,
   ...finalReviewRoutes,
   ...programmeRoutes,
   ...moduleRoutes,
