@@ -24,6 +24,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/PATCH `/me` · GET/PATCH `/me/preferences` · PATCH `/me/onboarding` | Profil, rythme, onboarding | SPEC-602, 707 |
 | GET/PATCH `/me/notification-settings` · POST/DELETE `/me/push-subscriptions` | Notifications | SPEC-205, 708 |
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
+| GET `/warmups/today` · POST `/warmups/:activityId/answers` | Échauffement : une entrée par formation triée par heure de séance ; réponse de première passe idempotente par position (409 sur une position déjà répondue, 422 hors bornes), FSRS et quiz global du soir dans la même transaction | SPEC-714 |
 | POST/GET/DELETE `/me/pause` | Mode pause | SPEC-721 |
 | POST `/me/export` · GET `/me/exports/:id` · POST `/me/deletion` · DELETE `/me/deletion` | Données personnelles | SPEC-211 |
 | GET/PATCH `/me/profile` | État de l'écran Paramètres et enregistrement transactionnel du profil et du rythme, avec version attendue (`409 CONFLICT`) ; l'e-mail du profil n'est pas modifiable en V1 | SPEC-707 |

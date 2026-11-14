@@ -38,6 +38,37 @@ export const RepriseChoice = z.union([
 ]);
 export type RepriseChoice = z.infer<typeof RepriseChoice>;
 
+/** ET-1 — kind produced by the `echauffement` automation (SPEC-714 EF-4). */
+export const ECHAUFFEMENT_ACTION_KINDS = ['warmup_added'] as const;
+export const EchauffementActionKind = z.enum(ECHAUFFEMENT_ACTION_KINDS);
+export type EchauffementActionKind = z.infer<typeof EchauffementActionKind>;
+
+/** ET-1 — legacy value of `AUTOMATION_DEFAULTS.echauffement.scope` before the V1 wording. */
+const LEGACY_WARMUP_SCOPE = 'yesterday_and_prerequisites';
+
+/**
+ * ET-1, EF-1 — parameters of the warm-up: two, three (default) or five questions, over the
+ * previous study day alone or with the prerequisites of the upcoming chapter. The stored defaults
+ * of the identity trigger use the older `questionCount`/`yesterday_and_prerequisites` names, so the
+ * schema accepts them as aliases and always emits the canonical keys (ADR-0327).
+ */
+export const EchauffementParams = z.preprocess(
+  (value) => {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) return value;
+    const raw = value as Record<string, unknown>;
+    const next: Record<string, unknown> = { ...raw };
+    if (next.count === undefined && raw.questionCount !== undefined) next.count = raw.questionCount;
+    if (next.scope === LEGACY_WARMUP_SCOPE) next.scope = 'yesterday_prerequisites';
+    delete next.questionCount;
+    return next;
+  },
+  z.object({
+    count: z.union([z.literal(2), z.literal(3), z.literal(5)]).default(3),
+    scope: z.enum(['yesterday_prerequisites', 'yesterday']).default('yesterday_prerequisites'),
+  }),
+);
+export type EchauffementParams = z.infer<typeof EchauffementParams>;
+
 /** EF-6 — one of the two options a `plan_change_proposed` action exposes (BR-FOR-14). */
 export const ReprisePlanOption = z.object({
   kind: z.enum(['shift_end', 'lighten']),

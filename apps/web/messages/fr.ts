@@ -71,6 +71,53 @@ export const fr = {
       toastExpired: 'Cette proposition a expiré.',
       toastConflict: 'Ce créneau n’est plus libre. Choisissez-en un autre.',
     },
+    warmup: {
+      title: (kind: string, time: string) => `Échauffement · avant votre ${kind} de ${time}`,
+      subtitle: (count: number, minutes: number, scope: 'yesterday_prerequisites' | 'yesterday') =>
+        `${String(count)} question${count === 1 ? '' : 's'} de rappel, ${String(minutes)} minute${minutes === 1 ? '' : 's'} : ${scope === 'yesterday' ? 'les notions vues la veille.' : 'la veille et les prérequis du chapitre.'}`,
+      progress: (index: number, count: number) =>
+        index < count ? `Question ${String(index + 1)} sur ${String(count)}` : 'Terminé',
+      progressLabel: (index: number, count: number, state: string) =>
+        `Progression de l’échauffement : ${String(Math.min(index, count))} sur ${String(count)} (${state})`,
+      tagYesterday: 'Vu hier',
+      tagPrerequisite: (moduleNumber: number) => `Prérequis · module ${String(moduleNumber)}`,
+      reveal: 'Voir la réponse',
+      knew: 'Je savais',
+      review: 'À revoir',
+      score: (knewCount: number, count: number) =>
+        `Échauffement fait : ${String(knewCount)} sur ${String(count)}`,
+      follow: (questions: readonly string[], kind: string, tonight: boolean): string => {
+        if (questions.length === 0) {
+          return kind === 'validation_quiz'
+            ? 'Tout est là. Vous êtes prêt pour le quiz de validation.'
+            : 'Tout est là. Vous êtes prêt pour la suite.';
+        }
+        const quoted = questions.map((question) => `« ${question} »`).join(', ');
+        const subject = questions.length > 1 ? 'Ces notions repassent' : 'Cette notion repasse';
+        return `À revoir : ${quoted}. ${subject} ${tonight ? 'dans le quiz global de ce soir.' : 'dans le prochain quiz global.'}`;
+      },
+      next: (kind: string): string => {
+        switch (kind) {
+          case 'validation_quiz':
+            return 'Passer au quiz de validation';
+          case 'course':
+            return 'Ouvrir le cours';
+          case 'exercise':
+            return 'Ouvrir l’exercice';
+          case 'mock_exam':
+            return 'Commencer l’examen blanc';
+          default:
+            return 'Ouvrir le module';
+        }
+      },
+      restart: 'Recommencer',
+      loading: 'Chargement de l’échauffement',
+      error: 'Impossible de charger l’échauffement.',
+      retry: 'Réessayer',
+      saveError: 'La réponse n’a pas pu être enregistrée. Réessayez.',
+      conflict:
+        'Cette question a déjà été répondue : l’échauffement affiche la réponse enregistrée.',
+    },
     formations: {
       title: 'Mes formations',
       tabLabel: 'Mes formations',

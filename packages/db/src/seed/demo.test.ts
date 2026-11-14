@@ -156,7 +156,7 @@ describe('[SPEC-115] demo fixtures', () => {
       '2026-11-13',
     ]);
     expect(DEMO_AGENDA).toHaveLength(22);
-    expect(DEMO_EXPECTED.agendaSlots).toBe(22);
+    expect(DEMO_EXPECTED.agendaSlots).toBe(23);
     expect(DEMO_EXPECTED.agendaDays).toBe(5);
     expect(DEMO_AGENDA.filter((slot) => slot.status === 'done')).toHaveLength(10);
     expect(DEMO_AGENDA.some((slot) => slot.kind === 'buffer' && slot.title.includes('Marge'))).toBe(
