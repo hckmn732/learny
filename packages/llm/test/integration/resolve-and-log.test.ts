@@ -166,12 +166,14 @@ describe('[SPEC-504] résolution et journal', () => {
     expect(error.credentialId).toBe(credentialId);
   });
 
-  it('CA-1 — abonné avec clé non qualifiée : IA fournie', async () => {
+  it('CA-1, SPEC-709 CL-3 — abonné avec clé devenue non qualifiée : AI_UNAVAILABLE, sans bascule payante', async () => {
     const userId = await subscriber('sub-unqualified');
     const credentialId = await personalKey(userId, { status: 'untested' });
     await choose(userId, 'tutor', 'gpt-test', credentialId);
-    const resolved = await model(userId, 'tutor');
-    expect(resolved).toMatchObject({ kind: 'managed', modelId: 'claude-sonnet-5-5' });
+    const error = await unavailable(userId);
+    expect(error.code).toBe('AI_UNAVAILABLE');
+    expect(error.reason).toBe('credential_not_qualified');
+    expect(error.credentialId).toBe(credentialId);
   });
 
   it('CA-1 — past_due : aucun droit fourni, AI_UNAVAILABLE sans clé', async () => {
