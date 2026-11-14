@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { cn } from '@learny/ui';
 
@@ -18,18 +18,41 @@ const GRADE_KEYS: Record<string, SelfGrade> = {
 
 /** Recall card: front, flip, back and the four self-assessment buttons (SPEC-503 EF-8). */
 export function RecallCardView(props: BrickViewProps<'recall_card'>) {
-  const { brick, variant, value, onChange, status, correction, dueLabels, labels, labelledBy } =
-    props;
+  const {
+    brick,
+    variant,
+    value,
+    onChange,
+    status,
+    correction,
+    dueLabels,
+    labels,
+    labelledBy,
+    recallTestIds,
+  } = props;
   const t = resolveLabels(labels);
+  const testIds = recallTestIds ?? {
+    front: 'brick-recall-front',
+    back: 'brick-recall-back',
+    flip: 'brick-flip',
+    grade: (key: SelfGrade) => `brick-grade-${key}`,
+  };
   const generatedId = useId();
   const titleId = labelledBy ?? generatedId;
   const payload = brick.publicPayload;
   const [flipped, setFlipped] = useState(false);
+  const firstGradeRef = useRef<HTMLButtonElement | null>(null);
   const locked = status === 'locked';
   const corrected = status === 'corrected' || variant === 'review';
   const selected: SelfGrade | undefined =
     value?.selfGrade ?? (correction?.kind === 'recall_card' ? correction.selfGrade : undefined);
   const showBack = flipped || corrected || selected !== undefined;
+
+  // ET-10 — after a manual flip the focus lands on the first self-assessment button.
+  useEffect(() => {
+    if (!flipped || locked || selected !== undefined) return;
+    firstGradeRef.current?.focus();
+  }, [flipped, locked, selected]);
 
   function flip() {
     if (!locked) setFlipped(true);
@@ -79,7 +102,7 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
       {!showBack ? (
         <div
           className="flex min-h-240 flex-col justify-between gap-24 rounded-22 border border-solid border-border bg-surface-subtle p-32 transition-opacity duration-150 motion-reduce:transition-none"
-          data-testid="brick-recall-front"
+          data-testid={testIds.front}
         >
           <span className="text-12 font-700 tracking-kicker text-ink-muted uppercase">
             {t.recallFront}
@@ -89,7 +112,7 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
           </p>
           <button
             className="min-h-48 cursor-pointer self-start rounded-14 border-0 bg-ink px-20 font-700 text-15 text-white"
-            data-testid="brick-flip"
+            data-testid={testIds.flip}
             onClick={flip}
             type="button"
           >
@@ -100,7 +123,7 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
         <div className="flex flex-col gap-18">
           <div
             className="flex min-h-240 flex-col gap-18 rounded-22 bg-ink p-32 text-white transition-opacity duration-150 motion-reduce:transition-none"
-            data-testid="brick-recall-back"
+            data-testid={testIds.back}
           >
             <span className="text-12 font-700 tracking-kicker text-lime uppercase">
               {t.recallBack}
@@ -113,7 +136,7 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
             ) : null}
             <button
               className="min-h-44 cursor-pointer self-start rounded-12 border border-solid border-dark-500 bg-transparent px-16 font-600 text-14 text-white"
-              data-testid="brick-flip"
+              data-testid={testIds.flip}
               onClick={() => {
                 setFlipped(false);
               }}
@@ -142,12 +165,13 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
                         ? 'border-0 bg-ink text-white'
                         : 'border border-solid border-border-strong bg-surface text-ink',
                     )}
-                    data-testid={`brick-grade-${key}`}
+                    data-testid={testIds.grade(key)}
                     disabled={locked}
                     key={key}
                     onClick={() => {
                       grade(key);
                     }}
+                    ref={key === 'again' ? firstGradeRef : undefined}
                     type="button"
                   >
                     <span className="text-15 font-700">{t.selfGrade[key]}</span>

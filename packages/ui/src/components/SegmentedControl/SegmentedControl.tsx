@@ -11,6 +11,10 @@ export interface SegmentOption<T extends string> {
   label: string;
   count?: number;
   icon?: LucideIcon;
+  /** Option-level disabled state (the others stay interactive). */
+  disabled?: boolean;
+  /** Optional `data-testid` of the option button. */
+  testId?: string;
 }
 
 const segmentedVariants = cva('inline-flex', {
@@ -125,7 +129,8 @@ export function SegmentedControl<T extends string>({
                   : 'bg-ink font-600 text-white'
                 : 'font-500 text-ink-muted hover:bg-surface-muted',
             )}
-            disabled={disabled}
+            data-testid={option.testId}
+            disabled={disabled || option.disabled === true}
             key={option.value}
             onClick={() => {
               onValueChange(option.value);
