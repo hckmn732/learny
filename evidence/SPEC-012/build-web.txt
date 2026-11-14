@@ -1,107 +1,448 @@
 #0 building with "default" instance using docker driver
 
 #1 [internal] load build definition from web.Dockerfile
-#1 DONE 0.0s
-
-#1 [internal] load build definition from web.Dockerfile
-#1 transferring dockerfile: 3.25kB done
+#1 transferring dockerfile: 3.79kB done
 #1 DONE 0.0s
 
 #2 resolve image config for docker-image://docker.io/docker/dockerfile:1.7
-#2 DONE 0.5s
+#2 DONE 0.6s
 
 #3 docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
 #3 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
 #3 CACHED
 
 #4 [internal] load metadata for docker.io/library/node:24.22.3-alpine3.24
-#4 DONE 0.5s
+#4 DONE 0.6s
 
 #5 [internal] load .dockerignore
 #5 transferring context: 505B done
 #5 DONE 0.0s
 
-#6 [internal] load build context
-#6 transferring context: 24.84kB done
+#6 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
+#6 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 0.0s done
 #6 DONE 0.0s
 
-#7 [base 1/3] FROM docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5
-#7 resolve docker.io/library/node:24.22.3-alpine3.24@sha256:116b800c3754b440ee0aa3ed2f20f5bf3d99a554bfd9adeea09ea8017f6e85f5 0.0s done
-#7 DONE 0.0s
+#7 [internal] load build context
+#7 transferring context: 134.89MB 0.9s done
+#7 DONE 0.9s
 
-#8 [builder 4/5] COPY . .
+#8 [deps 12/18] COPY packages/llm/package.json ./packages/llm/package.json
 #8 CACHED
 
-#9 [runner 3/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/standalone ./
+#9 [deps  4/18] COPY packages/bricks/package.json ./packages/bricks/package.json
 #9 CACHED
 
-#10 [deps  7/10] COPY packages/db/package.json ./packages/db/package.json
+#10 [deps  9/18] COPY packages/ingestion/package.json ./packages/ingestion/package.json
 #10 CACHED
 
-#11 [deps  8/10] COPY packages/jobs/package.json ./packages/jobs/package.json
+#11 [deps 15/18] COPY packages/testing/package.json ./packages/testing/package.json
 #11 CACHED
 
-#12 [builder 5/5] RUN pnpm --filter @learny/web build
+#12 [builder 2/5] COPY --from=deps /repo/apps ./apps
 #12 CACHED
 
-#13 [deps  3/10] COPY apps/worker/package.json ./apps/worker/package.json
+#13 [deps  8/18] COPY packages/db/package.json ./packages/db/package.json
 #13 CACHED
 
-#14 [deps  1/10] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+#14 [base 3/3] WORKDIR /repo
 #14 CACHED
 
-#15 [runner 4/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/static ./apps/web/.next/static
+#15 [deps  6/18] COPY packages/contracts/package.json ./packages/contracts/package.json
 #15 CACHED
 
-#16 [runner 2/6] WORKDIR /app
+#16 [deps  3/18] COPY apps/worker/package.json ./apps/worker/package.json
 #16 CACHED
 
-#17 [runner 5/6] COPY --from=builder --chown=root:root /repo/apps/web/public ./apps/web/public
+#17 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
 #17 CACHED
 
-#18 [deps  2/10] COPY apps/web/package.json ./apps/web/package.json
+#18 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
 #18 CACHED
 
-#19 [deps  5/10] COPY packages/contracts/package.json ./packages/contracts/package.json
+#19 [deps 10/18] COPY packages/jobs/package.json ./packages/jobs/package.json
 #19 CACHED
 
-#20 [deps  6/10] COPY packages/core/package.json ./packages/core/package.json
+#20 [deps  2/18] COPY apps/web/package.json ./apps/web/package.json
 #20 CACHED
 
-#21 [deps  9/10] COPY packages/testing/package.json ./packages/testing/package.json
+#21 [deps  1/18] COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 #21 CACHED
 
-#22 [builder 1/5] COPY --from=deps /repo/node_modules ./node_modules
+#22 [deps 17/18] COPY packages/ui/package.json ./packages/ui/package.json
 #22 CACHED
 
-#23 [base 2/3] RUN corepack enable && corepack prepare pnpm@10.34.9 --activate
+#23 [deps 18/18] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/web...
 #23 CACHED
 
-#24 [base 3/3] WORKDIR /repo
+#24 [deps 13/18] COPY packages/notifications/package.json ./packages/notifications/package.json
 #24 CACHED
 
-#25 [deps 10/10] RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store     pnpm install --frozen-lockfile --filter @learny/web...
+#25 [deps 16/18] COPY packages/tutor/package.json ./packages/tutor/package.json
 #25 CACHED
 
-#26 [builder 2/5] COPY --from=deps /repo/apps ./apps
+#26 [deps  5/18] COPY packages/config/package.json ./packages/config/package.json
 #26 CACHED
 
-#27 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#27 [deps  7/18] COPY packages/core/package.json ./packages/core/package.json
 #27 CACHED
 
-#28 [deps  4/10] COPY packages/config/package.json ./packages/config/package.json
+#28 [deps 11/18] COPY packages/learning-engine/package.json ./packages/learning-engine/package.json
 #28 CACHED
 
-#29 [runner 6/6] COPY --chown=root:root docker/healthcheck-web.mjs ./healthcheck-web.mjs
+#29 [deps 14/18] COPY packages/services/package.json ./packages/services/package.json
 #29 CACHED
 
-#30 exporting to image
-#30 exporting layers done
-#30 exporting manifest sha256:5635d05ea5c0f917aec0715aa953f38fbffebac2b9cfcb4185b2a6d547e7efcd done
-#30 exporting config sha256:e11dd0dd65e3b16756cc7263d0acbd8128d764592771d247e5a4145409aa0574 done
-#30 exporting attestation manifest sha256:5c27a09f066e16a27cdc4868238857e276aec4a5e201bd0e5015781f3e3ed880 0.0s done
-#30 exporting manifest list sha256:207b0240ef4ca5cf2b1daeaa535f1a0be6c4e888a19af5201f9fd396c7c23fa7 0.0s done
-#30 naming to docker.io/library/***
-#30 naming to docker.io/library/*** done
-#30 unpacking to docker.io/library/*** done
-#30 DONE 0.1s
+#30 [builder 3/5] COPY --from=deps /repo/packages ./packages
+#30 CACHED
+
+#31 [builder 4/5] COPY . .
+#31 DONE 3.3s
+
+#32 [builder 5/5] RUN pnpm --filter @learny/web build
+#32 0.698 
+#32 0.698 > @learny/web@0.0.0 build /repo/apps/web
+#32 0.698 > next build
+#32 0.698 
+#32 1.005 ▲ Next.js 16.4.6 (Turbopack)
+#32 1.005 - Environments: .env.local
+#32 1.026 ✓ Running next.config.ts took 21ms
+#32 1.033 
+#32 1.065   Creating an optimized *** build ...
+#32 16.08 ✓ Compiled successfully in 15.0s
+#32 16.08   Running TypeScript ...
+#32 32.21   Finished TypeScript in 16.1s ...
+#32 32.22   Collecting page data using 15 workers ...
+#32 35.49   Generating static pages using 15 workers (0/7) ...
+#32 35.77   Generating static pages using 15 workers (1/7) 
+#32 35.77   Generating static pages using 15 workers (3/7) 
+#32 35.78   Generating static pages using 15 workers (5/7) 
+#32 35.78 ✓ Generating static pages using 15 workers (7/7) in 285ms
+#32 35.78 Turbopack build encountered 4 warnings:
+#32 35.78 ./apps/web/instrumentation.ts:15:5
+#32 35.78 Warning: A Node.js API is used (process.exit at line: 15) which is not supported in the Edge Runtime.
+#32 35.78     Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+#32 35.78   [90m13 |[0m     [36mconst[0m message = error [36minstanceof[0m [33mError[0m ? error.message : [32m'Configuration invalide.'[0m;
+#32 35.78   [90m14 |[0m     console.error([32m`learny web: démarrage refusé. [0m${message[32m}`[0m);
+#32 35.78 [33m[1m>[0m [90m15 |[0m     process.exit([35m1[0m);
+#32 35.78   [90m   |[0m     [33m[1m^^^^^^^^^^^^[0m
+#32 35.78   [90m16 |[0m   }
+#32 35.78   [90m17 |[0m   [90m// Telemetry is optional and configured after the environment is known (SPEC-010, ET-4).[0m
+#32 35.78   [90m18 |[0m   [36mconst[0m { registerServerSentry } = [36mawait[0m [36mimport[0m([32m'./sentry.server.config'[0m);
+#32 35.78 
+#32 35.78 Ecmascript file had an error
+#32 35.78 
+#32 35.78 Import trace:
+#32 35.78   App Route:
+#32 35.78     ./apps/web/instrumentation.ts
+#32 35.78     ./apps/web/lib/sdd-status.ts
+#32 35.78     ./apps/web/app/%5Fdev/sdd/reference/[file]/route.ts
+#32 35.78 
+#32 35.78 
+#32 35.78 ./apps/web/lib/sdd-status.ts:62:13
+#32 35.78 Warning: Dynamic filesystem access causes tracing of the whole project
+#32 35.78   [90m60 |[0m [36mexport[0m [36mfunction[0m findRepoRoot(start = process.cwd(), env = process.env): string | [36mnull[0m {
+#32 35.78   [90m61 |[0m   [36mif[0m (env.[33mSDD_ROOT[0m) [36mreturn[0m path.resolve(env.[33mSDD_ROOT[0m);
+#32 35.78 [33m[1m>[0m [90m62 |[0m   [36mlet[0m dir = path.resolve(start);
+#32 35.78   [90m   |[0m             [33m[1m^^^^^^^^^^^^^^^^^^^[0m
+#32 35.78   [90m63 |[0m   [36mfor[0m (;;) {
+#32 35.78   [90m64 |[0m     [36mif[0m (fs.existsSync(path.join(dir, [32m'specs'[0m, [32m'catalog.json'[0m))) [36mreturn[0m dir;
+#32 35.78   [90m65 |[0m     [36mconst[0m parent = path.dirname(dir);
+#32 35.78 
+#32 35.78 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+#32 35.78 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+#32 35.78 This can slow down deployments or lead to failures when size limits are exceeded.
+#32 35.78 To resolve this, you can
+#32 35.78 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+#32 35.78 - only use them in development, or
+#32 35.78 - opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
+#32 35.78 - remove them.
+#32 35.78 
+#32 35.78 Import traces:
+#32 35.78   App Route:
+#32 35.78     ./apps/web/lib/sdd-status.ts
+#32 35.78     ./apps/web/app/%5Fdev/sdd/reference/[file]/route.ts
+#32 35.78 
+#32 35.78   Server Component:
+#32 35.78     ./apps/web/lib/sdd-status.ts
+#32 35.78     ./apps/web/app/%5Fdev/sdd/page.tsx
+#32 35.78 
+#32 35.78   Middleware:
+#32 35.78     ./apps/web/lib/sdd-status.ts
+#32 35.78     ./apps/web/lib/selfhost-status.ts
+#32 35.78     ./apps/web/components/sdd-demos/spec-012.tsx
+#32 35.78     ./apps/web/app/%5Fdev/sdd/registry.ts
+#32 35.78     ./apps/web/proxy.ts
+#32 35.78 
+#32 35.78 
+#32 35.78 ./tools/ci/check-workflows.mjs:588:5
+#32 35.78 Warning: Dynamic filesystem access causes tracing of the whole project
+#32 35.78   [90m586 |[0m [36mexport[0m [36mfunction[0m runActionlint(root = [33mROOT[0m) {
+#32 35.78   [90m587 |[0m   [36mconst[0m files = [[33mCI_WORKFLOW[0m, [33mPR_TITLE_WORKFLOW[0m, [33mDEPLOY_WORKFLOW[0m].map((relative) =>
+#32 35.78 [33m[1m>[0m [90m588 |[0m     path.join(root, relative),
+#32 35.78   [90m    |[0m     [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+#32 35.78   [90m589 |[0m   );
+#32 35.78   [90m590 |[0m   [36mconst[0m result = spawnQuiet([32m'actionlint'[0m, [[32m'-no-color'[0m, ...files], { cwd: root });
+#32 35.78   [90m591 |[0m   [36mif[0m (result.error && result.error.code === [32m'ENOENT'[0m)
+#32 35.78 
+#32 35.78 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+#32 35.78 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+#32 35.78 This can slow down deployments or lead to failures when size limits are exceeded.
+#32 35.78 To resolve this, you can
+#32 35.78 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+#32 35.78 - only use them in development, or
+#32 35.78 - opt out by adding an ignore comment to the highlighted call: path.join(/*turbopackIgnore: true*/ ...), or
+#32 35.78 - remove them.
+#32 35.78 
+#32 35.78 Import traces:
+#32 35.78   Middleware:
+#32 35.78     ./tools/ci/check-workflows.mjs
+#32 35.78     ./apps/web/components/sdd-demos/spec-011.tsx
+#32 35.78     ./apps/web/app/%5Fdev/sdd/registry.ts
+#32 35.78     ./apps/web/proxy.ts
+#32 35.78 
+#32 35.78   Server Component:
+#32 35.78     ./tools/ci/check-workflows.mjs
+#32 35.78     ./apps/web/components/sdd-demos/spec-011.tsx
+#32 35.78     ./apps/web/app/%5Fdev/sdd/registry.ts
+#32 35.78     ./apps/web/app/%5Fdev/sdd/[specId]/page.tsx
+#32 35.78 
+#32 35.78 
+#32 35.78 ./tools/ci/check-workflows.mjs:619:33
+#32 35.78 Warning: Dynamic filesystem access causes tracing of the whole project
+#32 35.78   [90m617 |[0m ) {
+#32 35.78   [90m618 |[0m   [36mconst[0m rootIndex = process.argv.indexOf([32m'--root'[0m);
+#32 35.78 [33m[1m>[0m [90m619 |[0m   [36mconst[0m root = rootIndex >= [35m0[0m ? path.resolve(process.argv[rootIndex + [35m1[0m] ?? [33mROOT[0m) : [33mROOT[0m;
+#32 35.78   [90m    |[0m                                 [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+#32 35.78   [90m620 |[0m   [36mconst[0m report = checkRepository(root);
+#32 35.78   [90m621 |[0m   [36mconst[0m described = describeCi(report.workflows);
+#32 35.78   [90m622 |[0m   console.log(
+#32 35.78 
+#32 35.78 Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+#32 35.78 This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+#32 35.78 This can slow down deployments or lead to failures when size limits are exceeded.
+#32 35.78 To resolve this, you can
+#32 35.78 - make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+#32 35.78 - only use them in development, or
+#32 35.78 - opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
+#32 35.78 - remove them.
+#32 35.78 
+#32 35.78 Import traces:
+#32 35.78   Middleware:
+#32 35.78     ./tools/ci/check-workflows.mjs
+#32 35.78     ./apps/web/components/sdd-demos/spec-011.tsx
+#32 35.78     ./apps/web/app/%5Fdev/sdd/registry.ts
+#32 35.78     ./apps/web/proxy.ts
+#32 35.78 
+#32 35.78   Server Component:
+#32 35.78     ./tools/ci/check-workflows.mjs
+#32 35.78     ./apps/web/components/sdd-demos/spec-011.tsx
+#32 35.78     ./apps/web/app/%5Fdev/sdd/registry.ts
+#32 35.78     ./apps/web/app/%5Fdev/sdd/[specId]/page.tsx
+#32 35.78 
+#32 35.78 
+#32 35.78   Finalizing page optimization ...
+#32 36.93 
+#32 36.93 Route (app)
+#32 36.93 ┌ ƒ /
+#32 36.93 ├ ƒ /_dev/bricks
+#32 36.93 ├ ƒ /_dev/bricks/examen
+#32 36.93 ├ ƒ /_dev/bricks/exercice
+#32 36.93 ├ ƒ /_dev/bricks/jeux
+#32 36.93 ├ ƒ /_dev/bricks/quiz
+#32 36.93 ├ ƒ /_dev/sdd
+#32 36.93 ├ ƒ /_dev/sdd/[specId]
+#32 36.93 ├ ƒ /_dev/sdd/reference/[file]
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-301
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-401
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-403
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-404
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-501
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-505
+#32 36.93 ├ ƒ /_dev/sdd/SPEC-510
+#32 36.93 ├ ƒ /_dev/stripe/checkout
+#32 36.93 ├ ƒ /_dev/stripe/portal
+#32 36.93 ├ ƒ /_dev/ui
+#32 36.93 ├ ƒ /_dev/ui/accessibilite
+#32 36.93 ├ ƒ /_dev/ui/actions
+#32 36.93 ├ ƒ /_dev/ui/jetons
+#32 36.93 ├ ƒ /_dev/ui/retours
+#32 36.93 ├ ƒ /_dev/ui/saisie
+#32 36.93 ├ ƒ /_dev/ui/structure
+#32 36.93 ├ ƒ /_not-found
+#32 36.93 ├ ƒ /acces-refuse
+#32 36.93 ├ ƒ /accueil
+#32 36.93 ├ ƒ /api/inngest
+#32 36.93 ├ ƒ /api/v1/_dev/commit-check
+#32 36.93 ├ ƒ /api/v1/_dev/demo-job
+#32 36.93 ├ ƒ /api/v1/_dev/secret-scan
+#32 36.93 ├ ƒ /api/v1/attempts/[aid]
+#32 36.93 ├ ƒ /api/v1/attempts/[aid]/answers/[pos]
+#32 36.93 ├ ƒ /api/v1/attempts/[aid]/answers/[pos]/check
+#32 36.93 ├ ƒ /api/v1/attempts/[aid]/result
+#32 36.93 ├ ƒ /api/v1/attempts/[aid]/submit
+#32 36.93 ├ ƒ /api/v1/auth/callback
+#32 36.93 ├ ƒ /api/v1/auth/magic-link
+#32 36.93 ├ ƒ /api/v1/auth/resend
+#32 36.93 ├ ƒ /api/v1/auth/sign-in
+#32 36.93 ├ ƒ /api/v1/auth/sign-out
+#32 36.93 ├ ƒ /api/v1/auth/sign-up
+#32 36.93 ├ ƒ /api/v1/billing/checkout
+#32 36.93 ├ ƒ /api/v1/billing/portal
+#32 36.93 ├ ƒ /api/v1/billing/subscription
+#32 36.93 ├ ƒ /api/v1/bricks/[bid]
+#32 36.93 ├ ƒ /api/v1/bricks/[bid]/report
+#32 36.93 ├ ƒ /api/v1/chapters/[cid]/complete
+#32 36.93 ├ ƒ /api/v1/chapters/[cid]/resources
+#32 36.93 ├ ƒ /api/v1/chapters/[cid]/summary
+#32 36.93 ├ ƒ /api/v1/chapters/[cid]/uploads
+#32 36.93 ├ ƒ /api/v1/conversations/[id]
+#32 36.93 ├ ƒ /api/v1/conversations/[id]/messages
+#32 36.93 ├ ƒ /api/v1/conversations/[id]/self-test/answer
+#32 36.93 ├ ƒ /api/v1/course-citations/[cid]/source
+#32 36.93 ├ ƒ /api/v1/course-sections/[sid]
+#32 36.93 ├ ƒ /api/v1/course-sections/[sid]/report
+#32 36.93 ├ ƒ /api/v1/courses/[cid]/conversations
+#32 36.93 ├ ƒ /api/v1/courses/[cid]/progress
+#32 36.93 ├ ƒ /api/v1/dev/sdd/cron/hourly-tick
+#32 36.93 ├ ƒ /api/v1/dev/sdd/echo
+#32 36.93 ├ ƒ /api/v1/dev/sdd/email/outbox
+#32 36.93 ├ ƒ /api/v1/dev/sdd/email/preview
+#32 36.93 ├ ƒ /api/v1/dev/sdd/email/send
+#32 36.93 ├ ƒ /api/v1/dev/sdd/events/demo
+#32 36.93 ├ ƒ /api/v1/dev/sdd/events/demo/[runId]
+#32 36.93 ├ ƒ /api/v1/dev/sdd/events/outbox
+#32 36.93 ├ ƒ /api/v1/dev/sdd/items
+#32 36.93 ├ ƒ /api/v1/dev/sdd/notify
+#32 36.93 ├ ƒ /api/v1/dev/sdd/personal-data/deletion
+#32 36.93 ├ ƒ /api/v1/dev/sdd/personal-data/execute
+#32 36.93 ├ ƒ /api/v1/dev/sdd/personal-data/export
+#32 36.93 ├ ƒ /api/v1/dev/sdd/push/send
+#32 36.93 ├ ƒ /api/v1/dev/sdd/rate-limit/burst
+#32 36.93 ├ ƒ /api/v1/dev/sdd/rate-limit/origin
+#32 36.93 ├ ƒ /api/v1/dev/sdd/rate-limit/purge
+#32 36.93 ├ ƒ /api/v1/dev/sdd/stripe/checkout/cancel
+#32 36.93 ├ ƒ /api/v1/dev/sdd/stripe/checkout/pay
+#32 36.93 ├ ƒ /api/v1/dev/sdd/stripe/events
+#32 36.93 ├ ƒ /api/v1/dev/sdd/stripe/simulate
+#32 36.93 ├ ƒ /api/v1/dev/sdd/uploads
+#32 36.93 ├ ƒ /api/v1/email/unsubscribe
+#32 36.93 ├ ƒ /api/v1/exercises/[aid]/draft
+#32 36.93 ├ ƒ /api/v1/exercises/[aid]/submissions
+#32 36.93 ├ ƒ /api/v1/formations
+#32 36.93 ├ ƒ /api/v1/formations/[fid]
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/archive
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/cadrage/complete
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/cadrage/messages
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/final-review
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/gaps
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/maintenance
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/mock-exams
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/mock-exams/attempts
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/mock-exams/format
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/modules/[mid]/exercises/[aid]
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/notion-graph
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/pause
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/programme
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/programme/adjust
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/programme/generate
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/programme/import
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/programme/validate
+#32 36.93 ├ ƒ /api/v1/formations/[fid]/resume
+#32 36.93 ├ ƒ /api/v1/health
+#32 36.93 ├ ƒ /api/v1/home
+#32 36.93 ├ ƒ /api/v1/me
+#32 36.93 ├ ƒ /api/v1/me/ai/credentials
+#32 36.93 ├ ƒ /api/v1/me/ai/credentials/[id]
+#32 36.93 ├ ƒ /api/v1/me/ai/credentials/[id]/qualify
+#32 36.93 ├ ƒ /api/v1/me/ai/task-models
+#32 36.93 ├ ƒ /api/v1/me/ai/usage
+#32 36.93 ├ ƒ /api/v1/me/current-formation
+#32 36.93 ├ ƒ /api/v1/me/deletion
+#32 36.93 ├ ƒ /api/v1/me/export
+#32 36.93 ├ ƒ /api/v1/me/exports/[id]
+#32 36.93 ├ ƒ /api/v1/me/header
+#32 36.93 ├ ƒ /api/v1/me/onboarding
+#32 36.93 ├ ƒ /api/v1/me/preferences
+#32 36.93 ├ ƒ /api/v1/me/push-subscriptions
+#32 36.93 ├ ƒ /api/v1/me/sidebar
+#32 36.93 ├ ƒ /api/v1/mock-exams/[aid]
+#32 36.93 ├ ƒ /api/v1/mock-exams/[aid]/answers/[pos]
+#32 36.93 ├ ƒ /api/v1/mock-exams/[aid]/marks/[pos]
+#32 36.93 ├ ƒ /api/v1/mock-exams/[aid]/result
+#32 36.93 ├ ƒ /api/v1/mock-exams/[aid]/submit
+#32 36.93 ├ ƒ /api/v1/modules/[mid]
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/course
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/course-generation
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/exercises/[aid]/attempts
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/exercises/[aid]/hint
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/quiz/attempts
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/remediation
+#32 36.93 ├ ƒ /api/v1/modules/[mid]/remediation/complete
+#32 36.93 ├ ƒ /api/v1/notifications
+#32 36.93 ├ ƒ /api/v1/notifications/[id]/read
+#32 36.93 ├ ƒ /api/v1/notifications/read-all
+#32 36.93 ├ ƒ /api/v1/notifications/unread-count
+#32 36.93 ├ ƒ /api/v1/resources/[rid]
+#32 36.93 ├ ƒ /api/v1/resources/[rid]/dismiss
+#32 36.93 ├ ƒ /api/v1/resources/[rid]/finalize
+#32 36.93 ├ ƒ /api/v1/resources/[rid]/import
+#32 36.93 ├ ƒ /api/v1/resources/[rid]/retry
+#32 36.93 ├ ƒ /api/v1/resources/[rid]/url
+#32 36.93 ├ ƒ /api/v1/search
+#32 36.93 ├ ƒ /api/v1/webhooks/stripe
+#32 36.93 ├ ƒ /connexion
+#32 36.93 ├ ƒ /formations/[fid]/bilan
+#32 36.93 ├ ƒ /formations/[fid]/cadrage
+#32 36.93 ├ ƒ /formations/[fid]/carte
+#32 36.93 ├ ƒ /formations/[fid]/examen-blanc
+#32 36.93 ├ ƒ /formations/[fid]/examen-blanc/[attemptId]
+#32 36.93 ├ ƒ /formations/[fid]/lacunes
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]/cours
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]/exercices/[aid]
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]/quiz
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]/quiz/[attemptId]/resultat
+#32 36.93 ├ ƒ /formations/[fid]/modules/[mid]/remediation
+#32 36.93 ├ ƒ /formations/[fid]/programme
+#32 36.93 ├ ƒ /formations/nouvelle
+#32 36.93 ├ ƒ /hors-ligne
+#32 36.93 ├ ƒ /inscription
+#32 36.93 ├ ƒ /premiers-pas
+#32 36.93 ├ ƒ /premiers-pas/[etape]
+#32 36.93 ├ ƒ /recherche
+#32 36.93 └ ƒ /verifier-email
+#32 36.93 
+#32 36.93 
+#32 36.93 ƒ Proxy (Middleware)
+#32 36.93 
+#32 36.93 ƒ  (Dynamic)  server-rendered on demand
+#32 36.93 
+#32 DONE 37.2s
+
+#33 [runner 2/6] WORKDIR /app
+#33 CACHED
+
+#34 [runner 3/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/standalone ./
+#34 DONE 0.6s
+
+#35 [runner 4/6] COPY --from=builder --chown=root:root /repo/apps/web/.next/static ./apps/web/.next/static
+#35 DONE 0.1s
+
+#36 [runner 5/6] COPY --from=builder --chown=root:root /repo/apps/web/public ./apps/web/public
+#36 DONE 0.3s
+
+#37 [runner 6/6] COPY --chown=root:root docker/healthcheck-web.mjs ./healthcheck-web.mjs
+#37 DONE 0.1s
+
+#38 exporting to image
+#38 exporting layers
+#38 exporting layers 3.4s done
+#38 exporting manifest sha256:eb4cc8750ed44b5645b6efa7496f509cc6f0de9351ba7d93a6c9ef7e9bfe06c1 0.0s done
+#38 exporting config sha256:d58eab01059398a21045d0b6f775161cd16fc304cb4891151f2f1bd6d09c11ef 0.0s done
+#38 exporting attestation manifest sha256:4ea6255929ca53529a728b0cf919ef5c96e7cc9a72004ecc55905dc532d505c7 0.0s done
+#38 exporting manifest list sha256:2c1bbd07eebe4fadcbe6a87e48719da825a223487470a2bd5174521544810e31 0.0s done
+#38 naming to docker.io/library/***
+#38 naming to docker.io/library/*** done
+#38 unpacking to docker.io/library/***
+#38 unpacking to docker.io/library/*** 0.9s done
+#38 DONE 4.4s

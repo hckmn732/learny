@@ -366,8 +366,14 @@ test('explore la carte des notions @SPEC-616', async ({ page, axeCheck, captureE
   const viewport = page.getByTestId('graph-viewport');
 
   // CA-2 — search + Enter selects and centres « Variante d’exercice ».
-  await page.getByTestId('graph-search').fill('Variante d’exercice');
-  await page.getByTestId('graph-search').press('Enter');
+  const search = page.getByTestId('graph-search');
+  await search.click();
+  // Type the query: `fill` does not reach the controlled input on WebKit, and Enter can arrive
+  // before React applies the change, so wait for the rendered results first.
+  await search.pressSequentially('Variante d’exercice');
+  await expect(page.getByTestId('graph-search')).toHaveValue('Variante d’exercice');
+  await expect(page.getByTestId('graph-search-results')).toBeVisible();
+  await search.press('Enter');
   const detail = page.getByTestId('graph-detail');
   await expect(detail).toContainText('Variante d’exercice');
   await expect(detail).toContainText('S’appuie sur');
