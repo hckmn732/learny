@@ -103,6 +103,19 @@ const VALID: Record<EventName, Record<string, unknown>> = {
     text: 'Clé ou type de pièce ?',
   },
 
+  'agenda/slot-moved': {
+    userId: U1,
+    slotId: U2,
+    newSlotId: U3,
+    formationId: U2,
+    startsAt: '2026-11-16T09:00:00+01:00',
+  },
+  'plan/replanned': {
+    userId: U1,
+    formationId: U2,
+    choice: 'shift_end',
+    planVersion: 'plan-1234567890abcdef',
+  },
   'automation/action-proposed': { userId: U1, actionId: U2, automation: 'reprise' },
   'automation/action-applied': { userId: U1, actionId: U2, automation: 'micro_seance' },
   'automation/action-undone': { userId: U1, actionId: U2, automation: 'pause' },
@@ -141,7 +154,7 @@ const VALID: Record<EventName, Record<string, unknown>> = {
 describe('[SPEC-203] catalogue des événements', () => {
   it('décrit un exemple valide pour chacun des événements du catalogue', () => {
     expect(Object.keys(VALID).sort()).toEqual([...EVENT_NAMES_LIST].sort());
-    expect(EVENT_NAMES_LIST).toHaveLength(46);
+    expect(EVENT_NAMES_LIST).toHaveLength(48);
   });
 
   it.each(EVENT_NAMES_LIST)('%s accepte son exemple valide', (name) => {
