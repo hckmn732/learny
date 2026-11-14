@@ -331,7 +331,11 @@ test('conformité SCR-15 @SPEC-707 @visual', async ({
     expect(region.ratio, `écart ${region.name}`).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
   }
 
-  await expectScreenshotBaseline(page, 'spec-707-parametres-desktop.png', { fullPage: true });
+  await expectScreenshotBaseline(page, 'spec-707-parametres-desktop.png', {
+    fullPage: true,
+    // The seed stamps the creation date at load time: mask it so the baseline stays stable.
+    mask: [page.getByTestId('profile-created')],
+  });
   await axeCheck();
 });
 
@@ -345,10 +349,15 @@ test('conformité SCR-15 mobile @SPEC-707 @visual @mobile', async ({
   await useDemoUser(context, baseURL, page);
   await page.goto('/parametres');
   await expect(page.getByTestId('profile-first-name')).toHaveValue('Alex');
+  // Wait for the loaded screen, never capture the route loading fallback.
+  await expect(page.getByTestId('profile-save')).toBeVisible();
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
-  await expectScreenshotBaseline(page, 'spec-707-parametres-mobile.png', { fullPage: true });
+  await expectScreenshotBaseline(page, 'spec-707-parametres-mobile.png', {
+    fullPage: true,
+    mask: [page.getByTestId('profile-created')],
+  });
   await axeCheck();
 });
