@@ -33,6 +33,7 @@ export * from './learning';
 export * from './me';
 export * from './moteur-d-automatismes';
 export * from './automations';
+export * from './warmup';
 export * from './gaps';
 export * from './notion-graph';
 export * from './exercises';

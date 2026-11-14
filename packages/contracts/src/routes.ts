@@ -39,6 +39,7 @@ import { seriesMilestoneRoutes } from './serie-regularite-et-jalons-interface';
 import { sidebarRoutes } from './sidebar';
 import { tutorChatRoutes } from './tutor-chat';
 import { uploadsDevRoutes, uploadsRoutes } from './uploads';
+import { warmupRoutes } from './warmup';
 
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
 // A test checks the uniqueness of `id` and of `method + path`.
@@ -89,6 +90,7 @@ export const ROUTES = {
   ...examRoutes,
   ...remediationRoutes,
   ...automationRoutes,
+  ...warmupRoutes,
   ...reviewRoutes,
 } as const;
 
