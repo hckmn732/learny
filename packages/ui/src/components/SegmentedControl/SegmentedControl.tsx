@@ -59,6 +59,8 @@ export type SegmentedControlProps<T extends string> = Omit<
     'aria-label': string;
     fullWidth?: boolean;
     disabled?: boolean;
+    /** Optional stable `data-testid` per option (SPEC-704 agenda views). */
+    optionTestId?: (value: T) => string;
   };
 
 export function SegmentedControl<T extends string>({
@@ -70,6 +72,7 @@ export function SegmentedControl<T extends string>({
   size = 'md',
   fullWidth = false,
   disabled = false,
+  optionTestId,
   ref,
   'aria-label': ariaLabel,
   ...props
@@ -127,6 +130,7 @@ export function SegmentedControl<T extends string>({
             )}
             disabled={disabled}
             key={option.value}
+            data-testid={optionTestId?.(option.value)}
             onClick={() => {
               onValueChange(option.value);
             }}

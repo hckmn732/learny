@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T09:24:42.824Z",
+  "updatedAt": "2026-11-14T09:54:11.206Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4674,14 +4674,55 @@
       "validations": {}
     },
     "SPEC-704": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T08:00:12.874Z",
+      "completedAt": "2026-11-14T09:52:11.707Z",
+      "branch": "spec/SPEC-704-agenda-vues-filtres-et-detail",
+      "commit": "084518d2",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T09:49:02.922Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T09:49:17.488Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T09:49:38.175Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T09:49:54.156Z",
+          "details": "44 test(s) [SPEC-704] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T09:51:09.135Z",
+          "details": "9 test(s) [SPEC-704] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T09:51:59.946Z",
+          "details": "5 réussi(s), 0 échec(s), 12 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T09:51:59.946Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T09:51:59.962Z",
+          "details": "10/10 critères ✅"
+        }
+      }
     },
     "SPEC-705": {
       "status": "pending",

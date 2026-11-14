@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-14T09:24:42.825Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-14T09:54:11.208Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 92 |
+| Terminées | 93 |
 | En cours | 0 |
 | Prêtes | 8 |
-| En attente de dépendances | 32 |
+| En attente de dépendances | 31 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **69.7 %** |
-| Avancement V1 | 74.2 % |
+| **Avancement global** | **70.5 %** |
+| Avancement V1 | 75.0 % |
 | Prochaine action | start SPEC-701 — Quiz global : session du jour et cartes de rappel |
 
 ## Phases et checkpoints
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 1/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 2/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -130,8 +130,8 @@
 | [SPEC-701](../specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md) | Quiz global : session du jour et cartes de rappel | P7 | 🟢 ready | 0 | — | SPEC-406, SPEC-503, SPEC-411, SPEC-513 |
 | [SPEC-702](../specs/p7-engagement/SPEC-702-jeux-association-remise-en-ordre-classement-texte-.md) | Jeux : association, remise en ordre, classement, texte à trous | P7 | ⏳ waiting | 0 | — | SPEC-701 |
 | [SPEC-703](../specs/p7-engagement/SPEC-703-micro-seance.md) | Micro-séance | P7 | ⏳ waiting | 0 | — | SPEC-701 |
-| [SPEC-704](../specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md) | Agenda : vues, filtres et détail | P7 | 🟢 ready | 0 | — | SPEC-407, SPEC-304, SPEC-411 |
-| [SPEC-705](../specs/p7-engagement/SPEC-705-agenda-deplacer-et-reajuster-le-planning.md) | Agenda : déplacer et réajuster le planning | P7 | ⏳ waiting | 0 | — | SPEC-704 |
+| [SPEC-704](../specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md) | Agenda : vues, filtres et détail | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-407, SPEC-304, SPEC-411 |
+| [SPEC-705](../specs/p7-engagement/SPEC-705-agenda-deplacer-et-reajuster-le-planning.md) | Agenda : déplacer et réajuster le planning | P7 | 🟢 ready | 0 | — | SPEC-704 |
 | [SPEC-706](../specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md) | Notifications : génération des rappels | P7 | 🟢 ready | 0 | — | SPEC-209, SPEC-306, SPEC-411 |
 | [SPEC-707](../specs/p7-engagement/SPEC-707-parametres-onglets-et-profil.md) | Paramètres : onglets et Profil | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-304, SPEC-211 |
 | [SPEC-708](../specs/p7-engagement/SPEC-708-parametres-notifications.md) | Paramètres : Notifications | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-209 |

@@ -93,3 +93,15 @@ export {
   modelPrices,
 } from './pricing';
 export type { ModelPrices } from './pricing';
+export {
+  AGENDA_LEGEND_BASE_KINDS,
+  AGENDA_LEGEND_EXTRA_KINDS,
+  AGENDA_SLOT_KINDS,
+  AGENDA_SLOT_STYLES,
+  agendaLegendLabel,
+  agendaSlotLabel,
+  agendaSlotLabelOf,
+  agendaSlotStyle,
+  agendaSlotStyleOf,
+} from './agenda';
+export type { AgendaSlotKind as AgendaSlotKindConfig, AgendaSlotStyle } from './agenda';

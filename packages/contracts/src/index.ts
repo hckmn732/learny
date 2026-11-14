@@ -55,3 +55,4 @@ export * from './course';
 export * from './course-reading';
 export * from './resources';
 export * from './dev-billing';
+export * from './agenda';

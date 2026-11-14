@@ -1,0 +1,111 @@
+<testsuites id="" name="" tests="5" failures="0" skipped="0" errors="0" time="49.623579">
+<testsuite name="p7/agenda.spec.ts" timestamp="2026-11-14T09:51:41.317Z" hostname="desktop" tests="5" failures="0" skipped="0" time="16.76" errors="0">
+<testcase name="vues, navigation et détail @SPEC-704" classname="p7/agenda.spec.ts" time="5.532">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/attachments/axe-908327ceb866303fbabd623f5521a50138335c3d.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/attachments/axe-ba9181756adc863057a27bc9289fa759be84226e.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-vues-navigation-et-détail-SPEC-704-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="filtre par formation @SPEC-704" classname="p7/agenda.spec.ts" time="1.608">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-agenda-filtre-par-formation-SPEC-704-desktop/attachments/axe-9bcf8fbe1abd2c850130a8c90fe18f20c8cbb62c.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-filtre-par-formation-SPEC-704-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-filtre-par-formation-SPEC-704-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-filtre-par-formation-SPEC-704-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-filtre-par-formation-SPEC-704-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="ouvrir une activité @SPEC-704" classname="p7/agenda.spec.ts" time="1.297">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-agenda-ouvrir-une-activité-SPEC-704-desktop/attachments/axe-5f701a51ca0156c780d118fbf3e2dce44930b86d.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-ouvrir-une-activité-SPEC-704-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-ouvrir-une-activité-SPEC-704-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-ouvrir-une-activité-SPEC-704-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-ouvrir-une-activité-SPEC-704-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-12 @SPEC-704 @visual" classname="p7/agenda.spec.ts" time="7.252">
+<properties>
+<property name="mockup-diff-ratio" value="SCR-12-semaine:0.1130">
+</property>
+<property name="mockup-diff-ratio" value="SCR-12-jour:0.1018">
+</property>
+<property name="mockup-diff-ratio" value="SCR-12-mois:0.1029">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/axe-018715980ba33784f74ffcf25197493fc4908ef9.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-semaine-side-by-side-826dafc5dd638c03873d28ccd14d2122099015a0.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-semaine-diff-6a63a5ae0b7326ab96614fa4ee024b24b60b72b7.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-jour-side-by-side-fbd18a08dfa776de99ce1d88b6d9bb88b4a51ff5.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-jour-diff-ecf3256860ec0c74229148ebee61433ce882242e.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/axe-7605cc7bd50d29fcd07846ce96496116f4d2728f.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-mois-side-by-side-584451702148660688471c0f8f151835c9bf1519.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/SCR-12-mois-diff-d632c99d97c106a4089d33eb075ba0776b2bde14.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/attachments/axe-a9bec5b0ac0babf306c28a632540ff5571f2dc5f.json]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/video-3.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-conformité-SCR-12-SPEC-704-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="latence de GET /agenda @SPEC-704" classname="p7/agenda.spec.ts" time="1.071">
+<properties>
+<property name="agenda-p95-ms" value="26.7">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-agenda-latence-de-GET-agenda-SPEC-704-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-agenda-latence-de-GET-agenda-SPEC-704-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-agenda-latence-de-GET-agenda-SPEC-704-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

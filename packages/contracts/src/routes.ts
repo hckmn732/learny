@@ -1,3 +1,4 @@
+import { agendaRoutes } from './agenda';
 import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
@@ -37,6 +38,7 @@ import { uploadsDevRoutes, uploadsRoutes } from './uploads';
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
 // A test checks the uniqueness of `id` and of `method + path`.
 export const ROUTES = {
+  ...agendaRoutes,
   ...healthRoutes,
   ...authRoutes,
   ...meRoutes,

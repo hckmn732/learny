@@ -4650,6 +4650,49 @@ export const fr = {
     saveError: 'Enregistrement impossible. Vérifiez votre réseau et réessayez.',
     conflict: 'Vos paramètres ont été modifiés dans un autre onglet. Rechargez-les puis réessayez.',
   },
+  agenda: {
+    title: 'Agenda',
+    subtitleAll: 'Toutes vos formations',
+    loading: 'Chargement de l’agenda…',
+    errorTitle: 'L’agenda n’a pas pu être chargé.',
+    retry: 'Réessayer',
+    filterLabel: 'Formation affichée',
+    filterAll: 'Toutes les formations',
+    viewsGroupLabel: 'Affichage',
+    viewJour: 'Jour',
+    viewSemaine: 'Semaine',
+    viewMois: 'Mois',
+    today: 'Aujourd’hui',
+    rangeWeek: (label: string) => `semaine du ${label}`,
+    miniTitle: (month: string, year: number) => `${month} ${String(year)}`,
+    miniFormation: (period: string | null) => (period === null ? null : `Formation : ${period}`),
+    detailTitle: 'Activité sélectionnée',
+    detailEmpty: 'Aucune activité sur cette période.',
+    open: 'Ouvrir',
+    move: 'Déplacer',
+    legendTitle: 'Légende',
+    legendNote:
+      'Si un quiz n’est pas validé, le tuteur utilise d’abord les marges. Au-delà, il vous propose de décaler la fin, d’augmenter le volume quotidien ou d’alléger le programme.',
+    plannedWord: 'prévues',
+    doneWord: 'faites',
+    marginsLabel: (count: number) =>
+      count > 1 ? `${String(count)} marges de rattrapage` : `${String(count)} marge de rattrapage`,
+    dayTitle: (day: string, moduleNumber: number | null) =>
+      moduleNumber === null ? day : `${day} · module ${String(moduleNumber)}`,
+    dayEmpty: 'Aucune activité prévue ce jour-là.',
+    statusPlanned: 'Prévu',
+    statusDone: 'Fait',
+    statusMissed: 'Manquée',
+    missedMention: 'Manquée',
+    slotAria: (title: string, type: string, day: string, time: string, status: string) =>
+      `${title}, ${type}, ${day} ${time}, ${status}`,
+    monthCellAria: (day: string, count: number) =>
+      `${day}, ${count === 0 ? 'aucune activité' : `${String(count)} activité${count > 1 ? 's' : ''}`}`,
+    monthMore: (count: number) => `+ ${String(count)} autre${count > 1 ? 's' : ''}`,
+    emptyTitle: 'Votre agenda est vide',
+    emptyText: 'Validez un programme pour que le tuteur planifie vos activités.',
+    emptyLink: 'Nouvelle formation',
+  },
 } as const;
 
 export type Messages = typeof fr;
