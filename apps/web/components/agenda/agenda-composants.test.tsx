@@ -61,7 +61,7 @@ describe('[SPEC-704] composants agenda', () => {
         />,
       );
       const button = screen.getByRole('button', {
-        name: 'Quiz de validation, Quiz de validation, Mercredi 11 nov. 09:00 – 10:00, Prévu',
+        name: 'Quiz de validation, 09:00 – 10:00, Quiz de validation, Mercredi 11 nov., Prévu',
       });
       expect(button.getAttribute('aria-pressed')).toBe('false');
     });
@@ -219,14 +219,16 @@ describe('[SPEC-704] composants agenda', () => {
     });
 
     it('désactive « Déplacer » pour un créneau fait, manqué ou passé (EF-9)', () => {
+      const moveButton = (): HTMLButtonElement =>
+        screen.getByTestId<HTMLButtonElement>('agenda-detail-move');
       const { rerender } = renderComponent(
         <SlotDetail slot={slot({ id: 'a', status: 'done', movable: false })} />,
       );
-      expect(screen.getByTestId('agenda-detail-move').disabled).toBe(true);
+      expect(moveButton().disabled).toBe(true);
       rerender(<SlotDetail slot={slot({ id: 'a', status: 'missed', movable: false })} />);
-      expect(screen.getByTestId('agenda-detail-move').disabled).toBe(true);
+      expect(moveButton().disabled).toBe(true);
       rerender(<SlotDetail slot={slot({ id: 'a' })} />);
-      expect(screen.getByTestId('agenda-detail-move').disabled).toBe(false);
+      expect(moveButton().disabled).toBe(false);
     });
 
     it('affiche l’état sans activité et masque les actions (EF-9)', () => {
