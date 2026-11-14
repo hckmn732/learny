@@ -1476,6 +1476,8 @@ export interface DemoAutomationActionFixture {
   requiresConsent: boolean;
   formation: DemoFormationKey | null;
   createdAt: string;
+  /** SPEC-712 — payload of the action (missed slot, proposal and alternatives). */
+  payload?: Record<string, unknown>;
   source: DemoSource;
 }
 
@@ -1490,11 +1492,39 @@ export const DEMO_AUTOMATION_ACTIONS: readonly DemoAutomationActionFixture[] = [
     key: 'reschedule',
     automation: 'reprise',
     kind: 'reprise_proposed',
-    summary: '« Ledgers parallèles » non terminé mardi : reprise proposée jeudi 10:30.',
+    summary:
+      '« Ledgers parallèles » n’a pas été terminé mardi. Je propose de le reprendre jeudi à 10:30, dans une marge de votre agenda.',
     status: 'pending_consent',
     requiresConsent: true,
     formation: 'sap',
     createdAt: parisInstant('2026-11-11', '08:05'),
+    payload: {
+      dedupeKey: 'missed:demo-m0',
+      createdOn: parisInstant('2026-11-11', '08:05'),
+      missedSlotId: demoId('slot', 'm0'),
+      title: 'Ledgers parallèles',
+      missedDate: '2026-11-10',
+      proposed: {
+        startsAt: parisInstant('2026-11-12', '10:30'),
+        endsAt: parisInstant('2026-11-12', '12:00'),
+        bufferSlotId: demoId('slot', 'm0-buffer'),
+        inBuffer: true,
+      },
+      alternatives: [
+        {
+          startsAt: parisInstant('2026-11-12', '15:00'),
+          endsAt: parisInstant('2026-11-12', '16:00'),
+        },
+        {
+          startsAt: parisInstant('2026-11-13', '15:00'),
+          endsAt: parisInstant('2026-11-13', '16:00'),
+        },
+        {
+          startsAt: parisInstant('2026-11-16', '09:00'),
+          endsAt: parisInstant('2026-11-16', '10:00'),
+        },
+      ],
+    },
     source: AUTOMATION_SOURCE,
   },
   {

@@ -2272,7 +2272,7 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
     action.automation,
     action.kind,
     action.summary,
-    json({ source: 'fixture', key: action.key }),
+    json(action.payload ?? { source: 'fixture', key: action.key }),
     null,
     action.requiresConsent,
     action.status,
