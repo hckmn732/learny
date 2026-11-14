@@ -2267,6 +2267,24 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
 
   slotRows.push(
     [
+      demoId('slot', 'w2w'),
+      demoUserId('alex'),
+      demoFormationId('sap'),
+      demoModuleId('sap', 3),
+      'warmup',
+      'Échauffement',
+      '3 questions de rappel · 2 min · ajouté par le tuteur',
+      timestamp(parisInstant('2026-11-11', '13:50')),
+      timestamp(parisInstant('2026-11-11', '13:52')),
+      'planned',
+      catalog.activityIds.get('warmup') ?? null,
+      'automation',
+      null,
+      false,
+      timestamp(parisInstant('2026-11-08', '18:00')),
+      timestamp(parisInstant('2026-11-08', '18:00')),
+    ],
+    [
       demoId('slot', 'camille-mon'),
       demoUserId('camille'),
       demoFormationId('agile'),
