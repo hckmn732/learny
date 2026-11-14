@@ -166,6 +166,44 @@ export const fr = {
       wrong: 'Réponse enregistrée.',
       answerPending: 'Enregistrement…',
     },
+    games: {
+      matching: {
+        instruction: 'Touchez une notion, puis la définition qui lui correspond.',
+        verify: 'Vérifier',
+        reset: 'Recommencer',
+        expected: (term: string) => `Attendu : ${term}`,
+        associated: (definition: string, term: number) =>
+          `${definition}, associée au terme ${String(term)}`,
+        notAssociated: (definition: string) => `${definition}, non associée`,
+      },
+      ordering: {
+        up: 'Monter',
+        down: 'Descendre',
+        verify: 'Vérifier l’ordre',
+        expectedPosition: (position: number) => `Position attendue : ${String(position)}`,
+      },
+      categorization: {
+        verify: 'Vérifier le classement',
+        expected: (category: string) => `Attendu : ${category}`,
+      },
+      cloze: {
+        instruction: 'Complétez de tête, sans liste de choix.',
+        verify: 'Vérifier',
+        labels: [
+          'Premier mot manquant',
+          'Second mot manquant',
+          'Troisième mot manquant',
+        ] as readonly string[],
+        numbered: (index: number) => `Mot manquant n°${String(index)}`,
+        expectedMultiple: 'Réponses attendues :',
+        expectedSingle: 'Réponse attendue :',
+        and: ' et ',
+      },
+      correct: 'Juste',
+      wrong: 'Faux',
+      explanation: 'Explication',
+      unavailable: 'Ce jeu n’est plus disponible.',
+    },
     end: {
       badge: 'Session terminée',
       title: (notions: number, minutes: number) =>

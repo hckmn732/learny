@@ -1030,12 +1030,10 @@ describe('[SPEC-701] réponse et clôture de la session', () => {
   it('ET-3 — une association est corrigée par le moteur et sa réponse est conservée', async () => {
     const rights = opaqueMapping(matchingPayload, VERSION_A);
     const response = {
-      pairs: Object.fromEntries(
-        matchingPayload.pairs.map((pair) => [
-          pair.id,
-          rights.find((right) => right.pairId === pair.id)?.id ?? null,
-        ]),
-      ),
+      pairs: matchingPayload.pairs.map((pair) => ({
+        leftId: pair.id,
+        rightId: rights.find((right) => right.pairId === pair.id)?.id ?? '',
+      })),
     };
     const fake = fakeTx(
       answerHandlers({

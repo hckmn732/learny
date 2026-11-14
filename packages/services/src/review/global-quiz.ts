@@ -3,7 +3,13 @@ import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { toPublicBrick, type BrickType } from '@learny/bricks';
+import {
+  toPublicBrick,
+  parseBrickPayload,
+  type BrickType,
+  type GradeError,
+  type GradeOutcome,
+} from '@learny/bricks';
 import {
   ENGINE,
   GAME_LABELS,
@@ -12,12 +18,15 @@ import {
 } from '@learny/config/product';
 import {
   GlobalQuizSessionDtoSchema,
+  REVIEW_GAME_RESPONSE_SCHEMAS,
   ReviewAnswerResultDtoSchema,
+  ReviewGameCorrectionSchema,
   ReviewItemDtoSchema,
   ReviewSummaryDtoSchema,
   type GlobalQuizSessionDto,
   type ReviewAnswerInput,
   type ReviewAnswerResultDto,
+  type ReviewGameFormat,
   type ReviewItemDto,
   type ReviewRationale,
   type ReviewSummaryDto,
@@ -40,6 +49,8 @@ import { getDueNotions } from '../learning/get-due-notions';
 import { requestRefill } from '../question-bank';
 import { requireUser, toResult } from '../resources/result';
 
+import { correctionExplanation, toBrickResponse, toGameCorrection } from './game-response';
+import { splitResultByNotion } from './per-notion';
 import { buildRationale, type RationaleGapItem } from './rationale';
 
 // Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0319).
@@ -115,6 +126,8 @@ interface SessionItemConfig {
   moduleIds: string[];
   notionIds: string[];
   withdrawn?: boolean;
+  /** CL-7 — the stored payload no longer matches its schema: message instead of the game. */
+  invalid?: boolean;
 }
 
 interface SessionConfig {
@@ -147,6 +160,7 @@ const sessionConfigSchema = z.object({
       moduleIds: z.array(z.string()),
       notionIds: z.array(z.string()),
       withdrawn: z.boolean().optional(),
+      invalid: z.boolean().optional(),
     }),
   ),
 });
@@ -935,11 +949,18 @@ function wasDueWord(count: number): string {
   return `${String(count)} notions étaient dues`;
 }
 
+/** CL-7 — `title` is display metadata of the demonstration cloze, outside the strict schema. */
+function schemaCandidate(payload: unknown): unknown {
+  if (typeof payload !== 'object' || payload === null || !('title' in payload)) return payload;
+  const rest = { ...(payload as Record<string, unknown>) };
+  delete rest.title;
+  return rest;
+}
+
 /**
  * Builds the DTO of an existing session: the frozen config, the bricks read in one query (ET-11),
  * the client-safe payloads, the FSRS previews of the recall cards and the answers state.
- */
-async function buildDto(
+ */ async function buildDto(
   ctx: ServiceContext,
   tx: DbTx,
   userId: string,
@@ -994,19 +1015,36 @@ async function buildDto(
   const answeredPositions = new Set(answerByPosition.keys());
 
   // ET-6 (BR-MEM-09) — a brick reported after the creation withdraws its un-answered item.
+  // CL-7 — a payload that no longer matches its schema withdraws the item and retires the brick.
   for (const item of config.items) {
-    if (item.withdrawn === true || answeredPositions.has(item.position + 1)) continue;
+    if (item.invalid === true) continue;
     const brick = brickByVersionId.get(activityItems[item.position]?.brickVersionId ?? '');
-    if (brick !== undefined && brick.status !== 'active') {
-      item.withdrawn = true;
-      await tx.execute(sql`
-        update public.activities
-        set config = jsonb_set(
+    if (brick === undefined) continue;
+    const parsed =
+      brick.status === 'active'
+        ? parseBrickPayload(brick.type as BrickType, schemaCandidate(brick.payload))
+        : null;
+    const invalid = parsed !== null && !parsed.ok;
+    if (brick.status === 'active' && !invalid) continue;
+    item.invalid = invalid;
+    if (!answeredPositions.has(item.position + 1)) item.withdrawn = true;
+    await tx.execute(sql`
+      update public.activities
+      set config = jsonb_set(
+        jsonb_set(
           config,
           array[${'items'}, ${String(item.position)}, ${'withdrawn'}],
-          'true'::jsonb
-        )
-        where id = ${activity.id}::uuid
+          ${JSON.stringify(item.withdrawn === true)}::jsonb
+        ),
+        array[${'items'}, ${String(item.position)}, ${'invalid'}],
+        ${JSON.stringify(invalid)}::jsonb
+      )
+      where id = ${activity.id}::uuid
+    `);
+    if (invalid) {
+      await tx.execute(sql`
+        update public.bricks set status = 'retired'
+        where id = ${brick.brick_id}::uuid and status <> 'retired'
       `);
     }
   }
@@ -1057,18 +1095,22 @@ async function buildDto(
   for (const item of config.items) {
     const versionId = activityItems[item.position]?.brickVersionId ?? '';
     const brick = brickByVersionId.get(versionId);
-    if (brick === undefined || item.withdrawn === true) continue;
+    if (brick === undefined) continue;
+    if (item.withdrawn === true && item.invalid !== true) continue;
     const games = GAME_LABELS as Record<string, { name: string; tech: string } | undefined>;
     const game = games[brick.type];
-    const publicBrick = toPublicBrick({
-      brickId: brick.brick_id,
-      versionId: brick.version_id,
-      type: brick.type as BrickType,
-      notionIds: brick.notion_ids,
-      payload: brick.payload as never,
-    });
+    const publicBrick =
+      item.invalid === true
+        ? null
+        : toPublicBrick({
+            brickId: brick.brick_id,
+            versionId: brick.version_id,
+            type: brick.type as BrickType,
+            notionIds: brick.notion_ids,
+            payload: brick.payload as never,
+          });
     let intervals: ReviewItemDto['intervals'] = null;
-    if (item.format === 'recall_card') {
+    if (item.format === 'recall_card' && item.invalid !== true) {
       const card = cardByNotion.get(item.notionIds[0] ?? '');
       intervals =
         card === undefined
@@ -1093,10 +1135,11 @@ async function buildDto(
         ),
         reason: item.reasonKey === null ? null : (REASON_TEXTS[item.reasonKey] ?? null),
         notionIds: item.notionIds,
-        payload: publicBrick.publicPayload,
+        payload: publicBrick?.publicPayload ?? {},
         intervals,
-        state: stateOf(item, answer),
-        result: resultOf(item, answer, logsByAnswer.get(answer?.id ?? '')),
+        state: item.invalid === true ? 'withdrawn' : stateOf(item, answer),
+        result:
+          item.invalid === true ? null : resultOf(item, answer, logsByAnswer.get(answer?.id ?? '')),
       }),
     );
   }
@@ -1333,6 +1376,10 @@ export function answerReviewItem(
       let responseToStore: unknown = { skipped: true };
       let brickType: string | null = null;
       let brickNotionIds: string[] = [];
+      let scoreRatio: number | null = null;
+      let isGame = false;
+      let gameConfusions: { notionId: string; withNotionId: string }[] = [];
+      let gameNotions: { notionId: string; correct: boolean; confusedWithNotionId?: string }[] = [];
       if (!skipped) {
         const brickRows = await tx.execute<{
           type: string;
@@ -1350,18 +1397,81 @@ export function answerReviewItem(
         }
         brickType = brick.type;
         brickNotionIds = brick.notion_ids;
+        const gameSchema =
+          brick.type in REVIEW_GAME_RESPONSE_SCHEMAS
+            ? REVIEW_GAME_RESPONSE_SCHEMAS[brick.type as ReviewGameFormat]
+            : null;
         const { gradeBrick } = await import('@learny/bricks');
-        const response = resolveResponse(brick.type, input.response);
-        const graded = gradeBrick(brick.type as BrickType, brick.payload, response, versionId);
+        let response = resolveResponse(brick.type, input.response);
+        let graded: Result<GradeOutcome, GradeError>;
+        if (gameSchema !== null) {
+          isGame = true;
+          // ET-1 — the contract shape is validated before grading: incomplete or unknown ids are 400.
+          const parsed = gameSchema.safeParse(input.response);
+          if (!parsed.success) {
+            throw new AppError(
+              'VALIDATION_FAILED',
+              'La réponse du jeu est incomplète ou invalide.',
+              {
+                errors: parsed.error.issues.map((issue) => ({
+                  path: ['response', ...issue.path.map(String)].join('.'),
+                  message: issue.message,
+                })),
+              },
+            );
+          }
+          response = toBrickResponse(brick.type as ReviewGameFormat, parsed.data);
+          graded = gradeBrick(brick.type as BrickType, brick.payload, response, versionId);
+          if (!graded.ok) {
+            throw new AppError(
+              'VALIDATION_FAILED',
+              'La réponse du jeu contient un identifiant inconnu.',
+              {
+                errors: graded.error.issues.map((issue) => ({
+                  path: issue.path,
+                  message: issue.message,
+                })),
+              },
+            );
+          }
+        } else {
+          graded = gradeBrick(brick.type as BrickType, brick.payload, response, versionId);
+        }
         if (!graded.ok) {
           throw new AppError('RESPONSE_INVALID', 'Réponse invalide.', { status: 422 });
         }
         isCorrect = graded.value.isCorrect;
-        correction = graded.value.correction;
-        explanation =
-          typeof correction === 'object' && correction !== null && 'explanation' in correction
-            ? ((correction as { explanation?: string | null }).explanation ?? null)
-            : null;
+        scoreRatio = graded.value.score;
+        if (gameSchema !== null) {
+          const gameCorrection = toGameCorrection(
+            brick.type as ReviewGameFormat,
+            brick.payload,
+            graded.value,
+            versionId,
+          );
+          correction = ReviewGameCorrectionSchema.parse(gameCorrection);
+          explanation = correctionExplanation(graded.value);
+          gameNotions = splitResultByNotion(
+            brick.type as ReviewGameFormat,
+            brick.payload,
+            gameCorrection,
+            {
+              notionIds: brickNotionIds,
+              isCorrect: graded.value.isCorrect,
+              confusions: graded.value.confusions,
+            },
+          );
+          gameConfusions = graded.value.confusions.map((confusion) => ({
+            notionId: confusion.notionId,
+            withNotionId: confusion.confusedWithNotionId,
+          }));
+        } else {
+          correction = graded.value.correction;
+          explanation =
+            typeof correction === 'object' && correction !== null && 'explanation' in correction
+              ? ((correction as { explanation?: string | null }).explanation ?? null)
+              : null;
+        }
         if (brick.type === 'recall_card') {
           rating = (response as { selfGrade?: FsrsRating }).selfGrade ?? null;
           responseToStore = { selfGrade: rating };
@@ -1371,6 +1481,15 @@ export function answerReviewItem(
       }
 
       const answerId = randomUUID();
+      const gradedByCode = !skipped && isCorrect !== null;
+      const score = gradedByCode
+        ? isGame && scoreRatio !== null
+          ? Math.round(scoreRatio * 10_000) / 10_000
+          : isCorrect
+            ? 100
+            : 0
+        : null;
+      const maxScore = gradedByCode ? (isGame ? 1 : 100) : null;
       await tx.execute(sql`
         insert into public.answers
           (id, attempt_id, brick_version_id, position, response, is_correct, score, max_score, time_ms, graded_by, feedback, answered_at)
@@ -1381,34 +1500,66 @@ export function answerReviewItem(
           ${input.position + 1},
           ${JSON.stringify(responseToStore)}::jsonb,
           ${isCorrect},
-          ${skipped || isCorrect === null ? null : isCorrect ? 100 : 0},
-          ${skipped || isCorrect === null ? null : 100},
+          ${score},
+          ${maxScore},
           ${timeMs},
           'code',
-          ${JSON.stringify({ clientAnswerId: input.clientAnswerId, correction, explanation })}::jsonb,
+          ${JSON.stringify({
+            clientAnswerId: input.clientAnswerId,
+            correction,
+            explanation,
+            confusions: gameConfusions,
+          })}::jsonb,
           ${reviewedAt}::timestamptz
         )
       `);
 
       const notions: ReviewAnswerResultDto['notions'] = [];
       if (!skipped && brickType !== null) {
-        const perNotionMs = Math.max(1, Math.round(timeMs / Math.max(1, brickNotionIds.length)));
-        for (const notionId of brickNotionIds) {
-          const applied = await applyReviewResult(tx, {
-            userId,
-            notionId,
-            source: 'global_quiz',
-            format: brickType,
-            correct: isCorrect,
-            rating,
-            timeMs: brickType === 'recall_card' ? timeMs : perNotionMs,
-            answerId,
-            attemptId: row.attempt_id,
-            attemptNo: row.attempt_no,
-            reviewedAt,
-          });
-          if (applied !== null) {
-            notions.push({ notionId, rating: applied.rating, nextDueAt: applied.dueAt });
+        if (gameNotions.length > 0) {
+          const perNotionMs = Math.max(1, Math.round(timeMs / Math.max(1, gameNotions.length)));
+          for (const notion of gameNotions) {
+            const applied = await applyReviewResult(tx, {
+              userId,
+              notionId: notion.notionId,
+              source: 'global_quiz',
+              format: brickType,
+              correct: notion.correct,
+              rating: null,
+              timeMs: perNotionMs,
+              answerId,
+              attemptId: row.attempt_id,
+              attemptNo: row.attempt_no,
+              reviewedAt,
+              confusedWithNotionId: notion.confusedWithNotionId ?? null,
+            });
+            if (applied !== null) {
+              notions.push({
+                notionId: notion.notionId,
+                rating: applied.rating,
+                nextDueAt: applied.dueAt,
+              });
+            }
+          }
+        } else {
+          const perNotionMs = Math.max(1, Math.round(timeMs / Math.max(1, brickNotionIds.length)));
+          for (const notionId of brickNotionIds) {
+            const applied = await applyReviewResult(tx, {
+              userId,
+              notionId,
+              source: 'global_quiz',
+              format: brickType,
+              correct: isCorrect,
+              rating,
+              timeMs: brickType === 'recall_card' ? timeMs : perNotionMs,
+              answerId,
+              attemptId: row.attempt_id,
+              attemptNo: row.attempt_no,
+              reviewedAt,
+            });
+            if (applied !== null) {
+              notions.push({ notionId, rating: applied.rating, nextDueAt: applied.dueAt });
+            }
           }
         }
       }
