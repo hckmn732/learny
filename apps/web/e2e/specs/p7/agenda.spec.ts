@@ -86,7 +86,7 @@ test('vues, navigation et détail @SPEC-704', async ({ page, axeCheck }) => {
     'href',
     `/formations/${SAP}/modules/${demoModuleId('sap', 3)}/quiz`,
   );
-  await expect(page.getByTestId('agenda-detail-move')).toBeEnabled();
+  await expect(page.getByTestId('slot-move')).toBeEnabled();
   // CA-6 — les totaux affichés suivent EF-11 sur les créneaux de la semaine.
   await expect(page.getByTestId('agenda-totals-planned')).toContainText('24 h prévues');
   await expect(page.getByTestId('agenda-totals-done')).toContainText('15 h faites');

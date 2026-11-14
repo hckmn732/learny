@@ -26,7 +26,9 @@ import { AgendaTotals } from './AgendaTotals';
 import { DayView } from './DayView';
 import { MiniCalendar } from './MiniCalendar';
 import { MonthView } from './MonthView';
+import { ReplanPanel } from './ReplanPanel';
 import { SlotDetail } from './SlotDetail';
+import { SlotMovePanel } from './SlotMovePanel';
 import { WeekView } from './WeekView';
 
 const t = fr.agenda;
@@ -99,6 +101,8 @@ export function AgendaScreen({
   const queryClient = useQueryClient();
   const [state, setState] = useState<AgendaUrlState>(initialState);
   const [selection, setSelection] = useState<string | null>(initialState.creneau);
+  const [moving, setMoving] = useState<string | null>(null);
+  const [explanation, setExplanation] = useState<string | null>(null);
 
   const window = agendaFetchWindow(state.view, state.date);
   // The server preload only seeds the initial query key: handing it to another key (formation,
@@ -120,11 +124,13 @@ export function AgendaScreen({
   const update = (patch: Partial<AgendaUrlState>): void => {
     const next = { ...state, ...patch };
     setState(next);
+    setMoving(null);
     router.replace(agendaUrl(next), { scroll: false });
   };
 
   const select = (slotId: string | null): void => {
     setSelection(slotId);
+    setMoving(null);
     router.replace(agendaUrl({ ...state, creneau: slotId }), { scroll: false });
   };
 
@@ -284,7 +290,43 @@ export function AgendaScreen({
               update({ date });
             }}
           />
-          <SlotDetail slot={selectedSlot} />
+          <SlotDetail
+            slot={selectedSlot}
+            onMoveClick={(slotId) => {
+              setMoving(slotId);
+              setExplanation(null);
+            }}
+          />
+          {explanation !== null && (
+            <p
+              role="status"
+              data-testid="agenda-move-explanation"
+              className="m-0 rounded-14 border border-solid border-border bg-surface px-16 py-12 text-14"
+            >
+              {explanation}
+            </p>
+          )}
+          {moving !== null &&
+            (() => {
+              const moveSlot =
+                derived.displayed.find((slot) => slot.id === moving) ??
+                (selectedSlot?.id === moving ? selectedSlot : null);
+              return moveSlot === null ? null : (
+                <SlotMovePanel
+                  slot={moveSlot}
+                  onClose={() => {
+                    setMoving(null);
+                  }}
+                  onMoved={(text) => {
+                    setMoving(null);
+                    setExplanation(text);
+                  }}
+                />
+              );
+            })()}
+          {dto.blockedModule !== null && (
+            <ReplanPanel formationId={dto.blockedModule.formationId} blocked={dto.blockedModule} />
+          )}
           <AgendaLegend kindsInPeriod={derived.kinds} />
         </div>
         <section

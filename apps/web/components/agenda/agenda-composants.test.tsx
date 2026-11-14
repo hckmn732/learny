@@ -220,7 +220,7 @@ describe('[SPEC-704] composants agenda', () => {
 
     it('désactive « Déplacer » pour un créneau fait, manqué ou passé (EF-9)', () => {
       const moveButton = (): HTMLButtonElement =>
-        screen.getByTestId<HTMLButtonElement>('agenda-detail-move');
+        screen.getByTestId<HTMLButtonElement>('slot-move');
       const { rerender } = renderComponent(
         <SlotDetail slot={slot({ id: 'a', status: 'done', movable: false })} />,
       );
