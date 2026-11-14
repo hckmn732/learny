@@ -19,6 +19,7 @@ import { nightlyOutboxCleanup } from './nightly-outbox-cleanup';
 import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
 import { notificationsDeferredDue } from './notifications-deferred-due';
+import { notificationsReminders } from './notifications-reminders';
 import { prepareQuestionBankForCourse, questionBankNightly } from './prepare-question-bank';
 import { planProgramme } from './programme';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
@@ -43,6 +44,7 @@ export const learnyFunctions = [
   notificationDelivery,
   notificationsDailyDigest,
   notificationsDeferredDue,
+  notificationsReminders,
   planProgramme,
   prepareQuestionBankForCourse,
   questionBankNightly,

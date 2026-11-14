@@ -78,6 +78,11 @@ describe('[SPEC-203] registre', () => {
       'event.data.deliveryId',
     );
     expect(triggersOf(get('notifications-deferred-due'))).toEqual([{ event: 'cron/hourly-tick' }]);
+    // SPEC-706 — the 40-minute reminders follow the same hourly tick.
+    expect(triggersOf(get('notifications-reminders'))).toEqual([{ event: 'cron/hourly-tick' }]);
+    expect((get('notifications-reminders').opts as { idempotency?: string }).idempotency).toBe(
+      'event.data.tickAt',
+    );
     expect(triggersOf(get('notifications-daily-digest'))).toEqual([{ event: 'cron/hourly-tick' }]);
   });
 

@@ -28,6 +28,7 @@ export * from './sidebar';
 export * from './parametres-onglets-et-profil';
 export * from './parametres-notifications';
 export * from './notifications/list';
+export * from './notifications-generation-des-rappels';
 export * from './billing/index';
 
 export * from './email/index';

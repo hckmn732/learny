@@ -718,7 +718,11 @@ export function SettingsView({
           </div>
         </TabsContent>
 
-        <TabsContent className="mt-24" value="notifications">
+        <TabsContent
+          className="mt-24"
+          data-testid="settings-panel-notifications"
+          value="notifications"
+        >
           <NotificationSettingsTab
             email={me.email}
             initial={initialNotifications}

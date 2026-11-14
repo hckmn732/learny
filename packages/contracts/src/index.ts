@@ -22,6 +22,7 @@ export * from './security';
 export * from './uploads';
 export * from './push';
 export * from './notifications';
+export * from './notifications-generation-des-rappels';
 export * from './personal-data';
 export * from './retrieval';
 export * from './events';
