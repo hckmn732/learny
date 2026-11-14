@@ -1,6 +1,5 @@
 'use client';
 
-import { AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -8,6 +7,7 @@ import {
   SETTINGS_DEFAULT_TAB,
   SETTINGS_TAB_IDS,
   settingsTabFromHash,
+  type AiModelsState,
   type CourseLanguage,
   type NotificationSettingsDto,
   type SettingsState,
@@ -37,6 +37,7 @@ import { fr } from '../../messages/fr';
 import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
 
+import { AiModelsTab } from './ai-models-tab';
 import { AutomationJournal } from './automation-journal';
 import { NotificationSettingsTab } from './notification-settings-tab';
 
@@ -118,6 +119,8 @@ export interface SettingsViewProps {
   initialError: boolean;
   initialNotifications: NotificationSettingsDto | null;
   notificationError: boolean;
+  initialAiModels: AiModelsState | null;
+  aiModelsError: boolean;
   pushPublicKey?: string | undefined;
   requestId?: string;
 }
@@ -152,6 +155,8 @@ export function SettingsView({
   initialError,
   initialNotifications,
   notificationError,
+  initialAiModels,
+  aiModelsError,
   pushPublicKey,
   requestId,
 }: SettingsViewProps) {
@@ -738,12 +743,11 @@ export function SettingsView({
         </TabsContent>
 
         <TabsContent className="mt-0" value="modeles">
-          <Card as="section" data-testid="settings-panel-modeles">
-            <div className="flex items-start gap-12">
-              <AlertTriangle aria-hidden className="mt-2 size-20 text-ink-muted" />
-              <p className="m-0 text-14 text-ink-muted">{t.coming.modeles}</p>
-            </div>
-          </Card>
+          <AiModelsTab
+            initial={initialAiModels}
+            initialError={aiModelsError}
+            {...(requestId === undefined ? {} : { requestId })}
+          />
         </TabsContent>
       </Tabs>
     </main>

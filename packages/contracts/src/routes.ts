@@ -26,6 +26,7 @@ import { automationRoutes } from './moteur-d-automatismes';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { notificationsGenerationDevRoutes } from './notifications-generation-des-rappels';
 import { notionGraphRoutes } from './notion-graph';
+import { parametresModelesRoutes } from './parametres-modeles-d-ia';
 import { parametresNotificationsRoutes } from './parametres-notifications';
 import { parametresRoutes } from './parametres-onglets-et-profil';
 import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
@@ -62,6 +63,7 @@ export const ROUTES = {
   ...seriesMilestoneRoutes,
   ...parametresRoutes,
   ...parametresNotificationsRoutes,
+  ...parametresModelesRoutes,
   ...aiRoutes,
   ...billingRoutes,
   ...brickRoutes,

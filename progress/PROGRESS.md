@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-14T12:44:06.478Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-14T13:56:12.118Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 101 |
+| Terminées | 102 |
 | En cours | 0 |
 | Prêtes | 13 |
-| En attente de dépendances | 18 |
+| En attente de dépendances | 17 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **76.5 %** |
-| Avancement V1 | 81.5 % |
+| **Avancement global** | **77.3 %** |
+| Avancement V1 | 82.3 % |
 | Prochaine action | start SPEC-703 — Micro-séance |
 
 ## Phases et checkpoints
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 10/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 11/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -135,7 +135,7 @@
 | [SPEC-706](../specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md) | Notifications : génération des rappels | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-209, SPEC-306, SPEC-411 |
 | [SPEC-707](../specs/p7-engagement/SPEC-707-parametres-onglets-et-profil.md) | Paramètres : onglets et Profil | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-304, SPEC-211 |
 | [SPEC-708](../specs/p7-engagement/SPEC-708-parametres-notifications.md) | Paramètres : Notifications | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-707, SPEC-209 |
-| [SPEC-709](../specs/p7-engagement/SPEC-709-parametres-modeles-d-ia.md) | Paramètres : Modèles d'IA | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-506, SPEC-507 |
+| [SPEC-709](../specs/p7-engagement/SPEC-709-parametres-modeles-d-ia.md) | Paramètres : Modèles d'IA | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-707, SPEC-506, SPEC-507 |
 | [SPEC-710](../specs/p7-engagement/SPEC-710-parametres-automatismes.md) | Paramètres : Automatismes | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-711 |
 | [SPEC-711](../specs/p7-engagement/SPEC-711-moteur-d-automatismes.md) | Moteur d'automatismes | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-203, SPEC-209, SPEC-108, SPEC-411 |
 | [SPEC-712](../specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md) | Automatisme 1 : reprise après décrochage | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-407 |
@@ -151,7 +151,7 @@
 | [SPEC-722](../specs/p7-engagement/SPEC-722-accueil-le-tuteur-a-agi-pour-vous.md) | Accueil : le tuteur a agi pour vous | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-603 |
 | [SPEC-723](../specs/p7-engagement/SPEC-723-serie-regularite-et-jalons-interface.md) | Série, régularité et jalons : interface | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-409, SPEC-304 |
 | [SPEC-724](../specs/p7-engagement/SPEC-724-formations-a-plusieurs.md) | Formations à plusieurs | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-111, SPEC-606, SPEC-602 |
-| [SPEC-725](../specs/p7-engagement/SPEC-725-abonnement-a-l-ia-fournie-interface-et-plafond.md) | Abonnement à l'IA fournie : interface et plafond | P7 | ⏳ waiting | 0 | — | SPEC-210, SPEC-507, SPEC-709 |
+| [SPEC-725](../specs/p7-engagement/SPEC-725-abonnement-a-l-ia-fournie-interface-et-plafond.md) | Abonnement à l'IA fournie : interface et plafond | P7 | 🟢 ready | 0 | — | SPEC-210, SPEC-507, SPEC-709 |
 | [SPEC-801](../specs/p8-livraison-v1/SPEC-801-application-installable-et-revisions-hors-ligne.md) | Application installable et révisions hors ligne | P8 | ⏳ waiting | 0 | — | SPEC-701, SPEC-702 |
 | [SPEC-802](../specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md) | Responsive et mobile | P8 | ⏳ waiting | 0 | — | SPEC-618, SPEC-725, SPEC-724, SPEC-616 |
 | [SPEC-803](../specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md) | Accessibilité WCAG 2.2 AA | P8 | ⏳ waiting | 0 | — | SPEC-802 |

@@ -115,24 +115,23 @@ export async function resolveModel(db: Db, input: ResolveInput): Promise<Result<
     });
   }
 
-  const entitled = await hasManagedAi(db, input.userId);
-
-  // (2) the provided AI, with a Claude override only when the row names one of its models.
-  if (entitled) return ok(managed(input.task, row?.modelId ?? null));
-
-  // (3) a row points at an unqualified key (or at a key deleted by cascade).
-  if (row !== undefined) {
-    const deleted = row.credentialId === null && !isProvidedModel(row.modelId);
-    return err(
-      aiUnavailable(
-        deleted || row.credentialId !== null
-          ? 'credential_not_qualified'
-          : 'no_subscription_no_key',
-        row.credentialId === null ? {} : { credentialId: row.credentialId },
-      ),
-    );
+  // (2) CL-3, BR-IA-05 — the learner chose a personal model that is no longer usable (failed
+  // re-test, removed model, deleted key): the task refuses instead of silently billing the
+  // provided AI. A provided override (credential_id null, Claude model) is handled below.
+  if (row !== undefined && row.credentialId !== null) {
+    return err(aiUnavailable('credential_not_qualified', { credentialId: row.credentialId }));
   }
 
-  // (4) no choice and no subscription.
+  const entitled = await hasManagedAi(db, input.userId);
+
+  // (3) the provided AI, with a Claude override only when the row names one of its models.
+  if (entitled) return ok(managed(input.task, row?.modelId ?? null));
+
+  // (4) a row points at a key deleted by cascade, or at an unknown model.
+  if (row !== undefined) {
+    return err(aiUnavailable('credential_not_qualified'));
+  }
+
+  // (5) no choice and no subscription.
   return err(aiUnavailable('no_subscription_no_key'));
 }
