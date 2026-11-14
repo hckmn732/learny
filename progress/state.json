@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T12:17:59.833Z",
+  "updatedAt": "2026-11-14T12:19:15.474Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4807,11 +4807,11 @@
       }
     },
     "SPEC-705": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-14T12:19:15.474Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-705-agenda-deplacer-et-reajuster-le-planning",
       "commit": null,
       "lastError": null,
       "validations": {}
