@@ -256,6 +256,7 @@ test('producteurs et rappels @SPEC-706', async ({
 });
 
 test('conformité SCR-03 @SPEC-706 @visual @mobile', async ({ page, axeCheck, context, baseURL }, testInfo) => {
+  test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   const alex = DEMO_USERS.find((user) => user.key === 'alex');
   if (alex === undefined) throw new Error('utilisateur démo Alex absent');
   // The demo dataset of SPEC-115 carries the eight rows of the mockup.

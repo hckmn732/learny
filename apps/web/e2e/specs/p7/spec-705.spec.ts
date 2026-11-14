@@ -219,6 +219,7 @@ test('parcours SPEC-705 @SPEC-705', async ({ page, axeCheck }) => {
 });
 
 test('conformité SPEC-705 @SPEC-705 @visual @mobile', async ({ page, axeCheck }) => {
+  test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(AGENDA);
   await expect(page.getByTestId('replan-panel')).toBeVisible();
