@@ -1,0 +1,42 @@
+{
+  "lint": {
+    "status": "passed",
+    "at": "2026-11-14T14:00:03.792Z",
+    "details": ""
+  },
+  "typecheck": {
+    "status": "passed",
+    "at": "2026-11-14T14:01:06.618Z",
+    "details": ""
+  },
+  "build": {
+    "status": "passed",
+    "at": "2026-11-14T14:01:34.107Z",
+    "details": ""
+  },
+  "unit": {
+    "status": "passed",
+    "at": "2026-11-14T14:01:53.753Z",
+    "details": "24 test(s) [SPEC-714] réussi(s), 0 échec(s)"
+  },
+  "integration": {
+    "status": "passed",
+    "at": "2026-11-14T14:03:23.492Z",
+    "details": "7 test(s) [SPEC-714] réussi(s), 0 échec(s)"
+  },
+  "e2e": {
+    "status": "passed",
+    "at": "2026-11-14T14:04:04.870Z",
+    "details": "2 réussi(s), 0 échec(s), 6 vidéo(s)"
+  },
+  "visual": {
+    "status": "passed",
+    "at": "2026-11-14T14:04:04.870Z",
+    "details": "1 test(s) @visual réussi(s) (mode mockup)"
+  },
+  "acceptance": {
+    "status": "passed",
+    "at": "2026-11-14T14:04:04.883Z",
+    "details": "8/8 critères ✅"
+  }
+}
