@@ -12,7 +12,7 @@ Normatif. Le socle est livré par SPEC-001 (minimal) et SPEC-004 (complet). Une 
 | Visuel | Playwright | dans les tests e2e, étiquette `@visual` | `pnpm test:visual` | conformité aux maquettes et non-régression (§6) |
 | Accessibilité | `@axe-core/playwright` | dans les tests e2e | inclus dans `test:e2e` | aucune violation `serious`/`critical` sur les pages testées |
 
-Pyramide visée : unitaire ≥ 80 % de couverture de lignes sur `learning-engine`, `bricks`, `core`, `llm/budget` ; ≥ 70 % sur `services` ; les autres paquets sans seuil mais chaque comportement d'une spécification a au moins un test.
+Pyramide visée : unitaire ≥ 95 % de couverture de lignes sur `learning-engine`, `core`, `contracts`, `config`, `ui` ; ≥ 90 % sur `bricks` ; ≥ 80 % sur `llm/budget` ; ≥ 70 % sur `services` ; les autres paquets sans seuil mais chaque comportement d'une spécification a au moins un test. Les planchers sont appliqués par `vitest.config.ts` (`COVERAGE_FLOORS`) et ne baissent jamais : on les relève quand la couverture réelle le permet.
 
 ## 2. Étiquetage par spécification
 

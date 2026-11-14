@@ -8,9 +8,12 @@ assertMockLlm(process.env);
 // Line coverage floors (docs/engineering/testing.md §1), enforced from the checkpoint where each
 // package exists: a glob that matches no file is ignored.
 const COVERAGE_FLOORS = {
-  'packages/learning-engine/src/**': { lines: 80 },
-  'packages/bricks/src/**': { lines: 80 },
-  'packages/core/src/**': { lines: 80 },
+  'packages/learning-engine/src/**': { lines: 95 },
+  'packages/bricks/src/**': { lines: 90 },
+  'packages/core/src/**': { lines: 95 },
+  'packages/contracts/src/**': { lines: 95 },
+  'packages/config/src/**': { lines: 95 },
+  'packages/ui/src/**': { lines: 95 },
   'packages/llm/src/budget/**': { lines: 80 },
   'packages/services/src/**': { lines: 70 },
 };
