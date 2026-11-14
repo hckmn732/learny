@@ -235,6 +235,9 @@ importers:
 
   packages/automations:
     dependencies:
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../config
       '@learny/contracts':
         specifier: workspace:*
         version: link:../contracts
@@ -247,6 +250,9 @@ importers:
       '@learny/jobs':
         specifier: workspace:*
         version: link:../jobs
+      '@learny/learning-engine':
+        specifier: workspace:*
+        version: link:../learning-engine
       '@learny/notifications':
         specifier: workspace:*
         version: link:../notifications

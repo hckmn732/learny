@@ -1,0 +1,71 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="44.808189">
+<testsuite name="p7/automations/reprise.spec.ts" timestamp="2026-11-14T12:19:32.103Z" hostname="desktop" tests="3" failures="0" skipped="0" time="8.225" errors="0">
+<testcase name="bandeau de reprise : autre créneau puis annuler @SPEC-712" classname="p7/automations/reprise.spec.ts" time="4.382">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-defaut-e340b92e42c9fa7fafe46b5416e295df1154e242.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/axe-896fdaafe942ee5afb3f2c2f96f71f0c1a3fbb95.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-deplie-b960339ade72e4b6b721b3688f33f672282d6f5e.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/accueil-bandeau-replace-8bc7e97a5be2a6b9184812da95793ee6dd572cdb.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/attachments/axe-7f7279b20ce8009f10b5faaaf6c443f74ebb59f3.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-ban-1d4f0-éneau-puis-annuler-SPEC-712-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="refus : ne pas replacer @SPEC-712" classname="p7/automations/reprise.spec.ts" time="1.929">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/attachments/parametres-journal-refus-3f7d1ac265bf3bab85bcf6267dc465e8988c63af.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/attachments/axe-0b291eac17c721f6f5072295c5aa847ac7b50379.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-refus-ne-pas-replacer-SPEC-712-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="accueil avec bandeau conforme à la maquette @SPEC-712 @visual" classname="p7/automations/reprise.spec.ts" time="1.914">
+<properties>
+<property name="mockup-diff-ratio" value="SCR-03-bandeau:0.0841">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/axe-6d0d7d3fbe4a8f52b2c4431cc599f8fbfcd8bcdb.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/accueil-bandeau-visuel-33cf702c7e881de801db40783553acd1b115ff30.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/SCR-03-bandeau-side-by-side-8867c456868a8cf7a9ce5b72af8cfa25ff177ec3.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/attachments/SCR-03-bandeau-diff-2de3c9dc7c3ddb28872af8c4f9e02deb24e7c82f.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-reprise-acc-3de71-la-maquette-SPEC-712-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

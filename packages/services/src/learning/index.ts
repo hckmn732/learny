@@ -25,3 +25,5 @@ export { applyReviewResult } from './apply-review';
 export type { AppliedReviewResult, ApplyReviewResultInput } from './apply-review';
 export { getDueNotions } from './get-due-notions';
 export { persistPlan } from './persist-plan';
+export { completeScheduleSlot } from './slots';
+export type { CompleteSlotResult } from './slots';

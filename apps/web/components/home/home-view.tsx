@@ -40,6 +40,8 @@ import {
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
 
+import { TutorProposalPanel } from './TutorProposalBanner';
+
 const t = fr.home;
 
 const MODULE_STATUS_CLASS = {
@@ -652,7 +654,7 @@ export function HomeView({
         </Button>
       </header>
 
-      <HomeSlot name="proposal" />
+      <TutorProposalPanel />
 
       <div className="flex flex-wrap gap-20">
         <DayCard data={data.today} liveSlots={liveSlots} primaryAction={livePrimary} />

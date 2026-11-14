@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T12:17:59.833Z",
+  "updatedAt": "2026-11-14T12:25:40.532Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5041,14 +5041,55 @@
       }
     },
     "SPEC-712": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T10:34:58.510Z",
+      "completedAt": "2026-11-14T12:21:14.031Z",
+      "branch": "spec/SPEC-712-automatisme-1-reprise-apres-decrochage",
+      "commit": "675a2e5a",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T12:16:51.922Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T12:16:53.295Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T12:16:53.709Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T12:17:10.696Z",
+          "details": "38 test(s) [SPEC-712] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T12:18:54.326Z",
+          "details": "14 test(s) [SPEC-712] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T12:19:41.875Z",
+          "details": "3 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T12:19:41.875Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T12:19:41.889Z",
+          "details": "8/8 critères ✅"
+        }
+      }
     },
     "SPEC-713": {
       "status": "pending",

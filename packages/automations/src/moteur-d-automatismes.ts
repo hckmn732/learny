@@ -43,6 +43,7 @@ import {
   expireDueAutomationActions,
   getAutomationAction,
   schema,
+  serviceDb,
   undoAutomationAction as undoActionRow,
   type AutomationAction,
   type Db,
@@ -84,6 +85,8 @@ export interface AutomationNotificationDraft {
   /** Internal relative path the notification opens; validated by the template. */
   href: string;
   expiresAt?: string;
+  /** Optional values read by the notification template (`summary`, `title`, …). */
+  data?: Record<string, unknown>;
 }
 
 /** One proposal returned by `run`; never applied by itself. */
@@ -158,6 +161,12 @@ export interface AutomationDefinition<
     ctx: AutomationEffectContext,
     action: AutomationActionView,
   ): Promise<Result<Record<string, unknown> | null>>;
+  /**
+   * SPEC-712 EF-9 — after an undo from the home banner, the engine runs the definition again in
+   * `direct` mode so the proposal comes back with a suffixed `dedupeKey` (ADR-0191 §3). Other
+   * definitions keep the default `false`: their behavior is unchanged.
+   */
+  reproposeAfterUndo?: boolean;
 }
 
 /** Identity helper that keeps the parameter and payload types of a definition. */
@@ -262,8 +271,8 @@ function toView(action: AutomationAction): AutomationActionView {
     undoPayload: action.undoPayload,
     requiresConsent: action.requiresConsent,
     status: action.status,
-    decidedAt: action.decidedAt === null ? null : action.decidedAt.toISOString(),
-    createdAt: action.createdAt.toISOString(),
+    decidedAt: action.decidedAt === null ? null : new Date(String(action.decidedAt)).toISOString(),
+    createdAt: new Date(String(action.createdAt)).toISOString(),
   });
 }
 
@@ -480,10 +489,17 @@ export function runAutomation(
             toView({ ...action, status: 'applied' }),
           );
           if (!applied.ok) throw applied.error;
-          if (applied.value.undoPayload !== undefined) {
+          if (applied.value.undoPayload !== undefined || applied.value.payload !== undefined) {
+            const appliedView = toView({ ...action, status: 'applied' });
             await tx
               .update(schema.automationActions)
-              .set({ undoPayload: applied.value.undoPayload ?? null })
+              .set({
+                summary: definition.explain(appliedView, profile.tone, profile.timeZone),
+                ...(applied.value.payload === undefined ? {} : { payload: applied.value.payload }),
+                ...(applied.value.undoPayload === undefined
+                  ? {}
+                  : { undoPayload: applied.value.undoPayload ?? null }),
+              })
               .where(eq(schema.automationActions.id, action.id));
           }
         }
@@ -506,6 +522,7 @@ export function runAutomation(
         type: draft.notification.type,
         formationId: draft.formationId,
         data: {
+          ...(draft.notification.data ?? {}),
           href: draft.notification.href,
           automation: input.key,
         },
@@ -782,13 +799,27 @@ function decide(
         if (!applied.ok) throw applied.error;
         const payloadAfter = applied.value.payload;
         const undoAfter = applied.value.undoPayload;
+        // EF-8 — the one-line summary follows the new status, so the journal reads
+        // « C’est noté : … » once the learner accepted the proposal.
+        const finalPayload = payloadAfter ?? payload;
+        const summaryAfter = definition.explain(
+          toView({ ...action, payload: finalPayload, status: 'applied' }),
+          profile.tone,
+          profile.timeZone,
+        );
         if (payloadAfter !== undefined || undoAfter !== undefined) {
           await tx
             .update(schema.automationActions)
             .set({
+              summary: summaryAfter,
               ...(payloadAfter === undefined ? {} : { payload: payloadAfter }),
               ...(undoAfter === undefined ? {} : { undoPayload: undoAfter ?? null }),
             })
+            .where(eq(schema.automationActions.id, action.id));
+        } else {
+          await tx
+            .update(schema.automationActions)
+            .set({ summary: summaryAfter })
             .where(eq(schema.automationActions.id, action.id));
         }
       }
@@ -799,6 +830,14 @@ function decide(
           { userId: user.userId, actionId: action.id, automation: action.automation },
           { id: `automation-action-applied:${action.id}` },
         );
+      }
+      if (decision === 'decline' && definition !== undefined) {
+        // EF-8 — the journal reads « Refusé : … » from the first render after the decision.
+        const declined = toView({ ...action, status: 'declined' });
+        await tx
+          .update(schema.automationActions)
+          .set({ summary: definition.explain(declined, profile.tone, profile.timeZone) })
+          .where(eq(schema.automationActions.id, action.id));
       }
       const final = await getAutomationAction(tx, {
         userId: user.userId,
@@ -842,6 +881,7 @@ export function undoAutomationAction(
     const registry = opts.registry ?? automationRegistry;
     const user = requireUser(ctx);
     const now = ctx.clock.now();
+    const repropose: { key: AutomationKey; definition: AutomationDefinition<z.ZodType> }[] = [];
     const view = await withTransaction(user.db, async (tx, outbox) => {
       const current = await getAutomationAction(tx, {
         userId: user.userId,
@@ -877,14 +917,43 @@ export function undoAutomationAction(
         actionId: input.actionId,
         undoneAt: now,
       });
+      // EF-8 — the summary follows the new status, so the journal reads « Annulé : … ».
+      if (definition !== undefined) {
+        const summaryAfter = definition.explain(
+          toView({ ...action, status: 'undone' }),
+          profile.tone,
+          profile.timeZone,
+        );
+        await tx
+          .update(schema.automationActions)
+          .set({ summary: summaryAfter })
+          .where(eq(schema.automationActions.id, action.id));
+        if (definition.reproposeAfterUndo === true && current.status === 'applied') {
+          repropose.push({ key: current.automation, definition });
+        }
+      }
       // BR-AUT-12 — the journal keeps the cancelled row; the event goes out after the commit.
       outbox.add(
         'automation/action-undone',
         { userId: user.userId, actionId: action.id, automation: action.automation },
         { id: `automation-action-undone:${action.id}` },
       );
-      return toView(action);
+      return toView({ ...action });
     });
+    // ADR-0191 §3 — the proposal comes back right after the undo, with a suffixed dedupe key.
+    // The proposal is written on the service role, like every other proposal of the engine; a
+    // failure never cancels the committed undo.
+    const againWith = repropose[0];
+    if (againWith !== undefined) {
+      const again = await runAutomation(
+        { requestId: ctx.requestId, sdb: serviceDb(), clock: ctx.clock, logger: ctx.logger },
+        { key: againWith.key, userId: user.userId, trigger: { type: 'direct' } },
+        opts,
+      );
+      if (!again.ok) {
+        ctx.logger.warn('automation repropose failed', { outcome: 'repropose_failed' });
+      }
+    }
     return view;
   });
 }
