@@ -1,0 +1,99 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="46.079307">
+<testsuite name="p7/global-quiz-games.spec.ts" timestamp="2026-11-14T12:11:25.497Z" hostname="desktop" tests="3" failures="0" skipped="0" time="13.121" errors="0">
+<testcase name="association, ordre, classement, trous @SPEC-702" classname="p7/global-quiz-games.spec.ts" time="4.516">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/association-avant-da1898d51599a22c4e2b24f6532e446377ec7ad9.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/association-apres-d09efc4b1418c80702edb2e594685d7501dbd79d.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/ordre-avant-38153167e9635877afeeb000d05c19fa2d299cc1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/ordre-apres-bb53748eb3558577e5d121ef582e2930d58383d0.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/classement-avant-0b560759b60c6111199042e370d5d8e6dc09cade.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/classement-apres-add5fb00b4d332b387c135cc1f33cedda7c275bb.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/trous-avant-d92fc3acd0f5a5f9304cbbc1c0ce6c9b86056554.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/trous-apres-a0624dbaf4835b2b0a69028f407ce5739807eb6e.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/attachments/axe-88a9c966445dab3f0c6d9f2ebd8ea0554063b276.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-assoc-cb0e8-e-classement-trous-SPEC-702-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="jeux au clavier @SPEC-702" classname="p7/global-quiz-games.spec.ts" time="2.932">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-games-jeux-au-clavier-SPEC-702-desktop/attachments/axe-36f606284b8e3593534528a396289e7aa7d37032.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-jeux-au-clavier-SPEC-702-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-jeux-au-clavier-SPEC-702-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-jeux-au-clavier-SPEC-702-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-jeux-au-clavier-SPEC-702-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité des jeux @SPEC-702 @visual" classname="p7/global-quiz-games.spec.ts" time="5.673">
+<properties>
+<property name="mockup-diff-ratio" value="spec-702-association:0.0919">
+</property>
+<property name="mockup-diff-ratio" value="spec-702-ordre:0.0563">
+</property>
+<property name="mockup-diff-ratio" value="spec-702-classement:0.0559">
+</property>
+<property name="mockup-diff-ratio" value="spec-702-trous:0.1002">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-association-side-by-side-f4d1e681ec595e2aee56e6b393fe8cca0876004c.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-association-diff-c7c07b5b958bb1010d5183d15d997d3034385556.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-ordre-side-by-side-4b257a80a8e236f69fcc574cefed9fc075fed45c.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-ordre-diff-fe104a2865feee2895e6c33a1dc153fc504afd8b.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-classement-side-by-side-63453fcb70ec5463cbf5ae275de12428d8eceece.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-classement-diff-1c4252bf289d236eb306e481b15f5c9e76b3a00c.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-trous-side-by-side-720473e8150abfbf0156e5a47a045b78ccf1aeb6.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/spec-702-trous-diff-e228f447faed88254a7aa62396b785924f9a947e.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/attachments/axe-10f0ad184dd6925d05594744c3734dbc671a77b5.json]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/test-finished-2.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/test-finished-3.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/test-finished-4.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/test-finished-5.png]]
+
+[[ATTACHMENT|artifacts/p7-global-quiz-games-conformité-des-jeux-SPEC-702-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
