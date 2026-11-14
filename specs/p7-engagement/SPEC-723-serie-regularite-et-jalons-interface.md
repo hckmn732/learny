@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-409, SPEC-304]
 business_rules: [BR-GAM-02, BR-GAM-03]
 screens: [SCR-03]
-adrs: []
+adrs: [ADR-0321]
 visual: mockup
 ---
 
@@ -107,5 +107,5 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 
 ## 15. Décisions et hypothèses
 
-- Aucun ADR spécifique dans le catalogue ; les règles métier, conventions et documents d’architecture cités sont appliqués sans nouveau choix de produit.
+- Aucun ADR spécifique dans le catalogue n’était initialement requis ; les règles métier, conventions et documents d’architecture cités sont appliqués. L’ambiguïté du point d’entrée des jalons « 100 notions » et « 30 jours » est tranchée par **ADR-0321** (réconciliation sobre et idempotente à la lecture de `GET /api/v1/milestones`).
 - Aucune décision ouverte : une ambiguïté découverte pendant l’implémentation suit `docs/engineering/sdd-process.md` §4 et produit un ADR avant modification du périmètre.
