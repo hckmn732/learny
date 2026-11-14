@@ -134,6 +134,16 @@ export const fr = {
       micro: (minutes: number) => `Micro-séance · ${String(minutes)} min`,
       microAvailableLater: 'La micro-séance arrive dans une prochaine version.',
     },
+    micro: {
+      /** SPEC-703 EF-3 — note shown while the micro-session of the day loads. */
+      note: (minutes: number) =>
+        minutes >= 10
+          ? 'Version courte de secours : deux cartes de rappel et une question. Elle garde le rythme et la série les jours chargés.'
+          : 'Version courte de secours : une carte de rappel et une question. Elle garde le rythme et la série les jours chargés.',
+      converted: 'Micro-séance chargée',
+      restored: 'Séance complète chargée',
+      loading: 'Chargement de la micro-séance…',
+    },
     adjust: 'Régler',
     progress: {
       label: (position: number, total: number) => `Jeu ${String(position)} sur ${String(total)}`,
