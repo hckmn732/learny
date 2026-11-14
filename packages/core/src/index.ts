@@ -21,6 +21,7 @@ export type { RequestContext } from './request-context';
 export {
   DEFAULT_QUIET_HOURS,
   DEFAULT_TIME_ZONE,
+  addCivilDays,
   detectUserTimeZone,
   endOfUserDay,
   formatUserDate,
