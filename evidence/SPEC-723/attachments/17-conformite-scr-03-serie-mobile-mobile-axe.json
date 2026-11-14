@@ -1,0 +1,78 @@
+[
+  {
+    "id": "aria-allowed-role",
+    "impact": "minor",
+    "tags": [
+      "cat.aria",
+      "best-practice"
+    ],
+    "description": "Ensure role attribute has an appropriate value for the element",
+    "help": "ARIA role should be appropriate for the element",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-allowed-role?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "aria-allowed-role",
+            "data": [
+              "dialog"
+            ],
+            "relatedNodes": [],
+            "impact": "minor",
+            "message": "ARIA role dialog is not allowed for given element"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "minor",
+        "html": "<aside data-sidebar=\"\" data-testid=\"sidebar\" class=\"box-border flex-col gap-10 bg-ink px-12 py-16 text-white fixed inset-y-0 left-0 z-drawer flex h-dvh w-sidebar max-w-[85vw] animate-dialog-in motion-reduce:animate-none\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Navigation principale\">",
+        "target": [
+          "aside"
+        ],
+        "failureSummary": "Fix any of the following:\n  ARIA role dialog is not allowed for given element"
+      }
+    ]
+  },
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "region",
+              "accessibleText": "mes formations"
+            },
+            "relatedNodes": [
+              {
+                "html": "<div class=\"w-full max-w-full min-w-0 overflow-x-auto\" role=\"region\" tabindex=\"0\" aria-label=\"Mes formations\" data-testid=\"home-table-ongoing\">",
+                "target": [
+                  ".max-w-full"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<section id=\"home-formations\" data-testid=\"home-formations\" aria-labelledby=\"home-formations-title\" class=\"min-w-0 overflow-hidden rounded-24 border border-solid border-border bg-surface p-8\">",
+        "target": [
+          "#home-formations"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]
