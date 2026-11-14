@@ -31,6 +31,7 @@ export * from './ingestion';
 export * from './learning';
 export * from './me';
 export * from './moteur-d-automatismes';
+export * from './automations';
 export * from './gaps';
 export * from './notion-graph';
 export * from './exercises';
