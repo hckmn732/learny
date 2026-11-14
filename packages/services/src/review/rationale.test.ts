@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildRationale } from './rationale';
+import { buildMicroNote, buildRationale } from './rationale';
 
 // SPEC-701 EF-7, ET-5 — bullets frozen at the creation of the session (ADR-0180).
 const BASE = {
@@ -86,5 +86,85 @@ describe('[SPEC-701] rationale', () => {
         ],
       }),
     ).toEqual([]);
+  });
+});
+
+describe('[SPEC-703] notes de la micro-séance', () => {
+  it('EF-4 — puce micro puis lacune, textes exacts', () => {
+    const bullets = buildRationale({
+      ...BASE,
+      mode: 'micro',
+      microCards: 1,
+      microHasQuestion: true,
+      gapItems: [
+        {
+          notionLabel: 'Variante d’exercice',
+          gapNature: 'forgetting',
+          gapDetectedAt: '2026-11-06T15:42:00Z',
+          format: 'recall_card',
+        },
+      ],
+      modulePositions: [1, 2],
+    });
+    expect(bullets).toEqual([
+      {
+        label: 'Micro-séance',
+        text: 'la notion la plus urgente en carte de rappel, puis une question qui en mêle plusieurs.',
+      },
+      {
+        label: 'Lacune en priorité',
+        text: 'la variante d’exercice, oubliée depuis le 6 nov., revient en carte de rappel.',
+      },
+    ]);
+  });
+
+  it('EF-4 — la micro-séance ne montre ni charge lissée ni modules mêlés', () => {
+    const bullets = buildRationale({
+      ...BASE,
+      mode: 'micro',
+      microCards: 2,
+      microHasQuestion: true,
+      modulePositions: [1, 2],
+    });
+    expect(bullets).toEqual([
+      {
+        label: 'Micro-séance',
+        text: 'les notions les plus urgentes en cartes de rappel, puis une question qui en mêle plusieurs.',
+      },
+    ]);
+  });
+
+  it('EF-3 — note exacte de la démonstration, une carte et une question', () => {
+    expect(buildMicroNote({ cards: 1, hasQuestion: true })).toBe(
+      'Version courte de secours : une carte de rappel et une question. Elle garde le rythme et la série les jours chargés.',
+    );
+    expect(buildMicroNote({ cards: 2, hasQuestion: true })).toBe(
+      'Version courte de secours : deux cartes de rappel et une question. Elle garde le rythme et la série les jours chargés.',
+    );
+  });
+
+  it('CL-1, CL-2 — note adaptée quand la micro-séance n’a pas de question', () => {
+    expect(buildMicroNote({ cards: 1, hasQuestion: false })).toBe(
+      'Version courte de secours : une carte de rappel.',
+    );
+    expect(buildMicroNote({ cards: 2, hasQuestion: false })).toBe(
+      'Version courte de secours : deux cartes de rappel.',
+    );
+    expect(buildMicroNote({ cards: 0, hasQuestion: true })).toBe(
+      'Version courte de secours : une question. Elle garde le rythme et la série les jours chargés.',
+    );
+  });
+
+  it('CL-2 — la puce micro décrit les cartes seules sans question', () => {
+    expect(
+      buildRationale({
+        ...BASE,
+        mode: 'micro',
+        microCards: 2,
+        microHasQuestion: false,
+      }),
+    ).toEqual([
+      { label: 'Micro-séance', text: 'les notions les plus urgentes en cartes de rappel.' },
+    ]);
   });
 });

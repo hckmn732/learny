@@ -16,6 +16,12 @@ export interface RationaleGapItem {
 }
 
 export interface RationaleInput {
+  /** Session kind (SPEC-703): the micro-session shows its own bullet first (EF-4). */
+  mode?: 'full' | 'micro';
+  /** Number of recall cards of the micro-session (EF-4, CL-1, CL-2). */
+  microCards?: number;
+  /** Whether the micro-session carries its question (CL-2). */
+  microHasQuestion?: boolean;
   timeZone: string;
   now: Date;
   dueCount: number;
@@ -66,20 +72,22 @@ function withArticle(label: string): string {
  * Pure bullets of the « Réglé par le tuteur » section (EF-7). The gap bullet exists when at least
  * one selected item answers an active gap; the load bullet when at least one notion was deferred;
  * the interleaving bullet when the items span at least two modules.
+ *
+ * SPEC-703 EF-4 — a micro-session replaces those bullets with its own, followed by the gap bullet:
+ * the short session never smooths the load nor interleaves modules on purpose.
  */
 export function buildRationale(input: RationaleInput): { label: string; text: string }[] {
   const bullets: { label: string; text: string }[] = [];
   const gap = input.gapItems[0];
+  if (input.mode === 'micro') {
+    bullets.push({ label: 'Micro-séance', text: microRationaleText(input) });
+    if (gap !== undefined && gap.gapDetectedAt !== null) {
+      bullets.push(gapBullet(gap, input.timeZone));
+    }
+    return bullets;
+  }
   if (gap !== undefined && gap.gapDetectedAt !== null) {
-    const games = GAME_LABELS as Record<string, { name: string } | undefined>;
-    const game = games[gap.format]?.name ?? gap.format;
-    bullets.push({
-      label: 'Lacune en priorité',
-      text: `${withArticle(gap.notionLabel)}, oubliée depuis le ${shortDayLabel(
-        gap.gapDetectedAt,
-        input.timeZone,
-      )}, revient en ${lowercaseFirst(game)}.`,
-    });
+    bullets.push(gapBullet(gap, input.timeZone));
   }
   if (input.deferredCount > 0) {
     const plural = input.deferredCount === 1 ? '' : 's';
@@ -99,6 +107,54 @@ export function buildRationale(input: RationaleInput): { label: string; text: st
     });
   }
   return bullets;
+}
+
+/** SPEC-703 EF-4 — bullet of the micro-session, adapted to its actual composition (CL-1, CL-2). */
+function microRationaleText(input: RationaleInput): string {
+  const cards = input.microCards ?? 1;
+  const hasQuestion = input.microHasQuestion ?? true;
+  if (!hasQuestion) {
+    return cards >= 2
+      ? 'les notions les plus urgentes en cartes de rappel.'
+      : 'la notion la plus urgente en carte de rappel.';
+  }
+  if (cards === 0) return 'une question qui mêle plusieurs notions prioritaires.';
+  if (cards >= 2) {
+    return 'les notions les plus urgentes en cartes de rappel, puis une question qui en mêle plusieurs.';
+  }
+  return 'la notion la plus urgente en carte de rappel, puis une question qui en mêle plusieurs.';
+}
+
+function gapBullet(gap: RationaleGapItem, timeZone: string): { label: string; text: string } {
+  const games = GAME_LABELS as Record<string, { name: string } | undefined>;
+  const game = games[gap.format]?.name ?? gap.format;
+  return {
+    label: 'Lacune en priorité',
+    text: `${withArticle(gap.notionLabel)}, oubliée depuis le ${shortDayLabel(
+      gap.gapDetectedAt ?? '',
+      timeZone,
+    )}, revient en ${lowercaseFirst(game)}.`,
+  };
+}
+
+/**
+ * SPEC-703 EF-3 — explanatory note of the duration switch in micro mode. CL-1 and CL-2 adapt it
+ * to the actual composition: a single card, two cards, or cards only when no question variant
+ * exists (the refill request covers the missing format).
+ */
+export function buildMicroNote(input: { cards: number; hasQuestion: boolean }): string {
+  const cards = Math.max(0, Math.trunc(input.cards));
+  if (input.hasQuestion) {
+    if (cards >= 2) {
+      return 'Version courte de secours : deux cartes de rappel et une question. Elle garde le rythme et la série les jours chargés.';
+    }
+    if (cards === 1) {
+      return 'Version courte de secours : une carte de rappel et une question. Elle garde le rythme et la série les jours chargés.';
+    }
+    return 'Version courte de secours : une question. Elle garde le rythme et la série les jours chargés.';
+  }
+  if (cards >= 2) return 'Version courte de secours : deux cartes de rappel.';
+  return 'Version courte de secours : une carte de rappel.';
 }
 
 /** Convenience used by the service: the civil day of `now` plus one, in the user's zone. */

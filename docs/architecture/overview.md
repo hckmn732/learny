@@ -110,6 +110,7 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 | `remediation/requested` | SPEC-612 | préparation d'une remédiation à la demande |
 | `gap/detected` / `gap/nature-changed` / `gap/cleared` | SPEC-411 | notifications, automatisme 5 |
 | `review/answered` | SPEC-701 | FSRS, série |
+| `review/session-completed` | SPEC-703 | automatisme 2 (proposition consommée), jalons SPEC-723 |
 | `exam/submitted` | SPEC-614 | correction, lacunes |
 | `exercise/submitted` | SPEC-613 | correction tuteur |
 | `tutor/question-asked` | SPEC-610 | automatisme 6 |

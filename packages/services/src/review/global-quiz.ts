@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { toPublicBrick, type BrickType } from '@learny/bricks';
 import {
   ENGINE,
+  GAMES_ENABLED,
   GAME_LABELS,
   REVIEW_EXTRA_NOTION_SECONDS,
   REVIEW_FORMAT_SECONDS,
@@ -24,6 +25,7 @@ import {
 } from '@learny/contracts';
 import { AppError, addCivilDays, userDayBounds, userLocalDay, type Result } from '@learny/core';
 import { upsertDailyActivity, type DbTx } from '@learny/db';
+import { withTransaction } from '@learny/jobs';
 import {
   buildDailySession,
   previewGrades,
@@ -40,7 +42,8 @@ import { getDueNotions } from '../learning/get-due-notions';
 import { requestRefill } from '../question-bank';
 import { requireUser, toResult } from '../resources/result';
 
-import { buildRationale, type RationaleGapItem } from './rationale';
+import { composeMicroSession, type MicroBrick } from './micro-composition';
+import { buildRationale, buildMicroNote, type RationaleGapItem } from './rationale';
 
 // Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0319).
 //
@@ -127,6 +130,10 @@ interface SessionConfig {
   estimatedSec: number;
   rationale: ReviewRationale[];
   items: SessionItemConfig[];
+  /** SPEC-703 EF-3 — frozen explanatory note of the micro-session (CL-1, CL-2). */
+  note?: string;
+  /** SPEC-703 — duration D of the micro-session, frozen at creation (CL-6). */
+  microMinutes?: number;
 }
 
 const sessionConfigSchema = z.object({
@@ -138,6 +145,8 @@ const sessionConfigSchema = z.object({
   capMinutes: z.number().int().min(1),
   estimatedSec: z.number().int().min(0),
   rationale: z.array(z.object({ label: z.string(), text: z.string() })),
+  note: z.string().optional(),
+  microMinutes: z.number().int().min(1).optional(),
   items: z.array(
     z.object({
       position: z.number().int().min(0),
@@ -335,14 +344,19 @@ async function loadLastFormats(
 async function loadAutomationParams(
   tx: DbTx,
   userId: string,
-): Promise<{ capMinutes: number; preference: 'vary' | 'cards' | 'matching_categorization' }> {
+): Promise<{
+  capMinutes: number;
+  preference: 'vary' | 'cards' | 'matching_categorization';
+  microMinutes: number;
+}> {
   const rows = await tx.execute<{ key: string; params: unknown }>(sql`
     select key::text as key, params
     from public.automation_settings
-    where user_id = ${userId}::uuid and key in ('plafond_quiz', 'jeu_lacune')
+    where user_id = ${userId}::uuid and key in ('plafond_quiz', 'jeu_lacune', 'micro_seance')
   `);
   let capMinutes: number = ENGINE.globalQuiz.maxMinutesDefault;
   let preference: 'vary' | 'cards' | 'matching_categorization' = 'vary';
+  let microMinutes: number = ENGINE.globalQuiz.microMinutesDefault;
   for (const row of rows) {
     const params = (row.params ?? {}) as Record<string, unknown>;
     if (row.key === 'plafond_quiz' && typeof params.maxMinutes === 'number') {
@@ -354,8 +368,14 @@ async function loadAutomationParams(
         .safeParse(params.preference);
       if (parsed.success) preference = parsed.data;
     }
+    if (row.key === 'micro_seance' && typeof params.durationMin === 'number') {
+      const parsed = z
+        .union([z.literal(3), z.literal(5), z.literal(10)])
+        .safeParse(params.durationMin);
+      if (parsed.success) microMinutes = parsed.data;
+    }
   }
-  return { capMinutes, preference };
+  return { capMinutes, preference, microMinutes };
 }
 
 /** Fingerprints of the brick variants the learner already answered (BR-MEM-07 EF-5). */
@@ -467,7 +487,83 @@ function displayLabelOf(
   return notionIds
     .map((notionId) => notionById.get(notionId)?.label ?? '')
     .filter((label) => label !== '')
+    .slice(0, 1)
     .join(', ');
+}
+
+/**
+ * SPEC-703 EF-2, ET-2, ET-3 — micro-session of D minutes: the engine order ranks the due notions
+ * (gaps first, then delay); the pure composition keeps the recall cards on the most urgent
+ * notions, then one question covering up to four other priority notions. Every served brick keeps
+ * the display label of the daily session and the gap reason of its first notion.
+ */
+function composeMicro(
+  engineOrder: readonly string[],
+  reviewRows: readonly NotionRow[],
+  bricks: readonly BrickVersionRow[],
+  notionById: ReadonlyMap<string, NotionRow>,
+  seenFingerprints: ReadonlySet<string>,
+  durationMin: number,
+): { items: DrawnItem[]; exhausted: { notionId: string; format: string }[] } {
+  const priority = rankNotions(engineOrder, reviewRows);
+  const candidates: MicroBrick[] = bricks
+    .map((brick) => {
+      const notionIds = brick.notion_ids.filter((notionId) => notionById.has(notionId));
+      const gapNature = notionById.get(notionIds[0] ?? '')?.gap_nature ?? null;
+      return {
+        brickId: brick.brick_id,
+        brickVersionId: brick.version_id,
+        type: brick.type,
+        notionIds,
+        displayLabel: displayLabelOf(brick, notionIds, notionById),
+        moduleIds: [
+          ...new Set(notionIds.map((notionId) => notionById.get(notionId)?.module_id ?? '')),
+        ].filter((moduleId) => moduleId !== ''),
+        reasonKey: gapNature === null ? null : `gap_${gapNature}`,
+        fingerprint: brick.fingerprint,
+      } satisfies MicroBrick;
+    })
+    .filter((brick) => brick.notionIds.length > 0);
+
+  const composition = composeMicroSession({
+    durationMin,
+    gamesEnabled: GAMES_ENABLED,
+    priorityNotionIds: priority,
+    bricks: candidates,
+    seenFingerprints,
+  });
+  return {
+    items: composition.items.map((brick) => ({
+      brickId: brick.brickId,
+      brickVersionId: brick.brickVersionId,
+      format: brick.type,
+      notionIds: brick.notionIds,
+      displayLabel: brick.displayLabel,
+      moduleIds: brick.moduleIds,
+      reasonKey: brick.reasonKey,
+    })),
+    exhausted: composition.missingFormats.map((format) => ({
+      notionId: priority[0] ?? '',
+      format,
+    })),
+  };
+}
+
+/** Ranks the due notions: engine order first, then gaps before plain delays (ADR-0182 §1). */
+function rankNotions(engineOrder: readonly string[], reviewRows: readonly NotionRow[]): string[] {
+  const ranked = [...new Set(engineOrder.filter((notionId) => notionId !== ''))];
+  const seen = new Set(ranked);
+  const rest = [...reviewRows]
+    .filter((row) => !seen.has(row.notion_id))
+    .sort(
+      (left, right) =>
+        Number(right.gap_nature !== null) - Number(left.gap_nature !== null) ||
+        new Date(left.due_at).getTime() - new Date(right.due_at).getTime() ||
+        left.module_position - right.module_position ||
+        left.notion_id.localeCompare(right.notion_id),
+    );
+  for (const row of rest) ranked.push(row.notion_id);
+  return ranked;
 }
 
 function emptyDto(
@@ -570,6 +666,8 @@ export function getOrCreateTodaySession(
       const gaps: GlobalQuizGap[] = due.value.gaps;
       const lastFormats = await loadLastFormats(tx, userId, formationId);
       const automation = await loadAutomationParams(tx, userId);
+      const microMinutes = automation.microMinutes;
+      const capMinutes = mode === 'micro' ? microMinutes : automation.capMinutes;
       const drawn = buildDailySession({
         formationId,
         date: today,
@@ -584,7 +682,7 @@ export function getOrCreateTodaySession(
         gaps,
         bank,
         lastFormats,
-        capMinutes: automation.capMinutes,
+        capMinutes,
         mode,
         seed: `global-quiz:${userId}:${formationId}:${today}:${mode}`,
         preference: automation.preference,
@@ -599,17 +697,29 @@ export function getOrCreateTodaySession(
       const notionById = new Map(dueRows.map((row) => [row.notion_id, row]));
       const selectedNotions = new Set(drawn.items.map((item) => item.notionId));
       const seenFingerprints = await loadSeenFingerprints(tx, userId);
-      const grouped = groupByBricks(
-        drawn.items.map((item) => ({
-          notionId: item.notionId,
-          format: item.format,
-          gapNature: item.gapNature,
-        })),
-        notionById,
-        selectedNotions,
-        bricks,
-        seenFingerprints,
-      );
+      let grouped: { items: DrawnItem[]; exhausted: { notionId: string; format: string }[] };
+      if (mode === 'micro') {
+        grouped = composeMicro(
+          drawn.items.map((item) => item.notionId),
+          reviewRows,
+          bricks,
+          notionById,
+          seenFingerprints,
+          microMinutes,
+        );
+      } else {
+        grouped = groupByBricks(
+          drawn.items.map((item) => ({
+            notionId: item.notionId,
+            format: item.format,
+            gapNature: item.gapNature,
+          })),
+          notionById,
+          selectedNotions,
+          bricks,
+          seenFingerprints,
+        );
+      }
       if (grouped.items.length === 0) {
         // CL-7 / CL-8 — every drawn notion waits for a bank variant: nothing is written, but the
         // exhausted formats still ask SPEC-513 for new variants.
@@ -622,17 +732,23 @@ export function getOrCreateTodaySession(
       const selectedCount = new Set(grouped.items.flatMap((item) => item.notionIds)).size;
       const deferredCount = Math.max(0, dueCount - selectedCount);
       const deferredTo = addCivilDays(today, 1);
-      const estimatedSec = grouped.items.reduce(
-        (sum, item) => sum + itemCostSec(item.format, item.notionIds.length),
-        0,
-      );
+      const estimatedSec =
+        mode === 'micro'
+          ? microMinutes * 60
+          : grouped.items.reduce(
+              (sum, item) => sum + itemCostSec(item.format, item.notionIds.length),
+              0,
+            );
+      const microCardCount = grouped.items.filter((item) => item.format === 'recall_card').length;
+      const microHasQuestion = grouped.items.some((item) => item.format !== 'recall_card');
       const rationale = buildRationale({
+        ...(mode === 'micro' ? { mode, microCards: microCardCount, microHasQuestion } : {}),
         timeZone,
         now,
         dueCount,
         deferredCount,
         deferredTo,
-        capMinutes: automation.capMinutes,
+        capMinutes,
         gapItems: gapItemsOf(grouped.items, notionById),
         modulePositions: grouped.items.flatMap((item) =>
           item.notionIds.map((notionId) => notionById.get(notionId)?.module_position ?? 0),
@@ -644,9 +760,15 @@ export function getOrCreateTodaySession(
         dueCount,
         deferredCount,
         deferredTo,
-        capMinutes: automation.capMinutes,
+        capMinutes,
         estimatedSec,
         rationale,
+        ...(mode === 'micro'
+          ? {
+              note: buildMicroNote({ cards: microCardCount, hasQuestion: microHasQuestion }),
+              microMinutes,
+            }
+          : {}),
         items: grouped.items.map((item, index) => ({
           position: index,
           format: item.format,
@@ -936,6 +1058,52 @@ function wasDueWord(count: number): string {
 }
 
 /**
+ * SPEC-703 EF-1, CL-6 — durations shown by the two-mode switch. Each button keeps the duration of
+ * the session that exists today for its mode; when a mode has no session yet, the micro duration
+ * is the automation 2 setting and the full duration the daily cap.
+ */
+async function loadModeOptions(
+  tx: DbTx,
+  userId: string,
+  formationId: string,
+  today: string,
+  config: SessionConfig,
+): Promise<{ fullMinutes: number; microMinutes: number }> {
+  const rows = await tx.execute<{ config: unknown }>(sql`
+    select config
+    from public.activities
+    where owner_id = ${userId}::uuid
+      and formation_id = ${formationId}::uuid
+      and kind = ${REVIEW_ACTIVITY_KIND}::public.activity_kind
+      and for_date = ${today}::date
+  `);
+  let fullMinutes: number | null = null;
+  let microMinutes: number | null = null;
+  for (const row of rows) {
+    const parsed = parseSessionConfig(row.config);
+    if (parsed === null) continue;
+    if (parsed.mode === 'full') fullMinutes = Math.max(1, Math.ceil(parsed.estimatedSec / 60));
+    if (parsed.mode === 'micro') {
+      microMinutes = parsed.microMinutes ?? Math.max(1, Math.ceil(parsed.estimatedSec / 60));
+    }
+  }
+  if (fullMinutes === null && config.mode === 'full') {
+    fullMinutes = Math.max(1, Math.ceil(config.estimatedSec / 60));
+  }
+  if (microMinutes === null && config.mode === 'micro') {
+    microMinutes = config.microMinutes ?? Math.max(1, Math.ceil(config.estimatedSec / 60));
+  }
+  if (microMinutes === null) {
+    const automation = await loadAutomationParams(tx, userId);
+    microMinutes = automation.microMinutes;
+  }
+  return {
+    fullMinutes: fullMinutes ?? ENGINE.globalQuiz.maxMinutesDefault,
+    microMinutes,
+  };
+}
+
+/**
  * Builds the DTO of an existing session: the frozen config, the bricks read in one query (ET-11),
  * the client-safe payloads, the FSRS previews of the recall cards and the answers state.
  */
@@ -1121,6 +1289,7 @@ async function buildDto(
         ? 'empty'
         : 'in_progress'
       : 'completed';
+  const modeOptions = await loadModeOptions(tx, userId, activity.formation_id, today, config);
 
   return GlobalQuizSessionDtoSchema.parse({
     sessionId: activity.id,
@@ -1135,16 +1304,15 @@ async function buildDto(
       estimatedMinutes: Math.max(1, Math.ceil(config.estimatedSec / 60)),
       subtitle: `${formation.title} · session du ${weekdayLabel(today)} ${dayMonthLabel(today, timeZone)}`,
     },
-    modeOptions: {
-      fullMinutes: Math.max(1, Math.ceil(config.estimatedSec / 60)),
-      microMinutes: ENGINE.globalQuiz.microMinutesDefault,
-    },
+    modeOptions,
     note:
-      config.deferredCount > 0
-        ? `${wasDueWord(config.dueCount)} aujourd’hui : ${String(config.deferredCount)} ${
-            config.deferredCount === 1 ? 'est reportée' : 'sont reportées'
-          } à ${weekdayLabel(config.deferredTo)} pour que vos révisions restent sous ${String(config.capMinutes)} min.`
-        : `${notionWord(config.dueCount)} à revoir aujourd’hui, lacunes en priorité.`,
+      config.mode === 'micro'
+        ? (config.note ?? '')
+        : config.deferredCount > 0
+          ? `${wasDueWord(config.dueCount)} aujourd’hui : ${String(config.deferredCount)} ${
+              config.deferredCount === 1 ? 'est reportée' : 'sont reportées'
+            } à ${weekdayLabel(config.deferredTo)} pour que vos révisions restent sous ${String(config.capMinutes)} min.`
+          : `${notionWord(config.dueCount)} à revoir aujourd’hui, lacunes en priorité.`,
     rationale: config.rationale,
     items: dtoItems,
     currentPosition,
@@ -1397,7 +1565,7 @@ export function answerReviewItem(
           const applied = await applyReviewResult(tx, {
             userId,
             notionId,
-            source: 'global_quiz',
+            source: config.mode === 'micro' ? 'micro_session' : 'global_quiz',
             format: brickType,
             correct: isCorrect,
             rating,
@@ -1479,7 +1647,7 @@ export function completeReviewSession(
 ): Promise<Result<ReviewSummaryDto>> {
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
-    return db.run(async (tx) => {
+    return withTransaction(db, async (tx, outbox) => {
       const rows = await tx.execute<{
         id: string;
         owner_id: string;
@@ -1582,7 +1750,10 @@ export function completeReviewSession(
         day,
         minutes,
         qualifying: hasAnswer,
-        sources: [`review-session:${sessionId}`],
+        sources:
+          config.mode === 'micro'
+            ? [`micro_session`, `review-session:${sessionId}`]
+            : [`review-session:${sessionId}`],
       });
       const streakDays = hasAnswer
         ? await bumpStreak(tx, userId, day)
@@ -1602,6 +1773,16 @@ export function completeReviewSession(
         set review_feedback = ${JSON.stringify({ summary })}::jsonb
         where id = ${attempt.id}::uuid
       `);
+      // SPEC-703 ET-5 — after commit, SPEC-713 marks the micro-session proposal as consumed and
+      // SPEC-723 notifies the milestones. A replay of a closed session returns early above.
+      outbox.add('review/session-completed', {
+        userId,
+        formationId: activity.formation_id,
+        sessionId,
+        mode: config.mode,
+        forDate: config.forDate,
+        reviewedCount,
+      });
       return summary;
     });
   });
