@@ -314,8 +314,18 @@ test('examen blanc sans aide @SPEC-614', async ({ page, axeCheck, captureEvidenc
   await expect(page.getByTestId('exam-palette')).toBeVisible();
   await expect(page.locator('[data-testid^="exam-palette-"]')).toHaveCount(20);
   await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toHaveCount(0);
+  // Wait for the writes to be acknowledged before reloading: a reload aborts an in-flight PUT.
+  const answerSaved = page.waitForResponse(
+    (response) =>
+      response.request().method() === 'PUT' && /\/answers\/1$/.test(response.url()),
+  );
   await page.getByTestId('exam-option-a').click();
+  await answerSaved;
+  const markSaved = page.waitForResponse(
+    (response) => response.request().method() === 'PUT' && /\/marks\/1$/.test(response.url()),
+  );
   await page.getByTestId('exam-mark').click();
+  await markSaved;
   await expect(page.getByTestId('exam-mark')).toHaveText('Ne plus marquer');
   await expect(page.getByTestId('exam-palette-1')).toHaveAttribute('aria-label', /répondue, à revoir/);
 

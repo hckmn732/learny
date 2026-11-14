@@ -106,12 +106,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `pnpm --filter @learny/web exec next start -p ${String(PORT)}`,
+    command: 'pnpm --filter @learny/web exec node server.mjs',
     url: `${BASE_URL}/api/v1/health`,
     reuseExistingServer: !process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0',
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
+      PORT: String(PORT),
       APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
       ENABLE_SDD_PAGES: 'true',
       // The server sits behind a trusted proxy in these tests: each test announces its own address

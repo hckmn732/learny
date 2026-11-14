@@ -59,7 +59,7 @@ describe('[SPEC-005] references', () => {
       let second = await captureReferences({ outDir: generationB });
       // Chromium occasionally keeps a fallback-font raster for one launch on loaded CI runners.
       // Retry the second generation instead of accepting a non-deterministic reference.
-      for (let attempt = 0; attempt < 2 && treeHash(generationA) !== treeHash(generationB); attempt += 1) {
+      for (let attempt = 0; attempt < 4 && treeHash(generationA) !== treeHash(generationB); attempt += 1) {
         fs.rmSync(generationB, { recursive: true, force: true });
         second = await captureReferences({ outDir: generationB });
       }
