@@ -214,6 +214,7 @@ test('conformité SCR-17 groupe desktop @SPEC-724 @visual', async ({
   context,
   baseURL,
   axeCheck,
+  captureEvidence,
 }) => {
   const currentOwner = owner;
   const currentMember = member;
@@ -255,6 +256,7 @@ test('conformité SCR-17 groupe desktop @SPEC-724 @visual', async ({
   expect(body).not.toMatch(/note privée|apport privé|contenu privé|lacune :/i);
 
   await expectScreenshotBaseline(page, 'spec-724-groupe-desktop.png', { fullPage: true });
+  await captureEvidence('visual-spec-724-groupe-desktop');
   await axeCheck();
 });
 
@@ -263,6 +265,7 @@ test('conformité SCR-17 groupe mobile @SPEC-724 @visual @mobile', async ({
   context,
   baseURL,
   axeCheck,
+  captureEvidence,
 }) => {
   test.skip(test.info().project.name !== 'mobile', 'mobile uniquement');
   const currentOwner = owner;
@@ -285,5 +288,6 @@ test('conformité SCR-17 groupe mobile @SPEC-724 @visual @mobile', async ({
     });
   });
   await expectScreenshotBaseline(page, 'spec-724-groupe-mobile.png', { fullPage: true });
+  await captureEvidence('visual-spec-724-groupe-mobile');
   await axeCheck();
 });
