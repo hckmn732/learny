@@ -26,6 +26,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
 | POST/GET/DELETE `/me/pause` | Mode pause | SPEC-721 |
 | POST `/me/export` · GET `/me/exports/:id` · POST `/me/deletion` · DELETE `/me/deletion` | Données personnelles | SPEC-211 |
+| GET/PATCH `/me/profile` | État de l'écran Paramètres et enregistrement transactionnel du profil et du rythme, avec version attendue (`409 CONFLICT`) ; l'e-mail du profil n'est pas modifiable en V1 | SPEC-707 |
 | GET/PUT `/me/ai/task-models` · GET/POST/DELETE `/me/ai/credentials` · POST `/me/ai/credentials/:id/qualify` · GET `/me/ai/usage` | Modèles d'IA. Clés personnelles (SPEC-505) : POST 201 DTO masqué (`keyMasked`, `outsideEu`, `dataNote`), GET 200 `{ items }` (10 au plus), DELETE 204 ; 404 pour la clé d'autrui, 409 `CONFLICT` pour un doublon exact, 422 `VALIDATION_FAILED`, `LOCAL_MODELS_DISABLED`, `CREDENTIAL_LIMIT_REACHED`, `URL_INVALID`, `URL_BLOCKED_HOST` ; aucune réponse ne contient `apiKey` ni `encryptedKey` | SPEC-505, 506, 507, 709 |
 | POST `/billing/checkout` · POST `/billing/portal` · GET `/billing/subscription` · POST `/webhooks/stripe` | Abonnement | SPEC-210, 725 |
 | GET `/home` | Données de l'accueil | SPEC-603 |

@@ -4580,6 +4580,76 @@ export const fr = {
     error: 'La remédiation n’a pas pu être chargée.',
     excerptPrefix: 'Extrait',
   },
+  settings: {
+    eyebrow: 'Paramètres',
+    tabsLabel: 'Rubriques des paramètres',
+    tabs: {
+      profil: 'Profil',
+      notifications: 'Notifications',
+      automatismes: 'Automatismes',
+      modeles: 'Modèles d’IA',
+    },
+    coming: {
+      notifications: 'La gestion des notifications arrive avec SPEC-708.',
+      automatismes: 'Les automatismes arrivent avec SPEC-710.',
+      modeles: 'Les modèles d’IA arrivent avec SPEC-709.',
+    },
+    loading: 'Chargement des paramètres…',
+    errorTitle: 'Impossible de charger les paramètres.',
+    identity: {
+      title: 'Identité',
+      created: (date: string, formations: string) => `Compte créé le ${date} · ${formations}`,
+      firstName: 'Prénom',
+      lastName: 'Nom',
+      email: 'Adresse e-mail',
+      emailHint: 'Les rappels par e-mail partent à cette adresse.',
+      language: 'Langue des cours',
+      toneLabel: 'Le tuteur vous parle en',
+      toneVous: 'Vouvoyant',
+      toneTu: 'Tutoyant',
+      timezone: 'Fuseau horaire',
+    },
+    rhythm: {
+      title: 'Rythme d’apprentissage',
+      subtitle:
+        'Le tuteur s’en sert pour placer les activités dans l’agenda. Valeur par défaut des nouvelles formations.',
+    },
+    privacy: {
+      title: 'Données et confidentialité',
+      description:
+        'Vos apports, cours et résultats restent à vous : exportables à tout moment, supprimés avec le compte.',
+      exportTrigger: 'Exporter mes données',
+      exportTitle: 'Exporter vos données ?',
+      exportDescription:
+        'Une archive ZIP contenant vos cours, vos apports et vos résultats sera prête dans moins de 15 minutes. Le lien de téléchargement restera valable 7 jours.',
+      exportConfirm: 'Exporter',
+      exportPending: 'Demande d’export…',
+      exportQueued: 'Export en file d’attente.',
+      exportRunning: 'Export en cours.',
+      exportReady: 'Export prêt.',
+      exportFailed: 'L’export a échoué. Vous pouvez redemander un export.',
+      exportNone: 'Aucun export demandé pour l’instant.',
+      download: 'Télécharger',
+      expires: (label: string) => `Valable jusqu’au ${label}.`,
+      size: (label: string) => `Taille : ${label}.`,
+      deleteTrigger: 'Supprimer mon compte',
+      deleteTitle: 'Supprimer votre compte ?',
+      deleteDescription: (label: string) =>
+        `Toutes vos données personnelles et vos fichiers seront effacés définitivement le ${label}. Vous pourrez annuler cette demande jusque-là.`,
+      deleteConfirm: 'Supprimer mon compte',
+      deletePending: 'Demande en cours…',
+      cancelTrigger: 'Annuler la suppression',
+      cancelPending: 'Annulation…',
+      deleteNone: 'Aucune suppression programmée.',
+      deleteScheduled: (label: string) =>
+        `Suppression programmée le ${label}. Vous pouvez encore annuler.`,
+    },
+    save: 'Enregistrer',
+    saving: 'Enregistrement…',
+    saved: 'Modifications enregistrées',
+    saveError: 'Enregistrement impossible. Vérifiez votre réseau et réessayez.',
+    conflict: 'Vos paramètres ont été modifiés dans un autre onglet. Rechargez-les puis réessayez.',
+  },
 } as const;
 
 export type Messages = typeof fr;

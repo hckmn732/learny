@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T02:55:36.402Z",
+  "updatedAt": "2026-11-14T09:24:42.824Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -4704,14 +4704,55 @@
       "validations": {}
     },
     "SPEC-707": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T08:00:12.657Z",
+      "completedAt": "2026-11-14T09:24:42.821Z",
+      "branch": "spec/SPEC-707-parametres-onglets-et-profil",
+      "commit": "a042fc8e",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T09:22:09.332Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T09:22:10.679Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T09:22:11.123Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T09:22:26.959Z",
+          "details": "9 test(s) [SPEC-707] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T09:23:42.809Z",
+          "details": "6 test(s) [SPEC-707] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T09:24:25.811Z",
+          "details": "3 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T09:24:25.811Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T09:24:25.824Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-708": {
       "status": "pending",

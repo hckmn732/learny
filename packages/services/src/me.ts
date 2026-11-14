@@ -16,12 +16,15 @@ interface MeRow {
   course_language: 'fr' | 'en' | 'es' | 'de';
   timezone: string;
   onboarding_step: 'profil' | 'rythme' | 'ia' | 'rappels' | 'depart' | 'done';
-  onboarding_completed_at: Date | null;
+  onboarding_completed_at: Date | string | null;
   current_formation_id: string | null;
   [key: string]: unknown;
 }
 
 function toMe(row: MeRow): MeDto {
+  const completed = row.onboarding_completed_at;
+  const completedAt =
+    completed === null ? null : completed instanceof Date ? completed : new Date(completed);
   return {
     id: row.id,
     email: row.email,
@@ -31,7 +34,10 @@ function toMe(row: MeRow): MeDto {
     courseLanguage: row.course_language,
     timezone: row.timezone,
     onboardingStep: row.onboarding_step,
-    onboardingCompletedAt: row.onboarding_completed_at?.toISOString() ?? null,
+    onboardingCompletedAt:
+      completedAt === null || Number.isNaN(completedAt.getTime())
+        ? null
+        : completedAt.toISOString(),
     currentFormationId: row.current_formation_id,
   };
 }
