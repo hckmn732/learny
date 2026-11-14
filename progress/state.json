@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T11:27:04.615Z",
+  "updatedAt": "2026-11-14T12:40:03.146Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5161,14 +5161,55 @@
       }
     },
     "SPEC-724": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-14T11:30:21.569Z",
+      "completedAt": "2026-11-14T12:40:03.142Z",
+      "branch": "spec/SPEC-724-formations-a-plusieurs",
+      "commit": "f69f7bf5",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-14T12:36:27.093Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-14T12:36:43.689Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-14T12:37:06.125Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-14T12:37:24.467Z",
+          "details": "23 test(s) [SPEC-724] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-14T12:38:52.171Z",
+          "details": "5 test(s) [SPEC-724] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-14T12:39:35.206Z",
+          "details": "3 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-14T12:39:35.206Z",
+          "details": "2 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-14T12:39:35.217Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-725": {
       "status": "pending",
