@@ -4,9 +4,11 @@
 // The service computes the local day and minutes of every slot from the learner's profile zone and
 // never reads a clock itself (ADR-0047) — `now` comes from the injected clock of the context.
 import { agendaSlotLabelOf } from '@learny/config';
+import { ENGINE } from '@learny/config/product';
 import type { AgendaDto, AgendaSlot, AgendaTotals } from '@learny/contracts';
 import {
   AppError,
+  addCivilDays,
   endOfUserDay,
   startOfUserDay,
   toUserZone,
@@ -48,6 +50,16 @@ interface SlotAgendaRow {
   status: string;
   activity_id: string | null;
   group_milestone: boolean;
+  [key: string]: unknown;
+}
+
+interface ModuleAgendaRow {
+  id: string;
+  formation_id: string;
+  position: number;
+  title: string;
+  planned_end: string | null;
+  status: string;
   [key: string]: unknown;
 }
 
@@ -167,6 +179,52 @@ export function getAgenda(
         throw new AppError('NOT_FOUND', 'Formation introuvable dans votre agenda.');
       }
       const visible = formationFilter === null ? formations : [formationFilter];
+      const visibleIds = new Set(visible.map((formation) => formation.id));
+
+      // SPEC-705 EF-2 — a non-validated module whose planned end is at least the configured delay
+      // in the past drives the BR-FOR-14 proposal. The interface only receives the first one; the
+      // detailed quiz-failure case is refined by the replanning service.
+      const moduleRows = await tx.execute<ModuleAgendaRow>(sql`
+        select m.id::text as id,
+               m.formation_id::text as formation_id,
+               m.position::int as position,
+               m.title,
+               m.planned_end::text as planned_end,
+               m.status::text as status
+        from public.modules m
+        join public.formations f on f.id = m.formation_id
+        where (f.owner_id = ${userId}::uuid or exists (
+          select 1 from public.groups g
+          join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = ${userId}::uuid
+            and gm.member_status = 'active'
+        ))
+          and f.status::text in ('active', 'paused')
+          and m.status::text <> 'validated'
+          and (${params.formation} = 'all' or m.formation_id::text = ${params.formation})
+        order by m.position asc, m.id asc
+      `);
+      const blockedCutoff = addCivilDays(
+        userLocalDay(now, timezone),
+        -ENGINE.planner.blockedDelayDays,
+      );
+      const blockedRow = moduleRows.find(
+        (module) =>
+          visibleIds.has(module.formation_id) &&
+          module.planned_end !== null &&
+          module.planned_end <= blockedCutoff,
+      );
+      const blockedModule =
+        blockedRow === undefined
+          ? null
+          : {
+              formationId: blockedRow.formation_id,
+              moduleId: blockedRow.id,
+              moduleNumber: blockedRow.position,
+              title: blockedRow.title,
+              reason: 'delayed' as const,
+            };
 
       const starts = visible
         .map((formation) => formation.start_date)
@@ -286,6 +344,7 @@ export function getAgenda(
         })),
         slots,
         totals: agendaTotals(slots),
+        blockedModule,
       };
     });
   });

@@ -86,7 +86,7 @@ export function SlotDetail({
         </NextLink>
         <button
           type="button"
-          data-testid="agenda-detail-move"
+          data-testid="slot-move"
           disabled={!slot.movable}
           onClick={() => onMoveClick?.(slot.id)}
           className="inline-flex min-h-44 cursor-pointer items-center rounded-12 border border-solid border-dark-500 bg-transparent px-16 text-14 font-600 text-white font-[inherit] disabled:cursor-not-allowed disabled:opacity-55"

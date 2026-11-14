@@ -1,0 +1,51 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="50.546394">
+<testsuite name="p7/spec-705.spec.ts" timestamp="2026-11-14T14:22:16.519Z" hostname="desktop" tests="2" failures="0" skipped="0" time="10.356" errors="0">
+<testcase name="parcours SPEC-705 @SPEC-705" classname="p7/spec-705.spec.ts" time="6.678">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/attachments/axe-43617ddd06b720bcb0e6870bdc3a9193cc328816.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-705 @SPEC-705 @visual @mobile" classname="p7/spec-705.spec.ts" time="3.678">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-desktop/attachments/axe-eed1b90f709b0aec622d3233160f096f0963f7d3.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-705.spec.ts" timestamp="2026-11-14T14:22:16.519Z" hostname="mobile" tests="1" failures="0" skipped="0" time="5.439" errors="0">
+<testcase name="conformité SPEC-705 @SPEC-705 @visual @mobile" classname="p7/spec-705.spec.ts" time="5.439">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/attachments/axe-d55ff7ebd38d2eb904237d679357e42ef8faae80.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

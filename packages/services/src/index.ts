@@ -56,3 +56,4 @@ export * from './mock-exams/index';
 export * from './remediation/index';
 export * from './automations';
 export * from './warmup/index';
+export * from './agenda-deplacer-et-reajuster-le-planning';
