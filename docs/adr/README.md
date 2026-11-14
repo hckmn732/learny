@@ -191,3 +191,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0318](ADR-0318-nom-accessible-des-creneaux-et-cases-de-l-agenda.md) | Nom accessible des créneaux et cases de l'agenda | Déduite | SPEC-704 |
 | [ADR-0319](ADR-0319-session-du-jour-groupement-des-briques-donnees-de-demonstrat.md) | Session du jour : groupement des briques, donnees de demonstration et estimation | Déduite | SPEC-701 |
 | [ADR-0321](ADR-0321-reconciliation-sobre-et-idempotente-des-jalons-a-la-lecture.md) | Réconciliation sobre et idempotente des jalons à la lecture | Déduite | SPEC-723, SPEC-409, SPEC-209, SPEC-304 |
+| [ADR-0324](ADR-0324-copie-individuelle-a-la-sortie-d-un-groupe.md) | Copie individuelle à la sortie d’un groupe et notifications | Déduite | SPEC-724, SPEC-111, ADR-0035, ADR-0122, ADR-0246 |
