@@ -233,10 +233,14 @@ test('bloc d’échauffement conforme à la maquette @SPEC-714 @visual', async (
       'border-top-color': '#E7E6E1',
       'border-top-left-radius': '21.6px',
     },
-    '[data-testid="warmup-title"]': { color: '#111113', 'font-size': '18px', 'font-weight': '600' },
+    '[data-testid="warmup-title"]': {
+      color: '#111113',
+      'font-size': '16.2px',
+      'font-weight': '600',
+    },
     '[data-testid="warmup-question"]': {
       color: '#111113',
-      'font-size': '20px',
+      'font-size': '18px',
     },
     '[data-testid="warmup-tag"]': {
       'background-color': '#E1F4EF',
