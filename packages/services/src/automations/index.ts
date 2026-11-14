@@ -2,10 +2,11 @@
 //
 // Every helper runs inside the transaction handed by the caller: the engine writes the settings,
 // the actions and the outbox entries of one learner atomically. Creation of an action is reserved
-// to the service role of the engine (SPEC-108, `automation_actions_owner_insert`); the decisions
+// to the service role of the engine (SPEC-108: the learner only reads and decides); the decisions
 // of the learner run under RLS through `userDb`. The unique partial index
 // `automation_actions_dedupe_uq` on `(user_id, automation, payload->>'dedupeKey')` makes a
-// replayed trigger or a redelivered event a no-op (EF-4, CL-2).
+// replayed trigger or a redelivered event a no-op (EF-4, CA-2), decided by the database and
+// never by a caught driver error (postgres.js poisons the commit of a failed statement).
 import { and, desc, eq, gte, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -13,16 +14,42 @@ import { AppError } from '@learny/core';
 import {
   automationActions,
   automationSettings,
-  createAutomationAction,
   type AutomationAction,
   type AutomationKey,
-  type CreateAutomationActionInput,
   type DbTx,
 } from '@learny/db';
 
-const instantSchema = z.date().refine((value) => !Number.isNaN(value.getTime()), {
-  message: 'instant invalide',
-});
+const uuidSchema = z.uuid();
+const automationKeySchema = z.enum([
+  'reprise',
+  'micro_seance',
+  'echauffement',
+  'remediation',
+  'jeu_lacune',
+  'questions_cartes',
+  'plafond_quiz',
+  'sprint',
+  'bilan',
+  'pause',
+]);
+const automationStatusSchema = z.enum([
+  'pending_consent',
+  'applied',
+  'declined',
+  'undone',
+  'expired',
+  'consumed',
+]);
+const kindSchema = z.string().min(1).max(80);
+const summarySchema = z
+  .string()
+  .min(1)
+  .max(300)
+  .refine((value) => !/[\r\n]/.test(value), 'une seule ligne attendue');
+const payloadSchema = z.record(z.string(), z.unknown());
+const instantSchema = z
+  .date()
+  .refine((value) => !Number.isNaN(value.getTime()), { message: 'instant invalide' });
 
 function instant(value: Date, field: string): Date {
   const parsed = instantSchema.safeParse(value);
@@ -30,6 +57,24 @@ function instant(value: Date, field: string): Date {
     throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`);
   }
   return parsed.data;
+}
+
+function identifier(value: string, field: string): string {
+  if (!uuidSchema.safeParse(value).success) {
+    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide.`);
+  }
+  return value;
+}
+
+function parse<T>(schema: z.ZodType<T>, value: unknown, field: string): T {
+  const result = schema.safeParse(value);
+  if (!result.success) {
+    const message = result.error.issues[0]?.message ?? 'valeur invalide';
+    throw new AppError('VALIDATION_FAILED', `Champ « ${field} » invalide : ${message}`, {
+      errors: [{ path: field, message }],
+    });
+  }
+  return result.data;
 }
 
 export type AutomationSettingsRow = typeof automationSettings.$inferSelect;
@@ -120,19 +165,6 @@ export interface CreatedAction {
   created: boolean;
 }
 
-const DEDUPE_CONSTRAINT = 'automation_actions_dedupe_uq';
-
-function isDedupeViolation(error: unknown): boolean {
-  // postgres.js raises the driver error directly; drizzle may wrap it in a `DrizzleQueryError`.
-  let current: unknown = error;
-  for (let depth = 0; depth < 3 && typeof current === 'object' && current !== null; depth += 1) {
-    const candidate = current as { code?: unknown; constraint_name?: unknown; cause?: unknown };
-    if (candidate.code === '23505' && candidate.constraint_name === DEDUPE_CONSTRAINT) return true;
-    current = candidate.cause;
-  }
-  return false;
-}
-
 /** Reads the existing action of a `(user, automation, dedupeKey)` triple, if any. */
 export async function findAutomationActionByDedupeKey(
   tx: DbTx,
@@ -152,32 +184,110 @@ export async function findAutomationActionByDedupeKey(
   return rows[0] ?? null;
 }
 
+interface InsertedActionRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  formation_id: string | null;
+  automation: AutomationAction['automation'];
+  kind: string;
+  summary: string;
+  payload: Record<string, unknown>;
+  undo_payload: Record<string, unknown> | null;
+  requires_consent: boolean;
+  status: AutomationAction['status'];
+  decided_at: Date | null;
+  created_at: Date;
+}
+
+function toAction(row: InsertedActionRow): AutomationAction {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    formationId: row.formation_id,
+    automation: row.automation,
+    kind: row.kind,
+    summary: row.summary,
+    payload: row.payload,
+    undoPayload: row.undo_payload,
+    requiresConsent: row.requires_consent,
+    status: row.status,
+    decidedAt: row.decided_at,
+    createdAt: row.created_at,
+  };
+}
+
 /**
- * EF-2, EF-4 — inserts one action; a second proposal with the same `dedupeKey` returns the
- * existing row and `created: false`, without error and without any other write.
+ * EF-2, EF-4 — inserts one action with `on conflict do nothing` on the partial unique index
+ * `automation_actions_dedupe_uq`: a second proposal with the same `dedupeKey` returns the
+ * existing row and `created: false`, without error and without any other write. The conflict
+ * target carries the index predicate, so only the rows carrying a key deduplicate (CL-2).
  */
 export async function createAutomationActionQuiet(
   tx: DbTx,
-  input: CreateAutomationActionInput,
+  input: CreateAutomationActionQuietInput,
 ): Promise<CreatedAction> {
-  try {
-    const action = await createAutomationAction(tx, input);
-    return { action, created: true };
-  } catch (error) {
-    if (!isDedupeViolation(error)) throw error;
-    const dedupeKey =
-      input.payload !== undefined && typeof input.payload.dedupeKey === 'string'
-        ? input.payload.dedupeKey
-        : null;
-    if (dedupeKey === null) throw error;
-    const action = await findAutomationActionByDedupeKey(tx, {
-      userId: input.userId,
-      automation: input.automation,
-      dedupeKey,
-    });
-    if (action === null) throw error;
-    return { action, created: false };
+  const userId = identifier(input.userId, 'userId');
+  const formationId =
+    input.formationId === undefined || input.formationId === null
+      ? null
+      : identifier(input.formationId, 'formationId');
+  const automation = parse(automationKeySchema, input.automation, 'automation');
+  const kind = parse(kindSchema, input.kind, 'kind');
+  const summary = parse(summarySchema, input.summary, 'summary');
+  const payload = parse(payloadSchema, input.payload ?? {}, 'payload');
+  const undoPayload =
+    input.undoPayload === undefined || input.undoPayload === null
+      ? null
+      : parse(payloadSchema, input.undoPayload, 'undoPayload');
+  const requiresConsent = input.requiresConsent ?? false;
+  const status = parse(
+    automationStatusSchema,
+    input.requiresConsent ? 'pending_consent' : 'applied',
+    'status',
+  );
+  const decidedAt =
+    input.decidedAt === undefined || input.decidedAt === null
+      ? null
+      : instant(input.decidedAt, 'decidedAt');
+  const createdAt = input.createdAt === undefined ? null : instant(input.createdAt, 'createdAt');
+
+  if (status === 'pending_consent' && decidedAt !== null) {
+    throw new AppError(
+      'VALIDATION_FAILED',
+      'Champ « decidedAt » invalide : une action en attente n’a pas encore de décision.',
+    );
   }
+
+  const rows = await tx.execute<InsertedActionRow>(sql`
+    insert into public.automation_actions
+      (user_id, formation_id, automation, kind, summary, payload, undo_payload,
+       requires_consent, status, decided_at, created_at)
+    values (
+      ${userId}::uuid,
+      ${formationId}::uuid,
+      ${automation}::automation_key,
+      ${kind},
+      ${summary},
+      ${JSON.stringify(payload)}::jsonb,
+      ${undoPayload === null ? null : JSON.stringify(undoPayload)}::jsonb,
+      ${requiresConsent},
+      ${status}::automation_status,
+      ${decidedAt === null ? null : decidedAt.toISOString()}::timestamptz,
+      ${createdAt === null ? null : createdAt.toISOString()}::timestamptz
+    )
+    on conflict (user_id, automation, (payload ->> 'dedupeKey')) where payload ? 'dedupeKey'
+    do nothing
+    returning id, user_id, formation_id, automation, kind, summary, payload, undo_payload,
+              requires_consent, status, decided_at, created_at
+  `);
+  const row = rows[0];
+  if (row !== undefined) return { action: toAction(row), created: true };
+  const dedupeKey = typeof payload.dedupeKey === 'string' ? payload.dedupeKey : null;
+  if (dedupeKey === null) throw new AppError('INTERNAL_ERROR', 'Action non créée.');
+  const existing = await findAutomationActionByDedupeKey(tx, { userId, automation, dedupeKey });
+  if (existing === null) throw new AppError('INTERNAL_ERROR', 'Action non créée.');
+  return { action: existing, created: false };
 }
 
 export interface AutomationActionFilters {

@@ -11,7 +11,7 @@
 // Transactions: the proposals run on the service role (creation is reserved to the automation
 // role, SPEC-108); the decisions of the learner (accept, decline, undo) run under RLS through
 // `userDb`, so an action of another learner answers 404 without revealing its existence (CL-1).
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import {
@@ -271,6 +271,8 @@ function toView(action: AutomationAction): AutomationActionView {
 export function validateDraft(
   definition: AutomationDefinition<z.ZodType>,
   draft: AutomationActionDraft,
+  tone: AutomationTone,
+  timeZone: string,
 ): { summary: string; payload: Record<string, unknown> } {
   if (
     typeof draft.dedupeKey !== 'string' ||
@@ -299,8 +301,8 @@ export function validateDraft(
       decidedAt: null,
       createdAt: '',
     },
-    'vous',
-    'Europe/Paris',
+    tone,
+    timeZone,
   );
   const checked = AutomationSummary.safeParse(summary);
   if (!checked.success) {
@@ -445,7 +447,7 @@ export function runAutomation(
 
     await withTransaction(engine.sdb, async (tx, outbox) => {
       for (const draft of drafts) {
-        const checked = validateDraft(definition, draft);
+        const checked = validateDraft(definition, draft, profile.tone, profile.timeZone);
         const inserted = await createAutomationActionQuiet(tx, {
           userId: input.userId,
           formationId: draft.formationId,
@@ -524,37 +526,6 @@ export function runAutomation(
 /* Decisions of the learner (EF-2, EF-3, ET-5, CL-1 to CL-4)            */
 /* ------------------------------------------------------------------ */
 
-export interface AutomationDecisionContext {
-  requestId: string;
-  userId: string;
-  /** RLS client of the learner; every decision runs inside its transaction. */
-  db: UserDatabase;
-  clock: Clock;
-  logger: LearnyLogger;
-}
-
-export type AcceptAutomationInput = { actionId: string; choice?: Record<string, unknown> };
-export type RefAutomationInput = { actionId: string };
-
-/** BR-AUT-12 — journal of the learner, newest first, with the weekly counter. */
-export interface AutomationJournalQuery {
-  status?: AutomationActionStatus;
-  kind?: string;
-  automation?: AutomationKey;
-  formationId?: string;
-  since?: string;
-  limit?: number;
-  cursor?: string;
-}
-
-export interface AutomationJournalPage {
-  items: AutomationActionView[];
-  weekCount: number;
-  nextCursor: string | null;
-}
-
-const LIMIT_MAX = 100;
-
 /** Output types of the settings service, mirroring the contracts. */
 export interface AutomationSettingValue {
   automation: AutomationKey;
@@ -574,6 +545,31 @@ function requireUser(ctx: ServiceContext): { userId: string; db: UserDatabase } 
   }
   return { userId: ctx.userId, db: ctx.db };
 }
+
+/** BR-AUT-12 — journal of the learner, newest first, with the weekly counter. */
+export interface AutomationJournalQuery {
+  status?: AutomationActionStatus | undefined;
+  kind?: string | undefined;
+  automation?: AutomationKey | undefined;
+  formationId?: string | undefined;
+  since?: string | undefined;
+  limit?: number | undefined;
+  cursor?: string | undefined;
+}
+
+export interface AutomationJournalPage {
+  items: AutomationActionView[];
+  weekCount: number;
+  nextCursor: string | null;
+}
+
+export type AcceptAutomationInput = {
+  actionId: string;
+  choice?: Record<string, unknown> | undefined;
+};
+export type RefAutomationInput = { actionId: string };
+
+const LIMIT_MAX = 100;
 
 function definitionOf(
   registry: AutomationRegistry,
@@ -627,7 +623,11 @@ export function listMyAutomations(ctx: ServiceContext): Promise<Result<Automatio
 /** EF-3, ET-5 — validates `params` with the schema of the automation, then upserts the row. */
 export function updateMyAutomationSetting(
   ctx: ServiceContext,
-  input: { automation: AutomationKey; enabled?: boolean; params?: Record<string, unknown> },
+  input: {
+    automation: AutomationKey;
+    enabled?: boolean | undefined;
+    params?: Record<string, unknown> | undefined;
+  },
 ): Promise<Result<AutomationSettingValue>> {
   return toResult(async () => {
     const user = requireUser(ctx);
@@ -717,18 +717,47 @@ export function listMyAutomationActions(
  * transaction and sent after the commit (CA-2).
  */
 function decide(
-  ctx: AutomationDecisionContext,
+  ctx: ServiceContext,
   decision: 'accept' | 'decline',
   input: AcceptAutomationInput,
   opts: { registry?: AutomationRegistry },
 ): Promise<Result<AutomationActionView>> {
   return toResult(async () => {
     const registry = opts.registry ?? automationRegistry;
+    const user = requireUser(ctx);
     const now = ctx.clock.now();
-    const view = await withTransaction(ctx.db, async (tx, outbox) => {
-      const profile = await decisionProfile(tx, ctx.userId);
+    const view = await withTransaction(user.db, async (tx, outbox) => {
+      const profile = await decisionProfile(tx, user.userId);
+      // CL-1, CA-2 — lock the row first: a foreign identifier is a 404, a concurrent second
+      // decision sees the committed status and changes nothing (idempotent replay).
+      const locked = await tx.execute<{ status: AutomationActionStatus }>(sql`
+        select status::text as status from public.automation_actions
+        where id = ${input.actionId}::uuid and user_id = ${user.userId}::uuid
+        for update
+      `);
+      const before = locked[0];
+      if (before === undefined) {
+        throw new AppError('NOT_FOUND', 'Action introuvable.');
+      }
+      const target: AutomationActionStatus = decision === 'accept' ? 'applied' : 'declined';
+      if (before.status === target) {
+        // Idempotent replay: the committed answer is returned as is, with no second effect.
+        const existing = await getAutomationAction(tx, {
+          userId: user.userId,
+          actionId: input.actionId,
+        });
+        if (existing === null) throw new AppError('NOT_FOUND', 'Action introuvable.');
+        return toView(existing);
+      }
+      if (before.status !== 'pending_consent') {
+        // CL-3 — an expired, consumed, undone or declined action no longer waits for consent.
+        throw new AppError(
+          'CONFLICT',
+          'Cette action n’attend plus d’accord : rechargez le journal pour voir son état.',
+        );
+      }
       const action = await decideAutomationAction(tx, {
-        userId: ctx.userId,
+        userId: user.userId,
         actionId: input.actionId,
         decision,
         decidedAt: now,
@@ -740,7 +769,7 @@ function decide(
         const applied = await definition.apply(
           {
             requestId: ctx.requestId,
-            userId: ctx.userId,
+            userId: user.userId,
             tx,
             clock: ctx.clock,
             logger: ctx.logger,
@@ -767,11 +796,14 @@ function decide(
         // One committed effect, one event: the explicit identifier makes a replay a no-op (CA-2).
         outbox.add(
           'automation/action-applied',
-          { userId: ctx.userId, actionId: action.id, automation: action.automation },
+          { userId: user.userId, actionId: action.id, automation: action.automation },
           { id: `automation-action-applied:${action.id}` },
         );
       }
-      const final = await getAutomationAction(tx, { userId: ctx.userId, actionId: input.actionId });
+      const final = await getAutomationAction(tx, {
+        userId: user.userId,
+        actionId: input.actionId,
+      });
       if (final === null) throw new AppError('NOT_FOUND', 'Action introuvable.');
       return toView(final);
     });
@@ -781,7 +813,7 @@ function decide(
 
 /** EF-3, ET-5 — accepts a pending action and applies the effect once (CA-2, CL-3). */
 export function acceptAutomationAction(
-  ctx: AutomationDecisionContext,
+  ctx: ServiceContext,
   input: AcceptAutomationInput,
   opts: { registry?: AutomationRegistry } = {},
 ): Promise<Result<AutomationActionView>> {
@@ -790,7 +822,7 @@ export function acceptAutomationAction(
 
 /** EF-2, ET-5 — declines a pending action; the journal keeps the row (BR-AUT-12). */
 export function declineAutomationAction(
-  ctx: AutomationDecisionContext,
+  ctx: ServiceContext,
   input: RefAutomationInput,
   opts: { registry?: AutomationRegistry } = {},
 ): Promise<Result<AutomationActionView>> {
@@ -802,16 +834,17 @@ export function declineAutomationAction(
  * `AUTOMATION_ACTION_CONSUMED` and keeps its history (BR-AUT-11).
  */
 export function undoAutomationAction(
-  ctx: AutomationDecisionContext,
+  ctx: ServiceContext,
   input: RefAutomationInput,
   opts: { registry?: AutomationRegistry } = {},
 ): Promise<Result<AutomationActionView>> {
   return toResult(async () => {
     const registry = opts.registry ?? automationRegistry;
+    const user = requireUser(ctx);
     const now = ctx.clock.now();
-    const view = await withTransaction(ctx.db, async (tx, outbox) => {
+    const view = await withTransaction(user.db, async (tx, outbox) => {
       const current = await getAutomationAction(tx, {
-        userId: ctx.userId,
+        userId: user.userId,
         actionId: input.actionId,
       });
       if (current === null) throw new AppError('NOT_FOUND', 'Action introuvable.');
@@ -821,13 +854,13 @@ export function undoAutomationAction(
           'Cette action a déjà été consommée : elle ne peut plus être annulée.',
         );
       }
-      const profile = await decisionProfile(tx, ctx.userId);
+      const profile = await decisionProfile(tx, user.userId);
       const definition = definitionOf(registry, current.automation);
       if (definition?.undo !== undefined) {
         const undone = await definition.undo(
           {
             requestId: ctx.requestId,
-            userId: ctx.userId,
+            userId: user.userId,
             tx,
             clock: ctx.clock,
             logger: ctx.logger,
@@ -840,14 +873,14 @@ export function undoAutomationAction(
         if (!undone.ok) throw undone.error;
       }
       const action = await undoActionRow(tx, {
-        userId: ctx.userId,
+        userId: user.userId,
         actionId: input.actionId,
         undoneAt: now,
       });
       // BR-AUT-12 — the journal keeps the cancelled row; the event goes out after the commit.
       outbox.add(
         'automation/action-undone',
-        { userId: ctx.userId, actionId: action.id, automation: action.automation },
+        { userId: user.userId, actionId: action.id, automation: action.automation },
         { id: `automation-action-undone:${action.id}` },
       );
       return toView(action);
