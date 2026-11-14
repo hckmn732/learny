@@ -19,6 +19,9 @@ function context(userId: string, clock: Clock): ServiceContext {
 
 let stranger: { userId: string } | null = null;
 
+/** Formation of the time-zone and status cases (independent of the demo seed). */
+const STRANGER_FORMATION = '11111111-1111-4111-8111-111111111111';
+
 beforeAll(async () => {
   setClock(createFixedClock());
   await seedDemo();
@@ -27,6 +30,16 @@ beforeAll(async () => {
     await tx.execute(
       sql`update public.profiles set onboarding_step = 'done' where id = ${created.id}::uuid`,
     );
+    await tx.execute(sql`
+      insert into public.formations (
+        id, owner_id, title, monogram, status, start_date, end_date, volume_hours, objectives
+      )
+      values (
+        ${STRANGER_FORMATION}::uuid, ${created.id}::uuid, 'Formation fuseau', 'FF', 'active',
+        '2026-11-01', '2026-11-30', 20, '{operational}'::public.formation_objective[]
+      )
+      on conflict (id) do nothing
+    `);
     return created;
   });
   stranger = { userId: user.id };
@@ -50,8 +63,10 @@ describe('[SPEC-704] getAgenda', () => {
     expect(agenda.today).toBe('2026-11-11');
     expect(agenda.timezone).toBe('Europe/Paris');
     expect(agenda.formations.map((formation) => formation.title)).toEqual([
-      'SAP S/4HANA Finance',
+      'Anglais professionnel B2',
+      "Excel pour l'analyse financière",
       'Gestion de projet agile',
+      'SAP S/4HANA Finance',
     ]);
     // Les 22 créneaux rédigés de la semaine (marges et créneaux agile compris).
     expect(agenda.slots).toHaveLength(22);
@@ -84,8 +99,9 @@ describe('[SPEC-704] getAgenda', () => {
       formation: 'all',
     });
     if (!result.ok) throw new Error('agenda indisponible');
-    // Union des périodes des formations visibles : 26 oct. – 11 déc.
-    expect(result.value.bounds).toEqual({ start: '2026-10-26', end: '2026-12-11' });
+    // Union des périodes des formations visibles (deux formations terminées comprises) :
+    // 8 mai – 11 déc.
+    expect(result.value.bounds).toEqual({ start: '2026-05-08', end: '2026-12-11' });
     // La légende du mini-calendrier suit la formation en cours du menu (SAP).
     expect(result.value.captionPeriod).toEqual({ start: '2026-11-02', end: '2026-12-11' });
     expect(result.value.studyDays).toEqual([1, 2, 3, 4, 5]);
@@ -106,7 +122,7 @@ describe('[SPEC-704] getAgenda', () => {
     expect(result.value.bounds).toEqual({ start: '2026-10-26', end: '2026-11-27' });
     expect(result.value.captionPeriod).toEqual({ start: '2026-10-26', end: '2026-11-27' });
     expect(result.value.totals).toEqual({
-      plannedMinutes: 30,
+      plannedMinutes: 60,
       doneMinutes: 30,
       marginsRemaining: 0,
     });
@@ -191,18 +207,13 @@ describe('[SPEC-704] getAgenda', () => {
     if (stranger === null) throw new Error('utilisateur de test absent');
     const userId = stranger.userId;
     await serviceDb().execute(sql`
-      insert into public.formations (id, owner_id, title, monogram, status, start_date, end_date, volume_hours, objectives, exam_format)
-      values ('11111111-1111-4111-8111-111111111111'::uuid, ${userId}::uuid, 'Formation fuseau', 'FF', 'active', '2026-11-01', '2026-11-30', 20, '{}'::text[], null)
-      on conflict (id) do nothing
-    `);
-    await serviceDb().execute(sql`
       update public.profiles set timezone = 'America/Toronto' where id = ${userId}::uuid
     `);
     await serviceDb().execute(sql`
       insert into public.schedule_slots (user_id, formation_id, kind, title, starts_at, ends_at, status, created_by)
       values
-        (${userId}::uuid, '11111111-1111-4111-8111-111111111111'::uuid, 'course', 'Cours 09:00', '2026-11-11T14:00:00Z'::timestamptz, '2026-11-11T15:00:00Z'::timestamptz, 'planned', 'planner'),
-        (${userId}::uuid, '11111111-1111-4111-8111-111111111111'::uuid, 'course', 'À cheval sur minuit', '2026-11-11T04:30:00Z'::timestamptz, '2026-11-11T05:30:00Z'::timestamptz, 'planned', 'planner')
+        (${userId}::uuid, ${STRANGER_FORMATION}::uuid, 'course', 'Cours 09:00', '2026-11-11T14:00:00Z'::timestamptz, '2026-11-11T15:00:00Z'::timestamptz, 'planned', 'planner'),
+        (${userId}::uuid, ${STRANGER_FORMATION}::uuid, 'course', 'À cheval sur minuit', '2026-11-11T04:30:00Z'::timestamptz, '2026-11-11T05:30:00Z'::timestamptz, 'planned', 'planner')
     `);
 
     const result = await getAgenda(context(userId, createFixedClock()), {
@@ -234,9 +245,9 @@ describe('[SPEC-704] getAgenda', () => {
     await serviceDb().execute(sql`
       insert into public.schedule_slots (user_id, formation_id, kind, title, starts_at, ends_at, status, created_by)
       values
-        (${userId}::uuid, '11111111-1111-4111-8111-111111111111'::uuid, 'course', 'Déplacé', '2026-11-11T14:00:00Z'::timestamptz, '2026-11-11T15:00:00Z'::timestamptz, 'moved', 'planner'),
-        (${userId}::uuid, '11111111-1111-4111-8111-111111111111'::uuid, 'course', 'Annulé', '2026-11-11T16:00:00Z'::timestamptz, '2026-11-11T17:00:00Z'::timestamptz, 'cancelled', 'planner'),
-        (${userId}::uuid, '11111111-1111-4111-8111-111111111111'::uuid, 'course', 'Manqué', '2026-11-10T14:00:00Z'::timestamptz, '2026-11-10T15:00:00Z'::timestamptz, 'missed', 'planner')
+        (${userId}::uuid, ${STRANGER_FORMATION}::uuid, 'course', 'Déplacé', '2026-11-11T14:00:00Z'::timestamptz, '2026-11-11T15:00:00Z'::timestamptz, 'moved', 'planner'),
+        (${userId}::uuid, ${STRANGER_FORMATION}::uuid, 'course', 'Annulé', '2026-11-11T16:00:00Z'::timestamptz, '2026-11-11T17:00:00Z'::timestamptz, 'cancelled', 'planner'),
+        (${userId}::uuid, ${STRANGER_FORMATION}::uuid, 'course', 'Manqué', '2026-11-10T14:00:00Z'::timestamptz, '2026-11-10T15:00:00Z'::timestamptz, 'missed', 'planner')
     `);
     const result = await getAgenda(context(userId, createFixedClock()), {
       from: '2026-11-10',
