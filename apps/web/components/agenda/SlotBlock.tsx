@@ -55,13 +55,22 @@ export function SlotBlock({
   const timeLabel = `${clockOf(slot.startMinutes)} – ${clockOf(slot.endMinutes)}`;
   const long = slot.endMinutes - slot.startMinutes >= 60;
   const missed = slot.status === 'missed';
-  const ariaLabel = t.slotAria(
+  const showTime = long || mode === 'jour';
+  // ET-9 — the accessible name starts with the visible text (title, time, meta), then adds the
+  // type, the day and the status: axe `label-content-name-mismatch` (WCAG 2.5.3) requires the
+  // visible label to be part of the name, and no information relies on colour alone.
+  const metaText =
+    slot.meta === null ? null : missed ? `${slot.meta} · ${t.missedMention}` : slot.meta;
+  const mentionOnly = mode === 'jour' && slot.meta === null && missed ? t.missedMention : null;
+  const ariaLabel = [
     slot.title,
+    ...(showTime ? [timeLabel] : []),
+    ...(metaText === null ? [] : [metaText]),
+    ...(mentionOnly === null ? [] : [mentionOnly]),
     slot.typeLabel,
     longDayLabel(slot.date),
-    timeLabel,
     STATUS_LABELS[slot.status],
-  );
+  ].join(', ');
   const position =
     mode === 'semaine' && top !== undefined && height !== undefined
       ? { top, height, left, width }
@@ -101,19 +110,10 @@ export function SlotBlock({
         boxShadow: selected ? `0 0 0 2px ${colors.ink}` : undefined,
       }}
     >
-      <span className="text-12 leading-1.3 font-700">{slot.title}</span>
-      {(long || mode === 'jour') && (
-        <span className="text-11.5 leading-1.3 tabular-nums">{timeLabel}</span>
-      )}
-      {(long || mode === 'jour') && slot.meta !== null && (
-        <span className="text-11.5 leading-1.3">
-          {slot.meta}
-          {missed ? ` · ${t.missedMention}` : ''}
-        </span>
-      )}
-      {mode === 'jour' && slot.meta === null && missed && (
-        <span className="text-11.5 leading-1.3">{t.missedMention}</span>
-      )}
+      <span className="text-12 leading-1.3 font-700">{slot.title}</span>{' '}
+      {showTime && <span className="text-11.5 leading-1.3 tabular-nums">{timeLabel}</span>}{' '}
+      {showTime && metaText !== null && <span className="text-11.5 leading-1.3">{metaText}</span>}{' '}
+      {mentionOnly !== null && <span className="text-11.5 leading-1.3">{mentionOnly}</span>}
     </button>
   );
 }

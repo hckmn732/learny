@@ -63,6 +63,7 @@ export function AgendaToolbar({
         variant="solid"
         aria-label={t.viewsGroupLabel}
         value={view}
+        optionTestId={(value) => `agenda-view-${value}`}
         onValueChange={(value) => {
           onViewChange(value);
         }}

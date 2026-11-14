@@ -101,11 +101,17 @@ export function AgendaScreen({
   const [selection, setSelection] = useState<string | null>(initialState.creneau);
 
   const window = agendaFetchWindow(state.view, state.date);
+  // The server preload only seeds the initial query key: handing it to another key (formation,
+  // date or view change) would serve the previous period for the whole staleTime (EF-1, EF-3).
+  const isInitialQuery =
+    state.view === initialState.view &&
+    state.date === initialState.date &&
+    state.formation === initialState.formation;
   const query = useQuery({
     queryKey: ['agenda', window.from, window.to, state.formation],
     queryFn: () =>
       api.agendaGet({ query: { from: window.from, to: window.to, formation: state.formation } }),
-    ...(initialData === null ? {} : { initialData }),
+    ...(initialData === null || !isInitialQuery ? {} : { initialData }),
     staleTime: 30_000,
     retry: false,
   });

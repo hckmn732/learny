@@ -6,9 +6,9 @@
 import type { AgendaSlot } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
-import { civilDayNumber } from '../../lib/agenda/dates';
+import { AGENDA_DAYS, civilDayNumber, civilDow } from '../../lib/agenda/dates';
 import { gridHours, layoutDay, type GridHours } from '../../lib/agenda/grid';
-import { dayHeaderAriaLabel, shortDayLabel } from '../../lib/agenda/range';
+import { dayHeaderAriaLabel } from '../../lib/agenda/range';
 
 import { NowLine } from './NowLine';
 import { SlotBlock } from './SlotBlock';
@@ -56,9 +56,12 @@ export function WeekView({
               }}
               className="flex cursor-pointer flex-col items-center gap-4 border-0 bg-transparent px-8 pt-10 pb-12 text-center font-[inherit]"
             >
-              <span className="text-12 font-600 tracking-0.06em text-ink-muted uppercase">
-                {shortDayLabel(day.date)}
-              </span>
+              <span
+                aria-hidden="true"
+                className="text-12 font-600 tracking-0.06em text-ink-muted uppercase"
+              >
+                {AGENDA_DAYS[civilDow(day.date)]}
+              </span>{' '}
               <span
                 className={
                   day.date === today

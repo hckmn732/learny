@@ -66,50 +66,61 @@ export function MonthView({
           const chips = daySlots.slice(0, 3);
           const more = daySlots.length - chips.length;
           return (
-            <button
+            <div
               key={day}
-              type="button"
-              data-testid={`agenda-month-cell-${day}`}
-              aria-label={t.monthCellAria(longDayLabel(day), daySlots.length)}
-              onClick={() => {
-                onPickDay(day);
-              }}
-              className="flex min-h-104 min-w-0 cursor-pointer flex-col items-stretch gap-4 rounded-14 p-8 text-left font-[inherit]"
+              className="relative flex min-h-104 min-w-0 flex-col items-stretch rounded-14"
               style={{
                 border: isToday ? `2px solid ${colors.ink}` : `1px solid ${colors.divider}`,
                 background: weekend ? colors['surface-weekend'] : colors.surface,
               }}
             >
-              <span
-                className={
-                  isToday
-                    ? 'inline-flex size-26 items-center justify-center rounded-full bg-ink text-13 font-700 text-white'
-                    : `inline-flex h-26 items-center text-13 font-600 ${weekend ? 'text-on-dark-muted' : 'text-ink'}`
-                }
+              {/* The clickable cell is an empty overlay button: its accessible name (day + number
+                  of activities) then satisfies WCAG 2.5.3 without the chips being announced twice
+                  (EF-8, ET-9). */}
+              <button
+                type="button"
+                data-testid={`agenda-month-cell-${day}`}
+                aria-label={t.monthCellAria(longDayLabel(day), daySlots.length)}
+                onClick={() => {
+                  onPickDay(day);
+                }}
+                className="absolute inset-0 z-1 min-h-104 cursor-pointer rounded-14 border-0 bg-transparent p-0 font-[inherit]"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none flex min-w-0 flex-col items-stretch gap-4 p-8"
               >
-                {String(civilDayNumber(day))}
-              </span>
-              {chips.map((slot) => {
-                const style = agendaSlotStyle(slot.kind);
-                return (
-                  <span
-                    key={slot.id}
-                    className="block max-w-full overflow-hidden text-ellipsis rounded-6 px-6 py-2 text-11 font-600 whitespace-nowrap"
-                    style={{
-                      background: style.background,
-                      color: style.text,
-                      border: style.border ?? '0',
-                      opacity: slot.status === 'done' ? 0.7 : undefined,
-                    }}
-                  >
-                    {chipLabel(slot, currentFormationId, sigleOfFormation)}
-                  </span>
-                );
-              })}
-              {more > 0 && (
-                <span className="text-11 font-600 text-ink-muted">{t.monthMore(more)}</span>
-              )}
-            </button>
+                <span
+                  className={
+                    isToday
+                      ? 'inline-flex size-26 items-center justify-center rounded-full bg-ink text-13 font-700 text-white'
+                      : `inline-flex h-26 items-center text-13 font-600 ${weekend ? 'text-on-dark-muted' : 'text-ink'}`
+                  }
+                >
+                  {String(civilDayNumber(day))}
+                </span>
+                {chips.map((slot) => {
+                  const style = agendaSlotStyle(slot.kind);
+                  return (
+                    <span
+                      key={slot.id}
+                      className="block max-w-full overflow-hidden text-ellipsis rounded-6 px-6 py-2 text-11 font-600 whitespace-nowrap"
+                      style={{
+                        background: style.background,
+                        color: style.text,
+                        border: style.border ?? '0',
+                        opacity: slot.status === 'done' ? 0.7 : undefined,
+                      }}
+                    >
+                      {chipLabel(slot, currentFormationId, sigleOfFormation)}
+                    </span>
+                  );
+                })}
+                {more > 0 && (
+                  <span className="text-11 font-600 text-ink-muted">{t.monthMore(more)}</span>
+                )}
+              </div>
+            </div>
           );
         })}
       </div>
