@@ -184,11 +184,17 @@ export async function activeFormationCount(
   exceptFormationId: string,
 ): Promise<number> {
   const rows = await tx.execute<{ count: number }>(sql`
-    select count(*)::int as count
-    from public.formations
-    where owner_id = ${userId}::uuid
-      and status = 'active'
-      and id <> ${exceptFormationId}::uuid
+    select count(distinct f.id)::int as count
+    from public.formations f
+    left join public.groups g on g.formation_id = f.id
+    left join public.group_members gm
+      on gm.group_id = g.id
+     and gm.user_id = ${userId}::uuid
+     and gm.member_status = 'active'
+     and gm.left_at is null
+    where f.status = 'active'
+      and f.id <> ${exceptFormationId}::uuid
+      and (f.owner_id = ${userId}::uuid or gm.user_id is not null)
   `);
   return rows[0]?.count ?? 0;
 }

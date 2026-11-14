@@ -47,10 +47,16 @@ async function readHeader(tx: DbTx, userId: string): Promise<HeaderDto> {
     select p.first_name,
            p.last_name,
            p.email,
-           (select count(*)::int
+           (select count(distinct f.id)::int
               from public.formations f
-             where f.owner_id = p.id
-               and f.status = 'active') as active_count,
+              left join public.groups g on g.formation_id = f.id
+              left join public.group_members gm
+                on gm.group_id = g.id
+               and gm.user_id = p.id
+               and gm.member_status = 'active'
+               and gm.left_at is null
+             where f.status = 'active'
+               and (f.owner_id = p.id or gm.user_id is not null)) as active_count,
            (select count(*)::int
               from public.notifications n
              where n.user_id = p.id

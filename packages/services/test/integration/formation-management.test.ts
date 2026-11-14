@@ -16,6 +16,7 @@ import {
   resumeFormation,
   switchCurrentFormation,
 } from '../../src/formations';
+import { getHeader } from '../../src/header';
 import { getProgrammeScreenState } from '../../src/programme';
 import { getSidebar, selectCurrentFormation } from '../../src/sidebar';
 
@@ -429,6 +430,10 @@ describe('[SPEC-618] gestion des formations', () => {
       set planned_start = '2026-11-02'::date, planned_end = '2026-11-08'::date
       where formation_id = ${seeded.formationId}::uuid
     `);
+    const header = await getHeader(member.ctx);
+    expect(header.ok).toBe(true);
+    if (header.ok) expect(header.value.activeFormationCount).toBe(1);
+
     const programme = await getProgrammeScreenState(member.ctx, seeded.formationId);
     expect(programme.ok).toBe(true);
     if (programme.ok)
