@@ -167,12 +167,15 @@ export function SettingsView({ initialState, initialError, requestId }: Settings
   );
   const pollRef = useRef<number | null>(null);
 
-  // BR-SET-01 — the active tab follows the hash; an unknown hash opens Profil (CL-3) without
-  // losing the focus of the page.
+  // BR-SET-01 — the active tab follows the hash; Profil is the default and an unknown hash is
+  // normalised in the URL without navigation or focus loss (CL-3, ET-5).
   useEffect(() => {
     const apply = () => {
       const next = settingsTabFromHash(window.location.hash);
       setTab((previous) => (previous === next ? previous : next));
+      if (window.location.hash !== `#${next}`) {
+        window.history.replaceState(null, '', `#${next}`);
+      }
     };
     apply();
     window.addEventListener('hashchange', apply);
@@ -617,60 +620,63 @@ export function SettingsView({ initialState, initialError, requestId }: Settings
               </div>
             </Card>
 
-            <div
-              className="flex flex-col gap-8 rounded-24 border border-solid border-border bg-surface px-24 py-16"
-              data-testid="privacy-state"
-            >
-              <p
-                className="m-0 flex flex-wrap items-center gap-8 text-14 font-600"
-                data-testid="data-export-status"
-                role="status"
+            {exportState === null && deletionScheduledFor === null ? null : (
+              <div
+                className="flex flex-col gap-8 rounded-24 border border-solid border-border bg-surface px-24 py-16"
+                data-testid="privacy-state"
               >
-                {exportState === null
-                  ? t.privacy.exportNone
-                  : exportStatusLabel(exportState.status)}
-                {exportState?.status === 'done' ? (
-                  <>
-                    <a
-                      className="text-14 font-700 text-ink underline"
-                      data-testid="data-export-download"
-                      href={`/api/v1/me/exports/${exportState.id}?download=1`}
+                <p
+                  className="m-0 flex flex-wrap items-center gap-8 text-14 font-600"
+                  data-testid="data-export-status"
+                  role="status"
+                >
+                  {exportState === null
+                    ? t.privacy.exportNone
+                    : exportStatusLabel(exportState.status)}
+                  {exportState?.status === 'done' ? (
+                    <>
+                      <a
+                        className="text-14 font-700 text-ink underline"
+                        data-testid="data-export-download"
+                        href={`/api/v1/me/exports/${exportState.id}?download=1`}
+                      >
+                        {t.privacy.download}
+                      </a>
+                      <span className="font-400 text-ink-muted">
+                        {t.privacy.size(sizeOf(exportState.sizeBytes))}{' '}
+                        {exportState.expiresAt === null
+                          ? null
+                          : t.privacy.expires(dayDateLabel(exportState.expiresAt, me.timezone))}
+                      </span>
+                    </>
+                  ) : null}
+                </p>
+                <p
+                  className="m-0 flex flex-wrap items-center gap-12 text-14 font-600"
+                  data-testid="deletion-status"
+                  role="status"
+                >
+                  {deletionScheduledFor === null
+                    ? t.privacy.deleteNone
+                    : t.privacy.deleteScheduled(
+                        longDateTimeLabel(deletionScheduledFor, me.timezone),
+                      )}
+                  {deletionScheduledFor === null ? null : (
+                    <Button
+                      data-testid="deletion-cancel"
+                      disabled={privacyBusy}
+                      onClick={() => {
+                        void cancelDeletion();
+                      }}
+                      size="sm"
+                      variant="outline"
                     >
-                      {t.privacy.download}
-                    </a>
-                    <span className="font-400 text-ink-muted">
-                      {t.privacy.size(sizeOf(exportState.sizeBytes))}{' '}
-                      {exportState.expiresAt === null
-                        ? null
-                        : t.privacy.expires(dayDateLabel(exportState.expiresAt, me.timezone))}
-                    </span>
-                  </>
-                ) : null}
-              </p>
-              <p
-                className="m-0 flex flex-wrap items-center gap-12 text-14 font-600"
-                data-testid="deletion-status"
-                role="status"
-              >
-                {deletionScheduledFor === null
-                  ? t.privacy.deleteNone
-                  : t.privacy.deleteScheduled(longDateTimeLabel(deletionScheduledFor, me.timezone))}
-                {deletionScheduledFor === null ? null : (
-                  <Button
-                    data-testid="deletion-cancel"
-                    disabled={privacyBusy}
-                    onClick={() => {
-                      void cancelDeletion();
-                    }}
-                    size="sm"
-                    variant="outline"
-                  >
-                    {t.privacy.cancelTrigger}
-                  </Button>
-                )}
-              </p>
-            </div>
-
+                      {t.privacy.cancelTrigger}
+                    </Button>
+                  )}
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap items-center justify-end gap-12">
               {error === null ? null : <FormError data-testid="profile-error">{error}</FormError>}
               {saved ? (
