@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-14T11:27:04.616Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-14T14:18:34.769Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 98 |
+| Terminées | 99 |
 | En cours | 0 |
 | Prêtes | 16 |
-| En attente de dépendances | 18 |
+| En attente de dépendances | 17 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **74.2 %** |
-| Avancement V1 | 79.0 % |
+| **Avancement global** | **75.0 %** |
+| Avancement V1 | 79.8 % |
 | Prochaine action | start SPEC-702 — Jeux : association, remise en ordre, classement, texte à trous |
 
 ## Phases et checkpoints
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 7/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 8/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -129,7 +129,7 @@
 | [SPEC-618](../specs/p6-parcours/SPEC-618-gestion-des-formations-changer-pause-limite-de-tro.md) | Gestion des formations : changer, pause, limite de trois | P6 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-603, SPEC-407 |
 | [SPEC-701](../specs/p7-engagement/SPEC-701-quiz-global-session-du-jour-et-cartes-de-rappel.md) | Quiz global : session du jour et cartes de rappel | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-406, SPEC-503, SPEC-411, SPEC-513 |
 | [SPEC-702](../specs/p7-engagement/SPEC-702-jeux-association-remise-en-ordre-classement-texte-.md) | Jeux : association, remise en ordre, classement, texte à trous | P7 | 🟢 ready | 0 | — | SPEC-701 |
-| [SPEC-703](../specs/p7-engagement/SPEC-703-micro-seance.md) | Micro-séance | P7 | 🟢 ready | 0 | — | SPEC-701 |
+| [SPEC-703](../specs/p7-engagement/SPEC-703-micro-seance.md) | Micro-séance | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-701 |
 | [SPEC-704](../specs/p7-engagement/SPEC-704-agenda-vues-filtres-et-detail.md) | Agenda : vues, filtres et détail | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-407, SPEC-304, SPEC-411 |
 | [SPEC-705](../specs/p7-engagement/SPEC-705-agenda-deplacer-et-reajuster-le-planning.md) | Agenda : déplacer et réajuster le planning | P7 | 🟢 ready | 0 | — | SPEC-704 |
 | [SPEC-706](../specs/p7-engagement/SPEC-706-notifications-generation-des-rappels.md) | Notifications : génération des rappels | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-209, SPEC-306, SPEC-411 |
@@ -139,7 +139,7 @@
 | [SPEC-710](../specs/p7-engagement/SPEC-710-parametres-automatismes.md) | Paramètres : Automatismes | P7 | 🟢 ready | 0 | — | SPEC-707, SPEC-711 |
 | [SPEC-711](../specs/p7-engagement/SPEC-711-moteur-d-automatismes.md) | Moteur d'automatismes | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-203, SPEC-209, SPEC-108, SPEC-411 |
 | [SPEC-712](../specs/p7-engagement/SPEC-712-automatisme-1-reprise-apres-decrochage.md) | Automatisme 1 : reprise après décrochage | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-407 |
-| [SPEC-713](../specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md) | Automatisme 2 : micro-séance de secours | P7 | ⏳ waiting | 0 | — | SPEC-711, SPEC-703 |
+| [SPEC-713](../specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md) | Automatisme 2 : micro-séance de secours | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-703 |
 | [SPEC-714](../specs/p7-engagement/SPEC-714-automatisme-3-echauffement.md) | Automatisme 3 : échauffement | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-410 |
 | [SPEC-715](../specs/p7-engagement/SPEC-715-automatisme-4-remediation-apres-un-quiz-rate.md) | Automatisme 4 : remédiation après un quiz raté | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-612 |
 | [SPEC-716](../specs/p7-engagement/SPEC-716-automatisme-5-jeu-choisi-selon-la-lacune.md) | Automatisme 5 : jeu choisi selon la lacune | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-406 |
