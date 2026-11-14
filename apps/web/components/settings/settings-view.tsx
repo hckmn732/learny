@@ -9,6 +9,7 @@ import {
   SETTINGS_TAB_IDS,
   settingsTabFromHash,
   type CourseLanguage,
+  type NotificationSettingsDto,
   type SettingsState,
   type SettingsTab,
   type StudyRhythm,
@@ -35,6 +36,8 @@ import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
 import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
+
+import { NotificationSettingsTab } from './notification-settings-tab';
 
 const t = fr.settings;
 const onboardingT = fr.onboarding;
@@ -112,6 +115,9 @@ function chipClass(selected: boolean): string {
 export interface SettingsViewProps {
   initialState: SettingsState | null;
   initialError: boolean;
+  initialNotifications: NotificationSettingsDto | null;
+  notificationError: boolean;
+  pushPublicKey?: string | undefined;
   requestId?: string;
 }
 
@@ -140,7 +146,14 @@ function valuesOf(state: SettingsState): ProfileValues {
 }
 
 /** SCR-15 — settings screen: ARIA tabs in the URL hash, Profil tab, data and privacy (SPEC-707). */
-export function SettingsView({ initialState, initialError, requestId }: SettingsViewProps) {
+export function SettingsView({
+  initialState,
+  initialError,
+  initialNotifications,
+  notificationError,
+  pushPublicKey,
+  requestId,
+}: SettingsViewProps) {
   const router = useRouter();
   const [state, setState] = useState<SettingsState | null>(initialState);
   const [values, setValues] = useState<ProfileValues>(
@@ -705,7 +718,17 @@ export function SettingsView({ initialState, initialError, requestId }: Settings
           </div>
         </TabsContent>
 
-        {(['notifications', 'automatismes', 'modeles'] as const).map((id) => (
+        <TabsContent className="mt-24" value="notifications">
+          <NotificationSettingsTab
+            email={me.email}
+            initial={initialNotifications}
+            initialError={notificationError}
+            publicKey={pushPublicKey}
+            {...(requestId === undefined ? {} : { requestId })}
+          />
+        </TabsContent>
+
+        {(['automatismes', 'modeles'] as const).map((id) => (
           <TabsContent className="mt-0" key={id} value={id}>
             <Card as="section" data-testid={`settings-panel-${id}`}>
               <div className="flex items-start gap-12">
