@@ -8,6 +8,7 @@
     "./ai": "./src/ai/index.ts",
     "./destination": "./src/auth/destination.ts",
     "./home/derive": "./src/home/derive.ts",
+    "./warmup/derive": "./src/warmup/derive.ts",
     "./billing": "./src/billing/index.ts",
     "./ai/credentials": "./src/ai/credentials-service.ts",
     "./ai/qualify": "./src/ai/qualify-model.ts",
