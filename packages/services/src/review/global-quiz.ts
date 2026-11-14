@@ -42,7 +42,7 @@ import { requireUser, toResult } from '../resources/result';
 
 import { buildRationale, type RationaleGapItem } from './rationale';
 
-// Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0318).
+// Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0319).
 //
 // One activity per (owner, formation, local day, mode): the first `GET` of the day creates the
 // session under a consultative lock, the following ones replay the same DTO. The pure engine
@@ -158,7 +158,7 @@ function parseSessionConfig(raw: unknown): SessionConfig | null {
 
 const WEEKDAY_LABELS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 
-/** Lowercase weekday name of a civil day (EF-4 note, ADR-0318 §8: never « demain »). */
+/** Lowercase weekday name of a civil day (EF-4 note, ADR-0319 §8: never « demain »). */
 function weekdayLabel(day: string): string {
   const parsed = new Date(`${day}T12:00:00Z`);
   return Number.isNaN(parsed.getTime()) ? day : (WEEKDAY_LABELS[parsed.getUTCDay()] ?? day);
@@ -195,10 +195,14 @@ function modulesLabel(positions: readonly number[]): string {
   if (sorted.length === 0) return '';
   if (sorted.length === 1) return `Module ${String(sorted[0])}`;
   if (sorted.length === 2) return `Modules ${String(sorted[0])} et ${String(sorted[1])} mêlés`;
-  return `Modules ${sorted.map((position) => String(position)).join(', ')} mêlés`;
+  const head = sorted
+    .slice(0, -1)
+    .map((position) => String(position))
+    .join(', ');
+  return `Modules ${head} et ${String(sorted[sorted.length - 1])} mêlés`;
 }
 
-/** ET-8 + ADR-0318 §4 — cost of one game: its format price, 30 s per additional notion. */
+/** ET-8 + ADR-0319 §4 — cost of one game: its format price, 30 s per additional notion. */
 function itemCostSec(format: string, notionCount: number): number {
   const costs = REVIEW_FORMAT_SECONDS as Record<string, number>;
   return (costs[format] ?? 60) + REVIEW_EXTRA_NOTION_SECONDS * Math.max(0, notionCount - 1);
@@ -293,6 +297,7 @@ async function loadActiveBricks(
     where b.owner_id = ${userId}::uuid
       and b.formation_id = ${formationId}::uuid
       and b.status = 'active'
+      and b.purpose in ('review', 'bank')
   `);
 }
 
@@ -378,7 +383,7 @@ interface DrawnItem {
 }
 
 /**
- * ADR-0318 §1 — groups the per-notion items of the pure draw into game items served by one brick
+ * ADR-0319 §1 — groups the per-notion items of the pure draw into game items served by one brick
  * each: the first drawn notion that a still-unused brick can serve opens the item, the later
  * drawn notions of the same brick join it. The order follows the engine order, hence the rail.
  */
@@ -447,6 +452,11 @@ function displayLabelOf(
     return notionById.get(notionIds[0] ?? '')?.label ?? 'Notion';
   }
   const payload = brick.payload;
+  const title =
+    typeof payload === 'object' && payload !== null && 'title' in payload
+      ? (payload as { title?: unknown }).title
+      : null;
+  if (typeof title === 'string' && title.trim().length > 0) return title.trim();
   const instruction =
     typeof payload === 'object' && payload !== null && 'instruction' in payload
       ? (payload as { instruction?: unknown }).instruction
@@ -601,8 +611,12 @@ export function getOrCreateTodaySession(
         seenFingerprints,
       );
       if (grouped.items.length === 0) {
-        // CL-7 / CL-8 — every drawn notion waits for a bank variant: nothing is written.
-        return { dto: emptyDto(today, formationId, 'empty'), refill: [] as const };
+        // CL-7 / CL-8 — every drawn notion waits for a bank variant: nothing is written, but the
+        // exhausted formats still ask SPEC-513 for new variants.
+        return {
+          dto: emptyDto(today, formationId, 'empty'),
+          refill: [...grouped.exhausted, ...refillOf(drawn.exhausted)],
+        };
       }
 
       const selectedCount = new Set(grouped.items.flatMap((item) => item.notionIds)).size;
@@ -719,7 +733,7 @@ export function getOrCreateTodaySession(
       };
       return {
         dto: await buildDto(ctx, tx, userId, timeZone, today, formation, activity, attempt),
-        refill: grouped.exhausted,
+        refill: [...grouped.exhausted, ...refillOf(drawn.exhausted)],
       };
     });
 
@@ -735,6 +749,20 @@ export function getOrCreateTodaySession(
       );
     }
     return created.dto;
+  });
+}
+
+/** Formats the engine reported as exhausted, mapped to the refill request of SPEC-513 (CL-7). */
+function refillOf(
+  exhausted: readonly {
+    notionId: string;
+    requiredFormats: readonly string[];
+    availableFormats: readonly string[];
+  }[],
+): { notionId: string; format: string }[] {
+  return exhausted.flatMap((entry) => {
+    const format = entry.requiredFormats[0] ?? entry.availableFormats[0];
+    return format === undefined ? [] : [{ notionId: entry.notionId, format }];
   });
 }
 
@@ -975,7 +1003,7 @@ async function buildDto(
         update public.activities
         set config = jsonb_set(
           config,
-          ${['items', String(item.position), 'withdrawn']}::text[],
+          array[${'items'}, ${String(item.position)}, ${'withdrawn'}],
           'true'::jsonb
         )
         where id = ${activity.id}::uuid
@@ -1113,7 +1141,9 @@ async function buildDto(
     },
     note:
       config.deferredCount > 0
-        ? `${wasDueWord(config.dueCount)} aujourd’hui : ${notionWord(config.deferredCount)} reportée${config.deferredCount === 1 ? '' : 's'} à ${weekdayLabel(config.deferredTo)} pour que vos révisions restent sous ${String(config.capMinutes)} min.`
+        ? `${wasDueWord(config.dueCount)} aujourd’hui : ${String(config.deferredCount)} ${
+            config.deferredCount === 1 ? 'est reportée' : 'sont reportées'
+          } à ${weekdayLabel(config.deferredTo)} pour que vos révisions restent sous ${String(config.capMinutes)} min.`
         : `${notionWord(config.dueCount)} à revoir aujourd’hui, lacunes en priorité.`,
     rationale: config.rationale,
     items: dtoItems,
@@ -1557,7 +1587,7 @@ export function completeReviewSession(
       const streakDays = hasAnswer
         ? await bumpStreak(tx, userId, day)
         : await currentStreak(tx, userId);
-      const nextSessionAt = await nextPlannedSlot(tx, activity.formation_id, now);
+      const nextSessionAt = await nextPlannedSlot(tx, activity.formation_id, now, day, timeZone);
 
       const summary = ReviewSummaryDtoSchema.parse({
         reviewedCount,
@@ -1578,7 +1608,7 @@ export function completeReviewSession(
 }
 
 /**
- * BR-GAM-01, ADR-0318 §7 — incremental streak: a qualifying day not yet counted extends the
+ * BR-GAM-01, ADR-0319 §7 — incremental streak: a qualifying day not yet counted extends the
  * streak by one when the previous local day qualified, otherwise it restarts at one. The day is
  * then marked as counted (`streak_computed_on`), which makes replays idempotent.
  */
@@ -1615,8 +1645,18 @@ async function currentStreak(tx: DbTx, userId: string): Promise<number> {
   return rows[0]?.streak_days ?? 0;
 }
 
-/** First planned global-quiz slot of the formation after `now` (EF-11). */
-async function nextPlannedSlot(tx: DbTx, formationId: string, now: Date): Promise<string | null> {
+/**
+ * First planned global-quiz slot of the formation after `now` and after the civil day of the
+ * closure (EF-11): the session being finished, the next one is the following day's slot, which is
+ * the « demain, 17:00 » text of the demonstration.
+ */
+async function nextPlannedSlot(
+  tx: DbTx,
+  formationId: string,
+  now: Date,
+  day: string,
+  timeZone: string,
+): Promise<string | null> {
   const rows = await tx.execute<{ starts_at: string }>(sql`
     select starts_at
     from public.schedule_slots
@@ -1624,6 +1664,7 @@ async function nextPlannedSlot(tx: DbTx, formationId: string, now: Date): Promis
       and kind = 'global_quiz'
       and status = 'planned'
       and starts_at > ${now.toISOString()}::timestamptz
+      and (starts_at at time zone ${timeZone})::date > ${day}::date
     order by starts_at asc
     limit 1
   `);

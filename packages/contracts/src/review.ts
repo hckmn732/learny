@@ -70,9 +70,10 @@ export type ReviewItemDto = z.infer<typeof ReviewItemDtoSchema>;
 export const GlobalQuizHeaderSchema = z
   .object({
     notionCount: z.number().int().min(0),
-    modulesLabel: z.string().min(1),
+    /** Empty strings when nothing is due: the header is not rendered in that state. */
+    modulesLabel: z.string(),
     estimatedMinutes: z.number().int().min(0),
-    subtitle: z.string().min(1),
+    subtitle: z.string(),
   })
   .strict();
 export type GlobalQuizHeader = z.infer<typeof GlobalQuizHeaderSchema>;
@@ -86,8 +87,9 @@ export type ReviewRationale = z.infer<typeof ReviewRationaleSchema>;
 /** Session of the day: an existing one (idempotent read) or a freshly created one (EF-2). */
 export const GlobalQuizSessionDtoSchema = z
   .object({
-    sessionId: Uuid,
-    attemptId: Uuid,
+    /** Null in the `empty` and `paused` states: no activity and no attempt exist (CL-1, EF-12). */
+    sessionId: Uuid.nullable(),
+    attemptId: Uuid.nullable(),
     formationId: Uuid,
     forDate: CivilDate,
     mode: GlobalQuizModeSchema,

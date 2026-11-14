@@ -368,7 +368,7 @@ export const ENGINE = {
 
 /**
  * ET-8 — estimated duration of one review game by brick format (SPEC-701). `30` seconds more
- * cover every additional notion served by the same brick (ADR-0318 §4): a multi-notion game costs
+ * cover every additional notion served by the same brick (ADR-0319 §4): a multi-notion game costs
  * its format price once, then the extra notions.
  */
 export const REVIEW_FORMAT_SECONDS = {
