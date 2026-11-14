@@ -1,0 +1,63 @@
+<testsuites id="" name="" tests="4" failures="0" skipped="1" errors="0" time="41.723803">
+<testsuite name="p7/spec-724.spec.ts" timestamp="2026-11-14T12:39:24.524Z" hostname="desktop" tests="3" failures="0" skipped="1" time="7.05" errors="0">
+<testcase name="parcours SPEC-724 @SPEC-724" classname="p7/spec-724.spec.ts" time="4.921">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-724-parcours-SPEC-724-SPEC-724-desktop/attachments/axe-3a162452908b98e1410483cf01b4a4dd7f6edee2.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-parcours-SPEC-724-SPEC-724-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-parcours-SPEC-724-SPEC-724-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-parcours-SPEC-724-SPEC-724-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-parcours-SPEC-724-SPEC-724-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-17 groupe desktop @SPEC-724 @visual" classname="p7/spec-724.spec.ts" time="1.747">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/attachments/visual-spec-724-groupe-desktop-28b8ef09116e4eca17dfa7c52c9271d39be51fd6.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/attachments/axe-97115e02abf87716a41ace1af89e9409cfc531cd.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-17-groupe-desktop-SPEC-724-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SCR-17 groupe mobile @SPEC-724 @visual @mobile" classname="p7/spec-724.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p7/spec-724.spec.ts" timestamp="2026-11-14T12:39:24.524Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.494" errors="0">
+<testcase name="conformité SCR-17 groupe mobile @SPEC-724 @visual @mobile" classname="p7/spec-724.spec.ts" time="1.494">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/attachments/visual-spec-724-groupe-mobile-dc08dc229a8c5a0a5c6de7ac973baf8a42b83d0a.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/attachments/axe-58e96a5b819432c1eb9ea80fb628029df4bd4195.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-724-conformité-SCR-3260a-bile-SPEC-724-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
