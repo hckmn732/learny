@@ -36,6 +36,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
   const [status, setStatus] = useState<QualificationStatus>('untested');
   const [credentialId, setCredentialId] = useState<string | null>(null);
   const [modelId, setModelId] = useState<string | null>(null);
+  const [report, setReport] = useState<QualificationReport | null>(null);
   const [error, setError] = useState<string | null>(null);
   const epoch = useRef(0);
   const running = useRef(false);
@@ -46,6 +47,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
     setStatus('untested');
     setCredentialId(null);
     setModelId(null);
+    setReport(null);
     setError(null);
   }, []);
 
@@ -119,6 +121,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
         setStatus('timeout');
         return;
       }
+      setReport(report);
       setStatus(statusOf(report));
     } catch {
       if (current === epoch.current) setStatus('refused');
@@ -128,7 +131,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
     }
   }, [credentialId, model, modelId, options, status]);
 
-  return { status, error, credentialId, modelId, test, assignAll, reset, setError };
+  return { status, error, credentialId, modelId, report, test, assignAll, reset, setError };
 }
 
 export type TaskModelAssignment = TaskModelDto;

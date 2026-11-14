@@ -22932,6 +22932,983 @@
         "summary": "Qualifie un modèle personnel : connexion, outil, sortie structurée et treize briques (SPEC-506)."
       }
     },
+    "/api/v1/me/ai/models": {
+      "get": {
+        "operationId": "me.ai.models.get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "guard": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "alertThresholdPercent": {
+                          "maximum": 100,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "managedDailyCapUsd": {
+                          "pattern": "^\\d{1,6}\\.\\d{6}$",
+                          "type": "string"
+                        },
+                        "personalKeysExemptFromCap": {
+                          "const": true,
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "personalKeysExemptFromCap",
+                        "managedDailyCapUsd",
+                        "alertThresholdPercent"
+                      ],
+                      "type": "object"
+                    },
+                    "providers": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "dataNote": {
+                            "maxLength": 300,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "failure": {
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "brickType": {
+                                    "anyOf": [
+                                      {
+                                        "maxLength": 64,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "step": {
+                                    "enum": [
+                                      "connection",
+                                      "tools",
+                                      "structured",
+                                      "bricks"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "step",
+                                  "brickType"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "keyMasked": {
+                            "anyOf": [
+                              {
+                                "maxLength": 96,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "label": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "models": {
+                            "items": {
+                              "maxLength": 200,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "maxItems": 10,
+                            "type": "array"
+                          },
+                          "origin": {
+                            "enum": [
+                              "provided",
+                              "personal"
+                            ],
+                            "type": "string"
+                          },
+                          "outsideEu": {
+                            "type": "boolean"
+                          },
+                          "provider": {
+                            "enum": [
+                              "anthropic",
+                              "openai",
+                              "mistral",
+                              "deepseek",
+                              "openai_compatible",
+                              "local"
+                            ],
+                            "type": "string"
+                          },
+                          "providerLabel": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "qualifiedAt": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "enum": [
+                              "qualified",
+                              "unqualified",
+                              "pending"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "origin",
+                          "provider",
+                          "providerLabel",
+                          "label",
+                          "keyMasked",
+                          "status",
+                          "outsideEu",
+                          "dataNote",
+                          "models",
+                          "qualifiedAt",
+                          "failure"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 11,
+                      "type": "array"
+                    },
+                    "tasks": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "available": {
+                            "type": "boolean"
+                          },
+                          "credentialId": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "defaultModelId": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "modelId": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "options": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "credentialId": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "maxLength": 120,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "modelId": {
+                                  "maxLength": 200,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "origin": {
+                                  "enum": [
+                                    "provided",
+                                    "personal"
+                                  ],
+                                  "type": "string"
+                                },
+                                "outsideEu": {
+                                  "type": "boolean"
+                                },
+                                "provider": {
+                                  "enum": [
+                                    "anthropic",
+                                    "openai",
+                                    "mistral",
+                                    "deepseek",
+                                    "openai_compatible",
+                                    "local"
+                                  ],
+                                  "type": "string"
+                                },
+                                "providerLabel": {
+                                  "maxLength": 80,
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "modelId",
+                                "label",
+                                "origin",
+                                "credentialId",
+                                "provider",
+                                "providerLabel",
+                                "outsideEu"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 50,
+                            "type": "array"
+                          },
+                          "origin": {
+                            "enum": [
+                              "provided",
+                              "personal"
+                            ],
+                            "type": "string"
+                          },
+                          "outsideEu": {
+                            "type": "boolean"
+                          },
+                          "provider": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "anthropic",
+                                  "openai",
+                                  "mistral",
+                                  "deepseek",
+                                  "openai_compatible",
+                                  "local"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "providerLabel": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "requiredCapabilities": {
+                            "items": {
+                              "enum": [
+                                "tools",
+                                "structured",
+                                "web_search",
+                                "passage_refs",
+                                "vision"
+                              ],
+                              "type": "string"
+                            },
+                            "maxItems": 5,
+                            "type": "array"
+                          },
+                          "selection": {
+                            "enum": [
+                              "default",
+                              "custom"
+                            ],
+                            "type": "string"
+                          },
+                          "task": {
+                            "enum": [
+                              "programme",
+                              "course",
+                              "gaps",
+                              "tutor",
+                              "light"
+                            ],
+                            "type": "string"
+                          },
+                          "unavailableReason": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "credential_not_qualified",
+                                  "personal_model_missing"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "task",
+                          "requiredCapabilities",
+                          "defaultModelId",
+                          "selection",
+                          "modelId",
+                          "origin",
+                          "credentialId",
+                          "provider",
+                          "providerLabel",
+                          "outsideEu",
+                          "available",
+                          "unavailableReason",
+                          "options"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 5,
+                      "minItems": 5,
+                      "type": "array"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tasks",
+                    "providers",
+                    "guard",
+                    "updatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "État de l’onglet Modèles d’IA : cinq tâches, modèles qualifiés, fournisseurs masqués et garde-fou (SPEC-709)."
+      },
+      "patch": {
+        "operationId": "me.ai.models.update",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "action": {
+                        "const": "assign",
+                        "type": "string"
+                      },
+                      "credentialId": {
+                        "anyOf": [
+                          {
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "modelId": {
+                        "maxLength": 200,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "task": {
+                        "enum": [
+                          "programme",
+                          "course",
+                          "gaps",
+                          "tutor",
+                          "light"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "action",
+                      "task",
+                      "modelId"
+                    ],
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "action": {
+                        "const": "reset",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "action"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "guard": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "alertThresholdPercent": {
+                          "maximum": 100,
+                          "minimum": 1,
+                          "type": "integer"
+                        },
+                        "managedDailyCapUsd": {
+                          "pattern": "^\\d{1,6}\\.\\d{6}$",
+                          "type": "string"
+                        },
+                        "personalKeysExemptFromCap": {
+                          "const": true,
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "personalKeysExemptFromCap",
+                        "managedDailyCapUsd",
+                        "alertThresholdPercent"
+                      ],
+                      "type": "object"
+                    },
+                    "providers": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "dataNote": {
+                            "maxLength": 300,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "failure": {
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "brickType": {
+                                    "anyOf": [
+                                      {
+                                        "maxLength": 64,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "step": {
+                                    "enum": [
+                                      "connection",
+                                      "tools",
+                                      "structured",
+                                      "bricks"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "step",
+                                  "brickType"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "keyMasked": {
+                            "anyOf": [
+                              {
+                                "maxLength": 96,
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "label": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "models": {
+                            "items": {
+                              "maxLength": 200,
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "maxItems": 10,
+                            "type": "array"
+                          },
+                          "origin": {
+                            "enum": [
+                              "provided",
+                              "personal"
+                            ],
+                            "type": "string"
+                          },
+                          "outsideEu": {
+                            "type": "boolean"
+                          },
+                          "provider": {
+                            "enum": [
+                              "anthropic",
+                              "openai",
+                              "mistral",
+                              "deepseek",
+                              "openai_compatible",
+                              "local"
+                            ],
+                            "type": "string"
+                          },
+                          "providerLabel": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "qualifiedAt": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "status": {
+                            "enum": [
+                              "qualified",
+                              "unqualified",
+                              "pending"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "origin",
+                          "provider",
+                          "providerLabel",
+                          "label",
+                          "keyMasked",
+                          "status",
+                          "outsideEu",
+                          "dataNote",
+                          "models",
+                          "qualifiedAt",
+                          "failure"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 11,
+                      "type": "array"
+                    },
+                    "tasks": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "available": {
+                            "type": "boolean"
+                          },
+                          "credentialId": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "defaultModelId": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "modelId": {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "options": {
+                            "items": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "credentialId": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "label": {
+                                  "maxLength": 120,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "modelId": {
+                                  "maxLength": 200,
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "origin": {
+                                  "enum": [
+                                    "provided",
+                                    "personal"
+                                  ],
+                                  "type": "string"
+                                },
+                                "outsideEu": {
+                                  "type": "boolean"
+                                },
+                                "provider": {
+                                  "enum": [
+                                    "anthropic",
+                                    "openai",
+                                    "mistral",
+                                    "deepseek",
+                                    "openai_compatible",
+                                    "local"
+                                  ],
+                                  "type": "string"
+                                },
+                                "providerLabel": {
+                                  "maxLength": 80,
+                                  "minLength": 1,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "modelId",
+                                "label",
+                                "origin",
+                                "credentialId",
+                                "provider",
+                                "providerLabel",
+                                "outsideEu"
+                              ],
+                              "type": "object"
+                            },
+                            "maxItems": 50,
+                            "type": "array"
+                          },
+                          "origin": {
+                            "enum": [
+                              "provided",
+                              "personal"
+                            ],
+                            "type": "string"
+                          },
+                          "outsideEu": {
+                            "type": "boolean"
+                          },
+                          "provider": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "anthropic",
+                                  "openai",
+                                  "mistral",
+                                  "deepseek",
+                                  "openai_compatible",
+                                  "local"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "providerLabel": {
+                            "maxLength": 80,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "requiredCapabilities": {
+                            "items": {
+                              "enum": [
+                                "tools",
+                                "structured",
+                                "web_search",
+                                "passage_refs",
+                                "vision"
+                              ],
+                              "type": "string"
+                            },
+                            "maxItems": 5,
+                            "type": "array"
+                          },
+                          "selection": {
+                            "enum": [
+                              "default",
+                              "custom"
+                            ],
+                            "type": "string"
+                          },
+                          "task": {
+                            "enum": [
+                              "programme",
+                              "course",
+                              "gaps",
+                              "tutor",
+                              "light"
+                            ],
+                            "type": "string"
+                          },
+                          "unavailableReason": {
+                            "anyOf": [
+                              {
+                                "enum": [
+                                  "credential_not_qualified",
+                                  "personal_model_missing"
+                                ],
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "task",
+                          "requiredCapabilities",
+                          "defaultModelId",
+                          "selection",
+                          "modelId",
+                          "origin",
+                          "credentialId",
+                          "provider",
+                          "providerLabel",
+                          "outsideEu",
+                          "available",
+                          "unavailableReason",
+                          "options"
+                        ],
+                        "type": "object"
+                      },
+                      "maxItems": 5,
+                      "minItems": 5,
+                      "type": "array"
+                    },
+                    "updatedAt": {
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tasks",
+                    "providers",
+                    "guard",
+                    "updatedAt"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Affecte un modèle qualifié à une tâche ou revient aux modèles fournis, sans supprimer les clés (SPEC-709)."
+      }
+    },
     "/api/v1/me/ai/task-models": {
       "put": {
         "operationId": "me.ai.task-models.update",
