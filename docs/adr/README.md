@@ -198,3 +198,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0327](ADR-0327-decisions-d-implementation-de-l-automatisme-echauffement.md) | Décisions d'implémentation de l'automatisme échauffement | Déduite | SPEC-714, SPEC-711, SPEC-410, SPEC-411, ADR-0190, ADR-0193 |
 | [ADR-0328](ADR-0328-contrats-et-comportements-de-l-onglet-modeles-d-ia.md) | Contrats et comportements de l'onglet Modèles d'IA | Déduite | SPEC-709, SPEC-504, SPEC-506, ADR-0154, ADR-0013 |
 | [ADR-0329](ADR-0329-pile-complete-learny-et-supabase-pour-coolify.md) | Pile complète Learny et Supabase pour Coolify | Déduite | SPEC-012, SPEC-013 |
+| [ADR-0330](ADR-0330-pile-de-qa-coolify-avec-le-jeu-de-demonstration.md) | Pile de QA Coolify avec le jeu de démonstration | Déduite | SPEC-115, SPEC-012 |

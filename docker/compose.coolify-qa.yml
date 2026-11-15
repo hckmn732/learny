@@ -1,0 +1,386 @@
+# Pile de QA de Learny pour Coolify : même architecture que docker/compose.coolify.yml (Supabase,
+# Inngest, worker, web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
+# simulés pour la recette visuelle et manuelle.
+#
+# Différences avec la production :
+#   - APP_ENV=local : IA, Stripe et notifications simulées (aucune clé de fournisseur) ;
+#   - horloge figée au 2026-11-11T12:20:00Z (ADR-0047), l'instant du jeu de démonstration ;
+#   - job `seed` : jeu de démonstration SPEC-115 (Alex Perrin, SAP S/4HANA Finance…), rechargé à
+#     chaque déploiement ;
+#   - Mailpit : boîte aux lettres de test, protégée par mot de passe, pour lire les e-mails
+#     d'inscription et les liens de connexion ;
+#   - pages de démonstration /_dev activées.
+#
+# Coolify : application « Docker Compose » depuis le dépôt Git, Base Directory `/docker`, Docker
+# Compose Location `/compose.coolify-qa.yml`. Guide : docs/operations/coolify-qa.md.
+# Ne jamais y mettre de données réelles : les comptes et contenus y sont fictifs.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '5'
+
+x-app-environment: &app-environment
+  NODE_ENV: production
+  APP_ENV: local
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  APP_VERSION: ${APP_VERSION:-}
+  GIT_COMMIT: ${SOURCE_COMMIT:-}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
+  DB_LOG_QUERIES: 'false'
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
+  TRUST_PROXY: 'true'
+  LLM_MODE: mock
+  STRIPE_MODE: mock
+  PUSH_MODE: mock
+  JOBS_MODE: inngest
+  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
+  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
+  INNGEST_BASE_URL: http://inngest:8288
+  INNGEST_DEV: '0'
+  EMAIL_MODE: smtp
+  SMTP_HOST: mailpit
+  SMTP_PORT: '1025'
+  EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  VAPID_SUBJECT: mailto:qa@learny.test
+  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:-Learny (environnement de QA)}
+  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:-Adresse fictive de recette}
+  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:-qa@learny.test}
+  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:-Serveur Coolify de recette}
+  CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
+  ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
+
+services:
+  db:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: db
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -h 127.0.0.1 -d postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    restart: unless-stopped
+    logging: *logging
+
+  migrate:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: migrate
+    depends_on:
+      db:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+    restart: 'no'
+    exclude_from_hc: true
+    logging: *logging
+
+  # Jeu de démonstration SPEC-115, idempotent (identifiants fixes) : chaque déploiement remet les
+  # données de démonstration dans leur état de référence ; les comptes créés à la main restent.
+  # La garde de la seed n'accepte qu'un hôte local ou `.test` : le lien donne à `db` l'alias
+  # `db.learny.test`, visible de ce seul conteneur.
+  seed:
+    build:
+      context: ..
+      dockerfile: docker/qa-seed.Dockerfile
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      # GoTrue crée ses colonnes de auth.users au démarrage ; la seed y insère les comptes.
+      auth:
+        condition: service_healthy
+    links:
+      - db:db.learny.test
+    environment:
+      APP_ENV: test
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db.learny.test:5432/postgres
+      CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
+    restart: 'no'
+    exclude_from_hc: true
+    logging: *logging
+
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.197.0
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: '9999'
+      API_EXTERNAL_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      GOTRUE_SITE_URL: ${LEARNY_PUBLIC_APP_URL:?}
+      GOTRUE_URI_ALLOW_LIST: ${LEARNY_PUBLIC_APP_URL:?},${LEARNY_PUBLIC_APP_URL:?}/**
+      GOTRUE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      GOTRUE_JWT_EXP: '3600'
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_DB_NAMESPACE: auth
+      GOTRUE_DB_MIGRATIONS_PATH: /usr/local/etc/auth/migrations
+      GOTRUE_DISABLE_SIGNUP: 'false'
+      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: http://auth-templates:8080/confirmation.html
+      GOTRUE_MAILER_TEMPLATES_MAGIC_LINK: http://auth-templates:8080/magic-link.html
+      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: Confirmez votre adresse e-mail
+      GOTRUE_MAILER_SUBJECTS_MAGIC_LINK: Votre lien de connexion à Learny
+      # Tous les e-mails d'Auth arrivent dans Mailpit.
+      GOTRUE_SMTP_HOST: mailpit
+      GOTRUE_SMTP_PORT: '1025'
+      GOTRUE_SMTP_ADMIN_EMAIL: qa@learny.test
+      GOTRUE_SMTP_SENDER_NAME: Learny QA
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:9999/health']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v16.5
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_USE_LEGACY_GUCS: 'false'
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      PGRST_APP_SETTINGS_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+    exclude_from_hc: true
+    restart: unless-stopped
+    logging: *logging
+
+  storage:
+    image: public.ecr.aws/supabase/storage-api:v1.84.19
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      FILE_SIZE_LIMIT: '52428800'
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: 'false'
+    volumes:
+      - storage-data:/var/lib/storage
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O- http://127.0.0.1:5000/status >/dev/null || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  # API publique de Supabase. Domaine Coolify sur le port 8000 (URL = LEARNY_PUBLIC_SUPABASE_URL).
+  kong:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: kong
+    depends_on:
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 127.0.0.1:8001
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    expose:
+      - '8000'
+    healthcheck:
+      test: ['CMD', 'kong', 'health']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  auth-templates:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: auth-templates
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    expose:
+      - '8080'
+    restart: unless-stopped
+    logging: *logging
+
+  # Boîte aux lettres de test. Domaine Coolify sur le port 8025 ; l'interface et l'API exigent
+  # MAILPIT_UI_AUTH (« utilisateur:motdepasse »). Les messages ne sont pas conservés au redémarrage.
+  mailpit:
+    image: axllent/mailpit:v1.33.1
+    environment:
+      MP_UI_AUTH: ${MAILPIT_UI_AUTH:?}
+      MP_SMTP_AUTH_ACCEPT_ANY: '1'
+      MP_SMTP_AUTH_ALLOW_INSECURE: '1'
+      MP_MAX_MESSAGES: '2000'
+    expose:
+      - '8025'
+    restart: unless-stopped
+    logging: *logging
+
+  inngest:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: inngest
+    command:
+      - inngest
+      - start
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8288'
+      - --sdk-url
+      - http://worker:3001/api/inngest
+      - --event-key
+      - ${INNGEST_EVENT_KEY:?}
+      - --signing-key
+      - ${INNGEST_SIGNING_KEY:?}
+      - --sqlite-dir
+      - /var/lib/inngest
+    expose:
+      - '8288'
+    volumes:
+      - inngest-data:/var/lib/inngest
+    healthcheck:
+      test: ['CMD', 'perl', '/healthcheck.pl']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+    restart: unless-stopped
+    logging: *logging
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/worker.Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION:-qa}
+        GIT_COMMIT: ${SOURCE_COMMIT:-unknown}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+      PORT: '3001'
+    expose:
+      - '3001'
+    depends_on:
+      inngest:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck.mjs']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    restart: unless-stopped
+    logging: *logging
+
+  # Application web. Domaine Coolify sur le port 3000 (URL = LEARNY_PUBLIC_APP_URL).
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+        NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+        APP_VERSION: ${APP_VERSION:-qa}
+        GIT_COMMIT: ${SOURCE_COMMIT:-unknown}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+      - /app/apps/web/.next/cache:size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+    expose:
+      - '3000'
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+      inngest:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck-web.mjs']
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  db-data:
+  storage-data:
+  inngest-data:
