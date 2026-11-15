@@ -27,7 +27,9 @@ x-app-environment: &app-environment
   APP_ENV: production
   LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-}
-  GIT_COMMIT: ${SOURCE_COMMIT:-}
+  # Empreinte du commit livré (7 à 40 caractères hexadécimaux), facultative. Pas SOURCE_COMMIT :
+  # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
+  GIT_COMMIT: ${GIT_COMMIT:-}
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}

@@ -54,7 +54,9 @@ Quand votre nom de domaine sera actif, remplacez-les par exemple par `qa.learn-y
 3. **Domaines** : les trois de la section 2, et aucun pour les autres services (`inngest` et `db`
    en particulier).
 4. **Variables** : section 4.
-5. **Deploy**. Le premier build prend 15 à 20 minutes (surtout le build Next.js).
+5. **Advanced** : désactivez *Inject Build Args to Dockerfile* (sinon Coolify passe tous les
+   secrets en arguments de build ; voir `docs/operations/coolify.md` §3).
+6. **Deploy**. Le premier build prend 10 à 20 minutes (surtout le build Next.js).
 
 La QA est une ressource distincte de la production : elle a ses propres volumes, secrets et
 domaines. Elle peut tourner sur le même serveur.

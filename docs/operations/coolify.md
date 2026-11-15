@@ -89,7 +89,11 @@ ensuite sans procédure :
    authentification) et `db`.
 5. **Variables d'environnement** : section 4. Coolify bloque le déploiement tant qu'une variable
    obligatoire (`${VAR:?}` dans le Compose) est vide.
-6. **Deploy**.
+6. **Advanced** : désactivez *Inject Build Args to Dockerfile*. Par défaut, Coolify ajoute toutes
+   les variables, secrets compris, comme arguments de build des Dockerfiles, où elles peuvent
+   rester dans l'historique des images ; les Dockerfiles de Learny déclarent déjà les seuls
+   arguments publics dont ils ont besoin.
+7. **Deploy**.
 
 Conseil : désactivez le déploiement automatique à chaque push et déployez à la main (ou depuis un
 tag) une fois la CI verte. Coolify déploie ce qui se trouve sur la branche, sans attendre la CI.
@@ -150,8 +154,10 @@ Le Compose configure déjà Supabase Auth avec les modèles Learny (`supabase/te
 `APP_VERSION` (affichée par `/api/v1/health`), `LOG_LEVEL` (`info`), `DATABASE_POOL_MAX` (`10`
 par conteneur), `GOTRUE_DISABLE_SIGNUP` (`false` ; `true` ferme les inscriptions),
 `STORAGE_FILE_SIZE_LIMIT` (50 Mo), `SEARCH_API_KEY`, `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`,
-`ALLOWED_ORIGINS`, `APP_ENCRYPTION_KEY_PREVIOUS` (rotation). `GIT_COMMIT` est repris de
-`SOURCE_COMMIT`, fourni par Coolify.
+`ALLOWED_ORIGINS`, `APP_ENCRYPTION_KEY_PREVIOUS` (rotation), `GIT_COMMIT` (empreinte du commit
+livré, 7 à 40 caractères hexadécimaux, affichée par `/api/v1/health`). Ne reliez pas `GIT_COMMIT`
+à `SOURCE_COMMIT` : Coolify y met `unknown` quand le commit n'est pas inclus au build, et
+l'application refuse alors de démarrer.
 
 Le Compose fixe le reste : `APP_ENV=production`, `LLM_MODE=live`, `PUSH_MODE=live`,
 `JOBS_MODE=inngest`, `EMAIL_MODE=resend`, `TRUST_PROXY=true` (derrière le proxy Coolify) et
