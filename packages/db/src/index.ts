@@ -6,6 +6,7 @@ export {
   buildUserClaims,
   closeDb,
   createPostgresDatabase,
+  pingDatabase,
   serviceDb,
   userDb,
 } from './client';

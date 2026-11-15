@@ -187,6 +187,14 @@ export function serviceDb(): Db {
   return serviceHandle().db;
 }
 
+/**
+ * Health probe of the web (SPEC-006 EF-2, SPEC-010 EF-5): one `select 1` on the shared pool. It
+ * exposes no data and no connection detail, so the web can probe without importing `serviceDb`.
+ */
+export async function pingDatabase(): Promise<void> {
+  await serviceHandle().db.execute(sql`select 1`);
+}
+
 /** Closes the shared pool (integration tests, worker shutdown). Idempotent. */
 export async function closeDb(): Promise<void> {
   const current = service;

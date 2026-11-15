@@ -14,8 +14,8 @@ test('accueil provisoire et santé @SPEC-001', async ({ page, request }) => {
   const health = await request.get('/api/v1/health');
   expect(health.status()).toBe(200);
   expect(health.headers()['cache-control']).toBe('no-store');
-  // SPEC-006 enriched the body; before SPEC-101 the database is not configured (status degraded).
-  expect(await health.json()).toMatchObject({ status: 'degraded' });
+  // SPEC-006 enriched the body; SPEC-101 probes the configured test database (status ok).
+  expect(await health.json()).toMatchObject({ status: 'ok', database: 'ok' });
 
   const post = await request.post('/api/v1/health');
   expect(post.status()).toBe(405);
