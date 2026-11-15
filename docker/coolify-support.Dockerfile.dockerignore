@@ -3,5 +3,7 @@
 *
 !docker/apply-migrations.sh
 !docker/inngest-healthcheck.pl
+!docker/kong.selfhost.yml
+!docker/selfhost-init-roles.sql
 !supabase/migrations
 !supabase/templates
