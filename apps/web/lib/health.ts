@@ -12,11 +12,20 @@ export const HEALTH_PROBE_TIMEOUT_MS = 2000;
 const VERSION_PATTERN = /^[0-9A-Za-z][0-9A-Za-z.+_-]{0,63}$/;
 const COMMIT_PATTERN = /^[0-9a-f]{7,40}$/;
 
-// Wired by SPEC-101 once the database client exists. Until then the database is `not_configured`.
-let registeredQuery: DatabaseQuery | null = null;
+// Wired at startup by instrumentation.ts (lib/health-database.ts) once a database is configured;
+// otherwise the database is `not_configured`. Next.js compiles instrumentation and the routes into
+// separate bundles, each with its own copy of this module: the probe therefore lives on
+// `globalThis`, shared by every bundle of the server process.
+const DATABASE_QUERY_KEY = Symbol.for('learny.health.databaseQuery');
+
+type HealthRegistry = { [DATABASE_QUERY_KEY]?: DatabaseQuery | null };
+
+function registeredQuery(): DatabaseQuery | null {
+  return (globalThis as HealthRegistry)[DATABASE_QUERY_KEY] ?? null;
+}
 
 export function setDatabaseQuery(query: DatabaseQuery | null): void {
-  registeredQuery = query;
+  (globalThis as HealthRegistry)[DATABASE_QUERY_KEY] = query;
 }
 
 export interface HealthOptions {
@@ -71,7 +80,7 @@ export function buildInfo(env: Record<string, string | undefined> = process.env)
 }
 
 export async function getHealth(options: HealthOptions = {}): Promise<HealthResult> {
-  const query = options.query === undefined ? registeredQuery : options.query;
+  const query = options.query === undefined ? registeredQuery() : options.query;
   const database = await probeDatabase(query, options.timeoutMs);
   const build = buildInfo(options.env);
   const body = HealthResponse.parse({

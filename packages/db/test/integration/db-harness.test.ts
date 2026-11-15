@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { sql } from 'drizzle-orm';
 import { afterAll, describe, expect, it } from 'vitest';
 
-import { closeDb, createPostgresDatabase, serviceDb, userDb } from '../../src/client';
+import { closeDb, createPostgresDatabase, pingDatabase, serviceDb, userDb } from '../../src/client';
 import { asService, asUser, createTestUser, withRollback } from '../../src/testing';
 
 interface Row {
@@ -80,6 +80,10 @@ describe('[SPEC-101] harnais et clients', () => {
       const service = await tx.execute(sql`select auth.uid()::text as uid, current_user as role`);
       expect(service[0]).toEqual({ uid: null, role: 'postgres' });
     });
+  });
+
+  it('answers the web health probe with a select 1 on the shared pool (SPEC-006 EF-2)', async () => {
+    await expect(pingDatabase()).resolves.toBeUndefined();
   });
 
   it('does not leak claims between successive or concurrent transactions (CL-2, CL-8)', async () => {

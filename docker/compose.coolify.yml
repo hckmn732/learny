@@ -1,0 +1,378 @@
+# Pile complète de Learny pour Coolify : Supabase (Postgres, Auth, PostgREST, Storage, Kong),
+# Inngest, worker, web, migrations et modèles d'e-mails Auth, sur un seul réseau.
+#
+# Même architecture que docker/compose.selfhost.yml (SPEC-012), adaptée à Coolify :
+#   - aucun bind mount (Coolify ne monte pas les fichiers du dépôt) : la configuration versionnée
+#     est copiée dans les images de docker/coolify-support.Dockerfile ;
+#   - aucun port publié : Coolify route ses domaines vers `web` (port 3000) et `kong` (port 8000) ;
+#   - un seul réseau, celui que Coolify crée pour la ressource ;
+#   - production stricte : APP_ENV=production, modes réels, Supabase Auth avec les modèles Learny.
+#
+# Coolify : application « Docker Compose » depuis le dépôt Git, Base Directory `/docker`, Docker
+# Compose Location `/compose.coolify.yml`. Guide complet : docs/operations/coolify.md.
+#
+# Les secrets viennent des variables d'environnement de la ressource Coolify (générés par
+# tools/docker/selfhost-secrets.mjs). La syntaxe `:?` bloque le déploiement tant qu'une valeur
+# obligatoire manque ; la liste reprend PRODUCTION_REQUIRED_KEYS (packages/config), que
+# l'application revérifie au démarrage. Ne jamais supprimer les volumes : ils portent les données.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '5'
+
+x-app-environment: &app-environment
+  NODE_ENV: production
+  APP_ENV: production
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  APP_VERSION: ${APP_VERSION:-}
+  # Empreinte du commit livré (7 à 40 caractères hexadécimaux), facultative. Pas SOURCE_COMMIT :
+  # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
+  # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
+  GIT_COMMIT: ${GIT_COMMIT:-}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
+  DB_LOG_QUERIES: 'false'
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
+  TRUST_PROXY: 'true'
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+  LLM_MODE: live
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?}
+  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
+  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  JOBS_MODE: inngest
+  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
+  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
+  INNGEST_BASE_URL: http://inngest:8288
+  INNGEST_DEV: '0'
+  EMAIL_MODE: ${EMAIL_MODE:-resend}
+  EMAIL_FROM: ${EMAIL_FROM:?}
+  RESEND_API_KEY: ${RESEND_API_KEY:?}
+  SMTP_HOST: ${SMTP_HOST:?}
+  SMTP_PORT: ${SMTP_PORT:?}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:?}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:?}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:?}
+  PUSH_MODE: live
+  STRIPE_MODE: ${STRIPE_MODE:-live}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:?}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:?}
+  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:?}
+  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:?}
+  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:?}
+  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-2026-11-11}
+  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-11-11}
+  ENABLE_SDD_PAGES: 'false'
+
+services:
+  db:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: db
+    environment:
+      # L'image Supabase initialise ses rôles et schémas avec son superutilisateur supabase_admin ;
+      # remplacer POSTGRES_USER sauterait cette étape.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -h 127.0.0.1 -d postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    restart: unless-stopped
+    logging: *logging
+
+  # Job unique : applique supabase/migrations une seule fois par fichier, avec empreinte SHA-256
+  # (public.selfhost_schema_migrations). Rejoué à chaque déploiement, il n'applique que le nouveau.
+  migrate:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: migrate
+    depends_on:
+      db:
+        condition: service_healthy
+      # Storage crée le schéma `storage` au démarrage ; la migration de SPEC-114 y écrit.
+      storage:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+    restart: 'no'
+    exclude_from_hc: true
+    logging: *logging
+
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.197.0
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: '9999'
+      API_EXTERNAL_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      GOTRUE_SITE_URL: ${LEARNY_PUBLIC_APP_URL:?}
+      GOTRUE_URI_ALLOW_LIST: ${LEARNY_PUBLIC_APP_URL:?},${LEARNY_PUBLIC_APP_URL:?}/**
+      GOTRUE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      GOTRUE_JWT_EXP: '3600'
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_DB_NAMESPACE: auth
+      GOTRUE_DB_MIGRATIONS_PATH: /usr/local/etc/auth/migrations
+      GOTRUE_DISABLE_SIGNUP: ${GOTRUE_DISABLE_SIGNUP:-false}
+      GOTRUE_MAILER_AUTOCONFIRM: 'false'
+      # Modèles Learny (supabase/templates) : le lien mène à /api/v1/auth/callback?token_hash=…
+      GOTRUE_MAILER_TEMPLATES_CONFIRMATION: http://auth-templates:8080/confirmation.html
+      GOTRUE_MAILER_TEMPLATES_MAGIC_LINK: http://auth-templates:8080/magic-link.html
+      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: Confirmez votre adresse e-mail
+      GOTRUE_MAILER_SUBJECTS_MAGIC_LINK: Votre lien de connexion à Learny
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:?}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:?}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:?}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Learny}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:9999/health']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v16.5
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,storage,graphql_public}
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_DB_USE_LEGACY_GUCS: 'false'
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      PGRST_APP_SETTINGS_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+    # L'image PostgREST n'a pas d'outil de sonde : la santé de Coolify ne l'attend pas.
+    exclude_from_hc: true
+    restart: unless-stopped
+    logging: *logging
+
+  storage:
+    image: public.ecr.aws/supabase/storage-api:v1.84.19
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+      PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT:-52428800}
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: 'false'
+    volumes:
+      - storage-data:/var/lib/storage
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O- http://127.0.0.1:5000/status >/dev/null || exit 1']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  # API publique de Supabase : seule entrée vers Auth, PostgREST et Storage. Domaine Coolify sur le
+  # port 8000 (URL = LEARNY_PUBLIC_SUPABASE_URL).
+  kong:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: kong
+    depends_on:
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 127.0.0.1:8001
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+    expose:
+      - '8000'
+    healthcheck:
+      test: ['CMD', 'kong', 'health']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+    logging: *logging
+
+  # Modèles d'e-mails de Supabase Auth (supabase/templates), lus par `auth`. Aucun domaine public.
+  auth-templates:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: auth-templates
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    expose:
+      - '8080'
+    restart: unless-stopped
+    logging: *logging
+
+  # Inngest auto-hébergé (SQLite). Son interface n'a pas d'authentification : aucun domaine public.
+  inngest:
+    build:
+      context: ..
+      dockerfile: docker/coolify-support.Dockerfile
+      target: inngest
+    command:
+      - inngest
+      - start
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8288'
+      - --sdk-url
+      - http://worker:3001/api/inngest
+      - --event-key
+      - ${INNGEST_EVENT_KEY:?}
+      - --signing-key
+      - ${INNGEST_SIGNING_KEY:?}
+      - --sqlite-dir
+      - /var/lib/inngest
+    expose:
+      - '8288'
+    volumes:
+      - inngest-data:/var/lib/inngest
+    healthcheck:
+      test: ['CMD', 'perl', '/healthcheck.pl']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+    restart: unless-stopped
+    logging: *logging
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/worker.Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+      PORT: '3001'
+    expose:
+      - '3001'
+    depends_on:
+      inngest:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck.mjs']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    restart: unless-stopped
+    logging: *logging
+
+  # Application web. Domaine Coolify sur le port 3000 (URL = LEARNY_PUBLIC_APP_URL).
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+        NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+        APP_VERSION: ${APP_VERSION:-dev}
+    user: '1000:1000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+      - /app/apps/web/.next/cache:size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *app-environment
+    expose:
+      - '3000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+      rest:
+        condition: service_started
+      storage:
+        condition: service_healthy
+      inngest:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '/app/healthcheck-web.mjs']
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  db-data:
+  storage-data:
+  inngest-data:

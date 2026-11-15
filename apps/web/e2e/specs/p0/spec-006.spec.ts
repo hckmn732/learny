@@ -65,12 +65,13 @@ test('inspecte la santé @SPEC-006', async ({ page, request }) => {
   expect(health.headers()['cache-control']).toBe('no-store');
   expect(health.headers()['content-type']).toBe('application/json; charset=utf-8');
   const body = (await health.json()) as Record<string, unknown>;
+  // SPEC-101: the configured test database is probed (`select 1`).
   expect(body).toEqual({
-    status: 'degraded',
+    status: 'ok',
     version: 'dev',
     commit: 'unknown',
-    database: 'not_configured',
-    components: { database: 'not_configured', build: 'not_configured' },
+    database: 'ok',
+    components: { database: 'ok', build: 'not_configured' },
   });
   expect(scanText(JSON.stringify(body), 'health')).toEqual([]);
   expect((await request.post('/api/v1/health')).status()).toBe(405);
@@ -85,10 +86,10 @@ test('inspecte la santé @SPEC-006', async ({ page, request }) => {
   await expect(healthSection.getByRole('heading', { level: 2 })).toHaveText(
     'Santé de l’application',
   );
-  await expect(page.getByTestId('spec-006-health-status')).toHaveText('degraded');
+  await expect(page.getByTestId('spec-006-health-status')).toHaveText('ok');
   await expect(page.getByTestId('spec-006-health-version')).toHaveText('dev');
   await expect(page.getByTestId('spec-006-health-commit')).toHaveText('unknown');
-  await expect(page.getByTestId('spec-006-health-database')).toHaveText('not_configured');
+  await expect(page.getByTestId('spec-006-health-database')).toHaveText('ok');
   await expect(page.getByTestId('spec-006-probe-ok').getByRole('cell')).toHaveText([
     'Base saine',
     '200',

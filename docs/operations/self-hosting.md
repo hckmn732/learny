@@ -7,6 +7,9 @@ Supabase Cloud, Inngest Cloud) restent la cible de référence et sont décrits 
 `docs/operations/deployment.md` (SPEC-013). L'auto-hébergement convient à une installation privée
 ou à une évaluation, pas à une promesse de service sans exploitation.
 
+Pour déployer la même pile complète sur **Coolify** (une seule ressource, sans bind mount ni port
+publié), suivez plutôt `docs/operations/coolify.md` (`docker/compose.coolify.yml`, ADR-0329).
+
 Les décisions sont consignées dans ADR-0053, ADR-0227 et ADR-0228. Le fichier de référence est
 `docker/compose.selfhost.yml` ; les versions des images tierces y sont épinglées et ne doivent pas
 être remplacées par `latest`.
