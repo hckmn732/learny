@@ -197,3 +197,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0326](ADR-0326-version-de-plan-alternatives-et-apercu-des-reajustements-de-.md) | Version de plan, alternatives et aperçu des réajustements de l'agenda | Déduite | SPEC-705, SPEC-704, SPEC-407, ADR-0029, BR-AGE-05, BR-FOR-14, BR-AUT-11 |
 | [ADR-0327](ADR-0327-decisions-d-implementation-de-l-automatisme-echauffement.md) | Décisions d'implémentation de l'automatisme échauffement | Déduite | SPEC-714, SPEC-711, SPEC-410, SPEC-411, ADR-0190, ADR-0193 |
 | [ADR-0328](ADR-0328-contrats-et-comportements-de-l-onglet-modeles-d-ia.md) | Contrats et comportements de l'onglet Modèles d'IA | Déduite | SPEC-709, SPEC-504, SPEC-506, ADR-0154, ADR-0013 |
+| [ADR-0329](ADR-0329-production-sur-coolify-avec-un-supabase-coolify-existant.md) | Production sur Coolify avec un Supabase Coolify existant | Déduite | SPEC-012, SPEC-013 |

@@ -1,0 +1,7 @@
+# Contexte de docker/coolify-support.Dockerfile : liste blanche. BuildKit utilise ce fichier à la
+# place du .dockerignore racine (qui exclut supabase/). Seuls les fichiers copiés par l'image entrent.
+*
+!docker/apply-migrations.sh
+!docker/inngest-healthcheck.pl
+!supabase/migrations
+!supabase/templates
