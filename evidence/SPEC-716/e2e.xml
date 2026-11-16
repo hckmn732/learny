@@ -1,0 +1,41 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="54.78344800000001">
+<testsuite name="p7/automations/jeu-lacune.spec.ts" timestamp="2026-11-16T11:10:49.095Z" hostname="desktop" tests="2" failures="0" skipped="0" time="12.427" errors="0">
+<testcase name="automatisme 5 — test utilisateur › raison du choix dans le quiz global @SPEC-716" classname="p7/automations/jeu-lacune.spec.ts" time="8.062">
+<system-out>
+<![CDATA[{"level":"warn","timestamp":"2026-11-16T11:10:54.239Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/attachments/rail-raison-cd56e74ee418c08a1ba96039abc79d2509387b31.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/attachments/encadre-regle-c78921d73f1f938c07174d982e9fa835ceafed42.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/attachments/journal-jeu-consomme-235ae27f4deeaf899818ca1ed08a7984db8da9a4.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/attachments/axe-0e61ccc5ecffe37cc604a53f2f8a75e15b260786.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--535d8-ans-le-quiz-global-SPEC-716-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="automatisme 5 — démonstration › quiz global, raison du jeu @SPEC-716 @visual" classname="p7/automations/jeu-lacune.spec.ts" time="4.365">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--c67ae-ison-du-jeu-SPEC-716-visual-desktop/attachments/axe-e5a8b99c995fcc17df4d0182d34cb4feaac055cf.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--c67ae-ison-du-jeu-SPEC-716-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--c67ae-ison-du-jeu-SPEC-716-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--c67ae-ison-du-jeu-SPEC-716-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-jeu-lacune--c67ae-ison-du-jeu-SPEC-716-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
