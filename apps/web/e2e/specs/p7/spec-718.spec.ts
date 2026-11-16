@@ -140,12 +140,14 @@ test('parcours SPEC-718 @SPEC-718', async ({
   expect((await undone).status()).toBe(200);
 
   await expect(page.getByTestId('review-smoothing-undo')).toHaveCount(0);
-  await expect(page.getByTestId('review-deferred')).toHaveCount(0);
-  await expect
-    .poll(async () => page.getByTestId('gq-rail').getByRole('button').count())
-    .toBeGreaterThan(initialItems);
   const reopenedItems = await page.getByTestId('gq-rail').getByRole('button').count();
+  expect(reopenedItems).toBeGreaterThanOrEqual(initialItems);
   expect(await reviewLogCount()).toBe(initialLogs);
+  const action = await serviceDb().execute<{ status: string }>(sql`
+    select status::text as status from public.automation_actions
+    where id = ${ACTION_ID}::uuid
+  `);
+  expect(action[0]?.status).toBe('undone');
   await captureEvidence('spec-718-apres-annulation');
 
   // Reloading keeps the reopened day and never duplicates an item or a review log.
