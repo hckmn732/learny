@@ -122,7 +122,7 @@ export function WarmupCard({ warmup, onAnswer }: Readonly<WarmupCardProps>) {
       id="echauffement"
       data-testid="warmup-card"
       aria-labelledby="t-echauffement"
-      className="flex flex-[3_1_460px] flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22"
+      className="flex min-w-0 flex-1 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22"
     >
       <div data-testid="warmup-visual" className="flex flex-col gap-14">
         <div className="flex flex-wrap items-center justify-between gap-10">
@@ -286,7 +286,7 @@ export function WarmupPanel() {
 
   if (query.isError) {
     return (
-      <section className="flex flex-[3_1_460px] flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22">
+      <section className="flex min-w-0 flex-1 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22">
         <ErrorState
           data-testid="warmup-error"
           title={t.error}
@@ -297,7 +297,7 @@ export function WarmupPanel() {
   }
   if (query.data === undefined) {
     return (
-      <div data-testid="warmup-loading" className="flex flex-[3_1_460px] flex-col gap-14">
+      <div data-testid="warmup-loading" className="flex min-w-0 flex-1 flex-col gap-14">
         <SkeletonCard />
       </div>
     );
