@@ -216,6 +216,20 @@ test('conformité visuelle du quiz global @SPEC-701 @visual', async ({ page, axe
   await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-size', '30.6px');
   await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('font-weight', '600');
 
+  // SCR-10 predates the tutor-box additions of SPEC-716 (imposed-gap line) and SPEC-718 (daily
+  // cap and « Annuler le lissage »): they are hidden for the mockup comparison only, the baseline
+  // capture below keeps them.
+  const laterAdditions = [
+    page.getByTestId('global-quiz-tuned-gap'),
+    page.getByTestId('review-cap').locator('..'),
+  ];
+  for (const addition of laterAdditions) {
+    for (const element of await addition.all()) {
+      await element.evaluate((node) => {
+        node.setAttribute('style', 'display:none');
+      });
+    }
+  }
   const content = page.getByTestId('global-quiz-page');
   const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
   const comparison = compareWithReferenceRegion(
