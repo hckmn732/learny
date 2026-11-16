@@ -205,11 +205,19 @@ describe('[SPEC-711] service et API', () => {
     expect(missingField.status).toBe(400);
     expect(missingField.body.code).toBe('VALIDATION_FAILED');
 
-    // Aucune définition de `pause` n'est livrée par SPEC-711 : ses paramètres sont refusés.
+    // SPEC-710 complète le catalogue : `pause` accepte ses paramètres canoniques, une valeur hors
+    // schéma reste refusée sans écriture.
+    const pause = await call(UPDATE, {
+      method: 'PATCH',
+      url: '/api/v1/me/automations',
+      body: { automation: 'pause', params: { pauseUntil: '2026-11-22' } },
+    });
+    expect(pause.status).toBe(200);
+    expect(pause.body.params).toMatchObject({ pauseUntil: '2026-11-22' });
     const unknownSchema = await call(UPDATE, {
       method: 'PATCH',
       url: '/api/v1/me/automations',
-      body: { automation: 'pause', params: { minutes: 5 } },
+      body: { automation: 'pause', params: { pauseUntil: 'demain' } },
     });
     expect(unknownSchema.status).toBe(400);
     expect(unknownSchema.body.code).toBe('VALIDATION_FAILED');
