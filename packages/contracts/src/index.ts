@@ -53,6 +53,7 @@ export * from './parametres-notifications';
 export * from './parametres-modeles-d-ia';
 export * from './parametres-automatismes';
 export * from './billing';
+export * from './abonnement-a-l-ia-fournie-interface-et-plafond';
 export * from './bricks';
 export * from './cadrage';
 export * from './formation-management';
