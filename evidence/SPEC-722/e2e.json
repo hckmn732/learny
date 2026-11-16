@@ -1,0 +1,499 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-722/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-722",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-722/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3122",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-722/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3122",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-722/test-results/sdd/SPEC-722/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-722/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-722/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3122/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3122",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p7/spec-722.spec.ts",
+      "file": "p7/spec-722.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parcours SPEC-722 @SPEC-722",
+          "ok": true,
+          "tags": [
+            "SPEC-722"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T00:57:35.570Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/attachments/axe-d8aedb5835c4730fc4c6c4cdd328b2dae15165a2.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/attachments/axe-cb01abcf0a97d9aa08edbd2287cb9360c533196b.json"
+                    },
+                    {
+                      "name": "spec-722-parcours",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/attachments/spec-722-parcours-0fbe4b5e8736ffcecb877cd84fe413169e01b700.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-parcours-SPEC-722-SPEC-722-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8281a172e9f35d3cf07-71114bc76466a1ad6f5f",
+          "file": "p7/spec-722.spec.ts",
+          "line": 107,
+          "column": 1
+        },
+        {
+          "title": "états vide et erreur @SPEC-722",
+          "ok": true,
+          "tags": [
+            "SPEC-722"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5657,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T00:57:49.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/attachments/axe-a5e68608754c15e7bdc122c55d22d00e465c7fcb.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/attachments/axe-71e98a54729fe413f82720da51fa2162761e5e90.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-états-vide-et-erreur-SPEC-722-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8281a172e9f35d3cf07-7cd5f12ffd35704452dd",
+          "file": "p7/spec-722.spec.ts",
+          "line": 178,
+          "column": 1
+        },
+        {
+          "title": "conformité SCR-03 carte du tuteur @SPEC-722 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-722",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-tuteur-a-agi:0.1129"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7473,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T00:57:55.706Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-tuteur-a-agi:0.1129"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/attachments/axe-0e7a69f8371fcbd5f8224a2b3e05a8dc459b56cc.json"
+                    },
+                    {
+                      "name": "spec-722-carte-visuel",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/attachments/spec-722-carte-visuel-dac153c691f9e376ed606f99fc6f58bb5e65bc6a.png"
+                    },
+                    {
+                      "name": "SCR-03-tuteur-a-agi-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/attachments/SCR-03-tuteur-a-agi-side-by-side-dadb6b81a0f1bfb37fc9c96c831406d37297815e.png"
+                    },
+                    {
+                      "name": "SCR-03-tuteur-a-agi-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/attachments/SCR-03-tuteur-a-agi-diff-5632c35a5693d1bc9881d7010733af223a38ec56.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/attachments/axe-1adf2e56ac4c6143e3e3c44e666ffb0362aa95aa.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-722/test-results/artifacts/p7-spec-722-conformité-SCR-fb06b-e-du-tuteur-SPEC-722-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f8281a172e9f35d3cf07-ca16cdce4c6f442263ed",
+          "file": "p7/spec-722.spec.ts",
+          "line": 216,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T00:56:51.805Z",
+    "duration": 72086.671,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
