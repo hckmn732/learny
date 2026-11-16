@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { EchauffementParams, RepriseParams } from './automations';
+import { EchauffementParams, RemediationParams, RepriseParams } from './automations';
 import type { AutomationKey } from './moteur-d-automatismes';
 
 // Display catalogue of the ten automations of SCR-15 (SPEC-710 ET-4, BR-SET-04).
@@ -164,8 +164,8 @@ export const AUTOMATION_DISPLAY_DEFINITIONS: readonly AutomationDisplayDefinitio
     group: 'quiz',
     canUndo: true,
     settings: [
-      numberField('retryDelayHours', 24, [0, 12, 24, 48]),
-      stringField('mode', 'advised', ['advised', 'required']),
+      numberField('delayHours', 24, [0, 12, 24, 48]),
+      stringField('mode', 'advised', ['advised', 'mandatory']),
     ],
   },
   {
@@ -244,13 +244,6 @@ export const PlafondQuizParams = z.object({
 });
 export type PlafondQuizParams = z.infer<typeof PlafondQuizParams>;
 
-/** SPEC-715 — delay before the next attempt and mandatory or advised remediation. */
-export const RemediationParams = z.object({
-  retryDelayHours: z.union([z.literal(0), z.literal(12), z.literal(24), z.literal(48)]).default(24),
-  mode: z.enum(['advised', 'required']).default('advised'),
-});
-export type RemediationParams = z.infer<typeof RemediationParams>;
-
 /** SPEC-716 — the preferred game family when a gap is detected. */
 export const JeuLacuneParams = z.object({
   preference: z.enum(['vary', 'cards', 'matching']).default('vary'),
@@ -265,7 +258,7 @@ export const SprintParams = z.object({
 export type SprintParams = z.infer<typeof SprintParams>;
 
 /** SPEC-721 — the pause card of SCR-15: end date and return diagnostic. */
-export const PauseParams = z.object({
+export const PauseParams = z.strictObject({
   pauseUntil: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'date civile AAAA-MM-JJ attendue')

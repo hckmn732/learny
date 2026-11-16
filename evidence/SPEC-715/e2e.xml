@@ -1,0 +1,56 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="60.117385999999996">
+<testsuite name="p7/automations/remediation.spec.ts" timestamp="2026-11-16T07:38:28.659Z" hostname="desktop" tests="2" failures="0" skipped="0" time="16.545" errors="0">
+<testcase name="quiz raté : remédiation prête et tentative différée @SPEC-715" classname="p7/automations/remediation.spec.ts" time="10.591">
+<system-out>
+<![CDATA[{"level":"warn","timestamp":"2026-11-16T07:38:34.810Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/resultat-delai-cf4902bc5971ca0957b774de7720d2308cedf977.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/journal-remediation-bb4ab1126d31b14ff28027bc63f4d8bbabe54fee.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/resultat-apres-annulation-179ac0731c58911f2084df4a9269f876b82b4382.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/axe-75b549a9142dab8350fa1a3d5b22e932b4504d70.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/trace.zip]]
+]]>
+</system-out>
+<system-err>
+<![CDATA[(node:1628895) Warning: AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1628895) [AISDK_DEP_GENERATE_OBJECT] DeprecationWarning: AI SDK Warning: Deprecated: "generateObject". Use generateText with an output setting instead.
+]]>
+</system-err>
+</testcase>
+<testcase name="résultat avec délai, jetons @SPEC-715 @visual" classname="p7/automations/remediation.spec.ts" time="5.954">
+<system-out>
+<![CDATA[{"level":"warn","timestamp":"2026-11-16T07:38:45.534Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/axe-e3f955db97ad9f259df1fc2d506a1dd2e3039e8d.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/resultat-delai-visual-d1f0c30c26ae804bc8bc1210533063733232dcba.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/axe-65133e8688fae04c8b6d97c69eda811dd6de33e8.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/resultat-delai-mobile-870c0ddbff3fdbe62517a075462ac21abbdc0e78.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

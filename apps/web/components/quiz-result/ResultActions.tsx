@@ -13,7 +13,7 @@ const t = fr.quiz;
 export function availableLabel(iso: string): string {
   const date = new Date(iso);
   const day = new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'short',
+    weekday: 'long',
     day: 'numeric',
     month: 'short',
     timeZone: 'Europe/Paris',
@@ -58,12 +58,17 @@ export function ResultActions({
       : remediationStatus === 'in_progress' || remediationStatus === 'preparing'
         ? t.resultRemediationResume
         : t.resultRemediation;
-  const retryHint =
-    result.retry.reason === 'remediation_required'
+  const retryLabel =
+    result.retry.availableAt === null ? null : availableLabel(result.retry.availableAt);
+  const retryHint = result.retry.remediationRequired
+    ? retryLabel === null
       ? t.resultRetryAfterRemediation
-      : result.retry.availableAt === null
-        ? t.resultRetryAfterRemediation
-        : t.resultRetryAvailable(availableLabel(result.retry.availableAt));
+      : t.resultRetryAfterRemediationAt(retryLabel)
+    : retryLabel === null
+      ? t.resultRetryAfterRemediation
+      : t.resultRetryAvailableAt(retryLabel);
+  const blocked = !result.retry.allowed;
+  const settingsHref = '/parametres#automatismes';
 
   const retry = async () => {
     setStarting(true);
@@ -124,29 +129,23 @@ export function ResultActions({
             >
               {t.resultReread}
             </a>
-            <div className="flex flex-col items-end gap-2">
-              <button
-                aria-describedby={result.retry.allowed ? undefined : 'result-retry-hint'}
-                className="inline-flex min-h-48 cursor-pointer items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink disabled:cursor-not-allowed disabled:opacity-55"
-                data-testid="result-retry"
-                disabled={!result.retry.allowed || starting}
-                onClick={() => {
-                  void retry();
-                }}
-                type="button"
-              >
-                {t.resultRetry}
-              </button>
-              {result.retry.allowed ? null : (
-                <span className="text-12 text-ink-muted" id="result-retry-hint">
-                  {retryHint}
-                </span>
-              )}
-            </div>
+            <button
+              aria-describedby={blocked ? 'quiz-retry-available-at' : undefined}
+              aria-disabled={blocked ? 'true' : 'false'}
+              className="inline-flex min-h-48 cursor-pointer items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink disabled:cursor-not-allowed disabled:opacity-55"
+              data-testid="quiz-retry"
+              disabled={blocked || starting}
+              onClick={() => {
+                void retry();
+              }}
+              type="button"
+            >
+              {t.resultRetry}
+            </button>
             {remediationStatus === 'completed' ? (
               <button
                 className="inline-flex min-h-48 cursor-not-allowed items-center rounded-14 bg-ink px-22 text-15 font-700 text-white opacity-55"
-                data-testid="result-remediation"
+                data-testid="quiz-remediation"
                 disabled
                 type="button"
               >
@@ -155,7 +154,7 @@ export function ResultActions({
             ) : (
               <a
                 className="inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
-                data-testid="result-remediation"
+                data-testid="quiz-remediation"
                 href={remediationHref}
               >
                 {remediationLabel}
@@ -164,6 +163,22 @@ export function ResultActions({
           </>
         )}
       </div>
+      {passed || !blocked ? null : (
+        <p
+          className="m-0 max-w-[520px] text-right text-[13px] text-ink-muted"
+          data-testid="quiz-retry-available-at"
+          id="quiz-retry-available-at"
+        >
+          {retryHint}{' '}
+          <a
+            className="font-600 text-indigo-ink underline"
+            data-testid="quiz-retry-settings"
+            href={settingsHref}
+          >
+            {t.resultRetrySettings}
+          </a>
+        </p>
+      )}
     </div>
   );
 }

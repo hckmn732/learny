@@ -4744,7 +4744,11 @@ export const fr = {
     resultReread: 'Relire le cours',
     resultRetry: 'Nouvelle tentative',
     resultRetryAvailable: (label: string) => `Disponible ${label}`,
+    resultRetryAvailableAt: (label: string) => `Nouvelle tentative possible ${label}.`,
     resultRetryAfterRemediation: 'Disponible après la remédiation',
+    resultRetryAfterRemediationAt: (label: string) =>
+      `Nouvelle tentative possible après la remédiation, au plus tôt ${label}.`,
+    resultRetrySettings: 'Régler',
     resultRemediation: 'Remédiation ciblée · 15 min',
     resultRemediationResume: 'Reprendre la remédiation',
     resultRemediationDone: 'Remédiation terminée',
@@ -5038,13 +5042,13 @@ export const fr = {
           title: 'Remédiation après un quiz raté',
           rule: 'Sous le seuil, une remédiation ciblée sur les lacunes est préparée et la tentative suivante est planifiée après un délai, pour éviter de répondre au hasard.',
           settings: {
-            retryDelayHours: {
+            delayHours: {
               label: 'Délai avant la tentative suivante',
               options: { '0': 'Aucun', '12': '12 h', '24': '24 h', '48': '48 h' },
             },
             mode: {
               label: 'Remédiation',
-              options: { advised: 'Conseillée', required: 'Obligatoire' },
+              options: { advised: 'Conseillée', mandatory: 'Obligatoire' },
             },
           },
         },

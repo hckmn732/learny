@@ -5,6 +5,7 @@ export * from './module-unlock';
 export * from './regeneration';
 export * from './result';
 export * from './retry-gate';
+export * from './retry-guard';
 export * from './score';
 export * from './start';
 export * from './submit';

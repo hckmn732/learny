@@ -122,6 +122,8 @@ export interface AppErrorExtra {
   reason?: string;
   /** Earliest instant of a delayed action (`RETRY_NOT_YET_ALLOWED`, SPEC-612 EF-8). */
   availableAt?: string;
+  /** SPEC-715 EF-5 — the mandatory remediation must be finished before a new attempt. */
+  remediationRequired?: boolean;
   /** Product link explaining how to restore the service (SPEC-504 EF-2). */
   link?: string;
   /** Personal key that caused the failure, for the qualification flow (SPEC-504 CL-2). */
@@ -141,6 +143,7 @@ export class AppError extends Error {
   readonly retryAfterSec: number | undefined;
   readonly reason: string | undefined;
   readonly availableAt: string | undefined;
+  readonly remediationRequired: boolean | undefined;
   readonly link: string | undefined;
   readonly credentialId: string | undefined;
 
@@ -156,6 +159,7 @@ export class AppError extends Error {
     this.retryAfterSec = extra.retryAfterSec;
     this.reason = extra.reason;
     this.availableAt = extra.availableAt;
+    this.remediationRequired = extra.remediationRequired;
     this.link = extra.link;
     this.credentialId = extra.credentialId;
   }
@@ -176,6 +180,8 @@ export interface ProblemBody {
   /** SPEC-612 ET-8 — machine-readable refusal and the instant a retry becomes possible. */
   reason?: string;
   availableAt?: string;
+  /** SPEC-715 EF-5 — a mandatory remediation still has to be completed. */
+  remediationRequired?: boolean;
 }
 
 type CatalogEntry = { status: number; title: string };
@@ -218,5 +224,8 @@ export function toProblem(error: unknown, requestId: string): ProblemBody {
       : {}),
     ...(appError?.reason === undefined ? {} : { reason: appError.reason }),
     ...(appError?.availableAt === undefined ? {} : { availableAt: appError.availableAt }),
+    ...(appError?.remediationRequired === undefined
+      ? {}
+      : { remediationRequired: appError.remediationRequired }),
   };
 }
