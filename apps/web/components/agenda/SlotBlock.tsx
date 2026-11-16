@@ -55,6 +55,7 @@ export function SlotBlock({
   onArrow,
 }: SlotBlockProps) {
   const style = agendaSlotStyle(slot.kind);
+  const isSprint = slot.kind === 'sprint';
   const timeLabel = `${clockOf(slot.startMinutes)} – ${clockOf(slot.endMinutes)}`;
   const duration = slot.endMinutes - slot.startMinutes;
   const long = duration >= 60;
@@ -87,7 +88,7 @@ export function SlotBlock({
       type="button"
       aria-label={ariaLabel}
       aria-pressed={selected}
-      data-testid={`agenda-slot-${slot.id}`}
+      data-testid={isSprint ? 'sprint-slot' : `agenda-slot-${slot.id}`}
       data-slot-kind={slot.kind}
       onClick={() => {
         onSelect(slot.id);
@@ -118,11 +119,17 @@ export function SlotBlock({
       }}
     >
       <span className={cn('text-12 leading-1.3 font-700', line)}>{slot.title}</span>{' '}
+      {isSprint && <span className="sr-only">{t.sprintLabel}</span>}
       {showTime && (
         <span className={cn('text-11.5 leading-1.3 tabular-nums', line)}>{timeLabel}</span>
       )}{' '}
       {showTime && metaText !== null && (
-        <span className={cn('text-11.5 leading-1.3', line)}>{metaText}</span>
+        <span
+          className={cn('text-11.5 leading-1.3', line)}
+          {...(isSprint ? { 'data-testid': 'sprint-reason' } : {})}
+        >
+          {metaText}
+        </span>
       )}{' '}
       {mentionOnly !== null && <span className="text-11.5 leading-1.3">{mentionOnly}</span>}
     </button>
