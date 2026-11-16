@@ -1,0 +1,432 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-715/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-715",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-715/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3131",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-715/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3131",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-715/test-results/sdd/SPEC-715/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-715/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-715/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3131/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3131",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p7/automations/remediation.spec.ts",
+      "file": "p7/automations/remediation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "quiz raté : remédiation prête et tentative différée @SPEC-715",
+          "ok": true,
+          "tags": [
+            "SPEC-715"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10591,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"warn\",\"timestamp\":\"2026-11-16T07:38:34.810Z\",\"outcome\":\"event_dispatch_failed\",\"err\":{\"error\":\"Error\"},\"message\":\"event dispatch failed\"}\n"
+                    }
+                  ],
+                  "stderr": [
+                    {
+                      "text": "(node:1628895) Warning: AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+                    },
+                    {
+                      "text": "(node:1628895) [AISDK_DEP_GENERATE_OBJECT] DeprecationWarning: AI SDK Warning: Deprecated: \"generateObject\". Use generateText with an output setting instead.\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-16T07:38:33.220Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "resultat-delai",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/resultat-delai-cf4902bc5971ca0957b774de7720d2308cedf977.png"
+                    },
+                    {
+                      "name": "retry-422",
+                      "contentType": "application/json",
+                      "body": "ewogICJ0eXBlIjogImh0dHBzOi8vbGVhcm55LmFwcC9lcnJvcnMvcmV0cnktbm90LXlldC1hbGxvd2VkIiwKICAidGl0bGUiOiAiTm91dmVsbGUgdGVudGF0aXZlIHBhcyBlbmNvcmUgcG9zc2libGUiLAogICJzdGF0dXMiOiA0MjIsCiAgImRldGFpbCI6ICJOb3V2ZWxsZSB0ZW50YXRpdmUgcG9zc2libGUgbWVyY3JlZGkgMTEgbm92LiwgMTQ6MDAuIiwKICAiY29kZSI6ICJSRVRSWV9OT1RfWUVUX0FMTE9XRUQiLAogICJyZXF1ZXN0SWQiOiAiN2MwMDc1ZDgtODJkYy00Y2JjLWE1OGUtODEzZTM0ZWIwY2VlIiwKICAicmVhc29uIjogImRlbGF5IiwKICAiYXZhaWxhYmxlQXQiOiAiMjAyNi0xMS0xMVQxMzowMDowMC4wMDBaIiwKICAicmVtZWRpYXRpb25SZXF1aXJlZCI6IGZhbHNlCn0="
+                    },
+                    {
+                      "name": "journal-remediation",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/journal-remediation-bb4ab1126d31b14ff28027bc63f4d8bbabe54fee.png"
+                    },
+                    {
+                      "name": "resultat-apres-annulation",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/resultat-apres-annulation-179ac0731c58911f2084df4a9269f876b82b4382.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/attachments/axe-75b549a9142dab8350fa1a3d5b22e932b4504d70.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-d5156-tentative-différée-SPEC-715-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "65c29c8be866e6ddec8b-d367655931a4d926ed9b",
+          "file": "p7/automations/remediation.spec.ts",
+          "line": 158,
+          "column": 1
+        },
+        {
+          "title": "résultat avec délai, jetons @SPEC-715 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-715",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5954,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"warn\",\"timestamp\":\"2026-11-16T07:38:45.534Z\",\"outcome\":\"event_dispatch_failed\",\"err\":{\"error\":\"Error\"},\"message\":\"event dispatch failed\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T07:38:44.494Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/axe-e3f955db97ad9f259df1fc2d506a1dd2e3039e8d.json"
+                    },
+                    {
+                      "name": "resultat-delai-visual",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/resultat-delai-visual-d1f0c30c26ae804bc8bc1210533063733232dcba.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/axe-65133e8688fae04c8b6d97c69eda811dd6de33e8.json"
+                    },
+                    {
+                      "name": "resultat-delai-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/attachments/resultat-delai-mobile-870c0ddbff3fdbe62517a075462ac21abbdc0e78.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-715/test-results/artifacts/p7-automations-remediation-91077-élai-jetons-SPEC-715-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "65c29c8be866e6ddec8b-f51638a1891244be28c5",
+          "file": "p7/automations/remediation.spec.ts",
+          "line": 240,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T07:37:50.892Z",
+    "duration": 60117.386,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
