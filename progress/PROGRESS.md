@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-16T10:06:11.578Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-16T11:11:32.143Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 110 |
+| Terminées | 111 |
 | En cours | 0 |
-| Prêtes | 6 |
+| Prêtes | 5 |
 | En attente de dépendances | 16 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **83.3 %** |
-| Avancement V1 | 88.7 % |
-| Prochaine action | start SPEC-716 — Automatisme 5 : jeu choisi selon la lacune |
+| **Avancement global** | **84.1 %** |
+| Avancement V1 | 89.5 % |
+| Prochaine action | start SPEC-717 — Automatisme 6 : questions transformées en cartes |
 
 ## Phases et checkpoints
 
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 19/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 20/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -142,7 +142,7 @@
 | [SPEC-713](../specs/p7-engagement/SPEC-713-automatisme-2-micro-seance-de-secours.md) | Automatisme 2 : micro-séance de secours | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-703 |
 | [SPEC-714](../specs/p7-engagement/SPEC-714-automatisme-3-echauffement.md) | Automatisme 3 : échauffement | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-410 |
 | [SPEC-715](../specs/p7-engagement/SPEC-715-automatisme-4-remediation-apres-un-quiz-rate.md) | Automatisme 4 : remédiation après un quiz raté | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-612 |
-| [SPEC-716](../specs/p7-engagement/SPEC-716-automatisme-5-jeu-choisi-selon-la-lacune.md) | Automatisme 5 : jeu choisi selon la lacune | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-406 |
+| [SPEC-716](../specs/p7-engagement/SPEC-716-automatisme-5-jeu-choisi-selon-la-lacune.md) | Automatisme 5 : jeu choisi selon la lacune | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-406 |
 | [SPEC-717](../specs/p7-engagement/SPEC-717-automatisme-6-questions-transformees-en-cartes.md) | Automatisme 6 : questions transformées en cartes | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-610 |
 | [SPEC-718](../specs/p7-engagement/SPEC-718-automatisme-7-quiz-global-plafonne-et-lisse.md) | Automatisme 7 : quiz global plafonné et lissé | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-406 |
 | [SPEC-719](../specs/p7-engagement/SPEC-719-automatisme-8-sprint-avant-un-jalon.md) | Automatisme 8 : sprint avant un jalon | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-407 |
