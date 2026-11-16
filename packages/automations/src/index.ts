@@ -1,6 +1,7 @@
 // Public API of @learny/automations: the engine of the automations (SPEC-711, ADR-0190) and the
 // product definitions (SPEC-712 and later) registered on the singleton.
 export * from './moteur-d-automatismes';
+export * from './parametres-automatismes';
 export * from './reprise';
 export { repriseAutomation } from './definitions/reprise';
 export {

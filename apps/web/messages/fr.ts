@@ -4909,21 +4909,210 @@ export const fr = {
       modeles: 'Les modèles d’IA arrivent avec SPEC-709.',
     },
     automations: {
-      title: 'Journal des automatismes',
-      description:
-        'Chaque action du tuteur est expliquée en une ligne. Une action appliquée reste annulable tant qu’elle n’a pas été utilisée.',
-      loading: 'Chargement du journal…',
-      empty: 'Aucune action pour le moment.',
-      undo: 'Annuler',
+      principle:
+        'Entre deux séances, le tuteur agit pour vous : il rattrape, rappelle et entraîne au bon moment.',
+      principlePoints: [
+        'Chaque action est expliquée et peut être annulée',
+        'Les grands changements de planning attendent votre accord',
+        'Les heures calmes sont toujours respectées',
+      ],
+      activeCount: (active: number, total: number) =>
+        `${String(active)} automatismes actifs sur ${String(total)}`,
+      count: (count: number) => `${String(count)} action${count > 1 ? 's' : ''} cette semaine`,
+      pausedPrefix: 'En pause · ',
+      loading: 'Chargement des automatismes…',
+      errorTitle: 'Les automatismes n’ont pas pu être chargés.',
+      saveError: 'Le réglage n’a pas pu être enregistré. L’état du serveur est conservé.',
       undoError: 'L’action n’a pas pu être annulée. Réessayez.',
-      columns: { when: 'Date', status: 'Statut', action: 'Action', buttons: 'Boutons' },
-      statuses: {
-        pending: 'En attente',
-        applied: 'Appliquée',
-        declined: 'Refusée',
-        undone: 'Annulée',
-        expired: 'Expirée',
-        consumed: 'Consommée',
+      retry: 'Réessayer',
+      saved: 'Réglages enregistrés.',
+      groups: {
+        decrochage: {
+          title: 'Contre le décrochage',
+          description: 'Garder le fil, même les semaines difficiles.',
+        },
+        memoire: {
+          title: 'Mémorisation',
+          description: 'Se rappeler au bon moment, sans surcharge.',
+        },
+        quiz: {
+          title: 'Quiz et jeux',
+          description: 'S’entraîner là où c’est utile.',
+        },
+      },
+      lastAction: 'Dernière action',
+      noLastAction: 'Aucune action pour le moment.',
+      items: {
+        reprise: {
+          title: 'Reprise après décrochage',
+          rule: 'Une séance manquée est replacée dans une marge. Après quelques jours sans activité, le tuteur propose une reprise de 5 minutes, puis d’alléger le programme ou de décaler la fin.',
+          settings: {
+            inactiveDays: {
+              label: 'Proposer une reprise après',
+              options: { '1': '1 jour', '2': '2 jours', '3': '3 jours' },
+            },
+            lightenDays: {
+              label: 'Proposer d’alléger après',
+              options: { '4': '4 jours', '5': '5 jours', '7': '7 jours' },
+            },
+            mode: {
+              label: 'Replacer les séances manquées',
+              options: { auto: 'Automatiquement', accord: 'Après mon accord' },
+            },
+          },
+        },
+        micro_seance: {
+          title: 'Micro-séance de secours',
+          rule: 'Si la séance du jour n’est pas faite le soir, une version courte est proposée (cartes de rappel et une question) pour garder le rythme et la série.',
+          settings: {
+            hour: {
+              label: 'Proposée à',
+              options: { '19': '19:00', '20': '20:00', '21': '21:00' },
+            },
+            durationMin: {
+              label: 'Durée',
+              options: { '3': '3 min', '5': '5 min', '10': '10 min' },
+            },
+          },
+        },
+        bilan: {
+          title: 'Bilan de la semaine et replanification',
+          rule: 'Une fois par semaine : progression, mémorisation, notions à risque et plan de la semaine suivante. Le tuteur demande si vos disponibilités changent.',
+          settings: {
+            weekday: {
+              label: 'Jour',
+              options: { '5': 'Vendredi', '6': 'Samedi', '7': 'Dimanche' },
+            },
+            hour: {
+              label: 'Heure',
+              options: { '18': '18:00', '19': '19:00', '20': '20:00' },
+            },
+            channel: {
+              label: 'Canal',
+              options: { app: 'Application', app_email: 'Application et e-mail' },
+            },
+          },
+        },
+        echauffement: {
+          title: 'Échauffement de début de séance',
+          rule: 'Chaque séance commence par quelques questions sur les notions de la veille et les prérequis du chapitre : on se rappelle avant de lire.',
+          settings: {
+            count: {
+              label: 'Nombre de questions',
+              options: { '2': '2', '3': '3', '5': '5' },
+            },
+            scope: {
+              label: 'Porte sur',
+              options: {
+                yesterday_prerequisites: 'La veille et les prérequis',
+                yesterday: 'La veille seulement',
+              },
+            },
+          },
+        },
+        questions_cartes: {
+          title: 'Vos questions deviennent des cartes',
+          rule: 'Une question posée au tuteur devient une carte de rappel, révisée à intervalles espacés avec les autres.',
+          settings: {
+            mode: {
+              label: 'Création',
+              options: { confirm: 'Avec ma confirmation', auto: 'Automatique' },
+            },
+          },
+        },
+        plafond_quiz: {
+          title: 'Quiz global plafonné et lissé',
+          rule: 'Quand trop de notions sont dues le même jour, la révision est étalée sur les jours suivants, lacunes en tête, pour que la charge reste tenable.',
+          settings: {
+            maxMinutes: {
+              label: 'Durée maximale par jour',
+              options: { '10': '10 min', '15': '15 min', '20': '20 min', '30': '30 min' },
+            },
+            targetRetention: {
+              label: 'Taux de mémorisation visé',
+              options: { '0.85': '85 %', '0.9': '90 %', '0.95': '95 % (plus de révisions)' },
+            },
+          },
+        },
+        remediation: {
+          title: 'Remédiation après un quiz raté',
+          rule: 'Sous le seuil, une remédiation ciblée sur les lacunes est préparée et la tentative suivante est planifiée après un délai, pour éviter de répondre au hasard.',
+          settings: {
+            retryDelayHours: {
+              label: 'Délai avant la tentative suivante',
+              options: { '0': 'Aucun', '12': '12 h', '24': '24 h', '48': '48 h' },
+            },
+            mode: {
+              label: 'Remédiation',
+              options: { advised: 'Conseillée', required: 'Obligatoire' },
+            },
+          },
+        },
+        jeu_lacune: {
+          title: 'Jeu choisi selon la lacune',
+          rule: 'Confusion : un jeu d’association ou de classement oppose les deux notions. Oubli : cartes de rappel. Difficulté d’application : un exercice.',
+          settings: {
+            preference: {
+              label: 'Préférence',
+              options: {
+                vary: 'Varier les jeux',
+                cards: 'Plutôt des cartes de rappel',
+                matching: 'Plutôt association et classement',
+              },
+            },
+          },
+        },
+        sprint: {
+          title: 'Sprint avant un jalon',
+          rule: 'Avant un quiz de validation ou un examen blanc, des révisions courtes sont ajoutées sur les notions les plus faibles du module.',
+          settings: {
+            daysBefore: {
+              label: 'Commencer',
+              options: { '2': '2 jours avant', '3': '3 jours avant', '5': '5 jours avant' },
+            },
+            durationMin: {
+              label: 'Durée d’un sprint',
+              options: { '15': '15 min', '30': '30 min', '45': '45 min' },
+            },
+          },
+        },
+        pause: {
+          title: 'Mode pause et retour',
+          rule: 'Vacances, rush au travail : le planning est gelé sans casser la série. Au retour, un court diagnostic sur les notions à risque, puis une replanification.',
+          settings: {
+            pauseUntil: { label: 'En pause jusqu’au', options: {} },
+            diagnosticOnReturn: { label: 'Diagnostic au retour', options: {} },
+          },
+        },
+      },
+      pauseUntil: 'En pause jusqu’au',
+      diagnose: 'Diagnostic au retour',
+      startPause: 'Mettre en pause',
+      pauseScheduled: (date: string) => `Pause programmée jusqu’au ${date}.`,
+      guardrails: {
+        title: 'Garde-fous',
+        maxPerDay: 'Notifications par jour, au maximum',
+        maxPerDayValue: (count: number) => `${String(count)} par jour`,
+        bigChanges: 'Grands changements de planning',
+        bigChangesHint: 'Alléger le programme, décaler la fin',
+        alwaysConsent: 'Toujours sur accord',
+        quietHours: 'Heures calmes',
+        quietRange: (start: string, end: string) => `${start} – ${end}`,
+        edit: 'Modifier',
+      },
+      journal: {
+        title: 'Journal de la semaine',
+        description: 'Ce que les automatismes ont fait, et pourquoi.',
+        empty: 'Aucune action cette semaine.',
+        undo: 'Annuler',
+        statuses: {
+          pending_consent: 'En attente',
+          applied: 'Appliquée',
+          declined: 'Refusée',
+          undone: 'Annulée',
+          expired: 'Expirée',
+          consumed: 'Consommée',
+        },
       },
     },
     aiModels: {
