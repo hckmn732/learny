@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { EchauffementParams, RemediationParams, RepriseParams } from './automations';
+import {
+  EchauffementParams,
+  MicroSeanceParams,
+  RemediationParams,
+  RepriseParams,
+} from './automations';
 import type { AutomationKey } from './moteur-d-automatismes';
 
 // Display catalogue of the ten automations of SCR-15 (SPEC-710 ET-4, BR-SET-04).
@@ -215,13 +220,6 @@ export function automationDisplayDefinition(
 /* ------------------------------------------------------------------ */
 /* Canonical parameter schemas (SPEC-710, BR-SET-04)                    */
 /* ------------------------------------------------------------------ */
-
-/** SPEC-713 — micro-session proposed in the evening, lasting three, five or ten minutes. */
-export const MicroSeanceParams = z.object({
-  hour: z.union([z.literal(19), z.literal(20), z.literal(21)]).default(20),
-  durationMin: z.union([z.literal(3), z.literal(5), z.literal(10)]).default(5),
-});
-export type MicroSeanceParams = z.infer<typeof MicroSeanceParams>;
 
 /** SPEC-720 — weekly review on Friday, Saturday or Sunday, at 18:00, 19:00 or 20:00. */
 export const BilanParams = z.object({
