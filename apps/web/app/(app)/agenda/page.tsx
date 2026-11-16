@@ -1,3 +1,5 @@
+import { clock } from '@learny/core';
+
 import { AgendaScreen } from '../../../components/agenda/AgendaScreen';
 import { AppShell } from '../../../components/shell/app-shell';
 import { loadAgendaPage, type AgendaSearchParams } from '../../../lib/agenda-page';
@@ -13,6 +15,8 @@ interface AgendaPageProps {
 export default async function AgendaPage({ searchParams }: AgendaPageProps) {
   const [shell, params] = await Promise.all([loadShellPage(), searchParams]);
   const agenda = await loadAgendaPage(params);
+  // Reference instant of the screen (EF-9, EF-12): the client clock only measures elapsed time.
+  const serverNow = clock.now().toISOString();
   return (
     <AppShell
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
@@ -24,6 +28,7 @@ export default async function AgendaPage({ searchParams }: AgendaPageProps) {
         initialState={agenda.state}
         initialData={agenda.ok ? agenda.data : null}
         initialError={!agenda.ok}
+        serverNow={serverNow}
         {...(agenda.ok || agenda.requestId === undefined ? {} : { requestId: agenda.requestId })}
       />
     </AppShell>
