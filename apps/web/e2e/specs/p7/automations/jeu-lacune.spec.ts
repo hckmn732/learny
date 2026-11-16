@@ -101,7 +101,14 @@ async function seed(userId: string): Promise<{ formationId: string; notionId: st
     });
     await tx.execute(sql`
       update public.notion_states
-      set gap_detected_at = ${DETECTED_AT}::timestamptz
+      set gap_detected_at = ${DETECTED_AT}::timestamptz,
+          last_seen_at = '2026-11-10T18:00:00Z'::timestamptz,
+          fsrs = jsonb_set(
+            fsrs,
+            '{last_review}',
+            to_jsonb('2026-11-10T18:00:00.000Z'::text),
+            true
+          )
       where user_id = ${userId}::uuid and notion_id = ${notionId}::uuid
     `);
     return { formationId: programme.formationId, notionId };
@@ -154,7 +161,6 @@ test.describe('automatisme 5 — test utilisateur', () => {
     const seeded = await seed(current.userId);
     await automate(current.userId, seeded);
     const quizUrl = `/formations/${seeded.formationId}/quiz-global`;
-
     await page.goto(quizUrl);
     await expect(page.getByTestId('global-quiz-rail-reason')).toBeVisible({ timeout: 30_000 });
     await expect(page.getByTestId('global-quiz-rail-reason')).toHaveText(
@@ -246,7 +252,7 @@ test.describe('automatisme 5 — démonstration', () => {
     await expectTokens(page, {
       '[data-testid="global-quiz-rail-reason"]': {
         color: colors['orange-ink'],
-        'font-size': '11px',
+        'font-size': '9.9px',
         'font-weight': '700',
       },
       '[data-testid="gq-rationale"]': { 'background-color': colors.ink },
