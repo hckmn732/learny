@@ -33,7 +33,7 @@ import {
   type ReviewSummaryDto,
 } from '@learny/contracts';
 import { AppError, addCivilDays, userDayBounds, userLocalDay, type Result } from '@learny/core';
-import { upsertDailyActivity, type DbTx } from '@learny/db';
+import { consumeAutomationActions, upsertDailyActivity, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
 import {
   buildDailySession,
@@ -363,8 +363,8 @@ async function loadAutomationParams(
   preference: 'vary' | 'cards' | 'matching_categorization';
   microMinutes: number;
 }> {
-  const rows = await tx.execute<{ key: string; params: unknown }>(sql`
-    select key::text as key, params
+  const rows = await tx.execute<{ key: string; enabled: boolean; params: unknown }>(sql`
+    select key::text as key, enabled, params
     from public.automation_settings
     where user_id = ${userId}::uuid and key in ('plafond_quiz', 'jeu_lacune', 'micro_seance')
   `);
@@ -382,7 +382,8 @@ async function loadAutomationParams(
         .safeParse(params.preference);
       if (parsed.success) preference = parsed.data;
     }
-    if (row.key === 'micro_seance' && typeof params.durationMin === 'number') {
+    // SPEC-713 ET-3, CL-1 — a disabled automation keeps the manual micro-session at its default.
+    if (row.key === 'micro_seance' && row.enabled && typeof params.durationMin === 'number') {
       const parsed = z
         .union([z.literal(3), z.literal(5), z.literal(10)])
         .safeParse(params.durationMin);
@@ -1906,6 +1907,16 @@ export function completeReviewSession(
             ? [`micro_session`, `review-session:${sessionId}`]
             : [`review-session:${sessionId}`],
       });
+      // SPEC-713 EF-6 — a qualifying session saves the streak: the back-up proposal of the day is
+      // consumed, and completing the micro-session itself also closes its agenda slot.
+      if (hasAnswer) {
+        await consumeAutomationActions(tx, {
+          userId,
+          automation: 'micro_seance',
+          date: day,
+          completeSlots: config.mode === 'micro',
+        });
+      }
       const streakDays = hasAnswer
         ? await bumpStreak(tx, userId, day)
         : await currentStreak(tx, userId);

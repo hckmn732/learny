@@ -340,6 +340,68 @@ export async function consumeAutomationAction(
   return action;
 }
 
+export interface ConsumeAutomationActionsInput {
+  userId: string;
+  automation: AutomationKey;
+  /** Civil day stored in `payload.date` (`YYYY-MM-DD`). */
+  date: string;
+  /**
+   * SPEC-713 EF-6 — when the micro-session itself was completed, the linked slot becomes `done`.
+   * A plain qualifying activity consumes the action only and leaves the slot untouched.
+   */
+  completeSlots?: boolean;
+}
+
+/**
+ * SPEC-713 EF-6, ET-4 — consumes every applied action of one automation for a local day. Used by
+ * the daily activity of any qualifying work: doing the back-up session (or any other study work)
+ * saves the streak and ends the undo window (BR-AUT-11). Idempotent: consumed rows are untouched.
+ */
+export interface ConsumedAutomationAction {
+  id: string;
+  undoPayload: Record<string, unknown> | null;
+}
+
+export async function consumeAutomationActions(
+  db: Db | DbTx,
+  input: ConsumeAutomationActionsInput,
+): Promise<ConsumedAutomationAction[]> {
+  const userId = identifier(input.userId, 'userId');
+  const automation = parse(automationKeySchema, input.automation, 'automation');
+  const day = parse(z.string().regex(/^\d{4}-\d{2}-\d{2}$/), input.date, 'date');
+  // One statement over the narrow journal: the definition froze the consumed text in the payload,
+  // so a replay after an undo window keeps the same readable line.
+  const rows = await db.execute<{ id: string; undo_payload: unknown }>(sql`
+    update public.automation_actions
+    set status = 'consumed',
+        summary = coalesce(payload ->> 'summaryConsumed', summary)
+    where user_id = ${userId}::uuid
+      and automation = ${automation}::public.automation_key
+      and status = 'applied'
+      and payload ->> 'date' = ${day}
+    returning id::text as id, undo_payload
+  `);
+  const consumed = rows.map((row) => ({
+    id: row.id,
+    undoPayload:
+      typeof row.undo_payload === 'object' && row.undo_payload !== null
+        ? (row.undo_payload as Record<string, unknown>)
+        : null,
+  }));
+  if (input.completeSlots === true) {
+    for (const action of consumed) {
+      const slotId = action.undoPayload?.slotId;
+      if (typeof slotId !== 'string' || slotId === '') continue;
+      await db.execute(sql`
+        update public.schedule_slots
+        set status = 'done', updated_at = now()
+        where id = ${slotId}::uuid and user_id = ${userId}::uuid and status = 'planned'
+      `);
+    }
+  }
+  return consumed;
+}
+
 /** EF-3, BR-AUT-12 — compact projection for a weekly recap ordered oldest first. */
 export async function listAutomationActionsAscending(
   tx: DbTx,

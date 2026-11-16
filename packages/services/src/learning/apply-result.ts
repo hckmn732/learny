@@ -20,7 +20,13 @@ import {
   type LearningStateTransition,
 } from '@learny/contracts';
 import { AppError, userLocalDay, type Result } from '@learny/core';
-import { toFsrsCardJson, upsertDailyActivity, type DbTx, type FsrsCardJson } from '@learny/db';
+import {
+  consumeAutomationActions,
+  toFsrsCardJson,
+  upsertDailyActivity,
+  type DbTx,
+  type FsrsCardJson,
+} from '@learny/db';
 import { withTransaction } from '@learny/jobs';
 import {
   applyReview as applyFsrsReview,
@@ -1224,13 +1230,16 @@ async function applyInTransaction(
     const totalMs =
       attempt.duration_ms ?? answers.reduce((sum, answer) => sum + (answer.time_ms ?? 0), 0);
     const minutes = Math.max(1, Math.ceil(totalMs / 60_000));
+    const day = userLocalDay(submitted, timezone);
     const activity = await upsertDailyActivity(tx, {
       userId,
-      day: userLocalDay(submitted, timezone),
+      day,
       minutes,
       qualifying: true,
       sources: [`attempt:${attemptId}`],
     });
+    // SPEC-713 EF-6 — any qualifying activity of the day consumes the back-up proposal.
+    await consumeAutomationActions(tx, { userId, automation: 'micro_seance', date: day });
     dailyActivity = {
       day: activity.day,
       minutes: activity.minutes,

@@ -127,14 +127,23 @@ export const NOTIFICATION_TEMPLATES: Record<NotificationType, NotificationTempla
   global_quiz_today: definition(
     'refresh',
     'reminder',
-    (_data, tone) =>
-      toneOf(tone, 'Vos révisions du jour sont prêtes', 'Tes révisions du jour sont prêtes'),
     (data, tone) =>
       toneOf(
         tone,
-        `${String(number(data, 'notions', 10))} notions à revoir, environ ${String(number(data, 'minutes', 10))} minutes.`,
-        `${String(number(data, 'notions', 10))} notions à revoir, environ ${String(number(data, 'minutes', 10))} minutes.`,
+        text(data, 'titleOverride', 'Vos révisions du jour sont prêtes'),
+        text(data, 'titleOverride', 'Tes révisions du jour sont prêtes'),
       ),
+    (data, tone) => {
+      // SPEC-713 EF-4 — the back-up micro-session overrides the generic revision body.
+      if (typeof data.bodyOverride === 'string' && data.bodyOverride.trim() !== '') {
+        return data.bodyOverride.trim();
+      }
+      return toneOf(
+        tone,
+        `${String(number(data, 'notions', 10))} notions à revoir, environ ${String(number(data, 'minutes', 10))} minutes.`,
+        `${String(number(data, 'notions', 10))} notions à revoir, environ ${String(number(data, 'minutes', 10))} minutes.`,
+      );
+    },
     formationHref,
   ),
   new_gap: definition(

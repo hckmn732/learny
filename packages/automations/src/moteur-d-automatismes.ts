@@ -539,13 +539,18 @@ export function runAutomation(
         data: {
           ...(draft.notification.data ?? {}),
           ...(draft.notification.data?.bodyOverride === undefined
-            ? {}
-            : { bodyOverride: item.summary }),
+            ? { bodyOverride: item.summary }
+            : {}),
           href: draft.notification.href,
           automation: input.key,
         },
         dedupeKey: `automation:${item.actionId}`,
         eligibleAt: now.toISOString(),
+        // SPEC-713 EF-4 — an external send deferred past the notification expiry is dropped
+        // (BR-NOT-06), exactly like an obsolete quiet-hours delivery.
+        ...(draft.notification.expiresAt === undefined
+          ? {}
+          : { staleAt: draft.notification.expiresAt }),
       });
       if (!result.ok)
         engine.logger.warn('automation notification failed', {
@@ -934,8 +939,9 @@ export function undoAutomationAction(
         undoneAt: now,
       });
       // EF-8 — the summary follows the new status, so the journal reads « Annulé : … ».
+      let summaryAfter = action.summary;
       if (definition !== undefined) {
-        const summaryAfter = definition.explain(
+        summaryAfter = definition.explain(
           toView({ ...action, status: 'undone' }),
           profile.tone,
           profile.timeZone,
@@ -954,7 +960,7 @@ export function undoAutomationAction(
         { userId: user.userId, actionId: action.id, automation: action.automation },
         { id: `automation-action-undone:${action.id}` },
       );
-      return toView({ ...action });
+      return toView({ ...action, summary: summaryAfter });
     });
     // ADR-0191 §3 — the proposal comes back right after the undo, with a suffixed dedupe key.
     // The proposal is written on the service role, like every other proposal of the engine; a

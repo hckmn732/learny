@@ -144,11 +144,19 @@ export function tutorActivityItem(
   timeZone = 'Europe/Paris',
 ): TutorActivityItem {
   const status = action.status as TutorCardStatus;
+  // SPEC-713 EF-8 — the consumed line of the home card names the day and the hour; it is frozen
+  // in the payload when the action is created, so the card never recomputes a time zone.
+  const summary =
+    status === 'consumed' &&
+    action.automation === 'micro_seance' &&
+    typeof action.payload.cardSummary === 'string'
+      ? action.payload.cardSummary
+      : action.summary;
   return {
     id: action.id,
     automation: action.automation,
     type: action.kind,
-    summary: action.summary,
+    summary,
     status,
     requiresConsent: action.requiresConsent,
     createdAt: action.createdAt,

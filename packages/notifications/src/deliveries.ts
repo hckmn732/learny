@@ -8,6 +8,7 @@ import { and, asc, eq, inArray, lte, sql } from 'drizzle-orm';
 
 import { AppError, err, ok, type Clock, type LearnyLogger, type Result } from '@learny/core';
 import {
+  automationActions,
   schema,
   updateDeliveryStatus,
   type Db,
@@ -144,6 +145,29 @@ async function abandonIfStale(
 }
 
 /**
+ * SPEC-713 EF-4, BR-NOT-06 — the external send of an automation notification expires with its
+ * action: a deferred delivery re-evaluated after `payload.expiresAt` is abandoned as stale.
+ */
+async function automationStaleAt(
+  ctx: DeliveryContext,
+  notification: Notification,
+): Promise<Date | null> {
+  const key = notification.dedupeKey;
+  if (key === null || !key.startsWith('automation:')) return null;
+  const actionId = key.slice('automation:'.length);
+  if (!/^[0-9a-f-]{36}$/u.test(actionId)) return null;
+  const rows = await ctx.sdb
+    .select({ payload: automationActions.payload })
+    .from(automationActions)
+    .where(eq(automationActions.id, actionId))
+    .limit(1);
+  const expiresAt = rows[0]?.payload.expiresAt;
+  if (typeof expiresAt !== 'string') return null;
+  const instant = new Date(expiresAt);
+  return Number.isNaN(instant.getTime()) ? null : instant;
+}
+
+/**
  * EF-5, EF-7, ET-4 — sends one pending delivery, if it is due and still meaningful. Idempotent on
  * the delivery identifier; a final `sent` line is returned untouched.
  */
@@ -156,6 +180,7 @@ export async function deliverDelivery(
   const loaded = await loadDelivery(ctx, deliveryId);
   if (loaded === null) return err(new AppError('NOT_FOUND', 'Livraison introuvable.'));
   const now = ctx.clock.now();
+  const staleAt = options.staleAt ?? (await automationStaleAt(ctx, loaded.notification));
   if (loaded.delivery.status === 'sent') {
     return ok({
       deliveryId,
@@ -186,7 +211,7 @@ export async function deliverDelivery(
     loaded.delivery.status === 'deferred_quiet'
   ) {
     if (loaded.delivery.status === 'deferred_quiet') {
-      const abandoned = await abandonIfStale(ctx, loaded, options.staleAt ?? null, now);
+      const abandoned = await abandonIfStale(ctx, loaded, staleAt, now);
       if (abandoned !== null) return ok(abandoned);
     }
     // Deferred, capped and skipped are waiting for the deferred job or are final.
@@ -201,7 +226,7 @@ export async function deliverDelivery(
       });
     }
   } else {
-    const abandoned = await abandonIfStale(ctx, loaded, options.staleAt ?? null, now);
+    const abandoned = await abandonIfStale(ctx, loaded, staleAt, now);
     if (abandoned !== null) return ok(abandoned);
   }
 

@@ -157,7 +157,17 @@ export function buildAutomationSettingsView(
         lastAction:
           last === undefined
             ? null
-            : { at: last.createdAt, summary: last.summary, status: last.status },
+            : {
+                at: last.createdAt,
+                // SPEC-713 EF-8 — the last-action line of the settings screen is the frozen one.
+                summary:
+                  key === 'micro_seance' &&
+                  last.status === 'consumed' &&
+                  typeof last.payload.lastActionSummary === 'string'
+                    ? last.payload.lastActionSummary
+                    : last.summary,
+                status: last.status,
+              },
       };
     }),
   }));
