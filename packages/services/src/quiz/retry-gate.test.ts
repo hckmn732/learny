@@ -18,6 +18,8 @@ describe('[SPEC-612] garde de nouvelle tentative', () => {
       allowed: false,
       availableAt: '2026-11-12T12:20:00.000Z',
       reason: 'delay',
+      remediationRequired: false,
+      remediationDone: false,
     });
   });
 

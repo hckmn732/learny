@@ -454,7 +454,13 @@ describe('[SPEC-612] remédiation ciblée', () => {
   it('lit la remédiation courante : absente, archivée, prête, en cours, terminée (ET-2, CL-12)', async () => {
     retryGate.mockResolvedValue({
       ok: true,
-      value: { allowed: true, availableAt: null, reason: null },
+      value: {
+        allowed: true,
+        availableAt: null,
+        reason: null,
+        remediationRequired: false,
+        remediationDone: false,
+      },
     });
 
     await expect(
@@ -598,7 +604,13 @@ describe('[SPEC-612] remédiation ciblée', () => {
   it('termine la remédiation quand toutes les questions sont vérifiées (ET-2, CA-6)', async () => {
     retryGate.mockResolvedValue({
       ok: true,
-      value: { allowed: true, availableAt: '2026-11-12T12:20:00.000Z', reason: null },
+      value: {
+        allowed: true,
+        availableAt: '2026-11-12T12:20:00.000Z',
+        reason: null,
+        remediationRequired: false,
+        remediationDone: false,
+      },
     });
     applyLearningResult.mockResolvedValue({ ok: true, value: undefined });
 

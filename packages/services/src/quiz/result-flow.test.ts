@@ -151,7 +151,13 @@ const notions = [
 ];
 
 function hygiene() {
-  readRetryGate.mockResolvedValue({ allowed: true, availableAt: null, reason: null });
+  readRetryGate.mockResolvedValue({
+    allowed: true,
+    availableAt: null,
+    reason: null,
+    remediationRequired: false,
+    remediationDone: false,
+  });
 }
 
 describe('[SPEC-612] résultat de quiz', () => {
@@ -201,7 +207,13 @@ describe('[SPEC-612] résultat de quiz', () => {
       nextModule: null,
       pendingOpenCount: 1,
       remediation: { status: 'none', href: null },
-      retry: { allowed: true, availableAt: null, reason: null },
+      retry: {
+        allowed: true,
+        availableAt: null,
+        reason: null,
+        remediationRequired: false,
+        remediationDone: false,
+      },
     });
     expect(result.value.history).toEqual([{ attemptNo: 1, score: 50, passed: false }]);
     expect(result.value.gaps.map((gap) => gap.notionId)).toEqual([N4, N1]);
@@ -224,6 +236,8 @@ describe('[SPEC-612] résultat de quiz', () => {
       allowed: false,
       availableAt: '2026-11-12T12:20:00.000Z',
       reason: 'delay',
+      remediationRequired: false,
+      remediationDone: false,
     });
     const inProgress = {
       ...attemptRow,
@@ -271,7 +285,12 @@ describe('[SPEC-612] résultat de quiz', () => {
         status: 'in_progress',
         href: `/formations/${FORMATION}/modules/${MODULE}/remediation`,
       },
-      retry: { allowed: false, reason: 'delay' },
+      retry: {
+        allowed: false,
+        reason: 'delay',
+        remediationRequired: false,
+        remediationDone: false,
+      },
     });
   });
 

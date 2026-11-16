@@ -148,11 +148,11 @@ test('échec, lacunes puis remédiation @SPEC-612', async ({ page, axeCheck, cap
     'une question qui oppose les deux notions.',
   );
   await expect(page.getByTestId('result-mastered')).toContainText('9 notions maîtrisées');
-  await expect(page.getByTestId('result-retry')).toBeDisabled();
-  await expect(page.getByText(/Disponible jeu\. 12 nov\. à/)).toBeVisible();
+  await expect(page.getByTestId('quiz-retry')).toBeDisabled();
+  await expect(page.getByTestId('quiz-retry-available-at')).toContainText('Nouvelle tentative possible');
   await captureEvidence('result-fail');
 
-  await page.getByTestId('result-remediation').click();
+  await page.getByTestId('quiz-remediation').click();
   await expect(page.getByTestId('remediation-page')).toBeVisible({ timeout: 30_000 });
   await expect(page.getByTestId('remediation-page')).toContainText('Remédiation ciblée');
   await expect(page.getByTestId('remediation-prepare')).toBeVisible();

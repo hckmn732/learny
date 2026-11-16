@@ -291,7 +291,7 @@ describe('[SPEC-710] service et API', () => {
     expect(byKey.get('micro_seance')?.values).toEqual({ hour: '20', durationMin: '5' });
     expect(byKey.get('bilan')?.values).toEqual({ weekday: '7', hour: '19', channel: 'app' });
     expect(byKey.get('remediation')?.values).toEqual({
-      retryDelayHours: '24',
+      delayHours: '24',
       mode: 'advised',
     });
     expect(byKey.get('plafond_quiz')?.values).toEqual({
