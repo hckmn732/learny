@@ -40,6 +40,7 @@ import {
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
 
+import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';
 import { WarmupPanel } from './WarmupCard';
 
@@ -670,7 +671,9 @@ export function HomeView({
           <WarmupPanel />
         </HomeSlot>
         <div className="flex flex-[2_1_340px] flex-col gap-20">
-          <HomeSlot name="agent-feed" />
+          <HomeSlot name="agent-feed">
+            <TutorActivityPanel />
+          </HomeSlot>
           <HomeSlot name="weekly" />
         </div>
       </div>

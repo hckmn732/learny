@@ -32,6 +32,7 @@ export * from './ingestion';
 export * from './learning';
 export * from './me';
 export * from './moteur-d-automatismes';
+export * from './accueil-le-tuteur-a-agi-pour-vous';
 export * from './automations';
 export * from './warmup';
 export * from './gaps';

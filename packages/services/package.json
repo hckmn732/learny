@@ -8,6 +8,7 @@
     "./ai": "./src/ai/index.ts",
     "./destination": "./src/auth/destination.ts",
     "./home/derive": "./src/home/derive.ts",
+    "./accueil-le-tuteur-a-agi-pour-vous": "./src/accueil-le-tuteur-a-agi-pour-vous.ts",
     "./warmup/derive": "./src/warmup/derive.ts",
     "./billing": "./src/billing/index.ts",
     "./ai/credentials": "./src/ai/credentials-service.ts",

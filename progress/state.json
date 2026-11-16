@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T00:42:13.545Z",
+  "updatedAt": "2026-11-16T01:05:19.815Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5387,14 +5387,55 @@
       "validations": {}
     },
     "SPEC-722": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-15T19:14:08.922Z",
+      "completedAt": "2026-11-16T01:05:19.810Z",
+      "branch": "spec/SPEC-722-accueil-le-tuteur-a-agi-pour-vous",
+      "commit": "d783604f",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T00:46:12.500Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T00:49:26.598Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-16T00:50:57.332Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T00:52:31.032Z",
+          "details": "9 test(s) [SPEC-722] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T00:56:47.364Z",
+          "details": "2 test(s) [SPEC-722] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T00:58:04.108Z",
+          "details": "3 réussi(s), 0 échec(s), 9 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T00:58:04.108Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T00:58:04.149Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-723": {
       "status": "done",
