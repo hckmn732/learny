@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
 import type { SelfGrade } from '@learny/bricks/view';
@@ -13,6 +13,7 @@ import {
 import { EmptyState, ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
+import { invalidateStudyProgress } from '../../lib/study-progress';
 import { fr } from '../../messages/fr';
 
 import { GamePanel } from './GamePanel';
@@ -53,6 +54,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
   const { formationId, initial, timeZone } = props;
   // ET-6 — the selected mode drives the query key; the URL is replaced by SessionModeSwitch.
   const [mode, setMode] = useState<'full' | 'micro'>(initial.mode);
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ['global-quiz', formationId, mode],
     queryFn: () => api.globalQuizToday({ params: { fid: formationId }, query: { mode } }),
@@ -142,6 +144,9 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
       const parsed = ReviewSummaryDtoSchema.safeParse(value);
       if (parsed.success) setSummary(parsed.data);
       setCompleteError(false);
+      // QA SCR-03 — the streak, the due counts, the home cards and the agenda slot changed: the
+      // sidebar and the home screen must not keep their cached state of before the session.
+      void invalidateStudyProgress(queryClient);
       await query.refetch();
     },
     onError: () => {
