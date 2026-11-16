@@ -40,16 +40,19 @@ describe('[SPEC-603] getHome', () => {
 
     expect(home.today.date).toBe('2026-11-11');
     expect(home.today.label).toBe('Mercredi 11 novembre');
-    expect(home.today.slots).toHaveLength(4);
-    expect(home.today.plannedMinutes).toBe(300);
+    // Le seed SPEC-714 ajoute l'échauffement de 2 min placé par le tuteur à 13:50.
+    expect(home.today.slots).toHaveLength(5);
+    expect(home.today.plannedMinutes).toBe(302);
     expect(home.today.doneMinutes).toBe(180);
     expect(home.today.slots.map((slot) => slot.state)).toEqual([
       'done',
+      'todo',
       'next',
       'upcoming',
       'upcoming',
     ]);
-    expect(home.today.slots[1]).toMatchObject({
+    expect(home.today.slots[1]).toMatchObject({ kind: 'warmup', time: '13:50' });
+    expect(home.today.slots[2]).toMatchObject({
       state: 'next',
       minutesUntil: 40,
     });
