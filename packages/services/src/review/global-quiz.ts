@@ -2467,6 +2467,18 @@ export function completeReviewSession(
           completeSlots: config.mode === 'micro',
         });
       }
+      // QA SCR-03 — a finished full session closes the global-quiz slot of the day in the agenda:
+      // the home day card shows it « Fait » instead of « À venir » (BR-PRO-02). The micro-session
+      // closes its own slot above (SPEC-713).
+      if (hasAnswer && config.mode === 'full') {
+        await completeTodayQuizSlots(tx, {
+          userId,
+          formationId: activity.formation_id,
+          day,
+          timeZone,
+          now,
+        });
+      }
       const streakDays = hasAnswer
         ? await bumpStreak(tx, userId, day)
         : await currentStreak(tx, userId);
@@ -2498,6 +2510,22 @@ export function completeReviewSession(
       return summary;
     });
   });
+}
+
+/** Marks `done` the planned global-quiz slots of the formation on the learner's civil day. */
+async function completeTodayQuizSlots(
+  tx: DbTx,
+  input: { userId: string; formationId: string; day: string; timeZone: string; now: Date },
+): Promise<void> {
+  await tx.execute(sql`
+    update public.schedule_slots
+    set status = 'done', updated_at = ${input.now.toISOString()}::timestamptz
+    where user_id = ${input.userId}::uuid
+      and formation_id = ${input.formationId}::uuid
+      and kind = 'global_quiz'
+      and status = 'planned'
+      and (starts_at at time zone ${input.timeZone})::date = ${input.day}::date
+  `);
 }
 
 /**

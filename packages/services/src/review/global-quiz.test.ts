@@ -1215,6 +1215,10 @@ describe('[SPEC-701] réponse et clôture de la session', () => {
     expect(result.ok && result.value.minutes).toBeGreaterThanOrEqual(1);
     expect(fake.calls.some((text) => text.startsWith('update public.attempts'))).toBe(true);
     expect(fake.calls.some((text) => text.startsWith('update public.profiles'))).toBe(true);
+    // QA SCR-03 — the global-quiz slot of the day becomes « Fait » on the home day card.
+    const slotUpdate = fake.calls.find((text) => text.startsWith('update public.schedule_slots'));
+    expect(slotUpdate).toContain("kind = 'global_quiz'");
+    expect(slotUpdate).toContain("set status = 'done'");
   });
 
   it('CL-12 — une session sans réponse ne qualifie pas la journée et garde la série', async () => {
@@ -1232,6 +1236,7 @@ describe('[SPEC-701] réponse et clôture de la session', () => {
       value: { reviewedCount: 0, okCount: 0, soonCount: 0, streakDays: 3, nextSessionAt: null },
     });
     expect(fake.calls.some((text) => text.startsWith('update public.profiles'))).toBe(false);
+    expect(fake.calls.some((text) => text.startsWith('update public.schedule_slots'))).toBe(false);
   });
 
   it('EF-11 — une session déjà clôturée rejoue son résumé enregistré', async () => {

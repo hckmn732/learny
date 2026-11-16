@@ -124,9 +124,16 @@ test('parcours SPEC-722 @SPEC-722', async ({ page, axeCheck, captureEvidence }) 
     '/parametres#automatismes',
   );
   await expect(page.getByTestId('automation-action').first()).toBeVisible();
-  await expect(card).toContainText('Cinq jeux choisis pour le quiz global');
+  await expect(card).toContainText('Lacune « Variante d’exercice » : carte de rappel ajoutée');
   await expect(card).toContainText('18 notions étaient dues');
   await expect(card).toContainText(REMEDIATION_SUMMARY);
+  // QA SCR-03 — une action appliquée sans charge d'annulation n'offre pas « Annuler » (400 sinon).
+  await expect(
+    card
+      .getByTestId('automation-action')
+      .filter({ hasText: REMEDIATION_SUMMARY })
+      .getByTestId('automation-action-undo'),
+  ).toHaveCount(0);
   await axeCheck();
 
   // CA-1 — Accepter une alternative applique l'action une fois, la carte et l'annonce se mettent à

@@ -123,9 +123,9 @@ export function TutorActivityPanel() {
     <section
       data-testid="tutor-acted"
       aria-labelledby="tutor-acted-title"
-      className="flex flex-col gap-1.5 rounded-24 border border-solid border-border bg-surface p-[22px_24px]"
+      className="flex flex-col gap-6 rounded-24 border border-solid border-border bg-surface px-24 py-22"
     >
-      <div className="mb-1 flex items-baseline justify-between gap-10">
+      <div className="mb-4 flex items-baseline justify-between gap-10">
         <h2
           id="tutor-acted-title"
           ref={headingRef}
@@ -221,15 +221,16 @@ function ActivityLine({
     <li
       data-testid="automation-action"
       data-status={item.status}
-      className="flex flex-col gap-2 border-t border-solid border-divider py-3 first:border-t-0"
+      className="flex flex-col gap-8 border-t border-solid border-divider py-12 first:border-t-0"
     >
-      <div className="flex items-start gap-2.5">
+      <div className="flex items-start gap-10">
+        {/* 8 px status dot, same size as the dots of Toast and AlertDialog (SCR-03 mockup). */}
         <span
           aria-hidden="true"
           data-testid="automation-action-dot"
-          className={cn('mt-1.5 size-2 shrink-0 rounded-full', DOT_CLASS[item.automation])}
+          className={cn('mt-6 size-8 shrink-0 rounded-full', DOT_CLASS[item.automation])}
         />
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           <span className="flex flex-wrap items-baseline justify-between gap-x-8">
             <span className="text-11 font-700 tracking-kicker text-ink-muted uppercase">
               {t.kinds[item.automation]}
@@ -242,7 +243,7 @@ function ActivityLine({
         </div>
       </div>
       {pending ? (
-        <div className="flex flex-wrap gap-1.5 pl-[18px]">
+        <div className="flex flex-wrap gap-6 pl-18">
           <Button
             data-testid="automation-action-confirm"
             disabled={busy}
@@ -263,7 +264,7 @@ function ActivityLine({
           </Button>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-1.5 pl-[18px]">
+        <div className="flex flex-wrap gap-6 pl-18">
           {item.canUndo ? (
             <Button
               data-testid="automation-action-undo"

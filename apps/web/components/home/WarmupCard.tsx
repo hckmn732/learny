@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
 import type { WarmupAnswer, WarmupDto, WarmupItem } from '@learny/contracts';
@@ -8,6 +8,7 @@ import { sessionKindLabel, warmupDurationMin } from '@learny/services/warmup/der
 import { Button, ErrorState, SkeletonCard, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
+import { invalidateStudyProgress } from '../../lib/study-progress';
 import { fr } from '../../messages/fr';
 
 const t = fr.home.warmup;
@@ -121,7 +122,7 @@ export function WarmupCard({ warmup, onAnswer }: Readonly<WarmupCardProps>) {
       id="echauffement"
       data-testid="warmup-card"
       aria-labelledby="t-echauffement"
-      className="flex flex-[3_1_460px] flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22"
+      className="flex min-w-0 flex-1 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22"
     >
       <div data-testid="warmup-visual" className="flex flex-col gap-14">
         <div className="flex flex-wrap items-center justify-between gap-10">
@@ -276,6 +277,7 @@ export function WarmupCard({ warmup, onAnswer }: Readonly<WarmupCardProps>) {
 
 /** Loading skeleton and error state of the card (EF-7, §10). */
 export function WarmupPanel() {
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ['warmups', 'today'],
     queryFn: () => api.warmupTodayGet({}),
@@ -284,7 +286,7 @@ export function WarmupPanel() {
 
   if (query.isError) {
     return (
-      <section className="flex flex-[3_1_460px] flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22">
+      <section className="flex min-w-0 flex-1 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22">
         <ErrorState
           data-testid="warmup-error"
           title={t.error}
@@ -295,7 +297,7 @@ export function WarmupPanel() {
   }
   if (query.data === undefined) {
     return (
-      <div data-testid="warmup-loading" className="flex flex-[3_1_460px] flex-col gap-14">
+      <div data-testid="warmup-loading" className="flex min-w-0 flex-1 flex-col gap-14">
         <SkeletonCard />
       </div>
     );
@@ -305,12 +307,16 @@ export function WarmupPanel() {
   return (
     <WarmupCard
       warmup={warmup}
-      onAnswer={async ({ position, knew }) =>
-        api.warmupAnswer({
+      onAnswer={async ({ position, knew }) => {
+        const next = await api.warmupAnswer({
           params: { activityId: warmup.activityId },
           body: { position, knew },
-        })
-      }
+        });
+        // QA SCR-03 — the last answer closes the warm-up slot and consumes its automation action:
+        // the day card, the tutor card and the shell refresh without a reload.
+        if (next.status === 'done') void invalidateStudyProgress(queryClient);
+        return next;
+      }}
     />
   );
 }
