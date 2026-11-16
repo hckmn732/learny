@@ -4,6 +4,7 @@ import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
 import { authRoutes } from './auth';
+import { pauseRoutes } from './automatisme-10-mode-pause-et-retour';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
 import { cadrageRoutes, formationRoutes } from './cadrage';
@@ -96,6 +97,7 @@ export const ROUTES = {
   ...examRoutes,
   ...remediationRoutes,
   ...automationRoutes,
+  ...pauseRoutes,
   ...warmupRoutes,
   ...reviewRoutes,
 } as const;

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T15:01:27.254Z",
+  "updatedAt": "2026-11-16T16:22:52.843Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5567,11 +5567,11 @@
       "validations": {}
     },
     "SPEC-721": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-16T16:22:52.843Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-721-automatisme-10-mode-pause-et-retour",
       "commit": null,
       "lastError": null,
       "validations": {}
