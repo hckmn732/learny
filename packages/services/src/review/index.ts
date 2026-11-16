@@ -6,5 +6,14 @@ export { MICRO_QUESTION_FORMATS, composeMicroSession, microCardCount } from './m
 export type { ComposeMicroInput, MicroBrick, MicroComposition } from './micro-composition';
 export { splitResultByNotion } from './per-notion';
 export type { PerNotionResult, SplitContext } from './per-notion';
+export {
+  QUESTION_CARD_AUTOMATION,
+  QUESTION_CARD_FORMAT,
+  QUESTION_CARD_KIND,
+  QUESTION_CARD_REASON_CODE,
+  QUESTION_CARD_REASON_LABEL,
+  questionCardForcedGame,
+} from './question-card';
+export type { QuestionCardActionLike, QuestionCardForcedGame } from './question-card';
 export { buildMicroNote, buildRationale, nextCivilDay } from './rationale';
 export type { RationaleGapItem, RationaleInput } from './rationale';
