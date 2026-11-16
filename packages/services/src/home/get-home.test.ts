@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { UserDatabase } from '@learny/db';
 
-import { TestClock } from '../../test/support/fakes';
+import { TestClock, sqlText } from '../../test/support/fakes';
 import type { ServiceContext } from '../context';
 
 import { getHome } from './get-home';
@@ -286,6 +286,32 @@ function fullSequence(profile: Record<string, unknown> = {}) {
   ]);
 }
 
+/** Profile and formation in order; the stored session of the day and the next quiz by query. */
+function withTodaySession(completed: boolean, nextQuiz: unknown[]) {
+  const queue: unknown[][] = [
+    [{ current_formation_id: ACTIVE, timezone: 'Europe/Paris', next_review_at: null }],
+    [formation()],
+  ];
+  return vi.fn((query: unknown) => {
+    const text = sqlText(query);
+    if (text.includes("a.kind = 'global_quiz_session'")) {
+      return Promise.resolve([
+        {
+          config: {
+            estimatedSec: 600,
+            items: [{ format: 'choice_question', notionIds: [NOTION, NOTION_BIS] }],
+          },
+          completed,
+        },
+      ]);
+    }
+    if (text.includes("kind = 'global_quiz'") && text.includes('from public.schedule_slots')) {
+      return Promise.resolve(nextQuiz);
+    }
+    return Promise.resolve(queue.shift() ?? []);
+  });
+}
+
 describe('[SPEC-603] accueil de l’apprenant', () => {
   it('projette la journée, la rétention, le quiz et les deux onglets (ET-2)', async () => {
     const execute = fullSequence();
@@ -408,6 +434,49 @@ describe('[SPEC-603] accueil de l’apprenant', () => {
         },
         today: { date: '2026-11-11', plannedMinutes: 0, doneMinutes: 0, slots: [] },
       },
+    });
+  });
+
+  it('QA SCR-03 — la session du jour terminée ne propose plus de notions à revoir', async () => {
+    const execute = withTodaySession(true, [{ starts_at: '2026-11-12T16:00:00Z' }]);
+
+    const result = await getHome(context(execute));
+
+    expect(result).toMatchObject({
+      ok: true,
+      value: {
+        globalQuiz: {
+          formationId: ACTIVE,
+          notionCount: 0,
+          gamesCount: 0,
+          durationMin: 0,
+          hasGaps: false,
+          deferred: null,
+          nextReviewOn: '2026-11-12',
+        },
+      },
+    });
+  });
+
+  it('QA SCR-03 — sans quiz planifié, la prochaine révision est le lendemain', async () => {
+    const execute = withTodaySession(true, []);
+
+    const result = await getHome(context(execute));
+
+    expect(result).toMatchObject({
+      ok: true,
+      value: { globalQuiz: { notionCount: 0, nextReviewOn: '2026-11-12' } },
+    });
+  });
+
+  it('QA SCR-03 — la session du jour en cours garde ses notions à revoir', async () => {
+    const execute = withTodaySession(false, []);
+
+    const result = await getHome(context(execute));
+
+    expect(result).toMatchObject({
+      ok: true,
+      value: { globalQuiz: { notionCount: 2, gamesCount: 1, durationMin: 10 } },
     });
   });
 

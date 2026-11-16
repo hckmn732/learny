@@ -2,10 +2,13 @@
 
 // Orange line of the current local hour (SPEC-704 EF-12, BR-AGE-07, CL-2). The position follows
 // the wall clock of the learner's zone and refreshes every 60 s through the injected clock
-// (ADR-0047): the browser clock is frozen in test, the server never reads the process time.
+// (ADR-0047). The screen hands the clock anchored on the server instant (`anchoredClock`): the
+// browser time alone would place the line on the device hour, not on the application hour.
 import { useEffect, useState } from 'react';
 
-import { clock, toUserZone } from '@learny/core';
+import { clock as defaultClock, toUserZone, type Clock } from '@learny/core';
+
+import { nowLineTop } from '../../lib/agenda/grid';
 
 export interface NowLineProps {
   timezone: string;
@@ -14,9 +17,17 @@ export interface NowLineProps {
   /** Grid end hour: the line hides outside the displayed range. */
   gridEndHour: number;
   visible: boolean;
+  /** Application clock; defaults to the injectable clock of `@learny/core`. */
+  clock?: Clock | undefined;
 }
 
-export function NowLine({ timezone, gridStartHour, gridEndHour, visible }: NowLineProps) {
+export function NowLine({
+  timezone,
+  gridStartHour,
+  gridEndHour,
+  visible,
+  clock = defaultClock,
+}: NowLineProps) {
   const [minutes, setMinutes] = useState<number | null>(null);
 
   useEffect(() => {
@@ -29,11 +40,11 @@ export function NowLine({ timezone, gridStartHour, gridEndHour, visible }: NowLi
     return () => {
       window.clearInterval(timer);
     };
-  }, [timezone]);
+  }, [timezone, clock]);
 
   if (!visible || minutes === null) return null;
-  const top = (minutes / 60 - gridStartHour) * 60;
-  if (top < 0 || top >= (gridEndHour - gridStartHour) * 60) return null;
+  const top = nowLineTop(minutes, gridStartHour, gridEndHour);
+  if (top === null) return null;
 
   return (
     <div

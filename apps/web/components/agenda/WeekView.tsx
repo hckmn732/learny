@@ -4,6 +4,7 @@
 // plus the weekend days when they are studied or carry a slot; 60 px per hour on the mockup
 // scale; the current day column has the light background and carries the orange now line.
 import type { AgendaSlot } from '@learny/contracts';
+import type { Clock } from '@learny/core';
 import { colors } from '@learny/ui/tokens';
 
 import { AGENDA_DAYS, civilDayNumber, civilDow } from '../../lib/agenda/dates';
@@ -22,6 +23,8 @@ export interface WeekViewProps {
   onSelect: (slotId: string) => void;
   onPickDay: (date: string) => void;
   onArrow?: ((direction: -1 | 1) => void) | undefined;
+  /** Application clock of the now line (anchored on the server instant). */
+  clock?: Clock | undefined;
 }
 
 export function WeekView({
@@ -33,6 +36,7 @@ export function WeekView({
   onSelect,
   onPickDay,
   onArrow,
+  clock,
 }: WeekViewProps) {
   const grid: GridHours = gridHours(allSlots);
   const gridHeight = (grid.endHour - grid.startHour) * 60;
@@ -126,6 +130,7 @@ export function WeekView({
                   gridStartHour={grid.startHour}
                   gridEndHour={grid.endHour}
                   visible={isToday}
+                  clock={clock}
                 />
               </div>
             );

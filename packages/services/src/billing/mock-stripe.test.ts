@@ -68,9 +68,9 @@ describe('[SPEC-210] passerelle Stripe simulée', () => {
       stripe.createPortalSession({
         customerId: 'cus_mock_1',
         returnUrl: 'https://learny.test/parametres',
-        returnPath: '/parametres#ia',
+        returnPath: '/parametres#modeles',
       }),
-    ).resolves.toEqual({ url: '/_dev/stripe/portal?return=%2Fparametres%23ia' });
+    ).resolves.toEqual({ url: '/_dev/stripe/portal?return=%2Fparametres%23modeles' });
   });
 
   it('paiement : abonnement actif trente jours et événement signé (EF-4, EF-7)', async () => {

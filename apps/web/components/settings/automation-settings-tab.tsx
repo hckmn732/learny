@@ -439,10 +439,8 @@ export function AutomationSettingsTab({
           </div>
         </div>
         <article className="flex flex-col gap-14" data-testid="automation-row-pause">
-          <div className="flex items-start gap-14">
-            <p className="m-0 flex-1 text-13 leading-1.5 text-ink-secondary">
-              {t.items.pause.rule}
-            </p>
+          {/* The rule is shown once, under the section title (maquette Parametres « t-pause »). */}
+          <div className="flex justify-end">
             <Switch
               aria-labelledby="automation-title-pause"
               checked={pauseEnabled}

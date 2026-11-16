@@ -423,13 +423,15 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect((await receive(delivery, h)).result).toBe('applied');
   });
 
-  it('EF-2 — portail : introuvable sans client Stripe, puis URL de retour /parametres#ia', async () => {
+  it('EF-2 — portail : introuvable sans client Stripe, puis URL de retour /parametres#modeles', async () => {
     const h = harness();
     const userId = await createUser('portail');
     expect((await errorOf(openPortal({ userId }, h.deps))).code).toBe('NOT_FOUND');
     await startCheckout({ userId }, SUCCESS, {}, h.deps);
     const portal = await openPortal({ userId }, h.deps);
-    expect(portal.url).toBe(`/_dev/stripe/portal?return=${encodeURIComponent('/parametres#ia')}`);
+    expect(portal.url).toBe(
+      `/_dev/stripe/portal?return=${encodeURIComponent('/parametres#modeles')}`,
+    );
   });
 
   it('EF-5 — les statuts relus chez Stripe sont convertis (trialing, unpaid, incomplete_expired)', async () => {

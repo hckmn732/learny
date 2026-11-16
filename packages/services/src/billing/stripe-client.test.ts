@@ -159,7 +159,7 @@ describe('[SPEC-210] passerelle Stripe réelle', () => {
       stripe.createPortalSession({
         customerId: 'cus_1',
         returnUrl: 'https://learny.test/parametres',
-        returnPath: '/parametres#ia',
+        returnPath: '/parametres#modeles',
       }),
     ).resolves.toEqual({ url: 'https://portal.test' });
     expect(client.billingPortal.sessions.create).toHaveBeenCalledWith({
@@ -173,7 +173,7 @@ describe('[SPEC-210] passerelle Stripe réelle', () => {
         stripe.createPortalSession({
           customerId: 'cus_1',
           returnUrl: 'https://learny.test/parametres',
-          returnPath: '/parametres#ia',
+          returnPath: '/parametres#modeles',
         }),
       ),
     ).resolves.toBe('SERVICE_UNAVAILABLE');
