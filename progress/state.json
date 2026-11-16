@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T17:00:11.149Z",
+  "updatedAt": "2026-11-16T17:48:57.099Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5598,22 +5598,22 @@
       }
     },
     "SPEC-720": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-16T15:09:23.861Z",
-      "completedAt": null,
+      "completedAt": "2026-11-16T17:48:57.092Z",
       "branch": "spec/SPEC-720-automatisme-9-bilan-de-la-semaine",
-      "commit": null,
-      "lastError": "acceptance: 0/4 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4 ; 1 ❌",
+      "commit": "c484019f",
+      "lastError": null,
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-16T16:23:54.740Z",
+          "at": "2026-11-16T17:44:14.213Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-16T16:27:47.015Z",
+          "at": "2026-11-16T17:48:39.704Z",
           "details": ""
         },
         "unit": {
@@ -5637,9 +5637,9 @@
           "details": "1 test(s) @visual réussi(s) (mode mockup)"
         },
         "acceptance": {
-          "status": "failed",
-          "at": "2026-11-16T16:29:24.207Z",
-          "details": "0/4 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4 ; 1 ❌"
+          "status": "passed",
+          "at": "2026-11-16T17:48:40.102Z",
+          "details": "4/4 critères ✅"
         }
       }
     },
