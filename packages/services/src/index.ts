@@ -24,6 +24,7 @@ export * from './header';
 export * from './me';
 export * from './home';
 export * from './accueil-le-tuteur-a-agi-pour-vous';
+export * from './weekly-review';
 export * from './onboarding/index';
 export * from './sidebar';
 export * from './serie-regularite-et-jalons-interface';

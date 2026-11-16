@@ -1672,6 +1672,27 @@ export const DEMO_AUTOMATION_ACTIONS: readonly DemoAutomationActionFixture[] = [
     formation: 'sap',
     createdAt: parisInstant('2026-11-08', '19:00'),
     source: AUTOMATION_SOURCE,
+    // SPEC-720 — the seeded review keeps the real figures of the demonstration week (SCR-03).
+    payload: {
+      dedupeKey: `weekly:${demoUserId('alex')}:2026-W45`,
+      weekKey: '2026-W45',
+      weekStart: '2026-11-02',
+      weekEnd: '2026-11-08',
+      nextWeekStart: '2026-11-09',
+      reviewOn: parisInstant('2026-11-08', '19:00'),
+      studyMinutes: 780,
+      retention: { horizonDays: 30, rate: 85.71428571428571, reviewed: 7, successful: 6 },
+      atRiskNotions: [
+        { notionId: demoNotionId('sap:m3:c4:n1'), label: 'Ledgers parallèles', mastery: 28 },
+        { notionId: demoNotionId('sap:m3:c2:n4'), label: 'Clé de comptabilisation', mastery: 35 },
+        { notionId: demoNotionId('sap:m3:c2:n7'), label: 'Équilibre d’une pièce', mastery: 55 },
+      ],
+      atRiskCount: 3,
+      plan: [],
+      planMinutes: 0,
+      channel: 'app',
+      availabilityHref: '/parametres#rythme',
+    },
   },
 ] as const;
 
