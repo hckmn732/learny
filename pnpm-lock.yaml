@@ -235,6 +235,9 @@ importers:
 
   packages/automations:
     dependencies:
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../bricks
       '@learny/config':
         specifier: workspace:*
         version: link:../config

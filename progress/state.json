@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T11:54:49.259Z",
+  "updatedAt": "2026-11-16T12:54:58.625Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5450,14 +5450,50 @@
       }
     },
     "SPEC-717": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-16T11:40:46.534Z",
+      "completedAt": "2026-11-16T12:54:58.615Z",
+      "branch": "spec/SPEC-717-automatisme-6-questions-transformees-en-",
+      "commit": "d95f61dc",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T12:44:18.857Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T12:46:14.018Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T12:48:05.567Z",
+          "details": "8 test(s) [SPEC-717] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T12:53:15.665Z",
+          "details": "8 test(s) [SPEC-717] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T12:54:37.877Z",
+          "details": "2 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T12:54:37.878Z",
+          "details": "1 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T12:54:37.924Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-718": {
       "status": "in_progress",

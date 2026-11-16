@@ -1,13 +1,23 @@
 #!/usr/bin/env node
-// Exécute toutes les validations obligatoires d'une spécification et collecte les preuves.
-// Usage : node tools/sdd/validate.mjs SPEC-xxx [--skip-build]
+// Exécute les validations obligatoires d'une spécification et collecte les preuves.
+// Usage : node tools/sdd/validate.mjs SPEC-xxx [--skip-build] [--only unit,integration,e2e,visual,acceptance]
+//
+// - lint et typecheck passent toujours en premier (rapides grâce au cache Turbo) ; s'ils échouent,
+//   les étapes de test sont marquées « non exécutées » au lieu de tourner pour rien.
+// - --only relance uniquement les étapes citées (plus lint, typecheck et acceptance) et conserve
+//   les résultats précédents des autres étapes : après un échec, ne relancer que ce qui a échoué.
+// - unit et integration ne chargent que les fichiers de test qui contiennent « [SPEC-xxx] »
+//   (repli sur tout le projet Vitest si aucun fichier n'est trouvé).
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  argSpec, die, e2eVerdict, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, specCriteria, summarizePlaywright,
-  visualVerdict, writeFileAtomic,
+  argSpec, die, e2eVerdict, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, shOk, specCriteria,
+  summarizePlaywright, visualVerdict, writeFileAtomic,
 } from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
+
+const STEPS = ['lint', 'typecheck', 'build', 'unit', 'integration', 'e2e', 'visual', 'acceptance'];
+const ALWAYS = ['lint', 'typecheck', 'acceptance'];
 
 const catalog = loadCatalog();
 const st = loadState(catalog);
@@ -22,23 +32,57 @@ for (const k of ['lint', 'typecheck', 'build', 'test:unit', 'test:int', 'test:e2
   if (!scripts[k]) die(`Script pnpm manquant : ${k} (voir docs/engineering/testing.md).`);
 }
 
+const onlyIdx = process.argv.indexOf('--only');
+const onlyArg = onlyIdx > 0 ? process.argv[onlyIdx + 1] ?? '' : (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7);
+const only = onlyArg ? onlyArg.split(',').map((x) => x.trim()).filter(Boolean) : null;
+if (only) {
+  const bad = only.filter((x) => !STEPS.includes(x));
+  if (bad.length) die(`--only : étape(s) inconnue(s) ${bad.join(', ')} (valeurs : ${STEPS.join(', ')}).`);
+}
+const wanted = (step) => !only || only.includes(step) || ALWAYS.includes(step) || (step === 'visual' && only.includes('e2e'));
+if (only && only.includes('visual') && !only.includes('e2e')) only.push('e2e'); // visual se lit dans la campagne e2e
+
 const out = path.join(ROOT, 'test-results', 'sdd', spec.id);
-fs.rmSync(out, { recursive: true, force: true });
+if (!only) fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
 const tag = spec.id;
-const results = {};
+const results = only ? { ...(s.validations ?? {}) } : {};
 const record = (name, ok, details = '') => {
   results[name] = { status: ok ? 'passed' : 'failed', at: nowIso(), details };
   console.log(`${ok ? '✔' : '✖'} ${name}${details ? ` — ${details}` : ''}`);
 };
+const skip = (name, why) => {
+  results[name] = { status: 'failed', at: nowIso(), details: `non exécuté : ${why}` };
+  console.log(`⏭ ${name} — non exécuté : ${why}`);
+};
+const timed = (name, fn) => {
+  const t0 = Date.now();
+  const r = fn();
+  console.log(`⏱ ${name} : ${Math.round((Date.now() - t0) / 1000)} s`);
+  return r;
+};
 
-record('lint', run('pnpm -s lint') === 0);
-record('typecheck', run('pnpm -s typecheck') === 0);
-if (!process.argv.includes('--skip-build')) record('build', run('pnpm -s build') === 0);
+record('lint', timed('lint', () => run('pnpm -s lint')) === 0);
+record('typecheck', timed('typecheck', () => run('pnpm -s typecheck')) === 0);
+if (wanted('build') && !process.argv.includes('--skip-build')) record('build', timed('build', () => run('pnpm -s build')) === 0);
+const staticOk = ['lint', 'typecheck', 'build'].every((k) => results[k]?.status !== 'failed' || (k === 'build' && !wanted('build')));
+
+/** Fichiers de test qui contiennent « [SPEC-xxx] » (chemins relatifs à la racine). */
+function taggedTestFiles() {
+  const r = shOk(`git ls-files -co --exclude-standard -z | xargs -0 grep -lF -- "[${tag}]" 2>/dev/null`);
+  return (r.out ?? '').split('\n').map((x) => x.trim())
+    .filter((f) => /\.test\.(ts|tsx|mts|js|mjs)$/.test(f) && !f.includes('node_modules'));
+}
+const tagged = taggedTestFiles();
 
 function vitest(kind, script) {
   const file = path.join(out, `${kind}.json`);
-  const code = run(`pnpm -s ${script} -t "${tag}" --reporter=default --reporter=json --outputFile.json="${file}"`);
+  fs.rmSync(file, { force: true });
+  const isInt = (f) => /(^|\/)test\/integration\//.test(f) || /\.int\.test\./.test(f);
+  const files = tagged.filter((f) => (kind === 'integration' ? isInt(f) : !isInt(f)));
+  const filter = files.length ? ` ${files.map((f) => JSON.stringify(f)).join(' ')}` : '';
+  if (!files.length) console.log(`(aucun fichier ${kind} ne contient [${tag}] : repli sur tout le projet)`);
+  const code = timed(kind, () => run(`pnpm -s ${script}${filter} -t "${tag}" --reporter=default --reporter=json --outputFile.json="${file}"`));
   let n = 0;
   let failed = 0;
   if (fs.existsSync(file)) {
@@ -52,14 +96,26 @@ function vitest(kind, script) {
   }
   record(kind, code === 0 && failed === 0 && n > 0, `${n} test(s) [${tag}] réussi(s), ${failed} échec(s)`);
 }
-vitest('unit', 'test:unit');
-vitest('integration', 'test:int');
 
-const pwJson = path.join(out, 'e2e.json');
-const e2eCode = run(`pnpm -s test:e2e --grep "@${tag}"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson });
-const e2e = summarizePlaywright(fs.existsSync(pwJson) ? JSON.parse(fs.readFileSync(pwJson, 'utf8')) : null, tag);
-record('e2e', e2eVerdict(e2eCode, e2e), `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
-record('visual', visualVerdict(e2e), `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);
+for (const [kind, script] of [['unit', 'test:unit'], ['integration', 'test:int']]) {
+  if (!wanted(kind)) continue;
+  if (staticOk) vitest(kind, script);
+  else skip(kind, 'lint/typecheck/build en échec');
+}
+
+if (wanted('e2e')) {
+  if (staticOk) {
+    const pwJson = path.join(out, 'e2e.json');
+    fs.rmSync(pwJson, { force: true });
+    const e2eCode = timed('e2e', () => run(`pnpm -s test:e2e --grep "@${tag}"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson }));
+    const e2e = summarizePlaywright(fs.existsSync(pwJson) ? JSON.parse(fs.readFileSync(pwJson, 'utf8')) : null, tag);
+    record('e2e', e2eVerdict(e2eCode, e2e), `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
+    record('visual', visualVerdict(e2e), `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);
+  } else {
+    skip('e2e', 'lint/typecheck/build en échec');
+    skip('visual', 'lint/typecheck/build en échec');
+  }
+}
 
 collectEvidence(spec, out);
 
@@ -77,9 +133,15 @@ if (fs.existsSync(acc)) {
 record('acceptance', accOk, accDetail);
 
 s.validations = results;
-const allOk = Object.values(results).every((r) => r.status === 'passed');
-s.lastError = allOk ? null : Object.entries(results).filter(([, r]) => r.status !== 'passed').map(([k, r]) => `${k}: ${r.details}`).join(' | ');
+const required = ['lint', 'typecheck', 'unit', 'integration', 'e2e', 'visual', 'acceptance'];
+const allOk = required.every((k) => results[k]?.status === 'passed') && Object.values(results).every((r) => r.status === 'passed');
+const failing = Object.entries(results).filter(([, r]) => r.status !== 'passed');
+s.lastError = allOk ? null : failing.map(([k, r]) => `${k}: ${r.details}`).join(' | ');
 saveState(st);
 writeFileAtomic(path.join(P.evidence, spec.id, 'checks.json'), JSON.stringify(results, null, 2) + '\n');
-console.log(allOk ? `\n✔ ${spec.id} : toutes les validations sont réussies.` : `\n✖ ${spec.id} : validations en échec. Corriger puis relancer.`);
+if (allOk) console.log(`\n✔ ${spec.id} : toutes les validations sont réussies.`);
+else {
+  const retry = failing.map(([k]) => k).filter((k) => !ALWAYS.includes(k) && k !== 'build');
+  console.log(`\n✖ ${spec.id} : validations en échec. Corriger puis relancer${retry.length ? ` uniquement : --only ${retry.join(',')}` : ''}.`);
+}
 process.exit(allOk ? 0 : 1);

@@ -159,6 +159,7 @@ export function TutorProposalBanner({
   const shown = accepted ?? action;
   const done = accepted !== null && accepted.status === 'applied';
   const isPlan = action.kind === 'plan_change_proposed' && !done;
+  const isCard = action.automation === 'questions_cartes';
   const alternatives = alternativesOf(action);
   const options = planOptionsOf(action);
 
@@ -187,7 +188,7 @@ export function TutorProposalBanner({
           data-testid="tutor-proposal-kicker"
           className="m-0 text-12 font-700 tracking-kicker text-orange-ink uppercase"
         >
-          {done ? t.kickerDone : t.kickerAsk}
+          {done ? (isCard ? t.kickerCardDone : t.kickerDone) : t.kickerAsk}
         </h2>
         <p aria-live="polite" data-testid="tutor-proposal-text" className="m-0 text-15 leading-1.5">
           {shown.summary}
@@ -216,6 +217,33 @@ export function TutorProposalBanner({
         >
           {t.undo}
         </Button>
+      ) : isCard ? (
+        <div className="flex w-full flex-col gap-8 sm:w-auto sm:flex-row">
+          <Button
+            data-testid="tutor-proposal-accept"
+            className="min-h-[42px]"
+            disabled={busy}
+            onClick={() => {
+              onAccept(action.id);
+            }}
+            size="md"
+            variant="dark"
+          >
+            {t.accept}
+          </Button>
+          <Button
+            data-testid="tutor-proposal-decline"
+            className="min-h-[42px]"
+            disabled={busy}
+            onClick={() => {
+              onDecline(action.id);
+            }}
+            size="md"
+            variant="outline"
+          >
+            {t.refuse}
+          </Button>
+        </div>
       ) : isPlan ? (
         <div className="flex w-full flex-col gap-10 sm:w-auto sm:flex-row">
           <Button

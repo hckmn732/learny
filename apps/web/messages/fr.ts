@@ -53,11 +53,13 @@ export const fr = {
     proposal: {
       kickerAsk: 'Le tuteur propose · votre accord est demandé',
       kickerDone: 'Séance replacée',
+      kickerCardDone: 'Le tuteur a agi pour vous',
       iconLabel: 'Proposition du tuteur',
       accept: 'Accepter',
       other: 'Autre créneau',
       slotsLabel: 'Créneaux libres proposés par le tuteur',
       decline: 'Ne pas replacer',
+      refuse: 'Refuser',
       undo: 'Annuler',
       options: 'Voir les options',
       later: 'Pas maintenant',

@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@learny/bricks": "workspace:*",
     "@learny/config": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
