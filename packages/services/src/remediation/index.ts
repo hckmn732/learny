@@ -183,6 +183,12 @@ export interface PrepareOptions {
   trigger?: 'auto' | 'manual';
   generator?: RemediationPlanGenerator;
   scenario?: string;
+  /**
+   * SPEC-715 CL-9 — the automation of remediation needs to distinguish an unavailable AI from a
+   * degraded but usable local plan. `fallback` (default) keeps the SPEC-612 behaviour; `fail`
+   * returns the AI error so the caller can apply the delay without a remediation activity.
+   */
+  onAiUnavailable?: 'fallback' | 'fail';
 }
 
 export interface PrepareOutcome {
@@ -545,6 +551,7 @@ export function prepareRemediation(
 
     let plan: RemediationPlan | null = null;
     let fallback = false;
+    let aiError: AppError | null = null;
     try {
       const generator = options.generator ?? defaultRemediationPlanGenerator;
       const generated = await generator(
@@ -567,10 +574,21 @@ export function prepareRemediation(
         },
       );
       if (generated.ok) plan = generated.value;
-      else fallback = true;
+      else {
+        fallback = true;
+        aiError = generated.error;
+      }
     } catch (cause) {
       fallback = true;
+      if (cause instanceof AppError) aiError = cause;
       ctx.logger.warn('remediation.plan.failed', { outcome: 'ai_task_failed' }, cause);
+    }
+    if (
+      options.onAiUnavailable === 'fail' &&
+      aiError !== null &&
+      (aiError.code === 'AI_UNAVAILABLE' || aiError.code === 'AI_CAP_REACHED')
+    ) {
+      throw aiError;
     }
 
     const outcome = await withTransaction(db, async (tx): Promise<PrepareOutcome> => {

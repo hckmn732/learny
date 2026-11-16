@@ -6,7 +6,7 @@ import { parseBrickPayload, toPublicBrick } from '@learny/bricks';
 import { ENGINE } from '@learny/config/product';
 import type { CreateQuizAttemptOutput } from '@learny/contracts';
 import { AppError, type Result } from '@learny/core';
-import { sql, type DbTx } from '@learny/db';
+import { consumeAutomationAction, sql, type DbTx } from '@learny/db';
 import { withTransaction } from '@learny/jobs';
 import {
   drawAttempt,
@@ -93,7 +93,9 @@ function asArray(value: unknown): string[] {
   return [];
 }
 
-function questionType(value: string): 'choice_question' | 'cloze' | 'matching' | 'open_question' | null {
+function questionType(
+  value: string,
+): 'choice_question' | 'cloze' | 'matching' | 'open_question' | null {
   if (value === 'choice_question' || value === 'cloze' || value === 'matching') return value;
   if (value === 'open_question') return 'open_question';
   return null;
@@ -215,10 +217,7 @@ function drawNotionsOf(
     modulePosition,
     position: row.position,
     label: row.label,
-    mastery:
-      row.mastery === null || row.mastery === ''
-        ? null
-        : Number(row.mastery),
+    mastery: row.mastery === null || row.mastery === '' ? null : Number(row.mastery),
   }));
 }
 
@@ -336,11 +335,9 @@ export function startValidationAttempt(
         return { preparing: true as const, retryAfterSec: 3 };
       }
       if (draw.questions.length === 0) {
-        throw new AppError(
-          'CONFLICT',
-          'Aucune question disponible pour ce module.',
-          { status: 409 },
-        );
+        throw new AppError('CONFLICT', 'Aucune question disponible pour ce module.', {
+          status: 409,
+        });
       }
 
       const notionLabel = new Map(notionRows.map((notion) => [notion.id, notion.label]));
@@ -397,6 +394,23 @@ export function startValidationAttempt(
       `);
       const attemptId = attemptRows[0]?.id;
       if (attemptId === undefined) throw new AppError('INTERNAL_ERROR', 'Tentative non créée.');
+
+      // SPEC-715 EF-7 — the next attempt consumes the applied remediation action of the module:
+      // the delay and the mandatory remediation no longer apply, and the undo becomes impossible.
+      const previous = await tx.execute<{ id: string }>(sql`
+        select id::text as id
+        from public.automation_actions
+        where user_id = ${userId}::uuid
+          and automation = 'remediation'
+          and status = 'applied'
+          and (payload ->> 'moduleId') = ${moduleId}
+        order by created_at desc, id desc
+        limit 1
+      `);
+      const previousActionId = previous[0]?.id;
+      if (previousActionId !== undefined) {
+        await consumeAutomationAction(tx, { userId, actionId: previousActionId });
+      }
 
       for (const [index, question] of draw.questions.entries()) {
         await tx.execute(sql`

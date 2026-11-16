@@ -87,6 +87,10 @@ export const QuizResultDto = z
       allowed: z.boolean(),
       availableAt: IsoDateTime.nullable(),
       reason: RetryReason.nullable(),
+      /** SPEC-715 ET-4 — the mandatory remediation is still required. */
+      remediationRequired: z.boolean(),
+      /** SPEC-715 ET-4 — the remediation of the failed attempt is finished. */
+      remediationDone: z.boolean(),
     }),
     remediation: z.strictObject({
       status: RemediationStatus,

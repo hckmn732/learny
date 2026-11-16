@@ -3,7 +3,7 @@ import { sql } from '@learny/db';
 
 import type { ServiceContext } from '../context';
 
-import { retryDelayGuard } from './retry-gate';
+import { checkRetryAllowed } from './retry-guard';
 
 // Guards evaluated before creating a validation attempt (SPEC-611 ET-6, BR-FOR-08). SPEC-612 adds
 // the retry-delay guard to the same registry: the service only composes them.
@@ -15,10 +15,7 @@ export interface QuizAttemptGuardContext {
   status: 'locked' | 'open' | 'validated';
 }
 
-export type QuizAttemptGuard = (
-  ctx: ServiceContext,
-  moduleId: string,
-) => Promise<Result<void>>;
+export type QuizAttemptGuard = (ctx: ServiceContext, moduleId: string) => Promise<Result<void>>;
 
 /** BR-FOR-08, CL-7 — a locked module never opens, even from a hand-written URL. */
 export const moduleOpenGuard: QuizAttemptGuard = async (ctx, moduleId) => {
@@ -42,12 +39,10 @@ export const moduleOpenGuard: QuizAttemptGuard = async (ctx, moduleId) => {
     return err(new AppError('NOT_FOUND', 'Module introuvable.'));
   }
   if (status === 'locked') {
-    return err(
-      new AppError('MODULE_LOCKED', 'Ce module est verrouillé.', { status: 422 }),
-    );
+    return err(new AppError('MODULE_LOCKED', 'Ce module est verrouillé.', { status: 422 }));
   }
   return ok(undefined);
 };
 
 /** Registry extended by SPEC-612; SPEC-611 registers the open-module guard (ET-6). */
-export const quizAttemptGuards: QuizAttemptGuard[] = [moduleOpenGuard, retryDelayGuard];
+export const quizAttemptGuards: QuizAttemptGuard[] = [moduleOpenGuard, checkRetryAllowed];

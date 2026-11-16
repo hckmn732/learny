@@ -72,9 +72,13 @@ const MS_PER_DAY = 86_400_000;
 
 export type AutomationTone = 'vous' | 'tu';
 
-/** `event` (an Inngest event), `hourly` (the `cron/hourly-tick`), `nightly`, or `direct`. */
+/**
+ * `event` (an Inngest event), `hourly` (the `cron/hourly-tick`), `nightly`, or `direct`.
+ * SPEC-715 — the event trigger may carry the typed `data` of the event so a definition can react
+ * to `quiz/graded` without reading the outbox again (ADR-0190 §1, missing engine element).
+ */
 export type AutomationTrigger =
-  | { type: 'event'; name: string }
+  | { type: 'event'; name: string; data?: Record<string, unknown> }
   | { type: 'hourly'; localHour: number | ((params: Record<string, unknown>) => number) }
   | { type: 'nightly' }
   | { type: 'direct' };
@@ -428,7 +432,9 @@ export function runAutomation(
       );
     }
     // CL-5 — a global pause suspends every key except `pause`; the journal stays intact.
-    if (input.key !== 'pause') {
+    // SPEC-715 CL-4 — `remediation` reacts to an event that already happened (the failed quiz):
+    // the action is still created, but its `apply` places no slot while the pause is active.
+    if (input.key !== 'pause' && input.key !== 'remediation') {
       const paused = await engine.sdb.transaction((tx) =>
         readActivePause(tx, input.userId, userLocalDay(now, profile.timeZone)),
       );
@@ -453,7 +459,7 @@ export function runAutomation(
 
     const actionIds: string[] = [];
     const duplicateIds: string[] = [];
-    const notified: { actionId: string; draft: AutomationActionDraft }[] = [];
+    const notified: { actionId: string; draft: AutomationActionDraft; summary: string }[] = [];
 
     await withTransaction(engine.sdb, async (tx, outbox) => {
       for (const draft of drafts) {
@@ -475,6 +481,7 @@ export function runAutomation(
         }
         const action = inserted.action;
         actionIds.push(action.id);
+        let finalSummary = checked.summary;
         if (!draft.requiresConsent && definition.apply !== undefined) {
           const applied = await definition.apply(
             {
@@ -491,11 +498,16 @@ export function runAutomation(
           );
           if (!applied.ok) throw applied.error;
           if (applied.value.undoPayload !== undefined || applied.value.payload !== undefined) {
-            const appliedView = toView({ ...action, status: 'applied' });
+            const appliedView = toView({
+              ...action,
+              ...(applied.value.payload === undefined ? {} : { payload: applied.value.payload }),
+              status: 'applied',
+            });
+            finalSummary = definition.explain(appliedView, profile.tone, profile.timeZone);
             await tx
               .update(schema.automationActions)
               .set({
-                summary: definition.explain(appliedView, profile.tone, profile.timeZone),
+                summary: finalSummary,
                 ...(applied.value.payload === undefined ? {} : { payload: applied.value.payload }),
                 ...(applied.value.undoPayload === undefined
                   ? {}
@@ -509,7 +521,9 @@ export function runAutomation(
           { userId: input.userId, actionId: action.id, automation: input.key },
           { id: `automation-action:${action.id}` },
         );
-        if (draft.notification !== undefined) notified.push({ actionId: action.id, draft });
+        if (draft.notification !== undefined) {
+          notified.push({ actionId: action.id, draft, summary: finalSummary });
+        }
       }
     });
 
@@ -524,6 +538,9 @@ export function runAutomation(
         formationId: draft.formationId,
         data: {
           ...(draft.notification.data ?? {}),
+          ...(draft.notification.data?.bodyOverride === undefined
+            ? {}
+            : { bodyOverride: item.summary }),
           href: draft.notification.href,
           automation: input.key,
         },

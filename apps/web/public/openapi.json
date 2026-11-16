@@ -1999,12 +1999,20 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "remediationDone": {
+                          "type": "boolean"
+                        },
+                        "remediationRequired": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
                         "allowed",
                         "availableAt",
-                        "reason"
+                        "reason",
+                        "remediationRequired",
+                        "remediationDone"
                       ],
                       "type": "object"
                     },

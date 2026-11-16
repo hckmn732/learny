@@ -9,8 +9,10 @@ export {
   explainEchauffement,
   explainWarmupLastAction,
 } from './definitions/echauffement';
+export { explainRemediation, remediationAutomation } from './definitions/remediation';
 
 import { echauffementAutomation } from './definitions/echauffement';
+import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
 import { automationRegistry } from './moteur-d-automatismes';
 
@@ -21,4 +23,7 @@ if (automationRegistry.get('reprise') === undefined) {
 }
 if (automationRegistry.get('echauffement') === undefined) {
   automationRegistry.register(echauffementAutomation);
+}
+if (automationRegistry.get('remediation') === undefined) {
+  automationRegistry.register(remediationAutomation);
 }
