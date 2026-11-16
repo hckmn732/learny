@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T11:11:32.140Z",
+  "updatedAt": "2026-11-16T11:54:49.259Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5460,11 +5460,11 @@
       "validations": {}
     },
     "SPEC-718": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-16T11:54:49.259Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-718-automatisme-7-quiz-global-plafonne-et-li",
       "commit": null,
       "lastError": null,
       "validations": {}
