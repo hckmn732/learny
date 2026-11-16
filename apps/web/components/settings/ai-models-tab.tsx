@@ -17,6 +17,8 @@ import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
 import { useCredentialQualification } from '../onboarding/useCredentialQualification';
 
+import { ManagedAiBlock } from './managed-ai-block';
+
 const t = fr.settings.aiModels;
 
 /** EF-3 — the six providers of BR-IA-02, in the order of the rule. */
@@ -226,6 +228,11 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
           ))}
         </ul>
       </section>
+
+      <ManagedAiBlock
+        providers={state.providers}
+        {...(requestId === undefined ? {} : { requestId })}
+      />
 
       <Card as="section" className="p-8" data-testid="ai-models-tasks">
         <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
