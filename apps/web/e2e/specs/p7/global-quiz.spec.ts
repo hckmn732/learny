@@ -107,6 +107,13 @@ async function restoreDemoSession(): Promise<void> {
     where user_id = ${demoUserId('alex')}::uuid
       and reviewed_at >= ${NOW}::timestamptz
   `);
+  // SPEC-716 EF-8 — answering the imposed recall card consumes the seeded « jeu_lacune » action;
+  // the seed inserts it with « on conflict do nothing », so it never comes back to « applied ».
+  await serviceDb().execute(sql`
+    update public.automation_actions
+    set status = 'applied'
+    where user_id = ${demoUserId('alex')}::uuid and automation = 'jeu_lacune'
+  `);
   await serviceDb().transaction(async (tx) => {
     // Lock the rows first: a late answer transaction of the previous test commits before this one,
     // so the restored FSRS values are the last write (the test clock is frozen).
@@ -173,6 +180,10 @@ test.beforeEach(async ({ context, baseURL }) => {
 });
 
 test.afterAll(async () => {
+  // The last test closes the demonstration session: the later files of the run (home, settings,
+  // tutor card) read the same demo user, and the seed alone does not drop the session rows.
+  await restoreDemoSession();
+  await restoreDemoData();
   await closeDb();
 });
 
