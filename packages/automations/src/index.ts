@@ -23,6 +23,7 @@ export {
   questionsCartesAutomation,
 } from './definitions/questions-cartes';
 export { explainRemediation, remediationAutomation } from './definitions/remediation';
+export { explainPause, pauseAutomation } from './definitions/pause';
 export {
   explainMicroSeance,
   microCardSummary,
@@ -40,6 +41,7 @@ import { plafondQuizAutomation } from './automatisme-7-quiz-global-plafonne-et-l
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
+import { pauseAutomation } from './definitions/pause';
 import { questionsCartesAutomation } from './definitions/questions-cartes';
 import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
@@ -67,4 +69,7 @@ if (automationRegistry.get('plafond_quiz') === undefined) {
 }
 if (automationRegistry.get('questions_cartes') === undefined) {
   automationRegistry.register(questionsCartesAutomation);
+}
+if (automationRegistry.get('pause') === undefined) {
+  automationRegistry.register(pauseAutomation);
 }
