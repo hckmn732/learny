@@ -188,7 +188,10 @@ export function SettingsView({
   const pollRef = useRef<number | null>(null);
 
   // BR-SET-01 — the active tab follows the hash; Profil is the default and an unknown hash is
-  // normalised in the URL without navigation or focus loss (CL-3, ET-5).
+  // normalised in the URL without navigation or focus loss (CL-3, ET-5). The hash is read when the
+  // screen mounts, on `hashchange` and on `popstate` (back/forward between two hashes), and once
+  // more after the first paint: the server render knows no hash, and a hydration recovery or a late
+  // history update of the router must not leave the screen on Profil.
   useEffect(() => {
     const apply = () => {
       const next = settingsTabFromHash(window.location.hash);
@@ -198,9 +201,13 @@ export function SettingsView({
       }
     };
     apply();
+    const frame = window.requestAnimationFrame(apply);
     window.addEventListener('hashchange', apply);
+    window.addEventListener('popstate', apply);
     return () => {
+      window.cancelAnimationFrame(frame);
       window.removeEventListener('hashchange', apply);
+      window.removeEventListener('popstate', apply);
     };
   }, []);
 

@@ -35,7 +35,7 @@ Le modèle économique (ADR-0011) rend l'outil gratuit avec sa propre clé et r�
 ## 5. Exigences fonctionnelles
 
 - **EF-1** — `POST /api/v1/billing/checkout`, corps `{ successPath, cancelPath }` (chemins relatifs commençant par `/`, sans `//`), renvoie `200 { url }`. Le client Stripe est créé au premier appel avec `metadata.userId` et l'e-mail du profil, puis réutilisé. Un utilisateur déjà `active` reçoit `409 ALREADY_SUBSCRIBED`.
-- **EF-2** — `POST /api/v1/billing/portal` renvoie `200 { url }` vers le portail client Stripe avec retour vers `/parametres#ia` ; sans client Stripe, `404 NOT_FOUND`.
+- **EF-2** — `POST /api/v1/billing/portal` renvoie `200 { url }` vers le portail client Stripe avec retour vers `/parametres#modeles` (onglet « Modèles d’IA », BR-SET-01 ; `#ia` reste accepté comme alias) ; sans client Stripe, `404 NOT_FOUND`.
 - **EF-3** — `GET /api/v1/billing/subscription` renvoie `{ status, currentPeriodEnd, hasManagedAi, dailyCapUsd }` (`status` ∈ `none|active|past_due|canceled|incomplete`, date ISO ou `null`).
 - **EF-4** — `POST /api/v1/webhooks/stripe` (public, sans session) vérifie la signature `Stripe-Signature` avec `STRIPE_WEBHOOK_SECRET` (tolérance 300 s), traite `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`, ignore les autres types avec `200`, et répond `400 INVALID_SIGNATURE` si la signature est invalide.
 - **EF-5** — Correspondance des statuts (ADR-0215) : `active`/`trialing` → `active` ; `past_due`/`unpaid` → `past_due` ; `canceled`/`incomplete_expired` → `canceled` ; `incomplete` → `incomplete`.
