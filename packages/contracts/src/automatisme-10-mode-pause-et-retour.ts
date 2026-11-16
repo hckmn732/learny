@@ -121,18 +121,9 @@ export const mePauseEnd = defineRoute({
   auth: 'user',
   output: PauseStateDto,
   successStatus: 200,
-  idempotent: true,
   summary:
     'Met fin à la pause, propose le diagnostic de dix minutes ou replanifie immédiatement (SPEC-721).',
-  errors: [
-    'VALIDATION_FAILED',
-    'IDEMPOTENCY_KEY_REQUIRED',
-    'IDEMPOTENCY_IN_PROGRESS',
-    'NOT_FOUND',
-    'CONFLICT',
-    'UNAUTHENTICATED',
-    'INTERNAL_ERROR',
-  ],
+  errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'CONFLICT', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
 });
 
 /** POST /me/pause/diagnostic — a real result replans; without an answer nothing moves (CL-5). */

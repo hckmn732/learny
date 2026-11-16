@@ -27483,17 +27483,6 @@
     "/api/v1/me/pause": {
       "delete": {
         "operationId": "me.pause.end",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "content": {
