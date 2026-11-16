@@ -39,6 +39,16 @@ export const ReviewIntervalsSchema = z
   .strict();
 export type ReviewIntervals = z.infer<typeof ReviewIntervalsSchema>;
 
+/** ET-3 — why the imposed game was chosen (SPEC-716 EF-7): code and already-localised label. */
+export const REVIEW_REASON_CODES = ['gap_forgetting', 'gap_confusion', 'question_card'] as const;
+export const ReviewReasonSchema = z
+  .object({
+    code: z.enum(REVIEW_REASON_CODES),
+    label: z.string().min(1),
+  })
+  .strict();
+export type ReviewReason = z.infer<typeof ReviewReasonSchema>;
+
 /** One game of the session. `payload` is the client-safe projection of the brick version. */
 export const ReviewItemDtoSchema = z
   .object({
@@ -54,8 +64,8 @@ export const ReviewItemDtoSchema = z
     displayLabel: z.string().min(1),
     /** Sub-title scope: « Module 2 » or « Modules 1 et 2 mêlés ». */
     scopeLabel: z.string().min(1),
-    /** Tutor reason of the choice, when the item answers a gap (EF-7). */
-    reason: z.string().nullable(),
+    /** Tutor reason of the choice, when the item answers a gap (SPEC-716 EF-7). */
+    reason: ReviewReasonSchema.nullable(),
     notionIds: z.array(Uuid).min(1),
     payload: z.unknown(),
     /** Previewed due dates per self-assessment grade, recall card only. */
@@ -101,6 +111,8 @@ export const GlobalQuizSessionDtoSchema = z
     /** Note right of the duration switch (EF-4); empty when nothing is due. */
     note: z.string(),
     rationale: z.array(ReviewRationaleSchema).max(3),
+    /** SPEC-716 ET-3 — lines of the « Réglé par le tuteur » box for the imposed gaps. */
+    tuned: z.array(ReviewRationaleSchema),
     items: z.array(ReviewItemDtoSchema),
     currentPosition: z.number().int().min(0),
     summary: z.unknown().nullable(),

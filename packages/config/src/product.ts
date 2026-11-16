@@ -72,6 +72,9 @@ export const RESOURCE_LIMITS = {
 /** ADR-0056 — dimension of every embedding (`resource_chunks.embedding`, Voyage `voyage-4-lite`). */
 export const EMBEDDING_DIM = 1024;
 
+/** SPEC-716 EF-5 — default length of the practice exercise scheduled by the gap automation. */
+export const EXERCISE_DEFAULT_MIN = 15;
+
 /** BR-QUI-*, BR-PRA-02 — validation quizzes and mock exams. */
 export const QUIZ_RULES = {
   /** BR-QUI-01 — 12 questions by default, between 10 and 20, scored out of 100. */
