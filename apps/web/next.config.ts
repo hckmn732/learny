@@ -33,6 +33,11 @@ const nextConfig: NextConfig = {
         source: '/_dev/:path*',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
+      {
+        // SPEC-801 ET-11 — the worker must never be served from a stale HTTP cache.
+        source: '/sw.js',
+        headers: [{ key: 'Cache-Control', value: 'no-cache' }],
+      },
     ]);
   },
 };

@@ -1,12 +1,16 @@
-// The service worker is a plain script served from `public/`: these tests run its real bytes in a
-// sandbox with a simulated worker scope (SPEC-205 EF-4, ET-4, CL-6, CA-3).
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
-import vm from 'node:vm';
-
+// The push handlers of the single service worker (SPEC-205 EF-4, ET-4, CL-6, CA-3) now live in
+// `lib/push/sw-push.ts` and are imported by the Serwist worker (SPEC-801). The tests run the real
+// functions against a simulated worker scope.
 import { describe, expect, it } from 'vitest';
 
-const SW_PATH = path.resolve(__dirname, '../public/sw.js');
+import {
+  iconFor,
+  registerPushHandlers,
+  safeNotificationUrl,
+  safeText,
+  type PushWorkerScope,
+} from './push/sw-push';
+
 const ORIGIN = 'https://app.learny.test';
 
 interface Shown {
@@ -14,68 +18,78 @@ interface Shown {
   options: { body: string; icon: string; data: { url: string | null }; tag?: string };
 }
 
-interface Scope {
+interface Client {
+  url: string;
+  focus?: () => Promise<unknown>;
+  navigate?: (url: string) => Promise<unknown>;
+}
+
+interface Harness {
+  scope: PushWorkerScope;
   listeners: Record<string, (event: unknown) => void>;
   shown: Shown[];
   opened: string[];
   navigated: string[];
   focused: number;
-  clients: Array<{
-    url: string;
-    focus: () => Promise<unknown>;
-    navigate?: (url: string) => Promise<unknown>;
-  }>;
+  clients: Client[];
 }
 
-function loadWorker(): Scope {
-  const scope: Scope = {
+function loadWorker(): Harness {
+  const shown: Shown[] = [];
+  const opened: string[] = [];
+  const navigated: string[] = [];
+  const clients: Client[] = [];
+  const harness: Harness = {
+    scope: undefined as never,
     listeners: {},
-    shown: [],
-    opened: [],
-    navigated: [],
+    shown,
+    opened,
+    navigated,
     focused: 0,
-    clients: [],
+    clients,
   };
-  const self = {
+  harness.scope = {
     location: { origin: ORIGIN },
-    addEventListener: (name: string, fn: (event: unknown) => void) => {
-      scope.listeners[name] = fn;
+    listeners: harness.listeners,
+    shown,
+    opened,
+    navigated,
+    focused: 0,
+    addEventListener: (name: string, fn: (event: never) => void) => {
+      harness.listeners[name] = fn as (event: unknown) => void;
     },
-    skipWaiting: () => undefined,
     registration: {
-      showNotification: (title: string, options: Shown['options']) => {
-        scope.shown.push({ title, options });
+      showNotification: (title: string, options: unknown) => {
+        shown.push({ title, options: options as Shown['options'] });
         return Promise.resolve();
       },
     },
     clients: {
-      claim: () => Promise.resolve(),
-      matchAll: () => Promise.resolve(scope.clients),
+      matchAll: () => Promise.resolve(clients),
       openWindow: (url: string) => {
-        scope.opened.push(url);
+        opened.push(url);
         return Promise.resolve(null);
       },
     },
-  };
-  const context = vm.createContext({ self, URL, Object, console });
-  vm.runInContext(readFileSync(SW_PATH, 'utf8'), context, { filename: 'sw.js' });
-  return scope;
+  } as unknown as PushWorkerScope & Harness;
+  registerPushHandlers(harness.scope);
+  return harness;
 }
 
-async function push(scope: Scope, payload: unknown): Promise<Shown | undefined> {
+async function push(harness: Harness, payload: unknown): Promise<Shown | undefined> {
   const waits: Promise<unknown>[] = [];
-  scope.listeners.push?.({
+  harness.listeners.push?.({
     data: { json: () => payload },
     waitUntil: (promise: Promise<unknown>) => waits.push(promise),
   });
   await Promise.all(waits);
-  return scope.shown[scope.shown.length - 1];
+  return harness.shown[harness.shown.length - 1];
 }
 
-async function click(scope: Scope, url: unknown): Promise<void> {
+async function click(harness: Harness, url: unknown): Promise<void> {
   const waits: Promise<unknown>[] = [];
   let closed = 0;
-  scope.listeners.notificationclick?.({
+  harness.listeners.notificationclick?.({
     notification: { data: { url }, close: () => (closed += 1) },
     waitUntil: (promise: Promise<unknown>) => waits.push(promise),
   });
@@ -83,17 +97,30 @@ async function click(scope: Scope, url: unknown): Promise<void> {
   expect(closed).toBe(1);
 }
 
-describe('[SPEC-205] service worker', () => {
-  it('contains no secret, no cache and only the push handlers (ET-4)', () => {
-    const source = readFileSync(SW_PATH, 'utf8');
-    expect(source).not.toMatch(/VAPID_PRIVATE_KEY|privateKey|caches\.|fetch\(/);
-    expect(source).toContain("addEventListener('push'");
-    expect(source).toContain("addEventListener('notificationclick'");
+describe('[SPEC-205] [SPEC-801] gestionnaire push du service worker unique', () => {
+  it('borne le texte et l’icône, sans URL externe (EF-4)', () => {
+    expect(safeText('  a\u0000b  ', 10, 'x')).toBe('a b');
+    expect(safeText('T'.repeat(50), 120, 'x')).toHaveLength(50);
+    expect(safeText(12, 10, 'x')).toBe('x');
+    expect(iconFor('calendar')).toBe('/icons/notification.png');
+    expect(iconFor('https://evil/x.png')).toBe('/icons/notification.png');
+    expect(safeNotificationUrl(ORIGIN, '/agenda')).toBe(`${ORIGIN}/agenda`);
+    for (const candidate of [
+      'https://evil.example/',
+      'javascript:alert(1)',
+      '//evil.example/x',
+      '/\\evil.example',
+      'quiz',
+      '',
+      null,
+    ]) {
+      expect(safeNotificationUrl(ORIGIN, candidate)).toBeNull();
+    }
   });
 
-  it('shows a bounded title, body and bundled icon from the payload (EF-4)', async () => {
-    const scope = loadWorker();
-    const shown = await push(scope, {
+  it('affiche un titre, un corps et une icône bornés (EF-4)', async () => {
+    const harness = loadWorker();
+    const shown = await push(harness, {
       title: 'Votre quiz global du jour est prêt',
       body: 'Dix questions.',
       icon: 'calendar',
@@ -109,7 +136,7 @@ describe('[SPEC-205] service worker', () => {
         tag: 'abc',
       },
     });
-    const long = await push(scope, {
+    const long = await push(harness, {
       title: 'T'.repeat(500),
       body: 'B'.repeat(900),
       icon: 'https://evil/x.png',
@@ -117,51 +144,29 @@ describe('[SPEC-205] service worker', () => {
     expect(long?.title).toHaveLength(120);
     expect(long?.options.body).toHaveLength(400);
     expect(long?.options.icon).toBe('/icons/notification.png');
-    const empty = await push(scope, 'not an object');
+    const empty = await push(harness, 'not an object');
     expect(empty?.title).toBe('Learny');
     expect(empty?.options.data.url).toBeNull();
   });
 
-  it('opens or focuses an internal URL only (CL-6, CA-3)', async () => {
-    const scope = loadWorker();
-    await click(scope, '/agenda');
-    expect(scope.opened).toEqual([`${ORIGIN}/agenda`]);
+  it('ouvre ou focalise une URL interne uniquement (CL-6, CA-3)', async () => {
+    const harness = loadWorker();
+    await click(harness, '/agenda');
+    expect(harness.opened).toEqual([`${ORIGIN}/agenda`]);
 
-    scope.clients = [
-      {
-        url: `${ORIGIN}/`,
-        focus: () => {
-          scope.focused += 1;
-          return Promise.resolve();
-        },
-        navigate: (url) => {
-          scope.navigated.push(url);
-          return Promise.resolve({ focus: () => Promise.resolve() });
-        },
+    harness.clients.push({
+      url: `${ORIGIN}/`,
+      focus: () => {
+        harness.focused += 1;
+        return Promise.resolve();
       },
-    ];
-    await click(scope, '/quiz/global');
-    expect(scope.navigated).toEqual([`${ORIGIN}/quiz/global`]);
-    expect(scope.opened).toHaveLength(1);
-  });
-
-  it('ignores external, javascript:, protocol-relative and malformed URLs (CL-6)', async () => {
-    const scope = loadWorker();
-    for (const url of [
-      'https://evil.example/',
-      'javascript:alert(1)',
-      '//evil.example/x',
-      '/\\evil.example',
-      'quiz',
-      '',
-      null,
-      undefined,
-      12,
-    ]) {
-      await click(scope, url);
-    }
-    expect(scope.opened).toEqual([]);
-    expect(scope.navigated).toEqual([]);
-    expect(scope.focused).toBe(0);
+      navigate: (url) => {
+        harness.navigated.push(url);
+        return Promise.resolve({ focus: () => Promise.resolve() });
+      },
+    });
+    await click(harness, '/quiz/global');
+    expect(harness.navigated).toEqual([`${ORIGIN}/quiz/global`]);
+    expect(harness.opened).toHaveLength(1);
   });
 });

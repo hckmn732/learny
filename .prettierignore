@@ -18,3 +18,7 @@ apps/web/public/openapi.json
 
 # Thème Tailwind généré par packages/ui/scripts/build-theme.ts (SPEC-301)
 packages/ui/src/styles/theme.css
+
+apps/web/public/sw.js
+apps/web/public/swe-worker-*.js
+apps/web/public/swe-worker-build.txt
