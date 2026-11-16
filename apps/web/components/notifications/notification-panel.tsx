@@ -73,6 +73,8 @@ function isUnread(item: NotificationItem): boolean {
 }
 
 const ORANGE_TYPES = new Set(['new_gap', 'session_to_reschedule']);
+/** SPEC-713 §10 — the revision type (« Quiz global du jour », micro-séance) uses the lime pastille. */
+const REVISION_TYPES = new Set(['global_quiz_today']);
 
 /**
  * Presentational panel of the header bell (SPEC-306 EF-1 to EF-5; BR-NOT-01). It keeps the
@@ -268,7 +270,9 @@ export const NotificationPanelView = ({
                         const unread = isUnread(item);
                         const tone = ORANGE_TYPES.has(item.type)
                           ? 'bg-orange-soft text-orange-ink'
-                          : 'bg-indigo-soft text-indigo-ink';
+                          : REVISION_TYPES.has(item.type)
+                            ? 'bg-lime-soft text-lime-ink'
+                            : 'bg-indigo-soft text-indigo-ink';
                         return (
                           <li key={item.id}>
                             <a

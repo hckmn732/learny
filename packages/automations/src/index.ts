@@ -10,8 +10,21 @@ export {
   explainWarmupLastAction,
 } from './definitions/echauffement';
 export { explainRemediation, remediationAutomation } from './definitions/remediation';
+export {
+  explainMicroSeance,
+  microCardSummary,
+  microLastActionSummary,
+  microSeanceAutomation,
+} from './definitions/micro-seance';
+export {
+  shouldProposeMicroSession,
+  type MicroFormationCandidate,
+  type MicroProposalDecision,
+  type MicroProposalInput,
+} from './micro-seance/should-propose';
 
 import { echauffementAutomation } from './definitions/echauffement';
+import { microSeanceAutomation } from './definitions/micro-seance';
 import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
 import { automationRegistry } from './moteur-d-automatismes';
@@ -26,4 +39,7 @@ if (automationRegistry.get('echauffement') === undefined) {
 }
 if (automationRegistry.get('remediation') === undefined) {
   automationRegistry.register(remediationAutomation);
+}
+if (automationRegistry.get('micro_seance') === undefined) {
+  automationRegistry.register(microSeanceAutomation);
 }

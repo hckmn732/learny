@@ -69,6 +69,21 @@ export const EchauffementParams = z.preprocess(
 );
 export type EchauffementParams = z.infer<typeof EchauffementParams>;
 
+/** EF-1, ET-1 — kind produced by the `micro_seance` automation (SPEC-713 ET-1). */
+export const MICRO_SEANCE_ACTION_KINDS = ['micro_session_proposed'] as const;
+export const MicroSeanceActionKind = z.enum(MICRO_SEANCE_ACTION_KINDS);
+export type MicroSeanceActionKind = z.infer<typeof MicroSeanceActionKind>;
+
+/**
+ * EF-1, ET-1 — evening hour and duration of the backup micro-session (BR-AUT-02). The three
+ * allowed values of each field are the ones of the settings screen (SPEC-710).
+ */
+export const MicroSeanceParams = z.object({
+  hour: z.union([z.literal(19), z.literal(20), z.literal(21)]).default(20),
+  durationMin: z.union([z.literal(3), z.literal(5), z.literal(10)]).default(5),
+});
+export type MicroSeanceParams = z.infer<typeof MicroSeanceParams>;
+
 /** EF-2, ET-1 — kind produced by the `remediation` automation (SPEC-715 EF-3). */
 export const REMEDIATION_ACTION_KINDS = ['remediation_ready'] as const;
 export const RemediationActionKind = z.enum(REMEDIATION_ACTION_KINDS);
