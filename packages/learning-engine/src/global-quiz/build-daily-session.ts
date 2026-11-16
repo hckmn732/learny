@@ -434,6 +434,7 @@ export function buildDailySession(rawInput: BuildDailySessionInput): DailySessio
     seed: input.seed,
     requestedCapMinutes: input.capMinutes,
     capMinutes: effectiveCap,
+    targetRetention: input.targetRetention ?? 0.9,
     items: selected.map(itemOf),
     deferred: deferred.map((entry) => ({
       notionId: entry.notionId,

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { QuizSmoothingNotice } from './automatisme-7-quiz-global-plafonne-et-lisse';
 import { CivilDate, IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 
@@ -113,6 +114,8 @@ export const GlobalQuizSessionDtoSchema = z
     rationale: z.array(ReviewRationaleSchema).max(3),
     /** SPEC-716 ET-3 — lines of the « Réglé par le tuteur » box for the imposed gaps. */
     tuned: z.array(ReviewRationaleSchema),
+    /** SPEC-718 ET-5 — cap, deferral and undo of the smoothed day; null when nothing is deferred. */
+    smoothing: QuizSmoothingNotice.nullable().default(null),
     items: z.array(ReviewItemDtoSchema),
     currentPosition: z.number().int().min(0),
     summary: z.unknown().nullable(),

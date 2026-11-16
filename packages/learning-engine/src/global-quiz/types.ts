@@ -139,6 +139,8 @@ export interface BuildDailySessionInput {
   mode: GlobalQuizMode;
   seed: string;
   preference?: GlobalQuizFormatPreference;
+  /** BR-AUT-07 — target retention of the cap automation, echoed by the draw (default 0.9). */
+  targetRetention?: number;
   params: GlobalQuizParams;
 }
 
@@ -155,6 +157,7 @@ export const BuildDailySessionInputSchema = z
     mode: GlobalQuizModeSchema,
     seed: z.string(),
     preference: GlobalQuizFormatPreferenceSchema.optional(),
+    targetRetention: z.number().min(0).max(1).optional(),
     params: GlobalQuizParamsSchema,
   })
   .strict() as z.ZodType<BuildDailySessionInput>;
@@ -211,6 +214,8 @@ export interface DailySession {
   requestedCapMinutes: number;
   /** Effective cap: `capMinutes`, bounded by `maintenanceMaxMinutes` in maintenance mode. */
   capMinutes: number;
+  /** BR-AUT-07 — expected retention of the smoothed day (default 0.9). */
+  targetRetention: number;
   items: DailySessionItem[];
   deferred: DeferredNotion[];
   exhausted: ExhaustedNotion[];
