@@ -431,7 +431,7 @@ describe('[SPEC-701] session du jour du quiz global', () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.value.items[0]).toMatchObject({
-      reason: 'Choisi pour votre oubli',
+      reason: { code: 'gap_forgetting', label: 'Choisi pour votre oubli' },
       displayLabel: 'La notion oubliée',
     });
     expect(result.value.rationale[0]?.label).toBe('Lacune en priorité');

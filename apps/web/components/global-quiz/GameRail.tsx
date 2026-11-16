@@ -68,7 +68,12 @@ export function GameRail(props: GameRailProps) {
               <span className="text-14 font-600 text-ink">{item.name}</span>
               <span className="text-12 text-ink-muted">{item.displayLabel}</span>
               {item.reason === null ? null : (
-                <span className="text-11 font-700 text-orange-ink">{item.reason}</span>
+                <span
+                  className="text-11 font-700 text-orange-ink"
+                  data-testid="global-quiz-rail-reason"
+                >
+                  {item.reason.label}
+                </span>
               )}
             </span>
             <span

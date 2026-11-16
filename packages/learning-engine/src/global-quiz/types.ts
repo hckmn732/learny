@@ -81,6 +81,19 @@ export const GlobalQuizBankSchema = z
   })
   .strict() as z.ZodType<GlobalQuizBank>;
 
+/** SPEC-716 EF-6 — format imposed by an applied `game_chosen` action of the gap automation. */
+export interface GlobalQuizForcedFormat {
+  notionId: Id;
+  format: BrickFormat;
+}
+
+export const GlobalQuizForcedFormatSchema = z
+  .object({
+    notionId: IdSchema,
+    format: BrickFormatSchema,
+  })
+  .strict() as z.ZodType<GlobalQuizForcedFormat>;
+
 /** Last format presented for a notion (BR-MEM-04). */
 export interface GlobalQuizLastFormat {
   notionId: Id;
@@ -120,6 +133,8 @@ export interface BuildDailySessionInput {
   gaps: readonly GlobalQuizGap[];
   bank: readonly GlobalQuizBank[];
   lastFormats: readonly GlobalQuizLastFormat[];
+  /** SPEC-716 ET-3 — imposed formats, read from the applied actions of `jeu_lacune`. */
+  forcedFormats?: readonly GlobalQuizForcedFormat[];
   capMinutes: number;
   mode: GlobalQuizMode;
   seed: string;
@@ -135,6 +150,7 @@ export const BuildDailySessionInputSchema = z
     gaps: z.array(GlobalQuizGapSchema),
     bank: z.array(GlobalQuizBankSchema),
     lastFormats: z.array(GlobalQuizLastFormatSchema),
+    forcedFormats: z.array(GlobalQuizForcedFormatSchema).optional(),
     capMinutes: z.number().int().positive(),
     mode: GlobalQuizModeSchema,
     seed: z.string(),

@@ -310,7 +310,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
                   setCurrent(position);
                 }}
               />
-              <TutorRationale rationale={display.rationale} />
+              <TutorRationale rationale={display.rationale} tuned={display.tuned} />
             </div>
 
             {effectiveSummary !== null ? (

@@ -49,6 +49,7 @@ function fixture(currentPosition = 0): GlobalQuizSessionDto {
     modeOptions: { fullMinutes: 8, microMinutes: 5 },
     note: '7 notions à revoir aujourd’hui, lacunes en priorité.',
     rationale: [],
+    tuned: [],
     items: [
       {
         position: 0,
@@ -59,7 +60,7 @@ function fixture(currentPosition = 0): GlobalQuizSessionDto {
         tech: 'Rappel actif',
         displayLabel: 'Variante d’exercice',
         scopeLabel: 'Module 2',
-        reason: 'Choisi pour votre oubli',
+        reason: { code: 'gap_forgetting', label: 'Choisi pour votre oubli' },
         notionIds: [NOTION],
         payload: {
           front: 'Que définit une variante d’exercice comptable ?',

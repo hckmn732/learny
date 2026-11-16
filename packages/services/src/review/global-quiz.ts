@@ -118,6 +118,7 @@ interface NotionRow {
   due_at: Date | string;
   gap_nature: string | null;
   gap_detected_at: Date | string | null;
+  gap_cleared_at: Date | string | null;
   fsrs: unknown;
 }
 
@@ -128,6 +129,8 @@ interface SessionItemConfig {
   displayLabel: string;
   moduleIds: string[];
   notionIds: string[];
+  /** SPEC-716 EF-8 — the applied `game_chosen` action consumed by an answer. */
+  actionId?: string | null;
   withdrawn?: boolean;
   /** CL-7 — the stored payload no longer matches its schema: message instead of the game. */
   invalid?: boolean;
@@ -142,6 +145,8 @@ interface SessionConfig {
   capMinutes: number;
   estimatedSec: number;
   rationale: ReviewRationale[];
+  /** SPEC-716 ET-3 — lines of the « Réglé par le tuteur » box for the imposed gaps. */
+  tuned: ReviewRationale[];
   items: SessionItemConfig[];
   /** SPEC-703 EF-3 — frozen explanatory note of the micro-session (CL-1, CL-2). */
   note?: string;
@@ -158,6 +163,7 @@ const sessionConfigSchema = z.object({
   capMinutes: z.number().int().min(1),
   estimatedSec: z.number().int().min(0),
   rationale: z.array(z.object({ label: z.string(), text: z.string() })),
+  tuned: z.array(z.object({ label: z.string(), text: z.string() })).default([]),
   note: z.string().optional(),
   microMinutes: z.number().int().min(1).optional(),
   items: z.array(
@@ -168,6 +174,7 @@ const sessionConfigSchema = z.object({
       displayLabel: z.string(),
       moduleIds: z.array(z.string()),
       notionIds: z.array(z.string()),
+      actionId: z.string().nullable().optional(),
       withdrawn: z.boolean().optional(),
       invalid: z.boolean().optional(),
     }),
@@ -202,6 +209,19 @@ const REASON_TEXTS: Readonly<Record<string, string>> = {
   gap_misunderstanding: 'Choisi pour votre malentendu',
   gap_application: 'Choisi pour votre entraînement',
 };
+
+/** SPEC-716 ET-3 — the contract reason of an item; unknown natures keep no reason. */
+function reasonOf(
+  reasonKey: string | null,
+): { code: 'gap_forgetting' | 'gap_confusion' | 'question_card'; label: string } | null {
+  if (reasonKey === 'gap_forgetting') {
+    return { code: 'gap_forgetting', label: REASON_TEXTS.gap_forgetting ?? '' };
+  }
+  if (reasonKey === 'gap_confusion') {
+    return { code: 'gap_confusion', label: REASON_TEXTS.gap_confusion ?? '' };
+  }
+  return null;
+}
 
 /** Item scope label (EF-8): « Module 2 » or « Modules 1 et 2 » (without « mêlés »). */
 function itemScopeLabel(positions: readonly number[]): string {
@@ -288,6 +308,7 @@ async function loadDueRows(
       ns.due_at,
       ns.gap_nature::text as gap_nature,
       ns.gap_detected_at,
+      ns.gap_cleared_at,
       ns.fsrs
     from public.notion_states ns
     join public.notions n on n.id = ns.notion_id
@@ -393,6 +414,93 @@ async function loadAutomationParams(
   return { capMinutes, preference, microMinutes };
 }
 
+/**
+ * SPEC-716 EF-6 — applied `game_chosen` actions of the learner whose gap is still active. The
+ * format is read at draw time (ADR-0193 §4); a consumed, expired or undone action is ignored.
+ */
+async function loadForcedGames(
+  tx: DbTx,
+  userId: string,
+  formationId: string,
+  dueRows: readonly NotionRow[],
+): Promise<Map<string, ForcedGame>> {
+  const gapByNotion = new Map(
+    dueRows
+      .filter((row) => row.gap_nature !== null && row.gap_cleared_at === null)
+      .map((row) => [row.notion_id, row.gap_nature as ForcedGame['nature']]),
+  );
+  const rows = await tx.execute<{
+    id: string;
+    payload: Record<string, unknown>;
+  }>(sql`
+    select id::text as id, payload
+    from public.automation_actions
+    where user_id = ${userId}::uuid
+      and formation_id = ${formationId}::uuid
+      and automation = 'jeu_lacune'
+      and kind = 'game_chosen'
+      and status = 'applied'
+    order by created_at desc, id desc
+  `);
+  const forced = new Map<string, ForcedGame>();
+  for (const row of rows) {
+    const notionId = typeof row.payload.notionId === 'string' ? row.payload.notionId : '';
+    if (notionId === '' || forced.has(notionId)) continue;
+    const nature = gapByNotion.get(notionId);
+    if (nature === undefined || nature === 'misunderstanding' || nature === 'application') continue;
+    const format = typeof row.payload.format === 'string' ? row.payload.format : null;
+    const pending = row.payload.pendingGeneration === true;
+    // CL-9 — pending with no usable format imposes nothing.
+    if (format === null || (pending && format !== 'choice_question')) continue;
+    forced.set(notionId, {
+      notionId,
+      nature,
+      format,
+      confusedWithLabel:
+        typeof row.payload.confusedWithLabel === 'string' ? row.payload.confusedWithLabel : null,
+      actionId: row.id,
+    });
+  }
+  return forced;
+}
+
+/** SPEC-716 EF-7 — « Lacune en priorité » lines of the tutor box. */
+function buildTuned(
+  forced: ReadonlyMap<string, ForcedGame>,
+  dueRows: readonly NotionRow[],
+  timeZone: string,
+): ReviewRationale[] {
+  const labelByNotion = new Map(dueRows.map((row) => [row.notion_id, row.label]));
+  const monthDay = (instant: Date | string | null): string => {
+    if (instant === null) return 'récemment';
+    const parsed = typeof instant === 'string' ? new Date(instant) : instant;
+    if (Number.isNaN(parsed.getTime())) return 'récemment';
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      timeZone,
+    }).format(parsed);
+  };
+  const lines: ReviewRationale[] = [];
+  for (const game of forced.values()) {
+    const notion = labelByNotion.get(game.notionId) ?? 'cette notion';
+    const row = dueRows.find((entry) => entry.notion_id === game.notionId);
+    if (game.nature === 'forgetting') {
+      lines.push({
+        label: 'Lacune en priorité',
+        text: `${notion}, oubliée depuis le ${monthDay(row?.gap_detected_at ?? null)}, revient en carte de rappel.`,
+      });
+    } else if (game.nature === 'confusion' && game.confusedWithLabel !== null) {
+      const format = game.format === 'categorization' ? 'un classement' : 'une association';
+      lines.push({
+        label: 'Lacune en priorité',
+        text: `« ${notion} » et « ${game.confusedWithLabel} » se confondent : ${format} les oppose.`,
+      });
+    }
+  }
+  return lines;
+}
+
 /** Fingerprints of the brick variants the learner already answered (BR-MEM-07 EF-5). */
 async function loadSeenFingerprints(tx: DbTx, userId: string): Promise<Set<string>> {
   const rows = await tx.execute<{ fingerprint: string | null }>(sql`
@@ -415,6 +523,16 @@ interface DrawnItem {
   displayLabel: string;
   moduleIds: string[];
   reasonKey: string | null;
+  actionId?: string | null;
+}
+
+/** SPEC-716 EF-6 — an applied `game_chosen` action whose gap is still active. */
+interface ForcedGame {
+  notionId: string;
+  nature: 'forgetting' | 'confusion' | 'misunderstanding' | 'application';
+  format: string | null;
+  confusedWithLabel: string | null;
+  actionId: string;
 }
 
 /**
@@ -428,6 +546,7 @@ function groupByBricks(
   selectedNotions: ReadonlySet<string>,
   bricks: readonly BrickVersionRow[],
   seenFingerprints: ReadonlySet<string>,
+  forcedGames: ReadonlyMap<string, ForcedGame> = new Map(),
 ): { items: DrawnItem[]; exhausted: { notionId: string; format: string }[] } {
   const items: DrawnItem[] = [];
   const exhausted: { notionId: string; format: string }[] = [];
@@ -459,6 +578,7 @@ function groupByBricks(
     usedBricks.add(brick.brick_id);
     const notionIds = brick.notion_ids.filter((notionId) => selectedNotions.has(notionId));
     for (const notionId of notionIds) coveredNotions.add(notionId);
+    const forced = forcedGames.get(engineItem.notionId);
     items.push({
       brickId: brick.brick_id,
       brickVersionId: brick.version_id,
@@ -468,7 +588,13 @@ function groupByBricks(
       moduleIds: [
         ...new Set(notionIds.map((notionId) => notionById.get(notionId)?.module_id ?? '')),
       ].filter((moduleId) => moduleId !== ''),
-      reasonKey: engineItem.gapNature === null ? null : `gap_${engineItem.gapNature}`,
+      reasonKey:
+        forced !== undefined
+          ? `gap_${forced.nature}`
+          : engineItem.gapNature === null
+            ? null
+            : `gap_${engineItem.gapNature}`,
+      actionId: forced?.actionId ?? null,
     });
   }
   return { items, exhausted };
@@ -600,6 +726,7 @@ function emptyDto(
     },
     note: '',
     rationale: [],
+    tuned: [],
     items: [],
     currentPosition: 0,
     summary: null,
@@ -680,6 +807,7 @@ export function getOrCreateTodaySession(
       }));
       const gaps: GlobalQuizGap[] = due.value.gaps;
       const lastFormats = await loadLastFormats(tx, userId, formationId);
+      const forcedGames = await loadForcedGames(tx, userId, formationId, dueRows);
       const automation = await loadAutomationParams(tx, userId);
       const microMinutes = automation.microMinutes;
       const capMinutes = mode === 'micro' ? microMinutes : automation.capMinutes;
@@ -697,6 +825,9 @@ export function getOrCreateTodaySession(
         gaps,
         bank,
         lastFormats,
+        forcedFormats: [...forcedGames.values()]
+          .filter((game): game is ForcedGame & { format: string } => game.format !== null)
+          .map((game) => ({ notionId: game.notionId, format: game.format as never })),
         capMinutes,
         mode,
         seed: `global-quiz:${userId}:${formationId}:${today}:${mode}`,
@@ -733,6 +864,7 @@ export function getOrCreateTodaySession(
           selectedNotions,
           bricks,
           seenFingerprints,
+          forcedGames,
         );
       }
       if (grouped.items.length === 0) {
@@ -778,6 +910,7 @@ export function getOrCreateTodaySession(
         capMinutes,
         estimatedSec,
         rationale,
+        tuned: mode === 'micro' ? [] : buildTuned(forcedGames, dueRows, timeZone),
         ...(mode === 'micro'
           ? {
               note: buildMicroNote({ cards: microCardCount, hasQuestion: microHasQuestion }),
@@ -791,6 +924,7 @@ export function getOrCreateTodaySession(
           displayLabel: item.displayLabel,
           moduleIds: item.moduleIds,
           notionIds: item.notionIds,
+          actionId: item.actionId ?? null,
         })),
       };
 
@@ -1302,7 +1436,7 @@ async function loadModeOptions(
             return notion === undefined ? 0 : notion.module_position;
           }),
         ),
-        reason: item.reasonKey === null ? null : (REASON_TEXTS[item.reasonKey] ?? null),
+        reason: reasonOf(item.reasonKey),
         notionIds: item.notionIds,
         payload: publicBrick?.publicPayload ?? {},
         intervals,
@@ -1358,6 +1492,7 @@ async function loadModeOptions(
             } à ${weekdayLabel(config.deferredTo)} pour que vos révisions restent sous ${String(config.capMinutes)} min.`
           : `${notionWord(config.dueCount)} à revoir aujourd’hui, lacunes en priorité.`,
     rationale: config.rationale,
+    tuned: config.tuned,
     items: dtoItems,
     currentPosition,
     summary: status === 'completed' ? parseSummary(attempt.review_feedback) : null,
@@ -1731,6 +1866,18 @@ export function answerReviewItem(
             }
           }
         }
+      }
+
+      // SPEC-716 EF-8 — an answered imposed game consumes its `game_chosen` action.
+      if (!skipped && typeof itemConfig.actionId === 'string' && itemConfig.actionId !== '') {
+        await tx.execute(sql`
+          update public.automation_actions
+          set status = 'consumed'
+          where id = ${itemConfig.actionId}::uuid
+            and user_id = ${userId}::uuid
+            and automation = 'jeu_lacune'
+            and status = 'applied'
+        `);
       }
 
       return ReviewAnswerResultDtoSchema.parse({
