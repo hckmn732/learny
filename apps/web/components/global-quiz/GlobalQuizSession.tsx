@@ -149,6 +149,19 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
     },
   });
 
+  // SPEC-718 EF-3, ET-4 — « Annuler le lissage » reopens the day's deferred notions; answers
+  // already given keep their positions and corrections, the next read rebuilds the snapshot.
+  const undoSmoothing = useMutation({
+    mutationFn: (actionId: string) => api.meAutomationActionUndo({ params: { id: actionId } }),
+    onSuccess: async () => {
+      setAnswerError(false);
+      await query.refetch();
+    },
+    onError: () => {
+      setAnswerError(true);
+    },
+  });
+
   function advanceFrom(position: number): void {
     const from = items.findIndex((entry) => entry.position === position);
     const next = items[from + 1];
@@ -310,7 +323,15 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
                   setCurrent(position);
                 }}
               />
-              <TutorRationale rationale={display.rationale} tuned={display.tuned} />
+              <TutorRationale
+                onUndoSmoothing={(actionId) => {
+                  undoSmoothing.mutate(actionId);
+                }}
+                rationale={display.rationale}
+                smoothing={display.smoothing}
+                tuned={display.tuned}
+                undoSmoothing={undoSmoothing.isPending}
+              />
             </div>
 
             {effectiveSummary !== null ? (

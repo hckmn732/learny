@@ -10,6 +10,8 @@ export interface ServiceContext {
   db: UserDatabase | null;
   clock: Clock;
   logger: LearnyLogger;
+  /** Owner-role client, used only for engine-owned rows (automation journal). */
+  sdb?: Db;
 }
 
 export interface CreateServiceContextOptions {
@@ -33,6 +35,7 @@ export function createServiceContext(options: CreateServiceContextOptions): Serv
           ),
     clock: options.clock ?? systemClock,
     logger: options.logger ?? rootLogger,
+    sdb: serviceDb(),
   };
 }
 

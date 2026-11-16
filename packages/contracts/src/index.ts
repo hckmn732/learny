@@ -53,6 +53,7 @@ export * from './parametres-onglets-et-profil';
 export * from './parametres-notifications';
 export * from './parametres-modeles-d-ia';
 export * from './parametres-automatismes';
+export * from './automatisme-7-quiz-global-plafonne-et-lisse';
 export * from './billing';
 export * from './abonnement-a-l-ia-fournie-interface-et-plafond';
 export * from './bricks';

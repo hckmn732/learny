@@ -270,6 +270,10 @@ export const fr = {
       gap: 'Lacune en priorité',
       load: 'Charge lissée',
       modules: 'Modules mêlés',
+      /** SPEC-718 — cap and reversal of the smoothed day. */
+      cap: (minutes: number) => `Durée maximale : ${String(minutes)} min par jour.`,
+      undoSmoothing: 'Annuler le lissage',
+      undoPending: 'Annulation…',
     },
     game: {
       skip: 'Passer',
