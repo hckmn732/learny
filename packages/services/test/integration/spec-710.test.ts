@@ -258,6 +258,9 @@ describe('[SPEC-710] service et API', () => {
     );
     // L'upsert est idempotent sur les valeurs ; seul `updated_at` avance avec l'horloge réelle.
     expect({ ...second, updatedAt: first.updatedAt }).toEqual(first);
+    if (first.updatedAt === null || second.updatedAt === null) {
+      throw new Error('updatedAt attendu après un upsert.');
+    }
     expect(Date.parse(second.updatedAt)).toBeGreaterThanOrEqual(Date.parse(first.updatedAt));
     const rows = await serviceDb().execute<{ total: number }>(sql`
       select count(*)::int as total from public.automation_settings
