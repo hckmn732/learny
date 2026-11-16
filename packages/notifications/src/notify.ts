@@ -178,7 +178,11 @@ export async function notify(
     });
     const decided: NotificationDelivery[] = [];
     const due: { deliveryId: string; notification: Notification }[] = [];
+    const allowed = value.externalChannels;
     for (const channel of channelsOf(value.type)) {
+      // SPEC-720 EF-3 — a producer may keep a notification strictly in-app (`[]`) or restrict it
+      // to the e-mail channel. The default (undefined) keeps every channel of the template.
+      if (allowed !== undefined && !allowed.includes(channel)) continue;
       const decision = decideDelivery({
         channel,
         type: value.type,

@@ -4,6 +4,7 @@ import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
 import { authRoutes } from './auth';
+import { weeklyReviewRoutes } from './automatisme-9-bilan-de-la-semaine';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
 import { cadrageRoutes, formationRoutes } from './cadrage';
@@ -96,6 +97,7 @@ export const ROUTES = {
   ...examRoutes,
   ...remediationRoutes,
   ...automationRoutes,
+  ...weeklyReviewRoutes,
   ...warmupRoutes,
   ...reviewRoutes,
 } as const;
