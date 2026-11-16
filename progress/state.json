@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T15:01:27.254Z",
+  "updatedAt": "2026-11-16T21:26:53.327Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5781,14 +5781,50 @@
       }
     },
     "SPEC-801": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-16T16:25:21.165Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "tmp/spec-801",
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T21:26:31.234Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T21:26:35.313Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T21:22:35.032Z",
+          "details": "21 test(s) [SPEC-801] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T21:26:53.283Z",
+          "details": "13 test(s) [SPEC-801] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T21:24:49.355Z",
+          "details": "7 réussi(s), 0 échec(s), 14 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T21:24:49.355Z",
+          "details": "4 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T21:26:53.326Z",
+          "details": "8/8 critères ✅"
+        }
+      }
     },
     "SPEC-802": {
       "status": "pending",

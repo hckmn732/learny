@@ -1,6 +1,7 @@
 // Visual conformity of the offline screens (SPEC-801 §10, CA-8): tokens and structure of
 // `/hors-ligne` with and without a pack, and of the offline revision screen in 1440×900 and
 // 390×844. Baselines are compared with a 1 % pixel tolerance.
+import { serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession } from '@learny/testing/supabase';
@@ -9,6 +10,22 @@ import { colors } from '@learny/ui/tokens';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
+
+// The shared demonstration database keeps the answers of the other files of the campaign; the
+// baselines describe a pristine session, so the SAP attempts are reset before capturing.
+async function clearSapAnswers(): Promise<void> {
+  await serviceDb().execute(sql`
+    delete from public.answers
+    where attempt_id in (
+      select attempt.id
+      from public.attempts attempt
+      join public.activities activity on activity.id = attempt.activity_id
+      where attempt.user_id = ${demoUserId('alex')}::uuid
+        and activity.formation_id = ${SAP}::uuid
+        and activity.kind = 'global_quiz_session'
+    )
+  `);
+}
 
 async function ready(page: import('@playwright/test').Page): Promise<void> {
   await page.goto('/accueil');
@@ -20,6 +37,7 @@ async function ready(page: import('@playwright/test').Page): Promise<void> {
 
 test.beforeAll(async () => {
   await restoreDemoData();
+  await clearSapAnswers();
 });
 
 test.afterAll(async () => {

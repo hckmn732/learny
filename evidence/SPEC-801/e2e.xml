@@ -1,0 +1,115 @@
+<testsuites id="" name="" tests="7" failures="0" skipped="0" errors="0" time="113.15584999999999">
+<testsuite name="p8/offline-visual.spec.ts" timestamp="2026-11-16T21:23:35.597Z" hostname="desktop" tests="3" failures="0" skipped="0" time="15.7" errors="0">
+<testcase name="conformité visuelle de /hors-ligne avec paquets @SPEC-801 @visual" classname="p8/offline-visual.spec.ts" time="6.899">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/attachments/axe-a76cc2efe0afaf928ba957069ac633eae8187541.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="état vide de /hors-ligne @SPEC-801 @visual" classname="p8/offline-visual.spec.ts" time="2.712">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/attachments/axe-81abea457b415c56defb182044b693f99db64220.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="écran de révision hors ligne, conformité visuelle @SPEC-801 @visual @mobile" classname="p8/offline-visual.spec.ts" time="6.089">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/attachments/axe-f79fc1f8b9ec29eaaa121a259fa0e2c1eacb90c0.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/offline.spec.ts" timestamp="2026-11-16T21:23:35.597Z" hostname="desktop" tests="3" failures="0" skipped="0" time="26.823" errors="0">
+<testcase name="installable et précharge les révisions @SPEC-801 @chromium-only" classname="p8/offline.spec.ts" time="7.546">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="révise hors ligne puis synchronise @SPEC-801 @chromium-only" classname="p8/offline.spec.ts" time="9.625">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/axe-7edfc4057e2546de9a44bb7a30afbaf06fb18a90.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/offline-quiz-0a4f28b87caf55ea6fdac8f2acb2f2ec70b69ce6.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/axe-918af07de7939784aba96680ccc3a29d1d0969ae.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conflit et déconnexion @SPEC-801 @chromium-only" classname="p8/offline.spec.ts" time="9.652">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/attachments/axe-d62cdee39aa2f126fa4b2e71a0c3a8c8e524822c.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/offline-visual.spec.ts" timestamp="2026-11-16T21:23:35.597Z" hostname="mobile" tests="1" failures="0" skipped="0" time="4.421" errors="0">
+<testcase name="écran de révision hors ligne, conformité visuelle @SPEC-801 @visual @mobile" classname="p8/offline-visual.spec.ts" time="4.421">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/attachments/axe-331b7269a5ef6cb3875c3dd47558f069712b38fa.json]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

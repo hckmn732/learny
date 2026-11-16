@@ -1,0 +1,708 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-801/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-801",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-801/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3151",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-801/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3151",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-801/test-results/sdd/SPEC-801/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-801/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-801/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3151/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3151",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p8/offline-visual.spec.ts",
+      "file": "p8/offline-visual.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "conformité visuelle de /hors-ligne avec paquets @SPEC-801 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6899,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:23:37.633Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/attachments/axe-a76cc2efe0afaf928ba957069ac633eae8187541.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-conformi-758f1-vec-paquets-SPEC-801-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c6db98b4367ac3ea64d4-85e775f272c68ca2feb3",
+          "file": "p8/offline-visual.spec.ts",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "title": "état vide de /hors-ligne @SPEC-801 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2712,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:23:48.934Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/attachments/axe-81abea457b415c56defb182044b693f99db64220.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-état-vide-de-hors-ligne-SPEC-801-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c6db98b4367ac3ea64d4-42072d04bc1062d39b01",
+          "file": "p8/offline-visual.spec.ts",
+          "line": 86,
+          "column": 1
+        },
+        {
+          "title": "écran de révision hors ligne, conformité visuelle @SPEC-801 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6089,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:23:52.055Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/attachments/axe-f79fc1f8b9ec29eaaa121a259fa0e2c1eacb90c0.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4421,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:24:36.718Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/attachments/axe-331b7269a5ef6cb3875c3dd47558f069712b38fa.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-visual-écran-de-253dd-elle-SPEC-801-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c6db98b4367ac3ea64d4-b2c1587434d3420e1bcd",
+          "file": "p8/offline-visual.spec.ts",
+          "line": 99,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "p8/offline.spec.ts",
+      "file": "p8/offline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "installable et précharge les révisions @SPEC-801 @chromium-only",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "chromium-only"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7546,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:24:02.665Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "offline-pack.json",
+                      "contentType": "application/json",
+                      "body": "eyJvd25lcklkIjoiM2I2OWM3YTctYjFmNS01OTdhLWIxOTktOTk5ZGUxMWZmZGZkIiwibG9jYWxEYXRlIjoiMjAyNi0xMS0xMSIsImdlbmVyYXRlZEF0IjoiMjAyNi0xMS0xMVQxMjoyMDowMC4wMDBaIiwiZXhwaXJlc0F0IjoiMjAyNi0xMS0xMlQyMzowMDowMC4wMDBaIiwiZm9ybWF0aW9ucyI6W3siZm9ybWF0aW9uSWQiOiJhNjkzMWJmNy03MjljLTVhMjEtYjU1Ni0xYTE4MjQ1YjNlMWUiLCJmb3JtYXRpb25UaXRsZSI6Ikdlc3Rpb24gZGUgcHJvamV0IGFnaWxlIiwic2Vzc2lvbiI6eyJzZXNzaW9uSWQiOm51bGwsImF0dGVtcHRJZCI6bnVsbCwiZm9ybWF0aW9uSWQiOiJhNjkzMWJmNy03MjljLTVhMjEtYjU1Ni0xYTE4MjQ1YjNlMWUiLCJmb3JEYXRlIjoiMjAyNi0xMS0xMSIsIm1vZGUiOiJmdWxsIiwic3RhdHVzIjoiZW1wdHkiLCJoZWFkZXIiOnsibm90aW9uQ291bnQiOjAsIm1vZHVsZXNMYWJlbCI6IiIsImVzdGltYXRlZE1pbnV0ZXMiOjAsInN1YnRpdGxlIjoiIn0sIm1vZGVPcHRpb25zIjp7ImZ1bGxNaW51dGVzIjowLCJtaWNyb01pbnV0ZXMiOjV9LCJub3RlIjoiIiwicmF0aW9uYWxlIjpbXSwidHVuZWQiOltdLCJzbW9vdGhpbmciOm51bGwsIml0ZW1zIjpbXSwiY3VycmVudFBvc2l0aW9uIjowLCJzdW1tYXJ5IjpudWxsfSwiZXh0cmFDYXJkcyI6W119LHsiZm9ybWF0aW9uSWQiOiI3OWM2ZDhiNC1lZTU1LTVmMjctOWRhMS1lOTU4ODgyYmZkZmMiLCJmb3JtYXRpb25UaXRsZSI6IlNBUCBTLzRIQU5BIEZpbmFuY2UiLCJzZXNzaW9uIjp7InNlc3Npb25JZCI6IjU2NDNkYmY2LTE0NTgtNDQzYS05MTVkLTVkYjQ4ZmFiYWVjMyIsImF0dGVtcHRJZCI6IjljYjcwNDRlLTJmOTktNDM3OS1iMDMzLWM0NTFiOGVhZTA0NSIsImZvcm1hdGlvbklkIjoiNzljNmQ4YjQtZWU1NS01ZjI3LTlkYTEtZTk1ODg4MmJmZGZjIiwiZm9yRGF0ZSI6IjIwMjYtMTEtMTEiLCJtb2RlIjoiZnVsbCIsInN0YXR1cyI6ImluX3Byb2dyZXNzIiwiaGVhZGVyIjp7Im5vdGlvbkNvdW50IjoxNCwibW9kdWxlc0xhYmVsIjoiTW9kdWxlcyAxIGV0IDIgbcOqbMOpcyIsImVzdGltYXRlZE1pbnV0ZXMiOjEwLCJzdWJ0aXRsZSI6IlNBUCBTLzRIQU5BIEZpbmFuY2Ugwrcgc2Vzc2lvbiBkdSBtZXJjcmVkaSAxMSBub3ZlbWJyZSJ9LCJtb2RlT3B0aW9ucyI6eyJmdWxsTWludXRlcyI6MTAsIm1pY3JvTWludXRlcyI6NX0sIm5vdGUiOiIxOCBub3Rpb25zIMOpdGFpZW50IGR1ZXMgYXVqb3VyZOKAmWh1aSA6IDQgc29udCByZXBvcnTDqWVzIMOgIGpldWRpIHBvdXIgcXVlIHZvcyByw6l2aXNpb25zIHJlc3RlbnQgc291cyAxNSBtaW4uIiwicmF0aW9uYWxlIjpbeyJsYWJlbCI6IkxhY3VuZSBlbiBwcmlvcml0w6kiLCJ0ZXh0IjoibGEgdmFyaWFudGUgZOKAmWV4ZXJjaWNlLCBvdWJsacOpZSBkZXB1aXMgbGUgNiBub3YuLCByZXZpZW50IGVuIGNhcnRlIGRlIHJhcHBlbC4ifSx7ImxhYmVsIjoiQ2hhcmdlIGxpc3PDqWUiLCJ0ZXh0IjoiNCBub3Rpb25zIHN1ciAxOCByZXBvcnTDqWVzIMOgIGpldWRpLCBwb3VyIHJlc3RlciBzb3VzIDE1IG1pbiBwYXIgam91ci4ifSx7ImxhYmVsIjoiTW9kdWxlcyBtw6psw6lzIiwidGV4dCI6InJldHJvdXZlciBsYSBib25uZSBub3Rpb24gcGFybWkgZOKAmWF1dHJlcyBsYSBmaXhlIG1pZXV4LiJ9XSwidHVuZWQiOlt7ImxhYmVsIjoiTGFjdW5lIGVuIHByaW9yaXTDqSIsInRleHQiOiJWYXJpYW50ZSBk4oCZZXhlcmNpY2UsIG91Ymxpw6llIGRlcHVpcyBsZSA2IG5vdi4sIHJldmllbnQgZW4gY2FydGUgZGUgcmFwcGVsLiJ9XSwic21vb3RoaW5nIjp7ImFjdGlvbklkIjoiODQxNjVjY2UtZjNmMy01ZWQ3LWI1NjMtNjdlOTk0N2VmOWQwIiwiY2FwTWludXRlcyI6MTUsInRhcmdldFJldGVudGlvbiI6MC45LCJkZWZlcnJlZENvdW50Ijo0LCJkZWZlcnJlZFRvIjoiMjAyNi0xMS0xMiIsImVzdGltYXRlZE1pbnV0ZXMiOjEwfSwiaXRlbXMiOlt7InBvc2l0aW9uIjowLCJicmlja0lkIjoiYTkxMzE4M2EtZDNjOC01OTNkLThlMmQtNDM2Y2U4MTg2MTk0IiwiYnJpY2tWZXJzaW9uSWQiOiIxMmIxODk0Yi0zNTIxLTUxZDQtYmQ1MS1jNTdmNzZhMTM0ZjAiLCJ0eXBlIjoicmVjYWxsX2NhcmQiLCJuYW1lIjoiQ2FydGUgZGUgcmFwcGVsIiwidGVjaCI6IlJhcHBlbCBhY3RpZiIsImRpc3BsYXlMYWJlbCI6IlZhcmlhbnRlIGTigJlleGVyY2ljZSIsInNjb3BlTGFiZWwiOiJNb2R1bGUgMiIsInJlYXNvbiI6eyJjb2RlIjoiZ2FwX2ZvcmdldHRpbmciLCJsYWJlbCI6IkNob2lzaSBwb3VyIHZvdHJlIG91YmxpIn0sIm5vdGlvbklkcyI6WyIxMjdlZmFhZC04MmUwLTViMGQtOTc1Ny1lY2Y2NjMyM2U5MTQiXSwicGF5bG9hZCI6eyJiYWNrIjoiTGUgbm9tYnJlIGRlIHDDqXJpb2RlcyBjb21wdGFibGVzIGTigJl1biBleGVyY2ljZSwgZXQgbGV1cnMgZGF0ZXMgZGUgZMOpYnV0IGV0IGRlIGZpbi4iLCJmcm9udCI6IlF1ZSBkw6lmaW5pdCB1bmUgdmFyaWFudGUgZOKAmWV4ZXJjaWNlIGNvbXB0YWJsZSA/Iiwic291cmNlcyI6W10sInNvdXJjZUxhYmVsIjoidm90cmUgY291cnMgZHUgbW9kdWxlIDIsIGNoYXBpdHJlIDIifSwiaW50ZXJ2YWxzIjp7ImFnYWluIjoiMjAyNi0xMS0xMVQxMjozMDowMC4wMDBaIiwiaGFyZCI6IjIwMjYtMTEtMjFUMTI6MjA6MDAuMDAwWiIsImdvb2QiOiIyMDI2LTExLTIzVDEyOjIwOjAwLjAwMFoiLCJlYXN5IjoiMjAyNi0xMS0yN1QxMjoyMDowMC4wMDBaIn0sInN0YXRlIjoidG9kbyIsInJlc3VsdCI6bnVsbH0seyJwb3NpdGlvbiI6MSwiYnJpY2tJZCI6ImEwMDE2YjkzLTcwMTUtNWI3Ny04ODRkLTk3ZjgxN2NkZmY1MCIsImJyaWNrVmVyc2lvbklkIjoiZmZjZjU1MjUtMzY4Yy01NGIwLWJhOWYtYjZkZDBlZjc5YTQ1IiwidHlwZSI6Im1hdGNoaW5nIiwibmFtZSI6IkFzc29jaWF0aW9uIiwidGVjaCI6Ik5vdGlvbnMgcHJvY2hlcyIsImRpc3BsYXlMYWJlbCI6Ik5vdGlvbnMgZGUgYmFzZSBTQVAiLCJzY29wZUxhYmVsIjoiTW9kdWxlcyAxIGV0IDIiLCJyZWFzb24iOm51bGwsIm5vdGlvbklkcyI6WyJjMDM0MGU2Mi0yNmM4LTUxMGMtYTcxMy0wYTg1ZmUwYWMzZTEiLCJjODNlZGEzOS05MDAzLTU1ZDQtOTQyNi0xMGRhOTQ2ZGY1OTMiLCIyZTU4ODYzYi01Nzk3LTU5MzItYjY1Mi0yYTJiOTYyMGMxN2UiXSwicGF5bG9hZCI6eyJwYWlycyI6W3siaWQiOiJwMSIsImxlZnQiOiJTb2Npw6l0w6kiLCJyaWdodCI6IkVudGl0w6kganVyaWRpcXVlIHF1aSB0aWVudCBzYSBwcm9wcmUgY29tcHRhYmlsaXTDqSIsIm5vdGlvbklkIjoiYzgzZWRhMzktOTAwMy01NWQ0LTk0MjYtMTBkYTk0NmRmNTkzIn0seyJpZCI6InAyIiwibGVmdCI6IlBsYW4gY29tcHRhYmxlIiwicmlnaHQiOiJMaXN0ZSBkZXMgY29tcHRlcyBnw6luw6lyYXV4IHV0aWxpc2FibGVzIiwibm90aW9uSWQiOiIyZTU4ODYzYi01Nzk3LTU5MzItYjY1Mi0yYTJiOTYyMGMxN2UifSx7ImlkIjoicDMiLCJsZWZ0IjoiTGF1bmNocGFkIEZpb3JpIiwicmlnaHQiOiJQYWdlIGTigJlhY2N1ZWlsIHF1aSByZWdyb3VwZSBsZXMgYXBwbGljYXRpb25zIiwibm90aW9uSWQiOiJjMDM0MGU2Mi0yNmM4LTUxMGMtYTcxMy0wYTg1ZmUwYWMzZTEifV0sInNvdXJjZXMiOltdLCJleHBsYW5hdGlvbiI6IkxhIHNvY2nDqXTDqSBwb3J0ZSBsZXMgY29tcHRlcywgbGUgcGxhbiBjb21wdGFibGUgbGVzIGxpc3RlIGV0IGxlIGxhdW5jaHBhZCBsZXMgZXhwb3NlLiIsImV4dHJhUmlnaHRzIjpbXSwiaW5zdHJ1Y3Rpb24iOiJOb3Rpb25zIGRlIGJhc2UgU0FQIDogcmVsaWV6IGNoYXF1ZSBub3Rpb24gw6Agc2EgZMOpZmluaXRpb24uIn0sImludGVydmFscyI6bnVsbCwic3RhdGUiOiJ0b2RvIiwicmVzdWx0IjpudWxsfSx7InBvc2l0aW9uIjoyLCJicmlja0lkIjoiMzkyOGM0ODQtZjkzZS01ZDExLWE5OTItZjg2ZjU2YmI3ZTE4IiwiYnJpY2tWZXJzaW9uSWQiOiJkNzgzZTA4Ni1iZGVlLTUzNDItOTY3Ni01M2EyNGFjZDRiNTAiLCJ0eXBlIjoib3JkZXJpbmciLCJuYW1lIjoiUmVtaXNlIGVuIG9yZHJlIiwidGVjaCI6IlPDqXF1ZW5jZSIsImRpc3BsYXlMYWJlbCI6Ik5pdmVhdXggZOKAmW9yZ2FuaXNhdGlvbiIsInNjb3BlTGFiZWwiOiJNb2R1bGUgMiIsInJlYXNvbiI6bnVsbCwibm90aW9uSWRzIjpbImJmM2E2NGE4LTBmODctNTMwMy05Y2IwLTM1ZmVkZWI1ZmMxOCIsIjdjYmI2NGQzLTU4YjYtNTIyMy05YTIyLTUzOTBlMmY4Mjk4OCIsIjA0NDJkZGRjLWUwN2MtNTRjNS1iZGQ5LTdlNTdmZjM3YmQ3NyIsIjZkZmU4MGIyLTY5ZjUtNWU3Ni04YzhjLTUyMmRjMWFmYjIzMSJdLCJwYXlsb2FkIjp7Iml0ZW1zIjpbeyJpZCI6Im8xIiwidGV4dCI6Ik1hbmRhbnQifSx7ImlkIjoibzIiLCJ0ZXh0IjoiU29jacOpdMOpIn0seyJpZCI6Im8zIiwidGV4dCI6IkRpdmlzaW9uIn0seyJpZCI6Im80IiwidGV4dCI6Ik1hZ2FzaW4ifV0sInNvdXJjZXMiOltdLCJleHBsYW5hdGlvbiI6IkxlIG1hbmRhbnQgY29udGllbnQgbGVzIHNvY2nDqXTDqXMsIHF1aSBzZSBkw6ljb3VwZW50IGVuIGRpdmlzaW9ucyBwdWlzIGVuIG1hZ2FzaW5zLiIsImluc3RydWN0aW9uIjoiTml2ZWF1eCBk4oCZb3JnYW5pc2F0aW9uIDogcmVtZXR0ZXogbGVzIG5pdmVhdXggU0FQIGRhbnMgbOKAmW9yZHJlLCBkdSBwbHVzIGxhcmdlIGF1IHBsdXMgZmluLiJ9LCJpbnRlcnZhbHMiOm51bGwsInN0YXRlIjoidG9kbyIsInJlc3VsdCI6bnVsbH0seyJwb3NpdGlvbiI6MywiYnJpY2tJZCI6IjE3N2ViMjQ5LWNmNGEtNTJiOS1iZWIzLTg4NDEyZGU1NjVmNyIsImJyaWNrVmVyc2lvbklkIjoiNjc3Mzg4MDAtNWI1My01NzU1LWI3MzAtZWNjNzcyNjVkOWFmIiwidHlwZSI6ImNhdGVnb3JpemF0aW9uIiwibmFtZSI6IkNsYXNzZW1lbnQiLCJ0ZWNoIjoiQ2F0w6lnb3Jpc2F0aW9uIiwiZGlzcGxheUxhYmVsIjoiRG9ubsOpZXMgZGUgYmFzZSBldCBvcMOpcmF0aW9ucyIsInNjb3BlTGFiZWwiOiJNb2R1bGUgMSIsInJlYXNvbiI6bnVsbCwibm90aW9uSWRzIjpbImI4YzMxMmNlLTdlNWUtNTNlZi1hODlhLTM0ZThkZjY5NzkwNCIsImEwOTNhODlhLWUyNzktNWFlYi1hNGM0LTEzYTIyNzdlODA3YiIsImUzZGMyODY0LTg1NGUtNTUwMi04OWY1LTVhMzY2NmIyNGQ0MyJdLCJwYXlsb2FkIjp7Iml0ZW1zIjpbeyJpZCI6ImkxIiwidGV4dCI6IkNvbXB0ZSBnw6luw6lyYWwiLCJjYXRlZ29yeUlkIjoiYzEifSx7ImlkIjoiaTIiLCJ0ZXh0IjoiRm91cm5pc3NldXIiLCJjYXRlZ29yeUlkIjoiYzEifSx7ImlkIjoiaTMiLCJ0ZXh0IjoiRmFjdHVyZSBk4oCZYWNoYXQiLCJjYXRlZ29yeUlkIjoiYzIifSx7ImlkIjoiaTQiLCJ0ZXh0IjoiUGFpZW1lbnQiLCJjYXRlZ29yeUlkIjoiYzIifSx7ImlkIjoiaTUiLCJ0ZXh0IjoiQ2xpZW50IiwiY2F0ZWdvcnlJZCI6ImMxIn0seyJpZCI6Imk2IiwidGV4dCI6IsOJY3JpdHVyZSBkZSByw6lndWxhcmlzYXRpb24iLCJjYXRlZ29yeUlkIjoiYzIifV0sInNvdXJjZXMiOltdLCJjYXRlZ29yaWVzIjpbeyJpZCI6ImMxIiwibGFiZWwiOiJEb25uw6llIGRlIGJhc2UiLCJub3Rpb25JZCI6ImEwOTNhODlhLWUyNzktNWFlYi1hNGM0LTEzYTIyNzdlODA3YiJ9LHsiaWQiOiJjMiIsImxhYmVsIjoiT3DDqXJhdGlvbiIsIm5vdGlvbklkIjpudWxsfV0sImV4cGxhbmF0aW9uIjoiTGVzIGRvbm7DqWVzIGRlIGJhc2UgZMOpY3JpdmVudCBsZXMgb2JqZXRzIDsgbGVzIG9ww6lyYXRpb25zIGxlcyBtZXR0ZW50IGVuIG1vdXZlbWVudC4iLCJpbnN0cnVjdGlvbiI6IkRvbm7DqWVzIGRlIGJhc2UgZXQgb3DDqXJhdGlvbnMgOiBjbGFzc2V6IGNoYXF1ZSDDqWzDqW1lbnQuIn0sImludGVydmFscyI6bnVsbCwic3RhdGUiOiJ0b2RvIiwicmVzdWx0IjpudWxsfSx7InBvc2l0aW9uIjo0LCJicmlja0lkIjoiODFlNTYwNGMtZTI1Mi01OTg5LWEyNTUtZWY3YTk2YjY1YjdkIiwiYnJpY2tWZXJzaW9uSWQiOiI1ZTg2MmI1Mi00MjQxLTUyYmUtYmIyYS02OTcwNzM0ZDhkYzgiLCJ0eXBlIjoiY2xvemUiLCJuYW1lIjoiVGV4dGUgw6AgdHJvdXMiLCJ0ZWNoIjoiUmFwcGVsIGFjdGlmIiwiZGlzcGxheUxhYmVsIjoiRmlvcmkgZXQgZGV2aXNlcyIsInNjb3BlTGFiZWwiOiJNb2R1bGVzIDEgZXQgMiIsInJlYXNvbiI6bnVsbCwibm90aW9uSWRzIjpbImRlMjczN2Q3LTFkNGUtNTc3YS04ZTVhLTIyMDQwNjVkMTQwZiIsIjcxMGFkNWI3LTRjZTAtNWIwZS1iNzJlLWVhOTI2NjI5MjhjNSIsImEyYTY2OTFlLTAxMDgtNTBkMC05YzczLTA2YTc2ODFlOWRlYSJdLCJwYXlsb2FkIjp7ImdhcHMiOlt7ImlkIjoxLCJoaW50Ijoiw4lsw6ltZW50IGR1IGxhdW5jaHBhZCIsImFuc3dlcnMiOlsidHVpbGUiXX0seyJpZCI6MiwiaGludCI6IkRldmlzZSBkZSB0ZW51ZSBkZXMgY29tcHRlcyIsImFuc3dlcnMiOlsiaW50ZXJuZSJdfV0sInRpdGxlIjoiRmlvcmkgZXQgZGV2aXNlcyIsInNvdXJjZXMiOltdLCJ0ZW1wbGF0ZSI6IkRhbnMgU0FQIEZpb3JpLCBjaGFxdWUgYXBwbGljYXRpb24gc+KAmW91dnJlIGRlcHVpcyB1bmUge3sxfX0gZHUgbGF1bmNocGFkLCBldCB1bmUgc29jacOpdMOpIHRpZW50IHNhIGNvbXB0YWJpbGl0w6kgZGFucyBzYSBkZXZpc2Uge3syfX0uIiwiZXhwbGFuYXRpb24iOiJMYSB0dWlsZSBvdXZyZSBs4oCZYXBwbGljYXRpb24gOyBsYSBkZXZpc2UgaW50ZXJuZSBwb3J0ZSBsYSBjb21wdGFiaWxpdMOpIGRlIGxhIHNvY2nDqXTDqS4ifSwiaW50ZXJ2YWxzIjpudWxsLCJzdGF0ZSI6InRvZG8iLCJyZXN1bHQiOm51bGx9XSwiY3VycmVudFBvc2l0aW9uIjowLCJzdW1tYXJ5IjpudWxsfSwiZXh0cmFDYXJkcyI6W119XX0="
+                    },
+                    {
+                      "name": "offline-measures.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcmVsb2FkTXMiOjIxNjIsInBhY2tCeXRlcyI6Njc3MywicGFja0NvdW50IjoyfQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-installable-et--157b3-ions-SPEC-801-chromium-only-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e3981b901554ed22c89c-c2e50110170988cc2062",
+          "file": "p8/offline.spec.ts",
+          "line": 153,
+          "column": 1
+        },
+        {
+          "title": "révise hors ligne puis synchronise @SPEC-801 @chromium-only",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "chromium-only"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9625,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:24:10.715Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/axe-7edfc4057e2546de9a44bb7a30afbaf06fb18a90.json"
+                    },
+                    {
+                      "name": "offline-quiz",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/offline-quiz-0a4f28b87caf55ea6fdac8f2acb2f2ec70b69ce6.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/attachments/axe-918af07de7939784aba96680ccc3a29d1d0969ae.json"
+                    },
+                    {
+                      "name": "offline-measures.json",
+                      "contentType": "application/json",
+                      "body": "eyJyZXZpZXdMb2dzQmVmb3JlIjoyMywicmV2aWV3TG9nc0FmdGVyU3luYyI6MjcsInJldmlld0xvZ3NBZnRlclJlcGxheSI6MjcsInF1ZXVlZCI6Mn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-révise-hors-lig-3dc66-nise-SPEC-801-chromium-only-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e3981b901554ed22c89c-661021c1a84b53afcc2a",
+          "file": "p8/offline.spec.ts",
+          "line": 196,
+          "column": 1
+        },
+        {
+          "title": "conflit et déconnexion @SPEC-801 @chromium-only",
+          "ok": true,
+          "tags": [
+            "SPEC-801",
+            "chromium-only"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9652,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T21:24:20.968Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/attachments/axe-d62cdee39aa2f126fa4b2e71a0c3a8c8e524822c.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-801/test-results/artifacts/p8-offline-conflit-et-déconnexion-SPEC-801-chromium-only-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e3981b901554ed22c89c-a5531bbf8563f786ccd2",
+          "file": "p8/offline.spec.ts",
+          "line": 305,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T21:22:55.934Z",
+    "duration": 113155.84999999999,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
