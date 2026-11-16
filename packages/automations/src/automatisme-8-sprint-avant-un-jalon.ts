@@ -706,6 +706,7 @@ async function plansFor(
   db: Db,
   userId: string,
   examSlotIds: readonly string[],
+  expectedExamDates: ReadonlyMap<string, string>,
 ): Promise<SprintPlanView[]> {
   if (examSlotIds.length === 0) return [];
   const rows = await db.execute<ActionResultRow>(sql`
@@ -725,6 +726,10 @@ async function plansFor(
   for (const row of rows) {
     const examSlotId = stringOf(row.payload.examSlotId);
     if (examSlotId === '' || seen.has(examSlotId)) continue;
+    // A moved milestone keeps its old applied action: only the plan of the current local exam
+    // date is the active one, even when both rows share the frozen creation instant.
+    const expected = expectedExamDates.get(examSlotId);
+    if (expected !== undefined && stringOf(row.payload.examDate) !== expected) continue;
     seen.add(examSlotId);
     const targets = Array.isArray(row.payload.targets)
       ? (row.payload.targets as SprintPlannedSlot[])
@@ -821,18 +826,24 @@ export async function planSprintsBeforeMilestones(
     });
     if (!run.ok) throw run.error;
 
-    const milestones = await (ctx.sdb ?? serviceDb()).execute<{ id: string }>(sql`
-      select ss.id::text as id
+    const db = ctx.sdb ?? serviceDb();
+    const milestones = await db.execute<{ id: string; starts_at: Date | string }>(sql`
+      select ss.id::text as id, ss.starts_at
       from public.schedule_slots ss
       where ss.user_id = ${user.userId}::uuid
         and ss.formation_id = ${input.formationId}::uuid
         and ss.kind in ('validation_quiz', 'mock_exam')
         ${input.examSlotId === undefined ? sql`` : sql`and ss.id = ${input.examSlotId}::uuid`}
     `);
+    const profile = await readProfile(db, user.userId);
+    const expectedExamDates = new Map(
+      milestones.map((row) => [row.id, userLocalDay(dbInstant(row.starts_at), profile.timezone)]),
+    );
     const plans = await plansFor(
-      ctx.sdb ?? serviceDb(),
+      db,
       user.userId,
       milestones.map((row) => row.id),
+      expectedExamDates,
     );
     return ok({
       created: run.value.created,
