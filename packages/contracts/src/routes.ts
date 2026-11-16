@@ -27,6 +27,7 @@ import { automationRoutes } from './moteur-d-automatismes';
 import { notificationRoutes, notificationsDevRoutes } from './notifications';
 import { notificationsGenerationDevRoutes } from './notifications-generation-des-rappels';
 import { notionGraphRoutes } from './notion-graph';
+import { offlineRoutes } from './offline';
 import { parametresModelesRoutes } from './parametres-modeles-d-ia';
 import { parametresNotificationsRoutes } from './parametres-notifications';
 import { parametresRoutes } from './parametres-onglets-et-profil';
@@ -98,6 +99,7 @@ export const ROUTES = {
   ...automationRoutes,
   ...warmupRoutes,
   ...reviewRoutes,
+  ...offlineRoutes,
 } as const;
 
 export type RouteName = keyof typeof ROUTES;

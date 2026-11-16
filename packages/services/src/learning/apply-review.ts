@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { ENGINE } from '@learny/config/product';
@@ -47,6 +48,11 @@ export interface ApplyReviewResultInput {
    * Fed to the gap detector as a `confusion`, so a cross-notion mistake becomes a gap.
    */
   confusedWithNotionId?: string | null;
+  /**
+   * SPEC-801 ET-8 — a synchronised answer older than an existing review of the same notion is
+   * recorded in `answers` but never regresses the current FSRS state (the most recent wins).
+   */
+  skipFsrsIfNewer?: boolean;
 }
 
 export interface AppliedReviewResult {
@@ -68,6 +74,7 @@ const inputSchema = z.object({
   attemptNo: z.number().int().min(1),
   reviewedAt: z.iso.datetime(),
   confusedWithNotionId: z.uuid().nullable().optional(),
+  skipFsrsIfNewer: z.boolean().optional(),
 });
 
 /**
@@ -82,6 +89,19 @@ export async function applyReviewResult(
   const input = inputSchema.parse(rawInput);
   const format = formatOf(input.format);
   if (format === null) return null;
+
+  if (input.skipFsrsIfNewer === true) {
+    const newer = await tx.execute<{ reviewed_at: string }>(sql`
+      select reviewed_at::text as reviewed_at
+      from public.review_logs
+      where user_id = ${input.userId}::uuid
+        and notion_id = ${input.notionId}::uuid
+        and reviewed_at > ${input.reviewedAt}::timestamptz
+      order by reviewed_at desc
+      limit 1
+    `);
+    if (newer[0] !== undefined) return null;
+  }
 
   const states = await loadStates(tx, input.userId, [input.notionId]);
   const state = states.get(input.notionId);
