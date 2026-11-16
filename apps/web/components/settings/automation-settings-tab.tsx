@@ -12,6 +12,7 @@ import {
   type AutomationKey,
   type AutomationSettingsDto,
   type NotificationSettingsDto,
+  type PauseStateDto,
 } from '@learny/contracts';
 import { addCivilDays, clock, formatUserDate, startOfUserDay, toUserZone } from '@learny/core';
 import { Button, Card, ErrorState, FormError, Select, SkeletonGroup, Switch } from '@learny/ui';
@@ -149,6 +150,11 @@ export function AutomationSettingsTab({
     queryFn: () => api.meAutomationActionsList({ query: { limit: 100 } }),
     retry: false,
   });
+  const pauseStateQuery = useQuery({
+    queryKey: ['pause', 'state'],
+    queryFn: () => api.mePauseGet({}),
+    retry: false,
+  });
   const [pending, setPending] = useState<string | null>(null);
   const [undoing, setUndoing] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -158,6 +164,7 @@ export function AutomationSettingsTab({
 
   const settings = settingsQuery.data;
   const actions = actionsQuery.data;
+  const pauseState = pauseStateQuery.data;
   const sortedActions = useMemo(() => sortActions(actions?.items ?? []), [actions]);
   const weekly = sortedActions.slice(0, actions?.weekCount ?? 0);
   const lastByKey = useMemo(() => {
@@ -209,6 +216,54 @@ export function AutomationSettingsTab({
     }
   };
 
+  const startPauseMode = async (): Promise<void> => {
+    if (pending !== null || selectedPauseUntil === '') return;
+    setPending('pause-start');
+    setError(null);
+    setStatus(null);
+    try {
+      const state = await api.mePauseStart({
+        body: {
+          endDate: selectedPauseUntil,
+          diagnosticEnabled: diagnosticValue === 'true',
+        },
+      });
+      queryClient.setQueryData<PauseStateDto>(['pause', 'state'], state);
+      await Promise.all([refetchSettings(), actionsQuery.refetch()]);
+      setStatus(t.pauseScheduled(pauseLabel(state.endsOn ?? selectedPauseUntil, timeZone)));
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.detail : t.saveError);
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const resumePauseMode = async (): Promise<void> => {
+    if (pending !== null) return;
+    setPending('pause-resume');
+    setError(null);
+    setStatus(null);
+    try {
+      const state = await api.mePauseEnd({});
+      queryClient.setQueryData<PauseStateDto>(['pause', 'state'], state);
+      await Promise.all([
+        refetchSettings(),
+        actionsQuery.refetch(),
+        queryClient.invalidateQueries({ queryKey: ['home'] }),
+        queryClient.invalidateQueries({ queryKey: ['agenda'] }),
+      ]);
+      setStatus(
+        state.diagnostic === null
+          ? t.pauseResumed
+          : t.pauseDiagnosticProposed(state.diagnostic.minutes),
+      );
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.detail : t.saveError);
+    } finally {
+      setPending(null);
+    }
+  };
+
   const undo = async (actionId: string): Promise<void> => {
     if (undoing !== null) return;
     setUndoing(actionId);
@@ -229,7 +284,7 @@ export function AutomationSettingsTab({
     }
   };
 
-  if (settingsQuery.isPending || actionsQuery.isPending) {
+  if (settingsQuery.isPending || actionsQuery.isPending || pauseStateQuery.isPending) {
     return (
       <Card as="section" data-testid="automation-panel" aria-busy="true">
         <SkeletonGroup label={t.loading}>
@@ -244,6 +299,7 @@ export function AutomationSettingsTab({
   if (
     settingsQuery.isError ||
     actionsQuery.isError ||
+    pauseStateQuery.isError ||
     settings === undefined ||
     actions === undefined
   ) {
@@ -257,7 +313,11 @@ export function AutomationSettingsTab({
           title={t.errorTitle}
           {...(request === undefined ? {} : { requestId: request })}
           onRetry={() => {
-            void Promise.all([settingsQuery.refetch(), actionsQuery.refetch()]);
+            void Promise.all([
+              settingsQuery.refetch(),
+              actionsQuery.refetch(),
+              pauseStateQuery.refetch(),
+            ]);
           }}
         />
       </Card>
@@ -439,92 +499,122 @@ export function AutomationSettingsTab({
           </div>
         </div>
         <article className="flex flex-col gap-14" data-testid="automation-row-pause">
-          {/* The rule is shown once, under the section title (maquette Parametres « t-pause »). */}
-          <div className="flex justify-end">
-            <Switch
-              aria-labelledby="automation-title-pause"
-              checked={pauseEnabled}
-              data-testid="automation-switch"
-              disabled={pending !== null}
-              onCheckedChange={(checked) => {
-                void saveSetting(AUTOMATION_PAUSE_KEY, { enabled: checked }, 'toggle-pause');
-              }}
-            />
-          </div>
-          {pauseEnabled ? (
-            <div className="flex flex-wrap items-end gap-14 gap-y-24">
-              <Select
-                className="min-w-[180px] flex-none"
-                data-testid="automation-setting-pause-pauseUntil"
+          <div className="flex flex-col gap-14" data-testid="pause-mode">
+            {/* The rule is shown once, under the section title (maquette Parametres « t-pause »). */}
+            <div className="flex justify-end">
+              <Switch
+                aria-labelledby="automation-title-pause"
+                checked={pauseEnabled}
+                data-testid="automation-switch"
                 disabled={pending !== null}
-                label={t.pauseUntil}
-                onChange={(event) => {
-                  setPauseUntil(event.target.value);
-                  setStatus(null);
+                onCheckedChange={(checked) => {
+                  void saveSetting(AUTOMATION_PAUSE_KEY, { enabled: checked }, 'toggle-pause');
                 }}
-                options={pauseDates}
-                value={selectedPauseUntil}
               />
-              <div className="flex min-h-44 items-center gap-10">
-                <Switch
-                  aria-label={t.diagnose}
-                  checked={diagnosticValue === 'true'}
-                  data-testid="automation-setting-pause-diagnosticOnReturn"
+            </div>
+            {pauseEnabled && pauseState?.status !== 'active' ? (
+              <div className="flex flex-wrap items-end gap-14 gap-y-24">
+                <Select
+                  className="min-w-[180px] flex-none"
+                  data-testid="pause-end-date"
                   disabled={pending !== null}
-                  onCheckedChange={(checked) => {
-                    setDiagnostic(checked ? 'true' : 'false');
+                  label={t.pauseUntil}
+                  onChange={(event) => {
+                    setPauseUntil(event.target.value);
                     setStatus(null);
                   }}
+                  options={pauseDates}
+                  value={selectedPauseUntil}
                 />
-                <span className="text-14 font-600">{t.diagnose}</span>
+                <div className="flex min-h-44 items-center gap-10">
+                  <Switch
+                    aria-label={t.diagnose}
+                    checked={diagnosticValue === 'true'}
+                    data-testid="pause-diagnostic"
+                    disabled={pending !== null}
+                    onCheckedChange={(checked) => {
+                      setDiagnostic(checked ? 'true' : 'false');
+                      setStatus(null);
+                    }}
+                  />
+                  <span className="text-14 font-600">{t.diagnose}</span>
+                </div>
+                <Button
+                  className="ml-auto"
+                  data-testid="automation-pause-start"
+                  disabled={pending !== null || selectedPauseUntil === ''}
+                  onClick={() => {
+                    void startPauseMode();
+                  }}
+                  size="lg"
+                  type="button"
+                  variant="dark"
+                >
+                  {t.startPause}
+                </Button>
               </div>
-              <Button
-                className="ml-auto"
-                data-testid="automation-pause-start"
-                disabled={pending !== null || selectedPauseUntil === ''}
-                onClick={() => {
-                  void saveSetting(
-                    AUTOMATION_PAUSE_KEY,
-                    {
-                      params: {
-                        ...pauseParams,
-                        pauseUntil: selectedPauseUntil,
-                        diagnosticOnReturn: diagnosticValue === 'true',
-                      },
-                    },
-                    'pause-start',
-                  ).then((saved) => {
-                    if (saved) {
-                      setStatus(t.pauseScheduled(pauseLabel(selectedPauseUntil, timeZone)));
-                    }
-                  });
-                }}
-                size="lg"
-                type="button"
-                variant="dark"
+            ) : null}
+            {pauseState?.status === 'active' ? (
+              <div
+                className="flex flex-wrap items-center justify-between gap-12 rounded-14 bg-indigo-soft px-14 py-12 text-14 text-indigo-ink-strong"
+                data-testid="automation-pause-active"
+                role="status"
               >
-                {t.startPause}
-              </Button>
-            </div>
-          ) : null}
-          {settings.paused ? (
+                <span>
+                  <strong>{t.pauseActive(pauseLabel(pauseState.endsOn ?? '', timeZone))}</strong>{' '}
+                  {pauseState.diagnosticOnReturn
+                    ? t.pauseDiagnosticPlanned
+                    : t.pauseWithoutDiagnostic}
+                </span>
+                <Button
+                  data-testid="pause-resume"
+                  disabled={pending !== null}
+                  onClick={() => {
+                    void resumePauseMode();
+                  }}
+                  size="sm"
+                  type="button"
+                  variant="dark"
+                >
+                  {t.resumeNow}
+                </Button>
+              </div>
+            ) : null}
+            {pauseState?.status === 'ended' &&
+            pauseState.diagnostic !== null &&
+            pauseState.diagnostic.completedAt === null ? (
+              <p
+                className="m-0 rounded-14 bg-indigo-soft px-14 py-12 text-14 text-indigo-ink-strong"
+                data-testid="pause-diagnostic-proposed"
+                role="status"
+              >
+                {t.pauseDiagnosticProposed(pauseState.diagnostic.minutes)}
+              </p>
+            ) : null}
+            {pauseState?.status === 'ended' &&
+            pauseState.diagnostic !== null &&
+            pauseState.diagnostic.completedAt !== null ? (
+              <p
+                className="m-0 rounded-14 bg-canvas px-14 py-12 text-14 text-ink-secondary"
+                data-testid="pause-diagnostic-done"
+                role="status"
+              >
+                {t.pauseDiagnosticDone(
+                  pauseState.diagnostic.answered ?? 0,
+                  pauseState.diagnostic.notionIds.length,
+                )}
+              </p>
+            ) : null}
             <p
-              className="m-0 rounded-14 bg-indigo-soft px-14 py-12 text-14 text-indigo-ink-strong"
-              data-testid="automation-pause-active"
-              role="status"
+              className="m-0 rounded-10 bg-canvas px-12 py-8 text-12 leading-1.5 text-ink-secondary"
+              data-testid="automation-last-pause"
             >
-              Une pause est active : les automatismes sont suspendus jusqu’au retour.
+              <strong>{t.lastAction} :</strong>{' '}
+              {lastByKey.get(AUTOMATION_PAUSE_KEY) === undefined
+                ? t.noLastAction
+                : `${lastActionDate(lastByKey.get(AUTOMATION_PAUSE_KEY)?.createdAt ?? '', timeZone)}, ${lastByKey.get(AUTOMATION_PAUSE_KEY)?.summary ?? ''}`}
             </p>
-          ) : null}
-          <p
-            className="m-0 rounded-10 bg-canvas px-12 py-8 text-12 leading-1.5 text-ink-secondary"
-            data-testid="automation-last-pause"
-          >
-            <strong>{t.lastAction} :</strong>{' '}
-            {lastByKey.get(AUTOMATION_PAUSE_KEY) === undefined
-              ? t.noLastAction
-              : `${lastActionDate(lastByKey.get(AUTOMATION_PAUSE_KEY)?.createdAt ?? '', timeZone)}, ${lastByKey.get(AUTOMATION_PAUSE_KEY)?.summary ?? ''}`}
-          </p>
+          </div>
         </article>
       </section>
 
