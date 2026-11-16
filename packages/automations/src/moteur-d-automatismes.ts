@@ -18,6 +18,7 @@ import {
   AutomationActionItem,
   AutomationActionKind,
   AutomationSummary,
+  automationParamsSchema,
   decodeCursor,
   encodeCursor,
   EVENT_AUTOMATION_KEYS,
@@ -618,10 +619,11 @@ export function listMyAutomations(ctx: ServiceContext): Promise<Result<Automatio
         const row = rows.find((entry) => entry.key === key);
         const definition = definitionOf(automationRegistry, key);
         let params: Record<string, unknown> = row?.params ?? {};
-        if (definition !== undefined) {
-          const parsed = definition.params.safeParse(row?.params ?? {});
-          if (parsed.success) params = parsed.data as Record<string, unknown>;
-        }
+        // SPEC-710 ET-4 — the display catalogue carries a canonical schema for every key, so the
+        // screen receives the same defaults even before SPEC-713 to SPEC-721 register a definition.
+        const schema = definition?.params ?? automationParamsSchema(key);
+        const parsed = schema.safeParse(row?.params ?? {});
+        if (parsed.success) params = parsed.data as Record<string, unknown>;
         return {
           automation: key,
           enabled: row?.enabled ?? true,
@@ -655,13 +657,10 @@ export function updateMyAutomationSetting(
       const definition = definitionOf(automationRegistry, input.automation);
       let params = current?.params ?? {};
       if (input.params !== undefined) {
-        if (definition === undefined) {
-          throw validationError(
-            'params',
-            'cet automatisme ne définit pas encore de paramètres (SPEC-712 à 721)',
-          );
-        }
-        const parsed = definition.params.safeParse(input.params);
+        // SPEC-710 ET-4 — the catalogue schema validates the settings of the ten automations; a
+        // registered definition of SPEC-712 to SPEC-721 keeps precedence over it.
+        const schema = definition?.params ?? automationParamsSchema(input.automation);
+        const parsed = schema.safeParse(input.params);
         if (!parsed.success) {
           const issue = parsed.error.issues[0];
           throw validationError(

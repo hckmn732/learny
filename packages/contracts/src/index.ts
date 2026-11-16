@@ -50,6 +50,7 @@ export * from './formations-a-plusieurs';
 export * from './parametres-onglets-et-profil';
 export * from './parametres-notifications';
 export * from './parametres-modeles-d-ia';
+export * from './parametres-automatismes';
 export * from './billing';
 export * from './bricks';
 export * from './cadrage';
