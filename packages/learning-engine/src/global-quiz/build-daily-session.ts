@@ -166,6 +166,16 @@ function canonicalLastFormats(
   return byNotion;
 }
 
+function canonicalForced(
+  forced: readonly { notionId: Id; format: BrickFormat }[] | undefined,
+): Map<Id, BrickFormat> {
+  const byNotion = new Map<Id, BrickFormat>();
+  for (const entry of forced ?? []) {
+    if (!byNotion.has(entry.notionId)) byNotion.set(entry.notionId, entry.format);
+  }
+  return byNotion;
+}
+
 function preferenceTargets(preference: GlobalQuizFormatPreference): readonly BrickFormat[] {
   if (preference === 'cards') return ['recall_card'];
   if (preference === 'matching_categorization') return ['matching', 'categorization'];
@@ -184,7 +194,12 @@ function chooseFormat(
   preference: GlobalQuizFormatPreference,
   seed: string,
   notionId: Id,
+  forcedFormat: BrickFormat | null = null,
 ): FormatDecision | null {
+  if (forcedFormat !== null) {
+    if (!available.includes(forcedFormat)) return null;
+    return { format: forcedFormat, reason: 'gap_nature', variantRequested: false };
+  }
   const imposed = gapNature === null ? [] : IMPOSED_GAP_FORMATS[gapNature];
   const pool = imposed.length === 0 ? [...available] : available.filter((f) => imposed.includes(f));
   if (pool.length === 0) return null;
@@ -322,6 +337,7 @@ export function buildDailySession(rawInput: BuildDailySessionInput): DailySessio
   const gaps = canonicalGaps(input.gaps);
   const bank = canonicalBank(input.bank, params);
   const lastFormats = canonicalLastFormats(input.lastFormats);
+  const forcedFormats = canonicalForced(input.forcedFormats);
   const notions = canonicalNotions(input.dueNotions);
 
   const candidates: Candidate[] = [];
@@ -356,9 +372,16 @@ export function buildDailySession(rawInput: BuildDailySessionInput): DailySessio
       preference,
       input.seed,
       notion.notionId,
+      forcedFormats.get(notion.notionId) ?? null,
     );
     if (decision === null) {
-      const imposed = gapNature === null ? [] : IMPOSED_GAP_FORMATS[gapNature];
+      const forcedFormat = forcedFormats.get(notion.notionId) ?? null;
+      const imposed =
+        forcedFormat !== null
+          ? [forcedFormat]
+          : gapNature === null
+            ? []
+            : IMPOSED_GAP_FORMATS[gapNature];
       exhausted.push({
         notionId: notion.notionId,
         moduleId: notion.moduleId,

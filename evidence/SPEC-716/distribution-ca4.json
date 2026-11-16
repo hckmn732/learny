@@ -1,0 +1,6 @@
+{
+  "formats": ["choice_question", "cloze", "matching", "categorization", "recall_card"],
+  "draws": 1000,
+  "cards": { "recall_card": 430, "choice_question": 128, "matching": 139, "categorization": 147, "cloze": 156 },
+  "vary": { "choice_question": 216, "cloze": 204, "categorization": 202, "recall_card": 195, "matching": 183 }
+}

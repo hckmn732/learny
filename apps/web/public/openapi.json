@@ -13200,9 +13200,32 @@
                             "type": "integer"
                           },
                           "reason": {
-                            "type": [
-                              "string",
-                              "null"
+                            "anyOf": [
+                              {
+                                "additionalProperties": false,
+                                "properties": {
+                                  "code": {
+                                    "enum": [
+                                      "gap_forgetting",
+                                      "gap_confusion",
+                                      "question_card"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "label": {
+                                    "minLength": 1,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "label"
+                                ],
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
                             ]
                           },
                           "result": {
@@ -13343,6 +13366,27 @@
                           "type": "null"
                         }
                       ]
+                    },
+                    "tuned": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "label": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "text": {
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "label",
+                          "text"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
                     }
                   },
                   "required": [
@@ -13356,6 +13400,7 @@
                     "modeOptions",
                     "note",
                     "rationale",
+                    "tuned",
                     "items",
                     "currentPosition",
                     "summary"

@@ -113,6 +113,11 @@ export const RemediationParams = z.preprocess(
 );
 export type RemediationParams = z.infer<typeof RemediationParams>;
 
+/** EF-4, EF-5 — kinds produced by the `jeu_lacune` automation (SPEC-716). */
+export const JEU_LACUNE_ACTION_KINDS = ['game_chosen', 'exercise_scheduled'] as const;
+export const JeuLacuneActionKind = z.enum(JEU_LACUNE_ACTION_KINDS);
+export type JeuLacuneActionKind = z.infer<typeof JeuLacuneActionKind>;
+
 /** EF-6 — one of the two options a `plan_change_proposed` action exposes (BR-FOR-14). */
 export const ReprisePlanOption = z.object({
   kind: z.enum(['shift_end', 'lighten']),

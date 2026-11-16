@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T10:06:11.575Z",
+  "updatedAt": "2026-11-16T11:11:32.140Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5404,14 +5404,50 @@
       }
     },
     "SPEC-716": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-16T10:09:10.953Z",
+      "completedAt": "2026-11-16T11:11:32.134Z",
+      "branch": "spec/SPEC-716-automatisme-5-jeu-choisi-selon-la-lacune",
+      "commit": "987c7d78",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T11:02:50.077Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T11:03:45.962Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T11:05:25.415Z",
+          "details": "17 test(s) [SPEC-716] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T11:10:08.959Z",
+          "details": "8 test(s) [SPEC-716] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T11:11:07.055Z",
+          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T11:11:07.055Z",
+          "details": "1 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T11:11:07.089Z",
+          "details": "7/7 critères ✅"
+        }
+      }
     },
     "SPEC-717": {
       "status": "pending",
