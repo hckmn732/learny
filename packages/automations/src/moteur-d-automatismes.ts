@@ -81,7 +81,7 @@ export type AutomationTrigger =
   | { type: 'event'; name: string; data?: Record<string, unknown> }
   | { type: 'hourly'; localHour: number | ((params: Record<string, unknown>) => number) }
   | { type: 'nightly' }
-  | { type: 'direct' };
+  | { type: 'direct'; data?: Record<string, unknown> };
 
 export type NotificationTypeName = (typeof EVENT_NOTIFICATION_TYPES)[number];
 

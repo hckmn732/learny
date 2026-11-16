@@ -3,6 +3,12 @@
 export * from './moteur-d-automatismes';
 export * from './parametres-automatismes';
 export * from './reprise';
+export {
+  drawSmoothQuizSession,
+  explainQuizSmoothed,
+  plafondQuizAutomation,
+  reintroduceDeferredNotions,
+} from './automatisme-7-quiz-global-plafonne-et-lisse';
 export { repriseAutomation } from './definitions/reprise';
 export {
   echauffementAutomation,
@@ -24,6 +30,7 @@ export {
   type MicroProposalInput,
 } from './micro-seance/should-propose';
 
+import { plafondQuizAutomation } from './automatisme-7-quiz-global-plafonne-et-lisse';
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
@@ -47,4 +54,7 @@ if (automationRegistry.get('micro_seance') === undefined) {
 }
 if (automationRegistry.get('jeu_lacune') === undefined) {
   automationRegistry.register(jeuLacuneAutomation);
+}
+if (automationRegistry.get('plafond_quiz') === undefined) {
+  automationRegistry.register(plafondQuizAutomation);
 }
