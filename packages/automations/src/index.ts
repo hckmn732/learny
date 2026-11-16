@@ -10,6 +10,12 @@ export {
   explainWarmupLastAction,
 } from './definitions/echauffement';
 export { explainJeuLacune, jeuLacuneAutomation } from './definitions/jeu-lacune';
+export {
+  explainQuestionsCartes,
+  questionCardDedupeKey,
+  questionCardSkipReason,
+  questionsCartesAutomation,
+} from './definitions/questions-cartes';
 export { explainRemediation, remediationAutomation } from './definitions/remediation';
 export {
   explainMicroSeance,
@@ -27,6 +33,7 @@ export {
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
+import { questionsCartesAutomation } from './definitions/questions-cartes';
 import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
 import { automationRegistry } from './moteur-d-automatismes';
@@ -47,4 +54,7 @@ if (automationRegistry.get('micro_seance') === undefined) {
 }
 if (automationRegistry.get('jeu_lacune') === undefined) {
   automationRegistry.register(jeuLacuneAutomation);
+}
+if (automationRegistry.get('questions_cartes') === undefined) {
+  automationRegistry.register(questionsCartesAutomation);
 }

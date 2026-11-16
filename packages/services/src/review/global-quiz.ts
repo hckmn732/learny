@@ -54,6 +54,13 @@ import { requireUser, toResult } from '../resources/result';
 import { correctionExplanation, toBrickResponse, toGameCorrection } from './game-response';
 import { composeMicroSession, type MicroBrick } from './micro-composition';
 import { splitResultByNotion } from './per-notion';
+import {
+  QUESTION_CARD_AUTOMATION,
+  QUESTION_CARD_KIND,
+  QUESTION_CARD_REASON_CODE,
+  QUESTION_CARD_REASON_LABEL,
+  questionCardForcedGame,
+} from './question-card';
 import { buildMicroNote, buildRationale, type RationaleGapItem } from './rationale';
 
 // Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0319).
@@ -208,9 +215,10 @@ const REASON_TEXTS: Readonly<Record<string, string>> = {
   gap_confusion: 'Choisi pour votre confusion',
   gap_misunderstanding: 'Choisi pour votre malentendu',
   gap_application: 'Choisi pour votre entraînement',
+  [QUESTION_CARD_REASON_CODE]: QUESTION_CARD_REASON_LABEL,
 };
 
-/** SPEC-716 ET-3 — the contract reason of an item; unknown natures keep no reason. */
+/** SPEC-716 ET-3, SPEC-717 ET-5, ADR-0193 — the contract reason of an item. */
 function reasonOf(
   reasonKey: string | null,
 ): { code: 'gap_forgetting' | 'gap_confusion' | 'question_card'; label: string } | null {
@@ -219,6 +227,9 @@ function reasonOf(
   }
   if (reasonKey === 'gap_confusion') {
     return { code: 'gap_confusion', label: REASON_TEXTS.gap_confusion ?? '' };
+  }
+  if (reasonKey === QUESTION_CARD_REASON_CODE) {
+    return { code: 'question_card', label: REASON_TEXTS[QUESTION_CARD_REASON_CODE] ?? '' };
   }
   return null;
 }
@@ -415,8 +426,9 @@ async function loadAutomationParams(
 }
 
 /**
- * SPEC-716 EF-6 — applied `game_chosen` actions of the learner whose gap is still active. The
- * format is read at draw time (ADR-0193 §4); a consumed, expired or undone action is ignored.
+ * SPEC-716 EF-6, SPEC-717 ET-5 — applied actions imposing a format on the next quiz. The gap
+ * games of SPEC-716 have priority (ADR-0193 §1); a question card fills a notion without an active
+ * gap. A pending, consumed, expired or undone action is ignored; the format is read at draw time.
  */
 async function loadForcedGames(
   tx: DbTx,
@@ -431,19 +443,27 @@ async function loadForcedGames(
   );
   const rows = await tx.execute<{
     id: string;
+    automation: string;
+    kind: string;
+    status: string;
     payload: Record<string, unknown>;
   }>(sql`
-    select id::text as id, payload
+    select id::text as id, automation::text as automation, kind, status::text as status, payload
     from public.automation_actions
     where user_id = ${userId}::uuid
       and formation_id = ${formationId}::uuid
-      and automation = 'jeu_lacune'
-      and kind = 'game_chosen'
+      and (
+        (automation = 'jeu_lacune' and kind = 'game_chosen')
+        or (automation = ${QUESTION_CARD_AUTOMATION} and kind = ${QUESTION_CARD_KIND})
+      )
       and status = 'applied'
     order by created_at desc, id desc
   `);
   const forced = new Map<string, ForcedGame>();
-  for (const row of rows) {
+  // ADR-0193 §1 — an imposed gap format wins over a question card for the same notion.
+  const gapRows = rows.filter((row) => row.automation === 'jeu_lacune');
+  const cardRows = rows.filter((row) => row.automation === QUESTION_CARD_AUTOMATION);
+  for (const row of gapRows) {
     const notionId = typeof row.payload.notionId === 'string' ? row.payload.notionId : '';
     if (notionId === '' || forced.has(notionId)) continue;
     const nature = gapByNotion.get(notionId);
@@ -459,6 +479,20 @@ async function loadForcedGames(
       confusedWithLabel:
         typeof row.payload.confusedWithLabel === 'string' ? row.payload.confusedWithLabel : null,
       actionId: row.id,
+      questionCard: false,
+    });
+  }
+  for (const row of cardRows) {
+    if (forced.has(questionCardForcedGame(row)?.notionId ?? '')) continue;
+    const card = questionCardForcedGame(row);
+    if (card === null) continue;
+    forced.set(card.notionId, {
+      notionId: card.notionId,
+      nature: null,
+      format: card.format,
+      confusedWithLabel: null,
+      actionId: card.actionId,
+      questionCard: true,
     });
   }
   return forced;
@@ -526,13 +560,14 @@ interface DrawnItem {
   actionId?: string | null;
 }
 
-/** SPEC-716 EF-6 — an applied `game_chosen` action whose gap is still active. */
+/** SPEC-716 EF-6, SPEC-717 ET-5 — an applied action imposing a format on one notion. */
 interface ForcedGame {
   notionId: string;
-  nature: 'forgetting' | 'confusion' | 'misunderstanding' | 'application';
+  nature: 'forgetting' | 'confusion' | 'misunderstanding' | 'application' | null;
   format: string | null;
   confusedWithLabel: string | null;
   actionId: string;
+  questionCard: boolean;
 }
 
 /**
@@ -590,7 +625,11 @@ function groupByBricks(
       ].filter((moduleId) => moduleId !== ''),
       reasonKey:
         forced !== undefined
-          ? `gap_${forced.nature}`
+          ? forced.questionCard
+            ? QUESTION_CARD_REASON_CODE
+            : forced.nature === null
+              ? null
+              : `gap_${forced.nature}`
           : engineItem.gapNature === null
             ? null
             : `gap_${engineItem.gapNature}`,
@@ -1868,14 +1907,14 @@ export function answerReviewItem(
         }
       }
 
-      // SPEC-716 EF-8 — an answered imposed game consumes its `game_chosen` action.
+      // SPEC-716 EF-8, SPEC-717 ET-5 — an answered imposed game consumes its action.
       if (!skipped && typeof itemConfig.actionId === 'string' && itemConfig.actionId !== '') {
         await tx.execute(sql`
           update public.automation_actions
           set status = 'consumed'
           where id = ${itemConfig.actionId}::uuid
             and user_id = ${userId}::uuid
-            and automation = 'jeu_lacune'
+            and automation in ('jeu_lacune', ${QUESTION_CARD_AUTOMATION})
             and status = 'applied'
         `);
       }
