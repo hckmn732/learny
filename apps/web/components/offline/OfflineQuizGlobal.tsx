@@ -137,7 +137,7 @@ export interface OfflineQuizGlobalProps {
 export function OfflineQuizGlobal({ pack, timeZone = 'Europe/Paris' }: OfflineQuizGlobalProps) {
   const session: GlobalQuizSessionDto = pack.session;
   const fullItems = session.items;
-  const [items, setItems] = useState<ReviewItemDto[]>(() => fullItems.map(displayItem));
+  const [items, setItems] = useState<ReviewItemDto[]>(() => fullItems);
   const [current, setCurrent] = useState<number>(session.currentPosition);
   const [summary, setSummary] = useState<ReviewSummaryDto | null>(() => {
     const raw = session.summary as ReviewSummaryDto | null;
@@ -379,7 +379,7 @@ export function OfflineQuizGlobal({ pack, timeZone = 'Europe/Paris' }: OfflineQu
                   skipDisabled={item.state !== 'todo'}
                 />
               }
-              item={item}
+              item={displayItem(item)}
               onAnswer={(response) => {
                 void submit(response);
               }}
