@@ -1,0 +1,44 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="60.070581000000004">
+<testsuite name="p7/automations/micro-seance.spec.ts" timestamp="2026-11-16T10:03:33.762Z" hostname="desktop" tests="2" failures="0" skipped="0" time="15.068" errors="0">
+<testcase name="micro-séance proposée puis faite @SPEC-713" classname="p7/automations/micro-seance.spec.ts" time="9.747">
+<system-out>
+<![CDATA[{"level":"warn","timestamp":"2026-11-16T10:03:39.061Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/attachments/notification-micro-bbc148c670f0956b8651eabf298109db9e20d8d5.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/attachments/quiz-global-micro-c846186bf93ca4628b5c5683d2c407318be48a0b.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/attachments/accueil-micro-faite-f690a7ce149b1ba1e7d6265f907987b2df90cf02.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/attachments/axe-3959eb483665bbf3692c31613ffc86ab52d8bccd.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-ca064-roposée-puis-faite-SPEC-713-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="quiz global en mode micro, jetons et structure @SPEC-713 @visual" classname="p7/automations/micro-seance.spec.ts" time="5.321">
+<system-out>
+<![CDATA[{"level":"warn","timestamp":"2026-11-16T10:03:49.111Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/attachments/quiz-global-micro-visuel-126df64b2a23477bca80d19bc1ec016d141a4712.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/attachments/axe-13e7e6b591a2918ae33302306333d943252733b9.json]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-automations-micro-seanc-b1cec-t-structure-SPEC-713-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
