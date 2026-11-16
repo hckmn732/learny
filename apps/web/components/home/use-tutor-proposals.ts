@@ -31,8 +31,8 @@ export function useTutorProposals(): TutorProposals {
   const [accepted, setAccepted] = useState<AutomationActionItem | null>(null);
   const [busy, setBusy] = useState(false);
   const query = useQuery({
-    queryKey: ['automation-actions', 'reprise', 'banner'],
-    queryFn: () => api.meAutomationActionsList({ query: { automation: 'reprise', limit: 20 } }),
+    queryKey: ['automation-actions', 'home', 'pending'],
+    queryFn: () => api.meAutomationActionsList({ query: { limit: 50 } }),
     retry: false,
     refetchOnWindowFocus: true,
   });
