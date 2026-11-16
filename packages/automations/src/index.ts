@@ -24,6 +24,18 @@ export {
   type AtRiskInput,
   type WeeklyReviewWeek,
 } from '@learny/contracts';
+export {
+  explainSprint,
+  placeSprintTargets,
+  planSprintsBeforeMilestones,
+  selectWeakestNotions,
+  sprintAutomation,
+  sprintTargetDays,
+  type SprintNotionCandidate,
+  type SprintPlacement,
+  type SprintPlacementInput,
+  type SprintTargetDay,
+} from './automatisme-8-sprint-avant-un-jalon';
 export { repriseAutomation } from './definitions/reprise';
 export {
   echauffementAutomation,
@@ -52,6 +64,7 @@ export {
 } from './micro-seance/should-propose';
 
 import { plafondQuizAutomation } from './automatisme-7-quiz-global-plafonne-et-lisse';
+import { sprintAutomation } from './automatisme-8-sprint-avant-un-jalon';
 import { weeklyReviewAutomation } from './automatisme-9-bilan-de-la-semaine';
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
@@ -86,4 +99,7 @@ if (automationRegistry.get('questions_cartes') === undefined) {
 }
 if (automationRegistry.get('bilan') === undefined) {
   automationRegistry.register(weeklyReviewAutomation);
+}
+if (automationRegistry.get('sprint') === undefined) {
+  automationRegistry.register(sprintAutomation);
 }

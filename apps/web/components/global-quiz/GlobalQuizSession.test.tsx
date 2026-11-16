@@ -156,13 +156,17 @@ function answered(dto: GlobalQuizSessionDto, rating: string | null): GlobalQuizS
   };
 }
 
+function testClient(): QueryClient {
+  return new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+}
+
 function renderSession(
   initial: GlobalQuizSessionDto,
   dueLabelsByPosition: Record<string, Partial<Record<string, string>>> = {},
+  client: QueryClient = testClient(),
 ) {
-  const client = new QueryClient({
-    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
-  });
   return render(
     <QueryClientProvider client={client}>
       <GlobalQuizSession
@@ -282,7 +286,9 @@ describe('[SPEC-701] GlobalQuizSession', () => {
       nextSessionAt: '2026-11-12T16:00:00Z',
     });
 
-    renderSession(current);
+    const client = testClient();
+    const invalidate = vi.spyOn(client, 'invalidateQueries');
+    renderSession(current, {}, client);
     expect(screen.getByTestId('gq-next').textContent).toBe('Terminer la session');
     fireEvent.click(screen.getByTestId('gq-skip'));
     await waitFor(() => {
@@ -295,6 +301,12 @@ describe('[SPEC-701] GlobalQuizSession', () => {
     await waitFor(() => {
       expect(screen.getByTestId('gq-end')).toBeTruthy();
     });
+    // QA SCR-03 — the sidebar, the header and the home screen drop their state of before the
+    // session (streak, due count, « N notions à revoir »).
+    const invalidated = invalidate.mock.calls.map(([filters]) => filters?.queryKey);
+    expect(invalidated).toEqual(
+      expect.arrayContaining([['sidebar'], ['header'], ['home'], ['agenda']]),
+    );
   });
 
   it('EF-12 — une erreur réseau affiche une alerte et « Réessayer » réutilise le clientAnswerId', async () => {

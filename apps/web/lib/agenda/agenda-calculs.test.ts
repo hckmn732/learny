@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import type { AgendaSlot, AgendaSlotKind } from '@learny/contracts';
 
+import { anchoredClock } from './clock';
 import { chipLabel, formatDuration, legendEntriesOf, monthCells, totalsOf } from './format';
-import { gridHours, layoutDay } from './grid';
+import { gridHours, layoutDay, nowLineTop } from './grid';
 import {
   calendarAriaLabel,
   navLabel,
@@ -231,10 +232,49 @@ describe('[SPEC-704] agenda : calculs', () => {
       expect(layout.map((entry) => entry.column)).toEqual([0, 1, 0]);
     });
 
+    it('place les créneaux du jour de démonstration à leur heure et selon leur durée (EF-7)', () => {
+      // Mercredi 11 nov. : échauffement 13:50–13:52, quiz 14:00–15:00, quiz global 17:00–17:30.
+      const layout = layoutDay(
+        [
+          { startMinutes: 13 * 60 + 50, endMinutes: 13 * 60 + 52 },
+          { startMinutes: 14 * 60, endMinutes: 15 * 60 },
+          { startMinutes: 17 * 60, endMinutes: 17 * 60 + 30 },
+        ],
+        9,
+      );
+      expect(layout.map((entry) => entry.top)).toEqual([292, 302, 482]);
+      expect(layout.map((entry) => entry.height)).toEqual([16, 56, 26]);
+      expect(layout.every((entry) => entry.columns === 1)).toBe(true);
+    });
+
     it('tronque un créneau à cheval sur minuit à la fin de la grille (CL-3)', () => {
       const layout = layoutDay([{ startMinutes: 23 * 60 + 30, endMinutes: 30 }], 9);
       expect(layout[0]?.height).toBe(26);
       expect(layout[0]?.timeLabel).toBe('23:30 – 00:30');
+    });
+  });
+
+  describe('ligne de l’heure (EF-12)', () => {
+    it('place 13:20 à 260 px d’une grille commençant à 09:00 (CA-2)', () => {
+      expect(nowLineTop(13 * 60 + 20, 9, 18)).toBe(260);
+      expect(nowLineTop(9 * 60, 9, 18)).toBe(0);
+      expect(nowLineTop(13 * 60 + 20, 8, 18)).toBe(320);
+    });
+
+    it('masque la ligne hors de la plage affichée', () => {
+      expect(nowLineTop(8 * 60 + 59, 9, 18)).toBeNull();
+      expect(nowLineTop(18 * 60, 9, 18)).toBeNull();
+    });
+
+    it('ancre l’horloge sur l’instant du serveur, le navigateur ne mesurant que l’écoulé', () => {
+      // Navigateur non figé (lundi 16 nov. 14:01 à Paris) face au serveur figé (ADR-0047).
+      let browserMs = Date.parse('2026-11-16T13:01:00Z');
+      const browser = { now: () => new Date(browserMs) };
+      const anchored = anchoredClock('2026-11-11T12:20:00.000Z', browser);
+      expect(anchored.now().toISOString()).toBe('2026-11-11T12:20:00.000Z');
+      browserMs += 60_000;
+      expect(anchored.now().toISOString()).toBe('2026-11-11T12:21:00.000Z');
+      expect(anchoredClock('pas une date', browser)).toBe(browser);
     });
   });
 

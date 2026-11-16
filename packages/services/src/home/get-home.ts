@@ -497,6 +497,29 @@ async function readBricks(tx: DbTx, userId: string, formationId: string): Promis
   `);
 }
 
+/** Civil day of the next planned global quiz after today, tomorrow when none is planned yet. */
+async function readNextQuizDay(
+  tx: DbTx,
+  userId: string,
+  formationId: string,
+  today: string,
+  timeZone: string,
+): Promise<string> {
+  const rows = await tx.execute<{ starts_at: Date | string }>(sql`
+    select starts_at
+    from public.schedule_slots
+    where user_id = ${userId}::uuid
+      and formation_id = ${formationId}::uuid
+      and kind = 'global_quiz'
+      and status = 'planned'
+      and (starts_at at time zone ${timeZone})::date > ${today}::date
+    order by starts_at
+    limit 1
+  `);
+  const next = rows[0];
+  return next === undefined ? addCivilDays(today, 1) : civilDayOf(next.starts_at, timeZone);
+}
+
 /** The session of the day, when it already exists (SPEC-701): the home card mirrors it exactly. */
 async function readTodayQuizCard(
   tx: DbTx,
@@ -505,17 +528,36 @@ async function readTodayQuizCard(
   today: string,
   timeZone: string,
 ): Promise<HomeGlobalQuiz | null> {
-  const rows = await tx.execute<{ config: unknown }>(sql`
-    select config
-    from public.activities
-    where owner_id = ${userId}::uuid
-      and formation_id = ${formation.id}::uuid
-      and kind = 'global_quiz_session'
-      and for_date = ${today}::date
-    order by created_at desc
+  const rows = await tx.execute<{ config: unknown; completed: boolean | null }>(sql`
+    select a.config,
+           exists (
+             select 1 from public.attempts at
+             where at.activity_id = a.id and at.status = 'graded'
+           ) as completed
+    from public.activities a
+    where a.owner_id = ${userId}::uuid
+      and a.formation_id = ${formation.id}::uuid
+      and a.kind = 'global_quiz_session'
+      and a.for_date = ${today}::date
+    order by a.created_at desc
     limit 1
   `);
-  const config = rows[0]?.config;
+  const row = rows[0];
+  // QA SCR-03 — once the session of the day is finished, the card no longer offers the notions it
+  // has just reviewed: « Rien à revoir aujourd'hui » and the day of the next planned quiz.
+  if (row?.completed === true) {
+    return {
+      formationId: formation.id,
+      formationTitle: formation.title,
+      notionCount: 0,
+      gamesCount: 0,
+      durationMin: 0,
+      hasGaps: false,
+      deferred: null,
+      nextReviewOn: await readNextQuizDay(tx, userId, formation.id, today, timeZone),
+    };
+  }
+  const config = row?.config;
   if (typeof config !== 'object' || config === null) return null;
   const raw = config as {
     estimatedSec?: unknown;

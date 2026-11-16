@@ -549,9 +549,17 @@ export function CompletedTable({
   );
 }
 
-export function HomeSlot({ name, children }: Readonly<{ name: string; children?: ReactNode }>) {
+export function HomeSlot({
+  name,
+  className,
+  children,
+}: Readonly<{ name: string; className?: string; children?: ReactNode }>) {
   if (children === undefined || children === null) return null;
-  return <div data-testid={`home-slot-${name}`}>{children}</div>;
+  return (
+    <div data-testid={`home-slot-${name}`} className={className}>
+      {children}
+    </div>
+  );
 }
 
 export function HomeView({
@@ -667,11 +675,17 @@ export function HomeView({
         </div>
       </div>
 
+      {/* Same columns as the row above: the warm-up fills the left column whatever its content (an
+          answered question never moves the tutor card); without a warm-up the slot renders
+          nothing, is hidden and the tutor column takes the whole row. */}
       <div className="flex flex-wrap items-stretch gap-20">
-        <HomeSlot name="warmup">
+        <HomeSlot
+          name="warmup"
+          className="peer flex min-w-0 flex-[2_1_520px] flex-col empty:hidden"
+        >
           <WarmupPanel />
         </HomeSlot>
-        <div className="flex flex-[2_1_340px] flex-col gap-20">
+        <div className="flex min-w-0 max-w-[353px] flex-[1_1_300px] flex-col gap-20 peer-empty:max-w-none">
           <HomeSlot name="agent-feed">
             <TutorActivityPanel />
           </HomeSlot>

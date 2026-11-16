@@ -1,0 +1,407 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-719/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-719",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-719/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3131",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-719/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3131",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-719/test-results/sdd/SPEC-719/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-719/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-719/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3131/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3131",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p7/spec-719.spec.ts",
+      "file": "p7/spec-719.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parcours SPEC-719 @SPEC-719",
+          "ok": true,
+          "tags": [
+            "SPEC-719"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8947,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T16:57:07.794Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-719-sprint-j3",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/attachments/spec-719-sprint-j3-9b7a6fd652e6512a7d25cc2c7ffe2f127e162497.png"
+                    },
+                    {
+                      "name": "spec-719-sprint-deplace",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/attachments/spec-719-sprint-deplace-93820f1a356f173df7ded0668e31ccb62459c4bf.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/attachments/axe-28b3e265fcea663566c9f14b765d75063e5c0c30.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-parcours-SPEC-719-SPEC-719-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b784f331afe1b9a85d6-98f6dfee861f7a6fe00a",
+          "file": "p7/spec-719.spec.ts",
+          "line": 142,
+          "column": 1
+        },
+        {
+          "title": "conformité SPEC-719 @SPEC-719 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-719",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T16:57:22.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/attachments/axe-fdd15682ba0a68d84ec59260467b2ba2a9e7a05a.json"
+                    },
+                    {
+                      "name": "spec-719-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/attachments/spec-719-desktop-116b36bc13264183c720363ac7fee0bbd2823710.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/attachments/axe-8d92d2d8f6bf9a682dcd590c6e0fb1520dacf5fe.json"
+                    },
+                    {
+                      "name": "spec-719-mobile",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/attachments/spec-719-mobile-03ce10b2dddd6604658971dfcc08b78c657fc57a.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-719/test-results/artifacts/p7-spec-719-conformité-SPEC-719-SPEC-719-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4b784f331afe1b9a85d6-c8d8718cfb8de3d60226",
+          "file": "p7/spec-719.spec.ts",
+          "line": 228,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T16:56:19.350Z",
+    "duration": 71107.956,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

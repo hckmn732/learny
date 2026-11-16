@@ -82,7 +82,12 @@ describe('[SPEC-722] règles et calculs', () => {
     expect(before.proposals[0]?.status).toBe('pending_consent');
     expect(before.items).toHaveLength(0);
 
-    const applied = { ...pending, status: 'applied' as const, decidedAt: AT };
+    const applied = {
+      ...pending,
+      status: 'applied' as const,
+      decidedAt: AT,
+      undoPayload: { createdSlotId: OTHER },
+    };
     const after = buildTutorActivityFeed({ pending: [applied], applied: [applied] });
     expect(after.proposals).toHaveLength(0);
     expect(after.items).toHaveLength(1);
@@ -95,8 +100,10 @@ describe('[SPEC-722] règles et calculs', () => {
     const feed = buildTutorActivityFeed({ consumed: [consumed] });
     expect(feed.items[0]?.summary).toBe('Micro-séance faite.');
     expect(feed.items[0]?.canUndo).toBe(false);
-    expect(canUndoTutorActivity('consumed')).toBe(false);
-    expect(canUndoTutorActivity('applied')).toBe(true);
+    expect(
+      canUndoTutorActivity(action({ status: 'consumed', undoPayload: { slotId: OTHER } })),
+    ).toBe(false);
+    expect(canUndoTutorActivity(action({ undoPayload: { slotId: OTHER } }))).toBe(true);
 
     const reprise = action({
       automation: 'reprise',
@@ -105,6 +112,18 @@ describe('[SPEC-722] règles et calculs', () => {
     });
     expect(tutorActivityHref(reprise, 'Europe/Paris')).toBe('/agenda?vue=semaine&date=2026-11-12');
     expect(TUTOR_SETTINGS_HREF).toBe('/parametres#automatismes');
+  });
+
+  it('EF-2 — « Annuler » est absent pour une action sans charge d’annulation ou non annulable', () => {
+    // QA SCR-03 — le moteur répond 400 VALIDATION_FAILED sans `undoPayload` : pas de bouton.
+    const withoutPayload = action({ undoPayload: null });
+    expect(canUndoTutorActivity(withoutPayload)).toBe(false);
+    expect(buildTutorActivityFeed({ applied: [withoutPayload] }).items[0]?.canUndo).toBe(false);
+    // SPEC-710 — la pause n'est jamais annulable depuis le journal, même avec une charge.
+    const pause = action({ automation: 'pause', undoPayload: { pauseUntil: '2026-11-20' } });
+    expect(canUndoTutorActivity(pause)).toBe(false);
+    const undoable = action({ undoPayload: { slotId: OTHER } });
+    expect(buildTutorActivityFeed({ applied: [undoable] }).items[0]?.canUndo).toBe(true);
   });
 
   it('EF-2, CL-5 — une cible supprimée ne produit aucun lien cassé', () => {

@@ -23,8 +23,8 @@ const { subscriptions, profiles } = schema;
 /** EF-3 — cap applied to an account that never subscribed (data-model §9). */
 export const DEFAULT_DAILY_CAP_USD = 1.5;
 
-/** `/parametres#ia` — where the portal sends the learner back (EF-2). */
-export const PORTAL_RETURN_PATH = '/parametres#ia';
+/** `/parametres#modeles` — the « Modèles d’IA » tab (BR-SET-01) where the portal sends the learner back (EF-2). */
+export const PORTAL_RETURN_PATH = '/parametres#modeles';
 
 function requireUser(ctx: Pick<ServiceContext, 'userId'>): string {
   if (ctx.userId === null) throw new AppError('UNAUTHENTICATED', 'Vous devez être connecté.');

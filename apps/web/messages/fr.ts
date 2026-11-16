@@ -5497,6 +5497,7 @@ export const fr = {
     miniFormation: (period: string | null) => (period === null ? null : `Formation : ${period}`),
     detailTitle: 'Activité sélectionnée',
     detailEmpty: 'Aucune activité sur cette période.',
+    sprintLabel: 'Sprint avant un jalon',
     open: 'Ouvrir',
     move: 'Déplacer',
     legendTitle: 'Légende',

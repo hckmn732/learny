@@ -78,7 +78,7 @@ export function layoutDay(slots: readonly AgendaSlotTime[], gridStartHour: numbe
     for (const entry of cluster) {
       result.set(entry.index, {
         top:
-          Math.max(0, (entry.slot.startMinutes / 60 - gridStartHour) * AGENDA_PX_PER_HOUR) +
+          Math.max(0, ((entry.slot.startMinutes - gridStartHour * 60) * AGENDA_PX_PER_HOUR) / 60) +
           SLOT_INSET_PX,
         height: Math.max(
           16,
@@ -118,4 +118,18 @@ export function layoutDay(slots: readonly AgendaSlotTime[], gridStartHour: numbe
   flush();
 
   return sorted.map(({ index }) => result.get(index) as SlotLayout);
+}
+
+/**
+ * EF-12 — distance of the now line from the top of the grid, in px, for a local wall-clock time
+ * in minutes since 00:00; `null` outside the displayed range (the line is hidden).
+ */
+export function nowLineTop(
+  wallMinutes: number,
+  gridStartHour: number,
+  gridEndHour: number,
+): number | null {
+  const top = ((wallMinutes - gridStartHour * 60) * AGENDA_PX_PER_HOUR) / 60;
+  if (top < 0 || top >= (gridEndHour - gridStartHour) * AGENDA_PX_PER_HOUR) return null;
+  return top;
 }

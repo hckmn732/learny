@@ -10,9 +10,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import type { AgendaDto, AgendaSlot } from '@learny/contracts';
-import { clock } from '@learny/core';
+import { clock, type Clock } from '@learny/core';
 import { EmptyState, ErrorState, SkeletonCard, SkeletonGroup } from '@learny/ui';
 
+import { anchoredClock } from '../../lib/agenda/clock';
 import { longDayLabel } from '../../lib/agenda/dates';
 import { calendarAriaLabel, navTargets, rangeCaption, visibleRange } from '../../lib/agenda/range';
 import { agendaUrl, type AgendaUrlState } from '../../lib/agenda/state';
@@ -34,8 +35,11 @@ import { WeekView } from './WeekView';
 const t = fr.agenda;
 
 /** Selection by default: the first slot whose end is after now, else the first one (EF-9). */
-export function defaultSelection(slots: readonly AgendaSlot[]): AgendaSlot | null {
-  const now = clock.now().getTime();
+export function defaultSelection(
+  slots: readonly AgendaSlot[],
+  appClock: Clock = clock,
+): AgendaSlot | null {
+  const now = appClock.now().getTime();
   return slots.find((slot) => new Date(slot.endsAt).getTime() > now) ?? slots[0] ?? null;
 }
 
@@ -89,6 +93,12 @@ export interface AgendaScreenProps {
   initialData: AgendaDto | null;
   initialError: boolean;
   requestId?: string;
+  /**
+   * Instant of the server render (`clock.now()`, frozen by `CLOCK_FIXED_AT`): reference of the
+   * now line and of the default selection, so that they follow the application clock and not
+   * the device clock (EF-9, EF-12; ADR-0047).
+   */
+  serverNow?: string;
 }
 
 export function AgendaScreen({
@@ -96,6 +106,7 @@ export function AgendaScreen({
   initialData,
   initialError,
   requestId,
+  serverNow,
 }: AgendaScreenProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -103,6 +114,11 @@ export function AgendaScreen({
   const [selection, setSelection] = useState<string | null>(initialState.creneau);
   const [moving, setMoving] = useState<string | null>(null);
   const [explanation, setExplanation] = useState<string | null>(null);
+  // Computed once per mount, on the server render and again at hydration: the browser clock
+  // only adds the time elapsed since the page was served.
+  const [appClock] = useState<Clock>(() =>
+    serverNow === undefined ? clock : anchoredClock(serverNow, clock),
+  );
 
   const window = agendaFetchWindow(state.view, state.date);
   // The server preload only seeds the initial query key: handing it to another key (formation,
@@ -157,7 +173,7 @@ export function AgendaScreen({
       ? null
       : (byIdIn(derived.displayed, selection) ??
         byIdIn(derived.displayed, state.creneau) ??
-        defaultSelection(derived.displayed));
+        defaultSelection(derived.displayed, appClock));
 
   if (query.isError && dto === undefined) {
     return (
@@ -276,7 +292,9 @@ export function AgendaScreen({
           }}
         />
       </div>
-      <div className="flex flex-wrap items-start gap-20 max-shell:flex-col">
+      {/* Under the shell breakpoint the two columns stack: no wrap and stretched items, so each
+          column takes the width of the screen instead of its max-content width (column wrap). */}
+      <div className="flex flex-wrap items-start gap-20 max-shell:flex-col max-shell:flex-nowrap max-shell:items-stretch">
         <div className="flex min-w-0 flex-col gap-16" style={{ flex: '1 1 280px' }}>
           <MiniCalendar
             monthOf={state.date}
@@ -354,6 +372,7 @@ export function AgendaScreen({
               }))}
               today={today}
               timezone={dto.timezone}
+              clock={appClock}
               allSlots={displayed}
               selectedId={selectedSlot?.id ?? null}
               onArrow={(direction) => {
@@ -373,6 +392,7 @@ export function AgendaScreen({
               slots={displayed}
               today={today}
               timezone={dto.timezone}
+              clock={appClock}
               selectedId={selectedSlot?.id ?? null}
               onArrow={(direction) => {
                 moveSelection(direction);

@@ -216,6 +216,60 @@ test('ouvrir une activité @SPEC-704', async ({ page, axeCheck }) => {
   await axeCheck();
 });
 
+test('vue Jour sur la grille horaire @SPEC-704', async ({ page }) => {
+  await page.goto('/agenda?vue=jour&date=2026-11-11&formation=all');
+  await expect(page.getByTestId('agenda-day')).toBeVisible();
+
+  // EF-7 — même grille que la vue Semaine (60 px par heure depuis 09:00) : haut = début + 2 px,
+  // hauteur = durée − 4 px.
+  const quiz = page.getByRole('button', { name: /^Quiz de validation, 14:00 – 15:00/ });
+  await expect(quiz).toHaveCSS('top', '302px');
+  await expect(quiz).toHaveCSS('height', '56px');
+  const globalQuiz = page.getByRole('button', { name: /^Quiz global, 17:00 – 17:30/ });
+  await expect(globalQuiz).toHaveCSS('top', '482px');
+  await expect(globalQuiz).toHaveCSS('height', '26px');
+
+  // EF-12 — la ligne de l'heure est à 13:20 (260 px), au-dessus du quiz de 14:00.
+  const nowLine = page.getByTestId('agenda-now-line');
+  await expect(nowLine).toHaveCount(1);
+  await expect(nowLine).toHaveCSS('top', '260px');
+  const lineBox = await nowLine.boundingBox();
+  const quizBox = await quiz.boundingBox();
+  expect(lineBox).not.toBeNull();
+  expect(quizBox).not.toBeNull();
+  expect(lineBox?.y ?? 0).toBeLessThan(quizBox?.y ?? 0);
+});
+
+test('agenda sans débordement horizontal à 390 px @SPEC-704', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const view of ['semaine', 'jour', 'mois']) {
+    await page.goto(`/agenda?vue=${view}&date=2026-11-11&formation=all`);
+    await expect(page.getByTestId('agenda-calendar')).toBeVisible();
+    const widths = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      client: document.documentElement.clientWidth,
+    }));
+    expect(widths.scroll, `défilement horizontal de la page en vue ${view}`).toBeLessThanOrEqual(
+      widths.client,
+    );
+    // La colonne de gauche tient dans l'écran : le mini-calendrier montre ses sept jours et le
+    // panneau « Activité sélectionnée » ne dépasse pas.
+    for (const testId of [
+      'agenda-minical',
+      'agenda-minical-day-2026-11-15',
+      'agenda-detail',
+      'agenda-legend',
+      'agenda-calendar',
+    ]) {
+      const box = await page.getByTestId(testId).boundingBox();
+      expect(box, testId).not.toBeNull();
+      expect((box?.x ?? 0) + (box?.width ?? 0), `${testId} en vue ${view}`).toBeLessThanOrEqual(
+        widths.client,
+      );
+    }
+  }
+});
+
 test('conformité SCR-12 @SPEC-704 @visual', async ({ page, axeCheck }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1600, height: 1133 });

@@ -185,7 +185,7 @@ test('contrats de facturation et webhook signé @SPEC-210', async ({ page }, tes
   expect(replay.headers()['idempotent-replayed']).toBe('true');
   const portal = await request.post('/api/v1/billing/portal', { headers: { origin: ORIGIN } });
   expect(portal.status()).toBe(200);
-  expect((await jsonOf(portal)).url).toBe('/_dev/stripe/portal?return=%2Fparametres%23ia');
+  expect((await jsonOf(portal)).url).toBe('/_dev/stripe/portal?return=%2Fparametres%23modeles');
 
   // CA-2 — the webhook is public but signed: a missing or wrong signature is a 400.
   const signatureCases: Array<{ case: string; status: number; code?: string }> = [];

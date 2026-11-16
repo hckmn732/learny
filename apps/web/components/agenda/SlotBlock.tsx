@@ -28,9 +28,12 @@ function clockOf(minutes: number): string {
 export interface SlotBlockProps {
   slot: AgendaSlot;
   selected: boolean;
-  /** `semaine` positions absolutely on the grid; `jour` renders an inline row (maquette). */
+  /**
+   * Both modes position the slot on the hour grid; `semaine` stacks title, time and meta,
+   * `jour` lays them out in line (maquette).
+   */
   mode: 'semaine' | 'jour';
-  /** Precomputed layout of the grid (`layoutDay`); required in `semaine` mode. */
+  /** Precomputed layout of the grid (`layoutDay`). */
   top?: number | undefined;
   height?: number | undefined;
   left?: string | undefined;
@@ -52,8 +55,13 @@ export function SlotBlock({
   onArrow,
 }: SlotBlockProps) {
   const style = agendaSlotStyle(slot.kind);
+  const isSprint = slot.kind === 'sprint';
   const timeLabel = `${clockOf(slot.startMinutes)} – ${clockOf(slot.endMinutes)}`;
-  const long = slot.endMinutes - slot.startMinutes >= 60;
+  const duration = slot.endMinutes - slot.startMinutes;
+  const long = duration >= 60;
+  // Week slots under 1 h 30 have room for one line per text (title, time, meta): each one ends
+  // with an ellipsis instead of being cut in the middle of a line (full text in the name).
+  const compact = mode === 'semaine' && duration < 90;
   const missed = slot.status === 'missed';
   const showTime = long || mode === 'jour';
   // ET-9 — the accessible name starts with the visible text (title, time, meta), then adds the
@@ -72,16 +80,15 @@ export function SlotBlock({
     STATUS_LABELS[slot.status],
   ].join(', ');
   const position =
-    mode === 'semaine' && top !== undefined && height !== undefined
-      ? { top, height, left, width }
-      : undefined;
+    top !== undefined && height !== undefined ? { top, height, left, width } : undefined;
+  const line = compact ? 'truncate' : undefined;
 
   return (
     <button
       type="button"
       aria-label={ariaLabel}
       aria-pressed={selected}
-      data-testid={`agenda-slot-${slot.id}`}
+      data-testid={isSprint ? 'sprint-slot' : `agenda-slot-${slot.id}`}
       data-slot-kind={slot.kind}
       onClick={() => {
         onSelect(slot.id);
@@ -97,7 +104,8 @@ export function SlotBlock({
       }}
       className={cn(
         'absolute box-border flex flex-col overflow-hidden rounded-12 border-0 text-left font-[inherit] cursor-pointer',
-        mode === 'jour' && 'relative flex-row flex-wrap items-baseline gap-x-12 gap-y-2 py-6',
+        mode === 'jour' &&
+          'flex-row flex-wrap content-start items-baseline gap-x-12 gap-y-2 px-12 py-6',
         selected && 'z-3',
       )}
       style={{
@@ -110,9 +118,19 @@ export function SlotBlock({
         boxShadow: selected ? `0 0 0 2px ${colors.ink}` : undefined,
       }}
     >
-      <span className="text-12 leading-1.3 font-700">{slot.title}</span>{' '}
-      {showTime && <span className="text-11.5 leading-1.3 tabular-nums">{timeLabel}</span>}{' '}
-      {showTime && metaText !== null && <span className="text-11.5 leading-1.3">{metaText}</span>}{' '}
+      <span className={cn('text-12 leading-1.3 font-700', line)}>{slot.title}</span>{' '}
+      {isSprint && <span className="sr-only">{t.sprintLabel}</span>}
+      {showTime && (
+        <span className={cn('text-11.5 leading-1.3 tabular-nums', line)}>{timeLabel}</span>
+      )}{' '}
+      {showTime && metaText !== null && (
+        <span
+          className={cn('text-11.5 leading-1.3', line)}
+          {...(isSprint ? { 'data-testid': 'sprint-reason' } : {})}
+        >
+          {metaText}
+        </span>
+      )}{' '}
       {mentionOnly !== null && <span className="text-11.5 leading-1.3">{mentionOnly}</span>}
     </button>
   );

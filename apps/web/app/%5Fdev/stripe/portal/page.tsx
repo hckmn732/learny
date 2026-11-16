@@ -19,7 +19,8 @@ export default async function MockPortalPage({
 }: Readonly<{ searchParams: Promise<Record<string, string | string[] | undefined>> }>) {
   if (!sddPagesEnabled()) notFound();
   const { return: back } = await searchParams;
-  const returnPath = typeof back === 'string' && isSafeRelativePath(back) ? back : '/parametres#ia';
+  const returnPath =
+    typeof back === 'string' && isSafeRelativePath(back) ? back : '/parametres#modeles';
   return (
     <main className="mx-auto max-w-2xl p-8">
       <h1 data-testid="stripe-mock-title" className="font-display text-3xl font-semibold">

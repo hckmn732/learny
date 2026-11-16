@@ -8,7 +8,9 @@ import { cleanup, renderComponent, screen } from '@learny/testing/render';
 
 import { AgendaLegend } from './AgendaLegend';
 import { AgendaTotals } from './AgendaTotals';
+import { DayView } from './DayView';
 import { MiniCalendar } from './MiniCalendar';
+import { NowLine } from './NowLine';
 import { SlotBlock } from './SlotBlock';
 import { SlotDetail } from './SlotDetail';
 import { WeekView } from './WeekView';
@@ -112,6 +114,22 @@ describe('[SPEC-704] composants agenda', () => {
       expect(screen.getByRole('button', { name: /Manquée$/ })).toBeTruthy();
     });
 
+    it('termine par une ellipse le texte d’un créneau d’une heure en vue Semaine', () => {
+      renderComponent(
+        <SlotBlock
+          slot={slot({ id: 'a', title: 'Marge de remédiation', meta: 'Si le quiz échoue' })}
+          selected={false}
+          mode="semaine"
+          top={2}
+          height={56}
+          onSelect={() => undefined}
+        />,
+      );
+      const spans = screen.getByTestId('agenda-slot-a').querySelectorAll('span');
+      expect(spans).toHaveLength(3);
+      for (const span of spans) expect(span.className).toContain('truncate');
+    });
+
     it('utilise la couleur du type sans valeur en dur dans le composant (ET-3)', () => {
       renderComponent(
         <SlotBlock
@@ -126,6 +144,122 @@ describe('[SPEC-704] composants agenda', () => {
       const element = screen.getByTestId('agenda-slot-a');
       expect(element.style.background).toBe('rgb(225, 244, 239)');
       expect(element.style.color).toBe('rgb(11, 92, 77)');
+    });
+  });
+
+  describe('DayView', () => {
+    const daySlots = [
+      slot({ id: 'warmup', kind: 'warmup', startMinutes: 830, endMinutes: 832 }),
+      slot({ id: 'quiz', kind: 'validation_quiz', startMinutes: 840, endMinutes: 900 }),
+      slot({ id: 'global', kind: 'global_quiz', startMinutes: 1020, endMinutes: 1050 }),
+    ];
+
+    it('positionne chaque créneau selon son heure de début et sa durée (EF-7, ET-6)', () => {
+      renderComponent(
+        <DayView
+          date="2026-11-11"
+          slots={daySlots}
+          today="2026-11-11"
+          timezone="Europe/Paris"
+          selectedId={null}
+          onSelect={() => undefined}
+        />,
+      );
+      const quiz = screen.getByTestId('agenda-slot-quiz');
+      expect(quiz.style.top).toBe('302px');
+      expect(quiz.style.height).toBe('56px');
+      const global = screen.getByTestId('agenda-slot-global');
+      expect(global.style.top).toBe('482px');
+      expect(global.style.height).toBe('26px');
+      expect(screen.getByTestId('agenda-slot-warmup').style.top).toBe('292px');
+      expect(quiz.className).toContain('absolute');
+      expect(quiz.className).not.toContain('relative');
+    });
+
+    it('partage la largeur de deux créneaux qui se chevauchent (ET-7)', () => {
+      renderComponent(
+        <DayView
+          date="2026-11-12"
+          slots={[
+            slot({ id: 'a', startMinutes: 540, endMinutes: 600, date: '2026-11-12' }),
+            slot({ id: 'b', startMinutes: 570, endMinutes: 630, date: '2026-11-12' }),
+          ]}
+          today="2026-11-11"
+          timezone="Europe/Paris"
+          selectedId={null}
+          onSelect={() => undefined}
+        />,
+      );
+      const a = screen.getByTestId('agenda-slot-a');
+      const b = screen.getByTestId('agenda-slot-b');
+      expect(a.style.top).toBe('2px');
+      expect(b.style.top).toBe('32px');
+      expect(a.style.width).toBe(b.style.width);
+      expect(a.style.left).not.toBe(b.style.left);
+    });
+
+    it('affiche la ligne de l’heure à 13:20 sur le jour courant seulement (EF-12, CA-2)', () => {
+      const { rerender } = renderComponent(
+        <DayView
+          date="2026-11-11"
+          slots={daySlots}
+          today="2026-11-11"
+          timezone="Europe/Paris"
+          selectedId={null}
+          onSelect={() => undefined}
+        />,
+      );
+      expect(screen.getByTestId('agenda-now-line').style.top).toBe('260px');
+      rerender(
+        <DayView
+          date="2026-11-12"
+          slots={daySlots}
+          today="2026-11-11"
+          timezone="Europe/Paris"
+          selectedId={null}
+          onSelect={() => undefined}
+        />,
+      );
+      expect(screen.queryByTestId('agenda-now-line')).toBeNull();
+    });
+  });
+
+  describe('NowLine', () => {
+    it('suit l’horloge de l’application fournie, pas celle du navigateur (EF-12)', () => {
+      // 12:20Z = 13:20 à Paris : 4 h 20 après 09:00 → 260 px ; 13:01Z = 14:01 → 301 px.
+      const { rerender } = renderComponent(
+        <NowLine
+          timezone="Europe/Paris"
+          gridStartHour={9}
+          gridEndHour={18}
+          visible
+          clock={createFixedClock('2026-11-11T12:20:00Z')}
+        />,
+      );
+      expect(screen.getByTestId('agenda-now-line').style.top).toBe('260px');
+      rerender(
+        <NowLine
+          timezone="Europe/Paris"
+          gridStartHour={9}
+          gridEndHour={18}
+          visible
+          clock={createFixedClock('2026-11-16T13:01:00Z')}
+        />,
+      );
+      expect(screen.getByTestId('agenda-now-line').style.top).toBe('301px');
+    });
+
+    it('se masque hors de la plage horaire affichée', () => {
+      renderComponent(
+        <NowLine
+          timezone="Europe/Paris"
+          gridStartHour={9}
+          gridEndHour={18}
+          visible
+          clock={createFixedClock('2026-11-11T19:30:00Z')}
+        />,
+      );
+      expect(screen.queryByTestId('agenda-now-line')).toBeNull();
     });
   });
 
