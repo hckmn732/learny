@@ -2417,7 +2417,7 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
     action.kind,
     action.summary,
     json(action.payload ?? { source: 'fixture', key: action.key }),
-    null,
+    action.undoPayload === undefined ? null : json(action.undoPayload),
     action.requiresConsent,
     action.status,
     action.status === 'pending_consent' ? null : timestamp(action.createdAt),

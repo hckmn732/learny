@@ -1476,6 +1476,8 @@ export interface DemoAutomationActionFixture {
   createdAt: string;
   /** SPEC-712 — payload of the action (missed slot, proposal and alternatives). */
   payload?: Record<string, unknown>;
+  /** SPEC-718 — undo material of the smoothed day. */
+  undoPayload?: Record<string, unknown>;
   source: DemoSource;
 }
 
@@ -1608,6 +1610,24 @@ export const DEMO_AUTOMATION_ACTIONS: readonly DemoAutomationActionFixture[] = [
     formation: 'sap',
     createdAt: parisInstant('2026-11-11', '08:00'),
     source: AUTOMATION_SOURCE,
+    payload: {
+      dedupeKey: `smooth:${demoFormationId('sap')}:2026-11-11`,
+      formationId: demoFormationId('sap'),
+      localDate: '2026-11-11',
+      deferredTo: '2026-11-12',
+      dueCount: 18,
+      selectedCount: 14,
+      deferredNotionIds: [],
+      estimatedMinutes: 10,
+      maxMinutes: 15,
+      targetRetention: 0.9,
+      reason: 'cap',
+    },
+    undoPayload: {
+      formationId: demoFormationId('sap'),
+      localDate: '2026-11-11',
+      deferredNotionIds: [],
+    },
   },
   {
     key: 'sprint',
