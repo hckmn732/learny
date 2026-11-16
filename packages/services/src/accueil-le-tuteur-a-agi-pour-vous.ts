@@ -1,8 +1,9 @@
-import type {
-  AutomationActionItem,
-  TutorActivityFeedDto,
-  TutorActivityItem,
-  TutorCardStatus,
+import {
+  automationDisplayDefinition,
+  type AutomationActionItem,
+  type TutorActivityFeedDto,
+  type TutorActivityItem,
+  type TutorCardStatus,
 } from '@learny/contracts';
 import { toUserZone, type Result } from '@learny/core';
 
@@ -133,9 +134,20 @@ export function tutorActivityHref(
   }
 }
 
-/** EF-2 — « Annuler » disappears once the effect was consumed (BR-AUT-11). */
-export function canUndoTutorActivity(status: TutorCardStatus): boolean {
-  return status === 'applied';
+/**
+ * EF-2 — « Annuler » is offered only when the engine can really undo the action: it is applied
+ * (a consumed effect can no longer be undone, BR-AUT-11), it carries an undo payload (the engine
+ * answers 400 `VALIDATION_FAILED` otherwise) and its automation is undoable at all (the pause is
+ * not). Same rule as the journal of the settings screen (SPEC-710).
+ */
+export function canUndoTutorActivity(
+  action: Pick<AutomationActionItem, 'automation' | 'status' | 'undoPayload'>,
+): boolean {
+  return (
+    action.status === 'applied' &&
+    action.undoPayload !== null &&
+    automationDisplayDefinition(action.automation)?.canUndo !== false
+  );
 }
 
 /** EF-2 — one card line: dated summary, target, decision still possible. */
@@ -162,7 +174,7 @@ export function tutorActivityItem(
     createdAt: action.createdAt,
     decidedAt: action.decidedAt,
     href: tutorActivityHref(action, timeZone),
-    canUndo: canUndoTutorActivity(status),
+    canUndo: canUndoTutorActivity(action),
   };
 }
 
