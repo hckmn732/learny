@@ -1,8 +1,17 @@
-import { OfflineView } from '../../components/system/system-page-view';
+import { ToastProvider } from '@learny/ui';
 
-export const metadata = { title: 'Hors ligne — Learny' };
+import { OfflinePackList } from '../../components/offline/OfflinePackList';
+import { OfflineProvider } from '../../components/offline/OfflineProvider';
 
-// Public route kept by the proxy so an offline learner still gets an explanation and a retry.
-export default function OfflinePage() {
-  return <OfflineView />;
+export const dynamic = 'force-static';
+
+// SCR-20 / EF-10 — public, statically precached offline page. It reads IndexedDB on the client and
+// keeps the synchronisation triggers alive so a network return sends the queue and shows the toast.
+export default function HorsLignePage() {
+  return (
+    <ToastProvider>
+      <OfflineProvider />
+      <OfflinePackList />
+    </ToastProvider>
+  );
 }

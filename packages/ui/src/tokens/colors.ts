@@ -65,6 +65,8 @@ export const colors = {
   // colours reuse `green-ink` and `orange-ink`; these two fill the named gaps of ET-2.
   success: '#14A38B',
   'danger-soft': '#FFEDE0',
+  // SPEC-801 EF-6 — soft warning background of the offline banner.
+  'offline-soft': '#FFF7E0',
   // Resource excerpt colours by contribution type (SPEC-503 EF-12, ADR-0152).
   'excerpt-pdf': '#A13A06',
   'excerpt-pdf-soft': '#FFEDE0',
