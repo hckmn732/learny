@@ -17,6 +17,7 @@ export * from './memory-json';
 export * from './planning';
 export * from './notifications';
 export * from './ai-billing';
+export * from './offline';
 export * from './privacy-search';
 export * from './groups';
 export * from './events';

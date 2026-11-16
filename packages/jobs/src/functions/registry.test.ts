@@ -60,6 +60,8 @@ describe('[SPEC-203] registre', () => {
     expect(retriesOf('cron-hourly-tick')).toBe(1);
     expect(triggersOf(get('cron-nightly'))).toEqual([{ cron: 'TZ=UTC 30 1 * * *' }]);
     expect(triggersOf(get('nightly-outbox-cleanup'))).toEqual([{ event: 'cron/nightly' }]);
+    // SPEC-801 ET-6 — the offline receipts are purged by the same nightly cron.
+    expect(triggersOf(get('offline-receipts-purge'))).toEqual([{ event: 'cron/nightly' }]);
     expect(triggersOf(get('sdd-demo-pipeline'))).toEqual([{ event: 'sdd/demo-requested' }]);
     expect(retriesOf('sdd-demo-pipeline')).toBe(3);
     expect(byId.has('sdd-demo-job')).toBe(true);
