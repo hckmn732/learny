@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T17:00:11.149Z",
+  "updatedAt": "2026-11-16T17:48:57.099Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5598,14 +5598,50 @@
       }
     },
     "SPEC-720": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-16T15:09:23.861Z",
+      "completedAt": "2026-11-16T17:48:57.092Z",
+      "branch": "spec/SPEC-720-automatisme-9-bilan-de-la-semaine",
+      "commit": "c484019f",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T17:44:14.213Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T17:48:39.704Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T16:27:50.706Z",
+          "details": "6 test(s) [SPEC-720] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T16:27:59.674Z",
+          "details": "4 test(s) [SPEC-720] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T16:29:24.167Z",
+          "details": "2 réussi(s), 0 échec(s), 7 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T16:29:24.167Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T17:48:40.102Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-721": {
       "status": "pending",

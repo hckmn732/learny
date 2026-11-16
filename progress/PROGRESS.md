@@ -1,21 +1,21 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-16T17:00:11.153Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-16T17:48:57.104Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 114 |
+| Terminées | 115 |
 | En cours | 0 |
-| Prêtes | 2 |
+| Prêtes | 1 |
 | En attente de dépendances | 16 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **86.4 %** |
-| Avancement V1 | 91.9 % |
-| Prochaine action | start SPEC-720 — Automatisme 9 : bilan de la semaine |
+| **Avancement global** | **87.1 %** |
+| Avancement V1 | 92.7 % |
+| Prochaine action | start SPEC-721 — Automatisme 10 : mode pause et retour |
 
 ## Phases et checkpoints
 
@@ -28,7 +28,7 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 23/25 | CP-7 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 24/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 0/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
@@ -146,7 +146,7 @@
 | [SPEC-717](../specs/p7-engagement/SPEC-717-automatisme-6-questions-transformees-en-cartes.md) | Automatisme 6 : questions transformées en cartes | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-610 |
 | [SPEC-718](../specs/p7-engagement/SPEC-718-automatisme-7-quiz-global-plafonne-et-lisse.md) | Automatisme 7 : quiz global plafonné et lissé | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-406 |
 | [SPEC-719](../specs/p7-engagement/SPEC-719-automatisme-8-sprint-avant-un-jalon.md) | Automatisme 8 : sprint avant un jalon | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-407 |
-| [SPEC-720](../specs/p7-engagement/SPEC-720-automatisme-9-bilan-de-la-semaine.md) | Automatisme 9 : bilan de la semaine | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-408 |
+| [SPEC-720](../specs/p7-engagement/SPEC-720-automatisme-9-bilan-de-la-semaine.md) | Automatisme 9 : bilan de la semaine | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-408 |
 | [SPEC-721](../specs/p7-engagement/SPEC-721-automatisme-10-mode-pause-et-retour.md) | Automatisme 10 : mode pause et retour | P7 | 🟢 ready | 0 | — | SPEC-711, SPEC-407, SPEC-409 |
 | [SPEC-722](../specs/p7-engagement/SPEC-722-accueil-le-tuteur-a-agi-pour-vous.md) | Accueil : le tuteur a agi pour vous | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-711, SPEC-603 |
 | [SPEC-723](../specs/p7-engagement/SPEC-723-serie-regularite-et-jalons-interface.md) | Série, régularité et jalons : interface | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-409, SPEC-304 |

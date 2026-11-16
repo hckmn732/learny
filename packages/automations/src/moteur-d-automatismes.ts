@@ -92,6 +92,11 @@ export interface AutomationNotificationDraft {
   expiresAt?: string;
   /** Optional values read by the notification template (`summary`, `title`, …). */
   data?: Record<string, unknown>;
+  /**
+   * SPEC-720 EF-3 — external channels allowed by the automation. `[]` keeps the notification
+   * strictly in-app; undefined keeps the default channels of the template (SPEC-209).
+   */
+  channels?: readonly ('email' | 'push')[];
 }
 
 /** One proposal returned by `run`; never applied by itself. */
@@ -546,6 +551,11 @@ export function runAutomation(
         },
         dedupeKey: `automation:${item.actionId}`,
         eligibleAt: now.toISOString(),
+        // SPEC-720 EF-3 — the definition may keep the notification in-app or limit it to e-mail;
+        // the unified service still applies preferences, quiet hours and the daily cap.
+        ...(draft.notification.channels === undefined
+          ? {}
+          : { externalChannels: [...draft.notification.channels] }),
         // SPEC-713 EF-4 — an external send deferred past the notification expiry is dropped
         // (BR-NOT-06), exactly like an obsolete quiet-hours delivery.
         ...(draft.notification.expiresAt === undefined

@@ -38,6 +38,11 @@ export const NotifyInput = z.object({
   eligibleAt: IsoDateTime.optional(),
   /** BR-NOT-06 — after this instant a deferred delivery is abandoned (CL-5). */
   staleAt: IsoDateTime.optional(),
+  /**
+   * SPEC-720 EF-3 — optional restriction of the external channels. The in-app row is always
+   * created; an empty array keeps the notification strictly inside the application.
+   */
+  externalChannels: z.array(DeliveryChannel).max(2).optional(),
 });
 export type NotifyInput = z.infer<typeof NotifyInput>;
 

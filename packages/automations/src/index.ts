@@ -9,6 +9,21 @@ export {
   plafondQuizAutomation,
   reintroduceDeferredNotions,
 } from './automatisme-7-quiz-global-plafonne-et-lisse';
+export { explainWeeklyReview, weeklyReviewAutomation } from './automatisme-9-bilan-de-la-semaine';
+export {
+  formatWeeklyStudy,
+  isAtRiskNotion,
+  isoWeekKey,
+  sortAtRiskNotions,
+  sumPlanMinutes,
+  weeklyPeriodLabel,
+  weeklyReceivedLabel,
+  weeklyRetentionLabel,
+  weeklyReviewExternalChannels,
+  weeklyReviewWeek,
+  type AtRiskInput,
+  type WeeklyReviewWeek,
+} from '@learny/contracts';
 export {
   explainSprint,
   placeSprintTargets,
@@ -50,6 +65,7 @@ export {
 
 import { plafondQuizAutomation } from './automatisme-7-quiz-global-plafonne-et-lisse';
 import { sprintAutomation } from './automatisme-8-sprint-avant-un-jalon';
+import { weeklyReviewAutomation } from './automatisme-9-bilan-de-la-semaine';
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
@@ -80,6 +96,9 @@ if (automationRegistry.get('plafond_quiz') === undefined) {
 }
 if (automationRegistry.get('questions_cartes') === undefined) {
   automationRegistry.register(questionsCartesAutomation);
+}
+if (automationRegistry.get('bilan') === undefined) {
+  automationRegistry.register(weeklyReviewAutomation);
 }
 if (automationRegistry.get('sprint') === undefined) {
   automationRegistry.register(sprintAutomation);
