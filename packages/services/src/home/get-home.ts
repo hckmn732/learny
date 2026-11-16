@@ -523,6 +523,7 @@ async function readTodayQuizCard(
     deferredCount?: unknown;
     dueCount?: unknown;
     deferredTo?: unknown;
+    capMinutes?: unknown;
   };
   if (!Array.isArray(raw.items) || typeof raw.estimatedSec !== 'number') return null;
   const items = raw.items.flatMap((item) => {
@@ -546,6 +547,10 @@ async function readTodayQuizCard(
   const deferredCount = typeof raw.deferredCount === 'number' ? raw.deferredCount : 0;
   const dueCount = typeof raw.dueCount === 'number' ? raw.dueCount : notionIds.size + deferredCount;
   const deferredTo = typeof raw.deferredTo === 'string' ? raw.deferredTo : null;
+  const capMin =
+    typeof raw.capMinutes === 'number' && raw.capMinutes > 0
+      ? Math.round(raw.capMinutes)
+      : ENGINE.globalQuiz.maxMinutesDefault;
   return {
     formationId: formation.id,
     formationTitle: formation.title,
@@ -561,7 +566,7 @@ async function readTodayQuizCard(
             deferredCount,
             deferredTo,
             dayLabel: deferredDayLabel(deferredTo, today, timeZone),
-            capMin: ENGINE.globalQuiz.maxMinutesDefault,
+            capMin,
           },
     nextReviewOn: null,
   };
@@ -575,6 +580,7 @@ function globalQuiz(
   today: string,
   now: Date,
   timeZone: string,
+  capMinutes: number,
 ): HomeGlobalQuiz | null {
   const byNotion = new Map<string, Set<BrickFormat>>();
   for (const brick of bricks) {
@@ -608,7 +614,7 @@ function globalQuiz(
     gaps: [],
     bank,
     lastFormats: [],
-    capMinutes: ENGINE.globalQuiz.maxMinutesDefault,
+    capMinutes,
     mode: 'full',
     seed: `home:${formation.id}:${today}`,
     params: {
@@ -637,7 +643,7 @@ function globalQuiz(
             deferredCount,
             deferredTo: addCivilDays(today, 1),
             dayLabel: deferredDayLabel(addCivilDays(today, 1), today, timeZone),
-            capMin: ENGINE.globalQuiz.maxMinutesDefault,
+            capMin: capMinutes,
           },
     nextReviewOn:
       session.items.length > 0 || nextReviewAt === null ? null : civilDayOf(nextReviewAt, timeZone),
@@ -757,6 +763,19 @@ function completedRow(
     volumeHours: summary.hours,
     action: revisionAction,
   };
+}
+
+async function readQuizCapMinutes(tx: DbTx, userId: string): Promise<number> {
+  const rows = await tx.execute<{ params: unknown }>(sql`
+    select params from public.automation_settings
+    where user_id = ${userId}::uuid and key = 'plafond_quiz'
+    limit 1
+  `);
+  const params = (rows[0]?.params ?? {}) as Record<string, unknown>;
+  const parsed = ENGINE.globalQuiz.allowedMaxMinutes.find(
+    (minutes) => minutes === params.maxMinutes,
+  );
+  return parsed ?? ENGINE.globalQuiz.maxMinutesDefault;
 }
 
 async function readHome(tx: DbTx, userId: string, now: Date): Promise<HomeDto> {
@@ -901,7 +920,16 @@ async function readHome(tx: DbTx, userId: string, now: Date): Promise<HomeDto> {
     (currentFormation.status !== 'active' && currentFormation.status !== 'paused')
       ? null
       : ((await readTodayQuizCard(tx, userId, currentFormation, today, timeZone)) ??
-        globalQuiz(currentFormation, due, bricks, profile, today, now, timeZone));
+        globalQuiz(
+          currentFormation,
+          due,
+          bricks,
+          profile,
+          today,
+          now,
+          timeZone,
+          await readQuizCapMinutes(tx, userId),
+        ));
 
   return {
     today: {

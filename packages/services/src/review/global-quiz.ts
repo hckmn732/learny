@@ -20,6 +20,7 @@ import {
 import {
   GlobalQuizSessionDtoSchema,
   REVIEW_GAME_RESPONSE_SCHEMAS,
+  quizSmoothingDedupeKey,
   ReviewAnswerResultDtoSchema,
   ReviewGameCorrectionSchema,
   ReviewItemDtoSchema,
@@ -30,11 +31,12 @@ import {
   type ReviewGameFormat,
   type ReviewItemDto,
   type ReviewRationale,
+  type QuizSmoothingNotice,
   type ReviewSummaryDto,
 } from '@learny/contracts';
 import { AppError, addCivilDays, userDayBounds, userLocalDay, type Result } from '@learny/core';
-import { consumeAutomationActions, upsertDailyActivity, type DbTx } from '@learny/db';
-import { withTransaction } from '@learny/jobs';
+import { consumeAutomationActions, upsertDailyActivity, type Db, type DbTx } from '@learny/db';
+import { emitAfterCommit, withTransaction } from '@learny/jobs';
 import {
   buildDailySession,
   previewGrades,
@@ -44,6 +46,7 @@ import {
   type GlobalQuizLastFormat,
 } from '@learny/learning-engine';
 
+import { createAutomationActionQuiet } from '../automations';
 import type { ServiceContext } from '../context';
 import { fromPersistenceCard } from '../learning/apply-result';
 import { applyReviewResult } from '../learning/apply-review';
@@ -144,6 +147,8 @@ interface SessionConfig {
   deferredTo: string;
   capMinutes: number;
   estimatedSec: number;
+  /** SPEC-718 — target retention frozen with the session (ET-5). */
+  targetRetention?: number;
   rationale: ReviewRationale[];
   /** SPEC-716 ET-3 — lines of the « Réglé par le tuteur » box for the imposed gaps. */
   tuned: ReviewRationale[];
@@ -162,6 +167,7 @@ const sessionConfigSchema = z.object({
   deferredTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   capMinutes: z.number().int().min(1),
   estimatedSec: z.number().int().min(0),
+  targetRetention: z.number().min(0).max(1).optional(),
   rationale: z.array(z.object({ label: z.string(), text: z.string() })),
   tuned: z.array(z.object({ label: z.string(), text: z.string() })).default([]),
   note: z.string().optional(),
@@ -381,6 +387,7 @@ async function loadAutomationParams(
   userId: string,
 ): Promise<{
   capMinutes: number;
+  targetRetention: number;
   preference: 'vary' | 'cards' | 'matching_categorization';
   microMinutes: number;
 }> {
@@ -390,12 +397,19 @@ async function loadAutomationParams(
     where user_id = ${userId}::uuid and key in ('plafond_quiz', 'jeu_lacune', 'micro_seance')
   `);
   let capMinutes: number = ENGINE.globalQuiz.maxMinutesDefault;
+  let targetRetention: number = ENGINE.fsrs.requestRetention;
   let preference: 'vary' | 'cards' | 'matching_categorization' = 'vary';
   let microMinutes: number = ENGINE.globalQuiz.microMinutesDefault;
   for (const row of rows) {
     const params = (row.params ?? {}) as Record<string, unknown>;
     if (row.key === 'plafond_quiz' && typeof params.maxMinutes === 'number') {
       capMinutes = Math.round(params.maxMinutes);
+    }
+    if (row.key === 'plafond_quiz') {
+      const parsed = z
+        .union([z.literal(0.85), z.literal(0.9), z.literal(0.95)])
+        .safeParse(params.targetRetention);
+      if (parsed.success) targetRetention = parsed.data;
     }
     if (row.key === 'jeu_lacune' && typeof params.preference === 'string') {
       const parsed = z
@@ -411,7 +425,287 @@ async function loadAutomationParams(
       if (parsed.success) microMinutes = parsed.data;
     }
   }
-  return { capMinutes, preference, microMinutes };
+  return { capMinutes, targetRetention, preference, microMinutes };
+}
+
+interface QuizSmoothedRow {
+  [key: string]: unknown;
+  id: string;
+  status: string;
+  payload: unknown;
+  created_at: Date | string;
+}
+
+interface SmoothingCandidate {
+  formationId: string;
+  localDate: string;
+  deferredTo: string;
+  dueCount: number;
+  selectedCount: number;
+  deferredNotionIds: string[];
+  estimatedMinutes: number;
+  maxMinutes: number;
+  targetRetention: number;
+  timeZone: string;
+}
+
+function smoothingDay(row: QuizSmoothedRow, timeZone: string): string | null {
+  const payload = (row.payload ?? {}) as Record<string, unknown>;
+  const localDate = payload.localDate ?? payload.date;
+  if (typeof localDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(localDate)) return localDate;
+  const created = row.created_at instanceof Date ? row.created_at : new Date(row.created_at);
+  return Number.isNaN(created.getTime()) ? null : userLocalDay(created, timeZone);
+}
+
+/** ET-4 — the `quiz_smoothed` action of the local day, applied, undone or absent. */
+async function readSmoothingAction(
+  db: Db | DbTx,
+  userId: string,
+  formationId: string,
+  today: string,
+  timeZone: string,
+): Promise<QuizSmoothedRow | null> {
+  const rows = await db.execute<QuizSmoothedRow>(sql`
+    select id::text as id, status::text as status, payload, created_at
+    from public.automation_actions
+    where user_id = ${userId}::uuid
+      and formation_id = ${formationId}::uuid
+      and automation = 'plafond_quiz'
+      and kind = 'quiz_smoothed'
+    order by created_at desc, id desc
+  `);
+  return rows.find((row) => smoothingDay(row, timeZone) === today) ?? null;
+}
+
+function smoothingNoticeOf(
+  config: SessionConfig,
+  action: QuizSmoothedRow | null,
+): QuizSmoothingNotice | null {
+  if (config.mode !== 'full' || config.deferredCount <= 0) return null;
+  return {
+    actionId: action?.status === 'applied' ? action.id : null,
+    capMinutes: config.capMinutes,
+    targetRetention: config.targetRetention ?? ENGINE.fsrs.requestRetention,
+    deferredCount: config.deferredCount,
+    deferredTo: config.deferredTo,
+    estimatedMinutes: Math.max(1, Math.ceil(config.estimatedSec / 60)),
+  };
+}
+
+/** ET-4 — the journal line of the day, same wording as the automation definition. */
+function smoothingSummary(candidate: SmoothingCandidate): string {
+  const deferred = candidate.deferredNotionIds.length;
+  return `${String(candidate.dueCount)} notions étaient dues aujourd’hui : ${String(
+    deferred,
+  )} ${deferred === 1 ? 'est reportée' : 'sont reportées'} à ${weekdayLabel(
+    candidate.deferredTo,
+  )} pour rester sous ${String(candidate.maxMinutes)} min.`;
+}
+
+/**
+ * ET-2, ET-4 — the journal row is created after the session commit, on the owner-role client like
+ * every automation proposal. Its `dedupeKey` makes a replay a no-op and its `undoPayload` lets the
+ * generic undo route reopen the day without writing a fake review log.
+ */
+async function recordSmoothingAction(
+  ctx: ServiceContext,
+  candidate: SmoothingCandidate,
+  timeZone: string,
+): Promise<QuizSmoothedRow | null> {
+  const sdb = ctx.sdb;
+  if (sdb === undefined || ctx.userId === null || candidate.deferredNotionIds.length === 0) {
+    return null;
+  }
+  const existing = await readSmoothingAction(
+    sdb,
+    ctx.userId,
+    candidate.formationId,
+    candidate.localDate,
+    timeZone,
+  );
+  if (existing !== null) return existing;
+  const dedupeKey = quizSmoothingDedupeKey(candidate.formationId, candidate.localDate);
+  const created = await sdb.transaction((tx) =>
+    createAutomationActionQuiet(tx, {
+      userId: ctx.userId as string,
+      formationId: candidate.formationId,
+      automation: 'plafond_quiz',
+      kind: 'quiz_smoothed',
+      summary: smoothingSummary(candidate),
+      payload: {
+        dedupeKey,
+        formationId: candidate.formationId,
+        localDate: candidate.localDate,
+        deferredTo: candidate.deferredTo,
+        dueCount: candidate.dueCount,
+        selectedCount: candidate.selectedCount,
+        deferredNotionIds: candidate.deferredNotionIds,
+        estimatedMinutes: candidate.estimatedMinutes,
+        maxMinutes: candidate.maxMinutes,
+        targetRetention: candidate.targetRetention,
+        reason: 'cap',
+      },
+      undoPayload: {
+        formationId: candidate.formationId,
+        localDate: candidate.localDate,
+        deferredNotionIds: candidate.deferredNotionIds,
+      },
+      requiresConsent: false,
+      createdAt: ctx.clock.now(),
+    }),
+  );
+  if (created.created && created.action !== null) {
+    await emitAfterCommit(
+      sdb,
+      'automation/action-applied',
+      {
+        userId: ctx.userId,
+        actionId: created.action.id,
+        automation: 'plafond_quiz',
+      },
+      { id: `automation-action:${created.action.id}` },
+    );
+  }
+  const action = created.action;
+  if (action === null) return null;
+  return {
+    id: action.id,
+    status: action.status,
+    payload: action.payload,
+    created_at: action.createdAt,
+  };
+}
+
+/**
+ * ET-4 / CA-2 — after « Annuler le lissage », the existing session reopens every notion that the
+ * cap had deferred. Positions of the current items are untouched, so answers already given keep
+ * their correction; the deferred notions are appended from the same deterministic draw.
+ */
+async function reopenDeferredNotions(
+  ctx: ServiceContext,
+  tx: DbTx,
+  userId: string,
+  timeZone: string,
+  today: string,
+  formationId: string,
+  activity: ActivityRow,
+  config: SessionConfig,
+): Promise<void> {
+  if (config.mode !== 'full' || config.deferredCount <= 0) return;
+  const action = await readSmoothingAction(tx, userId, formationId, today, timeZone);
+  if (action === null || action.status !== 'undone') return;
+
+  const now = ctx.clock.now();
+  const bounds = userDayBounds(today, timeZone);
+  const dueRows = await loadDueRows(tx, userId, formationId, bounds);
+  const reviewRows = dueRows.filter((row) => row.in_review);
+  if (reviewRows.length === 0) return;
+  const due = await getDueNotions(ctx, formationId, now);
+  if (!due.ok) throw due.error;
+  const engineNotions = new Map(due.value.notions.map((notion) => [notion.notionId, notion]));
+  const bricks = await loadActiveBricks(tx, userId, formationId);
+  const bank: GlobalQuizBank[] = reviewRows.map((row) => ({
+    notionId: row.notion_id,
+    formats: [
+      ...new Set(
+        bricks
+          .filter((brick) => brick.notion_ids.includes(row.notion_id))
+          .map((brick) => brick.type),
+      ),
+    ] as GlobalQuizBank['formats'],
+  }));
+  const automation = await loadAutomationParams(tx, userId);
+  const drawn = buildDailySession({
+    formationId,
+    date: today,
+    dueNotions: reviewRows.map((row) => ({
+      notionId: row.notion_id,
+      moduleId: row.module_id,
+      modulePosition: row.module_position,
+      moduleStatus: engineNotions.get(row.notion_id)?.moduleStatus ?? 'validated',
+      evaluated: engineNotions.get(row.notion_id)?.evaluated ?? true,
+      dueAt: new Date(row.due_at).toISOString(),
+    })),
+    gaps: due.value.gaps,
+    bank,
+    lastFormats: await loadLastFormats(tx, userId, formationId),
+    forcedFormats: [...(await loadForcedGames(tx, userId, formationId, dueRows)).values()]
+      .filter((game): game is ForcedGame & { format: string } => game.format !== null)
+      .map((game) => ({ notionId: game.notionId, format: game.format as never })),
+    capMinutes: Math.max(automation.capMinutes, reviewRows.length * 2 + 10),
+    mode: 'full',
+    seed: `global-quiz:${userId}:${formationId}:${today}:full`,
+    preference: automation.preference,
+    targetRetention: automation.targetRetention,
+    params: {
+      notionCostSec: ENGINE.globalQuiz.notionCostSec,
+      sessionOverheadSec: ENGINE.globalQuiz.sessionOverheadSec,
+      formatSeconds: ENGINE.globalQuiz.formatSeconds,
+      maintenanceMaxMinutes: ENGINE.globalQuiz.maintenanceMaxMinutes,
+    },
+  });
+
+  const notionById = new Map(dueRows.map((row) => [row.notion_id, row]));
+  const existingNotions = new Set(config.items.flatMap((item) => item.notionIds));
+  const newEngineItems = drawn.items
+    .filter((item) => !existingNotions.has(item.notionId))
+    .map((item) => ({
+      notionId: item.notionId,
+      format: item.format,
+      gapNature: item.gapNature,
+    }));
+  if (newEngineItems.length === 0) return;
+  const newSelected = new Set(newEngineItems.map((item) => item.notionId));
+  const activityItems = (activity.items ?? []) as { brickId: string; brickVersionId: string }[];
+  const usedBricks = new Set(activityItems.map((item) => item.brickId));
+  const forcedGames = await loadForcedGames(tx, userId, formationId, dueRows);
+  const grouped = groupByBricks(
+    newEngineItems,
+    notionById,
+    newSelected,
+    bricks.filter((brick) => !usedBricks.has(brick.brick_id)),
+    await loadSeenFingerprints(tx, userId),
+    forcedGames,
+  );
+  if (grouped.items.length === 0) return;
+
+  const appendedConfig = grouped.items.map((item, index) => ({
+    position: config.items.length + index,
+    format: item.format,
+    reasonKey: item.reasonKey,
+    displayLabel: item.displayLabel,
+    moduleIds: item.moduleIds,
+    notionIds: item.notionIds,
+    actionId: item.actionId ?? null,
+  }));
+  const nextItems = [
+    ...activityItems,
+    ...grouped.items.map((item) => ({
+      brickId: item.brickId,
+      brickVersionId: item.brickVersionId,
+    })),
+  ];
+  const covered = new Set([...existingNotions, ...grouped.items.flatMap((item) => item.notionIds)]);
+  const remaining = reviewRows.filter((row) => !covered.has(row.notion_id)).length;
+  const addedSeconds = grouped.items.reduce(
+    (sum, item) => sum + itemCostSec(item.format, item.notionIds.length),
+    0,
+  );
+  const nextConfig: SessionConfig = {
+    ...config,
+    deferredCount: remaining,
+    estimatedSec: config.estimatedSec + addedSeconds,
+    rationale: config.rationale.filter((entry) => entry.label !== 'Charge lissée'),
+    items: [...config.items, ...appendedConfig],
+  };
+  await tx.execute(sql`
+    update public.activities
+    set config = ${JSON.stringify(nextConfig)}::jsonb,
+        items = ${JSON.stringify(nextItems)}::jsonb
+    where id = ${activity.id}::uuid and owner_id = ${userId}::uuid
+  `);
+  activity.config = nextConfig;
+  activity.items = nextItems;
 }
 
 /**
@@ -757,7 +1051,11 @@ export function getOrCreateTodaySession(
         throw new AppError('NOT_FOUND', 'Formation introuvable.');
       }
       if (formation.status === 'paused') {
-        return { dto: emptyDto(today, formationId, 'paused'), refill: [] as const };
+        return {
+          dto: emptyDto(today, formationId, 'paused'),
+          refill: [] as const,
+          smoothing: null,
+        };
       }
       if (formation.status === 'completed') {
         // CL-10 — a completed formation is served by the maintenance interview (SPEC-617).
@@ -768,6 +1066,20 @@ export function getOrCreateTodaySession(
 
       const existing = await findTodayActivity(tx, userId, formationId, today, mode);
       if (existing !== null) {
+        // SPEC-718 ET-4 — an undone smoothing reopens the deferred notions of the same day.
+        const parsedExisting = parseSessionConfig(existing.activity.config);
+        if (parsedExisting !== null) {
+          await reopenDeferredNotions(
+            ctx,
+            tx,
+            userId,
+            timeZone,
+            today,
+            formationId,
+            existing.activity,
+            parsedExisting,
+          );
+        }
         return {
           dto: await buildDto(
             ctx,
@@ -780,6 +1092,7 @@ export function getOrCreateTodaySession(
             existing.attempt,
           ),
           refill: [],
+          smoothing: null,
         };
       }
 
@@ -788,7 +1101,7 @@ export function getOrCreateTodaySession(
       const dueCount = dueRows.length;
       if (dueCount === 0) {
         // CL-1 — nothing due: no activity, no attempt, badge 0.
-        return { dto: emptyDto(today, formationId, 'empty'), refill: [] as const };
+        return { dto: emptyDto(today, formationId, 'empty'), refill: [] as const, smoothing: null };
       }
       const reviewRows = dueRows.filter((row) => row.in_review);
       const due = await getDueNotions(ctx, formationId, now);
@@ -832,6 +1145,7 @@ export function getOrCreateTodaySession(
         mode,
         seed: `global-quiz:${userId}:${formationId}:${today}:${mode}`,
         preference: automation.preference,
+        targetRetention: automation.targetRetention,
         params: {
           notionCostSec: ENGINE.globalQuiz.notionCostSec,
           sessionOverheadSec: ENGINE.globalQuiz.sessionOverheadSec,
@@ -873,6 +1187,7 @@ export function getOrCreateTodaySession(
         return {
           dto: emptyDto(today, formationId, 'empty'),
           refill: [...grouped.exhausted, ...refillOf(drawn.exhausted)],
+          smoothing: null,
         };
       }
 
@@ -909,6 +1224,8 @@ export function getOrCreateTodaySession(
         deferredTo,
         capMinutes,
         estimatedSec,
+        targetRetention:
+          mode === 'micro' ? ENGINE.fsrs.requestRetention : automation.targetRetention,
         rationale,
         tuned: mode === 'micro' ? [] : buildTuned(forcedGames, dueRows, timeZone),
         ...(mode === 'micro'
@@ -944,6 +1261,7 @@ export function getOrCreateTodaySession(
             replay.attempt,
           ),
           refill: [],
+          smoothing: null,
         };
       }
 
@@ -1002,9 +1320,28 @@ export function getOrCreateTodaySession(
         started_at: createdAt,
         review_feedback: null,
       };
+      const coveredNotions = new Set(grouped.items.flatMap((item) => item.notionIds));
+      const deferredNotionIds = reviewRows
+        .filter((row) => !coveredNotions.has(row.notion_id))
+        .map((row) => row.notion_id);
       return {
         dto: await buildDto(ctx, tx, userId, timeZone, today, formation, activity, attempt),
         refill: [...grouped.exhausted, ...refillOf(drawn.exhausted)],
+        smoothing:
+          mode === 'full' && deferredNotionIds.length > 0
+            ? {
+                formationId,
+                localDate: today,
+                deferredTo,
+                dueCount,
+                selectedCount,
+                deferredNotionIds,
+                estimatedMinutes: Math.max(1, Math.ceil(estimatedSec / 60)),
+                maxMinutes: capMinutes,
+                targetRetention: automation.targetRetention,
+                timeZone,
+              }
+            : null,
       };
     });
 
@@ -1018,6 +1355,24 @@ export function getOrCreateTodaySession(
         [...exhaustedByNotion.keys()],
         [...new Set(created.refill.map((entry) => entry.format))],
       );
+    }
+    const recorded =
+      created.smoothing === null
+        ? null
+        : await recordSmoothingAction(ctx, created.smoothing, created.smoothing.timeZone);
+    if (recorded !== null && recorded.status === 'applied') {
+      created.dto.smoothing = {
+        actionId: recorded.id,
+        capMinutes: created.smoothing?.maxMinutes ?? created.dto.smoothing?.capMinutes ?? 1,
+        targetRetention:
+          created.smoothing?.targetRetention ?? created.dto.smoothing?.targetRetention ?? 0.9,
+        deferredCount: created.smoothing?.deferredNotionIds.length ?? 0,
+        deferredTo: created.smoothing?.deferredTo ?? null,
+        estimatedMinutes:
+          created.smoothing?.estimatedMinutes ??
+          created.dto.smoothing?.estimatedMinutes ??
+          created.dto.header.estimatedMinutes,
+      };
     }
     return created.dto;
   });
@@ -1468,6 +1823,14 @@ async function loadModeOptions(
         : 'in_progress'
       : 'completed';
   const modeOptions = await loadModeOptions(tx, userId, activity.formation_id, today, config);
+  const smoothingAction = await readSmoothingAction(
+    tx,
+    userId,
+    activity.formation_id,
+    today,
+    timeZone,
+  );
+  const smoothing = smoothingNoticeOf(config, smoothingAction);
 
   return GlobalQuizSessionDtoSchema.parse({
     sessionId: activity.id,
@@ -1493,6 +1856,7 @@ async function loadModeOptions(
           : `${notionWord(config.dueCount)} à revoir aujourd’hui, lacunes en priorité.`,
     rationale: config.rationale,
     tuned: config.tuned,
+    smoothing,
     items: dtoItems,
     currentPosition,
     summary: status === 'completed' ? parseSummary(attempt.review_feedback) : null,
