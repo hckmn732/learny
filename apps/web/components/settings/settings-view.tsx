@@ -38,7 +38,7 @@ import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
 
 import { AiModelsTab } from './ai-models-tab';
-import { AutomationJournal } from './automation-journal';
+import { AutomationSettingsTab } from './automation-settings-tab';
 import { NotificationSettingsTab } from './notification-settings-tab';
 
 const t = fr.settings;
@@ -739,7 +739,11 @@ export function SettingsView({
         </TabsContent>
 
         <TabsContent className="mt-24" value="automatismes">
-          <AutomationJournal />
+          <AutomationSettingsTab
+            initialNotifications={initialNotifications}
+            timeZone={me.timezone}
+            {...(requestId === undefined ? {} : { requestId })}
+          />
         </TabsContent>
 
         <TabsContent className="mt-0" value="modeles">
