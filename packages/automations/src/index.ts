@@ -9,6 +9,7 @@ export {
   explainEchauffement,
   explainWarmupLastAction,
 } from './definitions/echauffement';
+export { explainJeuLacune, jeuLacuneAutomation } from './definitions/jeu-lacune';
 export { explainRemediation, remediationAutomation } from './definitions/remediation';
 export {
   explainMicroSeance,
@@ -24,6 +25,7 @@ export {
 } from './micro-seance/should-propose';
 
 import { echauffementAutomation } from './definitions/echauffement';
+import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
 import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
@@ -42,4 +44,7 @@ if (automationRegistry.get('remediation') === undefined) {
 }
 if (automationRegistry.get('micro_seance') === undefined) {
   automationRegistry.register(microSeanceAutomation);
+}
+if (automationRegistry.get('jeu_lacune') === undefined) {
+  automationRegistry.register(jeuLacuneAutomation);
 }
