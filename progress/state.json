@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-14T14:37:50.418Z",
+  "updatedAt": "2026-11-16T00:42:13.545Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5103,14 +5103,55 @@
       "completedAt": "2026-11-14T13:56:12.114Z"
     },
     "SPEC-710": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-15T19:15:05.281Z",
+      "completedAt": "2026-11-16T00:42:13.538Z",
+      "branch": "spec/SPEC-710-parametres-automatismes",
+      "commit": "83512132",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T00:30:32.244Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T00:30:36.057Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-16T00:31:53.021Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T00:33:28.122Z",
+          "details": "8 test(s) [SPEC-710] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T00:37:47.734Z",
+          "details": "4 test(s) [SPEC-710] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T00:38:52.604Z",
+          "details": "2 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T00:38:52.605Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T00:38:52.642Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-711": {
       "status": "done",
