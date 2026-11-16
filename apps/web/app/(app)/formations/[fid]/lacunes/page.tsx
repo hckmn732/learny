@@ -51,10 +51,7 @@ export default async function LacunesPage({ params, searchParams }: LacunesPageP
       header={shell.header.ok ? shell.header.data : null}
       headerError={!shell.header.ok}
     >
-      <main
-        data-testid="gaps-page"
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
-      >
+      <main data-testid="gaps-page" className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40">
         {gaps.ok ? (
           <div data-testid="gaps-content" className="flex flex-col gap-24">
             <PageHeader

@@ -26,7 +26,7 @@ export const SearchResultItem = ({
   <article
     data-testid={testId}
     data-kind={kind}
-    className="min-w-0 rounded-24 border border-solid border-border bg-surface py-20 px-20 shell:px-24"
+    className="min-w-0 rounded-24 border border-solid border-border bg-surface py-20 px-20 nav:px-24"
   >
     <p className="m-0 mb-6 flex items-center gap-8">
       <span
@@ -100,7 +100,7 @@ function retryHref(query: string): string {
 }
 
 const stateCardClass =
-  'rounded-24 border border-solid border-border bg-surface py-28 px-24 shell:px-28';
+  'rounded-24 border border-solid border-border bg-surface py-28 px-24 nav:px-28';
 
 export const SearchPageView = ({ state }: { state: SearchPageState }) => (
   <>

@@ -216,7 +216,7 @@ export function Demos() {
         </GalleryCard>
 
         <GalleryCard testId="ui-retours-empty" title={t.empty.title} intro={t.empty.intro}>
-          <div className="grid grid-cols-1 gap-16 shell:grid-cols-2">
+          <div className="grid grid-cols-1 gap-16 nav:grid-cols-2">
             <EmptyState
               action={<Button variant="outline">{t.empty.emptyAction}</Button>}
               data-testid="ui-empty"
@@ -233,7 +233,7 @@ export function Demos() {
             <div className="flex flex-col gap-16">
               <SkeletonText lines={2} />
               <Skeleton className="h-40 w-40" radius={12} />
-              <div className="grid grid-cols-1 gap-16 shell:grid-cols-2">
+              <div className="grid grid-cols-1 gap-16 nav:grid-cols-2">
                 <SkeletonCard />
                 <SkeletonCard />
               </div>

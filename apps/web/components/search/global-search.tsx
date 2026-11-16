@@ -272,7 +272,7 @@ export const GlobalSearch = ({
         placeholder={placeholder}
         value={value}
         data-testid="header-search-input"
-        className="min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 font-sans text-14 text-ink placeholder:text-ink-muted"
+        className="touch-target min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 font-sans text-14 text-ink placeholder:text-ink-muted max-sm:text-[16px]"
         onChange={(event) => {
           onChange(event.currentTarget.value);
         }}

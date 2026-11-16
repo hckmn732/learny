@@ -2,7 +2,7 @@
 
 import { evaluateTableChecks, formatFrenchNumber } from '@learny/bricks';
 import type { ExerciseSubmission, ExerciseTableProduction } from '@learny/contracts';
-import { Select, TextField, cn } from '@learny/ui';
+import { ScrollableTable, Select, TextField, cn } from '@learny/ui';
 
 import { fr } from '../../messages/fr';
 
@@ -69,13 +69,10 @@ export function StructuredTable({
 
   return (
     <div className="flex flex-col gap-12">
-      <div
-        aria-label={t.tableLabel}
-        className="w-full max-w-full"
-        style={{ overflowX: 'auto', maxWidth: '100%', contain: 'paint' }}
-        data-testid="exercise-table"
-        role="region"
-        tabIndex={0}
+      <ScrollableTable
+        label={t.tableLabel}
+        testId="exercise-table"
+        className="w-full max-w-full [contain:paint]"
       >
         <div
           className="flex min-w-680 flex-col gap-6 text-14"
@@ -188,7 +185,7 @@ export function StructuredTable({
             </div>
           ))}
         </div>
-      </div>
+      </ScrollableTable>
       <div className="flex flex-wrap items-center justify-between gap-12">
         {!locked && rows.length < production.maxRows ? (
           <button

@@ -30,7 +30,7 @@ export const SuggestionGroup = ({
 }: SuggestionGroupProps) => (
   <div
     aria-label={t.suggestionsLabel}
-    className="grid grid-cols-1 gap-10 [@media(min-width:480px)]:grid-cols-2 [@media(min-width:720px)]:grid-cols-3"
+    className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3"
     role="group"
   >
     {suggestions.map((suggestion) => {

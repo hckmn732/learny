@@ -13,7 +13,7 @@ export default function RechercheLoading() {
     <main
       data-testid="search-page-loading"
       aria-busy="true"
-      className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+      className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
     >
       <PageHeader eyebrow={t.eyebrow} title={t.title} />
       <p className="mt-20 text-14 text-ink-muted">{fr.search.loading}</p>

@@ -40,10 +40,10 @@ export function SessionModeSwitch(props: SessionModeSwitchProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-x-16 gap-y-12">
-      <div className="w-full min-[480px]:w-auto" data-testid="gq-mode-switch">
+      <div className="w-full sm:w-auto" data-testid="gq-mode-switch">
         <SegmentedControl
           aria-label={t.modes.label}
-          className="w-full [&_button]:min-h-11 min-[480px]:w-auto min-[480px]:[&_button]:flex-none"
+          className="w-full [&_button]:min-h-11 sm:w-auto sm:[&_button]:flex-none"
           onValueChange={selectMode}
           options={[
             {

@@ -6,7 +6,7 @@ import type { ComponentPropsWithRef } from 'react';
 import { cn } from '../../cn';
 
 const chipVariants = cva(
-  'inline-flex cursor-pointer items-center justify-center gap-6 font-sans transition-colors disabled:cursor-not-allowed disabled:opacity-55',
+  'touch-target inline-flex cursor-pointer items-center justify-center gap-6 font-sans transition-colors disabled:cursor-not-allowed disabled:opacity-55',
   {
     variants: {
       shape: { rounded: '', pill: '' },

@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 import type { ReviewItemDto } from '@learny/contracts';
 
 import { fr } from '../../messages/fr';
@@ -36,10 +38,19 @@ function statusOf(item: ReviewItemDto, currentPosition: number): RailStatus {
  * stays readable with its correction; the current item carries `aria-current="step"`.
  */
 export function GameRail(props: GameRailProps) {
+  const currentRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const node = currentRef.current;
+    if (node !== null && typeof node.scrollIntoView === 'function') {
+      node.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+  }, [props.currentPosition]);
+
   return (
     <nav
       aria-label={t.rail.label}
-      className="flex flex-col gap-4 rounded-24 border border-solid border-border bg-surface p-10"
+      className="flex flex-row gap-4 overflow-x-auto rounded-24 border border-solid border-border bg-surface p-10 sm:flex-col sm:overflow-visible"
       data-testid="gq-rail"
     >
       {props.items.map((item, index) => {
@@ -48,10 +59,11 @@ export function GameRail(props: GameRailProps) {
         return (
           <button
             aria-current={current ? 'step' : undefined}
-            className={`flex min-h-56 w-full cursor-pointer items-center gap-12 rounded-16 border-0 px-10 py-8 text-left font-sans text-ink ${
+            className={`flex min-h-56 w-full min-w-[240px] cursor-pointer items-center gap-12 rounded-16 border-0 px-10 py-8 text-left font-sans text-ink [scroll-snap-align:center] sm:min-w-0 ${
               current ? 'bg-surface-muted' : 'bg-transparent'
             }`}
             data-testid={`gq-rail-item-${String(index + 1)}`}
+            ref={current ? currentRef : undefined}
             key={item.position}
             onClick={() => {
               props.onSelect(item.position);

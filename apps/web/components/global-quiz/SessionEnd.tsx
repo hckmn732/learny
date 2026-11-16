@@ -68,7 +68,7 @@ export function SessionEnd(props: SessionEndProps) {
       >
         {t.end.title(summary.reviewedCount, summary.minutes)}
       </h2>
-      <div className="grid grid-cols-1 gap-12 shell:grid-cols-3">
+      <div className="grid grid-cols-1 gap-12 nav:grid-cols-3">
         <div className="flex flex-col gap-4 rounded-18 bg-surface-muted p-18">
           <span className="font-display text-30 font-600 text-ink" data-testid="gq-end-ok">
             {summary.okCount}

@@ -58,7 +58,7 @@ export function QuizResultScreen({
   };
 
   return (
-    <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[920px] flex-col gap-20" data-testid="quiz-result">
         <div className="flex flex-wrap items-center justify-between gap-12">
           <div className="flex flex-col gap-4">

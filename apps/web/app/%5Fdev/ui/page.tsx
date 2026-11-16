@@ -18,7 +18,7 @@ export default function UiGalleryIndexPage() {
         <p className="mt-8 max-w-[42rem] text-15 text-ink-secondary">{t.indexIntro}</p>
       </header>
 
-      <ul className="mt-24 grid grid-cols-1 gap-16 shell:grid-cols-2">
+      <ul className="mt-24 grid grid-cols-1 gap-16 nav:grid-cols-2">
         <li>
           <Link
             href="/_dev/ui/jetons"

@@ -183,7 +183,7 @@ export function Demos() {
       </GalleryCard>
 
       <GalleryCard testId="a11y-contrast" title={t.contrast.title} intro={t.contrast.intro}>
-        <div className="grid grid-cols-1 gap-8 shell:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 nav:grid-cols-2">
           {ACCESSIBLE_TOKEN_PAIRS.map((pair) => {
             const ratio = contrastRatio(colors[pair.foreground], colors[pair.background]);
             return (
@@ -205,7 +205,7 @@ export function Demos() {
       </GalleryCard>
 
       <GalleryCard testId="a11y-states" title={t.states.title} intro={t.states.intro}>
-        <div className="grid grid-cols-1 gap-12 shell:grid-cols-2">
+        <div className="grid grid-cols-1 gap-12 nav:grid-cols-2">
           <SkeletonGroup
             className="rounded-18 border border-solid border-border bg-surface p-16"
             data-testid="a11y-state-loading"

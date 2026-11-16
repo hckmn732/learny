@@ -44,7 +44,7 @@ export const Select = ({
         aria-describedby={describedBy}
         aria-invalid={error ? true : undefined}
         className={cn(
-          'min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-12 text-15 text-ink',
+          'touch-target min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-12 text-15 text-ink max-sm:text-[16px]',
           error && 'border-orange-ink',
         )}
         id={selectId}

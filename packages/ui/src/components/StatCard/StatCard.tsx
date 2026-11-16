@@ -54,11 +54,7 @@ export type StatRowProps = ComponentPropsWithRef<'div'>;
 
 /** Aligns the statistics cards: 12 px gap, wrapping, one column under 480 px (EF-2, CL-5). */
 export const StatRow = forwardRef<HTMLDivElement, StatRowProps>(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex flex-wrap gap-12 max-[479px]:flex-col', className)}
-    {...props}
-  />
+  <div ref={ref} className={cn('flex flex-wrap gap-12 max-sm:flex-col', className)} {...props} />
 ));
 
 StatRow.displayName = 'StatRow';

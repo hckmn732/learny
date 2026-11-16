@@ -64,7 +64,7 @@ export function Spec005Gallery({ states }: Readonly<{ states: ReferenceState[] }
           </option>
         ))}
       </select>
-      <div className="mt-4 grid gap-6 md:grid-cols-2">
+      <div className="mt-4 grid gap-6 sm:grid-cols-2">
         <Figure kind="desktop" state={selected} entry={selected.desktop} />
         <Figure kind="mobile" state={selected} entry={selected.mobile} />
       </div>

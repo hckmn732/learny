@@ -175,7 +175,7 @@ export default function Spec208Demo() {
       <BaseTokenStyle />
       <BaseCard testId="spec-208-profiles" title={t.profiles.title}>
         <p className="mb-4 text-sm">{t.profiles.intro}</p>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3">
           {RATE_PROFILE_NAMES.map((profile) => (
             <ProfileCard key={profile} profile={profile} />
           ))}

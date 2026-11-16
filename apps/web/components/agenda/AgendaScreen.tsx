@@ -7,11 +7,18 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { AgendaDto, AgendaSlot } from '@learny/contracts';
 import { clock, type Clock } from '@learny/core';
-import { EmptyState, ErrorState, SkeletonCard, SkeletonGroup } from '@learny/ui';
+import {
+  BottomSheet,
+  EmptyState,
+  ErrorState,
+  SkeletonCard,
+  SkeletonGroup,
+  useBreakpoint,
+} from '@learny/ui';
 
 import { anchoredClock } from '../../lib/agenda/clock';
 import { longDayLabel } from '../../lib/agenda/dates';
@@ -99,6 +106,8 @@ export interface AgendaScreenProps {
    * the device clock (EF-9, EF-12; ADR-0047).
    */
   serverNow?: string;
+  /** True when the URL carried an explicit `vue` parameter; the mobile default never overrides it. */
+  explicitView?: boolean;
 }
 
 export function AgendaScreen({
@@ -107,6 +116,7 @@ export function AgendaScreen({
   initialError,
   requestId,
   serverNow,
+  explicitView = false,
 }: AgendaScreenProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -114,11 +124,25 @@ export function AgendaScreen({
   const [selection, setSelection] = useState<string | null>(initialState.creneau);
   const [moving, setMoving] = useState<string | null>(null);
   const [explanation, setExplanation] = useState<string | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const compact = useBreakpoint('sm');
+  const [mobileDefaultApplied, setMobileDefaultApplied] = useState(false);
   // Computed once per mount, on the server render and again at hydration: the browser clock
   // only adds the time elapsed since the page was served.
   const [appClock] = useState<Clock>(() =>
     serverNow === undefined ? clock : anchoredClock(serverNow, clock),
   );
+
+  useEffect(() => {
+    if (!compact || mobileDefaultApplied) return;
+    // Behaviour-only mobile default (SPEC-802 EF-5): the URL stays the source of truth.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMobileDefaultApplied(true);
+    if (explicitView || state.view !== 'semaine') return;
+    const next = { ...state, view: 'jour' as const };
+    setState(next);
+    router.replace(agendaUrl(next), { scroll: false });
+  }, [compact, explicitView, mobileDefaultApplied, router, state]);
 
   const window = agendaFetchWindow(state.view, state.date);
   // The server preload only seeds the initial query key: handing it to another key (formation,
@@ -147,6 +171,7 @@ export function AgendaScreen({
   const select = (slotId: string | null): void => {
     setSelection(slotId);
     setMoving(null);
+    if (slotId !== null) setDetailOpen(true);
     router.replace(agendaUrl({ ...state, creneau: slotId }), { scroll: false });
   };
 
@@ -294,8 +319,8 @@ export function AgendaScreen({
       </div>
       {/* Under the shell breakpoint the two columns stack: no wrap and stretched items, so each
           column takes the width of the screen instead of its max-content width (column wrap). */}
-      <div className="flex flex-wrap items-start gap-20 max-shell:flex-col max-shell:flex-nowrap max-shell:items-stretch">
-        <div className="flex min-w-0 flex-col gap-16" style={{ flex: '1 1 280px' }}>
+      <div className="flex flex-wrap items-start gap-20 max-nav:flex-col max-nav:flex-nowrap max-nav:items-stretch">
+        <div className="flex min-w-0 flex-col gap-16 max-sm:order-2" style={{ flex: '1 1 280px' }}>
           <MiniCalendar
             monthOf={state.date}
             today={today}
@@ -308,13 +333,15 @@ export function AgendaScreen({
               update({ date });
             }}
           />
-          <SlotDetail
-            slot={selectedSlot}
-            onMoveClick={(slotId) => {
-              setMoving(slotId);
-              setExplanation(null);
-            }}
-          />
+          <div className="max-sm:hidden">
+            <SlotDetail
+              slot={selectedSlot}
+              onMoveClick={(slotId) => {
+                setMoving(slotId);
+                setExplanation(null);
+              }}
+            />
+          </div>
           {explanation !== null && (
             <p
               role="status"
@@ -350,7 +377,7 @@ export function AgendaScreen({
         <section
           aria-label={calendarAriaLabel(state.view, range)}
           data-testid="agenda-calendar"
-          className="min-w-0 rounded-24 border border-solid border-border bg-surface px-8 pb-16"
+          className="min-w-0 rounded-24 border border-solid border-border bg-surface px-8 pb-16 max-sm:order-1"
           style={{ flex: '999 1 600px' }}
         >
           <div className="flex flex-wrap items-baseline gap-x-20 gap-y-8 px-16 pt-12 pb-8 text-13 text-ink-muted">
@@ -416,6 +443,23 @@ export function AgendaScreen({
           )}
         </section>
       </div>
+      {compact && selectedSlot !== null ? (
+        <BottomSheet
+          open={detailOpen}
+          onOpenChange={setDetailOpen}
+          title={t.detailTitle}
+          testId="agenda-detail-sheet"
+        >
+          <SlotDetail
+            slot={selectedSlot}
+            onMoveClick={(slotId) => {
+              setMoving(slotId);
+              setExplanation(null);
+              setDetailOpen(false);
+            }}
+          />
+        </BottomSheet>
+      ) : null}
     </main>
   );
 }

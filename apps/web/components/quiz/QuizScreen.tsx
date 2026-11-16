@@ -132,7 +132,7 @@ export function QuizScreen(props: QuizScreenProps) {
   };
 
   return (
-    <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[920px] flex-col gap-22" data-testid="quiz-page">
         <QuizHeader
           attemptNo={attempt?.attemptNo ?? 1}

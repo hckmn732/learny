@@ -151,7 +151,7 @@ export function RecallCardView(props: BrickViewProps<'recall_card'>) {
             </p>
             <div
               aria-labelledby={`${titleId}-grade`}
-              className="grid grid-cols-2 gap-8 min-[640px]:grid-cols-4"
+              className="grid grid-cols-2 gap-8 sm:grid-cols-4"
               role="group"
             >
               {GRADES.map((key) => {

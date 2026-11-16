@@ -7,7 +7,7 @@ const t = fr.exercises;
 /** Distinct error state of SCR-08: never colour alone, retry reachable by keyboard. */
 export default function ExerciseError({ reset }: { reset: () => void }) {
   return (
-    <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40">
       <section
         className="mx-auto mt-40 flex max-w-480 flex-col gap-12 rounded-24 border border-solid border-border bg-surface px-24 py-24 text-center"
         data-testid="exercise-error-boundary"

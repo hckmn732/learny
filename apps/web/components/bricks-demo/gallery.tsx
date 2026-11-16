@@ -140,7 +140,7 @@ export function BricksGallery({ filters }: Readonly<{ filters: GalleryFilters }>
             <Badge tone="neutral">{VARIANT_OF[type]}</Badge>
             <code className="text-12 text-ink-muted">{type}</code>
           </div>
-          <div className="grid grid-cols-1 gap-16 shell:grid-cols-2">
+          <div className="grid grid-cols-1 gap-16 nav:grid-cols-2">
             {states.map((state) => (
               <article
                 className={cn(

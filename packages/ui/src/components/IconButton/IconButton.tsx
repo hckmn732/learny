@@ -5,7 +5,7 @@ import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cn } from '../../cn';
 
 const iconButtonVariants = cva(
-  'relative inline-flex shrink-0 cursor-pointer items-center justify-center border border-solid transition-colors disabled:cursor-not-allowed disabled:opacity-55',
+  'touch-target relative inline-flex shrink-0 cursor-pointer items-center justify-center border border-solid transition-colors disabled:cursor-not-allowed disabled:opacity-55',
   {
     variants: {
       tone: {

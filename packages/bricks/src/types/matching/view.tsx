@@ -141,7 +141,7 @@ export function MatchingView(props: BrickViewProps<'matching'>) {
         variant={variant}
       />
       <p className="m-0 text-15 text-ink-muted">{t.matchingHelp}</p>
-      <div className="grid grid-cols-1 gap-12 min-[640px]:grid-cols-2 min-[640px]:gap-x-20">
+      <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-x-20">
         <div className="flex flex-col gap-10">
           {payload.lefts.map((left, index) => {
             const state = correctionMap?.get(left.id);

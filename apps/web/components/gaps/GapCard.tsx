@@ -62,7 +62,7 @@ export function GapCard({ item, timezone }: GapCardProps) {
       data-testid="gap-card"
       data-nature={item.nature}
       data-notion-id={item.notionId}
-      className="flex flex-wrap items-start gap-20 rounded-24 border border-solid border-border bg-surface p-22 shell:gap-28 shell:px-24"
+      className="flex flex-wrap items-start gap-20 rounded-24 border border-solid border-border bg-surface p-22 nav:gap-28 nav:px-24"
     >
       <div className="flex min-w-0 flex-[2_1_380px] flex-col gap-10">
         <div className="flex flex-wrap items-center gap-8">

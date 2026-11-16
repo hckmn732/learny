@@ -114,7 +114,7 @@ export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        'flex min-h-42 cursor-pointer select-none items-center gap-10 rounded-10 px-10 text-14 font-600 outline-none',
+        'touch-target flex min-h-42 cursor-pointer select-none items-center gap-10 rounded-10 px-10 text-14 font-600 outline-none',
         destructive ? 'text-danger' : 'text-ink',
         'hover:bg-canvas focus:bg-canvas data-[highlighted]:bg-canvas',
         className,

@@ -128,7 +128,7 @@ function AnswerZone({
     return (
       <div
         aria-labelledby="t-question"
-        className="grid grid-cols-1 gap-12 min-[640px]:grid-cols-2"
+        className="grid grid-cols-1 gap-12 sm:grid-cols-2"
         role={multiple ? 'group' : 'radiogroup'}
       >
         {data.options.map((option, index) => {

@@ -9,6 +9,7 @@
   --font-weight-*: initial;
   --leading-*: initial;
   --tracking-*: initial;
+  --breakpoint-*: initial;
 
   /* Interface colours (EF-2). */
   --color-canvas: #F4F4F1;
@@ -176,8 +177,14 @@
   --font-display: var(--font-space-grotesk), sans-serif;
   --font-mono: ui-monospace, monospace;
 
-  /* Layout (EF-8): the shell breakpoint is a media query, therefore in CSS pixels. */
-  --breakpoint-shell: 900px;
+  /* Breakpoints (SPEC-802 ET-1, ADR-0201): rem of 16 px, no default value remains. */
+  --breakpoint-sm: 48rem;
+  --breakpoint-nav: 56.25rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 90rem;
+
+  /* Layout (EF-8): the nav breakpoint is a media query, therefore in CSS pixels. */
   --container-sidebar: 15.5rem;
   --container-content: 72.5rem;
   --container-popover: 25rem;

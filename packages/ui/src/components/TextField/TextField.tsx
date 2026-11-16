@@ -18,9 +18,9 @@ export type TextFieldProps = Omit<ComponentPropsWithRef<'input'>, 'size'> & {
 };
 
 const FORM_CLASS =
-  'min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-14 text-15 text-ink placeholder:text-ink-muted';
+  'touch-target min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-14 text-15 text-ink placeholder:text-ink-muted max-sm:text-[16px]';
 const SEARCH_CLASS =
-  'min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 text-14 text-ink placeholder:text-ink-muted';
+  'touch-target min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 text-14 text-ink placeholder:text-ink-muted max-sm:text-[16px]';
 
 export const TextField = ({
   className,

@@ -32,7 +32,7 @@ export default async function ExercisePage({ params }: ExercisePageProps) {
       sidebarError={!shell.sidebar.ok}
     >
       <main
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+        className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
         style={{ overflowX: 'hidden' }}
       >
         {exercise.ok ? (

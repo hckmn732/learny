@@ -39,7 +39,7 @@ export default function SaisieGalleryPage() {
         testId="ui-saisie-textfields"
         title={t.textFields.title}
       >
-        <div className="grid grid-cols-1 gap-16 shell:grid-cols-2">
+        <div className="grid grid-cols-1 gap-16 nav:grid-cols-2">
           <TextField
             data-testid="ui-textfield-form"
             hint={t.textFields.formHint}

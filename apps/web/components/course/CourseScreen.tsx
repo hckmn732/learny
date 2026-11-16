@@ -126,7 +126,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
 
   return (
     <main
-      className={`mx-auto w-full px-16 pb-40 shell:px-40 ${chatOpen ? 'min-[1200px]:pr-[500px]' : ''}`}
+      className={`mx-auto w-full px-16 pb-40 nav:px-40 ${chatOpen ? 'xl:pr-[500px]' : ''}`}
       data-chat-open={chatOpen ? 'true' : undefined}
       data-testid="course-page"
     >
@@ -199,7 +199,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
             <CourseToc chapters={screen.chapters} screen={screen} sections={course.sections} />
 
             <article
-              className="flex min-w-0 flex-1 basis-560 flex-col gap-20 rounded-28 border border-border bg-surface p-28 shell:p-40"
+              className="flex min-w-0 flex-1 basis-560 flex-col gap-20 rounded-28 border border-border bg-surface p-28 nav:p-40"
               data-cours="true"
               data-testid="course-article"
             >
@@ -216,7 +216,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
                   </span>
                 </div>
                 <h1
-                  className="m-0 font-display text-34 font-600 tracking-title shell:text-40"
+                  className="m-0 font-display text-34 font-600 tracking-title nav:text-40"
                   data-testid="course-title"
                 >
                   {course.chapter.title}

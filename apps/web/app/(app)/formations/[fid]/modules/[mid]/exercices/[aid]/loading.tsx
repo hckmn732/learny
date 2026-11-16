@@ -7,7 +7,7 @@ export default function ExerciseLoading() {
   return (
     <main
       aria-busy="true"
-      className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+      className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       data-testid="exercise-loading"
       role="status"
     >

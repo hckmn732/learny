@@ -139,7 +139,7 @@ export function ProgrammeModuleCard({
       </div>
       {expanded ? (
         <div className="flex flex-col gap-12 px-16 pb-18 pl-[70px]">
-          <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-2">
+          <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 sm:grid-cols-2">
             {chapters.map((chapter) => (
               <li
                 className="flex items-center gap-10 rounded-14 bg-surface-subtle px-14 py-12 text-14 font-500"

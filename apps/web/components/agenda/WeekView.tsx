@@ -48,7 +48,7 @@ export function WeekView({
           className="grid border-b border-solid border-b-border"
           style={{ gridTemplateColumns: `64px repeat(${String(days.length)}, minmax(0, 1fr))` }}
         >
-          <div />
+          <div className="sticky left-0 z-10 bg-surface" />
           {days.map((day) => (
             <button
               key={day.date}
@@ -82,7 +82,7 @@ export function WeekView({
           className="grid pt-8"
           style={{ gridTemplateColumns: `64px repeat(${String(days.length)}, minmax(0, 1fr))` }}
         >
-          <div className="relative" style={{ height: gridHeight }}>
+          <div className="relative sticky left-0 z-10 bg-surface" style={{ height: gridHeight }}>
             {grid.labels.map((label, index) => (
               <span
                 key={label}
