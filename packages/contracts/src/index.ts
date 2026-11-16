@@ -56,6 +56,7 @@ export * from './parametres-automatismes';
 export * from './automatisme-7-quiz-global-plafonne-et-lisse';
 export * from './automatisme-9-bilan-de-la-semaine';
 export * from './automatisme-8-sprint-avant-un-jalon';
+export * from './automatisme-10-mode-pause-et-retour';
 export * from './billing';
 export * from './abonnement-a-l-ia-fournie-interface-et-plafond';
 export * from './bricks';

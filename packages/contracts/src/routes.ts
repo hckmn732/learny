@@ -4,6 +4,7 @@ import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
 import { authRoutes } from './auth';
+import { pauseRoutes } from './automatisme-10-mode-pause-et-retour';
 import { weeklyReviewRoutes } from './automatisme-9-bilan-de-la-semaine';
 import { billingRoutes } from './billing';
 import { brickRoutes } from './bricks';
@@ -98,6 +99,7 @@ export const ROUTES = {
   ...remediationRoutes,
   ...automationRoutes,
   ...weeklyReviewRoutes,
+  ...pauseRoutes,
   ...warmupRoutes,
   ...reviewRoutes,
 } as const;

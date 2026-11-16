@@ -50,6 +50,7 @@ export {
   questionsCartesAutomation,
 } from './definitions/questions-cartes';
 export { explainRemediation, remediationAutomation } from './definitions/remediation';
+export { explainPause, pauseAutomation } from './definitions/pause';
 export {
   explainMicroSeance,
   microCardSummary,
@@ -69,6 +70,7 @@ import { weeklyReviewAutomation } from './automatisme-9-bilan-de-la-semaine';
 import { echauffementAutomation } from './definitions/echauffement';
 import { jeuLacuneAutomation } from './definitions/jeu-lacune';
 import { microSeanceAutomation } from './definitions/micro-seance';
+import { pauseAutomation } from './definitions/pause';
 import { questionsCartesAutomation } from './definitions/questions-cartes';
 import { remediationAutomation } from './definitions/remediation';
 import { repriseAutomation } from './definitions/reprise';
@@ -102,4 +104,7 @@ if (automationRegistry.get('bilan') === undefined) {
 }
 if (automationRegistry.get('sprint') === undefined) {
   automationRegistry.register(sprintAutomation);
+}
+if (automationRegistry.get('pause') === undefined) {
+  automationRegistry.register(pauseAutomation);
 }

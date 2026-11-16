@@ -5121,6 +5121,16 @@ export const fr = {
       diagnose: 'Diagnostic au retour',
       startPause: 'Mettre en pause',
       pauseScheduled: (date: string) => `Pause programmée jusqu’au ${date}.`,
+      pauseActive: (date: string) => `En pause jusqu’au ${date}.`,
+      pauseDiagnosticPlanned:
+        'Au retour : diagnostic de 10 min sur les notions à risque, puis nouveau planning.',
+      pauseWithoutDiagnostic: 'Au retour : nouveau planning.',
+      resumeNow: 'Reprendre maintenant',
+      pauseResumed: 'Pause terminée : le planning reprend.',
+      pauseDiagnosticProposed: (minutes: number) =>
+        `Pause terminée : un diagnostic de ${String(minutes)} minutes sur les notions à risque est proposé une seule fois avant la replanification.`,
+      pauseDiagnosticDone: (answered: number, count: number) =>
+        `Diagnostic terminé : ${String(answered)} réponse${answered === 1 ? '' : 's'} sur ${String(count)} notion${count === 1 ? '' : 's'}. Le planning est replanifié.`,
       guardrails: {
         title: 'Garde-fous',
         maxPerDay: 'Notifications par jour, au maximum',

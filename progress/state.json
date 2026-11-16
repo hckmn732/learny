@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T17:48:57.099Z",
+  "updatedAt": "2026-11-16T17:55:33.565Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5644,14 +5644,50 @@
       }
     },
     "SPEC-721": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-16T16:22:52.843Z",
+      "completedAt": "2026-11-16T17:52:06.107Z",
+      "branch": "spec/SPEC-721-automatisme-10-mode-pause-et-retour",
+      "commit": "ac1f0ffa",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-16T17:51:46.664Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-16T17:51:52.074Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-16T17:40:11.573Z",
+          "details": "3 test(s) [SPEC-721] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-16T17:40:29.240Z",
+          "details": "4 test(s) [SPEC-721] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-16T17:42:13.924Z",
+          "details": "2 réussi(s), 0 échec(s), 5 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-16T17:42:13.925Z",
+          "details": "1 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-16T17:51:53.613Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-722": {
       "status": "done",
