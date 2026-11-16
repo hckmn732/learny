@@ -21,12 +21,32 @@ export type SettingsTab = z.infer<typeof SettingsTab>;
 /** BR-SET-01 — Profil is the default tab. */
 export const SETTINGS_DEFAULT_TAB: SettingsTab = 'profil';
 
+/**
+ * Former spellings of the « Modèles d’IA » hash (SPEC-210 EF-2 `#ia`, slugs of the tab label).
+ * They open the tab and the URL is normalised to the canonical `#modeles` of BR-SET-01.
+ */
+const SETTINGS_TAB_ALIASES: ReadonlyMap<string, SettingsTab> = new Map([
+  ['ia', 'modeles'],
+  ['modeles-ia', 'modeles'],
+  ['modeles-d-ia', 'modeles'],
+]);
+
 /** CL-3 — an unknown or missing hash opens Profil and normalises the URL. */
 export function settingsTabFromHash(hash: string | null | undefined): SettingsTab {
-  const raw = (hash ?? '').replace(/^#/, '').toLowerCase();
-  return (SETTINGS_TAB_IDS as readonly string[]).includes(raw)
-    ? (raw as SettingsTab)
-    : SETTINGS_DEFAULT_TAB;
+  let raw = (hash ?? '').replace(/^#/, '');
+  try {
+    raw = decodeURIComponent(raw);
+  } catch {
+    // A malformed escape is an unknown hash.
+  }
+  raw = raw
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\s’']+/g, '-');
+  if ((SETTINGS_TAB_IDS as readonly string[]).includes(raw)) return raw as SettingsTab;
+  return SETTINGS_TAB_ALIASES.get(raw) ?? SETTINGS_DEFAULT_TAB;
 }
 
 /**

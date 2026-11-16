@@ -22,6 +22,31 @@ describe('[SPEC-707] contrats des paramètres', () => {
     expect(settingsTabFromHash('#NOTIFICATIONS')).toBe('notifications');
   });
 
+  it('CA-1 — chaque onglet s’ouvre depuis son hash, avec ou sans « # » (QA SCR-15)', () => {
+    for (const id of ['profil', 'notifications', 'automatismes', 'modeles'] as const) {
+      expect(settingsTabFromHash(`#${id}`)).toBe(id);
+      expect(settingsTabFromHash(id)).toBe(id);
+      expect(settingsTabFromHash(` #${id.toUpperCase()} `.trim())).toBe(id);
+    }
+  });
+
+  it('CA-1 — les anciennes graphies de « Modèles d’IA » ouvrent l’onglet Modèles', () => {
+    for (const hash of [
+      '#ia',
+      '#modeles-ia',
+      '#modeles-d-ia',
+      '#mod%C3%A8les',
+      '#modèles',
+      '#Modèles d’IA',
+      '#mod%C3%A8les-d%E2%80%99ia',
+    ]) {
+      expect(settingsTabFromHash(hash), hash).toBe('modeles');
+    }
+    // Une clé héritée d'Object ou un échappement invalide restent des hashes inconnus.
+    expect(settingsTabFromHash('#constructor')).toBe('profil');
+    expect(settingsTabFromHash('#%E0%A4%A')).toBe('profil');
+  });
+
   it('CA-2 — StudyRhythm garde les bornes de BR-ACC-08', () => {
     const base = { studyDays: [1, 2, 3, 4, 5], preferredSlots: ['matin', 'apres_midi'] };
     expect(StudyRhythm.safeParse({ hoursPerDay: 1, ...base }).success).toBe(true);
