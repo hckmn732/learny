@@ -43,6 +43,7 @@ import { fr } from '../../messages/fr';
 import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';
 import { WarmupPanel } from './WarmupCard';
+import { WeeklyReviewPanel } from './WeeklyReviewCard';
 
 const t = fr.home;
 
@@ -674,7 +675,9 @@ export function HomeView({
           <HomeSlot name="agent-feed">
             <TutorActivityPanel />
           </HomeSlot>
-          <HomeSlot name="weekly" />
+          <HomeSlot name="weekly">
+            <WeeklyReviewPanel />
+          </HomeSlot>
         </div>
       </div>
 
