@@ -240,6 +240,36 @@ test('vue Jour sur la grille horaire @SPEC-704', async ({ page }) => {
   expect(lineBox?.y ?? 0).toBeLessThan(quizBox?.y ?? 0);
 });
 
+test('agenda sans débordement horizontal à 390 px @SPEC-704', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const view of ['semaine', 'jour', 'mois']) {
+    await page.goto(`/agenda?vue=${view}&date=2026-11-11&formation=all`);
+    await expect(page.getByTestId('agenda-calendar')).toBeVisible();
+    const widths = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      client: document.documentElement.clientWidth,
+    }));
+    expect(widths.scroll, `défilement horizontal de la page en vue ${view}`).toBeLessThanOrEqual(
+      widths.client,
+    );
+    // La colonne de gauche tient dans l'écran : le mini-calendrier montre ses sept jours et le
+    // panneau « Activité sélectionnée » ne dépasse pas.
+    for (const testId of [
+      'agenda-minical',
+      'agenda-minical-day-2026-11-15',
+      'agenda-detail',
+      'agenda-legend',
+      'agenda-calendar',
+    ]) {
+      const box = await page.getByTestId(testId).boundingBox();
+      expect(box, testId).not.toBeNull();
+      expect((box?.x ?? 0) + (box?.width ?? 0), `${testId} en vue ${view}`).toBeLessThanOrEqual(
+        widths.client,
+      );
+    }
+  }
+});
+
 test('conformité SCR-12 @SPEC-704 @visual', async ({ page, axeCheck }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1600, height: 1133 });

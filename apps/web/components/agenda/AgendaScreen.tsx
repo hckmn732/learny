@@ -292,7 +292,9 @@ export function AgendaScreen({
           }}
         />
       </div>
-      <div className="flex flex-wrap items-start gap-20 max-shell:flex-col">
+      {/* Under the shell breakpoint the two columns stack: no wrap and stretched items, so each
+          column takes the width of the screen instead of its max-content width (column wrap). */}
+      <div className="flex flex-wrap items-start gap-20 max-shell:flex-col max-shell:flex-nowrap max-shell:items-stretch">
         <div className="flex min-w-0 flex-col gap-16" style={{ flex: '1 1 280px' }}>
           <MiniCalendar
             monthOf={state.date}
@@ -390,6 +392,7 @@ export function AgendaScreen({
               slots={displayed}
               today={today}
               timezone={dto.timezone}
+              clock={appClock}
               selectedId={selectedSlot?.id ?? null}
               onArrow={(direction) => {
                 moveSelection(direction);
