@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="60.21620899999999">
+<testsuite name="p7/spec-725.spec.ts" timestamp="2026-11-16T02:11:38.517Z" hostname="desktop" tests="2" failures="0" skipped="0" time="14.385" errors="0">
+<testcase name="parcours SPEC-725 @SPEC-725" classname="p7/spec-725.spec.ts" time="8.386">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-725-parcours-SPEC-725-SPEC-725-desktop/attachments/axe-3399af1a154de991accc8170ac733449cac0beca.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-parcours-SPEC-725-SPEC-725-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-parcours-SPEC-725-SPEC-725-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-parcours-SPEC-725-SPEC-725-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-parcours-SPEC-725-SPEC-725-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité SPEC-725 @SPEC-725 @visual" classname="p7/spec-725.spec.ts" time="5.999">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/attachments/axe-905c3cbf5a377002b45e64f4554bbab9673c9164.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/attachments/axe-e647a64c2d126fc93666408ccd7cedbadff17244.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-725-conformité-SPEC-725-SPEC-725-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
