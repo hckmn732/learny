@@ -1,0 +1,6 @@
+# SPEC-718 — critères d'acceptation
+
+- ✅ CA-1 — Défaut 15 min / 90 % et six choix autorisés. Preuves : `packages/services/src/spec-718.test.ts` « [SPEC-718] CA-1 — 15 min et 90 % par défaut… » ; options réelles vérifiées par `apps/web/e2e/specs/p7/spec-718.spec.ts` sur `/parametres#automatismes` (10/15/20/30 min et 85/90/95 %).
+- ✅ CA-2 — Lacunes en tête, report sans review log, annulation unique. Preuves : tests unitaires « CA-2 — les lacunes restent en tête… » et « Annuler le lissage réintroduit… » ; intégration `packages/services/test/integration/spec-718.test.ts` (action `quiz_smoothed`, `review_logs` inchangés, réouverture sans doublon) ; e2e `parcours SPEC-718 @SPEC-718` (bouton `review-smoothing-undo`, action `undone`, rechargement stable).
+- ✅ CA-3 — 400/404 RLS/409 et idempotence. Preuves : intégration « CA-3 — 400, 404 RLS et 409 sur un état obsolète, sans écriture » et « CA-2 — … deux requêtes identiques » (une seule action, un seul événement `automation/action-applied`).
+- ✅ CA-4 — Jetons, structure, axe et captures desktop/mobile. Preuves : e2e `conformité SPEC-718 @SPEC-718 @visual` (`expectTokens`, `review-cap`, `review-deferred`, `review-smoothing-undo`, `expectScreenshotBaseline`, `axeCheck`), captures et vidéo collectées dans `evidence/SPEC-718/`.
