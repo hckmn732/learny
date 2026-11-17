@@ -270,7 +270,7 @@ export function TutorProposalBanner({
           </Button>
         </div>
       ) : (
-        <div className="flex w-full flex-col gap-8 sm:w-auto sm:flex-row">
+        <div className="flex w-full flex-wrap gap-8 sm:w-auto">
           <Button
             data-testid="tutor-proposal-accept"
             className="min-h-[42px]"

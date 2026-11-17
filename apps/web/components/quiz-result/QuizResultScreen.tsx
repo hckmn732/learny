@@ -92,7 +92,7 @@ export function QuizResultScreen({
             </span>
             <a
               aria-label={t.quit}
-              className="inline-flex size-44 items-center justify-center rounded-12 border border-border bg-surface text-ink"
+              className="touch-target inline-flex size-44 items-center justify-center rounded-12 border border-border bg-surface text-ink"
               data-testid="quiz-quit"
               href={moduleHref}
             >

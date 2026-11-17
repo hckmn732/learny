@@ -734,7 +734,9 @@ export function HomeView({
       >
         <div className="flex flex-col gap-4">
           <p className="m-0 text-14 text-ink-muted">{data.today.label}</p>
-          <h1 className="m-0 font-display text-34 font-600 tracking-title">{t.header.title}</h1>
+          <h1 className="m-0 font-display text-34 font-600 tracking-title max-sm:leading-[normal]">
+            {t.header.title}
+          </h1>
         </div>
         <Button asChild variant="lime" size="md">
           <NextLink prefetch={false} href="/formations/nouvelle">

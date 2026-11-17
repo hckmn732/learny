@@ -646,7 +646,7 @@ export function AutomationSettingsTab({
                 )}
               </span>
             </span>
-            <a className="text-14 font-600" href="#notifications">
+            <a className="touch-target text-14 font-600" href="#notifications">
               {t.guardrails.edit}
             </a>
           </div>
