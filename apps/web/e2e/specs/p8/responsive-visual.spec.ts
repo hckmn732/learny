@@ -130,15 +130,16 @@ test('comparaison aux références menu masqué 390×844 @SPEC-802 @visual', asy
       path.join(EVIDENCE, `${screen.id}-mobile-side-by-side.png`),
     );
     fs.copyFileSync(comparison.diffPath, path.join(EVIDENCE, `${screen.id}-mobile-diff.png`));
-    expect(comparison.ratio, `écart maquette ${screen.id}`).toBeLessThanOrEqual(
-      MOCKUP_MAX_DIFF_RATIO,
-    );
   }
 
   fs.writeFileSync(
     path.join(EVIDENCE, 'ratios.json'),
     `${JSON.stringify({ generatedAt: '2026-11-11T12:20:00Z', ratios }, null, 2)}\n`,
   );
+  // Every screen is measured before asserting, so one run records the four rates (CA-6).
+  for (const { screen, ratio } of ratios) {
+    expect.soft(ratio, `écart maquette ${screen}`).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+  }
 });
 
 test('lignes de base 360, 390 et 768 @SPEC-802 @visual', async ({ page }) => {

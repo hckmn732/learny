@@ -41,6 +41,25 @@ const SETUP_TIMEOUT = 10_000;
 const SAP = demoFormationId('sap');
 const AGILE = demoFormationId('agile');
 
+/**
+ * Clicks a trigger until its panel is visible: a click that lands while the header swaps its
+ * desktop trigger for the mobile one (behaviour hook after hydration) is otherwise lost.
+ */
+async function openWith(page: Page, trigger: string, panel: string): Promise<void> {
+  const target = page.getByTestId(panel).first();
+  const deadline = SETUP_TIMEOUT;
+  const started = performance.now();
+  for (;;) {
+    await page.getByTestId(trigger).click({ timeout: SETUP_TIMEOUT });
+    try {
+      await target.waitFor({ state: 'visible', timeout: 2_000 });
+      return;
+    } catch (error) {
+      if (performance.now() - started > deadline) throw error;
+    }
+  }
+}
+
 async function openMenu(page: Page): Promise<void> {
   // From 900 px the menu is a permanent column (SPEC-304): nothing to open.
   if ((page.viewportSize()?.width ?? 0) >= 900) return;
@@ -49,20 +68,15 @@ async function openMenu(page: Page): Promise<void> {
 }
 
 async function openNotifications(page: Page): Promise<void> {
-  await page.getByTestId('header-notifications').click({ timeout: SETUP_TIMEOUT });
-  await page
-    .getByTestId('notification-panel')
-    .waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
+  await openWith(page, 'header-notifications', 'notification-panel');
 }
 
 async function openAccount(page: Page): Promise<void> {
-  await page.getByTestId('header-account-trigger').click({ timeout: SETUP_TIMEOUT });
-  await page.getByTestId('account-menu').waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
+  await openWith(page, 'header-account-trigger', 'account-menu');
 }
 
 async function openTutor(page: Page): Promise<void> {
-  await page.getByTestId('tutor-open').click({ timeout: SETUP_TIMEOUT });
-  await page.getByTestId('tutor-panel').waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
+  await openWith(page, 'tutor-open', 'tutor-panel');
 }
 
 async function openGraphDetail(page: Page): Promise<void> {
