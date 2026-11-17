@@ -9,7 +9,22 @@ import path from 'node:path';
 
 import { legalConfigFromEnv, type LegalConfig } from '@learny/config';
 
-import { findRepoRoot } from '../sdd-status';
+/**
+ * Directory holding the legal templates: `docs/legal` searched from the working directory
+ * upwards. It works in the repository, in the Docker build (`/repo/apps/web`) and in the
+ * standalone image (`/app`), where `outputFileTracingIncludes` copies the templates; the image
+ * has no `specs/` folder, so the SDD root lookup cannot be used here.
+ */
+function findLegalDir(start = process.cwd()): string | null {
+  let dir = path.resolve(start);
+  for (;;) {
+    const candidate = path.join(dir, 'docs', 'legal');
+    if (fs.existsSync(path.join(candidate, 'cgu.md'))) return candidate;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
 
 export const LEGAL_PAGE_KEYS = ['cgu', 'confidentialite', 'mentions'] as const;
 export type LegalPageKey = (typeof LEGAL_PAGE_KEYS)[number];
@@ -142,9 +157,9 @@ const CACHE = new Map<LegalPageKey, string>();
 function readTemplate(key: LegalPageKey, root?: string): string {
   const cached = CACHE.get(key);
   if (root === undefined && cached !== undefined) return cached;
-  const repo = root ?? findRepoRoot();
-  if (repo === null) throw new Error('Racine du dépôt introuvable pour les documents légaux.');
-  const file = path.join(repo, 'docs', 'legal', LEGAL_DOCUMENT_FILES[key]);
+  const dir = root === undefined ? findLegalDir() : path.join(root, 'docs', 'legal');
+  if (dir === null) throw new Error('Documents légaux introuvables (docs/legal).');
+  const file = path.join(dir, LEGAL_DOCUMENT_FILES[key]);
   const template = fs.readFileSync(file, 'utf8');
   if (root === undefined) CACHE.set(key, template);
   return template;

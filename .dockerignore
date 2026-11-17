@@ -22,6 +22,7 @@ evidence
 progress
 design
 docs
+!docs/legal
 specs
 supabase
 .env
