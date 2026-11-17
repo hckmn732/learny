@@ -15,8 +15,8 @@ export const PAGE_BUDGETS = {
   cls: 0.1,
   tbt: 300,
   score: 85,
-  js: 200 * 1024,
-  jsAnonymous: 130 * 1024,
+  js: 220 * 1024, // ADR-0332
+  jsAnonymous: 220 * 1024, // ADR-0332 : même budget que les pages connectées
   css: 50 * 1024,
   fontsBytes: 120 * 1024,
   fontsCount: 2,

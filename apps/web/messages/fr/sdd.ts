@@ -2564,7 +2564,7 @@ export const sdd = {
       cls: ['CLS', '< 0,1'],
       tbt: ['TBT', '< 300 ms'],
       score: ['Score Lighthouse', '≥ 0,85'],
-      js: ['JavaScript', '≤ 200 Ko (connexion : 130 Ko)'],
+      js: ['JavaScript', '≤ 220 Ko (ADR-0332)'],
       css: ['CSS', '≤ 50 Ko'],
       fonts: ['Polices', '≤ 2 fichiers, ≤ 120 Ko'],
       images: ['Images', '≤ 300 Ko'],
