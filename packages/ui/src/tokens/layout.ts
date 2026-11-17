@@ -1,4 +1,5 @@
 // Layout and control metrics (SPEC-301, EF-8 and EF-9).
+import { breakpoints } from './breakpoints';
 import { colors } from './colors';
 
 /** Control heights in mockup pixels, in published order. */
@@ -16,7 +17,8 @@ export const layout = {
   headerPadYPx: 12,
   popoverWidthPx: 400,
   menuWidthPx: 260,
-  shellBreakpointPx: 900,
+  /** Kept for the existing consumers; the value comes from the single breakpoint table. */
+  shellBreakpointPx: breakpoints.nav,
 } as const;
 
 export type LayoutToken = keyof typeof layout;

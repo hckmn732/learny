@@ -62,7 +62,7 @@ export function GapCard({ item, timezone }: GapCardProps) {
       data-testid="gap-card"
       data-nature={item.nature}
       data-notion-id={item.notionId}
-      className="flex flex-wrap items-start gap-20 rounded-24 border border-solid border-border bg-surface p-22 shell:gap-28 shell:px-24"
+      className="flex flex-wrap items-start gap-20 rounded-24 border border-solid border-border bg-surface p-22 nav:gap-28 nav:px-24"
     >
       <div className="flex min-w-0 flex-[2_1_380px] flex-col gap-10">
         <div className="flex flex-wrap items-center gap-8">
@@ -104,7 +104,7 @@ export function GapCard({ item, timezone }: GapCardProps) {
             href={item.training.href}
             prefetch={false}
             aria-label={`${t.train} : ${item.notionLabel}`}
-            className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline transition-colors hover:bg-dark-700"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline transition-colors hover:bg-dark-700"
           >
             {t.train}
           </NextLink>
@@ -123,7 +123,7 @@ export function GapCard({ item, timezone }: GapCardProps) {
               href={item.course.href}
               prefetch={false}
               aria-label={`${t.course} : ${item.notionLabel}`}
-              className="inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink no-underline transition-colors hover:border-ink"
+              className="touch-target inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink no-underline transition-colors hover:border-ink"
             >
               {t.course}
             </NextLink>

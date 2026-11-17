@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode, type RefObject } from 'react';
 
 import type { HeaderDto } from '@learny/contracts';
-import { AlertDialog, IconButton, iconRegistry } from '@learny/ui';
+import { AlertDialog, IconButton, ResponsivePanel, iconRegistry, useBreakpoint } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { purgeOfflineDatabase, purgeRuntimeCaches } from '../../lib/offline/db';
@@ -55,13 +55,15 @@ export const HeaderView = ({
   notificationPanel,
 }: HeaderViewProps) => {
   const [accountOpen, setAccountOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const compact = useBreakpoint('sm');
   const unread = data?.unreadNotificationCount ?? 0;
   const notificationsLabel = t.notificationsLabel(unread);
 
   return (
     <header
       data-testid="shell-header"
-      className="sticky top-0 z-header mb-24 flex flex-wrap items-center gap-12 border-b border-solid border-border bg-header-glass px-16 py-12 backdrop-blur-[10px] shell:px-40"
+      className="sticky top-0 z-header mb-24 flex flex-wrap items-center gap-12 border-b border-solid border-border bg-header-glass px-16 py-12 backdrop-blur-[10px] nav:px-40"
     >
       <IconButton
         ref={showTriggerRef}
@@ -72,14 +74,46 @@ export const HeaderView = ({
         aria-expanded={false}
         data-testid="sidebar-show"
         onClick={onShowSidebar}
-        className={sidebarCollapsed ? undefined : 'shell:hidden'}
+        className={sidebarCollapsed ? undefined : 'nav:hidden'}
       />
 
-      <GlobalSearch
-        label={t.searchLabel}
-        placeholder={t.searchPlaceholder}
-        onNavigate={onNavigate}
-      />
+      {compact ? (
+        <>
+          <IconButton
+            tone="light"
+            size="md"
+            label={t.searchLabel}
+            icon={iconRegistry.search}
+            data-testid="header-search-toggle"
+            onClick={() => {
+              setSearchOpen(true);
+            }}
+          />
+          <ResponsivePanel
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+            title={t.searchLabel}
+            testId="header-search-panel"
+          >
+            <div className="p-16">
+              <GlobalSearch
+                label={t.searchLabel}
+                placeholder={t.searchPlaceholder}
+                onNavigate={(href) => {
+                  setSearchOpen(false);
+                  onNavigate(href);
+                }}
+              />
+            </div>
+          </ResponsivePanel>
+        </>
+      ) : (
+        <GlobalSearch
+          label={t.searchLabel}
+          placeholder={t.searchPlaceholder}
+          onNavigate={onNavigate}
+        />
+      )}
 
       <div className="ml-auto flex items-center gap-8">
         <OfflineIndicator />

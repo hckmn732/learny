@@ -10,6 +10,8 @@ export interface Scenario {
   screenId: string;
   state: string;
   source: string;
+  /** Viewports captured for this scenario (SPEC-802 ET-5); every viewport when absent. */
+  viewports?: string[];
   setup: (page: Page) => Promise<void>;
   expect: (page: Page) => Promise<unknown>;
 }

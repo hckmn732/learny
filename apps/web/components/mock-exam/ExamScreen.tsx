@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import type { ExamAttemptDto, ExamQuestionDto, ExamResultDto } from '@learny/contracts';
+import { BottomSheet, useBreakpoint } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
@@ -68,6 +69,8 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
       ),
   );
   const [confirming, setConfirming] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const compact = useBreakpoint('sm');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -202,7 +205,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
 
   return (
     <div className="min-h-screen bg-canvas" data-testid="exam-screen">
-      <header className="sticky top-0 z-20 flex flex-wrap items-center gap-x-20 gap-y-12 bg-ink px-40 py-12 text-white">
+      <header className="sticky top-0 z-20 flex flex-wrap items-center gap-x-20 gap-y-12 bg-ink px-16 py-12 text-white nav:px-40">
         <span className="flex items-center gap-10 font-display text-17 font-600">
           <span
             aria-hidden="true"
@@ -219,7 +222,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
         <span className="ml-auto flex items-center gap-12">
           <ExamTimer remainingMs={remainingMs} warning={remainingMs > 0 && remainingMs < 300_000} />
           <button
-            className="min-h-40 rounded-12 bg-surface px-16 text-14 font-700 text-ink"
+            className="touch-target min-h-40 rounded-12 bg-surface px-16 text-14 font-700 text-ink"
             data-testid="exam-submit"
             onClick={() => {
               setConfirming(true);
@@ -231,7 +234,19 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
         </span>
       </header>
 
-      <main className="mx-auto w-full max-w-[1160px] px-16 py-24 shell:px-40">
+      <main className="mx-auto w-full max-w-[1160px] px-16 py-24 nav:px-40">
+        {compact ? (
+          <button
+            className="touch-target mb-12 min-h-44 rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+            data-testid="exam-palette-open"
+            onClick={() => {
+              setPaletteOpen(true);
+            }}
+            type="button"
+          >
+            {t.paletteLabel}
+          </button>
+        ) : null}
         <div className="flex flex-wrap items-start gap-20" data-testid="exam-paper">
           <section
             aria-labelledby="t-exam-question"
@@ -257,7 +272,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
             <ExamQuestion onChange={change} question={question} value={value} />
             <div className="flex flex-wrap justify-between gap-10 border-t border-divider pt-8">
               <button
-                className="min-h-44 rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink disabled:opacity-40"
+                className="touch-target min-h-44 rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink disabled:opacity-40"
                 disabled={current === 0}
                 onClick={() => {
                   go(current);
@@ -269,7 +284,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
               <div className="flex flex-wrap gap-10">
                 <button
                   aria-pressed={isMarked}
-                  className="min-h-44 rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                  className="touch-target min-h-44 rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                   data-testid="exam-mark"
                   onClick={toggleMark}
                   type="button"
@@ -277,7 +292,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
                   {isMarked ? t.unmark : t.mark}
                 </button>
                 <button
-                  className="min-h-44 rounded-12 bg-ink px-18 text-14 font-700 text-white"
+                  className="touch-target min-h-44 rounded-12 bg-ink px-18 text-14 font-700 text-white"
                   data-testid="exam-next"
                   onClick={() => {
                     if (current === attempt.questions.length - 1) {
@@ -294,7 +309,7 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
             </div>
           </section>
 
-          <aside className="flex flex-1 basis-260 flex-col gap-16">
+          <aside className="flex flex-1 basis-260 flex-col gap-16 max-sm:hidden">
             <QuestionPalette
               answered={answeredPositions}
               current={current + 1}
@@ -314,6 +329,26 @@ export function ExamScreen({ initialAttempt, programmeHref }: ExamScreenProps) {
           {error}
         </p>
       )}
+
+      {compact ? (
+        <BottomSheet
+          open={paletteOpen}
+          onOpenChange={setPaletteOpen}
+          title={t.paletteLabel}
+          testId="exam-palette-sheet"
+        >
+          <QuestionPalette
+            answered={answeredPositions}
+            current={current + 1}
+            marked={marked}
+            onSelect={(position) => {
+              go(position);
+              setPaletteOpen(false);
+            }}
+            total={attempt.questions.length}
+          />
+        </BottomSheet>
+      ) : null}
 
       <SubmitDialog
         busy={busy}

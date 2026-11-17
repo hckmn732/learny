@@ -13,6 +13,7 @@ import {
   ProgressBar,
   cn,
   iconRegistry,
+  useBreakpoint,
 } from '@learny/ui';
 
 import { fr } from '../../messages/fr';
@@ -177,6 +178,8 @@ export const FormationSwitcher = ({
   disabled = false,
 }: FormationSwitcherProps) => {
   const [open, setOpen] = useState(false);
+  // SPEC-802 EF-2 — in the mobile overlay the menu is too wide to open beside it: below.
+  const overlay = useBreakpoint('nav');
   const active = formations.filter((formation) => formation.status === 'active');
   const paused = formations.filter((formation) => formation.status === 'paused');
 
@@ -201,12 +204,15 @@ export const FormationSwitcher = ({
           />
         </PopoverTrigger>
         <PopoverContent
-          side="right"
+          side={overlay ? 'bottom' : 'right'}
           align="start"
           width={360}
           data-testid="sidebar-formation-menu"
           aria-label={t.dialogTitle}
-          className="max-h-[min(560px,calc(100dvh-32px))] overflow-y-auto p-16"
+          className={cn(
+            'max-h-[min(560px,calc(100dvh-32px))] overflow-y-auto p-16',
+            overlay && 'z-dialog!',
+          )}
         >
           <h2 id="formation-switcher-title" className="m-0 text-20 font-600 font-display">
             {t.dialogTitle}

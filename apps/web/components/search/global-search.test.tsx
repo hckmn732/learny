@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import {
   SearchResponse,
@@ -72,6 +72,14 @@ function setup(search: SearchFunction) {
   const input = screen.getByTestId<HTMLInputElement>('header-search-input');
   return { ...result, input, onNavigate };
 }
+
+beforeAll(() => {
+  // jsdom has no layout: the CL-4 focus handler (SPEC-802) calls scrollIntoView.
+  Object.defineProperty(Element.prototype, 'scrollIntoView', {
+    configurable: true,
+    value: () => undefined,
+  });
+});
 
 afterEach(cleanup);
 

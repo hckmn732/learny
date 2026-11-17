@@ -396,7 +396,7 @@ export default function Spec408Demo() {
       </BaseCard>
 
       <BaseCard testId="retention-inputs" title="Entrées réellement utilisées">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <h3 className="m-0 font-display text-15 font-600">Modules et validations</h3>
             <ul className="m-0 mt-2 list-none p-0 text-13">

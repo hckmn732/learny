@@ -34,11 +34,11 @@ export default function UiGalleryLayout({ children }: Readonly<{ children: React
       <nav aria-label={fr.ui.accessibility.skipNavLabel}>
         <SkipLink>{fr.ui.accessibility.skipLink}</SkipLink>
       </nav>
-      <div className="mx-auto flex max-w-content flex-col gap-24 px-40 pt-28 pb-56 shell:flex-row shell:gap-40">
-        <aside className="shrink-0 shell:w-sidebar">
+      <div className="mx-auto flex max-w-content flex-col gap-24 px-40 pt-28 pb-56 nav:flex-row nav:gap-40">
+        <aside className="shrink-0 nav:w-sidebar">
           <p className="font-display text-21 font-semibold tracking-heading">Learny UI</p>
           <nav aria-label={t.navLabel} className="mt-16">
-            <ul className="flex flex-wrap gap-x-8 gap-y-4 shell:flex-col shell:gap-2">
+            <ul className="flex flex-wrap gap-x-8 gap-y-4 nav:flex-col nav:gap-2">
               <li>
                 <Link
                   href="/_dev/ui"

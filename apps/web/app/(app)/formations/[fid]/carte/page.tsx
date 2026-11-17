@@ -30,7 +30,7 @@ export default async function CartePage({ params }: CartePageProps) {
     >
       <main
         data-testid="notion-graph-page"
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+        className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       >
         {graph.ok ? (
           <NotionGraphLazy graph={graph.data} />

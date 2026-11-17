@@ -336,6 +336,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-711'),
   },
+  'SPEC-805': {
+    title: 'SPEC-805 · Contrôles de sécurité',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-805'),
+  },
   'SPEC-211': {
     title: 'SPEC-211 — Export des données et suppression du compte',
     titleTestId: 'sdd-title',

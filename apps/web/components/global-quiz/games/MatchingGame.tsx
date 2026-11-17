@@ -94,7 +94,7 @@ export function MatchingGame(props: MatchingGameProps): ReactNode {
   return (
     <div className="flex flex-col gap-16" data-testid="game-matching">
       <p className="m-0 text-15 text-ink-muted">{t.matching.instruction}</p>
-      <div className="grid grid-cols-1 gap-12 min-[600px]:grid-cols-2 min-[600px]:gap-x-20">
+      <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-x-20">
         <div className="flex flex-col gap-10" role="group" aria-label={t.matching.instruction}>
           {payload.lefts.map((left, index) => {
             const rightId = pairs[left.id];

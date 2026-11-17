@@ -77,3 +77,80 @@
     outline: 3px solid Highlight;
   }
 }
+
+/*
+ * Touch target of the shared controls (SPEC-802 EF-8, ADR-0201): the visible box is unchanged,
+ * a centred pseudo-element extends the clickable area to 44 × 44 CSS px. The 44 px threshold is
+ * in CSS pixels on purpose: one Tailwind spacing unit is 0.9 px after the 90 % scale.
+ */
+@layer base {
+  :where(.touch-target) {
+    position: relative;
+  }
+}
+
+.touch-target::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/*
+ * Every native control gets the same invisible 44 px target (SPEC-802 EF-8). Anchors are added
+ * through the `touch-target` utility so inline links in a paragraph keep their text flow; the
+ * conformance helper treats `display: inline` links as the WCAG 2.5.8 inline exception.
+ */
+@layer base {
+  :where(
+    button,
+    input:not([type='hidden']),
+    select,
+    textarea,
+    [role='button'],
+    [role='switch'],
+    [role='tab'],
+    [role='checkbox'],
+    [role='radio'],
+    [role='menuitem']
+  ):not([data-touch-exempt]) {
+    position: relative;
+  }
+}
+
+:where(
+    button,
+    input:not([type='hidden']),
+    select,
+    textarea,
+    [role='button'],
+    [role='switch'],
+    [role='tab'],
+    [role='checkbox'],
+    [role='radio'],
+    [role='menuitem']
+  ):not([data-touch-exempt])::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
+/*
+ * Full-screen popover below `sm` (SPEC-802 EF-3): Radix positions the content through a wrapper
+ * that keeps a `transform`, which would become the containing block of the fixed content and
+ * shift it. The wrapper of a full-screen panel is pinned to the window instead.
+ */
+@media (width < 48rem) {
+  [data-radix-popper-content-wrapper]:has(> [data-fullscreen-mobile]) {
+    inset: 0 !important;
+    min-width: 0 !important;
+    transform: none !important;
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-import { Badge, Button, Select, TextField, Textarea, cn } from '@learny/ui';
+import { Badge, Button, ScrollableTable, Select, TextField, Textarea, cn } from '@learny/ui';
 
 import { resolveLabels } from '../../view/labels';
 import { MarkdownContent } from '../../view/markdown';
@@ -151,12 +151,7 @@ export function InstructionView(props: BrickViewProps<'instruction'>) {
               </div>
             ) : null}
 
-            <div
-              aria-label="Postes de la pièce"
-              className="overflow-x-auto"
-              role="region"
-              tabIndex={0}
-            >
+            <ScrollableTable label="Postes de la pièce">
               <div
                 className="flex min-w-680 flex-col gap-6 text-14"
                 data-testid="brick-table"
@@ -260,7 +255,7 @@ export function InstructionView(props: BrickViewProps<'instruction'>) {
                   </div>
                 ))}
               </div>
-            </div>
+            </ScrollableTable>
 
             <div className="flex flex-wrap items-center justify-between gap-12">
               {!locked && rows.length < table.maxRows ? (

@@ -18,9 +18,9 @@ export type TextFieldProps = Omit<ComponentPropsWithRef<'input'>, 'size'> & {
 };
 
 const FORM_CLASS =
-  'min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-14 text-15 text-ink placeholder:text-ink-muted';
+  'touch-target min-h-48 w-full rounded-12 border border-solid border-border-strong bg-surface px-14 text-15 text-ink placeholder:text-ink-muted max-sm:text-[16px]';
 const SEARCH_CLASS =
-  'min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 text-14 text-ink placeholder:text-ink-muted';
+  'touch-target min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 text-14 text-ink placeholder:text-ink-muted max-sm:text-[16px]';
 
 export const TextField = ({
   className,
@@ -50,7 +50,7 @@ export const TextField = ({
         {LeadingIcon ? (
           <LeadingIcon
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-14 -translate-y-1/2 text-ink-muted"
+            className="pointer-events-none absolute top-1/2 left-14 z-[1] -translate-y-1/2 text-ink-muted"
             size={18}
             strokeWidth={2}
           />

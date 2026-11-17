@@ -120,7 +120,7 @@ export function ProgrammeModuleCard({
         </span>
         {module.status === 'validated' && href !== null ? (
           <a
-            className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
             data-testid={`programme-module-${String(module.position)}-action`}
             href={`${href}/cours`}
           >
@@ -129,7 +129,7 @@ export function ProgrammeModuleCard({
         ) : null}
         {module.status === 'open' && href !== null ? (
           <a
-            className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
             data-testid={`programme-module-${String(module.position)}-action`}
             href={href}
           >
@@ -139,7 +139,7 @@ export function ProgrammeModuleCard({
       </div>
       {expanded ? (
         <div className="flex flex-col gap-12 px-16 pb-18 pl-[70px]">
-          <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-2">
+          <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 sm:grid-cols-2">
             {chapters.map((chapter) => (
               <li
                 className="flex items-center gap-10 rounded-14 bg-surface-subtle px-14 py-12 text-14 font-500"
@@ -168,25 +168,25 @@ export function ProgrammeModuleCard({
           {module.status === 'open' && href !== null ? (
             <div className="flex flex-wrap gap-8">
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={href}
               >
                 {t.apports}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={`${href}/cours`}
               >
                 {t.readCourse}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={`${href}/exercices`}
               >
                 {t.practice}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink"
                 href={`${href}/quiz`}
               >
                 {t.passQuiz}

@@ -51,10 +51,7 @@ export default async function LacunesPage({ params, searchParams }: LacunesPageP
       header={shell.header.ok ? shell.header.data : null}
       headerError={!shell.header.ok}
     >
-      <main
-        data-testid="gaps-page"
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
-      >
+      <main data-testid="gaps-page" className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40">
         {gaps.ok ? (
           <div data-testid="gaps-content" className="flex flex-col gap-24">
             <PageHeader
@@ -66,7 +63,7 @@ export default async function LacunesPage({ params, searchParams }: LacunesPageP
                     data-testid="gaps-train-all"
                     prefetch={false}
                     href={`/formations/${encodeURIComponent(gaps.data.formationId)}/quiz-global?cible=lacunes`}
-                    className="inline-flex min-h-48 items-center rounded-14 bg-lime px-20 text-15 font-700 text-ink no-underline transition-[filter] hover:brightness-95"
+                    className="touch-target inline-flex min-h-48 items-center rounded-14 bg-lime px-20 text-15 font-700 text-ink no-underline transition-[filter] hover:brightness-95"
                   >
                     {t.trainAll}
                   </NextLink>

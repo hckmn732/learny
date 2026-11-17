@@ -19,6 +19,8 @@ import {
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
 import { fr } from '../../../../messages/fr';
 
+import { ResponsiveGalleryDemo } from './ResponsiveGalleryDemo';
+
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -43,7 +45,7 @@ export default function StructureGalleryPage() {
       </header>
 
       <GalleryCard testId="ui-structure-cards" title={t.cards.title} intro={t.cards.intro}>
-        <div className="grid grid-cols-1 gap-16 shell:grid-cols-2">
+        <div className="grid grid-cols-1 gap-16 nav:grid-cols-2">
           <Card labelledBy="card-default-title" data-testid="ui-card-default">
             <CardHeader
               title={t.cards.defaultTitle}
@@ -148,6 +150,14 @@ export default function StructureGalleryPage() {
           eyebrow={t.pageHeader.eyebrow}
           title={t.pageHeader.pageTitle}
         />
+      </GalleryCard>
+
+      <GalleryCard
+        testId="ui-structure-responsive"
+        title="Disposition responsive"
+        intro="Panneau plein écran sous 768 px, feuille basse, tableau défilant et barre d’actions fixe."
+      >
+        <ResponsiveGalleryDemo />
       </GalleryCard>
 
       <GalleryCard testId="ui-structure-icons" title={t.icons.title} intro={t.icons.intro}>

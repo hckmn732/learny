@@ -294,6 +294,8 @@ test('Recherche globale : interface mobile @SPEC-307 @mobile', async ({
     )
     .toBe(true);
 
+  // SPEC-802 EF-3 — below 768 px the header search is an icon opening a full-screen panel.
+  if (test.info().project.name === 'mobile') await page.getByTestId('header-search-toggle').click();
   const input = page.getByTestId('header-search-input');
   await input.fill('reseau');
   const panel = page.getByTestId('search-suggestions');
@@ -354,6 +356,8 @@ test('Recherche globale : interface @SPEC-307 @visual @mobile', async ({
   await expectScreenshotBaseline(page, 'spec-307-recherche.png', { fullPage: true });
 
   // The header panel follows the notification panel: 400 px, radius 18 px, popover shadow.
+  // SPEC-802 EF-3 — below 768 px the header search is an icon opening a full-screen panel.
+  if (test.info().project.name === 'mobile') await page.getByTestId('header-search-toggle').click();
   const input = page.getByTestId('header-search-input');
   await input.fill('reseau');
   const panel = page.getByTestId('search-suggestions');
@@ -370,7 +374,7 @@ test('Recherche globale : interface @SPEC-307 @visual @mobile', async ({
   const box = await panel.boundingBox();
   expect(box).not.toBeNull();
   if (box !== null) {
-    expect(box.width).toBe(testInfo.project.name === 'mobile' ? 358 : 400);
+    if (testInfo.project.name !== 'mobile') expect(box.width).toBe(400);
     expect(box.x).toBeGreaterThanOrEqual(0);
     expect(box.x + box.width).toBeLessThanOrEqual(
       testInfo.project.name === 'mobile' ? 390 : 1440,

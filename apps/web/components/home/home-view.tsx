@@ -24,6 +24,7 @@ import {
   EmptyState,
   ErrorState,
   ProgressRing,
+  ScrollableTable,
   SkeletonCard,
   SkeletonGroup,
   Tabs,
@@ -77,7 +78,7 @@ function Sigil({
 function DayStatus({ slot }: Readonly<{ slot: HomeSlotDto }>) {
   if (slot.state === 'done') {
     return (
-      <span className="rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime">
+      <span className="touch-target rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime">
         {t.day.done}
       </span>
     );
@@ -108,7 +109,7 @@ function DayStatus({ slot }: Readonly<{ slot: HomeSlotDto }>) {
   if (slot.state === 'todo') {
     return (
       <NextLink
-        className="rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime"
+        className="touch-target rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime"
         href={slot.href}
       >
         {t.day.doIt}
@@ -349,89 +350,129 @@ export function FormationsTable({
 }: Readonly<{ rows: OngoingFormationRow[]; empty: ReactNode }>) {
   if (rows.length === 0) return <>{empty}</>;
   return (
-    <div
-      className="w-full max-w-full min-w-0 overflow-x-auto"
-      role="region"
-      tabIndex={0}
-      aria-label={t.formations.tableLabel}
-      data-testid="home-table-ongoing"
-    >
-      <table className="w-full min-w-[920px] border-separate border-spacing-y-6 text-14">
-        <thead>
-          <tr className="text-left text-12 text-ink-muted">
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.formation}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.progress}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.module}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.next}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.end}
-            </th>
-            <th scope="col" className="px-16 py-8 text-right font-600">
-              <span className="sr-only">{t.formations.columns.action}</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id} data-testid={`home-formation-row-${row.id}`}>
-              <td className="rounded-l-16 bg-surface-subtle px-16 py-14">
-                <div className="flex items-center gap-12">
-                  <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
-                  <span className="flex min-w-0 flex-col gap-2">
-                    <span className="font-600">{row.title}</span>
-                    <span className="text-13 text-ink-muted">{row.subtitle}</span>
-                  </span>
-                </div>
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <ProgressCell row={row} />
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <div className="flex flex-col items-start gap-4">
-                  <span>{row.moduleTitle ?? t.formations.noModule}</span>
-                  {row.moduleStatus === null ? null : (
-                    <span
-                      className={cn(
-                        'rounded-full px-8 py-2 text-12 font-600',
-                        MODULE_STATUS_CLASS[row.moduleStatus.tone],
-                      )}
-                    >
-                      {row.moduleStatus.label}
-                    </span>
-                  )}
-                </div>
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <NextActivityCell row={row} />
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <EndCell day={row.endDate} />
-              </td>
-              <td className="rounded-r-16 bg-surface-subtle px-16 py-14 text-right">
-                <Button
-                  asChild
-                  data-testid={`home-formation-action-${row.id}`}
-                  variant={row.primaryAction ? 'dark' : 'outline'}
-                  size="md"
-                >
-                  <NextLink prefetch={false} href={row.action.href}>
-                    {row.action.label}
-                  </NextLink>
-                </Button>
-              </td>
+    <>
+      <ScrollableTable
+        label={t.formations.tableLabel}
+        testId="home-table-ongoing"
+        className="hidden w-full max-w-full min-w-0 sm:block"
+      >
+        <table className="w-full min-w-[920px] border-separate border-spacing-y-6 text-14">
+          <thead>
+            <tr className="text-left text-12 text-ink-muted">
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.formation}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.progress}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.module}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.next}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.end}
+              </th>
+              <th scope="col" className="px-16 py-8 text-right font-600">
+                <span className="sr-only">{t.formations.columns.action}</span>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.id} data-testid={`home-formation-row-${row.id}`}>
+                <td className="rounded-l-16 bg-surface-subtle px-16 py-14">
+                  <div className="flex items-center gap-12">
+                    <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
+                    <span className="flex min-w-0 flex-col gap-2">
+                      <span className="font-600">{row.title}</span>
+                      <span className="text-13 text-ink-muted">{row.subtitle}</span>
+                    </span>
+                  </div>
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <ProgressCell row={row} />
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <div className="flex flex-col items-start gap-4">
+                    <span>{row.moduleTitle ?? t.formations.noModule}</span>
+                    {row.moduleStatus === null ? null : (
+                      <span
+                        className={cn(
+                          'rounded-full px-8 py-2 text-12 font-600',
+                          MODULE_STATUS_CLASS[row.moduleStatus.tone],
+                        )}
+                      >
+                        {row.moduleStatus.label}
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <NextActivityCell row={row} />
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <EndCell day={row.endDate} />
+                </td>
+                <td className="rounded-r-16 bg-surface-subtle px-16 py-14 text-right">
+                  <Button
+                    asChild
+                    data-testid={`home-formation-action-${row.id}`}
+                    variant={row.primaryAction ? 'dark' : 'outline'}
+                    size="md"
+                  >
+                    <NextLink prefetch={false} href={row.action.href}>
+                      {row.action.label}
+                    </NextLink>
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </ScrollableTable>
+      <ul
+        data-testid="home-formation-cards"
+        className="flex list-none flex-col gap-8 p-8 sm:hidden"
+      >
+        {rows.map((row) => (
+          <li
+            key={row.id}
+            className="flex flex-col gap-10 rounded-16 bg-surface-subtle p-14"
+            data-testid={`home-formation-card-${row.id}`}
+          >
+            <div className="flex items-center gap-12">
+              <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
+              <span className="flex min-w-0 flex-col gap-2">
+                <span className="font-600 break-words [overflow-wrap:anywhere]">{row.title}</span>
+                <span className="text-13 text-ink-muted break-words [overflow-wrap:anywhere]">
+                  {row.subtitle}
+                </span>
+              </span>
+            </div>
+            <ProgressCell row={row} />
+            <div className="flex flex-col gap-2 text-13">
+              <span className="font-600">{row.moduleTitle ?? t.formations.noModule}</span>
+              <NextActivityCell row={row} />
+              <span className="text-ink-muted">
+                {t.formations.columns.end} : <EndCell day={row.endDate} />
+              </span>
+            </div>
+            <Button
+              asChild
+              variant={row.primaryAction ? 'dark' : 'outline'}
+              size="md"
+              className="self-start"
+            >
+              <NextLink prefetch={false} href={row.action.href}>
+                {row.action.label}
+              </NextLink>
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -441,111 +482,148 @@ export function CompletedTable({
 }: Readonly<{ rows: CompletedFormationRow[]; empty: ReactNode }>) {
   if (rows.length === 0) return <>{empty}</>;
   return (
-    <div
-      className="w-full max-w-full min-w-0 overflow-x-auto"
-      role="region"
-      tabIndex={0}
-      aria-label={t.formations.tableLabel}
-      data-testid="home-table-completed"
-    >
-      <table className="w-full min-w-[920px] border-separate border-spacing-y-6 text-14">
-        <thead>
-          <tr className="text-left text-12 text-ink-muted">
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.formation}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.result}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.memory}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.revisions}
-            </th>
-            <th scope="col" className="px-16 py-8 font-600">
-              {t.formations.columns.completedOn}
-            </th>
-            <th scope="col" className="px-16 py-8 text-right font-600">
-              <span className="sr-only">{t.formations.columns.action}</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id} data-testid={`home-formation-row-${row.id}`}>
-              <td className="rounded-l-16 bg-surface-subtle px-16 py-14">
-                <div className="flex items-center gap-12">
-                  <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
-                  <span className="flex min-w-0 flex-col gap-2">
-                    <span className="font-600">{row.title}</span>
-                    <span className="text-13 text-ink-muted">{row.subtitle}</span>
-                  </span>
-                </div>
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <span className="rounded-full bg-indigo-soft px-10 py-3 text-12 font-700 text-indigo-ink-strong">
-                  {t.formations.validated(row.resultPercent)}
-                </span>
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <div className="flex flex-col gap-2">
-                  <span className="font-700 tabular-nums">
-                    {row.retentionPercent === null ? '—' : `${String(row.retentionPercent)} %`}
-                  </span>
-                  <span className="text-12 text-ink-muted">
-                    {row.retentionPercent === null
-                      ? t.formations.measurementComing
-                      : t.formations.retained}
-                  </span>
-                </div>
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                {row.maintenanceMode === 'light' ? (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-600">{t.formations.dueToday(row.dueCount)}</span>
-                    <span className="text-13 text-ink-muted">{t.formations.memoryInterview}</span>
-                  </div>
-                ) : row.maintenanceMode === 'stopped' ? (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-600">{t.formations.stopped}</span>
-                    <span className="text-13 text-ink-muted">{t.formations.stoppedDetail}</span>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    <span className="font-600">{t.formations.reportToDo}</span>
-                    <span className="text-13 text-ink-muted">{t.formations.reportDetail}</span>
-                  </div>
-                )}
-              </td>
-              <td className="bg-surface-subtle px-16 py-14">
-                <div className="flex flex-col gap-2 tabular-nums">
-                  <span>{row.completedOn === null ? '—' : shortDate(row.completedOn)}</span>
-                  <span className="text-12 text-ink-muted">
-                    {row.weeks === null ? '' : t.formations.weeks(row.weeks)}
-                    {row.weeks !== null && row.volumeHours !== null ? ' · ' : ''}
-                    {row.volumeHours === null ? '' : formatDuration(row.volumeHours * 60)}
-                  </span>
-                </div>
-              </td>
-              <td className="rounded-r-16 bg-surface-subtle px-16 py-14 text-right">
-                <Button
-                  asChild
-                  data-testid={`home-formation-action-${row.id}`}
-                  variant="outline"
-                  size="md"
-                >
-                  <NextLink prefetch={false} href={row.action.href}>
-                    {row.action.label}
-                  </NextLink>
-                </Button>
-              </td>
+    <>
+      <ScrollableTable
+        label={t.formations.tableLabel}
+        testId="home-table-completed"
+        className="hidden w-full max-w-full min-w-0 sm:block"
+      >
+        <table className="w-full min-w-[920px] border-separate border-spacing-y-6 text-14">
+          <thead>
+            <tr className="text-left text-12 text-ink-muted">
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.formation}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.result}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.memory}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.revisions}
+              </th>
+              <th scope="col" className="px-16 py-8 font-600">
+                {t.formations.columns.completedOn}
+              </th>
+              <th scope="col" className="px-16 py-8 text-right font-600">
+                <span className="sr-only">{t.formations.columns.action}</span>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.id} data-testid={`home-formation-row-${row.id}`}>
+                <td className="rounded-l-16 bg-surface-subtle px-16 py-14">
+                  <div className="flex items-center gap-12">
+                    <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
+                    <span className="flex min-w-0 flex-col gap-2">
+                      <span className="font-600">{row.title}</span>
+                      <span className="text-13 text-ink-muted">{row.subtitle}</span>
+                    </span>
+                  </div>
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <span className="rounded-full bg-indigo-soft px-10 py-3 text-12 font-700 text-indigo-ink-strong">
+                    {t.formations.validated(row.resultPercent)}
+                  </span>
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <div className="flex flex-col gap-2">
+                    <span className="font-700 tabular-nums">
+                      {row.retentionPercent === null ? '—' : `${String(row.retentionPercent)} %`}
+                    </span>
+                    <span className="text-12 text-ink-muted">
+                      {row.retentionPercent === null
+                        ? t.formations.measurementComing
+                        : t.formations.retained}
+                    </span>
+                  </div>
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  {row.maintenanceMode === 'light' ? (
+                    <div className="flex flex-col gap-2">
+                      <span className="font-600">{t.formations.dueToday(row.dueCount)}</span>
+                      <span className="text-13 text-ink-muted">{t.formations.memoryInterview}</span>
+                    </div>
+                  ) : row.maintenanceMode === 'stopped' ? (
+                    <div className="flex flex-col gap-2">
+                      <span className="font-600">{t.formations.stopped}</span>
+                      <span className="text-13 text-ink-muted">{t.formations.stoppedDetail}</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      <span className="font-600">{t.formations.reportToDo}</span>
+                      <span className="text-13 text-ink-muted">{t.formations.reportDetail}</span>
+                    </div>
+                  )}
+                </td>
+                <td className="bg-surface-subtle px-16 py-14">
+                  <div className="flex flex-col gap-2 tabular-nums">
+                    <span>{row.completedOn === null ? '—' : shortDate(row.completedOn)}</span>
+                    <span className="text-12 text-ink-muted">
+                      {row.weeks === null ? '' : t.formations.weeks(row.weeks)}
+                      {row.weeks !== null && row.volumeHours !== null ? ' · ' : ''}
+                      {row.volumeHours === null ? '' : formatDuration(row.volumeHours * 60)}
+                    </span>
+                  </div>
+                </td>
+                <td className="rounded-r-16 bg-surface-subtle px-16 py-14 text-right">
+                  <Button
+                    asChild
+                    data-testid={`home-formation-action-${row.id}`}
+                    variant="outline"
+                    size="md"
+                  >
+                    <NextLink prefetch={false} href={row.action.href}>
+                      {row.action.label}
+                    </NextLink>
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </ScrollableTable>
+      <ul
+        data-testid="home-completed-cards"
+        className="flex list-none flex-col gap-8 p-8 sm:hidden"
+      >
+        {rows.map((row) => (
+          <li
+            key={row.id}
+            className="flex flex-col gap-8 rounded-16 bg-surface-subtle p-14"
+            data-testid={`home-completed-card-${row.id}`}
+          >
+            <div className="flex items-center gap-12">
+              <Sigil accent={row.accent} monogram={row.monogram} title={row.title} />
+              <span className="flex min-w-0 flex-col gap-2">
+                <span className="font-600 break-words [overflow-wrap:anywhere]">{row.title}</span>
+                <span className="text-13 text-ink-muted break-words [overflow-wrap:anywhere]">
+                  {row.subtitle}
+                </span>
+              </span>
+            </div>
+            <span className="text-13">
+              {t.formations.validated(row.resultPercent)} ·{' '}
+              {row.retentionPercent === null
+                ? t.formations.measurementComing
+                : `${String(row.retentionPercent)} % ${t.formations.retained}`}
+            </span>
+            <span className="text-12 text-ink-muted">
+              {t.formations.columns.completedOn} :{' '}
+              {row.completedOn === null ? '—' : shortDate(row.completedOn)}
+            </span>
+            <Button asChild variant="outline" size="md" className="self-start">
+              <NextLink prefetch={false} href={row.action.href}>
+                {row.action.label}
+              </NextLink>
+            </Button>
+          </li>
+        ))}
+      </ul>
       <p className="mx-16 mb-12 text-13 text-ink-muted">{t.formations.completedHint}</p>
-    </div>
+    </>
   );
 }
 
@@ -607,7 +685,7 @@ export function HomeView({
   if (query.data === undefined) {
     if (initialError || query.isError) {
       return (
-        <main className="mx-auto w-full max-w-content px-16 pb-56 shell:px-40">
+        <main className="mx-auto w-full max-w-content px-16 pb-56 nav:px-40">
           <ErrorState
             className="mt-24 rounded-24 border border-solid border-border bg-surface"
             title={t.errorTitle}
@@ -618,7 +696,7 @@ export function HomeView({
       );
     }
     return (
-      <main className="mx-auto w-full max-w-content px-16 pb-56 shell:px-40">
+      <main className="mx-auto w-full max-w-content px-16 pb-56 nav:px-40">
         <SkeletonGroup className="mt-24 flex flex-col gap-20" label={t.loading}>
           <SkeletonCard />
           <SkeletonCard />
@@ -649,14 +727,16 @@ export function HomeView({
   };
 
   return (
-    <main className="mx-auto flex w-full max-w-content flex-col gap-24 overflow-x-hidden px-16 pt-24 pb-56 shell:px-0">
+    <main className="mx-auto flex w-full max-w-content flex-col gap-24 overflow-x-hidden px-16 pt-24 pb-56 nav:px-0">
       <header
         data-testid="home-header"
         className="flex flex-wrap items-center justify-between gap-16 py-8"
       >
         <div className="flex flex-col gap-4">
           <p className="m-0 text-14 text-ink-muted">{data.today.label}</p>
-          <h1 className="m-0 font-display text-34 font-600 tracking-title">{t.header.title}</h1>
+          <h1 className="m-0 font-display text-34 font-600 tracking-title max-sm:leading-[normal]">
+            {t.header.title}
+          </h1>
         </div>
         <Button asChild variant="lime" size="md">
           <NextLink prefetch={false} href="/formations/nouvelle">

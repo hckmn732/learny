@@ -26,6 +26,7 @@ export default async function AgendaPage({ searchParams }: AgendaPageProps) {
     >
       <AgendaScreen
         initialState={agenda.state}
+        explicitView={params.vue !== undefined}
         initialData={agenda.ok ? agenda.data : null}
         initialError={!agenda.ok}
         serverNow={serverNow}

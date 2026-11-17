@@ -30,7 +30,7 @@ const segmentedVariants = cva('inline-flex', {
 });
 
 const optionVariants = cva(
-  'inline-flex cursor-pointer items-center justify-center gap-6 border-0 bg-transparent',
+  'touch-target inline-flex cursor-pointer items-center justify-center gap-6 border-0 bg-transparent',
   {
     variants: {
       variant: {

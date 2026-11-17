@@ -31,7 +31,7 @@ export default async function RecherchePage({ searchParams }: RecherchePageProps
     >
       <main
         data-testid="search-page"
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+        className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       >
         <SearchPageView state={state} />
       </main>

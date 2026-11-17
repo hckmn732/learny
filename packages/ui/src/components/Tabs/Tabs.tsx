@@ -21,7 +21,7 @@ export const TabsList = ({ className, variant = 'soft', ...props }: TabsListProp
   <TabsVariantContext.Provider value={variant}>
     <TabsPrimitive.List
       className={cn(
-        'inline-flex items-center gap-4 p-4',
+        'touch-target inline-flex items-center gap-4 p-4',
         variant === 'soft'
           ? 'rounded-12 bg-canvas'
           : 'rounded-14 border border-solid border-border bg-surface',
@@ -39,7 +39,7 @@ export const TabsTrigger = ({ className, ...props }: TabsTriggerProps) => {
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'inline-flex cursor-pointer items-center justify-center rounded-9 border-0 bg-transparent px-14 text-ink-muted',
+        'touch-target inline-flex cursor-pointer items-center justify-center rounded-9 border-0 bg-transparent px-14 text-ink-muted',
         variant === 'soft'
           ? 'min-h-36 text-13 font-500 data-[state=active]:bg-surface data-[state=active]:font-600 data-[state=active]:text-ink data-[state=active]:shadow-segment'
           : 'min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-600 data-[state=active]:text-white',

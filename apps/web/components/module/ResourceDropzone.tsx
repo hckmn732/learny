@@ -10,7 +10,9 @@ const t = fr.module;
 
 const YOUTUBE_HOSTS = new Set(['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be']);
 
-function fileMime(file: File): 'application/pdf' | 'image/png' | 'image/jpeg' | 'image/webp' | 'image/heic' | null {
+function fileMime(
+  file: File,
+): 'application/pdf' | 'image/png' | 'image/jpeg' | 'image/webp' | 'image/heic' | null {
   const name = file.name.toLowerCase();
   if (file.type === 'application/pdf' || name.endsWith('.pdf')) return 'application/pdf';
   if (file.type === 'image/png' || name.endsWith('.png')) return 'image/png';
@@ -41,7 +43,12 @@ export interface ResourceDropzoneProps {
  * are deliberately absent: they only arrive in V2. Every control is keyboard reachable and the
  * drop zone has a real focus target.
  */
-export function ResourceDropzone({ onNote, onUrl, onFile, pending = false }: ResourceDropzoneProps) {
+export function ResourceDropzone({
+  onNote,
+  onUrl,
+  onFile,
+  pending = false,
+}: ResourceDropzoneProps) {
   const pdfInput = useRef<HTMLInputElement>(null);
   const imageInput = useRef<HTMLInputElement>(null);
   const [mode, setMode] = useState<'none' | 'web' | 'youtube' | 'note'>('none');
@@ -99,8 +106,7 @@ export function ResourceDropzone({ onNote, onUrl, onFile, pending = false }: Res
 
   const buttonStyle =
     'flex min-h-96 cursor-pointer flex-col items-center justify-center gap-8 rounded-18 border border-border bg-surface px-10 py-14 font-sans text-ink';
-  const iconStyle =
-    'inline-flex h-40 w-40 items-center justify-center rounded-12 text-18';
+  const iconStyle = 'inline-flex h-40 w-40 items-center justify-center rounded-12 text-18';
 
   return (
     <section
@@ -117,7 +123,10 @@ export function ResourceDropzone({ onNote, onUrl, onFile, pending = false }: Res
           }}
           type="button"
         >
-          <span aria-hidden="true" className={cn(iconStyle, 'bg-orange-soft text-orange-ink-strong')}>
+          <span
+            aria-hidden="true"
+            className={cn(iconStyle, 'bg-orange-soft text-orange-ink-strong')}
+          >
             PDF
           </span>
           <span className="text-14 font-700">{t.types.pdf}</span>
@@ -158,7 +167,10 @@ export function ResourceDropzone({ onNote, onUrl, onFile, pending = false }: Res
           }}
           type="button"
         >
-          <span aria-hidden="true" className={cn(iconStyle, 'bg-indigo-soft text-indigo-ink-strong')}>
+          <span
+            aria-hidden="true"
+            className={cn(iconStyle, 'bg-indigo-soft text-indigo-ink-strong')}
+          >
             YT
           </span>
           <span className="text-14 font-700">{t.types.youtube}</span>
@@ -296,7 +308,7 @@ export function ResourceDropzone({ onNote, onUrl, onFile, pending = false }: Res
           {t.noteLabel}
         </label>
         <textarea
-          className="min-h-96 resize-y rounded-16 border border-border-strong bg-surface px-16 py-14 text-15 leading-1.5 text-ink"
+          className="min-h-96 resize-y rounded-16 border border-border-strong bg-surface px-16 py-14 text-15 leading-1.5 text-ink max-sm:text-[16px]"
           id="resource-note"
           onChange={(event) => {
             setNote(event.target.value);

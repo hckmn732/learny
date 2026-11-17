@@ -39,7 +39,7 @@ export const Checkbox = ({
           aria-describedby={describedBy}
           aria-invalid={error ? true : undefined}
           className={cn(
-            'mt-1 size-18 shrink-0 cursor-pointer accent-ink',
+            'touch-target mt-1 size-18 shrink-0 cursor-pointer accent-ink',
             disabled && 'cursor-not-allowed opacity-55',
           )}
           disabled={disabled}

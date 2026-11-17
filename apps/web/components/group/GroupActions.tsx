@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 import type { GroupDto } from '@learny/contracts';
 import { AppError } from '@learny/core';
-import { AlertDialog, Button, Card, FormError } from '@learny/ui';
+import { AlertDialog, Button, Card, FormError, ScrollableTable } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr';
@@ -172,7 +172,7 @@ export function GroupActions({ group }: Readonly<{ group: GroupDto }>) {
           </div>
         </div>
 
-        <div className="mt-16 overflow-x-auto">
+        <ScrollableTable label={t.membersTitle} className="mt-16">
           <table
             className="w-full min-w-[760px] border-collapse text-left"
             data-testid="group-members"
@@ -255,7 +255,7 @@ export function GroupActions({ group }: Readonly<{ group: GroupDto }>) {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollableTable>
       </section>
 
       {group.canLeave ? (

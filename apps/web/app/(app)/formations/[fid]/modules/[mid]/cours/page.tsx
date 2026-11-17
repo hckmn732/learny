@@ -48,7 +48,7 @@ export default async function CoursePage({ params, searchParams }: CoursePagePro
         sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
         sidebarError={!shell.sidebar.ok}
       >
-        <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+        <main className="mx-auto w-full px-16 pb-40 nav:px-40">
           <div
             className="mx-auto flex w-full max-w-[1160px] flex-col gap-16 rounded-24 border border-border bg-surface p-28"
             data-testid="course-locked"
@@ -58,7 +58,7 @@ export default async function CoursePage({ params, searchParams }: CoursePagePro
               Ce module se débloque quand le quiz du module précédent est validé.
             </p>
             <a
-              className="inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+              className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
               href={`/formations/${encodeURIComponent(fid)}/programme`}
             >
               Retour au programme

@@ -20,7 +20,7 @@ describe('[SPEC-303] StatCard', () => {
     const row = screen.getByTestId('stat-row');
     expect(row.className).toContain('gap-12');
     expect(row.className).toContain('flex-wrap');
-    expect(row.className).toContain('max-[479px]:flex-col');
+    expect(row.className).toContain('max-sm:flex-col');
 
     const dark = screen.getByTestId('stat-dark');
     expect(dark.className).toContain('bg-ink');

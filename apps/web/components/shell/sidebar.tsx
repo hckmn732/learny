@@ -27,6 +27,8 @@ import {
   cn,
   iconRegistry,
   toast,
+  breakpointQuery,
+  useBreakpoint,
   type IconName,
 } from '@learny/ui';
 
@@ -50,16 +52,6 @@ const FORMATION_ACCENT_CLASS = {
 
 export const SIDEBAR_COLLAPSED_STORAGE_KEY = 'learny.sidebar.collapsed';
 const SIDEBAR_QUERY_KEY = ['sidebar'] as const;
-const SHELL_BREAKPOINT_QUERY = '(max-width: 899px)';
-
-function isCompactViewport(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia(SHELL_BREAKPOINT_QUERY).matches
-  );
-}
-
 function isActivePath(pathname: string, href: string): boolean {
   if (href === '/accueil') return pathname === '/accueil' || pathname === '/';
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -91,7 +83,7 @@ const SidebarLink = ({
     prefetch={false}
     {...(onNavigate === undefined ? {} : { onClick: onNavigate })}
     className={cn(
-      'flex min-h-36 items-center gap-12 rounded-11 px-10 text-14 no-underline transition-colors',
+      'touch-target flex min-h-36 items-center gap-12 rounded-11 px-10 text-14 no-underline transition-colors',
       active
         ? 'bg-dark-750 font-600 text-white'
         : 'font-500 text-on-dark-muted hover:bg-dark-800 hover:text-white',
@@ -213,7 +205,7 @@ export const SidebarView = ({
         <div
           aria-hidden="true"
           data-testid="sidebar-backdrop"
-          className="fixed inset-0 z-popover bg-overlay animate-overlay-in motion-reduce:animate-none shell:hidden"
+          className="fixed inset-0 z-popover bg-overlay animate-overlay-in motion-reduce:animate-none nav:hidden"
           onClick={onCloseOverlay}
         />
       ) : null}
@@ -229,7 +221,7 @@ export const SidebarView = ({
           onClick={onShow}
           className={cn(
             'fixed top-12 left-12 z-header shadow-float',
-            collapsed ? undefined : 'shell:hidden',
+            collapsed ? undefined : 'nav:hidden',
           )}
         />
       ) : null}
@@ -247,8 +239,8 @@ export const SidebarView = ({
           className={cn(
             'box-border flex-col gap-10 bg-ink px-12 py-16 text-white',
             overlayOpen
-              ? 'fixed inset-y-0 left-0 z-drawer flex h-dvh w-sidebar max-w-[85vw] animate-dialog-in motion-reduce:animate-none'
-              : 'hidden shell:sticky shell:top-0 shell:flex shell:h-screen shell:w-sidebar shell:shrink-0',
+              ? 'fixed inset-y-0 left-0 z-drawer flex h-dvh w-[min(85vw,18rem)] animate-dialog-in motion-reduce:animate-none'
+              : 'hidden nav:sticky nav:top-0 nav:flex nav:h-screen nav:w-sidebar nav:shrink-0',
           )}
         >
           <div className="flex items-center justify-between gap-8 pl-4">
@@ -256,7 +248,7 @@ export const SidebarView = ({
               href="/accueil"
               aria-label={t.logoLabel}
               data-testid="sidebar-logo"
-              className="flex min-w-0 items-center gap-10 font-display text-16 font-600 whitespace-nowrap text-white no-underline"
+              className="touch-target flex min-w-0 items-center gap-10 font-display text-16 font-600 whitespace-nowrap text-white no-underline"
             >
               <span
                 aria-hidden="true"
@@ -383,7 +375,7 @@ export const SidebarView = ({
                     </span>
                     <span className="flex min-w-0 flex-1 flex-col gap-5">
                       <span
-                        className="text-13 font-600 leading-1.25 break-words text-white"
+                        className="line-clamp-2 text-13 font-600 leading-1.25 break-words text-white [overflow-wrap:anywhere]"
                         title={currentFormation.title}
                       >
                         {currentFormation.title}
@@ -469,6 +461,8 @@ export const Sidebar = ({
   const triggerRef = showTriggerRef ?? localTriggerRef;
   const wasOverlayOpen = useRef(false);
 
+  const compact = useBreakpoint('nav');
+
   const query = useQuery({
     queryKey: SIDEBAR_QUERY_KEY,
     queryFn: () => api.sidebarGet({}),
@@ -494,7 +488,7 @@ export const Sidebar = ({
       const previous = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       const focusTarget = asideRef.current?.querySelector<HTMLElement>(
-        '[data-testid="sidebar-hide"]',
+        '[data-testid="sidebar-home"]',
       );
       focusTarget?.focus();
       return () => {
@@ -507,6 +501,12 @@ export const Sidebar = ({
     }
     return undefined;
   }, [overlayOpen, triggerRef]);
+
+  useEffect(() => {
+    // CL-1 — crossing 900 px closes the overlay without touching the stored preference.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!compact) setOverlayOpen(false);
+  }, [compact]);
 
   useEffect(() => {
     if (!overlayOpen) return undefined;
@@ -659,13 +659,20 @@ export const Sidebar = ({
   };
 
   const show = useCallback(() => {
-    if (isCompactViewport()) {
+    // CL-1, CL-2 — read the media query at click time: the first hydrated render answers
+    // `compact = false`, so a click before its effect must still open the mobile overlay and
+    // must never persist a collapse preference from the mobile state.
+    const compactNow =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia(breakpointQuery('nav')).matches
+        : compact;
+    if (compactNow) {
       setOverlayOpen(true);
       return;
     }
     setCollapsed(false);
     update.mutate({ collapsed: false });
-  }, [update]);
+  }, [compact, update]);
 
   // SPEC-305 EF-1 — the fixed header owns the visible trigger; it calls the registered action so
   // the sidebar keeps its own show logic (persisted on desktop, overlay on mobile).

@@ -79,7 +79,7 @@ export function FragileNotions({ gaps }: FragileNotionsProps) {
                 <NextLink
                   prefetch={false}
                   href={gap.trainingHref}
-                  className="inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-13 font-700 text-ink no-underline transition-[background-color] hover:bg-surface-subtle"
+                  className="touch-target inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-13 font-700 text-ink no-underline transition-[background-color] hover:bg-surface-subtle"
                 >
                   {t.fragile.train}
                 </NextLink>

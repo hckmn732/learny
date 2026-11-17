@@ -54,7 +54,7 @@ export const Textarea = ({
         aria-describedby={describedBy}
         aria-invalid={error ? true : undefined}
         className={cn(
-          'min-h-96 w-full resize-y rounded-12 border border-solid border-border-strong bg-surface px-14 py-12 text-15 leading-1.5 text-ink placeholder:text-ink-muted',
+          'touch-target min-h-96 w-full resize-y rounded-12 border border-solid border-border-strong bg-surface px-14 py-12 text-15 leading-1.5 text-ink placeholder:text-ink-muted max-sm:text-[16px]',
           error && 'border-orange-ink',
         )}
         defaultValue={value === undefined ? defaultValue : undefined}

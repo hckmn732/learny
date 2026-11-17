@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="52.556092">
+<testsuite name="p8/spec-805.spec.ts" timestamp="2026-11-17T08:04:15.230Z" hostname="desktop" tests="2" failures="0" skipped="0" time="7.857" errors="0">
+<testcase name="parcours protégé @SPEC-805" classname="p8/spec-805.spec.ts" time="4.95">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/attachments/axe-437fd18c3e3558675a7cfbafe4bef1cbb374310b.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/attachments/spec-805-demo-f12be8d7fd4bb4f1072f117da4774bc24d5cc0fb.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-parcours-protégé-SPEC-805-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="contrôles de sécurité conformes @SPEC-805 @visual @mobile" classname="p8/spec-805.spec.ts" time="2.907">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/attachments/axe-46d86c23b8619cc330a4e66ec8c52d472971cdde.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/attachments/spec-805-demo-visual-216ed8525fbf796a89e12fc5938798c8ad9d177d.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/spec-805.spec.ts" timestamp="2026-11-17T08:04:15.230Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.911" errors="0">
+<testcase name="contrôles de sécurité conformes @SPEC-805 @visual @mobile" classname="p8/spec-805.spec.ts" time="2.911">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/attachments/axe-3e13a45b9cbd654e239fe1d3732b4396b1ebefe2.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/attachments/spec-805-demo-visual-0672db7b62257de749c7607841fe3a51fab3412d.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-805-contrôles-de-s-3fb99-rmes-SPEC-805-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

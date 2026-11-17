@@ -94,7 +94,7 @@ export function ResultActions({
         {passed ? (
           <>
             <a
-              className="inline-flex min-h-48 items-center px-16 text-15 font-600"
+              className="touch-target inline-flex min-h-48 items-center px-16 text-15 font-600"
               data-testid="result-home"
               href={homeHref}
             >
@@ -102,7 +102,7 @@ export function ResultActions({
             </a>
             {result.isLastModule ? (
               <a
-                className="inline-flex min-h-48 items-center rounded-14 bg-lime px-22 text-15 font-700 text-ink"
+                className="touch-target inline-flex min-h-48 items-center rounded-14 bg-lime px-22 text-15 font-700 text-ink"
                 data-testid="result-final-report"
                 href={`/formations/${encodeURIComponent(formationId)}/bilan`}
               >
@@ -110,7 +110,7 @@ export function ResultActions({
               </a>
             ) : (
               <a
-                className="inline-flex min-h-48 items-center rounded-14 bg-lime px-22 text-15 font-700 text-ink"
+                className="touch-target inline-flex min-h-48 items-center rounded-14 bg-lime px-22 text-15 font-700 text-ink"
                 data-testid="result-next-module"
                 href={`/formations/${encodeURIComponent(formationId)}/modules/${encodeURIComponent(
                   result.nextModule?.id ?? '',
@@ -123,7 +123,7 @@ export function ResultActions({
         ) : (
           <>
             <a
-              className="inline-flex min-h-48 items-center px-16 text-15 font-600"
+              className="touch-target inline-flex min-h-48 items-center px-16 text-15 font-600"
               data-testid="result-reread"
               href={courseHref}
             >
@@ -153,7 +153,7 @@ export function ResultActions({
               </button>
             ) : (
               <a
-                className="inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
+                className="touch-target inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
                 data-testid="quiz-remediation"
                 href={remediationHref}
               >

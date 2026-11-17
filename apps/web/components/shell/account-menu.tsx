@@ -11,9 +11,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
   Icon,
+  ResponsivePanel,
   Skeleton,
   getInitials,
   iconRegistry,
+  useBreakpoint,
 } from '@learny/ui';
 
 import { fr } from '../../messages/fr';
@@ -70,6 +72,7 @@ export const AccountMenuView = ({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const previousPathname = useRef(pathname);
   const avatarName = data?.firstName ?? data?.emailLabel ?? null;
+  const compact = useBreakpoint('sm');
   const initials = getInitials(avatarName, data?.lastName);
   const triggerLabel = `${initials} ${t.accountButton}`;
   const avatarProps = {
@@ -84,6 +87,121 @@ export const AccountMenuView = ({
     routeChanged.current = true;
     onOpenChange(false);
   }, [onOpenChange, open, pathname]);
+
+  if (compact) {
+    const closeAnd = (action: () => void) => {
+      onOpenChange(false);
+      action();
+    };
+    return (
+      <>
+        <button
+          ref={triggerRef}
+          type="button"
+          aria-label={triggerLabel}
+          aria-expanded={open}
+          data-testid="header-account-trigger"
+          onClick={() => {
+            onOpenChange(true);
+          }}
+          className="touch-target inline-flex min-h-42 shrink-0 cursor-pointer items-center gap-10 rounded-full border border-solid border-border bg-surface pr-12 pl-4 font-sans text-14 font-600 text-ink transition-colors hover:bg-surface-subtle"
+        >
+          <Avatar {...avatarProps} aria-hidden={false} data-testid="header-account-avatar" />{' '}
+          <span data-testid="header-account-name">{t.accountButton}</span>
+          <Icon name="chevron-down" size={14} strokeWidth={2.2} className="text-ink-muted" />
+        </button>
+        <ResponsivePanel
+          open={open}
+          onOpenChange={onOpenChange}
+          title={t.accountMenuLabel}
+          testId="account-menu"
+          returnFocusRef={triggerRef}
+        >
+          <div className="flex flex-col gap-2 p-10">
+            <div
+              data-testid="account-identity"
+              className="mb-4 flex items-center gap-10 border-b border-solid border-divider pb-12"
+            >
+              <Avatar {...avatarProps} />
+              <span className="flex min-w-0 flex-col gap-2">
+                <span
+                  data-testid="account-identity-name"
+                  className="truncate text-14 font-700 text-ink"
+                >
+                  {identityName(data)}
+                </span>
+                <span
+                  data-testid="account-active-formations"
+                  className={
+                    status === 'error' ? 'text-12 font-600 text-danger' : 'text-12 text-ink-muted'
+                  }
+                  role={status === 'error' ? 'alert' : undefined}
+                >
+                  {identityMeta(data, status)}
+                </span>
+              </span>
+            </div>
+            {status === 'error' ? (
+              <button
+                type="button"
+                data-testid="account-retry"
+                onClick={onRetry}
+                className="touch-target flex min-h-48 items-center gap-10 rounded-10 px-10 text-left text-14 font-600 text-ink hover:bg-canvas"
+              >
+                <Icon name="alert" size={18} strokeWidth={1.8} />
+                {t.retry}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              data-testid="account-settings"
+              onClick={() => {
+                closeAnd(() => {
+                  onNavigate('/parametres');
+                });
+              }}
+              className="touch-target flex min-h-48 items-center gap-10 rounded-10 px-10 text-left text-14 font-600 text-ink hover:bg-canvas"
+            >
+              <Icon name="settings" size={18} strokeWidth={1.8} />
+              {t.settings}
+            </button>
+            <button
+              type="button"
+              data-testid="account-pause"
+              onClick={() => {
+                closeAnd(() => {
+                  onNavigate('/parametres#automatismes');
+                });
+              }}
+              className="touch-target flex min-h-48 items-center gap-10 rounded-10 px-10 text-left text-14 font-600 text-ink hover:bg-canvas"
+            >
+              <Icon name="pause" size={18} strokeWidth={1.8} />
+              {t.pause}
+            </button>
+            <button
+              type="button"
+              data-testid="account-sign-out"
+              disabled={signOutPending}
+              onClick={onSignOut}
+              className="touch-target flex min-h-48 items-center gap-10 rounded-10 px-10 text-left text-14 font-600 text-ink hover:bg-canvas disabled:opacity-55"
+            >
+              <Icon name="sign-out" size={18} strokeWidth={1.8} />
+              {signOutPending ? t.signingOut : t.signOut}
+            </button>
+            {signOutError === null ? null : (
+              <p
+                role="alert"
+                data-testid="account-sign-out-error"
+                className="m-0 px-10 pb-2 text-12 leading-1.45 font-600 text-danger"
+              >
+                {signOutError}
+              </p>
+            )}
+          </div>
+        </ResponsivePanel>
+      </>
+    );
+  }
 
   return (
     <DropdownMenu

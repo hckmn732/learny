@@ -17,6 +17,7 @@ import {
   SkeletonGroup,
   cn,
   iconRegistry,
+  useBreakpoint,
   type IconName,
 } from '@learny/ui';
 
@@ -99,11 +100,21 @@ export const NotificationPanelView = ({
   announcement = '',
 }: NotificationPanelViewProps) => {
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const compact = useBreakpoint('sm');
   const items = data?.items ?? [];
   const visible = filter === 'unread' ? items.filter(isUnread) : items;
   const count = Math.max(0, unreadCount);
   const label = fr.shell.header.notificationsLabel(count);
   const total = data?.total ?? 0;
+
+  useEffect(() => {
+    if (!open || !compact) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [compact, open]);
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
@@ -132,6 +143,9 @@ export const NotificationPanelView = ({
       <PopoverContent
         data-testid="notification-panel"
         aria-labelledby="t-notifications"
+        aria-modal={compact ? true : undefined}
+        role="dialog"
+        fullScreenOnMobile
         className="flex flex-col p-0"
         onCloseAutoFocus={(event) => {
           // EF-5 — every close (Échap or outside click) gives the focus back to the bell. The
@@ -149,6 +163,17 @@ export const NotificationPanelView = ({
           >
             {t.panelTitle}
           </h2>
+          <button
+            type="button"
+            aria-label="Fermer"
+            data-testid="panel-close"
+            onClick={() => {
+              onOpenChange(false);
+            }}
+            className="touch-target flex size-44 shrink-0 items-center justify-center rounded-10 border border-solid border-border bg-surface text-18 text-ink sm:hidden"
+          >
+            ×
+          </button>
           <button
             type="button"
             data-testid="notification-read-all"
@@ -178,7 +203,7 @@ export const NotificationPanelView = ({
         </div>
 
         <div
-          className="max-h-[min(420px,calc(100vh-200px))] overflow-y-auto px-6 pb-6"
+          className="max-h-[min(420px,calc(100vh-200px))] overflow-y-auto px-6 pb-6 max-sm:max-h-none max-sm:flex-1"
           data-testid="notification-list"
         >
           <p
@@ -343,7 +368,7 @@ export const NotificationPanelView = ({
           <a
             href="/parametres#notifications"
             data-testid="notification-manage"
-            className="font-600 text-indigo-ink underline-offset-2 hover:underline"
+            className="touch-target font-600 text-indigo-ink underline-offset-2 hover:underline"
           >
             {t.manage}
           </a>

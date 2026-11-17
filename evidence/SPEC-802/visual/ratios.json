@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-11-11T12:20:00Z",
+  "ratios": [
+    {
+      "screen": "SCR-03",
+      "region": "fenêtre 346×664",
+      "ratio": 0.1187234487081273,
+      "windowRatio": 0.1187234487081273
+    },
+    {
+      "screen": "SCR-07",
+      "region": "fenêtre 346×664",
+      "ratio": 0.09858364092206978,
+      "windowRatio": 0.09858364092206978
+    },
+    {
+      "screen": "SCR-10",
+      "region": "jusqu’à gq-rail 346×284",
+      "ratio": 0.10500284946674265,
+      "windowRatio": 0.33407618914966225
+    },
+    {
+      "screen": "SCR-12",
+      "region": "jusqu’à agenda-calendar 346×242",
+      "ratio": 0.07987388334209143,
+      "windowRatio": 0.17115572115049796
+    }
+  ]
+}

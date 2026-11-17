@@ -55,7 +55,7 @@ export const Switch = ({
         aria-labelledby={labelId}
         checked={checked}
         className={cn(
-          'inline-flex h-28 w-46 shrink-0 cursor-pointer items-center rounded-full border-0 p-3 transition-colors data-[state=checked]:bg-ink data-[state=unchecked]:bg-border-strong',
+          'touch-target inline-flex h-28 w-46 shrink-0 cursor-pointer items-center rounded-full border-0 p-3 transition-colors data-[state=checked]:bg-ink data-[state=unchecked]:bg-border-strong',
           locked && 'cursor-default opacity-55',
           className,
         )}

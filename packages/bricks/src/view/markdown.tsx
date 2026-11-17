@@ -3,7 +3,7 @@ import Markdown from 'react-markdown';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 
-import { cn } from '@learny/ui';
+import { ScrollableTable, cn } from '@learny/ui';
 
 const COMPONENTS: Components = {
   h1: ({ children }) => (
@@ -28,14 +28,9 @@ const COMPONENTS: Components = {
     </li>
   ),
   table: ({ children }) => (
-    <div
-      aria-label="Tableau"
-      className="overflow-x-auto rounded-18 border border-solid border-border"
-      role="region"
-      tabIndex={0}
-    >
+    <ScrollableTable label="Tableau" className="rounded-18 border border-solid border-border">
       <table className="w-full min-w-420 border-collapse text-17 leading-1.4">{children}</table>
-    </div>
+    </ScrollableTable>
   ),
   thead: ({ children }) => <thead className="bg-canvas text-left">{children}</thead>,
   th: ({ children }) => (

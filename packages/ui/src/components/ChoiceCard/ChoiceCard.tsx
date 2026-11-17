@@ -23,7 +23,7 @@ export const ChoiceCard = forwardRef<HTMLButtonElement, ChoiceCardProps>(
       ref={ref}
       aria-checked={selected}
       className={cn(
-        'flex min-h-44 w-full cursor-pointer items-center gap-12 rounded-14 px-14 py-12 text-left font-sans text-ink',
+        'touch-target flex min-h-44 w-full cursor-pointer items-center gap-12 rounded-14 px-14 py-12 text-left font-sans text-ink',
         selected
           ? 'border-2 border-ink bg-surface-subtle'
           : 'border border-border-strong bg-surface',

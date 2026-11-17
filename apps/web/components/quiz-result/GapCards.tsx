@@ -30,7 +30,7 @@ export function GapCards({ gaps, passed }: { gaps: readonly GapCardDto[]; passed
               <strong>{t.resultTutorProposal}</strong> {gap.proposal}
             </p>
             <a
-              className="inline-flex min-h-44 w-fit items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+              className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
               data-testid="result-gap-train"
               href={gap.trainHref}
             >

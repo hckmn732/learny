@@ -463,8 +463,19 @@ async function compareContent(
   testInfo: import('@playwright/test').TestInfo,
   name: string,
 ): Promise<number> {
-  const content = page.getByTestId('notion-graph-content');
-  const actual = await content.screenshot({ animations: 'disabled', scale: 'css' });
+  // SPEC-802 — the mobile header is sticky: an element screenshot scrolls the page and the
+  // header then covers the top of the content. Capture the full page at the element box.
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+  });
+  const box = await page.getByTestId('notion-graph-content').boundingBox();
+  if (box === null) throw new Error('contenu de la carte absent');
+  const actual = await page.screenshot({
+    animations: 'disabled',
+    scale: 'css',
+    fullPage: true,
+    clip: box,
+  });
   const comparison = compareWithReferenceRegion(
     actual,
     `${REFERENCE_DIR}${referenceName}`,

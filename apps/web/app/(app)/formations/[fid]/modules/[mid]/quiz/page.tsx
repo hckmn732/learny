@@ -48,7 +48,7 @@ export default async function QuizPage({ params }: QuizPageProps) {
       sidebarError={!shell.sidebar.ok}
     >
       {selected.status === 'locked' ? (
-        <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+        <main className="mx-auto w-full px-16 pb-40 nav:px-40">
           <div
             className="mx-auto flex w-full max-w-[920px] flex-col gap-12 rounded-28 border border-border bg-surface p-32"
             data-testid="quiz-locked"
@@ -56,7 +56,7 @@ export default async function QuizPage({ params }: QuizPageProps) {
             <h1 className="m-0 font-display text-30 font-600">{fr.quiz.lockedTitle}</h1>
             <p className="m-0 text-15 text-ink-muted">{fr.quiz.lockedText}</p>
             <a
-              className="inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+              className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
               href={programmeHref}
             >
               {fr.quiz.lockedBack}

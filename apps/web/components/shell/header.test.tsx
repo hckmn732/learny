@@ -270,7 +270,7 @@ describe('[SPEC-305] Coquille : en-tête figé et menu Mon compte', () => {
 
   it('garde les actions atteignables sous 900 px (CL-4)', () => {
     view({ sidebarCollapsed: false });
-    expect(screen.getByTestId('sidebar-show').className).toContain('shell:hidden');
+    expect(screen.getByTestId('sidebar-show').className).toContain('nav:hidden');
     expect(screen.getByTestId('header-notifications').getAttribute('aria-label')).toBe(
       'Notifications, 3 non lues',
     );

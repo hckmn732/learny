@@ -289,7 +289,7 @@ test('Coquille : menu latéral mobile @SPEC-304 @mobile', async ({
   await expect(sidebar).toBeVisible();
   await expect(sidebar).toHaveAttribute('role', 'dialog');
   await expect(sidebar).toHaveAttribute('aria-modal', 'true');
-  await expect(page.getByTestId('sidebar-hide')).toBeFocused();
+  await expect(page.getByTestId('sidebar-home')).toBeFocused();
   await expect(page.getByTestId('sidebar-backdrop')).toBeVisible();
 
   // CL-3 — Escape closes and returns the focus to the trigger.

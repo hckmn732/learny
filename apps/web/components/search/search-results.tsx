@@ -26,7 +26,7 @@ export const SearchResultItem = ({
   <article
     data-testid={testId}
     data-kind={kind}
-    className="min-w-0 rounded-24 border border-solid border-border bg-surface py-20 px-20 shell:px-24"
+    className="min-w-0 rounded-24 border border-solid border-border bg-surface py-20 px-20 nav:px-24"
   >
     <p className="m-0 mb-6 flex items-center gap-8">
       <span
@@ -100,7 +100,7 @@ function retryHref(query: string): string {
 }
 
 const stateCardClass =
-  'rounded-24 border border-solid border-border bg-surface py-28 px-24 shell:px-28';
+  'rounded-24 border border-solid border-border bg-surface py-28 px-24 nav:px-28';
 
 export const SearchPageView = ({ state }: { state: SearchPageState }) => (
   <>
@@ -134,7 +134,7 @@ export const SearchPageView = ({ state }: { state: SearchPageState }) => (
           <a
             data-testid="search-page-retry"
             href={retryHref(state.query)}
-            className="mt-12 inline-flex min-h-38 items-center rounded-12 border border-solid border-border-strong px-16 text-14 font-600 text-ink no-underline"
+            className="touch-target mt-12 inline-flex min-h-38 items-center rounded-12 border border-solid border-border-strong px-16 text-14 font-600 text-ink no-underline"
           >
             {t.page.retry}
           </a>

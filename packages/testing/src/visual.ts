@@ -315,3 +315,59 @@ export async function compareRegions(
   }
   return results;
 }
+
+/**
+ * First row at or below `fromY` whose pixels differ from the background sampled at
+ * (`sampleX`, `fromY`) — the top of the first rendered content (SPEC-802 ET-5): it aligns an
+ * application capture with a mockup whose header has a different height.
+ */
+export function firstContentRow(
+  source: Buffer | string,
+  fromY: number,
+  options: { width?: number; sampleX?: number; tolerance?: number } = {},
+): number {
+  const png = readPng(source);
+  const width = Math.min(options.width ?? png.width, png.width);
+  const sampleX = options.sampleX ?? 5;
+  const tolerance = options.tolerance ?? 60;
+  const at = (x: number, y: number): [number, number, number] => {
+    const i = (y * png.width + x) * 4;
+    return [png.data[i] ?? 0, png.data[i + 1] ?? 0, png.data[i + 2] ?? 0];
+  };
+  const bg = at(sampleX, fromY);
+  for (let y = fromY; y < png.height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const c = at(x, y);
+      if (Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) > tolerance) {
+        return y;
+      }
+    }
+  }
+  return png.height;
+}
+
+/** First column whose pixels differ from the background in rows `[fromY, toY)` (SPEC-802 ET-5). */
+export function firstContentColumn(
+  source: Buffer | string,
+  fromY: number,
+  toY: number,
+  options: { sampleX?: number; tolerance?: number } = {},
+): number {
+  const png = readPng(source);
+  const sampleX = options.sampleX ?? 2;
+  const tolerance = options.tolerance ?? 60;
+  const at = (x: number, y: number): [number, number, number] => {
+    const i = (y * png.width + x) * 4;
+    return [png.data[i] ?? 0, png.data[i + 1] ?? 0, png.data[i + 2] ?? 0];
+  };
+  const bg = at(sampleX, fromY);
+  for (let x = 0; x < png.width; x += 1) {
+    for (let y = fromY; y < Math.min(toY, png.height); y += 1) {
+      const c = at(x, y);
+      if (Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) > tolerance) {
+        return x;
+      }
+    }
+  }
+  return 0;
+}

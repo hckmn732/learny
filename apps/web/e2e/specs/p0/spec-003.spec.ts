@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 import {
   indexCatalog,
@@ -17,6 +17,17 @@ import { sddDemos } from '../../../app/%5Fdev/sdd/registry';
 
 const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const FIXED_TIME = new Date('2026-11-11T12:20:00Z');
+
+/** Injects a stylesheet carrying the nonce of the response scripts, as the CSP requires. */
+async function addNoncedStyle(page: Page, content: string): Promise<void> {
+  await page.evaluate((css) => {
+    const nonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce ?? '';
+    const style = document.createElement('style');
+    style.nonce = nonce;
+    style.textContent = css;
+    document.head.append(style);
+  }, content);
+}
 
 const STATUS_LABELS: Record<DisplayStatus, string> = {
   pending: 'En attente',
@@ -145,15 +156,17 @@ test('index SDD conforme @SPEC-003 @visual', async ({ page }) => {
 
   // Live values change with every completed specification and can change text wrapping:
   // freeze the table layout and row heights before masking the dynamic cells.
-  await page.addStyleTag({
-    content: `
+  // The CSP only admits <style> elements carrying the response nonce (SPEC-805): reuse it.
+  await addNoncedStyle(
+    page,
+    `
       [data-testid="sdd-index-specs"] table,
       [data-testid="sdd-index-phases"] table { table-layout: fixed; }
       [data-testid="sdd-index-specs"] tbody tr { height: 44px; }
       [data-testid="sdd-index-specs"] td,
       [data-testid="sdd-index-next"] p { white-space: nowrap; overflow: hidden; }
     `,
-  });
+  );
   const mask = [
     page.getByTestId('sdd-index-live'),
     page.getByTestId('sdd-indicator-value'),

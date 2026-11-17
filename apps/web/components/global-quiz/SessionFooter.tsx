@@ -20,7 +20,7 @@ export interface SessionFooterProps {
 export function SessionFooter(props: SessionFooterProps) {
   return (
     <div
-      className="flex flex-wrap justify-between gap-12 border-t border-solid border-divider pt-18"
+      className="flex w-full flex-wrap justify-between gap-12 border-t border-solid border-divider pt-18"
       data-testid="gq-footer"
     >
       <button
