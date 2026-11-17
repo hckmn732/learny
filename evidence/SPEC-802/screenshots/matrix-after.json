@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-11-11T12:20:00Z",
+  "results": [
+    {
+      "width": 360,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/notifications",
+      "ok": false,
+      "error": "locator.waitFor: Test timeout of 1200000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('notification-panel') to be visible\u001b[22m\n"
+    }
+  ]
+}
