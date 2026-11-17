@@ -42,6 +42,21 @@ test('parcours protégé @SPEC-805', async ({
   expect(firstHeaders['permissions-policy']).toContain('camera=()');
   expect(firstHeaders['strict-transport-security']).toBeUndefined();
 
+  const nonces = await page
+    .locator('script[nonce]')
+    .evaluateAll((elements) => elements.map((element) => element.getAttribute('nonce')));
+  expect(nonces.length).toBeGreaterThan(0);
+  for (const nonce of nonces) expect(nonce).toBe(firstNonce);
+  const injected = await page.evaluate(async () => {
+    const script = document.createElement('script');
+    script.id = 'spec-805-injected';
+    script.textContent = 'window.__spec805 = true;';
+    document.body.appendChild(script);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    return (window as unknown as { __spec805?: boolean }).__spec805 === true;
+  });
+  expect(injected).toBe(false);
+
   const second = await page.reload();
   const secondCsp = second?.headers()['content-security-policy'] ?? '';
   const secondNonce = /'nonce-([^']+)'/.exec(secondCsp)?.[1];
