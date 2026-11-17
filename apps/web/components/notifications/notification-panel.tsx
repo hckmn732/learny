@@ -368,7 +368,7 @@ export const NotificationPanelView = ({
           <a
             href="/parametres#notifications"
             data-testid="notification-manage"
-            className="font-600 text-indigo-ink underline-offset-2 hover:underline"
+            className="touch-target font-600 text-indigo-ink underline-offset-2 hover:underline"
           >
             {t.manage}
           </a>

@@ -29,7 +29,7 @@ export default function QuizGlobalLoading() {
           <Skeleton className="h-34 w-80 rounded-full" />
         </div>
       </div>
-      <Skeleton className="h-40 w-460 rounded-12" />
+      <Skeleton className="h-40 w-460 max-w-full rounded-12" />
       <div className="flex items-center gap-12">
         <Skeleton className="h-8 flex-1 rounded-4" />
         <Skeleton className="h-16 w-80 rounded-full" />

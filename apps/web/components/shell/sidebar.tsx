@@ -27,6 +27,7 @@ import {
   cn,
   iconRegistry,
   toast,
+  breakpointQuery,
   useBreakpoint,
   type IconName,
 } from '@learny/ui';
@@ -247,7 +248,7 @@ export const SidebarView = ({
               href="/accueil"
               aria-label={t.logoLabel}
               data-testid="sidebar-logo"
-              className="flex min-w-0 items-center gap-10 font-display text-16 font-600 whitespace-nowrap text-white no-underline"
+              className="touch-target flex min-w-0 items-center gap-10 font-display text-16 font-600 whitespace-nowrap text-white no-underline"
             >
               <span
                 aria-hidden="true"
@@ -658,7 +659,14 @@ export const Sidebar = ({
   };
 
   const show = useCallback(() => {
-    if (compact) {
+    // CL-1, CL-2 — read the media query at click time: the first hydrated render answers
+    // `compact = false`, so a click before its effect must still open the mobile overlay and
+    // must never persist a collapse preference from the mobile state.
+    const compactNow =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia(breakpointQuery('nav')).matches
+        : compact;
+    if (compactNow) {
       setOverlayOpen(true);
       return;
     }

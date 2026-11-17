@@ -78,7 +78,7 @@ function Sigil({
 function DayStatus({ slot }: Readonly<{ slot: HomeSlotDto }>) {
   if (slot.state === 'done') {
     return (
-      <span className="rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime">
+      <span className="touch-target rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime">
         {t.day.done}
       </span>
     );
@@ -109,7 +109,7 @@ function DayStatus({ slot }: Readonly<{ slot: HomeSlotDto }>) {
   if (slot.state === 'todo') {
     return (
       <NextLink
-        className="rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime"
+        className="touch-target rounded-full bg-dark-700 px-10 py-4 text-12 font-600 text-lime"
         href={slot.href}
       >
         {t.day.doIt}

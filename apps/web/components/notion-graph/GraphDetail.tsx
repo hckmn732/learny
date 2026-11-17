@@ -314,7 +314,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-course-link"
                   prefetch={false}
                   href={selected.courseHref}
-                  className="inline-flex min-h-40 items-center rounded-12 bg-ink px-14 text-14 font-700 text-white no-underline"
+                  className="touch-target inline-flex min-h-40 items-center rounded-12 bg-ink px-14 text-14 font-700 text-white no-underline"
                 >
                   {t.detail.actions.course}
                 </NextLink>
@@ -324,7 +324,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-train-link"
                   prefetch={false}
                   href={selected.trainingHref}
-                  className="inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-14 font-700 text-ink no-underline"
+                  className="touch-target inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-14 font-700 text-ink no-underline"
                 >
                   {t.detail.actions.train}
                 </NextLink>
@@ -334,7 +334,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
                   data-testid="graph-gap-link"
                   prefetch={false}
                   href={selected.gapHref}
-                  className="inline-flex min-h-40 items-center rounded-12 bg-orange px-14 text-14 font-700 text-ink no-underline"
+                  className="touch-target inline-flex min-h-40 items-center rounded-12 bg-orange px-14 text-14 font-700 text-ink no-underline"
                 >
                   {t.detail.actions.gap}
                 </NextLink>
@@ -345,7 +345,7 @@ export function GraphDetail({ graph, selectedId, onSelect, onClose }: GraphDetai
               data-testid="graph-programme-link"
               prefetch={false}
               href={programmeHref}
-              className="inline-flex min-h-40 items-center rounded-12 bg-ink px-14 text-14 font-700 text-white no-underline"
+              className="touch-target inline-flex min-h-40 items-center rounded-12 bg-ink px-14 text-14 font-700 text-white no-underline"
             >
               {t.detail.actions.programme}
             </NextLink>

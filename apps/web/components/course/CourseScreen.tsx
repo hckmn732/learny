@@ -276,7 +276,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
                   <span />
                 ) : (
                   <a
-                    className="inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-18 text-14 font-600"
+                    className="touch-target inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-18 text-14 font-600"
                     href={`/formations/${encodeURIComponent(screen.formation.id)}/modules/${encodeURIComponent(screen.module.id)}/cours?chapitre=${encodeURIComponent(course.previousChapterId)}`}
                   >
                     {t.previous}
@@ -284,7 +284,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
                 )}
                 {course.nextChapterId === null ? null : (
                   <a
-                    className="inline-flex min-h-48 items-center rounded-14 bg-ink px-18 text-14 font-700 text-white"
+                    className="touch-target inline-flex min-h-48 items-center rounded-14 bg-ink px-18 text-14 font-700 text-white"
                     href={`/formations/${encodeURIComponent(screen.formation.id)}/modules/${encodeURIComponent(screen.module.id)}/cours?chapitre=${encodeURIComponent(course.nextChapterId)}`}
                   >
                     {t.next}
@@ -317,7 +317,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
                   {t.quizText.replace('{threshold}', String(course.quiz.threshold))}
                 </p>
                 <a
-                  className="inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-18 text-14 font-700 text-white"
+                  className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-18 text-14 font-700 text-white"
                   data-testid="course-quiz-link"
                   href={course.quiz.href}
                 >

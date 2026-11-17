@@ -21,7 +21,7 @@ export const TabsList = ({ className, variant = 'soft', ...props }: TabsListProp
   <TabsVariantContext.Provider value={variant}>
     <TabsPrimitive.List
       className={cn(
-        'inline-flex items-center gap-4 p-4',
+        'touch-target inline-flex items-center gap-4 p-4',
         variant === 'soft'
           ? 'rounded-12 bg-canvas'
           : 'rounded-14 border border-solid border-border bg-surface',

@@ -81,6 +81,18 @@ export async function expectTouchTargets(
         if (!(el instanceof HTMLElement) || el.getClientRects().length === 0) continue;
         const style = getComputedStyle(el);
         if (style.visibility === 'hidden' || style.display === 'none') continue;
+        // Radix focus guards are aria-hidden 0 × 0 spans: not interactive targets.
+        if (el.getAttribute('aria-hidden') === 'true') continue;
+        if (el.closest('[aria-hidden="true"]') !== null) continue;
+        if (el.hasAttribute('data-radix-focus-guard')) continue;
+        const raw = el.getBoundingClientRect();
+        if (raw.width === 0 && raw.height === 0) continue;
+        // A skip link is 1 px until keyboard focus reveals it; it is not a touch target.
+        if (
+          (el.classList.contains('sr-only') || el.classList.contains('learny-visually-hidden')) &&
+          document.activeElement !== el
+        )
+          continue;
         if (el.closest('[data-touch-exempt]') !== null) continue;
         if (el.hasAttribute('data-touch-exempt')) continue;
         // WCAG 2.5.8 inline exception: a link inside running text keeps the text flow.
@@ -137,10 +149,15 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
         const rect = el.getBoundingClientRect();
         return rect.right > window.innerWidth + 1 || rect.left < -1;
       })
-      .slice(0, 5)
+      .slice(0, 8)
       .map((el) => {
         const testId = el.getAttribute('data-testid');
-        return testId === null ? el.tagName.toLowerCase() : `[data-testid="${testId}"]`;
+        const rect = el.getBoundingClientRect();
+        const name = testId === null ? el.tagName.toLowerCase() : `[data-testid="${testId}"]`;
+        const classes = [...el.classList].slice(0, 6).join('.');
+        return `${name}${classes === '' ? '' : `.${classes}`} right=${String(
+          Math.round(rect.right),
+        )} width=${String(Math.round(rect.width))}`;
       }),
   }));
   expect(

@@ -50,8 +50,8 @@ export function CourseToc({
               aria-current={active ? 'page' : undefined}
               className={
                 active
-                  ? 'flex min-h-48 items-center gap-10 rounded-14 px-10 py-8 text-14 font-700 text-ink'
-                  : 'flex min-h-48 items-center gap-10 rounded-14 px-10 py-8 text-14 text-ink'
+                  ? 'touch-target flex min-h-48 items-center gap-10 rounded-14 px-10 py-8 text-14 font-700 text-ink'
+                  : 'touch-target flex min-h-48 items-center gap-10 rounded-14 px-10 py-8 text-14 text-ink'
               }
               href={chapterHref(screen, chapter.id)}
             >
@@ -79,7 +79,7 @@ export function CourseToc({
             {active
               ? sections.map((section) => (
                   <a
-                    className="block py-6 pr-10 pl-44 text-13 text-ink-muted"
+                    className="touch-target block py-6 pr-10 pl-44 text-13 text-ink-muted"
                     href={`#${section.anchor}`}
                     key={section.id}
                   >

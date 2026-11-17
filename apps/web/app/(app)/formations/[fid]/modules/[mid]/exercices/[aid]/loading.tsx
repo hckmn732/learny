@@ -14,7 +14,7 @@ export default function ExerciseLoading() {
       <p className="sr-only">{t.loading}</p>
       <div className="mt-28 flex animate-pulse flex-col gap-18 motion-reduce:animate-none">
         <div className="h-16 w-320 rounded-8 bg-surface-muted" />
-        <div className="h-40 w-520 rounded-12 bg-surface-muted" />
+        <div className="h-40 w-520 max-w-full rounded-12 bg-surface-muted" />
         <div className="h-220 rounded-24 bg-surface-muted" />
         <div className="h-380 rounded-24 bg-surface-muted" />
       </div>
