@@ -36,6 +36,12 @@ const nextConfig: NextConfig = {
   // packages. The managed build (SPEC-013) keeps the same output, which Vercel accepts.
   output: 'standalone',
   outputFileTracingRoot: path.join(import.meta.dirname, '../..'),
+  // Templates read with fs at request time are invisible to the tracer: ship them explicitly
+  // (SPEC-806 legal pages, SPEC-803 accessibility statement).
+  outputFileTracingIncludes: {
+    '/legal/*': ['../../docs/legal/*.md'],
+    '/accessibilite': ['./content/legal/*.md'],
+  },
   // SDD demo pages are never indexed, even when they answer 404 (SPEC-006, EF-4).
   headers() {
     return Promise.resolve([
