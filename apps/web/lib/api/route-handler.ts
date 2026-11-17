@@ -151,7 +151,9 @@ export function routeHandler<R extends AnyRoute>(
           ...(userId === null ? {} : { userId }),
         });
       }
-      return mergeResponseHeaders(problem, responseHeaders);
+      const failed = mergeResponseHeaders(problem, responseHeaders);
+      failed.headers.set('Server-Timing', `app;dur=${String(duration())}`);
+      return failed;
     };
 
     try {
@@ -311,6 +313,8 @@ export function routeHandler<R extends AnyRoute>(
         direct ?? successResponse(route, requestId, route.successStatus, response.payload),
         responseHeaders,
       );
+      // SPEC-804 ET-7 — durée du handler, sans donnée personnelle.
+      answer.headers.set('Server-Timing', `app;dur=${String(duration())}`);
       if (reservation !== null) {
         await finishIdempotency(reservation, route.successStatus, response.payload ?? null);
         reservation = null;

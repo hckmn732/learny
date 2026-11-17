@@ -107,6 +107,26 @@ export default defineConfig({
       ...(process.env.CROSS_BROWSER_SKIP_FIREFOX === '1' ? { grep: /$^/ } : {}),
       use: { ...devices['Desktop Firefox'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
+    // SPEC-804 ET-2 — projet de mesure de l'INP, réservé à `pnpm test:perf` (PW_PERF=1).
+    ...(process.env.PW_PERF === '1'
+      ? [
+          {
+            name: 'perf',
+            testDir: './e2e/perf',
+            retries: 0,
+            workers: 1,
+            use: {
+              ...devices['Pixel 7'],
+              ...COMMON,
+              viewport: { width: 390, height: 844 },
+              isMobile: true,
+              video: 'off' as const,
+              trace: 'off' as const,
+              screenshot: 'off' as const,
+            },
+          },
+        ]
+      : []),
     {
       name: 'cross-browser-webkit',
       testMatch: '**/specs/p6/**/*.spec.ts',
@@ -124,6 +144,8 @@ export default defineConfig({
       PORT: String(PORT),
       APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
       ENABLE_SDD_PAGES: 'true',
+      // SPEC-804: rapport de démonstration figé pour la page de performance.
+      PERF_DEMO_FIXTURE: '1',
       // The server sits behind a trusted proxy in these tests: each test announces its own address
       // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.
       TRUST_PROXY: 'true',

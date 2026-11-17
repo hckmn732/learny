@@ -46,6 +46,7 @@ export default defineConfig({
             'packages/notifications/emails/**/*.test.{ts,tsx}',
             'apps/*/src/**/*.test.{ts,tsx}',
             'apps/web/{app,components,lib,messages}/**/*.test.{ts,tsx}',
+            'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',
             'tools/**/test/unit/**/*.test.ts',
             'tools/perf/test/**/*.test.ts',

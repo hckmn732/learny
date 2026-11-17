@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import bundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -22,6 +23,13 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
   devIndicators: false,
   reactStrictMode: true,
+  // SPEC-804 ET-5/ET-6 — images modernes, imports ciblés et analyse du bundle.
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'date-fns'],
+  },
   // Docker image (SPEC-012, ET-2): a self-contained server whose traced files include workspace
   // packages. The managed build (SPEC-013) keeps the same output, which Vercel accepts.
   output: 'standalone',
@@ -42,4 +50,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });
+
+export default withBundleAnalyzer(nextConfig);

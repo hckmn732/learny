@@ -310,3 +310,35 @@ jobs:
             apps/web/e2e/__screenshots__/
           if-no-files-found: warn
           retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+
+  # SPEC-804 — budgets de performance aux tags de version et sur demande manuelle.
+  perf:
+    name: Performances (test:perf)
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
+    needs: [audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - uses: grafana/setup-k6-action@v1
+      - run: pnpm install --frozen-lockfile
+      - run: supabase start
+      - run: pnpm build
+      - name: Budgets Lighthouse, INP et k6
+        run: pnpm test:perf
+      - name: Publier le rapport de performances
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-reports
+          path: |
+            test-results/perf/
+            evidence/SPEC-804/
+          if-no-files-found: warn
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
