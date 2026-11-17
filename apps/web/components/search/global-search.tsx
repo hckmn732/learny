@@ -413,7 +413,7 @@ export const GlobalSearch = ({
             <a
               data-testid="search-view-all"
               href={viewAllHref}
-              className="mx-6 mt-2 mb-6 flex min-h-38 items-center justify-center rounded-12 border border-solid border-border bg-surface-subtle px-12 text-13 font-600 text-ink no-underline"
+              className="touch-target mx-6 mt-2 mb-6 flex min-h-38 items-center justify-center rounded-12 border border-solid border-border bg-surface-subtle px-12 text-13 font-600 text-ink no-underline"
             >
               {t.viewAll}
             </a>

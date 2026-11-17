@@ -120,7 +120,7 @@ export function ProgrammeModuleCard({
         </span>
         {module.status === 'validated' && href !== null ? (
           <a
-            className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
             data-testid={`programme-module-${String(module.position)}-action`}
             href={`${href}/cours`}
           >
@@ -129,7 +129,7 @@ export function ProgrammeModuleCard({
         ) : null}
         {module.status === 'open' && href !== null ? (
           <a
-            className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
             data-testid={`programme-module-${String(module.position)}-action`}
             href={href}
           >
@@ -168,25 +168,25 @@ export function ProgrammeModuleCard({
           {module.status === 'open' && href !== null ? (
             <div className="flex flex-wrap gap-8">
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={href}
               >
                 {t.apports}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={`${href}/cours`}
               >
                 {t.readCourse}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-16 text-14 font-600 text-ink"
                 href={`${href}/exercices`}
               >
                 {t.practice}
               </a>
               <a
-                className="inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink"
                 href={`${href}/quiz`}
               >
                 {t.passQuiz}

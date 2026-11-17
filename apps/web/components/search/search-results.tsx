@@ -134,7 +134,7 @@ export const SearchPageView = ({ state }: { state: SearchPageState }) => (
           <a
             data-testid="search-page-retry"
             href={retryHref(state.query)}
-            className="mt-12 inline-flex min-h-38 items-center rounded-12 border border-solid border-border-strong px-16 text-14 font-600 text-ink no-underline"
+            className="touch-target mt-12 inline-flex min-h-38 items-center rounded-12 border border-solid border-border-strong px-16 text-14 font-600 text-ink no-underline"
           >
             {t.page.retry}
           </a>

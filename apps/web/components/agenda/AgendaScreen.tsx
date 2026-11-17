@@ -249,7 +249,7 @@ export function AgendaScreen({
           action={
             <NextLink
               href="/formations/nouvelle"
-              className="inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink no-underline"
+              className="touch-target inline-flex min-h-44 items-center rounded-12 bg-lime px-16 text-14 font-700 text-ink no-underline"
             >
               {t.emptyLink}
             </NextLink>

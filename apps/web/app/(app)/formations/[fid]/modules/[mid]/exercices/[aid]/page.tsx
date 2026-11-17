@@ -49,7 +49,7 @@ export default async function ExercisePage({ params }: ExercisePageProps) {
               <p className="m-0 text-12 text-ink-muted">Référence : {exercise.requestId}</p>
             )}
             <a
-              className="mt-4 inline-flex min-h-44 items-center justify-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline"
+              className="touch-target mt-4 inline-flex min-h-44 items-center justify-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline"
               href={`/formations/${fid}/modules/${mid}/exercices/${aid}`}
             >
               {t.retryLoad}

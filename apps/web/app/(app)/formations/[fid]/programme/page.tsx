@@ -71,7 +71,7 @@ export default async function ProgrammePage({ params }: ProgrammePageProps) {
             </div>
             <div className="flex flex-wrap gap-8">
               <a
-                className="inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-18 text-15 font-600 text-ink"
+                className="touch-target inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-18 text-15 font-600 text-ink"
                 data-testid="programme-exam-link"
                 href={`/formations/${encodeURIComponent(fid)}/examen-blanc`}
               >
@@ -79,7 +79,7 @@ export default async function ProgrammePage({ params }: ProgrammePageProps) {
               </a>
               {openModule === null || openModule.href === null ? null : (
                 <a
-                  className="inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
+                  className="touch-target inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
                   data-testid="programme-open-module"
                   href={openModule.href}
                 >

@@ -79,7 +79,7 @@ export default async function ModulePage({ params, searchParams }: ModulePagePro
                 {t.lockedHint(selected.unlockAfterPosition ?? Math.max(1, selected.position - 1))}
               </p>
               <a
-                className="inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+                className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
                 href={`/formations/${encodeURIComponent(fid)}/programme`}
               >
                 {t.backToProgramme}

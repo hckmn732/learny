@@ -251,7 +251,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
       <EmptyState
         action={
           <a
-            className="inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white no-underline"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white no-underline"
             href="/accueil"
           >
             {t.empty.action}

@@ -119,7 +119,7 @@ export function ProgrammeModuleList({ formationId, modules }: ProgrammeModuleLis
                 </span>
                 {module.status === 'open' ? (
                   <a
-                    className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+                    className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
                     href={`/formations/${formationId}/programme#module-${String(module.position)}`}
                   >
                     {t.openModule}

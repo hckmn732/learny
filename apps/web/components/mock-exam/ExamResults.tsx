@@ -195,7 +195,7 @@ export function ExamResults({ result, programmeHref, onRestart }: ExamResultsPro
             {t.review}
           </button>
           <a
-            className="inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink"
+            className="touch-target inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink"
             href={programmeHref}
           >
             {t.back}

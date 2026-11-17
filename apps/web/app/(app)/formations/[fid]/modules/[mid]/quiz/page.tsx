@@ -56,7 +56,7 @@ export default async function QuizPage({ params }: QuizPageProps) {
             <h1 className="m-0 font-display text-30 font-600">{fr.quiz.lockedTitle}</h1>
             <p className="m-0 text-15 text-ink-muted">{fr.quiz.lockedText}</p>
             <a
-              className="inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+              className="touch-target inline-flex min-h-44 w-fit items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
               href={programmeHref}
             >
               {fr.quiz.lockedBack}

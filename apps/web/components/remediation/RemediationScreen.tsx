@@ -237,7 +237,7 @@ export function RemediationScreen({
                     {gap.excerpts.map((excerpt) => (
                       <li key={`${gap.notionId}-${excerpt.label}`}>
                         <a
-                          className="inline-flex min-h-36 items-center rounded-10 bg-canvas px-12 text-13 font-600 text-ink"
+                          className="touch-target inline-flex min-h-36 items-center rounded-10 bg-canvas px-12 text-13 font-600 text-ink"
                           href={excerpt.href}
                         >
                           {`${t.excerptPrefix} · ${excerpt.label}`}
@@ -278,14 +278,14 @@ export function RemediationScreen({
                 </p>
                 <div className="flex flex-wrap gap-10">
                   <a
-                    className="inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white"
+                    className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white"
                     data-testid="remediation-retry"
                     href={quizHref}
                   >
                     {t.retry}
                   </a>
                   <a
-                    className="inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-18 text-14 font-600 text-ink"
+                    className="touch-target inline-flex min-h-44 items-center rounded-12 border border-border-strong bg-surface px-18 text-14 font-600 text-ink"
                     data-testid="remediation-back"
                     href={moduleHref}
                   >

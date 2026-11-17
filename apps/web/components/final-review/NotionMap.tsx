@@ -60,7 +60,7 @@ export function NotionMap({ modules, mapHref }: NotionMapProps) {
         <NextLink
           prefetch={false}
           href={mapHref}
-          className="inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-13 font-700 text-ink no-underline hover:bg-surface-subtle"
+          className="touch-target inline-flex min-h-40 items-center rounded-12 border border-solid border-border-strong bg-surface px-14 text-13 font-700 text-ink no-underline hover:bg-surface-subtle"
         >
           {t.openMap}
         </NextLink>

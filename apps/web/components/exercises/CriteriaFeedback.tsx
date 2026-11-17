@@ -85,7 +85,7 @@ export function CriteriaFeedback({
       </p>
       <div className="flex flex-wrap gap-8">
         <a
-          className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline"
+          className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white no-underline"
           data-testid="exercise-next"
           href={correction.nextStep.href}
         >
@@ -101,7 +101,7 @@ export function CriteriaFeedback({
           {t.retry}
         </Button>
         <a
-          className="inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink no-underline"
+          className="touch-target inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong bg-surface px-16 text-14 font-600 text-ink no-underline"
           href={gapsHref}
         >
           {t.gaps}
