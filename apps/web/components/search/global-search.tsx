@@ -276,7 +276,9 @@ export const GlobalSearch = ({
         onChange={(event) => {
           onChange(event.currentTarget.value);
         }}
-        onFocus={() => {
+        onFocus={(event) => {
+          // SPEC-802 CL-4 — keep the field above the virtual keyboard.
+          event.currentTarget.scrollIntoView({ block: 'nearest' });
           if (value.trim() !== '') setOpen(true);
         }}
         onKeyDown={onKeyDown}

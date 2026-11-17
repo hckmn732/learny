@@ -409,6 +409,10 @@ export function TutorPanel({
             onChange={(event) => {
               onDraft(event.target.value);
             }}
+            onFocus={(event) => {
+              // SPEC-802 CL-4 — keep the field above the virtual keyboard.
+              event.currentTarget.scrollIntoView({ block: 'nearest' });
+            }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
