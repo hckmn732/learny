@@ -36,7 +36,7 @@ export default function AccessibilitePage() {
           className="rounded-24 border border-solid border-border bg-surface p-24 sm:p-40"
           data-testid="accessibilite-card"
         >
-          <MarkdownContent markdown={markdown} className="[&_h2]:text-20" />
+          <MarkdownContent markdown={markdown.replace(/^# .*\n+/, '')} className="[&_h2]:text-20" />
         </article>
       </main>
       <SiteFooter />

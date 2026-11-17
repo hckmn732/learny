@@ -56,7 +56,13 @@ test('zoom 200 % et espacement du texte @SPEC-803', async ({ page, context, base
   ]) {
     await page.goto(route);
     await page.locator('main, [data-testid="quiz-page"]').first().waitFor({ state: 'visible', timeout: 20_000 });
-    await page.addStyleTag({ content: TEXT_SPACING });
+    // The CSP only admits <style> elements carrying the response nonce (SPEC-805): reuse it.
+    await page.evaluate((css) => {
+      const style = document.createElement('style');
+      style.nonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce ?? '';
+      style.textContent = css;
+      document.head.append(style);
+    }, TEXT_SPACING);
     await page.evaluate(() => {
       document.documentElement.style.fontSize = '180%';
     });

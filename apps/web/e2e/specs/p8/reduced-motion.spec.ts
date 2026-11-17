@@ -71,6 +71,16 @@ test('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => {
   expect(await motionOffenders(page)).toEqual([]);
 
   await page.goto(`/formations/${SAP}/quiz-global`);
+  await expect(page.getByTestId('gq-game').or(page.getByTestId('gq-end'))).toBeVisible({
+    timeout: 30_000,
+  });
+  // Skip the games until the session shows a recall card (order depends on the day's notions).
+  for (let step = 0; step < 20; step += 1) {
+    if (await page.getByTestId('gq-recall').isVisible()) break;
+    await page.getByTestId('gq-skip').click();
+    await expect(page.getByTestId('gq-next')).toBeEnabled({ timeout: 15_000 });
+    await page.getByTestId('gq-next').click();
+  }
   await expect(page.getByTestId('recall-card-flip')).toBeVisible({ timeout: 30_000 });
   await page.getByTestId('recall-card-flip').click();
   await expect

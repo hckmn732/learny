@@ -83,6 +83,8 @@ test('noms accessibles des régions clés @SPEC-803', async ({ page, context, ba
     name: 'settings-tabs.aria.yml',
   });
 
+  // A signed-in visitor is redirected away from /connexion: inspect it without the session.
+  await context.clearCookies();
   await page.goto('/connexion');
   await expect(page.getByTestId('auth-content')).toBeVisible();
   await expect(page.getByTestId('auth-content')).toMatchAriaSnapshot({

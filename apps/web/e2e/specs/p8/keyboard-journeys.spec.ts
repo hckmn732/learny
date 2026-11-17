@@ -46,6 +46,66 @@ async function focusAnd(page: Page, testId: string, key = 'Enter'): Promise<void
   await page.keyboard.press(key);
 }
 
+/**
+ * The demonstration dataset has no question bank for module quizzes (the tutor would generate
+ * them): seed an in-progress validation quiz of three choice questions taken from Alex's own
+ * demo bricks of the module, so the journey reaches its result screen.
+ */
+async function seedKeyboardQuiz(): Promise<string> {
+  const alex = demoUserId('alex');
+  const rows = await serviceDb().execute<{
+    brick_id: string;
+    version_id: string;
+    notion_id: string;
+    notion_label: string;
+    payload: unknown;
+  }>(sql`
+    select b.id::text as brick_id, bv.id::text as version_id,
+           n.id::text as notion_id, n.label as notion_label, bv.payload
+    from public.bricks b
+    join public.brick_versions bv on bv.brick_id = b.id and bv.version = b.current_version
+    join public.notions n on n.id = b.notion_ids[1]
+    where b.owner_id = ${alex}::uuid and b.type = 'choice_question' and b.status = 'active'
+      and n.module_id = ${MODULE}::uuid
+    order by b.id
+    limit 3
+  `);
+  if (rows.length < 3) throw new Error('questions à choix du module de démonstration introuvables');
+  const points = 100 / rows.length;
+  const items = rows.map((row) => ({
+    brickId: row.brick_id,
+    brickVersionId: row.version_id,
+    points,
+    notionId: row.notion_id,
+    notionLabel: row.notion_label,
+    type: 'choice_question',
+    payload: row.payload,
+  }));
+  const config = { threshold: 80, questionCount: items.length, scoring: 'equal' };
+  const activity = await serviceDb().execute<{ id: string }>(sql`
+    insert into public.activities (owner_id, formation_id, module_id, kind, config, items, status)
+    values (
+      ${alex}::uuid, ${SAP}::uuid, ${MODULE}::uuid, 'validation_quiz',
+      ${JSON.stringify(config)}::jsonb, ${JSON.stringify(items)}::jsonb, 'ready'
+    )
+    returning id::text as id
+  `);
+  const activityId = activity[0]?.id ?? '';
+  const attempt = await serviceDb().execute<{ id: string }>(sql`
+    insert into public.attempts (user_id, activity_id, attempt_no, status, started_at)
+    values (${alex}::uuid, ${activityId}::uuid, 1, 'in_progress', '2026-11-11T12:20:00Z')
+    returning id::text as id
+  `);
+  const attemptId = attempt[0]?.id ?? '';
+  for (const [index, row] of rows.entries()) {
+    await serviceDb().execute(sql`
+      insert into public.answers (attempt_id, brick_version_id, position, response, max_score)
+      values (${attemptId}::uuid, ${row.version_id}::uuid, ${index + 1}, '{}'::jsonb, ${points})
+    `);
+  }
+  return attemptId;
+}
+
 async function createPasswordUser(): Promise<{ id: string; email: string }> {
   const email = `e2e803-${randomBytes(5).toString('hex')}@test.learny.test`;
   const { url, serviceRoleKey } = supabaseLocalEnv();
@@ -131,6 +191,7 @@ test('parcours clavier quiz de validation @SPEC-803', async ({ page, context, ba
   forbidMouse(page);
   await resetDemoRateLimits();
   await applyDemo(context, baseURL);
+  created.push(await seedKeyboardQuiz());
   await page.goto(`/formations/${SAP}/modules/${MODULE}/quiz`);
   await expect(page.getByTestId('quiz-question-counter')).toBeVisible({ timeout: 30_000 });
   for (let index = 0; index < 3; index += 1) {
@@ -150,6 +211,9 @@ test('parcours clavier quiz de validation @SPEC-803', async ({ page, context, ba
 test('parcours clavier examen blanc @SPEC-803', async ({ page, context, baseURL }) => {
   forbidMouse(page);
   await applyDemo(context, baseURL);
+  // The seeded graded attempt only carries display data: the result of the new attempt must not
+  // be compared with it.
+  await deleteDemoAttempts([exam.gradedId]);
   await page.goto(`/formations/${SAP}/examen-blanc/${exam.inProgressId}`);
   await expect(page.getByTestId('exam-screen')).toBeVisible({ timeout: 30_000 });
   const examOption = page.locator('[data-testid^="exam-option-"]').first();
@@ -172,7 +236,7 @@ test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }
   await expect(page.getByTestId('gq-game').or(page.getByTestId('gq-end'))).toBeVisible({
     timeout: 30_000,
   });
-  for (let turn = 0; turn < 6; turn += 1) {
+  for (let turn = 0; turn < 40; turn += 1) {
     if ((await page.getByTestId('gq-end').count()) > 0) break;
     if ((await page.getByTestId('gq-recall').count()) > 0) {
       await focusAnd(page, 'recall-card-flip', 'Enter');
@@ -194,7 +258,7 @@ test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }
     } else if ((await page.getByTestId('game-ordering').count()) > 0) {
       await focusAnd(page, 'ordering-verify', 'Enter');
     } else if ((await page.getByTestId('game-cloze').count()) > 0) {
-      const gaps = page.locator('[data-testid^="cloze-gap-"]');
+      const gaps = page.locator('input[data-testid^="cloze-gap-"]');
       const count = await gaps.count();
       for (let index = 0; index < count; index += 1) {
         await gaps.nth(index).focus();
@@ -248,7 +312,8 @@ test('parcours clavier paramètres @SPEC-803', async ({ page, context, baseURL }
   await weekend.focus();
   await page.keyboard.press('Space');
   await expect(weekend).not.toHaveAttribute('aria-checked', before ?? 'false');
-  await page.keyboard.press('Home');
-  await focusAnd(page, 'profile-save', 'Enter');
-  await expect(page.getByTestId('profile-save-status')).toBeVisible({ timeout: 20_000 });
+  // The tab saves on change and announces the confirmation in its polite live region.
+  await expect(page.getByTestId('notification-settings-status')).not.toBeEmpty({
+    timeout: 20_000,
+  });
 });

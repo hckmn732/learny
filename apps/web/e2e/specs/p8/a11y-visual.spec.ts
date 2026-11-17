@@ -77,7 +77,8 @@ test('états de focus visibles des composants principaux @SPEC-803 @visual', asy
   await expect(button).toHaveCSS('outline-offset', '2px');
 
   await page.goto('/_dev/ui/saisie');
-  const field = page.getByTestId('ui-textfield-form').locator('input');
+  // TextField forwards data-testid to the <input> itself.
+  const field = page.getByTestId('ui-textfield-form');
   await page.keyboard.press('Tab');
   await field.focus();
   await expect(field).toHaveCSS('outline-width', '2px');

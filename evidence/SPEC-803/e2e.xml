@@ -1,2 +1,950 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.09923900000000004">
+<testsuites id="" name="" tests="16" failures="6" skipped="2" errors="4" time="926.1939229999999">
+<testsuite name="p8/a11y-audit.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="2" failures="0" skipped="1" time="90.004" errors="0">
+<testcase name="audit axe desktop @SPEC-803" classname="p8/a11y-audit.spec.ts" time="89.777">
+<system-out>
+<![CDATA[[axe 1440] SCR-01/inscription
+[axe 1440] SCR-01/connexion
+[axe 1440] SCR-01/verification
+[axe 1440] SCR-02/profil
+[axe 1440] SCR-02/rythme
+[axe 1440] SCR-02/ia
+[axe 1440] SCR-02/rappels
+[axe 1440] SCR-02/depart
+[axe 1440] SCR-03/accueil
+[axe 1440] SCR-03/menu
+[axe 1440] SCR-03/notifications
+[axe 1440] SCR-03/compte
+[axe 1440] SCR-04/nouvelle
+[axe 1440] SCR-04/cadrage
+[axe 1440] SCR-05/programme
+[axe 1440] SCR-06/module
+[axe 1440] SCR-07/cours
+[axe 1440] SCR-07/tuteur
+[axe 1440] SCR-08/exercice
+[axe 1440] SCR-09/quiz
+[axe 1440] SCR-09/remediation
+[axe 1440] SCR-10/quiz-global
+[axe 1440] SCR-11/introduction
+[axe 1440] SCR-12/agenda
+[axe 1440] SCR-12/semaine
+[axe 1440] SCR-12/mois
+[axe 1440] SCR-13/lacunes
+[axe 1440] SCR-14/carte
+[axe 1440] SCR-14/detail
+[axe 1440] SCR-15/profil
+[axe 1440] SCR-15/notifications
+[axe 1440] SCR-15/automatismes
+[axe 1440] SCR-15/modeles
+[axe 1440] SCR-16/bilan
+[axe 1440] SCR-17/groupe
+[axe 1440] SCR-18/recherche
+[axe 1440] SCR-20/introuvable
+[axe 1440] SCR-20/hors-ligne
+[axe 1440] SCR-20/acces-refuse
+[axe 1440] SCR-09/resultat
+[axe 1440] SCR-11/epreuve
+[axe 1440] SCR-11/resultats
+[axe 1440] SCR-20/accessibilite
+[axe 1440] SCR-01/connexion-erreur
+[axe 1440] SCR-15/export-donnees
+[axe 1440] SCR-15/suppression-compte
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-3.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-4.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-5.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-7.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-8.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-6.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-11.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-9.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-10.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-12.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-14.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-13.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-15.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-16.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-17.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-18.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-20.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-19.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-21.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-23.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-25.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-24.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-26.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-27.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-28.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-29.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-22.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-30.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-31.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-32.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-33.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-34.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-35.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-36.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-37.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-38.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-40.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-39.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-41.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-42.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-43.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-44.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-45.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-46.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="audit axe mobile @SPEC-803 @mobile" classname="p8/a11y-audit.spec.ts">
+<properties>
+<property name="skip" value="parcours mobile">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p8/a11y-visual.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="3" failures="1" skipped="1" time="64.759" errors="1">
+<testcase name="déclaration d’accessibilité, jetons et structure @SPEC-803 @visual" classname="p8/a11y-visual.spec.ts" time="1.136">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toHaveText(expected) failed" type="expect.toHaveText">
+<![CDATA[  [desktop] › p8/a11y-visual.spec.ts:35:1 › déclaration d’accessibilité, jetons et structure @SPEC-803 @visual 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('heading', { level: 1 })
+    Expected: "Déclaration d’accessibilité"
+    Error: strict mode violation: getByRole('heading', { level: 1 }) resolved to 2 elements:
+        1) <h1 class="m-0 font-display text-34 font-600 leading-1.15 tracking-title">Déclaration d’accessibilité</h1> aka locator('header').getByRole('heading', { name: 'Déclaration d’accessibilité' })
+        2) <h1 class="m-0 font-display text-34 font-600 leading-1.2 tracking-title">Déclaration d’accessibilité</h1> aka getByTestId('brick-markdown').getByRole('heading', { name: 'Déclaration d’accessibilité' })
+
+    Call log:
+      - Expect "toHaveText" getByRole('heading', { level: 1 }) with timeout 5000ms
+      - waiting for getByRole('heading', { level: 1 })
+
+
+      38 | }) => {
+      39 |   await page.goto('/accessibilite');
+    > 40 |   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Déclaration d’accessibilité');
+         |                                                         ^
+      41 |   await expect(page).toHaveTitle('Déclaration d’accessibilité · Learny');
+      42 |   await expectTokens(page, {
+      43 |     'h1': { color: '#111113' },
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-visual.spec.ts:40:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="déclaration d’accessibilité mobile @SPEC-803 @visual @mobile" classname="p8/a11y-visual.spec.ts">
+<properties>
+<property name="skip" value="capture mobile">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="états de focus visibles des composants principaux @SPEC-803 @visual" classname="p8/a11y-visual.spec.ts" time="63.366">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 60000ms exceeded." type="Error">
+<![CDATA[  [desktop] › p8/a11y-visual.spec.ts:65:1 › états de focus visibles des composants principaux @SPEC-803 @visual 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.focus: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByTestId('ui-textfield-form').locator('input')
+
+
+      80 |   const field = page.getByTestId('ui-textfield-form').locator('input');
+      81 |   await page.keyboard.press('Tab');
+    > 82 |   await field.focus();
+         |               ^
+      83 |   await expect(field).toHaveCSS('outline-width', '2px');
+      84 |   await expect(field).toHaveCSS('outline-color', FOCUS_LIGHT);
+      85 |
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-visual.spec.ts:82:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="p8/aria-snapshots.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="1" failures="1" skipped="0" time="12.202" errors="0">
+<testcase name="noms accessibles des régions clés @SPEC-803" classname="p8/aria-snapshots.spec.ts" time="12.202">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [desktop] › p8/aria-snapshots.spec.ts:38:1 › noms accessibles des régions clés @SPEC-803 ─────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('auth-content')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('auth-content') with timeout 5000ms
+      - waiting for getByTestId('auth-content')
+
+
+      85 |
+      86 |   await page.goto('/connexion');
+    > 87 |   await expect(page.getByTestId('auth-content')).toBeVisible();
+         |                                                  ^
+      88 |   await expect(page.getByTestId('auth-content')).toMatchAriaSnapshot({
+      89 |     name: 'connexion-form.aria.yml',
+      90 |   });
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/aria-snapshots.spec.ts:87:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="p8/keyboard-journeys.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="6" failures="3" skipped="0" time="459.073" errors="1">
+<testcase name="parcours clavier connexion @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="2.833">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcours clavier quiz de validation @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="32.228">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [desktop] › p8/keyboard-journeys.spec.ts:130:1 › parcours clavier quiz de validation @SPEC-803 ───
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('quiz-question-counter')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('quiz-question-counter') with timeout 30000ms
+      - waiting for getByTestId('quiz-question-counter')
+
+
+      133 |   await applyDemo(context, baseURL);
+      134 |   await page.goto(`/formations/${SAP}/modules/${MODULE}/quiz`);
+    > 135 |   await expect(page.getByTestId('quiz-question-counter')).toBeVisible({ timeout: 30_000 });
+          |                                                           ^
+      136 |   for (let index = 0; index < 3; index += 1) {
+      137 |     const options = page.locator('[data-testid^="quiz-option-"]');
+      138 |     await options.first().focus();
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:135:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-keyboard-journeys-parco-11795-quiz-de-validation-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="parcours clavier examen blanc @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="31.579">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [desktop] › p8/keyboard-journeys.spec.ts:150:1 › parcours clavier examen blanc @SPEC-803 ─────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('exam-result')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('exam-result') with timeout 30000ms
+      - waiting for getByTestId('exam-result')
+
+
+      162 |   await expect(page.getByTestId('exam-confirm-dialog')).toBeVisible();
+      163 |   await focusAnd(page, 'exam-confirm-finish', 'Enter');
+    > 164 |   await expect(page.getByTestId('exam-result')).toBeVisible({ timeout: 30_000 });
+          |                                                 ^
+      165 | });
+      166 |
+      167 | test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }) => {
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:164:49
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-examen-blanc-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="parcours clavier quiz global @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="382.389">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 360000ms exceeded." type="Error">
+<![CDATA[  [desktop] › p8/keyboard-journeys.spec.ts:167:1 › parcours clavier quiz global @SPEC-803 ──────────
+
+    Test timeout of 360000ms exceeded.
+
+    Error: locator.focus: Test timeout of 360000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid^="cloze-gap-"]').nth(1)
+
+
+      198 |       const count = await gaps.count();
+      199 |       for (let index = 0; index < count; index += 1) {
+    > 200 |         await gaps.nth(index).focus();
+          |                               ^
+      201 |         await page.keyboard.type('réponse');
+      202 |       }
+      203 |       // The last gap owns the Enter shortcut of the cloze game (SPEC-701), which frees the
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:200:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-quiz-global-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="parcours clavier carte des notions @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="2.708">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="parcours clavier paramètres @SPEC-803" classname="p8/keyboard-journeys.spec.ts" time="7.336">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [desktop] › p8/keyboard-journeys.spec.ts:227:1 › parcours clavier paramètres @SPEC-803 ───────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('profile-save')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('profile-save') with timeout 5000ms
+      - waiting for getByTestId('profile-save')
+
+
+      42 | async function focusAnd(page: Page, testId: string, key = 'Enter'): Promise<void> {
+      43 |   const target = page.getByTestId(testId);
+    > 44 |   await expect(target).toBeVisible();
+         |                        ^
+      45 |   await target.focus();
+      46 |   await page.keyboard.press(key);
+      47 | }
+        at focusAnd (/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:44:24)
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:252:9
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="p8/reduced-motion.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="1" failures="1" skipped="0" time="33.711" errors="0">
+<testcase name="mouvement réduit @SPEC-803" classname="p8/reduced-motion.spec.ts" time="33.711">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [desktop] › p8/reduced-motion.spec.ts:54:1 › mouvement réduit @SPEC-803 ──────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('recall-card-flip')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('recall-card-flip') with timeout 30000ms
+      - waiting for getByTestId('recall-card-flip')
+
+
+      72 |
+      73 |   await page.goto(`/formations/${SAP}/quiz-global`);
+    > 74 |   await expect(page.getByTestId('recall-card-flip')).toBeVisible({ timeout: 30_000 });
+         |                                                      ^
+      75 |   await page.getByTestId('recall-card-flip').click();
+      76 |   await expect
+      77 |     .poll(async () =>
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/reduced-motion.spec.ts:74:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-reduced-motion-mouvement-réduit-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="p8/text-spacing.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="desktop" tests="1" failures="0" skipped="0" time="1.707" errors="1">
+<testcase name="zoom 200 % et espacement du texte @SPEC-803" classname="p8/text-spacing.spec.ts" time="1.707">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/trace.zip]]
+]]>
+</system-out>
+<error message="page.addStyleTag: Applying inline style violates the following Content Security Policy directive &apos;style-src-elem &apos;self&apos; &apos;nonce-Hhn90KZ09KqWE7hXlfVvTfGG&apos;&apos;. Either the &apos;unsafe-inline&apos; keyword, a hash (&apos;sha256-tOPwjUgbaSf/PDzw/Zd1OnXJzBoOVIoWfB/1mTv2Ft0=&apos;), or a nonce (&apos;nonce-...&apos;) is required to enable inline execution. The action has been blocked." type="Error">
+<![CDATA[  [desktop] › p8/text-spacing.spec.ts:47:1 › zoom 200 % et espacement du texte @SPEC-803 ───────────
+
+    Error: page.addStyleTag: Applying inline style violates the following Content Security Policy directive 'style-src-elem 'self' 'nonce-Hhn90KZ09KqWE7hXlfVvTfGG''. Either the 'unsafe-inline' keyword, a hash ('sha256-tOPwjUgbaSf/PDzw/Zd1OnXJzBoOVIoWfB/1mTv2Ft0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+
+      57 |     await page.goto(route);
+      58 |     await page.locator('main, [data-testid="quiz-page"]').first().waitFor({ state: 'visible', timeout: 20_000 });
+    > 59 |     await page.addStyleTag({ content: TEXT_SPACING });
+         |                ^
+      60 |     await page.evaluate(() => {
+      61 |       document.documentElement.style.fontSize = '180%';
+      62 |     });
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/text-spacing.spec.ts:59:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="p8/a11y-audit.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="mobile" tests="1" failures="0" skipped="0" time="83.849" errors="0">
+<testcase name="audit axe mobile @SPEC-803 @mobile" classname="p8/a11y-audit.spec.ts" time="83.849">
+<system-out>
+<![CDATA[[axe 390] SCR-01/inscription
+[axe 390] SCR-01/connexion
+[axe 390] SCR-01/verification
+[axe 390] SCR-02/profil
+[axe 390] SCR-02/rythme
+[axe 390] SCR-02/ia
+[axe 390] SCR-02/rappels
+[axe 390] SCR-02/depart
+[axe 390] SCR-03/accueil
+[axe 390] SCR-03/menu
+[axe 390] SCR-03/notifications
+[axe 390] SCR-03/compte
+[axe 390] SCR-04/nouvelle
+[axe 390] SCR-04/cadrage
+[axe 390] SCR-05/programme
+[axe 390] SCR-06/module
+[axe 390] SCR-07/cours
+[axe 390] SCR-07/tuteur
+[axe 390] SCR-08/exercice
+[axe 390] SCR-09/quiz
+[axe 390] SCR-09/remediation
+[axe 390] SCR-10/quiz-global
+[axe 390] SCR-11/introduction
+[axe 390] SCR-12/agenda
+[axe 390] SCR-12/semaine
+[axe 390] SCR-12/mois
+[axe 390] SCR-13/lacunes
+[axe 390] SCR-14/carte
+[axe 390] SCR-14/detail
+[axe 390] SCR-15/profil
+[axe 390] SCR-15/notifications
+[axe 390] SCR-15/automatismes
+[axe 390] SCR-15/modeles
+[axe 390] SCR-16/bilan
+[axe 390] SCR-17/groupe
+[axe 390] SCR-18/recherche
+[axe 390] SCR-20/introuvable
+[axe 390] SCR-20/hors-ligne
+[axe 390] SCR-20/acces-refuse
+[axe 390] SCR-09/resultat
+[axe 390] SCR-11/epreuve
+[axe 390] SCR-11/resultats
+[axe 390] SCR-20/accessibilite
+[axe 390] SCR-01/connexion-erreur
+[axe 390] SCR-15/export-donnees
+[axe 390] SCR-15/suppression-compte
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-3.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-4.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-5.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-7.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-8.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-6.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-10.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-11.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-9.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-12.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-14.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-15.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-13.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-16.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-17.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-18.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-19.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-20.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-21.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-22.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-23.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-24.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-25.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-27.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-30.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-26.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-29.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-31.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-33.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-32.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-28.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-34.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-36.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-35.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-37.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-38.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-40.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-39.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-41.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-42.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-44.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-43.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-46.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-45.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/a11y-visual.spec.ts" timestamp="2026-11-17T14:32:10.091Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.497" errors="1">
+<testcase name="déclaration d’accessibilité mobile @SPEC-803 @visual @mobile" classname="p8/a11y-visual.spec.ts" time="2.497">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/attachments/axe-91141fb386057c0a03935f08e322c2733724fe78.json]]
+
+[[ATTACHMENT|../apps/web/e2e/__screenshots__/p8/a11y-visual.spec.ts/accessibilite-mobile-mobile-linux.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/accessibilite-mobile-actual.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/test-failed-1.png]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/error-context.md]]
+
+[[ATTACHMENT|artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+<error message="A snapshot doesn&apos;t exist at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/__screenshots__/p8/a11y-visual.spec.ts/accessibilite-mobile-mobile-linux.png, writing actual." type="Error">
+<![CDATA[  [mobile] › p8/a11y-visual.spec.ts:57:1 › déclaration d’accessibilité mobile @SPEC-803 @visual @mobile 
+
+    Error: A snapshot doesn't exist at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/__screenshots__/p8/a11y-visual.spec.ts/accessibilite-mobile-mobile-linux.png, writing actual.
+
+       at ../../../../packages/testing/src/visual.ts:235
+
+      233 |     return;
+      234 |   }
+    > 235 |   await expect(target).toHaveScreenshot(name, {
+          |   ^
+      236 |     maxDiffPixelRatio: BASELINE_MAX_DIFF_RATIO,
+      237 |     ...options,
+      238 |   });
+        at expectScreenshotBaseline (/home/ubuntu/projects/learny-wt-803/packages/testing/src/visual.ts:235:3)
+        at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-visual.spec.ts:62:3
+
+    attachment #1: axe (application/json) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/attachments/axe-91141fb386057c0a03935f08e322c2733724fe78.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: accessibilite-mobile (image/png) ────────────────────────────────────────────────
+    Expected: ../__screenshots__/p8/a11y-visual.spec.ts/accessibilite-mobile-mobile-linux.png
+    Received: ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/accessibilite-mobile-actual.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #5: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/error-context.md
+
+    Error Context: ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/error-context.md
+
+    attachment #8: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../../../test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
 </testsuites>
