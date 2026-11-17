@@ -14,7 +14,7 @@ export function SiteFooter({ className }: Readonly<SiteFooterProps>) {
   return (
     <footer
       className={cn(
-        'mx-auto w-full max-w-[75rem] border-t border-solid border-border px-24 py-20',
+        'mx-auto w-full max-w-[75rem] border-t border-solid border-border bg-canvas px-24 py-20',
         className,
       )}
       data-testid="site-footer"
