@@ -99,8 +99,10 @@ describe('[SPEC-115] demo fixtures', () => {
     expect(labels).toEqual(expect.arrayContaining(['Clé de comptabilisation', 'Type de pièce']));
   });
 
-  it('CA-1 — cinq formations, trois actives ou proposées et deux terminées', () => {
-    expect(DEMO_FORMATIONS).toHaveLength(5);
+  it('CA-1 — cinq formations SPEC-115, trois actives ou proposées et deux terminées', () => {
+    // Extension QA (hors SPEC-115) : deux formations personnelles de Camille et Hugo s'ajoutent à
+    // la fin du tableau (cadrage et pause), sans changer les filtres par statut ci-dessous.
+    expect(DEMO_FORMATIONS).toHaveLength(7);
     expect(
       DEMO_FORMATIONS.filter(
         (formation) => formation.status === 'active' || formation.status === 'programme_proposed',
@@ -119,6 +121,20 @@ describe('[SPEC-115] demo fixtures', () => {
     expect(DEMO_FORMATIONS[1]?.group).toBe(true);
     expect(DEMO_FORMATIONS[3]?.maintenanceMode).toBe('light');
     expect(DEMO_FORMATIONS[4]?.maintenanceMode).toBe('stopped');
+  });
+
+  it('extension QA (hors SPEC-115) — formations personnelles de Camille et Hugo', () => {
+    const leadership = DEMO_FORMATIONS[5];
+    const scrum = DEMO_FORMATIONS[6];
+    expect(leadership?.owner).toBe('camille');
+    expect(leadership?.status).toBe('cadrage');
+    expect(leadership?.modules).toHaveLength(0);
+    expect(scrum?.owner).toBe('hugo');
+    expect(scrum?.status).toBe('paused');
+    expect(scrum?.modules).toHaveLength(4);
+    for (const formation of DEMO_FORMATIONS.slice(0, 5)) {
+      expect(formation.owner).toBe('alex');
+    }
   });
 
   it('CA-1 — quatre lacunes et quatorze notions à revoir, cohérentes avec la carte', () => {

@@ -36,6 +36,7 @@ import {
   demoFixtureFingerprint,
   parisInstant,
   SAP_FORMATION,
+  SCRUM_FORMATION,
   type DemoFormationFixture,
   type DemoModuleFixture,
   type DemoNotionFixture,
@@ -112,7 +113,13 @@ function moduleStatus(
   position: number,
 ): 'locked' | 'open' | 'validated' {
   if (formation.status === 'completed') return 'validated';
-  if (formation.status !== 'active' || formation.currentModulePosition === null) return 'locked';
+  // SPEC-115 extension QA — une formation en pause garde l'état de ses modules déjà ouverts.
+  if (
+    (formation.status !== 'active' && formation.status !== 'paused') ||
+    formation.currentModulePosition === null
+  ) {
+    return 'locked';
+  }
   if (position < formation.currentModulePosition) return 'validated';
   if (position === formation.currentModulePosition) return 'open';
   return 'locked';
@@ -378,7 +385,7 @@ async function seedFormations(tx: DbTx, catalog: SeededCatalog): Promise<void> {
     const createdAt = `${formation.startDate ?? '2026-10-28'}T09:00:00+01:00`;
     return [
       id,
-      demoUserId('alex'),
+      demoUserId(formation.owner),
       formation.title,
       formation.monogram,
       formation.accentColor,
@@ -708,6 +715,14 @@ const USER_PROGRESS: readonly UserProgrammeProgress[] = [
     scores: [72, 76],
     current: 3,
   },
+  // Extension QA (hors SPEC-115) — Hugo met sa certification Scrum Master en pause au module 3.
+  {
+    user: 'hugo',
+    formation: SCRUM_FORMATION,
+    validated: 2,
+    scores: [74, 80],
+    current: 3,
+  },
 ];
 
 function progressStatus(
@@ -929,6 +944,8 @@ async function seedProgress(tx: DbTx): Promise<void> {
     maxModule: 3,
     due: [1, 4],
   });
+  // Extension QA (hors SPEC-115) — notions vues par Hugo avant la mise en pause de sa certification.
+  notionStatesFor('hugo', SCRUM_FORMATION, { maxModule: 3, due: [0, 3] });
   for (const formation of DEMO_FORMATIONS.filter((entry) => entry.status === 'completed')) {
     notionStatesFor('alex', formation, {
       maxModule: formation.modules.length,
@@ -1235,6 +1252,51 @@ async function seedResources(tx: DbTx, catalog: SeededCatalog): Promise<void> {
       timestamp(parisInstant('2026-11-09', '14:00')),
       timestamp(parisInstant('2026-11-09', '14:00')),
     ],
+    // Extension QA (hors SPEC-115) — un apport personnel pour chacune des deux nouvelles formations.
+    [
+      demoId('resource', 'camille', 'leadership-objectifs'),
+      demoUserId('camille'),
+      demoFormationId('leadership'),
+      null,
+      'note',
+      'learner',
+      null,
+      'Notes · objectifs du programme',
+      'Mieux cadrer les décisions difficiles avec l’équipe « Gestion de projet agile ».',
+      null,
+      null,
+      'text/markdown',
+      1024,
+      'ready',
+      null,
+      null,
+      json({ source: 'fixture' }),
+      null,
+      timestamp(parisInstant('2026-11-11', '09:00')),
+      timestamp(parisInstant('2026-11-11', '09:00')),
+    ],
+    [
+      demoId('resource', 'hugo', 'scrum-notes-m3'),
+      demoUserId('hugo'),
+      demoFormationId('scrum'),
+      catalog.chapterIds.get('scrum:m3:c1') ?? null,
+      'note',
+      'learner',
+      null,
+      'Vos notes · module 3',
+      'Scrum of Scrums et dépendances entre équipes, avant la mise en pause.',
+      null,
+      null,
+      'text/markdown',
+      1024,
+      'ready',
+      null,
+      null,
+      json({ source: 'fixture' }),
+      null,
+      timestamp(parisInstant('2026-10-21', '10:30')),
+      timestamp(parisInstant('2026-10-21', '10:30')),
+    ],
   );
 
   await insertRows(
@@ -1296,6 +1358,8 @@ const COURSES: readonly CourseDefinition[] = [
     modulePosition: 3,
     model: 'claude-haiku',
   },
+  // Extension QA (hors SPEC-115) — cours du module ouvert au moment de la mise en pause.
+  { owner: 'hugo', formation: SCRUM_FORMATION, modulePosition: 3, model: 'claude-haiku' },
 ];
 
 async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
@@ -2350,6 +2414,43 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
       timestamp(parisInstant('2026-11-08', '18:00')),
       timestamp(parisInstant('2026-11-08', '18:00')),
     ],
+    // Extension QA (hors SPEC-115) — agendas privés de Camille (cadrage) et Hugo (pause).
+    [
+      demoId('slot', 'camille-cadrage'),
+      demoUserId('camille'),
+      demoFormationId('leadership'),
+      null,
+      'contributions',
+      'Entretien de cadrage',
+      'Leadership et influence · à planifier',
+      timestamp(parisInstant('2026-11-12', '12:00')),
+      timestamp(parisInstant('2026-11-12', '12:30')),
+      'planned',
+      null,
+      'learner',
+      null,
+      false,
+      timestamp(parisInstant('2026-11-11', '09:00')),
+      timestamp(parisInstant('2026-11-11', '09:00')),
+    ],
+    [
+      demoId('slot', 'hugo-scrum-wed'),
+      demoUserId('hugo'),
+      demoFormationId('scrum'),
+      demoModuleId('scrum', 3),
+      'course',
+      'Mise à l’échelle',
+      'Module 3 · en pause',
+      timestamp(parisInstant('2026-10-21', '09:00')),
+      timestamp(parisInstant('2026-10-21', '10:30')),
+      'done',
+      null,
+      'planner',
+      null,
+      false,
+      timestamp(parisInstant('2026-10-19', '18:00')),
+      timestamp(parisInstant('2026-10-19', '18:00')),
+    ],
   );
 
   await insertRows(
@@ -2417,6 +2518,47 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
       null,
       timestamp(parisInstant('2026-11-09', '18:00')),
     ],
+    // Extension QA (hors SPEC-115) — notifications supplémentaires, non comptées par les contrôles
+    // de SPEC-115 (scopés à Alex ou à la formation SAP).
+    [
+      demoId('notification', 'camille-cadrage'),
+      demoUserId('camille'),
+      demoFormationId('leadership'),
+      'session_planned',
+      'Entretien de cadrage à planifier',
+      'Leadership et influence : décrivez vos objectifs pour démarrer le programme.',
+      '/formations/leadership',
+      'session',
+      'demo:camille-cadrage',
+      null,
+      timestamp(parisInstant('2026-11-11', '09:00')),
+    ],
+    [
+      demoId('notification', 'hugo-scrum-paused'),
+      demoUserId('hugo'),
+      demoFormationId('scrum'),
+      'session_to_reschedule',
+      'Formation en pause',
+      'Certification Scrum Master : reprenez quand vous serez prêt, votre progression est conservée.',
+      '/formations/scrum',
+      'calendar',
+      'demo:hugo-scrum-paused',
+      timestamp(parisInstant('2026-10-23', '18:00')),
+      timestamp(parisInstant('2026-10-23', '18:00')),
+    ],
+    [
+      demoId('notification', 'alex-agile-module-validated'),
+      demoUserId('alex'),
+      demoFormationId('agile'),
+      'module_validated',
+      'Module 4 validé · 84 %',
+      'Le module 5 · Rétrospectives est débloqué.',
+      '/formations/agile/programme',
+      'check',
+      'demo:alex-agile-module-validated',
+      timestamp(parisInstant('2026-11-06', '18:30')),
+      timestamp(parisInstant('2026-11-06', '18:30')),
+    ],
   );
 
   await insertRows(
@@ -2453,6 +2595,38 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
     action.status === 'pending_consent' ? null : timestamp(action.createdAt),
     timestamp(action.createdAt),
   ]);
+  // Extension QA (hors SPEC-115) — automatismes déclenchés pour Camille et Hugo, hors des contrôles
+  // de SPEC-115 (scopés à Alex).
+  actionRows.push(
+    [
+      demoId('automation-action', 'camille-echauffement'),
+      demoUserId('camille'),
+      demoFormationId('agile'),
+      'echauffement',
+      'warmup_added',
+      'Échauffement ajouté avant votre session du jeudi : 3 questions sur la rétrospective.',
+      json({ source: 'fixture', key: 'camille-echauffement' }),
+      null,
+      false,
+      'applied',
+      timestamp(parisInstant('2026-11-11', '07:10')),
+      timestamp(parisInstant('2026-11-11', '07:10')),
+    ],
+    [
+      demoId('automation-action', 'hugo-reprise'),
+      demoUserId('hugo'),
+      demoFormationId('scrum'),
+      'reprise',
+      'reprise_proposed',
+      'Certification Scrum Master en pause depuis le 23 octobre. Je propose une reprise cette semaine.',
+      json({ source: 'fixture', key: 'hugo-reprise' }),
+      null,
+      true,
+      'pending_consent',
+      null,
+      timestamp(parisInstant('2026-11-11', '08:30')),
+    ],
+  );
   await insertRows(
     tx,
     'public.automation_actions',
