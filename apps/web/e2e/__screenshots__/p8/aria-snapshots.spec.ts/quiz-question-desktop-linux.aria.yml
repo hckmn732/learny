@@ -1,0 +1,14 @@
+- navigation "Fil d’Ariane":
+    - link "Programme":
+        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/programme
+    - text: /
+    - link "Module 1 · Fondamentaux de SAP S/4HANA et navigation Fiori":
+        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/modules/7a4c9e86-d395-5d10-b006-c3bf8236a8db
+    - text: / Quiz de validation
+- heading "Quiz de validation" [level=1]
+- text: /Tentative 1 Seuil \d+ %/
+- link "Quitter le quiz":
+    - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/modules/7a4c9e86-d395-5d10-b006-c3bf8236a8db
+- status:
+    - heading "Le tuteur prépare de nouvelles questions…" [level=2]
+    - paragraph: Le tuteur prépare de nouvelles questions…

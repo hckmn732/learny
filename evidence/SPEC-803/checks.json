@@ -1,0 +1,22 @@
+{
+  "lint": {
+    "status": "passed",
+    "at": "2026-11-17T13:39:22.218Z",
+    "details": ""
+  },
+  "typecheck": {
+    "status": "passed",
+    "at": "2026-11-17T13:40:25.447Z",
+    "details": ""
+  },
+  "unit": {
+    "status": "passed",
+    "at": "2026-11-17T13:43:46.507Z",
+    "details": "17 test(s) [SPEC-803] réussi(s), 0 échec(s)"
+  },
+  "acceptance": {
+    "status": "failed",
+    "at": "2026-11-17T13:43:46.530Z",
+    "details": "0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌"
+  }
+}

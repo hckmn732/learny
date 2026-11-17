@@ -1,0 +1,43 @@
+- dialog "Notifications":
+    - heading "Notifications" [level=2]
+    - button "Tout marquer comme lu"
+    - group "Filtrer les notifications":
+        - button "Toutes 8" [pressed]
+        - button "Non lues 3"
+    - status: 3 notifications non lues.
+    - region "Aujourd’hui":
+        - heading "Aujourd’hui" [level=3]
+        - list:
+            - listitem:
+                - 'link /Quiz de validation à \d+:\d+ \d+:\d+ Module 3 · Comptabilité générale, tentative 2\. Seuil de validation : \d+ %\. SAP S\/4HANA Finance Non lue/':
+                    - /url: /formations/sap/modules/3/quiz
+            - listitem:
+                - link /Votre cours est prêt \d+:\d+ Chapitre 2 · Saisie des pièces comptables, rédigé à partir de vos 4 apports\. SAP S\/4HANA Finance Non lue/:
+                    - /url: /formations/sap/modules/3/cours
+            - listitem:
+                - 'link /Une séance à replacer \d+:\d+ « Ledgers parallèles » non terminé mardi : reprise proposée jeudi \d+:\d+\. Votre accord est demandé\. SAP S\/4HANA Finance Non lue/':
+                    - /url: /agenda?vue=semaine&date=2026-11-12
+            - listitem:
+                - link /Quiz global du jour \d+:\d+ \d+ notions à revoir, lacunes en priorité\. Prévu à \d+:\d+, environ \d+ min\. SAP S\/4HANA Finance/:
+                    - /url: /formations/sap/quiz-global
+    - region "Hier":
+        - heading "Hier" [level=3]
+        - list:
+            - listitem:
+                - link /Session demain à \d+:\d+ \d+:\d+ Rétrospectives · apports du chapitre 2\. Pensez à préparer vos notes\. Gestion de projet agile/:
+                    - /url: /agenda?vue=semaine&date=2026-11-12
+            - listitem:
+                - 'link /Nouvelle lacune repérée \d+:\d+ Clé de comptabilisation : confondue avec le type de pièce, deux fois\. SAP S\/4HANA Finance/':
+                    - /url: /formations/sap/lacunes
+    - region "Plus tôt":
+        - heading "Plus tôt" [level=3]
+        - list:
+            - listitem:
+                - link /Module 2 validé · \d+ % lun\. 9 nov\. Le module 3 · Comptabilité générale est débloqué\. SAP S\/4HANA Finance/:
+                    - /url: /formations/sap/programme
+            - listitem:
+                - link /Bilan de la semaine dim\. 8 nov\. \d+ h d'étude, \d+ % retenu à 1 mois, 3 notions à risque d'oubli\. SAP S\/4HANA Finance/:
+                    - /url: /accueil#bilan
+    - text: Rappels aussi envoyés par e-mail
+    - link "Gérer les notifications":
+        - /url: /parametres#notifications
