@@ -56,3 +56,6 @@ logs/
 apps/web/public/sw.js
 apps/web/public/swe-worker-*.js
 apps/web/public/swe-worker-build.txt
+
+# SPEC-804 — sorties locales des mesures
+tools/perf/k6/out/

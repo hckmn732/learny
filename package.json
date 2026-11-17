@@ -52,7 +52,10 @@
     "sdd:adr": "node tools/sdd/adr.mjs",
     "openapi:generate": "tsx packages/contracts/scripts/generate-openapi.ts",
     "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check",
-    "email:dev": "pnpm --filter @learny/notifications dev"
+    "email:dev": "pnpm --filter @learny/notifications dev",
+    "test:perf": "node tools/perf/run.mjs",
+    "perf:seed": "tsx packages/db/src/seed/perf-cli.ts",
+    "analyze": "ANALYZE=true pnpm --filter @learny/web build"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -61,6 +64,8 @@
     "@commitlint/lint": "^21.2.4",
     "@commitlint/load": "^21.2.4",
     "@eslint/js": "^9.39.5",
+    "@lhci/cli": "^0.16.1",
+    "@next/bundle-analyzer": "^16.4.6",
     "@next/eslint-plugin-next": "^16.4.6",
     "@playwright/test": "^1.65.0",
     "@readme/openapi-parser": "^10.0.0",
@@ -82,6 +87,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vitest": "^5.1.0",
+    "web-vitals": "^5.3.0",
     "yaml": "^2.9.1"
   }
 }
