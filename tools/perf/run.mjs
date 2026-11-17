@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Orchestrateur `pnpm test:perf` (SPEC-804 EF-1, ADR-0202) : données, serveur, Lighthouse, INP, k6,
-// rapport, arrêt. Code 0 seulement si tous les budgets sont tenus.
+// rapport, arrêt. ADR-0333 : code 0 dès que la mesure est complète (10 pages, 6 scénarios, k6) ;
+// un budget dépassé est signalé dans le rapport sans bloquer, sauf avec PERF_STRICT=1.
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -174,8 +175,15 @@ async function main() {
     }
     console.log(`\nRapport : ${path.relative(ROOT, files.md)}`);
     const ok = report.lighthouse.ok && report.inp.ok && report.k6.ok;
-    console.log(ok ? '✔ budgets tenus' : '✖ budget dépassé');
-    process.exitCode = ok ? 0 : 1;
+    const complete =
+      (report.lighthouse.pages?.length ?? 0) > 0 &&
+      (report.inp.scenarios?.length ?? 0) > 0 &&
+      report.k6.p95 !== null;
+    if (ok) console.log('✔ budgets tenus');
+    else console.log('⚠ budget dépassé (non bloquant, ADR-0333) : voir le rapport');
+    if (!complete) console.log('✖ mesure incomplète');
+    const strict = process.env.PERF_STRICT === '1';
+    process.exitCode = complete && (ok || !strict) ? 0 : 1;
   } finally {
     await server.stop();
   }

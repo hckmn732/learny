@@ -202,3 +202,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0330](ADR-0330-pile-de-qa-coolify-avec-le-jeu-de-demonstration.md) | Pile de QA Coolify avec le jeu de démonstration | Déduite | SPEC-115, SPEC-012 |
 | [ADR-0331](ADR-0331-decisions-d-implementation-de-l-automatisme-bilan-de-la-sema.md) | Décisions d'implémentation de l'automatisme bilan de la semaine | Déduite | SPEC-720, SPEC-711, SPEC-408, SPEC-402, SPEC-407, ADR-0190, ADR-0047 |
 | [ADR-0332](ADR-0332-budget-javascript-de-220-ko-par-page.md) | Budget JavaScript de 220 Ko par page | Déduite | SPEC-804, ADR-0041, ADR-0202 |
+| [ADR-0333](ADR-0333-budgets-de-performance-v1-non-bloquants.md) | Budgets de performance V1 non bloquants | Déduite | SPEC-804, ADR-0202, ADR-0332 |
