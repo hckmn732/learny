@@ -324,6 +324,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-209'),
   },
+  'SPEC-804': {
+    title: 'SPEC-804 · Performances',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-804-page'),
+  },
   'SPEC-711': {
     title: 'SPEC-711 · Moteur d’automatismes',
     titleTestId: 'sdd-title',
