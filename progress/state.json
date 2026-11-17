@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T13:44:57.144Z",
+  "updatedAt": "2026-11-17T17:19:33.534Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5996,12 +5996,12 @@
       "validations": {}
     },
     "SPEC-804": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 1,
       "startedAt": "2026-11-17T06:30:00.000Z",
-      "completedAt": null,
+      "completedAt": "2026-11-17T17:19:33.529Z",
       "branch": "spec/SPEC-804-performances",
-      "commit": null,
+      "commit": "00ab4427",
       "lastError": null,
       "validations": {
         "lint": {
