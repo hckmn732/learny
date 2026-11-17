@@ -110,7 +110,7 @@ test('consulte et accepte les textes légaux @SPEC-806', async ({
   const rows = await serviceDb().execute<{
     document: string;
     version: string;
-    accepted_at: Date;
+    accepted_at: Date | string;
   }>(sql`
     select la.document::text as document, la.version, la.accepted_at
     from public.legal_acceptances la
@@ -120,7 +120,7 @@ test('consulte et accepte les textes légaux @SPEC-806', async ({
   `);
   expect(rows.map((row) => row.document)).toEqual(['cgu', 'privacy']);
   expect(rows.map((row) => row.version)).toEqual([LEGAL_VERSIONS.cgu, LEGAL_VERSIONS.privacy]);
-  expect(new Set(rows.map((row) => row.accepted_at.toISOString()))).toEqual(new Set([FIXED_ISO]));
+  expect(new Set(rows.map((row) => new Date(row.accepted_at).toISOString()))).toEqual(new Set([FIXED_ISO]));
 
   await axeCheck();
 });
