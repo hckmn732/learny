@@ -81,6 +81,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0073](ADR-0073-tarifs-de-l-ia-en-configuration.md) | Tarifs de l'IA en configuration | Déduite | SPEC-507 |
 | [ADR-0074](ADR-0074-fonctions-v2-desactivees.md) | Fonctions V2 désactivées | Déduite | SPEC-901 à SPEC-908 |
 | [ADR-0075](ADR-0075-changer-de-formation-et-formation-courante.md) | Changer de formation et formation courante | Déduite | SPEC-304, SPEC-618 |
+| [ADR-0201](ADR-0201-points-de-rupture-et-disposition-mobile.md) | Points de rupture et disposition mobile | Déduite | SPEC-802, BR-PLA-02, BR-NAV-03 |
 | [ADR-0203](ADR-0203-propriete-de-l-index-sdd-entre-spec-003-et-spec-006.md) | Propriete de l'index SDD entre SPEC-003 et SPEC-006 | Déduite | SPEC-003, SPEC-006 |
 | [ADR-0204](ADR-0204-page-publique-d-accessibilite-et-liens-de-pied-de-page.md) | Page publique d'accessibilite et liens de pied de page | Déduite | SPEC-803, SPEC-806 |
 | [ADR-0205](ADR-0205-limites-et-horodatage-des-imports-audio-et-video-v2.md) | Limites et horodatage des imports audio et video V2 | Déduite | SPEC-901, SPEC-902 |

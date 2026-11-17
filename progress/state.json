@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T17:55:33.565Z",
+  "updatedAt": "2026-11-16T17:57:28.623Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5904,11 +5904,11 @@
       "validations": {}
     },
     "SPEC-802": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-16T17:57:28.348Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-802-responsive-et-mobile",
       "commit": null,
       "lastError": null,
       "validations": {}
