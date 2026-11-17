@@ -18,6 +18,7 @@ export {
   returnFocus,
 } from './focus-return';
 export type { FocusElementOptions, FocusReturnOptions, FocusTarget } from './focus-return';
+export { LiveAnnouncer, useAnnounce } from './announcer';
 export { LiveRegion, shouldAnnounce } from './live-region';
 export type { LivePoliteness, LiveRegionProps } from './live-region';
 export { SkipLink } from './skip-link';

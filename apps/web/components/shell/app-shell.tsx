@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState, type ReactNode } from 'react';
 
 import type { HeaderDto, SidebarDto } from '@learny/contracts';
-import { ToastProvider } from '@learny/ui';
+import { LiveAnnouncer, ToastProvider } from '@learny/ui';
 
 import { fr } from '../../messages/fr';
 import { OfflineProvider } from '../offline/OfflineProvider';
@@ -42,35 +42,37 @@ export const AppShell = ({
   // calls of the shell and the home cards (a failed « Annuler », a lost network) showed nothing.
   return (
     <ToastProvider>
-      <OfflineProvider />
-      <div className="flex min-h-screen bg-canvas">
-        <a
-          href="#contenu"
-          className="sr-only z-skip rounded-10 bg-surface px-14 py-10 text-14 font-600 text-ink focus:not-sr-only focus:fixed focus:top-8 focus:left-8"
-        >
-          {fr.shell.skipToContent}
-        </a>
-        <Sidebar
-          initialData={sidebar}
-          initialError={sidebarError}
-          showTrigger="external"
-          showTriggerRef={showTriggerRef}
-          onCollapsedChange={setCollapsed}
-          onShowHandler={registerShowSidebar}
-        />
-        <div id="contenu" tabIndex={-1} className="mx-auto min-w-0 w-full max-w-[90rem] flex-1">
-          <Header
-            initialData={header}
-            initialError={headerError}
-            sidebarCollapsed={collapsed}
-            onShowSidebar={() => {
-              showSidebarRef.current();
-            }}
+      <LiveAnnouncer>
+        <OfflineProvider />
+        <div className="flex min-h-screen bg-canvas">
+          <a
+            href="#contenu"
+            className="sr-only z-skip rounded-10 bg-surface px-14 py-10 text-14 font-600 text-ink focus:not-sr-only focus:fixed focus:top-8 focus:left-8"
+          >
+            {fr.shell.skipToContent}
+          </a>
+          <Sidebar
+            initialData={sidebar}
+            initialError={sidebarError}
+            showTrigger="external"
             showTriggerRef={showTriggerRef}
+            onCollapsedChange={setCollapsed}
+            onShowHandler={registerShowSidebar}
           />
-          {children}
+          <div id="contenu" tabIndex={-1} className="mx-auto min-w-0 w-full max-w-[90rem] flex-1">
+            <Header
+              initialData={header}
+              initialError={headerError}
+              sidebarCollapsed={collapsed}
+              onShowSidebar={() => {
+                showSidebarRef.current();
+              }}
+              showTriggerRef={showTriggerRef}
+            />
+            {children}
+          </div>
         </div>
-      </div>
+      </LiveAnnouncer>
     </ToastProvider>
   );
 };

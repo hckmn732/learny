@@ -1,0 +1,286 @@
+{
+  "generatedAt": "2026-11-11T12:20:00Z",
+  "project": "desktop",
+  "states": 46,
+  "blockingStates": 1,
+  "byImpact": {},
+  "rows": [
+    {
+      "width": 1440,
+      "id": "SCR-01/inscription",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/connexion",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/verification",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/profil",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/rythme",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/ia",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/rappels",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/depart",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/accueil",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/menu",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/notifications",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/compte",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-04/nouvelle",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-04/cadrage",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-05/programme",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-06/module",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-07/cours",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-07/tuteur",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-08/exercice",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/quiz",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/remediation",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-10/quiz-global",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/introduction",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/agenda",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/semaine",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/mois",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-13/lacunes",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-14/carte",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-14/detail",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/profil",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/notifications",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/automatismes",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/modeles",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-16/bilan",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-17/groupe",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-18/recherche",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/introuvable",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/hors-ligne",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/acces-refuse",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/resultat",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/epreuve",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/resultats",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/accessibilite",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/connexion-erreur",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/suppression-compte",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/export-donnees",
+      "ok": false,
+      "violations": [],
+      "error": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('data-export')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" data-state=\"closed\" aria-expanded=\"false\" aria-haspopup=\"dialog\" data-testid=\"data-export\" class=\"touch-target inline-flex cursor-pointer items-center justify-center gap-8 border border-solid text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55 border-border-strong bg-surface font-600 text-ink hover:border-ink min-h-44 rounded-12 px-16 text-14\">Exporter mes données</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is inert\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is inert\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is inert\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    }
+  ]
+}

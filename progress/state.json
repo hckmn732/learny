@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T10:17:07.504Z",
+  "updatedAt": "2026-11-17T10:27:40.625Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5986,11 +5986,11 @@
       }
     },
     "SPEC-803": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-17T10:27:40.624Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-803-accessibilite-wcag-2-2-aa",
       "commit": null,
       "lastError": null,
       "validations": {}

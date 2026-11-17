@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { clock } from '@learny/core';
-import { toast } from '@learny/ui';
+import { toast, useAnnounce } from '@learny/ui';
 
 import { readMeta } from '../../lib/offline/db';
 import { prefetchPack } from '../../lib/offline/pack';
@@ -63,14 +63,17 @@ async function prefetchIfStale(): Promise<void> {
  */
 export function OfflineProvider() {
   const started = useRef(false);
+  const announce = useAnnounce();
 
   useEffect(() => {
     if (started.current) return;
     started.current = true;
     const run = async (): Promise<void> => {
       try {
+        const before = await pendingCount();
         await synchronise();
         await prefetchIfStale();
+        if (before > 0) announce(fr.offline.sync.announceDone(before));
       } catch {
         // Offline or storage refused: the online application keeps working (CL-7, CL-8).
       }
@@ -103,7 +106,7 @@ export function OfflineProvider() {
       window.removeEventListener('online', onOnline);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, []);
+  }, [announce]);
 
   return null;
 }

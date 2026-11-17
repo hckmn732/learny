@@ -2,6 +2,7 @@ import { ToastProvider } from '@learny/ui';
 
 import { OfflinePackList } from '../../components/offline/OfflinePackList';
 import { OfflineProvider } from '../../components/offline/OfflineProvider';
+import { SiteFooter } from '../../components/site-footer/SiteFooter';
 
 export const dynamic = 'force-static';
 
@@ -10,8 +11,13 @@ export const dynamic = 'force-static';
 export default function HorsLignePage() {
   return (
     <ToastProvider>
-      <OfflineProvider />
-      <OfflinePackList />
+      <div className="flex min-h-dvh flex-col">
+        <OfflineProvider />
+        <div className="flex-1">
+          <OfflinePackList />
+        </div>
+        <SiteFooter />
+      </div>
     </ToastProvider>
   );
 }

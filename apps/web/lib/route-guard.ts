@@ -23,6 +23,7 @@ const PUBLIC_EXACT = new Set([
   SIGN_UP_PATH,
   '/verifier-email',
   '/hors-ligne',
+  '/accessibilite',
   '/hors-ligne/revisions',
   '/openapi.json',
 ]);

@@ -41,13 +41,13 @@
 .learny-skip-link:focus,
 .learny-skip-link:focus-visible {
   transform: translateY(0);
-  outline: 3px solid var(--color-lime);
+  outline: 2px solid var(--color-lime);
   outline-offset: 2px;
 }
 
 .learny-focus-target:focus,
 [data-page-title]:focus {
-  outline: 3px solid var(--color-indigo);
+  outline: 2px solid var(--color-indigo-ink);
   outline-offset: 2px;
 }
 
@@ -57,10 +57,10 @@
   *::after {
     scroll-behavior: auto !important;
     animation-delay: 0ms !important;
-    animation-duration: 0.01ms !important;
+    animation-duration: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0ms !important;
   }
 }
 
@@ -74,7 +74,7 @@
 
   .learny-focus-target:focus,
   [data-page-title]:focus {
-    outline: 3px solid Highlight;
+    outline: 2px solid Highlight;
   }
 }
 

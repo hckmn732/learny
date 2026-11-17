@@ -2,6 +2,23 @@ import { brickViewLabels } from '@learny/bricks/view';
 
 export const fr = {
   bricks: brickViewLabels,
+  siteFooter: {
+    navLabel: 'Informations légales',
+    links: {
+      cgu: 'CGU',
+      confidentialite: 'Confidentialité',
+      mentions: 'Mentions légales',
+      accessibilite: 'Accessibilité : partiellement conforme',
+    },
+  },
+  accessibility: {
+    title: 'Déclaration d’accessibilité',
+    eyebrow: 'Informations légales',
+    editor: 'Éditeur',
+    contact: 'Contact',
+    toComplete: '[à compléter]',
+    documentTitle: 'Déclaration d’accessibilité · Learny',
+  },
   home: {
     title: 'Learny',
     subtitle: 'Application en cours de construction.',
@@ -265,6 +282,10 @@ export const fr = {
         count === 1
           ? 'Une réponse hors ligne a été refusée et sera supprimée dans 7 jours.'
           : `${String(count)} réponses hors ligne ont été refusées et seront supprimées dans 7 jours.`,
+      announceDone: (count: number) =>
+        count === 1
+          ? 'Synchronisation hors ligne terminée : 1 réponse enregistrée.'
+          : `Synchronisation hors ligne terminée : ${String(count)} réponses enregistrées.`,
     },
     page: {
       eyebrow: 'Connexion perdue',
