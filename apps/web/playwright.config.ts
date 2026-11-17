@@ -96,6 +96,22 @@ export default defineConfig({
         isMobile: true,
       },
     },
+    // SPEC-807 ET-4/ET-7 — the six V1 journeys (`apps/web/e2e/journeys`) in the three engines.
+    // `pnpm test:v1:journeys` runs them; the default desktop/mobile projects keep `e2e/specs`.
+    { name: 'journeys', testDir: './e2e/journeys', use: DESKTOP },
+    {
+      name: 'journeys-firefox',
+      testDir: './e2e/journeys',
+      grepInvert: /@visual/,
+      ...(process.env.CROSS_BROWSER_SKIP_FIREFOX === '1' ? { grep: /$^/ } : {}),
+      use: { ...devices['Desktop Firefox'], ...COMMON, viewport: { width: 1440, height: 900 } },
+    },
+    {
+      name: 'journeys-webkit',
+      testDir: './e2e/journeys',
+      grepInvert: /@visual/,
+      use: { ...devices['Desktop Safari'], ...COMMON, viewport: { width: 1440, height: 900 } },
+    },
     {
       name: 'cross-browser-firefox',
       // Cross-browser covers the functional journeys: pixel baselines stay engine-specific and

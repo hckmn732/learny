@@ -56,7 +56,8 @@
     "test:perf": "node tools/perf/run.mjs",
     "perf:seed": "tsx packages/db/src/seed/perf-cli.ts",
     "analyze": "ANALYZE=true pnpm --filter @learny/web build",
-    "legal:check": "node tools/legal/check.mjs"
+    "legal:check": "node tools/legal/check.mjs",
+    "test:v1:journeys": "node apps/web/e2e/run-playwright.mjs --project=journeys --project=journeys-firefox --project=journeys-webkit"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
