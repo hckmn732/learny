@@ -1,0 +1,15 @@
+{
+  "executed": true,
+  "command": "pnpm audit --audit-level high --json",
+  "commit": "40923d62",
+  "generatedAt": "2026-11-17T08:04:41Z",
+  "lockfile": "pnpm-lock.yaml",
+  "high": 0,
+  "critical": 0,
+  "moderate": 4,
+  "low": 0,
+  "info": 0,
+  "dependencies": 1341,
+  "actions": [],
+  "validation": "VALIDÉ — lint, typecheck, unit, integration, e2e, visual, acceptance"
+}
