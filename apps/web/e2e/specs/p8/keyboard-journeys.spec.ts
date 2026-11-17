@@ -300,8 +300,11 @@ test('parcours clavier paramètres @SPEC-803', async ({ page, context, baseURL }
   await page.goto('/parametres#profil');
   const profileTab = page.getByTestId('settings-tab-profil');
   await expect(profileTab).toHaveAttribute('aria-selected', 'true');
-  await profileTab.focus();
-  await expect(profileTab).toBeFocused();
+  // Hydration may move the focus once: retry until the tab keeps it.
+  await expect(async () => {
+    await profileTab.focus();
+    await expect(profileTab).toBeFocused({ timeout: 1_000 });
+  }).toPass({ timeout: 20_000 });
   await profileTab.press('ArrowRight');
   await expect(page.getByTestId('settings-tab-notifications')).toHaveAttribute(
     'aria-selected',

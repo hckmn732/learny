@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T17:19:33.534Z",
+  "updatedAt": "2026-11-17T17:47:55.260Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5992,42 +5992,42 @@
       "completedAt": null,
       "branch": "spec/SPEC-803-accessibilite-wcag-2-2-aa",
       "commit": null,
-      "lastError": "acceptance: 0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌ | e2e: 9 réussi(s), 1 échec(s), 105 vidéo(s) | visual: 2 test(s) @visual réussi(s) (mode tokens)",
+      "lastError": "unit: 17 test(s) [SPEC-803] réussi(s), 0 échec(s) | e2e: 9 réussi(s), 1 échec(s), 106 vidéo(s) | visual: 3 test(s) @visual réussi(s) (mode tokens)",
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-17T16:53:14.125Z",
+          "at": "2026-11-17T17:32:45.908Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-17T16:54:10.067Z",
+          "at": "2026-11-17T17:36:17.464Z",
           "details": ""
         },
         "unit": {
-          "status": "passed",
-          "at": "2026-11-17T13:43:46.507Z",
-          "details": "17 test(s) [SPEC-803] réussi(s), 0 échec(s)"
-        },
-        "acceptance": {
           "status": "failed",
-          "at": "2026-11-17T17:04:25.382Z",
-          "details": "0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌"
+          "at": "2026-11-17T17:38:06.490Z",
+          "details": "17 test(s) [SPEC-803] réussi(s), 0 échec(s)"
         },
         "integration": {
           "status": "passed",
-          "at": "2026-11-17T14:31:25.515Z",
+          "at": "2026-11-17T17:38:11.003Z",
           "details": "5 test(s) [SPEC-803] réussi(s), 0 échec(s)"
         },
         "e2e": {
           "status": "failed",
-          "at": "2026-11-17T17:04:25.156Z",
-          "details": "9 réussi(s), 1 échec(s), 105 vidéo(s)"
+          "at": "2026-11-17T17:47:55.077Z",
+          "details": "9 réussi(s), 1 échec(s), 106 vidéo(s)"
         },
         "visual": {
           "status": "failed",
-          "at": "2026-11-17T17:04:25.156Z",
-          "details": "2 test(s) @visual réussi(s) (mode tokens)"
+          "at": "2026-11-17T17:47:55.077Z",
+          "details": "3 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-17T17:47:55.260Z",
+          "details": "7/7 critères ✅"
         }
       }
     },
