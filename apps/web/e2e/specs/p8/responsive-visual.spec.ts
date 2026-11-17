@@ -18,6 +18,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { resetDemoRateLimits } from '../../support/demo-exam';
+
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
 const REFERENCES = fileURLToPath(new URL('../../../../../design/references/', import.meta.url));
@@ -57,6 +59,7 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ context, baseURL }) => {
+  await resetDemoRateLimits();
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );

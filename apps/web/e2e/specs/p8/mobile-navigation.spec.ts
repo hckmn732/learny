@@ -5,7 +5,11 @@ import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } 
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 
-import { deleteDemoAttempts, seedDemoExamAttempts } from '../../support/demo-exam';
+import {
+  deleteDemoAttempts,
+  resetDemoRateLimits,
+  seedDemoExamAttempts,
+} from '../../support/demo-exam';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
@@ -29,6 +33,7 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ context, baseURL }) => {
+  await resetDemoRateLimits();
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );

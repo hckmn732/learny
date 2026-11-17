@@ -18,7 +18,11 @@ import {
   expectTouchTargets,
 } from '@learny/testing/touch-targets';
 
-import { deleteDemoAttempts, seedDemoExamAttempts } from '../../support/demo-exam';
+import {
+  deleteDemoAttempts,
+  resetDemoRateLimits,
+  seedDemoExamAttempts,
+} from '../../support/demo-exam';
 import {
   RESPONSIVE_WIDTHS,
   buildResponsiveMatrix,
@@ -122,6 +126,7 @@ test.afterAll(async () => {
   // Leave the demo dataset as the next file of the campaign expects it.
   await deleteDemoAttempts(created);
   await restoreDemoData();
+  await resetDemoRateLimits();
   await closeDb();
 });
 
@@ -133,6 +138,7 @@ for (const width of RESPONSIVE_WIDTHS) {
     axeCheck,
   }) => {
     test.setTimeout(20 * 60_000);
+    await resetDemoRateLimits();
     await page.setViewportSize({ width: width.width, height: width.height });
     for (const entry of entries) {
       try {

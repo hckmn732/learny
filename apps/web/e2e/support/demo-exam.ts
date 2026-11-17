@@ -166,3 +166,14 @@ export async function deleteDemoAttempts(ids: readonly string[]): Promise<void> 
   );
   await serviceDb().execute(sql`delete from public.attempts where id in (${list})`);
 }
+
+/**
+ * Refills the API rate-limit buckets of the demo learner. The e2e clock is frozen, so a bucket
+ * emptied by the ~270 navigations of the responsive matrix never refills by itself and every
+ * later request of the campaign would be answered 429.
+ */
+export async function resetDemoRateLimits(): Promise<void> {
+  await serviceDb().execute(sql`
+    delete from public.rate_limits where bucket like ${`user:${demoUserId('alex')}:%`}
+  `);
+}
