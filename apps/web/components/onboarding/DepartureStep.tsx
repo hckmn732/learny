@@ -10,7 +10,7 @@ import { AppError } from '@learny/core';
 import { Button, Card, FormError, Link as UiLink, TextField } from '@learny/ui';
 
 import { api, apiFetch } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding';
 
 import { formatFirstNames } from './formatFirstNames';
 import { parseInviteCode } from './parseInviteCode';

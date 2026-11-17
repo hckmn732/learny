@@ -6,7 +6,7 @@ import { useTransition } from 'react';
 import type { GapCountsByNature, GapNature } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/gaps';
 
 const t = fr.gaps.filters;
 

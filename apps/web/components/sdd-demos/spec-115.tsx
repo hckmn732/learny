@@ -1,5 +1,5 @@
 import { loadSpec115Demo, type Spec115Data } from '../../app/%5Fdev/sdd/spec-115-data';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec115;

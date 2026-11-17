@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { isSafeRelativePath } from '@learny/contracts';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 
 import { BaseCard, BaseTokenStyle } from './base-tokens';
 

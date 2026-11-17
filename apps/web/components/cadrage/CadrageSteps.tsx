@@ -1,4 +1,4 @@
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/cadrage';
 
 const t = fr.cadrage;
 

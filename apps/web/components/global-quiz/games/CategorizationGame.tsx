@@ -6,7 +6,7 @@ import type { PublicPayload } from '@learny/bricks';
 import type { ReviewCategorizationResponse, ReviewItemDto } from '@learny/contracts';
 import { Button, cn } from '@learny/ui';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/globalQuiz';
 
 import { CORRECT_TILE, GameCorrection, Verdict, WRONG_TILE, gameResultOf } from './GameCorrection';
 

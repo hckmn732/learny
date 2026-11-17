@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import type { CourseSection } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/course';
 
 const t = fr.course;
 

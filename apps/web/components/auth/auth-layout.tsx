@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/auth';
 import { SiteFooter } from '../site-footer/SiteFooter';
 
 import { AUTH_STEPS, AuthStepper } from './AuthStepper';

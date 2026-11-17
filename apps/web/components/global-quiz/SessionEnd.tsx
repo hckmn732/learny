@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { ReviewSummaryDto } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/globalQuiz';
 
 const t = fr.globalQuiz;
 

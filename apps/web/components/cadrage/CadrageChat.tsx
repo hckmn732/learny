@@ -10,11 +10,11 @@ import {
   type CadrageRubricKey,
   type CadrageStateDto,
   type CadrageSuggestion,
-} from '@learny/contracts';
+} from '@learny/contracts/cadrage';
 import { AppError } from '@learny/core';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/cadrage';
 
 import { CadrageSteps } from './CadrageSteps';
 import { ChatMessage } from './ChatMessage';

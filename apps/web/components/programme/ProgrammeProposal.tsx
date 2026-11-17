@@ -3,13 +3,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
-import type { ImportProgrammeInput, ProgrammeProposalStateDto } from '@learny/contracts';
-import { isActiveProgramme } from '@learny/contracts';
+import {
+  isActiveProgramme,
+  type ImportProgrammeInput,
+  type ProgrammeProposalStateDto,
+} from '@learny/contracts/programme';
 import { AppError } from '@learny/core';
 import { Button } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/programme';
 
 import { AdjustDialog } from './AdjustDialog';
 import { formatLongDate } from './dates';

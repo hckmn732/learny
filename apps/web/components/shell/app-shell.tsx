@@ -5,7 +5,7 @@ import { useCallback, useRef, useState, type ReactNode } from 'react';
 import type { HeaderDto, SidebarDto } from '@learny/contracts';
 import { ToastProvider } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 import { OfflineProvider } from '../offline/OfflineProvider';
 
 import { Header } from './header';

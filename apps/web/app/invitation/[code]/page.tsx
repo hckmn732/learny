@@ -4,7 +4,7 @@ import { Card } from '@learny/ui';
 
 import { InvitationJoin } from '../../../components/group/InvitationJoin';
 import { loadInvitationPage } from '../../../lib/group-page';
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/group';
 
 export const dynamic = 'force-dynamic';
 

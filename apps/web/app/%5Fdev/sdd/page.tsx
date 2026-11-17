@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { DemoShell } from '../../../components/sdd/demo-shell';
 import { loadSddIndex } from '../../../lib/sdd-index';
 import { readSddStatus, type PublicNextAction, type PublicSpec } from '../../../lib/sdd-status';
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/sdd';
 
 import { sddDemos } from './registry';
 

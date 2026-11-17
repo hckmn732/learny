@@ -5,7 +5,7 @@ import { useState } from 'react';
 import type { CourseSummaryView } from '@learny/contracts';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/course';
 
 const t = fr.course;
 
@@ -81,7 +81,10 @@ export function SummaryEditor({
         </p>
       )}
       {summary === null ? null : summary.feedback === null ? (
-        <p className="m-0 rounded-16 bg-orange-soft p-14 text-14 text-orange-ink-strong" role="status">
+        <p
+          className="m-0 rounded-16 bg-orange-soft p-14 text-14 text-orange-ink-strong"
+          role="status"
+        >
           {t.summaryDeferred}
         </p>
       ) : (

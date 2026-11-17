@@ -2,7 +2,7 @@ import { Check } from 'lucide-react';
 
 import type { CadrageSuggestion } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/cadrage';
 
 const t = fr.cadrage;
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import type { ProgrammeModuleDto } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/programme';
 
 import { formatRange } from './dates';
 

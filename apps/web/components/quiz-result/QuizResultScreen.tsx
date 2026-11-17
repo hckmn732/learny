@@ -7,7 +7,7 @@ import type { QuizResultDto } from '@learny/contracts';
 import { ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 import { GapCards } from './GapCards';
 import { MasteredNotions } from './MasteredNotions';

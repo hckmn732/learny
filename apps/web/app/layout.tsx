@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { colors } from '@learny/ui/tokens';
 
 import { fontVariables } from '../lib/fonts';
-import { fr } from '../messages/fr';
+import { fr } from '../messages/fr/meta';
 
 import './globals.css';
 import { Providers } from './providers';
@@ -24,6 +24,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="fr" className={fontVariables}>
+      <head>
+        {process.env.CLOCK_FIXED_AT === undefined ? null : (
+          <meta name="learny-clock-fixed-at" content={process.env.CLOCK_FIXED_AT} />
+        )}
+      </head>
       <body className="bg-canvas text-ink font-sans antialiased">
         <Providers>{children}</Providers>
       </body>

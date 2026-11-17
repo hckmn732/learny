@@ -227,7 +227,9 @@ function optionsHandler(
           status: response.status,
           durationMs: duration(),
         });
-        return withRequestId(response, requestId);
+        const timed = withRequestId(response, requestId);
+        timed.headers.set('Server-Timing', `app;dur=${String(duration())}`);
+        return timed;
       });
     } catch (error) {
       const status = problemStatus(error);
@@ -249,7 +251,9 @@ function optionsHandler(
           ...(userId === undefined ? {} : { userId }),
         });
       }
-      return problemResponse(error, requestId);
+      const problem = problemResponse(error, requestId);
+      problem.headers.set('Server-Timing', `app;dur=${String(duration())}`);
+      return problem;
     }
   };
 }

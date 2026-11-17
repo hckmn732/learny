@@ -9,7 +9,7 @@ import { AppShell } from '../../../../../../components/shell/app-shell';
 import { SIGN_IN_PATH } from '../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../lib/supabase/page';
-import { fr } from '../../../../../../messages/fr';
+import { fr } from '../../../../../../messages/fr/programme';
 
 export const dynamic = 'force-dynamic';
 

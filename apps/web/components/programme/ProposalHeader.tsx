@@ -2,7 +2,7 @@
 
 import type { ProgrammeProposalDto } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/programme';
 
 import { formatDay, formatLongDate, weeksBetween } from './dates';
 

@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import type { GapCard as GapCardDto, GapNature } from '@learny/contracts';
 import { ProgressBar } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/gaps';
 
 import { formatDetectedAt, formatPercent } from './format';
 

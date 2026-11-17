@@ -2,7 +2,7 @@
 
 import { useId, useState, type SyntheticEvent } from 'react';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 
 const t = fr.sdd.spec002;
 

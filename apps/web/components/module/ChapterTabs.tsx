@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { ModuleChapterItem } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/module';
 
 const t = fr.module;
 

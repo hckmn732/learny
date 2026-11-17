@@ -15,7 +15,7 @@ import {
 } from '@learny/ui/tokens';
 
 import { TokenSwatch } from '../../../../components/dev-ui/TokenSwatch';
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 export const dynamic = 'force-dynamic';
 

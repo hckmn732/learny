@@ -11,7 +11,7 @@ import { Button, Card, ErrorState, FormError, Select, Switch } from '@learny/ui'
 
 import { ApiError, api } from '../../lib/api-client';
 import { createPushGateway } from '../../lib/push-onboarding';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/settings';
 
 const t = fr.settings.notificationsTab;
 

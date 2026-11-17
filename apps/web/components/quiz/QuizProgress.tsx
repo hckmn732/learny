@@ -2,7 +2,7 @@
 
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
 

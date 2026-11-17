@@ -1,4 +1,4 @@
-import { fr } from '../../../../../../../../messages/fr';
+import { fr } from '../../../../../../../../messages/fr/exercises';
 
 const t = fr.exercises;
 

@@ -26,7 +26,7 @@ import { calendarAriaLabel, navTargets, rangeCaption, visibleRange } from '../..
 import { agendaUrl, type AgendaUrlState } from '../../lib/agenda/state';
 import { agendaFetchWindow } from '../../lib/agenda/window';
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 import { AgendaLegend } from './AgendaLegend';
 import { AgendaToolbar } from './AgendaToolbar';

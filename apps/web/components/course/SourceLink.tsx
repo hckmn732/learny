@@ -3,7 +3,7 @@
 import type { CourseCitation } from '@learny/contracts';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/course';
 
 const t = fr.course;
 

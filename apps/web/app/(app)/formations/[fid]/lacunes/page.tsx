@@ -11,7 +11,7 @@ import { GapStats } from '../../../../../components/gaps/GapStats';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGapsPage } from '../../../../../lib/gaps-page';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/gaps';
 
 export const dynamic = 'force-dynamic';
 

@@ -16,7 +16,7 @@ import {
   useBreakpoint,
 } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.sidebar.formationManagement;
 

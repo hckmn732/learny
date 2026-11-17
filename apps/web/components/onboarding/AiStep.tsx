@@ -7,7 +7,7 @@ import type { AiCredentialProvider } from '@learny/contracts';
 import { Button, Card, ChoiceGroup, FormError, Select, TextField, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 import { useCredentialQualification, type QualificationStatus } from './useCredentialQualification';

@@ -1,5 +1,5 @@
 import { readStackStatus } from '../../lib/stack-status';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec008;

@@ -6,7 +6,7 @@ import type { AutomationActionItem } from '@learny/contracts';
 import { clock } from '@learny/core';
 import { Button, Icon, toast, cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 import {
   proposalErrorMessage,

@@ -3,7 +3,7 @@ import {
   type SecurityCategory,
   type SecurityStatus,
 } from '../../app/%5Fdev/sdd/spec-805-data';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec805;

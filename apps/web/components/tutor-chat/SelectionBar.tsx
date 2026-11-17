@@ -1,6 +1,6 @@
 'use client';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/tutorChat';
 
 import type { Selection } from './use-text-selection';
 

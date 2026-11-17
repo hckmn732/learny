@@ -7,7 +7,7 @@ import type { ExamAttemptDto, ExamQuestionDto, ExamResultDto } from '@learny/con
 import { BottomSheet, useBreakpoint } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/mockExam';
 
 import { ExamQuestion } from './ExamQuestion';
 import { ExamResults } from './ExamResults';

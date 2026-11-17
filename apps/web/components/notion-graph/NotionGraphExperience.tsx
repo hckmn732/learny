@@ -19,7 +19,7 @@ import {
   type GraphViewport,
 } from '../../lib/notion-graph/pan-zoom';
 import { searchGraphNodes } from '../../lib/notion-graph/search';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 import { GraphDetail } from './GraphDetail';
 import { GraphList } from './GraphList';

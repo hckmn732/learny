@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MarkdownContent } from '@learny/bricks/view';
 import type { ContextItemDto, ConversationSummaryDto, FollowUpDto } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/tutorChat';
 
 import {
   dataOf,
