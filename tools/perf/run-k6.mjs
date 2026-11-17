@@ -1,5 +1,5 @@
 // Exécute k6 (binaire local ou image Docker figée) et écrit le résumé (SPEC-804 EF-4, ET-1).
-import { spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,26 @@ function hasK6() {
   return spawnSync('k6', ['version'], { encoding: 'utf8' }).status === 0;
 }
 
+/**
+ * Crée une session par utilisateur de charge et écrit leurs en-têtes `Cookie` dans
+ * `tools/perf/k6/out/cookies.json` (hors Git). Chaque VU k6 utilise son propre utilisateur : le
+ * seau de limitation de débit par utilisateur (120/min) n'est jamais partagé (EF-4, CL-4).
+ */
+function writeCookiesFile() {
+  const json = execFileSync(
+    'pnpm',
+    ['exec', 'tsx', path.join('tools', 'perf', 'perf-sessions.ts')],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
+  const file = path.join(OUT_DIR, 'cookies.json');
+  fs.writeFileSync(file, json);
+  return file;
+}
+
 export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const summary = path.join(OUT_DIR, 'summary.json');
@@ -19,6 +39,7 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
   const version = fs
     .readFileSync(path.join(ROOT, 'tools', 'perf', 'k6-version.txt'), 'utf8')
     .trim();
+  const cookiesFile = writeCookiesFile();
 
   let result;
   if (hasK6()) {
@@ -28,7 +49,13 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
       {
         cwd: ROOT,
         stdio: 'inherit',
-        env: { ...process.env, BASE_URL: base, FORMATION_ID: formationId, PERF_COOKIE: cookie },
+        env: {
+          ...process.env,
+          BASE_URL: base,
+          FORMATION_ID: formationId,
+          PERF_COOKIE: cookie,
+          PERF_COOKIES_FILE: cookiesFile,
+        },
       },
     );
   } else {
@@ -43,6 +70,8 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
       `FORMATION_ID=${formationId}`,
       '-e',
       `PERF_COOKIE=${cookie}`,
+      '-e',
+      'PERF_COOKIES_FILE=/scripts/out/cookies.json',
       '-v',
       `${K6_DIR}:/scripts`,
       `grafana/k6:${version}`,

@@ -46,10 +46,13 @@ function lhr(url: string, overrides: Record<string, number> = {}, finalUrl = url
   };
 }
 
-function dirWith(reports: unknown[]): string {
+function dirWith(
+  reports: unknown[],
+  name = (index: number) => `lhr-${String(index)}.json`,
+): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'learny-lhci-'));
   reports.forEach((report, index) => {
-    fs.writeFileSync(path.join(dir, `lhr-${String(index)}.json`), JSON.stringify(report));
+    fs.writeFileSync(path.join(dir, name(index)), JSON.stringify(report));
   });
   return dir;
 }
@@ -74,6 +77,16 @@ describe('[SPEC-804] assert-lighthouse', () => {
     const result = evaluateLighthouse(dirWith(reports)) as unknown as LhResult;
     expect(result.ok).toBe(false);
     expect(result.pages[0]?.reasons.join(' ')).toContain('LCP');
+  });
+
+  it('lit aussi les rapports `*.report.json` écrits par l’upload filesystem de LHCI', () => {
+    const dir = dirWith(
+      Array.from({ length: 5 }, () => lhr('http://127.0.0.1:3100/accueil')),
+      (index) => `127_0_0_1-accueil-2026_11_17_08_2${String(index)}_00.report.json`,
+    );
+    const result = evaluateLighthouse(dir) as unknown as LhResult;
+    expect(result.ok).toBe(true);
+    expect(result.pages[0]?.runs).toBe(5);
   });
 
   it('détecte un budget JavaScript dépassé et une session perdue', () => {

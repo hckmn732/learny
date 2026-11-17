@@ -90,11 +90,9 @@ function lighthouse(cookie) {
   fs.rmSync(outAnon, { recursive: true, force: true });
   fs.rmSync(outAuth, { recursive: true, force: true });
 
-  const chrome = capture('pnpm', [
-    'exec',
-    'node',
+  const chrome = capture('node', [
     '-e',
-    "process.stdout.write(require('playwright').chromium.executablePath())",
+    "process.stdout.write(require('@playwright/test').chromium.executablePath())",
   ]).trim();
   for (const [dir, urls, withCookie] of [
     [outAnon, anonymous, false],

@@ -59,3 +59,6 @@ apps/web/public/swe-worker-build.txt
 
 # SPEC-804 — sorties locales des mesures
 tools/perf/k6/out/
+
+# SPEC-804 — sorties locales de Lighthouse CI
+.lighthouseci/

@@ -26,10 +26,13 @@ export const PAGE_BUDGETS = {
 
 export function readLhr(dir) {
   if (!fs.existsSync(dir)) return [];
-  return fs
-    .readdirSync(dir)
-    .filter((name) => /^lhr-.*\.json$/.test(name))
-    .map((name) => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')));
+  return (
+    fs
+      .readdirSync(dir)
+      // `lhci collect` writes `lhr-*.json`; `upload.target: filesystem` writes `*.report.json`.
+      .filter((name) => /^(lhr-.*|.+\.report)\.json$/.test(name))
+      .map((name) => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')))
+  );
 }
 
 function metricsOf(lhr) {
