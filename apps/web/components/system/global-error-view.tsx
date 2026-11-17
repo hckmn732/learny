@@ -1,4 +1,4 @@
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/meta';
 
 import { ErrorView } from './error-view';
 

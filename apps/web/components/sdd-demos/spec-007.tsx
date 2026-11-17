@@ -1,6 +1,6 @@
 import { DEMO_JOB_ID, JOB_RETRIES, functions } from '@learny/jobs';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 import { DemoJobRunner } from './spec-007-run';

@@ -3,14 +3,16 @@
 import { Inter, Space_Grotesk } from 'next/font/google';
 
 export const inter = Inter({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
   display: 'swap',
   variable: '--font-inter',
   adjustFontFallback: true,
 });
 
 export const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
+  weight: ['600'],
   display: 'swap',
   variable: '--font-space-grotesk',
   adjustFontFallback: true,

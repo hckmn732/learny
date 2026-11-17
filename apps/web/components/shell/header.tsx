@@ -8,8 +8,7 @@ import type { HeaderDto } from '@learny/contracts';
 import { AlertDialog, IconButton, ResponsivePanel, iconRegistry, useBreakpoint } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { purgeOfflineDatabase, purgeRuntimeCaches } from '../../lib/offline/db';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/offline-shell';
 import { NotificationBell } from '../notifications/notification-panel';
 import { OfflineIndicator } from '../offline/OfflineIndicator';
 import { flushBeforeSignOut } from '../offline/OfflineProvider';
@@ -19,6 +18,13 @@ import { AccountMenuView, type AccountMenuStatus } from './account-menu';
 
 const t = fr.shell.header;
 const HEADER_QUERY_KEY = ['header'] as const;
+
+/** Clears offline data and runtime caches without shipping the IndexedDB stack initially (SPEC-804). */
+async function purgeLocalData(): Promise<void> {
+  const { purgeOfflineDatabase, purgeRuntimeCaches } = await import('../../lib/offline/db');
+  await purgeOfflineDatabase().catch(() => undefined);
+  await purgeRuntimeCaches().catch(() => undefined);
+}
 
 export interface HeaderViewProps {
   data: HeaderDto | null;
@@ -191,8 +197,7 @@ export const Header = ({
     mutationFn: () => api.authSignOut({}),
     onSuccess: async () => {
       // EF-11 — no offline data survives the session; ET-3 clears the cached learner data.
-      await purgeOfflineDatabase().catch(() => undefined);
-      await purgeRuntimeCaches().catch(() => undefined);
+      await purgeLocalData();
       queryClient.clear();
       router.replace('/connexion');
       router.refresh();
@@ -216,8 +221,7 @@ export const Header = ({
       setBlockedSignOut(remaining);
       return;
     }
-    await purgeOfflineDatabase().catch(() => undefined);
-    await purgeRuntimeCaches().catch(() => undefined);
+    await purgeLocalData();
     signOut.mutate();
   }
 
@@ -273,12 +277,9 @@ export const Header = ({
         onConfirm={() => {
           setBlockedSignOut(null);
           setSignOutPendingLocal(true);
-          void purgeOfflineDatabase()
-            .catch(() => undefined)
-            .then(() => purgeRuntimeCaches().catch(() => undefined))
-            .then(() => {
-              signOut.mutate();
-            });
+          void purgeLocalData().then(() => {
+            signOut.mutate();
+          });
         }}
       />
     </>

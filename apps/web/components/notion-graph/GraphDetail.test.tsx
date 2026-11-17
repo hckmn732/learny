@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { NotionGraphDto } from '@learny/contracts';
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 import { GraphDetail } from './GraphDetail';
 import { GraphList } from './GraphList';

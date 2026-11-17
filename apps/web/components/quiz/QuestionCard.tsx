@@ -5,7 +5,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import type { QuizFeedback, QuizQuestionDto } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 import { CheckFeedback, hasAnswer } from './CheckFeedback';
 

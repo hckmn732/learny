@@ -1,5 +1,5 @@
 import { readReferences } from '../../lib/references';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 import { Spec005Gallery } from './spec-005-gallery';

@@ -3,7 +3,7 @@
 import type { SidebarDto } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.sidebar;
 

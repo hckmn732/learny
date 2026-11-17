@@ -6,7 +6,7 @@ import { agendaSlotStyle } from '@learny/config';
 import type { AgendaSlotKind } from '@learny/contracts';
 
 import { legendEntriesOf } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

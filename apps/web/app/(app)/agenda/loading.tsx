@@ -1,7 +1,7 @@
 // Loading state of the agenda (SPEC-704 EF-13): skeletons of the sidebar cards and the grid.
 import { SkeletonCard, SkeletonGroup } from '@learny/ui';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/agenda';
 
 export default function AgendaLoading() {
   return (

@@ -9,7 +9,7 @@ import { Button, IconButton, SegmentedControl, Select } from '@learny/ui';
 
 import { navLabel, rangeLabel } from '../../lib/agenda/range';
 import type { AgendaView } from '../../lib/agenda/state';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

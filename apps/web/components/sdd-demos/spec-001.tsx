@@ -2,7 +2,7 @@ import { HOSTING_REGIONS, isEuRegion, type HostingService } from '@learny/config
 import { clock } from '@learny/core';
 
 import { getHealth } from '../../lib/health';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const WORKSPACE_PACKAGES = [

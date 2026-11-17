@@ -24,7 +24,7 @@ import {
   getServerEnv,
   secretPresence,
 } from '../../lib/server-env';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec009;

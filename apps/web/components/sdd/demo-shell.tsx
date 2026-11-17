@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { clock } from '@learny/core';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 
 const TIME_ZONE = 'Europe/Paris';
 

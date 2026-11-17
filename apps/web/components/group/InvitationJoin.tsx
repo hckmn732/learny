@@ -9,7 +9,7 @@ import { AppError } from '@learny/core';
 import { Button, FormError } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/group';
 import { formatFirstNames } from '../onboarding/formatFirstNames';
 
 const t = fr.group.invitePage;

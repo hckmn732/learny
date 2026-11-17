@@ -12,7 +12,7 @@ import {
   SkeletonText,
 } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/system';
 
 const t = fr.system;
 

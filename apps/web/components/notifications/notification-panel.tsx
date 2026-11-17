@@ -22,7 +22,7 @@ import {
 } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.notifications;
 

@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-11-11T12:20:00Z",
+  "commit": "sample804",
+  "environment": {
+    "node": "v24",
+    "chromium": "Playwright",
+    "k6": "1.2.0",
+    "cpu": "Exemple",
+    "cores": 4,
+    "memoryBytes": 8589934592,
+    "platform": "linux"
+  },
+  "lighthouse": {
+    "ok": true,
+    "pages": [
+      {
+        "url": "http://127.0.0.1:3100/accueil",
+        "runs": 5,
+        "metrics": {
+          "lcp": { "values": [1800, 1900, 1750, 1850, 1820], "p75": 1850 },
+          "cls": { "values": [0.02, 0.01, 0.02, 0.01, 0.02], "p75": 0.02 },
+          "tbt": { "values": [100, 120, 110, 130, 105], "p75": 120 },
+          "score": { "values": [95, 94, 96, 95, 95], "p75": 95 }
+        },
+        "resources": {
+          "js": 150000,
+          "css": 20000,
+          "fontsBytes": 80000,
+          "fontsCount": 2,
+          "images": 90000,
+          "requests": 25
+        },
+        "ok": true,
+        "reasons": []
+      }
+    ]
+  },
+  "inp": {
+    "ok": true,
+    "scenarios": [
+      {
+        "name": "accueil → panneau des notifications",
+        "values": [80, 90, 85, 95, 88],
+        "p75": 90,
+        "ok": true
+      }
+    ]
+  },
+  "k6": {
+    "ok": true,
+    "p50": 40,
+    "p95": 120,
+    "p99": 200,
+    "failureRate": 0,
+    "status429": 0,
+    "routes": [{ "name": "route_home_duration", "p50": 35, "p95": 110, "p99": 180, "ok": true }]
+  }
+}

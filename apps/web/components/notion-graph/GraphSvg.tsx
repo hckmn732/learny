@@ -9,7 +9,7 @@ import { colors } from '@learny/ui/tokens';
 import type { GraphView, GraphViewport } from '../../lib/notion-graph/pan-zoom';
 import { panBy, toGraphPoint, toViewBox, zoomAt } from '../../lib/notion-graph/pan-zoom';
 import { normalizeGraphQuery } from '../../lib/notion-graph/search';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 import { GraphLegend } from './GraphLegend';
 import type { GraphLayout, GraphPoint } from './layout';

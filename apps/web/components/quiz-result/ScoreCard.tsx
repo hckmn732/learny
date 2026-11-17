@@ -1,7 +1,7 @@
 import type { QuizResultDto } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 import { AttemptHistory } from './AttemptHistory';
 

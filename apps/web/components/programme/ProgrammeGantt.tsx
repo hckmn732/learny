@@ -1,7 +1,7 @@
 import type { ActiveProgrammeDto } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/programme';
 
 import { barGeometry, dayDiff, formatRange, mondayOf, programmeWeeks } from './dates';
 

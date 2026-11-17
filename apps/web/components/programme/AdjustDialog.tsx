@@ -12,7 +12,7 @@ import {
   Textarea,
 } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/programme';
 
 const t = fr.programme;
 

@@ -7,7 +7,7 @@ import type { QuizQuestionDto } from '@learny/contracts';
 import { ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 import { QuestionCard } from './QuestionCard';
 import { QuizHeader } from './QuizHeader';

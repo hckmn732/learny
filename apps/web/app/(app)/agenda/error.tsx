@@ -4,7 +4,7 @@
 
 import { ErrorState } from '@learny/ui';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/agenda';
 
 export default function AgendaError() {
   return (

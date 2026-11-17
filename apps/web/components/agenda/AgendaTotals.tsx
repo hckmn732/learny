@@ -4,7 +4,7 @@
 import type { AgendaSlot } from '@learny/contracts';
 
 import { formatDuration, totalsOf } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

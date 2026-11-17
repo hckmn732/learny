@@ -7,7 +7,7 @@ import type { FinalReviewDto } from '@learny/contracts';
 import { ChoiceGroup } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/finalReview';
 
 const t = fr.finalReview;
 

@@ -12,7 +12,7 @@ import type {
 } from '@learny/contracts';
 import { Button, Select, TextField, Textarea, cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/exercises';
 
 import { CriteriaFeedback } from './CriteriaFeedback';
 import { HintButton } from './HintButton';

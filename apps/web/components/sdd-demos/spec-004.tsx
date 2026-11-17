@@ -1,7 +1,7 @@
 import { clock } from '@learny/core';
 import { colors } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec004;

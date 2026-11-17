@@ -3,18 +3,18 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import type { AiModelsState } from '@learny/contracts/parametres-modeles-d-ia';
+import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
 import {
   SETTINGS_DEFAULT_TAB,
   SETTINGS_TAB_IDS,
   settingsTabFromHash,
-  type AiModelsState,
   type CourseLanguage,
-  type NotificationSettingsDto,
   type SettingsState,
   type SettingsTab,
   type StudyRhythm,
   type TutorTone,
-} from '@learny/contracts';
+} from '@learny/contracts/parametres-onglets-et-profil';
 import { clock, formatUserDate } from '@learny/core';
 import {
   AlertDialog,
@@ -33,7 +33,7 @@ import {
 import { cn } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding-settings-shell';
 import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
 

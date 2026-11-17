@@ -18,7 +18,7 @@ import {
   type PushBrowser,
   type PushRegistration,
 } from '../../lib/push';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec205;

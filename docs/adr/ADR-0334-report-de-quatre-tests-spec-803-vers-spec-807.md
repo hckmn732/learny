@@ -1,7 +1,7 @@
 # ADR-0334 — Report de quatre tests SPEC-803 vers SPEC-807
 
 - **Statut** : Acceptée
-- **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
+- **Origine** : Décision du porteur (17/11/2026)
 - **Date** : 2026-11-17
 - **Liens** : SPEC-803, SPEC-807
 

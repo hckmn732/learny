@@ -39,7 +39,7 @@ import {
 } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.retours;
 

@@ -6,7 +6,7 @@
 // visible on the very next navigation.
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
-import { ONBOARDING_STEP_VALUES, type OnboardingStep } from '@learny/contracts';
+import { ONBOARDING_STEP_VALUES, type OnboardingStep } from '@learny/contracts/me';
 
 export const ONBOARDING_TICKET_COOKIE = 'learny_ob';
 export const ONBOARDING_TICKET_TTL_MS = 60_000;

@@ -2,7 +2,7 @@ import type { FinalReviewDto } from '@learny/contracts';
 import { shortCivilDay } from '@learny/services/home/derive';
 import { PageHeader } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/finalReview';
 
 import { FragileNotions } from './FragileNotions';
 import { MaintenanceChoice } from './MaintenanceChoice';

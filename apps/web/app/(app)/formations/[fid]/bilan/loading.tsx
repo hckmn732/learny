@@ -1,6 +1,6 @@
 import { SkeletonCard, SkeletonGroup } from '@learny/ui';
 
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/finalReview';
 
 const t = fr.finalReview;
 

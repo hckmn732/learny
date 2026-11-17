@@ -9,7 +9,7 @@ import { Button, ErrorState, SkeletonCard, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { invalidateStudyProgress } from '../../lib/study-progress';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 const t = fr.home.warmup;
 

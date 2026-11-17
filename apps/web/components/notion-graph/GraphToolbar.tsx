@@ -7,7 +7,7 @@ import type { NotionGraphNode } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
 import type { GraphFilters } from '../../lib/notion-graph/pan-zoom';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 const t = fr.notionGraph;
 

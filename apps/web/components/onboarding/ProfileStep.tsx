@@ -9,7 +9,7 @@ import { Button, Card, FormError, Select, TextField } from '@learny/ui';
 import { cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 

@@ -7,7 +7,7 @@ import type { QuizQuestionDto, RemediationDto } from '@learny/contracts';
 import { ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/remediation';
 import { QuestionCard } from '../quiz/QuestionCard';
 import { availableLabel } from '../quiz-result/ResultActions';
 

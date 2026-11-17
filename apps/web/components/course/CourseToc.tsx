@@ -2,7 +2,7 @@
 
 import type { CourseChapterSummary, CourseSection, ModuleCourseScreen } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/course';
 
 const t = fr.course;
 

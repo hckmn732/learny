@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Button, Card, Link, PageHeader } from '@learny/ui';
 
 import { logClientError, safeErrorInfo } from '../../lib/client-log';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/system';
 
 const t = fr.system.error;
 

@@ -12,7 +12,7 @@ import {
   type ReviewGameFormat,
   type ReviewItemDto,
   type ReviewSummaryDto,
-} from '@learny/contracts';
+} from '@learny/contracts/review';
 import { clock } from '@learny/core';
 import {
   correctionExplanation,
@@ -23,7 +23,7 @@ import { EmptyState } from '@learny/ui';
 
 import { readProgress, writeProgress, type StoredPack } from '../../lib/offline/db';
 import { enqueue } from '../../lib/offline/queue';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/globalQuiz-offline';
 import { GamePanel } from '../global-quiz/GamePanel';
 import { GameRail } from '../global-quiz/GameRail';
 import { GlobalQuizHeader } from '../global-quiz/GlobalQuizHeader';

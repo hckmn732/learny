@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/ui';
 
 export const dynamic = 'force-dynamic';
 

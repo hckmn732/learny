@@ -9,7 +9,7 @@ import { AppError } from '@learny/core';
 import { AlertDialog, Button, Card, FormError, ScrollableTable } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/group';
 
 const t = fr.group;
 

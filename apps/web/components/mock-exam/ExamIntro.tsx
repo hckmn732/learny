@@ -6,7 +6,7 @@ import { useState } from 'react';
 import type { ExamIntroDto } from '@learny/contracts';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/mockExam';
 
 const t = fr.mockExam;
 

@@ -6,7 +6,7 @@ import type { SearchGroup, SearchItem, SearchKind, SearchResponse } from '@learn
 import { PageHeader } from '@learny/ui';
 
 import type { SearchPageState } from '../../lib/search-data';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/search';
 
 import { HighlightedText } from './highlighted-text';
 

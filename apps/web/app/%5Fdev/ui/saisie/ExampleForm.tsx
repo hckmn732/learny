@@ -5,7 +5,7 @@ import * as z from 'zod/mini';
 
 import { Button, Form, FormError, FormField, TextField, useZodForm } from '@learny/ui';
 
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.saisie.form;
 

@@ -2,3 +2,5 @@
 export * from './demo';
 export * from './demo-fixtures';
 export * from './demo-guard';
+export * from './perf';
+export * from './perf-credentials';

@@ -1,5 +1,5 @@
 import { NotionGraphError } from '../../../../../components/notion-graph/NotionGraphError';
-import { NotionGraphExperience } from '../../../../../components/notion-graph/NotionGraphExperience';
+import { NotionGraphLazy } from '../../../../../components/notion-graph/NotionGraphLazy';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadNotionGraphPage } from '../../../../../lib/notion-graph-page';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
@@ -33,7 +33,7 @@ export default async function CartePage({ params }: CartePageProps) {
         className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       >
         {graph.ok ? (
-          <NotionGraphExperience graph={graph.data} />
+          <NotionGraphLazy graph={graph.data} />
         ) : (
           <NotionGraphError
             {...(graph.requestId === undefined ? {} : { requestId: graph.requestId })}

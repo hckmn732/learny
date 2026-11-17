@@ -6,7 +6,7 @@ import { HealthResponse } from '@learny/contracts';
 import { AppError, isAppError } from '@learny/core';
 
 import { apiFetch } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 
 const t = fr.sdd.spec006.client;
 

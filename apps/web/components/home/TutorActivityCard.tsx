@@ -13,7 +13,7 @@ import {
 import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, toast, cn } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 const t = fr.home.tutorActed;
 

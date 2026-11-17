@@ -9,7 +9,7 @@ import { Button, Card, FormError, Switch } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { createPushGateway, type PushGateway } from '../../lib/push-onboarding';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 

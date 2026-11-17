@@ -9,7 +9,7 @@ import type { Clock } from '@learny/core';
 import { colors } from '@learny/ui/tokens';
 
 import { gridHours, layoutDay, type GridHours } from '../../lib/agenda/grid';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 import { NowLine } from './NowLine';
 import { SlotBlock } from './SlotBlock';

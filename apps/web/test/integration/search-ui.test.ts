@@ -17,7 +17,7 @@ import {
 import { GET as searchRoute } from '../../app/api/v1/search/route';
 import { SearchPageView } from '../../components/search/search-results';
 import { searchPageForContext, type SearchPageState } from '../../lib/search-data';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/search';
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };

@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 import type { HeaderDto } from '@learny/contracts';
 import { cleanup, renderComponent, screen, waitFor, within } from '@learny/testing/render';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 
 import { HeaderView, type HeaderViewProps } from './header';
 

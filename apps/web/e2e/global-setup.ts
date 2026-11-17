@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = fileURLToPath(new URL('../../../', import.meta.url));
 
 export default function globalSetup(): void {
+  // SPEC-804 : `pnpm test:perf` prépare lui-même ses données de démonstration et de charge.
+  if (process.env.PERF_SKIP_DB === '1') return;
   const reset = spawnSync('pnpm', ['db:reset', '--yes'], {
     cwd: ROOT,
     stdio: 'inherit',

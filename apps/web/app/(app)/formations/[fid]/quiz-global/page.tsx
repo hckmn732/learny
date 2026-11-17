@@ -4,7 +4,7 @@ import { GlobalQuizSession } from '../../../../../components/global-quiz/GlobalQ
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGlobalQuizPage } from '../../../../../lib/global-quiz-page';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/globalQuiz';
 
 export const dynamic = 'force-dynamic';
 

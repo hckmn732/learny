@@ -15,11 +15,11 @@ import {
   type SearchItem,
   type SearchKind,
   type SearchResponse,
-} from '@learny/contracts';
+} from '@learny/contracts/search';
 import { Icon, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/search';
 
 import { HighlightedText } from './highlighted-text';
 

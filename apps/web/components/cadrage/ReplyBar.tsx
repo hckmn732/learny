@@ -3,7 +3,7 @@
 import { ArrowRight } from 'lucide-react';
 import type { RefObject } from 'react';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/cadrage';
 
 const t = fr.cadrage;
 

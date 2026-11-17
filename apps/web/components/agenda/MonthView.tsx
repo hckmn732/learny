@@ -10,7 +10,7 @@ import { colors } from '@learny/ui/tokens';
 
 import { civilDayNumber, civilDow, longDayLabel } from '../../lib/agenda/dates';
 import { chipLabel, monthCells } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

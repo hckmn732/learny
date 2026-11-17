@@ -15,7 +15,7 @@ import {
   subscribePendingAuth,
 } from '../../lib/auth/pending-auth';
 import { useClock } from '../../lib/auth/use-clock';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/auth';
 
 const t = fr.auth;
 

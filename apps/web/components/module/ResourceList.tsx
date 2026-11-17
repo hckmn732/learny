@@ -5,7 +5,7 @@ import { useState } from 'react';
 import type { ResourceListItem } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/module';
 
 const t = fr.module;
 

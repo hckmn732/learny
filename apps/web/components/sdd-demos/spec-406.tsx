@@ -12,7 +12,7 @@ import type {
 } from '@learny/learning-engine';
 import { Badge, Button } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 
 import {

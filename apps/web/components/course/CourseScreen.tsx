@@ -1,19 +1,24 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
 import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contracts';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
-import { TutorChat } from '../tutor-chat/TutorChat';
+import { fr } from '../../messages/fr/course-module';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';
 import { SummaryEditor } from './SummaryEditor';
 
 const t = fr.course;
+
+// SPEC-804 ET-5 — le panneau du tuteur est chargé à la demande, côté client.
+const TutorChat = dynamic(() => import('../tutor-chat/TutorChat').then((m) => m.TutorChat), {
+  ssr: false,
+});
 
 function messageOf(cause: unknown): string {
   return cause instanceof Error && cause.message !== '' ? cause.message : fr.module.errors.generic;

@@ -1,0 +1,30 @@
+export const remediation = {
+  breadcrumb: 'Remédiation',
+  title: 'Remédiation ciblée',
+  duration: '≈ 15 min',
+  notions: (count: number) => (count === 1 ? '1 notion' : `${String(count)} notions`),
+  preparing: 'Le tuteur prépare votre remédiation…',
+  preparingText: 'Cette page se met à jour automatiquement dès qu’elle est prête.',
+  noneTitle: 'Aucune remédiation en cours.',
+  noneText: 'Une remédiation ciblée est proposée après une tentative échouée.',
+  prepare: 'Préparer une remédiation',
+  empty: 'Aucune question n’est disponible pour cette remédiation.',
+  check: 'Vérifier',
+  checking: 'Vérification…',
+  missingAnswer: 'Donnez une réponse avant de vérifier.',
+  answerSaved: 'Réponse enregistrée.',
+  finish: 'Terminer la remédiation',
+  finishing: 'Enregistrement…',
+  unfinished: 'Vérifiez toutes les questions avant de terminer.',
+  doneTitle: 'Remédiation terminée.',
+  doneNow: 'Votre nouvelle tentative est disponible dès maintenant.',
+  doneAt: (label: string) => `Votre nouvelle tentative est disponible le ${label}.`,
+  retry: 'Nouvelle tentative',
+  backToModule: 'Retour au module',
+  progress: (checked: number, total: number) =>
+    `Question ${String(checked)} sur ${String(total)} vérifiée${checked === 1 ? '' : 's'}`,
+  error: 'La remédiation n’a pas pu être chargée.',
+  excerptPrefix: 'Extrait',
+} as const;
+
+export const fr = { remediation } as const;

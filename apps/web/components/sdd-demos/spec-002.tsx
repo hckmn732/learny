@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 
 import { COMMIT_TYPES } from '@learny/config';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 import { CommitCheckForm, SecretScanForm } from './spec-002-forms';

@@ -1,0 +1,105 @@
+// Exécute k6 (binaire local ou image Docker figée) et écrit le résumé (SPEC-804 EF-4, ET-1).
+import { execFileSync, spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = fileURLToPath(new URL('../..', import.meta.url));
+const K6_DIR = path.join(ROOT, 'tools', 'perf', 'k6');
+const OUT_DIR = path.join(K6_DIR, 'out');
+
+function hasK6() {
+  return spawnSync('k6', ['version'], { encoding: 'utf8' }).status === 0;
+}
+
+/**
+ * Crée une session par utilisateur de charge et écrit leurs en-têtes `Cookie` dans
+ * `tools/perf/k6/out/cookies.json` (hors Git). Chaque VU k6 utilise son propre utilisateur : le
+ * seau de limitation de débit par utilisateur (120/min) n'est jamais partagé (EF-4, CL-4).
+ */
+function writeCookiesFile() {
+  const json = execFileSync(
+    'pnpm',
+    ['exec', 'tsx', path.join('tools', 'perf', 'perf-sessions.ts')],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
+  const file = path.join(OUT_DIR, 'cookies.json');
+  fs.writeFileSync(file, json);
+  return file;
+}
+
+export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+  const summary = path.join(OUT_DIR, 'summary.json');
+  fs.rmSync(summary, { force: true });
+  const version = fs
+    .readFileSync(path.join(ROOT, 'tools', 'perf', 'k6-version.txt'), 'utf8')
+    .trim();
+  const cookiesFile = writeCookiesFile();
+
+  let result;
+  if (hasK6()) {
+    result = spawnSync(
+      'k6',
+      ['run', '--summary-export', summary, path.join(K6_DIR, 'api-load.js')],
+      {
+        cwd: ROOT,
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          BASE_URL: base,
+          FORMATION_ID: formationId,
+          PERF_COOKIE: cookie,
+          PERF_COOKIES_FILE: cookiesFile,
+        },
+      },
+    );
+  } else {
+    const dockerArgs = [
+      'run',
+      '--rm',
+      '-i',
+      // The perf server listens on 127.0.0.1 only: share the host network, and run as the host
+      // user so the summary can be written to the mounted directory.
+      '--network=host',
+      `--user=${String(process.getuid?.() ?? 0)}:${String(process.getgid?.() ?? 0)}`,
+      '-e',
+      `BASE_URL=${base}`,
+      '-e',
+      `FORMATION_ID=${formationId}`,
+      '-e',
+      `PERF_COOKIE=${cookie}`,
+      '-e',
+      'PERF_COOKIES_FILE=/scripts/out/cookies.json',
+      '-v',
+      `${K6_DIR}:/scripts`,
+      `grafana/k6:${version}`,
+      'run',
+      '--summary-export=/scripts/out/summary.json',
+      '/scripts/api-load.js',
+    ];
+    result = spawnSync('docker', dockerArgs, { cwd: ROOT, stdio: 'inherit' });
+  }
+
+  const available = fs.existsSync(summary);
+  const parsed = available ? JSON.parse(fs.readFileSync(summary, 'utf8')) : null;
+  return {
+    ok: result.status === 0 && available,
+    code: result.status,
+    summary: parsed,
+    path: available ? path.relative(ROOT, summary) : null,
+  };
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const out = runK6({
+    formationId: process.env.FORMATION_ID ?? '',
+    cookie: process.env.PERF_COOKIE ?? '',
+    base: process.env.BASE_URL ?? 'http://127.0.0.1:3100',
+  });
+  process.exit(out.ok ? 0 : 1);
+}

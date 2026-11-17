@@ -7,7 +7,7 @@ import { cleanup, renderComponent, screen, waitFor, within } from '@learny/testi
 import { ToastProvider, clearToasts } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 import { TutorActivityPanel } from './TutorActivityCard';
 

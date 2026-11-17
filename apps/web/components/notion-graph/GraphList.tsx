@@ -2,7 +2,7 @@
 
 import type { NotionGraphDto, NotionGraphLinkKind } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 const t = fr.notionGraph;
 

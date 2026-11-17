@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { AccountForm } from '../../../components/auth/AccountForm';
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/auth';
 
 const t = fr.auth.signup;
 
