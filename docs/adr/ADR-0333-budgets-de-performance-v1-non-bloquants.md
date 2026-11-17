@@ -1,7 +1,7 @@
 # ADR-0333 — Budgets de performance V1 non bloquants
 
 - **Statut** : Acceptée
-- **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
+- **Origine** : Décision du porteur (17/11/2026)
 - **Date** : 2026-11-17
 - **Liens** : SPEC-804, ADR-0202, ADR-0332
 
@@ -15,4 +15,4 @@ Pour la V1, pnpm test:perf mesure et publie un rapport complet ; il sort en code
 
 ## Conséquences
 
-Les dépassements restent visibles (rapport, page /_dev/sdd/SPEC-804) et constituent une dette de performance à reprendre après la V1 ; une mesure sur l infrastructure de production est recommandée avant de conclure.
+Les dépassements restent visibles (rapport, page /_dev/sdd/SPEC-804) et constituent une dette de performance à reprendre après la V1 ; une mesure sur l infrastructure de production est recommandée avant de conclure. Constat du 17/11 : l étape INP ne termine pas sous ralentissement (non mesurée) et la charge k6 de 50 VU échoue à 96 % (limite de débit) ; ces outils sont à réparer avec la dette de performance.

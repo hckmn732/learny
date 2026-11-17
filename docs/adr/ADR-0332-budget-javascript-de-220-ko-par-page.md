@@ -1,7 +1,7 @@
 # ADR-0332 — Budget JavaScript de 220 Ko par page
 
 - **Statut** : Acceptée
-- **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
+- **Origine** : Décision du porteur (17/11/2026)
 - **Date** : 2026-11-17
 - **Liens** : SPEC-804, ADR-0041, ADR-0202
 
