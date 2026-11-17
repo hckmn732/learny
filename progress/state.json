@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T18:08:15.248Z",
+  "updatedAt": "2026-11-17T18:09:09.147Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6170,11 +6170,11 @@
       }
     },
     "SPEC-807": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-17T18:09:09.146Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-807-parcours-de-bout-en-bout-et-non-regressi",
       "commit": null,
       "lastError": null,
       "validations": {}
