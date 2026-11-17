@@ -100,21 +100,20 @@ afterAll(async () => {
 });
 
 describe('[SPEC-805] HTTP security', () => {
-  it('CA-1 — deux réponses HTML ont des nonces distincts et les en-têtes prescrits', () => {
+  it('CA-1 — deux réponses HTML ont des nonces distincts et les en-têtes prescrits', async () => {
     vi.stubEnv('ENABLE_SDD_PAGES', 'true');
-    vi.stubEnv('APP_ENV', 'test');
-    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('APP_ENV', 'production');
 
-    const first = proxy(
-      new NextRequest('https://learny.test/_dev/sdd/SPEC-805', {
+    const first = await proxy(
+      new NextRequest('https://learny.test/connexion', {
         headers: { 'x-forwarded-proto': 'https' },
       }),
-    ) as NextResponse;
-    const second = proxy(
-      new NextRequest('https://learny.test/_dev/sdd/SPEC-805', {
+    );
+    const second = await proxy(
+      new NextRequest('https://learny.test/connexion', {
         headers: { 'x-forwarded-proto': 'https' },
       }),
-    ) as NextResponse;
+    );
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(200);
@@ -142,8 +141,7 @@ describe('[SPEC-805] HTTP security', () => {
 
   it('EF-2 — une réponse HTTP locale n’annonce pas HSTS', () => {
     vi.stubEnv('ENABLE_SDD_PAGES', 'true');
-    vi.stubEnv('APP_ENV', 'test');
-    vi.stubEnv('NODE_ENV', 'production');
+    vi.stubEnv('APP_ENV', 'production');
     const response = proxy(
       new NextRequest('http://localhost/_dev/sdd/SPEC-805', {
         headers: { 'x-forwarded-proto': 'http' },
