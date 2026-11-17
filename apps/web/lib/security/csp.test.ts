@@ -35,14 +35,21 @@ describe('[SPEC-805] CSP', () => {
     expect(isValidCspNonce("'; script-src https://evil.test")).toBe(false);
   });
 
-  it('CA-1 — la politique porte le nonce, refuse unsafe-eval et unsafe-inline', () => {
+  it('CA-1 — la politique porte le nonce, refuse unsafe-eval et unsafe-inline hors attributs style', () => {
     const nonce = createCspNonce();
     const policy = buildContentSecurityPolicy(nonce, { production: true });
     expect(directive(policy, 'script-src')).toContain(`'nonce-${nonce}'`);
     expect(directive(policy, 'script-src')).toContain("'strict-dynamic'");
-    expect(directive(policy, 'style-src')).toContain(`'nonce-${nonce}'`);
+    expect(directive(policy, 'style-src')).toBe(`style-src 'self' 'nonce-${nonce}'`);
+    expect(directive(policy, 'style-src-elem')).toBe(`style-src-elem 'self' 'nonce-${nonce}'`);
+    // CL-8: React style attributes (dynamic widths, colours) cannot carry a nonce.
+    expect(directive(policy, 'style-src-attr')).toBe("style-src-attr 'unsafe-inline'");
     expect(policy).not.toContain('unsafe-eval');
-    expect(policy).not.toContain('unsafe-inline');
+    const inline = policy
+      .split(';')
+      .map((part) => part.trim())
+      .filter((part) => part.includes('unsafe-inline'));
+    expect(inline).toEqual(["style-src-attr 'unsafe-inline'"]);
     expect(directive(policy, 'object-src')).toBe("object-src 'none'");
     expect(directive(policy, 'base-uri')).toBe("base-uri 'self'");
     expect(directive(policy, 'frame-ancestors')).toBe("frame-ancestors 'none'");
