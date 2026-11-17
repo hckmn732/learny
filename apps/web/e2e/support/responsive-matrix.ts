@@ -36,33 +36,42 @@ export interface MatrixExtras {
   examResultId?: string | undefined;
 }
 
+/** A setup step that does not open its panel fails fast instead of eating the width budget. */
+const SETUP_TIMEOUT = 10_000;
 const SAP = demoFormationId('sap');
 const AGILE = demoFormationId('agile');
 
 async function openMenu(page: Page): Promise<void> {
-  await page.getByTestId('sidebar-show').click();
-  await page.getByTestId('sidebar').waitFor({ state: 'visible' });
+  // From 900 px the menu is a permanent column (SPEC-304): nothing to open.
+  if ((page.viewportSize()?.width ?? 0) >= 900) return;
+  await page.getByTestId('sidebar-show').click({ timeout: SETUP_TIMEOUT });
+  await page.getByTestId('sidebar').waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
 }
 
 async function openNotifications(page: Page): Promise<void> {
-  await page.getByTestId('header-notifications').click();
-  await page.getByTestId('notification-panel').waitFor({ state: 'visible' });
+  await page.getByTestId('header-notifications').click({ timeout: SETUP_TIMEOUT });
+  await page
+    .getByTestId('notification-panel')
+    .waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
 }
 
 async function openAccount(page: Page): Promise<void> {
-  await page.getByTestId('header-account-trigger').click();
-  await page.getByTestId('account-menu').waitFor({ state: 'visible' });
+  await page.getByTestId('header-account-trigger').click({ timeout: SETUP_TIMEOUT });
+  await page.getByTestId('account-menu').waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
 }
 
 async function openTutor(page: Page): Promise<void> {
-  await page.getByTestId('tutor-open').click();
-  await page.getByTestId('tutor-panel').waitFor({ state: 'visible' });
+  await page.getByTestId('tutor-open').click({ timeout: SETUP_TIMEOUT });
+  await page.getByTestId('tutor-panel').waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
 }
 
 async function openGraphDetail(page: Page): Promise<void> {
   const gap = page.getByTestId('graph-gap-item').first();
-  await gap.click();
-  await page.getByTestId('graph-detail').first().waitFor({ state: 'visible' });
+  await gap.click({ timeout: SETUP_TIMEOUT });
+  await page
+    .getByTestId('graph-detail')
+    .first()
+    .waitFor({ state: 'visible', timeout: SETUP_TIMEOUT });
 }
 
 export function buildResponsiveMatrix(extras: MatrixExtras = {}): MatrixEntry[] {
@@ -71,6 +80,13 @@ export function buildResponsiveMatrix(extras: MatrixExtras = {}): MatrixEntry[] 
     { id: 'SCR-01/inscription', route: '/inscription', user: 'anonymous' },
     { id: 'SCR-01/connexion', route: '/connexion', user: 'anonymous' },
     { id: 'SCR-01/verification', route: '/verifier-email', user: 'anonymous' },
+
+    // SCR-02 — onboarding steps; Alex has finished onboarding, so every step is reachable.
+    ...(['profil', 'rythme', 'ia', 'rappels', 'depart'] as const).map((step): MatrixEntry => ({
+      id: `SCR-02/${step}`,
+      route: `/premiers-pas/${step}`,
+      user: 'demo',
+    })),
 
     // SCR-03 — home and shell states.
     { id: 'SCR-03/accueil', route: '/accueil', user: 'demo' },
