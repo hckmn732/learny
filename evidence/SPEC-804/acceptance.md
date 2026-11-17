@@ -49,8 +49,10 @@ n'est inventée et aucun budget n'a été assoupli. Les rapports Lighthouse brut
 
 - `lint` ✅, `typecheck` ✅, `unit` ✅ (15 tests `[SPEC-804]`), `e2e` ✅ (4 tests, 7 vidéos),
   `visual` ✅ (2 tests), `acceptance` ❌ (CA-1 à CA-5 non tenus).
-- `integration` : `query-plans` et `perf-seed` ✅ ; `server-timing` corrigé pour ne plus dépendre de
-  l'état de la base (l'en-tête `Server-Timing: app;dur=…` est bien présent, sans donnée personnelle).
+- `integration` : `query-plans` et `perf-seed` ✅ ; `server-timing` corrigé puis rejoué seul ✅
+  (`apps/web/test/integration/server-timing.test.ts` : 1 fichier, 1 test ; l'en-tête
+  `Server-Timing: app;dur=…` est présent, sans donnée personnelle). Le dernier `validate` global
+  conserve l'échec antérieur de ce fichier avant correctif.
 
 ## Blocage
 
