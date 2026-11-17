@@ -9,7 +9,7 @@ import { cn } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
 import { longDayLabel } from '../../lib/agenda/dates';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

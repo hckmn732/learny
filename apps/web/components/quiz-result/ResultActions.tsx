@@ -6,7 +6,7 @@ import { useState } from 'react';
 import type { QuizResultDto } from '@learny/contracts';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
 

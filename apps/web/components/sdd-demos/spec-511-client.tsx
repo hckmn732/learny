@@ -5,7 +5,7 @@ import type {
   Spec511Data,
   Spec511ResultRow,
 } from '../../app/%5Fdev/sdd/spec-511-data';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec511;

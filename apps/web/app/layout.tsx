@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { colors } from '@learny/ui/tokens';
 
 import { fontVariables } from '../lib/fonts';
-import { fr } from '../messages/fr';
+import { fr } from '../messages/fr/meta';
 
 import './globals.css';
 import { Providers } from './providers';

@@ -2,7 +2,7 @@ import type { FinalReviewDto } from '@learny/contracts';
 import { formatDuration } from '@learny/services/home/derive';
 import { StatCard, StatRow } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/finalReview';
 
 const t = fr.finalReview;
 

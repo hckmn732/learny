@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contracts';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/course-module';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';

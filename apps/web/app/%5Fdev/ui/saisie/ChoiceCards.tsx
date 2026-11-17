@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { ChoiceGroup } from '@learny/ui';
 
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.saisie.choice;
 

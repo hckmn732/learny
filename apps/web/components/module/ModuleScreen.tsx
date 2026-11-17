@@ -7,7 +7,7 @@ import type { ModuleScreen as ModuleScreenDto } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/module';
 import { formatRange } from '../programme/dates';
 
 import { ChapterTabs } from './ChapterTabs';

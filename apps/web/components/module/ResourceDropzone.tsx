@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/module';
 
 const t = fr.module;
 

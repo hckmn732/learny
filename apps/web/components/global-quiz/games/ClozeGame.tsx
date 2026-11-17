@@ -7,7 +7,7 @@ import type { ReviewClozeResponse, ReviewItemDto } from '@learny/contracts';
 import { Button, cn } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/globalQuiz';
 
 import { GameCorrection, gameResultOf } from './GameCorrection';
 

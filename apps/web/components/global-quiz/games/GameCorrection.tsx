@@ -9,7 +9,7 @@ import {
   type ReviewItemDto,
 } from '@learny/contracts';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/globalQuiz';
 
 const t = fr.globalQuiz.games;
 

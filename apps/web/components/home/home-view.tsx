@@ -39,7 +39,7 @@ import {
 } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';

@@ -9,7 +9,7 @@ import { EmptyState, Skeleton } from '@learny/ui';
 
 import { getPack, type StoredPack } from '../../lib/offline/db';
 import { availablePacks } from '../../lib/offline/pack';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/offline-system';
 
 import { OfflineQuizGlobal } from './OfflineQuizGlobal';
 

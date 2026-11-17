@@ -4,7 +4,7 @@
 // reste la référence et sert le rapport disponible.
 import { Card } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 
 import { Spec804Live } from './spec-804';
 

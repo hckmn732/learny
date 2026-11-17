@@ -6,7 +6,7 @@ import { useCallback, useState } from 'react';
 import type { AutomationActionItem } from '@learny/contracts';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/home';
 
 const t = fr.home.proposal;
 const ACCEPTED_KEY = 'learny:tutor-proposal-accepted';

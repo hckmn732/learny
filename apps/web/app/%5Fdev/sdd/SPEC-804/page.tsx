@@ -10,7 +10,7 @@ import { Card } from '@learny/ui';
 import { DemoShell } from '../../../../components/sdd/demo-shell';
 import { Spec804Live } from '../../../../components/sdd-demos/spec-804';
 import { sddPagesEnabled } from '../../../../lib/sdd-pages';
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/sdd';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { robots: { index: false, follow: false } };

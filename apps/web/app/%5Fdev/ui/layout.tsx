@@ -6,7 +6,7 @@ import type { ReactNode } from 'react';
 import { SkipLink } from '@learny/ui';
 
 import { sddPagesEnabled } from '../../../lib/sdd-pages';
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/ui';
 
 export const dynamic = 'force-dynamic';
 

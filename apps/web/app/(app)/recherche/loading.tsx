@@ -1,6 +1,6 @@
 import { PageHeader } from '@learny/ui';
 
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/search';
 
 const t = fr.search.page;
 

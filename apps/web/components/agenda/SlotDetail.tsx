@@ -10,7 +10,7 @@ import type { AgendaSlot } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
 import { longDayLabel } from '../../lib/agenda/dates';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

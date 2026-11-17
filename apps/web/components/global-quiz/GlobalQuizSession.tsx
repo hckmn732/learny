@@ -9,12 +9,12 @@ import {
   type GlobalQuizSessionDto,
   type ReviewAnswerInput,
   type ReviewSummaryDto,
-} from '@learny/contracts';
+} from '@learny/contracts/review';
 import { BottomActionBar, EmptyState, ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { invalidateStudyProgress } from '../../lib/study-progress';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/globalQuiz';
 
 import { GamePanel } from './GamePanel';
 import { GameRail } from './GameRail';

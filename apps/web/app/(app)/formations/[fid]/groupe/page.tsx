@@ -4,7 +4,7 @@ import { CreateGroupCard } from '../../../../../components/group/CreateGroupCard
 import { GroupActions } from '../../../../../components/group/GroupActions';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGroupPage } from '../../../../../lib/group-page';
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/group';
 
 export const dynamic = 'force-dynamic';
 

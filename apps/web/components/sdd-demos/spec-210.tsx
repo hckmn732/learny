@@ -7,7 +7,7 @@ import { colors } from '@learny/ui/tokens';
 
 import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec210;

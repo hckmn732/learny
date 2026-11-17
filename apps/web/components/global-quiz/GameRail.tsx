@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import type { ReviewItemDto } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/globalQuiz';
 
 const t = fr.globalQuiz;
 

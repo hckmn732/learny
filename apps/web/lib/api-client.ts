@@ -1,8 +1,23 @@
 // Typed client of /api/v1 for the browser (SPEC-006 `apiFetch`, SPEC-201 `callApi` and `api`).
-import { z } from 'zod';
-
-import { ROUTES, type AnyRoute, type RouteInput, type RouteOutput } from '@learny/contracts';
+import type { AnyRoute, RouteInput, RouteOutput } from '@learny/contracts/define-route';
+import type { ROUTES } from '@learny/contracts/routes';
 import { AppError, ERROR_CATALOG, type ErrorCode } from '@learny/core';
+
+/**
+ * Minimal schema surface used by the client: any Zod schema satisfies it. Declaring it here keeps
+ * the Zod runtime out of the initial browser bundle (the route registry, and therefore Zod, is
+ * loaded on the first API call only — SPEC-804).
+ */
+export interface SchemaIssue {
+  path: readonly unknown[];
+  message: string;
+}
+
+export interface Schema<T> {
+  safeParse(
+    value: unknown,
+  ): { success: true; data: T } | { success: false; error: { issues: readonly SchemaIssue[] } };
+}
 
 export const API_BASE = '/api/v1';
 
@@ -14,24 +29,64 @@ export interface ApiRequest<TInput, TOutput> {
   path: string;
   /** JSON body, validated by `input` before anything is sent. */
   body?: TInput;
-  input?: z.ZodType<TInput>;
+  input?: Schema<TInput>;
   /** Schema of a successful response; for 204 it receives `undefined` (use `z.undefined()`). */
-  output: z.ZodType<TOutput>;
+  output: Schema<TOutput>;
   signal?: AbortSignal;
   /** Injectable transport (tests, demonstration); defaults to the global fetch. */
   fetch?: typeof fetch;
 }
 
 // RFC 9457 problem details, as produced by the API (docs/architecture/api.md §1).
-const ProblemDetails = z.looseObject({
-  type: z.string().optional(),
-  title: z.string().optional(),
-  status: z.number().int().optional(),
-  detail: z.string().optional(),
-  code: z.string().min(1).optional(),
-  requestId: z.string().min(1).optional(),
-  errors: z.array(z.object({ path: z.string(), message: z.string() })).optional(),
-});
+interface ProblemDetails {
+  type?: string;
+  title?: string;
+  status?: number;
+  detail?: string;
+  code?: string;
+  requestId?: string;
+  errors?: { path: string; message: string }[];
+}
+
+function parseProblem(value: unknown): ProblemDetails | null {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
+  const raw = value as Record<string, unknown>;
+  const optional = (key: string): string | undefined =>
+    typeof raw[key] === 'string' ? raw[key] : undefined;
+  const nonEmpty = (key: string): string | undefined => {
+    const found = optional(key);
+    return found === undefined || found === '' ? undefined : found;
+  };
+  const errors = Array.isArray(raw.errors)
+    ? raw.errors.filter(
+        (item): item is { path: string; message: string } =>
+          typeof item === 'object' &&
+          item !== null &&
+          typeof (item as { path?: unknown }).path === 'string' &&
+          typeof (item as { message?: unknown }).message === 'string',
+      )
+    : undefined;
+  const status =
+    typeof raw.status === 'number' && Number.isInteger(raw.status) ? raw.status : undefined;
+  const type = optional('type');
+  const title = optional('title');
+  const detail = optional('detail');
+  const code = nonEmpty('code');
+  const requestId = nonEmpty('requestId');
+  return {
+    ...(type === undefined ? {} : { type }),
+    ...(title === undefined ? {} : { title }),
+    ...(status === undefined ? {} : { status }),
+    ...(detail === undefined ? {} : { detail }),
+    ...(code === undefined ? {} : { code }),
+    ...(requestId === undefined ? {} : { requestId }),
+    ...(errors === undefined ? {} : { errors }),
+  };
+}
+
+function isProblemDetails(value: ProblemDetails | null): value is ProblemDetails {
+  return value !== null;
+}
 
 const SAFE_PATH = /^\/(?!\/)[A-Za-z0-9\-._~%/]*(\?[A-Za-z0-9\-._~%&=+,]*)?$/;
 
@@ -80,9 +135,9 @@ async function toAppError(response: Response): Promise<AppError> {
   const fallbackRequestId = headerRequestId(response);
   if (contentType.includes('application/problem+json')) {
     const json = await readJson(response);
-    const problem = json.ok ? ProblemDetails.safeParse(json.value) : null;
-    if (problem?.success === true) {
-      const p = problem.data;
+    const problem = json.ok ? parseProblem(json.value) : null;
+    if (isProblemDetails(problem)) {
+      const p = problem;
       const code = p.code ?? codeForStatus(response.status);
       const detail = p.detail ?? p.title ?? ERROR_CATALOG[codeForStatus(response.status)].title;
       const extra = withResponseHeaders(
@@ -129,7 +184,10 @@ export async function apiFetch<TInput, TOutput>(
       const parsed = req.input.safeParse(req.body);
       if (!parsed.success) {
         throw new AppError('VALIDATION_FAILED', ERROR_CATALOG.VALIDATION_FAILED.title, {
-          errors: parsed.error.issues.map((i) => ({ path: i.path.join('.'), message: i.message })),
+          errors: parsed.error.issues.map((i) => ({
+            path: i.path.map(String).join('.'),
+            message: i.message,
+          })),
         });
       }
       value = parsed.data;
@@ -282,7 +340,7 @@ export async function callApi<R extends AnyRoute>(
   if (route.output === null || status === 204) return undefined as RouteOutput<R>;
   const json = await readJson(response);
   if (!json.ok) throw invalid();
-  const parsed = (route.output as z.ZodType).safeParse(json.value);
+  const parsed = (route.output as Schema<unknown>).safeParse(json.value);
   if (!parsed.success) throw invalid();
   return parsed.data as RouteOutput<R>;
 }
@@ -296,10 +354,25 @@ export type Api = {
   ) => Promise<RouteOutput<ApiRoutes[K]>>;
 };
 
+// The route registry carries every Zod schema: it is loaded on the first API call only, so a page
+// that renders its initial data on the server never ships the contracts to the browser (SPEC-804).
+let routesPromise: Promise<ApiRoutes> | undefined;
+export function loadRoutes(): Promise<ApiRoutes> {
+  routesPromise ??= import('@learny/contracts/routes').then((module) => module.ROUTES);
+  return routesPromise;
+}
+
+async function callNamed(name: string, input: never, options?: CallOptions): Promise<unknown> {
+  const routes = await loadRoutes();
+  const route = (routes as Record<string, AnyRoute | undefined>)[name];
+  if (route === undefined) throw new Error(`Route inconnue : ${name}`);
+  return callApi(route, input, options);
+}
+
 /** `api.devEcho({ body })`, `api.devItems({ query })`… one function per registered route. */
-export const api = Object.fromEntries(
-  Object.entries(ROUTES).map(([name, route]) => [
-    name,
-    (input: never, options?: CallOptions) => callApi(route as AnyRoute, input, options),
-  ]),
-) as unknown as Api;
+export const api = new Proxy({} as Api, {
+  get(_target, name) {
+    if (typeof name !== 'string') return undefined;
+    return (input: never, options?: CallOptions) => callNamed(name, input, options);
+  },
+});

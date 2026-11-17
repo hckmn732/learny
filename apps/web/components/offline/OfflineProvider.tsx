@@ -10,7 +10,7 @@ import { prefetchPack } from '../../lib/offline/pack';
 import { pendingCount } from '../../lib/offline/queue';
 import { registerServiceWorker, requestBackgroundSync } from '../../lib/offline/register-sw';
 import { syncQueue } from '../../lib/offline/sync';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/offline';
 
 const t = fr.offline.sync;
 

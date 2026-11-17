@@ -33,7 +33,7 @@ import {
 } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/shell';
 import { ActiveLimitDialog } from '../formations/ActiveLimitDialog';
 
 import { FormationSwitcher } from './FormationSwitcher';

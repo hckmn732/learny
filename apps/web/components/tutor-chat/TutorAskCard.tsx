@@ -2,7 +2,7 @@
 
 import type { CourseStarter, CourseView } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/tutorChat';
 
 const t = fr.tutorChat;
 

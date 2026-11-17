@@ -2,7 +2,7 @@
 
 import type { NotionGraphColorMode, NotionGraphNode } from '@learny/contracts';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/notionGraph';
 
 import { GRAPH_COLORS, MASTERY_COLORS, moduleColor } from './palette';
 

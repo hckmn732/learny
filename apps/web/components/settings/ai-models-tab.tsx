@@ -14,7 +14,7 @@ import type {
 import { Badge, Button, Card, ErrorState, FormError, Select, TextField, cn } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/bricks-settings';
 import { useCredentialQualification } from '../onboarding/useCredentialQualification';
 
 import { ManagedAiBlock } from './managed-ai-block';

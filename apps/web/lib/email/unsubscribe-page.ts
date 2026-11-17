@@ -2,7 +2,7 @@
 // the same base tokens as the e-mails; the token is only echoed inside the form action.
 import { colors, px } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/email';
 
 const t = fr.email.unsubscribe;
 

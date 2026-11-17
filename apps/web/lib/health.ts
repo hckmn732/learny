@@ -1,5 +1,9 @@
 // Health of the web process and of its database (SPEC-006, EF-1/EF-2, ET-1).
-import { HealthResponse, type ComponentStatus, type DatabaseStatus } from '@learny/contracts';
+import {
+  HealthResponse,
+  type ComponentStatus,
+  type DatabaseStatus,
+} from '@learny/contracts/health';
 
 /**
  * Capability given to the probe: run one trivial query (e.g. `select 1`).

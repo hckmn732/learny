@@ -20,7 +20,7 @@ import {
   longDayLabel,
 } from '../../lib/agenda/dates';
 import { monthCells } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

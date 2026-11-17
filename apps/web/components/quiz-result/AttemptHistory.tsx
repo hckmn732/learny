@@ -1,7 +1,7 @@
 import type { AttemptHistoryEntry } from '@learny/contracts';
 import { colors } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
 /** The mockup shows at most the six latest attempts (SPEC-612 EF-2). */

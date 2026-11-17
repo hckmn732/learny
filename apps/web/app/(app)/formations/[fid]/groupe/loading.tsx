@@ -1,6 +1,6 @@
 import { PageHeader, Skeleton, SkeletonGroup, SkeletonText } from '@learny/ui';
 
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/group';
 
 const t = fr.group;
 

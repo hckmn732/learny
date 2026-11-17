@@ -12,7 +12,7 @@ import {
 } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 import { ChoiceCards } from './ChoiceCards';
 import { ExampleForm } from './ExampleForm';

@@ -1,7 +1,7 @@
 import { sddDemos } from '../../app/%5Fdev/sdd/registry';
 import { getHealth, type DatabaseQuery } from '../../lib/health';
 import { sddPagesEnabled } from '../../lib/sdd-pages';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 import { Spec006Client } from './spec-006-client';

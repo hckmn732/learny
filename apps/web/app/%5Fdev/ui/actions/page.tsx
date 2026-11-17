@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Badge, Button, CountBadge, Link, type BadgeProps } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr';
+import { fr } from '../../../../messages/fr/ui';
 
 import { Chips } from './Chips';
 import { IconButtons } from './IconButtons';

@@ -9,7 +9,7 @@ import { AlertDialog, IconButton, ResponsivePanel, iconRegistry, useBreakpoint }
 
 import { api } from '../../lib/api-client';
 import { purgeOfflineDatabase, purgeRuntimeCaches } from '../../lib/offline/db';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/offline-shell';
 import { NotificationBell } from '../notifications/notification-panel';
 import { OfflineIndicator } from '../offline/OfflineIndicator';
 import { flushBeforeSignOut } from '../offline/OfflineProvider';

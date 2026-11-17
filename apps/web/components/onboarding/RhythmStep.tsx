@@ -8,7 +8,7 @@ import { Button, Card, FormError } from '@learny/ui';
 import { cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/onboarding';
 
 import {
   rhythmSummary,

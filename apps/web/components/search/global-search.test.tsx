@@ -9,7 +9,7 @@ import {
 } from '@learny/contracts';
 import { cleanup, renderComponent, screen, waitFor, within } from '@learny/testing/render';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/search';
 
 import { GlobalSearch, type SearchFunction } from './global-search';
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { VerifyEmailCard } from '../../../components/auth/VerifyEmailCard';
-import { fr } from '../../../messages/fr';
+import { fr } from '../../../messages/fr/auth';
 
 const t = fr.auth.verify;
 

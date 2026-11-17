@@ -10,7 +10,7 @@ import {
   createLoginAccountFormSchema,
   createSignupAccountFormSchema,
   type AccountFormMessages,
-} from '@learny/contracts';
+} from '@learny/contracts/auth';
 import { AppError, clock } from '@learny/core';
 import { Button, Card, Checkbox, ChoiceGroup, FormError, Link, TextField } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
@@ -24,7 +24,7 @@ import {
   type AuthIntent,
   type AuthMethod,
 } from '../../lib/auth/pending-auth';
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/auth';
 
 const t = fr.auth;
 

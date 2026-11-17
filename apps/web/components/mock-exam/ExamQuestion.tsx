@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { ExamQuestionDto } from '@learny/contracts';
 import { cn } from '@learny/ui';
 
-import { fr } from '../../messages/fr';
+import { fr } from '../../messages/fr/quiz';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 const GAP_TOKEN = /\{\{(\d+)\}\}/g;

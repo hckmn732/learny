@@ -6,7 +6,7 @@ import { ProgrammeProposal } from '../../../../../components/programme/Programme
 import { ProgrammeStats } from '../../../../../components/programme/ProgrammeStats';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadProgrammePage } from '../../../../../lib/programme-page';
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/programme';
 
 export const dynamic = 'force-dynamic';
 

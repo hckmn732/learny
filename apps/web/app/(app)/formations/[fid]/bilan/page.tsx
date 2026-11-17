@@ -4,7 +4,7 @@ import { FinalReviewScreen } from '../../../../../components/final-review/FinalR
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadFinalReviewPage } from '../../../../../lib/final-review-page';
 import { loadShellPage } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr';
+import { fr } from '../../../../../messages/fr/finalReview';
 
 export const dynamic = 'force-dynamic';
 
