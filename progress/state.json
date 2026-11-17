@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T10:17:07.504Z",
+  "updatedAt": "2026-11-17T12:03:48.665Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6052,11 +6052,11 @@
       }
     },
     "SPEC-806": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-17T12:03:48.491Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-806-rgpd-et-pages-legales",
       "commit": null,
       "lastError": null,
       "validations": {}
