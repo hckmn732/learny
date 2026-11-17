@@ -47,6 +47,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
           className,
         )}
         style={width === undefined ? style : { ...style, width }}
+        data-fullscreen-mobile={fullScreenOnMobile ? '' : undefined}
         {...props}
       >
         {children}

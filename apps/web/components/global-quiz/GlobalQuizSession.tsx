@@ -319,8 +319,8 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
             finished={ended}
             total={items.length}
           />
-          <div className="flex flex-wrap items-start gap-20 max-sm:flex-col">
-            <div className="flex flex-[1_1_260px] flex-col gap-16">
+          <div className="flex flex-wrap items-start gap-20 max-sm:flex-col max-sm:items-stretch">
+            <div className="flex min-w-0 flex-[1_1_260px] flex-col gap-16">
               <GameRail
                 currentPosition={ended ? -1 : (item?.position ?? -1)}
                 items={items}

@@ -141,3 +141,16 @@
   height: max(100%, 44px);
   transform: translate(-50%, -50%);
 }
+
+/*
+ * Full-screen popover below `sm` (SPEC-802 EF-3): Radix positions the content through a wrapper
+ * that keeps a `transform`, which would become the containing block of the fixed content and
+ * shift it. The wrapper of a full-screen panel is pinned to the window instead.
+ */
+@media (width < 48rem) {
+  [data-radix-popper-content-wrapper]:has(> [data-fullscreen-mobile]) {
+    inset: 0 !important;
+    min-width: 0 !important;
+    transform: none !important;
+  }
+}

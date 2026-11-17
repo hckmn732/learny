@@ -235,3 +235,43 @@ export async function expectMobileInputFontSize(page: Page, min = 16): Promise<v
     `champs < ${String(min)} px : ${violations.map((v) => `${v.name} ${String(v.size)} px`).join(', ')}`,
   ).toEqual([]);
 }
+
+/**
+ * EF-1 — nothing is cut off at the window edge. `overflow-x: hidden` on a page container hides a
+ * horizontal scrollbar but still truncates its content, so every rendered element must fit in
+ * the window, except inside a horizontally scrollable region, a visually hidden element or a
+ * closed off-canvas layer (`visibility: hidden`).
+ */
+export async function expectNoClippedContent(page: Page): Promise<void> {
+  const offenders = await page.evaluate(() => {
+    const width = window.innerWidth;
+    const outside = (el: Element): boolean => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return false;
+      return rect.right > width + 1 || rect.left < -1;
+    };
+    const exempt = (el: Element): boolean => {
+      for (let node: Element | null = el; node !== null; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (style.visibility === 'hidden' || style.display === 'none') return true;
+        if (style.getPropertyValue('clip') !== 'auto' || style.clipPath !== 'none') return true;
+        if (node.classList.contains('sr-only')) return true;
+        if (node !== el && (style.overflowX === 'auto' || style.overflowX === 'scroll'))
+          return true;
+      }
+      return false;
+    };
+    return [...document.querySelectorAll('body *')]
+      .filter((el) => outside(el) && !exempt(el))
+      .filter((el) => el.parentElement === null || !outside(el.parentElement))
+      .slice(0, 8)
+      .map((el) => {
+        const rect = el.getBoundingClientRect();
+        const testId = el.getAttribute('data-testid');
+        const name = testId === null ? el.tagName.toLowerCase() : `[data-testid="${testId}"]`;
+        const classes = [...el.classList].slice(0, 6).join('.');
+        return `${name}${classes === '' ? '' : `.${classes}`} left=${String(Math.round(rect.left))} right=${String(Math.round(rect.right))}`;
+      });
+  });
+  expect(offenders, `contenu coupé au bord de la fenêtre : ${offenders.join(', ')}`).toEqual([]);
+}

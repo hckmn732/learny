@@ -373,7 +373,12 @@ export function SettingsView({
               {t.tabs[tab]}
             </h1>
           </div>
-          <TabsList aria-label={t.tabsLabel} data-testid="settings-tabs" variant="solid">
+          <TabsList
+            aria-label={t.tabsLabel}
+            data-testid="settings-tabs"
+            variant="solid"
+            className="max-w-full max-sm:overflow-x-auto max-sm:overflow-y-hidden"
+          >
             {SETTINGS_TAB_IDS.map((id) => (
               <TabsTrigger data-testid={`settings-tab-${id}`} key={id} value={id}>
                 {t.tabs[id]}
