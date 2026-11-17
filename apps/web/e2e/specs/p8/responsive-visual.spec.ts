@@ -219,6 +219,10 @@ test('lignes de base 360, 390 et 768 @SPEC-802 @visual', async ({ page }) => {
     await page.setViewportSize({ width: width.width, height: width.height });
     for (const screen of SCREENS) {
       await page.goto(screen.route);
+      // Same settled state as the mockup comparison: loaded data, no skeleton, fonts ready.
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
+      await expect(page.getByTestId(screen.ready).first()).toBeVisible();
       await waitForFonts(page);
       await expectScreenshotBaseline(page, `spec-802-${screen.id}-${width.name}.png`, {
         maxDiffPixelRatio: 0.01,
