@@ -1,0 +1,18 @@
+- complementary "Détail de la carte":
+    - text: Module 3 · Comptabilité générale
+    - heading "Ledgers parallèles" [level=2]
+    - button "Fermer le détail": ×
+    - paragraph: Plusieurs ledgers tiennent la même comptabilité selon des normes différentes, par exemple locales et IFRS.
+    - text: /À consolider \d+ %/
+    - 'progressbar /Maîtrise de Ledgers parallèles : \d+ %/'
+    - heading "S’appuie sur" [level=3]
+    - button "Journal universel (ACDOCA)"
+    - button "Ledger"
+    - heading "Lien repéré par le tuteur" [level=3]
+    - button "Domaine d’évaluation"
+    - link "Revoir dans le cours":
+        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/modules/cc5035ad-7ab4-597e-a2af-15a815151f4d/cours?chapitre=5e1f1258-2095-5119-99f0-fb996d2d4d92#chapitre-4-text
+    - link "S’entraîner":
+        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/quiz-global?cible=2d4ef962-73fc-50d5-b2be-037c704e65e0
+    - link "Voir la lacune":
+        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/lacunes?nature=misunderstanding

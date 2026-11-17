@@ -8,6 +8,10 @@ export const offline = {
       count === 1 ? '1 réponse en attente' : `${String(count)} réponses en attente`,
   },
   sync: {
+    announceDone: (count: number) =>
+      count === 1
+        ? 'Synchronisation hors ligne terminée : 1 réponse enregistrée.'
+        : `Synchronisation hors ligne terminée : ${String(count)} réponses enregistrées.`,
     done: (count: number) =>
       count === 1 ? '1 réponse synchronisée.' : `${String(count)} réponses synchronisées.`,
     conflict:

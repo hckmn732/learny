@@ -1,0 +1,5 @@
+- region "Carte de rappel":
+    - heading "Carte de rappel" [level=2]
+    - text: Recto · cherchez de tête
+    - paragraph: Que définit une variante d’exercice comptable ?
+    - button "Retourner la carte"

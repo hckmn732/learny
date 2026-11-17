@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { clock } from '@learny/core';
-import { toast } from '@learny/ui';
+import { toast, useAnnounce } from '@learny/ui';
 
 // The offline stack (IndexedDB, pack, queue) is only downloaded when the shell starts it after the
 // first paint or when the network changes (SPEC-804): it never weighs on the initial bundle.
@@ -68,14 +68,19 @@ async function prefetchIfStale(): Promise<void> {
  */
 export function OfflineProvider() {
   const started = useRef(false);
+  const announce = useAnnounce();
 
   useEffect(() => {
     if (started.current) return;
     started.current = true;
     const run = async (): Promise<void> => {
       try {
+        // The offline stack and its messages are loaded on demand (SPEC-804).
+        const [{ pendingCount }, { fr }] = await Promise.all([offline.queue(), offline.messages()]);
+        const before = await pendingCount();
         await synchronise();
         await prefetchIfStale();
+        if (before > 0) announce(fr.offline.sync.announceDone(before));
       } catch {
         // Offline or storage refused: the online application keeps working (CL-7, CL-8).
       }
@@ -110,7 +115,7 @@ export function OfflineProvider() {
       window.removeEventListener('online', onOnline);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, []);
+  }, [announce]);
 
   return null;
 }

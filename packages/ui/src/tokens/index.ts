@@ -23,6 +23,8 @@ export { controlHeightsPx, focusRing, layout } from './layout';
 export type { ControlHeightPx, LayoutToken } from './layout';
 export { zIndex } from './z-index';
 export type { ZIndexToken } from './z-index';
+export { TOKEN_PAIRS } from './pairs';
+export type { TokenPair, TokenPairId } from './pairs';
 export { motion } from './motion';
 export type { MotionToken } from './motion';
 export { tokensExport } from './tokens.export';

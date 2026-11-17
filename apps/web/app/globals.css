@@ -12,6 +12,15 @@
   html {
     font-size: 90%;
     color-scheme: light;
+    /* SPEC-803 EF-5 (2.4.11): a focused element is never hidden by the sticky header. */
+    scroll-padding-top: 72px;
+  }
+
+  @media (width < 48rem) {
+    html {
+      /* SPEC-803 EF-5: the fixed action bar of mobile screens. */
+      scroll-padding-bottom: 72px;
+    }
   }
 
   body {
@@ -31,7 +40,13 @@
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-indigo);
+    outline: 2px solid var(--color-indigo-ink);
     outline-offset: 2px;
+  }
+
+  /* SPEC-803 EF-5: a light-lime ring on the dark surfaces (sidebar, authentication panel). */
+  .bg-ink :focus-visible,
+  .bg-ink:focus-visible {
+    outline-color: var(--color-lime);
   }
 }

@@ -1,0 +1,1910 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-803/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-803",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-803/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3162",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3162",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-803/test-results/sdd/SPEC-803/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-803/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-803/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3162/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3162",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "PERF_DEMO_FIXTURE": "1",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p8/a11y-audit.spec.ts",
+      "file": "p8/a11y-audit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "audit axe desktop @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 2700000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 87419,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[axe 1440] SCR-01/inscription\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-01/connexion\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-01/verification\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-02/profil\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-02/rythme\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-02/ia\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-02/rappels\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-02/depart\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-03/accueil\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-03/menu\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-03/notifications\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-03/compte\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-04/nouvelle\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-04/cadrage\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-05/programme\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-06/module\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-07/cours\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-07/tuteur\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-08/exercice\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-09/quiz\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-09/remediation\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-10/quiz-global\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-11/introduction\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-12/agenda\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-12/semaine\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-12/mois\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-13/lacunes\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-14/carte\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-14/detail\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/profil\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/notifications\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/automatismes\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/modeles\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-16/bilan\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-17/groupe\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-18/recherche\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-20/introuvable\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-20/hors-ligne\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-20/acces-refuse\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-09/resultat\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-11/epreuve\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-11/resultats\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-20/accessibilite\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-01/connexion-erreur\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/export-donnees\n"
+                    },
+                    {
+                      "text": "[axe 1440] SCR-15/suppression-compte\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T17:58:28.239Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-6.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-8.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-10.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-9.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-12.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-13.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-14.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-15.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-17.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-16.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-18.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-19.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-20.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-21.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-22.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-23.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-25.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-24.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-26.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-27.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-28.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-29.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-30.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-33.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-34.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-35.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-36.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-37.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-38.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-11.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-39.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-31.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-41.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-43.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-40.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-44.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-45.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-46.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-42.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-32.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0322f2086d69036725c2-dc6d910701e12d70ba2f",
+          "file": "p8/a11y-audit.spec.ts",
+          "line": 195,
+          "column": 1
+        },
+        {
+          "title": "audit axe mobile @SPEC-803 @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-803",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "parcours mobile",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-audit.spec.ts",
+                    "line": 212,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 262,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:06.906Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "parcours mobile",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-audit.spec.ts",
+                        "line": 212,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 2700000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 358623,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "[axe 390] SCR-01/inscription\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-01/connexion\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-01/verification\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-02/profil\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-02/rythme\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-02/ia\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-02/rappels\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-02/depart\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-03/accueil\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-03/menu\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-03/notifications\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-03/compte\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-04/nouvelle\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-04/cadrage\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-05/programme\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-06/module\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-07/cours\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-07/tuteur\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-08/exercice\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-09/quiz\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-09/remediation\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-10/quiz-global\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-11/introduction\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-12/agenda\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-12/semaine\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-12/mois\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-13/lacunes\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-14/carte\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-14/detail\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/profil\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/notifications\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/automatismes\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/modeles\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-16/bilan\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-17/groupe\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-18/recherche\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-20/introuvable\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-20/hors-ligne\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-20/acces-refuse\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-09/resultat\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-11/epreuve\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-11/resultats\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-20/accessibilite\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-01/connexion-erreur\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/export-donnees\n"
+                    },
+                    {
+                      "text": "[axe 390] SCR-15/suppression-compte\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:01:06.793Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-6.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-9.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-11.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-8.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-10.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-12.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-14.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-13.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-15.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-16.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-17.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-19.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-20.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-18.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-22.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-21.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-23.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-24.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-26.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-25.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-27.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-28.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-29.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-30.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-33.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-32.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-34.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-31.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-35.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-36.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-37.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-39.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-38.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-40.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-41.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-42.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-43.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-44.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-45.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-46.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0322f2086d69036725c2-ec49401479bbf9698534",
+          "file": "p8/a11y-audit.spec.ts",
+          "line": 211,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "p8/a11y-visual.spec.ts",
+      "file": "p8/a11y-visual.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "déclaration d’accessibilité, jetons et structure @SPEC-803 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-803",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2302,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:10.971Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/attachments/axe-5bb6d615293d8c238b294309011577f4966bd470.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-3b4dd-t-structure-SPEC-803-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c63a05f633ce19d0b0b7-56ad3f4aef35bac8bfed",
+          "file": "p8/a11y-visual.spec.ts",
+          "line": 36,
+          "column": 1
+        },
+        {
+          "title": "déclaration d’accessibilité mobile @SPEC-803 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-803",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "capture mobile",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-visual.spec.ts",
+                    "line": 59,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 199,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:17.256Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "capture mobile",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/a11y-visual.spec.ts",
+                        "line": 59,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1938,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:07:20.996Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/attachments/axe-91141fb386057c0a03935f08e322c2733724fe78.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-déclaration-8efa7-bile-SPEC-803-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c63a05f633ce19d0b0b7-9df4f5853a37b067159b",
+          "file": "p8/a11y-visual.spec.ts",
+          "line": 58,
+          "column": 1
+        },
+        {
+          "title": "états de focus visibles des composants principaux @SPEC-803 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-803",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2765,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:17.479Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-visual-états-de-fo-fd0d6--principaux-SPEC-803-visual-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c63a05f633ce19d0b0b7-62a56f7b159e56328d56",
+          "file": "p8/a11y-visual.spec.ts",
+          "line": 66,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "p8/aria-snapshots.spec.ts",
+      "file": "p8/aria-snapshots.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "noms accessibles des régions clés @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6211,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:24.080Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-aria-snapshots-noms-accessibles-des-régions-clés-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b6b7067553081ce8f1d0-67416660a649ad1fc364",
+          "file": "p8/aria-snapshots.spec.ts",
+          "line": 38,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "p8/keyboard-journeys.spec.ts",
+      "file": "p8/keyboard-journeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parcours clavier connexion @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2437,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:38.064Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-connexion-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-52d506a285424b487431",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 171,
+          "column": 1
+        },
+        {
+          "title": "parcours clavier quiz de validation @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [
+                {
+                  "type": "fixme",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                    "line": 192,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:44.577Z",
+                  "annotations": [
+                    {
+                      "type": "fixme",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                        "line": 192,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-2212c55bf028bd08b145",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 192,
+          "column": 6
+        },
+        {
+          "title": "parcours clavier examen blanc @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [
+                {
+                  "type": "fixme",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                    "line": 215,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:44.578Z",
+                  "annotations": [
+                    {
+                      "type": "fixme",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                        "line": 215,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-89f3b8bd5544e4404ebf",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 215,
+          "column": 6
+        },
+        {
+          "title": "parcours clavier quiz global @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [
+                {
+                  "type": "fixme",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                    "line": 237,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:44.578Z",
+                  "annotations": [
+                    {
+                      "type": "fixme",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
+                        "line": 237,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-57a76908ec0cf2b11b4d",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 237,
+          "column": 6
+        },
+        {
+          "title": "parcours clavier carte des notions @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2474,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:44.578Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parco-0dbe5--carte-des-notions-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-d254a6c1194a530c257b",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 284,
+          "column": 1
+        },
+        {
+          "title": "parcours clavier paramètres @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2661,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:47.486Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4f52ce58e78772556ace-4ca8c74d477b7b5a08c3",
+          "file": "p8/keyboard-journeys.spec.ts",
+          "line": 297,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "p8/reduced-motion.spec.ts",
+      "file": "p8/reduced-motion.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mouvement réduit @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [
+                {
+                  "type": "fixme",
+                  "location": {
+                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/reduced-motion.spec.ts",
+                    "line": 56,
+                    "column": 6
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": -1,
+                  "parallelIndex": -1,
+                  "status": "skipped",
+                  "duration": 0,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:54.051Z",
+                  "annotations": [
+                    {
+                      "type": "fixme",
+                      "location": {
+                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/reduced-motion.spec.ts",
+                        "line": 56,
+                        "column": 6
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "5d4520d202c52cdfa69c-3fc584fd06366a3c843e",
+          "file": "p8/reduced-motion.spec.ts",
+          "line": 56,
+          "column": 6
+        }
+      ]
+    },
+    {
+      "title": "p8/text-spacing.spec.ts",
+      "file": "p8/text-spacing.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "zoom 200 % et espacement du texte @SPEC-803",
+          "ok": true,
+          "tags": [
+            "SPEC-803"
+          ],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2989,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T18:00:54.058Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-text-spacing-zoom-200-et-espacement-du-texte-SPEC-803-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1be5137fae8ec40bad94-263b8fffed759ff99242",
+          "file": "p8/text-spacing.spec.ts",
+          "line": 47,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-17T17:57:48.412Z",
+    "duration": 582089.251,
+    "expected": 10,
+    "skipped": 6,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

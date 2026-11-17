@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-17T17:19:33.537Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-17T18:08:15.251Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 121 |
+| Terminées | 122 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 11 |
+| En attente de dépendances | 10 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **91.7 %** |
-| Avancement V1 | 97.6 % |
+| **Avancement global** | **92.4 %** |
+| Avancement V1 | 98.4 % |
 | Prochaine action | checkpoint CP-7 |
 
 ## Phases et checkpoints
@@ -29,7 +29,7 @@
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
 | P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ⏳ |
-| P8 | Plateforme, qualité et livraison V1 | 5/8 | CP-8 | ⏳ |
+| P8 | Plateforme, qualité et livraison V1 | 6/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
 ## Détail des spécifications
@@ -154,7 +154,7 @@
 | [SPEC-725](../specs/p7-engagement/SPEC-725-abonnement-a-l-ia-fournie-interface-et-plafond.md) | Abonnement à l'IA fournie : interface et plafond | P7 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-210, SPEC-507, SPEC-709 |
 | [SPEC-801](../specs/p8-livraison-v1/SPEC-801-application-installable-et-revisions-hors-ligne.md) | Application installable et révisions hors ligne | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-701, SPEC-702 |
 | [SPEC-802](../specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md) | Responsive et mobile | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-618, SPEC-725, SPEC-724, SPEC-616 |
-| [SPEC-803](../specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md) | Accessibilité WCAG 2.2 AA | P8 | ⏳ waiting | 0 | — | SPEC-802 |
+| [SPEC-803](../specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md) | Accessibilité WCAG 2.2 AA | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802 |
 | [SPEC-804](../specs/p8-livraison-v1/SPEC-804-performances.md) | Performances | P8 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802 |
 | [SPEC-805](../specs/p8-livraison-v1/SPEC-805-securite.md) | Sécurité | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802 |
 | [SPEC-806](../specs/p8-livraison-v1/SPEC-806-rgpd-et-pages-legales.md) | RGPD et pages légales | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802, SPEC-211 |

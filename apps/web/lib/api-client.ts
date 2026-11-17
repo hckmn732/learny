@@ -369,10 +369,31 @@ async function callNamed(name: string, input: never, options?: CallOptions): Pro
   return callApi(route, input, options);
 }
 
-/** `api.devEcho({ body })`, `api.devItems({ query })`… one function per registered route. */
-export const api = new Proxy({} as Api, {
-  get(_target, name) {
+type ApiFunction = (input: never, options?: CallOptions) => Promise<unknown>;
+
+/**
+ * `api.devEcho({ body })`, `api.devItems({ query })`… one function per registered route. Each
+ * function is created on first access and kept on the target, so it is a real own property: tests
+ * can replace it with `vi.spyOn(api, name)` like a plain object method.
+ */
+const apiFunctions: Record<string, ApiFunction> = {};
+
+function ensureFunction(name: string): ApiFunction {
+  apiFunctions[name] ??= (input, options) => callNamed(name, input, options);
+  return apiFunctions[name];
+}
+
+export const api = new Proxy(apiFunctions, {
+  get(target, name) {
     if (typeof name !== 'string') return undefined;
-    return (input: never, options?: CallOptions) => callNamed(name, input, options);
+    return target[name] ?? ensureFunction(name);
   },
-});
+  has(_target, name) {
+    return typeof name === 'string';
+  },
+  getOwnPropertyDescriptor(target, name) {
+    if (typeof name !== 'string') return undefined;
+    ensureFunction(name);
+    return Reflect.getOwnPropertyDescriptor(target, name);
+  },
+}) as unknown as Api;

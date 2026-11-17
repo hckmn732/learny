@@ -1,0 +1,50 @@
+- complementary:
+    - link "Learny, accueil":
+        - /url: /accueil
+        - text: ''
+    - button "Masquer le menu" [expanded]
+    - navigation "Navigation principale":
+        - list:
+            - listitem:
+                - link "Accueil":
+                    - /url: /accueil
+            - listitem:
+                - link "Agenda":
+                    - /url: /agenda
+    - region "Formation en cours":
+        - heading "Formation en cours" [level=2]
+        - button "Changer de formation"
+        - text: /SAP S\/4HANA Finance \d+ % Module 3 sur 7/
+        - navigation "Formation en cours":
+            - list:
+                - listitem:
+                    - link "Programme":
+                        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/programme
+                - listitem:
+                    - link "Carte des notions":
+                        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/carte
+                - listitem:
+                    - link /Quiz global \d+ notions à revoir/:
+                        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/quiz-global
+                        - text: ''
+                - listitem:
+                    - link "Mes lacunes 4 lacunes":
+                        - /url: /formations/79c6d8b4-ee55-5f27-9da1-e958882bfdfc/lacunes
+                        - text: ''
+    - text: /Série \d+ jours/
+    - list /Régularité sur les \d+ derniers jours/:
+        - listitem: "/\\d+ octobre : pas d’activité/"
+        - listitem: "/\\d+ octobre : pas d’activité/"
+        - listitem: "/\\d+ octobre : activité faite/"
+        - listitem: '1 novembre : activité faite'
+        - listitem: '2 novembre : activité faite'
+        - listitem: '3 novembre : activité faite'
+        - listitem: '4 novembre : activité faite'
+        - listitem: '5 novembre : activité faite'
+        - listitem: '6 novembre : activité faite'
+        - listitem: '7 novembre : activité faite'
+        - listitem: '8 novembre : activité faite'
+        - listitem: '9 novembre : activité faite'
+        - listitem: "/\\d+ novembre : activité faite/"
+        - listitem: "/\\d+ novembre : activité faite/"
+    - paragraph: /Régularité sur les \d+ derniers jours/

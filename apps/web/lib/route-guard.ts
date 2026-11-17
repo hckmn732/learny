@@ -24,6 +24,7 @@ const PUBLIC_EXACT = new Set([
   '/verifier-email',
   '/accessibilite',
   '/hors-ligne',
+  '/accessibilite',
   '/hors-ligne/revisions',
   '/openapi.json',
 ]);

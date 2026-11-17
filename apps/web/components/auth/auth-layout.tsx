@@ -125,7 +125,7 @@ export function AuthLayout({ step, children }: Readonly<AuthLayoutProps>) {
           {children}
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter className="mt-auto" />
     </div>
   );
 }

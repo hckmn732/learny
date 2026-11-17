@@ -1,0 +1,8 @@
+- navigation "Questions":
+    - button "Question 1, sans réponse"
+    - button "Question 2, sans réponse"
+    - button "Question 3, sans réponse"
+    - list:
+        - listitem: Répondue
+        - listitem: À revoir
+        - listitem: Sans réponse

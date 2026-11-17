@@ -2,6 +2,7 @@ import { ToastProvider } from '@learny/ui';
 
 import { OfflinePackList } from '../../components/offline/OfflinePackList';
 import { OfflineProvider } from '../../components/offline/OfflineProvider';
+import { SiteFooter } from '../../components/site-footer/SiteFooter';
 
 // Rendered per request: a static page carries no CSP nonce, so its scripts would be refused and
 // the IndexedDB list never hydrates (SPEC-805). The service worker precaches the response with its
@@ -13,8 +14,13 @@ export const dynamic = 'force-dynamic';
 export default function HorsLignePage() {
   return (
     <ToastProvider>
-      <OfflineProvider />
-      <OfflinePackList />
+      <div className="flex min-h-dvh flex-col">
+        <OfflineProvider />
+        <div className="flex-1">
+          <OfflinePackList />
+        </div>
+        <SiteFooter />
+      </div>
     </ToastProvider>
   );
 }

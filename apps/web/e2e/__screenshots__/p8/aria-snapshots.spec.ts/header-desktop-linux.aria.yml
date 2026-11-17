@@ -1,0 +1,7 @@
+- banner:
+    - search:
+        - text: Rechercher
+        - combobox "Rechercher"
+        - status
+    - button "Notifications, 3 non lues"
+    - button "AP Mon compte"

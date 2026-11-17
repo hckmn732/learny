@@ -1,0 +1,13 @@
+- heading "Bon retour" [level=1]
+- paragraph: Connectez-vous pour reprendre là où vous en étiez.
+- text: Adresse e-mail
+- textbox "Adresse e-mail":
+    - /placeholder: vous@exemple.fr
+- radiogroup "Façon de se connecter":
+    - 'radio "Recevoir un lien de connexion Sans mot de passe : un lien valable 1 heure, envoyé par e-mail." [checked]'
+    - radio "Avec mon mot de passe Connexion immédiate."
+- button "Recevoir mon lien de connexion"
+- paragraph:
+    - text: Pas encore de compte ?
+    - link "Créer un compte":
+        - /url: /inscription

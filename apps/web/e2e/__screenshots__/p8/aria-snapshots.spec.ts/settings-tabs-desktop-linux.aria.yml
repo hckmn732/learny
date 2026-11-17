@@ -1,0 +1,5 @@
+- tablist "Rubriques des paramètres":
+    - tab "Profil" [selected]
+    - tab "Notifications"
+    - tab "Automatismes"
+    - tab "Modèles d’IA"

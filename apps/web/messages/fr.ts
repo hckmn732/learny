@@ -1,3 +1,4 @@
+import { accessibility } from './fr/accessibility';
 import { agenda } from './fr/agenda';
 import { auth } from './fr/auth';
 import { bricks } from './fr/bricks';
@@ -29,6 +30,7 @@ import { tutorChat } from './fr/tutorChat';
 import { ui } from './fr/ui';
 
 export const fr = {
+  accessibility,
   bricks,
   home,
   offline,

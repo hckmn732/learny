@@ -28,8 +28,9 @@ export type LayoutToken = keyof typeof layout;
  * must not shrink with the 90 % scale.
  */
 export const focusRing = {
-  width: '3px',
+  width: '2px',
   style: 'solid',
-  color: colors.indigo,
+  color: colors['indigo-ink'],
+  onDarkColor: colors.lime,
   offset: '2px',
 } as const;
