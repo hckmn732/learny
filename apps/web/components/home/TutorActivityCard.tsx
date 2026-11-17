@@ -138,7 +138,7 @@ export function TutorActivityPanel() {
         <NextLink
           data-testid="automation-settings-link"
           aria-label={t.settingsLabel}
-          className="text-13 font-600 text-ink underline-offset-2 hover:underline"
+          className="touch-target block text-13 font-600 text-ink underline-offset-2 hover:underline"
           href={TUTOR_SETTINGS_HREF}
         >
           {t.settings}

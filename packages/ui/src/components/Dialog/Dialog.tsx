@@ -95,7 +95,7 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
             aria-modal="true"
             className={cn(
               'fixed top-1/2 left-1/2 z-dialog flex max-h-[calc(100dvh-48px)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-24 bg-surface p-28 shadow-popover outline-none animate-dialog-in motion-reduce:animate-none',
-              size === 'md' ? 'shell:max-w-[560px]' : 'shell:max-w-[720px]',
+              size === 'md' ? 'nav:max-w-[560px]' : 'nav:max-w-[720px]',
               className,
             )}
             onOpenAutoFocus={(event) => {
@@ -169,7 +169,7 @@ export type DialogFooterProps = { children: ReactNode; className?: string };
 export const DialogFooter = ({ children, className }: DialogFooterProps) => (
   <div
     className={cn(
-      'mt-24 flex flex-wrap items-center justify-end gap-8 max-[899px]:flex-col-reverse max-[899px]:[&>*]:w-full',
+      'mt-24 flex flex-wrap items-center justify-end gap-8 max-nav:flex-col-reverse max-nav:[&>*]:w-full',
       className,
     )}
   >

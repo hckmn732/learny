@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { breakpointsRem } from '../src/tokens/breakpoints';
 import { colors } from '../src/tokens/colors';
 import { controlHeightsPx, layout } from '../src/tokens/layout';
 import { motion } from '../src/tokens/motion';
@@ -44,6 +45,7 @@ export function buildThemeCss(): string {
     '  --font-weight-*: initial;',
     '  --leading-*: initial;',
     '  --tracking-*: initial;',
+    '  --breakpoint-*: initial;',
     '',
     '  /* Interface colours (EF-2). */',
   ];
@@ -89,8 +91,12 @@ export function buildThemeCss(): string {
     '  --font-display: var(--font-space-grotesk), sans-serif;',
     `  --font-mono: ${fontFamilies.mono};`,
     '',
-    '  /* Layout (EF-8): the shell breakpoint is a media query, therefore in CSS pixels. */',
-    `  --breakpoint-shell: ${String(layout.shellBreakpointPx)}px;`,
+    '  /* Breakpoints (SPEC-802 ET-1, ADR-0201): rem of 16 px, no default value remains. */',
+    ...Object.entries(breakpointsRem).map(
+      ([name, rem]) => `  --breakpoint-${name}: ${String(rem)}rem;`,
+    ),
+    '',
+    '  /* Layout (EF-8): the nav breakpoint is a media query, therefore in CSS pixels. */',
     `  --container-sidebar: ${px(layout.sidebarWidthPx)};`,
     `  --container-content: ${px(layout.contentMaxPx)};`,
     `  --container-popover: ${px(layout.popoverWidthPx)};`,

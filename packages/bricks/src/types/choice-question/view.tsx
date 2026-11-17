@@ -68,9 +68,7 @@ export function ChoiceQuestionView(props: BrickViewProps<'choice_question'>) {
       {multiple ? <p className="m-0 text-13 text-ink-muted">{t.multipleAnswers}</p> : null}
       <div
         aria-labelledby={titleId}
-        className={cn(
-          exam ? 'flex flex-col gap-10' : 'grid grid-cols-1 gap-12 min-[640px]:grid-cols-2',
-        )}
+        className={cn(exam ? 'flex flex-col gap-10' : 'grid grid-cols-1 gap-12 sm:grid-cols-2')}
         role={multiple ? 'group' : 'radiogroup'}
       >
         {payload.options.map((option, index) => {

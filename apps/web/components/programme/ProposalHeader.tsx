@@ -79,7 +79,7 @@ export function ProposalHeader({ proposal, isCurrent, onAdjust, onValidate }: Pr
         <div className="flex flex-wrap gap-8">
           {active ? (
             <a
-              className="inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
+              className="touch-target inline-flex min-h-48 items-center rounded-14 bg-ink px-22 text-15 font-700 text-white"
               href={`/formations/${proposal.formationId}/programme`}
             >
               {t.openModule}

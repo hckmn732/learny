@@ -10,7 +10,7 @@ import { cn } from '../../cn';
  * component (ET-5); the label may wrap and balance on two lines (CL-2).
  */
 export const buttonVariants = cva(
-  'inline-flex cursor-pointer items-center justify-center gap-8 border border-solid font-sans text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55',
+  'touch-target inline-flex cursor-pointer items-center justify-center gap-8 border border-solid font-sans text-balance transition-[background-color,border-color,color,filter] disabled:cursor-not-allowed disabled:opacity-55',
   {
     variants: {
       variant: {

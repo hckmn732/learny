@@ -253,7 +253,7 @@ export const GlobalSearch = ({
         name="search"
         size={18}
         strokeWidth={1.8}
-        className="pointer-events-none absolute top-12 left-14 text-ink-muted"
+        className="pointer-events-none absolute top-12 left-14 z-[1] text-ink-muted"
       />
       <input
         id={inputId}
@@ -272,11 +272,13 @@ export const GlobalSearch = ({
         placeholder={placeholder}
         value={value}
         data-testid="header-search-input"
-        className="min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 font-sans text-14 text-ink placeholder:text-ink-muted"
+        className="touch-target min-h-42 w-full rounded-12 border border-solid border-border bg-surface pr-14 pl-42 font-sans text-14 text-ink placeholder:text-ink-muted max-sm:text-[16px]"
         onChange={(event) => {
           onChange(event.currentTarget.value);
         }}
-        onFocus={() => {
+        onFocus={(event) => {
+          // SPEC-802 CL-4 — keep the field above the virtual keyboard.
+          event.currentTarget.scrollIntoView({ block: 'nearest' });
           if (value.trim() !== '') setOpen(true);
         }}
         onKeyDown={onKeyDown}
@@ -411,7 +413,7 @@ export const GlobalSearch = ({
             <a
               data-testid="search-view-all"
               href={viewAllHref}
-              className="mx-6 mt-2 mb-6 flex min-h-38 items-center justify-center rounded-12 border border-solid border-border bg-surface-subtle px-12 text-13 font-600 text-ink no-underline"
+              className="touch-target mx-6 mt-2 mb-6 flex min-h-38 items-center justify-center rounded-12 border border-solid border-border bg-surface-subtle px-12 text-13 font-600 text-ink no-underline"
             >
               {t.viewAll}
             </a>

@@ -1,0 +1,587 @@
+<testsuites id="" name="" tests="13" failures="0" skipped="2" errors="0" time="478.33346099999994">
+<testsuite name="p8/mobile-navigation.spec.ts" timestamp="2026-11-17T10:06:31.030Z" hostname="desktop" tests="2" failures="0" skipped="2" time="0.523" errors="0">
+<testcase name="menu en surimpression et panneaux plein écran @SPEC-802 @mobile" classname="p8/mobile-navigation.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="agenda et quiz global sur mobile @SPEC-802 @mobile" classname="p8/mobile-navigation.spec.ts">
+<properties>
+<property name="skip" value="mobile uniquement">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="p8/responsive-matrix.spec.ts" timestamp="2026-11-17T10:06:31.030Z" hostname="desktop" tests="6" failures="0" skipped="0" time="356.72" errors="0">
+<testcase name="matrice 360 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="48.988">
+<system-out>
+<![CDATA[[matrice 360] SCR-01/inscription
+[matrice 360] SCR-01/connexion
+[matrice 360] SCR-01/verification
+[matrice 360] SCR-02/profil
+[matrice 360] SCR-02/rythme
+[matrice 360] SCR-02/ia
+[matrice 360] SCR-02/rappels
+[matrice 360] SCR-02/depart
+[matrice 360] SCR-03/accueil
+[matrice 360] SCR-03/menu
+[matrice 360] SCR-03/notifications
+[matrice 360] SCR-03/compte
+[matrice 360] SCR-04/nouvelle
+[matrice 360] SCR-04/cadrage
+[matrice 360] SCR-05/programme
+[matrice 360] SCR-06/module
+[matrice 360] SCR-07/cours
+[matrice 360] SCR-07/tuteur
+[matrice 360] SCR-08/exercice
+[matrice 360] SCR-09/quiz
+[matrice 360] SCR-09/remediation
+[matrice 360] SCR-10/quiz-global
+[matrice 360] SCR-11/introduction
+[matrice 360] SCR-12/agenda
+[matrice 360] SCR-12/semaine
+[matrice 360] SCR-12/mois
+[matrice 360] SCR-13/lacunes
+[matrice 360] SCR-14/carte
+[matrice 360] SCR-14/detail
+[matrice 360] SCR-15/profil
+[matrice 360] SCR-15/notifications
+[matrice 360] SCR-15/automatismes
+[matrice 360] SCR-15/modeles
+[matrice 360] SCR-16/bilan
+[matrice 360] SCR-17/groupe
+[matrice 360] SCR-18/recherche
+[matrice 360] SCR-20/introuvable
+[matrice 360] SCR-20/hors-ligne
+[matrice 360] SCR-20/acces-refuse
+[matrice 360] SCR-09/resultat
+[matrice 360] SCR-11/epreuve
+[matrice 360] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-360-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-360-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-360-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice 390 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="101.413">
+<system-out>
+<![CDATA[[matrice 390] SCR-01/inscription
+[matrice 390] SCR-01/connexion
+[matrice 390] SCR-01/verification
+[matrice 390] SCR-02/profil
+[matrice 390] SCR-02/rythme
+[matrice 390] SCR-02/ia
+[matrice 390] SCR-02/rappels
+[matrice 390] SCR-02/depart
+[matrice 390] SCR-03/accueil
+[matrice 390] SCR-03/menu
+[matrice 390] SCR-03/notifications
+[matrice 390] SCR-03/compte
+[matrice 390] SCR-04/nouvelle
+[matrice 390] SCR-04/cadrage
+[matrice 390] SCR-05/programme
+[matrice 390] SCR-06/module
+[matrice 390] SCR-07/cours
+[matrice 390] SCR-07/tuteur
+[matrice 390] SCR-08/exercice
+[matrice 390] SCR-09/quiz
+[matrice 390] SCR-09/remediation
+[matrice 390] SCR-10/quiz-global
+[matrice 390] SCR-11/introduction
+[matrice 390] SCR-12/agenda
+[matrice 390] SCR-12/semaine
+[matrice 390] SCR-12/mois
+[matrice 390] SCR-13/lacunes
+[matrice 390] SCR-14/carte
+[matrice 390] SCR-14/detail
+[matrice 390] SCR-15/profil
+[matrice 390] SCR-15/notifications
+[matrice 390] SCR-15/automatismes
+[matrice 390] SCR-15/modeles
+[matrice 390] SCR-16/bilan
+[matrice 390] SCR-17/groupe
+[matrice 390] SCR-18/recherche
+[matrice 390] SCR-20/introuvable
+[matrice 390] SCR-20/hors-ligne
+[matrice 390] SCR-20/acces-refuse
+[matrice 390] SCR-09/resultat
+[matrice 390] SCR-11/epreuve
+[matrice 390] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-17421cd4b79cd6cac0450877ed7cd1a1cc33518c.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-604c64798470ea5602a518bf4a6649fecb2e0f04.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-45a6bad9c9028ecbef0a51ad378a732dfc923e39.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-705e2b141877470a294e2107521852f23a133c61.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-f87a57d2adce8f98eefe28603ca13ab94e054d4f.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-59ef0c59f2d3a86d26669b19973404bf4332757e.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-4cdb446fa7e69b472f1e131bca63a9876ad04732.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-c8f75a0fea5c9f76b486e5a44c598d5a7ffaaee0.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-74b4c36944e2289f3f31b522f51f2a238dd06f4c.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-d013e0907891c4e510c8f4d323df2437a00568c5.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-9f0cdb59628fb6bc9043518c6bc87381828541c4.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-86a94a22f474e33f6b3dca32818fa91125453926.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-a3e51320749074cdca51f1be3414f2bfab5987a2.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-2ef44fe90b4893a9ba3a9db731522d16f2dbb800.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-6d73b4adbe03bcb1a1698343ed404d973afddaae.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-8039f5b6a9b9b6ddde45df44c95c00f972cf43ec.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-7cb173813a206469acfa52ce77a190c3dd73e9f8.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-eb82edf84b8d60d8092bf304ad638f54aa84418a.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-1d51171666ac309002be3c8679baa73ee8e6365d.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-6653f14e05e1115ba21960da5b9151a7fc745e0a.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-5dacb4b646b807a1aea8f949b4ab5654e33b5b8d.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-d0cf335c4eb3f4fd6041509383dedfa3ba37d99a.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-b1f7a7035cd40b63fb0c93381d3926a8372e4fac.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-baa080fa77ff47c5855264821c75a74b996b0587.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-73f6c5762dc9a266a78193b524c4fad695d2ae3a.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-65054b3ebf3d33bb48a78e0d5e41cb063cf5d9df.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-250810fa9b420cc3a644ea139a1571b29ee30736.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-494ff7cc559849475c7c367eed821499a158069b.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-bf215bceeb1ade357657426419693cddfddb3287.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-7546eca4a11bdee73e5d5b42a4653e6f51fcefc1.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-73b5278ad7246ffeca92a6b356f04cc1685c7a21.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-3a33eacb20ddb9c4102c5d266eacfefefbcd92d9.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-e7a1c953366298d96bb646b7c376480d4edcc431.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-a1de9071b4ac7864b5358ad2372d6391a617a946.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-f854a12f7f80b10b8ec1f713721abb881ddb384d.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-3d672884b2764ec6f8e8e93a31d9429b8e60a841.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-fcbb34b384553a153407e71fe12aa96d567efd89.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-b8d98e3fcb9f2321af91007a7fa3fee842299e42.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-1f61ad893b4cd998768f0b7ee7d69108318f6921.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-f6091aff360cc63de927fcd8cf59f2a1aa3f5533.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-fab4f40cc80c24d6acb4ce55a671d9afc22f7a49.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/attachments/axe-6e6c37ca00093fbfe6d4dcdbd9f6e8a867ec1afd.json]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-4.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-3.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-6.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-7.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-8.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-5.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-9.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-10.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-11.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-12.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-13.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-14.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-15.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-16.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-17.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-18.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-19.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-22.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-20.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-21.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-23.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-25.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-24.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-26.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-27.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-30.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-31.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-32.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-33.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-35.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-34.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-29.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-36.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-37.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-38.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-39.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-40.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-41.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-42.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video-28.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-390-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice 768 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="47.752">
+<system-out>
+<![CDATA[[matrice 768] SCR-01/inscription
+[matrice 768] SCR-01/connexion
+[matrice 768] SCR-01/verification
+[matrice 768] SCR-02/profil
+[matrice 768] SCR-02/rythme
+[matrice 768] SCR-02/ia
+[matrice 768] SCR-02/rappels
+[matrice 768] SCR-02/depart
+[matrice 768] SCR-03/accueil
+[matrice 768] SCR-03/menu
+[matrice 768] SCR-03/notifications
+[matrice 768] SCR-03/compte
+[matrice 768] SCR-04/nouvelle
+[matrice 768] SCR-04/cadrage
+[matrice 768] SCR-05/programme
+[matrice 768] SCR-06/module
+[matrice 768] SCR-07/cours
+[matrice 768] SCR-07/tuteur
+[matrice 768] SCR-08/exercice
+[matrice 768] SCR-09/quiz
+[matrice 768] SCR-09/remediation
+[matrice 768] SCR-10/quiz-global
+[matrice 768] SCR-11/introduction
+[matrice 768] SCR-12/agenda
+[matrice 768] SCR-12/semaine
+[matrice 768] SCR-12/mois
+[matrice 768] SCR-13/lacunes
+[matrice 768] SCR-14/carte
+[matrice 768] SCR-14/detail
+[matrice 768] SCR-15/profil
+[matrice 768] SCR-15/notifications
+[matrice 768] SCR-15/automatismes
+[matrice 768] SCR-15/modeles
+[matrice 768] SCR-16/bilan
+[matrice 768] SCR-17/groupe
+[matrice 768] SCR-18/recherche
+[matrice 768] SCR-20/introuvable
+[matrice 768] SCR-20/hors-ligne
+[matrice 768] SCR-20/acces-refuse
+[matrice 768] SCR-09/resultat
+[matrice 768] SCR-11/epreuve
+[matrice 768] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-768-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-768-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-768-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice 1024 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="52.277">
+<system-out>
+<![CDATA[[matrice 1024] SCR-01/inscription
+[matrice 1024] SCR-01/connexion
+[matrice 1024] SCR-01/verification
+[matrice 1024] SCR-02/profil
+[matrice 1024] SCR-02/rythme
+[matrice 1024] SCR-02/ia
+[matrice 1024] SCR-02/rappels
+[matrice 1024] SCR-02/depart
+[matrice 1024] SCR-03/accueil
+[matrice 1024] SCR-03/menu
+[matrice 1024] SCR-03/notifications
+[matrice 1024] SCR-03/compte
+[matrice 1024] SCR-04/nouvelle
+[matrice 1024] SCR-04/cadrage
+[matrice 1024] SCR-05/programme
+[matrice 1024] SCR-06/module
+[matrice 1024] SCR-07/cours
+[matrice 1024] SCR-07/tuteur
+[matrice 1024] SCR-08/exercice
+[matrice 1024] SCR-09/quiz
+[matrice 1024] SCR-09/remediation
+[matrice 1024] SCR-10/quiz-global
+[matrice 1024] SCR-11/introduction
+[matrice 1024] SCR-12/agenda
+[matrice 1024] SCR-12/semaine
+[matrice 1024] SCR-12/mois
+[matrice 1024] SCR-13/lacunes
+[matrice 1024] SCR-14/carte
+[matrice 1024] SCR-14/detail
+[matrice 1024] SCR-15/profil
+[matrice 1024] SCR-15/notifications
+[matrice 1024] SCR-15/automatismes
+[matrice 1024] SCR-15/modeles
+[matrice 1024] SCR-16/bilan
+[matrice 1024] SCR-17/groupe
+[matrice 1024] SCR-18/recherche
+[matrice 1024] SCR-20/introuvable
+[matrice 1024] SCR-20/hors-ligne
+[matrice 1024] SCR-20/acces-refuse
+[matrice 1024] SCR-09/resultat
+[matrice 1024] SCR-11/epreuve
+[matrice 1024] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1024-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1024-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1024-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice 1440 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="53.319">
+<system-out>
+<![CDATA[[matrice 1440] SCR-01/inscription
+[matrice 1440] SCR-01/connexion
+[matrice 1440] SCR-01/verification
+[matrice 1440] SCR-02/profil
+[matrice 1440] SCR-02/rythme
+[matrice 1440] SCR-02/ia
+[matrice 1440] SCR-02/rappels
+[matrice 1440] SCR-02/depart
+[matrice 1440] SCR-03/accueil
+[matrice 1440] SCR-03/menu
+[matrice 1440] SCR-03/notifications
+[matrice 1440] SCR-03/compte
+[matrice 1440] SCR-04/nouvelle
+[matrice 1440] SCR-04/cadrage
+[matrice 1440] SCR-05/programme
+[matrice 1440] SCR-06/module
+[matrice 1440] SCR-07/cours
+[matrice 1440] SCR-07/tuteur
+[matrice 1440] SCR-08/exercice
+[matrice 1440] SCR-09/quiz
+[matrice 1440] SCR-09/remediation
+[matrice 1440] SCR-10/quiz-global
+[matrice 1440] SCR-11/introduction
+[matrice 1440] SCR-12/agenda
+[matrice 1440] SCR-12/semaine
+[matrice 1440] SCR-12/mois
+[matrice 1440] SCR-13/lacunes
+[matrice 1440] SCR-14/carte
+[matrice 1440] SCR-14/detail
+[matrice 1440] SCR-15/profil
+[matrice 1440] SCR-15/notifications
+[matrice 1440] SCR-15/automatismes
+[matrice 1440] SCR-15/modeles
+[matrice 1440] SCR-16/bilan
+[matrice 1440] SCR-17/groupe
+[matrice 1440] SCR-18/recherche
+[matrice 1440] SCR-20/introuvable
+[matrice 1440] SCR-20/hors-ligne
+[matrice 1440] SCR-20/acces-refuse
+[matrice 1440] SCR-09/resultat
+[matrice 1440] SCR-11/epreuve
+[matrice 1440] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1440-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1440-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1440-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice 1920 px @SPEC-802" classname="p8/responsive-matrix.spec.ts" time="52.971">
+<system-out>
+<![CDATA[[matrice 1920] SCR-01/inscription
+[matrice 1920] SCR-01/connexion
+[matrice 1920] SCR-01/verification
+[matrice 1920] SCR-02/profil
+[matrice 1920] SCR-02/rythme
+[matrice 1920] SCR-02/ia
+[matrice 1920] SCR-02/rappels
+[matrice 1920] SCR-02/depart
+[matrice 1920] SCR-03/accueil
+[matrice 1920] SCR-03/menu
+[matrice 1920] SCR-03/notifications
+[matrice 1920] SCR-03/compte
+[matrice 1920] SCR-04/nouvelle
+[matrice 1920] SCR-04/cadrage
+[matrice 1920] SCR-05/programme
+[matrice 1920] SCR-06/module
+[matrice 1920] SCR-07/cours
+[matrice 1920] SCR-07/tuteur
+[matrice 1920] SCR-08/exercice
+[matrice 1920] SCR-09/quiz
+[matrice 1920] SCR-09/remediation
+[matrice 1920] SCR-10/quiz-global
+[matrice 1920] SCR-11/introduction
+[matrice 1920] SCR-12/agenda
+[matrice 1920] SCR-12/semaine
+[matrice 1920] SCR-12/mois
+[matrice 1920] SCR-13/lacunes
+[matrice 1920] SCR-14/carte
+[matrice 1920] SCR-14/detail
+[matrice 1920] SCR-15/profil
+[matrice 1920] SCR-15/notifications
+[matrice 1920] SCR-15/automatismes
+[matrice 1920] SCR-15/modeles
+[matrice 1920] SCR-16/bilan
+[matrice 1920] SCR-17/groupe
+[matrice 1920] SCR-18/recherche
+[matrice 1920] SCR-20/introuvable
+[matrice 1920] SCR-20/hors-ligne
+[matrice 1920] SCR-20/acces-refuse
+[matrice 1920] SCR-09/resultat
+[matrice 1920] SCR-11/epreuve
+[matrice 1920] SCR-11/resultats
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1920-px-SPEC-802-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1920-px-SPEC-802-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-matrix-matrice-1920-px-SPEC-802-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/responsive-visual.spec.ts" timestamp="2026-11-17T10:06:31.030Z" hostname="desktop" tests="3" failures="0" skipped="0" time="25.167" errors="0">
+<testcase name="jetons et structure mobile @SPEC-802 @visual" classname="p8/responsive-visual.spec.ts" time="1.572">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-responsive-visual-jeton-0dcb8-ture-mobile-SPEC-802-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-jeton-0dcb8-ture-mobile-SPEC-802-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-jeton-0dcb8-ture-mobile-SPEC-802-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="comparaison aux références menu masqué 390×844 @SPEC-802 @visual" classname="p8/responsive-visual.spec.ts" time="8.028">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-03-side-by-side-7bf49dde64e46134c25feb0d148d1fedf74b3803.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-03-diff-7c9c8f15598d05b809e41ef35392fc47808c21ca.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-07-side-by-side-65dc3139a3d56e6e63e7656c4a4adce1685a3aac.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-07-diff-f88f73c7d2c2e5a2007b59187a553547de2783ed.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-10-side-by-side-127b181b148b8f0580a7c3113c5966c41b48876e.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-10-diff-80f0ae96f312fa08545d3c0e2a9738eaec4961e5.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-12-side-by-side-7763913a7a1f50029f8c556b9e4d436fb32f15c9.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/attachments/SCR-12-diff-ccc737107b7275837d6dc5c7ad33359fea270f03.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-compa-2f5d8-qué-390×844-SPEC-802-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="lignes de base 360, 390 et 768 @SPEC-802 @visual" classname="p8/responsive-visual.spec.ts" time="15.567">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-responsive-visual-ligne-5d363--390-et-768-SPEC-802-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-ligne-5d363--390-et-768-SPEC-802-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-responsive-visual-ligne-5d363--390-et-768-SPEC-802-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/mobile-navigation.spec.ts" timestamp="2026-11-17T10:06:31.030Z" hostname="mobile" tests="2" failures="0" skipped="0" time="12.413" errors="0">
+<testcase name="menu en surimpression et panneaux plein écran @SPEC-802 @mobile" classname="p8/mobile-navigation.spec.ts" time="9.366">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-mobile-navigation-menu--819af-plein-écran-SPEC-802-mobile-mobile/attachments/axe-ea044c7e5aa01599d244ce89584bd48219fb035b.json]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-menu--819af-plein-écran-SPEC-802-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-menu--819af-plein-écran-SPEC-802-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-menu--819af-plein-écran-SPEC-802-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-menu--819af-plein-écran-SPEC-802-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="agenda et quiz global sur mobile @SPEC-802 @mobile" classname="p8/mobile-navigation.spec.ts" time="3.047">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-mobile-navigation-agend-59e57--sur-mobile-SPEC-802-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-agend-59e57--sur-mobile-SPEC-802-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-mobile-navigation-agend-59e57--sur-mobile-SPEC-802-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

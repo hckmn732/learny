@@ -72,7 +72,7 @@ export function GraphToolbar({
           aria-hidden="true"
           size={16}
           strokeWidth={2}
-          className="pointer-events-none absolute top-13 left-13 text-ink-muted"
+          className="pointer-events-none absolute top-13 left-13 z-[1] text-ink-muted"
         />
         <input
           id="recherche-notion"
@@ -92,7 +92,7 @@ export function GraphToolbar({
             setFocused(false);
           }}
           onKeyDown={onKeyDown}
-          className="min-h-42 w-full rounded-12 border border-solid border-border bg-surface py-0 pr-12 pl-38 text-14 text-ink"
+          className="touch-target min-h-42 w-full rounded-12 border border-solid border-border bg-surface py-0 pr-12 pl-38 text-14 text-ink max-sm:text-[16px]"
         />
         {open ? (
           <div className="absolute top-48 right-0 left-0 z-20 rounded-14 border border-solid border-border bg-surface p-6 shadow-float">
@@ -144,7 +144,7 @@ export function GraphToolbar({
       <div
         role="group"
         aria-label={t.filters.label}
-        className="flex max-w-[300px] flex-wrap gap-6 shell:max-w-none"
+        className="flex max-w-[300px] flex-wrap gap-6 nav:max-w-none"
       >
         {FILTERS.map((filter) => {
           const pressed = filters[filter.key];

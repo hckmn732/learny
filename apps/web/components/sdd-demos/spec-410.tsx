@@ -188,7 +188,7 @@ export default function Spec410Demo() {
           <StatCard value={NEXT_CHAPTER} label="chapitre à venir" data-testid="warmup-chapter" />
         </StatRow>
 
-        <div className="mt-5 grid gap-4 text-13 text-ink-secondary md:grid-cols-2">
+        <div className="mt-5 grid gap-4 text-13 text-ink-secondary sm:grid-cols-2">
           <div data-testid="warmup-input-notions">
             <h3 className="m-0 font-display text-15 font-600 text-ink">Notions vues récemment</h3>
             <ul className="m-0 mt-2 list-none p-0">
@@ -282,7 +282,7 @@ export default function Spec410Demo() {
         ) : (
           <ol
             aria-label="Notions de l’échauffement"
-            className="m-0 mt-4 grid list-none gap-3 p-0 md:grid-cols-2"
+            className="m-0 mt-4 grid list-none gap-3 p-0 sm:grid-cols-2"
           >
             {choices.map((choice) => (
               <li
@@ -316,7 +316,7 @@ export default function Spec410Demo() {
         </p>
         <ul
           aria-label="Notions exclues"
-          className="m-0 mt-3 grid list-none gap-2 p-0 md:grid-cols-2"
+          className="m-0 mt-3 grid list-none gap-2 p-0 sm:grid-cols-2"
         >
           {EXCLUSIONS.map((exclusion) => (
             <li

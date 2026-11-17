@@ -54,6 +54,21 @@ export const SCENARIOS = [
   { screenId: 'SCR-03', state: 'menu-reduit', source: 'Main.dc.html', setup: (page) => click(page, 'button', 'Masquer le menu'), expect: (page) => page.locator('html[data-sidebar="collapsed"]').waitFor({ state: 'attached' }) },
 
   // SCR-04 à SCR-14
+  // SPEC-802 ET-5 — état mobile « menu masqué » des quatre écrans de référence.
+  ...[
+    ['SCR-03', 'Main.dc.html'],
+    ['SCR-07', 'Cours.dc.html'],
+    ['SCR-10', 'QuizGlobal.dc.html'],
+    ['SCR-12', 'Agenda.dc.html'],
+  ].map(([screenId, file]) => ({
+    screenId,
+    state: 'menu-masque',
+    source: file,
+    viewports: ['mobile'],
+    setup: (page) => click(page, 'button', 'Masquer le menu'),
+    expect: (page) => page.locator('html[data-sidebar="collapsed"]').waitFor({ state: 'attached' }),
+  })),
+
   base('SCR-04', 'NouvelleFormation.dc.html', 'formation'),
   base('SCR-05', 'Programme.dc.html', 'Modules et chapitres'),
   { screenId: 'SCR-05', state: 'proposition', source: 'Programme.dc.html?proposition', setup: () => Promise.resolve(), expect: (page) => page.locator('button[aria-expanded="true"]').filter({ hasText: /^\s*1/ }).first().waitFor() },

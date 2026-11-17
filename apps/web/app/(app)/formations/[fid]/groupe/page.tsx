@@ -32,10 +32,7 @@ export default async function GroupPage({ params }: GroupPageProps) {
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
       sidebarError={!shell.sidebar.ok}
     >
-      <main
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
-        data-testid="group-page"
-      >
+      <main className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40" data-testid="group-page">
         <PageHeader eyebrow={state.formationTitle} title={t.title} />
         <div className="mt-24">
           {state.group === null ? (

@@ -35,7 +35,7 @@ export function ExamResults({ result, programmeHref, onRestart }: ExamResultsPro
   const reviewed = filter === 'all' ? result.review : result.review.filter((row) => !row.isCorrect);
 
   return (
-    <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-22" data-testid="exam-result">
         <header className="flex flex-col gap-8">
           <nav aria-label="Fil d'Ariane" className="text-14 text-ink-muted">
@@ -195,7 +195,7 @@ export function ExamResults({ result, programmeHref, onRestart }: ExamResultsPro
             {t.review}
           </button>
           <a
-            className="inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink"
+            className="touch-target inline-flex min-h-48 items-center rounded-14 border border-border-strong bg-surface px-20 text-15 font-600 text-ink"
             href={programmeHref}
           >
             {t.back}

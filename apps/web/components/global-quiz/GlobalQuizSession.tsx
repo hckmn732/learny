@@ -10,7 +10,7 @@ import {
   type ReviewAnswerInput,
   type ReviewSummaryDto,
 } from '@learny/contracts';
-import { EmptyState, ErrorState } from '@learny/ui';
+import { BottomActionBar, EmptyState, ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { invalidateStudyProgress } from '../../lib/study-progress';
@@ -251,7 +251,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
       <EmptyState
         action={
           <a
-            className="inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white no-underline"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-18 text-14 font-700 text-white no-underline"
             href="/accueil"
           >
             {t.empty.action}
@@ -319,8 +319,8 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
             finished={ended}
             total={items.length}
           />
-          <div className="flex flex-wrap items-start gap-20">
-            <div className="flex flex-[1_1_260px] flex-col gap-16">
+          <div className="flex flex-wrap items-start gap-20 max-sm:flex-col max-sm:flex-nowrap max-sm:items-stretch">
+            <div className="flex min-w-0 flex-[1_1_260px] flex-col gap-16">
               <GameRail
                 currentPosition={ended ? -1 : (item?.position ?? -1)}
                 items={items}
@@ -393,14 +393,16 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
                 <GamePanel
                   dueLabels={props.dueLabelsByPosition[String(item.position)]}
                   footer={
-                    <SessionFooter
-                      isLast={last}
-                      nextDisabled={item.state === 'todo'}
-                      onNext={next}
-                      onSkip={skip}
-                      pending={answer.isPending || complete.isPending}
-                      skipDisabled={item.state !== 'todo'}
-                    />
+                    <BottomActionBar className="sm:mt-0">
+                      <SessionFooter
+                        isLast={last}
+                        nextDisabled={item.state === 'todo'}
+                        onNext={next}
+                        onSkip={skip}
+                        pending={answer.isPending || complete.isPending}
+                        skipDisabled={item.state !== 'todo'}
+                      />
+                    </BottomActionBar>
                   }
                   item={item}
                   onAnswer={answerGame}

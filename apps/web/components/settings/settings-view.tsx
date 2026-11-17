@@ -340,7 +340,7 @@ export function SettingsView({
 
   if (state === null) {
     return (
-      <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-56 pt-24 shell:px-0">
+      <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-56 pt-24 nav:px-0">
         {initialError ? (
           <ErrorState
             className="rounded-24 border border-solid border-border bg-surface"
@@ -361,7 +361,7 @@ export function SettingsView({
   const rhythm = values.rhythm;
 
   return (
-    <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-56 pt-24 shell:px-0">
+    <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-56 pt-24 nav:px-0">
       <Tabs data-testid="settings-tabs-root" value={tab} onValueChange={changeTab}>
         <header className="flex flex-wrap items-end justify-between gap-16">
           <div className="flex min-w-0 flex-col gap-4">
@@ -373,7 +373,12 @@ export function SettingsView({
               {t.tabs[tab]}
             </h1>
           </div>
-          <TabsList aria-label={t.tabsLabel} data-testid="settings-tabs" variant="solid">
+          <TabsList
+            aria-label={t.tabsLabel}
+            data-testid="settings-tabs"
+            variant="solid"
+            className="max-w-full max-sm:overflow-x-auto max-sm:overflow-y-hidden"
+          >
             {SETTINGS_TAB_IDS.map((id) => (
               <TabsTrigger data-testid={`settings-tab-${id}`} key={id} value={id}>
                 {t.tabs[id]}

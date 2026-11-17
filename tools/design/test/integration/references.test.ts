@@ -73,7 +73,9 @@ describe('[SPEC-005] references', () => {
 
       const manifest = readManifest(generationA);
       expect(manifest.zoom).toBe(0.9);
-      expect(manifest.references).toHaveLength(SCENARIOS.length * 2);
+      // SPEC-802 ET-5 — a scenario may restrict its viewports (menu-masque: mobile only).
+      const expected = SCENARIOS.reduce((sum, s) => sum + (s.viewports?.length ?? 2), 0);
+      expect(manifest.references).toHaveLength(expected);
       for (const entry of manifest.references) {
         expect(entry.source).toMatch(/^design\/maquettes\/[^?#]+\.dc\.html(?:[?#].*)?$/);
         expect(entry.file).toMatch(/^design\/references\/.+\.png$/);

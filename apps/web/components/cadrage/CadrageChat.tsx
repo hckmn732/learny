@@ -113,7 +113,7 @@ function CadrageLayout({
   onGenerate,
 }: CadrageLayoutProps) {
   return (
-    <main className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-24">
         <CadrageSteps />
         <div className="flex flex-wrap items-start gap-20">
@@ -223,10 +223,7 @@ export function NewFormationChat({ initialTitle = '' }: NewFormationChatProps) {
   const [error, setError] = useState<string | null>(null);
   const create = useMutation({
     mutationFn: (input: { title: string; key: string }) =>
-      api.formationsCreate(
-        { body: { title: input.title } },
-        { idempotencyKey: input.key },
-      ),
+      api.formationsCreate({ body: { title: input.title } }, { idempotencyKey: input.key }),
     onSuccess: (data) => {
       const suffix =
         data.cadrage.error === null ? '' : `?erreur=${encodeURIComponent(data.cadrage.error.code)}`;
@@ -318,8 +315,7 @@ export function CadrageChat({ fid, initialState, creationError = null }: Cadrage
     previousCount.current = state.messages.length;
   }, [state.messages.length]);
   const patch = useMutation({
-    mutationFn: (value: string) =>
-      api.formationUpdate({ params: { fid }, body: { title: value } }),
+    mutationFn: (value: string) => api.formationUpdate({ params: { fid }, body: { title: value } }),
     onSuccess: (data) => {
       setTitle(data.title);
       setTitleError(null);
@@ -355,16 +351,13 @@ export function CadrageChat({ fid, initialState, creationError = null }: Cadrage
   const preview: Partial<Record<CadrageRubricKey, string>> =
     multi && pendingKey !== null && pendingKey !== 'other' && selected.size > 0
       ? {
-          [pendingKey]: [...selected]
-            .map((value) => labels.get(value) ?? value)
-            .join(', '),
+          [pendingKey]: [...selected].map((value) => labels.get(value) ?? value).join(', '),
         }
       : {};
 
   const creationErrorCode =
     state.messages.length === 0 && creationCode !== null ? creationCode : undefined;
-  const errorCode =
-    completeError ?? cadrage.error?.code ?? state.error?.code ?? creationErrorCode;
+  const errorCode = completeError ?? cadrage.error?.code ?? state.error?.code ?? creationErrorCode;
   const errorRetry =
     errorCode === 'AI_TASK_FAILED'
       ? () => {

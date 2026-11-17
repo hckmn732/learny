@@ -230,7 +230,7 @@ export function GraphSvg({
     <section
       data-testid="notion-graph"
       aria-label={t.graph.label}
-      className="relative h-[540px] min-w-0 flex-[999_1_560px] overflow-hidden rounded-24 bg-ink shell:h-[594px]"
+      className="relative h-[540px] min-w-0 flex-[999_1_560px] overflow-hidden rounded-24 bg-ink nav:h-[594px]"
     >
       <div ref={containerRef} className="absolute inset-0 h-full w-full">
         <svg
@@ -325,6 +325,7 @@ export function GraphSvg({
                   <g
                     key={node.id}
                     data-testid="graph-node"
+                    data-touch-exempt="graph-node"
                     data-node-id={node.id}
                     data-kind={node.kind}
                     data-status={node.masteryStatus ?? undefined}
@@ -384,7 +385,7 @@ export function GraphSvg({
           onClick={() => {
             onViewChange(zoomAt(view, { x: box.width / 2, y: box.height / 2 }, 1.3));
           }}
-          className="inline-flex size-36 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-18 text-white"
+          className="touch-target inline-flex size-44 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-18 text-white"
         >
           <Plus aria-hidden="true" size={18} strokeWidth={2} />
         </button>
@@ -395,7 +396,7 @@ export function GraphSvg({
           onClick={() => {
             onViewChange(zoomAt(view, { x: box.width / 2, y: box.height / 2 }, 1 / 1.3));
           }}
-          className="inline-flex size-36 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-18 text-white"
+          className="touch-target inline-flex size-44 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-18 text-white"
         >
           <Minus aria-hidden="true" size={18} strokeWidth={2} />
         </button>
@@ -404,7 +405,7 @@ export function GraphSvg({
           aria-label={t.graph.recenter}
           data-testid="graph-recenter"
           onClick={onRecenter}
-          className="inline-flex size-36 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-white"
+          className="touch-target inline-flex size-44 cursor-pointer items-center justify-center rounded-10 border border-solid border-dark-600 bg-dark-800 text-white"
         >
           <Maximize2 aria-hidden="true" size={16} strokeWidth={2} />
         </button>

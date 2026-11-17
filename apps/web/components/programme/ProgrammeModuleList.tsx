@@ -119,7 +119,7 @@ export function ProgrammeModuleList({ formationId, modules }: ProgrammeModuleLis
                 </span>
                 {module.status === 'open' ? (
                   <a
-                    className="inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
+                    className="touch-target inline-flex min-h-44 items-center rounded-12 bg-ink px-16 text-14 font-700 text-white"
                     href={`/formations/${formationId}/programme#module-${String(module.position)}`}
                   >
                     {t.openModule}
@@ -128,7 +128,7 @@ export function ProgrammeModuleList({ formationId, modules }: ProgrammeModuleLis
               </div>
               {expanded ? (
                 <div className="flex flex-col gap-12 px-16 pb-18 pl-[70px]">
-                  <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-2">
+                  <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 sm:grid-cols-2">
                     {module.chapters.map((chapter) => (
                       <li
                         className="flex flex-col gap-2 rounded-14 bg-surface-subtle px-14 py-12 text-14 font-500"

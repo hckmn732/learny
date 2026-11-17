@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import type { NotionGraphColorMode, NotionGraphDto, NotionGraphNode } from '@learny/contracts';
-import { PageHeader, SegmentedControl } from '@learny/ui';
+import { PageHeader, ResponsivePanel, SegmentedControl, useBreakpoint } from '@learny/ui';
 
 import {
   centerOn,
@@ -64,6 +64,7 @@ export function NotionGraphExperience({ graph }: NotionGraphExperienceProps) {
   const [view, setView] = useState<GraphView>(() =>
     initialView(layout, INITIAL_VIEWPORT, visibleIds),
   );
+  const compact = useBreakpoint('sm');
 
   const onViewportChange = useCallback(
     (next: GraphViewport) => {
@@ -156,7 +157,7 @@ export function NotionGraphExperience({ graph }: NotionGraphExperienceProps) {
           onToggleFilter={toggle}
         />
 
-        <div className="flex flex-wrap items-stretch gap-20">
+        <div className="flex flex-wrap items-stretch gap-20 max-sm:flex-col">
           <GraphSvg
             graph={{ ...graph, links }}
             layout={layout}
@@ -180,16 +181,42 @@ export function NotionGraphExperience({ graph }: NotionGraphExperienceProps) {
             }}
             onViewportChange={onViewportChange}
           />
-          <GraphDetail
-            graph={graph}
-            selectedId={filterState.selectedId}
-            onSelect={(id) => {
-              select(id, true);
-            }}
-            onClose={() => {
-              setFilterState((current) => ({ ...current, selectedId: null }));
-            }}
-          />
+          {compact && selected !== null ? (
+            <ResponsivePanel
+              open
+              onOpenChange={(next) => {
+                if (!next) {
+                  setFilterState((current) => ({ ...current, selectedId: null }));
+                }
+              }}
+              title={t.detail.label}
+              testId="graph-detail-panel"
+            >
+              <div className="p-16">
+                <GraphDetail
+                  graph={graph}
+                  selectedId={filterState.selectedId}
+                  onSelect={(id) => {
+                    select(id, true);
+                  }}
+                  onClose={() => {
+                    setFilterState((current) => ({ ...current, selectedId: null }));
+                  }}
+                />
+              </div>
+            </ResponsivePanel>
+          ) : (
+            <GraphDetail
+              graph={graph}
+              selectedId={filterState.selectedId}
+              onSelect={(id) => {
+                select(id, true);
+              }}
+              onClose={() => {
+                setFilterState((current) => ({ ...current, selectedId: null }));
+              }}
+            />
+          )}
         </div>
       </div>
 

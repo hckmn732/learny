@@ -37,10 +37,12 @@ export const Link = ({
 
   return (
     <NextLink
+      data-touch-exempt={variant === 'inline' ? 'inline' : undefined}
       className={cn(
         'font-500 transition-colors',
         VARIANT_CLASS[variant],
         WEIGHT_CLASS[weight],
+        'touch-target',
         className,
       )}
       href={href}

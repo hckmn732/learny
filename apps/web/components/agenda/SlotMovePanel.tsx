@@ -121,7 +121,7 @@ export function SlotMovePanel({
           <NextLink
             href="/parametres#rythme"
             data-testid="slot-move-adjust"
-            className="inline-flex min-h-44 items-center self-start rounded-12 bg-lime px-16 text-14 font-700 text-ink no-underline"
+            className="touch-target inline-flex min-h-44 items-center self-start rounded-12 bg-lime px-16 text-14 font-700 text-ink no-underline"
           >
             {t.adjust}
           </NextLink>

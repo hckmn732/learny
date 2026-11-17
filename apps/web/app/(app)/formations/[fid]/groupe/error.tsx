@@ -8,7 +8,7 @@ import { fr } from '../../../../../messages/fr';
 export default function GroupError({ reset }: { reset: () => void }) {
   return (
     <main
-      className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+      className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       data-testid="group-error-state"
     >
       <ErrorState

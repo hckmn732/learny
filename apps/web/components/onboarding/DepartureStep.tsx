@@ -265,7 +265,7 @@ export function DepartureStep({ firstName, tutorTone, payment }: Readonly<Depart
       {saveError === null ? null : <FormError>{saveError}</FormError>}
 
       <Link
-        className="self-center text-14 font-600 text-indigo-ink"
+        className="touch-target self-center text-14 font-600 text-indigo-ink"
         data-testid="departure-home"
         href="/accueil"
         onClick={(event) => {

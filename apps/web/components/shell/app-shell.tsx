@@ -58,7 +58,7 @@ export const AppShell = ({
           onCollapsedChange={setCollapsed}
           onShowHandler={registerShowSidebar}
         />
-        <div id="contenu" tabIndex={-1} className="min-w-0 flex-1">
+        <div id="contenu" tabIndex={-1} className="mx-auto min-w-0 w-full max-w-[90rem] flex-1">
           <Header
             initialData={header}
             initialError={headerError}

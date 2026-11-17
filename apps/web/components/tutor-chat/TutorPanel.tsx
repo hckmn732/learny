@@ -251,6 +251,14 @@ export function TutorPanel({
   }, []);
 
   useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+
+  useEffect(() => {
     const box = boxRef.current;
     if (box !== null) box.scrollTop = box.scrollHeight;
   }, [state.messages, state.streaming]);
@@ -259,7 +267,7 @@ export function TutorPanel({
     <section
       aria-labelledby="t-chat"
       aria-modal="false"
-      className="fixed top-0 right-0 bottom-0 z-dialog flex w-460 max-w-full flex-col border-l border-border bg-surface shadow-drawer max-[599px]:w-full"
+      className="fixed top-0 right-0 bottom-0 z-dialog flex w-460 max-w-full flex-col border-l border-border bg-surface shadow-drawer max-sm:w-full"
       data-testid="tutor-panel"
       id="chat-tuteur"
       role="dialog"
@@ -279,7 +287,7 @@ export function TutorPanel({
         </div>
         <div className="ml-auto flex gap-4">
           <button
-            className="min-h-36 cursor-pointer rounded-10 border border-border bg-surface px-10 text-13 font-600 text-ink"
+            className="touch-target min-h-36 cursor-pointer rounded-10 border border-border bg-surface px-10 text-13 font-600 text-ink"
             data-testid="tutor-reset"
             onClick={onNewDiscussion}
             type="button"
@@ -287,8 +295,8 @@ export function TutorPanel({
             {t.newDiscussion}
           </button>
           <button
-            aria-label={t.close}
-            className="h-36 w-36 cursor-pointer rounded-10 bg-transparent text-22 leading-1 text-ink-muted"
+            aria-label="Fermer"
+            className="touch-target h-36 w-36 cursor-pointer rounded-10 bg-transparent text-22 leading-1 text-ink-muted"
             data-testid="tutor-close"
             onClick={onClose}
             type="button"
@@ -395,11 +403,15 @@ export function TutorPanel({
             {t.inputLabel}
           </label>
           <textarea
-            className="min-w-0 flex-1 resize-none border-0 bg-transparent p-8 text-14 leading-1.45 text-ink outline-none"
+            className="touch-target min-w-0 flex-1 resize-none border-0 bg-transparent p-8 text-14 leading-1.45 text-ink outline-none max-sm:text-[16px]"
             data-testid="tutor-input"
             id="chat-input"
             onChange={(event) => {
               onDraft(event.target.value);
+            }}
+            onFocus={(event) => {
+              // SPEC-802 CL-4 — keep the field above the virtual keyboard.
+              event.currentTarget.scrollIntoView({ block: 'nearest' });
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {
@@ -414,7 +426,7 @@ export function TutorPanel({
           />
           <button
             aria-label={t.send}
-            className="flex h-40 w-40 flex-none cursor-pointer items-center justify-center rounded-11 bg-ink text-white disabled:opacity-60"
+            className="touch-target flex h-40 w-40 flex-none cursor-pointer items-center justify-center rounded-11 bg-ink text-white disabled:opacity-60"
             data-testid="tutor-send"
             disabled={state.streaming || draft.trim() === ''}
             onClick={onSend}

@@ -31,7 +31,9 @@ export function validateScenarios(scenarios, viewports) {
     if (!SLUG.test(s.state ?? '')) errors.push(`${id} : nom d'état invalide`);
     if (!s.source || !sourceFile(s.source).endsWith('.dc.html')) errors.push(`${id} : source invalide`);
     if (typeof s.setup !== 'function' || typeof s.expect !== 'function') errors.push(`${id} : setup et expect sont obligatoires`);
-    for (const vp of Object.keys(viewports)) {
+    const selected = s.viewports ?? Object.keys(viewports);
+    for (const vp of selected) {
+      if (!(vp in viewports)) errors.push(`${id} : viewport inconnu ${vp}`);
       const file = referenceFile(s.screenId, s.state, vp);
       if (seen.has(file)) errors.push(`Nom de fichier en double : ${file} (${seen.get(file)} et ${id})`);
       else seen.set(file, id);

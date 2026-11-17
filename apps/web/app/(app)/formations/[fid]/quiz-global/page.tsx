@@ -38,7 +38,7 @@ export default async function QuizGlobalPage({ params, searchParams }: QuizGloba
       sidebarError={!shell.sidebar.ok}
     >
       <main
-        className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-40 shell:px-40"
+        className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-40 nav:px-40"
         data-testid="global-quiz-page"
       >
         {quiz.ok ? (

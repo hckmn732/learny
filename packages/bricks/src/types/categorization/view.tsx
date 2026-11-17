@@ -49,7 +49,7 @@ export function CategorizationView(props: BrickViewProps<'categorization'>) {
         typeLabel={t.type('categorization')}
         variant={variant}
       />
-      <div className="grid grid-cols-1 gap-12 min-[640px]:grid-cols-2">
+      <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
         {payload.categories.map((category) => {
           const items = payload.items.filter((item) => assignments[item.id] === category.id);
           return (

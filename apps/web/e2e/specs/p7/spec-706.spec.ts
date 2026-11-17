@@ -290,7 +290,8 @@ test('conformité SCR-03 @SPEC-706 @visual @mobile', async ({ page, axeCheck, co
     '[data-testid="notification-panel"]': {
       'background-color': colors.surface,
       'border-color': colors.border,
-      'border-radius': '18px',
+      // SPEC-802 EF-3 — full screen, square corners, below 768 px.
+      'border-radius': mobile ? '0px' : '18px',
     },
     '[data-testid="header-notifications"]': {
       'background-color': colors.surface,

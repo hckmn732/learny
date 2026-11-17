@@ -34,7 +34,7 @@ export default async function BilanPage({ params }: BilanPageProps) {
     >
       <main
         data-testid="final-review-page"
-        className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+        className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
       >
         {review.ok ? (
           <FinalReviewScreen data={review.data} />

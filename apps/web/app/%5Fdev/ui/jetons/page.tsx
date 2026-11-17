@@ -136,7 +136,7 @@ export default function TokensGalleryPage() {
       </Section>
 
       <Section testId="tokens-shadows" title={t.shadows.title} intro={t.shadows.intro}>
-        <ul className="grid grid-cols-1 gap-24 shell:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-24 nav:grid-cols-2">
           {Object.entries(shadows).map(([name, value]) => (
             <li key={name}>
               <span

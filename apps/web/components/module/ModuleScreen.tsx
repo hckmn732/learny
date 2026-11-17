@@ -83,10 +83,7 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
     });
   };
 
-  const run = async (
-    action: () => Promise<unknown>,
-    success: string,
-  ): Promise<void> => {
+  const run = async (action: () => Promise<unknown>, success: string): Promise<void> => {
     setPending(true);
     setNotice(null);
     try {
@@ -149,12 +146,18 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
   const screenTitle = selected === undefined ? screen.module.title : selected.title;
 
   return (
-    <main className="mx-auto w-full px-16 pb-40 shell:px-40">
+    <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-24" data-testid="module-page">
-        <div className="flex flex-wrap items-center justify-between gap-16" data-testid="module-header">
+        <div
+          className="flex flex-wrap items-center justify-between gap-16"
+          data-testid="module-header"
+        >
           <div className="flex flex-1 basis-420 flex-col gap-8">
             <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-              <a className="underline" href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}>
+              <a
+                className="underline"
+                href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}
+              >
                 {t.breadcrumbProgramme}
               </a>{' '}
               / Module {screen.module.position}
@@ -174,12 +177,22 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
           </div>
           <div className="flex items-center gap-14 rounded-20 border border-border bg-surface px-18 py-14">
             <span
-              aria-label={t.chaptersDoneLabel(screen.counts.chaptersDone, screen.counts.chaptersTotal)}
+              aria-label={t.chaptersDoneLabel(
+                screen.counts.chaptersDone,
+                screen.counts.chaptersTotal,
+              )}
               className="relative inline-flex h-56 w-56 items-center justify-center"
               role="img"
             >
               <svg aria-hidden="true" className="block" height="56" viewBox="0 0 56 56" width="56">
-                <circle cx="28" cy="28" fill="none" r="22" stroke={colors["surface-muted"]} strokeWidth="7" />
+                <circle
+                  cx="28"
+                  cy="28"
+                  fill="none"
+                  r="22"
+                  stroke={colors['surface-muted']}
+                  strokeWidth="7"
+                />
                 <circle
                   cx="28"
                   cy="28"
@@ -235,10 +248,7 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
               data-testid="module-chapter-panel"
             >
               <div className="flex flex-col gap-8">
-                <h2
-                  className="m-0 font-display text-26 font-600 tracking-heading"
-                  id="t-chapitre"
-                >
+                <h2 className="m-0 font-display text-26 font-600 tracking-heading" id="t-chapitre">
                   {t.chapterTitle(selected?.position ?? 1, screenTitle)}
                 </h2>
                 <p className="m-0 text-15 leading-1.55 text-ink-muted">{t.dropIntro}</p>
@@ -352,16 +362,19 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
                 data-testid="chapter-complete"
                 disabled={pending}
                 onClick={() => {
-                  void run(async () => {
-                    const result = await api.chapterComplete({
-                      params: { cid: screen.selectedChapterId },
-                      body: { done: !chapterDone },
-                    });
-                    if (result.generationRequested) {
-                      return t.generationRequested;
-                    }
-                    return undefined;
-                  }, chapterDone ? t.reopened : t.completed);
+                  void run(
+                    async () => {
+                      const result = await api.chapterComplete({
+                        params: { cid: screen.selectedChapterId },
+                        body: { done: !chapterDone },
+                      });
+                      if (result.generationRequested) {
+                        return t.generationRequested;
+                      }
+                      return undefined;
+                    },
+                    chapterDone ? t.reopened : t.completed,
+                  );
                 }}
                 type="button"
               >

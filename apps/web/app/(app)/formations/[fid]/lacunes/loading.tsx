@@ -13,7 +13,7 @@ export default function LacunesLoading() {
     <main
       data-testid="gaps-loading"
       aria-busy="true"
-      className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+      className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
     >
       <PageHeader eyebrow={t.title} title={t.title} />
       <p role="status" aria-live="polite" className="mt-20 text-14 text-ink-muted">

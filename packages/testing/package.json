@@ -13,7 +13,8 @@
     "./render": "./src/render.tsx",
     "./supabase": "./src/supabase.ts",
     "./auth": "./src/auth.ts",
-    "./mail": "./src/mail.ts"
+    "./mail": "./src/mail.ts",
+    "./touch-targets": "./src/touch-targets.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

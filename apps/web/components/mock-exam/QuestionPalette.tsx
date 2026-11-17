@@ -37,7 +37,7 @@ export function QuestionPalette({
               aria-current={position === current ? 'step' : undefined}
               aria-label={t.paletteQuestion(position, isAnswered, isMarked)}
               className={cn(
-                'h-40 rounded-10 text-14 font-700',
+                'touch-target h-40 rounded-10 text-14 font-700',
                 isMarked
                   ? 'border-2 border-orange'
                   : isAnswered

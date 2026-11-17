@@ -137,7 +137,7 @@ function CalendarStrip({ result }: Readonly<{ result: StreakResult }>) {
   return (
     <ol
       aria-label="Régularité sur les 14 derniers jours"
-      className="m-0 grid list-none grid-cols-7 gap-2 p-0 max-[479px]:grid-cols-4"
+      className="m-0 grid list-none grid-cols-7 gap-2 p-0 max-sm:grid-cols-4"
     >
       {result.calendar.map((day) => (
         <li
@@ -220,7 +220,7 @@ export default function Spec409Demo() {
           />
         </StatRow>
 
-        <div className="mt-5 grid gap-4 text-13 text-ink-secondary md:grid-cols-2">
+        <div className="mt-5 grid gap-4 text-13 text-ink-secondary sm:grid-cols-2">
           <div data-testid="streak-input-activity">
             <h3 className="m-0 font-display text-15 font-600 text-ink">Activités terminées</h3>
             <ul className="m-0 mt-2 list-none p-0">
@@ -350,7 +350,7 @@ export default function Spec409Demo() {
         </p>
         <ul
           aria-label="Jalons détectés"
-          className="m-0 mt-3 grid list-none gap-2 p-0 md:grid-cols-2"
+          className="m-0 mt-3 grid list-none gap-2 p-0 sm:grid-cols-2"
         >
           {NEW_MILESTONES.map((milestone, index) => (
             <li

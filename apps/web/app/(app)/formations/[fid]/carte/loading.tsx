@@ -13,7 +13,7 @@ export default function CarteLoading() {
     <main
       data-testid="notion-graph-loading"
       aria-busy="true"
-      className="mx-auto w-full max-w-content px-16 pb-40 shell:px-40"
+      className="mx-auto w-full max-w-content px-16 pb-40 nav:px-40"
     >
       <PageHeader eyebrow={t.title} title={t.title} />
       <p role="status" aria-live="polite" className="mt-20 text-14 text-ink-muted">
@@ -27,7 +27,7 @@ export default function CarteLoading() {
           ))}
         </div>
         <div className="flex flex-wrap gap-20">
-          <Skeleton className="h-[540px] min-w-0 flex-[999_1_560px] rounded-24 shell:h-[594px]" />
+          <Skeleton className="h-[540px] min-w-0 flex-[999_1_560px] rounded-24 nav:h-[594px]" />
           <SkeletonGroup label={t.loading}>
             <div className="flex min-w-0 flex-1 basis-[240px] flex-col gap-16">
               {[0, 1].map((index) => (
