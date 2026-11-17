@@ -152,3 +152,15 @@ export async function seedDemoExamAttempts(): Promise<DemoExamAttempts> {
     inProgressId: inProgress[0]?.id ?? '',
   };
 }
+
+/**
+ * Deletes the attempts a SPEC-802 file created, so the shared demo dataset is intact for the
+ * next file of the campaign (the seed does not remove extra attempts).
+ */
+export async function deleteDemoAttempts(ids: readonly string[]): Promise<void> {
+  const kept = ids.filter((id) => id !== '');
+  if (kept.length === 0) return;
+  await serviceDb().execute(sql`
+    delete from public.attempts where id = any(${kept}::uuid[])
+  `);
+}

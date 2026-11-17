@@ -18,7 +18,7 @@ import {
   expectTouchTargets,
 } from '@learny/testing/touch-targets';
 
-import { seedDemoExamAttempts } from '../../support/demo-exam';
+import { deleteDemoAttempts, seedDemoExamAttempts } from '../../support/demo-exam';
 import {
   RESPONSIVE_WIDTHS,
   buildResponsiveMatrix,
@@ -30,6 +30,7 @@ const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const EVIDENCE = path.join(ROOT, 'evidence', 'SPEC-802', 'screenshots');
 
 let session: TestSession;
+let created: string[] = [];
 let entries: MatrixEntry[] = [];
 const results: Array<{
   width: number;
@@ -109,6 +110,7 @@ test.beforeAll(async () => {
   session = await createDemoSession(demoUserId('alex'), ALEX.email);
   const states = await seedStates();
   entries = buildResponsiveMatrix(states);
+  created = [states.quizAttemptId, states.examAttemptId, states.examResultId];
 });
 
 test.afterAll(async () => {
@@ -117,6 +119,9 @@ test.afterAll(async () => {
     path.join(EVIDENCE, 'matrix-after.json'),
     `${JSON.stringify({ generatedAt: '2026-11-11T12:20:00Z', results }, null, 2)}\n`,
   );
+  // Leave the demo dataset as the next file of the campaign expects it.
+  await deleteDemoAttempts(created);
+  await restoreDemoData();
   await closeDb();
 });
 

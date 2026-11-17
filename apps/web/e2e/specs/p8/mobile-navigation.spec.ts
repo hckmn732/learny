@@ -5,7 +5,7 @@ import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } 
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 
-import { seedDemoExamAttempts } from '../../support/demo-exam';
+import { deleteDemoAttempts, seedDemoExamAttempts } from '../../support/demo-exam';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
@@ -13,6 +13,7 @@ const COURSE = `/formations/${SAP}/modules/${demoModuleId('sap', 1)}/cours?chapi
 
 let session: TestSession;
 let examAttemptId = '';
+let examGradedId = '';
 
 test.beforeAll(async () => {
   await restoreDemoData();
@@ -24,6 +25,7 @@ test.beforeAll(async () => {
   );
   const exam = await seedDemoExamAttempts();
   examAttemptId = exam.inProgressId;
+  examGradedId = exam.gradedId;
 });
 
 test.beforeEach(async ({ context, baseURL }) => {
@@ -33,6 +35,8 @@ test.beforeEach(async ({ context, baseURL }) => {
 });
 
 test.afterAll(async () => {
+  await deleteDemoAttempts([examAttemptId, examGradedId]);
+  await restoreDemoData();
   await closeDb();
 });
 
