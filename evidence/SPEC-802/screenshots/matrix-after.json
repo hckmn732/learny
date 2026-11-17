@@ -2,6 +2,216 @@
   "generatedAt": "2026-11-11T12:20:00Z",
   "results": [
     {
+      "width": 360,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-02/profil",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-02/rythme",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-02/ia",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-02/rappels",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-02/depart",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/notifications",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-03/compte",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-04/nouvelle",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-04/cadrage",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-05/programme",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-06/module",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-07/cours",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-07/tuteur",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-08/exercice",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-09/quiz",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-09/remediation",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-10/quiz-global",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-11/introduction",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-12/agenda",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-12/semaine",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-12/mois",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-13/lacunes",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-14/carte",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-14/detail",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-15/profil",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-15/notifications",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-15/automatismes",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-15/modeles",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-16/bilan",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-17/groupe",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-18/recherche",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-20/introuvable",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-20/hors-ligne",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-20/acces-refuse",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-09/resultat",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-11/epreuve",
+      "ok": true
+    },
+    {
+      "width": 360,
+      "id": "SCR-11/resultats",
+      "ok": true
+    },
+    {
       "width": 390,
       "id": "SCR-01/inscription",
       "ok": true
@@ -208,6 +418,846 @@
     },
     {
       "width": 390,
+      "id": "SCR-11/resultats",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-02/profil",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-02/rythme",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-02/ia",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-02/rappels",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-02/depart",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-03/notifications",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-03/compte",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-04/nouvelle",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-04/cadrage",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-05/programme",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-06/module",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-07/cours",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-07/tuteur",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-08/exercice",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-09/quiz",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-09/remediation",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-10/quiz-global",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-11/introduction",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-12/agenda",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-12/semaine",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-12/mois",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-13/lacunes",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-14/carte",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-14/detail",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-15/profil",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-15/notifications",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-15/automatismes",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-15/modeles",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-16/bilan",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-17/groupe",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-18/recherche",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-20/introuvable",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-20/hors-ligne",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-20/acces-refuse",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-09/resultat",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-11/epreuve",
+      "ok": true
+    },
+    {
+      "width": 768,
+      "id": "SCR-11/resultats",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-02/profil",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-02/rythme",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-02/ia",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-02/rappels",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-02/depart",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-03/notifications",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-03/compte",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-04/nouvelle",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-04/cadrage",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-05/programme",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-06/module",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-07/cours",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-07/tuteur",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-08/exercice",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-09/quiz",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-09/remediation",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-10/quiz-global",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-11/introduction",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-12/agenda",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-12/semaine",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-12/mois",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-13/lacunes",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-14/carte",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-14/detail",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-15/profil",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-15/notifications",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-15/automatismes",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-15/modeles",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-16/bilan",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-17/groupe",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-18/recherche",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-20/introuvable",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-20/hors-ligne",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-20/acces-refuse",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-09/resultat",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-11/epreuve",
+      "ok": true
+    },
+    {
+      "width": 1024,
+      "id": "SCR-11/resultats",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/profil",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/rythme",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/ia",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/rappels",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-02/depart",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/notifications",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-03/compte",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-04/nouvelle",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-04/cadrage",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-05/programme",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-06/module",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-07/cours",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-07/tuteur",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-08/exercice",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/quiz",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/remediation",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-10/quiz-global",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/introduction",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/agenda",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/semaine",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-12/mois",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-13/lacunes",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-14/carte",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-14/detail",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/profil",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/notifications",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/automatismes",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-15/modeles",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-16/bilan",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-17/groupe",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-18/recherche",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/introuvable",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/hors-ligne",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-20/acces-refuse",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-09/resultat",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/epreuve",
+      "ok": true
+    },
+    {
+      "width": 1440,
+      "id": "SCR-11/resultats",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-01/inscription",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-01/connexion",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-01/verification",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-02/profil",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-02/rythme",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-02/ia",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-02/rappels",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-02/depart",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-03/accueil",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-03/menu",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-03/notifications",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-03/compte",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-04/nouvelle",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-04/cadrage",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-05/programme",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-06/module",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-07/cours",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-07/tuteur",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-08/exercice",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-09/quiz",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-09/remediation",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-10/quiz-global",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-11/introduction",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-12/agenda",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-12/semaine",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-12/mois",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-13/lacunes",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-14/carte",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-14/detail",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-15/profil",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-15/notifications",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-15/automatismes",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-15/modeles",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-16/bilan",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-17/groupe",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-18/recherche",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-20/introuvable",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-20/hors-ligne",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-20/acces-refuse",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-09/resultat",
+      "ok": true
+    },
+    {
+      "width": 1920,
+      "id": "SCR-11/epreuve",
+      "ok": true
+    },
+    {
+      "width": 1920,
       "id": "SCR-11/resultats",
       "ok": true
     }
