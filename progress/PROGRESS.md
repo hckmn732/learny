@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-17T03:54:52.372Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-17T08:10:26.699Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 117 |
+| Terminées | 118 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 15 |
+| En attente de dépendances | 14 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **88.6 %** |
-| Avancement V1 | 94.4 % |
+| **Avancement global** | **89.4 %** |
+| Avancement V1 | 95.2 % |
 | Prochaine action | checkpoint CP-7 |
 
 ## Phases et checkpoints
@@ -29,7 +29,7 @@
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
 | P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ⏳ |
-| P8 | Plateforme, qualité et livraison V1 | 1/8 | CP-8 | ⏳ |
+| P8 | Plateforme, qualité et livraison V1 | 2/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
 
 ## Détail des spécifications
@@ -156,7 +156,7 @@
 | [SPEC-802](../specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md) | Responsive et mobile | P8 | ⏳ waiting | 0 | — | SPEC-618, SPEC-725, SPEC-724, SPEC-616 |
 | [SPEC-803](../specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md) | Accessibilité WCAG 2.2 AA | P8 | ⏳ waiting | 0 | — | SPEC-802 |
 | [SPEC-804](../specs/p8-livraison-v1/SPEC-804-performances.md) | Performances | P8 | ⏳ waiting | 0 | — | SPEC-802 |
-| [SPEC-805](../specs/p8-livraison-v1/SPEC-805-securite.md) | Sécurité | P8 | ⏳ waiting | 0 | — | SPEC-802 |
+| [SPEC-805](../specs/p8-livraison-v1/SPEC-805-securite.md) | Sécurité | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802 |
 | [SPEC-806](../specs/p8-livraison-v1/SPEC-806-rgpd-et-pages-legales.md) | RGPD et pages légales | P8 | ⏳ waiting | 0 | — | SPEC-802, SPEC-211 |
 | [SPEC-807](../specs/p8-livraison-v1/SPEC-807-parcours-de-bout-en-bout-et-non-regression-globale.md) | Parcours de bout en bout et non-régression globale | P8 | ⏳ waiting | 0 | — | SPEC-803, SPEC-804, SPEC-805, SPEC-806, SPEC-801 |
 | [SPEC-808](../specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md) | Mise en production et version 1.0.0 | P8 | ⏳ waiting | 0 | — | SPEC-807, SPEC-013 |
