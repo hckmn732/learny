@@ -188,7 +188,8 @@ export async function captureReferences({
   const fontCache = new Map();
   try {
     for (const scenario of scenarios) {
-      for (const [viewport, size] of Object.entries(viewports)) {
+      for (const viewport of scenario.viewports ?? Object.keys(viewports)) {
+        const size = viewports[viewport];
         const label = `${scenario.screenId}/${scenario.state}/${viewport}`;
         // Fresh context per capture: empty storage and cookies (ET-3, CL-7).
         const context = await browser.newContext({ viewport: size, locale: LOCALE, timezoneId: TIME_ZONE, deviceScaleFactor: 1, reducedMotion: 'reduce' });
