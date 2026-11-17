@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T13:44:57.144Z",
+  "updatedAt": "2026-11-17T17:04:25.382Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5992,16 +5992,16 @@
       "completedAt": null,
       "branch": "spec/SPEC-803-accessibilite-wcag-2-2-aa",
       "commit": null,
-      "lastError": "acceptance: 0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌",
+      "lastError": "acceptance: 0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌ | e2e: 9 réussi(s), 1 échec(s), 105 vidéo(s) | visual: 2 test(s) @visual réussi(s) (mode tokens)",
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-17T13:39:22.218Z",
+          "at": "2026-11-17T16:53:14.125Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-17T13:40:25.447Z",
+          "at": "2026-11-17T16:54:10.067Z",
           "details": ""
         },
         "unit": {
@@ -6011,8 +6011,23 @@
         },
         "acceptance": {
           "status": "failed",
-          "at": "2026-11-17T13:43:46.530Z",
+          "at": "2026-11-17T17:04:25.382Z",
           "details": "0/7 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5, CA-6, CA-7 ; 1 ❌"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-17T14:31:25.515Z",
+          "details": "5 test(s) [SPEC-803] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "failed",
+          "at": "2026-11-17T17:04:25.156Z",
+          "details": "9 réussi(s), 1 échec(s), 105 vidéo(s)"
+        },
+        "visual": {
+          "status": "failed",
+          "at": "2026-11-17T17:04:25.156Z",
+          "details": "2 test(s) @visual réussi(s) (mode tokens)"
         }
       }
     },
