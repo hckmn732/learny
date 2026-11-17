@@ -79,10 +79,12 @@ function vitest(kind, script) {
   const file = path.join(out, `${kind}.json`);
   fs.rmSync(file, { force: true });
   const isInt = (f) => /(^|\/)test\/integration\//.test(f) || /\.int\.test\./.test(f);
-  const files = tagged.filter((f) => (kind === 'integration' ? isInt(f) : !isInt(f)));
+  // Unitaires : tout le projet (2 à 3 min, attrape les régressions hors de la spec) ;
+  // intégration : seulement les fichiers étiquetés (base partagée, plusieurs minutes sinon).
+  const files = kind === 'integration' ? tagged.filter(isInt) : [];
   const filter = files.length ? ` ${files.map((f) => JSON.stringify(f)).join(' ')}` : '';
-  if (!files.length) console.log(`(aucun fichier ${kind} ne contient [${tag}] : repli sur tout le projet)`);
-  const code = timed(kind, () => run(`pnpm -s ${script}${filter} -t "${tag}" --reporter=default --reporter=json --outputFile.json="${file}"`));
+  if (kind === 'integration' && !files.length) console.log(`(aucun fichier ${kind} ne contient [${tag}] : repli sur tout le projet)`);
+  const code = timed(kind, () => run(`pnpm -s ${script}${filter}${kind === 'integration' ? ` -t "${tag}"` : ''} --reporter=default --reporter=json --outputFile.json="${file}"`));
   let n = 0;
   let failed = 0;
   if (fs.existsSync(file)) {
