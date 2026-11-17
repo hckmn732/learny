@@ -68,8 +68,12 @@ test('menu en surimpression et panneaux plein écran @SPEC-802 @mobile', async (
     await page.getByTestId('header-notifications').click();
     await expect(notifications).toBeVisible({ timeout: 2_000 });
   }).toPass({ timeout: 15_000 });
+  // EF-3 — the panel covers the window: origin at 0,0 and full size, not only full width.
   const notificationBox = await notifications.boundingBox();
+  expect(notificationBox?.x ?? -1).toBe(0);
+  expect(notificationBox?.y ?? -1).toBe(0);
   expect(notificationBox?.width ?? 0).toBeGreaterThanOrEqual(389);
+  expect(notificationBox?.height ?? 0).toBeGreaterThanOrEqual(843);
   await expect(page.getByTestId('panel-close').first()).toBeVisible();
   await page.getByTestId('panel-close').first().click();
   await expect(notifications).toBeHidden();
@@ -80,7 +84,9 @@ test('menu en surimpression et panneaux plein écran @SPEC-802 @mobile', async (
     await expect(account).toBeVisible({ timeout: 2_000 });
   }).toPass({ timeout: 15_000 });
   const accountBox = await account.boundingBox();
+  expect(accountBox?.x ?? -1).toBe(0);
   expect(accountBox?.width ?? 0).toBeGreaterThanOrEqual(389);
+  expect(accountBox?.height ?? 0).toBeGreaterThanOrEqual(843);
   await page.getByTestId('panel-close').first().click();
   await expect(account).toBeHidden();
 

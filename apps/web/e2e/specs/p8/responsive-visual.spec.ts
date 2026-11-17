@@ -98,16 +98,20 @@ test('comparaison aux références menu masqué 390×844 @SPEC-802 @visual', asy
   for (const screen of SCREENS) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(screen.route);
+    // Hydrated mobile header (search reduced to an icon) and loaded data, no skeleton left.
+    await expect(page.getByTestId('header-search-toggle')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
     await waitForFonts(page);
     await expect(page.getByTestId('sidebar')).toBeHidden();
     const reference = path.join(REFERENCES, `${screen.id}-menu-masque-mobile.png`);
     const relative = `design/references/${screen.id}-menu-masque-mobile.png`;
     const image = MANIFEST.references.find((entry) => entry.file === relative);
     if (image === undefined) throw new Error(`référence absente du manifeste : ${relative}`);
-    // The mockups are rendered at 90 %: 390 CSS px ≈ 433 reference pixels. A fullPage capture
-    // may overflow horizontally (SCR-03 is 859 px wide); only the visible left region counts.
-    const regionWidth = Math.min(image.width, Math.round(390 / 0.9));
-    const regionHeight = Math.min(image.height, Math.round((844 * regionWidth) / 390));
+    // The reference pixels are CSS pixels of a 390 px window: the mockup overflows to the right
+    // (no media queries), so only the visible 390 × 844 window is compared, without rescaling.
+    const regionWidth = Math.min(image.width, 390);
+    const regionHeight = Math.min(image.height, 844);
     const actual = await page.screenshot({ animations: 'disabled' });
     const comparison = compareWithReferenceRegion(
       actual,

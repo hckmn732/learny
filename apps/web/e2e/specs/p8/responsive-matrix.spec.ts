@@ -13,6 +13,7 @@ import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {
   expectMobileInputFontSize,
+  expectNoClippedContent,
   expectNoHorizontalScroll,
   expectTouchTargets,
 } from '@learny/testing/touch-targets';
@@ -129,6 +130,7 @@ for (const width of RESPONSIVE_WIDTHS) {
         console.log(`[matrice ${String(width.width)}] ${entry.id}`);
         await renderEntry(context, page, baseURL, entry);
         await expectNoHorizontalScroll(page);
+        await expectNoClippedContent(page);
         if (width.width === 390 || width.width === 1024) {
           await expectTouchTargets(page, { min: 44 });
         }
