@@ -42,10 +42,10 @@ export function buildReport({ lighthouse, inp, k6, k6Version = 'inconnu' }) {
     .filter(([name]) => name.startsWith('route_'))
     .map(([name, metric]) => ({
       name,
-      p50: metric.values?.['p(50)'] ?? metric.p50 ?? null,
-      p95: metric.values?.['p(95)'] ?? metric.p95 ?? null,
-      p99: metric.values?.['p(99)'] ?? metric.p99 ?? null,
-      ok: (metric.values?.['p(95)'] ?? Infinity) < 300,
+      p50: metric.values?.['p(50)'] ?? metric['p(50)'] ?? metric.p50 ?? null,
+      p95: metric.values?.['p(95)'] ?? metric['p(95)'] ?? metric.p95 ?? null,
+      p99: metric.values?.['p(99)'] ?? metric['p(99)'] ?? metric.p99 ?? null,
+      ok: (metric.values?.['p(95)'] ?? metric['p(95)'] ?? Infinity) < 300,
     }));
   const httpDuration = k6Metrics.http_req_duration ?? {};
   const failed = k6Metrics.http_req_failed ?? {};
@@ -58,10 +58,10 @@ export function buildReport({ lighthouse, inp, k6, k6Version = 'inconnu' }) {
     inp: { ok: inp?.ok ?? false, scenarios },
     k6: {
       ok: k6?.ok ?? false,
-      p50: httpDuration.values?.['p(50)'] ?? httpDuration.p50 ?? null,
-      p95: httpDuration.values?.['p(95)'] ?? httpDuration.p95 ?? null,
-      p99: httpDuration.values?.['p(99)'] ?? httpDuration.p99 ?? null,
-      failureRate: failed.values?.rate ?? failed.rate ?? null,
+      p50: httpDuration.values?.['p(50)'] ?? httpDuration['p(50)'] ?? httpDuration.p50 ?? null,
+      p95: httpDuration.values?.['p(95)'] ?? httpDuration['p(95)'] ?? httpDuration.p95 ?? null,
+      p99: httpDuration.values?.['p(99)'] ?? httpDuration['p(99)'] ?? httpDuration.p99 ?? null,
+      failureRate: failed.values?.rate ?? failed.rate ?? failed.value ?? null,
       status429: notFound.count ?? notFound.values?.count ?? 0,
       routes,
     },

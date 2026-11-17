@@ -14,6 +14,9 @@ const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const NOW = new Date('2026-11-11T12:20:00Z');
 const PASSES = 5;
 const BUDGET = 200;
+
+// Five passes under CPU x4 and a 1.6 Mbit/s network take several minutes per scenario.
+test.setTimeout(10 * 60_000);
 const IIFE = path.join(
   ROOT,
   'node_modules',
