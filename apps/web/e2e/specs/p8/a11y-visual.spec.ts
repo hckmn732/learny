@@ -30,6 +30,7 @@ const SECTIONS = [
   'Établissement de cette déclaration',
   'Retour d’information et contact',
   'Voies de recours',
+  'Dérogations',
 ];
 
 test('déclaration d’accessibilité, jetons et structure @SPEC-803 @visual', async ({
