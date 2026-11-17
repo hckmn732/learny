@@ -256,7 +256,7 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 89321,
+                  "duration": 87419,
                   "errors": [],
                   "stdout": [
                     {
@@ -400,7 +400,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:38:53.981Z",
+                  "startTime": "2026-11-17T17:58:28.239Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -411,12 +411,22 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-4.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-1.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-5.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-4.webm"
                     },
                     {
                       "name": "video",
@@ -431,7 +441,17 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-8.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-10.webm"
                     },
                     {
                       "name": "video",
@@ -441,22 +461,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-3.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-11.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-12.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-13.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-2.webm"
                     },
                     {
                       "name": "video",
@@ -471,12 +481,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-16.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-17.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-17.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-16.webm"
                     },
                     {
                       "name": "video",
@@ -491,22 +501,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-20.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-21.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-12.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-10.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-1.webm"
                     },
                     {
                       "name": "video",
@@ -521,12 +521,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-24.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-25.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-25.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-24.webm"
                     },
                     {
                       "name": "video",
@@ -547,11 +547,6 @@
                       "name": "video",
                       "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-29.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-20.webm"
                     },
                     {
                       "name": "video",
@@ -581,12 +576,17 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-37.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-38.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-37.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-11.webm"
                     },
                     {
                       "name": "video",
@@ -596,22 +596,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-40.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-32.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-31.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-42.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-41.webm"
                     },
                     {
                       "name": "video",
@@ -621,12 +611,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-44.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-40.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-46.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-44.webm"
                     },
                     {
                       "name": "video",
@@ -636,7 +626,17 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-41.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-46.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-42.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-desktop-SPEC-803-desktop/video-32.webm"
                     },
                     {
                       "name": "video",
@@ -688,12 +688,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "skipped",
-                  "duration": 249,
+                  "duration": 262,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:40:34.609Z",
+                  "startTime": "2026-11-17T18:00:06.906Z",
                   "annotations": [
                     {
                       "type": "skip",
@@ -734,10 +734,10 @@
               "projectName": "mobile",
               "results": [
                 {
-                  "workerIndex": 2,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 348585,
+                  "duration": 358623,
                   "errors": [],
                   "stdout": [
                     {
@@ -881,7 +881,7 @@
                   ],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:40.076Z",
+                  "startTime": "2026-11-17T18:01:06.793Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -892,7 +892,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-5.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-1.webm"
                     },
                     {
                       "name": "video",
@@ -907,22 +912,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-1.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-6.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-3.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-7.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-8.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-5.webm"
                     },
                     {
                       "name": "video",
@@ -932,7 +927,17 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-11.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-8.webm"
                     },
                     {
                       "name": "video",
@@ -947,12 +952,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-13.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-14.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-14.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-13.webm"
                     },
                     {
                       "name": "video",
@@ -972,12 +977,17 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-18.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-19.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-19.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-20.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-18.webm"
                     },
                     {
                       "name": "video",
@@ -1032,7 +1042,7 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-31.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-33.webm"
                     },
                     {
                       "name": "video",
@@ -1042,12 +1052,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-33.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-34.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-34.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-31.webm"
                     },
                     {
                       "name": "video",
@@ -1062,11 +1072,6 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-38.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-37.webm"
                     },
                     {
@@ -1077,17 +1082,22 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-38.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-40.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-42.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-41.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-41.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-42.webm"
                     },
                     {
                       "name": "video",
@@ -1108,16 +1118,6 @@
                       "name": "video",
                       "contentType": "video/webm",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-46.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-6.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-a11y-audit-audit-axe-mobile-SPEC-803-mobile-mobile/video-20.webm"
                     },
                     {
                       "name": "video",
@@ -1167,12 +1167,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2221,
+                  "duration": 2302,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:40:38.674Z",
+                  "startTime": "2026-11-17T18:00:10.971Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1241,12 +1241,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "skipped",
-                  "duration": 197,
+                  "duration": 199,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:40:44.807Z",
+                  "startTime": "2026-11-17T18:00:17.256Z",
                   "annotations": [
                     {
                       "type": "skip",
@@ -1287,15 +1287,15 @@
               "projectName": "mobile",
               "results": [
                 {
-                  "workerIndex": 2,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2117,
+                  "duration": 1938,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:47:44.486Z",
+                  "startTime": "2026-11-17T18:07:20.996Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1353,12 +1353,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2575,
+                  "duration": 2765,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:40:45.030Z",
+                  "startTime": "2026-11-17T18:00:17.479Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1413,12 +1413,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6641,
+                  "duration": 6211,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:40:51.288Z",
+                  "startTime": "2026-11-17T18:00:24.080Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1473,12 +1473,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1942,
+                  "duration": 2437,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:06.125Z",
+                  "startTime": "2026-11-17T18:00:38.064Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1539,7 +1539,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:12.073Z",
+                  "startTime": "2026-11-17T18:00:44.577Z",
                   "annotations": [
                     {
                       "type": "fixme",
@@ -1593,7 +1593,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:12.073Z",
+                  "startTime": "2026-11-17T18:00:44.578Z",
                   "annotations": [
                     {
                       "type": "fixme",
@@ -1647,7 +1647,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:12.074Z",
+                  "startTime": "2026-11-17T18:00:44.578Z",
                   "annotations": [
                     {
                       "type": "fixme",
@@ -1687,12 +1687,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2335,
+                  "duration": 2474,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:12.074Z",
+                  "startTime": "2026-11-17T18:00:44.578Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1723,7 +1723,7 @@
         },
         {
           "title": "parcours clavier paramètres @SPEC-803",
-          "ok": false,
+          "ok": true,
           "tags": [
             "SPEC-803"
           ],
@@ -1738,38 +1738,19 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 6091,
-                  "error": {
-                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('settings-tab-profil')\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('settings-tab-profil') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('settings-tab-profil')\u001b[22m\n\u001b[2m    3 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" data-testid=\"settings-tab-profil\" id=\"radix-_R_n5av5ubtb_-trigger-profil\" aria-controls=\"radix-_R_n5av5ubtb_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-6…>Profil</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    11 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_j_-trigger-profil\" data-testid=\"settings-tab-profil\" aria-controls=\"radix-_r_j_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-600 data-[state=a…>Profil</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
-                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('settings-tab-profil')\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('settings-tab-profil') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('settings-tab-profil')\u001b[22m\n\u001b[2m    3 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" data-testid=\"settings-tab-profil\" id=\"radix-_R_n5av5ubtb_-trigger-profil\" aria-controls=\"radix-_R_n5av5ubtb_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-6…>Profil</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    11 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_j_-trigger-profil\" data-testid=\"settings-tab-profil\" aria-controls=\"radix-_r_j_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-600 data-[state=a…>Profil</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:304:28",
-                    "location": {
-                      "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
-                      "column": 28,
-                      "line": 304
-                    },
-                    "snippet": "  302 |   await expect(profileTab).toHaveAttribute('aria-selected', 'true');\n  303 |   await profileTab.focus();\n> 304 |   await expect(profileTab).toBeFocused();\n      |                            ^\n  305 |   await profileTab.press('ArrowRight');\n  306 |   await expect(page.getByTestId('settings-tab-notifications')).toHaveAttribute(\n  307 |     'aria-selected',"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
-                        "column": 28,
-                        "line": 304
-                      },
-                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('settings-tab-profil')\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByTestId('settings-tab-profil') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('settings-tab-profil')\u001b[22m\n\u001b[2m    3 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" data-testid=\"settings-tab-profil\" id=\"radix-_R_n5av5ubtb_-trigger-profil\" aria-controls=\"radix-_R_n5av5ubtb_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-6…>Profil</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    11 × locator resolved to <button role=\"tab\" type=\"button\" tabindex=\"-1\" data-state=\"active\" aria-selected=\"true\" data-orientation=\"horizontal\" data-radix-collection-item=\"\" id=\"radix-_r_j_-trigger-profil\" data-testid=\"settings-tab-profil\" aria-controls=\"radix-_r_j_-content-profil\" class=\"touch-target inline-flex cursor-pointer items-center justify-center border-0 bg-transparent px-14 text-ink-muted min-h-40 rounded-10 text-14 font-500 hover:bg-surface-muted data-[state=active]:bg-ink data-[state=active]:font-600 data-[state=a…>Profil</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  302 |   await expect(profileTab).toHaveAttribute('aria-selected', 'true');\n  303 |   await profileTab.focus();\n> 304 |   await expect(profileTab).toBeFocused();\n      |                            ^\n  305 |   await profileTab.press('ArrowRight');\n  306 |   await expect(page.getByTestId('settings-tab-notifications')).toHaveAttribute(\n  307 |     'aria-selected',\n    at /home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts:304:28"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 2661,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:14.805Z",
+                  "startTime": "2026-11-17T18:00:47.486Z",
                   "annotations": [],
                   "attachments": [
                     {
                       "name": "screenshot",
                       "contentType": "image/png",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/test-failed-1.png"
+                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/test-finished-1.png"
                     },
                     {
                       "name": "video",
@@ -1777,29 +1758,14 @@
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/video.webm"
                     },
                     {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/error-context.md"
-                    },
-                    {
                       "name": "trace",
                       "contentType": "application/zip",
                       "path": "/home/ubuntu/projects/learny-wt-803/test-results/artifacts/p8-keyboard-journeys-parcours-clavier-paramètres-SPEC-803-desktop/trace.zip"
                     }
-                  ],
-                  "errorLocation": {
-                    "file": "/home/ubuntu/projects/learny-wt-803/apps/web/e2e/specs/p8/keyboard-journeys.spec.ts",
-                    "column": 28,
-                    "line": 304
-                  }
+                  ]
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "4f52ce58e78772556ace-4ca8c74d477b7b5a08c3",
@@ -1847,7 +1813,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:25.132Z",
+                  "startTime": "2026-11-17T18:00:54.051Z",
                   "annotations": [
                     {
                       "type": "fixme",
@@ -1892,15 +1858,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
+                  "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3221,
+                  "duration": 2989,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T17:41:26.987Z",
+                  "startTime": "2026-11-17T18:00:54.058Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -1934,11 +1900,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T17:38:14.262Z",
-    "duration": 579913.797,
-    "expected": 9,
+    "startTime": "2026-11-17T17:57:48.412Z",
+    "duration": 582089.251,
+    "expected": 10,
     "skipped": 6,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

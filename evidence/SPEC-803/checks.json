@@ -1,17 +1,17 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-17T17:32:45.908Z",
+    "at": "2026-11-17T17:54:55.305Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-17T17:36:17.464Z",
+    "at": "2026-11-17T17:55:58.579Z",
     "details": ""
   },
   "unit": {
-    "status": "failed",
-    "at": "2026-11-17T17:38:06.490Z",
+    "status": "passed",
+    "at": "2026-11-17T17:57:45.151Z",
     "details": "17 test(s) [SPEC-803] réussi(s), 0 échec(s)"
   },
   "integration": {
@@ -20,18 +20,18 @@
     "details": "5 test(s) [SPEC-803] réussi(s), 0 échec(s)"
   },
   "e2e": {
-    "status": "failed",
-    "at": "2026-11-17T17:47:55.077Z",
-    "details": "9 réussi(s), 1 échec(s), 106 vidéo(s)"
+    "status": "passed",
+    "at": "2026-11-17T18:07:31.312Z",
+    "details": "10 réussi(s), 0 échec(s), 106 vidéo(s)"
   },
   "visual": {
-    "status": "failed",
-    "at": "2026-11-17T17:47:55.077Z",
+    "status": "passed",
+    "at": "2026-11-17T18:07:31.312Z",
     "details": "3 test(s) @visual réussi(s) (mode tokens)"
   },
   "acceptance": {
     "status": "passed",
-    "at": "2026-11-17T17:47:55.260Z",
+    "at": "2026-11-17T18:07:31.521Z",
     "details": "7/7 critères ✅"
   }
 }
