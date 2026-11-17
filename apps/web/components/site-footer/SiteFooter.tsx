@@ -1,33 +1,29 @@
-import Link from 'next/link';
+import { cn, Link } from '@learny/ui';
 
-import { cn } from '@learny/ui';
+import { SITE_FOOTER_LINKS, SITE_FOOTER_NAV_LABEL } from '../../lib/site-footer-links';
 
-import { SITE_FOOTER_LINKS } from '../../lib/site-footer-links';
-import { fr } from '../../messages/fr';
-
+/**
+ * Common footer of the public pages (ADR-0204, SPEC-806 EF-7): one `footer`, one named navigation
+ * and only the four legal entries of the registry. It loads no tracking script and sets no cookie.
+ */
 export interface SiteFooterProps {
   className?: string;
 }
 
-/**
- * Public footer shared by authentication, legal, accessibility and offline pages (ADR-0204,
- * SPEC-803 ET-6). The registry carries the normative order; the nav is named so assistive
- * technologies can jump straight to it (3.2.3, 3.2.6).
- */
 export function SiteFooter({ className }: Readonly<SiteFooterProps>) {
   return (
     <footer
-      className={cn('w-full border-t border-solid border-border bg-canvas px-24 py-20', className)}
+      className={cn(
+        'mx-auto w-full max-w-[75rem] border-t border-solid border-border px-24 py-20',
+        className,
+      )}
       data-testid="site-footer"
     >
-      <nav aria-label={fr.siteFooter.navLabel} data-testid="site-footer-nav">
-        <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-x-20 gap-y-8 p-0">
+      <nav aria-label={SITE_FOOTER_NAV_LABEL} data-testid="site-footer-nav">
+        <ul className="m-0 flex list-none flex-wrap gap-x-20 gap-y-8 p-0 text-14">
           {SITE_FOOTER_LINKS.map((link) => (
             <li key={link.href}>
-              <Link
-                className="text-14 text-ink-muted underline-offset-4 hover:text-ink hover:underline focus-visible:underline"
-                href={link.href}
-              >
+              <Link href={link.href} variant="subtle" weight="semibold">
                 {link.label}
               </Link>
             </li>

@@ -1,0 +1,517 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-806/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-806",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-806/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3163",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-806/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3163",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-806/test-results/sdd/SPEC-806/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-806/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-806/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3163/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3163",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p8/spec-806.spec.ts",
+      "file": "p8/spec-806.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "consulte et accepte les textes légaux @SPEC-806",
+          "ok": true,
+          "tags": [
+            "SPEC-806"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8721,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T13:44:02.610Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "legal-cgu-consultation",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/attachments/legal-cgu-consultation-d4203ac6a4394c659f3cd3045a8bca08f808f869.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/attachments/axe-042fed39ea91626913fb60685715bac6043710ef.json"
+                    },
+                    {
+                      "name": "legal-acceptation-case",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/attachments/legal-acceptation-case-f9fe437e2d435043507667bad749436112d891fd.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/attachments/axe-79fe459dcb28b7c74ca28b7d00bbd2e2eba56440.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-consulte-et-accepte-les-textes-légaux-SPEC-806-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46c30437ef64b342fdce-e99d225a4f17324bf058",
+          "file": "p8/spec-806.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "pages légales conformes @SPEC-806 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-806",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9008,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T13:44:12.025Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/axe-1b2386492173eb81017b05e9cc30cee1aaaef291.json"
+                    },
+                    {
+                      "name": "legal-cgu",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/legal-cgu-657531900949218fbe8aa73805f22209c817bb44.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/axe-413ba8f52a5bd2a44aac042dad8e66cbc2ad041e.json"
+                    },
+                    {
+                      "name": "legal-confidentialite",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/legal-confidentialite-6a622695c52d31eaadd452eb80d63ae5d44f69ae.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/axe-80ef4f8ebde3466828ac55f7ae89acf5a772a7d2.json"
+                    },
+                    {
+                      "name": "legal-mentions",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/attachments/legal-mentions-b7ea4ee6c93d0053c525cfa27e6d818c03666a3b.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10400,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-17T13:44:23.520Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/axe-10869a4b8b360d81601f1da437e5c72738296199.json"
+                    },
+                    {
+                      "name": "legal-cgu",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/legal-cgu-afef3952a2ca7e62aaada0924c076c8d221afbcb.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/axe-ef1c7f957e3e4407faf3a81db57624bf3a3cc853.json"
+                    },
+                    {
+                      "name": "legal-confidentialite",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/legal-confidentialite-67b9ee03db621106bc799a5f9acc9240482ebd25.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/axe-937f1cfaab3b3927062b5cbad3666e504c386265.json"
+                    },
+                    {
+                      "name": "legal-mentions",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/attachments/legal-mentions-fa34f6f3f1373dfb0709abfa7808b2a8453a0903.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-806/test-results/artifacts/p8-spec-806-pages-légales-conformes-SPEC-806-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46c30437ef64b342fdce-0341247c773d34a03c33",
+          "file": "p8/spec-806.spec.ts",
+          "line": 128,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-17T13:43:18.757Z",
+    "duration": 76408.55,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

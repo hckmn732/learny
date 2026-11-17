@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
 
+import { SITE_FOOTER_NAV_LABEL } from '../../lib/site-footer-links';
+
 import { authStepForPath, AuthLayout } from './auth-layout';
 
 afterEach(cleanup);
@@ -55,7 +57,10 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
     // DOM order: the Learny panel comes before the form column.
     expect(layout.firstElementChild).toBe(panel);
     expect(panel.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(screen.queryByRole('navigation')).toBeNull();
+    // SPEC-806: the only navigation is the named legal footer; no menu of the connected shell.
+    expect(screen.getAllByRole('navigation').map((nav) => nav.getAttribute('aria-label'))).toEqual([
+      SITE_FOOTER_NAV_LABEL,
+    ]);
   });
 
   it('affiche les textes, les sept étapes et l’état accessible de la maquette (EF-4, CA-3)', () => {
@@ -117,7 +122,9 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
     expect(screen.getByTestId('auth-panel').className).toContain('p-40');
     expect(screen.getByTestId('auth-step-counter').textContent).toBe('Connexion');
     expect(screen.getByTestId('auth-step-1').className).toContain('bg-white');
-    expect(container.querySelector('nav')).toBeNull();
+    expect(screen.getAllByRole('navigation').map((nav) => nav.getAttribute('aria-label'))).toEqual([
+      SITE_FOOTER_NAV_LABEL,
+    ]);
     expect(container.querySelector('[data-testid="app-sidebar"]')).toBeNull();
   });
 });

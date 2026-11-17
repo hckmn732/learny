@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 
 // SPEC-803 EF-10 — public declaration, rendered from the legal Markdown template with the
 // validated legal identity. No connected shell: header, declaration card and public footer.
-export const dynamic = 'force-static';
+// Per request: a static page carries no CSP nonce and its scripts would be refused (SPEC-805).
+export const dynamic = 'force-dynamic';
 
 export default function AccessibilitePage() {
   const env = getServerEnv();
