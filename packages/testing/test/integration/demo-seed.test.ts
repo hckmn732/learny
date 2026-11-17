@@ -57,8 +57,10 @@ describe('[SPEC-115] demo seed', () => {
     expect(second.checks['sap.notions']?.observed).toBe(48);
     expect(second.checks['group.members']?.observed).toBe(3);
     expect(second.checks['agenda.days']?.observed).toBe(5);
-    expect(second.tableCounts['public.notifications']).toBe(10);
-    expect(second.tableCounts['public.schedule_slots']).toBe(24);
+    // Extension QA (hors SPEC-115) : +3 notifications (Camille, Hugo, Alex sur agile) et +2
+    // créneaux d'agenda privés (Camille en cadrage, Hugo sur sa formation en pause).
+    expect(second.tableCounts['public.notifications']).toBe(13);
+    expect(second.tableCounts['public.schedule_slots']).toBe(27);
   });
 
   it('CA-1 — les identifiants fixes désignent les mêmes lignes après deux passages', async () => {
@@ -169,7 +171,8 @@ describe('[SPEC-115] demo seed', () => {
       expect(member.alexCourses).toBe(0);
       expect(member.alexStates).toBe(0);
       expect(member.alexAgenda).toBe(0);
-      expect(member.ownResources).toBe(1);
+      // Extension QA (hors SPEC-115) : +1 apport personnel par membre (leadership/scrum).
+      expect(member.ownResources).toBe(2);
       expect(member.groupProgress).toBe(3);
     }
     expect(observations.alex.sap).toBe(1);

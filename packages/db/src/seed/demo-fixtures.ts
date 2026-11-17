@@ -55,7 +55,8 @@ export interface DemoSource {
   element: string;
 }
 
-export type DemoFormationKey = 'sap' | 'agile' | 'python' | 'excel' | 'english';
+export type DemoFormationKey =
+  'sap' | 'agile' | 'python' | 'excel' | 'english' | 'leadership' | 'scrum';
 export type DemoUserKey = 'alex' | 'camille' | 'hugo';
 export type DemoGapNature = 'forgetting' | 'confusion' | 'misunderstanding' | 'application';
 export type DemoSlotKind =
@@ -213,6 +214,8 @@ export interface DemoModuleFixture {
 
 export interface DemoFormationFixture {
   key: DemoFormationKey;
+  /** Propriétaire de la formation ; `alex` pour les cinq formations de SPEC-115 (ADR-0071). */
+  owner: DemoUserKey;
   title: string;
   /** ADR-0162 — stored sigil shown on the home and sidebar cards. */
   monogram: string;
@@ -800,9 +803,53 @@ const ENGLISH_MODULES = compactModules(
   })),
 );
 
+const SCRUM = 'scrum';
+
+/**
+ * Extension QA (hors SPEC-115) : formation de Camille encore au cadrage, sans aucun module —
+ * donne un état d'écran absent du jeu de démonstration d'origine.
+ */
+const LEADERSHIP_MODULES: readonly DemoModuleFixture[] = [];
+
+const SCRUM_MODULES = compactModules(SCRUM, [
+  {
+    title: 'Rôles et cérémonies Scrum',
+    short: 'Rôles et cérémonies',
+    chapters: ['Product Owner et Scrum Master', 'Sprint planning et revue'],
+    notionsPerChapter: 2,
+    start: '2026-10-05',
+    end: '2026-10-09',
+  },
+  {
+    title: 'Artefacts et backlog',
+    short: 'Artefacts',
+    chapters: ['Backlog produit', 'Incrément'],
+    notionsPerChapter: 2,
+    start: '2026-10-12',
+    end: '2026-10-16',
+  },
+  {
+    title: 'Mise à l’échelle',
+    short: 'Mise à l’échelle',
+    chapters: ['Scrum of Scrums', 'Dépendances entre équipes'],
+    notionsPerChapter: 2,
+    start: '2026-10-19',
+    end: '2026-10-23',
+  },
+  {
+    title: 'Préparation à la certification',
+    short: 'Certification',
+    chapters: ['Examen blanc', 'Révisions ciblées'],
+    notionsPerChapter: 2,
+    start: '2026-10-26',
+    end: '2026-10-30',
+  },
+]);
+
 export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   {
     key: 'sap',
+    owner: 'alex',
     title: 'SAP S/4HANA Finance',
     monogram: 'SAP',
     accentColor: 'indigo',
@@ -833,6 +880,7 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   },
   {
     key: 'agile',
+    owner: 'alex',
     title: 'Gestion de projet agile',
     monogram: 'AG',
     accentColor: 'green',
@@ -861,6 +909,7 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   },
   {
     key: 'python',
+    owner: 'alex',
     title: "Python pour l'analyse de données",
     monogram: 'PY',
     accentColor: 'orange',
@@ -889,6 +938,7 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   },
   {
     key: 'excel',
+    owner: 'alex',
     title: "Excel pour l'analyse financière",
     monogram: 'XL',
     accentColor: 'teal',
@@ -917,6 +967,7 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
   },
   {
     key: 'english',
+    owner: 'alex',
     title: 'Anglais professionnel B2',
     monogram: 'EN',
     accentColor: 'violet',
@@ -943,6 +994,68 @@ export const DEMO_FORMATIONS: readonly DemoFormationFixture[] = [
     },
     modules: ENGLISH_MODULES,
   },
+  // Extension QA (hors SPEC-115, hors fidélité aux maquettes) : deux formations personnelles de
+  // Camille et Hugo, pour donner à la QA manuelle des états absents du jeu d'origine (cadrage sans
+  // module, formation en pause). `source.screen` vaut `fixture` : aucune maquette n'illustre ces
+  // deux cartes (cf. doc sur `DemoSource.screen`).
+  {
+    key: 'leadership',
+    owner: 'camille',
+    title: 'Leadership et influence',
+    monogram: 'LI',
+    accentColor: 'teal',
+    description: 'Mieux faire adopter ses décisions par l’équipe et les parties prenantes.',
+    objectives: ['dialogue'],
+    status: 'cadrage',
+    volumeHours: null,
+    startDate: null,
+    endDate: null,
+    defaultThreshold: 80,
+    currentModulePosition: null,
+    progressPercent: 0,
+    nextActivity: 'Décrire le programme',
+    nextActivityAt: null,
+    maintenanceMode: null,
+    resultPercent: null,
+    retentionPercent: null,
+    dueNotionCount: 0,
+    group: false,
+    source: {
+      screen: 'fixture',
+      file: 'Main.dc.html',
+      element: 'extension QA : carte de formation au cadrage, sans module (compte Camille)',
+    },
+    modules: LEADERSHIP_MODULES,
+  },
+  {
+    key: 'scrum',
+    owner: 'hugo',
+    title: 'Certification Scrum Master',
+    monogram: 'SM',
+    accentColor: 'violet',
+    description: 'Préparer la certification Scrum Master et accompagner la mise à l’échelle.',
+    objectives: ['exam'],
+    status: 'paused',
+    volumeHours: 40,
+    startDate: '2026-10-05',
+    endDate: '2026-10-30',
+    defaultThreshold: 80,
+    currentModulePosition: 3,
+    progressPercent: 45,
+    nextActivity: 'Reprendre quand vous serez prêt',
+    nextActivityAt: null,
+    maintenanceMode: null,
+    resultPercent: null,
+    retentionPercent: 79,
+    dueNotionCount: 2,
+    group: false,
+    source: {
+      screen: 'fixture',
+      file: 'Main.dc.html',
+      element: 'extension QA : carte de formation en pause après le module 2 (compte Hugo)',
+    },
+    modules: SCRUM_MODULES,
+  },
 ] as const;
 
 export function demoFormationId(key: DemoFormationKey): string {
@@ -967,6 +1080,9 @@ export function demoNotionId(notionKeyValue: string): string {
 
 export const SAP_FORMATION = DEMO_FORMATIONS[0] as DemoFormationFixture;
 export const AGILE_FORMATION = DEMO_FORMATIONS[1] as DemoFormationFixture;
+/** Extension QA (hors SPEC-115) — formations personnelles de Camille et Hugo. */
+export const LEADERSHIP_FORMATION = DEMO_FORMATIONS[5] as DemoFormationFixture;
+export const SCRUM_FORMATION = DEMO_FORMATIONS[6] as DemoFormationFixture;
 export const SAP_MODULE_COUNT = SAP_FORMATION.modules.length;
 export const SAP_NOTION_COUNT = SAP_FORMATION.modules.reduce(
   (total, module) => total + module.notions.length,
