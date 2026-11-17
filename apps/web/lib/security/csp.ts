@@ -90,7 +90,10 @@ export function cspSources(env: CspEnvironment = {}) {
 /**
  * Builds the policy for one response. `script-src` never contains `unsafe-eval` nor
  * `unsafe-inline`: Next.js scripts receive the nonce, and `strict-dynamic` trusts only the
- * scripts they load. `style-src` is nonce-based too, so no inline style escapes the nonce.
+ * scripts they load. `<style>` elements are nonce-based too (`style-src-elem`). Style
+ * attributes cannot carry a nonce: React renders dynamic values (progress widths, chart
+ * colours, CSS variables) as `style="…"`, so `style-src-attr` alone allows them (CL-8). An
+ * attribute can neither load a resource nor run code, so scripts keep their strict policy.
  */
 export function buildContentSecurityPolicy(nonce: string, env: CspEnvironment = {}): string {
   if (!isValidCspNonce(nonce)) {
@@ -101,6 +104,8 @@ export function buildContentSecurityPolicy(nonce: string, env: CspEnvironment = 
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
     `style-src 'self' 'nonce-${nonce}'`,
+    `style-src-elem 'self' 'nonce-${nonce}'`,
+    "style-src-attr 'unsafe-inline'",
     `img-src ${sources.img.join(' ')}`,
     "font-src 'self' data:",
     `connect-src ${sources.connect.join(' ')}`,

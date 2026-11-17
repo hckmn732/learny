@@ -4,8 +4,8 @@
     {
       "screen": "SCR-03",
       "region": "fenêtre 346×664",
-      "ratio": 0.11873215404972491,
-      "windowRatio": 0.11873215404972491
+      "ratio": 0.1187234487081273,
+      "windowRatio": 0.1187234487081273
     },
     {
       "screen": "SCR-07",
@@ -23,7 +23,7 @@
       "screen": "SCR-12",
       "region": "jusqu’à agenda-calendar 346×242",
       "ratio": 0.07987388334209143,
-      "windowRatio": 0.16465283097708755
+      "windowRatio": 0.17115572115049796
     }
   ]
 }
