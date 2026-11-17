@@ -30,6 +30,13 @@ export function isTouchExempt(value: string | null): boolean {
   return value !== null && value.trim() !== '';
 }
 
+/** The only exemptions admitted by ADR-0201 (CA-2): inline text links and graph nodes. */
+export const ALLOWED_TOUCH_EXEMPTIONS = ['inline', 'graph-node'] as const;
+
+export function isAllowedExemption(value: string | null): boolean {
+  return (ALLOWED_TOUCH_EXEMPTIONS as readonly string[]).includes((value ?? '').trim());
+}
+
 export interface TouchTargetOptions {
   min?: number;
 }
@@ -66,7 +73,7 @@ export async function expectTouchTargets(
 ): Promise<void> {
   const min = options.min ?? 44;
   const violations = await page.evaluate(
-    ({ selectors, min, tolerance }) => {
+    ({ selectors, min, tolerance, allowed }) => {
       type Pseudo = { content: string; position: string; width: string; height: string } | null;
       const parse = (value: string): number => Number.parseFloat(value);
       const out: { selector: string; text: string; width: number; height: number }[] = [];
@@ -93,8 +100,21 @@ export async function expectTouchTargets(
           document.activeElement !== el
         )
           continue;
-        if (el.closest('[data-touch-exempt]') !== null) continue;
-        if (el.hasAttribute('data-touch-exempt')) continue;
+        const exempt = el.closest('[data-touch-exempt]');
+        if (exempt !== null) {
+          // CA-2 — only the two exemptions of ADR-0201 are admitted.
+          const value = exempt.getAttribute('data-touch-exempt') ?? '';
+          if (!allowed.includes(value.trim())) {
+            const rect = el.getBoundingClientRect();
+            out.push({
+              selector: label(el),
+              text: `exemption non autorisée « ${value} »`,
+              width: Math.round(rect.width * 10) / 10,
+              height: Math.round(rect.height * 10) / 10,
+            });
+          }
+          continue;
+        }
         // WCAG 2.5.8 inline exception: a link inside running text keeps the text flow.
         if (el.tagName === 'A' && style.display === 'inline') continue;
         const box = el.getBoundingClientRect();
@@ -129,7 +149,12 @@ export async function expectTouchTargets(
       }
       return out;
     },
-    { selectors: TOUCH_SELECTORS, min, tolerance: 0.5 },
+    {
+      selectors: TOUCH_SELECTORS,
+      min,
+      tolerance: 0.5,
+      allowed: [...ALLOWED_TOUCH_EXEMPTIONS] as string[],
+    },
   );
 
   const summary = violations
@@ -144,10 +169,20 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
     innerWidth: window.innerWidth,
     documentWidth: document.documentElement.scrollWidth,
     bodyWidth: document.body.scrollWidth,
+    // Page coordinates (the page may already be scrolled sideways) and outermost offenders only,
+    // so the report names the element that overflows rather than its descendants.
     offenders: [...document.querySelectorAll<HTMLElement>('body *')]
       .filter((el) => {
-        const rect = el.getBoundingClientRect();
-        return rect.right > window.innerWidth + 1 || rect.left < -1;
+        const offends = (node: Element): boolean => {
+          const rect = node.getBoundingClientRect();
+          if (rect.width === 0 && rect.height === 0) return false;
+          return (
+            rect.right + window.scrollX > window.innerWidth + 1 || rect.left + window.scrollX < -1
+          );
+        };
+        if (!offends(el)) return false;
+        const parent = el.parentElement;
+        return parent === null || parent === document.body || !offends(parent);
       })
       .slice(0, 8)
       .map((el) => {
@@ -167,4 +202,36 @@ export async function expectNoHorizontalScroll(page: Page): Promise<void> {
     )}) ${result.offenders.join(', ')}`,
   ).toBeLessThanOrEqual(result.innerWidth + 1);
   expect(result.bodyWidth).toBeLessThanOrEqual(result.innerWidth + 1);
+}
+
+const TEXT_INPUT_SELECTOR = [
+  'input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range])',
+  ':not([type=file]):not([type=color]):not([type=submit]):not([type=button])',
+].join('');
+
+/**
+ * EF-9 — on mobile, every visible text field renders at least `min` CSS px so iOS never zooms
+ * on focus. Checkboxes, radios, ranges and buttons are not text fields.
+ */
+export async function expectMobileInputFontSize(page: Page, min = 16): Promise<void> {
+  const violations = await page.evaluate(
+    ({ selector, min }) =>
+      [...document.querySelectorAll<HTMLElement>(selector)]
+        .filter((el) => el.getClientRects().length > 0)
+        .filter((el) => getComputedStyle(el).visibility !== 'hidden')
+        .map((el) => ({
+          name:
+            el.getAttribute('data-testid') ??
+            el.getAttribute('name') ??
+            el.getAttribute('aria-label') ??
+            el.tagName.toLowerCase(),
+          size: Number.parseFloat(getComputedStyle(el).fontSize),
+        }))
+        .filter((field) => field.size < min - 0.01),
+    { selector: `${TEXT_INPUT_SELECTOR}, textarea, select`, min },
+  );
+  expect(
+    violations,
+    `champs < ${String(min)} px : ${violations.map((v) => `${v.name} ${String(v.size)} px`).join(', ')}`,
+  ).toEqual([]);
 }

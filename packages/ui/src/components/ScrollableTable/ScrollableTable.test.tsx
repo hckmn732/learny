@@ -27,5 +27,7 @@ describe('[SPEC-802] ScrollableTable', () => {
     expect(region?.getAttribute('aria-label')).toBe('Membres du groupe');
     expect(region?.getAttribute('tabindex')).toBe('0');
     expect(region?.className).toContain('overflow-x-auto');
+    // Containing block of visually hidden cell labels (they must not widen the page).
+    expect(region?.className).toContain('relative');
   });
 });

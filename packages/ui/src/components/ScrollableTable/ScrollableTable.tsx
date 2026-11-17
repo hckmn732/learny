@@ -22,7 +22,9 @@ export function ScrollableTable({ label, children, className, testId }: Scrollab
       tabIndex={0}
       data-testid={testId}
       className={cn(
-        'overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo',
+        // `relative` makes the region the containing block of absolutely positioned cells
+        // content (visually hidden labels): otherwise they escape the clip and widen the page.
+        'relative overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo',
         className,
       )}
     >

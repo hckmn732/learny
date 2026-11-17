@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { computeTargetSize, isTouchExempt } from './touch-targets';
+import { computeTargetSize, isAllowedExemption, isTouchExempt } from './touch-targets';
 
 describe('[SPEC-802] cibles tactiles', () => {
   it('détecte une cible de 32 px et accepte 44 px', () => {
@@ -37,5 +37,12 @@ describe('[SPEC-802] cibles tactiles', () => {
     expect(isTouchExempt('graph-node')).toBe(true);
     expect(isTouchExempt(null)).toBe(false);
     expect(isTouchExempt('')).toBe(false);
+  });
+
+  it('n’admet que les exemptions inline et graph-node (CA-2)', () => {
+    expect(isAllowedExemption('inline')).toBe(true);
+    expect(isAllowedExemption('graph-node')).toBe(true);
+    expect(isAllowedExemption('decorative')).toBe(false);
+    expect(isAllowedExemption(null)).toBe(false);
   });
 });

@@ -11,7 +11,11 @@ import { closeDb, serviceDb, sql } from '@learny/db';
 import { DEMO_USERS, demoId, demoUserId } from '@learny/db/seed/fixtures';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
-import { expectNoHorizontalScroll, expectTouchTargets } from '@learny/testing/touch-targets';
+import {
+  expectMobileInputFontSize,
+  expectNoHorizontalScroll,
+  expectTouchTargets,
+} from '@learny/testing/touch-targets';
 
 import { seedDemoExamAttempts } from '../../support/demo-exam';
 import {
@@ -128,7 +132,10 @@ for (const width of RESPONSIVE_WIDTHS) {
         if (width.width === 390 || width.width === 1024) {
           await expectTouchTargets(page, { min: 44 });
         }
-        if (width.width === 390) await axeCheck();
+        if (width.width === 390) {
+          await expectMobileInputFontSize(page, 16);
+          await axeCheck();
+        }
         results.push({ width: width.width, id: entry.id, ok: true });
       } catch (error) {
         results.push({
