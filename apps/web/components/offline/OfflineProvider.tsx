@@ -5,14 +5,16 @@ import { useEffect, useRef } from 'react';
 import { clock } from '@learny/core';
 import { toast } from '@learny/ui';
 
-import { readMeta } from '../../lib/offline/db';
-import { prefetchPack } from '../../lib/offline/pack';
-import { pendingCount } from '../../lib/offline/queue';
-import { registerServiceWorker, requestBackgroundSync } from '../../lib/offline/register-sw';
-import { syncQueue } from '../../lib/offline/sync';
-import { fr } from '../../messages/fr/offline';
-
-const t = fr.offline.sync;
+// The offline stack (IndexedDB, pack, queue) is only downloaded when the shell starts it after the
+// first paint or when the network changes (SPEC-804): it never weighs on the initial bundle.
+const offline = {
+  db: () => import('../../lib/offline/db'),
+  pack: () => import('../../lib/offline/pack'),
+  queue: () => import('../../lib/offline/queue'),
+  register: () => import('../../lib/offline/register-sw'),
+  sync: () => import('../../lib/offline/sync'),
+  messages: () => import('../../messages/fr/offline'),
+};
 
 let registered = false;
 
@@ -30,8 +32,10 @@ function whenIdle(callback: () => void): void {
 }
 
 async function synchronise(): Promise<void> {
+  const [{ syncQueue }, { fr }] = await Promise.all([offline.sync(), offline.messages()]);
   const result = await syncQueue({ now: () => clock.now() });
   if (!result.ran) return;
+  const t = fr.offline.sync;
   if (result.synced > 0) toast({ title: t.done(result.synced) });
   if (result.conflicts > 0) toast({ title: t.conflict, tone: 'error' });
   if (result.rejected > 0) toast({ title: t.rejected(result.rejected), tone: 'error' });
@@ -49,6 +53,7 @@ function browserLocalDay(now: Date): string {
 }
 
 async function prefetchIfStale(): Promise<void> {
+  const [{ readMeta }, { prefetchPack }] = await Promise.all([offline.db(), offline.pack()]);
   const meta = await readMeta('lastPack');
   if (meta?.localDate !== browserLocalDay(clock.now())) {
     await prefetchPack({ clock });
@@ -78,14 +83,16 @@ export function OfflineProvider() {
 
     if (!registered) {
       registered = true;
-      void registerServiceWorker().then((value) => {
-        if (value !== null) {
-          void requestBackgroundSync(value);
-          navigator.serviceWorker.addEventListener('message', (event) => {
-            if ((event.data as { type?: unknown }).type === 'learny-sync-request') void run();
-          });
-        }
-      });
+      void offline.register().then(({ registerServiceWorker, requestBackgroundSync }) =>
+        registerServiceWorker().then((value) => {
+          if (value !== null) {
+            void requestBackgroundSync(value);
+            navigator.serviceWorker.addEventListener('message', (event) => {
+              if ((event.data as { type?: unknown }).type === 'learny-sync-request') void run();
+            });
+          }
+        }),
+      );
     }
 
     whenIdle(() => {
@@ -110,6 +117,7 @@ export function OfflineProvider() {
 
 /** EF-8/CL-6 — best-effort synchronisation before sign-out, bounded to five seconds. */
 export async function flushBeforeSignOut(): Promise<number> {
+  const [{ syncQueue }, { pendingCount }] = await Promise.all([offline.sync(), offline.queue()]);
   await Promise.race([
     syncQueue({ now: () => clock.now() }).catch(() => undefined),
     new Promise((resolve) => {

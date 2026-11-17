@@ -3,7 +3,6 @@
 import { WifiOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { pendingCount } from '../../lib/offline/queue';
 import { useOnlineStatus } from '../../lib/offline/use-online-status';
 import { fr } from '../../messages/fr/offline';
 
@@ -20,7 +19,8 @@ export function OfflineIndicator() {
   useEffect(() => {
     let mounted = true;
     const refresh = () => {
-      void pendingCount()
+      void import('../../lib/offline/queue')
+        .then(({ pendingCount }) => pendingCount())
         .then((value) => {
           if (mounted) setPending(value);
         })
