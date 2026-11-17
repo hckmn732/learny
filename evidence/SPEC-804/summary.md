@@ -1,7 +1,7 @@
 # Preuves — SPEC-804 : Performances
 
-- Date : 2026-11-17T11:35:38.140Z
-- Commit : cd16a81b
+- Date : 2026-11-17T17:16:44.994Z
+- Commit : 4f9ad6a6
 - Spécification : `specs/p8-livraison-v1/SPEC-804-performances.md`
 
 ## Rapports
@@ -14,13 +14,13 @@
 
 ## Vidéos
 
-- `video/04-page-de-demonstration-des-performances-desktop.webm` — SHA-256 06f0f4ba5a0cce26a7206ed0c51437df52ad2383be20d614791194a6ffd6305a (hors Git : Git LFS indisponible, ADR-0050)
-- `video/05-page-de-demonstration-des-performances-desktop.webm` — SHA-256 7eb50557f612a58782252d3282bb67c9f68a1ceefdbc2c63287b45dbe1588fe2 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/08-vitals-de-l-accueil-sans-regression-desktop.webm` — SHA-256 b35f6c37810e6083d8732b78b6b6add23487881e18aeb542da83a77779060ed2 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/12-page-de-demonstration-des-performances-desktop.webm` — SHA-256 cb0f6ae4c61b6584081956dd4690bc8058687e0ae85513f7e61a345b888a3428 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/13-page-de-demonstration-des-performances-desktop.webm` — SHA-256 47282a59b5fb72b592126e61aa575659ab2bc91b9aa29aead5d81209262fea3f (hors Git : Git LFS indisponible, ADR-0050)
-- `video/17-page-de-demonstration-des-performances-mobile.webm` — SHA-256 c00e3966a7cc6c283cafb830d2fb28dfe7ae0878c52b753d527e9c013d45069e (hors Git : Git LFS indisponible, ADR-0050)
-- `video/18-page-de-demonstration-des-performances-mobile.webm` — SHA-256 9a1a7b4a36d684e168c75ced18fe3c13307b85e9763191abf1d162bb0b110860 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/04-page-de-demonstration-des-performances-desktop.webm` — SHA-256 d2c37218a5a4b09ee671316b694deefe880197a38139987886f0acb3fbd78230 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/05-page-de-demonstration-des-performances-desktop.webm` — SHA-256 939812843db2d08e519190b0150f40104632312e4beeabb8b443bfa9e21c7551 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/08-vitals-de-l-accueil-sans-regression-desktop.webm` — SHA-256 244f232ea75798f1a4844140106a5926a07cfa10e2d344b9b5acd9f3200bd146 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/12-page-de-demonstration-des-performances-desktop.webm` — SHA-256 5a547948db6a0a3fd4fd2cc7ed763fb1cde928041ee84f67400d24c6b18cfea9 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/13-page-de-demonstration-des-performances-desktop.webm` — SHA-256 47c0795e3c8e2ecd4bc44a1a86c55c63bb7247783d147ad5f4eefa7dc0af458c (hors Git : Git LFS indisponible, ADR-0050)
+- `video/17-page-de-demonstration-des-performances-mobile.webm` — SHA-256 ab97c34db6dacf627e338506869946b5142922daa53904837de2e7f6d0bfae4d (hors Git : Git LFS indisponible, ADR-0050)
+- `video/18-page-de-demonstration-des-performances-mobile.webm` — SHA-256 6672798dc09f656716fc20eea60cf0a7e3a6982e2751195c2e5e24a76c03886b (hors Git : Git LFS indisponible, ADR-0050)
 
 ## Captures
 

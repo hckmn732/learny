@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="60.367849">
-<testsuite name="p8/performance.spec.ts" timestamp="2026-11-17T11:35:18.001Z" hostname="desktop" tests="3" failures="0" skipped="0" time="11.535" errors="0">
-<testcase name="page de démonstration des performances @SPEC-804" classname="p8/performance.spec.ts" time="3.796">
+<testsuites id="" name="" tests="4" failures="0" skipped="0" errors="0" time="57.615505">
+<testsuite name="p8/performance.spec.ts" timestamp="2026-11-17T17:16:27.031Z" hostname="desktop" tests="3" failures="0" skipped="0" time="10.04" errors="0">
+<testcase name="page de démonstration des performances @SPEC-804" classname="p8/performance.spec.ts" time="2.544">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/attachments/axe-4e26d4bb7e4999e9b7271fce41af05f39d8d76f4.json]]
@@ -9,15 +9,15 @@
 
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/test-finished-1.png]]
 
-[[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video.webm]]
-
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video.webm]]
 
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="vitals de l’accueil sans régression @SPEC-804" classname="p8/performance.spec.ts" time="5.288">
+<testcase name="vitals de l’accueil sans régression @SPEC-804" classname="p8/performance.spec.ts" time="5.425">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p8-performance-vitals-de-l’accueil-sans-régression-SPEC-804-desktop/test-finished-1.png]]
@@ -28,7 +28,7 @@
 ]]>
 </system-out>
 </testcase>
-<testcase name="page de démonstration des performances @SPEC-804 @visual @mobile" classname="p8/performance.spec.ts" time="2.451">
+<testcase name="page de démonstration des performances @SPEC-804 @visual @mobile" classname="p8/performance.spec.ts" time="2.071">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-b9c7c-nces-SPEC-804-visual-mobile-desktop/attachments/axe-9e2577be7c8545e1546b4396354d98abf1474376.json]]
@@ -44,8 +44,8 @@
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="p8/performance.spec.ts" timestamp="2026-11-17T11:35:18.001Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.697" errors="0">
-<testcase name="page de démonstration des performances @SPEC-804 @visual @mobile" classname="p8/performance.spec.ts" time="2.697">
+<testsuite name="p8/performance.spec.ts" timestamp="2026-11-17T17:16:27.031Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.37" errors="0">
+<testcase name="page de démonstration des performances @SPEC-804 @visual @mobile" classname="p8/performance.spec.ts" time="2.37">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p8-performance-page-de-dém-b9c7c-nces-SPEC-804-visual-mobile-mobile/attachments/axe-e129684c471e05896308297f7efd21daad4e2781.json]]

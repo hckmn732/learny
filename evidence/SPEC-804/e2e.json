@@ -256,12 +256,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3796,
+                  "duration": 2544,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T11:35:19.952Z",
+                  "startTime": "2026-11-17T17:16:28.925Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -282,12 +282,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-804/test-results/artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-804/test-results/artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video-1.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/projects/learny-wt-804/test-results/artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video-1.webm"
+                      "path": "/home/ubuntu/projects/learny-wt-804/test-results/artifacts/p8-performance-page-de-dém-ca85a-n-des-performances-SPEC-804-desktop/video.webm"
                     },
                     {
                       "name": "trace",
@@ -323,12 +323,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5288,
+                  "duration": 5425,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T11:35:24.457Z",
+                  "startTime": "2026-11-17T17:16:31.803Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -377,12 +377,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2451,
+                  "duration": 2071,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T11:35:30.129Z",
+                  "startTime": "2026-11-17T17:16:37.667Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -426,12 +426,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2697,
+                  "duration": 2370,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-17T11:35:34.657Z",
+                  "startTime": "2026-11-17T17:16:41.916Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -475,8 +475,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-17T11:34:37.491Z",
-    "duration": 60367.849,
+    "startTime": "2026-11-17T17:15:47.164Z",
+    "duration": 57615.505,
     "expected": 4,
     "skipped": 0,
     "unexpected": 0,
