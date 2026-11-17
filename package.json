@@ -52,7 +52,8 @@
     "sdd:adr": "node tools/sdd/adr.mjs",
     "openapi:generate": "tsx packages/contracts/scripts/generate-openapi.ts",
     "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check",
-    "email:dev": "pnpm --filter @learny/notifications dev"
+    "email:dev": "pnpm --filter @learny/notifications dev",
+    "legal:check": "node tools/legal/check.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
