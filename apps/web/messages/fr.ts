@@ -4386,6 +4386,21 @@ export const fr = {
       },
       loading: 'Exécution du scénario de démonstration…',
     },
+    spec805: {
+      intro:
+        'Contrôles de sécurité de la V1 : en-têtes et CSP, protections de l’API, isolation des données, résistance des tâches IA aux consignes injectées, anti-SSRF de l’import et audit des dépendances. Les statuts proviennent du dernier rapport de validation ; sans rapport, tout reste « Non exécuté ». Aucune charge d’attaque ni aucun secret n’est affiché.',
+      note: 'La démonstration ne lance aucune attaque contre un service réel : elle consulte les résultats des tests et de l’audit. Une vérification absente n’est jamais présentée comme réussie.',
+      columns: {
+        control: 'Contrôle',
+        test: 'Test ou preuve',
+        status: 'Statut',
+      },
+      statuses: {
+        verified: 'Vérifié',
+        failed: 'Échec',
+        notRun: 'Non exécuté',
+      },
+    },
   },
   email: {
     unsubscribe: {
