@@ -189,6 +189,7 @@ export const agendaReplanRoutes = {
   }),
   formationReplan: defineRoute({
     id: 'formations.replan',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/replan',
     auth: 'user',

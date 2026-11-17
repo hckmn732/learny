@@ -150,6 +150,7 @@ export type GenerateCourseOutput = z.infer<typeof GenerateCourseOutput>;
 
 export const moduleGenerateCourse = defineRoute({
   id: 'modules.generateCourse',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/modules/:mid/course-generation',
   auth: 'user',

@@ -396,6 +396,7 @@ export const exerciseSubmit = defineRoute({
 
 export const exerciseHint = defineRoute({
   id: 'exercises.hint',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/modules/:mid/exercises/:aid/hint',
   auth: 'user',

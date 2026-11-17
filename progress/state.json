@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T10:17:07.504Z",
+  "updatedAt": "2026-11-17T13:44:57.144Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6052,14 +6052,50 @@
       }
     },
     "SPEC-806": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-17T12:03:48.491Z",
+      "completedAt": "2026-11-17T13:44:57.135Z",
+      "branch": "spec/SPEC-806-rgpd-et-pages-legales",
+      "commit": "53ce0ced",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-17T13:38:58.537Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-17T13:39:58.668Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-17T13:43:15.057Z",
+          "details": "16 test(s) [SPEC-806] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-17T13:31:53.970Z",
+          "details": "8 test(s) [SPEC-806] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-17T13:44:35.436Z",
+          "details": "3 réussi(s), 0 échec(s), 11 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-17T13:44:35.436Z",
+          "details": "2 test(s) @visual réussi(s) (mode tokens)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-17T13:44:35.486Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-807": {
       "status": "pending",

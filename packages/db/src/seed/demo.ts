@@ -8,6 +8,8 @@ import { createHash } from 'node:crypto';
 
 import { SQL, sql } from 'drizzle-orm';
 
+import { LEGAL_VERSIONS } from '@learny/config';
+
 import { serviceDb, type DbTx } from '../client';
 
 import {
@@ -269,6 +271,34 @@ async function seedAccounts(tx: DbTx): Promise<void> {
       ];
     }),
     { conflict: 'id' },
+  );
+
+  // SPEC-806 — the demonstration accounts already accepted the active legal versions, so the
+  // server guard of the formation mutations stays transparent for every existing journey.
+  await insertRows(
+    tx,
+    'public.legal_acceptances',
+    ['id', 'user_id', 'document', 'version', 'accepted_at'],
+    DEMO_USERS.flatMap((user) => {
+      const at = created[user.key] ?? '2026-10-28T09:00:00+01:00';
+      return [
+        [
+          demoId('legal', user.key, 'cgu', LEGAL_VERSIONS.cgu),
+          demoUserId(user.key),
+          'cgu',
+          LEGAL_VERSIONS.cgu,
+          timestamp(at),
+        ],
+        [
+          demoId('legal', user.key, 'privacy', LEGAL_VERSIONS.privacy),
+          demoUserId(user.key),
+          'privacy',
+          LEGAL_VERSIONS.privacy,
+          timestamp(at),
+        ],
+      ];
+    }),
+    { conflict: 'id', mode: 'nothing' },
   );
 
   await insertRows(

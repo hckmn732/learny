@@ -216,6 +216,7 @@ export const conversationGet = defineRoute({
 
 export const conversationMessage = defineRoute({
   id: 'conversations.messages',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/conversations/:id/messages',
   auth: 'user',

@@ -348,6 +348,7 @@ export const programmeRoutes = {
   }),
   programmeGenerate: defineRoute({
     id: 'programme.generate',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/programme/generate',
     auth: 'user',
@@ -370,6 +371,7 @@ export const programmeRoutes = {
   }),
   programmeImport: defineRoute({
     id: 'programme.import',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/programme/import',
     auth: 'user',
@@ -394,6 +396,7 @@ export const programmeRoutes = {
   }),
   programmeAdjust: defineRoute({
     id: 'programme.adjust',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/programme/adjust',
     auth: 'user',
@@ -415,6 +418,7 @@ export const programmeRoutes = {
   }),
   programmeValidate: defineRoute({
     id: 'programme.validate',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/programme/validate',
     auth: 'user',
