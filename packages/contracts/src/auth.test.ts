@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   accountFormSchema,
+  validateAccountForm,
   loginAccountFormSchema,
   MagicLinkInput,
   ResendInput,
@@ -105,5 +106,39 @@ describe('[SPEC-601] formulaires de compte', () => {
         termsAccepted: true,
       }).data?.email,
     ).toBe('ALEX.PERRIN@EXAMPLE.COM');
+  });
+});
+
+describe('[SPEC-804] validateAccountForm (sans Zod)', () => {
+  const samples = [
+    { method: 'magic', email: ' alex@exemple.fr ' },
+    { method: 'magic', email: 'invalide' },
+    { method: 'password', email: 'alex@exemple.fr', password: '' },
+    { method: 'password', email: 'alex@exemple.fr', password: 'x' },
+    { method: 'password', email: 'alex@exemple.fr', password: 'motdepasse12' },
+    { method: 'password', email: 'a@b', password: 'motdepasse12' },
+  ] as const;
+
+  it('donne le même verdict, les mêmes données et le même message que les schémas Zod', () => {
+    for (const terms of [true, false]) {
+      for (const sample of samples) {
+        const signupInput = { ...sample, termsAccepted: terms };
+        const zodSignup = accountFormSchema.safeParse(signupInput);
+        const plainSignup = validateAccountForm('signup', signupInput);
+        expect(plainSignup.success, JSON.stringify(signupInput)).toBe(zodSignup.success);
+        if (zodSignup.success && plainSignup.success) {
+          expect(plainSignup.data).toEqual(zodSignup.data);
+        }
+        if (!zodSignup.success && !plainSignup.success) {
+          expect(Object.values(plainSignup.errors)).toContain(zodSignup.error.issues[0]?.message);
+        }
+      }
+    }
+    for (const sample of samples) {
+      const zodLogin = loginAccountFormSchema.safeParse(sample);
+      const plainLogin = validateAccountForm('login', sample);
+      expect(plainLogin.success, JSON.stringify(sample)).toBe(zodLogin.success);
+      if (zodLogin.success && plainLogin.success) expect(plainLogin.data).toEqual(zodLogin.data);
+    }
   });
 });

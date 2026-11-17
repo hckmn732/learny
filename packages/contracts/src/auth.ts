@@ -2,30 +2,27 @@ import { z } from 'zod';
 
 import { isValidIanaZone } from '@learny/core';
 
+import {
+  ACCOUNT_EMAIL_RE,
+  ACCOUNT_FORM_MESSAGES,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  type AccountFormMessages,
+} from './account-form';
 import { Empty } from './common';
 import { defineRoute } from './define-route';
 
 // Authentication contracts and routes (SPEC-202 ET-1, ET-2; BR-ACC-01, BR-ACC-03, BR-ACC-09).
-export const PASSWORD_MIN_LENGTH = 12;
-export const PASSWORD_MAX_LENGTH = 72;
+// Constants and the Zod-free validator of the account form live in `./account-form` (SPEC-804).
 
-/** Client-side address check of the account form (SPEC-601 EF-6). */
-export const ACCOUNT_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-export interface AccountFormMessages {
-  email: string;
-  passwordSignup: string;
-  passwordLogin: string;
-  terms: string;
-}
-
-/** Default messages; `apps/web` passes the exact texts of `messages.auth` (ET-2). */
-export const ACCOUNT_FORM_MESSAGES: AccountFormMessages = {
-  email: 'Saisissez une adresse e-mail valide.',
-  passwordSignup: 'Le mot de passe doit faire 12 caractères au moins.',
-  passwordLogin: 'Saisissez votre mot de passe.',
-  terms: 'Acceptez les conditions pour créer votre compte.',
-};
+export {
+  ACCOUNT_EMAIL_RE,
+  ACCOUNT_FORM_MESSAGES,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  validateAccountForm,
+} from './account-form';
+export type { AccountFormMessages } from './account-form';
 
 /**
  * Account form of the sign-up screen (SPEC-601 ET-2). The union is discriminated on `method` so

@@ -1,16 +1,12 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect, useId, useState } from 'react';
 import { useForm, useWatch, type FieldErrors, type Resolver } from 'react-hook-form';
 
 import { ACCOUNT_RULES } from '@learny/config/product';
-import {
-  createLoginAccountFormSchema,
-  createSignupAccountFormSchema,
-  type AccountFormMessages,
-} from '@learny/contracts/auth';
+// Zod-free validation: the sign-in and sign-up pages never download the Zod runtime (SPEC-804).
+import { validateAccountForm, type AccountFormMessages } from '@learny/contracts/account-form';
 import { AppError, clock } from '@learny/core';
 import { Button, Card, Checkbox, ChoiceGroup, FormError, Link, TextField } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
@@ -89,13 +85,18 @@ export function AccountForm({ mode, initialError }: Readonly<AccountFormProps>) 
   const [globalError, setGlobalError] = useState<string | null>(initialError ?? null);
   const [submitting, setSubmitting] = useState(false);
 
-  const schema =
-    mode === 'signup'
-      ? createSignupAccountFormSchema(MESSAGES)
-      : createLoginAccountFormSchema(MESSAGES);
+  const resolver: Resolver<FormValues> = (values) => {
+    const result = validateAccountForm(mode, values, MESSAGES);
+    if (result.success) return { values: result.data as FormValues, errors: {} };
+    const errors: FieldErrors<FormValues> = {};
+    for (const [field, message] of Object.entries(result.errors)) {
+      errors[field as keyof FormValues] = { type: 'validate', message };
+    }
+    return { values: {}, errors };
+  };
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema) as unknown as Resolver<FormValues>,
+    resolver,
     mode: 'onSubmit',
     reValidateMode: 'onSubmit',
     shouldFocusError: false,
