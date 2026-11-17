@@ -91,6 +91,12 @@ export async function restoreDemoData(): Promise<void> {
       ${demoUserId('alex')}::uuid, ${demoUserId('camille')}::uuid, ${demoUserId('hugo')}::uuid
     )
   `);
+  // The e2e clock is frozen: a rate-limit bucket emptied by earlier specs never refills, and a
+  // long campaign ends up answered 429. Refill the demo learners' buckets with the rest.
+  await serviceDb().execute(sql`
+    delete from public.rate_limits
+    where bucket like ${`user:${demoUserId('alex')}:%`} or bucket like ${`user:${demoUserId('camille')}:%`} or bucket like ${`user:${demoUserId('hugo')}:%`}
+  `);
   const root = fileURLToPath(new URL('../../../', import.meta.url));
   const seed = spawnSync('pnpm', ['db:seed:demo'], {
     cwd: root,
