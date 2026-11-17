@@ -28,7 +28,7 @@ module.exports = {
       settings: {
         chromeFlags: '--headless=new --no-sandbox',
         skipAudits: ['is-on-https', 'redirects-http'],
-        ...(cookie ? { extraHeaders: JSON.stringify({ Cookie: cookie }) } : {}),
+        ...(cookie ? { extraHeaders: { Cookie: cookie } } : {}),
       },
     },
     assert: {

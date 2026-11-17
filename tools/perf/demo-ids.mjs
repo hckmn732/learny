@@ -4,7 +4,7 @@ import {
   demoModuleId,
   demoUserId,
   DEMO_USERS,
-} from '@learny/db/seed/fixtures';
+} from '../../packages/db/src/seed/demo-fixtures.ts';
 
 const alex = DEMO_USERS.find((user) => user.key === 'alex');
 

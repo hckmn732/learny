@@ -90,6 +90,12 @@ function lighthouse(cookie) {
   fs.rmSync(outAnon, { recursive: true, force: true });
   fs.rmSync(outAuth, { recursive: true, force: true });
 
+  const chrome = capture('pnpm', [
+    'exec',
+    'node',
+    '-e',
+    "process.stdout.write(require('playwright').chromium.executablePath())",
+  ]).trim();
   for (const [dir, urls, withCookie] of [
     [outAnon, anonymous, false],
     [outAuth, authenticated, true],
@@ -98,6 +104,7 @@ function lighthouse(cookie) {
       PERF_URLS: urls.join(','),
       PERF_LHCI_OUT: path.relative(ROOT, dir),
       PERF_BASE_URL: base,
+      ...(chrome === '' ? {} : { CHROME_PATH: chrome }),
       ...(withCookie ? { PERF_COOKIE: cookie } : {}),
     });
   }
@@ -120,6 +127,7 @@ function inp() {
       PLAYWRIGHT_REUSE_SERVER: '1',
       PLAYWRIGHT_PORT: String(PERF_PORT),
       E2E_SKIP_BUILD: '1',
+      PERF_SKIP_DB: '1',
     },
   );
   const file = path.join(OUT, 'inp.json');
