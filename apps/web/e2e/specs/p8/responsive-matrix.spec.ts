@@ -96,6 +96,10 @@ async function renderEntry(
     state: 'visible',
     timeout: 15_000,
   });
+  // Client-loaded content (quiz session, agenda, notifications) is part of the checked state:
+  // wait for the network to settle and for every skeleton region to be gone.
+  await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => undefined);
+  await expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 10_000 });
   if (entry.setup !== undefined) await entry.setup(page);
 }
 
