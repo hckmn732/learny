@@ -26,9 +26,9 @@ export const PERMISSIONS_POLICY_VALUE = [
 
 type Env = Readonly<Record<string, string | undefined>>;
 
-/** Production also covers managed deployments that set `APP_ENV` rather than `NODE_ENV`. */
+/** `next start` always sets NODE_ENV=production: the application environment is authoritative. */
 export function isProductionEnvironment(env: Env = process.env): boolean {
-  return env.NODE_ENV === 'production' || env.APP_ENV === 'production';
+  return env.APP_ENV === 'production';
 }
 
 /** True when the request arrived over HTTPS, including behind a trusted reverse proxy. */

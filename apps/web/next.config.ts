@@ -32,11 +32,12 @@ const nextConfig: NextConfig = {
   headers() {
     return Promise.resolve([
       {
-        // SPEC-805 — static headers for the responses middleware does not match (assets, webhooks).
+        // SPEC-805 — HSTS is added per request by the proxy only for a real HTTPS production response.
         source: '/:path*',
-        headers: Object.entries(staticSecurityHeaders(process.env.NODE_ENV === 'production')).map(
-          ([key, value]) => ({ key, value }),
-        ),
+        headers: Object.entries(staticSecurityHeaders(false)).map(([key, value]) => ({
+          key,
+          value,
+        })),
       },
       {
         source: '/_dev/:path*',

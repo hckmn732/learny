@@ -4,7 +4,7 @@ import {
   type SecurityStatus,
 } from '../../app/%5Fdev/sdd/spec-805-data';
 import { fr } from '../../messages/fr';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec805;
 
@@ -65,7 +65,6 @@ export default function Spec805Demo() {
   const categories = loadSpec805Report();
   return (
     <>
-      <BaseTokenStyle />
       <p className="mt-6 text-13 text-ink-secondary">{t.intro}</p>
       {categories.map((category) => (
         <Category key={category.key} category={category} />
