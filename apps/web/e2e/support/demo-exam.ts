@@ -160,7 +160,9 @@ export async function seedDemoExamAttempts(): Promise<DemoExamAttempts> {
 export async function deleteDemoAttempts(ids: readonly string[]): Promise<void> {
   const kept = ids.filter((id) => id !== '');
   if (kept.length === 0) return;
-  await serviceDb().execute(sql`
-    delete from public.attempts where id = any(${kept}::uuid[])
-  `);
+  const list = sql.join(
+    kept.map((id) => sql`${id}::uuid`),
+    sql`, `,
+  );
+  await serviceDb().execute(sql`delete from public.attempts where id in (${list})`);
 }
