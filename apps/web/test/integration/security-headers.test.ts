@@ -126,7 +126,9 @@ describe('[SPEC-805] HTTP security', () => {
     expect(firstNonce).not.toBe(secondNonce);
     expect(cspDirective(firstCsp, 'script-src')).toContain(`'nonce-${firstNonce ?? ''}'`);
     expect(firstCsp).not.toContain('unsafe-eval');
-    expect(firstCsp).not.toContain('unsafe-inline');
+    // CL-8: only style attributes (React dynamic values) are allowed inline.
+    expect(cspDirective(firstCsp, 'style-src-attr')).toBe("style-src-attr 'unsafe-inline'");
+    expect(firstCsp.replace("style-src-attr 'unsafe-inline'", '')).not.toContain('unsafe-inline');
 
     expect(first.headers.get('strict-transport-security')).toBe(
       'max-age=31536000; includeSubDomains',

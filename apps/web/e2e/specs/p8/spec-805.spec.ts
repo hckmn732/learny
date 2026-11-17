@@ -36,7 +36,9 @@ test('parcours protégé @SPEC-805', async ({
   expect(firstNonce).toBeTruthy();
   expect(firstCsp).toContain("default-src 'self'");
   expect(firstCsp).not.toContain('unsafe-eval');
-  expect(firstCsp).not.toContain('unsafe-inline');
+  // CL-8: only style attributes (React dynamic values) are allowed inline.
+  expect(firstCsp).toContain("style-src-attr 'unsafe-inline'");
+  expect(firstCsp.replace("style-src-attr 'unsafe-inline'", '')).not.toContain('unsafe-inline');
   expect(firstHeaders['x-content-type-options']).toBe('nosniff');
   expect(firstHeaders['referrer-policy']).toBe('strict-origin-when-cross-origin');
   expect(firstHeaders['permissions-policy']).toContain('camera=()');
