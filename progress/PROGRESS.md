@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-17T03:54:52.372Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-17T12:00:07.391Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -10,9 +10,9 @@
 | Terminées | 117 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 15 |
-| Bloquées | 0 |
-| Bloquées par une dépendance | 0 |
+| En attente de dépendances | 12 |
+| Bloquées | 1 |
+| Bloquées par une dépendance | 2 |
 | **Avancement global** | **88.6 %** |
 | Avancement V1 | 94.4 % |
 | Prochaine action | checkpoint CP-7 |
@@ -155,11 +155,11 @@
 | [SPEC-801](../specs/p8-livraison-v1/SPEC-801-application-installable-et-revisions-hors-ligne.md) | Application installable et révisions hors ligne | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-701, SPEC-702 |
 | [SPEC-802](../specs/p8-livraison-v1/SPEC-802-responsive-et-mobile.md) | Responsive et mobile | P8 | ⏳ waiting | 0 | — | SPEC-618, SPEC-725, SPEC-724, SPEC-616 |
 | [SPEC-803](../specs/p8-livraison-v1/SPEC-803-accessibilite-wcag-2-2-aa.md) | Accessibilité WCAG 2.2 AA | P8 | ⏳ waiting | 0 | — | SPEC-802 |
-| [SPEC-804](../specs/p8-livraison-v1/SPEC-804-performances.md) | Performances | P8 | ⏳ waiting | 0 | — | SPEC-802 |
+| [SPEC-804](../specs/p8-livraison-v1/SPEC-804-performances.md) | Performances | P8 | ⛔ blocked | 1 | ✓lint ✓typecheck ✓unit ✗integration ✓e2e ✓visual ✗acceptance | SPEC-802 |
 | [SPEC-805](../specs/p8-livraison-v1/SPEC-805-securite.md) | Sécurité | P8 | ⏳ waiting | 0 | — | SPEC-802 |
 | [SPEC-806](../specs/p8-livraison-v1/SPEC-806-rgpd-et-pages-legales.md) | RGPD et pages légales | P8 | ⏳ waiting | 0 | — | SPEC-802, SPEC-211 |
-| [SPEC-807](../specs/p8-livraison-v1/SPEC-807-parcours-de-bout-en-bout-et-non-regression-globale.md) | Parcours de bout en bout et non-régression globale | P8 | ⏳ waiting | 0 | — | SPEC-803, SPEC-804, SPEC-805, SPEC-806, SPEC-801 |
-| [SPEC-808](../specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md) | Mise en production et version 1.0.0 | P8 | ⏳ waiting | 0 | — | SPEC-807, SPEC-013 |
+| [SPEC-807](../specs/p8-livraison-v1/SPEC-807-parcours-de-bout-en-bout-et-non-regression-globale.md) | Parcours de bout en bout et non-régression globale | P8 | 🚫 dependency_blocked | 0 | — | SPEC-803, SPEC-804, SPEC-805, SPEC-806, SPEC-801 |
+| [SPEC-808](../specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md) | Mise en production et version 1.0.0 | P8 | 🚫 dependency_blocked | 0 | — | SPEC-807, SPEC-013 |
 | [SPEC-901](../specs/p9-v2/SPEC-901-import-audio-avec-transcription.md) | Import audio avec transcription | P9 | ⏳ waiting | 0 | — | SPEC-509 |
 | [SPEC-902](../specs/p9-v2/SPEC-902-import-video-avec-transcription.md) | Import vidéo avec transcription | P9 | ⏳ waiting | 0 | — | SPEC-901 |
 | [SPEC-903](../specs/p9-v2/SPEC-903-detection-des-liens-entre-ressources-et-entre-modu.md) | Détection des liens entre ressources et entre modules | P9 | ⏳ waiting | 0 | — | SPEC-616, SPEC-511 |
@@ -171,6 +171,8 @@
 
 ## Anomalies et blocages
 
-Aucun.
+- SPEC-804 (blocked) : Budgets Lighthouse non tenables sur la machine d'exécution : p75 TBT 0,75–1,24 s (budget 0,3 s), LCP simulé 4,6–5,1 s (budget 2,5 s), JS 410–585 Ko (budget 130–200 Ko) ; mesures réelles de 5 passages mobiles, aucun budget assoupli.
+- SPEC-807 (dependency_blocked) : dépendance bloquée
+- SPEC-808 (dependency_blocked) : dépendance bloquée
 
 Détails : [anomalies.md](anomalies.md), [blockers.md](blockers.md).

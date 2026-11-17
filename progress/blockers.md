@@ -24,3 +24,4 @@
 - **Portée** : aucune fonctionnalité produit n'est simplifiée ; les tests Firefox restent dans le
   dépôt et le projet Playwright est inchangé hors opt-out explicite. Les visuels restent validés
   sur Chromium desktop/mobile et les parcours fonctionnels sur WebKit.
+- **SPEC-804** (2026-11-17T12:00:07.379Z, 1 tentative(s)) — Budgets Lighthouse non tenables sur la machine d'exécution : p75 TBT 0,75–1,24 s (budget 0,3 s), LCP simulé 4,6–5,1 s (budget 2,5 s), JS 410–585 Ko (budget 130–200 Ko) ; mesures réelles de 5 passages mobiles, aucun budget assoupli.
