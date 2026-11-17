@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-16T17:57:28.623Z",
+  "updatedAt": "2026-11-17T10:15:20.304Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -5904,14 +5904,50 @@
       "validations": {}
     },
     "SPEC-802": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-16T17:57:28.348Z",
-      "completedAt": null,
+      "completedAt": "2026-11-17T10:15:20.297Z",
       "branch": "spec/SPEC-802-responsive-et-mobile",
-      "commit": null,
+      "commit": "08af391d",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-17T10:15:03.156Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-17T10:15:07.019Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-17T09:22:24.511Z",
+          "details": "13 test(s) [SPEC-802] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-17T09:22:29.386Z",
+          "details": "5 test(s) [SPEC-802] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-17T10:13:53.841Z",
+          "details": "11 réussi(s), 0 échec(s), 56 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-17T10:13:53.841Z",
+          "details": "3 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-17T10:15:07.638Z",
+          "details": "7/7 critères ✅"
+        }
+      }
     },
     "SPEC-803": {
       "status": "pending",
