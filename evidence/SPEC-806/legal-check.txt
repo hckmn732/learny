@@ -1,0 +1,6 @@
+
+> learny@0.1.0 legal:check /home/ubuntu/projects/learny-wt-806
+> node tools/legal/check.mjs
+
+⚠ identité légale manquante : LEGAL_ENTITY_NAME, LEGAL_ENTITY_ADDRESS, LEGAL_CONTACT_EMAIL, LEGAL_HOST_NAME
+✔ documents légaux cohérents (CGU 2026-11-11, confidentialité 2026-11-11).

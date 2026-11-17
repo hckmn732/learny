@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import { fr } from '../../messages/fr/auth';
+import { SiteFooter } from '../site-footer/SiteFooter';
 
 import { AUTH_STEPS, AuthStepper } from './AuthStepper';
 
@@ -124,6 +125,7 @@ export function AuthLayout({ step, children }: Readonly<AuthLayoutProps>) {
           {children}
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

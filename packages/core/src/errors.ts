@@ -13,6 +13,7 @@ export const ERROR_CATALOG = {
   ORIGIN_REJECTED: { status: 403, title: 'Origine non autorisée' },
   NOT_FOUND: { status: 404, title: 'Introuvable' },
   CONFLICT: { status: 409, title: 'Conflit' },
+  LEGAL_ACCEPTANCE_REQUIRED: { status: 422, title: 'Acceptation des CGU requise' },
   GROUP_FULL: { status: 409, title: 'Formation à plusieurs complète' },
   IDEMPOTENCY_IN_PROGRESS: { status: 409, title: 'Requête déjà en cours' },
   ALREADY_SUBSCRIBED: { status: 409, title: 'Abonnement déjà actif' },

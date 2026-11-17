@@ -38,6 +38,25 @@ export type {
   PushMode,
   StripeMode,
 } from './env-shared';
+export {
+  LEGAL_DOCUMENT_KEYS,
+  LEGAL_IDENTITY_KEYS,
+  LEGAL_PLACEHOLDER,
+  LEGAL_VERSION_KEYS,
+  LegalConfigError,
+  activeLegalVersions,
+  isCurrentVersion,
+  legalConfigFromEnv,
+  parseLegalConfig,
+} from './legal';
+export type {
+  LegalConfig,
+  LegalDocumentKey,
+  LegalIdentity,
+  LegalIdentityKey,
+  LegalVersionKey,
+  LegalVersions,
+} from './legal';
 export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {

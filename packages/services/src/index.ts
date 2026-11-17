@@ -39,6 +39,7 @@ export * from './billing/index';
 export * from './email/index';
 export { runNotifyDemo } from './dev/notifications';
 export * from './personal-data/index';
+export * from './legal/accept';
 export * from './learning/index';
 export * from './gaps/index';
 export * from './notion-graph/index';

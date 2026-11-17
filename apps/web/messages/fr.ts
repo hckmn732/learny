@@ -10,6 +10,7 @@ import { gaps } from './fr/gaps';
 import { globalQuiz } from './fr/globalQuiz';
 import { group } from './fr/group';
 import { home } from './fr/home';
+import { legal } from './fr/legal';
 import { meta } from './fr/meta';
 import { mockExam } from './fr/mockExam';
 import { moduleMessages } from './fr/module';
@@ -47,6 +48,7 @@ export const fr = {
   email,
   onboarding,
   auth,
+  legal,
   system,
   tutorChat,
   meta,

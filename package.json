@@ -55,7 +55,8 @@
     "email:dev": "pnpm --filter @learny/notifications dev",
     "test:perf": "node tools/perf/run.mjs",
     "perf:seed": "tsx packages/db/src/seed/perf-cli.ts",
-    "analyze": "ANALYZE=true pnpm --filter @learny/web build"
+    "analyze": "ANALYZE=true pnpm --filter @learny/web build",
+    "legal:check": "node tools/legal/check.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

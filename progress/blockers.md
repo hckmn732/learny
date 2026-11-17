@@ -24,4 +24,19 @@
 - **Portée** : aucune fonctionnalité produit n'est simplifiée ; les tests Firefox restent dans le
   dépôt et le projet Playwright est inchangé hors opt-out explicite. Les visuels restent validés
   sur Chromium desktop/mobile et les parcours fonctionnels sur WebKit.
-- **SPEC-804** (2026-11-17T12:00:07.379Z, 1 tentative(s)) — Budgets Lighthouse non tenables sur la machine d'exécution : p75 TBT 0,75–1,24 s (budget 0,3 s), LCP simulé 4,6–5,1 s (budget 2,5 s), JS 410–585 Ko (budget 130–200 Ko) ; mesures réelles de 5 passages mobiles, aucun budget assoupli.
+
+## B-002 — Identité légale de l’éditeur non fournie (2026-11-17)
+
+- **Contexte** : SPEC-806 publie les CGU, la politique de confidentialité et les mentions légales.
+  Les variables `LEGAL_ENTITY_NAME`, `LEGAL_ENTITY_ADDRESS`, `LEGAL_CONTACT_EMAIL` et
+  `LEGAL_HOST_NAME` ne sont pas fournies par le porteur du projet. ADR-0045 interdit d’inventer
+  une entité.
+- **Comportement livré** : les gabarits affichent exactement « [à compléter] » aux endroits
+  concernés et un encart annonce l’information à compléter ; aucune page ne présente l’identité
+  comme renseignée. `pnpm legal:check` liste les noms des champs manquants sans afficher de valeur.
+- **Preuves** : `evidence/SPEC-806/legal-check.txt` (sortie de `pnpm legal:check`),
+  `[SPEC-806] legal configuration` et `CA-1, CA-4 — une identité absente reste visible` dans les
+  tests d’intégration.
+- **Portée** : les pages et l’acceptation serveur sont fonctionnelles en local et en test. SPEC-808
+  ne peut pas annoncer la publication V1 tant que ces quatre valeurs ne sont pas fournies en
+  prépublication/production ; le contrôle de prépublication échoue alors avec les noms des champs.

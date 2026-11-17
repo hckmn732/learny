@@ -43,6 +43,11 @@ export interface RouteDef<
   summary: string;
   /** Business error codes the route may return (documentation). */
   errors: ErrorCode[];
+  /**
+   * SPEC-806 ET-4 — the wrapper requires the current legal versions before calling the service.
+   * Mutations that require the CGU set this flag; reading, export, deletion and acceptance do not.
+   */
+  legalAcceptance?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any route, whatever its schemas

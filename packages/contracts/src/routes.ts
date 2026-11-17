@@ -23,6 +23,7 @@ import { gapRoutes } from './gaps';
 import { headerRoutes } from './header';
 import { healthRoutes } from './health';
 import { homeRoutes } from './home';
+import { legalRoutes } from './legal';
 import { meRoutes } from './me';
 import { examRoutes } from './mock-exams';
 import { automationRoutes } from './moteur-d-automatismes';
@@ -53,6 +54,7 @@ export const ROUTES = {
   ...agendaRoutes,
   ...agendaReplanRoutes,
   ...healthRoutes,
+  ...legalRoutes,
   ...authRoutes,
   ...meRoutes,
   ...devRoutes,

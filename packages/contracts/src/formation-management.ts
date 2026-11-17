@@ -69,6 +69,7 @@ export const formationManagementRoutes = {
   }),
   formationPause: defineRoute({
     id: 'formations.pause',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/pause',
     auth: 'user',
@@ -90,6 +91,7 @@ export const formationManagementRoutes = {
   }),
   formationResume: defineRoute({
     id: 'formations.resume',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/resume',
     auth: 'user',
@@ -112,6 +114,7 @@ export const formationManagementRoutes = {
   }),
   formationArchive: defineRoute({
     id: 'formations.archive',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/archive',
     auth: 'user',
