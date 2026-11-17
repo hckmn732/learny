@@ -2,6 +2,8 @@ import path from 'node:path';
 
 import type { NextConfig } from 'next';
 
+import { staticSecurityHeaders } from './lib/security/headers';
+
 const nextConfig: NextConfig = {
   transpilePackages: [
     '@learny/core',
@@ -29,6 +31,14 @@ const nextConfig: NextConfig = {
   // SDD demo pages are never indexed, even when they answer 404 (SPEC-006, EF-4).
   headers() {
     return Promise.resolve([
+      {
+        // SPEC-805 — HSTS is added per request by the proxy only for a real HTTPS production response.
+        source: '/:path*',
+        headers: Object.entries(staticSecurityHeaders(false)).map(([key, value]) => ({
+          key,
+          value,
+        })),
+      },
       {
         source: '/_dev/:path*',
         headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],

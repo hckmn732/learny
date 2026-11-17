@@ -24,6 +24,12 @@ import {
 } from './lib/onboarding-ticket';
 import { decideRoute, isApiPath } from './lib/route-guard';
 import { findSddDemo, sddPagesEnabled } from './lib/sdd-pages';
+import { buildContentSecurityPolicy, createCspNonce } from './lib/security/csp';
+import {
+  applySecurityHeaders,
+  isHttpsRequest,
+  isProductionEnvironment,
+} from './lib/security/headers';
 import { refreshSession } from './lib/supabase/middleware';
 import { ONBOARDED_COOKIE, expireCookie } from './lib/supabase/server';
 
@@ -32,7 +38,7 @@ const NOT_FOUND_PATH = '/_sdd-not-found';
 const TICKET_TTL_SECONDS = Math.ceil(ONBOARDING_TICKET_TTL_MS / 1000);
 const FORMATION_PATH = /^\/formations\/([^/]+)(?:\/|$)/;
 
-function sddGuard(request: NextRequest): NextResponse {
+function sddGuard(request: NextRequest, requestHeaders: Headers): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
   const specId = segments[2];
   // SPEC-301 EF-11: the validated SDD URL answers a real 307 before the streamed root loading
@@ -67,8 +73,11 @@ function sddGuard(request: NextRequest): NextResponse {
               // SPEC-301 redirects its validated SDD URL to the design-system gallery.
               specId === 'SPEC-301' ||
               findSddDemo(specId, sddDemos) !== undefined)))));
-  if (allowed) return NextResponse.next();
-  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
+  if (allowed) return NextResponse.next({ request: { headers: requestHeaders } });
+  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), {
+    status: 404,
+    request: { headers: requestHeaders },
+  });
 }
 
 /**
@@ -76,7 +85,11 @@ function sddGuard(request: NextRequest): NextResponse {
  * already streamed the skeleton, so the status has to be fixed before rendering. The read is a
  * single indexed visibility check, not the page content.
  */
-async function formationGuard(request: NextRequest, userId: string): Promise<NextResponse | null> {
+async function formationGuard(
+  request: NextRequest,
+  requestHeaders: Headers,
+  userId: string,
+): Promise<NextResponse | null> {
   const match = FORMATION_PATH.exec(request.nextUrl.pathname);
   if (match === null) return null;
   const formationId = match[1] ?? '';
@@ -91,17 +104,22 @@ async function formationGuard(request: NextRequest, userId: string): Promise<Nex
   } catch {
     return null;
   }
-  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), { status: 404 });
+  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), {
+    status: 404,
+    request: { headers: requestHeaders },
+  });
 }
 
-async function sessionGuard(request: NextRequest): Promise<NextResponse> {
+async function sessionGuard(request: NextRequest, requestHeaders: Headers): Promise<NextResponse> {
   const { pathname, search } = request.nextUrl;
   let session;
   try {
     session = await refreshSession(request);
   } catch {
     // Auth not configured or unreachable: public pages keep working, protected ones ask to sign in.
-    if (isApiPath(pathname)) return NextResponse.next();
+    if (isApiPath(pathname)) {
+      return NextResponse.next({ request: { headers: requestHeaders } });
+    }
     session = {
       userId: null,
       writes: [],
@@ -128,9 +146,9 @@ async function sessionGuard(request: NextRequest): Promise<NextResponse> {
   let response =
     decision.kind === 'redirect'
       ? NextResponse.redirect(new URL(decision.to, request.url), 307)
-      : NextResponse.next();
+      : NextResponse.next({ request: { headers: requestHeaders } });
   if (decision.kind !== 'redirect' && session.userId !== null) {
-    const denied = await formationGuard(request, session.userId);
+    const denied = await formationGuard(request, requestHeaders, session.userId);
     if (denied !== null) response = denied;
   }
   for (const write of session.writes) response.cookies.set(write.name, write.value, write.options);
@@ -161,10 +179,40 @@ async function sessionGuard(request: NextRequest): Promise<NextResponse> {
   return response;
 }
 
+function securityOptions(request: NextRequest, nonce: string) {
+  return {
+    nonce,
+    production: isProductionEnvironment(),
+    https: isHttpsRequest(request),
+    csp: {
+      ...(process.env.NEXT_PUBLIC_SUPABASE_URL === undefined
+        ? {}
+        : { supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL }),
+      ...(process.env.NEXT_PUBLIC_SENTRY_DSN === undefined
+        ? {}
+        : { sentryDsn: process.env.NEXT_PUBLIC_SENTRY_DSN }),
+    },
+  };
+}
+
+/**
+ * SPEC-805 EF-1/EF-2 — one random nonce per request, reused by every script of the response, and
+ * the static headers. The nonce is sent to Next through both `x-nonce` and the request CSP header
+ * so its own scripts are stamped before the document is rendered.
+ */
 export function proxy(request: NextRequest): NextResponse | Promise<NextResponse> {
   const { pathname } = request.nextUrl;
-  if (pathname === '/_dev' || pathname.startsWith('/_dev/')) return sddGuard(request);
-  return sessionGuard(request);
+  const nonce = createCspNonce();
+  const options = securityOptions(request, nonce);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-nonce', nonce);
+  requestHeaders.set('content-security-policy', buildContentSecurityPolicy(nonce, options.csp));
+  if (pathname === '/_dev' || pathname.startsWith('/_dev/')) {
+    return applySecurityHeaders(sddGuard(request, requestHeaders), options);
+  }
+  return sessionGuard(request, requestHeaders).then((response) =>
+    applySecurityHeaders(response, options),
+  );
 }
 
 export const config = {
