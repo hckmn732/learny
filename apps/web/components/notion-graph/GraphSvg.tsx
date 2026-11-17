@@ -230,7 +230,7 @@ export function GraphSvg({
     <section
       data-testid="notion-graph"
       aria-label={t.graph.label}
-      className="relative h-[540px] min-w-0 flex-[999_1_560px] overflow-hidden rounded-24 bg-ink max-sm:h-[420px] nav:h-[594px]"
+      className="relative h-[540px] min-w-0 flex-[999_1_560px] overflow-hidden rounded-24 bg-ink nav:h-[594px]"
     >
       <div ref={containerRef} className="absolute inset-0 h-full w-full">
         <svg
