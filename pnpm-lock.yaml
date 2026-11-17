@@ -164,6 +164,9 @@ importers:
       ai:
         specifier: ^7.0.171
         version: 7.0.171(zod@4.6.7)
+      idb:
+        specifier: ^8.0.4
+        version: 8.0.4
       inngest:
         specifier: ^4.26.2
         version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
@@ -182,6 +185,9 @@ importers:
       react-hook-form:
         specifier: ^7.92.0
         version: 7.92.0(@types/react@19.3.0)(react@19.3.1)
+      serwist:
+        specifier: 9.5.14
+        version: 9.5.14(browserslist@4.29.5)(typescript@6.0.3)
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -201,6 +207,15 @@ importers:
       '@types/react-dom':
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
+      fake-indexeddb:
+        specifier: ^6.2.8
+        version: 6.2.8
+      sharp:
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@24.19.2)
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -3567,6 +3582,14 @@ packages:
     resolution: {integrity: sha512-+s+XyGtncoeQQd0f1hjdXbjIORcAt5IdhmcV1mz0vwBlyilfq3bB40bCg1j91g2L4xTlVmTm01X2ofGeKkZuew==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.12.0 <23.0.0 || >=23.2.0'}
 
+  '@serwist/utils@9.5.14':
+    resolution: {integrity: sha512-Ssr34/t6y4ri2O9cdXs3obx56dnWzAgmsFTgjA675IXgx6NvBTssaSweXarNoW/qJW2Eywf1HP5yPubYTPMPVw==}
+    peerDependencies:
+      browserslist: '>=4'
+    peerDependenciesMeta:
+      browserslist:
+        optional: true
+
   '@sidvind/better-ajv-errors@7.0.0':
     resolution: {integrity: sha512-imVsp5D3KxJ8+uUmu2dsLKnFg3qdX952v/L1gZoCa0NO2ivhQWHMpYM2KmpFrRXHWFjlqkNZ/935nxiTqXEi1A==}
     engines: {node: ^22.12 || >= 24.0}
@@ -4972,6 +4995,10 @@ packages:
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
+  fake-indexeddb@6.2.8:
+    resolution: {integrity: sha512-mpVW/HLUqwKXJ6F/s0hMgdK1eQfM4ncTHDioNGHWL0WKV3VcZCoZq1NKgboBbAge07aRCO7L48yziKssL59XEQ==}
+    engines: {node: '>=18'}
+
   fast-check@4.10.2:
     resolution: {integrity: sha512-iK2f+YrcmoeGqk6fA0ea2bptcu/itMIm4NfEozq6N25+aG6h7s5HZbB/k1aV7b5w5sFLMCbbtRUsTVR+BgC3xw==}
     engines: {node: '>=12.17.0'}
@@ -5276,6 +5303,12 @@ packages:
   iceberg-js@0.8.1:
     resolution: {integrity: sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==}
     engines: {node: '>=20.0.0'}
+
+  idb@8.0.3:
+    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
+
+  idb@8.0.4:
+    resolution: {integrity: sha512-jd0ITCrN+Zah4J7R/Z2jnR3W7A4BXDAjmo62MwWuSjxCiueUAf7X5rbodEdidWzeknwXHmLpdZkoiiCppNi30Q==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -6589,6 +6622,14 @@ packages:
     resolution: {integrity: sha512-9tjS0jTx5FQzhwAGhpcnwvqE0MlQiwJtunsIUNqGkw6E9CBOMbijlamIDUqvZTDtJAveVwa9L5ziP44bOJUzcQ==}
     engines: {node: '>=20.0'}
     hasBin: true
+
+  serwist@9.5.14:
+    resolution: {integrity: sha512-DsKXY8b3hAFxHrnSDugzm29fKGHF9tnAKqvUdbGU3Ui8QHE9izeh+j1na95m3ANk/yIIAvmbpxA8XS0cs3H8Lw==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   set-cookie-parser@3.2.2:
     resolution: {integrity: sha512-df017qMeYuXo4emL09nlyMpi2i2MtEIKS/6jtXH3vmjFgIRsOi852/5RmhJ4EkvN3ZF8jXadM/EkTPXgc8yPIw==}
@@ -8040,8 +8081,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.5':
     optionalDependencies:
@@ -9827,6 +9867,10 @@ snapshots:
       '@sentry/core': 11.12.0
       '@sentry/server-utils': 11.12.0
 
+  '@serwist/utils@9.5.14(browserslist@4.29.5)':
+    optionalDependencies:
+      browserslist: 4.29.5
+
   '@sidvind/better-ajv-errors@7.0.0(ajv@8.20.0)':
     dependencies:
       ajv: 8.20.0
@@ -11320,6 +11364,8 @@ snapshots:
 
   extend@3.0.2: {}
 
+  fake-indexeddb@6.2.8: {}
+
   fast-check@4.10.2:
     dependencies:
       pure-rand: 8.4.2
@@ -11656,6 +11702,10 @@ snapshots:
   husky@9.1.7: {}
 
   iceberg-js@0.8.1: {}
+
+  idb@8.0.3: {}
+
+  idb@8.0.4: {}
 
   ieee754@1.2.1: {}
 
@@ -13248,6 +13298,15 @@ snapshots:
 
   sentry@0.49.0: {}
 
+  serwist@9.5.14(browserslist@4.29.5)(typescript@6.0.3):
+    dependencies:
+      '@serwist/utils': 9.5.14(browserslist@4.29.5)
+      idb: 8.0.3
+    optionalDependencies:
+      typescript: 6.0.3
+    transitivePeerDependencies:
+      - browserslist
+
   set-cookie-parser@3.2.2: {}
 
   set-function-length@1.2.2:
@@ -13304,7 +13363,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
       '@types/node': 24.19.2
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:

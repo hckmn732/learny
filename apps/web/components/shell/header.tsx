@@ -5,11 +5,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode, type RefObject } from 'react';
 
 import type { HeaderDto } from '@learny/contracts';
-import { IconButton, iconRegistry } from '@learny/ui';
+import { AlertDialog, IconButton, iconRegistry } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
+import { purgeOfflineDatabase, purgeRuntimeCaches } from '../../lib/offline/db';
 import { fr } from '../../messages/fr';
 import { NotificationBell } from '../notifications/notification-panel';
+import { OfflineIndicator } from '../offline/OfflineIndicator';
+import { flushBeforeSignOut } from '../offline/OfflineProvider';
 import { GlobalSearch } from '../search/global-search';
 
 import { AccountMenuView, type AccountMenuStatus } from './account-menu';
@@ -79,6 +82,7 @@ export const HeaderView = ({
       />
 
       <div className="ml-auto flex items-center gap-8">
+        <OfflineIndicator />
         {notificationPanel ?? (
           <IconButton
             tone="light"
@@ -139,6 +143,8 @@ export const Header = ({
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const [signOutError, setSignOutError] = useState<string | null>(null);
+  const [signOutPendingLocal, setSignOutPendingLocal] = useState(false);
+  const [blockedSignOut, setBlockedSignOut] = useState<number | null>(null);
 
   const query = useQuery({
     queryKey: HEADER_QUERY_KEY,
@@ -149,8 +155,10 @@ export const Header = ({
 
   const signOut = useMutation({
     mutationFn: () => api.authSignOut({}),
-    onSuccess: () => {
-      // ET-3 — no cached learner data survives the session; the connected entry is replaced.
+    onSuccess: async () => {
+      // EF-11 — no offline data survives the session; ET-3 clears the cached learner data.
+      await purgeOfflineDatabase().catch(() => undefined);
+      await purgeRuntimeCaches().catch(() => undefined);
       queryClient.clear();
       router.replace('/connexion');
       router.refresh();
@@ -159,44 +167,86 @@ export const Header = ({
       // CL-2 — the menu stays open on its error; the session is never announced as closed.
       setSignOutError(t.signOutError);
     },
+    onSettled: () => {
+      setSignOutPendingLocal(false);
+    },
   });
+
+  /** CL-6 — a short synchronisation runs first; pending answers block the sign-out behind a dialog. */
+  async function beginSignOut(): Promise<void> {
+    setSignOutError(null);
+    setSignOutPendingLocal(true);
+    const remaining = await flushBeforeSignOut();
+    if (remaining > 0) {
+      setSignOutPendingLocal(false);
+      setBlockedSignOut(remaining);
+      return;
+    }
+    await purgeOfflineDatabase().catch(() => undefined);
+    await purgeRuntimeCaches().catch(() => undefined);
+    signOut.mutate();
+  }
 
   const status: AccountMenuStatus =
     query.data !== undefined ? 'ready' : query.isError || initialError ? 'error' : 'loading';
 
   return (
-    <HeaderView
-      data={query.data ?? null}
-      status={status}
-      pathname={pathname}
-      sidebarCollapsed={sidebarCollapsed}
-      onShowSidebar={onShowSidebar}
-      onRetry={() => {
-        void query.refetch();
-      }}
-      onNavigate={(href) => {
-        router.push(href);
-      }}
-      onSignOut={() => {
-        setSignOutError(null);
-        signOut.mutate();
-      }}
-      signOutPending={signOut.isPending}
-      signOutError={signOutError}
-      showTriggerRef={showTriggerRef}
-      notificationPanel={
-        <NotificationBell
-          unreadCount={query.data?.unreadNotificationCount ?? 0}
-          onNavigate={(href) => {
-            router.push(href);
-          }}
-          onUnreadCountChange={(count) => {
-            queryClient.setQueryData<HeaderDto>(HEADER_QUERY_KEY, (current) =>
-              current === undefined ? current : { ...current, unreadNotificationCount: count },
-            );
-          }}
-        />
-      }
-    />
+    <>
+      <HeaderView
+        data={query.data ?? null}
+        status={status}
+        pathname={pathname}
+        sidebarCollapsed={sidebarCollapsed}
+        onShowSidebar={onShowSidebar}
+        onRetry={() => {
+          void query.refetch();
+        }}
+        onNavigate={(href) => {
+          router.push(href);
+        }}
+        onSignOut={() => {
+          void beginSignOut();
+        }}
+        signOutPending={signOut.isPending || signOutPendingLocal}
+        signOutError={signOutError}
+        showTriggerRef={showTriggerRef}
+        notificationPanel={
+          <NotificationBell
+            unreadCount={query.data?.unreadNotificationCount ?? 0}
+            onNavigate={(href) => {
+              router.push(href);
+            }}
+            onUnreadCountChange={(count) => {
+              queryClient.setQueryData<HeaderDto>(HEADER_QUERY_KEY, (current) =>
+                current === undefined ? current : { ...current, unreadNotificationCount: count },
+              );
+            }}
+          />
+        }
+      />
+      <AlertDialog
+        open={blockedSignOut !== null}
+        onOpenChange={(open) => {
+          if (!open) setBlockedSignOut(null);
+        }}
+        trigger={<span aria-hidden="true" />}
+        title={fr.offline.signOut.title}
+        description={fr.offline.signOut.pending(blockedSignOut ?? 0)}
+        confirmLabel={fr.offline.signOut.confirm}
+        cancelLabel={fr.offline.signOut.cancel}
+        destructive
+        data-testid="offline-signout-dialog"
+        onConfirm={() => {
+          setBlockedSignOut(null);
+          setSignOutPendingLocal(true);
+          void purgeOfflineDatabase()
+            .catch(() => undefined)
+            .then(() => purgeRuntimeCaches().catch(() => undefined))
+            .then(() => {
+              signOut.mutate();
+            });
+        }}
+      />
+    </>
   );
 };

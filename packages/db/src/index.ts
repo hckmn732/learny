@@ -357,6 +357,7 @@ export type {
 export * from './repositories/privacy';
 export * from './repositories/idempotency';
 export * from './repositories/security-purge';
+export * from './repositories/offline-receipts';
 export * from './repositories/search';
 // Two tables of the shared-formation domain and their enumerations (SPEC-111 EF-1, EF-2). The
 // group view, the active-formation counter and the invitation code live in the custom migration

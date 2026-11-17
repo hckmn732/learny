@@ -42,7 +42,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/modules/:mid/remediation` · POST `/modules/:mid/remediation/complete` | Remédiation | SPEC-612 |
 | POST `/modules/:mid/exercises/:aid/hint` | Indices d'exercice | SPEC-613 |
 | POST `/formations/:fid/mock-exams` · PATCH `/formations/:fid/exam-format` | Examen blanc | SPEC-614 |
-| GET `/formations/:fid/global-quiz/today?mode=full|micro` · POST `/review-sessions/:sid/answers` · POST `/review-sessions/:sid/complete` · POST `/sync/offline-answers` | Quiz global, hors ligne : session du jour idempotente (200), réponses idempotentes par `clientAnswerId` (409 sur une position déjà répondue, 422 `SESSION_CLOSED` après clôture), clôture idempotente | SPEC-701, 703, 801 |
+| GET `/formations/:fid/global-quiz/today?mode=full|micro` · GET `/offline/pack` (paquet hors ligne du jour) · POST `/review-sessions/:sid/answers` · POST `/review-sessions/:sid/complete` · POST `/sync/offline-answers` | Quiz global, hors ligne : session du jour idempotente (200), réponses idempotentes par `clientAnswerId` (409 sur une position déjà répondue, 422 `SESSION_CLOSED` après clôture), clôture idempotente | SPEC-701, 703, 801 |
 | GET `/formations/:fid/gaps?nature=` | Mes lacunes | SPEC-615 |
 | GET `/formations/:fid/notion-graph` | Carte des notions : nœuds formation/module/notion/apport, liens typés (contient, prérequis, confusion, tuteur, source), maîtrise, lacunes ouvertes et statistiques ; 404 pour la formation d’un autre apprenant, apports et liens personnels filtrés par RLS | SPEC-616 |
 | GET `/agenda?from=&to=&formation=` · POST `/slots/:id/move` · GET `/slots/:id/alternatives` · POST `/formations/:fid/replan-options` · POST `/formations/:fid/replan` | Agenda | SPEC-704, 705 |

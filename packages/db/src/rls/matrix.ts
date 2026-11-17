@@ -95,6 +95,7 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('study_preferences', 'user_id', ['study_preferences_owner_all']),
   personal('notification_settings', 'user_id', ['notification_settings_owner_all']),
   personal('push_subscriptions', 'id', ['push_subscriptions_owner_all']),
+  personal('offline_sync_receipts', 'user_id', ['offline_sync_receipts_owner_all']),
   personal('automation_settings', 'user_id', ['automation_settings_owner_all']),
   personal('pauses', 'id', ['pauses_owner_all']),
 

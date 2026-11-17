@@ -51,3 +51,8 @@ desktop.ini
 npm-debug.log*
 pnpm-debug.log*
 logs/
+
+# SPEC-801 — generated service worker
+apps/web/public/sw.js
+apps/web/public/swe-worker-*.js
+apps/web/public/swe-worker-build.txt

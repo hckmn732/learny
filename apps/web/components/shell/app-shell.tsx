@@ -6,6 +6,7 @@ import type { HeaderDto, SidebarDto } from '@learny/contracts';
 import { ToastProvider } from '@learny/ui';
 
 import { fr } from '../../messages/fr';
+import { OfflineProvider } from '../offline/OfflineProvider';
 
 import { Header } from './header';
 import { Sidebar } from './sidebar';
@@ -41,6 +42,7 @@ export const AppShell = ({
   // calls of the shell and the home cards (a failed « Annuler », a lost network) showed nothing.
   return (
     <ToastProvider>
+      <OfflineProvider />
       <div className="flex min-h-screen bg-canvas">
         <a
           href="#contenu"

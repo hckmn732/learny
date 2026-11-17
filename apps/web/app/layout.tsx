@@ -1,5 +1,7 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+
+import { colors } from '@learny/ui/tokens';
 
 import { fontVariables } from '../lib/fonts';
 import { fr } from '../messages/fr';
@@ -11,6 +13,12 @@ export const metadata: Metadata = {
   title: fr.meta.title,
   description: fr.meta.description,
   applicationName: fr.meta.title,
+  // SPEC-801 EF-1 — iOS home-screen icon and browser theme colour.
+  icons: { apple: '/icons/apple-touch-icon.png' },
+};
+
+export const viewport: Viewport = {
+  themeColor: colors.ink,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

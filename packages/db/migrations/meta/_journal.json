@@ -358,6 +358,20 @@
       "when": 1794643680073,
       "tag": "0050_pretty_silvermane",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794846610436,
+      "tag": "0051_tearful_deadpool",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1794846620225,
+      "tag": "0052_offline_sync_receipts_rules",
+      "breakpoints": true
     }
   ]
 }

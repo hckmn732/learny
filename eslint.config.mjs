@@ -203,6 +203,8 @@ export default tseslint.config(
       'docs/**',
       'evidence/**',
       'progress/**',
+      'apps/web/public/sw.js',
+      'apps/web/public/swe-worker-*.js',
     ],
   },
   js.configs.recommended,

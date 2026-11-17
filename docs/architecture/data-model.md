@@ -92,6 +92,8 @@ Normatif. Implémenté dans `packages/db/src/schema/*.ts` (Drizzle) par les spé
 
 **review_logs** — `id`, `user_id`, `notion_id`, `answer_id uuid null`, `source review_source` (`validation|global_quiz|warmup|exercise|exam|self_test|micro_session|sprint|offline`), `grade fsrs_grade` (`again|hard|good|easy`), `correct bool`, `time_ms int`, `reviewed_at timestamptz`, `fsrs_before jsonb`, `fsrs_after jsonb` ; index unique partiel `(answer_id, notion_id) where answer_id is not null` (SPEC-411, ADR-0149).
 
+**offline_sync_receipts** — `user_id uuid → profiles on delete cascade`, `client_id uuid`, `status text check('applied'|'conflict'|'rejected')`, `answer_id uuid null → answers on delete set null`, `created_at`, `pk(user_id, client_id)` ; purge des reçus de plus de 30 jours par le cron nocturne (SPEC-801, ADR-0200).
+
 **gap_events** — `id`, `user_id`, `notion_id`, `kind` (`detected|nature_changed|cleared`), `nature gap_nature null`, `evidence jsonb`, `created_at`.
 
 ## 7. Agenda, automatismes, série (SPEC-108)

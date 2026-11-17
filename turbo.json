@@ -17,7 +17,14 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "dist/**",
+        "public/sw.js",
+        "public/swe-worker-*.js",
+        "public/swe-worker-build.txt"
+      ]
     },
     "dev": {
       "cache": false,

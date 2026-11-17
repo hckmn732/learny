@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "next build && node scripts/build-sw.mjs",
     "start": "next start -p 3000",
     "lint": "eslint --max-warnings=0 .",
     "typecheck": "tsc --noEmit"
@@ -34,12 +34,14 @@
     "@supabase/supabase-js": "^2.119.0",
     "@tanstack/react-query": "^5.107.1",
     "ai": "^7.0.171",
+    "idb": "^8.0.4",
     "inngest": "^4.26.2",
     "lucide-react": "^1.72.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.92.0",
+    "serwist": "9.5.14",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -48,6 +50,9 @@
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "esbuild": "0.28.2",
+    "fake-indexeddb": "^6.2.8",
+    "sharp": "0.35.5",
     "tailwindcss": "^4.3.5"
   }
 }

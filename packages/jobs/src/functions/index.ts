@@ -20,6 +20,7 @@ import { notificationDelivery } from './notification-delivery';
 import { notificationsDailyDigest } from './notifications-daily-digest';
 import { notificationsDeferredDue } from './notifications-deferred-due';
 import { notificationsReminders } from './notifications-reminders';
+import { offlineReceiptsPurge } from './offline-receipts-purge';
 import { prepareQuestionBankForCourse, questionBankNightly } from './prepare-question-bank';
 import { planProgramme } from './programme';
 import { sddDemoPipeline } from './sdd-demo-pipeline';
@@ -41,6 +42,7 @@ export const learnyFunctions = [
   generateCourseJob,
   ingestResource,
   nightlyOutboxCleanup,
+  offlineReceiptsPurge,
   notificationDelivery,
   notificationsDailyDigest,
   notificationsDeferredDue,
