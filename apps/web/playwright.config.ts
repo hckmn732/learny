@@ -113,6 +113,8 @@ export default defineConfig({
           {
             name: 'perf',
             testDir: './e2e/perf',
+            // Default testMatch only knows *.spec / *.test: the INP scenarios are *.perf.ts.
+            testMatch: '**/*.perf.ts',
             retries: 0,
             workers: 1,
             use: {

@@ -63,9 +63,12 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
       'run',
       '--rm',
       '-i',
-      '--add-host=host.docker.internal:host-gateway',
+      // The perf server listens on 127.0.0.1 only: share the host network, and run as the host
+      // user so the summary can be written to the mounted directory.
+      '--network=host',
+      `--user=${String(process.getuid?.() ?? 0)}:${String(process.getgid?.() ?? 0)}`,
       '-e',
-      'BASE_URL=http://host.docker.internal:3100',
+      `BASE_URL=${base}`,
       '-e',
       `FORMATION_ID=${formationId}`,
       '-e',
