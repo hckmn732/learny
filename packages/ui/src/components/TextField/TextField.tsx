@@ -50,7 +50,7 @@ export const TextField = ({
         {LeadingIcon ? (
           <LeadingIcon
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-14 -translate-y-1/2 text-ink-muted"
+            className="pointer-events-none absolute top-1/2 left-14 z-[1] -translate-y-1/2 text-ink-muted"
             size={18}
             strokeWidth={2}
           />

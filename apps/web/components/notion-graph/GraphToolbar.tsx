@@ -72,7 +72,7 @@ export function GraphToolbar({
           aria-hidden="true"
           size={16}
           strokeWidth={2}
-          className="pointer-events-none absolute top-13 left-13 text-ink-muted"
+          className="pointer-events-none absolute top-13 left-13 z-[1] text-ink-muted"
         />
         <input
           id="recherche-notion"

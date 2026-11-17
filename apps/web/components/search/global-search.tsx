@@ -253,7 +253,7 @@ export const GlobalSearch = ({
         name="search"
         size={18}
         strokeWidth={1.8}
-        className="pointer-events-none absolute top-12 left-14 text-ink-muted"
+        className="pointer-events-none absolute top-12 left-14 z-[1] text-ink-muted"
       />
       <input
         id={inputId}

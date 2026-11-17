@@ -393,7 +393,7 @@ export function GlobalQuizSession(props: GlobalQuizSessionProps) {
                 <GamePanel
                   dueLabels={props.dueLabelsByPosition[String(item.position)]}
                   footer={
-                    <BottomActionBar>
+                    <BottomActionBar className="sm:mt-0">
                       <SessionFooter
                         isLast={last}
                         nextDisabled={item.state === 'todo'}
