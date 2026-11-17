@@ -18,7 +18,11 @@ import {
   runWithRequestContext,
   type LearnyLogger,
 } from '@learny/core/server';
-import { createServiceContext, type ServiceContext } from '@learny/services';
+import {
+  createServiceContext,
+  enforceLegalAcceptance,
+  type ServiceContext,
+} from '@learny/services';
 
 import { getServerReporter } from '../sentry';
 
@@ -277,6 +281,11 @@ export function routeHandler<R extends AnyRoute>(
             ip: ip ?? 'unknown',
             responseHeaders,
           };
+          // SPEC-806 ET-4 — the server, not only the UI, refuses a mutation that needs a new
+          // acceptance. The explicit exemptions live in the legal service.
+          if (route.legalAcceptance === true) {
+            await enforceLegalAcceptance(ctx, route.id);
+          }
           const outcome = await fn({ ctx, params, query, body, request, logger: logger() });
           // A handler may answer with a non-JSON document (HTML page of the unsubscribe flow,
           // SPEC-204): the response is sent as is, status and headers included.

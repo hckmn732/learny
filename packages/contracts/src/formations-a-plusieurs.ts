@@ -161,6 +161,7 @@ const GROUP_ERRORS = [
 /** ET-3 — `POST /api/v1/formations/:fid/group` (BR-GRP-01). */
 export const formationGroupCreate = defineRoute({
   id: 'formations.group.create',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/formations/:fid/group',
   auth: 'user',
@@ -189,6 +190,7 @@ export const formationGroupGet = defineRoute({
 /** ET-3, BR-GRP-05 — `POST /api/v1/groups/:gid/rotate-code`; the old code dies immediately. */
 export const groupRotateCode = defineRoute({
   id: 'groups.rotateCode',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/groups/:gid/rotate-code',
   auth: 'user',
@@ -204,6 +206,7 @@ export const groupRotateCode = defineRoute({
 /** ET-3, BR-GRP-05 — `DELETE /api/v1/groups/:gid/members/:uid` (owner only). */
 export const groupMemberRemove = defineRoute({
   id: 'groups.members.remove',
+  legalAcceptance: true,
   method: 'DELETE',
   path: '/api/v1/groups/:gid/members/:uid',
   auth: 'user',
@@ -231,6 +234,7 @@ export const invitationGet = defineRoute({
 /** ET-3 — joining applies the three-active-formations limit and the ten-seat capacity. */
 export const invitationAccept = defineRoute({
   id: 'invitations.accept',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/invitations/:code/accept',
   auth: 'user',
@@ -246,6 +250,7 @@ export const invitationAccept = defineRoute({
 /** ET-3, BR-GRP-05 — a member leaves and keeps a private individual copy. */
 export const groupLeave = defineRoute({
   id: 'groups.leave',
+  legalAcceptance: true,
   method: 'POST',
   path: '/api/v1/groups/:gid/leave',
   auth: 'user',

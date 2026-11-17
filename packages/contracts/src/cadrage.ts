@@ -82,14 +82,7 @@ export type CadrageStateDto = z.infer<typeof CadrageStateDto>;
 export const FormationSummary = z.object({
   id: Uuid,
   title: z.string().min(1).max(120),
-  status: z.enum([
-    'cadrage',
-    'programme_proposed',
-    'active',
-    'paused',
-    'completed',
-    'archived',
-  ]),
+  status: z.enum(['cadrage', 'programme_proposed', 'active', 'paused', 'completed', 'archived']),
 });
 export type FormationSummary = z.infer<typeof FormationSummary>;
 
@@ -129,9 +122,8 @@ export const CadrageMessageCreateInput = z
   })
   .refine(
     (value) =>
-      [value.content, value.selections, value.retry].filter(
-        (candidate) => candidate !== undefined,
-      ).length === 1,
+      [value.content, value.selections, value.retry].filter((candidate) => candidate !== undefined)
+        .length === 1,
     { message: 'Envoyez une réponse, une sélection ou une nouvelle tentative.' },
   );
 export type CadrageMessageCreateInput = z.input<typeof CadrageMessageCreateInput>;
@@ -145,6 +137,7 @@ const idParams = z.object({ fid: Uuid });
 export const formationRoutes = {
   formationsCreate: defineRoute({
     id: 'formations.create',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations',
     auth: 'user',
@@ -174,6 +167,7 @@ export const formationRoutes = {
   }),
   formationUpdate: defineRoute({
     id: 'formations.update',
+    legalAcceptance: true,
     method: 'PATCH',
     path: '/api/v1/formations/:fid',
     auth: 'user',
@@ -200,6 +194,7 @@ export const cadrageRoutes = {
   }),
   cadrageMessageCreate: defineRoute({
     id: 'cadrage.message',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/cadrage/messages',
     auth: 'user',
@@ -224,6 +219,7 @@ export const cadrageRoutes = {
   }),
   cadrageComplete: defineRoute({
     id: 'cadrage.complete',
+    legalAcceptance: true,
     method: 'POST',
     path: '/api/v1/formations/:fid/cadrage/complete',
     auth: 'user',
@@ -231,12 +227,6 @@ export const cadrageRoutes = {
     output: CadrageCompleteOutput,
     successStatus: 202,
     summary: 'Conclut le cadrage et prépare la génération du programme (SPEC-604).',
-    errors: [
-      'CADRAGE_INCOMPLETE',
-      'CONFLICT',
-      'NOT_FOUND',
-      'UNAUTHENTICATED',
-      'INTERNAL_ERROR',
-    ],
+    errors: ['CADRAGE_INCOMPLETE', 'CONFLICT', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
   }),
 } as const;
