@@ -132,7 +132,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
 
   return (
     <main
-      className={`mx-auto w-full px-16 pb-40 nav:px-40 ${chatOpen ? 'xl:pr-[500px]' : ''}`}
+      className="mx-auto w-full px-16 pb-40 nav:px-40"
       data-chat-open={chatOpen ? 'true' : undefined}
       data-testid="course-page"
     >

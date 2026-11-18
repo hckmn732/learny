@@ -1,5 +1,3 @@
-import { fileURLToPath } from 'node:url';
-
 import { closeDb, serviceDb, sql } from '@learny/db';
 import {
   DEMO_USERS,
@@ -11,7 +9,7 @@ import {
 } from '@learny/db/seed/fixtures';
 import { expect, test } from '@learny/testing/playwright';
 import { createDemoSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
-import { MOCKUP_MAX_DIFF_RATIO, compareRegions, expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
+import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
@@ -20,7 +18,6 @@ const MODULE = demoModuleId('sap', 3);
 const CHAPTER = demoChapterId('sap', 3, 2);
 const COURSE_URL = `/formations/${FORMATION}/modules/${MODULE}/cours?chapitre=${CHAPTER}`;
 const COURSE = demoId('course', 'alex:sap:m3');
-const REFERENCE = fileURLToPath(new URL('../../../../../design/references/SCR-07-tuteur-ouvert-desktop.png', import.meta.url));
 
 let session: TestSession;
 
@@ -70,7 +67,12 @@ test('ouvre la discussion, retire la lacune et répond avec sources @SPEC-610', 
   // Retirer la lacune pour obtenir la comparaison plutôt qu'une question de vérification (BR-TUT-05).
   await page.locator('[data-testid="tutor-context-item"][data-key="gap"] button').click();
   await expect(page.getByTestId('tutor-context-count')).toHaveText('4 éléments');
+  // The entry card (and its suggestions) is hidden while the floating panel is open: close it to
+  // pick a suggestion, which reopens the panel and sends the question.
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('tutor-panel')).toBeHidden();
   await page.getByTestId('tutor-starter').filter({ hasText: 'quelle différence' }).click();
+  await expect(page.getByTestId('tutor-panel')).toBeVisible();
   await expect(page.getByTestId('tutor-messages')).toContainText('Le type de pièce se choisit', { timeout: 30_000 });
   await expect(page.getByTestId('tutor-sources')).toContainText('Sources : votre note vocale, 1:42 · Guide FI, p. 6');
   await expect(page.getByTestId('tutor-follow-up').filter({ hasText: 'Teste-moi' })).toBeVisible();
@@ -127,29 +129,27 @@ test('sélection, clavier, Échap et nouvelle discussion @SPEC-610', async ({ pa
 
 test('panneau tuteur conforme à la maquette @SPEC-610 @visual', async ({ page, axeCheck, captureEvidence }) => {
   await page.goto(COURSE_URL);
-  await page.getByTestId('tutor-open').click();
-  await expect(page.getByTestId('tutor-panel')).toBeVisible();
+  // The entry card is hidden while the floating panel is open (ADR-0337): its tokens are checked
+  // in the closed state, the panel's in the open one.
   await expectTokens(page, {
     '[data-testid="tutor-ask-card"]': { 'background-color': colors.ink, color: colors.white, 'border-radius': '21.6px' },
     '[data-testid="tutor-open"]': { 'background-color': colors.lime, color: colors.ink },
-    '[data-testid="tutor-panel"]': { 'background-color': colors.surface, 'border-left-color': colors.border },
+  });
+  await page.getByTestId('tutor-open').click();
+  await expect(page.getByTestId('tutor-panel')).toBeVisible();
+  await expectTokens(page, {
+    '[data-testid="tutor-panel"]': { 'background-color': colors.surface, 'border-top-color': colors.border },
     '[data-testid="tutor-context-count"]': { 'background-color': colors.ink, color: colors.lime },
-    '[data-testid="tutor-close"]': { color: colors['ink-muted'] },
+    '[data-testid="tutor-close"]': { color: colors.ink },
   });
   await expect(page.locator('#t-chat')).toHaveCSS('font-family', /Space Grotesk/);
   await expect(page.locator('#t-chat')).toHaveCSS('font-size', '16.2px');
   await expect(page.getByRole('dialog', { name: 'Tuteur' })).toHaveAttribute('aria-modal', 'false');
   await captureEvidence('tuteur-ouvert');
-  const comparisons = await compareRegions(page, {
-    reference: REFERENCE,
-    outputDir: 'test-results/visual/SPEC-610',
-    regions: [{ name: 'panneau', locator: page.getByTestId('tutor-panel'), rect: { x: 923, y: 0, width: 414, height: 810 } }],
-  });
-  for (const comparison of comparisons) {
-    await test.info().attach(`comparaison-${comparison.name}-side-by-side`, { path: comparison.sideBySidePath, contentType: 'image/png' });
-    await test.info().attach(`comparaison-${comparison.name}-diff`, { path: comparison.diffPath, contentType: 'image/png' });
-  }
-  expect(comparisons[0]?.ratio ?? 1).toBeLessThanOrEqual(MOCKUP_MAX_DIFF_RATIO);
+  // ADR-0337 — the tutor is a floating companion, not the mockup's full-height drawer: the
+  // geometry deliberately differs, so the mockup region is replaced by its tokens (above), axe
+  // and the pixel baseline of the floating panel.
+  await expect(page.getByTestId('tutor-panel')).toHaveCSS('position', 'fixed');
   await expectScreenshotBaseline(page, 'tutor-panel-open.png', { maxDiffPixelRatio: 0.01 });
   await axeCheck();
 });

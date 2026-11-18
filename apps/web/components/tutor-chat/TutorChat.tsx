@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { CourseStarter, CourseView } from '@learny/contracts';
 
@@ -37,6 +37,16 @@ export function TutorChat({
     onOpenChange(state.open);
   }, [onOpenChange, state.open]);
 
+  // The card (and its « Ouvrir la discussion » button) is unmounted while the floating panel is
+  // open; closing it puts the focus back on the entry point, as the fixed panel did before.
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (wasOpen.current && !state.open) {
+      document.querySelector<HTMLElement>('[data-testid="tutor-open"]')?.focus();
+    }
+    wasOpen.current = state.open;
+  }, [state.open]);
+
   useEffect(() => {
     const handler = (event: Event): void => {
       const detail = (event as CustomEvent<{ text: string; sectionId: string; label: string }>)
@@ -63,14 +73,16 @@ export function TutorChat({
 
   return (
     <>
-      <TutorAskCard
-        chapterLabel={chapterPosition}
-        chapterTitle={chapterTitle}
-        course={course}
-        onOpen={state.openPanel}
-        onStarter={onStarter}
-        open={state.open}
-      />
+      {state.open ? null : (
+        <TutorAskCard
+          chapterLabel={chapterPosition}
+          chapterTitle={chapterTitle}
+          course={course}
+          onOpen={state.openPanel}
+          onStarter={onStarter}
+          open={state.open}
+        />
+      )}
       {selection.selection !== null && !state.open ? (
         <SelectionBar
           onAsk={() => {

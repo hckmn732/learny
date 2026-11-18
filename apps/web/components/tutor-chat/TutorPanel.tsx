@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { MarkdownContent } from '@learny/bricks/view';
 import type { ContextItemDto, ConversationSummaryDto, FollowUpDto } from '@learny/contracts';
+import { ResponsivePanel } from '@learny/ui';
 
 import { fr } from '../../messages/fr/tutorChat';
 
@@ -251,41 +252,36 @@ export function TutorPanel({
   }, []);
 
   useEffect(() => {
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, []);
-
-  useEffect(() => {
     const box = boxRef.current;
     if (box !== null) box.scrollTop = box.scrollHeight;
   }, [state.messages, state.streaming]);
 
   return (
-    <section
-      aria-labelledby="t-chat"
-      aria-modal="false"
-      className="fixed top-0 right-0 bottom-0 z-dialog flex w-460 max-w-full flex-col border-l border-border bg-surface shadow-drawer max-sm:w-full"
-      data-testid="tutor-panel"
-      id="chat-tuteur"
-      role="dialog"
+    <ResponsivePanel
+      closeTestId="tutor-close"
+      description={t.panelSubtitle(chapterTitle)}
+      floating
+      modal={false}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
+      open
+      testId="tutor-panel"
+      title={t.panelTitle}
+      titleId="t-chat"
+      widthPx={420}
     >
-      <div className="flex items-center gap-12 border-b border-divider px-18 py-14">
-        <span
-          aria-hidden="true"
-          className="flex h-38 w-38 flex-none items-center justify-center rounded-12 bg-lime"
-        >
-          <Sparkle />
-        </span>
-        <div className="flex min-w-0 flex-col gap-1">
-          <h2 className="m-0 font-display text-18 font-600" id="t-chat">
-            {t.panelTitle}
-          </h2>
-          <span className="truncate text-12 text-ink-muted">{t.panelSubtitle(chapterTitle)}</span>
-        </div>
-        <div className="ml-auto flex gap-4">
+      <div className="flex min-h-0 flex-1 flex-col" id="chat-tuteur">
+        <div className="flex items-center justify-between gap-8 border-b border-divider px-16 py-6">
+          <span className="flex items-center gap-8 text-12 text-ink-muted">
+            <span
+              aria-hidden="true"
+              className="flex h-28 w-28 items-center justify-center rounded-9 bg-lime"
+            >
+              <Sparkle />
+            </span>
+            {t.panelSubtitle(chapterTitle)}
+          </span>
           <button
             className="touch-target min-h-36 cursor-pointer rounded-10 border border-border bg-surface px-10 text-13 font-600 text-ink"
             data-testid="tutor-reset"
@@ -294,162 +290,158 @@ export function TutorPanel({
           >
             {t.newDiscussion}
           </button>
-          <button
-            aria-label="Fermer"
-            className="touch-target h-36 w-36 cursor-pointer rounded-10 bg-transparent text-22 leading-1 text-ink-muted"
-            data-testid="tutor-close"
-            onClick={onClose}
-            type="button"
-          >
-            ×
-          </button>
         </div>
-      </div>
-      {state.history.length > 0 ? (
-        <div className="border-b border-divider px-16 py-6">
-          <button
-            aria-expanded={state.historyOpen}
-            className="cursor-pointer bg-transparent text-12 font-600 text-ink-muted underline"
-            onClick={() => {
-              state.setHistoryOpen(!state.historyOpen);
-            }}
-            type="button"
-          >
-            {t.previous(state.history.length)}
-          </button>
-          {state.historyOpen ? (
-            <ul className="m-0 mt-6 flex list-none flex-col gap-4 p-0" data-testid="tutor-history">
-              {state.history.map((entry: ConversationSummaryDto) => (
-                <li key={entry.id}>
-                  <button
-                    className="w-full cursor-pointer rounded-8 px-8 py-4 text-left text-12 text-ink hover:bg-surface-muted"
-                    onClick={() => {
-                      void state.loadConversation(entry.id);
-                      state.setHistoryOpen(false);
-                    }}
-                    type="button"
-                  >
-                    <span className="block truncate">{entry.title ?? t.newDiscussion}</span>
-                    <span className="text-11 text-ink-muted">{dateLabel(entry.lastMessageAt)}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      ) : null}
-      <ContextList state={state} />
-      <div
-        aria-live="polite"
-        className="flex min-h-0 flex-1 flex-col gap-14 overflow-y-auto px-16 py-18"
-        data-testid="tutor-messages"
-        id="chat-messages"
-        ref={boxRef}
-      >
-        {state.messages.map((message, index) => (
-          <Message
-            key={message.id}
-            last={index === state.messages.length - 1}
-            message={message}
-            onFollowUp={onFollowUp}
-            onRetry={() => {
-              void state.retry();
-            }}
-            streaming={state.streaming}
-          />
-        ))}
-        {state.fatalError === 'AI_UNAVAILABLE' ? (
-          <div
-            className="rounded-16 bg-orange-soft p-12 text-13 text-orange-ink-strong"
-            role="alert"
-          >
-            <p className="m-0">{t.errorUnavailable}</p>
-            <Link
-              className="mt-4 inline-block text-13 font-700 underline"
-              href="/parametres#modeles"
-            >
-              {t.configureModels}
-            </Link>
-          </div>
-        ) : null}
-        {state.streaming ? (
-          <div
-            className="flex items-center gap-10 text-13 text-ink-muted"
-            data-testid="tutor-typing"
-          >
-            <span aria-hidden="true" className="h-28 w-28 flex-none rounded-9 bg-lime-soft" />
-            {t.typing}
-          </div>
-        ) : null}
-        {state.sendError === null ? null : (
-          <p
-            className="m-0 rounded-12 bg-orange-soft p-10 text-13 text-orange-ink-strong"
-            role="alert"
-          >
-            {state.sendError}{' '}
+        {state.history.length > 0 ? (
+          <div className="border-b border-divider px-16 py-6">
             <button
-              className="cursor-pointer underline"
-              onClick={() => void state.retry()}
+              aria-expanded={state.historyOpen}
+              className="cursor-pointer bg-transparent text-12 font-600 text-ink-muted underline"
+              onClick={() => {
+                state.setHistoryOpen(!state.historyOpen);
+              }}
               type="button"
             >
-              {t.retry}
+              {t.previous(state.history.length)}
             </button>
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col gap-6 border-t border-divider px-16 py-12">
-        <div className="flex items-end gap-8 rounded-16 border border-border-strong bg-surface p-6">
-          <label className="sr-only" htmlFor="chat-input">
-            {t.inputLabel}
-          </label>
-          <textarea
-            className="touch-target min-w-0 flex-1 resize-none border-0 bg-transparent p-8 text-14 leading-1.45 text-ink outline-none max-sm:text-[16px]"
-            data-testid="tutor-input"
-            id="chat-input"
-            onChange={(event) => {
-              onDraft(event.target.value);
-            }}
-            onFocus={(event) => {
-              // SPEC-802 CL-4 — keep the field above the virtual keyboard.
-              event.currentTarget.scrollIntoView({ block: 'nearest' });
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                onSend();
-              }
-            }}
-            placeholder={t.placeholder}
-            ref={inputRef}
-            rows={2}
-            value={draft}
-          />
-          <button
-            aria-label={t.send}
-            className="touch-target flex h-40 w-40 flex-none cursor-pointer items-center justify-center rounded-11 bg-ink text-white disabled:opacity-60"
-            data-testid="tutor-send"
-            disabled={state.streaming || draft.trim() === ''}
-            onClick={onSend}
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              fill="none"
-              height="16"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2.2"
-              viewBox="0 0 24 24"
-              width="16"
+            {state.historyOpen ? (
+              <ul
+                className="m-0 mt-6 flex list-none flex-col gap-4 p-0"
+                data-testid="tutor-history"
+              >
+                {state.history.map((entry: ConversationSummaryDto) => (
+                  <li key={entry.id}>
+                    <button
+                      className="w-full cursor-pointer rounded-8 px-8 py-4 text-left text-12 text-ink hover:bg-surface-muted"
+                      onClick={() => {
+                        void state.loadConversation(entry.id);
+                        state.setHistoryOpen(false);
+                      }}
+                      type="button"
+                    >
+                      <span className="block truncate">{entry.title ?? t.newDiscussion}</span>
+                      <span className="text-11 text-ink-muted">
+                        {dateLabel(entry.lastMessageAt)}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        ) : null}
+        <ContextList state={state} />
+        <div
+          aria-live="polite"
+          className="flex min-h-0 flex-1 flex-col gap-14 overflow-y-auto px-16 py-18"
+          data-testid="tutor-messages"
+          id="chat-messages"
+          ref={boxRef}
+        >
+          {state.messages.map((message, index) => (
+            <Message
+              key={message.id}
+              last={index === state.messages.length - 1}
+              message={message}
+              onFollowUp={onFollowUp}
+              onRetry={() => {
+                void state.retry();
+              }}
+              streaming={state.streaming}
+            />
+          ))}
+          {state.fatalError === 'AI_UNAVAILABLE' ? (
+            <div
+              className="rounded-16 bg-orange-soft p-12 text-13 text-orange-ink-strong"
+              role="alert"
             >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </button>
+              <p className="m-0">{t.errorUnavailable}</p>
+              <Link
+                className="mt-4 inline-block text-13 font-700 underline"
+                href="/parametres#modeles"
+              >
+                {t.configureModels}
+              </Link>
+            </div>
+          ) : null}
+          {state.streaming ? (
+            <div
+              className="flex items-center gap-10 text-13 text-ink-muted"
+              data-testid="tutor-typing"
+            >
+              <span aria-hidden="true" className="h-28 w-28 flex-none rounded-9 bg-lime-soft" />
+              {t.typing}
+            </div>
+          ) : null}
+          {state.sendError === null ? null : (
+            <p
+              className="m-0 rounded-12 bg-orange-soft p-10 text-13 text-orange-ink-strong"
+              role="alert"
+            >
+              {state.sendError}{' '}
+              <button
+                className="cursor-pointer underline"
+                onClick={() => void state.retry()}
+                type="button"
+              >
+                {t.retry}
+              </button>
+            </p>
+          )}
         </div>
-        <span className="text-11 text-ink-muted">{t.keyboardHelp}</span>
+        <div className="flex flex-col gap-6 border-t border-divider px-16 py-12">
+          <div className="flex items-end gap-8 rounded-16 border border-border-strong bg-surface p-6">
+            <label className="sr-only" htmlFor="chat-input">
+              {t.inputLabel}
+            </label>
+            <textarea
+              className="touch-target min-w-0 flex-1 resize-none border-0 bg-transparent p-8 text-14 leading-1.45 text-ink outline-none max-sm:text-[16px]"
+              data-testid="tutor-input"
+              id="chat-input"
+              onChange={(event) => {
+                onDraft(event.target.value);
+              }}
+              onFocus={(event) => {
+                // SPEC-802 CL-4 — keep the field above the virtual keyboard.
+                event.currentTarget.scrollIntoView({ block: 'nearest' });
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault();
+                  onSend();
+                }
+              }}
+              placeholder={t.placeholder}
+              ref={inputRef}
+              rows={2}
+              value={draft}
+            />
+            <button
+              aria-label={t.send}
+              className="touch-target flex h-40 w-40 flex-none cursor-pointer items-center justify-center rounded-11 bg-ink text-white disabled:opacity-60"
+              data-testid="tutor-send"
+              disabled={state.streaming || draft.trim() === ''}
+              onClick={onSend}
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+          <span className="text-11 text-ink-muted">{t.keyboardHelp}</span>
+        </div>
+        {pending ? null : null}
       </div>
-      {pending ? null : null}
-    </section>
+    </ResponsivePanel>
   );
 }
