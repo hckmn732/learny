@@ -2,7 +2,13 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { setClock, type Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { demoFormationId, demoModuleId, demoUserId, seedDemo } from '@learny/db/seed';
+import {
+  demoFormationId,
+  demoModuleId,
+  demoUserId,
+  seedDemo,
+  type SeedDemoSummary,
+} from '@learny/db/seed';
 import { createTestUser } from '@learny/db/testing';
 import { createFixedClock } from '@learny/testing/clock';
 
@@ -22,9 +28,12 @@ let stranger: { userId: string } | null = null;
 /** Formation of the time-zone and status cases (independent of the demo seed). */
 const STRANGER_FORMATION = '11111111-1111-4111-8111-111111111111';
 
+// Summary of the demonstration seed: the agenda must return exactly what the seed wrote.
+let seed: SeedDemoSummary;
+
 beforeAll(async () => {
   setClock(createFixedClock());
-  await seedDemo();
+  seed = await seedDemo();
   const user = await serviceDb().transaction(async (tx) => {
     const created = await createTestUser(tx);
     await tx.execute(
@@ -68,10 +77,13 @@ describe('[SPEC-704] getAgenda', () => {
       'Gestion de projet agile',
       'SAP S/4HANA Finance',
     ]);
-    // Les 22 créneaux rédigés de la semaine (marges et créneaux agile compris).
-    expect(agenda.slots).toHaveLength(22);
+    // Nombre de créneaux écrits par le jeu de démonstration pour la semaine (marges et créneaux
+    // agile compris) : la valeur est dérivée du seed, qui la vérifie lui-même, au lieu d'être
+    // recopiée ici à chaque enrichissement du jeu (SPEC-115).
+    expect(agenda.slots).toHaveLength(seed.checks['agenda.slots']?.expected ?? 0);
+    // 23 créneaux : les 22 de la maquette Agenda plus le créneau de 2 min ajouté par SPEC-115.
     expect(agenda.totals).toEqual({
-      plannedMinutes: 1440,
+      plannedMinutes: 1442,
       doneMinutes: 900,
       marginsRemaining: 3,
     });
