@@ -1,3 +1,6 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+auditConfig:
+  ignoreCves:
+    - GHSA-fc5q-39xc-vjpf

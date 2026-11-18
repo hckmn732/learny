@@ -6,7 +6,7 @@ import {
   type Spec711Step,
 } from '../../app/%5Fdev/sdd/spec-711-data';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec711;
 
@@ -268,7 +268,6 @@ export default async function Spec711Demo() {
   }
   return (
     <>
-      <BaseTokenStyle />
       <p className="mt-6 text-13 text-ink-secondary">{t.intro}</p>
       <Registry keys={data.keys} />
       <State data={data} />

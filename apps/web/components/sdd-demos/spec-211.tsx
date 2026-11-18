@@ -6,7 +6,7 @@ import type { DevExecutionTable, EmailLine, ExportState } from '@learny/contract
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec211;
 
@@ -179,7 +179,6 @@ export default function Spec211Demo() {
   const status = exportState?.status ?? null;
   return (
     <>
-      <BaseTokenStyle />
       <p role="status" data-testid="spec-211-announce" className="mt-4 text-sm font-semibold">
         {announce}
       </p>

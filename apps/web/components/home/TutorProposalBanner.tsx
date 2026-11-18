@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 
 import type { AutomationActionItem } from '@learny/contracts';
-import { clock } from '@learny/core';
 import { Button, Icon, toast, cn } from '@learny/ui';
 
 import { fr } from '../../messages/fr/home';
@@ -79,6 +78,8 @@ function shiftDay(day: string, days: number): string {
 /**
  * EF-9, §10 — « Jeudi 15:00 » in the current week, « Lundi 16 nov., 9:00 » afterwards. The same
  * rule as the server explanation, kept client-side so the browser never imports the database.
+ * `now` is the reference instant of the action (`createdAt`): never the browser clock, so a
+ * real tester visiting days later sees the same labels as the frozen demo instant.
  */
 export function slotLabel(instant: string, now: string, timeZone: string): string {
   const day = civilDay(instant, timeZone);
@@ -97,6 +98,7 @@ interface BannerProps {
   action: AutomationActionItem;
   accepted?: AutomationActionItem | null;
   extraCount: number;
+  /** Reference of the week window: the creation instant of the shown action, not the clock. */
   now: string;
   timeZone: string;
   busy?: boolean;
@@ -320,7 +322,7 @@ export function TutorProposalBanner({
                 setExpanded(false);
               }}
               onKeyDown={closeWithEscape}
-              className="min-h-[38px] rounded-full border border-solid border-border bg-surface-subtle px-14 text-13 font-600 text-ink"
+              className="min-h-[38px] cursor-pointer rounded-full border border-solid border-border bg-surface-subtle px-14 text-13 font-600 text-ink transition-colors hover:bg-canvas disabled:cursor-not-allowed"
             >
               {slotLabel(alternative.startsAt, now, timeZone)}
             </button>
@@ -334,7 +336,7 @@ export function TutorProposalBanner({
               setExpanded(false);
             }}
             onKeyDown={closeWithEscape}
-            className="min-h-[38px] rounded-full border border-solid border-border bg-surface px-14 text-13 font-600 text-ink"
+            className="min-h-[38px] cursor-pointer rounded-full border border-solid border-border bg-surface px-14 text-13 font-600 text-ink transition-colors hover:bg-canvas disabled:cursor-not-allowed"
           >
             {t.decline}
           </button>
@@ -359,7 +361,7 @@ export function TutorProposalBanner({
                 setOptionsOpen(false);
               }}
               className={cn(
-                'min-h-[44px] rounded-full border border-solid border-border bg-surface-subtle px-16 text-14 font-600 text-ink',
+                'min-h-[44px] cursor-pointer rounded-full border border-solid border-border bg-surface-subtle px-16 text-14 font-600 text-ink transition-colors hover:bg-canvas disabled:cursor-not-allowed',
                 option.feasible === false ? 'opacity-60' : '',
               )}
             >
@@ -378,7 +380,6 @@ export function TutorProposalBanner({
  */
 export function TutorProposalPanel() {
   const proposals = useTutorProposals();
-  const [now] = useState(() => clock.now().toISOString());
   const [timeZone] = useState(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Paris',
   );
@@ -396,7 +397,7 @@ export function TutorProposalPanel() {
       action={proposals.accepted ?? action}
       accepted={proposals.accepted}
       extraCount={proposals.accepted === null ? proposals.extraCount : 0}
-      now={now}
+      now={action.createdAt}
       timeZone={timeZone}
       busy={proposals.busy}
       onAccept={(actionId, choice) => {

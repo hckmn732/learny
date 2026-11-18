@@ -173,7 +173,7 @@ describe('[SPEC-610] discussions du tuteur', () => {
       'Vous lisez « Les postes ». Je pars de ce passage et du reste du chapitre. Que voulez-vous que je vous explique ?',
     );
     expect(greetingText(built({ resourceTitles: ['Guide FI (PDF)'] }))).toBe(
-      'Je connais ce chapitre, vos 1 apports (guide fi) et votre objectif. Que voulez-vous que je vous explique ?',
+      'Je connais ce chapitre, votre apport (guide fi) et votre objectif. Que voulez-vous que je vous explique ?',
     );
     expect(greetingText(built({ includedKeys: ['formation'] }))).toBe(
       'Je connais ce chapitre et votre objectif. Que voulez-vous que je vous explique ?',

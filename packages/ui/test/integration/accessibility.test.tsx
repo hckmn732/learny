@@ -209,8 +209,9 @@ describe('[SPEC-309] Socle d’accessibilité service', () => {
       'utf8',
     );
     expect(css).toContain('@media (prefers-reduced-motion: reduce)');
-    expect(css).toMatch(/animation-duration:\s*0\.01ms/);
-    expect(css).toMatch(/transition-duration:\s*0\.01ms/);
+    // SPEC-803 froze the durations at `0ms`: the animation stops instead of running for 0.01ms.
+    expect(css).toMatch(/animation-duration:\s*0ms/);
+    expect(css).toMatch(/transition-duration:\s*0ms/);
     expect(css).toMatch(/\.learny-skip-link:focus/);
     expect(css).toMatch(/\.learny-visually-hidden/);
 

@@ -12,7 +12,6 @@ import {
 import { Badge, Button, ProgressBar } from '@learny/ui';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseTokenStyle } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec403;
 
@@ -152,7 +151,6 @@ export default function Spec403Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <section data-testid="mastery-inputs" className={CARD}>
         <h2 className="font-display text-xl font-600">{t.inputs.title}</h2>
         <p className="mt-2 text-sm text-ink-muted">{t.inputs.intro}</p>

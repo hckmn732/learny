@@ -91,6 +91,15 @@ export async function restoreDemoData(): Promise<void> {
       ${demoUserId('alex')}::uuid, ${demoUserId('camille')}::uuid, ${demoUserId('hugo')}::uuid
     )
   `);
+  // Automations written by the specs reuse a fixture's `dedupeKey` with another id: the seed would
+  // collide on `automation_actions_dedupe_uq` instead of its own id. The seed re-creates the nine
+  // fixture actions, so drop the demo learners' actions first (counts stay deterministic too).
+  await serviceDb().execute(sql`
+    delete from public.automation_actions
+    where user_id in (
+      ${demoUserId('alex')}::uuid, ${demoUserId('camille')}::uuid, ${demoUserId('hugo')}::uuid
+    )
+  `);
   // The e2e clock is frozen: a rate-limit bucket emptied by earlier specs never refills, and a
   // long campaign ends up answered 429. Refill the demo learners' buckets with the rest.
   await serviceDb().execute(sql`

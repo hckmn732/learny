@@ -178,9 +178,12 @@ function ChoiceCard() {
       title="Question à choix"
       description="Une seule option juste ; le distracteur choisi porte sa notion."
     >
+      {/* ADR-0201: the 44 px touch target of a checkbox is an overlay; stacked closer than 44 px
+          the targets overlap and a click lands on the neighbour. Each option owns its 44 px row. */}
       {payload.options.map((option) => (
         <Checkbox
           key={option.id}
+          className="min-h-[44px] justify-center"
           data-testid={`grade-choice-option-${option.id}`}
           label={option.text}
           checked={selected === option.id}

@@ -5,7 +5,10 @@ import { describe, expect, it } from 'vitest';
 
 import { sql, type DbTx } from '@learny/db';
 import {
+  DEMO_NOW_ISO,
+  DEMO_USERS,
   demoFormationId,
+  demoId,
   demoModuleId,
   demoNotionId,
   demoUserId,
@@ -58,9 +61,180 @@ describe('[SPEC-115] demo seed', () => {
     expect(second.checks['group.members']?.observed).toBe(3);
     expect(second.checks['agenda.days']?.observed).toBe(5);
     // Extension QA (hors SPEC-115) : +3 notifications (Camille, Hugo, Alex sur agile) et +2
-    // créneaux d'agenda privés (Camille en cadrage, Hugo sur sa formation en pause).
+    // créneaux d'agenda privés (Camille en cadrage, Hugo sur sa formation en pause), +1 créneau
+    // manqué hors de la semaine visible (ADR-0336).
     expect(second.tableCounts['public.notifications']).toBe(13);
-    expect(second.tableCounts['public.schedule_slots']).toBe(27);
+    expect(second.tableCounts['public.schedule_slots']).toBe(28);
+  });
+
+  it('ADR-0336 — la purge rend l’état de référence exact après une dérive', async () => {
+    const observed = await withRollback(async (tx) => {
+      await seedDemo({ tx });
+      // Dérive simulée : le payload d'une version antérieure de la seed, la session du jour jouée
+      // et un créneau parasite — autant d'états que la recette laisse derrière elle.
+      await tx.execute(sql`
+        update public.automation_actions
+        set payload = '{"source":"fixture","key":"schedule-remains"}'::jsonb
+        where id = ${demoId('automation-action', 'schedule-remains')}::uuid
+      `);
+      await tx.execute(sql`
+        insert into public.activities (owner_id, formation_id, kind, config, items, status, for_date)
+        select ${demoUserId('alex')}::uuid,
+               ${demoFormationId('sap')}::uuid,
+               'global_quiz_session',
+               '{"mode":"full","dueCount":14}'::jsonb,
+               jsonb_build_array(
+                 jsonb_build_object('brickId', b.id, 'brickVersionId', v.id)
+               ),
+               'ready',
+               '2026-11-11'
+        from public.bricks b
+        join public.brick_versions v on v.brick_id = b.id and v.version = b.current_version
+        where b.owner_id = ${demoUserId('alex')}::uuid
+          and b.formation_id = ${demoFormationId('sap')}::uuid
+          and b.status = 'active'
+        limit 1
+      `);
+      await tx.execute(sql`
+        insert into public.schedule_slots (
+          user_id, formation_id, kind, title, meta, starts_at, ends_at, status, created_by
+        ) values (
+          ${demoUserId('alex')}::uuid,
+          ${demoFormationId('sap')}::uuid,
+          'buffer',
+          'Marge parasite',
+          'dérive de recette',
+          '2026-11-11T10:00:00Z',
+          '2026-11-11T11:00:00Z',
+          'planned',
+          'learner'
+        )
+      `);
+      await seedDemo({ tx });
+      return {
+        retryAt: await tx.execute<{ retry_at: string | null }>(sql`
+          select (payload ->> 'retryAvailableAt') as retry_at
+          from public.automation_actions
+          where id = ${demoId('automation-action', 'schedule-remains')}::uuid
+        `),
+        sessions: await count(
+          tx,
+          sql`select count(*)::int as count from public.activities
+              where owner_id = ${demoUserId('alex')}::uuid
+                and kind in ('global_quiz_session', 'micro_session')`,
+        ),
+        straySlots: await count(
+          tx,
+          sql`select count(*)::int as count from public.schedule_slots
+              where user_id = ${demoUserId('alex')}::uuid and title = 'Marge parasite'`,
+        ),
+        alexSlots: await count(
+          tx,
+          sql`select count(*)::int as count from public.schedule_slots
+              where user_id = ${demoUserId('alex')}::uuid`,
+        ),
+      };
+    });
+
+    expect(observed.retryAt[0]?.retry_at).toBe('2026-11-11T03:30:00.000Z');
+    expect(observed.sessions).toBe(0);
+    expect(observed.straySlots).toBe(0);
+    expect(observed.alexSlots).toBe(24);
+  });
+
+  it('ADR-0336 — la proposition de reprise, le délai et l’IA du jeu sont jouables', async () => {
+    const observed = await withRollback(async (tx) => {
+      await seedDemo({ tx });
+      const alex = demoUserId('alex');
+      const sap = demoFormationId('sap');
+
+      const actionRows = await tx.execute<{ payload: Record<string, unknown> }>(sql`
+        select payload from public.automation_actions
+        where id = ${demoId('automation-action', 'reschedule')}::uuid
+      `);
+      const action = actionRows[0]?.payload as {
+        missedSlotId: string;
+        proposed: { startsAt: string; endsAt: string; bufferSlotId: string };
+        alternatives: { startsAt: string; endsAt: string }[];
+        expiresAt?: string;
+      };
+
+      const slotOf = async (id: string) =>
+        (
+          await tx.execute<{ kind: string; status: string }>(
+            sql`select kind, status from public.schedule_slots where id = ${id}::uuid`,
+          )
+        )[0];
+      const missed = await slotOf(action.missedSlotId);
+      const buffer = await slotOf(action.proposed.bufferSlotId);
+
+      const freeAt = async (start: string, end: string): Promise<number> =>
+        count(
+          tx,
+          sql`select count(*)::int as count from public.schedule_slots
+              where user_id = ${alex}::uuid and formation_id = ${sap}::uuid
+                and status in ('planned', 'done', 'missed')
+                and id not in (${sql.join(
+                  [action.missedSlotId, action.proposed.bufferSlotId].map((id) => sql`${id}::uuid`),
+                  sql`, `,
+                )})
+                and starts_at < ${end}::timestamptz
+                and ends_at > ${start}::timestamptz`,
+        );
+
+      const remediationRows = await tx.execute<{ retry_at: string; delay_hours: number }>(sql`
+        select (payload ->> 'retryAvailableAt') as retry_at,
+               (payload ->> 'delayHours')::int as delay_hours
+        from public.automation_actions
+        where id = ${demoId('automation-action', 'schedule-remains')}::uuid
+      `);
+
+      const subscriptions = await tx.execute<{ n: number; active: number }>(sql`
+        select count(*)::int as n,
+               count(*) filter (
+                 where status = 'active' and current_period_end > ${DEMO_NOW_ISO}::timestamptz
+               )::int as active
+        from public.subscriptions
+        where user_id in (${sql.join(
+          DEMO_USERS.map((user) => sql`${demoUserId(user.key)}::uuid`),
+          sql`, `,
+        )})
+      `);
+
+      const seenReviewAnswers = await count(
+        tx,
+        sql`select count(*)::int as count from public.answers a
+            join public.attempts t on t.id = a.attempt_id
+            join public.brick_versions v on v.id = a.brick_version_id
+            join public.bricks b on b.id = v.brick_id
+            where t.user_id = ${alex}::uuid and b.purpose = 'review'`,
+      );
+
+      return {
+        missed,
+        buffer,
+        proposedFree: await freeAt(action.proposed.startsAt, action.proposed.endsAt),
+        alternatives: await Promise.all(
+          action.alternatives.map((slot) => freeAt(slot.startsAt, slot.endsAt)),
+        ),
+        expiresAt: action.expiresAt ?? null,
+        remediation: remediationRows[0],
+        subscriptions: subscriptions[0],
+        seenReviewAnswers,
+      };
+    });
+
+    expect(observed.missed).toMatchObject({ kind: 'course', status: 'missed' });
+    expect(observed.buffer).toMatchObject({ kind: 'buffer', status: 'planned' });
+    expect(observed.proposedFree).toBe(0);
+    expect(observed.alternatives).toEqual([0, 0, 0]);
+    expect(observed.expiresAt).toBe('2026-11-12T09:30:00.000Z');
+    expect(observed.remediation?.delay_hours).toBe(12);
+    expect(Date.parse(observed.remediation?.retry_at ?? '')).toBeLessThanOrEqual(
+      Date.parse(DEMO_NOW_ISO),
+    );
+    expect(observed.subscriptions).toMatchObject({ n: 3, active: 3 });
+    expect(observed.seenReviewAnswers).toBe(0);
   });
 
   it('CA-1 — les identifiants fixes désignent les mêmes lignes après deux passages', async () => {

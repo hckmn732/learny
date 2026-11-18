@@ -14,8 +14,6 @@ import {
 } from '@learny/learning-engine/fixtures';
 import { Badge } from '@learny/ui';
 
-import { BaseTokenStyle } from '../sdd/base-tokens';
-
 interface ParamRow {
   key: keyof typeof ENGINE;
   label: string;
@@ -147,7 +145,6 @@ const CARD = 'rounded-24 border border-solid border-border bg-surface p-6';
 export default function Spec401Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <section data-testid="engine-params" className={`mt-6 ${CARD}`}>
         <h2 className="font-display text-xl font-600">Paramètres du moteur</h2>
         <table className="mt-4 w-full border-collapse text-left text-sm">

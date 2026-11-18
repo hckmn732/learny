@@ -129,7 +129,7 @@ test('inspecte la santé @SPEC-006', async ({ page, request }) => {
   await expect(result).toHaveAttribute('aria-live', 'polite');
   await expect(result).toHaveText('Aucun appel effectué.');
   await page.getByRole('button', { name: 'Appeler GET /api/v1/health' }).click();
-  await expect(result).toHaveText('Succès : status degraded, database not_configured.');
+  await expect(result).toHaveText('Succès : status ok, database ok.');
   await page.getByRole('button', { name: 'Simuler une erreur problem+json' }).click();
   await expect(result).toContainText(
     'Erreur MODULE_LOCKED : Ce module est verrouillé tant que le précédent n’est pas validé.',

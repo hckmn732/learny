@@ -82,50 +82,55 @@ export type AuthLayoutProps = {
  */
 export function AuthLayout({ step, children }: Readonly<AuthLayoutProps>) {
   return (
-    <div className="flex min-h-dvh flex-wrap bg-canvas text-ink" data-testid="auth-layout">
-      <aside
-        aria-label={t.label}
-        className="flex flex-[1_1_23.75rem] flex-col gap-28 self-stretch bg-ink p-40 text-white"
-        data-testid="auth-panel"
-      >
-        <AuthLogo />
-        <div className="mt-auto flex flex-col gap-14">
-          <p className="m-0 font-display text-34 font-600 leading-1.15 tracking-title">
-            {t.tagline[0]}
-            <br />
-            {t.tagline[1]}
-          </p>
-          <p className="m-0 text-15 leading-1.55 text-on-dark-secondary">{t.intro}</p>
-        </div>
-        <ul className="m-0 flex list-none flex-col gap-12 p-0 text-14 leading-1.2 text-on-dark-secondary">
-          {t.benefits.map((benefit) => (
-            <li className="flex gap-10" key={benefit}>
-              <span aria-hidden="true" className="font-700 text-lime">
-                ✓
-              </span>
-              {benefit}
-            </li>
-          ))}
-        </ul>
-        <AuthStepper current={step.current ?? 0} label={step.label} />
-      </aside>
-      <main
-        className="flex min-w-0 flex-[999_1_35rem] items-center justify-center px-24 py-32 sm:px-40 sm:py-48"
-        data-testid="auth-main"
-      >
-        <div className="flex w-full max-w-[35rem] flex-col gap-24" data-testid="auth-content">
-          <noscript>
-            <p
-              className="rounded-12 bg-orange-soft px-12 py-10 text-13 font-600 text-orange-ink"
-              role="status"
-            >
-              {fr.auth.noscript}
+    <div className="flex min-h-dvh flex-col bg-canvas text-ink" data-testid="auth-layout">
+      {/* SPEC-806 mounts the legal footer inside this layout. The split panel keeps the height of
+          the approved SCR-01 mockup (SPEC-308 CA-5): the footer sits below the viewport, not in
+          the panel's row, so the dark panel still reaches the bottom of the first screen. */}
+      <div className="flex min-h-dvh flex-1 flex-wrap">
+        <aside
+          aria-label={t.label}
+          className="flex flex-[1_1_23.75rem] flex-col gap-28 self-stretch bg-ink p-40 text-white"
+          data-testid="auth-panel"
+        >
+          <AuthLogo />
+          <div className="mt-auto flex flex-col gap-14">
+            <p className="m-0 font-display text-34 font-600 leading-1.15 tracking-title">
+              {t.tagline[0]}
+              <br />
+              {t.tagline[1]}
             </p>
-          </noscript>
-          {children}
-        </div>
-      </main>
-      <SiteFooter className="mt-auto" />
+            <p className="m-0 text-15 leading-1.55 text-on-dark-secondary">{t.intro}</p>
+          </div>
+          <ul className="m-0 flex list-none flex-col gap-12 p-0 text-14 leading-1.2 text-on-dark-secondary">
+            {t.benefits.map((benefit) => (
+              <li className="flex gap-10" key={benefit}>
+                <span aria-hidden="true" className="font-700 text-lime">
+                  ✓
+                </span>
+                {benefit}
+              </li>
+            ))}
+          </ul>
+          <AuthStepper current={step.current ?? 0} label={step.label} />
+        </aside>
+        <main
+          className="flex min-w-0 flex-[999_1_35rem] items-center justify-center px-24 py-32 sm:px-40 sm:py-48"
+          data-testid="auth-main"
+        >
+          <div className="flex w-full max-w-[35rem] flex-col gap-24" data-testid="auth-content">
+            <noscript>
+              <p
+                className="rounded-12 bg-orange-soft px-12 py-10 text-13 font-600 text-orange-ink"
+                role="status"
+              >
+                {fr.auth.noscript}
+              </p>
+            </noscript>
+            {children}
+          </div>
+        </main>
+      </div>
+      <SiteFooter />
     </div>
   );
 }

@@ -16,7 +16,7 @@ import {
 } from '@learny/learning-engine';
 import { Badge, Button, StatCard, StatRow } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const AT = '2026-11-11T12:20:00.000Z';
 const PARIS = 'Europe/Paris';
@@ -194,7 +194,6 @@ export default function Spec409Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="streak-summary" title="Série courante">
         <StatRow>
           <StatCard

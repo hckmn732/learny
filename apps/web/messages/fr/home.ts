@@ -66,6 +66,8 @@ export const home = {
     more: (count: number) =>
       count === 1 ? '1 autre proposition' : `${String(count)} autres propositions`,
     toastError: "L'action n'a pas pu être enregistrée. Réessayez.",
+    toastRateLimited: 'Trop de requêtes à la suite. Patientez un instant puis réessayez.',
+    toastNotFound: 'Cette proposition ne correspond plus à votre agenda. Rechargez la page.',
     toastExpired: 'Cette proposition a expiré.',
     toastConflict: 'Ce créneau n’est plus libre. Choisissez-en un autre.',
   },

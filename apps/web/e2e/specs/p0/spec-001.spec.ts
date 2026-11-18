@@ -38,7 +38,8 @@ test('page de démonstration SPEC-001 @SPEC-001', async ({ page }) => {
 
   const health = page.getByTestId('spec-001-health');
   await expect(health.getByRole('heading', { level: 2 })).toHaveText("Santé de l'API");
-  await expect(health).toContainText('status : degraded');
+  // SPEC-101: the e2e database is configured, so the page reflects a healthy API.
+  await expect(health).toContainText('status : ok');
 
   const regions = page.getByTestId('spec-001-regions');
   await expect(regions.getByRole('heading', { level: 2 })).toHaveText('Hébergement (BR-PLA-04)');

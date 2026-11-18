@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import type { ExamIntroDto } from '@learny/contracts';
+import { Breadcrumb } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr/mockExam';
@@ -70,12 +71,10 @@ export function ExamIntro({ intro, programmeHref }: ExamIntroProps) {
     <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[980px] flex-col gap-22" data-testid="exam-intro">
         <header className="flex flex-col gap-8">
-          <nav aria-label="Fil d'Ariane" className="text-14 text-ink-muted">
-            <a className="underline" href={programmeHref}>
-              Programme
-            </a>{' '}
-            / {t.breadcrumb}
-          </nav>
+          <Breadcrumb
+            data-testid="exam-breadcrumb"
+            items={[{ label: 'Programme', href: programmeHref }, { label: t.breadcrumb }]}
+          />
           <p className="m-0 text-14 text-ink-muted">{t.subtitle(intro.title)}</p>
           <h1 className="m-0 font-display text-34 font-600 tracking-title">{t.title}</h1>
         </header>

@@ -12,7 +12,7 @@ import {
 import { SAP_FORMATION, SAP_LINKS, SAP_NOTIONS } from '@learny/learning-engine/fixtures';
 import { Badge, Button, StatCard, StatRow } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const AT = '2026-11-11T12:20:00.000Z';
 const TZ = SAP_FORMATION.tz;
@@ -166,7 +166,6 @@ export default function Spec410Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="warmup-inputs" title="Entrées de la sélection">
         <StatRow>
           <StatCard

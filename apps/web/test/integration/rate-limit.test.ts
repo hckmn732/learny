@@ -8,7 +8,7 @@ import { ProblemDetails, defineRoute } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
 
-import { bootstrapProbe } from '../../lib/api/bootstrap-security';
+import { bootstrapProbe, createRateLimiter } from '../../lib/api/bootstrap-security';
 import { createRequestOriginGuard, registerSecurity } from '../../lib/api/bootstrap-security';
 import { handler } from '../../lib/api/handler';
 import { setOriginGuard } from '../../lib/api/origin';
@@ -114,6 +114,13 @@ describe('[SPEC-208] protections API — limitation de débit', () => {
   it('is active: the registered limiter is not the no-op (ET-6)', () => {
     expect(getRateLimiter()).not.toBe(noopRateLimiter);
     expect(bootstrapProbe().rateLimiterIsNoop).toBe(false);
+  });
+
+  it('RATE_LIMIT_MODE=off installs the no-op for the QA stack (ADR-0336)', () => {
+    expect(createRateLimiter({ RATE_LIMIT_MODE: 'off' })).toBe(noopRateLimiter);
+    // Anything else — missing value included — keeps the real limiter.
+    expect(createRateLimiter({ RATE_LIMIT_MODE: 'on' })).not.toBe(noopRateLimiter);
+    expect(createRateLimiter({})).not.toBe(noopRateLimiter);
   });
 
   it('limits the public authentication profile per address: the 11th request is a 429 (EF-2)', async () => {

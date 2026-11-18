@@ -13,7 +13,7 @@ import {
 } from '@learny/llm/budget';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec507;
 const AT = new Date('2026-11-11T12:20:00Z');
@@ -178,7 +178,6 @@ export default function Spec507Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="spec-507-budget" title={t.budget.title}>
         <p className="text-13 text-ink-secondary">{t.budget.intro}</p>
         <div className="mt-4 flex flex-wrap items-end gap-4">

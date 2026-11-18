@@ -6,7 +6,7 @@ import { brickFingerprint, stemText } from '@learny/bricks';
 import { maskFingerprint, QuestionBankPrepareInput, QuestionBankResult } from '@learny/contracts';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec513;
 
@@ -180,7 +180,6 @@ export default function Spec513Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <p className="mt-6 text-sm">{t.intro}</p>
 
       <BaseCard testId="spec-513-notion-card" title={t.notion.title}>

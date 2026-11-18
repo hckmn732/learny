@@ -124,6 +124,9 @@ export function messageDto(row: MessageRow): TutorMessageDto {
 export function greetingText(context: BuiltContext): string {
   const included = context.includedKeys;
   const resourcesIncluded = included.includes('resources');
+  const resourceCount = context.resourceTitles.length;
+  const resourceLabel =
+    resourceCount === 1 ? 'votre apport' : `vos ${String(resourceCount)} apports`;
   const titles = context.resourceTitles
     .slice(0, 4)
     .map((title) => title.replace(/\s*\([^)]*\)\s*$/, '').toLowerCase())
@@ -131,14 +134,12 @@ export function greetingText(context: BuiltContext): string {
   const parts: string[] = [];
   if (context.passageLabel !== null) {
     parts.push(
-      resourcesIncluded && context.resourceTitles.length > 0
-        ? `Vous lisez « ${context.passageLabel} ». Je pars de ce passage, de vos ${String(context.resourceTitles.length)} apports et du reste du chapitre.`
+      resourcesIncluded && resourceCount > 0
+        ? `Vous lisez « ${context.passageLabel} ». Je pars de ce passage, de ${resourceLabel} et du reste du chapitre.`
         : `Vous lisez « ${context.passageLabel} ». Je pars de ce passage et du reste du chapitre.`,
     );
-  } else if (resourcesIncluded && context.resourceTitles.length > 0) {
-    parts.push(
-      `Je connais ce chapitre, vos ${String(context.resourceTitles.length)} apports (${titles}) et votre objectif.`,
-    );
+  } else if (resourcesIncluded && resourceCount > 0) {
+    parts.push(`Je connais ce chapitre, ${resourceLabel} (${titles}) et votre objectif.`);
   } else {
     parts.push('Je connais ce chapitre et votre objectif.');
   }

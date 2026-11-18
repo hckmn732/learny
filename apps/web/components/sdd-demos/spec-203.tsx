@@ -10,7 +10,7 @@ import { colors } from '@learny/ui/tokens';
 import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec203;
 
@@ -281,7 +281,6 @@ function OutboxCard() {
 export default function Spec203Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <Pipeline />
       <TickCard />
       <OutboxCard />

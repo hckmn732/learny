@@ -120,5 +120,9 @@ export function proposalErrorMessage(error: unknown): string {
   const code = errorCode(error);
   if (code === 'CONFLICT') return t.toastConflict;
   if (code === 'AUTOMATION_ACTION_EXPIRED') return t.toastExpired;
+  // QA 2026-11-18 — les codes restants étaient indiscernables derrière le message générique :
+  // le rate limite et une proposition orpheline disent désormais ce qui se passe vraiment.
+  if (code === 'RATE_LIMITED') return t.toastRateLimited;
+  if (code === 'NOT_FOUND') return t.toastNotFound;
   return t.toastError;
 }

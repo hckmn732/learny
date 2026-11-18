@@ -29,6 +29,7 @@ export const SERVER_ENV_KEYS = [
   'APP_VERSION',
   'GIT_COMMIT',
   'RATE_LIMIT_IP_SECRET',
+  'RATE_LIMIT_MODE',
   'TRUST_PROXY',
   'ALLOWED_ORIGINS',
   'SUPABASE_SERVICE_ROLE_KEY',
@@ -139,6 +140,7 @@ export const PRODUCTION_REQUIRED_KEYS = [
 const STATIC_DEFAULTS = {
   LOG_LEVEL: 'info',
   TRUST_PROXY: 'false',
+  RATE_LIMIT_MODE: 'on',
   DATABASE_POOL_MAX: '10',
   DB_LOG_QUERIES: 'false',
   LLM_LIVE_TESTS: '0',
@@ -213,6 +215,8 @@ const serverFields = {
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
+  /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
+  RATE_LIMIT_MODE: enumOf(['on', 'off']),
   TRUST_PROXY: booleanString,
   ALLOWED_ORIGINS: z
     .string()
@@ -296,6 +300,7 @@ function checkEnvironment(value: z.infer<typeof serverEnvBase>, ctx: z.Refinemen
       if (field(name) === undefined) report(name, 'missing');
     }
     if (value.LLM_MODE === 'mock') report('LLM_MODE', 'forbidden');
+    if (value.RATE_LIMIT_MODE === 'off') report('RATE_LIMIT_MODE', 'forbidden');
     if (value.STRIPE_MODE === 'mock') report('STRIPE_MODE', 'forbidden');
     if (value.EMAIL_MODE === 'memory') report('EMAIL_MODE', 'forbidden');
     if (value.PUSH_MODE === 'mock') report('PUSH_MODE', 'forbidden');

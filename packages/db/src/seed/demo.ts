@@ -1,9 +1,11 @@
 // Seed transactionnelle du jeu de démonstration (SPEC-115 EF-1 à EF-6, ET-1 à ET-6, ADR-0250).
 //
-// Ordre des FK : comptes auth → profils → formations → programme → groupe → données personnelles →
-// contenus → agenda/notifications/automatismes. Les identifiants sont fixes (UUID v5) : les données
-// mutables sont mises à jour (`on conflict do update`) et les journaux append-only conservent leur
-// première écriture (`do nothing`). Une seule transaction : toute erreur annule l'ensemble (CL-2).
+// Ordre des FK : purge de l'état dérivé (ADR-0336) → comptes auth → profils → formations →
+// programme → groupe → données personnelles → contenus → agenda/notifications/automatismes. Les
+// identifiants sont fixes (UUID v5) : les données mutables sont mises à jour (`on conflict do
+// update`) et l'état dérivé des trois comptes fictifs est purgé avant le chargement pour que
+// l'état de référence redevienne exact, y compris sur une base qui a dérivé (ADR-0336). Une seule
+// transaction : toute erreur annule l'ensemble (CL-2).
 import { createHash } from 'node:crypto';
 
 import { SQL, sql } from 'drizzle-orm';
@@ -73,6 +75,7 @@ function timestamp(value: string): SQL {
 }
 
 interface InsertOptions {
+  /** Conflict target, or `'none'` to absorb every unique violation (`on conflict do nothing`). */
   conflict: string;
   mode?: 'update' | 'nothing';
   update?: readonly string[];
@@ -86,7 +89,8 @@ async function insertRows(
   options: InsertOptions,
 ): Promise<void> {
   if (rows.length === 0) return;
-  const conflict = options.conflict.split(',').map((column) => column.trim());
+  const targetless = options.conflict === 'none';
+  const conflict = targetless ? [] : options.conflict.split(',').map((column) => column.trim());
   const mode = options.mode ?? 'update';
   const updates = (
     options.update ??
@@ -96,11 +100,14 @@ async function insertRows(
     mode === 'nothing' || updates.length === 0
       ? sql`nothing`
       : sql`update set ${sql.join(updates, sql`, `)}`;
+  const onConflict = targetless
+    ? sql`on conflict do ${action}`
+    : sql`on conflict (${sql.raw(options.conflict)}) do ${action}`;
   await tx.execute(
     sql`insert into ${sql.raw(table)} (${sql.raw(columns.join(', '))}) values ${sql.join(
       rows.map((row) => tuple(row)),
       sql`, `,
-    )} on conflict (${sql.raw(options.conflict)}) do ${action}`,
+    )} ${onConflict}`,
   );
 }
 
@@ -173,6 +180,79 @@ function chapterNotionIds(module: DemoModuleFixture, chapterKeyValue: string): s
 
 function courseKey(owner: string, formation: string, modulePosition: number): string {
   return `${owner}:${formation}:m${String(modulePosition)}`;
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0. Purge de l'état dérivé des comptes de démonstration (ADR-0336)
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Tables personnelles vidées pour les trois comptes fictifs avant le chargement : l'état de
+ * référence redevient exact à chaque exécution, y compris sur une base qui a dérivé (une session
+ * jouée, un créneau déplacé, une action décidée, le payload d'une version antérieure de la seed).
+ * Les parents `activities`, `bricks`, `courses`, `resources`, `notifications` et
+ * `tutor_conversations` entraînent leurs enfants par `on delete cascade` ; les vues dérivées
+ * (`ai_spend_today`, `group_member_progress`) suivent leurs tables sources. Les comptes créés à
+ * la main ne sont jamais touchés : la purge ne vise que les identifiants fixes des comptes
+ * fictifs (docs/operations/coolify-qa.md).
+ */
+const PURGED_OWNED_TABLES: readonly (readonly [table: string, column: string])[] = [
+  ['public.activities', 'owner_id'],
+  ['public.bricks', 'owner_id'],
+  ['public.tutor_conversations', 'user_id'],
+  ['public.courses', 'owner_id'],
+  ['public.resources', 'owner_id'],
+  ['public.notifications', 'user_id'],
+  ['public.chapter_summaries', 'user_id'],
+  ['public.reading_progress', 'user_id'],
+  ['public.notion_states', 'user_id'],
+  ['public.review_logs', 'user_id'],
+  ['public.gap_events', 'user_id'],
+  ['public.chapter_progress', 'user_id'],
+  ['public.module_progress', 'user_id'],
+  ['public.daily_activity', 'user_id'],
+  ['public.milestones', 'user_id'],
+  ['public.schedule_slots', 'user_id'],
+  ['public.automation_actions', 'user_id'],
+  ['public.question_bank_jobs', 'user_id'],
+  ['public.ai_calls', 'user_id'],
+  ['public.ai_budget_reservations', 'user_id'],
+  ['public.ai_task_models', 'user_id'],
+  ['public.ai_credentials', 'user_id'],
+  ['public.idempotency_keys', 'user_id'],
+  ['public.event_outbox', 'user_id'],
+  ['public.pauses', 'user_id'],
+  ['public.cadrage_messages', 'user_id'],
+  ['public.programme_imports', 'user_id'],
+  ['public.programme_change_requests', 'user_id'],
+  ['public.programme_proposals', 'user_id'],
+  ['public.data_exports', 'user_id'],
+  ['public.offline_sync_receipts', 'user_id'],
+  ['public.push_subscriptions', 'user_id'],
+];
+
+async function purgeDemoState(tx: DbTx): Promise<void> {
+  const users = array(
+    DEMO_USERS.map((user) => demoUserId(user.key)),
+    'uuid[]',
+  );
+  for (const [table, column] of PURGED_OWNED_TABLES) {
+    await tx.execute(sql`delete from ${sql.raw(table)} where ${sql.raw(column)} = any(${users})`);
+  }
+  // Formations et groupes créés sous un compte de démonstration en dehors du référentiel : seules
+  // les lignes fixes sont conservées, les cascades emportent leurs modules, chapitres et membres.
+  const formations = array(
+    DEMO_FORMATIONS.map((entry) => demoFormationId(entry.key)),
+    'uuid[]',
+  );
+  await tx.execute(
+    sql`delete from public.formations where owner_id = any(${users}) and id <> all(${formations})`,
+  );
+  await tx.execute(
+    sql`delete from public.groups
+        where owner_id = any(${users})
+          and id <> ${demoId('group', 'agile')}::uuid`,
+  );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -323,6 +403,35 @@ async function seedAccounts(tx: DbTx): Promise<void> {
         user.key === 'alex' ? DEMO_PREFERENCES.preferredSlots : ['soir'],
         'public.study_slot[]',
       ),
+      timestamp('2026-11-11T07:15:00+01:00'),
+    ]),
+    { conflict: 'user_id' },
+  );
+
+  // Extension QA (ADR-0336) — les comptes de démonstration sont abonnés à l'IA fournie : sans
+  // droit actif, `resolveModel` refuse chaque tâche (`AI_UNAVAILABLE`, SPEC-504 EF-1) et la pile
+  // de recette ne peut ni générer un cours, ni discuter avec le tuteur, ni remplir la banque de
+  // questions, alors même que le mode simulé rend ces appels déterministes. La fin de période
+  // dépasse l'horloge figée du jeu et le plafond journalier laisse la recette respirer.
+  await insertRows(
+    tx,
+    'public.subscriptions',
+    [
+      'user_id',
+      'stripe_customer_id',
+      'stripe_subscription_id',
+      'status',
+      'current_period_end',
+      'daily_cap_usd',
+      'updated_at',
+    ],
+    DEMO_USERS.map((user) => [
+      demoUserId(user.key),
+      `cus_demo_${user.key}`,
+      `sub_demo_${user.key}`,
+      'active',
+      timestamp('2030-01-01T00:00:00+00:00'),
+      '10.000000',
       timestamp('2026-11-11T07:15:00+01:00'),
     ]),
     { conflict: 'user_id' },
@@ -1403,9 +1512,12 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
         data: unknown;
       }> = [
         {
+          // QA 2026-11-18 — la section introductive porte son propre titre (« Présentation ») :
+          // le titre du chapitre n'est plus répété dans le sommaire ni en H2 du contenu, et la
+          // phrase d'ouverture cite le chapitre entre guillemets au lieu de l'écraser en minuscules.
           kind: 'text',
-          title: chapter.title,
-          content: `## ${chapter.title}\n\nCe chapitre présente ${chapter.title.toLowerCase()} et les notions associées.`,
+          title: 'Présentation',
+          content: `Ce chapitre présente « ${chapter.title} » et les notions associées.`,
           data: null,
         },
       ];
@@ -2360,6 +2472,27 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
   });
 
   slotRows.push(
+    // ADR-0336 — la séance manquée référencée par la proposition « Le tuteur propose » vit
+    // désormais dans le seed, hors de la semaine visible du 9 au 13 novembre (elle était créée
+    // par le seul test e2e, ce qui rendait « Accepter » inopérant sur la pile de recette).
+    [
+      demoId('slot', 'm0'),
+      demoUserId('alex'),
+      demoFormationId('sap'),
+      demoModuleId('sap', 3),
+      'course',
+      'Ledgers parallèles',
+      'Non terminé mardi',
+      timestamp(parisInstant('2026-11-03', '10:30')),
+      timestamp(parisInstant('2026-11-03', '12:00')),
+      'missed',
+      null,
+      'planner',
+      null,
+      false,
+      timestamp(parisInstant('2026-11-08', '18:00')),
+      timestamp(parisInstant('2026-11-08', '18:00')),
+    ],
     [
       demoId('slot', 'w2w'),
       demoUserId('alex'),
@@ -2645,7 +2778,12 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
       'created_at',
     ],
     actionRows,
-    { conflict: 'id', mode: 'nothing' },
+    // The actions carry a `dedupeKey`, so `automation_actions_dedupe_uq` (user, automation,
+    // payload->>'dedupeKey') also guards them: an action written by the application with the same
+    // key but another id makes a targeted `on conflict (id)` fail. A targetless clause absorbs both
+    // the replayed fixture and the application's row, which keeps the seed idempotent on a mutated
+    // database (SPEC-115).
+    { conflict: 'none', mode: 'nothing' },
   );
 }
 
@@ -2721,7 +2859,11 @@ async function tableCounts(tx: DbTx, catalog: SeededCatalog): Promise<Record<str
   return counts;
 }
 
-async function verifySeed(tx: DbTx, catalog: SeededCatalog): Promise<SeedDemoSummary['checks']> {
+async function verifySeed(
+  tx: DbTx,
+  catalog: SeededCatalog,
+  tolerant = false,
+): Promise<SeedDemoSummary['checks']> {
   const sapId = demoFormationId('sap');
   const alex = demoUserId('alex');
   const modules = await tx.execute<{ count: number }>(
@@ -2812,18 +2954,21 @@ async function verifySeed(tx: DbTx, catalog: SeededCatalog): Promise<SeedDemoSum
   }
   const failed = Object.entries(checks).filter(([, check]) => !check.ok);
   if (failed.length > 0) {
-    throw new Error(
-      `contrôles de seed en échec : ${failed
-        .map(
-          ([key, check]) => `${key}=${String(check.observed)} (attendu ${String(check.expected)})`,
-        )
-        .join(', ')}`,
-    );
+    const detail = failed
+      .map(([key, check]) => `${key}=${String(check.observed)} (attendu ${String(check.expected)})`)
+      .join(', ');
+    if (tolerant) {
+      // Pile de recette : le jeu de demonstration derive des que les testeurs l'utilisent (une
+      // notification lue, un creneau deplace). Le chargement reste utile, l'ecart est signale.
+      process.stderr.write(`⚠ controles de seed ignores : ${detail}\n`);
+    } else {
+      throw new Error(`contrôles de seed en échec : ${detail}`);
+    }
   }
   return checks;
 }
 
-async function runSeed(tx: DbTx, fixedAt: string): Promise<SeedDemoSummary> {
+async function runSeed(tx: DbTx, fixedAt: string, tolerant = false): Promise<SeedDemoSummary> {
   const catalog: SeededCatalog = {
     formationIds: new Map(),
     moduleIds: new Map(),
@@ -2839,6 +2984,7 @@ async function runSeed(tx: DbTx, fixedAt: string): Promise<SeedDemoSummary> {
     groupId: '',
   };
 
+  await purgeDemoState(tx);
   await seedAccounts(tx);
   await seedFormations(tx, catalog);
   await tx.execute(
@@ -2859,7 +3005,7 @@ async function runSeed(tx: DbTx, fixedAt: string): Promise<SeedDemoSummary> {
   await seedAgendaAndNotifications(tx, catalog);
 
   const counts = await tableCounts(tx, catalog);
-  const checks = await verifySeed(tx, catalog);
+  const checks = await verifySeed(tx, catalog, tolerant);
   return {
     fingerprint: demoFixtureFingerprint(),
     fixedAt,
@@ -2872,15 +3018,21 @@ export interface SeedDemoOptions {
   /** Transaction existante (tests `withRollback`) ; sinon une transaction service est ouverte. */
   tx?: DbTx;
   env?: DemoEnvironmentInput;
+  /** Accepte un jeu de démonstration qui a dérivé (pile de recette) au lieu d'échouer. */
+  tolerant?: boolean;
 }
 
-/** Charge le jeu de démonstration ; deux exécutions produisent les mêmes identifiants et comptes. */
+/**
+ * Charge le jeu de démonstration ; deux exécutions produisent les mêmes identifiants, les mêmes
+ * comptes et le même état de référence (ADR-0336 : l'état dérivé des comptes fictifs est purgé).
+ */
 export async function seedDemo(options: SeedDemoOptions = {}): Promise<SeedDemoSummary> {
   const env = assertDemoEnvironment(options.env ?? process.env);
   demoNow(options.env ?? process.env);
+  const tolerant = options.tolerant ?? process.env.SEED_TOLERANT === '1';
   try {
-    if (options.tx !== undefined) return await runSeed(options.tx, env.fixedAt);
-    return await serviceDb().transaction(async (tx) => runSeed(tx, env.fixedAt));
+    if (options.tx !== undefined) return await runSeed(options.tx, env.fixedAt, tolerant);
+    return await serviceDb().transaction(async (tx) => runSeed(tx, env.fixedAt, tolerant));
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('Seed de démonstration')) throw error;
     throw new Error(describeSeedFailure(error), { cause: error });

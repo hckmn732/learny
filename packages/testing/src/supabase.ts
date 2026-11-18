@@ -95,9 +95,21 @@ export async function createTestSession(options: TestSessionOptions = {}): Promi
   const signedIn = await client.auth.signInWithPassword({ email, password });
   if (signedIn.error !== null) throw new Error(`signIn : ${signedIn.error.message}`);
 
+  // SPEC-806 ET-4: every guarded mutation (cadrage, programme, pause/resume, hint...) requires the
+  // active legal versions. A learner who signed up through the UI already accepted them, and the
+  // admin API of the fixture does not run the signup form: mirror that state here.
+  const { activeLegalVersions } = await import('@learny/config');
+  const { serviceDb, sql } = await import('@learny/db');
+  const versions = activeLegalVersions();
+  await serviceDb().execute(sql`
+    insert into public.legal_acceptances (user_id, document, version)
+    values
+      (${created.data.user.id}::uuid, 'cgu'::public.legal_document, ${versions.cgu}),
+      (${created.data.user.id}::uuid, 'privacy'::public.legal_document, ${versions.privacy})
+    on conflict (user_id, document, version) do nothing
+  `);
+
   if (options.confirmed === false) {
-    // Imported lazily: only this branch needs the database.
-    const { serviceDb, sql } = await import('@learny/db');
     await serviceDb().execute(
       sql`update auth.users set email_confirmed_at = null where id = ${created.data.user.id}::uuid`,
     );

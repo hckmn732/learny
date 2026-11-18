@@ -1,5 +1,6 @@
 'use client';
 
+import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -135,7 +136,7 @@ export function QuizScreen(props: QuizScreenProps) {
     <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[920px] flex-col gap-22" data-testid="quiz-page">
         <QuizHeader
-          attemptNo={attempt?.attemptNo ?? 1}
+          attemptNo={attempt?.attemptNo ?? null}
           formationId={props.formationId}
           moduleId={props.moduleId}
           modulePosition={props.modulePosition}
@@ -144,14 +145,37 @@ export function QuizScreen(props: QuizScreenProps) {
         />
         {preparing ? <QuizPreparing onRetry={retryPreparation} timedOut={timedOut} /> : null}
         {error !== null && !preparing ? (
-          <ErrorState
-            data-testid="quiz-error"
-            description={error}
-            onRetry={() => {
-              retryPreparation();
-            }}
-            title={t.errorTitle}
-          />
+          error.code === 'RETRY_NOT_YET_ALLOWED' ? (
+            // SPEC-611/715 — le délai de reprise est un état prévu, pas un échec de chargement :
+            // la date exacte du serveur s'affiche, sans bouton de relecture inutile.
+            <div
+              className="flex flex-col items-center gap-12 rounded-28 border border-solid border-border bg-surface p-32 text-center"
+              data-testid="quiz-retry-delay"
+              role="status"
+            >
+              <h2 className="m-0 font-display text-22 font-600 tracking-heading">
+                {t.retryDelayTitle}
+              </h2>
+              <p className="m-0 max-w-[480px] text-15 leading-1.55 text-ink-muted">
+                {error.message}
+              </p>
+              <NextLink
+                className="touch-target mt-4 inline-flex min-h-44 items-center rounded-12 border border-solid border-border bg-surface px-16 text-14 font-600 text-ink"
+                href={props.moduleHref}
+              >
+                {t.backToModule}
+              </NextLink>
+            </div>
+          ) : (
+            <ErrorState
+              data-testid="quiz-error"
+              description={error.message}
+              onRetry={() => {
+                retryPreparation();
+              }}
+              title={t.errorTitle}
+            />
+          )
         ) : null}
         {attempt === null && !preparing && error === null ? (
           <section

@@ -175,4 +175,26 @@ describe('[SPEC-712] bandeau Le tuteur propose', () => {
     expect(slotLabel('2026-11-12T15:00:00+01:00', NOW, 'Europe/Paris')).toBe('Jeudi 15:00');
     expect(slotLabel('2026-11-16T09:00:00+01:00', NOW, 'Europe/Paris')).toBe('Lundi 16 nov., 9:00');
   });
+
+  it('QA 2026-11-18 — pastilles avec curseur main et libellés ancrés sur la création', async () => {
+    // Bug #9 : les pastilles sont des boutons natifs sans le curseur du design system.
+    const { user } = renderBanner();
+    await user.click(screen.getByTestId('tutor-proposal-other'));
+    for (const testId of [
+      'tutor-proposal-slot-0',
+      'tutor-proposal-slot-1',
+      'tutor-proposal-slot-2',
+    ]) {
+      expect(screen.getByTestId(testId).className).toContain('cursor-pointer');
+    }
+    expect(screen.getByTestId('tutor-proposal-decline').className).toContain('cursor-pointer');
+
+    // Bug #8 (observation) : la référence des libellés est la création de l'action, jamais
+    // l'horloge réelle du navigateur — un testeur du 18 novembre voit la semaine du 9 au 15.
+    const created = '2026-11-11T08:05:00.000Z';
+    expect(slotLabel('2026-11-12T15:00:00+01:00', created, 'Europe/Paris')).toBe('Jeudi 15:00');
+    expect(slotLabel('2026-11-16T09:00:00+01:00', created, 'Europe/Paris')).toBe(
+      'Lundi 16 nov., 9:00',
+    );
+  });
 });

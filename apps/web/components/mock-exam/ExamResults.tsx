@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import type { ExamResultDto, ExamReviewFilter } from '@learny/contracts';
-import { cn } from '@learny/ui';
+import { Breadcrumb, cn } from '@learny/ui';
 
 import { fr } from '../../messages/fr/mockExam';
 
@@ -38,12 +38,14 @@ export function ExamResults({ result, programmeHref, onRestart }: ExamResultsPro
     <main className="mx-auto w-full px-16 pb-40 nav:px-40">
       <div className="mx-auto flex w-full max-w-[1160px] flex-col gap-22" data-testid="exam-result">
         <header className="flex flex-col gap-8">
-          <nav aria-label="Fil d'Ariane" className="text-14 text-ink-muted">
-            <a className="underline" href={programmeHref}>
-              Programme
-            </a>{' '}
-            / {t.breadcrumb} / Résultats
-          </nav>
+          <Breadcrumb
+            data-testid="exam-results-breadcrumb"
+            items={[
+              { label: 'Programme', href: programmeHref },
+              { label: t.breadcrumb },
+              { label: 'Résultats' },
+            ]}
+          />
           <h1 className="m-0 font-display text-34 font-600 tracking-title">{t.resultsTitle}</h1>
           <p className="m-0 text-14 text-ink-muted">
             {t.timeUsed(

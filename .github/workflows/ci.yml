@@ -100,7 +100,10 @@ jobs:
         if: always() && hashFiles('pnpm-lock.yaml') != ''
         run: |
           mkdir -p security-reports
-          pnpm audit --audit-level="${AUDIT_LEVEL}" 2>&1 | tee security-reports/pnpm-audit.txt
+          # ADR-0335 : GHSA-fc5q-39xc-vjpf (picomatch) n'a aucun correctif amont et n'atteint que
+          # des outils de développement. Exception nominative, revue le 2027-02-28, à retirer dès
+          # qu'une version corrigée est publiée (condition de sortie dans l'ADR).
+          pnpm audit --audit-level="${AUDIT_LEVEL}" --ignore GHSA-fc5q-39xc-vjpf 2>&1 | tee security-reports/pnpm-audit.txt
           exit "${PIPESTATUS[0]}"
       - name: Publier les rapports de sécurité
         if: always()
@@ -183,8 +186,21 @@ jobs:
           curl -sSL https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz \
             | sudo tar -xz -C /usr/local/bin actionlint
           actionlint --version
+      # SPEC-008 — un runner peut garder un conteneur qui tient déjà 54322, et le registre
+      # peut répondre « Rate exceeded ». On retire la pile résiduelle et on réessaie avant
+      # d'abandonner le shard (le flake a bloqué le shard e2e deux fois).
       - name: Démarrer Supabase local
-        run: supabase start
+        run: |
+          for attempt in 1 2 3; do
+            supabase stop --no-backup >/dev/null 2>&1 || true
+            docker ps -aq --filter name=supabase_ | xargs -r docker rm -f
+            if supabase start; then
+              exit 0
+            fi
+            echo "supabase start a échoué (tentative ${attempt}/3), nouvel essai…" >&2
+            sleep 10
+          done
+          exit 1
       - name: Remettre la base à zéro
         run: pnpm db:reset
       - name: Détecter les changements de la pile auto-hébergée
@@ -291,8 +307,21 @@ jobs:
           sudo locale-gen fr_FR.UTF-8
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends fonts-liberation fonts-dejavu-core fonts-noto-core
+      # SPEC-008 — un runner peut garder un conteneur qui tient déjà 54322, et le registre
+      # peut répondre « Rate exceeded ». On retire la pile résiduelle et on réessaie avant
+      # d'abandonner le shard (le flake a bloqué le shard e2e deux fois).
       - name: Démarrer Supabase local
-        run: supabase start
+        run: |
+          for attempt in 1 2 3; do
+            supabase stop --no-backup >/dev/null 2>&1 || true
+            docker ps -aq --filter name=supabase_ | xargs -r docker rm -f
+            if supabase start; then
+              exit 0
+            fi
+            echo "supabase start a échoué (tentative ${attempt}/3), nouvel essai…" >&2
+            sleep 10
+          done
+          exit 1
       - name: Remettre la base à zéro
         run: pnpm db:reset
       - name: Charger le jeu de démonstration
@@ -328,7 +357,19 @@ jobs:
           version: latest
       - uses: grafana/setup-k6-action@v1
       - run: pnpm install --frozen-lockfile
-      - run: supabase start
+      # SPEC-008 — même flake que les jobs en matrice : pile résiduelle ou registre limité.
+      - name: Démarrer Supabase local
+        run: |
+          for attempt in 1 2 3; do
+            supabase stop --no-backup >/dev/null 2>&1 || true
+            docker ps -aq --filter name=supabase_ | xargs -r docker rm -f
+            if supabase start; then
+              exit 0
+            fi
+            echo "supabase start a échoué (tentative ${attempt}/3), nouvel essai…" >&2
+            sleep 10
+          done
+          exit 1
       - run: pnpm build
       - name: Budgets Lighthouse, INP et k6
         run: pnpm test:perf

@@ -98,10 +98,11 @@ test('vues, navigation et détail @SPEC-704', async ({ page, axeCheck }) => {
     `/formations/${SAP}/modules/${demoModuleId('sap', 3)}/quiz`,
   );
   await expect(page.getByTestId('slot-move')).toBeEnabled();
-  // CA-6 — les totaux affichés suivent EF-11 sur les créneaux de la semaine.
-  await expect(page.getByTestId('agenda-totals-planned')).toContainText('24 h 02 prévues');
+  // CA-6 — les totaux affichés suivent EF-11 sur les créneaux de la semaine. ADR-0336 : la marge
+  // qui accueille la reprise remplace le cours du jeudi matin (pas d'heure « prévue », +1 marge).
+  await expect(page.getByTestId('agenda-totals-planned')).toContainText('22 h 32 prévues');
   await expect(page.getByTestId('agenda-totals-done')).toContainText('15 h faites');
-  await expect(page.getByTestId('agenda-totals-margins')).toHaveText('3 marges de rattrapage');
+  await expect(page.getByTestId('agenda-totals-margins')).toHaveText('4 marges de rattrapage');
 
   // CA-2 — la ligne de l'heure est sur la colonne du mercredi, à 260 px (13:20), une seule fois.
   const nowLine = page.getByTestId('agenda-now-line');
@@ -254,10 +255,12 @@ test('agenda sans débordement horizontal à 390 px @SPEC-704', async ({ page })
     );
     // La colonne de gauche tient dans l'écran : le mini-calendrier montre ses sept jours et le
     // panneau « Activité sélectionnée » ne dépasse pas.
+    // SPEC-802 — sous le point de rupture, le detail de l'activite passe dans une feuille
+    // ouverte au clic : le panneau desktop reste monte mais masque, donc hors du flux.
+    await expect(page.getByTestId('agenda-detail')).toBeHidden();
     for (const testId of [
       'agenda-minical',
       'agenda-minical-day-2026-11-15',
-      'agenda-detail',
       'agenda-legend',
       'agenda-calendar',
     ]) {

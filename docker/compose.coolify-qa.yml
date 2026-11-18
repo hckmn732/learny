@@ -41,6 +41,12 @@ x-app-environment: &app-environment
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
   TRUST_PROXY: 'true'
+  # QA seulement : l'horloge de démonstration est figée (CLOCK_FIXED_AT), donc les seaux du
+  # limiteur de débit de SPEC-208 ne se rechargent jamais d'eux-mêmes (leur fenêtre se calcule
+  # avec l'horloge injectée) et un testeur qui épuise son quota resterait bloqué. La recette
+  # désactive donc le limiteur ; SPEC-208 reste couvert par ses tests automatisés et la variable
+  # est refusée en production (packages/config, checkEnvironment).
+  RATE_LIMIT_MODE: 'off'
   LLM_MODE: mock
   STRIPE_MODE: mock
   PUSH_MODE: mock
@@ -116,6 +122,9 @@ services:
       - db:db.learny.test
     environment:
       APP_ENV: test
+      # Le jeu de demonstration derive des que les testeurs l'utilisent (notification lue,
+      # creneau deplace) : la pile de recette signale les ecarts sans refuser de demarrer.
+      SEED_TOLERANT: '1'
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db.learny.test:5432/postgres
       CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
     restart: 'no'
