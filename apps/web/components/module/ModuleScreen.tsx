@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import type { ModuleScreen as ModuleScreenDto } from '@learny/contracts';
+import { Breadcrumb, breadcrumbMessagesFr, buildFormationBreadcrumb } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
 import { api } from '../../lib/api-client';
@@ -153,15 +154,13 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
           data-testid="module-header"
         >
           <div className="flex flex-1 basis-420 flex-col gap-8">
-            <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-              <a
-                className="underline"
-                href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}
-              >
-                {t.breadcrumbProgramme}
-              </a>{' '}
-              / Module {screen.module.position}
-            </nav>
+            <Breadcrumb
+              data-testid="module-breadcrumb"
+              items={buildFormationBreadcrumb({
+                formationId: screen.formation.id,
+                page: breadcrumbMessagesFr.module(screen.module.position, screen.module.title),
+              })}
+            />
             <span className="self-start rounded-full bg-ink px-10 py-4 text-12 font-700 text-white">
               {t.badge(screen.module.position, screen.module.positionTotal)}
             </span>

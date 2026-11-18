@@ -19,7 +19,6 @@ const NOW = new Date('2026-11-11T12:20:00Z');
 const SAP = demoFormationId('sap');
 const PROPOSAL_ID = demoId('automation-action', 'reschedule');
 const MISSED_SLOT_ID = demoId('slot', 'm0');
-const FRIDAY_BUFFER_ID = demoId('slot', 'v3');
 const CONSUMED_ID = demoId('automation-action', 'schedule-remains');
 const PROPOSAL_SUMMARY =
   '« Ledgers parallèles » n’a pas été terminé mardi. Je propose de le reprendre jeudi à 10:30, dans une marge de votre agenda.';
@@ -46,11 +45,8 @@ async function restoreSeed(): Promise<void> {
     on conflict (id) do update
       set status = 'missed', moved_from_id = null, updated_at = now()
   `);
-  // La marge de vendredi 14:00–16:00 recouvrirait l'alternative « Vendredi 15:00 ».
-  await serviceDb().execute(sql`
-    update public.schedule_slots set status = 'cancelled', updated_at = now()
-    where id = ${FRIDAY_BUFFER_ID}::uuid
-  `);
+  // ADR-0336 — la séance manquée et sa marge vivent désormais dans le seed ; les alternatives
+  // occupent des fenêtres réellement libres, la marge du vendredi n'a plus besoin d'être libérée.
   await serviceDb().execute(sql`
     delete from public.automation_actions
     where user_id = ${alexId}::uuid and automation = 'reprise'
@@ -97,10 +93,6 @@ test.afterEach(async () => {
 
 test.afterAll(async () => {
   await restoreSeed();
-  await serviceDb().execute(sql`
-    update public.schedule_slots set status = 'planned', updated_at = now()
-    where id = ${FRIDAY_BUFFER_ID}::uuid
-  `);
   await closeDb();
 });
 
@@ -137,7 +129,8 @@ test('parcours SPEC-722 @SPEC-722', async ({ page, axeCheck, captureEvidence }) 
   await axeCheck();
 
   // CA-1 — Accepter une alternative applique l'action une fois, la carte et l'annonce se mettent à
-  // jour. Le créneau proposé par défaut (jeudi 10:30) est déjà occupé par le seed SPEC-115.
+  // jour. ADR-0336 : la proposition occupe désormais la marge du jeudi matin du seed, l'alternative
+  // du vendredi reste libre.
   await page.getByTestId('tutor-proposal-other').click();
   await page.getByTestId('tutor-proposal-slot-1').click();
   await expect(page.getByTestId('tutor-proposal-kicker')).toHaveText('Séance replacée');

@@ -247,6 +247,7 @@ const ATTEMPT_ERRORS = [
   'NOT_FOUND',
   'CONFLICT',
   'MODULE_LOCKED',
+  'RETRY_NOT_YET_ALLOWED',
   'UNAUTHENTICATED',
   'RATE_LIMITED',
   'INTERNAL_ERROR',
@@ -277,7 +278,8 @@ export const getQuizAttempt = defineRoute({
   output: AttemptDto,
   successStatus: 200,
   rateLimit: 'default',
-  summary: 'Renvoie une tentative de quiz sans révéler les bonnes réponses non vérifiées (SPEC-611).',
+  summary:
+    'Renvoie une tentative de quiz sans révéler les bonnes réponses non vérifiées (SPEC-611).',
   errors: [...ATTEMPT_ERRORS],
 });
 

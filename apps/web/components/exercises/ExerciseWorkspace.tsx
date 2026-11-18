@@ -10,7 +10,15 @@ import type {
   ExerciseSubmission,
   PracticeExerciseDto,
 } from '@learny/contracts';
-import { Button, Select, TextField, Textarea, cn } from '@learny/ui';
+import {
+  Breadcrumb,
+  buildFormationBreadcrumb,
+  Button,
+  Select,
+  TextField,
+  Textarea,
+  cn,
+} from '@learny/ui';
 
 import { fr } from '../../messages/fr/exercises';
 
@@ -226,18 +234,18 @@ export function ExerciseWorkspace({ initial }: ExerciseWorkspaceProps) {
       style={{ overflowX: 'hidden', maxWidth: '100%' }}
     >
       <div className="flex flex-col gap-8">
-        <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-          <NextLink
-            className="text-indigo-ink underline underline-offset-2"
-            href={`/formations/${initial.formationId}/programme`}
-          >
-            {t.navigation.programme}
-          </NextLink>
-          {' / '}
-          <span>{t.navigation.module(initial.modulePosition, initial.moduleTitle)}</span>
-          {' / '}
-          <span>{t.breadcrumb}</span>
-        </nav>
+        <Breadcrumb
+          data-testid="exercise-breadcrumb"
+          items={buildFormationBreadcrumb({
+            formationId: initial.formationId,
+            module: {
+              id: initial.moduleId,
+              position: initial.modulePosition,
+              title: initial.moduleTitle,
+            },
+            page: t.breadcrumb,
+          })}
+        />
         <div className="flex flex-wrap items-end justify-between gap-12">
           <div className="flex flex-col gap-6">
             {initial.gapNature === null ? null : (

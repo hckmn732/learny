@@ -1,5 +1,7 @@
 'use client';
 
+import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
+
 import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
@@ -16,35 +18,33 @@ export function QuizHeader({
   moduleId: string;
   modulePosition: number;
   moduleTitle: string;
-  attemptNo: number;
+  /** Null while no attempt is loaded: the pill stays hidden instead of showing a wrong number. */
+  attemptNo: number | null;
   threshold: number;
 }) {
   const moduleHref = `/formations/${encodeURIComponent(formationId)}/modules/${encodeURIComponent(moduleId)}`;
   return (
     <div className="flex flex-wrap items-center justify-between gap-12">
       <div className="flex flex-col gap-4">
-        <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-          <a
-            className="underline"
-            href={`/formations/${encodeURIComponent(formationId)}/programme`}
-          >
-            Programme
-          </a>{' '}
-          /{' '}
-          <a className="underline" href={moduleHref}>
-            Module {modulePosition} · {moduleTitle}
-          </a>{' '}
-          / {t.breadcrumb}
-        </nav>
+        <Breadcrumb
+          data-testid="quiz-breadcrumb"
+          items={buildFormationBreadcrumb({
+            formationId,
+            module: { id: moduleId, position: modulePosition, title: moduleTitle },
+            page: t.breadcrumb,
+          })}
+        />
         <h1 className="m-0 font-display text-30 font-600 tracking-title">{t.title}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-8">
-        <span
-          className="rounded-full bg-ink px-12 py-8 text-13 font-600 text-white"
-          data-testid="quiz-attempt-badge"
-        >
-          {t.attempt(attemptNo)}
-        </span>
+        {attemptNo === null ? null : (
+          <span
+            className="rounded-full bg-ink px-12 py-8 text-13 font-600 text-white"
+            data-testid="quiz-attempt-badge"
+          >
+            {t.attempt(attemptNo)}
+          </span>
+        )}
         <span
           className="rounded-full border border-border bg-surface px-12 py-8 text-13 font-600"
           data-testid="quiz-threshold-badge"

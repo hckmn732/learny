@@ -22,6 +22,8 @@ export const quiz = {
   answerSavedText: 'Réponse enregistrée. Le tuteur la corrigera à la fin de la tentative.',
   missingAnswer: 'Donnez une réponse avant de vérifier.',
   errorTitle: 'Le quiz n’a pas pu être chargé.',
+  retryDelayTitle: 'Nouvelle tentative pas encore disponible.',
+  backToModule: 'Retour au module',
   submitError: 'La tentative n’a pas pu être soumise.',
   openAnswer: 'Votre réponse',
   characters: (count: number, max: number) => `${String(count)} / ${String(max)} caractères`,

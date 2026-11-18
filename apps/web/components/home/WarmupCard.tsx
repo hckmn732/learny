@@ -122,7 +122,12 @@ export function WarmupCard({ warmup, onAnswer }: Readonly<WarmupCardProps>) {
       id="echauffement"
       data-testid="warmup-card"
       aria-labelledby="t-echauffement"
-      className="flex min-w-0 flex-1 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22"
+      className={cn(
+        'flex min-w-0 flex-col gap-14 rounded-24 border border-solid border-border bg-surface px-24 py-22',
+        // QA 2026-11-18 — en état « Terminé » la carte garde sa hauteur naturelle : l'étirement
+        // de la colonne voisine ne doit plus laisser un grand vide sous le score.
+        done ? 'self-start' : 'flex-1',
+      )}
     >
       <div data-testid="warmup-visual" className="flex flex-col gap-14">
         <div className="flex flex-wrap items-center justify-between gap-10">

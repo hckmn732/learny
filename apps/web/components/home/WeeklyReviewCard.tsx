@@ -105,28 +105,28 @@ export function WeeklyReviewPanel() {
       </div>
 
       <dl className="m-0 grid grid-cols-3 gap-10">
-        <div className="flex flex-col gap-2 rounded-12 bg-surface-subtle px-12 py-10">
+        <div className="flex min-w-0 flex-col gap-2 rounded-12 bg-surface-subtle px-12 py-10">
           <dd
             data-testid="weekly-review-hours"
-            className="m-0 font-display text-22 leading-1.1 font-600 tabular-nums"
+            className="m-0 min-w-0 font-display text-22 leading-1.1 font-600 break-words [overflow-wrap:anywhere] tabular-nums"
           >
             {review.studyLabel}
           </dd>
           <dt className="text-12 text-ink-muted">{t.studyLabel}</dt>
         </div>
-        <div className="flex flex-col gap-2 rounded-12 bg-surface-subtle px-12 py-10">
+        <div className="flex min-w-0 flex-col gap-2 rounded-12 bg-surface-subtle px-12 py-10">
           <dd
             data-testid="weekly-review-retention"
-            className="m-0 font-display text-22 leading-1.1 font-600 tabular-nums"
+            className="m-0 min-w-0 font-display text-22 leading-1.1 font-600 break-words [overflow-wrap:anywhere] tabular-nums"
           >
             {review.retentionLabel}
           </dd>
           <dt className="text-12 text-ink-muted">{t.retentionLabel}</dt>
         </div>
-        <div className="flex flex-col gap-2 rounded-12 bg-orange-soft px-12 py-10 text-orange-ink-strong">
+        <div className="flex min-w-0 flex-col gap-2 rounded-12 bg-orange-soft px-12 py-10 text-orange-ink-strong">
           <dd
             data-testid="weekly-review-at-risk"
-            className="m-0 font-display text-22 leading-1.1 font-600 tabular-nums"
+            className="m-0 min-w-0 font-display text-22 leading-1.1 font-600 break-words [overflow-wrap:anywhere] tabular-nums"
           >
             {String(review.atRiskCount)}
           </dd>
@@ -161,7 +161,7 @@ export function WeeklyReviewPanel() {
                 {review.atRiskNotions.map((notion) => (
                   <li
                     key={notion.notionId}
-                    className="rounded-full bg-orange-soft px-10 py-3 text-12 font-600 text-orange-ink-strong"
+                    className="max-w-full rounded-full bg-orange-soft px-10 py-3 text-12 font-600 break-words [overflow-wrap:anywhere] text-orange-ink-strong"
                   >
                     {notion.label}
                   </li>

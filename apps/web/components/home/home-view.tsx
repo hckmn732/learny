@@ -250,7 +250,7 @@ export function GlobalQuizCard({ data }: Readonly<{ data: HomeGlobalQuiz }>) {
     <section
       data-testid="home-global-quiz"
       aria-labelledby="home-global-quiz-title"
-      className="flex flex-col gap-10 rounded-24 bg-lime p-24 text-ink"
+      className="flex grow flex-col gap-10 rounded-24 bg-lime p-24 text-ink"
     >
       <h2 id="home-global-quiz-title" className="m-0 text-12 font-700 tracking-kicker uppercase">
         {t.quiz.title}
