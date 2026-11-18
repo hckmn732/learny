@@ -1437,8 +1437,8 @@ async function seedResources(tx: DbTx, catalog: SeededCatalog): Promise<void> {
     { conflict: 'id' },
   );
   // SPEC-807 EF-7, CA-1 — a citation is only readable when it carries the real passage it cites
-  // (get-course marks a citation without `chunk_id` as deleted, ADR-0039). The demonstration note
-  // of chapter 1 therefore gets one deterministic chunk.
+  // (get-course marks a citation without `chunk_id` as deleted, ADR-0039). The demonstration notes
+  // of chapters 1 and 2 therefore get one deterministic chunk each.
   await insertRows(
     tx,
     'public.resource_chunks',
@@ -1466,6 +1466,19 @@ async function seedResources(tx: DbTx, catalog: SeededCatalog): Promise<void> {
         'SAP S/4HANA, partenaire et données de base.',
         json({ charStart: 0, charEnd: 46 }),
         8,
+        null,
+        timestamp(parisInstant('2026-11-09', '10:30')),
+      ],
+      [
+        demoId('chunk', 'alex', 'notes-module-3', '1'),
+        demoId('resource', 'alex', 'notes-module-3'),
+        demoUserId('alex'),
+        demoFormationId('sap'),
+        demoChapterId('sap', 3, 2),
+        0,
+        'Journal universel, ledgers parallèles et ledger principal 0L.',
+        json({ charStart: 0, charEnd: 62 }),
+        12,
         null,
         timestamp(parisInstant('2026-11-09', '10:30')),
       ],
@@ -1635,8 +1648,9 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
           timestamp(createdAt),
         ]);
       }
-      // SPEC-807 EF-7, CA-1 — the reading screen of module 1 must show a real, resolvable source:
-      // one citation of the demonstration course points at the learner's own note (SPEC-609).
+      // SPEC-807 EF-7, CA-1 — the reading screens compared to the mockups (module 3 chapter 2,
+      // « Saisie des pièces comptables ») and the first chapter of module 1 must show a real,
+      // resolvable source: one citation points at the learner's own note (SPEC-609).
       if (
         definition.owner === 'alex' &&
         definition.formation.key === 'sap' &&
@@ -1652,6 +1666,25 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
           'SAP S/4HANA, partenaire et données de base.',
           json({}),
           'Vos notes · module 1',
+          'note',
+          timestamp(createdAt),
+        ]);
+      }
+      if (
+        definition.owner === 'alex' &&
+        definition.formation.key === 'sap' &&
+        module.position === 3 &&
+        chapterNumber === 2
+      ) {
+        citationRows.push([
+          demoId('citation', key, '2'),
+          demoId('section', key, '2', '2'),
+          demoUserId('alex'),
+          demoId('chunk', 'alex', 'notes-module-3', '1'),
+          demoId('resource', 'alex', 'notes-module-3'),
+          'Journal universel, ledgers parallèles et ledger principal 0L.',
+          json({}),
+          'Vos notes · module 3',
           'note',
           timestamp(createdAt),
         ]);
