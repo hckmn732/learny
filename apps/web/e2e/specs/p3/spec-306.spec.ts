@@ -375,9 +375,13 @@ test('Panneau des notifications : conformité @SPEC-306 @visual', async ({
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const seed = await seedPanel(session.userId);
   await page.goto(ACCUEIL);
-  await page.getByTestId('header-notifications').click();
+  // Le panneau est un composant client : un clic emis avant son hydratation est perdu. On
+  // rejoue le clic jusqu a l ouverture plutot que de dependre de la vitesse du runner.
   const panel = page.getByTestId('notification-panel');
-  await expect(panel).toBeVisible();
+  await expect(async () => {
+    if ((await panel.count()) === 0) await page.getByTestId('header-notifications').click();
+    await expect(panel).toBeVisible({ timeout: 1_500 });
+  }).toPass({ timeout: 30_000 });
   await expect(page.getByTestId('notification-group-today')).toBeVisible();
   // The pointer stays over the trigger after the click; move it away before reading tokens.
   await page.mouse.move(0, 0);
@@ -533,9 +537,13 @@ test('Panneau des notifications : conformité mobile @SPEC-306 @visual @mobile',
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await seedPanel(session.userId);
   await page.goto(ACCUEIL);
-  await page.getByTestId('header-notifications').click();
+  // Le panneau est un composant client : un clic emis avant son hydratation est perdu. On rejoue
+  // le clic jusqu a l ouverture plutot que de dependre de la vitesse du runner.
   const panel = page.getByTestId('notification-panel');
-  await expect(panel).toBeVisible();
+  await expect(async () => {
+    if ((await panel.count()) === 0) await page.getByTestId('header-notifications').click();
+    await expect(panel).toBeVisible({ timeout: 1_500 });
+  }).toPass({ timeout: 30_000 });
   await expect(page.getByTestId('notification-group-today')).toBeVisible();
 
   const box = await panel.boundingBox();

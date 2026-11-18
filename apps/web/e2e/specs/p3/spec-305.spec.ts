@@ -223,11 +223,13 @@ test('Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @mobile', as
 
   // CA-4 — the four actions are present, named, and none is clipped at 390 px.
   await expect(page.getByTestId('sidebar-show')).toBeVisible();
-  await expect(page.getByTestId('header-search-input')).toBeVisible();
+  // SPEC-802 — sous le point de rupture, la recherche est un bouton nomme qui ouvre un panneau :
+  // l action reste presente et nommee, seul le champ est derriere le panneau.
+  await expect(page.getByTestId('header-search-toggle')).toBeVisible();
   await expect(page.getByTestId('header-notifications')).toBeVisible();
   await expect(page.getByTestId('header-account-trigger')).toBeVisible();
   await expect(page.getByTestId('sidebar-show')).toHaveAttribute('aria-label', 'Afficher le menu');
-  await expect(page.getByTestId('header-search-input')).toHaveAttribute(
+  await expect(page.getByTestId('header-search-toggle')).toHaveAttribute(
     'aria-label',
     'Rechercher',
   );
@@ -249,7 +251,7 @@ test('Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @mobile', as
     .toBe(true);
   for (const testId of [
     'sidebar-show',
-    'header-search-input',
+    'header-search-toggle',
     'header-notifications',
     'header-account-trigger',
   ]) {
@@ -262,7 +264,12 @@ test('Coquille : en-tête figé et menu Mon compte mobile @SPEC-305 @mobile', as
   }
 
   // CA-4 — keyboard reaches the bell then the account trigger from the search field.
-  await page.getByTestId('header-search-input').focus();
+  await page.getByTestId('header-search-toggle').click();
+  await expect(page.getByTestId('header-search-input')).toBeVisible();
+  // Le panneau de recherche piege le focus : le refermer avant de tester la navigation clavier.
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('header-search-input')).toHaveCount(0);
+  await page.getByTestId('header-search-toggle').focus();
   await page.keyboard.press('Tab');
   await expect(page.getByTestId('header-notifications')).toBeFocused();
   await page.keyboard.press('Tab');
