@@ -5,7 +5,9 @@ export const tutorChat = {
   resources: (count: number) =>
     count === 0
       ? 'Aucun apport : le tuteur s’appuie sur le cours'
-      : `Vos ${String(count)} apports, cités en source`,
+      : count === 1
+        ? 'Votre apport, cité en source'
+        : `Vos ${String(count)} apports, cités en source`,
   gap: (notion: string) => `Votre lacune : ${notion}`,
   open: 'Ouvrir la discussion',
   tip: 'Astuce : sélectionnez un passage du cours pour le confier au tuteur.',
