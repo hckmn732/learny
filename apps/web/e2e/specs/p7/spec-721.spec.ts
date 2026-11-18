@@ -179,7 +179,7 @@ async function useDemoUser(
   await page.clock.setFixedTime(NOW);
 }
 
-test('parcours SPEC-721 @SPEC-721', async ({ page, axeCheck, captureEvidence }) => {
+test('parcours SPEC-721 @SPEC-721', async ({ page, baseURL, axeCheck, captureEvidence }) => {
   const current = session;
   if (current === null) throw new Error('session absente');
   const fixture = await seedFixture(current.userId);
@@ -228,7 +228,7 @@ test('parcours SPEC-721 @SPEC-721', async ({ page, axeCheck, captureEvidence }) 
     headers: {
       'content-type': 'application/json',
       'idempotency-key': randomUUID(),
-      origin: 'http://127.0.0.1:3151',
+      origin: baseURL ?? 'http://127.0.0.1:3100',
     },
     data: { answered: 3, correct: 2 },
   });
