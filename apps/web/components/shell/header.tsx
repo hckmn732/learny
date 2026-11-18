@@ -121,7 +121,9 @@ export const HeaderView = ({
         />
       )}
 
-      <div className="ml-auto flex items-center gap-8">
+      {/* Les cibles tactiles de 44 px debordent de leur bouton : avec 7 px d ecart elles se
+          recouvrent et le clic sur la cloche est intercepte par le bouton voisin. */}
+      <div className="ml-auto flex items-center gap-8 max-nav:gap-16">
         <OfflineIndicator />
         {notificationPanel ?? (
           <IconButton
