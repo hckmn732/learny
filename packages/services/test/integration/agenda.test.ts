@@ -91,9 +91,11 @@ describe('[SPEC-704] getAgenda', () => {
     expect(agenda.slots).toHaveLength(seed.checks['agenda.slots']?.expected ?? 0);
     // 23 créneaux : les 22 de la maquette Agenda plus le créneau de 2 min ajouté par SPEC-115.
     expect(agenda.totals).toEqual({
-      plannedMinutes: 1442,
+      // ADR-0336 : le créneau « Ledgers parallèles » est devenu la marge qui accueille la reprise
+      // proposée, ce qui retire 90 min planifiées et ajoute une marge.
+      plannedMinutes: 1352,
       doneMinutes: 900,
-      marginsRemaining: 3,
+      marginsRemaining: 4,
     });
     // Les statuts affichés sont planned, done, missed (BR-AGE-04).
     expect([...new Set(agenda.slots.map((slot) => slot.status))].sort()).toEqual([
