@@ -78,6 +78,19 @@ async function seedKeyboardQuiz(): Promise<{
       insert into public.subscriptions (user_id, status, current_period_end)
       values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
     `);
+    await tx.execute(sql`
+      update public.formations
+      set start_date = '2026-11-02',
+          end_date = '2026-12-11',
+          volume_hours = 150,
+          default_threshold = 80
+      where id = ${bank.formationId}::uuid
+    `);
+    await tx.execute(sql`
+      update public.modules
+      set planned_start = '2026-11-02', planned_end = '2026-12-11'
+      where id = ${bank.moduleId}::uuid
+    `);
     const rows = await tx.execute<{
       brick_id: string;
       version_id: string;
@@ -292,6 +305,10 @@ test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }
   });
   for (let turn = 0; turn < 40; turn += 1) {
     if ((await page.getByTestId('gq-end').count()) > 0) break;
+    const currentId = await page
+      .getByTestId('gq-rail')
+      .locator('[aria-current="step"]')
+      .getAttribute('data-testid');
     if ((await page.getByTestId('gq-recall').count()) > 0) {
       await focusAnd(page, 'recall-card-flip', 'Enter');
       await expect(page.getByTestId('recall-grade-good')).toBeVisible({ timeout: 10_000 });
@@ -324,7 +341,20 @@ test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }
       await page.keyboard.press('Enter');
     }
     await expect(page.getByTestId('gq-next')).toBeEnabled({ timeout: 15_000 });
+    const finishes = await page.getByTestId('gq-next').textContent();
     await focusAnd(page, 'gq-next', 'Enter');
+    if (finishes?.includes('Terminer la session')) {
+      await expect(page.getByTestId('gq-end')).toBeVisible({ timeout: 30_000 });
+      break;
+    }
+    await expect
+      .poll(() =>
+        page
+          .getByTestId('gq-rail')
+          .locator('[aria-current="step"]')
+          .getAttribute('data-testid'),
+      )
+      .not.toBe(currentId);
   }
   await expect(page.getByTestId('gq-end')).toBeVisible({ timeout: 30_000 });
 });

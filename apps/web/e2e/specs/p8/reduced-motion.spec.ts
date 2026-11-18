@@ -94,9 +94,19 @@ test('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => {
   // Skip the games until the session shows a recall card (order depends on the day's notions).
   for (let step = 0; step < 20; step += 1) {
     if (await page.getByTestId('gq-recall').isVisible()) break;
+    const currentId = await page
+      .getByTestId('gq-rail')
+      .locator('[aria-current="step"]')
+      .getAttribute('data-testid');
     await page.getByTestId('gq-skip').click();
-    await expect(page.getByTestId('gq-next')).toBeEnabled({ timeout: 15_000 });
-    await page.getByTestId('gq-next').click();
+    await expect
+      .poll(() =>
+        page
+          .getByTestId('gq-rail')
+          .locator('[aria-current="step"]')
+          .getAttribute('data-testid'),
+      )
+      .not.toBe(currentId);
   }
   await expect(page.getByTestId('recall-card-flip')).toBeVisible({ timeout: 30_000 });
   await page.getByTestId('recall-card-flip').click();

@@ -224,7 +224,14 @@ test('conformité SPEC-705 @SPEC-705 @visual @mobile', async ({ page, axeCheck }
   await page.goto(AGENDA);
   await expect(page.getByTestId('replan-panel')).toBeVisible();
   await expect(page.locator('[data-testid^="replan-option-"]')).toHaveCount(3);
-  await page.getByTestId('slot-move').click();
+  await page
+    .getByRole('button', {
+      name: 'Quiz de validation, 14:00 – 15:00, Tentative 2 · seuil 80 %, Quiz de validation, Mercredi 11 nov., Prévu',
+    })
+    .click();
+  const detail = page.getByTestId('agenda-detail-sheet');
+  await expect(detail).toBeVisible();
+  await detail.getByTestId('slot-move').click();
   await expect(page.getByTestId('slot-alternatives')).toBeVisible();
 
   // CA-4 — the move and replan states reuse the agenda tokens and typography.

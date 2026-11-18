@@ -198,6 +198,7 @@ test('limite de trois formations @SPEC-618', async ({ page, axeCheck, captureEvi
     where owner_id = ${session.userId}::uuid and status = 'active'
   `);
   expect(active[0]?.count).toBe(3);
+  await expect(page.locator('.bg-overlay')).toHaveCount(0);
   await axeCheck();
   await captureEvidence('limite-confirmee');
 });

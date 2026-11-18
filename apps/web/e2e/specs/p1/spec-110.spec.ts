@@ -34,6 +34,7 @@ test('inspecte les coûts IA @SPEC-110', async ({
   await expect(title).toHaveText('SPEC-110 · Schéma IA et facturation');
   expect(await title.evaluate((element) => element.tagName)).toBe('H1');
 
+  await expect(page.locator('section[data-testid]')).toHaveCount(SECTIONS.length);
   const ids = await page
     .locator('section[data-testid]')
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
@@ -109,6 +110,7 @@ test('inspecte les coûts IA @SPEC-110', async ({
 test('coûts IA conformes @SPEC-110 @visual @mobile', async ({ page, axeCheck }) => {
   await page.goto('/_dev/sdd/SPEC-110');
 
+  await expect(page.locator('section[data-testid]')).toHaveCount(SECTIONS.length);
   const ids = await page
     .locator('section[data-testid]')
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));

@@ -216,6 +216,9 @@ export async function expectScreenshotBaseline(
   name: string,
   options: BaselineOptions = {},
 ): Promise<void> {
+  const page = 'page' in target ? target.page() : target;
+  await expect(page.getByRole('heading', { name: 'Chargement en cours' })).toHaveCount(0);
+  await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
   const info = test.info();
   const baseline = info.snapshotPath(name, { kind: 'screenshot' });
   if (process.env.CI && !fs.existsSync(baseline)) {
