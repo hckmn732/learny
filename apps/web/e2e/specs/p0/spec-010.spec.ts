@@ -80,9 +80,9 @@ test('inspecte le diagnostic @SPEC-010', async ({ page, request, consoleErrors }
   expect(echoed.headers()['x-request-id']).toBe('req-e2e-health');
   const health = (await echoed.json()) as Record<string, unknown>;
   expect(health).toMatchObject({
-    status: 'degraded',
-    database: 'not_configured',
-    components: { database: 'not_configured', build: 'not_configured' },
+    status: 'ok',
+    database: 'ok',
+    components: { database: 'ok', build: 'not_configured' },
   });
 
   const generated = await request.get('/api/v1/health', {
