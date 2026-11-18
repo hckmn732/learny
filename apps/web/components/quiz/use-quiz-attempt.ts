@@ -19,8 +19,17 @@ export function preparationTimedOut(attempts: number): boolean {
   return attempts >= PREPARATION_MAX_ATTEMPTS;
 }
 
-function messageOf(error: unknown): string {
-  return error instanceof ApiError && error.detail !== '' ? error.detail : fr.quiz.errorTitle;
+/** Load failure of the attempt, with its machine-readable code for dedicated states (SPEC-611). */
+export interface QuizLoadError {
+  code: string | null;
+  message: string;
+}
+
+export function quizLoadErrorOf(error: unknown): QuizLoadError {
+  if (error instanceof ApiError) {
+    return { code: error.code, message: error.detail === '' ? fr.quiz.errorTitle : error.detail };
+  }
+  return { code: null, message: fr.quiz.errorTitle };
 }
 
 export interface UseQuizAttempt {
@@ -29,7 +38,7 @@ export interface UseQuizAttempt {
   loading: boolean;
   preparing: boolean;
   timedOut: boolean;
-  error: string | null;
+  error: QuizLoadError | null;
   retryPreparation: () => void;
   refetch: () => Promise<void>;
 }
@@ -38,7 +47,7 @@ export function useQuizAttempt(moduleId: string): UseQuizAttempt {
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [preparing, setPreparing] = useState(false);
   const [attempts, setAttempts] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<QuizLoadError | null>(null);
 
   const create = useMutation({
     mutationFn: (idempotencyKey: string) =>
@@ -54,7 +63,7 @@ export function useQuizAttempt(moduleId: string): UseQuizAttempt {
     },
     onError: (cause) => {
       setPreparing(false);
-      setError(messageOf(cause));
+      setError(quizLoadErrorOf(cause));
     },
   });
 
@@ -95,7 +104,7 @@ export function useQuizAttempt(moduleId: string): UseQuizAttempt {
     loading: attemptId === null && !preparing && error === null && query.isFetching,
     preparing,
     timedOut: preparing && preparationTimedOut(attempts),
-    error: error ?? (query.error === null ? null : messageOf(query.error)),
+    error: error ?? (query.error === null ? null : quizLoadErrorOf(query.error)),
     retryPreparation: () => {
       setAttempts(0);
       setPreparing(true);

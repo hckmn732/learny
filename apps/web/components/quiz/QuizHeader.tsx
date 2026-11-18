@@ -16,7 +16,8 @@ export function QuizHeader({
   moduleId: string;
   modulePosition: number;
   moduleTitle: string;
-  attemptNo: number;
+  /** Null while no attempt is loaded: the pill stays hidden instead of showing a wrong number. */
+  attemptNo: number | null;
   threshold: number;
 }) {
   const moduleHref = `/formations/${encodeURIComponent(formationId)}/modules/${encodeURIComponent(moduleId)}`;
@@ -39,12 +40,14 @@ export function QuizHeader({
         <h1 className="m-0 font-display text-30 font-600 tracking-title">{t.title}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-8">
-        <span
-          className="rounded-full bg-ink px-12 py-8 text-13 font-600 text-white"
-          data-testid="quiz-attempt-badge"
-        >
-          {t.attempt(attemptNo)}
-        </span>
+        {attemptNo === null ? null : (
+          <span
+            className="rounded-full bg-ink px-12 py-8 text-13 font-600 text-white"
+            data-testid="quiz-attempt-badge"
+          >
+            {t.attempt(attemptNo)}
+          </span>
+        )}
         <span
           className="rounded-full border border-border bg-surface px-12 py-8 text-13 font-600"
           data-testid="quiz-threshold-badge"
