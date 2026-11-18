@@ -38,7 +38,10 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
     );
 
     const layout = screen.getByTestId('auth-layout');
-    expect(layout.className).toContain('flex-wrap');
+    // SPEC-806 mounts the legal footer under the split panel: the root is a column, and the
+    // panel/card row is what keeps `flex-wrap` so it stacks under 900 px.
+    expect(layout.className).toContain('flex-col');
+    expect(layout.firstElementChild?.className ?? '').toContain('flex-wrap');
     expect(layout.className).toContain('min-h-dvh');
     expect(layout.className).toContain('bg-canvas');
 
@@ -54,8 +57,8 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
     expect(screen.getByTestId('auth-content').className).toContain('max-w-[35rem]');
     expect(screen.getByTestId('auth-child')).toBeTruthy();
 
-    // DOM order: the Learny panel comes before the form column.
-    expect(layout.firstElementChild).toBe(panel);
+    // DOM order: the Learny panel opens the split row, before the form column.
+    expect(layout.firstElementChild?.firstElementChild).toBe(panel);
     expect(panel.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     // SPEC-806: the only navigation is the named legal footer; no menu of the connected shell.
     expect(screen.getAllByRole('navigation').map((nav) => nav.getAttribute('aria-label'))).toEqual([
@@ -118,7 +121,10 @@ describe("[SPEC-308] Pages système et mise en page d'authentification", () => {
     // The same flex-wrap basis is what the browser wraps at the 390 px viewport (e2e checks
     // the real geometry and the absence of horizontal overflow).
     const layout = screen.getByTestId('auth-layout');
-    expect(layout.className).toContain('flex-wrap');
+    // SPEC-806 mounts the legal footer under the split panel: the root is a column, and the
+    // panel/card row is what keeps `flex-wrap` so it stacks under 900 px.
+    expect(layout.className).toContain('flex-col');
+    expect(layout.firstElementChild?.className ?? '').toContain('flex-wrap');
     expect(screen.getByTestId('auth-panel').className).toContain('p-40');
     expect(screen.getByTestId('auth-step-counter').textContent).toBe('Connexion');
     expect(screen.getByTestId('auth-step-1').className).toContain('bg-white');
