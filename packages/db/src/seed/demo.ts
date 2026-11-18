@@ -1512,9 +1512,12 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
         data: unknown;
       }> = [
         {
+          // QA 2026-11-18 — la section introductive porte son propre titre (« Présentation ») :
+          // le titre du chapitre n'est plus répété dans le sommaire ni en H2 du contenu, et la
+          // phrase d'ouverture cite le chapitre entre guillemets au lieu de l'écraser en minuscules.
           kind: 'text',
-          title: chapter.title,
-          content: `## ${chapter.title}\n\nCe chapitre présente ${chapter.title.toLowerCase()} et les notions associées.`,
+          title: 'Présentation',
+          content: `Ce chapitre présente « ${chapter.title} » et les notions associées.`,
           data: null,
         },
       ];
