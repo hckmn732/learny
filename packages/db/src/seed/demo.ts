@@ -73,6 +73,7 @@ function timestamp(value: string): SQL {
 }
 
 interface InsertOptions {
+  /** Conflict target, or `'none'` to absorb every unique violation (`on conflict do nothing`). */
   conflict: string;
   mode?: 'update' | 'nothing';
   update?: readonly string[];
@@ -86,7 +87,8 @@ async function insertRows(
   options: InsertOptions,
 ): Promise<void> {
   if (rows.length === 0) return;
-  const conflict = options.conflict.split(',').map((column) => column.trim());
+  const targetless = options.conflict === 'none';
+  const conflict = targetless ? [] : options.conflict.split(',').map((column) => column.trim());
   const mode = options.mode ?? 'update';
   const updates = (
     options.update ??
@@ -96,11 +98,14 @@ async function insertRows(
     mode === 'nothing' || updates.length === 0
       ? sql`nothing`
       : sql`update set ${sql.join(updates, sql`, `)}`;
+  const onConflict = targetless
+    ? sql`on conflict do ${action}`
+    : sql`on conflict (${sql.raw(options.conflict)}) do ${action}`;
   await tx.execute(
     sql`insert into ${sql.raw(table)} (${sql.raw(columns.join(', '))}) values ${sql.join(
       rows.map((row) => tuple(row)),
       sql`, `,
-    )} on conflict (${sql.raw(options.conflict)}) do ${action}`,
+    )} ${onConflict}`,
   );
 }
 
@@ -2645,7 +2650,12 @@ async function seedAgendaAndNotifications(tx: DbTx, catalog: SeededCatalog): Pro
       'created_at',
     ],
     actionRows,
-    { conflict: 'id', mode: 'nothing' },
+    // The actions carry a `dedupeKey`, so `automation_actions_dedupe_uq` (user, automation,
+    // payload->>'dedupeKey') also guards them: an action written by the application with the same
+    // key but another id makes a targeted `on conflict (id)` fail. A targetless clause absorbs both
+    // the replayed fixture and the application's row, which keeps the seed idempotent on a mutated
+    // database (SPEC-115).
+    { conflict: 'none', mode: 'nothing' },
   );
 }
 
