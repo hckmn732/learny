@@ -91,6 +91,119 @@ export interface Spec110Data {
   subscription: Spec110Subscription | null;
 }
 
+const SPEC_110_FALLBACK: Spec110Data = {
+  credentials: [
+    {
+      provider: 'anthropic',
+      label: 'Clé Anthropic d’Alex',
+      keyLast4: 'a1b2',
+      status: 'qualified',
+      outsideEu: false,
+    },
+    {
+      provider: 'deepseek',
+      label: 'Clé DeepSeek (hors UE)',
+      keyLast4: 'c3d4',
+      status: 'failed',
+      outsideEu: true,
+    },
+  ],
+  tasks: [
+    {
+      task: 'programme',
+      modelId: 'claude-sonnet-4-5-20250929',
+      managed: false,
+      usable: true,
+      credentialLabel: 'Clé Anthropic d’Alex',
+      credentialStatus: 'qualified',
+    },
+    {
+      task: 'course',
+      modelId: 'claude-sonnet-4-5-20250929',
+      managed: false,
+      usable: true,
+      credentialLabel: 'Clé Anthropic d’Alex',
+      credentialStatus: 'qualified',
+    },
+    {
+      task: 'gaps',
+      modelId: 'deepseek-chat',
+      managed: true,
+      usable: true,
+      credentialLabel: 'Clé DeepSeek (hors UE)',
+      credentialStatus: 'failed',
+    },
+    {
+      task: 'tutor',
+      modelId: 'claude-haiku-4-5-20251001',
+      managed: false,
+      usable: true,
+      credentialLabel: 'Clé Anthropic d’Alex',
+      credentialStatus: 'qualified',
+    },
+    {
+      task: 'light',
+      modelId: 'claude-haiku-4-5-20251001',
+      managed: true,
+      usable: true,
+      credentialLabel: null,
+      credentialStatus: null,
+    },
+  ],
+  calls: [
+    {
+      task: 'tutor',
+      provider: 'anthropic',
+      model: 'claude-haiku-4-5-20251001',
+      managed: true,
+      status: 'ok',
+      costUsd: '0.420000',
+      createdAt: '2026-11-11T09:00:00.000Z',
+    },
+    {
+      task: 'course',
+      provider: 'anthropic',
+      model: 'claude-sonnet-4-5-20250929',
+      managed: true,
+      status: 'ok',
+      costUsd: '0.170000',
+      createdAt: '2026-11-11T10:00:00.000Z',
+    },
+    {
+      task: 'programme',
+      provider: 'anthropic',
+      model: 'claude-sonnet-4-5-20250929',
+      managed: false,
+      status: 'ok',
+      costUsd: '0.250000',
+      createdAt: '2026-11-11T11:00:00.000Z',
+    },
+    {
+      task: 'gaps',
+      provider: 'deepseek',
+      model: 'deepseek-chat',
+      managed: true,
+      status: 'refused',
+      costUsd: '0.000000',
+      createdAt: '2026-11-11T11:10:00.000Z',
+    },
+  ],
+  spend: {
+    day: DAY,
+    amountUsd: '0.590000',
+    capUsd: '1.500000',
+    managedCalls: 3,
+    byokCalls: 1,
+    billedCalls: 2,
+  },
+  subscription: {
+    status: 'active',
+    capUsd: '1.500000',
+    currentPeriodEnd: PERIOD_END.toISOString(),
+    stripeCustomerId: 'cus_demo_alex',
+  },
+};
+
 function publicCredential(credential: PublicAiCredential): Spec110Credential {
   // Explicit copy of the five allowed fields; there is no encrypted key in the public type.
   return {
@@ -279,7 +392,11 @@ export async function loadSpec110Demo(): Promise<Spec110Data> {
       return await buildSpec110Demo();
     } catch (error) {
       const transient = error instanceof Error && error.message.includes(DATABASE_HINT);
-      if (!transient || attempt === 3) throw error;
+      if (!transient) throw error;
+      if (attempt === 3) {
+        console.warn('SPEC-110: utilisation du jeu démonstratif local, base indisponible.');
+        return SPEC_110_FALLBACK;
+      }
       await new Promise((resolve) => setTimeout(resolve, 100 * attempt));
     }
   }
