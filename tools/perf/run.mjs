@@ -147,7 +147,6 @@ async function main() {
     LLM_MODE: 'mock',
     EMAIL_MODE: 'memory',
     STRIPE_MODE: 'mock',
-    RATE_LIMIT_MODE: 'off',
     ENABLE_SDD_PAGES: 'false',
     TRUST_PROXY: 'true',
     APP_ENCRYPTION_KEY: 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=',

@@ -159,6 +159,7 @@ test('change et met en pause une formation @SPEC-618', async ({
 });
 
 test('limite de trois formations @SPEC-618', async ({ page, axeCheck, captureEvidence }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const seeded = await seed(session.userId);
   await page.goto('/accueil');
   await page.getByTestId('sidebar-switch-formation').click();

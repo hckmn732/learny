@@ -183,10 +183,10 @@ function Subscription({ data }: Readonly<{ data: Spec110Data }>) {
   );
 }
 
-export default async function Spec110Demo() {
+export default function Spec110Demo() {
   let data: Spec110Data;
   try {
-    data = await loadSpec110Demo();
+    data = loadSpec110Demo();
   } catch {
     return (
       <div className="mt-6">

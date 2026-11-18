@@ -19,22 +19,9 @@ export function perfUserId(index: number): string {
   ].join('-');
 }
 
-const sessions: Array<{ cookie: string; formationId: string }> = [];
+const cookieHeaders: string[] = [];
 for (const [offset, credential] of PERF_CREDENTIALS.entries()) {
   const session = await createDemoSession(perfUserId(offset + 1), credential.email);
-  const index = offset + 1;
-  const formationHex = createHash('md5')
-    .update(`perf:formation:${String(index)}`)
-    .digest('hex');
-  sessions.push({
-    cookie: session.cookieHeader,
-    formationId: [
-      formationHex.slice(0, 8),
-      formationHex.slice(8, 12),
-      formationHex.slice(12, 16),
-      formationHex.slice(16, 20),
-      formationHex.slice(20, 32),
-    ].join('-'),
-  });
+  cookieHeaders.push(session.cookieHeader);
 }
-process.stdout.write(JSON.stringify(sessions));
+process.stdout.write(JSON.stringify(cookieHeaders));

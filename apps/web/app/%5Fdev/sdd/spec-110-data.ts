@@ -100,7 +100,7 @@ const SPEC_110_FALLBACK: Spec110Data = {
       task: 'gaps',
       modelId: 'deepseek-chat',
       managed: true,
-      usable: true,
+      usable: false,
       credentialLabel: 'Clé DeepSeek (hors UE)',
       credentialStatus: 'failed',
     },
