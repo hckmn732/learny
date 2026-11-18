@@ -1,5 +1,7 @@
 'use client';
 
+import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
+
 import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
@@ -24,19 +26,14 @@ export function QuizHeader({
   return (
     <div className="flex flex-wrap items-center justify-between gap-12">
       <div className="flex flex-col gap-4">
-        <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-          <a
-            className="underline"
-            href={`/formations/${encodeURIComponent(formationId)}/programme`}
-          >
-            Programme
-          </a>{' '}
-          /{' '}
-          <a className="underline" href={moduleHref}>
-            Module {modulePosition} · {moduleTitle}
-          </a>{' '}
-          / {t.breadcrumb}
-        </nav>
+        <Breadcrumb
+          data-testid="quiz-breadcrumb"
+          items={buildFormationBreadcrumb({
+            formationId,
+            module: { id: moduleId, position: modulePosition, title: moduleTitle },
+            page: t.breadcrumb,
+          })}
+        />
         <h1 className="m-0 font-display text-30 font-600 tracking-title">{t.title}</h1>
       </div>
       <div className="flex flex-wrap items-center gap-8">

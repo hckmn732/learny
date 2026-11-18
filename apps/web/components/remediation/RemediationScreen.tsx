@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import type { QuizQuestionDto, RemediationDto } from '@learny/contracts';
-import { ErrorState } from '@learny/ui';
+import { Breadcrumb, buildFormationBreadcrumb, ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr/remediation';
@@ -153,19 +153,14 @@ export function RemediationScreen({
         data-testid="remediation-page"
       >
         <div className="flex flex-col gap-4">
-          <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-            <a
-              className="underline"
-              href={`/formations/${encodeURIComponent(formationId)}/programme`}
-            >
-              Programme
-            </a>{' '}
-            /{' '}
-            <a className="underline" href={moduleHref}>
-              Module {modulePosition} · {moduleTitle}
-            </a>{' '}
-            / {t.breadcrumb}
-          </nav>
+          <Breadcrumb
+            data-testid="remediation-breadcrumb"
+            items={buildFormationBreadcrumb({
+              formationId,
+              module: { id: moduleId, position: modulePosition, title: moduleTitle },
+              page: t.breadcrumb,
+            })}
+          />
           <div className="flex flex-wrap items-center justify-between gap-12">
             <h1 className="m-0 font-display text-30 font-600 tracking-title">{t.title}</h1>
             <div className="flex flex-wrap gap-8">

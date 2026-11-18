@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
 import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contracts';
+import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
 import { fr } from '../../messages/fr/course-module';
@@ -137,22 +138,18 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
     >
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-20">
         <div className="flex flex-wrap items-center justify-between gap-12">
-          <nav aria-label="Fil d’Ariane" className="text-14 text-ink-muted">
-            <a
-              className="underline"
-              href={`/formations/${encodeURIComponent(screen.formation.id)}/programme`}
-            >
-              Programme
-            </a>{' '}
-            /{' '}
-            <a
-              className="underline"
-              href={`/formations/${encodeURIComponent(screen.formation.id)}/modules/${encodeURIComponent(screen.module.id)}`}
-            >
-              Module {screen.module.position} · {screen.module.title}
-            </a>{' '}
-            / {t.breadcrumbCours}
-          </nav>
+          <Breadcrumb
+            data-testid="course-breadcrumb"
+            items={buildFormationBreadcrumb({
+              formationId: screen.formation.id,
+              module: {
+                id: screen.module.id,
+                position: screen.module.position,
+                title: screen.module.title,
+              },
+              page: t.breadcrumbCours,
+            })}
+          />
           {course === null ? null : (
             <div className="flex min-w-240 items-center gap-10">
               <div
