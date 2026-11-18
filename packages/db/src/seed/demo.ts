@@ -1436,6 +1436,42 @@ async function seedResources(tx: DbTx, catalog: SeededCatalog): Promise<void> {
     rows,
     { conflict: 'id' },
   );
+  // SPEC-807 EF-7, CA-1 — a citation is only readable when it carries the real passage it cites
+  // (get-course marks a citation without `chunk_id` as deleted, ADR-0039). The demonstration note
+  // of chapter 1 therefore gets one deterministic chunk.
+  await insertRows(
+    tx,
+    'public.resource_chunks',
+    [
+      'id',
+      'resource_id',
+      'owner_id',
+      'formation_id',
+      'chapter_id',
+      'position',
+      'text',
+      'location',
+      'token_count',
+      'embedding',
+      'created_at',
+    ],
+    [
+      [
+        demoId('chunk', 'alex', 'notes-module-1', '1'),
+        demoId('resource', 'alex', 'notes-module-1'),
+        demoUserId('alex'),
+        demoFormationId('sap'),
+        demoChapterId('sap', 1, 1),
+        0,
+        'SAP S/4HANA, partenaire et données de base.',
+        json({ charStart: 0, charEnd: 46 }),
+        8,
+        null,
+        timestamp(parisInstant('2026-11-09', '10:30')),
+      ],
+    ],
+    { conflict: 'id' },
+  );
 }
 
 interface CourseDefinition {
@@ -1474,6 +1510,7 @@ const COURSES: readonly CourseDefinition[] = [
 async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
   const courseRows: (readonly SqlValue[])[] = [];
   const sectionRows: (readonly SqlValue[])[] = [];
+  const citationRows: (readonly SqlValue[])[] = [];
   const readingRows: (readonly SqlValue[])[] = [];
   const conversationRows: (readonly SqlValue[])[] = [];
   const messageRows: (readonly SqlValue[])[] = [];
@@ -1598,6 +1635,27 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
           timestamp(createdAt),
         ]);
       }
+      // SPEC-807 EF-7, CA-1 — the reading screen of module 1 must show a real, resolvable source:
+      // one citation of the demonstration course points at the learner's own note (SPEC-609).
+      if (
+        definition.owner === 'alex' &&
+        definition.formation.key === 'sap' &&
+        module.position === 1 &&
+        chapterNumber === 1
+      ) {
+        citationRows.push([
+          demoId('citation', key, '1'),
+          demoId('section', key, '1', '1'),
+          demoUserId('alex'),
+          demoId('chunk', 'alex', 'notes-module-1', '1'),
+          demoId('resource', 'alex', 'notes-module-1'),
+          'SAP S/4HANA, partenaire et données de base.',
+          json({}),
+          'Vos notes · module 1',
+          'note',
+          timestamp(createdAt),
+        ]);
+      }
       if (definition.owner === 'alex' && definition.formation.key === 'sap') {
         readingRows.push([
           demoUserId('alex'),
@@ -1700,6 +1758,24 @@ async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {
       'updated_at',
     ],
     sectionRows,
+    { conflict: 'id', mode: 'nothing' },
+  );
+  await insertRows(
+    tx,
+    'public.citations',
+    [
+      'id',
+      'section_id',
+      'owner_id',
+      'chunk_id',
+      'resource_id',
+      'quote',
+      'location',
+      'label',
+      'media_kind',
+      'created_at',
+    ],
+    citationRows,
     { conflict: 'id', mode: 'nothing' },
   );
   await insertRows(
