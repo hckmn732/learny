@@ -83,7 +83,7 @@ export function OfflinePackList() {
                 </p>
               </div>
               <Link
-                className="inline-flex min-h-44 items-center rounded-12 bg-lime px-18 text-14 font-700 text-ink no-underline"
+                className="touch-target inline-flex min-h-44 items-center rounded-12 bg-lime px-18 text-14 font-700 text-ink no-underline"
                 href={`/formations/${pack.formationId}/quiz-global`}
               >
                 {t.review}
@@ -94,7 +94,7 @@ export function OfflinePackList() {
       )}
       <div className="flex flex-wrap items-center gap-12">
         <a
-          className="inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong px-18 text-14 font-700 text-ink no-underline"
+          className="touch-target inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong px-18 text-14 font-700 text-ink no-underline"
           href="/hors-ligne"
         >
           {t.retry}
@@ -144,7 +144,7 @@ export function OfflineRevision() {
         <EmptyState data-testid="offline-empty" description={t.emptyBody} title={t.emptyTitle} />
         <div className="mt-24 flex justify-center">
           <a
-            className="inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong px-18 text-14 font-700 text-ink no-underline"
+            className="touch-target inline-flex min-h-44 items-center rounded-12 border border-solid border-border-strong px-18 text-14 font-700 text-ink no-underline"
             href="/hors-ligne"
           >
             {t.retry}
