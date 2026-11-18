@@ -55,6 +55,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  // The stranger formation uses a fixed id, also used by the CL-7 case of the demo-seed suite:
+  // leaving it behind made that case fail with a duplicate key on a reused database.
+  await serviceDb().execute(
+    sql`delete from public.formations where id = ${STRANGER_FORMATION}::uuid`,
+  );
+  if (stranger !== null) {
+    await serviceDb().execute(sql`delete from auth.users where id = ${stranger.userId}::uuid`);
+  }
   await closeDb();
 });
 
