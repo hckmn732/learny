@@ -118,7 +118,11 @@ test('Pages système et mise en page d’authentification @SPEC-308', async ({
     await expect(
       page.getByTestId('auth-card').or(page.getByTestId('verify-card')),
     ).toBeVisible();
-    await expect(page.locator('nav')).toHaveCount(0);
+    // SPEC-806 mounts the legal footer, a named `nav`, on every public page including the auth
+    // ones (SPEC-806 ET-5); the connected shell and its navigations stay absent.
+    await expect(page.locator('nav')).toHaveCount(1);
+    await expect(page.getByTestId('site-footer-nav')).toBeVisible();
+    await expect(page.locator('nav:not([data-testid="site-footer-nav"])')).toHaveCount(0);
     await expect(page.locator('[data-testid="app-sidebar"]')).toHaveCount(0);
     await axeCheck();
   }
