@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { AiModelsState } from '@learny/contracts/parametres-modeles-d-ia';
 import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
@@ -64,10 +64,9 @@ function timezoneLabel(zone: string): string {
   return `${zone} (${offset})`;
 }
 
-/** The maquette zones plus the stored and detected ones, without duplicates (BR-ACC-07). */
+/** The maquette zones plus the stored one, without duplicates (BR-ACC-07). */
 function timezoneOptions(current: string): { value: string; label: string }[] {
-  const detected = detectedTimeZone(current);
-  const zones = [current, detected, 'Europe/Paris', 'Europe/London', 'America/Montreal'];
+  const zones = [current, 'Europe/Paris', 'Europe/London', 'America/Montreal'];
   return [...new Set(zones)].map((zone) => ({ value: zone, label: timezoneLabel(zone) }));
 }
 
@@ -185,6 +184,25 @@ export function SettingsView({
   const [deletionScheduledFor, setDeletionScheduledFor] = useState<string | null>(
     initialState?.deletionScheduledFor ?? null,
   );
+  // BR-ACC-07 — la zone détectée du navigateur ne peut pas entrer dans le rendu serveur (le
+  // serveur tourne en UTC) : ajoutée après montage, l'hydratation rend la même liste des deux
+  // côtés. Sinon l'option « UTC » du HTML serveur fait échouer l'hydratation (React #418) dès
+  // que le fuseau du navigateur diffère, et la page perd toute interaction le temps du
+  // rétablissement.
+  const [detectedZone, setDetectedZone] = useState<string | null>(null);
+  useEffect(() => {
+    // Détection du fuseau du navigateur après montage uniquement : le serveur tourne en UTC et
+    // rendrait une liste d'options différente, ce qui fait échouer l'hydratation (React #418).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDetectedZone(detectedTimeZone(''));
+  }, []);
+  const timezoneSelectOptions = useMemo(() => {
+    const options = timezoneOptions(values.timezone);
+    if (detectedZone === null || options.some((option) => option.value === detectedZone)) {
+      return options;
+    }
+    return [...options, { value: detectedZone, label: timezoneLabel(detectedZone) }];
+  }, [detectedZone, values.timezone]);
   const pollRef = useRef<number | null>(null);
 
   // BR-SET-01 — the active tab follows the hash; Profil is the default and an unknown hash is
@@ -488,7 +506,7 @@ export function SettingsView({
                       setValues((previous) => ({ ...previous, timezone: event.target.value }));
                       setSaved(false);
                     }}
-                    options={timezoneOptions(values.timezone)}
+                    options={timezoneSelectOptions}
                     value={values.timezone}
                   />
                 </div>
