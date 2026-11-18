@@ -254,10 +254,12 @@ test('agenda sans débordement horizontal à 390 px @SPEC-704', async ({ page })
     );
     // La colonne de gauche tient dans l'écran : le mini-calendrier montre ses sept jours et le
     // panneau « Activité sélectionnée » ne dépasse pas.
+    // SPEC-802 — sous le point de rupture, le detail de l'activite passe dans une feuille
+    // ouverte au clic : le panneau desktop reste monte mais masque, donc hors du flux.
+    await expect(page.getByTestId('agenda-detail')).toBeHidden();
     for (const testId of [
       'agenda-minical',
       'agenda-minical-day-2026-11-15',
-      'agenda-detail',
       'agenda-legend',
       'agenda-calendar',
     ]) {

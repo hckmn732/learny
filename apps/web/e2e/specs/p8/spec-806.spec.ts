@@ -82,7 +82,9 @@ test('consulte et accepte les textes légaux @SPEC-806', async ({
   await expect(page.getByTestId('legal-title')).toHaveText(PAGES[2].title);
   await page.getByTestId('site-footer').getByRole('link', { name: /Accessibilité/ }).click();
   await expect(page).toHaveURL(`${origin}/accessibilite`);
-  await expect(page.getByTestId('accessibility-status')).toContainText('Partiellement conforme');
+  // La declaration est rendue depuis son gabarit Markdown dans une carte unique : le statut se lit
+  // dans le contenu publie, il n'a jamais eu de point d'ancrage dedie.
+  await expect(page.getByTestId('accessibilite-card')).toContainText(/partiellement conforme/i);
   await axeCheck();
 
   // CA-2 — the sign-up case stays unchecked; an absent acceptance is refused before any account.

@@ -2,7 +2,7 @@
     - heading "Notifications" [level=2]
     - button "Tout marquer comme lu"
     - group "Filtrer les notifications":
-        - button "Toutes 8" [pressed]
+        - button "Toutes 9" [pressed]
         - button "Non lues 3"
     - status: 3 notifications non lues.
     - region "Aujourd’hui":
@@ -38,6 +38,9 @@
             - listitem:
                 - link /Bilan de la semaine dim\. 8 nov\. \d+ h d'étude, \d+ % retenu à 1 mois, 3 notions à risque d'oubli\. SAP S\/4HANA Finance/:
                     - /url: /accueil#bilan
+            - listitem:
+                - link /Module 4 validé · \d+ % ven\. 6 nov\. Le module 5 · Rétrospectives est débloqué\. Gestion de projet agile/:
+                    - /url: /formations/agile/programme
     - text: Rappels aussi envoyés par e-mail
     - link "Gérer les notifications":
         - /url: /parametres#notifications

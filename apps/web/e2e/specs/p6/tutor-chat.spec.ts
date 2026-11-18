@@ -81,17 +81,25 @@ test('ouvre la discussion, retire la lacune et répond avec sources @SPEC-610', 
 test('sélection, clavier, Échap et nouvelle discussion @SPEC-610', async ({ page }) => {
   await page.goto(COURSE_URL);
   await expect(page.getByTestId('course-article')).toBeVisible();
-  await page.evaluate(() => {
-    const paragraph = document.querySelector('[data-testid="course-article"] p');
-    if (paragraph === null) throw new Error('paragraphe absent');
-    const range = document.createRange();
-    range.selectNodeContents(paragraph);
-    const selection = window.getSelection();
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-    paragraph.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
-  });
-  await expect(page.getByTestId('tutor-selection-bar')).toBeVisible();
+  // SPEC-804 charge le panneau tuteur en `next/dynamic` : le listener `pointerup` n'existe
+  // qu'une fois le morceau charge et React hydrate. On rejoue la selection jusqu'a ce que la
+  // barre apparaisse, sinon le test depend de la vitesse du reseau.
+  const selectParagraph = async (): Promise<void> => {
+    await page.evaluate(() => {
+      const paragraph = document.querySelector('[data-testid="course-article"] p');
+      if (paragraph === null) throw new Error('paragraphe absent');
+      const range = document.createRange();
+      range.selectNodeContents(paragraph);
+      const current = window.getSelection();
+      current?.removeAllRanges();
+      current?.addRange(range);
+      paragraph.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+    });
+  };
+  await expect(async () => {
+    await selectParagraph();
+    await expect(page.getByTestId('tutor-selection-bar')).toBeVisible({ timeout: 2_000 });
+  }).toPass({ timeout: 30_000 });
   await page.getByTestId('tutor-selection-ask').click();
   await expect(page.getByTestId('tutor-panel')).toBeVisible();
   await expect(page.getByTestId('tutor-context-count')).toHaveText('6 éléments');
