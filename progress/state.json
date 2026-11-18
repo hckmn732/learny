@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-17T18:08:15.248Z",
+  "updatedAt": "2026-11-18T17:10:02.633Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6170,14 +6170,55 @@
       }
     },
     "SPEC-807": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-17T18:09:09.146Z",
+      "completedAt": "2026-11-18T17:10:02.625Z",
+      "branch": "spec/SPEC-807-parcours-de-bout-en-bout-et-non-regressi",
+      "commit": "dfa96f85",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-18T16:58:29.276Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-18T17:01:53.458Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-18T17:03:10.279Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-18T17:05:01.225Z",
+          "details": "12 test(s) [SPEC-807] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-18T17:05:12.533Z",
+          "details": "5 test(s) [SPEC-807] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-18T17:06:20.214Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-18T17:06:20.214Z",
+          "details": "2 test(s) @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-18T17:06:20.262Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-808": {
       "status": "pending",

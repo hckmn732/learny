@@ -3,13 +3,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { z } from 'zod';
 
 import type { TutorTone } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { Button, Card, FormError, Link as UiLink, TextField } from '@learny/ui';
 
-import { api, apiFetch } from '../../lib/api-client';
+import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/onboarding';
 
 import { formatFirstNames } from './formatFirstNames';
@@ -17,12 +16,6 @@ import { parseInviteCode } from './parseInviteCode';
 import { StepHeading } from './StepHeading';
 
 const t = fr.onboarding.depart;
-
-const InvitationAccepted = z.object({
-  formationId: z.string().min(1),
-  formationTitle: z.string().min(1),
-  memberFirstNames: z.array(z.string()),
-});
 
 export interface DepartureStepProps {
   firstName: string;
@@ -105,11 +98,9 @@ export function DepartureStep({ firstName, tutorTone, payment }: Readonly<Depart
     }
     setBusy(true);
     try {
-      const accepted = await apiFetch({
-        method: 'POST',
-        path: `/invitations/${code}/accept`,
-        output: InvitationAccepted,
-      });
+      // The dedicated route call carries the Idempotency-Key the contract requires
+      // (`invitationAccept.idempotent === true`); a plain `apiFetch` never sets it.
+      const accepted = await api.invitationAccept({ params: { code } });
       await markDone();
       setInviteStatus({
         title: accepted.formationTitle,

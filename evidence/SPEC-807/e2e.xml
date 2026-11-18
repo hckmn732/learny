@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="62.642578">
+<testsuite name="p8/spec-807.spec.ts" timestamp="2026-11-18T17:05:58.476Z" hostname="desktop" tests="2" failures="0" skipped="0" time="10.075" errors="0">
+<testcase name="matrice des parcours V1 @SPEC-807" classname="p8/spec-807.spec.ts" time="5.083">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/attachments/spec-807-matrice-faa990ba724b22c8711c2d508dc661248fcc02a7.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/attachments/axe-45e2e82947876e94db5926c5e0263ba6792bc97a.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-parcours-V1-SPEC-807-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="matrice des parcours V1 conforme @SPEC-807 @visual @mobile" classname="p8/spec-807.spec.ts" time="4.992">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/attachments/axe-38813320268ac69fdcdee1bbebaee6d4b1dae071.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/attachments/spec-807-demo-visual-09990a9b540be0aeca3b25a963d5484c10141ede.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p8/spec-807.spec.ts" timestamp="2026-11-18T17:05:58.476Z" hostname="mobile" tests="1" failures="0" skipped="0" time="5.975" errors="0">
+<testcase name="matrice des parcours V1 conforme @SPEC-807 @visual @mobile" classname="p8/spec-807.spec.ts" time="5.975">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/attachments/axe-a9e8a836def3385acdb425c135ba6a7aa956c773.json]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/attachments/spec-807-demo-visual-2c8cf4216699ec016c9ec2166a3e070f07e69245.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/video.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p8-spec-807-matrice-des-pa-[redacted]/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

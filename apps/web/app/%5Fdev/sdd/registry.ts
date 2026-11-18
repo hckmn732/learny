@@ -347,4 +347,10 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-211'),
   },
+  'SPEC-807': {
+    title: 'SPEC-807 · Parcours de bout en bout',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-807'),
+  },
 };

@@ -147,9 +147,27 @@ export async function seedDemoExamAttempts(): Promise<DemoExamAttempts> {
         deadline_at = excluded.deadline_at, submitted_at = null, score = null, passed = null
     returning id::text as id
   `);
+  const inProgressId = inProgress[0]?.id ?? '';
+  // `startExamAttempt` freezes one empty answer row per question at creation; the answer and
+  // grading writes only update those rows. Without them the answers are silently lost and the
+  // result has no question (`ExamResultDto.total >= 1`): GET …/result answered 500 (SPEC-807).
+  // The upsert above may reuse the attempt of a previous file: its answers are reset too.
+  await serviceDb().execute(sql`
+    delete from public.answers where attempt_id = ${inProgressId}::uuid
+  `);
+  for (const [index, item] of items.entries()) {
+    await serviceDb().execute(sql`
+      insert into public.answers (
+        attempt_id, brick_version_id, position, response, max_score, answered_at
+      ) values (
+        ${inProgressId}::uuid, ${item.brickVersionId}::uuid, ${index + 1},
+        '{}'::jsonb, ${item.points}, '2026-11-11T11:30:00Z'::timestamptz
+      )
+    `);
+  }
   return {
     gradedId: graded[0]?.id ?? '',
-    inProgressId: inProgress[0]?.id ?? '',
+    inProgressId,
   };
 }
 

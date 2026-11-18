@@ -1,0 +1,1930 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-807/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--project=journeys",
+      "--project=journeys-webkit",
+      "--reporter=json"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-807/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys",
+        "name": "journeys",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys-firefox",
+        "name": "journeys-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys-webkit",
+        "name": "journeys-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "journeys",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "journeys"
+      },
+      {
+        "grep": {},
+        "grepInvert": {},
+        "outputDir": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "journeys-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-807/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "journeys-webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3100/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3100",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "PERF_DEMO_FIXTURE": "1",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "../journeys/data-rights.spec.ts",
+      "file": "../journeys/data-rights.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "données personnelles : export complet, annulation puis effacement à J+30 @SPEC-807 @SPEC-211 @SPEC-707 @SPEC-806",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "SPEC-211",
+            "SPEC-707",
+            "SPEC-806"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10334,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"info\",\"timestamp\":\"2026-11-18T16:33:59.341Z\",\"userId\":\"d35fa807-72e6-404e-bfe5-369c8f13dda4\",\"component\":\"memory\",\"outcome\":\"transactional\",\"template\":\"deletion_completed\",\"messageId\":\"[Redacted]\",\"message\":\"email sent\"}\n"
+                    },
+                    {
+                      "text": "{\"level\":\"info\",\"timestamp\":\"2026-11-18T16:33:59.387Z\",\"userId\":\"d35fa807-72e6-404e-bfe5-369c8f13dda4\",\"outcome\":\"groups=0 tables=51\",\"message\":\"account deletion completed\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:33:50.434Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-807-donnees-export-pret",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/attachments/spec-807-donnees-export-pret-b1e5999ea4b991ec9bb81f76786b5977f35b6775.png"
+                    },
+                    {
+                      "name": "export-tree",
+                      "contentType": "text/plain",
+                      "body": "UkVBRE1FLnR4dApzZXR0aW5ncy5qc29uCnJlc3VsdHMuanNvbgpjb252ZXJzYXRpb25zLmpzb24KZm9ybWF0aW9ucy9jb21wdGFiaWxpdGUtZGU2MTMwMTAvcHJvZ3JhbW1lLmpzb24KZm9ybWF0aW9ucy9jb21wdGFiaWxpdGUtZGU2MTMwMTAvMDEtcGFydGllLTEvY291cnMubWQKYXBwb3J0cy9jb21wdGFiaWxpdGUtZGU2MTMwMTAvMDEtcGFydGllLTEvZmljaGUtY29tcHRhYmlsaXRlLWRlNjEzMDEwLnBkZgphcHBvcnRzL2NvbXB0YWJpbGl0ZS1kZTYxMzAxMC8wMS1wYXJ0aWUtMS9NZW1vIGNvbXB0YWJpbGl0ZSBkZTYxMzAxMC50eHQ="
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/attachments/axe-25050c78ab843993df373f8bf46977c9189b9157.json"
+                    },
+                    {
+                      "name": "spec-807-donnees-suppression-programmee",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/attachments/spec-807-donnees-suppression-programmee-0b224408404cd751c9bdf35045625c863a8d5db6.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys-webkit",
+              "projectName": "journeys-webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14021,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"info\",\"timestamp\":\"2026-11-18T16:38:07.977Z\",\"userId\":\"06a4796a-25cc-47a4-8724-2facc83f699a\",\"component\":\"memory\",\"outcome\":\"transactional\",\"template\":\"deletion_completed\",\"messageId\":\"[Redacted]\",\"message\":\"email sent\"}\n"
+                    },
+                    {
+                      "text": "{\"level\":\"info\",\"timestamp\":\"2026-11-18T16:38:08.026Z\",\"userId\":\"06a4796a-25cc-47a4-8724-2facc83f699a\",\"outcome\":\"groups=0 tables=51\",\"message\":\"account deletion completed\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:37:53.927Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-807-donnees-export-pret",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/attachments/spec-807-donnees-export-pret-8d33f3144db4f510f6c16f838ac93bd63d5d72e0.png"
+                    },
+                    {
+                      "name": "export-tree",
+                      "contentType": "text/plain",
+                      "body": "UkVBRE1FLnR4dApzZXR0aW5ncy5qc29uCnJlc3VsdHMuanNvbgpjb252ZXJzYXRpb25zLmpzb24KZm9ybWF0aW9ucy9jb21wdGFiaWxpdGUtZTRhYmYwNTkvcHJvZ3JhbW1lLmpzb24KZm9ybWF0aW9ucy9jb21wdGFiaWxpdGUtZTRhYmYwNTkvMDEtcGFydGllLTEvY291cnMubWQKYXBwb3J0cy9jb21wdGFiaWxpdGUtZTRhYmYwNTkvMDEtcGFydGllLTEvZmljaGUtY29tcHRhYmlsaXRlLWU0YWJmMDU5LnBkZgphcHBvcnRzL2NvbXB0YWJpbGl0ZS1lNGFiZjA1OS8wMS1wYXJ0aWUtMS9NZW1vIGNvbXB0YWJpbGl0ZSBlNGFiZjA1OS50eHQ="
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/attachments/axe-beedc571f285fffef35c6785b4bf3eba09a9392f.json"
+                    },
+                    {
+                      "name": "spec-807-donnees-suppression-programmee",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/attachments/spec-807-donnees-suppression-programmee-8d0db3424b0ea17b0678162eea3c67d8a05243f4.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/data-rights-données-person-fcc7c--SPEC-211-SPEC-707-SPEC-806-journeys-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2b606cbb1439bd0225d6-b6b0089798db5428716c",
+          "file": "../journeys/data-rights.spec.ts",
+          "line": 99,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "../journeys/first-formation.spec.ts",
+      "file": "../journeys/first-formation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "première formation : inscription jusqu’au module suivant @SPEC-807 @SPEC-806 @SPEC-601 @SPEC-602 @SPEC-604 @SPEC-605 @SPEC-606 @SPEC-607 @SPEC-608 @SPEC-609 @SPEC-610 @SPEC-611 @SPEC-612 @SPEC-715",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "SPEC-806",
+            "SPEC-601",
+            "SPEC-602",
+            "SPEC-604",
+            "SPEC-605",
+            "SPEC-606",
+            "SPEC-607",
+            "SPEC-608",
+            "SPEC-609",
+            "SPEC-610",
+            "SPEC-611",
+            "SPEC-612",
+            "SPEC-715"
+          ],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [
+                {
+                  "type": "regression",
+                  "description": "« Passer au quiz » mène à /formations/219b2fa0-40fd-484e-9c66-8adce5d06197/modules/ae7fb272-582c-4f74-b08d-e24c020f3507 au lieu de /formations/219b2fa0-40fd-484e-9c66-8adce5d06197/modules/ae7fb272-582c-4f74-b08d-e24c020f3507/quiz"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 117770,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "accepte les versions légales et s’inscrit (SPEC-806, SPEC-601)",
+                      "duration": 1147
+                    },
+                    {
+                      "title": "vérifie son e-mail via le transport de test",
+                      "duration": 1487
+                    },
+                    {
+                      "title": "termine Profil → Rythme → IA → Rappels → Départ (SPEC-602)",
+                      "duration": 4604
+                    },
+                    {
+                      "title": "crée la formation et répond au cadrage (SPEC-604)",
+                      "duration": 2364
+                    },
+                    {
+                      "title": "valide le programme : module 1 ouvert, les autres verrouillés (SPEC-605, SPEC-606)",
+                      "duration": 20783
+                    },
+                    {
+                      "title": "ajoute une note et un PDF de test puis attend leur traitement (SPEC-607)",
+                      "duration": 2306
+                    },
+                    {
+                      "title": "génère un cours sourcé (SPEC-608)",
+                      "duration": 1983
+                    },
+                    {
+                      "title": "les citations pointent vers les passages réellement déposés",
+                      "duration": 458
+                    },
+                    {
+                      "title": "lit le chapitre et rend un résumé (SPEC-609)",
+                      "duration": 423
+                    },
+                    {
+                      "title": "pose une question au tuteur simulé (SPEC-610)",
+                      "duration": 1010
+                    },
+                    {
+                      "title": "échoue au quiz sous le seuil (SPEC-611, SPEC-612)",
+                      "duration": 8473
+                    },
+                    {
+                      "title": "voit les lacunes, la remédiation et le délai",
+                      "duration": 2628
+                    },
+                    {
+                      "title": "repasse après le délai et réussit (horloge injectable)",
+                      "duration": 64498
+                    },
+                    {
+                      "title": "ouvre le module suivant",
+                      "duration": 3067
+                    },
+                    {
+                      "title": "isolation : aucune donnée d’un autre compte (ET-2)",
+                      "duration": 23
+                    }
+                  ],
+                  "startTime": "2026-11-18T16:34:01.958Z",
+                  "annotations": [
+                    {
+                      "type": "regression",
+                      "description": "« Passer au quiz » mène à /formations/219b2fa0-40fd-484e-9c66-8adce5d06197/modules/ae7fb272-582c-4f74-b08d-e24c020f3507 au lieu de /formations/219b2fa0-40fd-484e-9c66-8adce5d06197/modules/ae7fb272-582c-4f74-b08d-e24c020f3507/quiz"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "j1-inscription-verification",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j1-inscription-verification-744fdc84d6634e9845be5cb83d54b6d1778a3efc.png"
+                    },
+                    {
+                      "name": "j1-depart",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j1-depart-dff2e35654331df2820a22b3162db339c66621ea.png"
+                    },
+                    {
+                      "name": "j1-cadrage-fin",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j1-cadrage-fin-9d8f040a0500012ea3f0f2a951f8c28d9f561f7a.png"
+                    },
+                    {
+                      "name": "j1-programme-actif",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j1-programme-actif-2d054345c1c11bf1087238680c7c33e9c5d385f5.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/axe-131caa6b41567133263aa72d47c15f1d3a4c78ca.json"
+                    },
+                    {
+                      "name": "j2-apports-analyses",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-apports-analyses-4a74d24f0df9adcd0e9529f5470a49a80c1a9f40.png"
+                    },
+                    {
+                      "name": "j2-cours-source",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-cours-source-e54a717d4d18ca0ed83000e70d3d6c2e81952a9f.png"
+                    },
+                    {
+                      "name": "citations",
+                      "contentType": "application/json",
+                      "body": "WwogIHsKICAgICJyZXNvdXJjZUlkIjogImU1NGE1MThkLWU2ZGMtNDM5OC1hYWJmLWE3ZDE1NWQwZDM0NCIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9LAogIHsKICAgICJyZXNvdXJjZUlkIjogImU1NGE1MThkLWU2ZGMtNDM5OC1hYWJmLWE3ZDE1NWQwZDM0NCIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9LAogIHsKICAgICJyZXNvdXJjZUlkIjogImU1NGE1MThkLWU2ZGMtNDM5OC1hYWJmLWE3ZDE1NWQwZDM0NCIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9Cl0="
+                    },
+                    {
+                      "name": "j2-tuteur",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-tuteur-595aacce4142fe4cfb695342c003b8d3fb5b0328.png"
+                    },
+                    {
+                      "name": "j2-quiz-echoue",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-quiz-echoue-92c3d10992931e91d852324dbda7b1fb9c091e4a.png"
+                    },
+                    {
+                      "name": "j2-remediation",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-remediation-d8e395db4f00dfb4005c0d641f77cecf6855b94d.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/axe-a890d71a20a8247043a967c05b912850b6b904a1.json"
+                    },
+                    {
+                      "name": "j2-quiz-reussi",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-quiz-reussi-22ff6fe6f1d40d5502cf75160ac2505c3ce80690.png"
+                    },
+                    {
+                      "name": "j2-module-suivant",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/j2-module-suivant-05e5ccdce69f5ff2b5db022ef3bda83b1011f72a.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/axe-d1e01fb34c1231b8ef6ef1664e3e2f881dd17bc3.json"
+                    },
+                    {
+                      "name": "pdf-de-test",
+                      "contentType": "application/pdf",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/attachments/pdf-de-test-91ccbe4818e7dcf317490e7c9727813ce7aeede8.pdf"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 420000,
+              "annotations": [
+                {
+                  "type": "regression",
+                  "description": "« Passer au quiz » mène à /formations/fe08db84-b480-4dda-a8e6-16bf51cd184e/modules/8699eb61-bb88-4720-a4ed-635795e440d3 au lieu de /formations/fe08db84-b480-4dda-a8e6-16bf51cd184e/modules/8699eb61-bb88-4720-a4ed-635795e440d3/quiz"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "journeys-webkit",
+              "projectName": "journeys-webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 137518,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "accepte les versions légales et s’inscrit (SPEC-806, SPEC-601)",
+                      "duration": 1566
+                    },
+                    {
+                      "title": "vérifie son e-mail via le transport de test",
+                      "duration": 1531
+                    },
+                    {
+                      "title": "termine Profil → Rythme → IA → Rappels → Départ (SPEC-602)",
+                      "duration": 4565
+                    },
+                    {
+                      "title": "crée la formation et répond au cadrage (SPEC-604)",
+                      "duration": 4111
+                    },
+                    {
+                      "title": "valide le programme : module 1 ouvert, les autres verrouillés (SPEC-605, SPEC-606)",
+                      "duration": 23219
+                    },
+                    {
+                      "title": "ajoute une note et un PDF de test puis attend leur traitement (SPEC-607)",
+                      "duration": 2744
+                    },
+                    {
+                      "title": "génère un cours sourcé (SPEC-608)",
+                      "duration": 1565
+                    },
+                    {
+                      "title": "les citations pointent vers les passages réellement déposés",
+                      "duration": 1184
+                    },
+                    {
+                      "title": "lit le chapitre et rend un résumé (SPEC-609)",
+                      "duration": 513
+                    },
+                    {
+                      "title": "pose une question au tuteur simulé (SPEC-610)",
+                      "duration": 2024
+                    },
+                    {
+                      "title": "échoue au quiz sous le seuil (SPEC-611, SPEC-612)",
+                      "duration": 12811
+                    },
+                    {
+                      "title": "voit les lacunes, la remédiation et le délai",
+                      "duration": 3993
+                    },
+                    {
+                      "title": "repasse après le délai et réussit (horloge injectable)",
+                      "duration": 70335
+                    },
+                    {
+                      "title": "ouvre le module suivant",
+                      "duration": 4295
+                    },
+                    {
+                      "title": "isolation : aucune donnée d’un autre compte (ET-2)",
+                      "duration": 26
+                    }
+                  ],
+                  "startTime": "2026-11-18T16:38:10.037Z",
+                  "annotations": [
+                    {
+                      "type": "regression",
+                      "description": "« Passer au quiz » mène à /formations/fe08db84-b480-4dda-a8e6-16bf51cd184e/modules/8699eb61-bb88-4720-a4ed-635795e440d3 au lieu de /formations/fe08db84-b480-4dda-a8e6-16bf51cd184e/modules/8699eb61-bb88-4720-a4ed-635795e440d3/quiz"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "j1-inscription-verification",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j1-inscription-verification-78ce91f85f21616edeb34da7c107e5d9f22c885a.png"
+                    },
+                    {
+                      "name": "j1-depart",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j1-depart-091ac59f0032ba6e048652c9969a3c1040eb43ba.png"
+                    },
+                    {
+                      "name": "j1-cadrage-fin",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j1-cadrage-fin-231f848e77226b5806c8803b590a2c93beee38c3.png"
+                    },
+                    {
+                      "name": "j1-programme-actif",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j1-programme-actif-83eccf7e121f7f04b837bc1e8a0f3a67877ae30b.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/axe-58d2f915d0fcae2619e84c4bde21940a2bf42738.json"
+                    },
+                    {
+                      "name": "j2-apports-analyses",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-apports-analyses-0e2fde0961b4b4e3643622f4d9765c5c220228c3.png"
+                    },
+                    {
+                      "name": "j2-cours-source",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-cours-source-129a6e6ad5484c1650d52012179c35120ad08f7d.png"
+                    },
+                    {
+                      "name": "citations",
+                      "contentType": "application/json",
+                      "body": "WwogIHsKICAgICJyZXNvdXJjZUlkIjogIjVhNzI0NjNmLWQ4N2ItNDI4NS1iODNhLWFiMGIzMTU1N2RkYSIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9LAogIHsKICAgICJyZXNvdXJjZUlkIjogIjVhNzI0NjNmLWQ4N2ItNDI4NS1iODNhLWFiMGIzMTU1N2RkYSIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9LAogIHsKICAgICJyZXNvdXJjZUlkIjogIjVhNzI0NjNmLWQ4N2ItNDI4NS1iODNhLWFiMGIzMTU1N2RkYSIsCiAgICAicmVzb3VyY2VUaXRsZSI6ICJTQVAgUy80SEFOQSByw6l1bml0IGxhIGZpbmFuY2UgZXQgbGEgbG9naXN0aXF1ZSBkYW5zIHVuZSBzZXVsZSBiYXNlIGVuIG3DqW1vaXJlLiBMZSBqb3VybmFsIHVuaXZlcnNlbCBlbnJlZ2lzdHJlIGNoYXF1ZSDDqWNyaXR1cmUgdW5lIHNldWxlIGZvaXMuIiwKICAgICJjaHVua1RleHQiOiAiU0FQIFMvNEhBTkEgcsOpdW5pdCBsYSBmaW5hbmNlIGV0IGxhIGxvZ2lzdGlxdWUgZGFucyB1bmUgc2V1bGUgYmFzZSBlbiBtw6ltb2lyZS4gTGUgam91cm5hbCB1bml2ZXJzZWwgZW5yZWdpc3RyZSBjaGFxdWUgw6ljcml0dXJlIHVuZSBzZXVsZSBmb2lzLiIsCiAgICAicGFnZSI6IG51bGwKICB9Cl0="
+                    },
+                    {
+                      "name": "j2-tuteur",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-tuteur-c1a3f327677423ff8a19520a017c54916f1ac947.png"
+                    },
+                    {
+                      "name": "j2-quiz-echoue",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-quiz-echoue-62adee7ae6280cd337bd23612c5ba2f640a2586e.png"
+                    },
+                    {
+                      "name": "j2-remediation",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-remediation-2683df29e47007c4be24181a85992f9c29f64482.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/axe-99f368cce4a37c8564665f8f54232b4910d4ac86.json"
+                    },
+                    {
+                      "name": "j2-quiz-reussi",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-quiz-reussi-c7533330912125da741809a2a32c0f8b2b1e6368.png"
+                    },
+                    {
+                      "name": "j2-module-suivant",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/j2-module-suivant-ef94582d6d123dc7802c6447f3c332182661fcd5.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/axe-d4e9dc90d7e7d504becfb7f777d50c4f42db047c.json"
+                    },
+                    {
+                      "name": "pdf-de-test",
+                      "contentType": "application/pdf",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/attachments/pdf-de-test-e304f446c6a46fc2c28a945f94f6dc4e53d17a99.pdf"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/first-formation-première-f-3106d--SPEC-611-SPEC-612-SPEC-715-journeys-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4822a3ad928246b8b6e3-cbd8704a2a87b93eb220",
+          "file": "../journeys/first-formation.spec.ts",
+          "line": 53,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "../journeys/group.spec.ts",
+      "file": "../journeys/group.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "formation à plusieurs : invitation par code, apports privés et sortie avec copie @SPEC-807 @SPEC-724 @SPEC-111 @SPEC-206 @SPEC-607 @SPEC-602 @SPEC-606",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "SPEC-724",
+            "SPEC-111",
+            "SPEC-206",
+            "SPEC-607",
+            "SPEC-602",
+            "SPEC-606"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19650,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:36:03.267Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "journey-group-owner-created",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/journey-group-owner-created-8709ee83079175142e64187decee118f924c42dd.png"
+                    },
+                    {
+                      "name": "journey-group-member-programme",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/journey-group-member-programme-e45c10d6e9ccfb0e1586030a57184fab12643507.png"
+                    },
+                    {
+                      "name": "journey-group-member-apports",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/journey-group-member-apports-e36d704c589fd01d29ae48a62c968cc7a1afeb98.png"
+                    },
+                    {
+                      "name": "journey-group-member-copy",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/journey-group-member-copy-c1c04a8087763b5330e3b3a1c4435e11bfc3bc66.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/axe-91989e0ebe9767a6dea54ba8a5d1c06c48d55258.json"
+                    },
+                    {
+                      "name": "journey-group-owner-after-leave",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/journey-group-owner-after-leave-08d51584c4b2e2466ef76d676bf24a13ffb8547a.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/attachments/axe-037da31e4ae147a478c19274e0200a50dce4d046.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys-webkit",
+              "projectName": "journeys-webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24047,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:40:30.694Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "journey-group-owner-created",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/journey-group-owner-created-23289250a82b2e700d918cfa3a16c9c2e94818d5.png"
+                    },
+                    {
+                      "name": "journey-group-member-programme",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/journey-group-member-programme-a16f1ede6678c1c7a2fe10ef70ec4eba03833e05.png"
+                    },
+                    {
+                      "name": "journey-group-member-apports",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/journey-group-member-apports-7034190b14c9b8c13dabcf5721b645515ca3cc5d.png"
+                    },
+                    {
+                      "name": "journey-group-member-copy",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/journey-group-member-copy-07639e0751312efddf2d452321955b48316b0031.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/axe-fa631f408e589bcdad07e495c19fe6ed41026e27.json"
+                    },
+                    {
+                      "name": "journey-group-owner-after-leave",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/journey-group-owner-after-leave-a39e67b83873ac5827d204bf809e2613f7928bd6.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/attachments/axe-f1557bf3db7e83d377dab87211904c197ce4e86a.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/video-1.webm"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/test-finished-2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/group-formation-à-plusieur-eeb22--SPEC-607-SPEC-602-SPEC-606-journeys-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fffb772da385012f6740-6fb1d805f1d0a94b9da4",
+          "file": "../journeys/group.spec.ts",
+          "line": 74,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "../journeys/mock-exam.spec.ts",
+      "file": "../journeys/mock-exam.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "examen blanc : format, épreuve sans aide, reprise sans gain de temps, diagnostic @SPEC-807 @SPEC-614 @SPEC-615",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "SPEC-614",
+            "SPEC-615"
+          ],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7356,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:36:24.374Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "examen-format-propose",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/attachments/examen-format-propose-f7b5a5ffcda5197ef984d72098dd79cfd6d46f6b.png"
+                    },
+                    {
+                      "name": "examen-avant-interruption",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/attachments/examen-avant-interruption-b593c09150cfd0c05ea12ab2e3fced81d926356e.png"
+                    },
+                    {
+                      "name": "examen-apres-reprise",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/attachments/examen-apres-reprise-b91d93acd66fdd8518082c66d41fc3243ee5efb8.png"
+                    },
+                    {
+                      "name": "examen-resultat-diagnostique",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/attachments/examen-resultat-diagnostique-b946d5256e027abb40895ffef82a34a9200c422f.png"
+                    },
+                    {
+                      "name": "examen-lacunes",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/attachments/examen-lacunes-cf69d82283768bde9cb74bc35c6d6d2032f31b59.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys-webkit",
+              "projectName": "journeys-webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10094,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:40:55.714Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "examen-format-propose",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/attachments/examen-format-propose-dfce38fef2c7c314907cde7153cf5561450e2ea4.png"
+                    },
+                    {
+                      "name": "examen-avant-interruption",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/attachments/examen-avant-interruption-0734497848f6382578de04896efdc54956b71d57.png"
+                    },
+                    {
+                      "name": "examen-apres-reprise",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/attachments/examen-apres-reprise-a0f22ef319c45d0789e193d533cf1b972c5ec239.png"
+                    },
+                    {
+                      "name": "examen-resultat-diagnostique",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/attachments/examen-resultat-diagnostique-841d2db81392245131526a2be82f3d1349aa527a.png"
+                    },
+                    {
+                      "name": "examen-lacunes",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/attachments/examen-lacunes-7ab8811606cf6cce9dda54db7db36b9f69d88019.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/mock-exam-examen-blanc-for-34f5e--SPEC-807-SPEC-614-SPEC-615-journeys-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f88f80ebd82177dc95e4-93c445b289c253d0e780",
+          "file": "../journeys/mock-exam.spec.ts",
+          "line": 108,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "../journeys/review-automations.spec.ts",
+      "file": "../journeys/review-automations.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "révisions, hors ligne et automatismes @SPEC-807 @SPEC-701 @SPEC-704 @SPEC-711 @SPEC-713 @SPEC-718 @SPEC-720 @SPEC-801",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "SPEC-701",
+            "SPEC-704",
+            "SPEC-711",
+            "SPEC-713",
+            "SPEC-718",
+            "SPEC-720",
+            "SPEC-801"
+          ],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24424,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"warn\",\"timestamp\":\"2026-11-18T16:36:52.375Z\",\"outcome\":\"event_dispatch_failed\",\"err\":{\"error\":\"Error\"},\"message\":\"event dispatch failed\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "le paquet hors ligne du jour est préchargé (SPEC-801)",
+                      "duration": 1872
+                    },
+                    {
+                      "title": "les notions dues apparaissent, sous le plafond (SPEC-701, SPEC-718)",
+                      "duration": 2848
+                    },
+                    {
+                      "title": "une réponse en ligne met à jour FSRS et la maîtrise (SPEC-701)",
+                      "duration": 422
+                    },
+                    {
+                      "title": "une réponse hors ligne est stockée sur l’appareil (SPEC-801)",
+                      "duration": 733
+                    },
+                    {
+                      "title": "la reconnexion synchronise une seule fois (CL-3)",
+                      "duration": 596
+                    },
+                    {
+                      "title": "la clôture met à jour la série et l’agenda (SPEC-701, SPEC-704)",
+                      "duration": 8677
+                    },
+                    {
+                      "title": "l’apprenant configure ses automatismes (SPEC-711)",
+                      "duration": 3405
+                    },
+                    {
+                      "title": "les automatismes agissent dans leurs garde-fous (SPEC-713, SPEC-720)",
+                      "duration": 3484
+                    }
+                  ],
+                  "startTime": "2026-11-18T16:36:32.931Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/axe-e8470d245e5d41180cc6b660051ab7d5aa4267d1.json"
+                    },
+                    {
+                      "name": "spec-807-revisions-quiz",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/spec-807-revisions-quiz-efc9db2f6aed127f8bc9e1eb4983e42751078229.png"
+                    },
+                    {
+                      "name": "spec-807-revisions-hors-ligne",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/spec-807-revisions-hors-ligne-66d66862f7b9b1e891eb705e30bff06331306746.png"
+                    },
+                    {
+                      "name": "spec-807-sync-counters.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJiZWZvcmUiOiB7CiAgICAiYW5zd2VycyI6IDEsCiAgICAicmV2aWV3TG9ncyI6IDEsCiAgICAicmVjZWlwdHMiOiAwLAogICAgInN0cmVha0RheXMiOiA0LAogICAgInRvZGF5TWludXRlcyI6IDAKICB9LAogICJzeW5jZWQiOiB7CiAgICAiYW5zd2VycyI6IDIsCiAgICAicmV2aWV3TG9ncyI6IDIsCiAgICAicmVjZWlwdHMiOiAxLAogICAgInN0cmVha0RheXMiOiA0LAogICAgInRvZGF5TWludXRlcyI6IDEKICB9LAogICJyZXBsYXkiOiB7CiAgICAicmVzdWx0cyI6IFsKICAgICAgewogICAgICAgICJjbGllbnRJZCI6ICI1OTZlMGEzYy0xYmFkLTRmODItYThhYy0xNzhkZDE5OTM0MjUiLAogICAgICAgICJzdGF0dXMiOiAiZHVwbGljYXRlIgogICAgICB9CiAgICBdCiAgfQp9"
+                    },
+                    {
+                      "name": "spec-807-revisions-fin",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/spec-807-revisions-fin-ee085d4c65dc48a0342afb4f4a02f225cffb3a27.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/axe-6bcf29c630fed96cdbe0830750a4efc82b07cd82.json"
+                    },
+                    {
+                      "name": "spec-807-automatismes-journal",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/spec-807-automatismes-journal-212054690336f461f70cd15ba36fa551634d8130.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/attachments/axe-ab3b741a89ebb20cf9cbebbc3c7bef45af033b93.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "journeys-webkit",
+              "projectName": "journeys-webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 29377,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "{\"level\":\"warn\",\"timestamp\":\"2026-11-18T16:41:30.568Z\",\"outcome\":\"event_dispatch_failed\",\"err\":{\"error\":\"Error\"},\"message\":\"event dispatch failed\"}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "le paquet hors ligne du jour est préchargé (SPEC-801)",
+                      "duration": 1946
+                    },
+                    {
+                      "title": "les notions dues apparaissent, sous le plafond (SPEC-701, SPEC-718)",
+                      "duration": 3552
+                    },
+                    {
+                      "title": "une réponse en ligne met à jour FSRS et la maîtrise (SPEC-701)",
+                      "duration": 469
+                    },
+                    {
+                      "title": "une réponse hors ligne est stockée sur l’appareil (SPEC-801)",
+                      "duration": 1370
+                    },
+                    {
+                      "title": "la reconnexion synchronise une seule fois (CL-3)",
+                      "duration": 623
+                    },
+                    {
+                      "title": "la clôture met à jour la série et l’agenda (SPEC-701, SPEC-704)",
+                      "duration": 11401
+                    },
+                    {
+                      "title": "l’apprenant configure ses automatismes (SPEC-711)",
+                      "duration": 3370
+                    },
+                    {
+                      "title": "les automatismes agissent dans leurs garde-fous (SPEC-713, SPEC-720)",
+                      "duration": 4259
+                    }
+                  ],
+                  "startTime": "2026-11-18T16:41:06.800Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/axe-61be167bb1480f63bcac6a7d5f165c5737c367ee.json"
+                    },
+                    {
+                      "name": "spec-807-revisions-quiz",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/spec-807-revisions-quiz-282f8dc99b271849b76f0e400c2f5df31ca1bce4.png"
+                    },
+                    {
+                      "name": "spec-807-revisions-hors-ligne",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/spec-807-revisions-hors-ligne-ee86d74a61e0e06da59ea6054ddb595eeea2d04a.png"
+                    },
+                    {
+                      "name": "spec-807-sync-counters.json",
+                      "contentType": "application/json",
+                      "body": "ewogICJiZWZvcmUiOiB7CiAgICAiYW5zd2VycyI6IDEsCiAgICAicmV2aWV3TG9ncyI6IDEsCiAgICAicmVjZWlwdHMiOiAwLAogICAgInN0cmVha0RheXMiOiA0LAogICAgInRvZGF5TWludXRlcyI6IDAKICB9LAogICJzeW5jZWQiOiB7CiAgICAiYW5zd2VycyI6IDIsCiAgICAicmV2aWV3TG9ncyI6IDIsCiAgICAicmVjZWlwdHMiOiAxLAogICAgInN0cmVha0RheXMiOiA0LAogICAgInRvZGF5TWludXRlcyI6IDEKICB9LAogICJyZXBsYXkiOiB7CiAgICAicmVzdWx0cyI6IFsKICAgICAgewogICAgICAgICJjbGllbnRJZCI6ICI2Y2FjYTY3Ny03M2EwLTRhMTEtYjMyMy0xMjM5NzI5MDEyNTEiLAogICAgICAgICJzdGF0dXMiOiAiZHVwbGljYXRlIgogICAgICB9CiAgICBdCiAgfQp9"
+                    },
+                    {
+                      "name": "spec-807-revisions-fin",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/spec-807-revisions-fin-1e49926de9813127249ef8cbb03e3c123fc8cdc0.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/axe-49b230907a9bb572993981b030c5cd8cd5dcf89c.json"
+                    },
+                    {
+                      "name": "spec-807-automatismes-journal",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/spec-807-automatismes-journal-5daca3a0575f27f08c1354cad8553a58939437a4.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/attachments/axe-7a61226544e85068615784babf69d5748fded79c.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/review-automations-révisio-63844--SPEC-718-SPEC-720-SPEC-801-journeys-webkit/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "018484377d35aa5a54f7-aad18b578f3cc4598e78",
+          "file": "../journeys/review-automations.spec.ts",
+          "line": 104,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "../journeys/visual-regression.spec.ts",
+      "file": "../journeys/visual-regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "régression des écrans V1 @SPEC-807 @visual",
+          "ok": true,
+          "tags": [
+            "SPEC-807",
+            "visual"
+          ],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-01-fenetre:0.0788"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-home-header:0.1042"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-home-day:0.0723"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-home-retention:0.1076"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-tutor-acted:0.0992"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-home-formations:0.0473"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-03-home-global-quiz:0.0991"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-09-menu:0.0522"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-09-en-tete:0.0320"
+                },
+                {
+                  "type": "mockup-diff-ratio",
+                  "description": "SCR-10-contenu:0.1115"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "journeys",
+              "projectName": "journeys",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40983,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T16:36:59.120Z",
+                  "annotations": [
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-01-fenetre:0.0788"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-home-header:0.1042"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-home-day:0.0723"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-home-retention:0.1076"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-tutor-acted:0.0992"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-home-formations:0.0473"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-03-home-global-quiz:0.0991"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-09-menu:0.0522"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-09-en-tete:0.0320"
+                    },
+                    {
+                      "type": "mockup-diff-ratio",
+                      "description": "SCR-10-contenu:0.1115"
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "SCR-01-fenetre-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-01-fenetre-side-by-side-25fae876274bfc2433a9316ea2fb6b8301bb2157.png"
+                    },
+                    {
+                      "name": "SCR-01-fenetre-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-01-fenetre-diff-a825ee279588026e3f9c7289344dff5ba43760e0.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-f83e2281d79851cf9cf1b25b17f3ac570c17cbf6.json"
+                    },
+                    {
+                      "name": "SCR-01-inscription-consentement-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-01-inscription-consentement-desktop-8de75808cd39e69e6186481c1cde0ad5e54e1f89.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-f196312bf1ba0828b4a8e22cacaa60fcbded1753.json"
+                    },
+                    {
+                      "name": "SCR-03-home-header-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-header-side-by-side-330ff59177a433cecf9accc0408ddb3fce67bd92.png"
+                    },
+                    {
+                      "name": "SCR-03-home-header-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-header-diff-257ce10b6ba2694f38780cc5caebafe07fadcf55.png"
+                    },
+                    {
+                      "name": "SCR-03-home-day-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-day-side-by-side-a5e884121be7866d6891e02b2f05ace96135be40.png"
+                    },
+                    {
+                      "name": "SCR-03-home-day-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-day-diff-f9822768fb336df4212f4a428971a8952f877440.png"
+                    },
+                    {
+                      "name": "SCR-03-home-retention-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-retention-side-by-side-106515a370f3acc438898377ea26ed1cf0cffcc5.png"
+                    },
+                    {
+                      "name": "SCR-03-home-retention-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-retention-diff-86d55a2887f7fee3ac3a28f06f4d7572fd57be2b.png"
+                    },
+                    {
+                      "name": "SCR-03-tutor-acted-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-tutor-acted-side-by-side-5dd246bf51db454c2676a641ee61229bbc2f7c4f.png"
+                    },
+                    {
+                      "name": "SCR-03-tutor-acted-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-tutor-acted-diff-527b44feb381cbab2d5a1e0e08c40b12eacf4c59.png"
+                    },
+                    {
+                      "name": "SCR-03-home-formations-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-formations-side-by-side-97ebbc211aabe4963ef5a40bb3b0ca5798c50092.png"
+                    },
+                    {
+                      "name": "SCR-03-home-formations-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-formations-diff-0b1858ca859d91b0bd8064e48d73233f2ed985df.png"
+                    },
+                    {
+                      "name": "SCR-03-home-global-quiz-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-global-quiz-side-by-side-c38aa59299dc6ccae2738f9271f1f448bf65cb05.png"
+                    },
+                    {
+                      "name": "SCR-03-home-global-quiz-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-home-global-quiz-diff-6a1485d9e8c81bb90bdadfca4c5c27f2448c7cc1.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-edd026e9e9952e478b43b765ab04a9fade96ef76.json"
+                    },
+                    {
+                      "name": "SCR-03-accueil-final-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-03-accueil-final-desktop-42f0ba467fd941494574d23c8e0e0639aee95503.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-28f9a8cb2293ecfeb6472a3cfd0be573fe2b0f7a.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-1ce660f9b9722bd12b550f7b811235cadc3404a4.json"
+                    },
+                    {
+                      "name": "SCR-07-cours-source-ouverte-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-07-cours-source-ouverte-desktop-b8c11f1f4e5d98db34d2082606b8dcde9a7e23b3.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-a21b065e2ae0fd25f4faeedbbb466df2c9aa9b26.json"
+                    },
+                    {
+                      "name": "SCR-09-menu-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-menu-side-by-side-a41d7c3b69fba8b9915692c75c157e2531466a3b.png"
+                    },
+                    {
+                      "name": "SCR-09-menu-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-menu-diff-10d7c81fe833308a8150b4ec0a99d0a54f833f59.png"
+                    },
+                    {
+                      "name": "SCR-09-en-tete-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-en-tete-side-by-side-e0b0b21b45312a5941d6ad6b8cf0d101f46bd21c.png"
+                    },
+                    {
+                      "name": "SCR-09-en-tete-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-en-tete-diff-2b19ec85b9ef5943e197ab25d68156ed1dbb7ce3.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-d57f8e986dcc942f6c8484b6f20b1a6a8229330e.json"
+                    },
+                    {
+                      "name": "SCR-09-resultat-echec-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-resultat-echec-desktop-e38efdf92e2ce5cf5debcbc924628a7fa32f47c8.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-d50382941711ec2ef2339fe48a18ef7d9e5b9d06.json"
+                    },
+                    {
+                      "name": "SCR-09-resultat-reussi-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-09-resultat-reussi-desktop-192758dd5088fc1090782605bad8ca2821b6c555.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-ad83de37d9f83f46de3fd26056668d1bee7511b0.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-cfe74f9ddf72a59344641b08c66d0d3d91ec8f59.json"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-56f75cd7037d6f39bdf0c0172a30a0e8777e125e.json"
+                    },
+                    {
+                      "name": "SCR-10-quiz-global-desktop",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-10-quiz-global-desktop-39c300cd9eb6881016fd2f85729ca913f77dcffa.png"
+                    },
+                    {
+                      "name": "SCR-10-contenu-side-by-side",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-10-contenu-side-by-side-979a2cedc003aa6ac1e71db12c1272861558031b.png"
+                    },
+                    {
+                      "name": "SCR-10-contenu-diff",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/SCR-10-contenu-diff-8326610618f27ffab07290edfa76efdd6be882b9.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/attachments/axe-7095080b1834344ae0f93e6531e39b9591d49364.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-2.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-1.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-3.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-4.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-5.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-6.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-7.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-8.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-9.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-11.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-10.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-12.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video-13.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/video.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/ubuntu/projects/learny-wt-807/test-results/artifacts/visual-regression-régression-des-écrans-V1-SPEC-807-visual-journeys/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "78e23c5201ba1ea12e76-c05d1bb6e6f40ea0a12b",
+          "file": "../journeys/visual-regression.spec.ts",
+          "line": 137,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T16:33:10.638Z",
+    "duration": 507215.74,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
