@@ -43,12 +43,8 @@ async function restoreSeed(): Promise<void> {
     on conflict (id) do update
       set status = 'missed', moved_from_id = null, updated_at = now()
   `);
-  // La marge de vendredi 14:00–16:00 du seed recouvrirait l'alternative « Vendredi 15:00 » :
-  // elle est libérée le temps de cette suite, puis restaurée par `afterAll`.
-  await serviceDb().execute(sql`
-    update public.schedule_slots set status = 'cancelled', updated_at = now()
-    where id = ${demoId('slot', 'v3')}::uuid
-  `);
+  // ADR-0336 — la séance manquée et sa marge vivent désormais dans le seed ; les alternatives
+  // occupent des fenêtres réellement libres, la marge du vendredi n'a plus besoin d'être libérée.
   await serviceDb().execute(sql`
     delete from public.automation_actions
     where user_id = ${alexId}::uuid and automation = 'reprise'
@@ -80,10 +76,6 @@ test.beforeEach(async ({ context, baseURL }) => {
 
 test.afterAll(async () => {
   await restoreSeed();
-  await serviceDb().execute(sql`
-    update public.schedule_slots set status = 'planned', updated_at = now()
-    where id = ${demoId('slot', 'v3')}::uuid
-  `);
   await closeDb();
 });
 
@@ -109,8 +101,8 @@ test('bandeau de reprise : autre créneau puis annuler @SPEC-712', async ({
   // CA-5 — « Autre créneau » déplie les trois pastilles et le refus.
   await page.getByTestId('tutor-proposal-other').click();
   await expect(page.getByTestId('tutor-proposal-slots')).toBeVisible();
-  await expect(page.getByTestId('tutor-proposal-slot-0')).toHaveText('Jeudi 15:00');
-  await expect(page.getByTestId('tutor-proposal-slot-1')).toHaveText('Vendredi 15:00');
+  await expect(page.getByTestId('tutor-proposal-slot-0')).toHaveText('Jeudi 13:00');
+  await expect(page.getByTestId('tutor-proposal-slot-1')).toHaveText('Vendredi 13:00');
   await expect(page.getByTestId('tutor-proposal-slot-2')).toHaveText('Lundi 16 nov., 9:00');
   await expect(page.getByTestId('tutor-proposal-decline')).toHaveText('Ne pas replacer');
   await captureEvidence('accueil-bandeau-deplie');
@@ -119,7 +111,7 @@ test('bandeau de reprise : autre créneau puis annuler @SPEC-712', async ({
   await page.getByTestId('tutor-proposal-slot-1').click();
   await expect(page.getByTestId('tutor-proposal-kicker')).toHaveText('Séance replacée');
   await expect(page.getByTestId('tutor-proposal-text')).toContainText(
-    'C’est noté : reprise de « Ledgers parallèles » vendredi 15:00.',
+    'C’est noté : reprise de « Ledgers parallèles » vendredi 13:00.',
   );
   await expect(page.getByTestId('tutor-proposal-undo')).toHaveText('Annuler');
   await captureEvidence('accueil-bandeau-replace');
@@ -137,13 +129,13 @@ test('bandeau de reprise : autre créneau puis annuler @SPEC-712', async ({
   `);
   expect(created).toHaveLength(1);
   expect(new Date(created[0]?.starts_at ?? '').toISOString()).toBe(
-    new Date('2026-11-13T15:00:00+01:00').toISOString(),
+    new Date('2026-11-13T13:00:00+01:00').toISOString(),
   );
 
   // Le créneau apparaît dans la semaine de l'agenda.
   await page.goto('/agenda?vue=semaine&date=2026-11-13');
   await expect(page.getByTestId('agenda-calendar')).toBeVisible();
-  await expect(page.getByRole('button', { name: /Ledgers parallèles, 15:00 – 16:00/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Ledgers parallèles, 13:00 – 14:00/ })).toBeVisible();
 
   // CA-6 — « Annuler » retire le créneau et ramène la proposition.
   await page.goto('/accueil');
