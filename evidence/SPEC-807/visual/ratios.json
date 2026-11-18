@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-11-11T12:20:00.000Z",
+  "threshold": 0.12,
+  "ratios": [
+    {
+      "screen": "SCR-01",
+      "region": "fenetre",
+      "ratio": 0.07879475308641976
+    },
+    {
+      "screen": "SCR-03",
+      "region": "home-header",
+      "ratio": 0.10418604651162791
+    },
+    {
+      "screen": "SCR-03",
+      "region": "home-day",
+      "ratio": 0.07228407557354925
+    },
+    {
+      "screen": "SCR-03",
+      "region": "home-retention",
+      "ratio": 0.10755998074535734
+    },
+    {
+      "screen": "SCR-03",
+      "region": "tutor-acted",
+      "ratio": 0.09916519099418164
+    },
+    {
+      "screen": "SCR-03",
+      "region": "home-formations",
+      "ratio": 0.0472960041381094
+    },
+    {
+      "screen": "SCR-03",
+      "region": "home-global-quiz",
+      "ratio": 0.09910065935153457
+    },
+    {
+      "screen": "SCR-03",
+      "region": "pleine-page",
+      "ratio": 0.10755998074535734
+    },
+    {
+      "screen": "SCR-09",
+      "region": "menu",
+      "ratio": 0.05215625
+    },
+    {
+      "screen": "SCR-09",
+      "region": "en-tete",
+      "ratio": 0.03195267767989181
+    },
+    {
+      "screen": "SCR-10",
+      "region": "contenu",
+      "ratio": 0.1114638323416727
+    }
+  ]
+}
