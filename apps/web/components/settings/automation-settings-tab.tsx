@@ -341,7 +341,7 @@ export function AutomationSettingsTab({
     diagnostic ?? (pauseParams.diagnosticOnReturn === false ? 'false' : 'true');
 
   return (
-    <div className="flex flex-col gap-24">
+    <div className="flex flex-col gap-24" data-testid="automation-panel">
       <section
         aria-label="Principe des automatismes"
         className="flex flex-wrap items-center gap-20 rounded-24 bg-ink px-28 py-24 text-white"
@@ -405,10 +405,11 @@ export function AutomationSettingsTab({
             const titleId = `automation-title-${key}`;
             return (
               <article
-                className={cn(
-                  'flex flex-col gap-12 border-t border-solid border-border-subtle pt-16',
-                  !enabled && 'opacity-60',
-                )}
+                // A disabled automation keeps its text fully opaque: dimming the whole row pushed
+                // `text-ink-secondary` down to 3.15:1 against the card (WCAG 2.2 AA requires 4.5:1).
+                // The switch off, the disabled fields and `data-disabled` carry the state instead.
+                className="flex flex-col gap-12 border-t border-solid border-border-subtle pt-16"
+                data-disabled={enabled ? undefined : 'true'}
                 data-testid={`automation-row-${key}`}
                 key={key}
               >
