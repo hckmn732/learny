@@ -184,7 +184,13 @@ describe('[SPEC-703] micro-séance', () => {
     expect(first.mode).toBe('micro');
     expect(first.status).toBe('in_progress');
     expect(first.header.estimatedMinutes).toBe(5);
-    expect(first.header.notionCount).toBe(5);
+    // The draw may pick either recall card (one on the first notion, one on the second), so the
+    // covered notions are 4 or 5: the header must announce exactly what the items cover, one notion
+    // per game at least, and never more than the learner's five notions.
+    const covered = new Set(first.items.flatMap((item) => item.notionIds));
+    expect(first.header.notionCount).toBe(covered.size);
+    expect(first.header.notionCount).toBeGreaterThanOrEqual(first.items.length);
+    expect(first.header.notionCount).toBeLessThanOrEqual(learner.notionIds.length);
     expect(first.items.map((item) => item.type)).toEqual(['recall_card', 'choice_question']);
     expect(first.note).toBe(
       'Version courte de secours : une carte de rappel et une question. Elle garde le rythme et la série les jours chargés.',
@@ -237,7 +243,10 @@ describe('[SPEC-703] micro-séance', () => {
     );
     expect(session.items[0]?.type).toBe('recall_card');
     expect(session.items[0]?.notionIds).toEqual([second]);
-    expect(session.items[0]?.reason).toBe('Choisi pour votre oubli');
+    expect(session.items[0]?.reason).toEqual({
+      code: 'gap_forgetting',
+      label: 'Choisi pour votre oubli',
+    });
     expect(session.rationale.at(-1)?.label).toBe('Lacune en priorité');
   });
 
