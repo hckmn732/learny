@@ -219,6 +219,10 @@ test('conformité SPEC-618 @SPEC-618 @visual', async ({ page, axeCheck }) => {
       'border-top-color': colors['border-strong'],
     },
   });
+  // Le menu est alimente par une requete client : sans attendre sa stabilisation, une capture
+  // pris juste apres l ouverture differe de plusieurs pour cent sur une machine lente.
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
   await expectScreenshotBaseline(page, 'formation-switcher-desktop.png');
 
   await page
@@ -234,6 +238,7 @@ test('conformité SPEC-618 @SPEC-618 @visual', async ({ page, axeCheck }) => {
       'background-color': colors.surface,
     },
   });
+  await page.waitForLoadState('networkidle');
   await expectScreenshotBaseline(page, 'active-limit-desktop.png');
   await axeCheck();
 });
