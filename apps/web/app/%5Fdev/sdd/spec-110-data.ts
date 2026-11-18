@@ -7,6 +7,7 @@
 // never read back into the payload: the page only receives the redacted public projection (ET-5).
 import {
   createCredential,
+  DATABASE_HINT,
   getSpendToday,
   getSubscription,
   listAiCalls,
@@ -102,7 +103,7 @@ function publicCredential(credential: PublicAiCredential): Spec110Credential {
 }
 
 /** Full demonstration payload; every read is rolled back at the end of the request. */
-export async function loadSpec110Demo(): Promise<Spec110Data> {
+async function buildSpec110Demo(): Promise<Spec110Data> {
   return withRollback(async (tx) => {
     const user = await createTestUser(tx, { firstName: 'Alex', timezone: 'Europe/Paris' });
     const programme = await createTestProgramme(tx, user.id, {
@@ -270,4 +271,17 @@ export async function loadSpec110Demo(): Promise<Spec110Data> {
             },
     };
   });
+}
+
+export async function loadSpec110Demo(): Promise<Spec110Data> {
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      return await buildSpec110Demo();
+    } catch (error) {
+      const transient = error instanceof Error && error.message.includes(DATABASE_HINT);
+      if (!transient || attempt === 3) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 100 * attempt));
+    }
+  }
+  throw new Error('Chargement de la démonstration SPEC-110 impossible.');
 }

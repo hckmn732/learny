@@ -272,7 +272,6 @@ test('conformité SCR-03 @SPEC-706 @visual @mobile', async ({ page, axeCheck, co
   const bell = page.getByTestId('header-notifications');
   await expect(bell).toHaveAttribute('aria-label', 'Notifications, 3 non lues');
   await bell.click();
-  await page.mouse.move(0, 0);
   const panel = page.getByTestId('notification-panel');
   await expect(panel).toBeVisible();
 
