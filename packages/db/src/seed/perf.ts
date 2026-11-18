@@ -82,6 +82,12 @@ async function insertLearning(tx: DbTx): Promise<void> {
     from generate_series(1, 50) as i
   `);
   await tx.execute(sql`
+    update public.profiles as p
+    set current_formation_id = md5('perf:formation:' || i::text)::uuid
+    from generate_series(1, 50) as i
+    where p.id = md5('perf:user:' || i::text)::uuid
+  `);
+  await tx.execute(sql`
     insert into public.modules (id, formation_id, position, title, status, threshold)
     select md5('perf:module:' || i::text || ':' || m::text)::uuid,
            md5('perf:formation:' || i::text)::uuid, m, 'Module ' || m::text, 'open', 80

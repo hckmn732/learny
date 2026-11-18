@@ -77,7 +77,7 @@ const FORMATION_ID = __ENV.FORMATION_ID ?? '';
 const COOKIE = __ENV.PERF_COOKIE ?? '';
 // Un utilisateur `perf-NN` par VU : les 50 seaux de limitation de débit restent indépendants.
 const COOKIES_FILE = __ENV.PERF_COOKIES_FILE ?? '';
-const COOKIE_HEADERS = COOKIES_FILE === '' ? [] : JSON.parse(open(COOKIES_FILE));
+const SESSIONS = COOKIES_FILE === '' ? [] : JSON.parse(open(COOKIES_FILE));
 
 function pickRoute() {
   const total = DISTRIBUTION.reduce((sum, route) => sum + route.weight, 0);
@@ -91,9 +91,12 @@ function pickRoute() {
 
 export default function apiLoad() {
   const route = pickRoute();
-  const url = `${BASE_URL}${route.path.replace('{formationId}', FORMATION_ID)}`;
-  const cookie =
-    COOKIE_HEADERS.length === 0 ? COOKIE : COOKIE_HEADERS[(__VU - 1) % COOKIE_HEADERS.length];
+  const session = SESSIONS.length === 0 ? null : SESSIONS[(__VU - 1) % SESSIONS.length];
+  const url = `${BASE_URL}${route.path.replace(
+    '{formationId}',
+    session === null ? FORMATION_ID : session.formationId,
+  )}`;
+  const cookie = session === null ? COOKIE : session.cookie;
   const headers = {
     Cookie: cookie,
     Origin: BASE_URL,
