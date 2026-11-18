@@ -7,10 +7,17 @@ import type { Page } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, supabaseLocalEnv, type TestSession } from '@learny/testing/supabase';
 
+import {
+  deleteReviewLearner,
+  quizUrl,
+  seedReviewLearner,
+  signInLearner,
+  type ReviewLearner,
+} from '../../journeys/support/review-automations';
 import {
   deleteDemoAttempts,
   resetDemoRateLimits,
@@ -20,7 +27,6 @@ import {
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
-const MODULE = demoModuleId('sap', 1);
 
 let session: TestSession;
 let exam: DemoExamAttempts;
@@ -47,63 +53,87 @@ async function focusAnd(page: Page, testId: string, key = 'Enter'): Promise<void
 }
 
 /**
- * The demonstration dataset has no question bank for module quizzes (the tutor would generate
- * them): seed an in-progress validation quiz of three choice questions taken from Alex's own
- * demo bricks of the module, so the journey reaches its result screen.
+ * The demonstration dataset has no question bank for module quizzes (ADR-0334): like
+ * `specs/p6/quiz-attempt.spec.ts` (SPEC-611), a dedicated learner receives a module with a complete
+ * bank (`makeModuleWithBank`) and an in-progress validation attempt of three choice questions drawn
+ * from it, so the journey reaches its result screen without touching the demo data.
  */
-async function seedKeyboardQuiz(): Promise<string> {
-  const alex = demoUserId('alex');
-  const rows = await serviceDb().execute<{
-    brick_id: string;
-    version_id: string;
-    notion_id: string;
-    notion_label: string;
-    payload: unknown;
-  }>(sql`
-    select b.id::text as brick_id, bv.id::text as version_id,
-           n.id::text as notion_id, n.label as notion_label, bv.payload
-    from public.bricks b
-    join public.brick_versions bv on bv.brick_id = b.id and bv.version = b.current_version
-    join public.notions n on n.id = b.notion_ids[1]
-    where b.owner_id = ${alex}::uuid and b.type = 'choice_question' and b.status = 'active'
-      and n.module_id = ${MODULE}::uuid
-    order by b.id
-    limit 3
-  `);
-  if (rows.length < 3) throw new Error('questions à choix du module de démonstration introuvables');
-  const points = 100 / rows.length;
-  const items = rows.map((row) => ({
-    brickId: row.brick_id,
-    brickVersionId: row.version_id,
-    points,
-    notionId: row.notion_id,
-    notionLabel: row.notion_label,
-    type: 'choice_question',
-    payload: row.payload,
-  }));
-  const config = { threshold: 80, questionCount: items.length, scoring: 'equal' };
-  const activity = await serviceDb().execute<{ id: string }>(sql`
-    insert into public.activities (owner_id, formation_id, module_id, kind, config, items, status)
-    values (
-      ${alex}::uuid, ${SAP}::uuid, ${MODULE}::uuid, 'validation_quiz',
-      ${JSON.stringify(config)}::jsonb, ${JSON.stringify(items)}::jsonb, 'ready'
-    )
-    returning id::text as id
-  `);
-  const activityId = activity[0]?.id ?? '';
-  const attempt = await serviceDb().execute<{ id: string }>(sql`
-    insert into public.attempts (user_id, activity_id, attempt_no, status, started_at)
-    values (${alex}::uuid, ${activityId}::uuid, 1, 'in_progress', '2026-11-11T12:20:00Z')
-    returning id::text as id
-  `);
-  const attemptId = attempt[0]?.id ?? '';
-  for (const [index, row] of rows.entries()) {
-    await serviceDb().execute(sql`
-      insert into public.answers (attempt_id, brick_version_id, position, response, max_score)
-      values (${attemptId}::uuid, ${row.version_id}::uuid, ${index + 1}, '{}'::jsonb, ${points})
+async function seedKeyboardQuiz(): Promise<{
+  quizSession: TestSession;
+  formationId: string;
+  moduleId: string;
+}> {
+  const { makeModuleWithBank } = await import('@learny/testing');
+  const { createTestSession } = await import('@learny/testing/supabase');
+  const quizSession = await createTestSession();
+  const userId = quizSession.userId;
+  const seeded = await serviceDb().transaction(async (tx) => {
+    const bank = await makeModuleWithBank(tx, {
+      userId,
+      notions: 3,
+      variantsPerFormat: 1,
+      title: 'SAP S/4HANA Finance',
+    });
+    await tx.execute(sql`
+      insert into public.subscriptions (user_id, status, current_period_end)
+      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
     `);
-  }
-  return attemptId;
+    const rows = await tx.execute<{
+      brick_id: string;
+      version_id: string;
+      notion_id: string;
+      notion_label: string;
+      payload: unknown;
+    }>(sql`
+      select b.id::text as brick_id, bv.id::text as version_id,
+             n.id::text as notion_id, n.label as notion_label, bv.payload
+      from public.bricks b
+      join public.brick_versions bv on bv.brick_id = b.id and bv.version = b.current_version
+      join public.notions n on n.id = b.notion_ids[1]
+      where b.owner_id = ${userId}::uuid and b.type = 'choice_question' and b.status = 'active'
+        and n.module_id = ${bank.moduleId}::uuid
+      order by n.position, b.id
+      limit 3
+    `);
+    if (rows.length < 3) throw new Error('banque de questions à choix incomplète');
+    const points = 100 / rows.length;
+    const items = rows.map((row) => ({
+      brickId: row.brick_id,
+      brickVersionId: row.version_id,
+      points,
+      notionId: row.notion_id,
+      notionLabel: row.notion_label,
+      type: 'choice_question',
+      payload: row.payload,
+    }));
+    const config = { threshold: 80, questionCount: items.length, scoring: 'equal' };
+    const activity = await tx.execute<{ id: string }>(sql`
+      insert into public.activities (owner_id, formation_id, module_id, kind, config, items, status)
+      values (
+        ${userId}::uuid, ${bank.formationId}::uuid, ${bank.moduleId}::uuid, 'validation_quiz',
+        ${JSON.stringify(config)}::jsonb, ${JSON.stringify(items)}::jsonb, 'ready'
+      )
+      returning id::text as id
+    `);
+    const attempt = await tx.execute<{ id: string }>(sql`
+      insert into public.attempts (user_id, activity_id, attempt_no, status, started_at)
+      values (${userId}::uuid, ${activity[0]?.id ?? ''}::uuid, 1, 'in_progress', '2026-11-11T12:20:00Z')
+      returning id::text as id
+    `);
+    for (const [index, row] of rows.entries()) {
+      await tx.execute(sql`
+        insert into public.answers (
+          attempt_id, brick_version_id, position, response, max_score, answered_at
+        )
+        values (
+          ${attempt[0]?.id ?? ''}::uuid, ${row.version_id}::uuid, ${index + 1}, '{}'::jsonb,
+          ${points}, '2026-11-11T12:20:00Z'::timestamptz
+        )
+      `);
+    }
+    return { formationId: bank.formationId, moduleId: bank.moduleId };
+  });
+  return { quizSession, ...seeded };
 }
 
 async function createPasswordUser(): Promise<{ id: string; email: string }> {
@@ -187,32 +217,42 @@ test('parcours clavier connexion @SPEC-803', async ({ page }) => {
   await expect(page.locator('#contenu')).toBeFocused();
 });
 
-// Reporté à SPEC-807 (ADR-0334) : le jeu de démo n'a pas de banque de questions de module ; la tentative semée à la main fait échouer le rendu de la page. SPEC-807 rejoue ce parcours de bout en bout
-// avec des données préparées par le flux réel.
-test.fixme('parcours clavier quiz de validation @SPEC-803', async ({ page, context, baseURL }) => {
+// SPEC-807 reprend ce parcours (ADR-0334) : la banque et la tentative sont semées comme dans
+// quiz-attempt.spec.ts (SPEC-611), pour un apprenant dédié.
+test('parcours clavier quiz de validation @SPEC-803', async ({ page, context, baseURL }) => {
   forbidMouse(page);
-  await resetDemoRateLimits();
-  await applyDemo(context, baseURL);
-  created.push(await seedKeyboardQuiz());
-  await page.goto(`/formations/${SAP}/modules/${MODULE}/quiz`);
-  await expect(page.getByTestId('quiz-question-counter')).toBeVisible({ timeout: 30_000 });
-  for (let index = 0; index < 3; index += 1) {
-    const options = page.locator('[data-testid^="quiz-option-"]');
-    await options.first().focus();
-    await page.keyboard.press('Space');
-    await focusAnd(page, 'quiz-check', 'Enter');
-    await expect(page.getByTestId('quiz-next')).toBeVisible({ timeout: 20_000 });
-    await focusAnd(page, 'quiz-next', 'Enter');
-    if (index < 2) {
-      await expect(page.getByTestId('quiz-question-counter')).toBeVisible();
+  const { deleteTestSession } = await import('@learny/testing/supabase');
+  const seeded = await seedKeyboardQuiz();
+  try {
+    await context.clearCookies();
+    await context.addCookies(
+      seeded.quizSession.cookies.map((cookie) => ({
+        ...cookie,
+        url: baseURL ?? 'http://127.0.0.1:3100',
+      })),
+    );
+    await page.goto(`/formations/${seeded.formationId}/modules/${seeded.moduleId}/quiz`);
+    await expect(page.getByTestId('quiz-question-counter')).toBeVisible({ timeout: 30_000 });
+    for (let index = 0; index < 3; index += 1) {
+      const options = page.locator('[data-testid^="quiz-option-"]');
+      await options.first().focus();
+      await page.keyboard.press('Space');
+      await focusAnd(page, 'quiz-check', 'Enter');
+      await expect(page.getByTestId('quiz-next')).toBeVisible({ timeout: 20_000 });
+      await focusAnd(page, 'quiz-next', 'Enter');
+      if (index < 2) {
+        await expect(page.getByTestId('quiz-question-counter')).toBeVisible();
+      }
     }
+    await expect(page.getByTestId('quiz-result')).toBeVisible({ timeout: 30_000 });
+  } finally {
+    await deleteTestSession(seeded.quizSession);
   }
-  await expect(page.getByTestId('quiz-result')).toBeVisible({ timeout: 30_000 });
 });
 
-// Reporté à SPEC-807 (ADR-0334) : le résultat de la tentative semée par seedDemoExamAttempts renvoie une erreur 500 (GET /mock-exams/:id/result). SPEC-807 rejoue ce parcours de bout en bout
-// avec des données préparées par le flux réel.
-test.fixme('parcours clavier examen blanc @SPEC-803', async ({ page, context, baseURL }) => {
+// Réactivé par SPEC-807 (ADR-0334) : le 500 de GET /mock-exams/:id/result venait de la tentative
+// semée sans lignes `answers` (seedDemoExamAttempts les crée désormais comme startExamAttempt).
+test('parcours clavier examen blanc @SPEC-803', async ({ page, context, baseURL }) => {
   forbidMouse(page);
   await applyDemo(context, baseURL);
   // The seeded graded attempt only carries display data: the result of the new attempt must not
@@ -232,13 +272,21 @@ test.fixme('parcours clavier examen blanc @SPEC-803', async ({ page, context, ba
   await expect(page.getByTestId('exam-result')).toBeVisible({ timeout: 30_000 });
 });
 
-// Reporté à SPEC-807 (ADR-0334) : le parcours dépend de l'ordre des jeux de la séance du jour (champs à trous) et n'atteint pas l'écran de fin. SPEC-807 rejoue ce parcours de bout en bout
-// avec des données préparées par le flux réel.
-test.fixme('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }) => {
+// Réactivé par SPEC-807 (ADR-0334) : séance isolée et stable (fixture des révisions).
+let quizLearner: ReviewLearner | null = null;
+
+test.afterAll(async () => {
+  await deleteReviewLearner(quizLearner);
+});
+
+test('parcours clavier quiz global @SPEC-803', async ({ page, context, baseURL }) => {
   test.setTimeout(360_000);
   forbidMouse(page);
-  await applyDemo(context, baseURL);
-  await page.goto(`/formations/${SAP}/quiz-global`);
+  // SPEC-807 (ADR-0334) — isolated learner: one game of each kind (recall card, matching,
+  // categorization, ordering, cloze), all due at the frozen instant; only their order varies.
+  quizLearner = await seedReviewLearner({ prefix: 'e2e803-quiz-', bank: 'games' });
+  await signInLearner(context, quizLearner, baseURL);
+  await page.goto(quizUrl(quizLearner));
   await expect(page.getByTestId('gq-game').or(page.getByTestId('gq-end'))).toBeVisible({
     timeout: 30_000,
   });

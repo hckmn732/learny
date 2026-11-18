@@ -7,12 +7,21 @@ import { DEMO_USERS, demoFormationId, demoChapterId, demoModuleId, demoUserId } 
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 
+import {
+  deleteReviewLearner,
+  quizUrl,
+  seedReviewLearner,
+  signInLearner,
+  type ReviewLearner,
+} from '../../journeys/support/review-automations';
+
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
 const MODULE = demoModuleId('sap', 1);
 const CHAPTER = demoChapterId('sap', 1, 1);
 
 let session: TestSession;
+let learner: ReviewLearner | null = null;
 
 test.use({ reducedMotion: 'reduce' });
 test.setTimeout(120_000);
@@ -21,9 +30,13 @@ test.beforeAll(async () => {
   await restoreDemoData();
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
   session = await createDemoSession(demoUserId('alex'), ALEX.email);
+  // SPEC-807 (ADR-0334) — the global quiz runs on an isolated learner whose session of the day
+  // holds a recall card, whatever the other files of the campaign consumed.
+  learner = await seedReviewLearner({ prefix: 'e2e803-motion-', bank: 'games' });
 });
 
 test.afterAll(async () => {
+  await deleteReviewLearner(learner);
   await restoreDemoData();
   await closeDb();
 });
@@ -51,9 +64,9 @@ async function motionOffenders(page: Page): Promise<string[]> {
   });
 }
 
-// Reporté à SPEC-807 (ADR-0334) : la séance du quiz global de démonstration est consommée par
-// les autres fichiers de la campagne, la carte de rappel n'est pas atteignable de façon stable.
-test.fixme('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => {
+// Réactivé par SPEC-807 (ADR-0334) : le quiz global se joue sur l'apprenant isolé de la fixture
+// des révisions, dont la séance du jour contient toujours une carte de rappel.
+test('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => {
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );
@@ -72,7 +85,9 @@ test.fixme('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => 
     .toMatch(/^0s(, 0s)*$/);
   expect(await motionOffenders(page)).toEqual([]);
 
-  await page.goto(`/formations/${SAP}/quiz-global`);
+  if (learner === null) throw new Error('apprenant de fixture absent');
+  await signInLearner(context, learner, baseURL);
+  await page.goto(quizUrl(learner));
   await expect(page.getByTestId('gq-game').or(page.getByTestId('gq-end'))).toBeVisible({
     timeout: 30_000,
   });
@@ -94,6 +109,10 @@ test.fixme('mouvement réduit @SPEC-803', async ({ page, context, baseURL }) => 
     .toMatch(/^0s(, 0s)*$/);
   expect(await motionOffenders(page)).toEqual([]);
 
+  await context.clearCookies();
+  await context.addCookies(
+    session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
+  );
   await page.goto(`/formations/${SAP}/carte`);
   await expect(page.getByTestId('graph-node').first()).toBeVisible({ timeout: 30_000 });
   expect(await motionOffenders(page)).toEqual([]);

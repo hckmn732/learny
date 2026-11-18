@@ -123,7 +123,14 @@ test('données personnelles : export complet, annulation puis effacement à J+30
     .getByRole('group', { name: 'Temps d’étude par jour' })
     .getByRole('button', { name: '5 h', exact: true })
     .click();
+  // BR-SET-02 — the first name is required with the rhythm; a fresh account has none yet.
+  await page.getByLabel('Prénom').fill('Camille');
+  const profileSaved = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/api/v1/me/profile') && response.request().method() === 'PATCH',
+  );
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  expect((await profileSaved).status()).toBe(200);
   await expect(
     page.getByRole('status').filter({ hasText: 'Modifications enregistrées' }),
   ).toBeVisible();
@@ -208,10 +215,11 @@ test('données personnelles : export complet, annulation puis effacement à J+30
   // Réglages: the rhythm saved through the screen, no secret.
   const settingsJson = text('settings.json');
   const settings = JSON.parse(settingsJson) as {
-    profile: { email: string };
+    profile: { email: string; first_name: string };
     studyPreferences: { hours_per_day: number } | null;
   };
   expect(settings.profile.email).toBe(learner.email);
+  expect(settings.profile.first_name).toBe('Camille');
   expect(settings.studyPreferences?.hours_per_day).toBe(5);
   expect(settingsJson).not.toMatch(/api_key|apiKey|secret|password/i);
   // Isolation — nothing of the witness account, in any file name or content.
