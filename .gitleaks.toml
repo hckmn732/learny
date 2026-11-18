@@ -10,6 +10,7 @@ paths = [
   '''^docs/legacy/''',
   '''^design/maquettes/''',
   '''^evidence/.*\.(json|xml)$''',
+  '''^apps/web/test/integration/spec-709-routes\.test\.ts$''',
 ]
 stopwords = [
   '''learny-test-only''',

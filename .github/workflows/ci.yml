@@ -329,6 +329,10 @@ jobs:
       - run: pnpm build
       - name: Tests e2e, axe et visuels (shard ${{ matrix.shard }}/4)
         run: pnpm test:e2e --shard=${{ matrix.shard }}/4
+        env:
+          # The database is reset and seeded above before Playwright starts its web server.
+          # Re-running the reset in global setup invalidates that server's database pool.
+          E2E_SKIP_GLOBAL_SETUP_DB: '1'
       - name: Publier les rapports, captures et vidéos e2e
         if: always()
         uses: actions/upload-artifact@v4
@@ -354,7 +358,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.122.1
       - uses: grafana/setup-k6-action@v1
       - run: pnpm install --frozen-lockfile
       # SPEC-008 — même flake que les jobs en matrice : pile résiduelle ou registre limité.
