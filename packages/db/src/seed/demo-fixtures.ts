@@ -1296,13 +1296,15 @@ export const DEMO_AGENDA: readonly DemoAgendaSlotFixture[] = [
     'planner',
   ],
   [
-    'j2',
+    // ADR-0336 — la marge qui accueille la reprise proposée : l'état de référence ne contient pas
+    // le résultat de la proposition (le cours « Ledgers parallèles » apparaît à l'accord).
+    'm0-buffer',
     3,
     '10:30',
     '12:00',
-    'course',
-    'Ledgers parallèles',
-    'Nouvelle explication',
+    'buffer',
+    'Marge de rattrapage',
+    'Réservée pour la reprise',
     'planned',
     'sap',
     3,
@@ -1626,14 +1628,19 @@ export const DEMO_AUTOMATION_ACTIONS: readonly DemoAutomationActionFixture[] = [
         bufferSlotId: demoId('slot', 'm0-buffer'),
         inBuffer: true,
       },
+      // La proposition expire comme en production à l'heure de son créneau proposé
+      // (reprise.ts : `expiresAt` = instant de démarrage proposé).
+      expiresAt: '2026-11-12T09:30:00.000Z',
+      // ADR-0336 — des fenêtres réellement libres : jeudi 13:00–14:00 et vendredi 13:00–14:00
+      // (Paris), entre les marges seedées 14:00–16:00 ; lundi 16 nov. 9:00 inchangé.
       alternatives: [
         {
-          startsAt: parisInstant('2026-11-12', '15:00'),
-          endsAt: parisInstant('2026-11-12', '16:00'),
+          startsAt: parisInstant('2026-11-12', '13:00'),
+          endsAt: parisInstant('2026-11-12', '14:00'),
         },
         {
-          startsAt: parisInstant('2026-11-13', '15:00'),
-          endsAt: parisInstant('2026-11-13', '16:00'),
+          startsAt: parisInstant('2026-11-13', '13:00'),
+          endsAt: parisInstant('2026-11-13', '14:00'),
         },
         {
           startsAt: parisInstant('2026-11-16', '09:00'),
@@ -1671,8 +1678,12 @@ export const DEMO_AUTOMATION_ACTIONS: readonly DemoAutomationActionFixture[] = [
       gapLabels: ['Clé de comptabilisation', 'Ledgers parallèles', 'Date comptable'],
       remediationActivityId: null,
       durationMin: 15,
-      retryAvailableAt: '2026-11-11T13:00:00.000Z',
-      delayHours: 24,
+      // ADR-0336 — délai de 12 h appliqué à la tentative ratée du mardi 16:30 (15:30 UTC) : la
+      // tentative 2 devient jouable à l'instant figé du jeu (mercredi 4:30 UTC), avant le créneau
+      // « Quiz de validation · Tentative 2 » de 14:00 (Paris). La pile de recette doit pouvoir
+      // rejouer le quiz sans attendre une heure que l'horloge figée n'atteint jamais.
+      retryAvailableAt: '2026-11-11T03:30:00.000Z',
+      delayHours: 12,
       mode: 'advised',
       remediationSlotId: demoId('slot', 'w3'),
       retrySlotId: demoId('slot', 'w2'),
