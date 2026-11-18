@@ -2,7 +2,7 @@ import { resolvePostAuthDestination } from '@learny/services/destination';
 
 import { readPageSession } from '../../lib/supabase/page';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 import { MagicLinkCard, PasswordCard, SignOutCard } from './spec-202-forms';
 
@@ -37,7 +37,6 @@ export default async function Spec202Demo() {
   const session = await readPageSession();
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="auth-session" title={t.session.title}>
         <p role="status" data-testid="auth-session-state">
           {session === null

@@ -28,7 +28,7 @@ importers:
         version: 9.39.5
       '@lhci/cli':
         specifier: ^0.16.1
-        version: 0.16.1(@types/node@24.19.2)(ajv@8.20.0)(rollup@4.68.2)
+        version: 0.16.1(@types/node@24.19.2)(ajv@8.20.0)
       '@next/bundle-analyzer':
         specifier: ^16.4.6
         version: 16.4.6
@@ -173,6 +173,9 @@ importers:
       ai:
         specifier: ^7.0.171
         version: 7.0.171(zod@4.6.7)
+      get-nonce:
+        specifier: ^1.0.1
+        version: 1.0.1
       idb:
         specifier: ^8.0.4
         version: 8.0.4
@@ -9069,16 +9072,16 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@lhci/cli@0.16.1(@types/node@24.19.2)(ajv@8.20.0)(rollup@4.68.2)':
+  '@lhci/cli@0.16.1(@types/node@24.19.2)(ajv@8.20.0)':
     dependencies:
-      '@lhci/utils': 0.16.1(ajv@8.20.0)(proxy-agent@8.0.3)(rollup@4.68.2)
+      '@lhci/utils': 0.16.1(ajv@8.20.0)(proxy-agent@8.0.3)
       chrome-launcher: 0.13.4
       compression: 1.8.2
       debug: 4.4.3
       express: 4.22.3
       inquirer: 8.2.7(@types/node@24.19.2)
       isomorphic-fetch: 3.0.0
-      lighthouse: 13.6.0(ajv@8.20.0)(proxy-agent@8.0.3)(rollup@4.68.2)
+      lighthouse: 13.6.0(ajv@8.20.0)(proxy-agent@8.0.3)
       lighthouse-logger: 1.2.0
       open: 8.4.2
       proxy-agent: 8.0.3
@@ -9097,12 +9100,12 @@ snapshots:
       - webpack
       - yauzl
 
-  '@lhci/utils@0.16.1(ajv@8.20.0)(proxy-agent@8.0.3)(rollup@4.68.2)':
+  '@lhci/utils@0.16.1(ajv@8.20.0)(proxy-agent@8.0.3)':
     dependencies:
       debug: 4.4.3
       isomorphic-fetch: 3.0.0
       js-yaml: 5.5.0
-      lighthouse: 13.6.0(ajv@8.20.0)(proxy-agent@8.0.3)(rollup@4.68.2)
+      lighthouse: 13.6.0(ajv@8.20.0)(proxy-agent@8.0.3)
       tree-kill: 1.2.2
     transitivePeerDependencies:
       - ajv
@@ -13333,7 +13336,7 @@ snapshots:
 
   lighthouse-stack-packs@1.12.3: {}
 
-  lighthouse@13.6.0(ajv@8.20.0)(proxy-agent@8.0.3)(rollup@4.68.2):
+  lighthouse@13.6.0(ajv@8.20.0)(proxy-agent@8.0.3):
     dependencies:
       '@paulirish/trace_engine': 0.0.67
       '@sentry/node': 11.12.0(rollup@4.68.2)

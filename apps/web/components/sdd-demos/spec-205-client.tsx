@@ -19,7 +19,7 @@ import {
   type PushRegistration,
 } from '../../lib/push';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec205;
 
@@ -172,7 +172,6 @@ export default function Spec205Client({ publicKey }: Readonly<{ publicKey: strin
 
   return (
     <>
-      <BaseTokenStyle />
       <p data-testid="spec-205-inapp" className="mt-4 text-sm font-semibold">
         {t.inApp}
       </p>

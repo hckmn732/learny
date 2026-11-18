@@ -1,6 +1,5 @@
 // Demonstration of SPEC-510: web page, YouTube captions and image reading (ADR-0048/0049).
 import { loadSpec510Demo, type Spec510Data } from '../../app/%5Fdev/sdd/spec-510-data';
-import { BaseTokenStyle } from '../sdd/base-tokens';
 
 import { Spec510View } from './spec-510-client';
 
@@ -17,7 +16,6 @@ export default async function Spec510Demo() {
   }
   return (
     <>
-      <BaseTokenStyle />
       <Spec510View data={data} />
     </>
   );

@@ -3,7 +3,7 @@ import {
   type Spec411Data,
   type Spec411State,
 } from '../../app/%5Fdev/sdd/spec-411-data';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
   timeZone: 'Europe/Paris',
@@ -189,7 +189,6 @@ export default async function Spec411Demo() {
   }
   return (
     <>
-      <BaseTokenStyle />
       <p className="mt-6 text-13 text-ink-secondary">
         Démonstration : une tentative de validation corrigée sur deux notions, un premier appel
         transactionnel, un second appel idempotent, la lacune détectée et le plan persisté.

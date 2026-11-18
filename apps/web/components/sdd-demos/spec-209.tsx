@@ -6,7 +6,7 @@ import { DELIVERY_CHANNELS, DELIVERY_STATUSES, type DevNotifyOutput } from '@lea
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec209;
 
@@ -143,7 +143,6 @@ export default function Spec209Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="spec-209-settings" title={t.settings.title}>
         <div className="flex flex-wrap gap-6">
           <Toggle

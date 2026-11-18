@@ -16,7 +16,7 @@ import {
 import type { BrickFormat, FsrsRating, TimedResponse } from '@learny/learning-engine';
 import { Badge, Button } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const NOW = '2026-11-11T12:20:00.000Z';
 const TZ = 'Europe/Paris';
@@ -103,7 +103,6 @@ export default function Spec402Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="fsrs-inputs" title="Entrées et médiane personnelle">
         <dl className="grid gap-3 text-sm sm:grid-cols-2">
           <div className="rounded-18 bg-canvas p-4">

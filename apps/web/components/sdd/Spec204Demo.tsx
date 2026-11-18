@@ -10,7 +10,7 @@ import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
 import { fr } from '../../messages/fr/sdd';
 
-import { BaseCard, BaseTokenStyle } from './base-tokens';
+import { BaseCard } from './base-tokens';
 
 const t = fr.sdd.spec204;
 
@@ -101,7 +101,6 @@ export default function Spec204Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="email-toolbar" title={t.toolbar.title}>
         <div className="flex flex-wrap items-end gap-4">
           <div>

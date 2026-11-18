@@ -7,7 +7,7 @@ import { isSafeRelativePath } from '@learny/contracts';
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
 
-import { BaseCard, BaseTokenStyle } from './base-tokens';
+import { BaseCard } from './base-tokens';
 
 const t = fr.sdd.spec210;
 
@@ -43,7 +43,6 @@ export function MockCheckout({ sessionId }: Readonly<{ sessionId: string | null 
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="stripe-mock-checkout" title={t.checkout.title}>
         <p data-testid="stripe-mock-notice" className="text-sm font-semibold">
           {t.checkout.notice}
@@ -100,7 +99,6 @@ export function MockPortal({ returnPath }: Readonly<{ returnPath: string }>) {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="stripe-mock-portal" title={t.portal.title}>
         <p data-testid="stripe-mock-notice" className="text-sm font-semibold">
           {t.portal.notice}
