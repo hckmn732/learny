@@ -21,6 +21,7 @@ production.
 | Notifications push | envoyées | enregistrées, non envoyées (`PUSH_MODE=mock`) |
 | E-mails | SMTP réel, Resend | tous reçus dans **Mailpit** (inscription, lien de connexion, rappels) |
 | Horloge | réelle | figée au mercredi 11 novembre 2026, 13:20 à Paris (`CLOCK_FIXED_AT`, ADR-0047) |
+| Limiteur de débit | actif | désactivé (`RATE_LIMIT_MODE=off`) : l'horloge figée empêche la recharge des seaux, un testeur y resterait bloqué (ADR-0336) |
 | Pages `/_dev/sdd/*` | désactivées | activées (pages de démonstration des spécifications) |
 | Limiteur de débit (SPEC-208) | actif, fenêtres réelles | **remis à zéro toutes les 5 minutes** : l'horloge figée empêche les seaux de se recharger d'eux-mêmes |
 

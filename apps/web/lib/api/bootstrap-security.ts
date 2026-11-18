@@ -21,6 +21,9 @@ const PROCESS_SECRET = randomBytes(32).toString('hex');
 type Env = Readonly<Record<string, string | undefined>>;
 
 export function createRateLimiter(env: Env = process.env): RateLimiter {
+  // QA only (ADR-0336) : with a frozen clock the buckets never refill, so the demonstration stack
+  // swaps the limiter for the no-op. The mode is refused in production by the environment check.
+  if (env.RATE_LIMIT_MODE === 'off') return noopRateLimiter;
   const secret = env.RATE_LIMIT_IP_SECRET ?? PROCESS_SECRET;
   const limiter = createServiceRateLimiter({ now: () => clock.now() }, secret);
   return {

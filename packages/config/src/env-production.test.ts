@@ -45,6 +45,7 @@ function issuesOf(overrides: Record<string, string>): string[] {
 describe('[SPEC-009] interdits de la production (CL-4)', () => {
   it('refuse les modes simulés, les journaux SQL, les jobs inline et le dev Inngest', () => {
     expect(issuesOf({ LLM_MODE: 'mock' })).toContain('LLM_MODE:forbidden');
+    expect(issuesOf({ RATE_LIMIT_MODE: 'off' })).toContain('RATE_LIMIT_MODE:forbidden');
     expect(issuesOf({ STRIPE_MODE: 'mock' })).toContain('STRIPE_MODE:forbidden');
     expect(issuesOf({ EMAIL_MODE: 'memory' })).toContain('EMAIL_MODE:forbidden');
     expect(issuesOf({ PUSH_MODE: 'mock' })).toContain('PUSH_MODE:forbidden');

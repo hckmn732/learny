@@ -41,6 +41,12 @@ x-app-environment: &app-environment
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
   TRUST_PROXY: 'true'
+  # QA seulement : l'horloge de démonstration est figée (CLOCK_FIXED_AT), donc les seaux du
+  # limiteur de débit de SPEC-208 ne se rechargent jamais d'eux-mêmes (leur fenêtre se calcule
+  # avec l'horloge injectée) et un testeur qui épuise son quota resterait bloqué. La recette
+  # désactive donc le limiteur ; SPEC-208 reste couvert par ses tests automatisés et la variable
+  # est refusée en production (packages/config, checkEnvironment).
+  RATE_LIMIT_MODE: 'off'
   LLM_MODE: mock
   STRIPE_MODE: mock
   PUSH_MODE: mock
@@ -123,34 +129,6 @@ services:
       CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
     restart: 'no'
     exclude_from_hc: true
-    logging: *logging
-
-  # QA seulement : l'horloge de demonstration est figee (CLOCK_FIXED_AT), donc les seaux du
-  # limiteur de debit de SPEC-208 ne se rechargent jamais d'eux-memes (leur fenetre se calcule
-  # avec l'horloge injectee). Sans cette remise a zero, un testeur qui a epuise son quota reste
-  # bloque definitivement. Ne jamais recopier ce service dans la pile de production.
-  rate-limit-reset:
-    build:
-      context: ..
-      dockerfile: docker/coolify-support.Dockerfile
-      target: db
-    environment:
-      PGPASSWORD: ${POSTGRES_PASSWORD:?}
-    command:
-      - sh
-      - -c
-      - |
-        while true; do
-          psql -h db -U postgres -d postgres -c 'delete from public.rate_limits;' >/dev/null 2>&1 || true
-          sleep 300
-        done
-    # Le healthcheck herite du parent (pg_isready) ne decrit pas cette boucle de purge.
-    healthcheck:
-      disable: true
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
     logging: *logging
 
   auth:
