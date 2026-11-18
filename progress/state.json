@@ -6175,7 +6175,7 @@
       "startedAt": "2026-11-17T18:09:09.146Z",
       "completedAt": "2026-11-18T17:10:02.625Z",
       "branch": "spec/SPEC-807-parcours-de-bout-en-bout-et-non-regressi",
-      "commit": "ca3a5db3",
+      "commit": "dfa96f85",
       "lastError": null,
       "validations": {
         "lint": {
