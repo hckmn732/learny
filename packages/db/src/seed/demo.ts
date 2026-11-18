@@ -2731,7 +2731,11 @@ async function tableCounts(tx: DbTx, catalog: SeededCatalog): Promise<Record<str
   return counts;
 }
 
-async function verifySeed(tx: DbTx, catalog: SeededCatalog): Promise<SeedDemoSummary['checks']> {
+async function verifySeed(
+  tx: DbTx,
+  catalog: SeededCatalog,
+  tolerant = false,
+): Promise<SeedDemoSummary['checks']> {
   const sapId = demoFormationId('sap');
   const alex = demoUserId('alex');
   const modules = await tx.execute<{ count: number }>(
@@ -2822,18 +2826,21 @@ async function verifySeed(tx: DbTx, catalog: SeededCatalog): Promise<SeedDemoSum
   }
   const failed = Object.entries(checks).filter(([, check]) => !check.ok);
   if (failed.length > 0) {
-    throw new Error(
-      `contrôles de seed en échec : ${failed
-        .map(
-          ([key, check]) => `${key}=${String(check.observed)} (attendu ${String(check.expected)})`,
-        )
-        .join(', ')}`,
-    );
+    const detail = failed
+      .map(([key, check]) => `${key}=${String(check.observed)} (attendu ${String(check.expected)})`)
+      .join(', ');
+    if (tolerant) {
+      // Pile de recette : le jeu de demonstration derive des que les testeurs l'utilisent (une
+      // notification lue, un creneau deplace). Le chargement reste utile, l'ecart est signale.
+      process.stderr.write(`⚠ controles de seed ignores : ${detail}\n`);
+    } else {
+      throw new Error(`contrôles de seed en échec : ${detail}`);
+    }
   }
   return checks;
 }
 
-async function runSeed(tx: DbTx, fixedAt: string): Promise<SeedDemoSummary> {
+async function runSeed(tx: DbTx, fixedAt: string, tolerant = false): Promise<SeedDemoSummary> {
   const catalog: SeededCatalog = {
     formationIds: new Map(),
     moduleIds: new Map(),
@@ -2869,7 +2876,7 @@ async function runSeed(tx: DbTx, fixedAt: string): Promise<SeedDemoSummary> {
   await seedAgendaAndNotifications(tx, catalog);
 
   const counts = await tableCounts(tx, catalog);
-  const checks = await verifySeed(tx, catalog);
+  const checks = await verifySeed(tx, catalog, tolerant);
   return {
     fingerprint: demoFixtureFingerprint(),
     fixedAt,
@@ -2882,15 +2889,18 @@ export interface SeedDemoOptions {
   /** Transaction existante (tests `withRollback`) ; sinon une transaction service est ouverte. */
   tx?: DbTx;
   env?: DemoEnvironmentInput;
+  /** Accepte un jeu de démonstration qui a dérivé (pile de recette) au lieu d'échouer. */
+  tolerant?: boolean;
 }
 
 /** Charge le jeu de démonstration ; deux exécutions produisent les mêmes identifiants et comptes. */
 export async function seedDemo(options: SeedDemoOptions = {}): Promise<SeedDemoSummary> {
   const env = assertDemoEnvironment(options.env ?? process.env);
   demoNow(options.env ?? process.env);
+  const tolerant = options.tolerant ?? process.env.SEED_TOLERANT === '1';
   try {
-    if (options.tx !== undefined) return await runSeed(options.tx, env.fixedAt);
-    return await serviceDb().transaction(async (tx) => runSeed(tx, env.fixedAt));
+    if (options.tx !== undefined) return await runSeed(options.tx, env.fixedAt, tolerant);
+    return await serviceDb().transaction(async (tx) => runSeed(tx, env.fixedAt, tolerant));
   } catch (error) {
     if (error instanceof Error && error.message.startsWith('Seed de démonstration')) throw error;
     throw new Error(describeSeedFailure(error), { cause: error });

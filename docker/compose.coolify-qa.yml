@@ -116,6 +116,9 @@ services:
       - db:db.learny.test
     environment:
       APP_ENV: test
+      # Le jeu de demonstration derive des que les testeurs l'utilisent (notification lue,
+      # creneau deplace) : la pile de recette signale les ecarts sans refuser de demarrer.
+      SEED_TOLERANT: '1'
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db.learny.test:5432/postgres
       CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
     restart: 'no'
@@ -141,6 +144,9 @@ services:
           psql -h db -U postgres -d postgres -c 'delete from public.rate_limits;' >/dev/null 2>&1 || true
           sleep 300
         done
+    # Le healthcheck herite du parent (pg_isready) ne decrit pas cette boucle de purge.
+    healthcheck:
+      disable: true
     depends_on:
       db:
         condition: service_healthy
