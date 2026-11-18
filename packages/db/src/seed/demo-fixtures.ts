@@ -1304,7 +1304,7 @@ export const DEMO_AGENDA: readonly DemoAgendaSlotFixture[] = [
     '12:00',
     'buffer',
     'Marge de rattrapage',
-    'Réservée pour la reprise',
+    'Réservée par le tuteur',
     'planned',
     'sap',
     3,
