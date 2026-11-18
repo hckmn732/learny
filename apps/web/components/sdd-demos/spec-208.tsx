@@ -6,7 +6,7 @@ import { RATE_PROFILE_NAMES, RATE_PROFILES, type RateProfileName } from '@learny
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec208;
 
@@ -172,7 +172,6 @@ function PurgeCard() {
 export default function Spec208Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="spec-208-profiles" title={t.profiles.title}>
         <p className="mb-4 text-sm">{t.profiles.intro}</p>
         <div className="grid gap-4 sm:grid-cols-3">

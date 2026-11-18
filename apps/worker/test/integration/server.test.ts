@@ -104,6 +104,7 @@ describe('[SPEC-007] worker', () => {
       `${INNGEST_APP_ID}-generate-course`,
       `${INNGEST_APP_ID}-ingest-resource`,
       `${INNGEST_APP_ID}-nightly-outbox-cleanup`,
+      `${INNGEST_APP_ID}-offline-receipts-purge`,
       `${INNGEST_APP_ID}-notification-delivery`,
       `${INNGEST_APP_ID}-notifications-daily-digest`,
       `${INNGEST_APP_ID}-notifications-deferred-due`,

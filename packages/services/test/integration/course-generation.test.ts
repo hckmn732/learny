@@ -209,10 +209,14 @@ describe('[SPEC-608] génération du cours', () => {
     expect(new Set(citations.map((citation) => citation.chunk_id))).toEqual(new Set([f.chunkId]));
     expect(citations.every((citation) => citation.owner_id === f.a)).toBe(true);
 
+    // The base chapter of the module also carries a « À retenir » card (three points): read the one
+    // of the sourced chapter, otherwise `limit 1` without `order by` returns either card.
     const retain = await serviceDb().execute<{ points: unknown }>(sql`
       select data -> 'points' as points
       from public.course_sections
-      where course_id = ${courses[0]?.id ?? ''}::uuid and kind = 'retain'
+      where course_id = ${courses[0]?.id ?? ''}::uuid
+        and chapter_id = ${f.chapters[0]}::uuid
+        and kind = 'retain'
       limit 1
     `);
     expect(Array.isArray(retain[0]?.points)).toBe(true);

@@ -16,7 +16,7 @@ import {
 } from '@learny/learning-engine';
 import { Badge, Button } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const TZ = 'Europe/Paris';
 const NOW = '2026-11-11T12:20:00.000Z';
@@ -215,7 +215,6 @@ export default function Spec407Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="planner-inputs" title="Entrées du calcul">
         <dl className="grid gap-3 text-sm sm:grid-cols-2">
           <div className="rounded-18 bg-canvas p-4">

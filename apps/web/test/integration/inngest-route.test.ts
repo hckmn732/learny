@@ -33,7 +33,7 @@ describe('[SPEC-007] web /api/inngest', () => {
     const text = await res.text();
 
     expect(res.status).toBe(200);
-    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: 24 });
+    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: 25 });
     expect(functions.map((f) => f.id())).toEqual([
       DEMO_JOB_ID,
       'account-deletion',
@@ -45,6 +45,7 @@ describe('[SPEC-007] web /api/inngest', () => {
       'generate-course',
       'ingest-resource',
       'nightly-outbox-cleanup',
+      'offline-receipts-purge',
       'notification-delivery',
       'notifications-daily-digest',
       'notifications-deferred-due',

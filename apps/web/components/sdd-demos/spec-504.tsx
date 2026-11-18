@@ -4,7 +4,7 @@ import { AI_TASKS, DEFAULT_MODEL_BY_TASK, type AiTask } from '@learny/config';
 import { buildAnthropicRequestPreview } from '@learny/llm';
 
 import { loadResolutionDemo } from '../../app/%5Fdev/sdd/spec-504-data';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 import { Spec504Form } from './spec-504-client';
 
@@ -29,7 +29,6 @@ export default async function Spec504Demo() {
   const resolution = await loadResolutionDemo();
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="llm-resolution" title="Résolution">
         <div
           role="region"
@@ -52,7 +51,11 @@ export default async function Spec504Demo() {
             </thead>
             <tbody>
               {resolution.map((row) => (
-                <tr key={row.key} data-testid="llm-resolution-row" className="border-t border-border">
+                <tr
+                  key={row.key}
+                  data-testid="llm-resolution-row"
+                  className="border-t border-border"
+                >
                   <th scope="row" className="px-3 py-2 font-semibold">
                     {row.label}
                   </th>

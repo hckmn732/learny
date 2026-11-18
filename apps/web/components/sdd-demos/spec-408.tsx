@@ -15,7 +15,7 @@ import {
 } from '@learny/learning-engine';
 import { Badge, ProgressBar, StatCard, StatRow } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const AT = '2026-11-11T12:20:00.000Z';
 const PARIS = 'Europe/Paris';
@@ -286,7 +286,6 @@ const CAPTION = 'border-b border-border py-2 pr-3 text-left font-600';
 export default function Spec408Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="retention-summary" title="Rétention à un et deux mois">
         <div role="status" aria-live="polite">
           <StatRow>

@@ -13,7 +13,7 @@ import type {
 import { Badge, Button } from '@learny/ui';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 import {
   DEMO_MODULE_LABELS,
@@ -149,7 +149,6 @@ export default function Spec406Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="session-inputs" title={t.inputs.title}>
         <p className="text-sm text-ink-muted">{t.inputs.intro}</p>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">

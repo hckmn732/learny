@@ -100,7 +100,10 @@ jobs:
         if: always() && hashFiles('pnpm-lock.yaml') != ''
         run: |
           mkdir -p security-reports
-          pnpm audit --audit-level="${AUDIT_LEVEL}" 2>&1 | tee security-reports/pnpm-audit.txt
+          # ADR-0335 : GHSA-fc5q-39xc-vjpf (picomatch) n'a aucun correctif amont et n'atteint que
+          # des outils de développement. Exception nominative, revue le 2027-02-28, à retirer dès
+          # qu'une version corrigée est publiée (condition de sortie dans l'ADR).
+          pnpm audit --audit-level="${AUDIT_LEVEL}" --ignore GHSA-fc5q-39xc-vjpf 2>&1 | tee security-reports/pnpm-audit.txt
           exit "${PIPESTATUS[0]}"
       - name: Publier les rapports de sécurité
         if: always()

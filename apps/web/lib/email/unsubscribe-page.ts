@@ -1,8 +1,13 @@
 // French HTML pages of the one-click unsubscribe flow (SPEC-204 EF-5). Static markup, no script,
 // the same base tokens as the e-mails; the token is only echoed inside the form action.
+//
+// The `<style>` block is stamped with the CSP nonce of the response (SPEC-805): `style-src-elem`
+// only admits a nonce, so an anonymous <style> is refused by the browser. The nonce travels on the
+// `x-nonce` request header set by the proxy, next to the request CSP header.
 import { colors, px } from '@learny/ui/tokens';
 
 import { fr } from '../../messages/fr/email';
+import { isValidCspNonce } from '../security/csp';
 
 const t = fr.email.unsubscribe;
 
@@ -15,7 +20,16 @@ function escapeHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
-function page(title: string, body: string): string {
+/** CSP nonce of the response (`x-nonce`), or an empty string; anything malformed is ignored. */
+export function requestCspNonce(request: Request): string {
+  const nonce = request.headers.get('x-nonce') ?? '';
+  return isValidCspNonce(nonce) ? nonce : '';
+}
+
+function page(title: string, body: string, nonce: string): string {
+  // Only a nonce shaped by `createCspNonce` may reach the attribute: the value is never interpolated
+  // as is, so a hostile header cannot close the tag or add an attribute.
+  const nonceAttribute = isValidCspNonce(nonce) ? ` nonce="${nonce}"` : '';
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,7 +37,7 @@ function page(title: string, body: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>${escapeHtml(title)} · Learny</title>
-<style>
+<style${nonceAttribute}>
 body{margin:0;padding:32px 16px;background:${colors.canvas};color:${colors.ink};font-family:'Inter','Helvetica Neue',Arial,sans-serif;font-size:${px(15)};line-height:${px(24)}}
 main{max-width:${px(600)};margin:0 auto;background:${colors.surface};border:1px solid ${colors.border};border-radius:${px(24)};padding:${px(32)}}
 h1{margin:${px(24)} 0 ${px(12)};font-family:'Space Grotesk',Arial,sans-serif;font-size:${px(24)};line-height:${px(32)}}
@@ -45,7 +59,7 @@ ${body}
 }
 
 /** GET with a valid token: a form, no state change until the learner confirms (CL-6). */
-export function unsubscribeFormPage(token: string, actionPath: string): string {
+export function unsubscribeFormPage(token: string, actionPath: string, nonce = ''): string {
   const action = `${actionPath}?token=${encodeURIComponent(token)}`;
   return page(
     t.question,
@@ -55,24 +69,27 @@ export function unsubscribeFormPage(token: string, actionPath: string): string {
 <input type="hidden" name="List-Unsubscribe" value="One-Click">
 <button type="submit" data-testid="unsubscribe-confirm">${escapeHtml(t.confirm)}</button>
 </form>`,
+    nonce,
   );
 }
 
 /** After a POST: confirmation of the change. */
-export function unsubscribeDonePage(): string {
+export function unsubscribeDonePage(nonce = ''): string {
   return page(
     t.doneTitle,
     `<h1 data-testid="unsubscribe-title">${escapeHtml(t.doneTitle)}</h1>
 <p data-testid="unsubscribe-done">${escapeHtml(t.done)}</p>`,
+    nonce,
   );
 }
 
 /** Altered or unknown token (400). */
-export function unsubscribeInvalidPage(): string {
+export function unsubscribeInvalidPage(nonce = ''): string {
   return page(
     t.invalidTitle,
     `<h1 data-testid="unsubscribe-title">${escapeHtml(t.invalid)}</h1>
 <p class="muted">${escapeHtml(t.invalidHint)}</p>`,
+    nonce,
   );
 }
 

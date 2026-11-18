@@ -81,6 +81,15 @@ function mockupSources(): string[] {
     .map((file) => path.join(MOCKUPS, file));
 }
 
+/**
+ * Colours introduced by a later specification for a state the mockups do not cover. Each entry
+ * names the specification and the screen, so the exception stays auditable: SPEC-801 EF-6 defines
+ * the offline banner background (`#FFF7E0`) for SCR-10 and SCR-20, "sans maquette dédiée".
+ */
+const POST_MOCKUP_COLORS: Readonly<Record<string, string>> = {
+  'offline-soft': 'SPEC-801 EF-6 — bandeau hors ligne (SCR-10, SCR-20)',
+};
+
 describe('[SPEC-301] conformité aux maquettes', () => {
   it('vérifie couleurs, tailles et familles de tokens.json (ET-6 a à d)', () => {
     if (!fs.existsSync(REFERENCES)) {
@@ -107,8 +116,12 @@ describe('[SPEC-301] conformité aux maquettes', () => {
     const supportJs = fs.readFileSync(path.join(MOCKUPS, 'support.js'), 'utf8');
 
     // (a) Every interface colour is observed in the mockups; `unread` is defined by support.js.
+    // Only the tokens documented in POST_MOCKUP_COLORS may escape the comparison, and each of them
+    // must still exist: an exception cannot outlive the token it excuses.
+    for (const name of Object.keys(POST_MOCKUP_COLORS)) expect(colors).toHaveProperty(name);
     const unknownTokens = Object.entries(colors).filter(
-      ([, value]) => !mockupColors.has(normalizeColor(value)),
+      ([name, value]) =>
+        !mockupColors.has(normalizeColor(value)) && POST_MOCKUP_COLORS[name] === undefined,
     );
     expect(unknownTokens, 'couleurs de jeton absentes des maquettes').toEqual([]);
     expect(normalizeColor('#F5F5FD')).toBe(colors.unread);

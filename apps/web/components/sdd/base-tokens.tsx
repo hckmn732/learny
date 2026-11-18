@@ -1,22 +1,13 @@
 import type { ReactNode } from 'react';
 
-import { colors, px } from '@learny/ui/tokens';
-
-// Base-token layout of the P2 demonstration pages (SPEC-201 §10), now sourced from the design
-// tokens (SPEC-301): canvas background, surface cards, standard border and 24 px radius.
-export const BASE_TOKENS = {
-  background: colors.canvas,
-  card: colors.surface,
-  border: colors.border,
-  text: colors.ink,
-  radius: px(24),
-} as const;
-
-/** Sets the page background without touching the shared layout used by the other demos. */
-export function BaseTokenStyle() {
-  return <style>{`body { background-color: ${BASE_TOKENS.background}; }`}</style>;
-}
-
+// Base-token layout of the P2 demonstration pages (SPEC-201 §10), sourced from the design tokens
+// (SPEC-301): surface cards, standard border and 24 px radius.
+//
+// The canvas background used to be set by a `<style>{`body { … }`}</style>` injected by
+// `BaseTokenStyle`. SPEC-805 made `style-src-elem` nonce-based, so that element was refused by the
+// CSP of every demo page: the rule never applied. The same token is already the background of the
+// shared layout (`body.bg-canvas`, `--color-canvas: #F4F4F1`), so the component is gone and the
+// demos rely on the layout instead of injecting CSS of their own (CL-8: no inline <style>).
 export function BaseCard({
   testId,
   title,

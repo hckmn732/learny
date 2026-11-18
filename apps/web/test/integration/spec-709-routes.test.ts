@@ -151,7 +151,8 @@ describe('[SPEC-709] routes de l’onglet Modèles d’IA', () => {
     expect(providers[0]?.origin).toBe('provided');
     expect(providers.some((card) => card.id === credentialId)).toBe(true);
     const personal = providers.find((card) => card.id === credentialId);
-    expect(personal?.keyMasked).toBe('sk-••••••••a91F');
+    // The mask keeps the last four characters of the stored key (`sk-sentinel-0123456789abcdef`).
+    expect(personal?.keyMasked).toBe('sk-••••••••cdef');
     const serialized = JSON.stringify(answer.body);
     expect(serialized).not.toContain(SECRET);
     expect(serialized).not.toContain('encrypted');

@@ -11,7 +11,7 @@ import {
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec206;
 
@@ -237,7 +237,6 @@ function Deletion() {
 export default function Spec206Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <Limits />
       <Cases />
       <Deletion />

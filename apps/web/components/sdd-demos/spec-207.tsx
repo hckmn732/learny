@@ -11,7 +11,7 @@ import {
 } from '@learny/core';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec207;
 const HOUR_MS = 3_600_000;
@@ -114,7 +114,6 @@ export default function Spec207Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="spec-207-now" title={t.now.title}>
         <dl className="space-y-1">
           <Row label={t.now.utc} testId="spec-207-now-utc">

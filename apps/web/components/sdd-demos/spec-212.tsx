@@ -6,7 +6,7 @@ import type { Highlight, SearchResponse } from '@learny/contracts';
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec212;
 
@@ -127,7 +127,6 @@ export default function Spec212Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="spec-212-query" title={t.query.title}>
         <form
           onSubmit={(event) => {

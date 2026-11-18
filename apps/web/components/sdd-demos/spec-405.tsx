@@ -17,7 +17,7 @@ import {
 } from '@learny/learning-engine/fixtures';
 import { Badge } from '@learny/ui';
 
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const PARAMS = {
   ...ENGINE.draw,
@@ -207,7 +207,6 @@ function ScrollTable({ label, children }: Readonly<{ label: string; children: Re
 export default function Spec405Demo() {
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="draw-inputs" title="Entrées du tirage">
         <p className="text-sm text-ink-muted">
           Huit notions du module, deux lacunes actives, une banque suffisante et un jeu d’empreintes

@@ -15,7 +15,7 @@ import {
 import { Badge, Button } from '@learny/ui';
 
 import { fr } from '../../messages/fr/sdd';
-import { BaseCard, BaseTokenStyle } from '../sdd/base-tokens';
+import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec404;
 
@@ -348,7 +348,6 @@ export default function Spec404Demo() {
 
   return (
     <>
-      <BaseTokenStyle />
       <BaseCard testId="gap-inputs" title={t.inputs.title}>
         <p className="text-sm text-ink-muted">{t.inputs.intro}</p>
         <p data-testid="gap-evaluation" className="mt-2 text-sm">
