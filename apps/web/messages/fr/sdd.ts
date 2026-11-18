@@ -2612,6 +2612,34 @@ export const sdd = {
       notRun: 'Non exécuté',
     },
   },
+  spec807: {
+    intro:
+      'Matrice des six parcours V1 de bout en bout : chaque étape relie une route, une spécification propriétaire et des règles métier. Les statuts proviennent du dernier rapport de pnpm test:v1:journeys et des ratios de la régression visuelle ; sans rapport, tout reste « Non exécuté ».',
+    note: 'Un statut « Réussi » n’est affiché que lorsqu’un rapport d’exécution le prouve pour ce parcours et ce moteur. La présence d’un test ou d’une ligne de matrice ne vaut jamais réussite.',
+    testFile: 'Fichier de test :',
+    enginesLabel: (journey: string) => `Résultats par moteur du parcours ${journey}`,
+    stepsLabel: (journey: string) => `Étapes du parcours ${journey} (tableau défilant)`,
+    columns: ['Étape', 'Action', 'Route', 'Spécification', 'Règles métier'],
+    statuses: {
+      passed: 'Réussi',
+      failed: 'Échec',
+      notRun: 'Non exécuté',
+    },
+    run: {
+      title: 'Dernière exécution',
+      journeys: 'Matrice',
+      count: (journeys: number, steps: number) =>
+        `${String(journeys)} parcours · ${String(steps)} étapes`,
+      report: 'Rapport des parcours',
+      visual: 'Rapport visuel',
+      noReport: 'Aucun rapport',
+      undated: 'Rapport sans date',
+    },
+    visual: {
+      title: 'Régression visuelle des écrans V1',
+      columns: ['Écran', 'État capturé', 'Écart maquette', 'Statut'],
+    },
+  },
 } as const;
 
 export const fr = { sdd } as const;
