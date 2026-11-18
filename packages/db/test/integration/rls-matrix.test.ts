@@ -191,6 +191,7 @@ async function createSeed(tx: DbTx): Promise<Seed> {
     profiles: a.id,
     study_preferences: a.id,
     notification_settings: a.id,
+    offline_sync_receipts: a.id,
     automation_settings: a.id,
     chapter_progress: a.id,
     module_progress: a.id,
@@ -218,6 +219,11 @@ async function createSeed(tx: DbTx): Promise<Seed> {
       returning id::text as id
     `,
   );
+  // SPEC-801 ET-6: a receipt is keyed by `(user_id, client_id)`; the probe reads it by `user_id`.
+  await tx.execute(sql`
+    insert into public.offline_sync_receipts (user_id, client_id, status)
+    values (${a.id}::uuid, '5eed0000-0000-4000-8000-000000000001'::uuid, 'applied')
+  `);
   await tx.execute(sql`
     insert into public.chapter_progress (user_id, chapter_id)
     values (${a.id}::uuid, ${chapter1}::uuid)
@@ -596,6 +602,11 @@ const FOREIGN_INSERTS: Record<string, Inserter> = {
     tx.execute(sql`
       insert into public.push_subscriptions (user_id, endpoint, p256dh, auth)
       values (${s.a.id}::uuid, 'https://push.test.learny.test/forged', 'p256dh', 'auth')
+    `),
+  offline_sync_receipts: (tx, s) =>
+    tx.execute(sql`
+      insert into public.offline_sync_receipts (user_id, client_id, status)
+      values (${s.a.id}::uuid, '5eed0000-0000-4000-8000-0000000000ff'::uuid, 'applied')
     `),
   automation_settings: (tx, s) =>
     tx.execute(sql`
