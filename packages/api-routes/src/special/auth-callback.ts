@@ -1,4 +1,5 @@
-import { CallbackQuery, ROUTES } from '@learny/contracts';
+import { ROUTES } from '@learny/contracts';
+import { CallbackQuery } from '@learny/contracts';
 import { clock } from '@learny/core';
 import { createLogger } from '@learny/core/server';
 import { resolveApiRequestId } from '@learny/http/request-id';

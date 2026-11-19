@@ -1,3 +1,3 @@
-// SPEC-1004 ET-1 - the module moved to @learny/api-routes; this file only re-exports it for the
-// web consumers that still import the historical path.
+// SPEC-1004 ET-1 — the server configuration adapter lives in @learny/api-routes; this file keeps
+// the historical import path of apps/web (instrumentation, screens).
 export * from '@learny/api-routes/deps/env';
