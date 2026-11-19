@@ -12,6 +12,15 @@ on:
     branches: [main, 'spec/**', 'fix/**', 'release/**']
   pull_request:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Périmètre manuel
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - perf
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -67,6 +76,7 @@ jobs:
 
   secrets:
     name: Sécurité (secrets et dépendances)
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -117,7 +127,9 @@ jobs:
   quality:
     name: Lint, types, build, unitaires
     needs: audit
-    if: needs.audit.outputs.has_app == 'true'
+    if: >-
+      needs.audit.outputs.has_app == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.target == 'all')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -154,7 +166,9 @@ jobs:
   integration:
     name: Intégration (Supabase local, shard ${{ matrix.shard }}/4)
     needs: audit
-    if: needs.audit.outputs.has_app == 'true'
+    if: >-
+      needs.audit.outputs.has_app == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.target == 'all')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -263,7 +277,9 @@ jobs:
   e2e:
     name: E2E et conformité visuelle (Chromium, shard ${{ matrix.shard }}/4)
     needs: audit
-    if: needs.audit.outputs.has_app == 'true'
+    if: >-
+      needs.audit.outputs.has_app == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.target == 'all')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -349,7 +365,10 @@ jobs:
   # SPEC-804 — budgets de performance aux tags de version et sur demande manuelle.
   perf:
     name: Performances (test:perf)
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
+    if: >-
+      (github.event_name == 'workflow_dispatch' &&
+       (inputs.target == 'perf' || inputs.target == 'all')) ||
+      startsWith(github.ref, 'refs/tags/v')
     needs: [audit]
     runs-on: ubuntu-latest
     steps:
