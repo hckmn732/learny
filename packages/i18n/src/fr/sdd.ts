@@ -2669,6 +2669,26 @@ export const sdd = {
     },
     note: 'La liste de référence ne peut que diminuer : tout nouvel import serveur est refusé (règle learny/web-is-a-client, EF-4). Les fichiers app/api restent couverts par le motif global jusqu’à leur suppression (SPEC-1201).',
   },
+  spec1002: {
+    intro:
+      'Paquets partagés entre clients et serveur (ADR-1007) : exécutables dans un navigateur, sous Node et sous React Native. Le contrôle de portabilité est exécuté par la suite unitaire (CA-1).',
+    packages: {
+      title: 'Paquets partagés et dépendances autorisées',
+      region: 'Paquets partagés, dépendances autorisées et portabilité (tableau défilant)',
+      columns: ['Paquet', 'Dépendances autorisées', 'Portable'],
+      yes: 'oui',
+    },
+    note: 'Contrôle : tools/migration/test/unit/shared-packages.test.ts construit chaque paquet pour la plateforme neutral (esbuild) et refuse tout module node: ou paquet serveur.',
+    health: {
+      title: 'Appel de l’API depuis le navigateur',
+      callApi: 'Appeler l’API',
+      idle: 'Aucun appel encore effectué.',
+      pending: 'Appel en cours…',
+      status: 'Statut : ',
+      requestId: 'Identifiant de requête',
+      failed: (code: string, detail: string) => `Erreur ${code} : ${detail}`,
+    },
+  },
 } as const;
 
 export const fr = { sdd } as const;
