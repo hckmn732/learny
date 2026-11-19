@@ -84,7 +84,6 @@ export type ServerEnvKey = (typeof SERVER_ENV_KEYS)[number];
 export const TOOLING_ENV_KEYS = [
   'SDD_PUSH',
   'E2E_SKIP_BUILD',
-  'PW_PERF',
   'CHROME_PATH',
   // Self-hosted stack (SPEC-012): consumed by Docker Compose and the image builds, not by the app.
   'LEARNY_PUBLIC_APP_URL',

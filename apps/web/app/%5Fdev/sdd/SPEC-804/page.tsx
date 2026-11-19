@@ -26,7 +26,6 @@ interface Report {
   generatedAt: string;
   commit: string;
   lighthouse?: { pages?: PageReport[]; ok?: boolean };
-  inp?: { scenarios?: { name: string; p75: number | null; ok: boolean }[]; ok?: boolean };
   k6?: { routes?: { name: string; p95: number | null; ok: boolean }[]; ok?: boolean };
 }
 
@@ -71,7 +70,7 @@ function ReportSection({ report }: Readonly<{ report: Report | null }>) {
       </section>
     );
   }
-  const status = report.lighthouse?.ok && report.inp?.ok && report.k6?.ok;
+  const status = report.lighthouse?.ok && report.k6?.ok;
   return (
     <section data-testid="perf-report">
       <h2 className="text-xl font-semibold">{t.lastReport.title}</h2>
@@ -122,37 +121,6 @@ function ReportSection({ report }: Readonly<{ report: Report | null }>) {
                 <td className={cell}>{Math.round(page.metrics.tbt?.p75 ?? 0)} ms</td>
                 <td className={cell}>{Math.round(page.metrics.score?.p75 ?? 0)}</td>
                 <td className={cell}>{page.ok ? t.lastReport.ok : t.lastReport.ko}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <h3 className="mt-6 font-600">{t.lastReport.scenarios}</h3>
-      <div
-        role="region"
-        aria-label={t.lastReport.scenarios}
-        tabIndex={0}
-        className="mt-2 overflow-x-auto"
-      >
-        <table className="w-full min-w-[520px] text-left">
-          <thead>
-            <tr>
-              {t.lastReport.scenarioColumns.map((column) => (
-                <th key={column} scope="col" className={cell}>
-                  {column}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {(report.inp?.scenarios ?? []).map((scenario) => (
-              <tr key={scenario.name} data-testid="perf-report-scenario">
-                <td className={cell}>{scenario.name}</td>
-                <td className={cell}>
-                  {scenario.p75 === null ? '—' : `${String(Math.round(scenario.p75))} ms`}
-                </td>
-                <td className={cell}>{scenario.ok ? t.lastReport.ok : t.lastReport.ko}</td>
               </tr>
             ))}
           </tbody>

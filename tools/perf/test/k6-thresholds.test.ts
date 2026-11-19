@@ -68,4 +68,10 @@ describe('[SPEC-804] fichiers de mesure', () => {
     expect(run).toContain("APP_ENV: 'test'");
     expect(run).toContain("RATE_LIMIT_MODE: 'off'");
   });
+
+  it('refuse explicitement le benchmark INP supprimé', () => {
+    const run = fs.readFileSync(fileURLToPath(new URL('../run.mjs', import.meta.url)), 'utf8');
+    expect(run).toContain("new Set(['seed', 'lighthouse', 'k6'])");
+    expect(run).not.toContain('function inp()');
+  });
 });

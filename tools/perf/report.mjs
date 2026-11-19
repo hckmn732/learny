@@ -31,12 +31,11 @@ function environment(k6Version) {
   };
 }
 
-export function buildReport({ lighthouse, inp, k6, k6Version = 'inconnu' }) {
+export function buildReport({ lighthouse, k6, k6Version = 'inconnu' }) {
   const pages = [
     ...(lighthouse?.anonymous?.pages ?? []),
     ...(lighthouse?.authenticated?.pages ?? []),
   ];
-  const scenarios = inp?.scenarios ?? [];
   const k6Metrics = k6?.summary?.metrics ?? {};
   const routes = Object.entries(k6Metrics)
     .filter(([name]) => name.startsWith('route_'))
@@ -55,7 +54,6 @@ export function buildReport({ lighthouse, inp, k6, k6Version = 'inconnu' }) {
     commit: commit(),
     environment: environment(k6Version),
     lighthouse: { ok: lighthouse?.ok ?? false, pages },
-    inp: { ok: inp?.ok ?? false, scenarios },
     k6: {
       ok: k6?.ok ?? false,
       p50: httpDuration.values?.['p(50)'] ?? httpDuration['p(50)'] ?? httpDuration.p50 ?? null,
@@ -89,15 +87,6 @@ export function writeReport(report) {
       const r = page.resources;
       return `| ${new URL(page.url).pathname} | ${String(Math.round(m.lcp.p75))} | ${String(m.cls.p75)} | ${String(Math.round(m.tbt.p75))} | ${String(m.score.p75)} | ${String(Math.round(r.js / 1024))} | ${String(Math.round(r.css / 1024))} | ${String(r.fontsCount)} | ${String(Math.round(r.images / 1024))} | ${String(r.requests)} | ${page.ok ? 'ok' : 'ko'} |`;
     }),
-    '',
-    '## INP (p75 de 5 passages)',
-    '',
-    '| Scénario | p75 (ms) | Statut |',
-    '|---|---|---|',
-    ...report.inp.scenarios.map(
-      (scenario) =>
-        `| ${scenario.name} | ${scenario.p75 === null ? '—' : String(Math.round(scenario.p75))} | ${scenario.ok ? 'ok' : 'ko'} |`,
-    ),
     '',
     '## k6 (50 utilisateurs virtuels)',
     '',

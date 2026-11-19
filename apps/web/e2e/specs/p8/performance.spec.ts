@@ -51,7 +51,6 @@ test('page de démonstration des performances @SPEC-804', async ({
   await expect(page.getByTestId('perf-report-commit')).toHaveText('sample804');
   await expect(page.getByTestId('perf-report-status')).toHaveText('ok');
   await expect(page.getByTestId('perf-report-page')).toHaveCount(1);
-  await expect(page.getByTestId('perf-report-scenario')).toHaveCount(1);
   await expect(page.getByTestId('perf-report-route')).toHaveCount(1);
 
   await expect(page.getByTestId('perf-live')).toHaveAttribute('data-hydrated', 'true');
