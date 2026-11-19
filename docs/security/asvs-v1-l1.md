@@ -9,7 +9,7 @@ dans cette grille.
 |---|---|---|---|---|
 | V1.1.1 | Cycle de développement sécurisé documenté | Vérifié | [sdd-process.md](../../docs/engineering/sdd-process.md) | platform |
 | V1.2.1 | Architecture et frontières de confiance décrites | Vérifié | [overview.md](../../docs/architecture/overview.md) | platform |
-| V1.5.1 | Entrées et sorties validées aux frontières | Vérifié | [validate.test.ts](../../apps/web/lib/api/validate.test.ts) | api |
+| V1.5.1 | Entrées et sorties validées aux frontières | Vérifié | [validate.test.ts](../../packages/http/src/validate.test.ts) | api |
 | V2.1.1 | Politique de mot de passe et résistance | Vérifié | [password-strength.test.ts](../../apps/web/lib/auth/password-strength.test.ts) | auth |
 | V2.2.1 | Anti-automatisation des connexions | Vérifié | [rate-limit.test.ts](../../apps/web/test/integration/rate-limit.test.ts) | api |
 | V2.7.1 | Vérification d’identité déléguée à GoTrue | Vérifié | [auth-screens.test.ts](../../apps/web/test/integration/auth-screens.test.ts) | auth |
@@ -20,16 +20,16 @@ dans cette grille.
 | V4.1.1 | Contrôle d’accès au niveau objet (RLS) | Vérifié | [rls-security.test.ts](../../packages/testing/test/integration/rls-security.test.ts) | db |
 | V4.2.1 | Contrôle d’accès au niveau utilisateur | Vérifié | [rls-security.test.ts](../../packages/testing/test/integration/rls-security.test.ts) | db |
 | V4.3.1 | Principe du moindre privilège | Vérifié | [rls-matrix.test.ts](../../packages/db/test/integration/rls-matrix.test.ts) | db |
-| V5.1.1 | Validation positive des entrées | Vérifié | [validate.test.ts](../../apps/web/lib/api/validate.test.ts) | api |
+| V5.1.1 | Validation positive des entrées | Vérifié | [validate.test.ts](../../packages/http/src/validate.test.ts) | api |
 | V5.2.1 | Neutralisation du HTML non fiable | Vérifié | [global-search.test.tsx](../../apps/web/components/search/global-search.test.tsx) | ui |
 | V5.3.1 | Encodage de sortie | Vérifié | [components-render.test.tsx](../../packages/ui/test/integration/components-render.test.tsx) | ui |
-| V5.5.1 | Désérialisation sûre (JSON validé par Zod) | Vérifié | [validate.test.ts](../../apps/web/lib/api/validate.test.ts) | api |
+| V5.5.1 | Désérialisation sûre (JSON validé par Zod) | Vérifié | [validate.test.ts](../../packages/http/src/validate.test.ts) | api |
 | V6.2.1 | Aléa cryptographique pour les nonces | Vérifié | [csp.test.ts](../../apps/web/lib/security/csp.test.ts) | app |
 | V6.4.1 | Secrets absents du code et du navigateur | Vérifié | [config-boundary.test.ts](../../apps/web/lib/config-boundary.test.ts) | platform |
 | V7.1.1 | Aucun identifiant ou secret journalisé | Vérifié | [observability.test.ts](../../apps/web/test/integration/observability.test.ts) | platform |
 | V7.3.1 | Données sensibles expurgées des rapports | Vérifié | [observability.test.ts](../../apps/web/test/integration/observability.test.ts) | platform |
 | V8.1.1 | Classification et minimisation des données | Vérifié | [data-model.md](../../docs/architecture/data-model.md) | db |
-| V8.2.1 | Données client jamais tenues pour acquises | Vérifié | [validate.test.ts](../../apps/web/lib/api/validate.test.ts) | api |
+| V8.2.1 | Données client jamais tenues pour acquises | Vérifié | [validate.test.ts](../../packages/http/src/validate.test.ts) | api |
 | V9.1.1 | HTTPS et HSTS en production | Vérifié | [csp.test.ts](../../apps/web/lib/security/csp.test.ts) | app |
 | V10.1.1 | Redirections validées avant suivi | Vérifié | [ssrf.test.ts](../../packages/ingestion/test/integration/ssrf.test.ts) | ingestion |
 | V11.1.1 | Logique métier bornée (quotas, idempotence) | Vérifié | [rate-limit.test.ts](../../apps/web/test/integration/rate-limit.test.ts) | api |
