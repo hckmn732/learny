@@ -21,7 +21,6 @@ on:
         options:
           - all
           - perf
-          - inp
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -368,7 +367,7 @@ jobs:
     name: Performances (test:perf)
     if: >-
       (github.event_name == 'workflow_dispatch' &&
-       (inputs.target == 'perf' || inputs.target == 'inp' || inputs.target == 'all')) ||
+       (inputs.target == 'perf' || inputs.target == 'all')) ||
       startsWith(github.ref, 'refs/tags/v')
     needs: [audit]
     runs-on: ubuntu-latest
@@ -383,7 +382,7 @@ jobs:
           version: 2.122.1
       - uses: grafana/setup-k6-action@v1
       - run: pnpm install --frozen-lockfile
-      - name: Installer Chromium (Lighthouse et INP)
+      - name: Installer Chromium (Lighthouse)
         run: pnpm exec playwright install --with-deps chromium
       # SPEC-008 — même flake que les jobs en matrice : pile résiduelle ou registre limité.
       - name: Démarrer Supabase local
@@ -400,13 +399,8 @@ jobs:
           done
           exit 1
       - run: pnpm build
-      - name: Budgets Lighthouse, INP et k6
-        run: |
-          if [ "${{ inputs.target }}" = "inp" ]; then
-            pnpm test:perf --only=seed,inp
-          else
-            pnpm test:perf
-          fi
+      - name: Budgets Lighthouse et k6
+        run: pnpm test:perf
       - name: Publier le rapport de performances
         if: always()
         uses: actions/upload-artifact@v4

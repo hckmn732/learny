@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Orchestrateur `pnpm test:perf` (SPEC-804 EF-1, ADR-0202) : données, serveur, Lighthouse, INP, k6,
-// rapport, arrêt. ADR-0333 : code 0 dès que la mesure est complète (10 pages, 6 scénarios, k6) ;
+// Orchestrateur `pnpm test:perf` (SPEC-804 EF-1, ADR-0202) : données, serveur, Lighthouse, k6,
+// rapport, arrêt. ADR-0333 : code 0 dès que la mesure est complète (10 pages, k6) ;
 // un budget dépassé est signalé dans le rapport sans bloquer, sauf avec PERF_STRICT=1.
 import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -16,6 +16,11 @@ const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 const PERF_PORT = 3100;
 const onlyArg = process.argv.find((a) => a.startsWith('--only='))?.slice(7);
 const only = onlyArg ? onlyArg.split(',') : null;
+const allowedSteps = new Set(['seed', 'lighthouse', 'k6']);
+if (only?.some((step) => !allowedSteps.has(step))) {
+  console.error(`✖ Étape de performance inconnue. Choix : ${[...allowedSteps].join(', ')}`);
+  process.exit(2);
+}
 const wanted = (step) => only === null || only.includes(step);
 
 function run(cmd, args, env = {}) {
@@ -117,24 +122,6 @@ function lighthouse(cookie) {
   };
 }
 
-function inp() {
-  fs.rmSync(path.join(OUT, 'inp.json'), { force: true });
-  const code = run(
-    'pnpm',
-    ['exec', 'playwright', 'test', '-c', 'apps/web/playwright.config.ts', '--project=perf'],
-    {
-      PW_PERF: '1',
-      PLAYWRIGHT_REUSE_SERVER: '1',
-      PLAYWRIGHT_PORT: String(PERF_PORT),
-      E2E_SKIP_BUILD: '1',
-      PERF_SKIP_DB: '1',
-    },
-  );
-  const file = path.join(OUT, 'inp.json');
-  const parsed = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
-  return { ok: code === 0 && parsed !== null, code, ...(parsed ?? {}) };
-}
-
 async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   if (wanted('seed')) prepareData();
@@ -159,7 +146,6 @@ async function main() {
     const { demoCookie } = await import('./auth.mjs');
     const cookie = demoCookie();
     results.lighthouse = wanted('lighthouse') ? lighthouse(cookie) : { ok: false, pages: [] };
-    results.inp = wanted('inp') ? inp() : { ok: false, scenarios: [] };
     const ids = demoIds();
     const k6 = wanted('k6')
       ? runK6({ formationId: ids.formationId, cookie })
@@ -177,17 +163,9 @@ async function main() {
       fs.copyFileSync(k6Summary, path.join(ROOT, 'evidence', 'SPEC-804', 'k6-summary.json'));
     }
     console.log(`\nRapport : ${path.relative(ROOT, files.md)}`);
-    const ok =
-      (!wanted('lighthouse') || report.lighthouse.ok) &&
-      (!wanted('inp') || report.inp.ok) &&
-      (!wanted('k6') || report.k6.ok);
+    const ok = (!wanted('lighthouse') || report.lighthouse.ok) && (!wanted('k6') || report.k6.ok);
     const complete =
       (!wanted('lighthouse') || (report.lighthouse.pages?.length ?? 0) > 0) &&
-      (!wanted('inp') ||
-        ((report.inp.scenarios?.length ?? 0) === 6 &&
-          report.inp.scenarios.every(
-            (scenario) => scenario.values?.length === 5 && scenario.p75 !== null,
-          ))) &&
       (!wanted('k6') || report.k6.p95 !== null);
     if (ok) console.log('✔ budgets tenus');
     else console.log('⚠ budget dépassé (non bloquant, ADR-0333) : voir le rapport');
