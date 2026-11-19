@@ -52,4 +52,42 @@ describe('[SPEC-804] données de charge', () => {
     `);
     expect(Number(heavy[0]?.count)).toBe(1);
   });
+
+  it('crée des propriétaires, programmes et acceptations compatibles avec les API', async () => {
+    const rows = await serviceDb().execute<{ invalid: string }>(sql`
+      select (
+        select count(*)
+        from public.profiles
+        where email like 'perf-%@learny.test'
+          and id::text !~ '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+      )::text as invalid
+      union all
+      select count(*)::text
+      from public.profiles profile
+      left join public.formations formation on formation.owner_id = profile.id
+      where profile.email ~ '^perf-[0-9]{2}@learny[.]test$'
+        and (
+          profile.current_formation_id is distinct from formation.id
+          or coalesce(formation.monogram, '') = ''
+        )
+      union all
+      select count(*)::text
+      from public.modules module
+      join public.formations formation on formation.id = module.formation_id
+      join public.profiles profile on profile.id = formation.owner_id
+      where profile.email ~ '^perf-[0-9]{2}@learny[.]test$'
+        and (module.planned_start is null or module.planned_end is null)
+      union all
+      select count(*)::text
+      from public.profiles profile
+      where profile.email ~ '^perf-[0-9]{2}@learny[.]test$'
+        and not exists (
+          select 1
+          from public.legal_acceptances acceptance
+          where acceptance.user_id = profile.id
+            and acceptance.document = 'cgu'::public.legal_document
+        )
+    `);
+    expect(rows.map((row) => Number(row.invalid))).toEqual([0, 0, 0, 0]);
+  });
 });

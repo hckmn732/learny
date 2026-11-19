@@ -75,9 +75,9 @@ export const options = {
 const BASE_URL = __ENV.BASE_URL ?? 'http://127.0.0.1:3100';
 const FORMATION_ID = __ENV.FORMATION_ID ?? '';
 const COOKIE = __ENV.PERF_COOKIE ?? '';
-// Un utilisateur `perf-NN` par VU : les 50 seaux de limitation de débit restent indépendants.
-const COOKIES_FILE = __ENV.PERF_COOKIES_FILE ?? '';
-const COOKIE_HEADERS = COOKIES_FILE === '' ? [] : JSON.parse(open(COOKIES_FILE));
+// Un utilisateur `perf-NN` et sa formation par VU : aucun identifiant ne traverse les comptes.
+const SESSIONS_FILE = __ENV.PERF_SESSIONS_FILE ?? '';
+const SESSIONS = SESSIONS_FILE === '' ? [] : JSON.parse(open(SESSIONS_FILE));
 
 function pickRoute() {
   const total = DISTRIBUTION.reduce((sum, route) => sum + route.weight, 0);
@@ -91,9 +91,10 @@ function pickRoute() {
 
 export default function apiLoad() {
   const route = pickRoute();
-  const url = `${BASE_URL}${route.path.replace('{formationId}', FORMATION_ID)}`;
-  const cookie =
-    COOKIE_HEADERS.length === 0 ? COOKIE : COOKIE_HEADERS[(__VU - 1) % COOKIE_HEADERS.length];
+  const session = SESSIONS.length === 0 ? null : SESSIONS[(__VU - 1) % SESSIONS.length];
+  const formationId = session?.formationId ?? FORMATION_ID;
+  const cookie = session?.cookie ?? COOKIE;
+  const url = `${BASE_URL}${route.path.replace('{formationId}', formationId)}`;
   const headers = {
     Cookie: cookie,
     Origin: BASE_URL,

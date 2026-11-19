@@ -144,6 +144,8 @@ async function main() {
     NODE_ENV: 'production',
     APP_ENV: 'test',
     CLOCK_FIXED_AT: '2026-11-11T12:20:00Z',
+    // The perf clock is frozen; a production token bucket cannot refill in this benchmark.
+    RATE_LIMIT_MODE: 'off',
     LLM_MODE: 'mock',
     EMAIL_MODE: 'memory',
     STRIPE_MODE: 'mock',
