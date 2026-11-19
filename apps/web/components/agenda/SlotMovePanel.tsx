@@ -8,11 +8,11 @@ import NextLink from 'next/link';
 import { useState } from 'react';
 
 import type { AgendaSlot } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 import { SkeletonText } from '@learny/ui';
 
 import { longDayLabel, minutesToClock } from '../../lib/agenda/dates';
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda.moveDialog;
 

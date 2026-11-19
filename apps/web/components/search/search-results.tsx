@@ -3,10 +3,10 @@
 // Everything here is presentational: titles, snippets and highlight ranges come from the shared
 // SPEC-212 contract. A highlight wraps plain text in <mark>; no string is ever injected as HTML.
 import type { SearchGroup, SearchItem, SearchKind, SearchResponse } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/search';
 import { PageHeader } from '@learny/ui';
 
 import type { SearchPageState } from '../../lib/search-data';
-import { fr } from '../../messages/fr/search';
 
 import { HighlightedText } from './highlighted-text';
 

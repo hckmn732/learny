@@ -3,9 +3,9 @@
 import { useCallback, useRef, useState, type ReactNode } from 'react';
 
 import type { HeaderDto, SidebarDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/shell';
 import { LiveAnnouncer, ToastProvider } from '@learny/ui';
 
-import { fr } from '../../messages/fr/shell';
 import { OfflineProvider } from '../offline/OfflineProvider';
 
 import { Header } from './header';

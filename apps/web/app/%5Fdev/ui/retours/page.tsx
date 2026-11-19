@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { fr } from '../../../../messages/fr/ui';
+import { fr } from '@learny/i18n/fr/ui';
 
 import { Demos } from './Demos';
 

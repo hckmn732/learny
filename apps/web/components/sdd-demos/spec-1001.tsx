@@ -6,9 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { fr } from '@learny/i18n/fr/sdd';
 import { Card, CardHeader, ScrollableTable } from '@learny/ui';
-
-import { fr } from '../../messages/fr/sdd';
 
 const t = fr.sdd.spec1001;
 

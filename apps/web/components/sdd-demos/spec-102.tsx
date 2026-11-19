@@ -1,6 +1,7 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { cleanupDemoUser, createDemoUser } from '../../app/%5Fdev/sdd/spec-102-actions';
 import { loadSpec102Demo, type Spec102Data } from '../../app/%5Fdev/sdd/spec-102-data';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec102;

@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { notFound, redirect } from 'next/navigation';
 
+import { fr } from '@learny/i18n/fr/quiz';
 import { createServiceContext, getActiveProgramme } from '@learny/services';
 
 import { QuizScreen } from '../../../../../../../components/quiz/QuizScreen';
@@ -9,7 +10,6 @@ import { AppShell } from '../../../../../../../components/shell/app-shell';
 import { SIGN_IN_PATH } from '../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../../lib/supabase/page';
-import { fr } from '../../../../../../../messages/fr/quiz';
 
 export const dynamic = 'force-dynamic';
 

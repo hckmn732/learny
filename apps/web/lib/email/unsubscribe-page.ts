@@ -4,9 +4,9 @@
 // The `<style>` block is stamped with the CSP nonce of the response (SPEC-805): `style-src-elem`
 // only admits a nonce, so an anonymous <style> is refused by the browser. The nonce travels on the
 // `x-nonce` request header set by the proxy, next to the request CSP header.
+import { fr } from '@learny/i18n/fr/email';
 import { colors, px } from '@learny/ui/tokens';
 
-import { fr } from '../../messages/fr/email';
 import { isValidCspNonce } from '../security/csp';
 
 const t = fr.email.unsubscribe;

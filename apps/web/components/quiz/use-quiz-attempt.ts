@@ -4,9 +4,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
 import type { AttemptDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/quiz';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/quiz';
 
 // SPEC-611 EF-1, EF-8 — the client creates the attempt on mount, resumes an in-progress one and
 // retries the preparation every three seconds, at most forty times (two minutes). The count is a

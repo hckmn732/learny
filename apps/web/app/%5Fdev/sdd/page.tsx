@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { DemoShell } from '../../../components/sdd/demo-shell';
 import { loadSddIndex } from '../../../lib/sdd-index';
 import { readSddStatus, type PublicNextAction, type PublicSpec } from '../../../lib/sdd-status';
-import { fr } from '../../../messages/fr/sdd';
 
 import { sddDemos } from './registry';
 

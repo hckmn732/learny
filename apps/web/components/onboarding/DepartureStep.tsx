@@ -6,10 +6,10 @@ import { useEffect, useState } from 'react';
 
 import type { TutorTone } from '@learny/contracts';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError, Link as UiLink, TextField } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/onboarding';
 
 import { formatFirstNames } from './formatFirstNames';
 import { parseInviteCode } from './parseInviteCode';

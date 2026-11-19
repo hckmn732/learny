@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { fr } from '@learny/i18n/fr/notionGraph';
 import { PageHeader, ErrorState } from '@learny/ui';
-
-import { fr } from '../../messages/fr/notionGraph';
 
 const t = fr.notionGraph;
 

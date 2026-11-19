@@ -2,9 +2,8 @@
 // query; the route-level file only catches a failure before the screen mounts.
 'use client';
 
+import { fr } from '@learny/i18n/fr/agenda';
 import { ErrorState } from '@learny/ui';
-
-import { fr } from '../../../messages/fr/agenda';
 
 export default function AgendaError() {
   return (

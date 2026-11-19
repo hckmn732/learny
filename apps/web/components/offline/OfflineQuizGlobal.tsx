@@ -14,6 +14,7 @@ import {
   type ReviewSummaryDto,
 } from '@learny/contracts/review';
 import { clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/globalQuiz-offline';
 import {
   correctionExplanation,
   toBrickResponse,
@@ -23,7 +24,6 @@ import { EmptyState } from '@learny/ui';
 
 import { readProgress, writeProgress, type StoredPack } from '../../lib/offline/db';
 import { enqueue } from '../../lib/offline/queue';
-import { fr } from '../../messages/fr/globalQuiz-offline';
 import { GamePanel } from '../global-quiz/GamePanel';
 import { GameRail } from '../global-quiz/GameRail';
 import { GlobalQuizHeader } from '../global-quiz/GlobalQuizHeader';

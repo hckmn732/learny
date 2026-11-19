@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
+import { fr } from '@learny/i18n';
+
 import { LegalPage } from '../../../components/legal/LegalPage';
-import { fr } from '../../../messages/fr';
 
 const t = fr.legal.documents.cgu;
 

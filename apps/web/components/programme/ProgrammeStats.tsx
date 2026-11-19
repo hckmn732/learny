@@ -1,6 +1,5 @@
 import type { ActiveProgrammeDto } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/programme';
+import { fr } from '@learny/i18n/fr/programme';
 
 import { formatDay, formatLongDate } from './dates';
 

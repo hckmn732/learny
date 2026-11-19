@@ -1,6 +1,5 @@
+import { fr } from '@learny/i18n/fr/finalReview';
 import { SkeletonCard, SkeletonGroup } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/finalReview';
 
 const t = fr.finalReview;
 

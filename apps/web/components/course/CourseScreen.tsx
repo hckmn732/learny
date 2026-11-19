@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
 import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/course-module';
 import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/course-module';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';

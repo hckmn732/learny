@@ -1,5 +1,6 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { readSelfhostStatus, SELFHOST_CHAINS } from '../../lib/selfhost-status';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec012;

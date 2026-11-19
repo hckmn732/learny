@@ -8,6 +8,7 @@ import {
   type PushDemoSendOutput,
   type PushSubscriptionBody,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/sdd';
 import { colors } from '@learny/ui/tokens';
 
 import { ApiError, api } from '../../lib/api-client';
@@ -18,7 +19,6 @@ import {
   type PushBrowser,
   type PushRegistration,
 } from '../../lib/push';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec205;

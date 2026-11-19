@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import {
   colors,
   controlHeightsPx,
@@ -15,7 +16,6 @@ import {
 } from '@learny/ui/tokens';
 
 import { TokenSwatch } from '../../../../components/dev-ui/TokenSwatch';
-import { fr } from '../../../../messages/fr/ui';
 
 export const dynamic = 'force-dynamic';
 

@@ -5,6 +5,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestCourse, createTestProgramme } from '@learny/db/testing';
+import { fr } from '@learny/i18n/fr/search';
 import { createServiceContext } from '@learny/services';
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
 import {
@@ -17,7 +18,6 @@ import {
 import { GET as searchRoute } from '../../app/api/v1/search/route';
 import { SearchPageView } from '../../components/search/search-results';
 import { searchPageForContext, type SearchPageState } from '../../lib/search-data';
-import { fr } from '../../messages/fr/search';
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };

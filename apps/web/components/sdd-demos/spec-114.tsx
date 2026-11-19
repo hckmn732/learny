@@ -1,6 +1,6 @@
 import { STORAGE_BUCKETS, resourcePath, type StorageBucket } from '@learny/db';
+import { fr } from '@learny/i18n/fr/sdd';
 
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec114;

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import type { HeaderDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/shell';
 import {
   Avatar,
   DropdownMenu,
@@ -17,8 +18,6 @@ import {
   iconRegistry,
   useBreakpoint,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.header;
 

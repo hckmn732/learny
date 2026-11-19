@@ -8,6 +8,7 @@ import { ACCOUNT_RULES } from '@learny/config/product';
 // Zod-free validation: the sign-in and sign-up pages never download the Zod runtime (SPEC-804).
 import { validateAccountForm, type AccountFormMessages } from '@learny/contracts/account-form';
 import { AppError, clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/auth';
 import { Button, Card, Checkbox, ChoiceGroup, FormError, Link, TextField } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
@@ -20,7 +21,6 @@ import {
   type AuthIntent,
   type AuthMethod,
 } from '../../lib/auth/pending-auth';
-import { fr } from '../../messages/fr/auth';
 
 const t = fr.auth;
 

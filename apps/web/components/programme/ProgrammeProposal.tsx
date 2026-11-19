@@ -9,10 +9,10 @@ import {
   type ProgrammeProposalStateDto,
 } from '@learny/contracts/programme';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/programme';
 import { Button } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/programme';
 
 import { AdjustDialog } from './AdjustDialog';
 import { formatLongDate } from './dates';

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
+import { fr } from '@learny/i18n/fr/home';
+
 import { sddPagesEnabled } from '../lib/sdd-pages';
-import { fr } from '../messages/fr/home';
 
 export const dynamic = 'force-dynamic';
 

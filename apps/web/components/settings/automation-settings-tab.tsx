@@ -17,11 +17,11 @@ import {
 } from '@learny/contracts/parametres-automatismes';
 import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
 import { addCivilDays, clock, formatUserDate, startOfUserDay, toUserZone } from '@learny/core';
+import { fr } from '@learny/i18n/fr/settings';
 import { Button, Card, ErrorState, FormError, Select, SkeletonGroup, Switch } from '@learny/ui';
 import { cn } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/settings';
 
 const t = fr.settings.automations;
 

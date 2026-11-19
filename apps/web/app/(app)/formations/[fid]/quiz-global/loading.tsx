@@ -1,6 +1,5 @@
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { Skeleton, SkeletonGroup } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/globalQuiz';
 
 const t = fr.globalQuiz;
 

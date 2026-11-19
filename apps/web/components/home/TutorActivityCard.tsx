@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import type { TutorActivityItem } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/home';
 import {
   buildTutorActivityFeed,
   tutorActivityDateLabel,
@@ -13,7 +14,6 @@ import {
 import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, toast, cn } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/home';
 
 const t = fr.home.tutorActed;
 

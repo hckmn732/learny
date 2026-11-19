@@ -1,7 +1,6 @@
 import type { GapListDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/gaps';
 import { StatCard, StatRow } from '@learny/ui';
-
-import { fr } from '../../messages/fr/gaps';
 
 import { formatNextReview, moduleRangeLabel } from './format';
 

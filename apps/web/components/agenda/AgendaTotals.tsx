@@ -2,9 +2,9 @@
 
 // Totals of the displayed period (SPEC-704 EF-11, BR-AGE-06) and the day title of the day view.
 import type { AgendaSlot } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 
 import { formatDuration, totalsOf } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

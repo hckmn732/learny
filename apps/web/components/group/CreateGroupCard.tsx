@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/group';
 import { Button, Card, FormError } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/group';
 
 const t = fr.group;
 

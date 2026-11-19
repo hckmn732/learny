@@ -2,6 +2,7 @@ import { CircleCheck } from 'lucide-react';
 import NextLink from 'next/link';
 
 import { LEARNING_GAP_NATURES, type GapNature } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/gaps';
 import { EmptyState, PageHeader } from '@learny/ui';
 
 import { GapCard } from '../../../../../components/gaps/GapCard';
@@ -11,7 +12,6 @@ import { GapStats } from '../../../../../components/gaps/GapStats';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGapsPage } from '../../../../../lib/gaps-page';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr/gaps';
 
 export const dynamic = 'force-dynamic';
 

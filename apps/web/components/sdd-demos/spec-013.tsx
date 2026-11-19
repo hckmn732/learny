@@ -1,7 +1,7 @@
 import { HOSTING_REGIONS, isEuRegion, type HostingService } from '@learny/config';
+import { fr } from '@learny/i18n/fr/sdd';
 
 import { runCheck } from '../../../../tools/deploy/check.mjs';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec013;

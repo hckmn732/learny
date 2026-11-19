@@ -6,6 +6,7 @@
 import type { CSSProperties } from 'react';
 
 import type { AgendaPeriod } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 import { colors } from '@learny/ui/tokens';
 
 import {
@@ -20,7 +21,6 @@ import {
   longDayLabel,
 } from '../../lib/agenda/dates';
 import { monthCells } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

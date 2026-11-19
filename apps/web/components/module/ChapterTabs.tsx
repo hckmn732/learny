@@ -3,9 +3,8 @@
 import Link from 'next/link';
 
 import type { ModuleChapterItem } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/module';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/module';
 
 const t = fr.module;
 

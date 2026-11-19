@@ -1,9 +1,9 @@
 import { MarkdownContent } from '@learny/bricks/view';
 import { legalConfigFromEnv } from '@learny/config';
+import { fr } from '@learny/i18n';
 import { Card, Link } from '@learny/ui';
 
 import { LEGAL_PAGE_KEYS, loadLegalDocument, type LegalPageKey } from '../../lib/legal/documents';
-import { fr } from '../../messages/fr';
 import { SiteFooter } from '../site-footer/SiteFooter';
 
 const t = fr.legal;

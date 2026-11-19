@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { AI_MODEL_IDS, DEFAULT_MODEL_BY_TASK, type AiTask } from '@learny/config';
 import { userDayBounds } from '@learny/core';
+import { fr } from '@learny/i18n/fr/sdd';
 import {
   budgetCheckSchema,
   calculateUsageCost,
@@ -12,7 +13,6 @@ import {
   parseUsdMicros,
 } from '@learny/llm/budget';
 
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec507;

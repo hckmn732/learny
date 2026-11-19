@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 
 import type { AgendaDto, AgendaSlot } from '@learny/contracts';
 import { clock, type Clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/agenda';
 import {
   BottomSheet,
   EmptyState,
@@ -26,7 +27,6 @@ import { calendarAriaLabel, navTargets, rangeCaption, visibleRange } from '../..
 import { agendaUrl, type AgendaUrlState } from '../../lib/agenda/state';
 import { agendaFetchWindow } from '../../lib/agenda/window';
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/agenda';
 
 import { AgendaLegend } from './AgendaLegend';
 import { AgendaToolbar } from './AgendaToolbar';

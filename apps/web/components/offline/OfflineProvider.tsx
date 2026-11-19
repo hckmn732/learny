@@ -13,7 +13,7 @@ const offline = {
   queue: () => import('../../lib/offline/queue'),
   register: () => import('../../lib/offline/register-sw'),
   sync: () => import('../../lib/offline/sync'),
-  messages: () => import('../../messages/fr/offline'),
+  messages: () => import('@learny/i18n/fr/offline'),
 };
 
 let registered = false;

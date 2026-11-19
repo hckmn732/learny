@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { ENGINE } from '@learny/config/product';
+import { fr } from '@learny/i18n/fr/sdd';
 import {
   EngineError,
   calculateMastery,
@@ -10,8 +11,6 @@ import {
   type MasteryResult,
 } from '@learny/learning-engine';
 import { Badge, Button, ProgressBar } from '@learny/ui';
-
-import { fr } from '../../messages/fr/sdd';
 
 const t = fr.sdd.spec403;
 

@@ -13,6 +13,7 @@ import type {
   OngoingFormationRow,
 } from '@learny/contracts';
 import { clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/home';
 import {
   formatDuration,
   highlightedSlot,
@@ -39,7 +40,6 @@ import {
 } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/home';
 
 import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';

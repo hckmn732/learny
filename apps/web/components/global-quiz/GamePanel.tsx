@@ -5,8 +5,7 @@ import type { RefObject, ReactNode } from 'react';
 import type { SelfGrade } from '@learny/bricks/view';
 import { BrickRenderer } from '@learny/bricks/view';
 import type { ReviewItemDto } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/globalQuiz';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 
 import { CategorizationGame } from './games/CategorizationGame';
 import { ClozeGame } from './games/ClozeGame';

@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import type { ExamAttemptDto, ExamQuestionDto, ExamResultDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/mockExam';
 import { BottomSheet, useBreakpoint } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/mockExam';
 
 import { ExamQuestion } from './ExamQuestion';
 import { ExamResults } from './ExamResults';

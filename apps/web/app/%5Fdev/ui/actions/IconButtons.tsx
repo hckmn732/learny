@@ -2,9 +2,8 @@
 
 import { Bell, Plus } from 'lucide-react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { CountBadge, IconButton } from '@learny/ui';
-
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.actions.iconButtons;
 

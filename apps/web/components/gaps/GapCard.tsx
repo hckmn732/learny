@@ -1,9 +1,8 @@
 import NextLink from 'next/link';
 
 import type { GapCard as GapCardDto, GapNature } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/gaps';
 import { ProgressBar } from '@learny/ui';
-
-import { fr } from '../../messages/fr/gaps';
 
 import { formatDetectedAt, formatPercent } from './format';
 

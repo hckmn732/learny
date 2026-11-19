@@ -7,11 +7,11 @@ import {
   type NotificationSettingsPatch,
   type NotificationTypeId,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/settings';
 import { Button, Card, ErrorState, FormError, Select, Switch } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
 import { createPushGateway } from '../../lib/push-onboarding';
-import { fr } from '../../messages/fr/settings';
 
 const t = fr.settings.notificationsTab;
 

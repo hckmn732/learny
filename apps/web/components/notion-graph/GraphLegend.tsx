@@ -1,8 +1,7 @@
 'use client';
 
 import type { NotionGraphColorMode, NotionGraphNode } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/notionGraph';
+import { fr } from '@learny/i18n/fr/notionGraph';
 
 import { GRAPH_COLORS, MASTERY_COLORS, moduleColor } from './palette';
 

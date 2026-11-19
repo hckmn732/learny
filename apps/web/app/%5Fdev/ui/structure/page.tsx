@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { fr } from '@learny/i18n/fr/ui';
 import {
   Avatar,
   Breadcrumb,
@@ -17,7 +18,6 @@ import {
 } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr/ui';
 
 import { ResponsiveGalleryDemo } from './ResponsiveGalleryDemo';
 

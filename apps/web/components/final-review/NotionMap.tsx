@@ -1,8 +1,7 @@
 import NextLink from 'next/link';
 
 import type { FinalReviewDto } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/finalReview';
+import { fr } from '@learny/i18n/fr/finalReview';
 
 const t = fr.finalReview;
 

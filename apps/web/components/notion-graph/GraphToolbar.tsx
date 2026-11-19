@@ -4,10 +4,10 @@ import { Check, Search } from 'lucide-react';
 import { useState, type KeyboardEvent, type SyntheticEvent } from 'react';
 
 import type { NotionGraphNode } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/notionGraph';
 import { cn } from '@learny/ui';
 
 import type { GraphFilters } from '../../lib/notion-graph/pan-zoom';
-import { fr } from '../../messages/fr/notionGraph';
 
 const t = fr.notionGraph;
 

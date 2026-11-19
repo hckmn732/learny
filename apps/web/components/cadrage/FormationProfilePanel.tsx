@@ -1,9 +1,8 @@
 import { Check } from 'lucide-react';
 
 import type { CadrageProfile, CadrageRubricKey } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/cadrage';
 import { colors } from '@learny/ui/tokens';
-
-import { fr } from '../../messages/fr/cadrage';
 
 const t = fr.cadrage;
 

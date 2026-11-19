@@ -5,11 +5,11 @@ import { useState } from 'react';
 
 import type { ReminderChoices } from '@learny/contracts';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError, Switch } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { createPushGateway, type PushGateway } from '../../lib/push-onboarding';
-import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 

@@ -4,9 +4,9 @@
 // complementary kinds present in the displayed period. The pills reuse the type tokens.
 import { agendaSlotStyle } from '@learny/config';
 import type { AgendaSlotKind } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 
 import { legendEntriesOf } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

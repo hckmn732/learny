@@ -1,5 +1,6 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { loadSpec111Demo, type Spec111Data } from '../../app/%5Fdev/sdd/spec-111-data';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec111;

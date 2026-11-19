@@ -13,9 +13,9 @@ import type {
   TutorMessageDto,
   TutorSourceDto,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/tutorChat';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/tutorChat';
 
 import type { Selection } from './use-text-selection';
 

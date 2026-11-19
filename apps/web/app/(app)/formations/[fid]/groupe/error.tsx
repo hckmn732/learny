@@ -1,8 +1,7 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/group';
 import { ErrorState } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/group';
 
 /** Error boundary of SCR-17: the same accessible state as a failed server read. */
 export default function GroupError({ reset }: { reset: () => void }) {

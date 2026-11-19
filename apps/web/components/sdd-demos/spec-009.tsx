@@ -11,6 +11,7 @@ import {
   RESOURCE_RULES,
   THINKING_EFFORT_BY_TASK,
 } from '@learny/config';
+import { fr } from '@learny/i18n/fr/sdd';
 
 import {
   DEMO_INVALID_PRODUCTION_ENV,
@@ -24,7 +25,6 @@ import {
   getServerEnv,
   secretPresence,
 } from '../../lib/server-env';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec009;

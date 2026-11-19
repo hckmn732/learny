@@ -1,9 +1,10 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import {
   loadSpec109Demo,
   type Spec109Data,
   type Spec109Delivery,
 } from '../../app/%5Fdev/sdd/spec-109-data';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec109;

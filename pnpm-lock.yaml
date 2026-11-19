@@ -134,6 +134,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@learny/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@learny/ingestion':
         specifier: workspace:*
         version: link:../../packages/ingestion
@@ -406,6 +409,8 @@ importers:
       uuid:
         specifier: ^13.0.0
         version: 13.0.2
+
+  packages/i18n: {}
 
   packages/ingestion:
     dependencies:

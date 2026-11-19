@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
 import { MarkdownContent } from '@learny/bricks/view';
+import { fr } from '@learny/i18n';
 
 import { SiteFooter } from '../../components/site-footer/SiteFooter';
 import { renderAccessibilityDeclaration } from '../../lib/accessibility-declaration';
 import { getServerEnv } from '../../lib/server-env';
-import { fr } from '../../messages/fr';
 
 export const metadata: Metadata = {
   title: fr.accessibility.documentTitle,

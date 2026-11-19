@@ -11,10 +11,10 @@ import {
 } from '@learny/contracts/abonnement-a-l-ia-fournie-interface-et-plafond';
 import type { AiProviderCard } from '@learny/contracts/parametres-modeles-d-ia';
 import { formatUserDate } from '@learny/core';
+import { fr } from '@learny/i18n/fr/settings';
 import { Badge, Button, Card, ErrorState, SkeletonGroup } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/settings';
 
 const t = fr.settings.aiModels.managed;
 

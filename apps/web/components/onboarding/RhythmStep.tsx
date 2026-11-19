@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 
 import type { StudyPreferencesDto, StudySlot } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError } from '@learny/ui';
 import { cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/onboarding';
 
 import {
   rhythmSummary,

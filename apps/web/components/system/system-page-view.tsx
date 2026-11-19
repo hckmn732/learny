@@ -1,6 +1,7 @@
 import { SearchX, ShieldX, WifiOff, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { fr } from '@learny/i18n/fr/system';
 import {
   Button,
   Card,
@@ -11,8 +12,6 @@ import {
   SkeletonGroup,
   SkeletonText,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/system';
 
 const t = fr.system;
 

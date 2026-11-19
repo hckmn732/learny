@@ -2,9 +2,8 @@
 
 // Entrée du registre des démonstrations (SPEC-006, proxy) ; la page dédiée `/_dev/sdd/SPEC-804`
 // reste la référence et sert le rapport disponible.
+import { fr } from '@learny/i18n/fr/sdd';
 import { Card } from '@learny/ui';
-
-import { fr } from '../../messages/fr/sdd';
 
 import { Spec804Live } from './spec-804';
 

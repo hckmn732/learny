@@ -1,6 +1,5 @@
+import { fr } from '@learny/i18n/fr/group';
 import { PageHeader, Skeleton, SkeletonGroup, SkeletonText } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/group';
 
 const t = fr.group;
 

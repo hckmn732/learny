@@ -5,11 +5,11 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import type { AgendaFormation } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 import { Button, IconButton, SegmentedControl, Select } from '@learny/ui';
 
 import { navLabel, rangeLabel } from '../../lib/agenda/range';
 import type { AgendaView } from '../../lib/agenda/state';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

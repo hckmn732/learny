@@ -1,7 +1,7 @@
 import type { ComponentStatus } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/sdd';
 
 import { buildObservabilityDemo } from '../../lib/sdd-observability-demo';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec010;

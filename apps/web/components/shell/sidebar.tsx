@@ -15,6 +15,7 @@ import {
 } from 'react';
 
 import type { FormationManagementState, SidebarDto, SidebarFormation } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/shell';
 import {
   AlertDialog,
   Button,
@@ -33,7 +34,6 @@ import {
 } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/shell';
 import { ActiveLimitDialog } from '../formations/ActiveLimitDialog';
 
 import { FormationSwitcher } from './FormationSwitcher';

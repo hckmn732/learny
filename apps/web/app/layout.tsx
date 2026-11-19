@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
+import { fr } from '@learny/i18n/fr/meta';
 import { colors } from '@learny/ui/tokens';
 
 import { fontVariables } from '../lib/fonts';
-import { fr } from '../messages/fr/meta';
 
 import './globals.css';
 import { Providers } from './providers';

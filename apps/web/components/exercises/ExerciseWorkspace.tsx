@@ -10,6 +10,7 @@ import type {
   ExerciseSubmission,
   PracticeExerciseDto,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/exercises';
 import {
   Breadcrumb,
   buildFormationBreadcrumb,
@@ -19,8 +20,6 @@ import {
   Textarea,
   cn,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/exercises';
 
 import { CriteriaFeedback } from './CriteriaFeedback';
 import { HintButton } from './HintButton';

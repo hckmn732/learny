@@ -22,6 +22,7 @@
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
     "@learny/ingestion": "workspace:*",
+    "@learny/i18n": "workspace:*",
     "@learny/jobs": "workspace:*",
     "@learny/learning-engine": "workspace:*",
     "@learny/llm": "workspace:*",

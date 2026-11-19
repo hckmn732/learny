@@ -4,11 +4,11 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import type { ModuleScreen as ModuleScreenDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/module';
 import { Breadcrumb, breadcrumbMessagesFr, buildFormationBreadcrumb } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/module';
 import { formatRange } from '../programme/dates';
 
 import { ChapterTabs } from './ChapterTabs';

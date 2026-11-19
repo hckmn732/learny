@@ -3,9 +3,9 @@
 import { useId, useState, type ReactNode } from 'react';
 
 import type { Highlight, SearchResponse } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/sdd';
 
 import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec212;

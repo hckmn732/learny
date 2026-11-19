@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { ENGINE } from '@learny/config/product';
+import { fr } from '@learny/i18n/fr/sdd';
 import type {
   DailySession,
   DailySessionItem,
@@ -12,7 +13,6 @@ import type {
 } from '@learny/learning-engine';
 import { Badge, Button } from '@learny/ui';
 
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 import {

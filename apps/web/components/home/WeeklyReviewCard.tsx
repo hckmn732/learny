@@ -5,10 +5,10 @@ import NextLink from 'next/link';
 import { useId, useState } from 'react';
 
 import { formatWeeklyStudy } from '@learny/contracts/automatisme-9-bilan-de-la-semaine';
+import { fr } from '@learny/i18n/fr/home';
 import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/home';
 
 const t = fr.home.weeklyReview;
 

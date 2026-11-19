@@ -1,6 +1,5 @@
+import { fr } from '@learny/i18n/fr/auth';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/auth';
 
 const t = fr.auth.layout;
 

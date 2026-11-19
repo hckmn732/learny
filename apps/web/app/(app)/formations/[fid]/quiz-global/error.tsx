@@ -1,8 +1,7 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { ErrorState } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/globalQuiz';
 
 /** Error boundary of SCR-10 (SPEC-701 EF-12): same error state as a failed server read. */
 export default function QuizGlobalError({ reset }: { reset: () => void }) {

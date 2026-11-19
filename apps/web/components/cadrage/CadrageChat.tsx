@@ -12,9 +12,9 @@ import {
   type CadrageSuggestion,
 } from '@learny/contracts/cadrage';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/cadrage';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/cadrage';
 
 import { CadrageSteps } from './CadrageSteps';
 import { ChatMessage } from './ChatMessage';

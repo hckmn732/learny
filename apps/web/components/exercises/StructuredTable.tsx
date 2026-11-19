@@ -2,9 +2,8 @@
 
 import { evaluateTableChecks, formatFrenchNumber } from '@learny/bricks';
 import type { ExerciseSubmission, ExerciseTableProduction } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/exercises';
 import { ScrollableTable, Select, TextField, cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/exercises';
 
 import type { ProductionIssue } from './issue';
 

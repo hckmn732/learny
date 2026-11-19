@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import type { QuizQuestionDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/quiz';
 import { ErrorState } from '@learny/ui';
 
 import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/quiz';
 
 import { QuestionCard } from './QuestionCard';
 import { QuizHeader } from './QuizHeader';

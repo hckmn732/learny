@@ -1,9 +1,8 @@
 'use client';
 
 import type { SidebarDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/shell';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.sidebar;
 

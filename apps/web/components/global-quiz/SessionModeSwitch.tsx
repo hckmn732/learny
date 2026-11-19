@@ -4,9 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { SegmentedControl } from '@learny/ui';
-
-import { fr } from '../../messages/fr/globalQuiz';
 
 const t = fr.globalQuiz;
 

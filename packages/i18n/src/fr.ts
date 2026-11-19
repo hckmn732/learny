@@ -1,7 +1,6 @@
 import { accessibility } from './fr/accessibility';
 import { agenda } from './fr/agenda';
 import { auth } from './fr/auth';
-import { bricks } from './fr/bricks';
 import { cadrage } from './fr/cadrage';
 import { course } from './fr/course';
 import { email } from './fr/email';
@@ -31,7 +30,6 @@ import { ui } from './fr/ui';
 
 export const fr = {
   accessibility,
-  bricks,
   home,
   offline,
   globalQuiz,

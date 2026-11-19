@@ -8,8 +8,7 @@ import {
   type ReviewGameCorrection,
   type ReviewItemDto,
 } from '@learny/contracts';
-
-import { fr } from '../../../messages/fr/globalQuiz';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 
 const t = fr.globalQuiz.games;
 

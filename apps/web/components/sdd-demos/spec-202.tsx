@@ -1,7 +1,7 @@
+import { fr } from '@learny/i18n/fr/sdd';
 import { resolvePostAuthDestination } from '@learny/services/destination';
 
 import { readPageSession } from '../../lib/supabase/page';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 import { MagicLinkCard, PasswordCard, SignOutCard } from './spec-202-forms';

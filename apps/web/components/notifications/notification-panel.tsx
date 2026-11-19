@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react';
 
 import type { NotificationFilter, NotificationItem, NotificationListDto } from '@learny/contracts';
 import { formatUserDate, toUserZone } from '@learny/core';
+import { fr } from '@learny/i18n/fr/shell';
 import {
   ErrorState,
   Icon,
@@ -22,7 +23,6 @@ import {
 } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.notifications;
 

@@ -6,10 +6,10 @@ import { useState } from 'react';
 
 import type { InvitationPreview } from '@learny/contracts';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/group';
 import { Button, FormError } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/group';
 import { formatFirstNames } from '../onboarding/formatFirstNames';
 
 const t = fr.group.invitePage;

@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 import { clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/offline-system';
 import { EmptyState, Skeleton } from '@learny/ui';
 
 import { getPack, type StoredPack } from '../../lib/offline/db';
 import { availablePacks } from '../../lib/offline/pack';
-import { fr } from '../../messages/fr/offline-system';
 
 import { OfflineQuizGlobal } from './OfflineQuizGlobal';
 

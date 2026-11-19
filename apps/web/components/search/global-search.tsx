@@ -16,10 +16,10 @@ import {
   type SearchKind,
   type SearchResponse,
 } from '@learny/contracts/search';
+import { fr } from '@learny/i18n/fr/search';
 import { Icon, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/search';
 
 import { HighlightedText } from './highlighted-text';
 
