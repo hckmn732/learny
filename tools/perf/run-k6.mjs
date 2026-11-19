@@ -13,11 +13,11 @@ function hasK6() {
 }
 
 /**
- * Crée une session par utilisateur de charge et écrit leurs en-têtes `Cookie` dans
- * `tools/perf/k6/out/cookies.json` (hors Git). Chaque VU k6 utilise son propre utilisateur : le
+ * Crée une session par utilisateur de charge et écrit ses en-têtes dans
+ * `tools/perf/k6/out/sessions.json` (hors Git). Chaque VU k6 utilise son propre utilisateur : le
  * seau de limitation de débit par utilisateur (120/min) n'est jamais partagé (EF-4, CL-4).
  */
-function writeCookiesFile() {
+function writeSessionsFile() {
   const json = execFileSync(
     'pnpm',
     ['exec', 'tsx', path.join('tools', 'perf', 'perf-sessions.ts')],
@@ -27,7 +27,7 @@ function writeCookiesFile() {
       maxBuffer: 16 * 1024 * 1024,
     },
   );
-  const file = path.join(OUT_DIR, 'cookies.json');
+  const file = path.join(OUT_DIR, 'sessions.json');
   fs.writeFileSync(file, json);
   return file;
 }
@@ -39,7 +39,7 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
   const version = fs
     .readFileSync(path.join(ROOT, 'tools', 'perf', 'k6-version.txt'), 'utf8')
     .trim();
-  const cookiesFile = writeCookiesFile();
+  const sessionsFile = writeSessionsFile();
 
   let result;
   if (hasK6()) {
@@ -54,7 +54,7 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
           BASE_URL: base,
           FORMATION_ID: formationId,
           PERF_COOKIE: cookie,
-          PERF_COOKIES_FILE: cookiesFile,
+          PERF_SESSIONS_FILE: sessionsFile,
         },
       },
     );
@@ -74,7 +74,7 @@ export function runK6({ formationId, cookie, base = 'http://127.0.0.1:3100' }) {
       '-e',
       `PERF_COOKIE=${cookie}`,
       '-e',
-      'PERF_COOKIES_FILE=/scripts/out/cookies.json',
+      'PERF_SESSIONS_FILE=/scripts/out/sessions.json',
       '-v',
       `${K6_DIR}:/scripts`,
       `grafana/k6:${version}`,
