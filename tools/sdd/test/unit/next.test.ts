@@ -6,6 +6,7 @@ import {
   nextAction,
   nextActionJson,
   normalizeState,
+  trackConfig,
   type Catalog,
   type SddState,
 } from '../../core.mjs';
@@ -120,6 +121,46 @@ describe('[SPEC-003] next action', () => {
     expect(st.specs['SPEC-003']?.status).toBe('pending');
     // An independent branch stays selectable (CL-6).
     expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-004' });
+  });
+
+  it('runs an independent track without waiting for the product checkpoints (ADR-0341)', () => {
+    const c = catalog();
+    c.phases.push(
+      { id: 'P10', dir: 'p10', title: 'Migration A', checkpoint: 'CP-10', track: 'migration' },
+      { id: 'P11', dir: 'p11', title: 'Migration B', checkpoint: 'CP-11', track: 'migration', requires: ['CP-0'] },
+    );
+    const base = c.byId['SPEC-001'];
+    if (!base) throw new Error('fixture');
+    const mig = (id: string, phase: string, dependsOn: string[]) => {
+      const s = { ...base, id, phase, path: `specs/${id}.md`, dependsOn };
+      c.specs.push(s);
+      c.byId[id] = s;
+    };
+    mig('SPEC-1001', 'P10', ['SPEC-001']);
+    mig('SPEC-1101', 'P11', ['SPEC-1001']);
+    const st = state(c, (s) => {
+      done(s, 'SPEC-001', 'SPEC-002', 'SPEC-003', 'SPEC-004');
+    });
+    // The product track asks for CP-0; the migration track starts SPEC-1001 regardless.
+    expect(nextAction(c, st).kind).toBe('checkpoint');
+    expect(nextActionJson(nextAction(c, st, 'migration'))).toMatchObject({ kind: 'start', id: 'SPEC-1001' });
+    c.activeTrack = 'migration';
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-1001' });
+    // P11 waits for CP-10 (same track) and CP-0 (requires).
+    done(st, 'SPEC-1001');
+    const set = (cp: string) => {
+      const x = st.checkpoints[cp];
+      if (x) x.status = 'passed';
+    };
+    set('CP-10');
+    expect(displayStatus(c, st, 'SPEC-1101')).toBe('waiting');
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'stuck', waitingFor: ['CP-0'] });
+    set('CP-0');
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-1101' });
+    // Track configuration: the product track merges into main, the migration track into its branch.
+    c.tracks = { migration: { baseBranch: 'migration', versionTags: false } };
+    expect(trackConfig(c, 'produit')).toEqual({ baseBranch: 'main', versionTags: true });
+    expect(trackConfig(c, 'migration')).toEqual({ baseBranch: 'migration', versionTags: false });
   });
 
   it('never selects a member of a dependency cycle (CL-2)', () => {

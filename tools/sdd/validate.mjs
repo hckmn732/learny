@@ -84,7 +84,7 @@ function vitest(kind, script) {
   const files = kind === 'integration' ? tagged.filter(isInt) : [];
   const filter = files.length ? ` ${files.map((f) => JSON.stringify(f)).join(' ')}` : '';
   if (kind === 'integration' && !files.length) console.log(`(aucun fichier ${kind} ne contient [${tag}] : repli sur tout le projet)`);
-  const code = timed(kind, () => run(`pnpm -s ${script}${filter}${kind === 'integration' ? ` -t "${tag}"` : ''} --reporter=default --reporter=json --outputFile.json="${file}"`));
+  const code = timed(kind, () => run(`pnpm -s ${script}${filter}${kind === 'integration' ? ` -t "\\[${tag}\\]"` : ''} --reporter=default --reporter=json --outputFile.json="${file}"`));
   let n = 0;
   let failed = 0;
   if (fs.existsSync(file)) {
@@ -109,7 +109,7 @@ if (wanted('e2e')) {
   if (staticOk) {
     const pwJson = path.join(out, 'e2e.json');
     fs.rmSync(pwJson, { force: true });
-    const e2eCode = timed('e2e', () => run(`pnpm -s test:e2e --grep "@${tag}"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson }));
+    const e2eCode = timed('e2e', () => run(`pnpm -s test:e2e --grep "@${tag}\\b"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson }));
     const e2e = summarizePlaywright(fs.existsSync(pwJson) ? JSON.parse(fs.readFileSync(pwJson, 'utf8')) : null, tag);
     record('e2e', e2eVerdict(e2eCode, e2e), `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
     record('visual', visualVerdict(e2e), `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);

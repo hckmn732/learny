@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 // Affiche la prochaine action de la boucle autonome. `--json` pour une sortie machine.
-import { loadCatalog, loadState, nextAction, nextActionJson } from './lib.mjs';
+// Piste : SDD_TRACK, sinon `activeTrack` du catalogue, sinon « produit » (ADR-0341).
+import { currentTrack, loadCatalog, loadState, nextAction, nextActionJson } from './lib.mjs';
 
 const catalog = loadCatalog();
 const st = loadState(catalog);
-const a = nextAction(catalog, st);
+const track = currentTrack(catalog);
+const a = nextAction(catalog, st, track);
+if (!process.argv.includes('--json')) console.log(`Piste : ${track}`);
 if (process.argv.includes('--json')) {
   console.log(JSON.stringify(nextActionJson(a)));
 } else if (a.kind === 'resume') {
@@ -16,5 +19,6 @@ if (process.argv.includes('--json')) {
 } else if (a.kind === 'finished') {
   console.log('TERMINÉ — toutes les spécifications et tous les checkpoints sont validés.');
 } else {
-  console.log(`AUCUNE SPÉCIFICATION EXÉCUTABLE. Restantes :\n  ${a.remaining.join('\n  ')}\nVoir progress/anomalies.md et progress/blockers.md.`);
+  const waiting = a.waitingFor?.length ? `\nEn attente des checkpoints d'une autre piste : ${a.waitingFor.join(', ')} (fusionner la branche de base de cette piste quand ils sont réussis).` : '';
+  console.log(`AUCUNE SPÉCIFICATION EXÉCUTABLE. Restantes :\n  ${a.remaining.join('\n  ')}${waiting}\nVoir progress/anomalies.md et progress/blockers.md.`);
 }

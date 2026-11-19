@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 // Déclare une spécification terminée (si toutes ses validations sont réussies), commite preuves et suivi,
-// fusionne la branche dans main (--no-ff) et pousse si un remote origin existe.
+// fusionne la branche dans la branche de base de sa piste (--no-ff ; main par défaut, migration pour la
+// piste de migration, ADR-0341) et pousse si un remote origin existe.
 // Usage : node tools/sdd/complete.mjs SPEC-xxx [--no-merge] [--no-push]
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  argSpec, clearLock, currentBranch, die, hasRemoteOrigin, headCommit, isGitRepo, loadCatalog,
+  argSpec, baseBranchOf, clearLock, currentBranch, die, hasRemoteOrigin, headCommit, isGitRepo, loadCatalog,
   loadState, nowIso, P, saveState, shOk,
 } from './lib.mjs';
 import { renderProgress } from './status.mjs';
@@ -44,16 +45,17 @@ if (git) {
   const c = shOk(`git commit -m "chore(${spec.id}): marque la spécification terminée" -m "Refs: ${spec.id}"`);
   if (!c.ok && !/nothing to commit|rien à valider/i.test(c.out)) die(`Commit du suivi impossible : ${c.out}`);
   const branch = currentBranch();
-  if (!process.argv.includes('--no-merge') && branch !== 'main') {
-    const co = shOk('git checkout main');
-    if (!co.ok) die(`Bascule sur main impossible : ${co.out}`);
+  const base = baseBranchOf(catalog, spec);
+  if (!process.argv.includes('--no-merge') && branch !== base) {
+    const co = shOk(`git checkout ${base}`);
+    if (!co.ok) die(`Bascule sur ${base} impossible : ${co.out}`);
     const m = shOk(`git merge --no-ff ${branch} -m "merge(${spec.id}): ${spec.title.replaceAll('"', "'")}"`);
-    if (!m.ok) die(`Fusion impossible : ${m.out}. Résoudre le conflit sur main, committer, puis relancer.`);
+    if (!m.ok) die(`Fusion impossible : ${m.out}. Résoudre le conflit sur ${base}, committer, puis relancer.`);
     shOk(`git branch -d ${branch}`);
   }
   if (!process.argv.includes('--no-push') && hasRemoteOrigin() && process.env.SDD_PUSH !== '0') {
-    const p = shOk('git push origin main');
-    console.log(p.ok ? '↑ main poussé sur origin' : `⚠ push impossible, poursuite en local : ${p.out.split('\n')[0]}`);
+    const p = shOk(`git push origin ${base}`);
+    console.log(p.ok ? `↑ ${base} poussé sur origin` : `⚠ push impossible, poursuite en local : ${p.out.split('\n')[0]}`);
   }
 }
 clearLock();
