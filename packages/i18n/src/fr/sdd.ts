@@ -2689,6 +2689,24 @@ export const sdd = {
       failed: (code: string, detail: string) => `Erreur ${code} : ${detail}`,
     },
   },
+  spec1003: {
+    intro:
+      'La couche HTTP utilise uniquement les objets Request et Response standards. La démonstration traverse le même wrapper que les routes Next, sans dépendance au framework.',
+    transport: {
+      title: 'Transport indépendant du framework',
+      origin: 'Transport : @learny/http',
+    },
+    run: 'Exécuter les cas',
+    cases: {
+      region: 'Cas du wrapper HTTP, statut, code et identifiant de requête',
+      columns: ['Cas', 'Statut', 'Code', 'X-Request-Id'],
+      valid: 'Requête valide',
+      invalid: 'Corps invalide',
+      missingKey: 'Idempotency-Key absent',
+    },
+    yes: 'présent',
+    no: 'absent',
+  },
 } as const;
 
 export const fr = { sdd } as const;
