@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ROUTES } from '@learny/contracts';
 
-import { ApiError, api, callApi } from './api-client';
+import { ApiError, api, callApi } from './client';
 
 function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {

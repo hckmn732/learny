@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { AppError } from '@learny/core';
 
-import { apiFetch } from './api-client';
+import { apiFetch } from './client';
 
 const Item = z.object({ id: z.string(), title: z.string() });
 
