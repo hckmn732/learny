@@ -1,4 +1,4 @@
-# ADR-0343 — Suppression du benchmark INP Playwright
+# ADR-0338 — Suppression du benchmark INP Playwright
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
