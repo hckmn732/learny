@@ -138,6 +138,7 @@ async function measure(page: Page, scenario: Scenario): Promise<number | null> {
   await page.goto(scenario.url, { waitUntil: 'commit', timeout: 30_000 });
   await waitForHydration(page, scenario.ready);
   await throttle(page);
+  await page.addScriptTag({ path: IIFE });
   await page.evaluate(() => {
     const target = window as unknown as {
       __inpValues?: number[];
@@ -198,7 +199,6 @@ test.beforeEach(async ({ context, baseURL }) => {
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );
-  await context.addInitScript({ path: IIFE });
 });
 
 for (const scenario of scenarios) {

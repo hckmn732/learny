@@ -10,6 +10,7 @@ describe('[SPEC-804] mesure INP isolée', () => {
       'utf8',
     );
     expect(config).toContain("name: 'perf'");
+    expect(config).toContain('bypassCSP: true');
     expect(config).toContain("serviceWorkers: 'block'");
   });
 
@@ -33,6 +34,7 @@ describe('[SPEC-804] mesure INP isolée', () => {
       'utf8',
     );
     expect(spec).toContain('await unthrottle(page)');
+    expect(spec).toContain('await page.addScriptTag({ path: IIFE })');
     expect(spec).toContain("waitUntil: 'commit'");
     expect(spec).toContain('await waitForHydration(page, scenario.ready)');
     expect(spec).toContain('if (target.webVitals === undefined)');
