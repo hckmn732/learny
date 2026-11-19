@@ -8,7 +8,6 @@ import { describe, expect, it } from 'vitest';
 import * as publicConfig from '@learny/config';
 
 const WEB_ROOT = fileURLToPath(new URL('../', import.meta.url));
-const ADAPTER = 'lib/server-env.ts';
 const SERVER_ENTRY = '@learny/config/server';
 const SKIPPED = new Set(['node_modules', '.next', 'test-results', '__screenshots__']);
 
@@ -57,11 +56,19 @@ describe('[SPEC-009] config boundary', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('keeps a single server adapter in apps/web (ET-6)', () => {
+  it('keeps the server entry out of apps/web and a single adapter in the server package (ET-6, SPEC-1004)', () => {
+    // SPEC-1004 ET-1 moved the adapter to @learny/api-routes/src/deps/env.ts: apps/web must no
+    // longer reach the server entry at all (stronger invariant than a single file name).
     const importers = [...contents]
       .filter(([, source]) => source.includes(`from '${SERVER_ENTRY}'`))
       .map(([file]) => relative(file));
-    expect(importers).toEqual([ADAPTER]);
+    expect(importers).toEqual([]);
+
+    const packageRoot = path.resolve(WEB_ROOT, '../../packages/api-routes/src');
+    const adapters = sources(packageRoot)
+      .filter((file) => fs.readFileSync(file, 'utf8').includes(`from '${SERVER_ENTRY}'`))
+      .map((file) => path.relative(packageRoot, file).replaceAll('\\', '/'));
+    expect(adapters).toEqual(['deps/env.ts']);
   });
 
   it('exposes no server symbol through the package root (EF-2)', () => {

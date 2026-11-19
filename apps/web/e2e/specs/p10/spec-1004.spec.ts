@@ -36,7 +36,7 @@ test('affiche la couverture des routes @SPEC-1004', async ({ page, axeCheck, cap
 
   // CA-5 — the verdict states a complete coverage and the special handlers are listed.
   await expect(page.getByTestId('spec-1004-verdict')).toContainText('Couverture complète');
-  await page.getByTestId('spec-1004-special').getByText('Gestionnaires spéciaux').click();
+  await page.getByTestId('spec-1004-special').locator('summary').click();
   await expect(page.getByTestId('spec-1004-special-row').first()).toBeVisible();
   expect(await page.getByTestId('spec-1004-special-row').count()).toBeGreaterThan(0);
 
