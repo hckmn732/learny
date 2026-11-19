@@ -1,4 +1,6 @@
 // Flat ESLint configuration shared by every package (SPEC-001, ET-5).
+import { readFileSync } from 'node:fs';
+
 import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
 import importPlugin from 'eslint-plugin-import';
@@ -67,6 +69,32 @@ const SERVICE_DB_ALLOWED = [
   // End-to-end tests build their own committed fixtures (SPEC-206), like the integration tests.
   'apps/web/e2e/**',
 ];
+
+// SPEC-1001, EF-4 — `learny/web-is-a-client` (ADR-1003): apps/web imports no server package
+// outside the reference baseline. The list is versioned and can only shrink (EF-5); loading it
+// here keeps the lint rule and the boundary test on the same source of truth.
+const webBoundaryBaseline = JSON.parse(
+  readFileSync(new URL('./tools/migration/web-boundary-baseline.json', import.meta.url), 'utf8'),
+);
+
+const WEB_IS_A_CLIENT_PACKAGES = [
+  '@learny/db',
+  '@learny/services',
+  '@learny/jobs',
+  '@learny/llm',
+  '@learny/tutor',
+  '@learny/ingestion',
+  '@learny/automations',
+  '@learny/notifications',
+];
+const WEB_IS_A_CLIENT_GROUP = WEB_IS_A_CLIENT_PACKAGES.flatMap((name) => [name, `${name}/*`]);
+const WEB_IS_A_CLIENT_MESSAGE =
+  "apps/web est un client de l'API (ADR-1003) : passer par @learny/api-client.";
+
+// The baseline contains literal paths with parentheses and brackets ((app), [fid]…): as ESLint
+// ignore patterns they are glob metacharacters and must be escaped to match themselves.
+const escapeGlobPath = (file) =>
+  file.replaceAll('(', '\\(').replaceAll(')', '\\)').replaceAll('[', '\\[').replaceAll(']', '\\]');
 
 // The `ai` package and its `ai/test` subpath are exact names: a gitignore pattern `ai` would also
 // match an internal folder such as `packages/services/src/ai`, which is not provider code.
@@ -483,6 +511,83 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // SPEC-1001 EF-4 — `learny/web-is-a-client` (ADR-1003): the last block for regular apps/web
+    // files replicates the restrictions of the blocks above and adds the server packages, minus
+    // the reference baseline, the tests and the demo/webhook entry points (handled just below).
+    files: ['apps/web/**/*.{ts,tsx}'],
+    ignores: [
+      'apps/web/lib/server-env.ts',
+      'apps/web/test/**',
+      'apps/web/e2e/**',
+      ...webBoundaryBaseline.files.map(escapeGlobPath),
+      ...webBoundaryBaseline.globs,
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/db',
+              importNames: ['serviceDb'],
+              message:
+                'serviceDb est réservé à apps/web/app/_dev/** et apps/web/app/api/webhooks/** (SPEC-101, ET-6).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: WEB_IS_A_CLIENT_GROUP,
+              message: WEB_IS_A_CLIENT_MESSAGE,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Same rule for the _dev demo pages and the webhooks, which may import `serviceDb`: the
+    // config/server and Radix restrictions stay, the baseline still applies, and any new file
+    // importing a server package is refused (SPEC-1001 EF-4).
+    files: [
+      'apps/web/app/%5Fdev/**/*.{ts,tsx}',
+      'apps/web/app/_dev/**/*.{ts,tsx}',
+      'apps/web/app/api/webhooks/**/*.{ts,tsx}',
+    ],
+    ignores: [...webBoundaryBaseline.files.map(escapeGlobPath), ...webBoundaryBaseline.globs],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: WEB_IS_A_CLIENT_GROUP,
+              message: WEB_IS_A_CLIENT_MESSAGE,
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   {
     // Packages without any service-role use cannot import `serviceDb` (SPEC-101, ET-6).
     files: [

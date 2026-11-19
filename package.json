@@ -50,6 +50,7 @@
     "sdd:checkpoint": "node tools/sdd/checkpoint.mjs",
     "sdd:audit": "node tools/sdd/audit.mjs",
     "sdd:adr": "node tools/sdd/adr.mjs",
+    "migration:report": "node tools/migration/report.mjs",
     "openapi:generate": "tsx packages/contracts/scripts/generate-openapi.ts",
     "openapi:check": "tsx packages/contracts/scripts/generate-openapi.ts --check",
     "email:dev": "pnpm --filter @learny/notifications dev",
