@@ -122,16 +122,20 @@ async function unthrottle(page: Page): Promise<void> {
 }
 
 async function waitForHydration(page: Page, selector: string): Promise<void> {
-  await page.waitForFunction((readySelector) => {
-    const element = document.querySelector(readySelector);
-    if (element === null) return false;
-    return Object.keys(element).some((key) => key.startsWith('__reactProps$'));
-  }, selector);
+  await page.waitForFunction(
+    (readySelector) => {
+      const element = document.querySelector(readySelector);
+      if (element === null) return false;
+      return Object.keys(element).some((key) => key.startsWith('__reactProps$'));
+    },
+    selector,
+    { timeout: 60_000 },
+  );
 }
 
 async function measure(page: Page, scenario: Scenario): Promise<number | null> {
   await unthrottle(page);
-  await page.goto(scenario.url, { waitUntil: 'domcontentloaded', timeout: 120_000 });
+  await page.goto(scenario.url, { waitUntil: 'commit', timeout: 30_000 });
   await waitForHydration(page, scenario.ready);
   await throttle(page);
   await page.evaluate(() => {
