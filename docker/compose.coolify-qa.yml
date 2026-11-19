@@ -2,7 +2,7 @@
 # Inngest, worker, web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
 # simulés pour la recette visuelle et manuelle.
 #
-# Différences avec la production :
+# Différences avec la production (valeurs par défaut, toutes modifiables depuis Coolify) :
 #   - APP_ENV=local : IA, Stripe et notifications simulées (aucune clé de fournisseur) ;
 #   - horloge figée au 2026-11-11T12:20:00Z (ADR-0047), l'instant du jeu de démonstration ;
 #   - job `seed` : jeu de démonstration SPEC-115 (Alex Perrin, SAP S/4HANA Finance…), rechargé à
@@ -21,15 +21,25 @@ x-logging: &logging
     max-size: '10m'
     max-file: '5'
 
+# Toutes les variables de l'application se pilotent depuis Coolify (onglet Environment Variables) :
+# la valeur après `:-` est le défaut de recette, appliqué quand la variable est absente ou vide.
+# Sans aucune variable ajoutée, la pile reste la recette figée et simulée décrite plus haut.
+# Pour une recette avec les vrais fournisseurs (APP_ENV=preview) ou en mode production, voir
+# docs/operations/coolify-qa.md §4 bis et ADR-0339 ; les combinaisons interdites sont refusées au
+# démarrage par packages/config (checkEnvironment). NODE_ENV reste figé : l'image est un build de
+# production, le mode fonctionnel passe par APP_ENV.
 x-app-environment: &app-environment
   NODE_ENV: production
-  APP_ENV: local
+  # local (fournisseurs simulés) | preview (fournisseurs réels, Stripe en test) | production.
+  APP_ENV: ${APP_ENV:-local}
   LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-}
   # Empreinte du commit livré (7 à 40 caractères hexadécimaux), facultative. Pas SOURCE_COMMIT :
   # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
   # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
   GIT_COMMIT: ${GIT_COMMIT:-}
+
+  # Adresses et Supabase (les trois premières sont aussi intégrées au build du web).
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
@@ -37,35 +47,75 @@ x-app-environment: &app-environment
   SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
   DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
   DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
-  DB_LOG_QUERIES: 'false'
+  DB_LOG_QUERIES: ${DB_LOG_QUERIES:-false}
+
+  # Sécurité.
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
   RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
-  TRUST_PROXY: 'true'
-  # QA seulement : l'horloge de démonstration est figée (CLOCK_FIXED_AT), donc les seaux du
+  TRUST_PROXY: ${TRUST_PROXY:-true}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+  # Défaut de recette : l'horloge de démonstration est figée (CLOCK_FIXED_AT), donc les seaux du
   # limiteur de débit de SPEC-208 ne se rechargent jamais d'eux-mêmes (leur fenêtre se calcule
   # avec l'horloge injectée) et un testeur qui épuise son quota resterait bloqué. La recette
-  # désactive donc le limiteur ; SPEC-208 reste couvert par ses tests automatisés et la variable
-  # est refusée en production (packages/config, checkEnvironment).
-  RATE_LIMIT_MODE: 'off'
-  LLM_MODE: mock
-  STRIPE_MODE: mock
-  PUSH_MODE: mock
-  JOBS_MODE: inngest
+  # désactive donc le limiteur ; SPEC-208 reste couvert par ses tests automatisés. Avec l'horloge
+  # réelle, remettez `on` ; `off` est refusé en production (packages/config, checkEnvironment).
+  RATE_LIMIT_MODE: ${RATE_LIMIT_MODE:-off}
+
+  # IA (LLM_MODE=live exige ANTHROPIC_API_KEY ; VOYAGE_API_KEY pour les embeddings).
+  LLM_MODE: ${LLM_MODE:-mock}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
+
+  # Paiement (STRIPE_MODE=test avec des clés de test Stripe ; live = vrais paiements).
+  STRIPE_MODE: ${STRIPE_MODE:-mock}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+
+  # Notifications push (PUSH_MODE=live exige la paire VAPID).
+  PUSH_MODE: ${PUSH_MODE:-mock}
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
+
+  # Tâches de fond (Inngest de la pile).
+  JOBS_MODE: ${JOBS_MODE:-inngest}
   INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
   INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
   INNGEST_BASE_URL: http://inngest:8288
-  INNGEST_DEV: '0'
-  EMAIL_MODE: smtp
-  SMTP_HOST: mailpit
-  SMTP_PORT: '1025'
+  INNGEST_DEV: ${INNGEST_DEV:-0}
+
+  # E-mails : par défaut tous capturés par Mailpit (smtp) ; resend exige RESEND_API_KEY.
+  EMAIL_MODE: ${EMAIL_MODE:-smtp}
+  SMTP_HOST: ${SMTP_HOST:-mailpit}
+  SMTP_PORT: ${SMTP_PORT:-1025}
   EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
   EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
-  VAPID_SUBJECT: mailto:qa@learny.test
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+
+  # Observabilité (facultative).
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+
+  # Mentions légales (fictives par défaut) ; versions vides = versions documentées.
   LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:-Learny (environnement de QA)}
   LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:-Adresse fictive de recette}
   LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:-qa@learny.test}
   LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:-Serveur Coolify de recette}
+  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-}
+  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-}
+
+  # Horloge : absente ou vide = instant figé de la démo (ADR-0047) ; `real` = horloge réelle (la
+  # commande des conteneurs web, worker et seed retire alors la variable avant de lancer Node, qui
+  # retombe sur l'horloge système, packages/core/src/clock.ts).
   CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
+  # Pages /_dev/sdd/* : seule la valeur exacte `true` les active ; refusées en production.
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
 
 services:
@@ -120,7 +170,17 @@ services:
         condition: service_healthy
     links:
       - db:db.learny.test
+    # QA_SEED=off saute le chargement (le job se termine aussitôt, le web démarre quand même) :
+    # utile avec l'horloge réelle, le jeu de démonstration étant daté du 9 au 13 novembre 2026.
+    command:
+      - sh
+      - -c
+      - >-
+        if [ "$$QA_SEED" = "off" ]; then echo "seed : désactivée (QA_SEED=off)"; exit 0; fi;
+        if [ "$$CLOCK_FIXED_AT" = "real" ]; then unset CLOCK_FIXED_AT; fi;
+        exec pnpm exec tsx packages/db/src/seed/cli.ts
     environment:
+      QA_SEED: ${QA_SEED:-on}
       APP_ENV: test
       # Le jeu de demonstration derive des que les testeurs l'utilisent (notification lue,
       # creneau deplace) : la pile de recette signale les ecarts sans refuser de demarrer.
@@ -327,6 +387,12 @@ services:
     security_opt:
       - no-new-privileges:true
     cap_drop: [ALL]
+    command:
+      - sh
+      - -c
+      - >-
+        if [ "$$CLOCK_FIXED_AT" = "real" ]; then unset CLOCK_FIXED_AT; fi;
+        exec node dist/server.mjs
     environment:
       <<: *app-environment
       PORT: '3001'
@@ -364,6 +430,12 @@ services:
     security_opt:
       - no-new-privileges:true
     cap_drop: [ALL]
+    command:
+      - sh
+      - -c
+      - >-
+        if [ "$$CLOCK_FIXED_AT" = "real" ]; then unset CLOCK_FIXED_AT; fi;
+        exec node apps/web/server.js
     environment:
       <<: *app-environment
     expose:
