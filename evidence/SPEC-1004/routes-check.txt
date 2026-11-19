@@ -1,0 +1,8 @@
+$ node tools/migration/generate-next-routes.mjs --check
+Routes Next : 153 fichiers présents, 153 attendus.
+Aucune dérive (SPEC-1004 EF-4).
+
+$ node tools/migration/report.mjs (extrait)
+Routes du registre ROUTES : 169
+Fichiers route.ts sous apps/web/app : 154
+Liste de référence : 66 fichiers + apps/web/app/api/**

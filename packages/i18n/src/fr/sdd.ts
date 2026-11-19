@@ -2707,6 +2707,28 @@ export const sdd = {
     yes: 'présent',
     no: 'absent',
   },
+  spec1004: {
+    intro:
+      'Chaque route de l’API est une donnée : une table d’implémentations, une table de gestionnaires spéciaux, et des fichiers Next générés qui ne font que les appeler.',
+    coverage: {
+      title: 'Couverture de la table des routes',
+      region:
+        'Couverture des routes : registre, implémentations, gestionnaires spéciaux, fichiers Next générés et dérive',
+      columns: ['Indicateur', 'Valeur'],
+      registry: 'Routes du registre',
+      implementations: 'Implémentations',
+      specials: 'Gestionnaires spéciaux',
+      files: 'Fichiers Next générés',
+      drift: 'Dérive',
+      complete: 'Couverture complète, aucune dérive.',
+      incomplete: 'Couverture incomplète : exécuter pnpm migration:routes:check.',
+    },
+    special: {
+      summary: 'Gestionnaires spéciaux (méthode, chemin)',
+      region: 'Gestionnaires spéciaux : méthode et chemin',
+      columns: ['Méthode', 'Chemin'],
+    },
+  },
 } as const;
 
 export const fr = { sdd } as const;

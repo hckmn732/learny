@@ -7,8 +7,9 @@
 // for every script of the same response (ADR-0042).
 import { randomBytes } from 'node:crypto';
 
-/** 18 random bytes give a 24-character base64 nonce, well above the 128-bit guidance. */
-export const CSP_NONCE_BYTES = 18;
+import { CSP_NONCE_BYTES, isValidCspNonce } from '@learny/api-routes/special/csp-nonce';
+
+export { CSP_NONCE_BYTES, isValidCspNonce };
 
 /** Versioned directive list: changing it is a deliberate security decision. */
 export const CSP_POLICY_VERSION = 1;
@@ -22,7 +23,6 @@ export interface CspEnvironment {
   production?: boolean;
 }
 
-const NONCE_PATTERN = /^[A-Za-z0-9+/]{16,}={0,2}$/;
 const ORIGIN_PATTERN = /^https?:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::\d{1,5})?$/i;
 
 /**
@@ -44,11 +44,6 @@ export function normalizeCspOrigin(
   if (!allowCredentials && (url.username !== '' || url.password !== '')) return null;
   const origin = url.origin;
   return ORIGIN_PATTERN.test(origin) ? origin : null;
-}
-
-/** True only for a nonce shaped by `createCspNonce`; rejects quotes and injected directives. */
-export function isValidCspNonce(nonce: string): boolean {
-  return NONCE_PATTERN.test(nonce);
 }
 
 /** Cryptographically random nonce, base64 encoded. The random source is injectable for tests. */

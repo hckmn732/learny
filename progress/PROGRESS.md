@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-19T11:42:37.089Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-19T18:02:35.570Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 144 (V1 : 124, V2 : 8, migration : 12) |
-| Terminées | 126 |
+| Terminées | 127 |
 | En cours | 0 |
-| Prêtes | 1 |
+| Prêtes | 0 |
 | En attente de dépendances | 17 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **87.5 %** |
+| **Avancement global** | **88.2 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | migration |
-| Prochaine action | start SPEC-1004 — Table d’implémentation des routes (@learny/api-routes) |
+| Prochaine action | checkpoint CP-10 |
 
 ## Phases et checkpoints
 
@@ -32,7 +32,7 @@
 | P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 7/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
-| P10 | Migration — préparation, couche HTTP et paquets partagés | 3/4 | CP-10 | ⏳ |
+| P10 | Migration — préparation, couche HTTP et paquets partagés | 4/4 | CP-10 | ⏳ |
 | P11 | Migration — application API autonome | 0/3 | CP-11 | ⏳ |
 | P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
@@ -176,7 +176,7 @@
 | [SPEC-1001](../specs/p10-migration-preparation/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-separation.md) | Démarrage de la piste de migration et garde-fous de séparation | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-003, SPEC-011 |
 | [SPEC-1002](../specs/p10-migration-preparation/SPEC-1002-paquets-partages-client-d-api-logique-pure-et-messages.md) | Paquets partagés — client d’API, logique pure et messages | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1001 |
 | [SPEC-1003](../specs/p10-migration-preparation/SPEC-1003-couche-http-independante-du-framework.md) | Couche HTTP indépendante du framework (@learny/http) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓acceptance ✓unit ✓integration ✓e2e ✓visual | SPEC-1001 |
-| [SPEC-1004](../specs/p10-migration-preparation/SPEC-1004-table-d-implementation-des-routes.md) | Table d’implémentation des routes (@learny/api-routes) | P10 | 🟢 ready | 0 | — | SPEC-1003 |
+| [SPEC-1004](../specs/p10-migration-preparation/SPEC-1004-table-d-implementation-des-routes.md) | Table d’implémentation des routes (@learny/api-routes) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1003 |
 | [SPEC-1101](../specs/p11-migration-api/SPEC-1101-application-apps-api-hono.md) | Application apps/api (Hono) servant toutes les routes | P11 | ⏳ waiting | 0 | — | SPEC-1004, SPEC-1002 |
 | [SPEC-1102](../specs/p11-migration-api/SPEC-1102-authentification-multi-clients-et-protections-derriere-proxy.md) | Authentification multi-clients et protections derrière un proxy | P11 | ⏳ waiting | 0 | — | SPEC-1101 |
 | [SPEC-1103](../specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md) | Absorption du worker, images, CI et déploiement de l’API | P11 | ⏳ waiting | 0 | — | SPEC-1102 |

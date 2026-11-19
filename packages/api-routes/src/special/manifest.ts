@@ -1,0 +1,53 @@
+// SPEC-1004 EF-2 - method and path of every special handler. Data only: the Next generator
+// (tools/migration/generate-next-routes.mjs) reads it to lay out apps/web/app/api, and the coverage
+// test compares it with SPECIAL_HANDLERS so the two can never drift.
+export const SPECIAL_ROUTE_MANIFEST = [
+  { key: 'health', method: 'GET', path: '/api/v1/health' },
+  { key: 'authCallback', method: 'GET', path: '/api/v1/auth/callback' },
+  { key: 'devCronHourlyTick', method: 'POST', path: '/api/v1/dev/sdd/cron/hourly-tick' },
+  { key: 'devEcho', method: 'POST', path: '/api/v1/dev/sdd/echo' },
+  { key: 'devEmailOutbox', method: 'GET', path: '/api/v1/dev/sdd/email/outbox' },
+  { key: 'devEmailOutboxPurge', method: 'DELETE', path: '/api/v1/dev/sdd/email/outbox' },
+  { key: 'devEmailPreview', method: 'GET', path: '/api/v1/dev/sdd/email/preview' },
+  { key: 'devEmailSend', method: 'POST', path: '/api/v1/dev/sdd/email/send' },
+  { key: 'devEventsDemoRun', method: 'GET', path: '/api/v1/dev/sdd/events/demo/:runId' },
+  { key: 'devEventsDemoStart', method: 'POST', path: '/api/v1/dev/sdd/events/demo' },
+  { key: 'devEventsOutbox', method: 'GET', path: '/api/v1/dev/sdd/events/outbox' },
+  { key: 'devItems', method: 'GET', path: '/api/v1/dev/sdd/items' },
+  {
+    key: 'devNotificationsGenerate',
+    method: 'POST',
+    path: '/api/v1/dev/sdd/notifications/generate',
+  },
+  { key: 'devNotify', method: 'POST', path: '/api/v1/dev/sdd/notify' },
+  {
+    key: 'devPersonalDataDeletion',
+    method: 'POST',
+    path: '/api/v1/dev/sdd/personal-data/deletion',
+  },
+  {
+    key: 'devPersonalDataDeletionCancel',
+    method: 'DELETE',
+    path: '/api/v1/dev/sdd/personal-data/deletion',
+  },
+  { key: 'devPersonalDataExecute', method: 'POST', path: '/api/v1/dev/sdd/personal-data/execute' },
+  { key: 'devPersonalDataExport', method: 'POST', path: '/api/v1/dev/sdd/personal-data/export' },
+  { key: 'devPushSend', method: 'POST', path: '/api/v1/dev/sdd/push/send' },
+  { key: 'devRateLimitBurst', method: 'POST', path: '/api/v1/dev/sdd/rate-limit/burst' },
+  { key: 'devRateLimitOrigin', method: 'POST', path: '/api/v1/dev/sdd/rate-limit/origin' },
+  { key: 'devRateLimitPurge', method: 'POST', path: '/api/v1/dev/sdd/rate-limit/purge' },
+  {
+    key: 'devStripeCheckoutCancel',
+    method: 'POST',
+    path: '/api/v1/dev/sdd/stripe/checkout/cancel',
+  },
+  { key: 'devStripeCheckoutPay', method: 'POST', path: '/api/v1/dev/sdd/stripe/checkout/pay' },
+  { key: 'devStripeEvents', method: 'GET', path: '/api/v1/dev/sdd/stripe/events' },
+  { key: 'devStripeSimulate', method: 'POST', path: '/api/v1/dev/sdd/stripe/simulate' },
+  { key: 'devUploadSimulation', method: 'POST', path: '/api/v1/dev/sdd/uploads' },
+  { key: 'formationSprints', method: 'POST', path: '/api/v1/formations/:fid/sprints' },
+  { key: 'sddDemoJob', method: 'POST', path: '/api/v1/_dev/demo-job' },
+  { key: 'sddCommitCheck', method: 'POST', path: '/api/v1/_dev/commit-check' },
+  { key: 'sddSecretScan', method: 'POST', path: '/api/v1/_dev/secret-scan' },
+  { key: 'inngest', method: 'ALL', path: '/api/inngest' },
+] as const;

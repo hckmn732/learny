@@ -1,0 +1,19 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="27.831234000000002">
+<testsuite name="p7/spec-705.spec.ts" timestamp="2026-11-19T17:36:51.644Z" hostname="mobile" tests="1" failures="0" skipped="0" time="10.789" errors="0">
+<testcase name="conformité SPEC-705 @SPEC-705 @visual @mobile" classname="p7/spec-705.spec.ts" time="10.789">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/attachments/axe-6339572a9ace917740f4b19632d8f905b311e5e7.json]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
