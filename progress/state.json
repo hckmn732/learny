@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-19T10:34:29.344Z",
+  "updatedAt": "2026-11-19T11:42:37.085Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6311,14 +6311,55 @@
       "validations": {}
     },
     "SPEC-1001": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-18T18:25:09.420Z",
+      "completedAt": "2026-11-18T19:32:58.740Z",
+      "branch": "spec/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-s",
+      "commit": "20b47c93",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-18T19:27:00.336Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-18T19:27:24.763Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-18T19:28:07.865Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-18T19:29:21.694Z",
+          "details": "16 test(s) [SPEC-1001] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-18T19:29:32.067Z",
+          "details": "8 test(s) [SPEC-1001] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.663Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.663Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.675Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-1002": {
       "status": "done",
