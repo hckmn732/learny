@@ -2,6 +2,33 @@
 
 Complète `docs/legacy/specification-v0/3-Architecture-technique.md` (raisonnement d'origine). Les choix sont actés dans `docs/adr/`. Ce document est normatif pour la structure du dépôt et la circulation des données.
 
+## 0. Architecture cible : séparation backend / frontend (ADR-0336)
+
+> Les sections 2 à 4 décrivent l'état **avant** la piste de migration. La cible ci-dessous fait foi pour toute nouvelle conception ; chaque spécification de la piste (SPEC-1001 → SPEC-1302) met à jour les sections qu'elle rend obsolètes, et SPEC-1302 retire cette section de transition.
+
+```
+Navigateur (PWA)                          Android / iOS (Expo, ADR-0339, plus tard)
+   │ HTTPS, même origine                       │ HTTPS, Authorization: Bearer
+   ▼                                           │
+apps/web  (Next.js, client pur, ADR-0338)      │
+   ├─ écrans React, rendu serveur              │
+   ├─ proxy.ts : session, gardes, relai /api ──┼──► en-têtes de proxy de confiance (ADR-0340)
+   └─ Server Components → @learny/api-client ──┤
+                                               ▼
+                         apps/api  (Hono, ADR-0337) — seul propriétaire des données
+                            ├─ /api/v1/* (registre ROUTES + @learny/api-routes, via @learny/http)
+                            ├─ /api/inngest (packages/jobs)   ├─ /api/v1/webhooks/stripe
+                            └─ ► Supabase, Inngest, fournisseurs IA, Resend, Web Push, Stripe, Sentry
+```
+
+| Couche | Paquets | Importables par |
+|---|---|---|
+| Partagée (ADR-0342) | `contracts`, `core` (entrée `.`), `api-client`, `domain`, `i18n`, `learning-engine`, `ui/tokens` | tous (web, mobile, api, paquets) |
+| Interface web | `ui`, `bricks` (vues) | `apps/web` |
+| Serveur | `http`, `api-routes`, `services`, `db`, `jobs`, `llm`, `tutor`, `ingestion`, `automations`, `notifications`, `core/server` | `apps/api`, autres paquets serveur, tests |
+
+Règle vérifiée par ESLint (`learny/web-is-a-client`, SPEC-1001) : `apps/web` n'importe aucun paquet serveur.
+
 ## 1. Principes
 
 1. **Le modèle propose, le code valide et exécute** (ADR-0021). Toute écriture (apprenant ou tuteur) passe par un service applicatif qui valide (Zod) puis persiste.

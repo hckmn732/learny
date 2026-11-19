@@ -68,3 +68,36 @@ Livraison V1 (P8).
 Livraison V2 (P9).
 - Fonctions V2 (audio, vidéo, liens, explique à un débutant, mises en situation, projet fil rouge, baisse d'engagement) démontrées ; non-régression V1 complète.
 - Tag `v2.0.0`.
+
+# Piste « migration » (ADR-0341)
+
+Phases P10 → P13 sur la branche `migration`, indépendantes de la piste produit sauf P12 qui exige CP-8. Tags `cp-10` … `cp-13` uniquement (pas de version SemVer). Avant chaque checkpoint : `node tools/sdd/sync-main.mjs`. **Invariant commun à tous les checkpoints de la piste : aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée** (ADR-0336 §4).
+
+## CP-10
+
+Préparation, couche HTTP et paquets partagés (P10).
+- CI verte sur `migration`, aucun déploiement déclenché par la branche ; `sync-main.mjs` résout un conflit de suivi et s'arrête sur un conflit de code.
+- `@learny/api-client`, `@learny/domain`, `@learny/i18n` passent le contrôle de portabilité ; `@learny/http` n'importe pas `next`.
+- `ROUTE_IMPLEMENTATIONS` couvre 100 % du registre `ROUTES` ; `pnpm migration:routes:check` passe ; aucun fichier `route.ts` ne contient de logique.
+- `pnpm migration:report` : le couplage du web n'a pas augmenté depuis le démarrage de la piste ; suite e2e complète verte.
+
+## CP-11
+
+Application API autonome (P11).
+- `apps/api` sert 100 % des routes et gestionnaires spéciaux, `/api/inngest` et `/health` ; les suites paramétrées passent pour `next` et `hono`.
+- Authentification par cookie et par Bearer avec vérification locale (0 appel au serveur d'authentification pour une lecture) ; mutations relayées acceptées seulement avec le secret de proxy.
+- `apps/worker` supprimé ; image `api` construite et saine en auto-hébergé ; `deploy:check --dry-run` vert.
+
+## CP-12
+
+Bascule du web sur l'API (P12, exige CP-8).
+- `apps/web` ne contient plus de route `/api`, n'importe aucun paquet serveur et n'en déclare aucun en `dependencies` ; `pnpm migration:report` = 0.
+- Suite e2e complète **et** cross-browser vertes au travers du relai ; flux SSE, cookies d'authentification et webhook Stripe simulé vérifiés.
+- `pnpm test:perf` : budgets ADR-0041/ADR-0332 tenus, surcoût médian du rendu serveur ≤ 25 ms par page (ADR-0338).
+
+## CP-13
+
+API multi-clients et clôture (P13).
+- OpenAPI valide avec schémas de sécurité ; client natif simulé réussi sans cookie ni `Origin` ; CORS limité aux origines déclarées.
+- Aucun code de transition ; documentation et guide d'exploitation à jour ; `report.mjs --check` actif dans `pnpm lint`.
+- Suite e2e complète, cross-browser et performances vertes. Après réussite : fusion de `migration` dans `main` par l'agent principal, `activeTrack` remis à `"produit"` dans le commit de fusion (ADR-0341 §9).

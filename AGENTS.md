@@ -2,6 +2,15 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
+## Objectif prioritaire : séparation backend / frontend (piste « migration »)
+
+Learny devient plusieurs applications : `apps/api` (backend TypeScript, Hono), `apps/web` (frontend React, Next.js client pur de l'API) et, plus tard, `apps/mobile` (Android et iOS, React Native + Expo). Décisions : ADR-0336 à ADR-0342.
+
+- Le travail se fait sur la branche **`migration`**, dans le worktree `../learny-wt-migration` ; le worktree principal reste sur `main` (livraison V1).
+- Sur cette branche, `node tools/sdd/next.mjs` pilote la piste `migration` (P10 → P13, SPEC-1001 → SPEC-1302, checkpoints CP-10 → CP-13). Les spécifications partent de `migration` et y sont fusionnées (`docs/engineering/sdd-process.md` §1 bis, `docs/engineering/git.md` §1.0).
+- **Invariant absolu : conserver le fonctionnel actuel.** Aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Un écart est une anomalie à corriger dans le nouveau code, jamais dans le test.
+- `node tools/sdd/sync-main.mjs` (après SPEC-1001) au moins une fois par jour et avant chaque checkpoint. P12 attend CP-8 (V1 livrée sur `main`).
+
 ## Règle absolue : zéro intervention humaine
 
 - Ne **jamais** demander à l'utilisateur une clarification, une décision technique, une validation intermédiaire ou l'autorisation de continuer.
@@ -63,4 +72,4 @@ Modifier `design/maquettes/` ou `docs/legacy/` ; inventer une preuve ; affaiblir
 
 ## Git
 
-Dépôt distant : `origin` = `https://github.com/hckmn732/learny.git` (créé par le porteur du projet). Conventions : `docs/engineering/git.md` (branches `spec/SPEC-xxx-slug`, Conventional Commits avec la spécification en portée, fusions `--no-ff`, tags `cp-n` et SemVer).
+Dépôt distant : `origin` = `https://github.com/hckmn732/learny.git` (créé par le porteur du projet). Conventions : `docs/engineering/git.md` (branches `spec/SPEC-xxx-slug`, Conventional Commits avec la spécification en portée, fusions `--no-ff`, tags `cp-n` et SemVer ; branche `migration` et ses spécifications `spec/SPEC-1xxx-…` : §1.0).

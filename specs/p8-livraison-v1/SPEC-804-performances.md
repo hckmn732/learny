@@ -6,7 +6,7 @@ priority: V1
 depends_on: [SPEC-802]
 business_rules: [BR-PLA-07]
 screens: []
-adrs: [ADR-0041, ADR-0202, ADR-0338]
+adrs: [ADR-0041, ADR-0202, ADR-0343]
 visual: demo   # mockup (écran maquetté) | tokens (écran sans maquette) | demo (page de démonstration SDD)
 ---
 
@@ -45,7 +45,7 @@ Mesurer et tenir les budgets de performance de Learny (LCP < 2,5 s, INP < 200 ms
 ## 6. Exigences techniques
 
 - **ET-1 — Fichiers d'outillage** (`tools/perf/`) : `run.mjs` (orchestrateur, sans dépendance hors Node et des binaires cités), `server.mjs` (démarrage/arrêt de `next start`, port 3100), `auth.mjs` (connexion de l'utilisateur de démonstration par `POST /api/v1/auth/sign-in` avec les identifiants exportés par `@learny/testing` ; fabrique l'en-tête `Cookie` passé à Lighthouse par `settings.extraHeaders`), `lighthouserc.cjs` (`collect.numberOfRuns: 5`, `collect.url` résolues par `urls.mjs` depuis la base, `settings.chromeFlags: '--headless=new --no-sandbox'`, `upload.target: 'filesystem'`, `outputDir: test-results/perf/lhci`), `budget.json` (budgets de ressources d'EF-2, format Lighthouse `budgets`), `assert-lighthouse.mjs` (lit les `lhr-*.json`, calcule les p75, compare), `k6/api-load.js`, `k6-version.txt`, `run-k6.mjs` (binaire ou Docker : `docker run --rm -i --add-host=host.docker.internal:host-gateway -e BASE_URL=http://host.docker.internal:3100 -v <tools/perf/k6>:/scripts grafana/k6:<version> run --summary-export=/scripts/out/summary.json /scripts/api-load.js`), `report.mjs`, `p75.ts` (fonction pure `percentileNearestRank(values, 0.75)`).
-- **ET-2 — [remplacé par ADR-0338] Projet Playwright `perf`.** Ce projet et ses scénarios sont supprimés. Aucun benchmark INP automatisé ne fait partie de `pnpm test:perf`.
+- **ET-2 — [remplacé par ADR-0343] Projet Playwright `perf`.** Ce projet et ses scénarios sont supprimés. Aucun benchmark INP automatisé ne fait partie de `pnpm test:perf`.
 - **ET-3 — Données de charge.** `pnpm perf:seed` (`packages/db/src/seed/perf.ts`, idempotent, utilise les fabriques de `@learny/testing`) : 50 utilisateurs `perf-NN@learny.test` (mot de passe de test généré et enregistré dans `packages/db/src/seed/perf-credentials.ts`, valeur de test locale uniquement), chacun avec 1 formation active de 7 modules, 48 notions, 120 `notion_states` dont 14 dues le 2026-11-11, 300 `review_logs`, 60 `schedule_slots` sur novembre, 40 notifications ; plus un utilisateur volumineux `perf-heavy@learny.test` : 3 formations, 900 notions, 15 000 `review_logs`, 2 000 créneaux, 1 000 notifications, 400 ressources et 8 000 passages (embeddings simulés), qui sert aux contrôles `EXPLAIN`.
 - **ET-4 — Index vérifiés.** Test d'intégration `packages/db/test/integration/query-plans.test.ts` : après `perf:seed`, `ANALYZE`, puis `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` des requêtes réellement émises par les services (capturées via le journal Drizzle de chaque service) pour `perf-heavy` ; exigences : aucun `Seq Scan` sur une table de plus de 5 000 lignes, temps d'exécution < 50 ms. Requêtes et index attendus (créés par migration s'ils manquent, et ajoutés à `docs/architecture/data-model.md`) :
 
@@ -155,6 +155,6 @@ Définition commune (`docs/engineering/testing.md` §7), plus : `pnpm test:perf`
 
 - ADR appliqués : ADR-0041 (budgets), ADR-0049 (page de démonstration), ADR-0063 (TanStack Query), ADR-0047 (horloge), ADR-0070 (outils de test).
 - **ADR-0202 créé** (« Mesure des performances et commande test:perf ») : 10 pages et 6 scénarios, 5 passages, p75 au rang le plus proche, TBT < 300 ms et score ≥ 0,85 en complément, budgets de ressources, INP par Playwright + `web-vitals` (CPU ×4, réseau 150 ms / 1,6 Mbit/s), scénario k6 et seuils par route, index vérifiés par `EXPLAIN`, `test:perf` hors de `test:e2e`.
-- **ADR-0338 prioritaire** (« Suppression du benchmark INP Playwright ») : supprime le projet Playwright `perf`, les six scénarios, leur collecte et leur exigence de complétude. Le budget INP demeure affiché comme objectif V1, sans mesure automatisée stable ; Lighthouse, sa page de démonstration et k6 restent exécutables.
+- **ADR-0343 prioritaire** (« Suppression du benchmark INP Playwright ») : supprime le projet Playwright `perf`, les six scénarios, leur collecte et leur exigence de complétude. Le budget INP demeure affiché comme objectif V1, sans mesure automatisée stable ; Lighthouse, sa page de démonstration et k6 restent exécutables.
 - Hypothèse : la machine d'exécution des checkpoints est la référence des mesures ; les mesures de production (champ réel) relèvent de l'exploitation et ne conditionnent pas la version.
 - Complément signalé : index supplémentaires au modèle de données (ET-4) et en-tête `Server-Timing`.

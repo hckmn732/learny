@@ -13,6 +13,17 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 
 États stockés dans `progress/state.json` (seuls les scripts `tools/sdd/*.mjs` l'écrivent). États dérivés : `ready`, `waiting`, `dependency_blocked`.
 
+## 1 bis. Pistes (ADR-0341)
+
+Le catalogue répartit les phases en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-0336).
+
+- Une phase est débloquée par le checkpoint de la phase précédente **de la même piste** et par les checkpoints de son champ `requires` (P12 exige CP-8).
+- `specs/catalog.json` : `activeTrack` = piste pilotée par `next.mjs` ; `SDD_TRACK=<piste>` la surcharge pour une commande. Sur la branche `migration`, `activeTrack` vaut `"migration"` ; sur `main`, `"produit"`.
+- `tracks.<piste>.baseBranch` : branche de départ (`start.mjs`), de fusion et de push (`complete.mjs`, `checkpoint.mjs`) ; `versionTags: false` pour la piste migration (tags `cp-1x` seulement).
+- `next.mjs` affiche « Piste : … » ; `AUCUNE SPÉCIFICATION EXÉCUTABLE … En attente des checkpoints d'une autre piste : CP-8` signifie qu'il faut fusionner `main` (`node tools/sdd/sync-main.mjs`) une fois ce checkpoint réussi sur `main`.
+- Invariant de la piste migration : **aucun changement fonctionnel** ; aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée ; chaque spécification rejoue en non-régression ce qu'elle peut affecter, et CP-12/CP-13 la suite complète, le cross-browser et les performances (`phase.checks`).
+- Fin de piste : après CP-13, fusion de `migration` dans `main` et `activeTrack` remis à `"produit"` (SPEC-1302).
+
 ## 2. Boucle (à répéter jusqu'à « TERMINÉ »)
 
 1. **Identifier** : `node tools/sdd/next.mjs` → `REPRENDRE`, `DÉMARRER`, `CHECKPOINT`, `TERMINÉ` ou `AUCUNE SPÉCIFICATION EXÉCUTABLE`.
@@ -24,7 +35,7 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 7. **Valider et générer les preuves** : `node tools/sdd/validate.mjs SPEC-xxx` (lint, typecheck, build, unitaires, intégration, e2e avec vidéo, visuel, critères) → `evidence/SPEC-xxx/`.
 8. **Vérifier les critères d'acceptation** : compléter `evidence/SPEC-xxx/acceptance.md` (✅ + preuve par critère) ; relancer `validate.mjs` jusqu'à `acceptance` réussi.
 9. **Enregistrer les preuves et mettre à jour le suivi** : `node tools/sdd/complete.mjs SPEC-xxx` (commit des preuves, statut `done`, PROGRESS.md régénéré).
-10. **Versionner** : `complete.mjs` fusionne `--no-ff` dans `main` et pousse sur `origin` si configuré (ADR-0051).
+10. **Versionner** : `complete.mjs` fusionne `--no-ff` dans la branche de base de la piste (`main` ou `migration`, §1 bis) et la pousse sur `origin` si configuré (ADR-0051).
 11. **Passer à la suite** : retour à l'étape 1. Si `CHECKPOINT` : `node tools/sdd/checkpoint.mjs CP-n` ; en cas d'échec, corriger sur `fix/<SPEC>-<slug>` puis relancer.
 
 ## 2 bis. Parallélisme contrôlé, surveillance et relance

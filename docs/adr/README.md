@@ -9,7 +9,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0001](ADR-0001-developpement-pilote-par-les-specifications-sdd.md) | Développement piloté par les spécifications (SDD) | Déduite | AGENTS.md, SPEC-003 |
 | [ADR-0002](ADR-0002-monorepo-pnpm-et-turborepo.md) | Monorepo pnpm et Turborepo | Validée | SPEC-001 |
 | [ADR-0003](ADR-0003-versions-du-socle-technique.md) | Versions du socle technique | Déduite | SPEC-001 |
-| [ADR-0004](ADR-0004-application-web-next-js-api-integree.md) | Application web Next.js, API intégrée | Validée | SPEC-001, SPEC-006, SPEC-201 |
+| [ADR-0004](ADR-0004-application-web-next-js-api-integree.md) | Application web Next.js, API intégrée (remplacée par ADR-0336) | Validée | SPEC-001, SPEC-006, SPEC-201 |
 | [ADR-0005](ADR-0005-perimetre-produit.md) | Périmètre produit | Validée | docs/product/vision.md |
 | [ADR-0006](ADR-0006-supabase-cloud-en-region-ue.md) | Supabase Cloud en région UE | Validée | SPEC-008, SPEC-101 |
 | [ADR-0007](ADR-0007-authentification-par-lien-magique-ou-mot-de-passe.md) | Authentification par lien magique ou mot de passe | Validée | SPEC-202, SPEC-601 |
@@ -205,4 +205,11 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0333](ADR-0333-budgets-de-performance-v1-non-bloquants.md) | Budgets de performance V1 non bloquants | Validée | SPEC-804, ADR-0202, ADR-0332 |
 | [ADR-0334](ADR-0334-report-de-quatre-tests-spec-803-vers-spec-807.md) | Report de quatre tests SPEC-803 vers SPEC-807 | Validée | SPEC-803, SPEC-807 |
 | [ADR-0335](ADR-0335-exception-d-audit-temporaire-pour-l-avis-ghsa-fc5q-39xc-vjpf.md) | Exception d audit temporaire pour l avis GHSA-fc5q-39xc-vjpf sur picomatch | Déduite | SPEC-805, SPEC-011 |
-| [ADR-0338](ADR-0338-suppression-du-benchmark-inp-playwright.md) | Suppression du benchmark INP Playwright | Déduite | SPEC-804, ADR-0333, ADR-0202 |
+| [ADR-0336](ADR-0336-separation-backend-frontend-en-applications-distinctes.md) | Séparation backend / frontend en applications distinctes | Validée | ADR-0004, SPEC-1001 à SPEC-1302 |
+| [ADR-0337](ADR-0337-api-autonome-hono-apps-api.md) | API autonome en Hono (apps/api) | Validée | ADR-0017, SPEC-1003, SPEC-1004, SPEC-1101, SPEC-1103 |
+| [ADR-0338](ADR-0338-frontend-next-js-client-pur-de-l-api.md) | Frontend Next.js, client pur de l’API | Validée | SPEC-1201, SPEC-1202, SPEC-1203 |
+| [ADR-0339](ADR-0339-applications-mobiles-react-native-et-expo.md) | Applications mobiles Android et iOS en React Native avec Expo | Validée | SPEC-1301 |
+| [ADR-0340](ADR-0340-authentification-multi-clients-et-api-derriere-un-proxy.md) | Authentification multi-clients et API derrière un proxy | Validée | SPEC-1102, SPEC-1201, SPEC-1301 |
+| [ADR-0341](ADR-0341-piste-sdd-de-migration-et-branche-migration.md) | Piste SDD de migration et branche migration | Validée | ADR-0001, ADR-0005, ADR-0049 |
+| [ADR-0342](ADR-0342-paquets-partages-entre-clients-et-serveur.md) | Paquets partagés entre clients et serveur | Validée | SPEC-1002, SPEC-1003, SPEC-1004 |
+| [ADR-0343](ADR-0343-suppression-du-benchmark-inp-playwright.md) | Suppression du benchmark INP Playwright | Déduite | SPEC-804, ADR-0333, ADR-0202 |
