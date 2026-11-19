@@ -20,7 +20,7 @@ describe('[SPEC-1002] web api client', () => {
 
         // Le client typé du web (réexportation) à travers la route enregistrée du registre :
         // le transport injectable achemine l'appel vers le gestionnaire de la route.
-        const transport = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+        const transport = async (_input: RequestInfo | URL, init?: RequestInit) => {
           const headers = Object.fromEntries(new Headers(init?.headers).entries());
           const response = await fetch({
             method: init?.method ?? 'GET',
@@ -28,7 +28,7 @@ describe('[SPEC-1002] web api client', () => {
             ...(init?.body === undefined ? {} : { body: init.body as string }),
           });
           return response as unknown as Response;
-        }) as unknown as typeof fetch;
+        };
 
         const viaClient = await callApi(ROUTES.health, {}, { fetch: transport });
         expect(direct.status).toBe(200);
