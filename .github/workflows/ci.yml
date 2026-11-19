@@ -9,7 +9,8 @@ name: CI
 
 on:
   push:
-    branches: [main, 'spec/**', 'fix/**', 'release/**']
+    # SPEC-1001 (ADR-1006) : la piste migration est exécutée par la CI, sans aucun déploiement.
+    branches: [main, migration, 'spec/**', 'fix/**', 'release/**']
   pull_request:
   workflow_dispatch:
     inputs:

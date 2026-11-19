@@ -4,6 +4,8 @@
 #   secrets préfixés : aucune clé de production ne peut atteindre une preview (EF-2).
 # - La production exige un tag `v*` appartenant à `main` et une migration réussie avant Inngest,
 #   Vercel puis le contrôle de fumée (EF-3, CL-3, CL-4).
+# - La piste `migration` et ses branches `spec/SPEC-1*` ne déploient jamais (SPEC-1001, EF-2,
+#   ADR-1006) ; la garde sera levée par SPEC-1103.
 name: Deploy
 
 on:
@@ -30,7 +32,9 @@ jobs:
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch != 'main'
+      github.event.workflow_run.head_branch != 'main' &&
+      github.event.workflow_run.head_branch != 'migration' &&
+      !startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')
     runs-on: ubuntu-latest
     environment:
       name: preview

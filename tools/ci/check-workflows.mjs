@@ -102,17 +102,20 @@ function parseWorkflow(root, relative) {
   }
 }
 
-/** Lit et analyse les deux workflows ; les erreurs de syntaxe sont retournées, jamais levées. */
+/** Lit et analyse les trois workflows ; les erreurs de syntaxe sont retournées, jamais levées. */
 export function readWorkflows(root = ROOT) {
   const ci = parseWorkflow(root, CI_WORKFLOW);
   const prTitle = parseWorkflow(root, PR_TITLE_WORKFLOW);
-  const parseErrors = [ci.error, prTitle.error].filter(Boolean);
+  const deploy = parseWorkflow(root, DEPLOY_WORKFLOW);
+  const parseErrors = [ci.error, prTitle.error, deploy.error].filter(Boolean);
   return {
     root,
     ci: ci.doc,
     ciRaw: ci.raw,
     prTitle: prTitle.doc,
     prTitleRaw: prTitle.raw,
+    deploy: deploy.doc,
+    deployRaw: deploy.raw,
     parseErrors,
   };
 }
@@ -279,9 +282,9 @@ export function validateWorkflows({ workflows, scripts, actionlint, act }) {
   const prTitleJobs = prTitle?.jobs ?? {};
 
   if (ci !== null && ci !== undefined) {
-    // EF-1 : déclencheurs complets.
+    // EF-1 : déclencheurs complets ; SPEC-1001 : la piste migration est exécutée par la CI.
     if (!pushIncludes(ci.on?.push, 'main')) errors.push('Déclencheur push absent pour main.');
-    for (const branch of ['spec/**', 'fix/**', 'release/**']) {
+    for (const branch of ['migration', 'spec/**', 'fix/**', 'release/**']) {
       if (!pushIncludes(ci.on?.push, branch))
         errors.push(`Déclencheur push absent pour ${branch}.`);
     }
@@ -540,6 +543,38 @@ export function validateWorkflows({ workflows, scripts, actionlint, act }) {
       if (use.uses.startsWith('docker://') || use.uses.startsWith('./')) continue;
       if (!ACTION_REF.test(use.uses)) {
         errors.push(`Action non épinglée dans pr-title.yml : ${use.uses} (ET-1).`);
+      }
+    }
+  }
+
+  // SPEC-1001 (EF-2, ADR-1006) : la piste migration ne déploie ni preview ni production.
+  const deploy = workflows.deploy;
+  if (deploy !== null && deploy !== undefined) {
+    const preview = deploy.jobs?.preview;
+    const production = deploy.jobs?.production;
+    if (preview !== undefined) {
+      const condition = normalized(preview.if);
+      if (!condition.includes("github.event.workflow_run.head_branch!='migration'")) {
+        errors.push(
+          'Le job preview ne doit jamais déployer la branche migration (EF-2, ADR-1006).',
+        );
+      }
+      if (!condition.includes("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')")) {
+        errors.push(
+          'Le job preview ne doit jamais déployer les branches spec/SPEC-1* de la piste migration (EF-2).',
+        );
+      }
+    }
+    if (production !== undefined) {
+      const condition = normalized(production.if);
+      if (!condition.includes("startsWith(github.event.workflow_run.head_branch,'v')")) {
+        errors.push('Le job production ne doit répondre qu’à un tag v* (EF-2).');
+      }
+      const runs = runsOf(production).join('\n');
+      if (!runs.includes('git merge-base --is-ancestor') || !runs.includes('origin/main')) {
+        errors.push(
+          'Le job production doit vérifier que le tag appartient à main : la piste migration ne doit jamais atteindre la production (EF-2).',
+        );
       }
     }
   }
