@@ -114,6 +114,47 @@ export function readySpecs(catalog, st, track) {
 }
 
 /**
+ * Fusion de deux états de suivi par piste (ADR-1006 §4) : les entrées des spécifications et
+ * checkpoints de `track` viennent de `ours` (branche courante), toutes les autres de `theirs`
+ * (branche de base) — entrée entière, jamais un mélange champ par champ (CL-5). Une entrée
+ * absente du côté propriétaire retombe sur l'autre côté ; `updatedAt` garde le plus récent.
+ * Pure : aucun accès disque, aucune horloge, les arguments ne sont jamais modifiés.
+ */
+export function mergeTrackStates(catalog, ours, theirs, track) {
+  const oursSpecs = ours.specs ?? {};
+  const theirsSpecs = theirs.specs ?? {};
+  const oursCheckpoints = ours.checkpoints ?? {};
+  const theirsCheckpoints = theirs.checkpoints ?? {};
+  const cpTracks = new Map(catalog.phases.map((ph) => [ph.checkpoint, trackOf(ph)]));
+
+  const choose = (own, other, fromOurs) => (fromOurs ? own ?? other : other ?? own);
+
+  const specs = {};
+  for (const id of new Set([...Object.keys(oursSpecs), ...Object.keys(theirsSpecs)])) {
+    const fromOurs = catalog.byId[id] !== undefined && specTrack(catalog, catalog.byId[id]) === track;
+    specs[id] = choose(oursSpecs[id], theirsSpecs[id], fromOurs);
+  }
+
+  const checkpoints = {};
+  for (const id of new Set([...Object.keys(oursCheckpoints), ...Object.keys(theirsCheckpoints)])) {
+    checkpoints[id] = choose(oursCheckpoints[id], theirsCheckpoints[id], cpTracks.get(id) === track);
+  }
+
+  const anomalies = [];
+  const seen = new Set();
+  for (const entry of [...(ours.anomalies ?? []), ...(theirs.anomalies ?? [])]) {
+    const key = JSON.stringify(entry);
+    if (seen.has(key)) continue; // doublon hérité du point de départ de la piste
+    seen.add(key);
+    anomalies.push(entry);
+  }
+
+  // Le plus récent : chaque commande SDD réécrit updatedAt, la ligne conflit à chaque sync (EF-3).
+  const updatedAt = [ours.updatedAt, theirs.updatedAt].filter(Boolean).sort().at(-1) ?? null;
+  return { version: ours.version ?? theirs.version ?? 1, updatedAt, specs, checkpoints, anomalies };
+}
+
+/**
  * Prochaine action de la piste active : reprendre une spécification en cours, sinon checkpoint dû,
  * sinon première spécification prête.
  */

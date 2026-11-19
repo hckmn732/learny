@@ -136,6 +136,12 @@ export function phaseOf(catalog: Catalog, phaseId: string): CatalogPhase | undef
 export function specTrack(catalog: Catalog, spec: CatalogSpec): string;
 export function phaseUnlocked(catalog: Catalog, st: SddState, phaseId: string): boolean;
 export function readySpecs(catalog: Catalog, st: SddState, track?: string): CatalogSpec[];
+export function mergeTrackStates(
+  catalog: Catalog,
+  ours: SddState,
+  theirs: SddState,
+  track: string,
+): SddState;
 export function nextAction(catalog: Catalog, st: SddState, track?: string): NextAction;
 export function nextActionJson(action: NextAction): Record<string, unknown>;
 export function progressSummary(catalog: Catalog, st: SddState): ProgressSummary;
