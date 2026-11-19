@@ -205,6 +205,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0333](ADR-0333-budgets-de-performance-v1-non-bloquants.md) | Budgets de performance V1 non bloquants | Validée | SPEC-804, ADR-0202, ADR-0332 |
 | [ADR-0334](ADR-0334-report-de-quatre-tests-spec-803-vers-spec-807.md) | Report de quatre tests SPEC-803 vers SPEC-807 | Validée | SPEC-803, SPEC-807 |
 | [ADR-0335](ADR-0335-exception-d-audit-temporaire-pour-l-avis-ghsa-fc5q-39xc-vjpf.md) | Exception d audit temporaire pour l avis GHSA-fc5q-39xc-vjpf sur picomatch | Déduite | SPEC-805, SPEC-011 |
+| [ADR-0336](ADR-0336-etat-de-reference-exact-du-jeu-de-demonstration.md) | État de référence exact du jeu de démonstration | Déduite | SPEC-115, SPEC-712, SPEC-715, SPEC-504, SPEC-208, SPEC-012 |
 | [ADR-1001](ADR-1001-separation-backend-frontend-en-applications-distinctes.md) | Séparation backend / frontend en applications distinctes | Validée | ADR-0004, SPEC-1001 à SPEC-1302 |
 | [ADR-1002](ADR-1002-api-autonome-hono-apps-api.md) | API autonome en Hono (apps/api) | Validée | ADR-0017, SPEC-1003, SPEC-1004, SPEC-1101, SPEC-1103 |
 | [ADR-1003](ADR-1003-frontend-next-js-client-pur-de-l-api.md) | Frontend Next.js, client pur de l’API | Validée | SPEC-1201, SPEC-1202, SPEC-1203 |
