@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="50.059651">
+<testsuite name="p10/spec-1002.spec.ts" timestamp="2026-11-18T22:49:56.230Z" hostname="desktop" tests="2" failures="0" skipped="0" time="3.982" errors="0">
+<testcase name="appelle l API avec le client partagé @SPEC-1002" classname="p10/spec-1002.spec.ts" time="2.026">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/attachments/spec-1002-api-call-3908128d95886fb187956b940d70abea493b56ce.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/attachments/axe-734d904d9beb6f384999a94e8451ca11ae9fc3db.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration des paquets partagés @SPEC-1002 @visual @mobile" classname="p10/spec-1002.spec.ts" time="1.956">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/attachments/axe-8607402364d3b6160972e997977c66c34d33e3c9.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/attachments/spec-1002-demo-bdc8283dc4e4412fd494ab3bb415a840318d25d3.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p10/spec-1002.spec.ts" timestamp="2026-11-18T22:49:56.230Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.958" errors="0">
+<testcase name="démonstration des paquets partagés @SPEC-1002 @visual @mobile" classname="p10/spec-1002.spec.ts" time="1.958">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/attachments/axe-9671869a1f74bc6b39f95cf2571beb9652656920.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/attachments/spec-1002-demo-7f62ab1d8274ec3fb9c1420274460fe381d713bf.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
