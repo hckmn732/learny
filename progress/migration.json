@@ -1,7 +1,7 @@
 {
   "coupling": {
     "pages": 8,
-    "lib": 25,
+    "lib": 19,
     "components": 10,
     "dev": 28,
     "proxy": 1,

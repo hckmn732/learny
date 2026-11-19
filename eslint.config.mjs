@@ -35,6 +35,24 @@ const ALLOWED_IMPORTS = {
   // them to `@learny/config/product` and to fixtures (SPEC-401 ET-9).
   'learning-engine': ['core', 'config', 'testing'],
   'api-client': ['contracts', 'core'],
+  'api-routes': [
+    'contracts',
+    'core',
+    'config',
+    'db',
+    'services',
+    'jobs',
+    'notifications',
+    'llm',
+    'tutor',
+    'ingestion',
+    'automations',
+    'learning-engine',
+    'bricks',
+    'http',
+    'i18n',
+    'ui',
+  ],
   http: ['contracts', 'core', 'config', 'db', 'services'],
   bricks: ['core', 'contracts', 'ui'],
   domain: ['contracts', 'core', 'learning-engine', 'bricks'],
@@ -905,6 +923,77 @@ export default tseslint.config(
             {
               group: ['next', 'next/*'],
               message: '@learny/http est indépendant du framework : aucun import Next (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1004 ET-4 - @learny/api-routes est un paquet serveur : la table d'implementation et les
+    // gestionnaires speciaux importent les services, jamais un ecran ni un framework. Seul le
+    // sous-chemin @learny/ui/tokens est admis (jetons purs de la page HTML de desinscription,
+    // ADR-1007) ; ecart documente de l'ET-4 dans evidence/SPEC-1004/acceptance.md.
+    files: ['packages/api-routes/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: AI_SDK_PATHS,
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/api-routes',
+                '!@learny/api-routes/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config',
+                '!@learny/config/*',
+                '!@learny/db',
+                '!@learny/db/*',
+                '!@learny/services',
+                '!@learny/services/*',
+                '!@learny/jobs',
+                '!@learny/jobs/*',
+                '!@learny/notifications',
+                '!@learny/notifications/*',
+                '!@learny/llm',
+                '!@learny/llm/*',
+                '!@learny/tutor',
+                '!@learny/tutor/*',
+                '!@learny/ingestion',
+                '!@learny/ingestion/*',
+                '!@learny/automations',
+                '!@learny/automations/*',
+                '!@learny/learning-engine',
+                '!@learny/learning-engine/*',
+                '!@learny/bricks',
+                '!@learny/bricks/*',
+                '!@learny/http',
+                '!@learny/http/*',
+                '!@learny/i18n',
+                '!@learny/i18n/*',
+                '!@learny/ui',
+                '!@learny/ui/*',
+              ],
+              message:
+                'packages/api-routes ne peut importer que les paquets serveur et @learny/ui/tokens.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsule par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message:
+                '@learny/api-routes est independant du framework : aucun import Next (SPEC-1101).',
             },
           ],
         },
