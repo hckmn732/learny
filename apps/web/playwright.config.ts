@@ -138,6 +138,7 @@ export default defineConfig({
               ...COMMON,
               viewport: { width: 390, height: 844 },
               isMobile: true,
+              serviceWorkers: 'block' as const,
               video: 'off' as const,
               trace: 'off' as const,
               screenshot: 'off' as const,

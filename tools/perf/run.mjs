@@ -118,6 +118,7 @@ function lighthouse(cookie) {
 }
 
 function inp() {
+  fs.rmSync(path.join(OUT, 'inp.json'), { force: true });
   const code = run(
     'pnpm',
     ['exec', 'playwright', 'test', '-c', 'apps/web/playwright.config.ts', '--project=perf'],
