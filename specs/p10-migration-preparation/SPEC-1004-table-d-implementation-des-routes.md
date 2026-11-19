@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1003]
 business_rules: []
 screens: []
-adrs: [ADR-0337, ADR-0342, ADR-0049]
+adrs: [ADR-1002, ADR-1007, ADR-0049]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Faire de l'implémentation de chaque route une **donnée unique** : une table `R
 
 ## 2. Contexte
 
-Le registre `ROUTES` de `packages/contracts/src/routes.ts` décrit chaque route (méthode, chemin `:param`, schémas, authentification, idempotence, limitation). Les fichiers `apps/web/app/api/**/route.ts` associent une route à une fonction de service : 124 font moins de 15 lignes, 28 entre 16 et 50, 2 plus de 50. Les modules d'injection `apps/web/lib/api/{resource-deps,push-deps,personal-data-deps}.ts`, `apps/web/lib/quiz-grade-registry.ts`, `apps/web/lib/health.ts`, `apps/web/lib/health-database.ts`, `apps/web/lib/email/unsubscribe-page.ts` et `apps/web/lib/supabase/server.ts` (cookies des routes d'authentification) sont du code serveur propre aux routes. `/api/inngest` sert les fonctions de `@learny/jobs`. Lire ADR-0337, ADR-0342, `docs/architecture/api.md` §1–2.
+Le registre `ROUTES` de `packages/contracts/src/routes.ts` décrit chaque route (méthode, chemin `:param`, schémas, authentification, idempotence, limitation). Les fichiers `apps/web/app/api/**/route.ts` associent une route à une fonction de service : 124 font moins de 15 lignes, 28 entre 16 et 50, 2 plus de 50. Les modules d'injection `apps/web/lib/api/{resource-deps,push-deps,personal-data-deps}.ts`, `apps/web/lib/quiz-grade-registry.ts`, `apps/web/lib/health.ts`, `apps/web/lib/health-database.ts`, `apps/web/lib/email/unsubscribe-page.ts` et `apps/web/lib/supabase/server.ts` (cookies des routes d'authentification) sont du code serveur propre aux routes. `/api/inngest` sert les fonctions de `@learny/jobs`. Lire ADR-1002, ADR-1007, `docs/architecture/api.md` §1–2.
 
 ## 3. Dépendances
 
@@ -44,7 +44,7 @@ Aucune règle `BR-*` ; les routes appellent les mêmes services avec les mêmes 
 - **ET-2** — `RouteImplementation<R> = (args: { ctx: ServiceContext; input: RouteInput<R>; request: Request }) => Promise<Result<RouteOutput<R>, AppError>>`, signature déjà attendue par `handler(route, fn)` de `@learny/http` ; si `handler()` utilise une autre forme, la table s'y aligne **sans changer** `handler()`.
 - **ET-3** — `apps/web/lib/api/next-route.ts` : `nextRoute(id)` renvoie `handler(ROUTES[id], ROUTE_IMPLEMENTATIONS[id])` ; `nextSpecial(key)` renvoie le gestionnaire spécial. Ce sont les deux seuls imports des fichiers générés.
 - **ET-4** — `eslint.config.mjs` : `ALLOWED_IMPORTS['api-routes'] = ['http', 'contracts', 'core', 'config', 'db', 'services', 'jobs', 'notifications', 'llm', 'tutor', 'ingestion', 'automations', 'learning-engine', 'bricks']` (sans `ui`) ; `apps/web/app/api/**` reste couvert par la liste de référence de SPEC-1001 jusqu'à SPEC-1201, mais `nextRoute`/`nextSpecial` ne doivent plus importer que `@learny/http` et `@learny/api-routes`.
-- **ET-5** — Synchronisation avec `main` (ADR-0341) : quand une fusion de `main` modifie un fichier `route.ts`, l'agent reporte la modification dans `@learny/api-routes`, puis régénère ; la procédure est écrite dans `docs/engineering/git.md` (section « Piste de migration »).
+- **ET-5** — Synchronisation avec `main` (ADR-1006) : quand une fusion de `main` modifie un fichier `route.ts`, l'agent reporte la modification dans `@learny/api-routes`, puis régénère ; la procédure est écrite dans `docs/engineering/git.md` (section « Piste de migration »).
 
 ## 7. Comportements attendus et cas limites
 
@@ -106,4 +106,4 @@ Conditions communes, plus : suite e2e **complète** verte (pas seulement `@SPEC-
 
 ## 15. Décisions et hypothèses
 
-ADR-0337, ADR-0342. Décision : les fichiers Next sont générés pour éliminer toute dérive pendant la cohabitation avec `main` ; ils disparaissent avec SPEC-1201. Aucune question ouverte.
+ADR-1002, ADR-1007. Décision : les fichiers Next sont générés pour éliminer toute dérive pendant la cohabitation avec `main` ; ils disparaissent avec SPEC-1201. Aucune question ouverte.

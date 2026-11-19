@@ -1,9 +1,9 @@
-# ADR-0342 — Paquets partagés entre clients et serveur
+# ADR-1007 — Paquets partagés entre clients et serveur
 
 - **Statut** : Acceptée — complète docs/architecture/overview.md §3
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
-- **Liens** : ADR-0336, ADR-0337, ADR-0338, ADR-0339, SPEC-1002, SPEC-1003, SPEC-1004
+- **Liens** : ADR-1001, ADR-1002, ADR-1003, ADR-1004, SPEC-1002, SPEC-1003, SPEC-1004
 
 ## Contexte
 
@@ -27,7 +27,7 @@ Paquets **serveur** (importables seulement par `apps/api`, les autres paquets se
 
 | Paquet | Contenu |
 |---|---|
-| `@learny/http` | Couche de transport indépendante du framework (ADR-0337) : `handler()`, gardes (origine, limitation, idempotence, acceptation légale), session (cookie et Bearer, ADR-0340), `problem+json`, `requestId`, garde des routes de développement |
+| `@learny/http` | Couche de transport indépendante du framework (ADR-1002) : `handler()`, gardes (origine, limitation, idempotence, acceptation légale), session (cookie et Bearer, ADR-1005), `problem+json`, `requestId`, garde des routes de développement |
 | `@learny/api-routes` | Table `ROUTE_IMPLEMENTATIONS` (identifiant de route → fonction qui appelle `packages/services`) et gestionnaires spéciaux (SSE, webhooks, redirections d'authentification, pages HTML de désinscription, Inngest) |
 
 Les règles de dépendance sont vérifiées par ESLint (`import/no-restricted-paths` et règle `learny/web-is-a-client`).

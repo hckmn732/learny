@@ -2,7 +2,7 @@
 
 Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; un document OpenAPI 3.1 est généré dans `apps/web/public/openapi.json` (SPEC-201).
 
-> **Séparation backend / frontend (ADR-0336, ADR-0337, ADR-0340).** Les contrats, chemins, codes et réponses de ce document ne changent pas. Ce qui change pendant la piste de migration : le wrapper `handler()` passe dans `@learny/http` (SPEC-1003) ; les implémentations des routes dans `@learny/api-routes` (SPEC-1004) ; l'API est servie par `apps/api` (SPEC-1101) puis relayée par `apps/web` sur la même origine (SPEC-1201), et OpenAPI est publié par `apps/api` ; l'authentification accepte aussi `Authorization: Bearer` avec vérification locale du jeton (SPEC-1102) ; la politique de version de `/api/v1` est fixée par SPEC-1301. Toute route ajoutée par la piste est inscrite dans l'inventaire ci-dessous dans le même commit.
+> **Séparation backend / frontend (ADR-1001, ADR-1002, ADR-1005).** Les contrats, chemins, codes et réponses de ce document ne changent pas. Ce qui change pendant la piste de migration : le wrapper `handler()` passe dans `@learny/http` (SPEC-1003) ; les implémentations des routes dans `@learny/api-routes` (SPEC-1004) ; l'API est servie par `apps/api` (SPEC-1101) puis relayée par `apps/web` sur la même origine (SPEC-1201), et OpenAPI est publié par `apps/api` ; l'authentification accepte aussi `Authorization: Bearer` avec vérification locale du jeton (SPEC-1102) ; la politique de version de `/api/v1` est fixée par SPEC-1301. Toute route ajoutée par la piste est inscrite dans l'inventaire ci-dessous dans le même commit.
 
 ## 1. Conventions
 

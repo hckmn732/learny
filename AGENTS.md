@@ -4,7 +4,7 @@ Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout c
 
 ## Objectif prioritaire : séparation backend / frontend (piste « migration »)
 
-Learny devient plusieurs applications : `apps/api` (backend TypeScript, Hono), `apps/web` (frontend React, Next.js client pur de l'API) et, plus tard, `apps/mobile` (Android et iOS, React Native + Expo). Décisions : ADR-0336 à ADR-0342.
+Learny devient plusieurs applications : `apps/api` (backend TypeScript, Hono), `apps/web` (frontend React, Next.js client pur de l'API) et, plus tard, `apps/mobile` (Android et iOS, React Native + Expo). Décisions : ADR-1001 à ADR-1007.
 
 - Le travail se fait sur la branche **`migration`**, dans le worktree `../learny-wt-migration` ; le worktree principal reste sur `main` (livraison V1).
 - Sur cette branche, `node tools/sdd/next.mjs` pilote la piste `migration` (P10 → P13, SPEC-1001 → SPEC-1302, checkpoints CP-10 → CP-13). Les spécifications partent de `migration` et y sont fusionnées (`docs/engineering/sdd-process.md` §1 bis, `docs/engineering/git.md` §1.0).

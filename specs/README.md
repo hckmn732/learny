@@ -23,9 +23,9 @@ Source de vérité de la liste : [`catalog.json`](catalog.json) (identifiant, ph
 
 Critères des checkpoints : [`checkpoints.md`](checkpoints.md).
 
-## Pistes (ADR-0341)
+## Pistes (ADR-1006)
 
-Les phases sont réparties en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-0336). Une phase est débloquée par le checkpoint de la phase précédente **de sa piste** et par les checkpoints de son champ `requires`. `activeTrack` du catalogue désigne la piste pilotée par `node tools/sdd/next.mjs` (`SDD_TRACK=<piste>` la surcharge). Chaque piste déclare sa branche de base (`tracks.<piste>.baseBranch`) : `start.mjs` en part, `complete.mjs` y fusionne et la pousse.
+Les phases sont réparties en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001). Une phase est débloquée par le checkpoint de la phase précédente **de sa piste** et par les checkpoints de son champ `requires`. `activeTrack` du catalogue désigne la piste pilotée par `node tools/sdd/next.mjs` (`SDD_TRACK=<piste>` la surcharge). Chaque piste déclare sa branche de base (`tracks.<piste>.baseBranch`) : `start.mjs` en part, `complete.mjs` y fusionne et la pousse.
 
 ## Règles
 

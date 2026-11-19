@@ -14,7 +14,7 @@ export interface CatalogPhase {
   dir: string;
   title: string;
   checkpoint: string;
-  /** Piste de la phase (ADR-0341) ; « produit » par défaut. */
+  /** Piste de la phase (ADR-1006) ; « produit » par défaut. */
   track?: string;
   /** Checkpoints (d'autres pistes) à réussir avant de débloquer la phase. */
   requires?: string[];
@@ -27,6 +27,8 @@ export interface TrackConfig {
   baseBranch: string;
   /** Pose les tags SemVer (v0.n.0, v1.0.0…) aux checkpoints ; sinon seulement `cp-n`. */
   versionTags: boolean;
+  /** Début de la plage de numérotation des ADR de la piste (0 → ADR-0001…0999, 1000 → ADR-1001…1999). */
+  adrBase: number;
 }
 
 export interface CatalogSpec {
@@ -129,6 +131,7 @@ export const DEFAULT_TRACK: string;
 export function trackOf(phase: CatalogPhase | undefined): string;
 export function activeTrack(catalog: Catalog, override?: string): string;
 export function trackConfig(catalog: Catalog, track: string): TrackConfig;
+export function nextAdrNumber(existing: number[], adrBase?: number): number;
 export function phaseOf(catalog: Catalog, phaseId: string): CatalogPhase | undefined;
 export function specTrack(catalog: Catalog, spec: CatalogSpec): string;
 export function phaseUnlocked(catalog: Catalog, st: SddState, phaseId: string): boolean;

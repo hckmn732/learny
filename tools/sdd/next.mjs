@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Affiche la prochaine action de la boucle autonome. `--json` pour une sortie machine.
-// Piste : SDD_TRACK, sinon `activeTrack` du catalogue, sinon « produit » (ADR-0341).
+// Piste : SDD_TRACK, sinon `activeTrack` du catalogue, sinon « produit » (ADR-1006).
 import { currentTrack, loadCatalog, loadState, nextAction, nextActionJson } from './lib.mjs';
 
 const catalog = loadCatalog();

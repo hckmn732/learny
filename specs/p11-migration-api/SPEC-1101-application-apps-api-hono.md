@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1004, SPEC-1002]
 business_rules: []
 screens: []
-adrs: [ADR-0337, ADR-0336, ADR-0017, ADR-0049]
+adrs: [ADR-1002, ADR-1001, ADR-0017, ADR-0049]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Créer le backend autonome `apps/api` : un serveur Hono qui monte toutes les rou
 
 ## 2. Contexte
 
-ADR-0337 : Hono 4, port local 3001, absorption future du worker (SPEC-1103). ADR-0017 amendé : `/api/inngest` servi par `apps/api`. `apps/worker/src/server.ts` montre déjà l'usage de `@hono/node-server`, `inngest/hono`, Sentry Node et la santé `{ status, version, commit }`. `apps/web/server.mjs` montre les délais de connexion à reprendre (keep-alive 65 s). Lire ADR-0337, `docs/architecture/api.md`, `docs/engineering/testing.md` §3–4, `apps/web/playwright.config.ts` (`webServer`), `packages/config/src/server.ts`.
+ADR-1002 : Hono 4, port local 3001, absorption future du worker (SPEC-1103). ADR-0017 amendé : `/api/inngest` servi par `apps/api`. `apps/worker/src/server.ts` montre déjà l'usage de `@hono/node-server`, `inngest/hono`, Sentry Node et la santé `{ status, version, commit }`. `apps/web/server.mjs` montre les délais de connexion à reprendre (keep-alive 65 s). Lire ADR-1002, `docs/architecture/api.md`, `docs/engineering/testing.md` §3–4, `apps/web/playwright.config.ts` (`webServer`), `packages/config/src/server.ts`.
 
 ## 3. Dépendances
 
@@ -110,4 +110,4 @@ Conditions communes, plus : `apps/web` n'appelle pas encore `apps/api` en dehors
 
 ## 15. Décisions et hypothèses
 
-ADR-0337 (Hono, port 3001), ADR-0017 amendé. Décision : la parité est prouvée par paramétrage des suites existantes plutôt que par des tests nouveaux, pour ne pas dupliquer les attentes. Aucune question ouverte.
+ADR-1002 (Hono, port 3001), ADR-0017 amendé. Décision : la parité est prouvée par paramétrage des suites existantes plutôt que par des tests nouveaux, pour ne pas dupliquer les attentes. Aucune question ouverte.

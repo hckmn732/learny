@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-003, SPEC-011]
 business_rules: []
 screens: []
-adrs: [ADR-0336, ADR-0338, ADR-0341, ADR-0049]
+adrs: [ADR-1001, ADR-1003, ADR-1006, ADR-0049]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Rendre la branche `migration` exécutable et sûre : intégration continue sur l
 
 ## 2. Contexte
 
-Première spécification de la piste « migration » (ADR-0341) qui sépare le backend et le frontend (ADR-0336, ADR-0338). Le commit d'amorçage de la branche a déjà rendu l'outillage SDD conscient des pistes (`tools/sdd/core.mjs` : `track`, `requires`, `activeTrack`, `tracks.<piste>.baseBranch`) et accepté les portées `SPEC-\d{3,4}` et `CP-\d{1,2}`. Lire : `docs/adr/ADR-0336…`, `ADR-0338…`, `ADR-0341…`, `docs/engineering/sdd-process.md` (section « Pistes »), `docs/engineering/git.md`, `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`, `eslint.config.mjs` (zones `boundaryZones`, `SERVICE_DB_ALLOWED`), `apps/web/lib/sdd-pages.ts`, `apps/web/app/%5Fdev/sdd/registry.ts`.
+Première spécification de la piste « migration » (ADR-1006) qui sépare le backend et le frontend (ADR-1001, ADR-1003). Le commit d'amorçage de la branche a déjà rendu l'outillage SDD conscient des pistes (`tools/sdd/core.mjs` : `track`, `requires`, `activeTrack`, `tracks.<piste>.baseBranch`) et accepté les portées `SPEC-\d{3,4}` et `CP-\d{1,2}`. Lire : `docs/adr/ADR-1001…`, `ADR-1003…`, `ADR-1006…`, `docs/engineering/sdd-process.md` (section « Pistes »), `docs/engineering/git.md`, `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`, `eslint.config.mjs` (zones `boundaryZones`, `SERVICE_DB_ALLOWED`), `apps/web/lib/sdd-pages.ts`, `apps/web/app/%5Fdev/sdd/registry.ts`.
 
 État mesuré au démarrage de la piste (commit 773a4859) : 79 fichiers de `apps/web` hors `app/api` importent un paquet serveur (8 pages, 28 modules `lib/`, 15 composants, 28 fichiers `app/_dev`, `proxy.ts`), dont 4 composants client ; 154 fichiers `route.ts`.
 
@@ -29,13 +29,13 @@ Première spécification de la piste « migration » (ADR-0341) qui sépare le b
 
 ## 4. Règles métier couvertes
 
-Aucune règle `BR-*` : spécification technique, aucun comportement produit modifié (ADR-0336 §4).
+Aucune règle `BR-*` : spécification technique, aucun comportement produit modifié (ADR-1001 §4).
 
 ## 5. Exigences fonctionnelles
 
 - **EF-1** — La CI (`.github/workflows/ci.yml`) se déclenche sur les poussées vers `migration` en plus des branches existantes. `node tools/ci/check-workflows.mjs` reste vert.
 - **EF-2** — `.github/workflows/deploy.yml` ne déploie **ni prévisualisation ni production** pour `migration` ni pour les branches `spec/SPEC-1*` ; la condition est explicite et testée (SPEC-1103 la lèvera).
-- **EF-3** — `node tools/sdd/sync-main.mjs` fusionne `main` dans la branche courante (`git merge --no-ff main`) : si les seuls conflits portent sur `progress/state.json` ou `progress/PROGRESS.md`, il les résout selon ADR-0341 §4 (entrées de `main` pour la piste « produit », entrées de la branche pour la piste « migration », `updatedAt` le plus récent), régénère `progress/PROGRESS.md`, puis committe `merge(sdd): synchronise main dans migration`. S'il reste un conflit de code, il s'arrête avec la liste des fichiers en conflit et un code de sortie 2, sans committer.
+- **EF-3** — `node tools/sdd/sync-main.mjs` fusionne `main` dans la branche courante (`git merge --no-ff main`) : si les seuls conflits portent sur `progress/state.json` ou `progress/PROGRESS.md`, il les résout selon ADR-1006 §4 (entrées de `main` pour la piste « produit », entrées de la branche pour la piste « migration », `updatedAt` le plus récent), régénère `progress/PROGRESS.md`, puis committe `merge(sdd): synchronise main dans migration`. S'il reste un conflit de code, il s'arrête avec la liste des fichiers en conflit et un code de sortie 2, sans committer.
 - **EF-4** — Règle `learny/web-is-a-client` : tout fichier de `apps/web` qui importe `@learny/db`, `@learny/services`, `@learny/jobs`, `@learny/llm`, `@learny/tutor`, `@learny/ingestion`, `@learny/automations` ou `@learny/notifications` (chemin racine ou sous-chemin) est une erreur de lint **sauf** s'il figure dans `tools/migration/web-boundary-baseline.json`. Les tests (`apps/web/test/**`, `apps/web/e2e/**`) sont exemptés.
 - **EF-5** — La liste de référence ne peut que **diminuer** : un test échoue si elle contient un fichier qui n'importe plus aucun paquet serveur (entrée périmée à retirer) ou un fichier inexistant.
 - **EF-6** — `pnpm migration:report` (`tools/migration/report.mjs`) affiche et écrit `progress/migration.json` : nombre de fichiers web couplés par catégorie (`pages`, `lib`, `components`, `dev`, `proxy`, `apiRoutes`), nombre de routes du registre `ROUTES`, nombre de fichiers `route.ts`, et la liste des composants client couplés.
@@ -44,7 +44,7 @@ Aucune règle `BR-*` : spécification technique, aucun comportement produit modi
 ## 6. Exigences techniques
 
 - **ET-1** — `SDD_SPEC_ID_PATTERN` (`apps/web/lib/sdd-pages.ts`) devient `/^SPEC-\d{3,4}$/` ; `proxy.ts` et `app/%5Fdev/sdd/[specId]` acceptent donc les identifiants de la piste.
-- **ET-2** — La règle EF-4 est implémentée dans `eslint.config.mjs` par un bloc `no-restricted-imports` (motifs `@learny/db`, `@learny/db/*`, etc.) sur `apps/web/**/*.{ts,tsx}` avec `ignores` = contenu de la liste de référence + `apps/web/test/**` + `apps/web/e2e/**` ; message : « apps/web est un client de l'API (ADR-0338) : passer par @learny/api-client. »
+- **ET-2** — La règle EF-4 est implémentée dans `eslint.config.mjs` par un bloc `no-restricted-imports` (motifs `@learny/db`, `@learny/db/*`, etc.) sur `apps/web/**/*.{ts,tsx}` avec `ignores` = contenu de la liste de référence + `apps/web/test/**` + `apps/web/e2e/**` ; message : « apps/web est un client de l'API (ADR-1003) : passer par @learny/api-client. »
 - **ET-3** — `tools/migration/web-boundary-baseline.json` : `{ "files": [ "apps/web/…" ], "globs": [ "apps/web/app/api/**" ] }`, chemins triés, générés par `node tools/migration/report.mjs --write-baseline` (option utilisable **uniquement** si la liste est vide ou à la création ; ensuite, seules les suppressions sont permises — vérifié par EF-5).
 - **ET-4** — `tools/sdd/sync-main.mjs` réutilise `lib.mjs` (`loadCatalog`, `specTrack`, `writeJsonAtomic`) ; la fusion des états est une fonction pure `mergeTrackStates(catalog, ours, theirs, track)` exportée par `tools/sdd/core.mjs` et testée.
 - **ET-5** — `tools/migration/report.mjs` n'a aucune dépendance externe (Node 24) ; il analyse les imports par expression régulière sur `from '…'` et `import('…')`.
@@ -111,4 +111,4 @@ Conditions communes de `docs/engineering/testing.md` §7, plus : la liste de ré
 
 ## 15. Décisions et hypothèses
 
-ADR-0341 fixe la piste, la branche et la résolution du suivi ; ADR-0338 fixe la règle « le web est un client ». Hypothèse : les fichiers `apps/web/app/api/**` restent couverts par le motif global de la liste jusqu'à leur suppression (SPEC-1201). Aucune question ouverte.
+ADR-1006 fixe la piste, la branche et la résolution du suivi ; ADR-1003 fixe la règle « le web est un client ». Hypothèse : les fichiers `apps/web/app/api/**` restent couverts par le motif global de la liste jusqu'à leur suppression (SPEC-1201). Aucune question ouverte.

@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1203]
 business_rules: []
 screens: []
-adrs: [ADR-0339, ADR-0340, ADR-0342, ADR-0120]
+adrs: [ADR-1004, ADR-1005, ADR-1007, ADR-0120]
 visual: demo
 ---
 
@@ -14,11 +14,11 @@ visual: demo
 
 ## 1. Objectif
 
-Rendre l'API consommable par un client qui n'est pas le web : un client Android/iOS (ADR-0339) ou tout autre consommateur doit pouvoir s'authentifier auprès de Supabase, appeler toutes les routes utilisateur avec `Authorization: Bearer`, consommer le flux SSE du tuteur et lire un contrat OpenAPI complet. Aucun écran n'est ajouté ; la preuve est un **client natif simulé** exécuté en test.
+Rendre l'API consommable par un client qui n'est pas le web : un client Android/iOS (ADR-1004) ou tout autre consommateur doit pouvoir s'authentifier auprès de Supabase, appeler toutes les routes utilisateur avec `Authorization: Bearer`, consommer le flux SSE du tuteur et lire un contrat OpenAPI complet. Aucun écran n'est ajouté ; la preuve est un **client natif simulé** exécuté en test.
 
 ## 2. Contexte
 
-SPEC-1102 a livré l'authentification Bearer et la vérification locale. Il reste à : déclarer la sécurité dans OpenAPI, ouvrir CORS de façon contrôlée pour d'éventuelles origines web distinctes, donner à `@learny/api-client` un mode « jeton » avec rafraîchissement, et documenter la politique de version de `/api/v1`. Les notifications push natives et l'application `apps/mobile` sont hors de cette spécification (ADR-0339 §4). Lire ADR-0339, ADR-0340, ADR-0342, ADR-0120, `docs/architecture/api.md` §1.
+SPEC-1102 a livré l'authentification Bearer et la vérification locale. Il reste à : déclarer la sécurité dans OpenAPI, ouvrir CORS de façon contrôlée pour d'éventuelles origines web distinctes, donner à `@learny/api-client` un mode « jeton » avec rafraîchissement, et documenter la politique de version de `/api/v1`. Les notifications push natives et l'application `apps/mobile` sont hors de cette spécification (ADR-1004 §4). Lire ADR-1004, ADR-1005, ADR-1007, ADR-0120, `docs/architecture/api.md` §1.
 
 ## 3. Dépendances
 
@@ -51,7 +51,7 @@ Aucune règle `BR-*` ; les mêmes règles s'appliquent quel que soit le client.
 - **CL-1** — Requête préliminaire d'une origine non autorisée → 204 sans en-tête CORS (le navigateur bloquera) ; aucune exécution de route.
 - **CL-2** — Rafraîchissement du jeton en échec → l'erreur 401 d'origine est remontée, sans boucle.
 - **CL-3** — Flux SSE interrompu par le réseau → `streamTutorReply` lève une erreur typée `STREAM_INTERRUPTED` après avoir livré les parties reçues.
-- **CL-4** — Client natif qui envoie un `Origin` (WebView) → soumis à la garde d'origine comme un navigateur (ADR-0340 §6).
+- **CL-4** — Client natif qui envoie un `Origin` (WebView) → soumis à la garde d'origine comme un navigateur (ADR-1005 §6).
 - **CL-5** — Jeton valide d'un compte en cours de suppression → routes `freshAuth` refusées 401 (SPEC-1102).
 
 ## 8. Instructions d'implémentation
@@ -105,4 +105,4 @@ Conditions communes, plus : `openapi:check` vert et aucun changement de contrat 
 
 ## 15. Décisions et hypothèses
 
-ADR-0339 (clients natifs Expo, spécifiés après la piste), ADR-0340 (Bearer, CORS). Décision : la politique de version de `/api/v1` est fixée ici car elle conditionne les clients natifs, qui ne se mettent pas à jour en même temps que le serveur. Aucune question ouverte.
+ADR-1004 (clients natifs Expo, spécifiés après la piste), ADR-1005 (Bearer, CORS). Décision : la politique de version de `/api/v1` est fixée ici car elle conditionne les clients natifs, qui ne se mettent pas à jour en même temps que le serveur. Aucune question ouverte.

@@ -31,7 +31,7 @@ if (isGitRepo()) {
     const exists = shOk(`git rev-parse --verify --quiet refs/heads/${branch}`).ok;
     const dirty = shOk('git status --porcelain').out;
     if (dirty && !resuming) die(`Arbre de travail non propre sur ${cur}. Committez ou annulez avant de démarrer ${spec.id}.`);
-    // ADR-0341 : une spécification part de la branche de base de sa piste (main ou migration).
+    // ADR-1006 : une spécification part de la branche de base de sa piste (main ou migration).
     const r = exists ? shOk(`git checkout ${branch}`) : shOk(`git checkout -b ${branch} ${baseBranchOf(catalog, spec)}`);
     if (!r.ok) die(`Impossible de basculer sur ${branch} : ${r.out}`);
   }

@@ -52,7 +52,7 @@ export function isBlockedTransitively(catalog, st, id, seen = new Set()) {
   return catalog.byId[id].dependsOn.some((d) => isBlockedTransitively(catalog, st, d, seen));
 }
 
-// Pistes (ADR-0341) : une phase appartient à une piste (`track`, « produit » par défaut). Chaque piste
+// Pistes (ADR-1006) : une phase appartient à une piste (`track`, « produit » par défaut). Chaque piste
 // est une suite ordonnée de phases indépendante des autres ; `requires` ajoute des checkpoints d'autres
 // pistes à attendre. La piste active (`catalog.activeTrack`, surchargée par SDD_TRACK) pilote next.mjs.
 export const DEFAULT_TRACK = 'produit';
@@ -66,9 +66,21 @@ export function activeTrack(catalog, override) {
   return override || catalog.activeTrack || DEFAULT_TRACK;
 }
 
-/** Configuration d'une piste : branche de base (fusions, push) et tags de version SemVer. */
+/** Configuration d'une piste : branche de base (fusions, push), tags de version SemVer et plage d'ADR. */
 export function trackConfig(catalog, track) {
-  return { baseBranch: 'main', versionTags: true, ...(catalog.tracks?.[track] ?? {}) };
+  return { baseBranch: 'main', versionTags: true, adrBase: 0, ...(catalog.tracks?.[track] ?? {}) };
+}
+
+/**
+ * Numéro du prochain ADR d'une piste : chaque piste numérote dans sa propre plage de mille
+ * (`adrBase` 0 → ADR-0001…0999, 1000 → ADR-1001…1999) pour que deux branches parallèles
+ * ne créent jamais le même identifiant (ADR-1006).
+ */
+export function nextAdrNumber(existing, adrBase = 0) {
+  const inRange = existing.filter((n) => n > adrBase && n < adrBase + 1000);
+  const n = Math.max(adrBase, ...inRange) + 1;
+  if (n >= adrBase + 1000) throw new Error(`Plage d'ADR épuisée (${adrBase + 1}–${adrBase + 999}).`);
+  return n;
 }
 
 export function phaseOf(catalog, phaseId) {
@@ -214,7 +226,7 @@ export function summarizePlaywright(report, tag) {
   const out = { passed: 0, failed: 0, videos: 0, visual: 0 };
   const walk = (suite) => {
     for (const sp of suite.specs ?? []) {
-      // `@SPEC-110` ne doit pas retenir `@SPEC-1101` (identifiants à 4 chiffres, ADR-0341).
+      // `@SPEC-110` ne doit pas retenir `@SPEC-1101` (identifiants à 4 chiffres, ADR-1006).
       const own = new RegExp(`@${tag}(?![0-9])`);
       if (!own.test(sp.title) && !(sp.tags ?? []).includes(`@${tag}`)) continue;
       const isVisual = sp.title.includes('@visual') || (sp.tags ?? []).includes('@visual');

@@ -8,11 +8,11 @@ import { activeTrack, indexCatalog, normalizeState, specTrack, trackConfig } fro
 
 export {
   DEFAULT_TRACK, DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, activeTrack, displayStatus, emptySpecState, indexCatalog,
-  isBlockedTransitively, nextAction, nextActionJson, normalizeState, phaseOf, phaseUnlocked, progressSummary,
+  isBlockedTransitively, nextAction, nextActionJson, nextAdrNumber, normalizeState, phaseOf, phaseUnlocked, progressSummary,
   readySpecs, renderProgressMarkdown, specTrack, trackConfig, trackOf, e2eVerdict, summarizePlaywright, visualVerdict,
 } from './core.mjs';
 
-/** Piste active de la commande : SDD_TRACK l'emporte sur `catalog.activeTrack` (ADR-0341). */
+/** Piste active de la commande : SDD_TRACK l'emporte sur `catalog.activeTrack` (ADR-1006). */
 export function currentTrack(catalog) {
   return activeTrack(catalog, process.env.SDD_TRACK);
 }

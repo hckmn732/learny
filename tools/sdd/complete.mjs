@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Déclare une spécification terminée (si toutes ses validations sont réussies), commite preuves et suivi,
 // fusionne la branche dans la branche de base de sa piste (--no-ff ; main par défaut, migration pour la
-// piste de migration, ADR-0341) et pousse si un remote origin existe.
+// piste de migration, ADR-1006) et pousse si un remote origin existe.
 // Usage : node tools/sdd/complete.mjs SPEC-xxx [--no-merge] [--no-push]
 import fs from 'node:fs';
 import path from 'node:path';

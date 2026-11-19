@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1102]
 business_rules: []
 screens: []
-adrs: [ADR-0337, ADR-0017, ADR-0329, ADR-0330, ADR-0341]
+adrs: [ADR-1002, ADR-0017, ADR-0329, ADR-0330, ADR-1006]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Faire de `apps/api` le seul processus backend livrable : il absorbe `apps/worker
 
 ## 2. Contexte
 
-ADR-0337 §4–5 : `LEARNY_API_ROLE` (`all`, `api`, `jobs`), image `docker/api.Dockerfile`, projet Vercel `learny-api` en `fra1`. Existant : `apps/worker` (Hono, `/api/inngest`, santé, Sentry), `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`, `docker/compose.{dev,selfhost,coolify,coolify-qa}.yml` (ADR-0329, ADR-0330), `.github/workflows/{ci,deploy}.yml`, `tools/deploy/check.mjs`, `tools/docker/check-selfhost.mjs`, `vercel.json`. SPEC-1001 a interdit tout déploiement depuis la piste : cette spécification réactive la prévisualisation pour la branche `migration` une fois les deux applications déployables ensemble. Lire ADR-0337, ADR-0329, ADR-0330, `docs/architecture/overview.md` §6.
+ADR-1002 §4–5 : `LEARNY_API_ROLE` (`all`, `api`, `jobs`), image `docker/api.Dockerfile`, projet Vercel `learny-api` en `fra1`. Existant : `apps/worker` (Hono, `/api/inngest`, santé, Sentry), `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`, `docker/compose.{dev,selfhost,coolify,coolify-qa}.yml` (ADR-0329, ADR-0330), `.github/workflows/{ci,deploy}.yml`, `tools/deploy/check.mjs`, `tools/docker/check-selfhost.mjs`, `vercel.json`. SPEC-1001 a interdit tout déploiement depuis la piste : cette spécification réactive la prévisualisation pour la branche `migration` une fois les deux applications déployables ensemble. Lire ADR-1002, ADR-0329, ADR-0330, `docs/architecture/overview.md` §6.
 
 ## 3. Dépendances
 
@@ -106,4 +106,4 @@ Conditions communes, plus : un environnement auto-hébergé se lance avec `api` 
 
 ## 15. Décisions et hypothèses
 
-ADR-0337 (rôles, image, projet Vercel), ADR-0017 amendé, ADR-0329/0330 (piles Coolify). Hypothèse : les secrets des environnements gérés sont ajoutés par le porteur du projet ; leur absence est un blocage externe, jamais contourné. Aucune question ouverte.
+ADR-1002 (rôles, image, projet Vercel), ADR-0017 amendé, ADR-0329/0330 (piles Coolify). Hypothèse : les secrets des environnements gérés sont ajoutés par le porteur du projet ; leur absence est un blocage externe, jamais contourné. Aucune question ouverte.

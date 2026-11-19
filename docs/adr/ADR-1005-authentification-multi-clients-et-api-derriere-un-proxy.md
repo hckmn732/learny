@@ -1,9 +1,9 @@
-# ADR-0340 — Authentification multi-clients et API derrière un proxy
+# ADR-1005 — Authentification multi-clients et API derrière un proxy
 
 - **Statut** : Acceptée — complète ADR-0121, ADR-0252 et ADR-0258
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
-- **Liens** : ADR-0336, ADR-0121, ADR-0252, ADR-0258, SPEC-1102, SPEC-1201, SPEC-1301
+- **Liens** : ADR-1001, ADR-0121, ADR-0252, ADR-0258, SPEC-1102, SPEC-1201, SPEC-1301
 
 ## Contexte
 

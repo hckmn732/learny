@@ -1,9 +1,9 @@
-# ADR-0337 — API autonome en Hono (`apps/api`)
+# ADR-1002 — API autonome en Hono (`apps/api`)
 
 - **Statut** : Acceptée — amende ADR-0017
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
-- **Liens** : ADR-0336, ADR-0017, ADR-0251, ADR-0258, SPEC-1003, SPEC-1004, SPEC-1101, SPEC-1103
+- **Liens** : ADR-1001, ADR-0017, ADR-0251, ADR-0258, SPEC-1003, SPEC-1004, SPEC-1101, SPEC-1103
 
 ## Contexte
 
@@ -21,7 +21,7 @@ Options étudiées :
 
 ## Décision
 
-1. `apps/api` est une application **Hono 4** (Node 24) qui **monte automatiquement** toutes les routes du registre `ROUTES` de `@learny/contracts` à partir de la table d'implémentation de `@learny/api-routes` (ADR-0342) ; une route sans implémentation est une erreur de typage.
+1. `apps/api` est une application **Hono 4** (Node 24) qui **monte automatiquement** toutes les routes du registre `ROUTES` de `@learny/contracts` à partir de la table d'implémentation de `@learny/api-routes` (ADR-1007) ; une route sans implémentation est une erreur de typage.
 2. La couche de transport (wrapper `handler()`, gardes, idempotence, limitation, conversion d'erreurs, journalisation) vit dans `@learny/http`, indépendante de tout framework (`Request` → `Response`). `apps/api` l'adapte à Hono ; `apps/web` l'adapte à Next pendant la transition seulement.
 3. `apps/api` sert aussi `/api/inngest` (fonctions de `@learny/jobs`), `/api/v1/webhooks/stripe` (corps brut) et le flux SSE `POST /api/v1/conversations/:id/messages`, sans changement de contrat.
 4. **`apps/worker` est absorbé** : le même binaire `apps/api` sert l'API et les jobs ; la variable `LEARNY_API_ROLE` (`all` par défaut, `api`, `jobs`) permet de séparer les processus en auto-hébergement. ADR-0017 est amendé : les fonctions Inngest sont servies par `apps/api` dans tous les environnements.

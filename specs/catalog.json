@@ -10,7 +10,8 @@
     },
     "migration": {
       "baseBranch": "migration",
-      "versionTags": false
+      "versionTags": false,
+      "adrBase": 1000
     }
   },
   "phases": [
@@ -3960,9 +3961,9 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0336",
-        "ADR-0338",
-        "ADR-0341",
+        "ADR-1001",
+        "ADR-1003",
+        "ADR-1006",
         "ADR-0049"
       ],
       "visual": "demo",
@@ -3987,9 +3988,9 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0342",
-        "ADR-0336",
-        "ADR-0339"
+        "ADR-1007",
+        "ADR-1001",
+        "ADR-1004"
       ],
       "visual": "demo",
       "path": "specs/p10-migration-preparation/SPEC-1002-paquets-partages-client-d-api-logique-pure-et-messages.md",
@@ -4013,8 +4014,8 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0337",
-        "ADR-0342",
+        "ADR-1002",
+        "ADR-1007",
         "ADR-0251",
         "ADR-0258",
         "ADR-0120"
@@ -4041,8 +4042,8 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0337",
-        "ADR-0342",
+        "ADR-1002",
+        "ADR-1007",
         "ADR-0049"
       ],
       "visual": "demo",
@@ -4068,8 +4069,8 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0337",
-        "ADR-0336",
+        "ADR-1002",
+        "ADR-1001",
         "ADR-0017",
         "ADR-0049"
       ],
@@ -4095,7 +4096,7 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0340",
+        "ADR-1005",
         "ADR-0121",
         "ADR-0252",
         "ADR-0258",
@@ -4123,11 +4124,11 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0337",
+        "ADR-1002",
         "ADR-0017",
         "ADR-0329",
         "ADR-0330",
-        "ADR-0341"
+        "ADR-1006"
       ],
       "visual": "demo",
       "path": "specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md",
@@ -4151,9 +4152,9 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0338",
-        "ADR-0340",
-        "ADR-0337",
+        "ADR-1003",
+        "ADR-1005",
+        "ADR-1002",
         "ADR-0252"
       ],
       "visual": "demo",
@@ -4178,8 +4179,8 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0338",
-        "ADR-0342",
+        "ADR-1003",
+        "ADR-1007",
         "ADR-0041",
         "ADR-0332",
         "ADR-0252"
@@ -4206,10 +4207,10 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0338",
+        "ADR-1003",
         "ADR-0049",
-        "ADR-0341",
-        "ADR-0342"
+        "ADR-1006",
+        "ADR-1007"
       ],
       "visual": "demo",
       "path": "specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md",
@@ -4233,9 +4234,9 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0339",
-        "ADR-0340",
-        "ADR-0342",
+        "ADR-1004",
+        "ADR-1005",
+        "ADR-1007",
         "ADR-0120"
       ],
       "visual": "demo",
@@ -4260,11 +4261,11 @@
       "businessRules": [],
       "screens": [],
       "adrs": [
-        "ADR-0336",
-        "ADR-0341",
-        "ADR-0337",
-        "ADR-0338",
-        "ADR-0342"
+        "ADR-1001",
+        "ADR-1006",
+        "ADR-1002",
+        "ADR-1003",
+        "ADR-1007"
       ],
       "visual": "demo",
       "path": "specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md",

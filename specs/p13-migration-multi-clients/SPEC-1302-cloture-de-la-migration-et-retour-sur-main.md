@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1301]
 business_rules: []
 screens: []
-adrs: [ADR-0336, ADR-0341, ADR-0337, ADR-0338, ADR-0342]
+adrs: [ADR-1001, ADR-1006, ADR-1002, ADR-1003, ADR-1007]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Retirer tout le code de transition, mettre la documentation et l'exploitation en
 
 ## 2. Contexte
 
-ADR-0341 §9 : après CP-13, l'agent principal fusionne `migration` dans `main` et remet `catalog.activeTrack` à `"produit"` dans le commit de fusion. Code de transition présent à la fin de P12 : réexportations `apps/web/lib/api-client.ts` et `apps/web/lib/api/*` résiduelles, scripts `tools/migration/*` (rapport, liste de référence supprimée en SPEC-1203), mentions « transition » dans les documents. Lire ADR-0336 à ADR-0342, `docs/architecture/overview.md`, `docs/architecture/api.md`, `docs/engineering/{conventions,testing,git,sdd-process}.md`, `README.md`, `CONTRIBUTING.md`, `.env.example`.
+ADR-1006 §9 : après CP-13, l'agent principal fusionne `migration` dans `main` et remet `catalog.activeTrack` à `"produit"` dans le commit de fusion. Code de transition présent à la fin de P12 : réexportations `apps/web/lib/api-client.ts` et `apps/web/lib/api/*` résiduelles, scripts `tools/migration/*` (rapport, liste de référence supprimée en SPEC-1203), mentions « transition » dans les documents. Lire ADR-1001 à ADR-1007, `docs/architecture/overview.md`, `docs/architecture/api.md`, `docs/engineering/{conventions,testing,git,sdd-process}.md`, `README.md`, `CONTRIBUTING.md`, `.env.example`.
 
 ## 3. Dépendances
 
@@ -51,7 +51,7 @@ Aucune règle `BR-*`.
 - **CL-1** — Rotation du secret : requêtes signées avec l'ancien secret acceptées tant que `API_PROXY_SECRET_PREVIOUS` est défini, refusées (traitées comme sans secret) ensuite.
 - **CL-2** — Un import résiduel de `apps/web/lib/api-client` → échec de typecheck.
 - **CL-3** — Couplage réintroduit plus tard sur `main` → `pnpm lint` échoue via `report.mjs --check`.
-- **CL-4** — Fusion de `migration` dans `main` avec des conflits de suivi → résolus par `node tools/sdd/sync-main.mjs` exécuté dans l'autre sens (procédure documentée, mêmes règles d'ADR-0341 §4).
+- **CL-4** — Fusion de `migration` dans `main` avec des conflits de suivi → résolus par `node tools/sdd/sync-main.mjs` exécuté dans l'autre sens (procédure documentée, mêmes règles d'ADR-1006 §4).
 
 ## 8. Instructions d'implémentation
 
@@ -59,7 +59,7 @@ Aucune règle `BR-*`.
 2. Supprimer le code de transition, mettre à jour les importeurs. Commit `refactor(SPEC-1302): retire le code de transition`.
 3. Rotation du secret et contrôle permanent du couplage. Commit `feat(SPEC-1302): permet la rotation du secret de proxy`.
 4. Documentation et guide d'exploitation. Commit `docs(SPEC-1302): documente l'architecture à trois applications`.
-5. Test de fin de piste, `CHANGELOG.md`, démonstration, e2e, visuel ; `validate.mjs` ; `complete.mjs`. L'agent n'effectue **pas** la fusion dans `main` : elle suit CP-13 (ADR-0341 §9).
+5. Test de fin de piste, `CHANGELOG.md`, démonstration, e2e, visuel ; `validate.mjs` ; `complete.mjs`. L'agent n'effectue **pas** la fusion dans `main` : elle suit CP-13 (ADR-1006 §9).
 
 ## 9. Fichiers et composants concernés
 
@@ -105,4 +105,4 @@ Conditions communes, plus : CP-13 exécutable ; la fusion dans `main` est prépa
 
 ## 15. Décisions et hypothèses
 
-ADR-0341 §9 (fin de piste), ADR-0336 à ADR-0342. Décision : `report.mjs --check` reste comme garde-fou permanent pour empêcher la réintroduction d'un couplage après la migration. Aucune question ouverte.
+ADR-1006 §9 (fin de piste), ADR-1001 à ADR-1007. Décision : `report.mjs --check` reste comme garde-fou permanent pour empêcher la réintroduction d'un couplage après la migration. Aucune question ouverte.

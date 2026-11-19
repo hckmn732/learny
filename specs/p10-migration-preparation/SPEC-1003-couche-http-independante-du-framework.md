@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1001]
 business_rules: []
 screens: []
-adrs: [ADR-0337, ADR-0342, ADR-0251, ADR-0258, ADR-0120]
+adrs: [ADR-1002, ADR-1007, ADR-0251, ADR-0258, ADR-0120]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Sortir de `apps/web/lib/api/` toute la couche de transport de l'API (wrapper `ha
 
 ## 2. Contexte
 
-ADR-0337 choisit Hono et impose une couche de transport indépendante du framework ; ADR-0342 la nomme `@learny/http`. La couche existante (ADR-0251, ADR-0258, ADR-0120) est dans `apps/web/lib/api/` : `handler.ts`, `route-handler.ts`, `problem.ts`, `validate.ts`, `idempotency.ts`, `rate-limit.ts`, `origin.ts`, `request-id.ts`, `session.ts`, `bootstrap-security.ts`, `dev-guard.ts`. `NextRequest` n'y est utilisé que comme **type** (`handler.ts`, `route-handler.ts`, `dev-guard.ts`). Les routes importent `lib/api/handler` (148 fois), `lib/api/dev-guard` (23), `lib/api/idempotency` (4), `lib/api/request-id` (1). Lire `docs/architecture/api.md` §1 et les fichiers cités.
+ADR-1002 choisit Hono et impose une couche de transport indépendante du framework ; ADR-1007 la nomme `@learny/http`. La couche existante (ADR-0251, ADR-0258, ADR-0120) est dans `apps/web/lib/api/` : `handler.ts`, `route-handler.ts`, `problem.ts`, `validate.ts`, `idempotency.ts`, `rate-limit.ts`, `origin.ts`, `request-id.ts`, `session.ts`, `bootstrap-security.ts`, `dev-guard.ts`. `NextRequest` n'y est utilisé que comme **type** (`handler.ts`, `route-handler.ts`, `dev-guard.ts`). Les routes importent `lib/api/handler` (148 fois), `lib/api/dev-guard` (23), `lib/api/idempotency` (4), `lib/api/request-id` (1). Lire `docs/architecture/api.md` §1 et les fichiers cités.
 
 ## 3. Dépendances
 
@@ -104,4 +104,4 @@ Conditions communes, plus : aucun fichier `route.ts` modifié, aucune assertion 
 
 ## 15. Décisions et hypothèses
 
-ADR-0337 (transport indépendant), ADR-0342 (nom et dépendances). Décision : la configuration explicite `configureHttp` remplace les effets de bord à l'import, condition pour que deux hôtes (Next puis Hono) configurent le même paquet. Aucune question ouverte.
+ADR-1002 (transport indépendant), ADR-1007 (nom et dépendances). Décision : la configuration explicite `configureHttp` remplace les effets de bord à l'import, condition pour que deux hôtes (Next puis Hono) configurent le même paquet. Aucune question ouverte.

@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1101]
 business_rules: []
 screens: []
-adrs: [ADR-0340, ADR-0121, ADR-0252, ADR-0258, ADR-0007]
+adrs: [ADR-1005, ADR-0121, ADR-0252, ADR-0258, ADR-0007]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Permettre à `apps/api` d'authentifier un appelant par cookie de session (web) *
 
 ## 2. Contexte
 
-ADR-0340 fixe les règles. Aujourd'hui `packages/http/src/session.ts` (déplacé par SPEC-1003) lit les cookies et appelle `supabase.auth.getUser()` ; la garde d'origine compare `Origin` à l'origine reconstituée depuis `Host` (`hostOrigin()` de `security.ts`) ; l'adresse du client suit ADR-0258. Après SPEC-1201, `apps/web` relaiera `/api/v1/*` vers `apps/api` : sans cette spécification, `Host` deviendrait celui de l'API et toutes les mutations seraient refusées. Lire ADR-0340, ADR-0121, ADR-0252, ADR-0258, `docs/architecture/api.md` §1.
+ADR-1005 fixe les règles. Aujourd'hui `packages/http/src/session.ts` (déplacé par SPEC-1003) lit les cookies et appelle `supabase.auth.getUser()` ; la garde d'origine compare `Origin` à l'origine reconstituée depuis `Host` (`hostOrigin()` de `security.ts`) ; l'adresse du client suit ADR-0258. Après SPEC-1201, `apps/web` relaiera `/api/v1/*` vers `apps/api` : sans cette spécification, `Host` deviendrait celui de l'API et toutes les mutations seraient refusées. Lire ADR-1005, ADR-0121, ADR-0252, ADR-0258, `docs/architecture/api.md` §1.
 
 ## 3. Dépendances
 
@@ -109,4 +109,4 @@ Conditions communes, plus : le parcours d'authentification web (`@SPEC-202`) est
 
 ## 15. Décisions et hypothèses
 
-ADR-0340 fixe transports, vérification locale, routes sensibles et proxy de confiance. Hypothèse : le projet Supabase géré expose des clés asymétriques (JWKS) ; sinon le repli HS256 s'applique avec `SUPABASE_JWT_SECRET` côté serveur. Aucune question ouverte.
+ADR-1005 fixe transports, vérification locale, routes sensibles et proxy de confiance. Hypothèse : le projet Supabase géré expose des clés asymétriques (JWKS) ; sinon le repli HS256 s'applique avec `SUPABASE_JWT_SECRET` côté serveur. Aucune question ouverte.

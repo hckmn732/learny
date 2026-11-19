@@ -1,18 +1,18 @@
-# ADR-0341 — Piste SDD de migration et branche `migration`
+# ADR-1006 — Piste SDD de migration et branche `migration`
 
 - **Statut** : Acceptée — complète ADR-0001 et ADR-0005 ; amende ADR-0049
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
-- **Liens** : ADR-0001, ADR-0005, ADR-0049, ADR-0336, AGENTS.md, docs/engineering/sdd-process.md, docs/engineering/git.md
+- **Liens** : ADR-0001, ADR-0005, ADR-0049, ADR-1001, AGENTS.md, docs/engineering/sdd-process.md, docs/engineering/git.md
 
 ## Contexte
 
-La boucle SDD (ADR-0001) enchaîne les phases P0 → P9 dans l'ordre : une phase n'est exécutable que si le checkpoint de la précédente est réussi. La séparation backend/frontend (ADR-0336) doit avancer **en parallèle** de la livraison V1 (CP-7 et SPEC-807/808 restent à faire sur `main`), sur une branche dédiée, et être exécutée et testée par un agent en totale autonomie. Avec l'outillage d'origine, un agent démarrant sur cette branche aurait d'abord exécuté CP-7 puis la fin de la V1.
+La boucle SDD (ADR-0001) enchaîne les phases P0 → P9 dans l'ordre : une phase n'est exécutable que si le checkpoint de la précédente est réussi. La séparation backend/frontend (ADR-1001) doit avancer **en parallèle** de la livraison V1 (CP-7 et SPEC-807/808 restent à faire sur `main`), sur une branche dédiée, et être exécutée et testée par un agent en totale autonomie. Avec l'outillage d'origine, un agent démarrant sur cette branche aurait d'abord exécuté CP-7 puis la fin de la V1.
 
 ## Décision
 
 1. **Pistes** : le catalogue (`specs/catalog.json`) peut répartir les phases en pistes (`phase.track`, « produit » par défaut). Chaque piste est une suite ordonnée indépendante : une phase est débloquée par le checkpoint de la phase précédente **de la même piste** et par les checkpoints listés dans `phase.requires`. `catalog.activeTrack` désigne la piste que `next.mjs` pilote ; `SDD_TRACK` la surcharge.
-2. **Configuration d'une piste** (`catalog.tracks.<piste>`) : `baseBranch` (départ des branches `spec/…`, cible des fusions `--no-ff` et du push) et `versionTags` (tags SemVer aux checkpoints).
+2. **Configuration d'une piste** (`catalog.tracks.<piste>`) : `baseBranch` (départ des branches `spec/…`, cible des fusions `--no-ff` et du push), `versionTags` (tags SemVer aux checkpoints) et `adrBase` (plage de numérotation des ADR créés par `adr.mjs` : 0 → ADR-0001…0999 pour `produit`, 1000 → ADR-1001…1999 pour `migration`, afin que `main` et `migration` ne créent jamais le même identifiant ; les ADR de la migration commencent donc à ADR-1001).
 3. **Piste `migration`** : phases P10 à P13, checkpoints CP-10 à CP-13, spécifications **SPEC-1001 à SPEC-1302** (identifiants à 4 chiffres, phase × 100 + rang), priorité `migration`, `baseBranch: "migration"`, `versionTags: false` (tags `cp-10`… seulement).
 4. **Branche `migration`** : créée depuis `main` (773a4859). Sur cette branche, `catalog.activeTrack = "migration"`. `main` est fusionnée dans `migration` **au moins une fois par jour** et avant chaque checkpoint (`git merge --no-ff main`). Résolution des conflits de suivi : dans `progress/state.json`, garder les entrées de `main` pour les spécifications et checkpoints de la piste « produit » et celles de `migration` pour la piste « migration », puis régénérer `progress/PROGRESS.md` avec `node tools/sdd/status.mjs`. Un conflit de code est résolu en gardant le comportement de `main` et la structure de `migration`.
 5. **Dépendance à la V1** : la phase P12 (bascule du web, la seule qui supprime ou déplace du code que `main` modifie encore) exige `CP-8` (`requires: ["CP-8"]`). P10 et P11, purement additives, démarrent immédiatement.

@@ -25,7 +25,7 @@ describe('[SPEC-002] commit rules', () => {
     'chore(CP-0): checkpoint CP-0 réussi',
     'chore(sdd): initialise le référentiel',
     'docs(SPEC-002): complète CONTRIBUTING',
-    // ADR-0341 — piste de migration.
+    // ADR-1006 — piste de migration.
     'feat(SPEC-1101): crée l application apps/api',
     'chore(CP-10): checkpoint CP-10 réussi',
   ])('accepts %s', async (message) => {

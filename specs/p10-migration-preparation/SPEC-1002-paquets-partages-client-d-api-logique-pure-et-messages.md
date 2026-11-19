@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1001]
 business_rules: []
 screens: []
-adrs: [ADR-0342, ADR-0336, ADR-0339]
+adrs: [ADR-1007, ADR-1001, ADR-1004]
 visual: demo
 ---
 
@@ -18,13 +18,13 @@ Extraire de `apps/web` et de `packages/services` ce que tous les clients (web au
 
 ## 2. Contexte
 
-ADR-0342 définit les paquets partagés et leurs dépendances autorisées. Aujourd'hui :
+ADR-1007 définit les paquets partagés et leurs dépendances autorisées. Aujourd'hui :
 
 - le client typé de `/api/v1` vit dans `apps/web/lib/api-client.ts` (testé par `api-client.test.ts` et `api-client-routes.test.ts`) ;
 - deux modules purs de `packages/services` sont importés par des composants client : `packages/services/src/home/derive.ts` (par `components/home/home-view.tsx`, `TutorActivityCard.tsx`, `WarmupCard.tsx`) et `packages/services/src/review/game-response.ts` (par `components/offline/OfflineQuizGlobal.tsx`) ;
 - les messages vivent dans `apps/web/messages/fr.ts` (et `apps/web/messages/fr/`), référencés aussi par `packages/bricks/src/view/labels.ts`.
 
-Lire : ADR-0342, `docs/architecture/overview.md` §3 (règles de dépendance), `eslint.config.mjs` (`ALLOWED_IMPORTS`), `apps/web/lib/api-client.ts`.
+Lire : ADR-1007, `docs/architecture/overview.md` §3 (règles de dépendance), `eslint.config.mjs` (`ALLOWED_IMPORTS`), `apps/web/lib/api-client.ts`.
 
 ## 3. Dépendances
 
@@ -111,4 +111,4 @@ Conditions communes (`docs/engineering/testing.md` §7), plus : aucun alias de c
 
 ## 15. Décisions et hypothèses
 
-ADR-0342 fixe noms, contenus et dépendances. Hypothèse : `apps/web/messages` ne contient que des données (aucune fonction dépendant de Next). Aucune question ouverte.
+ADR-1007 fixe noms, contenus et dépendances. Hypothèse : `apps/web/messages` ne contient que des données (aucune fonction dépendant de Next). Aucune question ouverte.

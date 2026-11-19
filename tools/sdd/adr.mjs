@@ -3,7 +3,7 @@
 // Usage : node tools/sdd/adr.mjs new "Titre" --context "…" --decision "…" [--consequences "…"] [--links "SPEC-xxx"]
 import fs from 'node:fs';
 import path from 'node:path';
-import { die, nowIso, P, writeFileAtomic } from './lib.mjs';
+import { currentTrack, die, nextAdrNumber, nowIso, P, readJson, trackConfig, writeFileAtomic } from './lib.mjs';
 
 const [cmd, title] = process.argv.slice(2);
 if (cmd !== 'new' || !title) die('Usage : node tools/sdd/adr.mjs new "Titre" --context "…" --decision "…" [--consequences "…"] [--links "…"]');
@@ -15,7 +15,9 @@ const context = opt('context');
 const decision = opt('decision');
 if (!context || !decision) die('--context et --decision sont obligatoires.');
 const nums = fs.readdirSync(P.adrDir).map((f) => f.match(/^ADR-(\d{4})/)?.[1]).filter(Boolean).map(Number);
-const n = Math.max(0, ...nums) + 1;
+// Chaque piste numérote dans sa plage (`tracks.<piste>.adrBase`, ADR-1006) : pas de collision entre branches.
+const catalog = readJson(P.catalog);
+const n = nextAdrNumber(nums, trackConfig(catalog, currentTrack(catalog)).adrBase);
 const id = `ADR-${String(n).padStart(4, '0')}`;
 const slug = title.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
 const file = `${id}-${slug}.md`;

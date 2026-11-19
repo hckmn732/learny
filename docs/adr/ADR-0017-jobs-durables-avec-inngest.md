@@ -1,11 +1,11 @@
 # ADR-0017 — Jobs durables avec Inngest
 
-- **Statut** : Acceptée — amendée par ADR-0337
+- **Statut** : Acceptée — amendée par ADR-1002
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-007, SPEC-203
 
-> Amendée par ADR-0337 : à partir de SPEC-1101, les fonctions Inngest sont servies par `apps/api` à `/api/inngest` dans tous les environnements ; `apps/worker` est absorbé par `apps/api` (SPEC-1103).
+> Amendée par ADR-1002 : à partir de SPEC-1101, les fonctions Inngest sont servies par `apps/api` à `/api/inngest` dans tous les environnements ; `apps/worker` est absorbé par `apps/api` (SPEC-1103).
 
 ## Contexte
 

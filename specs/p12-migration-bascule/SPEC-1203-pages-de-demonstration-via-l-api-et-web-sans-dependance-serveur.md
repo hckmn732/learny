@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1202]
 business_rules: []
 screens: []
-adrs: [ADR-0338, ADR-0049, ADR-0341, ADR-0342]
+adrs: [ADR-1003, ADR-0049, ADR-1006, ADR-1007]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Terminer la séparation : les pages de démonstration SDD (`/_dev/sdd/*`) n'appe
 
 ## 2. Contexte
 
-ADR-0049 amendé (ADR-0338, ADR-0341) : une page de démonstration ne lit ni n'écrit la base elle-même. À l'issue de SPEC-1202, la liste de référence ne contient plus que des fichiers de `apps/web/app/%5Fdev/**` (28 au démarrage de la piste, dont 6 fichiers d'actions serveur `spec-102-actions.ts`, `spec-501-actions.ts`, `spec-504-actions.ts`, `spec-505-actions.ts`, `spec-506-actions.ts`, `spec-512-actions.ts`) et de `apps/web/components/sdd-demos/**`. Ces pages servent de preuve aux spécifications déjà terminées : leurs tests `@SPEC-xxx` existants doivent continuer de passer. Lire ADR-0049, ADR-0338, `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/lib/api/dev-guard.ts` (déplacé dans `@learny/http`).
+ADR-0049 amendé (ADR-1003, ADR-1006) : une page de démonstration ne lit ni n'écrit la base elle-même. À l'issue de SPEC-1202, la liste de référence ne contient plus que des fichiers de `apps/web/app/%5Fdev/**` (28 au démarrage de la piste, dont 6 fichiers d'actions serveur `spec-102-actions.ts`, `spec-501-actions.ts`, `spec-504-actions.ts`, `spec-505-actions.ts`, `spec-506-actions.ts`, `spec-512-actions.ts`) et de `apps/web/components/sdd-demos/**`. Ces pages servent de preuve aux spécifications déjà terminées : leurs tests `@SPEC-xxx` existants doivent continuer de passer. Lire ADR-0049, ADR-1003, `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/lib/api/dev-guard.ts` (déplacé dans `@learny/http`).
 
 ## 3. Dépendances
 
@@ -103,4 +103,4 @@ Conditions communes, plus : CP-12 exécutable (toutes les spécifications de P12
 
 ## 15. Décisions et hypothèses
 
-ADR-0049 amendé, ADR-0338. Décision : les tests du web gardent l'accès aux fabriques de données (`@learny/db`, `@learny/testing`) en `devDependencies` ; ce n'est pas du code livré. Aucune question ouverte.
+ADR-0049 amendé, ADR-1003. Décision : les tests du web gardent l'accès aux fabriques de données (`@learny/db`, `@learny/testing`) en `devDependencies` ; ce n'est pas du code livré. Aucune question ouverte.

@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1201]
 business_rules: []
 screens: []
-adrs: [ADR-0338, ADR-0342, ADR-0041, ADR-0332, ADR-0252]
+adrs: [ADR-1003, ADR-1007, ADR-0041, ADR-0332, ADR-0252]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Faire lire toutes les données des écrans produit et du proxy par l'API : les c
 
 ## 2. Contexte
 
-ADR-0338 §2 et §4 : rendu serveur conservé, données lues par l'API, surcoût médian ≤ 25 ms par page. Inventaire au démarrage de la piste (hors `app/_dev`, traité par SPEC-1203) : 8 pages, 28 modules `lib/` (dont 15 chargeurs `*-page.ts` : accueil, agenda, cadrage, exercice, bilan final, lacunes, quiz global, groupe, paramètres des notifications, carte des notions, programme, recherche, paramètres, modèles d'IA, etc.), 15 composants et `proxy.ts` (`canAccessFormation`). Exemple : `lib/home-page.ts` appelle `getHome(ctx)`, équivalent à `GET /api/v1/home` (`homeGet`). Lire ADR-0338, ADR-0041, ADR-0332, ADR-0252 et `docs/architecture/api.md` §2.
+ADR-1003 §2 et §4 : rendu serveur conservé, données lues par l'API, surcoût médian ≤ 25 ms par page. Inventaire au démarrage de la piste (hors `app/_dev`, traité par SPEC-1203) : 8 pages, 28 modules `lib/` (dont 15 chargeurs `*-page.ts` : accueil, agenda, cadrage, exercice, bilan final, lacunes, quiz global, groupe, paramètres des notifications, carte des notions, programme, recherche, paramètres, modèles d'IA, etc.), 15 composants et `proxy.ts` (`canAccessFormation`). Exemple : `lib/home-page.ts` appelle `getHome(ctx)`, équivalent à `GET /api/v1/home` (`homeGet`). Lire ADR-1003, ADR-0041, ADR-0332, ADR-0252 et `docs/architecture/api.md` §2.
 
 ## 3. Dépendances
 
@@ -41,7 +41,7 @@ Aucune règle `BR-*` ; les écrans affichent les mêmes données.
 
 - **ET-1** — `apps/web/lib/api/server-client.ts` : `serverApi()` crée un client `@learny/api-client` avec `baseUrl = API_INTERNAL_URL + '/api/v1'`, en-têtes `cookie` (cookies de la requête via `next/headers`), `X-Request-Id` (identifiant de la requête de page), `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto` et `X-Forwarded-For` ; utilisable seulement côté serveur (`import 'server-only'`).
 - **ET-2** — Mesure de référence : avant toute modification, `pnpm test:perf` est exécuté et son rapport copié dans `evidence/SPEC-1202/perf-before.json` ; après, `perf-after.json` ; le test `tools/perf/test/ssr-overhead.test.ts` compare les temps serveur médians par page.
-- **ET-3** — `readPageSession()` (`lib/supabase/page.ts`) ne vérifie plus le jeton par `getUser()` quand la page délègue ses données à l'API : elle se limite à lire la présence de session pour la redirection, l'API faisant foi (ADR-0340, une vérification locale par requête).
+- **ET-3** — `readPageSession()` (`lib/supabase/page.ts`) ne vérifie plus le jeton par `getUser()` quand la page délègue ses données à l'API : elle se limite à lire la présence de session pour la redirection, l'API faisant foi (ADR-1005, une vérification locale par requête).
 - **ET-4** — La liste de référence de SPEC-1001 ne contient plus aucun fichier hors `apps/web/app/%5Fdev/**` et `apps/web/components/sdd-demos/**` à la fin de cette spécification.
 - **ET-5** — TanStack Query côté client : les clés et fonctions existantes (`lib/query-keys.ts`) ne changent pas ; seule la source serveur des données initiales change.
 
@@ -104,4 +104,4 @@ Conditions communes, plus : budgets de performance tenus et aucune ligne de base
 
 ## 15. Décisions et hypothèses
 
-ADR-0338 (rendu serveur par l'API, budget de 25 ms). Décision : les routes de lecture ajoutées pour un chargeur reprennent un DTO existant et n'exposent aucune donnée nouvelle. Aucune question ouverte.
+ADR-1003 (rendu serveur par l'API, budget de 25 ms). Décision : les routes de lecture ajoutées pour un chargeur reprennent un DTO existant et n'exposent aucune donnée nouvelle. Aucune question ouverte.

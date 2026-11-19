@@ -16,14 +16,14 @@ const cpId = process.argv[2];
 const phase = catalog.phases.find((p) => p.checkpoint === cpId);
 if (!phase) die(`Checkpoint inconnu : ${cpId}`);
 const idx = catalog.phases.indexOf(phase);
-// ADR-0341 : précédent de la même piste et checkpoints `requires` d'autres pistes.
+// ADR-1006 : précédent de la même piste et checkpoints `requires` d'autres pistes.
 if (!phaseUnlocked(catalog, st, phase.id)) die('Le checkpoint précédent de la piste (ou un checkpoint requis) n\'est pas réussi.');
 const track = trackConfig(catalog, trackOf(phase));
 const specs = catalog.specs.filter((s) => s.phase === phase.id);
 const notDone = specs.filter((s) => st.specs[s.id].status !== 'done');
 if (notDone.length) die(`Spécifications non terminées : ${notDone.map((s) => s.id).join(', ')}`);
 
-// `checks` d'une phase (ADR-0341) : contrôles supplémentaires ('cross-browser', 'perf').
+// `checks` d'une phase (ADR-1006) : contrôles supplémentaires ('cross-browser', 'perf').
 const extra = phase.checks ?? [];
 const crossBrowser = ['CP-6', 'CP-7', 'CP-8', 'CP-9'].includes(cpId) || extra.includes('cross-browser');
 const steps = [
@@ -55,7 +55,7 @@ cp.at = nowIso();
 cp.report = path.relative(ROOT, path.join(dir, 'summary.md')).replaceAll('\\', '/');
 if (ok && isGitRepo()) {
   const tag = cpId.toLowerCase();
-  // Les pistes sans tags de version (migration) ne posent que `cp-n` (ADR-0341).
+  // Les pistes sans tags de version (migration) ne posent que `cp-n` (ADR-1006).
   const version = !track.versionTags ? null : cpId === 'CP-8' ? 'v1.0.0' : cpId === 'CP-9' ? 'v2.0.0' : `v0.${idx}.0`;
   cp.tag = version ? `${tag} ${version}` : tag;
   saveState(st);

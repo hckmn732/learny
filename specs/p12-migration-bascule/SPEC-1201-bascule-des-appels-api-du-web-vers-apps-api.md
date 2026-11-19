@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1103]
 business_rules: []
 screens: []
-adrs: [ADR-0338, ADR-0340, ADR-0337, ADR-0252]
+adrs: [ADR-1003, ADR-1005, ADR-1002, ADR-0252]
 visual: demo
 ---
 
@@ -18,7 +18,7 @@ Faire servir **tout** le trafic `/api/*` du web par `apps/api` : `apps/web` rela
 
 ## 2. Contexte
 
-Phase P12, débloquée après CP-11 **et** CP-8 (V1 livrée, ADR-0341 §5). ADR-0338 §3 : même origine, relai `afterFiles`. ADR-0340 §4–5 : le relai ajoute `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-For`. Comme les réécritures déclaratives de Next ne peuvent pas ajouter d'en-tête à la requête relayée, le relai est fait par `proxy.ts` (`NextResponse.rewrite(url, { request: { headers } })`), qui s'exécute déjà pour toutes les requêtes. Points à risque identifiés : flux SSE du tuteur, cookies posés par `/auth/*`, corps brut du webhook Stripe, taille des corps relayés, garde d'origine. Lire ADR-0338, ADR-0340, ADR-0252, `apps/web/proxy.ts`, `apps/web/next.config.ts`, `docs/engineering/testing.md` §4.
+Phase P12, débloquée après CP-11 **et** CP-8 (V1 livrée, ADR-1006 §5). ADR-1003 §3 : même origine, relai `afterFiles`. ADR-1005 §4–5 : le relai ajoute `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-For`. Comme les réécritures déclaratives de Next ne peuvent pas ajouter d'en-tête à la requête relayée, le relai est fait par `proxy.ts` (`NextResponse.rewrite(url, { request: { headers } })`), qui s'exécute déjà pour toutes les requêtes. Points à risque identifiés : flux SSE du tuteur, cookies posés par `/auth/*`, corps brut du webhook Stripe, taille des corps relayés, garde d'origine. Lire ADR-1003, ADR-1005, ADR-0252, `apps/web/proxy.ts`, `apps/web/next.config.ts`, `docs/engineering/testing.md` §4.
 
 ## 3. Dépendances
 
@@ -41,7 +41,7 @@ Aucune règle `BR-*` ; aucun comportement modifié.
 
 ## 6. Exigences techniques
 
-- **ET-1** — `apps/web/lib/api/relay.ts` : `relayToApi(request) → NextResponse` ; appelé en tête de `proxy.ts` pour les chemins `/api/` et `/openapi.json`, avant toute autre logique (pas de rafraîchissement de session sur ces chemins, comme aujourd'hui pour `isApiPath`). Il copie la requête vers `new URL(pathname + search, API_INTERNAL_URL)` et ajoute les en-têtes d'ADR-0340 ; il retire tout `X-Learny-Proxy-Secret` entrant.
+- **ET-1** — `apps/web/lib/api/relay.ts` : `relayToApi(request) → NextResponse` ; appelé en tête de `proxy.ts` pour les chemins `/api/` et `/openapi.json`, avant toute autre logique (pas de rafraîchissement de session sur ces chemins, comme aujourd'hui pour `isApiPath`). Il copie la requête vers `new URL(pathname + search, API_INTERNAL_URL)` et ajoute les en-têtes d'ADR-1005 ; il retire tout `X-Learny-Proxy-Secret` entrant.
 - **ET-2** — `apps/api` ajoute `X-Served-By: learny-api` à toutes ses réponses (en-tête purement technique).
 - **ET-3** — `next.config.ts` : limite de corps relayé portée à 12 Mo si la limite par défaut du proxy Next est inférieure (vérifiée sur la version installée), afin de ne refuser aucune requête acceptée aujourd'hui ; documentée dans le code.
 - **ET-4** — `packages/contracts/scripts/generate-openapi.ts` écrit `apps/api/openapi.json` ; `apps/web/public/openapi.json` est supprimé.
@@ -109,4 +109,4 @@ Conditions communes, plus : suite e2e complète et cross-browser vertes ; aucune
 
 ## 15. Décisions et hypothèses
 
-ADR-0338 (même origine), ADR-0340 (proxy de confiance). Décision : le relai passe par `proxy.ts` plutôt que par `rewrites` car il doit ajouter des en-têtes ; le code `API_UNAVAILABLE` est un ajout technique au catalogue, sans écran nouveau. Aucune question ouverte.
+ADR-1003 (même origine), ADR-1005 (proxy de confiance). Décision : le relai passe par `proxy.ts` plutôt que par `rewrites` car il doit ajouter des en-têtes ; le code `API_UNAVAILABLE` est un ajout technique au catalogue, sans écran nouveau. Aucune question ouverte.

@@ -5,6 +5,7 @@ import {
   indexCatalog,
   nextAction,
   nextActionJson,
+  nextAdrNumber,
   normalizeState,
   trackConfig,
   type Catalog,
@@ -123,7 +124,7 @@ describe('[SPEC-003] next action', () => {
     expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-004' });
   });
 
-  it('runs an independent track without waiting for the product checkpoints (ADR-0341)', () => {
+  it('runs an independent track without waiting for the product checkpoints (ADR-1006)', () => {
     const c = catalog();
     c.phases.push(
       { id: 'P10', dir: 'p10', title: 'Migration A', checkpoint: 'CP-10', track: 'migration' },
@@ -158,9 +159,17 @@ describe('[SPEC-003] next action', () => {
     set('CP-0');
     expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-1101' });
     // Track configuration: the product track merges into main, the migration track into its branch.
-    c.tracks = { migration: { baseBranch: 'migration', versionTags: false } };
-    expect(trackConfig(c, 'produit')).toEqual({ baseBranch: 'main', versionTags: true });
-    expect(trackConfig(c, 'migration')).toEqual({ baseBranch: 'migration', versionTags: false });
+    c.tracks = { migration: { baseBranch: 'migration', versionTags: false, adrBase: 1000 } };
+    expect(trackConfig(c, 'produit')).toEqual({ baseBranch: 'main', versionTags: true, adrBase: 0 });
+    expect(trackConfig(c, 'migration')).toEqual({ baseBranch: 'migration', versionTags: false, adrBase: 1000 });
+  });
+
+  it('numbers ADRs within each track range so parallel branches never collide (ADR-1006)', () => {
+    const existing = [1, 335, 336, 1001, 1007];
+    expect(nextAdrNumber(existing, 0)).toBe(337);
+    expect(nextAdrNumber(existing, 1000)).toBe(1008);
+    expect(nextAdrNumber([1, 336], 1000)).toBe(1001);
+    expect(() => nextAdrNumber([999], 0)).toThrow();
   });
 
   it('never selects a member of a dependency cycle (CL-2)', () => {

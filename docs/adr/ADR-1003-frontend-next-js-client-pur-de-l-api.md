@@ -1,9 +1,9 @@
-# ADR-0338 — Frontend Next.js, client pur de l'API
+# ADR-1003 — Frontend Next.js, client pur de l'API
 
 - **Statut** : Acceptée
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
-- **Liens** : ADR-0336, ADR-0041, ADR-0252, ADR-0332, ADR-0333, SPEC-1201, SPEC-1202, SPEC-1203
+- **Liens** : ADR-1001, ADR-0041, ADR-0252, ADR-0332, ADR-0333, SPEC-1201, SPEC-1202, SPEC-1203
 
 ## Contexte
 
