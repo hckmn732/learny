@@ -105,3 +105,6 @@ Conditions communes, plus : aucun fichier `route.ts` modifié, aucune assertion 
 ## 15. Décisions et hypothèses
 
 ADR-1002 (transport indépendant), ADR-1007 (nom et dépendances). Décision : la configuration explicite `configureHttp` remplace les effets de bord à l'import, condition pour que deux hôtes (Next puis Hono) configurent le même paquet. Aucune question ouverte.
+
+ADR-1008 décide de conserver le statut 201 du contrat existant `dev.echo` : la démonstration affiche
+201/400/400, sans changement fonctionnel ni modification d'une assertion existante.
