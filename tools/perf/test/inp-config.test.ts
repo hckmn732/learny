@@ -35,6 +35,8 @@ describe('[SPEC-804] mesure INP isolée', () => {
     expect(spec).toContain('await unthrottle(page)');
     expect(spec).toContain("waitUntil: 'commit'");
     expect(spec).toContain('await waitForHydration(page, scenario.ready)');
+    expect(spec).toContain('if (target.webVitals === undefined)');
+    expect(spec).toContain('target.webVitals.onINP');
     expect(spec.indexOf('await throttle(page)')).toBeGreaterThan(
       spec.indexOf('await waitForHydration(page, scenario.ready)'),
     );

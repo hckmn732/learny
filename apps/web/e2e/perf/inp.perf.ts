@@ -46,7 +46,7 @@ const scenarios: Scenario[] = [
   {
     name: 'accueil → panneau des notifications',
     url: '/accueil',
-    ready: '[data-testid="header-notifications"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.getByTestId('header-notifications').click();
       await page.getByTestId('notification-panel').waitFor();
@@ -55,7 +55,7 @@ const scenarios: Scenario[] = [
   {
     name: 'quiz global → carte de rappel puis Bon',
     url: `/formations/${FORMATION}/quiz-global`,
-    ready: '[data-testid="recall-card-flip"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.getByTestId('recall-card-flip').click();
       await page.getByTestId('recall-grade-good').click();
@@ -64,7 +64,7 @@ const scenarios: Scenario[] = [
   {
     name: 'quiz de validation → option puis Vérifier',
     url: `/formations/${FORMATION}/modules/${MODULE}/quiz`,
-    ready: '[data-testid^="quiz-option-"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.locator('[data-testid^="quiz-option-"]').first().click();
       await page.getByTestId('quiz-check').click();
@@ -73,7 +73,7 @@ const scenarios: Scenario[] = [
   {
     name: 'carte des notions → saisir clé puis Entrée',
     url: `/formations/${FORMATION}/carte`,
-    ready: '[data-testid="graph-search"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.getByTestId('graph-search').fill('clé');
       await page.getByTestId('graph-search').press('Enter');
@@ -82,7 +82,7 @@ const scenarios: Scenario[] = [
   {
     name: 'paramètres → onglet Notifications puis interrupteur',
     url: '/parametres#notifications',
-    ready: '[data-testid="weekend-rule-switch"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.getByTestId('weekend-rule-switch').click();
     },
@@ -90,7 +90,7 @@ const scenarios: Scenario[] = [
   {
     name: 'agenda → Semaine vers Mois',
     url: '/agenda?vue=semaine&date=2026-11-11',
-    ready: '[data-testid="agenda-view-mois"]',
+    ready: 'header-notifications',
     run: async (page) => {
       await page.getByTestId('agenda-view-mois').click();
     },
@@ -121,14 +121,14 @@ async function unthrottle(page: Page): Promise<void> {
   });
 }
 
-async function waitForHydration(page: Page, selector: string): Promise<void> {
+async function waitForHydration(page: Page, testId: string): Promise<void> {
   await page.waitForFunction(
-    (readySelector) => {
-      const element = document.querySelector(readySelector);
+    (readyTestId) => {
+      const element = document.querySelector(`[data-testid="${readyTestId}"]`);
       if (element === null) return false;
       return Object.keys(element).some((key) => key.startsWith('__reactProps$'));
     },
-    selector,
+    testId,
     { timeout: 60_000 },
   );
 }
@@ -139,8 +139,20 @@ async function measure(page: Page, scenario: Scenario): Promise<number | null> {
   await waitForHydration(page, scenario.ready);
   await throttle(page);
   await page.evaluate(() => {
-    const target = window as unknown as { __inpValues?: number[] };
+    const target = window as unknown as {
+      __inpValues?: number[];
+      webVitals?: {
+        onINP: (
+          cb: (metric: { value: number }) => void,
+          options: { reportAllChanges: boolean },
+        ) => void;
+      };
+    };
     target.__inpValues = [];
+    if (target.webVitals === undefined) throw new Error('web-vitals indisponible');
+    target.webVitals.onINP((metric) => target.__inpValues?.push(metric.value), {
+      reportAllChanges: true,
+    });
   });
   await scenario.run(page);
   await page.waitForTimeout(600);
@@ -187,21 +199,6 @@ test.beforeEach(async ({ context, baseURL }) => {
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );
   await context.addInitScript({ path: IIFE });
-  await context.addInitScript(() => {
-    const target = window as unknown as {
-      __inpValues?: number[];
-      webVitals?: {
-        onINP: (
-          cb: (metric: { value: number }) => void,
-          options: { reportAllChanges: boolean },
-        ) => void;
-      };
-    };
-    target.__inpValues = [];
-    target.webVitals?.onINP((metric) => target.__inpValues?.push(metric.value), {
-      reportAllChanges: true,
-    });
-  });
 });
 
 for (const scenario of scenarios) {
