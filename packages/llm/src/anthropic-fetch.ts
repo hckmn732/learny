@@ -1,23 +1,19 @@
 // Fetch wrapper of the Anthropic provider (SPEC-504 ET-4). It rewrites the JSON body and the
 // headers so the contract is the same whatever the installed @ai-sdk/anthropic version maps
 // natively: adaptive thinking, effort, automatic tool choice, strict tools, at most four cache
-// points, no sampling parameters, and the server-side fallback beta for provided Opus/Sonnet.
-import { AI_MODEL_IDS, type AiTask } from '@learny/config';
+// points and no sampling parameters.
+import type { AiTask } from '@learny/config';
 
-import { FALLBACK_BETA, MAX_CACHE_BREAKPOINTS } from './anthropic-options';
+import { MAX_CACHE_BREAKPOINTS } from './anthropic-options';
 import { TASK_CONFIG } from './tasks';
 
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
 export const LEARNY_TASK_HEADER = 'x-learny-llm-task';
-export const LEARNY_MANAGED_HEADER = 'x-learny-llm-managed';
-export const LEARNY_FALLBACK_HEADER = 'x-learny-llm-fallback';
 export const LEARNY_MODEL_HEADER = 'x-learny-llm-model';
 
 const PRIVATE_HEADERS = [
   LEARNY_TASK_HEADER,
-  LEARNY_MANAGED_HEADER,
-  LEARNY_FALLBACK_HEADER,
   LEARNY_MODEL_HEADER,
 ] as const;
 
@@ -31,19 +27,6 @@ function readHeader(headers: Headers, name: string): string | null {
 
 function removePrivateHeaders(headers: Headers): void {
   for (const header of PRIVATE_HEADERS) headers.delete(header);
-}
-
-function mergeBeta(headers: Headers, beta: string | null): void {
-  const existing = headers.get('anthropic-beta');
-  const values = new Set(
-    (existing ?? '')
-      .split(',')
-      .map((value) => value.trim())
-      .filter((value) => value !== ''),
-  );
-  if (beta !== null) values.add(beta);
-  if (values.size === 0) headers.delete('anthropic-beta');
-  else headers.set('anthropic-beta', [...values].join(','));
 }
 
 function isMessagesRequest(url: string): boolean {
@@ -83,11 +66,7 @@ function strictSchema(schema: unknown): unknown {
   return { ...(schema as Record<string, unknown>), additionalProperties: false };
 }
 
-function rewriteBody(
-  body: Record<string, unknown>,
-  task: AiTask | null,
-  fallback: boolean,
-): void {
+function rewriteBody(body: Record<string, unknown>, task: AiTask | null): void {
   // Adaptive thinking only; the 5.5 models reject `budget_tokens`.
   const thinking =
     body.thinking !== null && typeof body.thinking === 'object'
@@ -118,12 +97,7 @@ function rewriteBody(
     }));
   }
 
-  const model = typeof body.model === 'string' ? body.model : '';
-  const eligible =
-    fallback &&
-    (model === AI_MODEL_IDS.opus || model === AI_MODEL_IDS.sonnet);
-  if (eligible) body.fallbacks = 'default';
-  else delete body.fallbacks;
+  delete body.fallbacks;
 
   stripExtraCachePoints(body);
 }
@@ -144,7 +118,6 @@ export function createAnthropicFetch(baseFetch?: FetchLike): FetchLike {
     const headers = new Headers(request !== undefined ? request.headers : init?.headers);
     const taskHeader = readHeader(headers, LEARNY_TASK_HEADER);
     const task = isTask(taskHeader) ? taskHeader : null;
-    const fallback = readHeader(headers, LEARNY_FALLBACK_HEADER) === '1';
     const raw =
       request !== undefined
         ? await request.clone().text()
@@ -162,12 +135,8 @@ export function createAnthropicFetch(baseFetch?: FetchLike): FetchLike {
       // Provider bodies are always JSON; an unreadable body is forwarded untouched.
       return fetchImpl(input, init);
     }
-    rewriteBody(body, task, fallback);
+    rewriteBody(body, task);
     removePrivateHeaders(headers);
-    const eligibleFallback =
-      fallback && (body.model === AI_MODEL_IDS.opus || body.model === AI_MODEL_IDS.sonnet);
-    if (eligibleFallback) mergeBeta(headers, FALLBACK_BETA);
-    else mergeBeta(headers, null);
     if (request !== undefined) {
       // A Request instance is cloned so the caller's body stream is not consumed twice.
       return fetchImpl(new Request(request, { body: JSON.stringify(body), headers }));
@@ -185,13 +154,12 @@ export const anthropicFetch: FetchLike = createAnthropicFetch();
  */
 export function rewriteAnthropicInit(
   init: RequestInit,
-  options: { task: AiTask; fallback: boolean },
+  options: { task: AiTask },
 ): { body: string; headers: Headers } {
   const rawBody = init.body;
   const body = JSON.parse(typeof rawBody === 'string' ? rawBody : '{}') as Record<string, unknown>;
-  rewriteBody(body, options.task, options.fallback);
+  rewriteBody(body, options.task);
   const headers = new Headers(init.headers);
   removePrivateHeaders(headers);
-  if (options.fallback) mergeBeta(headers, FALLBACK_BETA);
   return { body: JSON.stringify(body), headers };
 }

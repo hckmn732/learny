@@ -12,7 +12,7 @@ describe('[SPEC-505] corps de création d’une clé personnelle', () => {
     expect(
       issuesOf({
         provider: 'anthropic',
-        modelIds: ['claude-sonnet-5-5'],
+        modelIds: ['model-b'],
         apiKey: 'sk-ant-12345678',
       }),
     ).toEqual([]);

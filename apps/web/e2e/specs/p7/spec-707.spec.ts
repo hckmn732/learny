@@ -74,9 +74,9 @@ test('parcours SPEC-707 @SPEC-707', async ({ page, axeCheck, captureEvidence }) 
   await expect(page.getByTestId('settings-panel-notifications')).toBeVisible();
   await expect(page).toHaveURL(/#notifications$/);
 
-  // EF-1 — exactly four tabs, in the mockup order.
+  // EF-1 — exactly five tabs, in display order (Abonnement comes last, ADR-0340).
   await expect(page.getByRole('tablist', { name: 'Rubriques des paramètres' })).toBeVisible();
-  await expect(page.getByTestId('settings-tabs').getByRole('tab')).toHaveCount(4);
+  await expect(page.getByTestId('settings-tabs').getByRole('tab')).toHaveCount(5);
 
   // CA-1 — the arrows change the tab, the hash follows and the focus moves (roving tabindex).
   await page.getByTestId('settings-tab-notifications').focus();
@@ -90,10 +90,16 @@ test('parcours SPEC-707 @SPEC-707', async ({ page, axeCheck, captureEvidence }) 
   await page.keyboard.press('ArrowRight');
   await expect(page.getByTestId('settings-tab-modeles')).toBeFocused();
   await page.keyboard.press('ArrowRight');
+  await expect(page.getByTestId('settings-tab-abonnement')).toBeFocused();
+  await expect(page).toHaveURL(/#abonnement$/);
+  await page.keyboard.press('ArrowRight');
   await expect(page.getByTestId('settings-tab-profil')).toBeFocused();
   await expect(page).toHaveURL(/#profil$/);
   await page.keyboard.press('End');
-  await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByTestId('settings-tab-abonnement')).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
   await page.keyboard.press('Home');
   await expect(page.getByTestId('settings-tab-profil')).toHaveAttribute('aria-selected', 'true');
 

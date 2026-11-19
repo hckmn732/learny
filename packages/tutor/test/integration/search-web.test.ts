@@ -10,15 +10,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 import { SearchWebOutput } from '@learny/contracts';
 import type { Clock } from '@learny/core';
 import { createLogCapture, createLogger } from '@learny/core/server';
-import {
-  closeDb,
-  createCredential,
-  serviceDb,
-  setTaskModel,
-  sql,
-  upsertSubscription,
-  userDb,
-} from '@learny/db';
+import { closeDb, createCredential, serviceDb, setTaskModel, sql, userDb } from '@learny/db';
 import { createTestProgramme, createTestUser } from '@learny/db/testing';
 import { createProviderSearch } from '@learny/llm';
 
@@ -57,7 +49,7 @@ function silentLogger() {
 
 async function learner(
   label: string,
-  options: { subscription?: boolean; personalModel?: boolean } = {},
+  options: { provider?: 'anthropic' | 'openai' } = {},
 ): Promise<Learner> {
   const email = `${PREFIX}${label}-${randomUUID().slice(0, 8)}@test.learny.test`;
   const created = await serviceDb().transaction(async (tx) => {
@@ -67,19 +59,13 @@ async function learner(
       chaptersPerModule: 1,
       notionsPerChapter: 1,
     });
-    if (options.subscription === true) {
-      await upsertSubscription(tx, {
-        userId: user.id,
-        status: 'active',
-        currentPeriodEnd: FUTURE,
-      });
-    }
-    if (options.personalModel === true) {
+    {
+      const provider = options.provider ?? 'anthropic';
       const credential = await createCredential(tx, {
         userId: user.id,
-        provider: 'openai',
+        provider,
         label: 'Clé de démonstration',
-        baseUrl: 'https://api.openai.com/v1',
+        baseUrl: provider === 'openai' ? 'https://api.openai.com/v1' : null,
         modelIds: ['gpt-demo'],
         encryptedKey: new Uint8Array(29).fill(3),
         keyLast4: 'demo',
@@ -135,8 +121,8 @@ afterAll(async () => {
 });
 
 describe('[SPEC-512] service', () => {
-  it('CA-1 — un abonné recherche via la route native, même schéma validé', async () => {
-    const user = await learner('native', { subscription: true });
+  it('CA-1 — une clé Anthropic recherche via la route native, même schéma validé', async () => {
+    const user = await learner('native', {});
     const result = await searchWeb(user.search, {
       query: 'programme de révision en douze semaines',
       purpose: 'programme',
@@ -154,7 +140,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CA-1 — un modèle personnel non Anthropic bascule sur le repli Tavily', async () => {
-    const user = await learner('fallback', { personalModel: true });
+    const user = await learner('fallback', { provider: 'openai' });
     const result = await searchWeb(
       { ...user.search, secrets: { searchApiKey: MOCK_KEY } },
       { query: 'gérer son temps de révision', purpose: 'resource_suggestion', limit: 3 },
@@ -168,7 +154,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CL-2 — sans SEARCH_API_KEY, le repli est indisponible et n’invente rien', async () => {
-    const user = await learner('no-key', { personalModel: true });
+    const user = await learner('no-key', { provider: 'openai' });
     const result = await searchWeb(
       { ...user.search, secrets: { searchApiKey: null } },
       { query: 'gérer son temps de révision', purpose: 'programme', limit: 3 },
@@ -179,7 +165,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CA-2 — la tâche cours est refusée avant toute résolution ou requête', async () => {
-    const user = await learner('refusal', { subscription: true });
+    const user = await learner('refusal', {});
     const result = await searchWeb(
       { ...user.search, task: 'course' },
       { query: 'rédiger un cours', purpose: 'programme', limit: 5 },
@@ -190,7 +176,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CA-3 — les liens dangereux et les doublons sont exclus, la provenance reste', async () => {
-    const user = await learner('unsafe', { subscription: true });
+    const user = await learner('unsafe', {});
     const tavily = createProviderSearch({
       provider: 'tavily',
       mode: 'mock',
@@ -215,7 +201,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('EF-5 — une panne du fournisseur est une erreur explicite sans source', async () => {
-    const user = await learner('unavailable', { subscription: true });
+    const user = await learner('unavailable', {});
     const tavily = createProviderSearch({
       provider: 'tavily',
       mode: 'mock',
@@ -233,8 +219,8 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CA-4 — la suggestion reste en attente, l’import est explicite et la RLS isole les apprenants', async () => {
-    const owner = await learner('owner', { subscription: true });
-    const other = await learner('other', { subscription: true });
+    const owner = await learner('owner', {});
+    const other = await learner('other', {});
 
     const before = await serviceDb().execute<{ sections: number; courses: number }>(sql`
       select
@@ -323,7 +309,7 @@ describe('[SPEC-512] service', () => {
   });
 
   it('CA-3 — une URL privée ne peut pas devenir une suggestion', async () => {
-    const owner = await learner('private-url', { subscription: true });
+    const owner = await learner('private-url', {});
     const result = await suggestResource(owner.suggestions, {
       chapterId: owner.chapterId,
       title: 'Intranet',

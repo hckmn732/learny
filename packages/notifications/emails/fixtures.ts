@@ -77,7 +77,6 @@ export const EMAIL_FIXTURES: { [K in EmailTemplateKey]: FixtureFactory<K> } = {
     taskLabel: 'rédaction du cours',
     modelLabel: 'gpt-4.1-mini',
     subject: 'Chapitre 4 · Clôture périodique',
-    managedAvailable: true,
   }),
   export_ready: () => ({
     downloadUrl: 'https://learny.example/exports/alex-perrin-2026-11-11.zip?token=exemple',

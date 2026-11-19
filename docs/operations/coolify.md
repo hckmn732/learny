@@ -138,7 +138,7 @@ Le Compose configure déjà Supabase Auth avec les modèles Learny (`supabase/te
 
 | Variable | Valeur |
 |---|---|
-| `ANTHROPIC_API_KEY` | clé Anthropic |
+| `ANTHROPIC_API_KEY` | clé Anthropic de la plateforme (plus utilisée pour répondre aux tâches : aucun modèle n'est fourni, ADR-0340) |
 | `VOYAGE_API_KEY` | clé Voyage |
 | `RESEND_API_KEY` | clé Resend (e-mails de l'application) |
 | `EMAIL_FROM` | `Learny <bonjour@exemple.fr>`, sur un domaine vérifié dans Resend |

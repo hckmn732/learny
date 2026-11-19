@@ -11,7 +11,13 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { clock } from '@learny/core';
 import { createLogger } from '@learny/core/server';
 import { sql, type Db, type DbTx } from '@learny/db';
-import { asUser, createTestProgramme, createTestUser, withRollback } from '@learny/db/testing';
+import {
+  asUser,
+  createTestProgramme,
+  createTestUser,
+  grantTestModels,
+  withRollback,
+} from '@learny/db/testing';
 
 import { WEB_FIXTURE_HTML, WEB_FIXTURE_URL } from '../../fixtures/web';
 import {
@@ -51,13 +57,7 @@ function databaseOf(tx: DbTx): Db {
 function inBase<T>(run: (base: Base) => Promise<T>): Promise<T> {
   return withRollback(async (tx) => {
     const user = await createTestUser(tx);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (
-        ${user.id}::uuid, 'active',
-        ${new Date(clock.now().getTime() + 30 * 86_400_000).toISOString()}::timestamptz
-      )
-    `);
+    await grantTestModels(tx, user.id);
     const programme = await createTestProgramme(tx, user.id, {
       modules: 1,
       chaptersPerModule: 1,
@@ -217,7 +217,7 @@ describe('[SPEC-510] service', () => {
       expect(imageRow?.metadata.ingestion).toMatchObject({
         contentOrigin: 'model',
         visionTask: 'light',
-        visionModel: 'claude-haiku-5-5',
+        visionModel: 'model-c',
       });
       const youtubeRow = statuses.find((row) => row.kind === 'youtube');
       expect(youtubeRow?.metadata).toMatchObject({ youtubeId: 'dQw4w9WgXcQ' });

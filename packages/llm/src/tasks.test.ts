@@ -1,19 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { DEFAULT_MODEL_BY_TASK, THINKING_EFFORT_BY_TASK } from '@learny/config';
+import { THINKING_EFFORT_BY_TASK } from '@learny/config';
 
-import { defaultModelForTask, needsProviderStreaming, TASK_CONFIG } from './tasks';
+import { needsProviderStreaming, TASK_CONFIG } from './tasks';
 
-describe('[SPEC-504] tâches et modèles par défaut', () => {
-  it('CA-1 — les cinq tâches lisent le modèle de @learny/config (BR-IA-01)', () => {
-    for (const task of ['programme', 'course', 'gaps', 'tutor', 'light'] as const) {
-      expect(defaultModelForTask(task)).toBe(DEFAULT_MODEL_BY_TASK[task]);
-    }
-    expect(defaultModelForTask('programme')).toBe('claude-opus-5-5');
-    expect(defaultModelForTask('tutor')).toBe('claude-sonnet-5-5');
-    expect(defaultModelForTask('light')).toBe('claude-haiku-5-5');
-  });
-
+describe('[SPEC-504] tâches', () => {
   it('ET-1 — budgets, efforts et capacités sont ceux de la spécification', () => {
     expect(TASK_CONFIG.programme).toMatchObject({ effort: 'high', maxOutputTokens: 32000 });
     expect(TASK_CONFIG.course).toMatchObject({ effort: 'medium', maxOutputTokens: 64000 });

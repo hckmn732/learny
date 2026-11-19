@@ -1,7 +1,6 @@
 import {
   ACCOUNT_RULES,
   AI_TASKS,
-  DEFAULT_MODEL_BY_TASK,
   FORMATION_RULES,
   GROUP_RULES,
   MEMORY_RULES,
@@ -263,9 +262,6 @@ export default function Spec009Demo() {
                   {t.models.task}
                 </th>
                 <th scope="col" className={cell}>
-                  {t.models.model}
-                </th>
-                <th scope="col" className={cell}>
                   {t.models.effort}
                 </th>
               </tr>
@@ -274,7 +270,6 @@ export default function Spec009Demo() {
               {AI_TASKS.map((task) => (
                 <tr key={task} data-testid={`spec-009-model-${task}`}>
                   <td className={cell}>{t.models.tasks[task]}</td>
-                  <td className={`${cell} font-mono break-all`}>{DEFAULT_MODEL_BY_TASK[task]}</td>
                   <td className={cell}>{t.models.efforts[THINKING_EFFORT_BY_TASK[task]]}</td>
                 </tr>
               ))}

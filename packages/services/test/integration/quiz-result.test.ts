@@ -4,7 +4,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 import type { Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme, createTestUser } from '@learny/db/testing';
+import { createTestProgramme, createTestUser, grantTestModels } from '@learny/db/testing';
 import { makeModuleWithBank } from '@learny/testing';
 
 import { createServiceContext, type ServiceContext } from '../../src/context';
@@ -65,10 +65,7 @@ async function fixture(label: string): Promise<Fixture> {
       notions: 12,
       variantsPerFormat: 3,
     });
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${user.id}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await grantTestModels(tx, user.id);
     const clock = new TestClock();
     return {
       userId: user.id,

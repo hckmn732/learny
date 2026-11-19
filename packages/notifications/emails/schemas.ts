@@ -56,7 +56,6 @@ export const EMAIL_PROPS_SCHEMAS = {
     taskLabel: z.string(),
     modelLabel: z.string(),
     subject: z.string().max(120),
-    managedAvailable: z.boolean(),
   }),
   export_ready: z.object({
     downloadUrl: z.url(),

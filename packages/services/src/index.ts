@@ -62,4 +62,3 @@ export * from './remediation/index';
 export * from './automations';
 export * from './warmup/index';
 export * from './agenda-deplacer-et-reajuster-le-planning';
-export * from './abonnement-a-l-ia-fournie-interface-et-plafond';

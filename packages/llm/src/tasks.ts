@@ -1,12 +1,6 @@
-// Task catalogue of @learny/llm (SPEC-504 ET-1, BR-IA-01, docs/architecture/ai.md §1).
-// The default model per task lives in @learny/config/models.ts only; this module never repeats a
-// provider model identifier (the ESLint rule on the `claude-` pattern enforces it).
-import {
-  DEFAULT_MODEL_BY_TASK,
-  type AiModelId,
-  type AiTask,
-  type ThinkingEffort,
-} from '@learny/config';
+// Task catalogue of @learny/llm (SPEC-504 ET-1, docs/architecture/ai.md §1).
+// No model is attached to a task here: the learner chooses it (BR-IA-02).
+import type { AiTask, ThinkingEffort } from '@learny/config';
 
 /** Capabilities a model must provide for a task (BR-IA-02 qualification). */
 export const TASK_CAPABILITIES = [
@@ -66,11 +60,6 @@ export const TASK_CONFIG = {
 
 /** Calls above this output budget stream on the provider side to avoid HTTP timeouts (ET-1). */
 export const STREAMING_OUTPUT_THRESHOLD = 16_000;
-
-/** BR-IA-01 — provided model of a task, read from @learny/config. */
-export function defaultModelForTask(task: AiTask): AiModelId {
-  return DEFAULT_MODEL_BY_TASK[task];
-}
 
 /** True when the task needs provider-side streaming for its output budget. */
 export function needsProviderStreaming(task: AiTask): boolean {

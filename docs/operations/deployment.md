@@ -12,7 +12,7 @@ n'est annoncé dans ce document tant qu'il n'a pas été vérifié.
 |---|---|---|---|---|
 | `local` | `pnpm dev` (localhost:3000) | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé par défaut (`LLM_MODE=mock`) |
 | `test` (CI) | build + `next start` | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé obligatoire (`LLM_MODE=mock`) |
-| `preview` | Vercel preview (région `fra1`) | projet Supabase preview (UE) | branche Inngest dédiée | réel, plafond bas |
+| `preview` | Vercel preview (région `fra1`) | projet Supabase preview (UE) | branche Inngest dédiée | réel |
 | `production` | Vercel production (`fra1`) | projet Supabase production (`eu-central-1`) | Inngest Cloud (UE) | réel |
 
 Les routes sont identiques en preview et en production : `vercel.json` ne définit aucune réécriture

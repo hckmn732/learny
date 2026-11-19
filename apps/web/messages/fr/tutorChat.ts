@@ -40,7 +40,6 @@ export const tutorChat = {
   errorNetwork: 'La réponse n’a pas pu être obtenue.',
   errorUnavailable:
     'Le tuteur n’est pas disponible : aucun modèle d’IA n’est configuré pour la discussion.',
-  errorCap: 'Le tuteur répond avec un modèle plus léger pour rester dans votre plafond.',
   errorRate: (seconds: number) =>
     `Trop de questions d’un coup : réessayez dans ${String(seconds)} s.`,
   configureModels: 'Régler mes modèles d’IA',

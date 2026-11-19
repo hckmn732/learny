@@ -28,6 +28,9 @@ describe('[SPEC-602] contrats du compte', () => {
     const wrong = OnboardingUpdateBody.safeParse({ step: 'rythme', reminders });
     expect(wrong.success).toBe(false);
     if (!wrong.success) expect(wrong.error.issues[0]?.path).toEqual(['reminders']);
-    expect(OnboardingUpdateBody.safeParse({ step: 'ia', aiChoice: 'managed' }).success).toBe(true);
+    // The platform provides no model: an « IA fournie » choice is no longer part of the body.
+    const ia = OnboardingUpdateBody.safeParse({ step: 'ia', aiChoice: 'managed' });
+    expect(ia.success).toBe(true);
+    if (ia.success) expect(ia.data).toEqual({ step: 'ia' });
   });
 });

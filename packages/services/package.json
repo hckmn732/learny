@@ -5,7 +5,6 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./ai": "./src/ai/index.ts",
     "./destination": "./src/auth/destination.ts",
     "./home/derive": "./src/home/derive.ts",
     "./review/game-response": "./src/review/game-response.ts",

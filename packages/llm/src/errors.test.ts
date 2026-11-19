@@ -54,12 +54,12 @@ describe('[SPEC-504] conversion des erreurs', () => {
   });
 
   it('EF-2 — AI_UNAVAILABLE porte la raison et le lien des paramètres', () => {
-    const missing = aiUnavailable('no_subscription_no_key');
+    const missing = aiUnavailable('no_model_selected');
     expect(missing.code).toBe('AI_UNAVAILABLE');
     expect(missing.status).toBe(422);
-    expect(missing.reason).toBe('no_subscription_no_key');
+    expect(missing.reason).toBe('no_model_selected');
     expect(missing.link).toBe('/parametres#modeles');
-    expect(missing.detail).toContain('Abonnez-vous à l’IA fournie');
+    expect(missing.detail).toContain('Choisissez un modèle de votre propre clé');
     const unqualified = aiUnavailable('credential_not_qualified', { credentialId: 'cred-2' });
     expect(unqualified.reason).toBe('credential_not_qualified');
     expect(unqualified.credentialId).toBe('cred-2');

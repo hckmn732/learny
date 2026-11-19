@@ -207,3 +207,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-0335](ADR-0335-exception-d-audit-temporaire-pour-l-avis-ghsa-fc5q-39xc-vjpf.md) | Exception d audit temporaire pour l avis GHSA-fc5q-39xc-vjpf sur picomatch | Déduite | SPEC-805, SPEC-011 |
 | [ADR-0338](ADR-0338-suppression-du-benchmark-inp-playwright.md) | Suppression du benchmark INP Playwright | Déduite | SPEC-804, ADR-0333, ADR-0202 |
 | [ADR-0339](ADR-0339-variables-de-la-pile-de-qa-coolify-pilotables-depuis-coolify.md) | Variables de la pile de QA Coolify pilotables depuis Coolify | Déduite | SPEC-012, ADR-0330, ADR-0336, ADR-0047 |
+| [ADR-0340](ADR-0340-la-plateforme-ne-fournit-aucun-modele-d-ia-l-abonnement-est-.md) | La plateforme ne fournit aucun modèle d'IA ; l'abonnement est le droit d'usage, gratuit par défaut | Déduite | SPEC-504, SPEC-507, SPEC-602, SPEC-709, SPEC-725, SPEC-210, ADR-0011, ADR-0012, ADR-0013, ADR-0018 |

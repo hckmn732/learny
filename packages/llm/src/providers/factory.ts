@@ -10,21 +10,17 @@ import { AppError, ok, type Result } from '@learny/core';
 import type { AiProviderValue, Db } from '@learny/db';
 
 import { anthropicFetch } from '../anthropic-fetch';
-import { anthropicApiKey } from '../config';
 import { decryptCredentialKey } from '../credentials/read';
 import type { ResolvedModel } from '../resolve';
 
 export interface ProviderSecrets {
-  /**
-   * Personal key, decrypted by SPEC-505 immediately before the call. Never logged, never returned.
-   * The provided AI reads its key from the server environment instead.
-   */
+  /** Personal key, decrypted by SPEC-505 immediately before the call. Never logged, never returned. */
   apiKey: string | null;
 }
 
 /**
  * Resolves the key of one call. An explicitly supplied secret wins (tests and callers holding a
- * short-lived key); otherwise a BYOK model is decrypted from its row under the owner's scope.
+ * short-lived key); otherwise the personal key is decrypted from its row under the owner's scope.
  * This function stays internal to @learny/llm: it is never re-exported by the package entry point.
  */
 export async function providerSecrets(
@@ -34,7 +30,6 @@ export async function providerSecrets(
   explicitApiKey: string | null = null,
 ): Promise<Result<ProviderSecrets>> {
   if (explicitApiKey !== null) return ok({ apiKey: explicitApiKey });
-  if (resolved.kind === 'managed') return ok({ apiKey: null });
   const decrypted = await decryptCredentialKey(db, {
     userId,
     credentialId: resolved.credentialId,
@@ -51,7 +46,7 @@ function incompatible(provider: AiProviderValue, detail: string): AppError {
   return new AppError('AI_PROVIDER_ERROR', `Fournisseur ${provider} mal configuré : ${detail}`);
 }
 
-function compatibleBaseUrl(resolved: Extract<ResolvedModel, { kind: 'byok' }>): string {
+function compatibleBaseUrl(resolved: ResolvedModel): string {
   if (resolved.baseUrl === null || resolved.baseUrl.trim() === '') {
     throw incompatible(resolved.provider, 'adresse de service absente');
   }
@@ -63,12 +58,6 @@ export function createLanguageModel(
   resolved: ResolvedModel,
   secrets: ProviderSecrets,
 ): LanguageModel {
-  if (resolved.kind === 'managed') {
-    const apiKey = anthropicApiKey() ?? secrets.apiKey;
-    if (apiKey === null) throw missingKey('anthropic');
-    return createAnthropic({ apiKey, fetch: anthropicFetch })(resolved.modelId);
-  }
-
   const { provider, modelId } = resolved;
   switch (provider) {
     case 'anthropic': {

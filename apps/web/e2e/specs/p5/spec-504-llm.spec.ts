@@ -31,18 +31,7 @@ test('résolution et scénarios simulés @SPEC-504', async ({
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
   expect(regions).toEqual(REGIONS);
 
-  // CA-1 — subscriber, qualified BYOK on tutor, no entitlement.
-  for (const task of ['programme', 'course', 'gaps']) {
-    await expect(page.getByTestId(`llm-resolution-subscriber-${task}`)).toContainText(
-      'claude-opus-5-5',
-    );
-  }
-  await expect(page.getByTestId('llm-resolution-subscriber-tutor')).toContainText(
-    'claude-sonnet-5-5',
-  );
-  await expect(page.getByTestId('llm-resolution-subscriber-light')).toContainText(
-    'claude-haiku-5-5',
-  );
+  // CA-1 — qualified BYOK chosen on tutor only; no default model for the other tasks.
   await expect(page.getByTestId('llm-resolution-byok-tutor')).toContainText('openai · gpt-demo');
   await expect(page.getByTestId('llm-resolution-byok-programme')).toContainText('Indisponible');
   for (const task of ['programme', 'course', 'gaps', 'tutor', 'light']) {
@@ -51,7 +40,7 @@ test('résolution et scénarios simulés @SPEC-504', async ({
 
   // CA-7 — the six scenarios, with the journal line of each call.
   await chooseScenario(page, 'tutor', 'demo', 'Bonjour !');
-  await expect(page.getByTestId('llm-last-call')).toContainText('claude-sonnet-5-5');
+  await expect(page.getByTestId('llm-last-call')).toContainText('gpt-demo');
   await expect(page.getByTestId('llm-last-call')).toContainText('ok');
   await chooseScenario(page, 'tutor', 'demo-tool-call', 'read_resources');
   await chooseScenario(page, 'tutor', 'demo-refusal', 'AI_REFUSED');
@@ -104,7 +93,7 @@ test('démonstration llm, conformité visuelle @SPEC-504 @visual @mobile', async
     .locator('main > section[data-testid]')
     .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
   expect(regions).toEqual(REGIONS);
-  await expect(page.getByTestId('llm-resolution-row')).toHaveCount(3);
+  await expect(page.getByTestId('llm-resolution-row')).toHaveCount(2);
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

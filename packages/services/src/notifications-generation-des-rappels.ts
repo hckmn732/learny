@@ -373,7 +373,7 @@ function demoFacts(
         userId,
         taskId: '00000000-0000-4000-8000-000000000008',
         taskLabel: 'La correction de votre quiz',
-        modelLabel: 'IA fournie',
+        modelLabel: 'personnel',
       },
     },
     {

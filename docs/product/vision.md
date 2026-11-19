@@ -30,7 +30,7 @@ Le tuteur IA porte environ 80 % de l'intelligence fonctionnelle, mais **le modè
 
 ## 5. Parcours de l'apprenant (V1)
 
-1. **Inscription** (lien magique ou mot de passe) puis **premiers pas** : profil, ton du tuteur, langue des cours, rythme, choix de l'IA (propre clé gratuite ou IA fournie payante), rappels.
+1. **Inscription** (lien magique ou mot de passe) puis **premiers pas** : profil, ton du tuteur, langue des cours, rythme, clé d'IA personnelle (la plateforme ne fournit aucun modèle), rappels.
 2. **Nouvelle formation** : saisie du sujet, cadrage par chat (≤ 5 questions choisies par le tuteur).
 3. **Programme** : proposé par le tuteur (analyse + recherche web) ou importé ; ajusté puis **validé** ; planifié dans l'agenda.
 4. Pour chaque **module** : l'apprenant dépose ses **apports** par chapitre (notes, PDF, pages web, sous-titres YouTube, images) ; le tuteur génère le **cours** sourcé ; l'apprenant le lit, pose ses questions au tuteur dans une **discussion contextuelle**, résume chaque chapitre ; il passe le **quiz de validation** (seuil 80 % par défaut) autant de fois que nécessaire ; sous le seuil : **lacunes** qualifiées, **remédiation**, nouvelle tentative différée ; au-dessus : module validé, module suivant débloqué.
@@ -40,7 +40,7 @@ Le tuteur IA porte environ 80 % de l'intelligence fonctionnelle, mais **le modè
 ## 6. Périmètre
 
 ### V1 (release `v1.0.0`)
-Tout ce qui est listé dans `docs/product/business-rules.md` avec la priorité V1, notamment : comptes, onboarding, cadrage, programme (proposé/importé), apports (texte, PDF, web, YouTube, images), cours sourcé, discussion tuteur, quiz de validation, lacunes, remédiation, exercice pratique, examen blanc, quiz global et 5 jeux, carte des notions, agenda, notifications (in-app, e-mail, push), 10 automatismes, série et jalons, formations à plusieurs, limite de 3 formations actives, bilan final, modèles d'IA configurables (BYOK) et IA fournie payante (Stripe) avec plafond quotidien, export et suppression du compte, PWA hors ligne pour les révisions, RGPD.
+Tout ce qui est listé dans `docs/product/business-rules.md` avec la priorité V1, notamment : comptes, onboarding, cadrage, programme (proposé/importé), apports (texte, PDF, web, YouTube, images), cours sourcé, discussion tuteur, quiz de validation, lacunes, remédiation, exercice pratique, examen blanc, quiz global et 5 jeux, carte des notions, agenda, notifications (in-app, e-mail, push), 10 automatismes, série et jalons, formations à plusieurs, limite de 3 formations actives, bilan final, modèles d'IA choisis par l'utilisateur avec sa propre clé (BYOK, aucun modèle fourni) et abonnement gratuit par défaut (Stripe), export et suppression du compte, PWA hors ligne pour les révisions, RGPD.
 
 ### V2 (release `v2.0.0`, phase P9)
 Import audio et vidéo avec transcription, détection des liens entre ressources et entre modules, « Explique à un débutant », mises en situation, projet fil rouge, détection fine de la baisse d'engagement.
@@ -54,7 +54,7 @@ Offre entreprise (comptes gérés, administration, facturation B2B), application
 - **Contrôle par l'apprenant** : il peut corriger, compléter, rejeter ou signaler tout contenu généré ; une modification crée une nouvelle version.
 - **Formats garantis** : toute brique non conforme à son schéma est refusée.
 - **Vie privée** : les apports, cours, notes et lacunes restent privés, y compris dans une formation à plusieurs. Données hébergées en UE. RGPD.
-- **Coût de l'IA maîtrisé** : modèle adapté à chaque tâche, cache, traitements groupés, génération unique puis réutilisation, plafond quotidien.
+- **Coût de l'IA maîtrisé** : modèle choisi par l'utilisateur pour chaque tâche, cache, traitements groupés, génération unique puis réutilisation.
 - **Accessibilité** : WCAG 2.2 niveau AA.
 - **Qualité visuelle** : conformité aux maquettes `design/maquettes/` (ADR-0034).
 

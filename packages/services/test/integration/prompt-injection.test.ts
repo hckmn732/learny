@@ -22,7 +22,7 @@ interface Captured {
 
 function fakeSession(captured: Captured[], value: unknown) {
   return {
-    resolved: { modelId: 'mock-gaps', provider: 'anthropic', kind: 'managed' },
+    resolved: { modelId: 'mock-gaps', provider: 'anthropic', kind: 'byok' },
     step: () => Promise.resolve({ ok: false as const }),
     stream: () => Promise.resolve({ ok: false as const }),
     object: (input: Captured) => {

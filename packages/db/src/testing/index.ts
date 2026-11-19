@@ -152,3 +152,28 @@ export function resetSequenceFreeIds(): Promise<void> {
 
 export * from './programme';
 export * from './embedding';
+
+/**
+ * The platform provides no AI model: a task runs only on the model the learner chose with a
+ * qualified key. This helper gives a test user a qualified local model assigned to the five tasks,
+ * so that flows running on the simulated model (`LLM_MODE=mock`) are not refused (SPEC-504 EF-1).
+ */
+export async function grantTestModels(tx: DbTx, userId: string): Promise<string> {
+  const rows = await tx.execute<{ id: string }>(sql`
+    insert into public.ai_credentials
+      (user_id, provider, label, base_url, model_ids, status, qualified_at)
+    values (
+      ${userId}::uuid, 'local', 'Modèle de test', 'http://localhost:11434/v1',
+      array['test-model']::text[], 'qualified', now()
+    )
+    returning id::text as id
+  `);
+  const credentialId = rows[0]?.id;
+  if (credentialId === undefined) throw new Error('grantTestModels : aucune clé insérée.');
+  await tx.execute(sql`
+    insert into public.ai_task_models (user_id, task, credential_id, model_id)
+    select ${userId}::uuid, task, ${credentialId}::uuid, 'test-model'
+    from unnest(enum_range(null::public.ai_task)) as task
+  `);
+  return credentialId;
+}

@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import type { TutorTone } from '@learny/contracts';
 import { AppError } from '@learny/core';
-import { Button, Card, FormError, Link as UiLink, TextField } from '@learny/ui';
+import { Button, Card, FormError, TextField } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/onboarding';
@@ -20,49 +20,16 @@ const t = fr.onboarding.depart;
 export interface DepartureStepProps {
   firstName: string;
   tutorTone: TutorTone;
-  payment: 'ok' | 'annule' | undefined;
 }
 
-/** SPEC-602 EF-11 to EF-14 — departure, invitation, payment return and end of onboarding. */
-export function DepartureStep({ firstName, tutorTone, payment }: Readonly<DepartureStepProps>) {
+/** SPEC-602 EF-11 to EF-14 — departure, invitation and end of onboarding. */
+export function DepartureStep({ firstName, tutorTone }: Readonly<DepartureStepProps>) {
   const router = useRouter();
   const [invite, setInvite] = useState('');
   const [inviteError, setInviteError] = useState<string | null>(null);
   const [inviteStatus, setInviteStatus] = useState<{ title: string; names: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [billing, setBilling] = useState<string | null>(payment === 'ok' ? t.paymentPending : null);
-  const [activated, setActivated] = useState(false);
-
-  useEffect(() => {
-    if (payment !== 'ok') return;
-    let cancelled = false;
-    let tries = 0;
-    const check = async (): Promise<void> => {
-      try {
-        const subscription = await api.billingSubscription({});
-        if (!cancelled && subscription.status === 'active') {
-          setActivated(true);
-          setBilling(t.paymentActivated);
-        }
-      } catch {
-        // CL-7 — a late webhook is not an error: the polling stops after 30 seconds.
-      }
-    };
-    void check();
-    const timer = setInterval(() => {
-      tries += 1;
-      if (tries >= 10) {
-        clearInterval(timer);
-        return;
-      }
-      void check();
-    }, 3000);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-    };
-  }, [payment]);
 
   const markDone = async (): Promise<void> => {
     await api.meOnboardingUpdate({ body: { step: 'done' } });
@@ -121,58 +88,12 @@ export function DepartureStep({ firstName, tutorTone, payment }: Readonly<Depart
     }
   };
 
-  const resumePayment = async (): Promise<void> => {
-    setSaveError(null);
-    try {
-      const { url } = await api.billingCheckout({
-        body: {
-          successPath: '/premiers-pas/depart?abonnement=ok',
-          cancelPath: '/premiers-pas/depart?abonnement=annule',
-        },
-      });
-      window.location.assign(url);
-    } catch {
-      setSaveError(fr.onboarding.common.saveError);
-    }
-  };
-
   return (
     <section className="flex flex-col gap-24" data-testid="onboarding-step-depart">
       <StepHeading
         subtitle={tutorTone === 'tu' ? t.subtitleTu : t.subtitleVous}
         title={t.welcome(firstName)}
       />
-      {payment === 'ok' ? (
-        <p
-          className={
-            activated
-              ? 'm-0 rounded-12 bg-green-soft px-12 py-10 text-13 font-600 text-green-ink'
-              : 'm-0 rounded-12 bg-canvas px-12 py-10 text-13 font-600 text-ink-muted'
-          }
-          data-testid="billing-status"
-          role="status"
-        >
-          {billing ?? t.paymentPending}
-        </p>
-      ) : null}
-      {payment === 'annule' ? (
-        <div className="flex flex-col gap-10" data-testid="billing-status">
-          <FormError>{t.paymentCancelled}</FormError>
-          <div className="flex flex-wrap items-center gap-12">
-            <Button
-              onClick={() => {
-                void resumePayment();
-              }}
-              size="md"
-              type="button"
-              variant="outline"
-            >
-              {t.resumePayment}
-            </Button>
-            <UiLink href="/premiers-pas/ia">{t.useOwnKey}</UiLink>
-          </div>
-        </div>
-      ) : null}
 
       <button
         className="flex items-center gap-16 rounded-24 bg-ink px-24 py-22 text-left text-white"

@@ -110,7 +110,7 @@ describe('[SPEC-510] contrats des sources distantes', () => {
     const reading = {
       title: 'Capture du compte 512',
       text: 'La capture montre un compte bancaire avec un solde débiteur.',
-      origin: { task: 'light', provider: 'anthropic', modelId: 'claude-haiku-5-5' },
+      origin: { task: 'light', provider: 'anthropic', modelId: 'model-c' },
     };
     expect(ImageExtraction.safeParse(reading).success).toBe(true);
     expect(

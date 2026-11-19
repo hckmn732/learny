@@ -10,20 +10,6 @@ export function llmMode(env: Record<string, string | undefined> = process.env): 
   return 'mock';
 }
 
-/** Provided-AI key, read only server-side (ET-3, ET-9). */
-export function anthropicApiKey(
-  env: Record<string, string | undefined> = process.env,
-): string | null {
-  if (env.ANTHROPIC_API_KEY !== undefined && env.ANTHROPIC_API_KEY.trim() !== '') {
-    return env.ANTHROPIC_API_KEY;
-  }
-  try {
-    return parseServerEnv(env).ANTHROPIC_API_KEY ?? null;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * SPEC-512 EF-2 / ADR-0048 — key of the Tavily fallback, read server-side only. `null` makes the
  * fallback unavailable (`SEARCH_UNAVAILABLE`); the value is never logged nor returned to a client.

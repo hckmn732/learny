@@ -5,10 +5,10 @@ import { createAnthropicFetch, rewriteAnthropicInit } from './anthropic-fetch';
 
 describe('[SPEC-504] réécriture du corps Anthropic', () => {
   it('CA-2 — injection des clés non prises en charge et nettoyage des échantillonnages', () => {
-    const { body, headers } = rewriteAnthropicInit(
+    const { body } = rewriteAnthropicInit(
       {
         body: JSON.stringify({
-          model: 'claude-opus-5-5',
+          model: 'test-model',
           temperature: 0.7,
           top_p: 0.9,
           top_k: 10,
@@ -31,7 +31,7 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
           messages: [],
         }),
       },
-      { task: 'programme', fallback: true },
+      { task: 'programme' },
     );
     const parsed = JSON.parse(body) as Record<string, unknown>;
     expect(parsed.thinking).toEqual({ type: 'adaptive' });
@@ -40,16 +40,15 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
     expect(parsed.tools).toEqual([
       expect.objectContaining({ strict: true, input_schema: expect.objectContaining({ additionalProperties: false }) }),
     ]);
-    expect(parsed.fallbacks).toBe('default');
+    expect(parsed.fallbacks).toBeUndefined();
     expect(parsed).not.toHaveProperty('temperature');
     expect(parsed).not.toHaveProperty('top_p');
     expect(parsed).not.toHaveProperty('top_k');
     expect(JSON.stringify(parsed)).not.toContain('budget_tokens');
     expect((JSON.stringify(parsed).match(/"cache_control"/g) ?? []).length).toBe(4);
-    expect(headers.get('anthropic-beta')).toBe('server-side-fallback-2026-07-01');
   });
 
-  it('CA-2 — pas de repli pour Haiku, aucun en-tête bêta privé ne fuit', async () => {
+  it('CA-2 — aucun repli serveur n’est envoyé, aucun en-tête privé ne fuit', async () => {
     let captured: { url: string; init: RequestInit | undefined } | undefined;
     const fetchImpl = createAnthropicFetch((input, init) => {
       captured = {
@@ -63,10 +62,9 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
       headers: {
         'content-type': 'application/json',
         'x-learny-llm-task': 'tutor',
-        'x-learny-llm-fallback': '1',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-5-5',
+        model: 'test-model',
         fallbacks: 'default',
         system: [{ type: 'text', text: 'stable' }],
         messages: [],
@@ -79,7 +77,6 @@ describe('[SPEC-504] réécriture du corps Anthropic', () => {
     expect(parsed.output_config).toEqual({ effort: 'low' });
     const headers = new Headers(captured?.init?.headers);
     expect(headers.get('x-learny-llm-task')).toBeNull();
-    expect(headers.get('x-learny-llm-fallback')).toBeNull();
     expect(headers.get('anthropic-beta')).toBeNull();
   });
 

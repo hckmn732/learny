@@ -1,6 +1,5 @@
 import { agendaRoutes } from './agenda';
 import { agendaReplanRoutes } from './agenda-deplacer-et-reajuster-le-planning';
-import { aiRoutes } from './ai';
 import { aiCredentialRoutes } from './ai-credentials';
 import { quizRoutes } from './attempts';
 import { authRoutes } from './auth';
@@ -72,7 +71,6 @@ export const ROUTES = {
   ...parametresRoutes,
   ...parametresNotificationsRoutes,
   ...parametresModelesRoutes,
-  ...aiRoutes,
   ...billingRoutes,
   ...brickRoutes,
   ...formationRoutes,

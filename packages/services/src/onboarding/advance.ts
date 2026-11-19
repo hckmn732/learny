@@ -205,17 +205,14 @@ export function advanceOnboarding(
       const stored = current.step;
       const crossesIa = RANK[stored] < RANK.rappels && RANK[requested] >= RANK.rappels;
 
-      // EF-8 — declaring the provided AI is the only way to cross the IA step without assignments;
-      // it also removes the personal assignments (back to the provided defaults).
-      if (value.aiChoice === 'managed') {
-        await tx.delete(aiTaskModels).where(eq(aiTaskModels.userId, userId));
-      }
-      if (crossesIa && value.aiChoice !== 'managed') {
+      // EF-8 — the platform provides no model: the IA step is crossed only with a qualified
+      // personal model assigned to each of the five tasks.
+      if (crossesIa) {
         const ready = await hasFiveQualifiedAssignments(tx, userId);
         if (!ready) {
           throw new AppError(
             'ONBOARDING_AI_REQUIRED',
-            'Testez une clé personnelle et affectez-la aux cinq tâches, ou choisissez l’IA fournie.',
+            'Testez une clé personnelle et affectez-la aux cinq tâches.',
             { status: 422 },
           );
         }

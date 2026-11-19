@@ -28,7 +28,7 @@ import { getAiModelsState, updateAiModels } from '../../src/parametres-modeles-d
 const PREFIX = 'sdd-709-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
 const FUTURE = new Date('2026-12-11T12:20:00Z');
-const QUALIFIED_MODEL = 'claude-personal-709';
+const QUALIFIED_MODEL = 'model-personal-709';
 const SECRET = 'sk-test-709-000000a91F'; // learny-test-only
 
 class TestClock implements Clock {
@@ -137,7 +137,7 @@ describe('[SPEC-709] service et API', () => {
     expect(failedCard?.failure?.step).toBe('bricks');
     expect(failedCard?.failure?.brickType).toBeTypeOf('string');
 
-    // A qualified key is proposed, then assigned and shown as « Personnalisé ».
+    // A qualified key is proposed, then assigned to the task.
     const goodKey = await createKey(user);
     await qualify(user, goodKey);
     const assigned = await updateAiModels(user.ctx, {
@@ -150,8 +150,6 @@ describe('[SPEC-709] service et API', () => {
     if (!assigned.ok) return;
     const tutor = assigned.value.tasks.find((task) => task.task === 'tutor');
     expect(tutor).toMatchObject({
-      selection: 'custom',
-      origin: 'personal',
       credentialId: goodKey,
       modelId: QUALIFIED_MODEL,
       outsideEu: true,
@@ -159,11 +157,16 @@ describe('[SPEC-709] service et API', () => {
     });
     expect(await assignmentCount(user.userId)).toBe(1);
 
-    // EF-2 — the reset removes the choice and keeps both credentials and their qualification.
-    const reset = await updateAiModels(user.ctx, { action: 'reset' });
-    expect(reset.ok).toBe(true);
-    if (!reset.ok) return;
-    expect(reset.value.tasks.every((task) => task.selection === 'default')).toBe(true);
+    // EF-2 — clearing the task removes the choice and keeps both credentials and their
+    // qualification; no default model takes its place.
+    const cleared = await updateAiModels(user.ctx, { action: 'clear', task: 'tutor' });
+    expect(cleared.ok).toBe(true);
+    if (!cleared.ok) return;
+    expect(cleared.value.tasks.find((task) => task.task === 'tutor')).toMatchObject({
+      modelId: null,
+      available: false,
+      unavailableReason: 'no_model_selected',
+    });
     expect(await assignmentCount(user.userId)).toBe(0);
     const keys = await serviceDb()
       .select({ id: aiCredentials.id, status: aiCredentials.status })
@@ -272,7 +275,7 @@ describe('[SPEC-709] service et API', () => {
       unavailableReason: 'credential_not_qualified',
     });
 
-    // No silent paid fallback: the subscriber does not get the provided model here.
+    // No fallback: the platform provides no model to replace the unusable one.
     const resolved = await resolveModel(serviceDb(), { userId: user.userId, task: 'tutor' });
     expect(resolved.ok).toBe(false);
     if (!resolved.ok) {

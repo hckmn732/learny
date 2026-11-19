@@ -7,11 +7,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import type { Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
-import {
-  advanceOnboarding,
-  getOnboardingState,
-  onboardingNeedsCheckout,
-} from '@learny/services/onboarding';
+import { advanceOnboarding } from '@learny/services/onboarding';
 
 import { createServiceContext, type ServiceContext } from '../../src/context';
 
@@ -45,13 +41,13 @@ async function qualifyAssignments(userId: string): Promise<void> {
       (id, user_id, provider, label, model_ids, encrypted_key, key_last4, status)
     values (
       ${credentialId}::uuid, ${userId}::uuid, 'anthropic', 'Test',
-      array['claude-sonnet-5-5'], decode(repeat('00', 32), 'hex'), '0000', 'qualified'
+      array['test-model'], decode(repeat('00', 32), 'hex'), '0000', 'qualified'
     )
   `);
   for (const task of ['programme', 'course', 'gaps', 'tutor', 'light']) {
     await serviceDb().execute(sql`
       insert into public.ai_task_models (user_id, task, credential_id, model_id)
-      values (${userId}::uuid, ${task}::ai_task, ${credentialId}::uuid, 'claude-sonnet-5-5')
+      values (${userId}::uuid, ${task}::ai_task, ${credentialId}::uuid, 'test-model')
     `);
   }
 }
@@ -87,7 +83,8 @@ describe('[SPEC-602] onboarding', () => {
 
   it('CA-2, CA-3 — rappels écrit les trois interrupteurs et les quatre automatismes', async () => {
     const { userId, ctx } = await user('reminders');
-    await advanceOnboarding(ctx, { step: 'rappels', aiChoice: 'managed' });
+    await qualifyAssignments(userId);
+    await advanceOnboarding(ctx, { step: 'rappels' });
     const result = await advanceOnboarding(ctx, {
       step: 'depart',
       reminders: { push: false, email: true, automations: false },
@@ -116,7 +113,8 @@ describe('[SPEC-602] onboarding', () => {
 
   it('CA-7 — done fixe la date et n’émet qu’un seul événement', async () => {
     const { userId, ctx } = await user('done');
-    await advanceOnboarding(ctx, { step: 'rappels', aiChoice: 'managed' });
+    await qualifyAssignments(userId);
+    await advanceOnboarding(ctx, { step: 'rappels' });
     await advanceOnboarding(ctx, { step: 'depart' });
     const first = await advanceOnboarding(ctx, { step: 'done' });
     const second = await advanceOnboarding(ctx, { step: 'done' });
@@ -131,16 +129,5 @@ describe('[SPEC-602] onboarding', () => {
     expect(rows[0]?.completed).not.toBeNull();
     expect(new Date(rows[0]?.completed ?? '').toISOString()).toBe(FIXED.toISOString());
     expect(rows[0]?.events).toBe(1);
-  });
-
-  it('CA-5 — Checkout requis sans cinq affectations ni abonnement actif', async () => {
-    const { userId, ctx } = await user('checkout');
-    expect(await onboardingNeedsCheckout(ctx)).toBe(true);
-    const before = await getOnboardingState(ctx);
-    expect(before.ok && before.value.needsCheckout).toBe(true);
-    await qualifyAssignments(userId);
-    expect(await onboardingNeedsCheckout(ctx)).toBe(false);
-    const after = await getOnboardingState(ctx);
-    expect(after.ok && after.value.needsCheckout).toBe(false);
   });
 });

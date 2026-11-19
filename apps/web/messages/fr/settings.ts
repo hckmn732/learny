@@ -6,6 +6,7 @@ export const settings = {
     notifications: 'Notifications',
     automatismes: 'Automatismes',
     modeles: 'Modèles d’IA',
+    abonnement: 'Abonnement',
   },
   coming: {
     notifications: 'La gestion des notifications arrive avec SPEC-708.',
@@ -231,20 +232,21 @@ export const settings = {
   },
   aiModels: {
     principle:
-      'Claude est utilisé par défaut. Remplacez-le, tâche par tâche, par le modèle de votre choix avec votre propre clé.',
+      'Vous choisissez vous-même le modèle de chaque tâche, avec votre propre clé. La plateforme n’en fournit aucun.',
     principlePoints: [
       'Vos clés sont chiffrées et ne reviennent jamais au navigateur',
       'Chaque modèle est testé avant d’être activé',
       'Révisions, lacunes et planning ne dépendent d’aucun modèle',
     ],
-    guard: (cap: string) =>
-      `Vos clés personnelles ne consomment pas le plafond de l’IA fournie (${cap} par jour).`,
     tasksTitle: 'Modèle par tâche',
     tasksSubtitle: 'Seuls les modèles qualifiés pour la tâche sont proposés.',
-    reset: 'Revenir aux modèles par défaut',
-    resetDone: 'Modèles fournis rétablis ; vos clés sont conservées.',
-    defaultPill: 'Par défaut',
-    customPill: 'Personnalisé',
+    noProviderForTasks:
+      'Aucun choix n’est possible tant qu’aucun fournisseur n’est qualifié. Ajoutez une clé dans « Mes fournisseurs ».',
+    chooseModel: 'Choisir un modèle',
+    noModelChosen: 'Aucun modèle choisi',
+    clearChoice: 'Retirer ce choix',
+    cleared: 'Choix retiré ; la tâche est indisponible tant qu’aucun modèle n’est choisi.',
+    chosenPill: 'Votre choix',
     outsideEuPill: 'Hors UE',
     required: (capabilities: string) => `Exige : ${capabilities}`,
     capabilities: {
@@ -265,11 +267,15 @@ export const settings = {
       programme: 'Recherche web assurée par l’API de recherche de la plateforme',
       course: 'Citations remplacées par des renvois vérifiés aux apports',
     },
-    unavailable: 'Ce modèle n’est plus qualifié pour cette tâche.',
-    unavailableHint: 'Choisissez un autre modèle qualifié : aucune bascule payante n’est faite.',
+    unavailable: {
+      no_model_selected: 'Aucun modèle choisi pour cette tâche.',
+      credential_not_qualified: 'Ce modèle n’est plus qualifié pour cette tâche.',
+      personal_model_missing: 'Ce modèle n’est plus disponible chez votre fournisseur.',
+    },
+    unavailableHint:
+      'Choisissez un modèle qualifié de l’un de vos fournisseurs : aucune bascule automatique n’est faite.',
     providersTitle: 'Mes fournisseurs',
-    providedBadge: 'Par défaut',
-    providedModels: 'Opus, Sonnet, Haiku · recherche web et citations intégrées',
+    providersEmpty: 'Aucun fournisseur configuré. Ajoutez une clé pour pouvoir choisir un modèle.',
     status: {
       qualified: 'Qualifié',
       unqualified: 'Non qualifié',
@@ -317,38 +323,25 @@ export const settings = {
     assignmentDone: 'Choix enregistré.',
     deleted: 'Clé supprimée ; ses affectations ont été retirées.',
     testError: 'La qualification n’a pas pu être lancée. Réessayez.',
-    managed: {
-      title: 'Abonnement à l’IA fournie',
-      description:
-        'Gratuit avec votre propre clé. L’IA fournie est incluse dans l’abonnement mensuel, avec un plafond quotidien.',
-      loading: 'Chargement de l’abonnement…',
-      errorTitle: 'Impossible de charger l’abonnement à l’IA fournie.',
-      actionError: 'L’opération n’a pas pu être ouverte. Réessayez.',
-      subscribe: 'Souscrire',
-      manage: 'Gérer l’abonnement',
-      badges: {
-        managed: 'IA fournie active',
-        personal: 'Votre clé',
-        unavailable: 'IA indisponible',
-      },
-      reasons: {
-        subscription_active:
-          'L’IA fournie est active : les cinq tâches utilisent les modèles inclus.',
-        personal_key:
-          'Sans abonnement, vos clés qualifiées alimentent les tâches que vous avez choisies.',
-        none: 'Aucune IA disponible pour vos tâches : ajoutez une clé qualifiée ou abonnez-vous. Les révisions, quiz déjà générés et l’agenda restent utilisables.',
-      },
-      unavailable:
-        'IA indisponible : ajoutez une clé qualifiée ou souscrivez à l’IA fournie pour lancer une tâche IA.',
-      capTitle: 'Consommation du jour',
-      capUsage: (spent: string, cap: string) => `${spent} dépensés sur ${cap}`,
-      capGaugeLabel: 'Consommation de l’IA fournie par rapport au plafond quotidien',
-      capPercent: (percent: number) => `${String(percent)} % du plafond quotidien`,
-      alert: (threshold: number) =>
-        `Alerte : vous avez dépassé ${String(threshold)} % du plafond de l’IA fournie pour aujourd’hui.`,
-      reached: (resetsAt: string) =>
-        `Plafond atteint : les tâches basculent sur le modèle léger jusqu’au ${resetsAt}. La conception du programme reprendra le lendemain.`,
+  },
+  subscriptionTab: {
+    title: 'Abonnement',
+    description: 'Votre droit d’utiliser Learny.',
+    loading: 'Chargement de l’abonnement…',
+    errorTitle: 'Impossible de charger l’abonnement.',
+    actionError: 'L’opération n’a pas pu être ouverte. Réessayez.',
+    manage: 'Gérer l’abonnement',
+    statuses: {
+      none: 'Gratuit',
+      active: 'Actif',
+      past_due: 'Paiement en retard',
+      canceled: 'Résilié',
+      incomplete: 'Incomplet',
     },
+    freeSummary:
+      'Learny est gratuit : l’accès complet à l’application est inclus, sans abonnement. Vous utilisez votre propre clé d’IA, dans l’onglet Modèles d’IA.',
+    paidSummary: 'Votre abonnement donne le droit d’utiliser l’application.',
+    periodEnd: (date: string) => `Période en cours jusqu’au ${date}.`,
   },
   notificationsTab: {
     channelsTitle: 'Canaux',

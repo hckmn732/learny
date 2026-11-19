@@ -24,6 +24,7 @@ import {
   seedDemoExamAttempts,
   type DemoExamAttempts,
 } from '../../support/demo-exam';
+import { seedOwnModels } from '../../support/own-model';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
@@ -74,10 +75,7 @@ async function seedKeyboardQuiz(): Promise<{
       variantsPerFormat: 1,
       title: 'SAP S/4HANA Finance',
     });
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await seedOwnModels(userId, tx);
     await tx.execute(sql`
       update public.formations
       set start_date = '2026-11-02',
@@ -389,8 +387,11 @@ test('parcours clavier paramètres @SPEC-803', async ({ page, context, baseURL }
     'true',
   );
   await page.getByTestId('settings-tab-notifications').press('End');
-  await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
-  await page.getByTestId('settings-tab-modeles').press('Home');
+  await expect(page.getByTestId('settings-tab-abonnement')).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await page.getByTestId('settings-tab-abonnement').press('Home');
   await expect(page.getByTestId('settings-tab-profil')).toHaveAttribute('aria-selected', 'true');
   await page.getByTestId('settings-tab-profil').press('ArrowRight');
   const weekend = page.getByTestId('weekend-rule-switch');

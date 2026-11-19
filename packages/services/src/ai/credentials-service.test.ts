@@ -40,7 +40,7 @@ function row(partial: Record<string, unknown> = {}) {
     provider: 'anthropic',
     label: 'Clé perso',
     baseUrl: null,
-    modelIds: ['claude-sonnet-4-5'],
+    modelIds: ['model-sonnet-4-5'],
     keyLast4: 'abcd',
     status: 'qualified',
     qualification: { keyPrefix: 'sk-ant' },

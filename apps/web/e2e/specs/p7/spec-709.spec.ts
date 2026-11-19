@@ -180,20 +180,38 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByTestId('settings-title')).toHaveText('Modèles d’IA');
   await expect(page.getByTestId('ai-models-principle')).toBeVisible();
-  await expect(page.getByTestId('provider-card')).toHaveCount(1);
-  await expect(page.getByTestId('provider-card')).toContainText('Anthropic · Claude');
-  await expect(page.getByTestId('provider-card')).toContainText('Par défaut');
+  await expect(page.getByTestId('ai-models-principle')).toContainText(
+    'La plateforme n’en fournit aucun',
+  );
 
-  // EF-1 — five task rows, each one with a selector of the qualified models only.
+  // ADR-0340 — no provider, no default model: the empty state invites to add a key, and the
+  // « Mes fournisseurs » section comes before « Modèle par tâche ».
+  await expect(page.getByTestId('provider-card')).toHaveCount(0);
+  await expect(page.getByTestId('ai-providers-empty')).toHaveText(
+    'Aucun fournisseur configuré. Ajoutez une clé pour pouvoir choisir un modèle.',
+  );
+  await expect(page.getByTestId('provider-add')).toBeVisible();
+  const providersBox = await page.getByTestId('ai-providers').boundingBox();
+  const tasksBox = await page.getByTestId('ai-models-tasks').boundingBox();
+  expect(providersBox).not.toBeNull();
+  expect(tasksBox).not.toBeNull();
+  expect(providersBox?.y ?? 0).toBeLessThan(tasksBox?.y ?? 0);
+  await expect(page.getByTestId('ai-tasks-no-provider')).toContainText(
+    'Aucun choix n’est possible tant qu’aucun fournisseur n’est qualifié',
+  );
+
+  // EF-1 — five task rows without any model: the selector is locked and nothing is « par défaut ».
   await expect(page.getByTestId('ai-task-model')).toHaveCount(5);
   for (const task of ['programme', 'course', 'gaps', 'tutor', 'light']) {
-    const row = page.getByTestId(`ai-task-${task}`);
-    await expect(row.getByTestId('ai-task-model')).toBeVisible();
-    await expect(row).toContainText('Par défaut');
+    const row = page.getByTestId('ai-task-' + task);
+    await expect(row.getByTestId('ai-task-model')).toBeDisabled();
+    await expect(row.getByTestId('ai-task-unavailable')).toContainText(
+      'Aucun modèle choisi pour cette tâche.',
+    );
+    await expect(row.getByTestId('ai-task-clear')).toHaveCount(0);
   }
-  await expect(page.getByTestId('ai-task-tutor').getByTestId('ai-task-model')).toContainText(
-    'Claude Sonnet',
-  );
+  await expect(page.locator('main')).not.toContainText('Claude');
+  await expect(page.locator('main')).not.toContainText('Par défaut');
 
   // EF-3, EF-4 — adding a provider: the outside-EU warning appears before any submit.
   await page.getByTestId('provider-add').click();
@@ -211,13 +229,12 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   );
   await expect(page.getByTestId('provider-qualification-result')).toContainText('Connexion');
   await page.getByTestId('provider-save').click();
-  await expect(page.getByTestId('provider-card')).toHaveCount(2);
+  await expect(page.getByTestId('provider-card')).toHaveCount(1);
+  await expect(page.getByTestId('ai-providers-empty')).toHaveCount(0);
+  await expect(page.getByTestId('ai-tasks-no-provider')).toHaveCount(0);
 
   // CA-2 — the card only renders the mask and the four last characters.
-  const openaiCard = page
-    .getByTestId('provider-card')
-    .filter({ hasText: 'OpenAI' })
-    .filter({ hasNotText: 'Anthropic' });
+  const openaiCard = page.getByTestId('provider-card').filter({ hasText: 'OpenAI' });
   await expect(openaiCard).toContainText('Votre clé · sk-••••••••a91F');
   await expect(openaiCard).not.toContainText(KEY);
   await expect(openaiCard.getByTestId('provider-region-warning')).toHaveText(
@@ -225,8 +242,9 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   );
   await expect(openaiCard).toContainText('Qualifié');
 
-  // CA-1, EF-2 — a qualified model is assigned, survives a reload, then resets.
+  // CA-1, EF-2 — a qualified model is assigned, survives a reload, then the choice is cleared.
   const tutor = page.getByTestId('ai-task-tutor');
+  await expect(tutor.getByTestId('ai-task-model')).toBeEnabled();
   const assigned = page.waitForResponse(
     (response) =>
       response.url().includes('/api/v1/me/ai/models') &&
@@ -234,13 +252,17 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   );
   await tutor.getByTestId('ai-task-model').selectOption({ label: 'OpenAI · ma clé' });
   expect((await assigned).status()).toBe(200);
-  await expect(tutor).toContainText('Personnalisé');
+  await expect(tutor).toContainText('Votre choix');
   await expect(tutor).toContainText('Hors UE');
   await page.reload();
   await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByTestId('ai-task-tutor')).toContainText('Personnalisé');
+  await expect(page.getByTestId('ai-task-tutor')).toContainText('Votre choix');
   await expect(page.getByTestId('ai-task-tutor').getByTestId('ai-task-model')).toHaveValue(
     /^[0-9]+$/,
+  );
+  // The four other tasks stay without a model: no automatic assignment.
+  await expect(page.getByTestId('ai-task-programme')).toContainText(
+    'Aucun modèle choisi pour cette tâche.',
   );
 
   // CA-1 — a failed model of the learner never appears in the five selectors (CL-5 card kept).
@@ -248,28 +270,37 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
     await seedKeys(session.userId, { qualified: false, failed: true });
   }
   await page.reload();
-  await expect(page.getByTestId('provider-card')).toHaveCount(3);
+  await expect(page.getByTestId('provider-card')).toHaveCount(2);
   const failedCard = page.getByTestId('provider-card').filter({ hasText: 'DeepSeek' });
   await expect(failedCard).toContainText('Non qualifié');
   await expect(failedCard).toContainText('brique « Association »');
   for (const task of ['programme', 'course', 'gaps', 'tutor', 'light']) {
-    await expect(page.getByTestId(`ai-task-${task}`)).not.toContainText(FAILED_MODEL);
+    await expect(page.getByTestId('ai-task-' + task)).not.toContainText(FAILED_MODEL);
   }
   for (const select of await page.getByTestId('ai-task-model').all()) {
     expect(await select.locator('option').allTextContents()).not.toContain(FAILED_MODEL);
   }
 
-  // EF-2 — « Revenir aux modèles par défaut » keeps the keys and restores the provided models.
-  await page.getByTestId('ai-reset-models').click();
-  await expect(page.getByTestId('ai-task-tutor')).toContainText('Par défaut');
-  await expect(page.getByTestId('ai-task-tutor')).not.toContainText('Personnalisé');
-  await expect(page.getByTestId('provider-card')).toHaveCount(3);
+  // EF-2 — clearing a choice keeps the keys and leaves the task without any model.
+  await page.getByTestId('ai-task-tutor').getByTestId('ai-task-clear').click();
+  await expect(page.getByTestId('ai-task-tutor')).toContainText(
+    'Aucun modèle choisi pour cette tâche.',
+  );
+  await expect(page.getByTestId('ai-task-tutor')).not.toContainText('Votre choix');
+  await expect(page.getByTestId('provider-card')).toHaveCount(2);
   await page.reload();
-  await expect(page.getByTestId('ai-task-tutor')).toContainText('Par défaut');
+  await expect(page.getByTestId('ai-task-tutor')).toContainText(
+    'Aucun modèle choisi pour cette tâche.',
+  );
 
   await captureEvidence('spec-709-parametres-modeles');
 
   // CL-1 — a server failure keeps the screen usable and offers « Réessayer ».
+  await page
+    .getByTestId('ai-task-tutor')
+    .getByTestId('ai-task-model')
+    .selectOption({ label: 'OpenAI · ma clé' });
+  await expect(page.getByTestId('ai-task-tutor')).toContainText('Votre choix');
   await page.route('**/api/v1/me/ai/models', async (route) => {
     if (route.request().method() !== 'PATCH') {
       await route.continue();
@@ -288,7 +319,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
       }),
     });
   });
-  await page.getByTestId('ai-reset-models').click();
+  await page.getByTestId('ai-task-tutor').getByTestId('ai-task-clear').click();
   await expect(page.getByTestId('ai-models-error')).toBeVisible();
   await expect(page.getByTestId('ai-models-retry')).toBeVisible();
   await page.unroute('**/api/v1/me/ai/models');
@@ -306,8 +337,8 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
   await cleanupDemoKeys();
   await seedKeys(demoUserId('alex'), { qualified: true, failed: true });
   await page.goto('/parametres#modeles');
-  await expect(page.getByTestId('provider-card')).toHaveCount(3);
-  await expect(page.getByTestId('ai-task-tutor')).toContainText('Personnalisé');
+  await expect(page.getByTestId('provider-card')).toHaveCount(2);
+  await expect(page.getByTestId('ai-task-tutor')).toContainText('Votre choix');
 
   await expectTokens(page, {
     body: { 'background-color': '#F4F4F1', color: '#111113' },
@@ -324,8 +355,9 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
     'OpenAI · ma clé',
   );
 
-  // Mockup comparison region by region (ADR-0034, ≤ 12 %); the reference is a 0.9 render of the
-  // maquette, the crops are resized to the rendered element by `compareRegions`.
+  // Mockup comparison of the intro banner only (ADR-0034, ≤ 12 %): the tasks and providers
+  // regions of the maquette show a provided Claude model and a « Par défaut » pill, which ADR-0340
+  // removes, and « Mes fournisseurs » now comes first.
   const regions = await compareRegions(page, {
     reference: 'design/references/SCR-15-modeles-desktop.png',
     outputDir: testInfo.outputPath('visual'),
@@ -334,16 +366,6 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
         name: 'ai-models-principle',
         locator: page.getByTestId('ai-models-principle'),
         rect: { x: 310, y: 161, width: 1044, height: 121 },
-      },
-      {
-        name: 'ai-models-tasks',
-        locator: page.getByTestId('ai-models-task-list'),
-        rect: { x: 311, y: 378, width: 1041, height: 363 },
-      },
-      {
-        name: 'ai-providers',
-        locator: page.getByTestId('ai-providers-cards'),
-        rect: { x: 311, y: 808, width: 1041, height: 171 },
       },
     ],
   });
@@ -377,6 +399,7 @@ test('conformité SPEC-709 mobile @SPEC-709 @visual @mobile', async ({
   await seedKeys(demoUserId('alex'), { qualified: true, failed: false });
   await page.goto('/parametres#modeles');
   await expect(page.getByTestId('ai-task-model')).toHaveCount(5);
+  await expect(page.getByTestId('ai-providers')).toBeVisible();
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );

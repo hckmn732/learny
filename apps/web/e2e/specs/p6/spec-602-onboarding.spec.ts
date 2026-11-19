@@ -229,50 +229,21 @@ test('premiers pas avec clé personnelle qualifiée @SPEC-602', async ({
   }
 });
 
-test('premiers pas avec IA fournie et paiement @SPEC-602', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  const owning = await createUser('ia');
-  const cancelling = await createUser('rappels');
+test('l’étape IA ne propose aucune IA fournie @SPEC-602', async ({ page, axeCheck, captureEvidence }) => {
+  const user = await createUser('ia');
   try {
-    await login(page, owning.email, /\/premiers-pas\/ia$/);
+    await login(page, user.email, /\/premiers-pas\/ia$/);
     await page.goto('/premiers-pas/ia');
-    await page.getByTestId('ai-choice-managed').click();
-    await expect(page.getByText('Abonnement mensuel, sans engagement.')).toBeVisible();
-    await captureEvidence('ia-fournie');
-    await page.getByTestId('onboarding-continue').click();
-    await expect(page).toHaveURL(/\/premiers-pas\/rappels$/);
-    await page.getByTestId('onboarding-continue').click();
-    await expect(page).toHaveURL(/\/_dev\/stripe\/checkout/);
-    await page.getByRole('button', { name: 'Payer' }).click();
-    await expect(page).toHaveURL(/\/premiers-pas\/depart\?abonnement=ok$/);
-    await expect(page.getByTestId('billing-status')).toHaveText('Abonnement activé : le tuteur est prêt.', {
-      timeout: 15_000,
-    });
-    await captureEvidence('depart-abonnement-ok');
+    await expect(page.getByTestId('ai-choice-managed')).toHaveCount(0);
+    await expect(page.getByTestId('ai-intro')).toContainText('Learny ne fournit aucun modèle');
+    await expect(page.getByTestId('ai-key')).toBeVisible();
+    await captureEvidence('ia-sans-ia-fournie');
     await axeCheck();
-  } finally {
-    await deleteTestSession(owning);
-  }
-
-  try {
-    await page.context().clearCookies();
-    await login(page, cancelling.email, /\/premiers-pas\/rappels$/);
-    await page.goto('/premiers-pas/rappels');
     await page.getByTestId('onboarding-continue').click();
-    await expect(page).toHaveURL(/\/_dev\/stripe\/checkout/);
-    await page.getByRole('button', { name: 'Annuler' }).click();
-    await expect(page).toHaveURL(/\/premiers-pas\/depart\?abonnement=annule$/);
-    await expect(page.getByTestId('billing-status')).toContainText(
-      'Le paiement n’a pas abouti : le tuteur restera indisponible',
-    );
-    await captureEvidence('depart-abonnement-annule');
-    await page.getByRole('button', { name: 'Reprendre le paiement' }).click();
-    await expect(page).toHaveURL(/\/_dev\/stripe\/checkout/);
+    await expect(page.getByTestId('ai-error')).toHaveText('Testez votre clé avant de continuer.');
+    await expect(page).toHaveURL(/\/premiers-pas\/ia$/);
   } finally {
-    await deleteTestSession(cancelling);
+    await deleteTestSession(user);
   }
 });
 
@@ -298,7 +269,7 @@ test('reprise de l’onboarding et clé refusée @SPEC-602', async ({
     );
     await page.getByTestId('onboarding-continue').click();
     await expect(page.getByTestId('ai-error')).toHaveText(
-      'Testez votre clé avant de continuer, ou choisissez l’IA fournie.',
+      'Testez votre clé avant de continuer.',
     );
     await captureEvidence('ia-cle-refusee');
     await axeCheck();
@@ -308,13 +279,14 @@ test('reprise de l’onboarding et clé refusée @SPEC-602', async ({
     await page.context().clearCookies();
     await login(page, user.email, /\/premiers-pas\/ia$/);
 
+    // Sans clé qualifiée, l’étape IA ne peut plus être franchie : aucune IA fournie n’existe.
     const patched = await page.request.patch('/api/v1/me/onboarding', {
-      data: { step: 'rappels', aiChoice: 'managed' },
+      data: { step: 'rappels' },
       headers: { origin: new URL(page.url()).origin },
     });
-    expect(patched.status()).toBe(200);
+    expect(patched.ok()).toBe(false);
     await page.goto('/accueil');
-    await expect(page).toHaveURL(/\/accueil$/);
+    await expect(page).toHaveURL(/\/premiers-pas\/ia$/);
   } finally {
     await deleteTestSession(user);
   }
@@ -427,12 +399,6 @@ test('conformité SCR-02 premiers pas @SPEC-602 @visual', async ({
       await compareScreen(page, reference, `SCR-02-${name}`);
       await expectScreenshotBaseline(page, `spec-602-${name}-desktop.png`, { fullPage: true });
     }
-    await visualState(page, user.userId, 'ia', null);
-    await page.goto('/premiers-pas/ia');
-    await page.getByTestId('ai-choice-managed').click();
-    await captureEvidence('ia-fournie');
-    await expectScreenshotBaseline(page, 'spec-602-ia-fournie-desktop.png', { fullPage: true });
-
     await visualState(page, user.userId, 'depart', 'Alex');
     await page.goto('/premiers-pas/depart');
     await expectTokens(page, {

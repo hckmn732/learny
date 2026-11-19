@@ -1,11 +1,5 @@
 // Public API of the subscription service (`@learny/services/billing`, SPEC-210).
-export {
-  DEFAULT_DAILY_CAP_USD,
-  PORTAL_RETURN_PATH,
-  getSubscription,
-  openPortal,
-  startCheckout,
-} from './checkout';
+export { PORTAL_RETURN_PATH, getSubscription, openPortal, startCheckout } from './checkout';
 export type { StartCheckoutOptions } from './checkout';
 export { resolveBillingConfig, WEBHOOK_TOLERANCE_SECONDS } from './config';
 export type { BillingConfig } from './config';
@@ -19,8 +13,6 @@ export {
   simulateStripeAction,
 } from './dev';
 export type { SimulatedAction, StripeEventLine } from './dev';
-export { hasManagedAi, isManagedAiEntitled } from './entitlement';
-export type { EntitlementInput, HasManagedAiOptions } from './entitlement';
 export { MockStripeGateway, createMockState, isMockGateway, mockCheckoutUrl } from './mock-stripe';
 export type { MockCheckoutSession, MockDelivery, MockStripeState } from './mock-stripe';
 export { StripeSdkGateway, translateStripeError } from './stripe-client';

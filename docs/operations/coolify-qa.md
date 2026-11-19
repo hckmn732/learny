@@ -22,7 +22,7 @@ Valeurs **par défaut** de la pile de QA (toutes modifiables, section 4 bis) :
 | Élément | Production | QA |
 |---|---|---|
 | Données | vides au départ | jeu de démonstration SPEC-115 (Alex Perrin, SAP S/4HANA Finance, agenda du 9 au 13 novembre…), rechargé à chaque déploiement |
-| IA | Anthropic, Voyage | simulée (`LLM_MODE=mock`) : réponses déterministes des fixtures |
+| IA | clés personnelles des utilisateurs (aucun modèle fourni, ADR-0340), Voyage pour les embeddings | simulée (`LLM_MODE=mock`) : réponses déterministes des fixtures |
 | Paiement | Stripe | simulé (`STRIPE_MODE=mock`) |
 | Notifications push | envoyées | enregistrées, non envoyées (`PUSH_MODE=mock`) |
 | E-mails | SMTP réel, Resend | tous reçus dans **Mailpit** (inscription, lien de connexion, rappels) |
@@ -142,7 +142,7 @@ aussitôt) ; les données déjà présentes restent.
 
 ### Recette avec les vrais fournisseurs (`preview`, recommandée)
 
-IA, embeddings et push réels, Stripe en **mode test**, e-mails toujours capturés par Mailpit :
+IA, embeddings et push réels, Stripe en **mode test**, e-mails toujours capturés par Mailpit. La plateforme ne fournit aucun modèle (ADR-0340) : chaque testeur enregistre sa propre clé dans Paramètres › Modèles d'IA et choisit lui-même le modèle de chaque tâche ; `ANTHROPIC_API_KEY` reste vide :
 
 ```env
 APP_ENV=preview

@@ -1,6 +1,6 @@
 // SPEC-802 — mobile navigation and full-screen panels (EF-2, EF-3, EF-5, EF-6, CA-3, CA-4).
 // The `mobile` project runs this file; the desktop project skips it explicitly.
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb } from '@learny/db';
 import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
@@ -10,6 +10,7 @@ import {
   resetDemoRateLimits,
   seedDemoExamAttempts,
 } from '../../support/demo-exam';
+import { seedOwnModels } from '../../support/own-model';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const SAP = demoFormationId('sap');
@@ -24,9 +25,7 @@ test.beforeAll(async () => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
   session = await createDemoSession(demoUserId('alex'), ALEX.email);
   // The tutor answers through the managed AI, which needs an active subscription (as SPEC-610).
-  await serviceDb().execute(
-    sql`insert into public.subscriptions (user_id, status, current_period_end) values (${demoUserId('alex')}::uuid, 'active', '2030-01-01T00:00:00Z') on conflict (user_id) do update set status = 'active'`,
-  );
+  await seedOwnModels(demoUserId('alex'));
   const exam = await seedDemoExamAttempts();
   examAttemptId = exam.inProgressId;
   examGradedId = exam.gradedId;
