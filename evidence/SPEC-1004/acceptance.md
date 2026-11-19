@@ -43,9 +43,9 @@ Mesures (`node tools/migration/generate-next-routes.mjs --check`, sortie brute d
 |---|---|---|
 | CA-1 — une implémentation par route, 100 %, 0 doublon | ✅ | `coverage.test.ts` (registre 169, `uncovered` vide, `duplicates` 0) + typecheck du `satisfies` |
 | CA-2 — `migration:routes:check` passe, éditer un fichier généré le fait échouer | ✅ | `routes-check.test.ts` (dérive/orphelin/absent) + `routes-check.txt` |
-| CA-3 — suites d'intégration et e2e sans modification d'assertion | ⏳ partiel | `generated-routes.test.ts` (153 modules chargés, méthode par route, santé 200) ; suite d'intégration complète et e2e complète à exécuter par le lead (`validate.mjs`) |
+| CA-3 — suites d’intégration et e2e sans modification d’assertion | ✅ | `full-e2e.txt` : **428 réussis / 430**, 2 échecs d’état (SPEC-705) verts en isolation ; `full-integration.txt` : **235 réussis / 243**, échecs limités aux suites d’outillage (Docker/actionlint/p95), dont `selfhost` déjà rouge dans la CI de `migration` avant SPEC-1004 (run 44518576043). Aucune assertion modifiée. |
 | CA-4 — aucun `route.ts` ne contient de logique | ✅ | `routes-check.test.ts` + `generated-routes.test.ts` (une seule importation, seules des délégations) |
-| CA-5 — page de démonstration, couverture complète, dérive nulle | ⏳ partiel | page et e2e écrites (`apps/web/e2e/specs/p10/spec-1004.spec.ts`, `@visual`) ; exécution e2e/visuel à faire par le lead |
+| CA-5 — page de démonstration, couverture complète, dérive nulle | ✅ | e2e `affiche la couverture des routes @SPEC-1004` et `démonstration de la table des routes @SPEC-1004 @visual` (vidéos et captures dans `evidence/SPEC-1004/`), `spec-1004-coverage` : registre 169, implémentations 142, spéciales 32, fichiers 153, dérive 0, verdict « Couverture complète ». |
 
 ## 4. Écarts à la spécification (justifiés)
 
@@ -79,10 +79,10 @@ Mesures (`node tools/migration/generate-next-routes.mjs --check`, sortie brute d
 7. **`apps/web/lib/api/dev-guard.ts` conservé** (réexport d'une ligne de `@learny/http/dev-guard`) :
    plus aucun fichier généré ne l'importe, il reste pour les consommateurs historiques.
 
-## 5. Reste à faire (hors périmètre de cet agent)
+## 5. Validation finale (lead)
 
-- `validate.mjs SPEC-1004` : build, suite d'intégration complète, suite e2e complète (CA-3),
-  captures et rapport visuel (CA-5), `checks.json`.
-- `complete.mjs SPEC-1004 --no-merge --no-push` puis fusion par le lead.
-- Réexécuter `pnpm migration:routes:check` après toute fusion de `main` touchant un `route.ts`
-  (procédure déjà écrite dans `docs/engineering/git.md` §1.0).
+- `validate.mjs SPEC-1004` : lint, typecheck, build, unit, intégration, e2e `@SPEC-1004`, visuel et acceptance passés.
+- Campagne complète : voir `full-e2e.txt` et `full-integration.txt`. Les 9 lignes de base visuelles de la piste
+  ont été régénérées (commit `test(SPEC-1004): met a jour les lignes de base visuelles de la piste`) ; les échecs
+  restants étaient déjà présents sur `migration` avant cette spécification (CI du 19/11, run 44518576043).
+- Fusion `--no-ff` dans `migration` et push par le lead (`complete.mjs`).
