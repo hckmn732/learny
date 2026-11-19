@@ -1,0 +1,15 @@
+  - import "./clock" without a file extension (packages/testing/src/env.ts:2:32). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/root/learny-wt-migration[39m
+
+ [32m✓[39m [30m[45m integration [49m[39m tools/migration/test/integration/boundary-lint.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 9446[2mms[22m[39m
+   [32m✓[39m [SPEC-1001] frontière ESLint de apps/web [2m(2)[22m
+     [33m[2m✓[22m[39m refuse un nouvel import serveur hors liste de référence (CA-2, CL-1)[33m 4694[2mms[22m[39m
+     [33m[2m✓[22m[39m laisse passer un fichier de la liste de référence (CA-2)[33m 4751[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 19:24:03
+[2m   Duration [22m 9.54s[2m (tests 100%)[22m
+
