@@ -31,6 +31,7 @@ const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 interface Scenario {
   name: string;
   url: string;
+  ready: string;
   run: (page: Page) => Promise<void>;
 }
 
@@ -45,6 +46,7 @@ const scenarios: Scenario[] = [
   {
     name: 'accueil → panneau des notifications',
     url: '/accueil',
+    ready: '[data-testid="header-notifications"]',
     run: async (page) => {
       await page.getByTestId('header-notifications').click();
       await page.getByTestId('notification-panel').waitFor();
@@ -53,6 +55,7 @@ const scenarios: Scenario[] = [
   {
     name: 'quiz global → carte de rappel puis Bon',
     url: `/formations/${FORMATION}/quiz-global`,
+    ready: '[data-testid="recall-card-flip"]',
     run: async (page) => {
       await page.getByTestId('recall-card-flip').click();
       await page.getByTestId('recall-grade-good').click();
@@ -61,6 +64,7 @@ const scenarios: Scenario[] = [
   {
     name: 'quiz de validation → option puis Vérifier',
     url: `/formations/${FORMATION}/modules/${MODULE}/quiz`,
+    ready: '[data-testid^="quiz-option-"]',
     run: async (page) => {
       await page.locator('[data-testid^="quiz-option-"]').first().click();
       await page.getByTestId('quiz-check').click();
@@ -69,6 +73,7 @@ const scenarios: Scenario[] = [
   {
     name: 'carte des notions → saisir clé puis Entrée',
     url: `/formations/${FORMATION}/carte`,
+    ready: '[data-testid="graph-search"]',
     run: async (page) => {
       await page.getByTestId('graph-search').fill('clé');
       await page.getByTestId('graph-search').press('Enter');
@@ -77,6 +82,7 @@ const scenarios: Scenario[] = [
   {
     name: 'paramètres → onglet Notifications puis interrupteur',
     url: '/parametres#notifications',
+    ready: '[data-testid="weekend-rule-switch"]',
     run: async (page) => {
       await page.getByTestId('weekend-rule-switch').click();
     },
@@ -84,6 +90,7 @@ const scenarios: Scenario[] = [
   {
     name: 'agenda → Semaine vers Mois',
     url: '/agenda?vue=semaine&date=2026-11-11',
+    ready: '[data-testid="agenda-view-mois"]',
     run: async (page) => {
       await page.getByTestId('agenda-view-mois').click();
     },
@@ -103,8 +110,30 @@ async function throttle(page: Page): Promise<void> {
   });
 }
 
+async function unthrottle(page: Page): Promise<void> {
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
+  await cdp.send('Network.emulateNetworkConditions', {
+    offline: false,
+    latency: 0,
+    downloadThroughput: -1,
+    uploadThroughput: -1,
+  });
+}
+
+async function waitForHydration(page: Page, selector: string): Promise<void> {
+  await page.waitForFunction((readySelector) => {
+    const element = document.querySelector(readySelector);
+    if (element === null) return false;
+    return Object.keys(element).some((key) => key.startsWith('__reactProps$'));
+  }, selector);
+}
+
 async function measure(page: Page, scenario: Scenario): Promise<number | null> {
+  await unthrottle(page);
   await page.goto(scenario.url, { waitUntil: 'domcontentloaded', timeout: 120_000 });
+  await waitForHydration(page, scenario.ready);
+  await throttle(page);
   await page.evaluate(() => {
     const target = window as unknown as { __inpValues?: number[] };
     target.__inpValues = [];
@@ -174,7 +203,6 @@ test.beforeEach(async ({ context, baseURL }) => {
 for (const scenario of scenarios) {
   test(`INP — ${scenario.name}`, async ({ page }) => {
     await page.clock.setFixedTime(NOW);
-    await throttle(page);
     const values: number[] = [];
     for (let pass = 0; pass < PASSES; pass += 1) {
       const value = await measure(page, scenario);

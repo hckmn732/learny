@@ -26,4 +26,25 @@ describe('[SPEC-804] mesure INP isolée', () => {
     expect(spec).toContain('scenariosWithP75.length === scenarios.length');
     expect(spec).toContain('result.values.length === PASSES');
   });
+
+  it('charge normalement puis mesure uniquement après hydratation sous throttling', () => {
+    const spec = fs.readFileSync(
+      fileURLToPath(new URL('../../../apps/web/e2e/perf/inp.perf.ts', import.meta.url)),
+      'utf8',
+    );
+    expect(spec).toContain('await unthrottle(page)');
+    expect(spec).toContain('await waitForHydration(page, scenario.ready)');
+    expect(spec.indexOf('await throttle(page)')).toBeGreaterThan(
+      spec.indexOf('await waitForHydration(page, scenario.ready)'),
+    );
+  });
+
+  it('offre un déclenchement manuel limité au job performance', () => {
+    const workflow = fs.readFileSync(
+      fileURLToPath(new URL('../../../.github/workflows/ci.yml', import.meta.url)),
+      'utf8',
+    );
+    expect(workflow).toContain('- perf');
+    expect(workflow).toContain("inputs.target == 'perf'");
+  });
 });
