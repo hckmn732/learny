@@ -33,6 +33,7 @@ describe('[SPEC-804] mesure INP isolée', () => {
       'utf8',
     );
     expect(spec).toContain('await unthrottle(page)');
+    expect(spec).toContain("waitUntil: 'commit'");
     expect(spec).toContain('await waitForHydration(page, scenario.ready)');
     expect(spec.indexOf('await throttle(page)')).toBeGreaterThan(
       spec.indexOf('await waitForHydration(page, scenario.ready)'),
@@ -45,6 +46,8 @@ describe('[SPEC-804] mesure INP isolée', () => {
       'utf8',
     );
     expect(workflow).toContain('- perf');
+    expect(workflow).toContain('- inp');
     expect(workflow).toContain("inputs.target == 'perf'");
+    expect(workflow).toContain('pnpm test:perf --only=seed,inp');
   });
 });

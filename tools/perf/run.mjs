@@ -177,11 +177,18 @@ async function main() {
       fs.copyFileSync(k6Summary, path.join(ROOT, 'evidence', 'SPEC-804', 'k6-summary.json'));
     }
     console.log(`\nRapport : ${path.relative(ROOT, files.md)}`);
-    const ok = report.lighthouse.ok && report.inp.ok && report.k6.ok;
+    const ok =
+      (!wanted('lighthouse') || report.lighthouse.ok) &&
+      (!wanted('inp') || report.inp.ok) &&
+      (!wanted('k6') || report.k6.ok);
     const complete =
-      (report.lighthouse.pages?.length ?? 0) > 0 &&
-      (report.inp.scenarios?.length ?? 0) > 0 &&
-      report.k6.p95 !== null;
+      (!wanted('lighthouse') || (report.lighthouse.pages?.length ?? 0) > 0) &&
+      (!wanted('inp') ||
+        ((report.inp.scenarios?.length ?? 0) === 6 &&
+          report.inp.scenarios.every(
+            (scenario) => scenario.values?.length === 5 && scenario.p75 !== null,
+          ))) &&
+      (!wanted('k6') || report.k6.p95 !== null);
     if (ok) console.log('✔ budgets tenus');
     else console.log('⚠ budget dépassé (non bloquant, ADR-0333) : voir le rapport');
     if (!complete) console.log('✖ mesure incomplète');
