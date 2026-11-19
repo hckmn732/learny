@@ -35,6 +35,7 @@ const ALLOWED_IMPORTS = {
   // them to `@learny/config/product` and to fixtures (SPEC-401 ET-9).
   'learning-engine': ['core', 'config', 'testing'],
   'api-client': ['contracts', 'core'],
+  http: ['contracts', 'core', 'config', 'db', 'services'],
   bricks: ['core', 'contracts', 'ui'],
   domain: ['contracts', 'core', 'learning-engine', 'bricks'],
   llm: ['core', 'config', 'contracts', 'db'],
@@ -67,7 +68,7 @@ const boundaryZones = [
 // Web modules explicitly allowed to use the owner-role client (ADR-0022, SPEC-201 ET-4): the
 // idempotency store of the API wrapper and the integration tests that inspect the database.
 const SERVICE_DB_ALLOWED = [
-  'apps/web/lib/api/idempotency.ts',
+  'packages/http/src/idempotency.ts',
   'apps/web/test/integration/**',
   // End-to-end tests build their own committed fixtures (SPEC-206), like the integration tests.
   'apps/web/e2e/**',
@@ -863,6 +864,51 @@ export default tseslint.config(
       'import/order': 'off',
       'no-unused-vars': 'off',
       'no-useless-escape': 'off',
+    },
+  },
+  {
+    // SPEC-1003 ET-2 — final block for all HTTP files, including idempotency (also listed in
+    // SERVICE_DB_ALLOWED). It repeats the package allowlist because the last block wins.
+    files: ['packages/http/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: AI_SDK_PATHS,
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/http',
+                '!@learny/http/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config',
+                '!@learny/config/*',
+                '!@learny/db',
+                '!@learny/db/*',
+                '!@learny/services',
+                '!@learny/services/*',
+              ],
+              message: 'packages/http ne peut importer que contracts, core, config, db, services.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/http est indépendant du framework : aucun import Next (ET-2).',
+            },
+          ],
+        },
+      ],
     },
   },
 );
