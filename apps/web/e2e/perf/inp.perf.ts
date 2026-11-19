@@ -104,8 +104,7 @@ async function throttle(page: Page): Promise<void> {
 }
 
 async function measure(page: Page, scenario: Scenario): Promise<number | null> {
-  await page.goto(scenario.url);
-  await page.waitForLoadState('networkidle');
+  await page.goto(scenario.url, { waitUntil: 'domcontentloaded', timeout: 120_000 });
   await page.evaluate(() => {
     const target = window as unknown as { __inpValues?: number[] };
     target.__inpValues = [];
@@ -131,7 +130,11 @@ test.afterAll(() => {
     p75: p75(result.values),
   }));
   const payload = {
-    ok: scenariosWithP75.every((result) => result.p75 !== null && result.p75 < BUDGET),
+    ok:
+      scenariosWithP75.length === scenarios.length &&
+      scenariosWithP75.every(
+        (result) => result.values.length === PASSES && result.p75 !== null && result.p75 < BUDGET,
+      ),
     scenarios: scenariosWithP75,
   };
   fs.mkdirSync(path.join(ROOT, 'test-results', 'perf'), { recursive: true });
