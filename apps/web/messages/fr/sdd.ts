@@ -2640,6 +2640,35 @@ export const sdd = {
       columns: ['Écran', 'État capturé', 'Écart maquette', 'Statut'],
     },
   },
+  spec1001: {
+    intro:
+      'Piste de migration (ADR-1006) : apps/web devient un client pur de l’API (ADR-1003). Ce rapport mesure le couplage résiduel — imports de paquets serveur — écrit par pnpm migration:report dans progress/migration.json.',
+    reportPresent: 'Rapport : progress/migration.json',
+    reportMissing: 'Aucun rapport : lancez pnpm migration:report',
+    coupling: {
+      title: 'Couplage du web',
+      region: 'Couplage du web par catégorie (tableau défilant)',
+      columns: ['Catégorie', 'Fichiers'],
+      labels: {
+        pages: 'Pages (app/, hors _dev et api)',
+        lib: 'Modules lib/',
+        components: 'Composants',
+        dev: 'Pages _dev',
+        proxy: 'proxy.ts',
+        apiRoutes: 'Routes API (app/api)',
+      },
+    },
+    routes: {
+      title: 'Routes',
+      registry: 'Routes du registre',
+      files: 'Fichiers route.ts',
+    },
+    clients: {
+      title: 'Composants client couplés',
+      empty: 'Aucun composant client couplé.',
+    },
+    note: 'La liste de référence ne peut que diminuer : tout nouvel import serveur est refusé (règle learny/web-is-a-client, EF-4). Les fichiers app/api restent couverts par le motif global jusqu’à leur suppression (SPEC-1201).',
+  },
 } as const;
 
 export const fr = { sdd } as const;
