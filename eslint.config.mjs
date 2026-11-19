@@ -34,12 +34,15 @@ const ALLOWED_IMPORTS = {
   // `config` and `testing` are only partially allowed; the dedicated engine blocks below restrict
   // them to `@learny/config/product` and to fixtures (SPEC-401 ET-9).
   'learning-engine': ['core', 'config', 'testing'],
+  'api-client': ['contracts', 'core'],
   bricks: ['core', 'contracts', 'ui'],
+  domain: ['contracts', 'core', 'learning-engine', 'bricks'],
   llm: ['core', 'config', 'contracts', 'db'],
   ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
   contracts: ['core'],
+  i18n: [],
 };
 
 const boundaryZones = [
@@ -324,6 +327,165 @@ export default tseslint.config(
     },
   },
   ...restrictedImportBlocks,
+  {
+    // SPEC-1002 ET-2 — @learny/api-client est un paquet partagé (ADR-1007) : exécutable dans un
+    // navigateur, sous Node et sous React Native. Ce bloc remplace le bloc généré par
+    // ALLOWED_IMPORTS pour ce paquet (le dernier bloc gagne) : il réplique la liste blanche et
+    // interdit Node, Next, react-dom et l'entrée serveur de core.
+    files: ['packages/api-client/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/api-client est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/api-client',
+                '!@learny/api-client/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+              ],
+              message: 'packages/api-client ne peut importer que contracts, core.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/api-client est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/api-client est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/api-client est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1002 ET-2 — @learny/domain, même principe que api-client. bricks est autorisé : le
+    // module review/game-response importe opaqueMapping de @learny/bricks (écart ADR-1007
+    // consigné dans evidence/SPEC-1002/acceptance.md ; bricks est pur et déjà bundlé client).
+    files: ['packages/domain/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/domain est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/domain',
+                '!@learny/domain/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/learning-engine',
+                '!@learny/learning-engine/*',
+                '!@learny/bricks',
+                '!@learny/bricks/*',
+              ],
+              message:
+                'packages/domain ne peut importer que contracts, core, learning-engine, bricks.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/domain est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/domain est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/domain est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1002 ET-2 — @learny/i18n : messages purs, aucune dépendance interne autorisée.
+    files: ['packages/i18n/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/i18n est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/*'],
+              message: "packages/i18n n'importe aucun autre paquet (ET-2, ADR-1007).",
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/i18n est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/i18n est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/i18n est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   {
     // The pure engine may import @learny/core and the side-effect-free @learny/config/product
     // only (SPEC-401 ET-9, ADR-0140). Node built-ins and network globals are refused in src.
