@@ -776,7 +776,7 @@ export function SettingsView({
           />
         </TabsContent>
 
-        <TabsContent className="mt-0" value="modeles">
+        <TabsContent className="mt-24" value="modeles">
           <AiModelsTab
             initial={initialAiModels}
             initialError={aiModelsError}
