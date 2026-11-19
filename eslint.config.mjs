@@ -936,6 +936,12 @@ export default tseslint.config(
     // ADR-1007) ; ecart documente de l'ET-4 dans evidence/SPEC-1004/acceptance.md.
     files: ['packages/api-routes/**/*.{ts,tsx}'],
     rules: {
+      // A route without parameters still receives the parsed arguments: the leading underscore
+      // marks the ones the table intentionally ignores (`_args`).
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
       'no-restricted-imports': [
         'error',
         {
@@ -987,11 +993,11 @@ export default tseslint.config(
               message: 'Radix est encapsule par packages/ui (SPEC-303, ET-1).',
             },
             {
-              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              group: ['@ai-sdk/*'],
               message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
             },
             {
-              group: ['next', 'next/*'],
+              group: ['next', 'next/*', '!inngest/next'],
               message:
                 '@learny/api-routes est independant du framework : aucun import Next (SPEC-1101).',
             },

@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./next": "./src/next-route.ts",
     "./coverage": "./src/coverage.ts",
     "./deps/env": "./src/deps/env.ts",
     "./deps/health": "./src/deps/health.ts",
@@ -17,9 +18,7 @@
     "./deps/sdd-pages": "./src/deps/sdd-pages.ts",
     "./deps/sentry": "./src/deps/sentry.ts",
     "./deps/supabase-server": "./src/deps/supabase-server.ts",
-    "./next": "./src/next.ts",
     "./special/csp-nonce": "./src/special/csp-nonce.ts",
-    "./special/manifest.json": "./src/special/manifest.json",
     "./special/unsubscribe-page": "./src/special/unsubscribe-page.ts"
   },
   "scripts": {
