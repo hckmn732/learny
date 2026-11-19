@@ -134,6 +134,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@learny/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@learny/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -410,6 +413,22 @@ importers:
         specifier: ^13.0.0
         version: 13.0.2
 
+  packages/domain:
+    dependencies:
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../bricks
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
   packages/i18n: {}
 
   packages/ingestion:
@@ -647,6 +666,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../db
+      '@learny/domain':
+        specifier: workspace:*
+        version: link:../domain
       '@learny/ingestion':
         specifier: workspace:*
         version: link:../ingestion

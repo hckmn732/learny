@@ -15,18 +15,6 @@ import type {
 import { endOfUserDay, startOfUserDay, toUserZone, type Result } from '@learny/core';
 import { formationMonogram, sql, type DbTx } from '@learny/db';
 import {
-  buildDailySession,
-  calculateRetention,
-  type BrickFormat,
-  type GlobalQuizBank,
-  type RetentionModule,
-  type RetentionReview,
-} from '@learny/learning-engine';
-
-import type { ServiceContext } from '../context';
-import { requireUser, toResult } from '../resources/result';
-
-import {
   civilDayLabel,
   completedSummary,
   highlightedSlot,
@@ -40,7 +28,18 @@ import {
   primaryActionFor,
   slotHref,
   slotState,
-} from './derive';
+} from '@learny/domain/home/derive';
+import {
+  buildDailySession,
+  calculateRetention,
+  type BrickFormat,
+  type GlobalQuizBank,
+  type RetentionModule,
+  type RetentionReview,
+} from '@learny/learning-engine';
+
+import type { ServiceContext } from '../context';
+import { requireUser, toResult } from '../resources/result';
 
 const MS_PER_MINUTE = 60_000;
 const QUIZ_FORMATS = new Set<string>([

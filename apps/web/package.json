@@ -21,6 +21,7 @@
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
+    "@learny/domain": "workspace:*",
     "@learny/ingestion": "workspace:*",
     "@learny/i18n": "workspace:*",
     "@learny/jobs": "workspace:*",

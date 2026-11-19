@@ -36,6 +36,11 @@ import {
 } from '@learny/contracts';
 import { AppError, addCivilDays, userDayBounds, userLocalDay, type Result } from '@learny/core';
 import { consumeAutomationActions, upsertDailyActivity, type Db, type DbTx } from '@learny/db';
+import {
+  correctionExplanation,
+  toBrickResponse,
+  toGameCorrection,
+} from '@learny/domain/review/game-response';
 import { emitAfterCommit, withTransaction } from '@learny/jobs';
 import {
   buildDailySession,
@@ -54,7 +59,6 @@ import { getDueNotions } from '../learning/get-due-notions';
 import { requestRefill } from '../question-bank';
 import { requireUser, toResult } from '../resources/result';
 
-import { correctionExplanation, toBrickResponse, toGameCorrection } from './game-response';
 import { composeMicroSession, type MicroBrick } from './micro-composition';
 import { splitResultByNotion } from './per-notion';
 import {

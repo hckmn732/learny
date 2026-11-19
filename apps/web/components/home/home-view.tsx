@@ -13,13 +13,13 @@ import type {
   OngoingFormationRow,
 } from '@learny/contracts';
 import { clock } from '@learny/core';
-import { fr } from '@learny/i18n/fr/home';
 import {
   formatDuration,
   highlightedSlot,
   minutesUntil,
   slotState,
-} from '@learny/services/home/derive';
+} from '@learny/domain/home/derive';
+import { fr } from '@learny/i18n/fr/home';
 import {
   Button,
   EmptyState,

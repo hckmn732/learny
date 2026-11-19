@@ -2,7 +2,7 @@
   "coupling": {
     "pages": 8,
     "lib": 28,
-    "components": 15,
+    "components": 10,
     "dev": 28,
     "proxy": 1,
     "apiRoutes": 150
@@ -14,8 +14,6 @@
   "clientComponents": [
     "apps/web/components/home/TutorActivityCard.tsx",
     "apps/web/components/home/WarmupCard.tsx",
-    "apps/web/components/home/home-view.tsx",
-    "apps/web/components/offline/OfflineQuizGlobal.tsx",
     "apps/web/components/sdd-demos/spec-507.tsx",
     "apps/web/components/sdd-demos/spec-508-client.tsx"
   ]

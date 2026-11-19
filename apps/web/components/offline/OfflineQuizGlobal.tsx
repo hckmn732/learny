@@ -14,12 +14,12 @@ import {
   type ReviewSummaryDto,
 } from '@learny/contracts/review';
 import { clock } from '@learny/core';
-import { fr } from '@learny/i18n/fr/globalQuiz-offline';
 import {
   correctionExplanation,
   toBrickResponse,
   toGameCorrection,
-} from '@learny/services/review/game-response';
+} from '@learny/domain/review/game-response';
+import { fr } from '@learny/i18n/fr/globalQuiz-offline';
 import { EmptyState } from '@learny/ui';
 
 import { readProgress, writeProgress, type StoredPack } from '../../lib/offline/db';

@@ -93,3 +93,27 @@ describe('[SPEC-1001] web boundary', () => {
     expect(progress).toEqual(progressFrom(measure));
   });
 });
+
+describe('[SPEC-1002] boundary', () => {
+  it('les modules purs extraits sortent du couplage du web (CA-3)', () => {
+    const decoupled = [
+      'apps/web/components/final-review/FinalReviewScreen.tsx',
+      'apps/web/components/final-review/MilestoneList.tsx',
+      'apps/web/components/final-review/Stats.tsx',
+      'apps/web/components/home/home-view.tsx',
+      'apps/web/components/offline/OfflineQuizGlobal.tsx',
+    ];
+    const baseline = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'tools/migration/web-boundary-baseline.json'), 'utf8'),
+    ) as { files: string[]; globs: string[] };
+    for (const file of decoupled) expect(baseline.files, file).not.toContain(file);
+    const coupled = measureWebBoundary();
+    for (const file of decoupled) {
+      expect(coupled.clientComponents, file).not.toContain(file);
+      expect(
+        coupled.coupled.map((entry) => entry.file),
+        file,
+      ).not.toContain(file);
+    }
+  });
+});

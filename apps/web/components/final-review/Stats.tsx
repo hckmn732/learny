@@ -1,6 +1,6 @@
 import type { FinalReviewDto } from '@learny/contracts';
+import { formatDuration } from '@learny/domain/home/derive';
 import { fr } from '@learny/i18n/fr/finalReview';
-import { formatDuration } from '@learny/services/home/derive';
 import { StatCard, StatRow } from '@learny/ui';
 
 const t = fr.finalReview;

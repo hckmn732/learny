@@ -1,6 +1,6 @@
 import type { FinalReviewDto } from '@learny/contracts';
+import { shortCivilDay } from '@learny/domain/home/derive';
 import { fr } from '@learny/i18n/fr/finalReview';
-import { shortCivilDay } from '@learny/services/home/derive';
 
 const t = fr.finalReview.milestones;
 

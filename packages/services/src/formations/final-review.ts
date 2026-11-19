@@ -2,10 +2,10 @@ import { ENGINE, GAP_NATURE_LABELS } from '@learny/config/product';
 import type { FinalReviewDto, FinalReviewMode, FinalReviewNotion } from '@learny/contracts';
 import { AppError, userLocalDay } from '@learny/core';
 import { formationMonogram } from '@learny/db';
+import { completedSummary } from '@learny/domain/home/derive';
 import { calculateProgress } from '@learny/learning-engine';
 
 import { trainingTarget } from '../gaps/links';
-import { completedSummary } from '../home/derive';
 import { evidenceOf } from '../quiz/result';
 import { milestoneLabel } from '../serie-regularite-et-jalons-interface';
 
