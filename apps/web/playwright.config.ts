@@ -155,7 +155,9 @@ export default defineConfig({
   webServer: {
     command: 'pnpm --filter @learny/web exec node server.mjs',
     url: `${BASE_URL}/api/v1/health`,
-    reuseExistingServer: !process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0',
+    reuseExistingServer:
+      process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
+      (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
     timeout: 120000,
     env: {
       ...TEST_SERVER_ENV,
