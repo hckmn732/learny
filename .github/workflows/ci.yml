@@ -363,6 +363,8 @@ jobs:
           version: 2.122.1
       - uses: grafana/setup-k6-action@v1
       - run: pnpm install --frozen-lockfile
+      - name: Installer Chromium (Lighthouse et INP)
+        run: pnpm exec playwright install --with-deps chromium
       # SPEC-008 — même flake que les jobs en matrice : pile résiduelle ou registre limité.
       - name: Démarrer Supabase local
         run: |
