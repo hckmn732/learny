@@ -93,6 +93,7 @@ function findClosing(text, openIndex) {
         index += 1;
       }
       index += 1;
+      previous = quote;
       continue;
     }
     if (char === '/' && REGEX_PREFIX.includes(previous)) {
@@ -245,7 +246,8 @@ export function readSpecials(root = ROOT) {
     'utf8',
   );
   const entries = [];
-  // One triple per handler: `{ key: '…', method: '…', path: '…' },` (Prettier may split the line).
+  // One triple per handler: `{ key: '…', method: '…', path: '…' },`; Prettier may split the line,
+  // so the separator is any whitespace.
   for (const match of source.matchAll(/key: '([^']+)',\s*method: '([^']+)',\s*path: '([^']+)'/g)) {
     entries.push({ key: match[1], method: match[2], path: match[3] });
   }
@@ -333,6 +335,12 @@ export function renderFile(relative, methods) {
 }
 
 /** Scans the tree: path → `{ content, methods }` for every existing route.ts under app/api. */
+/** Expected files, in the shape the coverage table uses (path relative to apps/web/app). */
+export function expectedRouteFiles(root = ROOT) {
+  const { files } = plannedFiles(root);
+  return [...files].map(([relative, file]) => ({ path: relative, methods: file.methods }));
+}
+
 export function scanGenerated(root = ROOT) {
   const found = new Map();
   const walk = (directory) => {

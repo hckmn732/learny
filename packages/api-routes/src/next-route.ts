@@ -17,7 +17,7 @@ export type RouteKey = keyof typeof ROUTE_IMPLEMENTATIONS;
 export function nextRoute(
   id: RouteKey,
 ): (request: Request, segment?: Segment) => Promise<Response> {
-  const routes = ROUTES as Record<RouteKey, AnyRoute>;
+  const routes = ROUTES as unknown as Record<RouteKey, AnyRoute>;
   const implementations = ROUTE_IMPLEMENTATIONS as Record<RouteKey, RouteImplementation<AnyRoute>>;
   const wrapped = routeHandler(routes[id], implementations[id]);
   // The host always passes the segment; an internal call may omit it.

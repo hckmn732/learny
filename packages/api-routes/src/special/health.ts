@@ -12,7 +12,8 @@ const probe = handler({ route: ROUTES.health.path }, () => healthResponse());
 export const healthSpecial: SpecialHandler = {
   method: ROUTES.health.method,
   path: ROUTES.health.path,
-  // The probe is also callable without a request (server checks, tests): same default as before.
+  // The probe is also callable without a request (server checks, integration tests): same default
+  // as before, a local URL the probe never uses.
   handle: (request?: Request) =>
     probe(request ?? new Request(`http://localhost${ROUTES.health.path}`)),
 };
