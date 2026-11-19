@@ -17,7 +17,8 @@ import { searchWeb } from '@learny/tutor';
 
 const PREFIX = 'sdd-512-';
 export const DEMO_EMAIL = `${PREFIX}demo@test.learny.test`;
-const DEMO_KEY = process.env.SEARCH_API_KEY ?? 'tvly-demo';
+// Vide = absente (comme normalizeEnv) : la pile de QA Coolify transmet toutes les variables (ADR-0339).
+const DEMO_KEY = process.env.SEARCH_API_KEY?.trim() || 'tvly-demo';
 
 export interface RouteDemo {
   provider: SearchWebProvider;
