@@ -1,0 +1,38 @@
+{
+  "name": "@learny/http",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./handler": "./src/handler.ts",
+    "./route-handler": "./src/route-handler.ts",
+    "./problem": "./src/problem.ts",
+    "./validate": "./src/validate.ts",
+    "./idempotency": "./src/idempotency.ts",
+    "./rate-limit": "./src/rate-limit.ts",
+    "./origin": "./src/origin.ts",
+    "./request-id": "./src/request-id.ts",
+    "./session": "./src/session.ts",
+    "./security": "./src/security.ts",
+    "./dev-guard": "./src/dev-guard.ts"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@learny/config": "workspace:*",
+    "@learny/contracts": "workspace:*",
+    "@learny/core": "workspace:*",
+    "@learny/db": "workspace:*",
+    "@learny/services": "workspace:*",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@learny/testing": "workspace:*",
+    "vitest": "^5.1.0"
+  }
+}
