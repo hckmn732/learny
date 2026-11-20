@@ -14,7 +14,7 @@ docs/adr/
 docs/
 /*.md
 # Fichier généré par pnpm openapi:generate (SPEC-201), vérifié par pnpm openapi:check
-apps/web/public/openapi.json
+apps/api/openapi.json
 
 # Thème Tailwind généré par packages/ui/scripts/build-theme.ts (SPEC-301)
 packages/ui/src/styles/theme.css

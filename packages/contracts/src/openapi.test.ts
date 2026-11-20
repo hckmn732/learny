@@ -25,7 +25,7 @@ describe('[SPEC-201] document OpenAPI', () => {
       readFileSync(resolve(__dirname, '../../../package.json'), 'utf8'),
     ) as { version: string };
     const committed = readFileSync(
-      resolve(__dirname, '../../../apps/web/public/openapi.json'),
+      resolve(__dirname, '../../../apps/api/openapi.json'),
       'utf8',
     );
     const built = serializeOpenApiDocument(buildOpenApiDocument(ROUTES, { version }));

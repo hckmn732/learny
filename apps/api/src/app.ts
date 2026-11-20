@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
@@ -15,6 +15,8 @@ import {
   sddDemoStore,
   setJobErrorReporter,
 } from '@learny/jobs';
+
+import openApiDocument from '../openapi.json';
 
 import { methodsForPath, mountApiRoutes } from './mount';
 
@@ -88,6 +90,9 @@ export function createApp(options: AppOptions = {}): Hono {
     context.header('cache-control', 'no-store');
     return context.json(getApiHealth(options.env));
   });
+  const openApi = (context: Context) => context.json(openApiDocument);
+  app.get('/openapi.json', openApi);
+  app.get('/api/v1/openapi.json', openApi);
   if (role !== 'jobs') mountApiRoutes(app, { omitSpecial: ['inngest'] });
   if (role !== 'api') {
     const inngestHandler = serve({ client, functions: registry });

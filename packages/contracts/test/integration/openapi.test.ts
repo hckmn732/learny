@@ -7,13 +7,13 @@ import { describe, expect, it } from 'vitest';
 import { ROUTES, buildOpenApiDocument, serializeOpenApiDocument } from '../../src/index';
 
 const root = resolve(import.meta.dirname, '../../../..');
-const committed = readFileSync(resolve(root, 'apps/web/public/openapi.json'), 'utf8');
+const committed = readFileSync(resolve(root, 'apps/api/openapi.json'), 'utf8');
 const version = (
   JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as { version: string }
 ).version;
 
 describe('[SPEC-201] openapi', () => {
-  it('matches the committed apps/web/public/openapi.json (CA-6)', () => {
+  it('matches the committed apps/api/openapi.json (CA-6)', () => {
     const generated = serializeOpenApiDocument(buildOpenApiDocument(ROUTES, { version }));
     expect(generated).toBe(committed);
   });

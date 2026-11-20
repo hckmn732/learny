@@ -35,6 +35,15 @@ describe('[SPEC-1101] health and inngest', () => {
     expect(await hono.json()).toEqual(await next.json());
   });
 
+  it('publie OpenAPI depuis les deux chemins (SPEC-1201 EF-6)', async () => {
+    const app = createApp();
+    for (const path of ['/openapi.json', '/api/v1/openapi.json']) {
+      const response = await app.request(path);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({ openapi: '3.1.0' });
+    }
+  });
+
   it('enregistre exactement les fonctions Inngest du web (CA-4)', async () => {
     vi.stubEnv('INNGEST_DEV', '1');
     const hono = await createApp().request('/api/inngest');
