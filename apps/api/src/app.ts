@@ -49,6 +49,10 @@ export function getApiHealth(env: Env = process.env): ApiHealth {
 
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
+  app.use('*', async (context, next) => {
+    context.header('X-Served-By', 'learny-api');
+    await next();
+  });
   const role = options.role ?? 'all';
   const client = options.client ?? inngest;
   if (options.env !== undefined) registerSecurity(options.env);

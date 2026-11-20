@@ -17,6 +17,7 @@ import { clock } from '@learny/core';
 import { canAccessFormation, createServiceContext } from '@learny/services';
 
 import { sddDemos } from './app/%5Fdev/sdd/registry';
+import { relayToApi } from './lib/api/relay';
 import {
   ONBOARDING_TICKET_TTL_MS,
   createOnboardingTicket,
@@ -202,6 +203,9 @@ function securityOptions(request: NextRequest, nonce: string) {
  */
 export function proxy(request: NextRequest): NextResponse | Promise<NextResponse> {
   const { pathname } = request.nextUrl;
+  if (pathname.startsWith('/api/') || pathname === '/openapi.json') {
+    return relayToApi(request);
+  }
   const nonce = createCspNonce();
   const options = securityOptions(request, nonce);
   const requestHeaders = new Headers(request.headers);
@@ -219,7 +223,9 @@ export const config = {
   matcher: [
     '/_dev',
     '/_dev/:path*',
-    // Everything else except static assets, files with an extension, the job endpoint and webhooks.
-    '/((?!_dev|_next|.*\\..*|api/inngest|api/v1/webhooks).*)',
+    '/api/:path*',
+    '/openapi.json',
+    // Everything else except static assets and files with an extension.
+    '/((?!_dev|_next|.*\\..*|api).*)',
   ],
 };

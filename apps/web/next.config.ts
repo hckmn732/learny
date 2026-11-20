@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['lucide-react', 'date-fns'],
+    // Next's proxy stream cloning otherwise defaults below the 11 MiB uploads accepted by the API.
+    proxyClientMaxBodySize: '12mb',
   },
   // Docker image (SPEC-012, ET-2): a self-contained server whose traced files include workspace
   // packages. The managed build (SPEC-013) keeps the same output, which Vercel accepts.
