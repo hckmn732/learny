@@ -105,6 +105,43 @@ importers:
         specifier: ^2.9.1
         version: 2.9.1
 
+  apps/api:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^2.1.7
+        version: 2.1.7(hono@4.13.18)
+      '@learny/api-routes':
+        specifier: workspace:*
+        version: link:../../packages/api-routes
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@learny/http':
+        specifier: workspace:*
+        version: link:../../packages/http
+      '@learny/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
+      '@sentry/node':
+        specifier: ^11.12.0
+        version: 11.12.0(rollup@4.68.2)
+      hono:
+        specifier: ^4.13.18
+        version: 4.13.18
+      inngest:
+        specifier: ^4.26.2
+        version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(express@4.22.3)(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
+    devDependencies:
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
+
   apps/web:
     dependencies:
       '@ai-sdk/react':
