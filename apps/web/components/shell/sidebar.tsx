@@ -14,6 +14,7 @@ import {
   type RefObject,
 } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { FormationManagementState, SidebarDto, SidebarFormation } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/shell';
 import {
@@ -33,7 +34,6 @@ import {
   type IconName,
 } from '@learny/ui';
 
-import { api, ApiError } from '../../lib/api-client';
 import { ActiveLimitDialog } from '../formations/ActiveLimitDialog';
 
 import { FormationSwitcher } from './FormationSwitcher';

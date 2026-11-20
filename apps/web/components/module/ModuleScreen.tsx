@@ -3,12 +3,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { ModuleScreen as ModuleScreenDto } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/module';
 import { Breadcrumb, breadcrumbMessagesFr, buildFormationBreadcrumb } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
-import { api } from '../../lib/api-client';
 import { formatRange } from '../programme/dates';
 
 import { ChapterTabs } from './ChapterTabs';

@@ -2,10 +2,9 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import { AI_TASKS } from '@learny/config';
 import type { AiCredentialProvider, QualificationReport, TaskModelDto } from '@learny/contracts';
-
-import { api } from '../../lib/api-client';
 
 export const QUALIFICATION_TIMEOUT_MS = 120_000;
 

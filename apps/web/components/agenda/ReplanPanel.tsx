@@ -6,12 +6,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { BlockedModule, ReplanChoice, ReplanOption } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/agenda';
 import { SkeletonText } from '@learny/ui';
 
 import { longDayLabel } from '../../lib/agenda/dates';
-import { api, ApiError } from '../../lib/api-client';
 
 const t = fr.agenda.replan;
 

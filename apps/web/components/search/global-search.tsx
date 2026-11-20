@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 
+import { api } from '@learny/api-client';
 import {
   normalizeSearchText,
   type SearchItem,
@@ -18,8 +19,6 @@ import {
 } from '@learny/contracts/search';
 import { fr } from '@learny/i18n/fr/search';
 import { Icon, cn } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
 
 import { HighlightedText } from './highlighted-text';
 

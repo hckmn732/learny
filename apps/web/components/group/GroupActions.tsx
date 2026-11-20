@@ -4,12 +4,11 @@ import { Copy, Link2, RefreshCw, UserMinus, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { GroupDto } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { fr } from '@learny/i18n/fr/group';
 import { AlertDialog, Button, Card, FormError, ScrollableTable } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
 
 const t = fr.group;
 

@@ -3,11 +3,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { WarmupAnswer, WarmupDto, WarmupItem } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/home';
 import { Button, ErrorState, SkeletonCard, cn } from '@learny/ui';
 
-import { api } from '../../lib/api-client';
 import { sessionKindLabel, warmupDurationMin } from '../../lib/home/warmup';
 import { invalidateStudyProgress } from '../../lib/study-progress';
 

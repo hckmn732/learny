@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
 
+import { api } from '@learny/api-client';
 import {
   CADRAGE_RUBRIC_KEYS,
   type CadrageProfile,
@@ -13,8 +14,6 @@ import {
 } from '@learny/contracts/cadrage';
 import { AppError } from '@learny/core';
 import { fr } from '@learny/i18n/fr/cadrage';
-
-import { api } from '../../lib/api-client';
 
 import { CadrageSteps } from './CadrageSteps';
 import { ChatMessage } from './ChatMessage';

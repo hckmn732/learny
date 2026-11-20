@@ -3,9 +3,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import { fr } from '@learny/i18n/fr/sdd';
 
-import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
 import { BaseCard } from '../sdd/base-tokens';
 

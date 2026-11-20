@@ -3,6 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import {
   isActiveProgramme,
   type ImportProgrammeInput,
@@ -11,8 +12,6 @@ import {
 import { AppError } from '@learny/core';
 import { fr } from '@learny/i18n/fr/programme';
 import { Button } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
 
 import { AdjustDialog } from './AdjustDialog';
 import { formatLongDate } from './dates';

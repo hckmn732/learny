@@ -16,7 +16,7 @@ const apiMock = vi.hoisted(() => ({
   authSignIn: vi.fn(),
   authResend: vi.fn(),
 }));
-vi.mock('../../lib/api-client', () => ({ api: apiMock }));
+vi.mock('@learny/api-client', () => ({ api: apiMock }));
 
 const EMAIL = 'alex.perrin@exemple.fr';
 const TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Paris';

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import {
   MOCK_PUSH_OUTCOMES,
   type MockPushOutcome,
@@ -11,7 +12,6 @@ import {
 import { fr } from '@learny/i18n/fr/sdd';
 import { colors } from '@learny/ui/tokens';
 
-import { ApiError, api } from '../../lib/api-client';
 import {
   disableBrowserPush,
   enableBrowserPush,

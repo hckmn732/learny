@@ -3,10 +3,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { createApp } from '@learny/api';
+import { callApi } from '@learny/api-client';
 import { ROUTES } from '@learny/contracts';
 import { requestApi, setApiAppFactory } from '@learny/testing/api';
-
-import { callApi } from '../../lib/api-client';
 
 import { honoRoute } from './hono-route';
 

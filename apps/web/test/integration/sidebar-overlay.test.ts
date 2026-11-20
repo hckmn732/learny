@@ -30,8 +30,8 @@ vi.mock('next/link', () => ({
   },
 }));
 
-vi.mock('../../lib/api-client', async (importOriginal) => {
-  const original = await importOriginal<typeof import('../../lib/api-client')>();
+vi.mock('@learny/api-client', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@learny/api-client')>();
   return {
     ...original,
     api: new Proxy(

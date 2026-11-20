@@ -3,10 +3,9 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { QuizResultDto } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/quiz';
-
-import { api, ApiError } from '../../lib/api-client';
 
 const t = fr.quiz;
 
