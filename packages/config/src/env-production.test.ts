@@ -7,6 +7,7 @@ import { EnvConfigError } from './env-shared';
 const PRODUCTION_ENV: Record<string, string> = {
   APP_ENV: 'production',
   API_INTERNAL_URL: 'https://api.learny.example',
+  API_PROXY_SECRET: 'learny-test-only-api-proxy-secret',
   NEXT_PUBLIC_APP_URL: 'https://learny.example',
   NEXT_PUBLIC_SUPABASE_URL: 'https://learny-test-only.supabase.co',
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon-learni-test-only',

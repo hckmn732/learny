@@ -129,12 +129,17 @@ export async function verifyAccessToken(
   token: string,
   options: JwtVerificationOptions,
 ): Promise<JwtVerification> {
-  if (options.jwksUrl !== undefined)
+  let header;
+  try {
+    header = decodeProtectedHeader(token);
+  } catch {
+    return { status: 'invalid' };
+  }
+  if (options.jwksUrl !== undefined && header.alg !== 'HS256')
     return verifyWithJwks(token, { ...options, jwksUrl: options.jwksUrl });
   if (options.jwtSecret === undefined) return { status: 'unavailable' };
 
   try {
-    const header = decodeProtectedHeader(token);
     if (header.alg !== 'HS256') return { status: 'invalid' };
     const { payload } = await jwtVerify(token, new TextEncoder().encode(options.jwtSecret), {
       ...verifyOptions(options),

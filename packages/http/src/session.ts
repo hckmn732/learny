@@ -135,15 +135,13 @@ export async function resolveIdentity(
     const explicitJwksUrl = env.SUPABASE_JWKS_URL;
     const jwksUrl =
       explicitJwksUrl ??
-      (env.SUPABASE_JWT_SECRET === undefined
-        ? `${url.replace(/\/$/, '')}/auth/v1/.well-known/jwks.json`
-        : undefined);
+      `${url.replace(/\/$/, '')}/auth/v1/.well-known/jwks.json`;
     const verifyToken = dependencies.verifyToken ?? verifyAccessToken;
     const verified = await verifyToken(bearer.token, {
       issuer: `${url.replace(/\/$/, '')}/auth/v1`,
       now: dependencies.now ?? (() => clock.now()),
       ...(env.SUPABASE_JWT_SECRET === undefined ? {} : { jwtSecret: env.SUPABASE_JWT_SECRET }),
-      ...(jwksUrl === undefined ? {} : { jwksUrl }),
+      jwksUrl,
       ...(dependencies.fetcher === undefined ? {} : { fetcher: dependencies.fetcher }),
     });
     if (verified.status === 'valid') return identityFromClaims(verified.claims, 'bearer');

@@ -14,7 +14,7 @@ dans cette grille.
 | V2.2.1 | Anti-automatisation des connexions | Vérifié | [rate-limit.test.ts](../../apps/web/test/integration/rate-limit.test.ts) | api |
 | V2.7.1 | Vérification d’identité déléguée à GoTrue | Vérifié | [auth-screens.test.ts](../../apps/web/test/integration/auth-screens.test.ts) | auth |
 | V2.8.1 | Second facteur d’authentification | Non applicable | Aucun parcours MFA n’est exposé en V1 ; GoTrue reste la seule autorité d’authentification. | auth |
-| V3.1.1 | Jeton de session jamais accepté depuis l’URL | Vérifié | [auth-routes.test.ts](../../apps/web/test/integration/auth-routes.test.ts) | auth |
+| V3.1.1 | Jeton de session jamais accepté depuis l’URL | Vérifié | [auth-routes.test.ts](../../apps/api/test/integration/auth-routes.test.ts) | auth |
 | V3.3.1 | Déconnexion invalide la session | Vérifié | [logout-menu.test.ts](../../apps/web/test/integration/logout-menu.test.ts) | auth |
 | V3.4.1 | Cookies de session HttpOnly, SameSite et Secure hors local | Vérifié | [auth-screens.test.ts](../../apps/web/test/integration/auth-screens.test.ts) | auth |
 | V4.1.1 | Contrôle d’accès au niveau objet (RLS) | Vérifié | [rls-security.test.ts](../../packages/testing/test/integration/rls-security.test.ts) | db |
@@ -38,9 +38,9 @@ dans cette grille.
 | V12.5.1 | URL utilisateur validées après résolution DNS | Vérifié | [ssrf.test.ts](../../packages/ingestion/test/integration/ssrf.test.ts) | ingestion |
 | V13.2.1 | Requêtes SQL paramétrées (Drizzle) | Vérifié | [rls-matrix.test.ts](../../packages/db/test/integration/rls-matrix.test.ts) | db |
 | V14.1.1 | En-têtes de sécurité configurés | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | app |
-| V14.2.1 | Méthodes HTTP et refus des mutations non prévues | Vérifié | [api-handler.test.ts](../../apps/web/test/integration/api-handler.test.ts) | api |
+| V14.2.1 | Méthodes HTTP et refus des mutations non prévues | Vérifié | [api-handler.test.ts](../../apps/api/test/integration/api-handler.test.ts) | api |
 | V14.3.1 | Vérification d’origine des mutations | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | api |
-| V14.4.1 | En-têtes de cache adaptés aux données privées | Vérifié | [api-handler.test.ts](../../apps/web/test/integration/api-handler.test.ts) | api |
+| V14.4.1 | En-têtes de cache adaptés aux données privées | Vérifié | [api-handler.test.ts](../../apps/api/test/integration/api-handler.test.ts) | api |
 | V14.5.1 | Content-Security-Policy stricte à nonce | Vérifié | [csp.test.ts](../../apps/web/lib/security/csp.test.ts) | app |
 | V14.6.1 | CORS restreint | Non applicable | L’API est same-origin ; aucune route ne renvoie `Access-Control-Allow-Origin`. | api |
 | V14.7.1 | HSTS sans contournement local | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | app |

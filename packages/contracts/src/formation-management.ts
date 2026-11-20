@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IsoDateTime, Uuid } from './common';
+import { Empty, IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 import { SidebarFormation } from './sidebar';
 
@@ -61,8 +61,8 @@ export const formationManagementRoutes = {
     path: '/api/v1/formations/:fid/access',
     auth: 'user',
     params: idParams,
-    output: null,
-    successStatus: 204,
+    output: Empty,
+    successStatus: 200,
     rateLimit: 'none',
     summary: 'Confirme avant le rendu que la formation est visible par l’apprenant (SPEC-1202).',
     errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],

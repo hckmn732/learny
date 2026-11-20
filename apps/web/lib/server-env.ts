@@ -1,3 +1,3 @@
 import 'server-only';
 
-export { parseServerEnv } from '@learny/config/server';
+export { getServerEnv as parseServerEnv } from '@learny/api-routes/deps/env';

@@ -39,7 +39,7 @@ function action(name: string, spec: string, idempotent = true) {
     id: `dev.sdd.${spec.toLowerCase()}.${name}`,
     method: 'POST',
     path: `/api/v1/dev/sdd/${spec}/${name}`,
-    auth: 'public',
+    auth: 'user',
     body: actionBody,
     output: payload,
     successStatus: 200,
