@@ -1,7 +1,7 @@
 import { APICallError, TypeValidationError } from 'ai';
 import { describe, expect, it } from 'vitest';
 
-import { aiUnavailable, mapProviderError } from './errors';
+import { aiUnavailable, mapProviderError, providerErrorClass } from './errors';
 
 function apiError(statusCode: number, responseBody?: string, message = 'failure'): APICallError {
   return new APICallError({
@@ -29,6 +29,13 @@ describe('[SPEC-504] conversion des erreurs', () => {
     expect(mapProviderError(apiError(500)).code).toBe('AI_PROVIDER_ERROR');
     expect(mapProviderError(apiError(529)).code).toBe('AI_PROVIDER_ERROR');
     expect(mapProviderError(new TypeError('fetch failed')).code).toBe('AI_PROVIDER_ERROR');
+  });
+
+  it('exposes only the provider error class for diagnostics', () => {
+    const error = new Error('secret body');
+    error.name = 'UnsupportedFunctionalityError';
+    expect(providerErrorClass(error)).toBe('UnsupportedFunctionalityError');
+    expect(providerErrorClass(new Error('another secret'))).toBe('Error');
   });
 
   it('CA-3 — délai et contexte trop long ont leurs codes dédiés', () => {

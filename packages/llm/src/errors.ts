@@ -15,6 +15,19 @@ export interface AiErrorContext {
 const CONTEXT_TOO_LONG = /context|too long|maximum.*token|prompt is too long|input length/i;
 const REFUSAL = /refusal|refused|declined/i;
 
+export function providerErrorClass(error: unknown): string {
+  if (error instanceof Error) {
+    const name = error.name;
+    if (name !== '' && name !== 'Error') return name;
+  }
+  if (error !== null && typeof error === 'object') {
+    const constructorName = error.constructor.name;
+    if (typeof constructorName === 'string' && constructorName !== '' && constructorName !== 'Object')
+      return constructorName;
+  }
+  return 'UnknownError';
+}
+
 /** Builds an AI_UNAVAILABLE error with the user message and the settings link of EF-2. */
 export function aiUnavailable(
   reason: 'no_model_selected' | 'credential_not_qualified',

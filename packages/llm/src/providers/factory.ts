@@ -53,6 +53,18 @@ function compatibleBaseUrl(resolved: ResolvedModel): string {
   return resolved.baseUrl;
 }
 
+const PROVIDER_DEFAULT_BASE_URLS: Partial<Record<AiProviderValue, string>> = {
+  deepseek: 'https://api.deepseek.com/beta',
+};
+
+function providerBaseUrl(
+  resolved: ResolvedModel,
+): string | undefined {
+  const configured = resolved.baseUrl?.trim();
+  if (configured !== undefined && configured !== '') return configured;
+  return PROVIDER_DEFAULT_BASE_URLS[resolved.provider];
+}
+
 /** ET-3 — one AI SDK language model for a resolved call. */
 export function createLanguageModel(
   resolved: ResolvedModel,
@@ -80,9 +92,10 @@ export function createLanguageModel(
     }
     case 'deepseek': {
       if (secrets.apiKey === null) throw missingKey(provider);
+      const baseURL = providerBaseUrl(resolved);
       return createDeepSeek({
         apiKey: secrets.apiKey,
-        ...(resolved.baseUrl === null ? {} : { baseURL: resolved.baseUrl }),
+        ...(baseURL === undefined ? {} : { baseURL }),
       })(modelId);
     }
     case 'openai_compatible': {

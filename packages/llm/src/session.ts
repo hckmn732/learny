@@ -18,6 +18,7 @@ import type { z } from 'zod';
 
 import type { AiTask, LlmMode } from '@learny/config';
 import { AppError, clock, err, ok, type Result } from '@learny/core';
+import { createLogger } from '@learny/core/server';
 import type { AiProviderValue, Db } from '@learny/db';
 
 import { LEARNY_TASK_HEADER } from './anthropic-fetch';
@@ -28,7 +29,7 @@ import {
   documentMessage,
 } from './anthropic-options';
 import { llmMode } from './config';
-import { mapProviderError, refused } from './errors';
+import { mapProviderError, providerErrorClass, refused } from './errors';
 import { logCall, type CallUsage } from './log';
 import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
@@ -165,6 +166,19 @@ export async function createSession(
   const current = resolvedResult.value;
   const mode = opts.mode ?? llmMode();
   const mockModels = new Map<string, LearnMockModel>();
+  const logger = createLogger({
+    route: `llm:${opts.task}`,
+    ...(ctx.requestId === undefined ? {} : { requestId: ctx.requestId }),
+    userId: ctx.userId,
+  });
+
+  function logProviderFailure(error: unknown, code: string): void {
+    logger.error(
+      'provider call failed',
+      { code, component: 'llm', outcome: providerErrorClass(error) },
+      error,
+    );
+  }
 
   async function languageModel(resolved: ResolvedModel): Promise<LanguageModel> {
     const secrets = await providerSecrets(
@@ -323,6 +337,7 @@ export async function createSession(
         modelId: resolved.modelId,
         ...(credentialOf(resolved) === undefined ? {} : { credentialId: credentialOf(resolved) }),
       });
+      logProviderFailure(error, mapped.code);
       const usage = usageFromError(error);
       const failedStatus =
         mapped.code === 'AI_REFUSED'
@@ -409,6 +424,7 @@ export async function createSession(
         modelId: resolved.modelId,
         ...(credentialOf(resolved) === undefined ? {} : { credentialId: credentialOf(resolved) }),
       });
+      logProviderFailure(error, mapped.code);
       const usage = usageFromError(error);
       const failedStatus = mapped.code === 'AI_REFUSED' ? 'refused' : 'invalid_output';
       await persist({
@@ -481,6 +497,7 @@ export async function createSession(
               ? {}
               : { credentialId: credentialOf(resolved) }),
           });
+          logProviderFailure(event.error, mapped.code);
           const usage = emptyUsage();
           const status = mapped.code === 'AI_REFUSED' ? 'refused' : 'error';
           void persist({
