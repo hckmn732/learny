@@ -10,11 +10,17 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
+export interface SelectOptionGroup {
+  label: string;
+  options: SelectOption[];
+}
+
 export type SelectProps = Omit<ComponentPropsWithRef<'select'>, 'children'> & {
   label: string;
   hint?: string | undefined;
   error?: string | undefined;
   options: SelectOption[];
+  groups?: readonly SelectOptionGroup[];
   hideLabel?: boolean;
 };
 
@@ -25,6 +31,7 @@ export const Select = ({
   hint,
   error,
   options,
+  groups,
   hideLabel = false,
   'aria-describedby': ariaDescribedBy,
   ...props
@@ -51,10 +58,21 @@ export const Select = ({
         {...props}
       >
         {options.map((option) => (
-          <option disabled={option.disabled} key={option.value} value={option.value}>
+          <option disabled={option.disabled} key={`plain-${option.value}`} value={option.value}>
             {option.label}
           </option>
         ))}
+        {groups === undefined
+          ? null
+          : groups.map((group) => (
+              <optgroup key={group.label} label={group.label}>
+                {group.options.map((option) => (
+                  <option disabled={option.disabled} key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
       </select>
       {hint ? (
         <p className="text-12 text-ink-muted" id={hintId}>

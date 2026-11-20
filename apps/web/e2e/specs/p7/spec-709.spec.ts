@@ -220,14 +220,9 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await expect(page.getByTestId('provider-region-warning')).toHaveText(
     'Traite les données hors de l’Union européenne',
   );
-  await page.getByTestId('provider-form-model').fill(MODEL);
   await page.getByTestId('provider-form-key').fill(KEY);
   await page.getByTestId('provider-qualify').click();
-  await expect(page.getByTestId('provider-qualification-result')).toBeVisible();
-  await expect(page.getByTestId('provider-qualification-result')).toContainText(
-    'Modèle qualifié',
-  );
-  await expect(page.getByTestId('provider-qualification-result')).toContainText('Connexion');
+  await expect(page.getByTestId('provider-discovered-models')).toBeVisible();
   await page.getByTestId('provider-save').click();
   await expect(page.getByTestId('provider-card')).toHaveCount(1);
   await expect(page.getByTestId('ai-providers-empty')).toHaveCount(0);

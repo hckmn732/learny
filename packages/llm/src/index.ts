@@ -20,6 +20,8 @@ export { PROVIDER_CATALOG, providerRegion, providerSupports } from './providers/
 export type { ProviderCapabilities, ProviderCatalogEntry } from './providers/catalog';
 export { createLanguageModel } from './providers/factory';
 export type { ProviderSecrets } from './providers/factory';
+export { discoverProviderModels } from './discover-models';
+export type { DiscoverProviderModelsInput, DiscoverProviderModelsOptions } from './discover-models';
 export { createSession, outgoingMessages } from './session';
 export type { LlmContext, LlmSession, LlmStreamResult, SessionOptions } from './session';
 export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';

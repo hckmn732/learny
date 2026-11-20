@@ -49,11 +49,11 @@ export const AiModelOption = z.object({
   provider: AiCredentialProvider,
   providerLabel: z.string().min(1).max(80),
   outsideEu: z.boolean(),
+  qualificationStatus: z.enum(['qualified', 'unqualified']),
 });
 export type AiModelOption = z.infer<typeof AiModelOption>;
 
-export const AI_MODEL_OPTIONS_MAX = 50;
-
+export const AI_MODEL_OPTIONS_MAX = 500;
 /**
  * EF-1, EF-2 — one row of « Modèle par tâche ». `modelId` is the model the learner chose (or the
  * stored choice when it became unusable, CL-3) and is `null` while nothing is chosen; the pills
@@ -91,7 +91,7 @@ export const AiProviderCard = z.object({
   status: AiProviderStatus,
   outsideEu: z.boolean(),
   dataNote: z.string().min(1).max(300),
-  models: z.array(z.string().min(1).max(200)).max(10),
+  models: z.array(z.string().min(1).max(200)).max(AI_MODEL_OPTIONS_MAX),
   qualifiedAt: IsoDateTime.nullable(),
   failure: AiProviderFailure.nullable(),
 });
