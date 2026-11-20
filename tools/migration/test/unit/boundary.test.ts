@@ -117,3 +117,22 @@ describe('[SPEC-1002] boundary', () => {
     }
   });
 });
+
+describe('[SPEC-1202] production web boundary', () => {
+  it('limite les imports serveur aux démonstrations et au répertoire _dev', () => {
+    const coupled = measureWebBoundary().coupled.map((entry) => entry.file);
+    const allowed = coupled.every(
+      (file) =>
+        file.startsWith('apps/web/app/%5Fdev/') ||
+        file.startsWith('apps/web/components/sdd-demos/'),
+    );
+    expect(coupled, 'couplage autorisé uniquement dans les démonstrations').toEqual(
+      coupled.filter(
+        (file) =>
+          file.startsWith('apps/web/app/%5Fdev/') ||
+          file.startsWith('apps/web/components/sdd-demos/'),
+      ),
+    );
+    expect(allowed).toBe(true);
+  });
+});
