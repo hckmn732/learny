@@ -1,0 +1,6 @@
+{
+  "status": "blocked",
+  "phase": "after",
+  "command": "pnpm test:perf",
+  "reason": "Awaiting a runnable local Supabase instance; no synthetic medians recorded."
+}
