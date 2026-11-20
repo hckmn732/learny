@@ -137,14 +137,21 @@ describe('[SPEC-709] onglet Modèles d’IA sans modèle par défaut', () => {
     );
     const tutor = screen.getByTestId('ai-task-tutor');
     await user.selectOptions(within(tutor).getByTestId('ai-task-model'), '0');
-    expect(update).toHaveBeenNthCalledWith(1, {
-      body: { action: 'assign', task: 'tutor', modelId: 'gpt-5.5-e2e', credentialId: CREDENTIAL },
+    expect(update.mock.calls[0]?.[0]).toEqual({
+      body: {
+        action: 'assign',
+        task: 'tutor',
+        modelId: 'gpt-5.5-e2e',
+        credentialId: CREDENTIAL,
+      },
     });
+    expect(typeof update.mock.calls[0]?.[1]?.idempotencyKey).toBe('string');
     expect(await within(tutor).findByText('Votre choix')).toBeTruthy();
     expect(within(tutor).getByText('Hors UE')).toBeTruthy();
 
     await user.click(within(tutor).getByTestId('ai-task-clear'));
-    expect(update).toHaveBeenNthCalledWith(2, { body: { action: 'clear', task: 'tutor' } });
+    expect(update.mock.calls[1]?.[0]).toEqual({ body: { action: 'clear', task: 'tutor' } });
+    expect(typeof update.mock.calls[1]?.[1]?.idempotencyKey).toBe('string');
     expect(await within(tutor).findByTestId('ai-task-unavailable')).toBeTruthy();
     expect(within(tutor).queryByText('Votre choix')).toBeNull();
   });
