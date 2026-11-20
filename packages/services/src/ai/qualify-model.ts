@@ -484,6 +484,16 @@ async function checkCredentialConnection(
       ...qualification,
       connection: report,
     }));
+    await requireUser(ctx).db.run((tx) =>
+      tx
+        .update(aiCredentials)
+        .set({
+          status: 'qualified',
+          qualifiedAt: finishedAt,
+          updatedAt: finishedAt,
+        })
+        .where(and(eq(aiCredentials.id, credentialId), eq(aiCredentials.userId, userId))),
+    );
     return report;
   });
 }

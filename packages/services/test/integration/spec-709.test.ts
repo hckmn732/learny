@@ -134,7 +134,7 @@ describe('[SPEC-709] service et API', () => {
       expect(task.options.some((option) => option.modelId === 'failed-709')).toBe(true);
     }
     const failedCard = afterFailure.value.providers.find((card) => card.id === failedKey);
-    expect(failedCard).toMatchObject({ status: 'unqualified' });
+    expect(failedCard).toMatchObject({ status: 'unqualified', connectionStatus: 'unknown' });
     expect(failedCard?.failure?.step).toBe('bricks');
     expect(failedCard?.failure?.brickType).toBeTypeOf('string');
 
@@ -191,7 +191,7 @@ describe('[SPEC-709] service et API', () => {
     expect(card?.keyMasked).toBe('sk-••••••••a91F');
     expect(JSON.stringify(state.value)).not.toContain(SECRET);
     // BR-IA-04 — the card carries the outside-EU flag and note.
-    expect(card).toMatchObject({ outsideEu: true, status: 'qualified' });
+    expect(card).toMatchObject({ outsideEu: true, connectionStatus: 'connected' });
 
     // CA-3 — Bob cannot see nor assign Alice's key: 404, no write, no existence leak.
     const foreign = await updateAiModels(bob.ctx, {

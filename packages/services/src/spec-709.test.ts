@@ -19,6 +19,7 @@ import {
   type AssignmentRow,
   type CredentialRow,
   taskCapabilities,
+  taskCompatibilityStateOf,
   taskStateOf,
   updateAiModels,
 } from './parametres-modeles-d-ia';
@@ -283,6 +284,55 @@ describe('[SPEC-709] règles et calculs', () => {
         }),
       ).keyMasked,
     ).toBeNull();
+  });
+
+  it('CA-2 — l’état de connexion prime sur l’ancienne qualification', () => {
+    const connected = providerCardOf(
+      credentialRow({
+        status: 'failed',
+        qualification: {
+          connection: { status: 'connected' },
+          models: { [MODEL]: report(MODEL, 'failed') },
+        },
+      }),
+    );
+    expect(connected.connectionStatus).toBe('connected');
+    expect(connected.failure?.step).toBe('bricks');
+
+    const unknown = providerCardOf(
+      credentialRow({ status: 'untested', qualification: { models: {} } }),
+    );
+    expect(unknown.connectionStatus).toBe('unknown');
+  });
+
+  it('CA-3 — la compatibilité absente produit un état pending stable', () => {
+    const pending = taskCompatibilityStateOf({}, CREDENTIAL, MODEL, 'tutor');
+    expect(pending).toMatchObject({
+      credentialId: CREDENTIAL,
+      modelId: MODEL,
+      task: 'tutor',
+      status: 'pending',
+      checkedAt: null,
+    });
+    const stored = {
+      credentialId: CREDENTIAL,
+      modelId: MODEL,
+      task: 'tutor' as const,
+      status: 'compatible' as const,
+      checkedAt: AT,
+      durationMs: 12,
+      requiredCapabilities: ['tools'] as const,
+      reserveCodes: [] as [],
+      reasons: [] as [],
+    };
+    expect(
+      taskCompatibilityStateOf(
+        { compatibilities: { [`${CREDENTIAL}:${MODEL}:tutor`]: stored } },
+        CREDENTIAL,
+        MODEL,
+        'tutor',
+      ),
+    ).toEqual(stored);
   });
 
   it('aucun modèle par défaut : sans choix, les cinq tâches sont indisponibles', async () => {
