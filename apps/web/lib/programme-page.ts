@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import { isActiveProgramme, type ProgrammeScreenStateDto } from '@learny/contracts';
-import { createServiceContext, getProgrammeScreenState } from '@learny/services';
 
+import { isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { loadShellForFormation, loadShellPage, type ShellPageResult } from './sidebar-page';
 import { readPageSession } from './supabase/page';
@@ -21,23 +19,26 @@ export interface ProgrammePageResult {
 export async function loadProgrammePage(formationId: string): Promise<ProgrammePageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const result = await getProgrammeScreenState(ctx, formationId);
-  if (!result.ok) {
-    if (result.error.code === 'NOT_FOUND') notFound();
-    throw result.error;
+  const client = await serverApi();
+  let state: ProgrammeScreenStateDto;
+  try {
+    state = await client.api.programmeGet({ params: { fid: formationId }, query: {} });
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
   // A proposal is not yet an active formation: selecting it through the formation switcher would
   // answer NOT_FOUND (ADR-0075), so only the active screen makes it current.
-  const shell = isActiveProgramme(result.value)
+  const shell = isActiveProgramme(state)
     ? await loadShellForFormation(formationId)
     : await loadShellPage();
-  if (isActiveProgramme(result.value)) return { shell, state: result.value };
-  if (result.value.formationStatus === 'archived') redirect('/accueil');
-  if (result.value.formationStatus === 'cadrage' && !result.value.cadrageCompleted) {
+  if (isActiveProgramme(state)) return { shell, state };
+  if (state.formationStatus === 'archived') redirect('/accueil');
+  if (state.formationStatus === 'cadrage' && !state.cadrageCompleted) {
     redirect(`/formations/${formationId}/cadrage`);
   }
-  return { shell, state: result.value };
+  return { shell, state };
 }
 
 export type { ShellPageResult };

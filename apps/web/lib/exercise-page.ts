@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import type { PracticeExerciseDto } from '@learny/contracts';
-import { createServiceContext, getPracticeExercise } from '@learny/services';
 
+import { apiErrorRequestId, isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { readPageSession } from './supabase/page';
 
@@ -22,11 +20,18 @@ export async function loadPracticeExercisePage(
 ): Promise<ExercisePageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const result = await getPracticeExercise(ctx, { formationId, moduleId, exerciseId });
-  if (result.ok) return { ok: true, data: result.value };
-  if (result.error.code === 'NOT_FOUND') notFound();
-  return result.error.requestId === undefined
-    ? { ok: false }
-    : { ok: false, requestId: result.error.requestId };
+  try {
+    const client = await serverApi();
+    return {
+      ok: true,
+      data: await client.api.exerciseDetail({
+        params: { fid: formationId, mid: moduleId, aid: exerciseId },
+      }),
+    };
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    const requestId = apiErrorRequestId(error);
+    return requestId === undefined ? { ok: false } : { ok: false, requestId };
+  }
 }

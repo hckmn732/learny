@@ -1,11 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
-
-import { createServiceContext, getQuizResult } from '@learny/services';
 
 import { QuizResultScreen } from '../../../../../../../../../components/quiz-result/QuizResultScreen';
 import { AppShell } from '../../../../../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../../../../lib/supabase/page';
@@ -25,14 +22,18 @@ export default async function QuizResultPage({ params }: QuizResultPageProps) {
   const { fid, mid, attemptId } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, result] = await Promise.all([
-    loadShellForFormation(fid),
-    getQuizResult(ctx, attemptId),
-  ]);
-  if (!result.ok) {
-    if (result.error.code === 'NOT_FOUND') notFound();
-    throw result.error;
+  const client = await serverApi();
+  let shell;
+  let result;
+  try {
+    [shell, result] = await Promise.all([
+      loadShellForFormation(fid),
+      client.api.getQuizResult({ params: { aid: attemptId } }),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
   return (
     <AppShell
@@ -44,10 +45,10 @@ export default async function QuizResultPage({ params }: QuizResultPageProps) {
       <QuizResultScreen
         attemptId={attemptId}
         formationId={fid}
-        initial={result.value}
+        initial={result}
         moduleId={mid}
-        modulePosition={result.value.module.position}
-        moduleTitle={result.value.module.title}
+        modulePosition={result.module.position}
+        moduleTitle={result.module.title}
       />
     </AppShell>
   );
