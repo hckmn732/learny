@@ -597,8 +597,8 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
 
 // ---------------------------------------------------------------------------------------------
 // Default client of the web application (EF-1): relative `/api/v1`, session cookie through
-// `credentials: 'same-origin'`, no header provider, no 401 replay — exactly the behaviour of the
-// former apps/web/lib/api-client.ts.
+// `credentials: 'same-origin'`, no header provider and no automatic 401 replay. Native clients use
+// an explicit base URL, a token provider and the replay option supplied by their scenario.
 
 const defaultClient: ApiClient = createApiClient({ baseUrl: API_BASE });
 

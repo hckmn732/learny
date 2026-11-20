@@ -4,9 +4,9 @@ import { registerInlineJobs } from './quiz-grade-registry';
 import { getServerReporter } from './sentry';
 
 /**
- * SPEC-1004 — the HTTP layer of this process is configured when the implementation tables are
- * imported, exactly like `apps/web/lib/api/handler.ts` did for every route module: error reporter
- * (Sentry when configured), token-bucket limiter, origin guard and the inline job registry.
+ * SPEC-1004 — the HTTP layer of apps/api is configured when the implementation tables are
+ * imported: error reporter (Sentry when configured), token-bucket limiter, origin guard and inline
+ * job registry.
  */
 export function configureApiRoutes(): void {
   configureHttp({
