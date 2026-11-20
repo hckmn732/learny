@@ -37,6 +37,7 @@ export const SAFE_LOG_FIELDS = [
   'runId',
   'operation',
   'outcome',
+  'providerMessage',
   'queryLength',
   'resultCount',
   'providerMessage',
