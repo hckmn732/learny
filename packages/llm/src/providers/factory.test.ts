@@ -54,7 +54,9 @@ function resolved(overrides: Partial<ResolvedModel> = {}): ResolvedModel {
 
 describe('[SPEC-504] provider base URLs', () => {
   it('DeepSeek uses /beta so strict tools reach the network', async () => {
-    const model = createLanguageModel(resolved(), { apiKey: 'deepseek-test-only' });
+    const model = createLanguageModel(resolved(), {
+      apiKey: 'deepseek-learny-test-only',
+    });
     await generateText({
       model,
       prompt: 'bonjour',
@@ -72,11 +74,11 @@ describe('[SPEC-504] provider base URLs', () => {
   it('keeps explicit provider URLs and default SDK URLs for other providers', () => {
     const deepseek = createLanguageModel(
       resolved({ baseUrl: 'https://proxy.example/beta' }),
-      { apiKey: 'deepseek-test-only' },
+      { apiKey: 'deepseek-learny-test-only' },
     );
     const openai = createLanguageModel(
       resolved({ provider: 'openai', modelId: 'gpt-test', baseUrl: null }),
-      { apiKey: 'openai-test-only' },
+      { apiKey: 'openai-learny-test-only' },
     );
     expect(deepseek).toBeDefined();
     expect(openai).toBeDefined();
