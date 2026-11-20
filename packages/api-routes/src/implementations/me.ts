@@ -1,6 +1,7 @@
 import {
   meAiTaskModelsUpdate,
   meGet,
+  meOnboardingGet,
   meOnboardingUpdate,
   mePreferencesGet,
   mePreferencesUpdate,
@@ -10,6 +11,7 @@ import type { HandlerArgs } from '@learny/http/route-handler';
 import {
   advanceOnboarding,
   getMe,
+  getOnboardingState,
   getStudyPreferences,
   updateProfile,
   updateStudyPreferences,
@@ -32,5 +34,6 @@ export const meImplementations = {
   mePreferencesUpdate: ({ ctx, body }: HandlerArgs<typeof mePreferencesUpdate>) =>
     updateStudyPreferences(ctx, body),
   meGet: ({ ctx }: HandlerArgs<typeof meGet>) => getMe(ctx),
+  meOnboardingGet: ({ ctx }: HandlerArgs<typeof meOnboardingGet>) => getOnboardingState(ctx),
   meUpdate: ({ ctx, body }: HandlerArgs<typeof meUpdate>) => updateProfile(ctx, body),
 };
