@@ -311,10 +311,9 @@ export function routeHandler<R extends AnyRoute>(
               logger().error('contract_violation', {
                 code: 'INTERNAL_ERROR',
                 outcome: 'contract_violation',
-                issues: checked.error.issues.map((issue) => ({
-                  path: issue.path.map(String).join('.'),
-                  code: issue.code,
-                })),
+                path: checked.error.issues
+                  .map((issue) => `${issue.path.map(String).join('.')}:${issue.code}`)
+                  .join(','),
               });
               throw new Error('contract_violation');
             }
