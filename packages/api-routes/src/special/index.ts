@@ -2,6 +2,7 @@ import { authCallbackSpecial } from './auth-callback';
 import { DEV_ROUTE_ENTRIES } from './dev-routes';
 import { healthSpecial } from './health';
 import { SPECIAL_ROUTE_MANIFEST } from './manifest';
+import { relayStreamSpecial } from './relay-stream';
 import { sddCommitCheckSpecial, sddDemoJobSpecial, sddSecretScanSpecial } from './sdd-tools';
 import { formationSprintsSpecial } from './sprints';
 
@@ -15,6 +16,7 @@ export type SpecialKey = (typeof SPECIAL_ROUTE_MANIFEST)[number]['key'];
 export const SPECIAL_HANDLERS = {
   ...DEV_ROUTE_ENTRIES,
   health: healthSpecial,
+  relayStream: relayStreamSpecial,
   authCallback: authCallbackSpecial,
   formationSprints: formationSprintsSpecial,
   sddDemoJob: sddDemoJobSpecial,

@@ -8,6 +8,10 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-1201': {
+    title: "Bascule de l'API",
+    load: () => import('../../../components/sdd-demos/spec-1201'),
+  },
   'SPEC-001': {
     title: 'Monorepo, application web minimale et socle de tests',
     load: () => import('../../../components/sdd-demos/spec-001'),

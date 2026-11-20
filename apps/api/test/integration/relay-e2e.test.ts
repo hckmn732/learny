@@ -28,6 +28,27 @@ afterEach(() => {
 });
 
 describe('[SPEC-1201] web relay', () => {
+  it('publie un flux SSE de démonstration en trois fragments', async () => {
+    vi.stubEnv('APP_ENV', 'test');
+    vi.stubEnv('ENABLE_SDD_PAGES', 'true');
+    const response = await createApp().request('/api/v1/dev/sdd/relay-stream');
+    const reader = response.body?.getReader();
+    const fragments: string[] = [];
+    while (reader !== undefined) {
+      const value = await reader.read();
+      if (value.done) break;
+      fragments.push(new TextDecoder().decode(value.value));
+    }
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toContain('text/event-stream');
+    expect(fragments).toEqual([
+      'data: fragment-1\n\n',
+      'data: fragment-2\n\n',
+      'data: fragment-3\n\n',
+    ]);
+  });
+
   it('sert X-Served-By et conserve les réponses de l’API réelle', async () => {
     vi.stubEnv('API_INTERNAL_URL', 'http://api.internal:3001');
     serveWith(createApp());

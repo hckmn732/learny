@@ -46,12 +46,10 @@ Navigateur (PWA)
    ▼
 apps/web  (Next.js App Router, Vercel région UE fra1)
    ├─ Server Components : lecture via services (client Supabase de l'utilisateur, RLS)
-   ├─ Route handlers /api/v1/* : mutations et lectures client (contrats Zod)
-   ├─ /api/inngest : point d'entrée des jobs (packages/jobs)
-   ├─ /api/webhooks/stripe
+   ├─ proxy.ts : relai de même origine de /api/* et /openapi.json
    └─ /_dev/sdd/[specId] : pages de démonstration (hors production, ADR-0049)
    │
-   │  La migration livre l'API à côté du web ; les écrans produit restent encore sur Next.js.
+   │  Requêtes relayées avec les en-têtes ADR-1005 ; aucune route Next n'héberge plus l'API.
    └──► apps/api (Hono, Vercel/Docker, fra1)
          ├─ /api/v1/* et flux SSE du tuteur
          ├─ /api/inngest (rôle `all` ou `jobs`)
@@ -70,7 +68,7 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
 /
 ├── AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, CHANGELOG.md
 ├── apps/
-│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, middleware.ts, e2e/ (Playwright)
+│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, proxy.ts, e2e/ (Playwright)
 │   └── api/                    serveur Hono : API, santé, webhook Stripe et /api/inngest
 ├── packages/
 │   ├── config/                 schéma des variables d'environnement (Zod), constantes produit, identifiants de modèles
@@ -110,9 +108,9 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 
 ## 4. Flux types
 
-**Lecture d'un écran** : Server Component → `services.<domaine>.get…(ctx)` → repository Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`.
+**Lecture d'un écran** (pendant SPEC-1201) : Server Component → `services.<domaine>.get…(ctx)` → repository Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`. SPEC-1202 remplace ces lectures serveur par le client API.
 
-**Mutation** : composant client → `fetch('/api/v1/...')` via le client typé `apps/web/lib/api-client.ts` → wrapper `handler()` (auth, Zod, idempotence, limitation) → service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
+**Mutation** : composant client → `fetch('/api/v1/...')` via le client typé `apps/web/lib/api-client.ts` → relai `proxy.ts` sur la même origine → Hono dans `apps/api` → wrapper `handler()` (auth, Zod, idempotence, limitation) → service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
 
 **Traitement long** : événement Inngest → fonction de `packages/jobs` découpée en `step.run` idempotents → services → notifications.
 
