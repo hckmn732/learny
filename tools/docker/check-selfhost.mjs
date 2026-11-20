@@ -391,6 +391,16 @@ export function composeUp(project, envFile, env, { build = true } = {}) {
     composeDown(project, envFile, env);
     result = run('docker', command, { env, stdio: 'inherit' });
   }
+  if (result.status !== 0) {
+    run('docker', composeCommand(project, envFile, ['ps', '--all']), {
+      env,
+      stdio: 'inherit',
+    });
+    run('docker', composeCommand(project, envFile, ['logs', '--tail', '80', 'api', 'web']), {
+      env,
+      stdio: 'inherit',
+    });
+  }
   return result.status === 0;
 }
 

@@ -23,7 +23,7 @@ async function healthy(base, path = '/api/v1/health') {
     const response = await fetch(`${base}${path}`);
     if (!response.ok) return false;
     const body = await response.json();
-    return body?.status === 'ok';
+    return body?.status === 'ok' || (path === '/health' && response.status === 200);
   } catch {
     return false;
   }
