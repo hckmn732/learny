@@ -2729,6 +2729,29 @@ export const sdd = {
       columns: ['Méthode', 'Chemin'],
     },
   },
+  spec1101: {
+    health: {
+      title: 'Santé de l’API',
+      status: 'Statut',
+      version: 'Version',
+      commit: 'Commit',
+    },
+    coverage: {
+      title: 'Couverture des routes servies',
+      region: 'Couverture de l’API Hono',
+      columns: ['Indicateur', 'Valeur'],
+      registry: 'Routes du registre',
+      served: 'Routes servies par l’API',
+      specials: 'Gestionnaires spéciaux',
+    },
+    parity: {
+      title: 'Parité web / API',
+      label: 'GET /api/v1/health — web et API identiques',
+      yes: 'Oui',
+      no: 'Non',
+    },
+    unavailable: 'API indisponible',
+  },
 } as const;
 
 export const fr = { sdd } as const;

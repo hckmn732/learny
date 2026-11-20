@@ -238,6 +238,36 @@ const restrictedImportBlocks = [
       ],
     },
   },
+  {
+    files: ['apps/api/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/ui',
+              message: 'apps/api est un serveur : aucun composant UI.',
+            },
+            {
+              name: '@learny/api-client',
+              message: 'apps/api n’utilise pas le client du navigateur.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/ui/*', '@learny/bricks/view', '@learny/bricks/view/*'],
+              message: 'apps/api n’importe aucune couche de rendu.',
+            },
+            {
+              group: ['@learny/web', '@learny/web/*', '@learny/worker', '@learny/worker/*'],
+              message: 'apps/api ne peut importer une autre application.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export default tseslint.config(
