@@ -82,6 +82,16 @@ export async function runNativeClientScenario(
   options: NativeClientScenarioOptions,
 ): Promise<NativeClientScenarioResult> {
   const local = supabaseLocalEnv();
+  const localEnvKeys = {
+    NEXT_PUBLIC_SUPABASE_URL: local.url,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: local.anonKey,
+    SUPABASE_SERVICE_ROLE_KEY: local.serviceRoleKey,
+    SUPABASE_JWT_SECRET: local.jwtSecret,
+  } as const;
+  const previousEnv = new Map(
+    Object.keys(localEnvKeys).map((key) => [key, process.env[key]] as const),
+  );
+  for (const [key, value] of Object.entries(localEnvKeys)) process.env[key] ??= value;
   const transport = options.fetch ?? globalThis.fetch;
   const email = options.email ?? `native-${randomBytes(5).toString('hex')}@test.learny.test`;
   const password = options.password ?? `Native-${randomBytes(12).toString('base64url')}`;
@@ -250,5 +260,9 @@ export async function runNativeClientScenario(
     };
   } finally {
     if (userId !== undefined) await admin.auth.admin.deleteUser(userId);
+    for (const [key, value] of previousEnv) {
+      if (value === undefined) Reflect.deleteProperty(process.env, key);
+      else process.env[key] = value;
+    }
   }
 }
