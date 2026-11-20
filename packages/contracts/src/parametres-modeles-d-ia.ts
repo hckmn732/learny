@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { AiCredentialProvider } from './ai-credentials';
+import {
+  AiConnectionStatus,
+  AiCompatibilityReserveCode,
+  AiCredentialProvider,
+  AiTaskCompatibility,
+} from './ai-credentials';
 import { IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 
@@ -54,6 +59,22 @@ export const AiModelOption = z.object({
 export type AiModelOption = z.infer<typeof AiModelOption>;
 
 export const AI_MODEL_OPTIONS_MAX = 500;
+export const AiTaskCompatibilityState = z.union([
+  AiTaskCompatibility,
+  z.object({
+    credentialId: Uuid,
+    modelId: z.string().min(1).max(200),
+    task: AiModelsTaskId,
+    status: z.literal('pending'),
+    checkedAt: z.null(),
+    durationMs: z.int().min(0),
+    requiredCapabilities: z.array(AiTaskCapabilityId).max(AI_TASK_CAPABILITY_IDS.length),
+    reserveCodes: z.array(AiCompatibilityReserveCode).length(0),
+    reasons: z.array(z.never()).length(0),
+  }),
+]);
+export type AiTaskCompatibilityState = z.infer<typeof AiTaskCompatibilityState>;
+
 /**
  * EF-1, EF-2 — one row of « Modèle par tâche ». `modelId` is the model the learner chose (or the
  * stored choice when it became unusable, CL-3) and is `null` while nothing is chosen; the pills
@@ -70,6 +91,8 @@ export const AiTaskModelState = z.object({
   outsideEu: z.boolean(),
   available: z.boolean(),
   unavailableReason: AiModelUnavailableReason.nullable(),
+  /** `null` means the exact key/model/task tuple has not been checked yet. */
+  compatibility: AiTaskCompatibilityState.nullable().optional(),
   options: z.array(AiModelOption).max(AI_MODEL_OPTIONS_MAX),
 });
 export type AiTaskModelState = z.infer<typeof AiTaskModelState>;
@@ -89,6 +112,7 @@ export const AiProviderCard = z.object({
   label: z.string().min(1).max(80),
   keyMasked: z.string().max(96).nullable(),
   status: AiProviderStatus,
+  connectionStatus: AiConnectionStatus.optional(),
   outsideEu: z.boolean(),
   dataNote: z.string().min(1).max(300),
   models: z.array(z.string().min(1).max(200)).max(AI_MODEL_OPTIONS_MAX),
@@ -145,14 +169,8 @@ export const meAiModelsUpdate = defineRoute({
   successStatus: 200,
   idempotent: true,
   summary:
-    'Affecte un modèle qualifié à une tâche ou retire le choix d’une tâche, sans supprimer les clés (SPEC-709).',
-  errors: [
-    'VALIDATION_FAILED',
-    'NOT_FOUND',
-    'AI_MODEL_NOT_QUALIFIED',
-    'IDEMPOTENCY_KEY_REQUIRED',
-    'UNAUTHENTICATED',
-  ],
+    'Affecte immédiatement un modèle à une tâche ou retire le choix, sans bloquer sur la compatibilité (SPEC-709).',
+  errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'IDEMPOTENCY_KEY_REQUIRED', 'UNAUTHENTICATED'],
 });
 
 export const parametresModelesRoutes = { meAiModelsGet, meAiModelsUpdate } as const;

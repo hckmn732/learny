@@ -197,13 +197,9 @@ export const meAiTaskModelsUpdate = defineRoute({
   body: TaskModelUpdateBody,
   output: TaskModelDto,
   successStatus: 200,
-  summary: 'Affecte un modèle personnel qualifié à une tâche du tuteur (SPEC-506/602).',
-  errors: [
-    'VALIDATION_FAILED',
-    'CREDENTIAL_NOT_FOUND',
-    'AI_MODEL_NOT_QUALIFIED',
-    'UNAUTHENTICATED',
-  ],
+  summary:
+    'Affecte un modèle personnel à une tâche du tuteur ; la compatibilité reste non bloquante (SPEC-506/602).',
+  errors: ['VALIDATION_FAILED', 'CREDENTIAL_NOT_FOUND', 'UNAUTHENTICATED'],
 });
 
 export const meRoutes = {

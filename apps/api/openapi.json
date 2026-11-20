@@ -26323,6 +26323,13 @@
                               }
                             ]
                           },
+                          "connectionStatus": {
+                            "enum": [
+                              "connected",
+                              "unknown"
+                            ],
+                            "type": "string"
+                          },
                           "createdAt": {
                             "format": "date-time",
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
@@ -26547,6 +26554,13 @@
                           "type": "null"
                         }
                       ]
+                    },
+                    "connectionStatus": {
+                      "enum": [
+                        "connected",
+                        "unknown"
+                      ],
+                      "type": "string"
                     },
                     "createdAt": {
                       "format": "date-time",
@@ -26953,6 +26967,16 @@
                     "maxLength": 120,
                     "minLength": 1,
                     "type": "string"
+                  },
+                  "task": {
+                    "enum": [
+                      "programme",
+                      "course",
+                      "gaps",
+                      "tutor",
+                      "light"
+                    ],
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -26969,237 +26993,385 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": false,
-                  "properties": {
-                    "bricks": {
-                      "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "durationMs": {
-                            "maximum": 9007199254740991,
-                            "minimum": 0,
-                            "type": "integer"
-                          },
-                          "errorCode": {
-                            "anyOf": [
-                              {
-                                "maxLength": 80,
-                                "minLength": 1,
-                                "type": "string"
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
-                          "issues": {
-                            "items": {
-                              "additionalProperties": false,
-                              "properties": {
-                                "code": {
-                                  "maxLength": 80,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "message": {
-                                  "maxLength": 300,
-                                  "minLength": 1,
-                                  "type": "string"
-                                },
-                                "path": {
-                                  "maxLength": 300,
-                                  "type": "string"
-                                }
-                              },
-                              "required": [
-                                "code",
-                                "path",
-                                "message"
-                              ],
-                              "type": "object"
-                            },
-                            "maxItems": 20,
-                            "type": "array"
-                          },
-                          "status": {
-                            "enum": [
-                              "passed",
-                              "failed"
-                            ],
-                            "type": "string"
-                          },
-                          "type": {
-                            "maxLength": 64,
-                            "minLength": 1,
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "type",
-                          "status",
-                          "durationMs",
-                          "errorCode",
-                          "issues"
-                        ],
-                        "type": "object"
-                      },
-                      "maxItems": 13,
-                      "minItems": 13,
-                      "type": "array"
-                    },
-                    "capabilities": {
+                  "anyOf": [
+                    {
                       "additionalProperties": false,
                       "properties": {
-                        "passage_refs": {
-                          "type": "boolean"
+                        "checkedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
                         },
-                        "structured": {
-                          "type": "boolean"
+                        "credentialId": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
                         },
-                        "tools": {
-                          "type": "boolean"
+                        "durationMs": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
                         },
-                        "vision": {
-                          "type": "boolean"
+                        "modelId": {
+                          "maxLength": 120,
+                          "minLength": 1,
+                          "type": "string"
                         },
-                        "web_search": {
-                          "type": "boolean"
+                        "status": {
+                          "const": "connected",
+                          "type": "string"
                         }
                       },
                       "required": [
-                        "tools",
-                        "structured",
-                        "web_search",
-                        "passage_refs",
-                        "vision"
+                        "credentialId",
+                        "modelId",
+                        "status",
+                        "checkedAt",
+                        "durationMs"
                       ],
                       "type": "object"
                     },
-                    "credentialId": {
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                      "type": "string"
-                    },
-                    "durationMs": {
-                      "maximum": 9007199254740991,
-                      "minimum": 0,
-                      "type": "integer"
-                    },
-                    "finishedAt": {
-                      "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
-                      "type": "string"
-                    },
-                    "id": {
-                      "format": "uuid",
-                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-                      "type": "string"
-                    },
-                    "modelId": {
-                      "maxLength": 120,
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "modelVersion": {
-                      "maxLength": 200,
-                      "minLength": 1,
-                      "type": "string"
-                    },
-                    "provider": {
-                      "enum": [
-                        "anthropic",
-                        "openai",
-                        "mistral",
-                        "deepseek",
-                        "openai_compatible",
-                        "local"
-                      ],
-                      "type": "string"
-                    },
-                    "startedAt": {
-                      "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
-                      "type": "string"
-                    },
-                    "status": {
-                      "enum": [
-                        "qualified",
-                        "failed"
-                      ],
-                      "type": "string"
-                    },
-                    "steps": {
-                      "items": {
-                        "additionalProperties": false,
-                        "properties": {
-                          "durationMs": {
-                            "maximum": 9007199254740991,
-                            "minimum": 0,
-                            "type": "integer"
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "checkedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "credentialId": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "durationMs": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "modelId": {
+                          "maxLength": 120,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "reasons": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "code": {
+                                "enum": [
+                                  "STRUCTURED_UNRELIABLE",
+                                  "NO_VISION",
+                                  "NO_TOOLS"
+                                ],
+                                "type": "string"
+                              },
+                              "message": {
+                                "maxLength": 300,
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "code",
+                              "message"
+                            ],
+                            "type": "object"
                           },
-                          "errorCode": {
-                            "anyOf": [
-                              {
-                                "maxLength": 80,
+                          "maxItems": 3,
+                          "type": "array"
+                        },
+                        "requiredCapabilities": {
+                          "items": {
+                            "enum": [
+                              "tools",
+                              "structured",
+                              "web_search",
+                              "passage_refs",
+                              "vision"
+                            ],
+                            "type": "string"
+                          },
+                          "maxItems": 5,
+                          "type": "array"
+                        },
+                        "reserveCodes": {
+                          "items": {
+                            "enum": [
+                              "STRUCTURED_UNRELIABLE",
+                              "NO_VISION",
+                              "NO_TOOLS"
+                            ],
+                            "type": "string"
+                          },
+                          "maxItems": 3,
+                          "type": "array"
+                        },
+                        "status": {
+                          "enum": [
+                            "compatible",
+                            "reserve"
+                          ],
+                          "type": "string"
+                        },
+                        "task": {
+                          "enum": [
+                            "programme",
+                            "course",
+                            "gaps",
+                            "tutor",
+                            "light"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "credentialId",
+                        "modelId",
+                        "task",
+                        "status",
+                        "checkedAt",
+                        "durationMs",
+                        "requiredCapabilities",
+                        "reserveCodes",
+                        "reasons"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "bricks": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "durationMs": {
+                                "maximum": 9007199254740991,
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "errorCode": {
+                                "anyOf": [
+                                  {
+                                    "maxLength": 80,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "issues": {
+                                "items": {
+                                  "additionalProperties": false,
+                                  "properties": {
+                                    "code": {
+                                      "maxLength": 80,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "message": {
+                                      "maxLength": 300,
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "path": {
+                                      "maxLength": 300,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "code",
+                                    "path",
+                                    "message"
+                                  ],
+                                  "type": "object"
+                                },
+                                "maxItems": 20,
+                                "type": "array"
+                              },
+                              "status": {
+                                "enum": [
+                                  "passed",
+                                  "failed"
+                                ],
+                                "type": "string"
+                              },
+                              "type": {
+                                "maxLength": 64,
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "status",
+                              "durationMs",
+                              "errorCode",
+                              "issues"
+                            ],
+                            "type": "object"
+                          },
+                          "maxItems": 13,
+                          "minItems": 13,
+                          "type": "array"
+                        },
+                        "capabilities": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "passage_refs": {
+                              "type": "boolean"
+                            },
+                            "structured": {
+                              "type": "boolean"
+                            },
+                            "tools": {
+                              "type": "boolean"
+                            },
+                            "vision": {
+                              "type": "boolean"
+                            },
+                            "web_search": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "tools",
+                            "structured",
+                            "web_search",
+                            "passage_refs",
+                            "vision"
+                          ],
+                          "type": "object"
+                        },
+                        "credentialId": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "durationMs": {
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "finishedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "id": {
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                          "type": "string"
+                        },
+                        "modelId": {
+                          "maxLength": 120,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "modelVersion": {
+                          "maxLength": 200,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "provider": {
+                          "enum": [
+                            "anthropic",
+                            "openai",
+                            "mistral",
+                            "deepseek",
+                            "openai_compatible",
+                            "local"
+                          ],
+                          "type": "string"
+                        },
+                        "startedAt": {
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                          "type": "string"
+                        },
+                        "status": {
+                          "enum": [
+                            "qualified",
+                            "failed"
+                          ],
+                          "type": "string"
+                        },
+                        "steps": {
+                          "items": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "durationMs": {
+                                "maximum": 9007199254740991,
+                                "minimum": 0,
+                                "type": "integer"
+                              },
+                              "errorCode": {
+                                "anyOf": [
+                                  {
+                                    "maxLength": 80,
+                                    "minLength": 1,
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "modelVersion": {
+                                "maxLength": 200,
                                 "minLength": 1,
                                 "type": "string"
                               },
-                              {
-                                "type": "null"
+                              "status": {
+                                "enum": [
+                                  "passed",
+                                  "failed"
+                                ],
+                                "type": "string"
+                              },
+                              "step": {
+                                "enum": [
+                                  "connection",
+                                  "tools",
+                                  "structured",
+                                  "bricks"
+                                ],
+                                "type": "string"
                               }
-                            ]
-                          },
-                          "modelVersion": {
-                            "maxLength": 200,
-                            "minLength": 1,
-                            "type": "string"
-                          },
-                          "status": {
-                            "enum": [
-                              "passed",
-                              "failed"
+                            },
+                            "required": [
+                              "step",
+                              "status",
+                              "durationMs",
+                              "errorCode",
+                              "modelVersion"
                             ],
-                            "type": "string"
+                            "type": "object"
                           },
-                          "step": {
-                            "enum": [
-                              "connection",
-                              "tools",
-                              "structured",
-                              "bricks"
-                            ],
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "step",
-                          "status",
-                          "durationMs",
-                          "errorCode",
-                          "modelVersion"
-                        ],
-                        "type": "object"
+                          "maxItems": 4,
+                          "minItems": 4,
+                          "type": "array"
+                        }
                       },
-                      "maxItems": 4,
-                      "minItems": 4,
-                      "type": "array"
+                      "required": [
+                        "id",
+                        "credentialId",
+                        "modelId",
+                        "provider",
+                        "status",
+                        "startedAt",
+                        "finishedAt",
+                        "durationMs",
+                        "modelVersion",
+                        "steps",
+                        "bricks",
+                        "capabilities"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "id",
-                    "credentialId",
-                    "modelId",
-                    "provider",
-                    "status",
-                    "startedAt",
-                    "finishedAt",
-                    "durationMs",
-                    "modelVersion",
-                    "steps",
-                    "bricks",
-                    "capabilities"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -27314,7 +27486,7 @@
             "cookieAuth": []
           }
         ],
-        "summary": "Qualifie un modèle personnel : connexion, outil, sortie structurée et treize briques (SPEC-506)."
+        "summary": "Teste la connexion d’un modèle ou sa compatibilité non bloquante avec une tâche (SPEC-506)."
       }
     },
     "/api/v1/me/ai/models": {
@@ -27331,6 +27503,13 @@
                       "items": {
                         "additionalProperties": false,
                         "properties": {
+                          "connectionStatus": {
+                            "enum": [
+                              "connected",
+                              "unknown"
+                            ],
+                            "type": "string"
+                          },
                           "dataNote": {
                             "maxLength": 300,
                             "minLength": 1,
@@ -27468,6 +27647,208 @@
                         "properties": {
                           "available": {
                             "type": "boolean"
+                          },
+                          "compatibility": {
+                            "anyOf": [
+                              {
+                                "anyOf": [
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "checkedAt": {
+                                        "format": "date-time",
+                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                        "type": "string"
+                                      },
+                                      "credentialId": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "durationMs": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "modelId": {
+                                        "maxLength": 120,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "reasons": {
+                                        "items": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "code": {
+                                              "enum": [
+                                                "STRUCTURED_UNRELIABLE",
+                                                "NO_VISION",
+                                                "NO_TOOLS"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "message": {
+                                              "maxLength": 300,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "code",
+                                            "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "maxItems": 3,
+                                        "type": "array"
+                                      },
+                                      "requiredCapabilities": {
+                                        "items": {
+                                          "enum": [
+                                            "tools",
+                                            "structured",
+                                            "web_search",
+                                            "passage_refs",
+                                            "vision"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 5,
+                                        "type": "array"
+                                      },
+                                      "reserveCodes": {
+                                        "items": {
+                                          "enum": [
+                                            "STRUCTURED_UNRELIABLE",
+                                            "NO_VISION",
+                                            "NO_TOOLS"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 3,
+                                        "type": "array"
+                                      },
+                                      "status": {
+                                        "enum": [
+                                          "compatible",
+                                          "reserve"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "task": {
+                                        "enum": [
+                                          "programme",
+                                          "course",
+                                          "gaps",
+                                          "tutor",
+                                          "light"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "credentialId",
+                                      "modelId",
+                                      "task",
+                                      "status",
+                                      "checkedAt",
+                                      "durationMs",
+                                      "requiredCapabilities",
+                                      "reserveCodes",
+                                      "reasons"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "checkedAt": {
+                                        "type": "null"
+                                      },
+                                      "credentialId": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "durationMs": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "modelId": {
+                                        "maxLength": 200,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "reasons": {
+                                        "items": {
+                                          "not": {}
+                                        },
+                                        "maxItems": 0,
+                                        "minItems": 0,
+                                        "type": "array"
+                                      },
+                                      "requiredCapabilities": {
+                                        "items": {
+                                          "enum": [
+                                            "tools",
+                                            "structured",
+                                            "web_search",
+                                            "passage_refs",
+                                            "vision"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 5,
+                                        "type": "array"
+                                      },
+                                      "reserveCodes": {
+                                        "items": {
+                                          "enum": [
+                                            "STRUCTURED_UNRELIABLE",
+                                            "NO_VISION",
+                                            "NO_TOOLS"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 0,
+                                        "minItems": 0,
+                                        "type": "array"
+                                      },
+                                      "status": {
+                                        "const": "pending",
+                                        "type": "string"
+                                      },
+                                      "task": {
+                                        "enum": [
+                                          "programme",
+                                          "course",
+                                          "gaps",
+                                          "tutor",
+                                          "light"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "credentialId",
+                                      "modelId",
+                                      "task",
+                                      "status",
+                                      "checkedAt",
+                                      "durationMs",
+                                      "requiredCapabilities",
+                                      "reserveCodes",
+                                      "reasons"
+                                    ],
+                                    "type": "object"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "credentialId": {
                             "anyOf": [
@@ -27795,6 +28176,13 @@
                       "items": {
                         "additionalProperties": false,
                         "properties": {
+                          "connectionStatus": {
+                            "enum": [
+                              "connected",
+                              "unknown"
+                            ],
+                            "type": "string"
+                          },
                           "dataNote": {
                             "maxLength": 300,
                             "minLength": 1,
@@ -27932,6 +28320,208 @@
                         "properties": {
                           "available": {
                             "type": "boolean"
+                          },
+                          "compatibility": {
+                            "anyOf": [
+                              {
+                                "anyOf": [
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "checkedAt": {
+                                        "format": "date-time",
+                                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+                                        "type": "string"
+                                      },
+                                      "credentialId": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "durationMs": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "modelId": {
+                                        "maxLength": 120,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "reasons": {
+                                        "items": {
+                                          "additionalProperties": false,
+                                          "properties": {
+                                            "code": {
+                                              "enum": [
+                                                "STRUCTURED_UNRELIABLE",
+                                                "NO_VISION",
+                                                "NO_TOOLS"
+                                              ],
+                                              "type": "string"
+                                            },
+                                            "message": {
+                                              "maxLength": 300,
+                                              "minLength": 1,
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "code",
+                                            "message"
+                                          ],
+                                          "type": "object"
+                                        },
+                                        "maxItems": 3,
+                                        "type": "array"
+                                      },
+                                      "requiredCapabilities": {
+                                        "items": {
+                                          "enum": [
+                                            "tools",
+                                            "structured",
+                                            "web_search",
+                                            "passage_refs",
+                                            "vision"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 5,
+                                        "type": "array"
+                                      },
+                                      "reserveCodes": {
+                                        "items": {
+                                          "enum": [
+                                            "STRUCTURED_UNRELIABLE",
+                                            "NO_VISION",
+                                            "NO_TOOLS"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 3,
+                                        "type": "array"
+                                      },
+                                      "status": {
+                                        "enum": [
+                                          "compatible",
+                                          "reserve"
+                                        ],
+                                        "type": "string"
+                                      },
+                                      "task": {
+                                        "enum": [
+                                          "programme",
+                                          "course",
+                                          "gaps",
+                                          "tutor",
+                                          "light"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "credentialId",
+                                      "modelId",
+                                      "task",
+                                      "status",
+                                      "checkedAt",
+                                      "durationMs",
+                                      "requiredCapabilities",
+                                      "reserveCodes",
+                                      "reasons"
+                                    ],
+                                    "type": "object"
+                                  },
+                                  {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "checkedAt": {
+                                        "type": "null"
+                                      },
+                                      "credentialId": {
+                                        "format": "uuid",
+                                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+                                        "type": "string"
+                                      },
+                                      "durationMs": {
+                                        "maximum": 9007199254740991,
+                                        "minimum": 0,
+                                        "type": "integer"
+                                      },
+                                      "modelId": {
+                                        "maxLength": 200,
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "reasons": {
+                                        "items": {
+                                          "not": {}
+                                        },
+                                        "maxItems": 0,
+                                        "minItems": 0,
+                                        "type": "array"
+                                      },
+                                      "requiredCapabilities": {
+                                        "items": {
+                                          "enum": [
+                                            "tools",
+                                            "structured",
+                                            "web_search",
+                                            "passage_refs",
+                                            "vision"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 5,
+                                        "type": "array"
+                                      },
+                                      "reserveCodes": {
+                                        "items": {
+                                          "enum": [
+                                            "STRUCTURED_UNRELIABLE",
+                                            "NO_VISION",
+                                            "NO_TOOLS"
+                                          ],
+                                          "type": "string"
+                                        },
+                                        "maxItems": 0,
+                                        "minItems": 0,
+                                        "type": "array"
+                                      },
+                                      "status": {
+                                        "const": "pending",
+                                        "type": "string"
+                                      },
+                                      "task": {
+                                        "enum": [
+                                          "programme",
+                                          "course",
+                                          "gaps",
+                                          "tutor",
+                                          "light"
+                                        ],
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "credentialId",
+                                      "modelId",
+                                      "task",
+                                      "status",
+                                      "checkedAt",
+                                      "durationMs",
+                                      "requiredCapabilities",
+                                      "reserveCodes",
+                                      "reasons"
+                                    ],
+                                    "type": "object"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "credentialId": {
                             "anyOf": [
@@ -28155,16 +28745,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "422": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "429": {
             "content": {
               "application/problem+json": {
@@ -28194,7 +28774,7 @@
             "cookieAuth": []
           }
         ],
-        "summary": "Affecte un modèle qualifié à une tâche ou retire le choix d’une tâche, sans supprimer les clés (SPEC-709)."
+        "summary": "Affecte immédiatement un modèle à une tâche ou retire le choix, sans bloquer sur la compatibilité (SPEC-709)."
       }
     },
     "/api/v1/me/ai/task-models": {
@@ -28313,16 +28893,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "422": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "429": {
             "content": {
               "application/problem+json": {
@@ -28352,7 +28922,7 @@
             "cookieAuth": []
           }
         ],
-        "summary": "Affecte un modèle personnel qualifié à une tâche du tuteur (SPEC-506/602)."
+        "summary": "Affecte un modèle personnel à une tâche du tuteur ; la compatibilité reste non bloquante (SPEC-506/602)."
       }
     },
     "/api/v1/me/automation-actions": {

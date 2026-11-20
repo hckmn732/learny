@@ -93,6 +93,7 @@ export const CredentialDto = z.object({
   modelIds: z.array(z.string()).max(MODEL_IDS_MAX),
   keyMasked: z.string().nullable(),
   status: AiCredentialStatus,
+  connectionStatus: z.enum(['connected', 'unknown']).optional(),
   outsideEu: z.boolean(),
   dataNote: z.string(),
   qualifiedAt: IsoDateTime.nullable(),
@@ -143,6 +144,55 @@ export const AiCredentialDiscoverDto = z.object({
   modelIds: z.array(z.string().min(1).max(MODEL_ID_MAX_LENGTH)).max(MODEL_IDS_MAX),
 });
 export type AiCredentialDiscoverDto = z.infer<typeof AiCredentialDiscoverDto>;
+
+export const AI_CONNECTION_STATUSES = ['connected', 'unknown'] as const;
+export const AiConnectionStatus = z.enum(AI_CONNECTION_STATUSES);
+export type AiConnectionStatus = z.infer<typeof AiConnectionStatus>;
+
+export const AiConnectionReport = z.object({
+  credentialId: Uuid,
+  modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+  status: z.literal('connected'),
+  checkedAt: IsoDateTime,
+  durationMs: z.int().min(0),
+});
+export type AiConnectionReport = z.infer<typeof AiConnectionReport>;
+
+export const AI_COMPATIBILITY_RESERVE_CODES = [
+  'STRUCTURED_UNRELIABLE',
+  'NO_VISION',
+  'NO_TOOLS',
+] as const;
+export const AiCompatibilityReserveCode = z.enum(AI_COMPATIBILITY_RESERVE_CODES);
+export type AiCompatibilityReserveCode = z.infer<typeof AiCompatibilityReserveCode>;
+
+export const AI_COMPATIBILITY_RESERVE_MESSAGES = {
+  STRUCTURED_UNRELIABLE:
+    'La sortie structurée de ce modèle n’est pas fiable pour cette tâche. Vous pouvez le conserver avec réserve.',
+  NO_VISION: 'Ce modèle ne prend pas en charge les images requises pour cette tâche.',
+  NO_TOOLS: 'Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche.',
+} as const satisfies Record<AiCompatibilityReserveCode, string>;
+
+export const AiCompatibilityReason = z.object({
+  code: AiCompatibilityReserveCode,
+  message: z.string().min(1).max(300),
+});
+export type AiCompatibilityReason = z.infer<typeof AiCompatibilityReason>;
+
+export const AiTaskCompatibility = z.object({
+  credentialId: Uuid,
+  modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+  task: z.enum(['programme', 'course', 'gaps', 'tutor', 'light']),
+  status: z.enum(['compatible', 'reserve']),
+  checkedAt: IsoDateTime,
+  durationMs: z.int().min(0),
+  requiredCapabilities: z
+    .array(z.enum(['tools', 'structured', 'web_search', 'passage_refs', 'vision']))
+    .max(5),
+  reserveCodes: z.array(AiCompatibilityReserveCode).max(AI_COMPATIBILITY_RESERVE_CODES.length),
+  reasons: z.array(AiCompatibilityReason).max(AI_COMPATIBILITY_RESERVE_CODES.length),
+});
+export type AiTaskCompatibility = z.infer<typeof AiTaskCompatibility>;
 
 // SPEC-506 — qualification of one personal model. The report contains statuses, durations, safe
 // error codes and schema issues only: never the key, the ciphertext or a prompt.
@@ -210,8 +260,16 @@ export type QualificationReport = z.infer<typeof QualificationReport>;
 
 export const AiQualificationBody = z.object({
   modelId: z.string().min(1).max(MODEL_ID_MAX_LENGTH),
+  task: z.enum(['programme', 'course', 'gaps', 'tutor', 'light']).optional(),
 });
 export type AiQualificationBody = z.infer<typeof AiQualificationBody>;
+
+export const AiQualificationResult = z.union([
+  AiConnectionReport,
+  AiTaskCompatibility,
+  QualificationReport,
+]);
+export type AiQualificationResult = z.infer<typeof AiQualificationResult>;
 
 export const TaskModelDto = z.object({
   task: z.enum(['programme', 'course', 'gaps', 'tutor', 'light']),
@@ -291,12 +349,12 @@ export const meAiCredentialsQualify = defineRoute({
   auth: 'user',
   params: CredentialParams,
   body: AiQualificationBody,
-  output: QualificationReport,
+  output: AiQualificationResult,
   successStatus: 200,
   rateLimit: 'ai',
   validationStatus: 422,
   summary:
-    'Qualifie un modèle personnel : connexion, outil, sortie structurée et treize briques (SPEC-506).',
+    'Teste la connexion d’un modèle ou sa compatibilité non bloquante avec une tâche (SPEC-506).',
   errors: [
     'CREDENTIAL_NOT_FOUND',
     'CREDENTIAL_DECRYPT_FAILED',
