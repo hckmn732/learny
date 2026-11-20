@@ -29,6 +29,7 @@ export const SERVER_ENV_KEYS = [
   'APP_VERSION',
   'GIT_COMMIT',
   'API_INTERNAL_URL',
+  'API_PROXY_SECRET',
   'API_PORT',
   'RATE_LIMIT_IP_SECRET',
   'RATE_LIMIT_MODE',
@@ -36,6 +37,7 @@ export const SERVER_ENV_KEYS = [
   'ALLOWED_ORIGINS',
   'SUPABASE_SERVICE_ROLE_KEY',
   'SUPABASE_JWT_SECRET',
+  'SUPABASE_JWKS_URL',
   'DATABASE_URL',
   'DATABASE_POOL_MAX',
   'DB_LOG_QUERIES',
@@ -137,6 +139,7 @@ export const PRODUCTION_REQUIRED_KEYS = [
   'LEGAL_CONTACT_EMAIL',
   'LEGAL_HOST_NAME',
   'API_INTERNAL_URL',
+  'API_PROXY_SECRET',
 ] as const;
 
 const STATIC_DEFAULTS = {
@@ -219,6 +222,7 @@ const serverFields = {
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
   API_INTERNAL_URL: serviceUrl.optional(),
+  API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
   API_PORT: integer(1, 65535),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
   /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
@@ -230,6 +234,7 @@ const serverFields = {
     .optional(),
   SUPABASE_SERVICE_ROLE_KEY: secret.optional(),
   SUPABASE_JWT_SECRET: secret.optional(),
+  SUPABASE_JWKS_URL: serviceUrl.optional(),
   DATABASE_URL: z
     .string()
     .regex(/^postgres(ql)?:\/\/\S+$/, 'postgres-url')

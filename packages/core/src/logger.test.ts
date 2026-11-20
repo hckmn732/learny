@@ -114,6 +114,7 @@ describe('[SPEC-010] logger', () => {
     expect(redactText(`contact ${EMAIL}`)).toBe(`contact ${REDACTED}`);
     expect(redactText(`clé ${API_KEY}`)).toBe(`clé ${REDACTED}`);
     expect(redactText('authorization: Bearer abc.def.ghi')).toContain(REDACTED);
+    expect(redactText('X-Learny-Proxy-Secret: relay-secret-value')).toContain(REDACTED);
     expect(redactText('password=hunter2')).toBe(`password=${REDACTED}`);
     expect(redactText('token: abc123')).toBe(`token: ${REDACTED}`);
     expect(sanitizeLogFields({ userId: EMAIL, route: '/api/v1/x' })).toEqual({

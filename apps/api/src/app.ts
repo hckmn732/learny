@@ -4,7 +4,7 @@ import { serve } from 'inngest/hono';
 
 import type { ErrorReporter } from '@learny/core';
 import { AppError } from '@learny/core';
-import { configureHttp } from '@learny/http';
+import { configureHttp, registerSecurity } from '@learny/http';
 import { apiProblemResponse } from '@learny/http/problem';
 import { resolveApiRequestId } from '@learny/http/request-id';
 import {
@@ -48,6 +48,7 @@ export function getApiHealth(env: Env = process.env): ApiHealth {
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
   const client = options.client ?? inngest;
+  if (options.env !== undefined) registerSecurity(options.env);
   if (options.reporter !== undefined) {
     const reporter = options.reporter;
     configureHttp({ reporter });
