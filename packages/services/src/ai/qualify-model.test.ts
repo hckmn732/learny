@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   insert: vi.fn(),
   notify: vi.fn(),
   run: vi.fn(),
+  createSession: vi.fn(),
+  evaluateCompatibility: vi.fn(),
 }));
 
 vi.mock('@learny/contracts', async (importOriginal) => {
@@ -34,7 +36,17 @@ vi.mock('@learny/db', () => ({
   serviceDb: () => ({}),
 }));
 
-vi.mock('@learny/llm/qualification', () => ({ runQualification: mocks.run }));
+vi.mock('@learny/llm', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return { ...actual, createSession: mocks.createSession };
+});
+vi.mock('@learny/llm/qualification', () => ({
+  runQualification: mocks.run,
+  evaluateTaskCompatibility: mocks.evaluateCompatibility,
+  COMPATIBILITY_FIXTURES: [],
+  QUALIFICATION_FIXTURES: [],
+  isQualificationScenario: () => false,
+}));
 vi.mock('@learny/notifications', () => ({ notify: mocks.notify }));
 
 const { assignTaskModel, qualificationBrickBattery, qualifyCredential, stopAfterInvalidBrick } =
@@ -63,6 +75,8 @@ function context(): ServiceContext {
 
 function credentialRow(partial: Record<string, unknown> = {}) {
   return {
+    provider: 'openai',
+    baseUrl: null,
     modelIds: ['model-c'],
     qualification: {
       models: {
@@ -85,6 +99,17 @@ function credentialRow(partial: Record<string, unknown> = {}) {
 
 function chain(rows: unknown[]) {
   return { from: () => ({ where: () => ({ limit: () => Promise.resolve(rows) }) }) };
+}
+
+function probeChain(rows: unknown[]) {
+  const end = {
+    limit: () => Promise.resolve(rows),
+  };
+  const where = {
+    ...end,
+    for: () => end,
+  };
+  return { from: () => ({ where: () => where }) };
 }
 
 describe('[SPEC-506] qualification et affectation', () => {
@@ -115,6 +140,65 @@ describe('[SPEC-506] qualification et affectation', () => {
     expect(qualificationBrickBattery.types).toHaveLength(13);
     expect(qualificationBrickBattery.schemaFor('text')).toBeDefined();
     expect(() => qualificationBrickBattery.schemaFor('unknown')).toThrow(/Type de brique inconnu/);
+  });
+
+  it('persiste une connexion unique avec le budget léger de sonde', async () => {
+    const row = credentialRow({
+      qualification: {},
+      provider: 'deepseek',
+      baseUrl: null,
+      outsideEu: true,
+    });
+    mocks.select
+      .mockReturnValueOnce(probeChain([row]))
+      .mockReturnValueOnce(probeChain([row]));
+    mocks.createSession.mockResolvedValue({
+      ok: true,
+      value: {
+        step: vi.fn().mockResolvedValue({
+          ok: true,
+          value: { text: 'reachable' },
+        }),
+      },
+    });
+
+    const result = await qualifyCredential(context(), CREDENTIAL, 'model-c');
+    expect(result).toMatchObject({ ok: true, value: { status: 'connected' } });
+    expect(mocks.createSession).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ probe: { timeoutMs: 12_000, maxOutputTokens: 256 } }),
+    );
+  });
+
+  it('persiste une compatibilité de tâche sans réexécuter la batterie', async () => {
+    const row = credentialRow({
+      qualification: { connection: { status: 'connected' } },
+      provider: 'deepseek',
+      baseUrl: null,
+      outsideEu: true,
+    });
+    mocks.select
+      .mockReturnValueOnce(probeChain([row]))
+      .mockReturnValueOnce(probeChain([row]));
+    mocks.createSession.mockResolvedValue({ ok: true, value: {} });
+    mocks.evaluateCompatibility.mockResolvedValue({
+      credentialId: CREDENTIAL,
+      modelId: 'model-c',
+      task: 'programme',
+      status: 'reserve',
+      checkedAt: AT.toISOString(),
+      durationMs: 20,
+      requiredCapabilities: ['tools'],
+      reserveCodes: ['NO_TOOLS'],
+      reasons: [{ code: 'NO_TOOLS', message: 'réserve' }],
+    });
+
+    const result = await qualifyCredential(context(), CREDENTIAL, 'model-c', {
+      task: 'programme',
+    });
+    expect(result).toMatchObject({ ok: true, value: { status: 'reserve' } });
+    expect(mocks.evaluateCompatibility).toHaveBeenCalledOnce();
+    expect(mocks.run).not.toHaveBeenCalled();
   });
 
   it('valide une brique d’exemple et signale une charge invalide (ET-2)', async () => {
