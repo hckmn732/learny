@@ -8,11 +8,12 @@ import { closeDb, serviceDb, sql } from '@learny/db';
 import { setSignedUpEmitter } from '@learny/services';
 import { extractAuthLink, waitForMail } from '@learny/testing/auth';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
+import { honoRoute } from './hono-route';
 
-import { GET as callback } from '../../app/api/v1/auth/callback/route';
-import { POST as magicLink } from '../../app/api/v1/auth/magic-link/route';
-import { POST as resend } from '../../app/api/v1/auth/resend/route';
-import { POST as signUp } from '../../app/api/v1/auth/sign-up/route';
+const callback = honoRoute('/api/v1/auth/callback', 'GET');
+const magicLink = honoRoute('/api/v1/auth/magic-link', 'POST');
+const resend = honoRoute('/api/v1/auth/resend', 'POST');
+const signUp = honoRoute('/api/v1/auth/sign-up', 'POST');
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };

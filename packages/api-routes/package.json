@@ -5,7 +5,6 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./next": "./src/next-route.ts",
     "./coverage": "./src/coverage.ts",
     "./deps/env": "./src/deps/env.ts",
     "./deps/health": "./src/deps/health.ts",

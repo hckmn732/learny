@@ -10,11 +10,12 @@ import {
   supabaseLocalEnv,
   type TestSession,
 } from '@learny/testing/supabase';
+import { honoRoute } from './hono-route';
 
-import { POST as readPost } from '../../app/api/v1/notifications/[id]/read/route';
-import { POST as readAllPost } from '../../app/api/v1/notifications/read-all/route';
-import { GET as listGet } from '../../app/api/v1/notifications/route';
-import { GET as unreadCountGet } from '../../app/api/v1/notifications/unread-count/route';
+const readPost = honoRoute('/api/v1/notifications/[id]/read', 'POST');
+const readAllPost = honoRoute('/api/v1/notifications/read-all', 'POST');
+const listGet = honoRoute('/api/v1/notifications', 'GET');
+const unreadCountGet = honoRoute('/api/v1/notifications/unread-count', 'GET');
 
 const BASE = 'http://localhost:3000';
 const EMPTY_SEGMENT = { params: Promise.resolve({}) };

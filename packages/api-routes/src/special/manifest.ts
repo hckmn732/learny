@@ -49,5 +49,4 @@ export const SPECIAL_ROUTE_MANIFEST = [
   { key: 'sddDemoJob', method: 'POST', path: '/api/v1/_dev/demo-job' },
   { key: 'sddCommitCheck', method: 'POST', path: '/api/v1/_dev/commit-check' },
   { key: 'sddSecretScan', method: 'POST', path: '/api/v1/_dev/secret-scan' },
-  { key: 'inngest', method: 'ALL', path: '/api/inngest' },
 ] as const;
