@@ -197,6 +197,22 @@ describe('[SPEC-009] environment', () => {
     ).toEqual(['NEXT_PUBLIC_APP_URL']);
   });
 
+  it('accepts private Docker API URLs without weakening public service URLs', () => {
+    for (const API_INTERNAL_URL of ['http://api:3001', 'https://api.internal:3001']) {
+      expect(parseServerEnv({ API_INTERNAL_URL }).API_INTERNAL_URL).toBe(API_INTERNAL_URL);
+    }
+    for (const API_INTERNAL_URL of [
+      'ftp://api:3001',
+      'http://user:pass@api:3001',
+      'http://api:3001/path',
+      'http://api:3001?query=1',
+    ]) {
+      expect(caught(() => parseServerEnv({ API_INTERNAL_URL })).names).toEqual([
+        'API_INTERNAL_URL',
+      ]);
+    }
+  });
+
   it('keeps a secret with surrounding spaces invalid instead of cleaning it (CL-7)', () => {
     const error = caught(() =>
       parseServerEnv({ ...PRODUCTION_ENV, ANTHROPIC_API_KEY: ' sk-ant-learny-test-only ' }),

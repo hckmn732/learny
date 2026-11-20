@@ -69,4 +69,15 @@ describe('[SPEC-009] interdits de la production (CL-4)', () => {
       'ALLOWED_ORIGINS:invalid',
     );
   });
+
+  it('accepte l’adresse Docker interne de l’API en production', () => {
+    const env = parseServerEnv({ ...PRODUCTION_ENV, API_INTERNAL_URL: 'http://api:3001' });
+    expect(env.API_INTERNAL_URL).toBe('http://api:3001');
+    expect(issuesOf({ API_INTERNAL_URL: 'ftp://api:3001' })).toContain(
+      'API_INTERNAL_URL:invalid',
+    );
+    expect(issuesOf({ API_INTERNAL_URL: 'http://user:pass@api:3001' })).toContain(
+      'API_INTERNAL_URL:invalid',
+    );
+  });
 });

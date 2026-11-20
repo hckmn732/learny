@@ -12,6 +12,7 @@ import {
   PUSH_MODES,
   STRIPE_MODES,
   isIanaTimeZone,
+  isInternalServiceUrl,
   isServiceUrl,
   normalizeEnv,
   toEnvIssues,
@@ -196,6 +197,7 @@ function integer(min: number, max: number) {
 }
 
 const serviceUrl = z.string().refine(isServiceUrl, 'invalid-url');
+const internalServiceUrl = z.string().refine(isInternalServiceUrl, 'invalid-url');
 const nonEmpty = z.string().min(1);
 // A secret keeps its exact bytes: surrounding spaces make it invalid rather than "cleaned" (CL-7).
 const secret = z.string().min(1).regex(/^\S+$/, 'no-whitespace');
@@ -224,7 +226,7 @@ const serverFields = {
   LOG_LEVEL: enumOf(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']),
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
-  API_INTERNAL_URL: serviceUrl.optional(),
+  API_INTERNAL_URL: internalServiceUrl.optional(),
   API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
   API_PROXY_SECRET_PREVIOUS: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
   LEARNY_API_ROLE: enumOf(API_ROLES),

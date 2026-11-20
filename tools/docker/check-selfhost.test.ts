@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
+import { parseServerEnv, serverEnvSchema } from '../../packages/config/src/env';
+
 import {
   EXPECTED_VOLUMES,
   HEALTHCHECKED_SERVICES,
@@ -142,6 +144,22 @@ describe('[SPEC-012] selfhost config', () => {
         expect(doc.services.web?.depends_on?.api?.condition, file).toBe('service_healthy');
       }
       expect(text, file).not.toMatch(/sk-[A-Za-z0-9]{10,}|eyJ[A-Za-z0-9_-]{20,}\./);
+    }
+  });
+
+  test('les topologies Docker utilisent une URL interne acceptée par le schéma serveur', () => {
+    for (const file of [
+      'docker/compose.selfhost.yml',
+      'docker/compose.coolify.yml',
+      'docker/compose.coolify-qa.yml',
+    ]) {
+      const text = readFile(file);
+      const url = /API_INTERNAL_URL:\s*(http:\/\/api:3001)/.exec(text)?.[1];
+      expect(url, file).toBe('http://api:3001');
+      expect(parseServerEnv({ APP_ENV: 'preview', API_INTERNAL_URL: url }).API_INTERNAL_URL).toBe(
+        url,
+      );
+      expect(serverEnvSchema.shape.API_INTERNAL_URL.safeParse(url).success, file).toBe(true);
     }
   });
 

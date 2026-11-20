@@ -87,6 +87,20 @@ export function isServiceUrl(value: string): boolean {
   return LOCAL_HOSTNAMES.has(url.hostname) || LOCAL_HOSTNAMES.has(url.host);
 }
 
+/** Internal service URL: private DNS is valid, but credentials, path, query and fragment are not. */
+export function isInternalServiceUrl(value: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+  if (url.username !== '' || url.password !== '') return false;
+  return url.hostname !== '' && (url.pathname === '' || url.pathname === '/') &&
+    url.search === '' && url.hash === '';
+}
+
 export function isIanaTimeZone(value: string): boolean {
   try {
     new Intl.DateTimeFormat('en-US', { timeZone: value });
