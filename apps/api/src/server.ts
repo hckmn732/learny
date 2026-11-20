@@ -9,6 +9,8 @@ import { parseServerEnv } from '@learny/config/server';
 import { createApp, DEFAULT_PORT } from './app';
 import { createApiReporter, initApiSentry } from './sentry';
 
+export { DEFAULT_PORT } from './app';
+
 type Env = Readonly<Record<string, string | undefined>>;
 
 export function parsePort(value: string | number | undefined): number {
@@ -56,8 +58,10 @@ export async function main(env: Env = process.env): Promise<void> {
     const reporter = createApiReporter(env);
     await initApiSentry(env);
     const port = parsePort(env.PORT ?? config.API_PORT);
-    await startServer(createApp({ env, reporter }), port);
-    console.info(`learny api: http://localhost:${String(port)} (${config.APP_ENV})`);
+    await startServer(createApp({ env, reporter, role: config.LEARNY_API_ROLE }), port);
+    console.info(
+      `learny api: http://localhost:${String(port)} (${config.APP_ENV}, rôle ${config.LEARNY_API_ROLE})`,
+    );
   } catch (error) {
     console.error(error instanceof Error ? error.message : 'Démarrage de l’API impossible.');
     process.exitCode = 1;

@@ -22,7 +22,7 @@
     "db:migration:custom": "pnpm --filter @learny/db migration:custom",
     "db:migrate": "supabase migration up --local",
     "db:check": "pnpm --filter @learny/db check",
-    "dev:worker": "turbo run dev --filter=@learny/worker",
+    "dev:worker": "turbo run dev --filter=@learny/api",
     "ai:rotate-keys": "tsx packages/llm/scripts/rotate-keys.ts",
     "build": "turbo run build",
     "lint": "turbo run lint && pnpm run lint:root && pnpm run db:check && pnpm run openapi:check && pnpm run migration:routes:check",

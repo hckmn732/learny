@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
+import type { ApiRole } from '@learny/config/server';
 import type { ErrorReporter } from '@learny/core';
 import { AppError } from '@learny/core';
 import { configureHttp, registerSecurity } from '@learny/http';
@@ -33,6 +34,7 @@ export interface AppOptions {
   functions?: Parameters<typeof serve>[0]['functions'];
   env?: Env;
   reporter?: ErrorReporter;
+  role?: ApiRole;
 }
 
 export function getApiHealth(env: Env = process.env): ApiHealth {
@@ -47,6 +49,7 @@ export function getApiHealth(env: Env = process.env): ApiHealth {
 
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
+  const role = options.role ?? 'all';
   const client = options.client ?? inngest;
   if (options.env !== undefined) registerSecurity(options.env);
   if (options.reporter !== undefined) {
@@ -81,14 +84,19 @@ export function createApp(options: AppOptions = {}): Hono {
     context.header('cache-control', 'no-store');
     return context.json(getApiHealth(options.env));
   });
-  mountApiRoutes(app, { omitSpecial: ['inngest'] });
-  const inngestHandler = serve({ client, functions: registry });
-  app.on(['GET', 'POST', 'PUT'], INNGEST_PATH, (context) => inngestHandler(context));
+  if (role !== 'jobs') mountApiRoutes(app, { omitSpecial: ['inngest'] });
+  if (role !== 'api') {
+    const inngestHandler = serve({ client, functions: registry });
+    app.on(['GET', 'POST', 'PUT'], INNGEST_PATH, (context) => inngestHandler(context));
+  }
 
   app.all('*', (context) => {
     const pathname = new URL(context.req.url).pathname;
     const requestId = resolveApiRequestId(context.req.header('x-request-id'));
-    const methods = methodsForPath(pathname);
+    const routeIsOmitted =
+      (role === 'jobs' && pathname !== INNGEST_PATH) ||
+      (role === 'api' && pathname === INNGEST_PATH);
+    const methods = routeIsOmitted ? [] : methodsForPath(pathname);
     const response = apiProblemResponse(
       new AppError(
         methods.length === 0 ? 'NOT_FOUND' : 'METHOD_NOT_ALLOWED',

@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { PUBLIC_ENV_KEYS, publicEnvSchema } from './env-public';
 import {
+  API_ROLES,
   APP_ENVS,
   EMAIL_MODES,
   EnvConfigError,
@@ -30,6 +31,7 @@ export const SERVER_ENV_KEYS = [
   'GIT_COMMIT',
   'API_INTERNAL_URL',
   'API_PROXY_SECRET',
+  'LEARNY_API_ROLE',
   'API_PORT',
   'RATE_LIMIT_IP_SECRET',
   'RATE_LIMIT_MODE',
@@ -163,6 +165,7 @@ export function envDefaults(appEnv: AppEnv): Record<string, string> {
   return {
     ...STATIC_DEFAULTS,
     API_PORT: '3001',
+    LEARNY_API_ROLE: 'all',
     ...(appEnv === 'production' ? {} : { API_INTERNAL_URL: 'http://127.0.0.1:3001' }),
     APP_ENV: appEnv,
     LLM_MODE: simulated ? 'mock' : 'live',
@@ -223,6 +226,7 @@ const serverFields = {
   GIT_COMMIT: commit.optional(),
   API_INTERNAL_URL: serviceUrl.optional(),
   API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
+  LEARNY_API_ROLE: enumOf(API_ROLES),
   API_PORT: integer(1, 65535),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
   /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
@@ -353,6 +357,14 @@ assertKeys('ENV', serverEnvShape, RUNTIME_ENV_KEYS);
  */
 export function parseServerEnv(raw: EnvInput = {}, appEnv?: AppEnv): ServerEnv {
   const input = normalizeEnv(raw);
+  if (
+    input.LEARNY_API_ROLE !== undefined &&
+    !(API_ROLES as readonly string[]).includes(input.LEARNY_API_ROLE)
+  ) {
+    throw new Error(
+      `LEARNY_API_ROLE invalide : valeurs permises : ${API_ROLES.join(', ')}.`,
+    );
+  }
   const requested = appEnv ?? input.APP_ENV ?? 'local';
   const effectiveEnv = isAppEnv(requested) ? requested : 'local';
   // Defaults first, then the provided values: an empty variable falls back to its documented

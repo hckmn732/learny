@@ -16,7 +16,8 @@ import {
 } from '@learny/jobs';
 import { driveInngestRun } from '@learny/jobs/testing';
 
-import { DEFAULT_PORT, createApp, getWorkerHealth, parsePort, startServer } from '../../src/server';
+import { createApp, getApiHealth } from '../../src/app';
+import { DEFAULT_PORT, parsePort, startServer } from '../../src/server';
 
 // Fake key for tests only: never a real Inngest signing key.
 const SIGNING_KEY = 'signkey-test-learny-test-only-0123456789abcdef';
@@ -70,7 +71,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe('[SPEC-007] worker', () => {
+describe('[SPEC-1103][SPEC-007] worker absorbed by the API', () => {
   it('answers GET /health with status, version and commit only (EF-3)', async () => {
     const app = createApp({ env: { APP_VERSION: '1.2.3', GIT_COMMIT: 'abcdef1' } });
     const res = await app.request('/health');
@@ -78,7 +79,7 @@ describe('[SPEC-007] worker', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('cache-control')).toBe('no-store');
     expect(await res.json()).toEqual({ status: 'ok', version: '1.2.3', commit: 'abcdef1' });
-    expect(getWorkerHealth({ APP_VERSION: 'postgres://u:p@h/db', GIT_COMMIT: 'x y' })).toEqual({
+    expect(getApiHealth({ APP_VERSION: 'postgres://u:p@h/db', GIT_COMMIT: 'x y' })).toEqual({
       status: 'ok',
       version: 'dev',
       commit: 'unknown',
@@ -200,9 +201,9 @@ describe('[SPEC-007] worker', () => {
 
     try {
       await expect(startServer(createApp(), port, '127.0.0.1')).rejects.toThrow(
-        `Le port ${String(port)} est déjà utilisé : le worker ne démarre pas.`,
+        `Le port ${String(port)} est déjà utilisé : l’API ne démarre pas.`,
       );
-      // The worker itself can start on a free port and be stopped cleanly.
+      // The API itself can start on a free port and be stopped cleanly.
       const server = await startServer(createApp(), 0, '127.0.0.1');
       await new Promise<void>((resolve) =>
         server.close(() => {
