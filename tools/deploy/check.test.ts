@@ -291,7 +291,8 @@ describe('[SPEC-013] managed regions', () => {
     const workflow = realWorkflow();
     const preview = workflowJob(workflow.doc, 'preview');
     const apiStep = workflowStep(preview, '--cwd apps/api');
-    const webStep = workflowStep(preview, '--env "API_INTERNAL_URL=$API_INTERNAL_URL"');
+    const webStep = (preview.steps ?? []).find((step) => step.id === 'deploy');
+    if (webStep === undefined) throw new Error('étape web deploy absente du fixture');
     const syncStep = workflowStep(preview, 'sync-inngest.mjs');
     expect((preview.steps ?? []).indexOf(apiStep)).toBeLessThan(
       (preview.steps ?? []).indexOf(syncStep),

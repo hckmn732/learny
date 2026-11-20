@@ -62,6 +62,7 @@ jobs:
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_PROJECT_ID }}
       VERCEL_API_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_API_PROJECT_ID }}
+      API_INTERNAL_URL: ${{ vars.PREVIEW_API_URL }}
       API_PROXY_SECRET: ${{ secrets.PREVIEW_API_PROXY_SECRET }}
     steps:
       - name: Extraire la ref validée par la CI
@@ -94,7 +95,7 @@ jobs:
             echo "::error::Le projet Vercel learny-api n’est pas configuré pour preview."
             exit 1
           }
-          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --cwd apps/api --token "$VERCEL_TOKEN" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
+          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --cwd apps/api --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "API preview fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
@@ -168,6 +169,7 @@ jobs:
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_PROJECT_ID }}
       VERCEL_API_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_API_PROJECT_ID }}
+      API_INTERNAL_URL: ${{ vars.PRODUCTION_API_URL }}
       API_PROXY_SECRET: ${{ secrets.PRODUCTION_API_PROXY_SECRET }}
     steps:
       - name: Extraire la ref validée par la CI
@@ -206,7 +208,7 @@ jobs:
             echo "::error::Le projet Vercel learny-api n’est pas configuré pour production."
             exit 1
           }
-          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --cwd apps/api --token "$VERCEL_TOKEN" --meta "githubCommitSha=$GIT_COMMIT")"
+          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --cwd apps/api --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT")"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "API production fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
