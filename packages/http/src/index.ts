@@ -2,6 +2,7 @@ export * from './configure';
 export * from './dev-guard';
 export * from './handler';
 export * from './idempotency';
+export * from './jwt';
 export * from './origin';
 export * from './problem';
 export * from './rate-limit';

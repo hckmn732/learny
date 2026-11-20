@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-1101]
 business_rules: []
 screens: []
-adrs: [ADR-1005, ADR-0121, ADR-0252, ADR-0258, ADR-0007]
+adrs: [ADR-1005, ADR-1009, ADR-0121, ADR-0252, ADR-0258, ADR-0007]
 visual: demo
 ---
 
@@ -109,4 +109,4 @@ Conditions communes, plus : le parcours d'authentification web (`@SPEC-202`) est
 
 ## 15. Décisions et hypothèses
 
-ADR-1005 fixe transports, vérification locale, routes sensibles et proxy de confiance. Hypothèse : le projet Supabase géré expose des clés asymétriques (JWKS) ; sinon le repli HS256 s'applique avec `SUPABASE_JWT_SECRET` côté serveur. Aucune question ouverte.
+ADR-1005 fixe transports, vérification locale, routes sensibles et proxy de confiance. Comme la version installée de Supabase n’expose pas `auth.getClaims()`, ADR-1009 ajoute `jose` pour garantir cette vérification locale. Hypothèse : le projet Supabase géré expose des clés asymétriques (JWKS) ; sinon le repli HS256 s’applique avec `SUPABASE_JWT_SECRET` côté serveur. Aucune question ouverte.

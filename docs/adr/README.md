@@ -216,3 +216,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-1006](ADR-1006-piste-sdd-de-migration-et-branche-migration.md) | Piste SDD de migration et branche migration | Validée | ADR-0001, ADR-0005, ADR-0049 |
 | [ADR-1007](ADR-1007-paquets-partages-entre-clients-et-serveur.md) | Paquets partagés entre clients et serveur | Validée | SPEC-1002, SPEC-1003, SPEC-1004 |
 | [ADR-1008](ADR-1008-statut-de-succes-de-la-demonstration-http.md) | Statut de succès de la démonstration HTTP | Déduite | SPEC-1003, ADR-1001, ADR-1002 |
+| [ADR-1009](ADR-1009-verification-jwt-locale-avec-jose-faute-de-getclaims.md) | Vérification JWT locale avec JOSE faute de getClaims | Déduite | ADR-1005,SPEC-1102 |
