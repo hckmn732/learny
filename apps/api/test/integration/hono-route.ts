@@ -8,7 +8,7 @@ export function honoRoute(
   fallbackPath: string,
   fallbackMethod: HttpMethod,
 ): (request?: Request, segment?: Segment) => Promise<Response> {
-  return (request) => {
+  return async (request) => {
     const target =
       request ??
       new Request(new URL(fallbackPath, 'http://localhost'), { method: fallbackMethod });

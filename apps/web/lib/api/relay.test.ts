@@ -40,6 +40,7 @@ describe('[SPEC-1201] relay', () => {
     expect(url).toBeInstanceOf(URL);
     expect((url as URL).href).toBe('http://127.0.0.1:4011/api/v1/echo?source=web');
     expect(init?.method).toBe('POST');
+    expect(init?.signal).toBe(request.signal);
     expect(headers.get('x-learny-proxy-secret')).toBe(SECRET);
     expect(headers.get('x-forwarded-host')).toBe('learny.example');
     expect(headers.get('x-forwarded-proto')).toBe('https');
@@ -79,6 +80,22 @@ describe('[SPEC-1201] relay', () => {
       'session=value; Path=/; HttpOnly; SameSite=Lax; Secure',
     ]);
     expect(await response.text()).toBe('data: un\n\ndata: deux\n\n');
+  });
+
+  it.each(['HEAD', 'OPTIONS'])('relaie %s sans corps', async (method) => {
+    vi.stubEnv('API_INTERNAL_URL', 'http://127.0.0.1:4011');
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response(null, { status: 204 }));
+
+    const response = await relayToApi(
+      new NextRequest('https://learny.example/api/v1/health', { method }),
+    );
+    const init = fetchMock.mock.calls[0]?.[1];
+
+    expect(response.status).toBe(204);
+    expect(init?.method).toBe(method);
+    expect(init?.body).toBeUndefined();
   });
 
   it('répond 502 API_UNAVAILABLE si l’API est inaccessible', async () => {
