@@ -134,7 +134,7 @@ describe('[SPEC-709] service et API', () => {
       expect(task.options.some((option) => option.modelId === 'failed-709')).toBe(true);
     }
     const failedCard = afterFailure.value.providers.find((card) => card.id === failedKey);
-    expect(failedCard).toMatchObject({ status: 'unqualified', connectionStatus: 'unknown' });
+    expect(failedCard).toMatchObject({ status: 'unqualified', connectionStatus: 'connected' });
     expect(failedCard?.failure?.step).toBe('bricks');
     expect(failedCard?.failure?.brickType).toBeTypeOf('string');
 

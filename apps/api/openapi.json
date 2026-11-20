@@ -27062,7 +27062,8 @@
                                 "enum": [
                                   "STRUCTURED_UNRELIABLE",
                                   "NO_VISION",
-                                  "NO_TOOLS"
+                                  "NO_TOOLS",
+                                  "CHECK_TIMEOUT"
                                 ],
                                 "type": "string"
                               },
@@ -27078,7 +27079,7 @@
                             ],
                             "type": "object"
                           },
-                          "maxItems": 3,
+                          "maxItems": 4,
                           "type": "array"
                         },
                         "requiredCapabilities": {
@@ -27100,11 +27101,12 @@
                             "enum": [
                               "STRUCTURED_UNRELIABLE",
                               "NO_VISION",
-                              "NO_TOOLS"
+                              "NO_TOOLS",
+                              "CHECK_TIMEOUT"
                             ],
                             "type": "string"
                           },
-                          "maxItems": 3,
+                          "maxItems": 4,
                           "type": "array"
                         },
                         "status": {
@@ -27683,7 +27685,8 @@
                                               "enum": [
                                                 "STRUCTURED_UNRELIABLE",
                                                 "NO_VISION",
-                                                "NO_TOOLS"
+                                                "NO_TOOLS",
+                                                "CHECK_TIMEOUT"
                                               ],
                                               "type": "string"
                                             },
@@ -27699,7 +27702,7 @@
                                           ],
                                           "type": "object"
                                         },
-                                        "maxItems": 3,
+                                        "maxItems": 4,
                                         "type": "array"
                                       },
                                       "requiredCapabilities": {
@@ -27721,11 +27724,12 @@
                                           "enum": [
                                             "STRUCTURED_UNRELIABLE",
                                             "NO_VISION",
-                                            "NO_TOOLS"
+                                            "NO_TOOLS",
+                                            "CHECK_TIMEOUT"
                                           ],
                                           "type": "string"
                                         },
-                                        "maxItems": 3,
+                                        "maxItems": 4,
                                         "type": "array"
                                       },
                                       "status": {
@@ -27807,7 +27811,8 @@
                                           "enum": [
                                             "STRUCTURED_UNRELIABLE",
                                             "NO_VISION",
-                                            "NO_TOOLS"
+                                            "NO_TOOLS",
+                                            "CHECK_TIMEOUT"
                                           ],
                                           "type": "string"
                                         },
@@ -28356,7 +28361,8 @@
                                               "enum": [
                                                 "STRUCTURED_UNRELIABLE",
                                                 "NO_VISION",
-                                                "NO_TOOLS"
+                                                "NO_TOOLS",
+                                                "CHECK_TIMEOUT"
                                               ],
                                               "type": "string"
                                             },
@@ -28372,7 +28378,7 @@
                                           ],
                                           "type": "object"
                                         },
-                                        "maxItems": 3,
+                                        "maxItems": 4,
                                         "type": "array"
                                       },
                                       "requiredCapabilities": {
@@ -28394,11 +28400,12 @@
                                           "enum": [
                                             "STRUCTURED_UNRELIABLE",
                                             "NO_VISION",
-                                            "NO_TOOLS"
+                                            "NO_TOOLS",
+                                            "CHECK_TIMEOUT"
                                           ],
                                           "type": "string"
                                         },
-                                        "maxItems": 3,
+                                        "maxItems": 4,
                                         "type": "array"
                                       },
                                       "status": {
@@ -28480,7 +28487,8 @@
                                           "enum": [
                                             "STRUCTURED_UNRELIABLE",
                                             "NO_VISION",
-                                            "NO_TOOLS"
+                                            "NO_TOOLS",
+                                            "CHECK_TIMEOUT"
                                           ],
                                           "type": "string"
                                         },
