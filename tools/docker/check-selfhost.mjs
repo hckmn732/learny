@@ -630,25 +630,29 @@ async function main() {
   errors.push(...validateDockerfile(readFile('docker/web.Dockerfile')));
   errors.push(...validateDockerfile(readFile('docker/api.Dockerfile')));
   errors.push(...validateDockerignore(readFile(DOCKERIGNORE_FILE)));
+  errors.push(...validateDockerignore(readFile('docker/api.Dockerfile.dockerignore')));
   errors.push(...validateGuide(readFile(GUIDE_FILE)));
 
   let env = {};
   let envPath = envFileOption;
-  try {
-    const loaded = loadEnvFile(envFileOption);
-    envPath = loaded.path;
-    env = { ...loaded.vars, ...process.env };
-    const missing = missingRequiredVariables(composeText, env);
-    for (const name of missing) errors.push(`variable obligatoire absente : ${name}`);
-  } catch (error) {
-    errors.push(error instanceof Error ? error.message : String(error));
+  const staticOnly = process.argv.includes('--static');
+  if (!staticOnly) {
+    try {
+      const loaded = loadEnvFile(envFileOption);
+      envPath = loaded.path;
+      env = { ...loaded.vars, ...process.env };
+      const missing = missingRequiredVariables(composeText, env);
+      for (const name of missing) errors.push(`variable obligatoire absente : ${name}`);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
   }
 
-  if (errors.length === 0 && dockerAvailable()) {
+  if (errors.length === 0 && !staticOnly && dockerAvailable()) {
     const resolved = composeConfig(envPath, env);
     if (!resolved.ok) errors.push(`docker compose config : ${resolved.error ?? 'échec'}`);
     else errors.push(...validateResolvedConfig(resolved.config));
-  } else if (!dockerAvailable()) {
+  } else if (!staticOnly && !dockerAvailable()) {
     console.warn('Docker indisponible : validation statique seulement (CL-7).');
     if (up) errors.push('Docker est requis pour --up : aucun démarrage inventé.');
   }
@@ -657,9 +661,11 @@ async function main() {
     for (const error of errors) console.error(`✖ ${error}`);
     process.exit(1);
   }
-  console.log('✔ configuration auto-hébergée valide (Compose, Dockerfiles, guide).');
+  console.log(
+    `✔ configuration auto-hébergée valide (Compose, Dockerfiles, guide${staticOnly ? ', contrôle statique' : ''}).`,
+  );
 
-  if (!up) return;
+  if (!up || staticOnly) return;
 
   const webPort = env.LEARNY_WEB_PORT ?? '8080';
   console.log(`Démarrage réel du projet ${project}…`);

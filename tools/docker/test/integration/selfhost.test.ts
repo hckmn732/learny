@@ -25,7 +25,7 @@ import { generateSecrets, toolNow } from '../../selfhost-secrets.mjs';
 const PROJECT = `learny-selfhost-it-${String(process.pid)}`;
 const TAG = `learny-selfhost-it-${String(process.pid)}`;
 const WEB_IMAGE = `${TAG}-web:test`;
-const WORKER_IMAGE = `${TAG}-worker:test`;
+const API_IMAGE = `${TAG}-api:test`;
 const ENV_FILE = path.join(ROOT, '.sdd', 'tmp', `${PROJECT}.env`);
 const EVIDENCE = path.join(ROOT, 'evidence', 'SPEC-012');
 const GIT_COMMIT = 'dc30f2d';
@@ -104,7 +104,7 @@ beforeAll(async () => {
   fs.mkdirSync(EVIDENCE, { recursive: true });
   for (const artifact of [
     'build-web.txt',
-    'build-worker.txt',
+    'build-api.txt',
     'compose-config.txt',
     'health.json',
     'volumes.txt',
@@ -142,7 +142,7 @@ beforeAll(async () => {
     LEARNY_SUPABASE_PORT: String(apiPort),
     LEARNY_INNGEST_PORT: String(inngestPort),
     LEARNY_WEB_IMAGE: WEB_IMAGE,
-    LEARNY_WORKER_IMAGE: WORKER_IMAGE,
+    LEARNY_API_IMAGE: API_IMAGE,
     GIT_COMMIT,
     APP_VERSION,
     SMTP_HOST: 'mailpit',
@@ -165,7 +165,7 @@ beforeAll(async () => {
   // Real, observed image builds (EF-1, ET-1, CA-1).
   for (const [dockerfile, image, log] of [
     ['docker/web.Dockerfile', WEB_IMAGE, 'build-web.txt'],
-    ['docker/worker.Dockerfile', WORKER_IMAGE, 'build-worker.txt'],
+    ['docker/api.Dockerfile', API_IMAGE, 'build-api.txt'],
   ] as const) {
     const args = ['build', '-f', dockerfile, '-t', image];
     for (const [key, value] of Object.entries(BUILD_ARGS))
@@ -203,15 +203,15 @@ afterAll(() => {
 describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', () => {
   test('construit deux images non root, sans fichier .env et avec le même commit', () => {
     const web = serviceImageInfo(PROJECT, envFile, env, 'web');
-    const worker = serviceImageInfo(PROJECT, envFile, env, 'worker');
+    const api = serviceImageInfo(PROJECT, envFile, env, 'api');
     expect(web?.labels['org.opencontainers.image.revision']).toBe(GIT_COMMIT);
-    expect(worker?.labels['org.opencontainers.image.revision']).toBe(GIT_COMMIT);
+    expect(api?.labels['org.opencontainers.image.revision']).toBe(GIT_COMMIT);
     expect(web?.labels['org.opencontainers.image.version']).toBe(APP_VERSION);
-    expect(worker?.labels['org.opencontainers.image.version']).toBe(APP_VERSION);
+    expect(api?.labels['org.opencontainers.image.version']).toBe(APP_VERSION);
     expect(web?.user).not.toMatch(/^(?:0|root)(?::|$)/);
-    expect(worker?.user).not.toMatch(/^(?:0|root)(?::|$)/);
+    expect(api?.user).not.toMatch(/^(?:0|root)(?::|$)/);
 
-    for (const image of [WEB_IMAGE, WORKER_IMAGE]) {
+    for (const image of [WEB_IMAGE, API_IMAGE]) {
       const user = docker(['run', '--rm', '--entrypoint', 'sh', image, '-c', 'id -u']);
       expect(user.status, `${image} doit démarrer`).toBe(0);
       expect(user.stdout.trim()).not.toBe('0');
@@ -267,7 +267,7 @@ describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', (
         {
           project: PROJECT,
           webImage: WEB_IMAGE,
-          workerImage: WORKER_IMAGE,
+          apiImage: API_IMAGE,
           commit: GIT_COMMIT,
           services,
           probes,

@@ -547,21 +547,19 @@ export function validateWorkflows({ workflows, scripts, actionlint, act }) {
     }
   }
 
-  // SPEC-1001 (EF-2, ADR-1006) : la piste migration ne déploie ni preview ni production.
+  // SPEC-1103 réactive la preview de migration ; seule la production reste limitée à main.
   const deploy = workflows.deploy;
   if (deploy !== null && deploy !== undefined) {
     const preview = deploy.jobs?.preview;
     const production = deploy.jobs?.production;
     if (preview !== undefined) {
       const condition = normalized(preview.if);
-      if (!condition.includes("github.event.workflow_run.head_branch!='migration'")) {
-        errors.push(
-          'Le job preview ne doit jamais déployer la branche migration (EF-2, ADR-1006).',
-        );
+      if (condition.includes("github.event.workflow_run.head_branch!='migration'")) {
+        errors.push('Le job preview doit déployer la branche migration avec l’API (SPEC-1103).');
       }
-      if (!condition.includes("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')")) {
+      if (condition.includes("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')")) {
         errors.push(
-          'Le job preview ne doit jamais déployer les branches spec/SPEC-1* de la piste migration (EF-2).',
+          'Le job preview doit accepter les branches spec/SPEC-1* après SPEC-1103.',
         );
       }
     }
