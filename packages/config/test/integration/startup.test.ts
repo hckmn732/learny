@@ -17,7 +17,7 @@ import { isForbiddenSecretFile, scanText } from '../../src/secret-patterns';
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const EXAMPLE = path.join(ROOT, '.env.example');
-const WORKER = path.join(ROOT, 'apps', 'worker', 'src', 'server.ts');
+const API = path.join(ROOT, 'apps', 'api', 'src', 'server.ts');
 
 /** Reads `.env.example` as a record; quoted values are unquoted, comments ignored (ET-5). */
 function readExample(): Record<string, string> {
@@ -116,9 +116,9 @@ describe('[SPEC-009] startup', () => {
     expect(gitignore).toContain('!.env.example');
   });
 
-  it('starts the worker with a local environment (CA-1)', async () => {
+  it('starts the API with a local environment (CA-1)', async () => {
     const port = await freePort();
-    const child: ChildProcess = spawn(process.execPath, ['--import', 'tsx', WORKER], {
+    const child: ChildProcess = spawn(process.execPath, ['--import', 'tsx', API], {
       cwd: ROOT,
       stdio: 'ignore',
       detached: true,
@@ -131,12 +131,18 @@ describe('[SPEC-009] startup', () => {
       });
       expect(healthy).toBe(true);
     } finally {
-      if (child.pid) process.kill(-child.pid, 'SIGTERM');
+      if (child.pid !== undefined) {
+        try {
+          process.kill(-child.pid, 'SIGTERM');
+        } catch {
+          // The API may already have stopped after a failed startup.
+        }
+      }
     }
   }, 60000);
 
-  it('refuses to start the worker on a truncated production environment (CA-2)', () => {
-    const result = runNode([WORKER], {
+  it('refuses to start the API on a truncated production environment (CA-2)', () => {
+    const result = runNode([API], {
       APP_ENV: 'production',
       PORT: '3999',
       DATABASE_URL: 'postgresql://learny:learny-test-only-LEAK@db.example:5432/learny',
