@@ -104,7 +104,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
           modelId: option.modelId,
           credentialId: option.credentialId,
         },
-      });
+      }, { idempotencyKey: crypto.randomUUID() });
       setState(next);
       const assigned = next.tasks.find((candidate) => candidate.task === task);
       if (assigned?.compatibility?.status === 'pending') {
@@ -134,7 +134,10 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
-      const next = await api.meAiModelsUpdate({ body: { action: 'clear', task } });
+      const next = await api.meAiModelsUpdate(
+        { body: { action: 'clear', task } },
+        { idempotencyKey: crypto.randomUUID() },
+      );
       setState(next);
       setStatus(t.cleared);
     } catch (cause) {

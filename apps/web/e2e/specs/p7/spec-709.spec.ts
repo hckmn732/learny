@@ -100,7 +100,7 @@ async function seedKeys(
     await serviceDb().insert(aiCredentials).values(rows);
   }
   if (options.qualified) {
-    // The mockup shows the tutor task on « OpenAI · ma clé ».
+    // The selector renders the actual discovered model before the provider label.
     await serviceDb().execute(sql`
       insert into public.ai_task_models (user_id, task, credential_id, model_id)
       values (${userId}::uuid, 'tutor', '66666666-6666-4666-8666-666666666666'::uuid, ${MODEL})
@@ -248,7 +248,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
       response.url().includes('/api/v1/me/ai/models') &&
       response.request().method() === 'PATCH',
   );
-  await tutor.getByTestId('ai-task-model').selectOption({ label: 'OpenAI · ma clé' });
+  await tutor.getByTestId('ai-task-model').selectOption({ label: `${MODEL} · ma clé` });
   expect((await assigned).status()).toBe(200);
   await expect(tutor).toContainText('Votre choix');
   await expect(tutor).toContainText('Compatible');
@@ -301,7 +301,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await page
     .getByTestId('ai-task-tutor')
     .getByTestId('ai-task-model')
-    .selectOption({ label: 'OpenAI · ma clé' });
+    .selectOption({ label: `${MODEL} · ma clé` });
   await expect(page.getByTestId('ai-task-tutor')).toContainText('Votre choix');
   await page.route('**/api/v1/me/ai/models', async (route) => {
     if (route.request().method() !== 'PATCH') {
@@ -354,7 +354,7 @@ test('conformité SPEC-709 @SPEC-709 @visual', async ({
     /Space[ _]Grotesk/,
   );
   await expect(page.getByTestId('ai-task-tutor').getByTestId('ai-task-model')).toContainText(
-    'OpenAI · ma clé',
+    `${MODEL} · ma clé`,
   );
 
   // Mockup comparison of the intro banner only (ADR-0034, ≤ 12 %): the tasks and providers
