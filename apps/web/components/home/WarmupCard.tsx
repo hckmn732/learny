@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import type { WarmupAnswer, WarmupDto, WarmupItem } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/home';
-import { sessionKindLabel, warmupDurationMin } from '@learny/services/warmup/derive';
 import { Button, ErrorState, SkeletonCard, cn } from '@learny/ui';
 
 import { api } from '../../lib/api-client';
+import { sessionKindLabel, warmupDurationMin } from '../../lib/home/warmup';
 import { invalidateStudyProgress } from '../../lib/study-progress';
 
 const t = fr.home.warmup;

@@ -6,14 +6,14 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import type { TutorActivityItem } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/home';
+import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, toast, cn } from '@learny/ui';
+
+import { api, ApiError } from '../../lib/api-client';
 import {
   buildTutorActivityFeed,
   tutorActivityDateLabel,
   TUTOR_SETTINGS_HREF,
-} from '@learny/services/accueil-le-tuteur-a-agi-pour-vous';
-import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, toast, cn } from '@learny/ui';
-
-import { api, ApiError } from '../../lib/api-client';
+} from '../../lib/home/tutor-activity';
 
 const t = fr.home.tutorActed;
 
