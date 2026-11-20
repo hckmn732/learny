@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import type { GroupState, InvitationPreview } from '@learny/contracts';
-import { createServiceContext, getFormationGroup, getInvitationPreview } from '@learny/services';
 
+import { isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { loadShellForFormation, type ShellPageResult } from './sidebar-page';
 import { readPageSession } from './supabase/page';
@@ -21,14 +19,20 @@ export interface GroupPageResult {
 export async function loadGroupPage(formationId: string): Promise<GroupPageResult> {
   const session = await readPageSession();
   if (session === null) redirect(`${SIGN_IN_PATH}?suite=/formations/${formationId}/groupe`);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const result = await getFormationGroup(ctx, formationId);
-  if (!result.ok) {
-    if (result.error.code === 'NOT_FOUND') notFound();
-    throw result.error;
+  const client = await serverApi();
+  try {
+    const [state, shell] = await Promise.all([
+      client.api.formationGroupGet({ params: { fid: formationId } }),
+      loadShellForFormation(formationId),
+    ]);
+    return { shell, state };
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) {
+      redirect(`${SIGN_IN_PATH}?suite=/formations/${formationId}/groupe`);
+    }
+    throw error;
   }
-  const shell = await loadShellForFormation(formationId);
-  return { shell, state: result.value };
 }
 
 export type InvitationPageResult =
@@ -38,12 +42,13 @@ export type InvitationPageResult =
 
 export async function loadInvitationPage(code: string): Promise<InvitationPageResult> {
   const session = await readPageSession();
-  const ctx = createServiceContext({ userId: session?.userId ?? null, requestId: randomUUID() });
-  const result = await getInvitationPreview(ctx, code);
-  if (!result.ok) {
-    if (result.error.code === 'VALIDATION_FAILED') return { kind: 'invalid' };
-    if (result.error.code === 'NOT_FOUND') return { kind: 'not-found' };
-    throw result.error;
+  const client = await serverApi();
+  try {
+    const preview = await client.api.invitationGet({ params: { code } });
+    return { kind: 'ok', preview, signedIn: session !== null };
+  } catch (error) {
+    if (isApiError(error, 'VALIDATION_FAILED')) return { kind: 'invalid' };
+    if (isApiError(error, 'NOT_FOUND')) return { kind: 'not-found' };
+    throw error;
   }
-  return { kind: 'ok', preview: result.value, signedIn: session !== null };
 }

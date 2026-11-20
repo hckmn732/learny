@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import type { FinalReviewDto } from '@learny/contracts';
-import { createServiceContext, getFinalReview } from '@learny/services';
 
+import { apiErrorRequestId, isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { readPageSession } from './supabase/page';
 
@@ -19,14 +17,19 @@ export type FinalReviewPageResult =
 export async function loadFinalReviewPage(formationId: string): Promise<FinalReviewPageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const result = await getFinalReview(ctx, formationId);
-  if (result.ok) return { ok: true, data: result.value };
-  if (result.error.code === 'NOT_FOUND') notFound();
-  if (result.error.code === 'CONFLICT') {
-    redirect(`/formations/${encodeURIComponent(formationId)}/programme`);
+  try {
+    const client = await serverApi();
+    return {
+      ok: true,
+      data: await client.api.getFinalReview({ params: { fid: formationId } }),
+    };
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    if (isApiError(error, 'CONFLICT')) {
+      redirect(`/formations/${encodeURIComponent(formationId)}/programme`);
+    }
+    const requestId = apiErrorRequestId(error);
+    return requestId === undefined ? { ok: false } : { ok: false, requestId };
   }
-  return result.error.requestId === undefined
-    ? { ok: false }
-    : { ok: false, requestId: result.error.requestId };
 }
