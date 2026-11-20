@@ -66,11 +66,11 @@ export default function Spec506Demo() {
     <div className="mt-6 grid gap-6">
       <Card data-testid="spec-506-demo" labelledBy="spec-506-demo-title">
         <h2 id="spec-506-demo-title" className="font-display text-xl font-600">
-          Compatibilité du modèle avec une tâche
+          Batterie de qualification
         </h2>
         <p className="mt-2 text-14 text-ink-muted">
-          Deux scénarios simulés, sans champ de clé : le modèle est compatible ou reçoit une réserve
-          non bloquante. Aucun fournisseur réel n’est appelé.
+          Deux scénarios simulés, sans champ de clé : le modèle réussit la batterie complète ou
+          échoue sur une seule brique. Aucun fournisseur réel n’est appelé.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <form action={action}>
@@ -81,7 +81,7 @@ export default function Spec506Demo() {
               data-testid="spec-506-run-success"
               loading={pending}
             >
-              Vérifier (succès simulé)
+              Qualifier (succès simulé)
             </Button>
           </form>
           <form action={action}>
@@ -92,7 +92,7 @@ export default function Spec506Demo() {
               data-testid="spec-506-run-invalid"
               loading={pending}
             >
-              Vérifier (réserve simulée)
+              Qualifier (brique invalide)
             </Button>
           </form>
         </div>
@@ -118,11 +118,11 @@ export default function Spec506Demo() {
 
       <Card data-testid="spec-506-steps" labelledBy="spec-506-steps-title">
         <h2 id="spec-506-steps-title" className="font-display text-xl font-600">
-          Capacités exigées
+          Rapport par étape
         </h2>
         {report === null ? (
           <p data-testid="spec-506-steps-empty" className="mt-4 text-14 text-ink-muted">
-            Lancez un scénario pour afficher les capacités exigées par la tâche.
+            Lancez un scénario pour afficher les quatre étapes.
           </p>
         ) : (
           <div
@@ -180,11 +180,11 @@ export default function Spec506Demo() {
 
       <Card data-testid="spec-506-bricks" labelledBy="spec-506-bricks-title">
         <h2 id="spec-506-bricks-title" className="font-display text-xl font-600">
-          Validation des briques conservée
+          Rapport par type de brique
         </h2>
         {report === null ? (
           <p data-testid="spec-506-bricks-empty" className="mt-4 text-14 text-ink-muted">
-            La compatibilité ne remplace jamais le mécanisme de validation des briques générées.
+            Les treize types apparaîtront après une qualification.
           </p>
         ) : (
           <div
