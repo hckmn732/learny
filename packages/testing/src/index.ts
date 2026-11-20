@@ -9,3 +9,9 @@ export {
   wcagCriterion,
 } from './wcag22';
 export type { WcagCriterion, WcagCriterionId, WcagLevel } from './wcag22';
+export type {
+  NativeClientScenarioOptions,
+  NativeClientScenarioResult,
+  NativeClientStep,
+} from './native-client';
+export { runNativeClientScenario } from './native-client';

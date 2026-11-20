@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import {
   BRICK_TYPES,
   brickExamples,
@@ -13,12 +14,6 @@ import {
 } from '@learny/bricks';
 import { Button, Card, ErrorState, Skeleton } from '@learny/ui';
 
-import {
-  correctDemoBrick,
-  createDemoBrick,
-  reportDemoBrick,
-  resetDemoBrick,
-} from '../../app/%5Fdev/sdd/spec-501-actions';
 import type { DemoBrick } from '../../app/%5Fdev/sdd/spec-501-types';
 
 const FORMATION = 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee';
@@ -63,6 +58,7 @@ export interface Spec501DemoProps {
 }
 
 export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>) {
+  const [currentBrick, setCurrentBrick] = useState(brick);
   const [type, setType] = useState<BrickType>('choice_question');
   const [json, setJson] = useState(() =>
     JSON.stringify(brickExamples.choice_question.valid, null, 2),
@@ -83,12 +79,24 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
       setValidation({ kind: 'malformed', message: 'Le JSON saisi n’est pas valide.' });
       return;
     }
+
     const result = await validateBrick(draftOf(type, payload), demoResolver);
     if (result.ok) {
       setValidation({ kind: 'valid', fingerprint: result.value.fingerprint });
     } else {
       setValidation({ kind: 'invalid', issues: result.error });
     }
+  }
+
+  async function mutate(action: 'create' | 'report' | 'correct'): Promise<void> {
+    const result =
+      action === 'create'
+        ? await api.devSddSpec501Create({ body: {} })
+        : action === 'report'
+          ? await api.devSddSpec501Report({ body: { brickId: currentBrick?.brickId } })
+          : await api.devSddSpec501Correct({ body: { brickId: currentBrick?.brickId } });
+    const data = result as { brick: DemoBrick | null; error: string | null };
+    setCurrentBrick(data.brick);
   }
 
   return (
@@ -204,32 +212,48 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
           Une brique de l’utilisateur de démonstration, créée puis corrigée par le vrai service.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <form action={createDemoBrick}>
+          <form
+            action={() => {
+              void mutate('create');
+            }}
+          >
             <Button type="submit" variant="lime" data-testid="brick-create">
               Créer
             </Button>
           </form>
-          <form action={reportDemoBrick}>
+          <form
+            action={() => {
+              void mutate('report');
+            }}
+          >
             <Button
               type="submit"
               variant="outline"
               data-testid="brick-report"
-              disabled={brick === null}
+              disabled={currentBrick === null}
             >
               Signaler
             </Button>
           </form>
-          <form action={correctDemoBrick}>
+          <form
+            action={() => {
+              void mutate('correct');
+            }}
+          >
             <Button
               type="submit"
               variant="dark"
               data-testid="brick-correct"
-              disabled={brick === null}
+              disabled={currentBrick === null}
             >
               Corriger
             </Button>
           </form>
-          <form action={resetDemoBrick}>
+          <form
+            action={() => {
+              setCurrentBrick(null);
+            }}
+          >
             <Button type="submit" variant="ghost" data-testid="brick-reset">
               Réinitialiser
             </Button>
@@ -238,11 +262,11 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
         <p className="mt-4 text-14">
           Statut :{' '}
           <strong data-testid="brick-status">
-            {brick === null ? 'aucune brique' : brick.status}
+            {currentBrick === null ? 'aucune brique' : currentBrick.status}
           </strong>
-          {brick === null ? null : ` · version ${String(brick.currentVersion)}`}
+          {currentBrick === null ? null : ` · version ${String(currentBrick.currentVersion)}`}
         </p>
-        {brick === null ? (
+        {currentBrick === null ? (
           <p className="mt-2 text-13 text-ink-muted">Cliquez sur « Créer » pour commencer.</p>
         ) : (
           <div
@@ -270,7 +294,7 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
                 </tr>
               </thead>
               <tbody>
-                {brick.versions.map((version) => (
+                {currentBrick.versions.map((version) => (
                   <tr key={version.versionId}>
                     <td className="border-b border-divider py-2 pr-3 font-mono">
                       {version.version}
@@ -296,14 +320,14 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
           La charge envoyée au navigateur avant correction : aucune bonne réponse, aucun élément
           attendu, aucun indice.
         </p>
-        {brick === null ? (
+        {currentBrick === null ? (
           <Skeleton data-testid="brick-public-skeleton" className="mt-4 h-24 w-full" />
         ) : (
           <pre
             data-testid="brick-public-json"
             className="mt-4 overflow-x-auto rounded-12 bg-canvas p-14 font-mono text-12"
           >
-            {JSON.stringify(brick.publicPayload, null, 2)}
+            {JSON.stringify(currentBrick.publicPayload, null, 2)}
           </pre>
         )}
       </Card>

@@ -5,6 +5,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
+
 import { clearOwnModels, seedOwnModels } from '../../support/own-model';
 
 const NEW = '/formations/nouvelle';

@@ -1,10 +1,10 @@
 import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { Badge, Button, CountBadge, Link, type BadgeProps } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr/ui';
 
 import { Chips } from './Chips';
 import { IconButtons } from './IconButtons';

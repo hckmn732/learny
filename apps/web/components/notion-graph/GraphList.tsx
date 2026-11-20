@@ -1,8 +1,7 @@
 'use client';
 
 import type { NotionGraphDto, NotionGraphLinkKind } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/notionGraph';
+import { fr } from '@learny/i18n/fr/notionGraph';
 
 const t = fr.notionGraph;
 

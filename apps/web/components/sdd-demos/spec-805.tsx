@@ -1,9 +1,10 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import {
   loadSpec805Report,
   type SecurityCategory,
   type SecurityStatus,
 } from '../../app/%5Fdev/sdd/spec-805-data';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec805;

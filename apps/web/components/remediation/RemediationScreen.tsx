@@ -3,11 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { QuizQuestionDto, RemediationDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/remediation';
 import { Breadcrumb, buildFormationBreadcrumb, ErrorState } from '@learny/ui';
 
-import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/remediation';
 import { QuestionCard } from '../quiz/QuestionCard';
 import { availableLabel } from '../quiz-result/ResultActions';
 

@@ -18,6 +18,7 @@ export const STACK = {
   mailpitSmtp: 1025,
   mailpitUi: 8025,
   web: 3000,
+  api: 3001,
 };
 
 export function serviceUrls(env = process.env) {
@@ -27,6 +28,7 @@ export function serviceUrls(env = process.env) {
     inngest: `http://127.0.0.1:${String(STACK.inngest)}`,
     mailpit: env.MAILPIT_URL ?? `http://127.0.0.1:${String(STACK.mailpitUi)}`,
     web: env.NEXT_PUBLIC_APP_URL ?? `http://127.0.0.1:${String(STACK.web)}`,
+    api: env.API_INTERNAL_URL ?? `http://127.0.0.1:${String(STACK.api)}`,
   };
 }
 

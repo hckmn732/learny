@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import type { AiModelsState } from '@learny/contracts/parametres-modeles-d-ia';
 import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
 import {
@@ -16,6 +17,7 @@ import {
   type TutorTone,
 } from '@learny/contracts/parametres-onglets-et-profil';
 import { clock, formatUserDate } from '@learny/core';
+import { fr } from '@learny/i18n/fr/onboarding-settings-shell';
 import {
   AlertDialog,
   Avatar,
@@ -32,8 +34,6 @@ import {
 } from '@learny/ui';
 import { cn } from '@learny/ui';
 
-import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/onboarding-settings-shell';
 import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
 

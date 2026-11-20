@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import * as z from 'zod/mini';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { Button, Form, FormError, FormField, TextField, useZodForm } from '@learny/ui';
-
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.saisie.form;
 

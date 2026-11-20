@@ -3,6 +3,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import type { PauseStateDto } from '@learny/contracts/automatisme-10-mode-pause-et-retour';
 import type {
   AutomationActionItem,
@@ -17,11 +18,9 @@ import {
 } from '@learny/contracts/parametres-automatismes';
 import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
 import { addCivilDays, clock, formatUserDate, startOfUserDay, toUserZone } from '@learny/core';
+import { fr } from '@learny/i18n/fr/settings';
 import { Button, Card, ErrorState, FormError, Select, SkeletonGroup, Switch } from '@learny/ui';
 import { cn } from '@learny/ui';
-
-import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/settings';
 
 const t = fr.settings.automations;
 

@@ -4,8 +4,7 @@ import { useState, type ReactNode } from 'react';
 
 import { MarkdownContent } from '@learny/bricks/view';
 import type { CourseSection } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/course';
+import { fr } from '@learny/i18n/fr/course';
 
 import { QuickQuestion } from './QuickQuestion';
 import { SourceLink } from './SourceLink';

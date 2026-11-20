@@ -2,17 +2,49 @@
 
 import { useActionState, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { SearchWebProvider } from '@learny/contracts';
 
-import {
-  decideSuggestion,
-  suggestFromSearch,
-  type SuggestionState,
-} from '../../app/%5Fdev/sdd/spec-512-actions';
 import type { RouteDemo, SearchWebDemo } from '../../app/%5Fdev/sdd/spec-512-data';
 import { BaseCard } from '../sdd/base-tokens';
 
 const INITIAL: SuggestionState = { status: 'idle', id: null, message: '' };
+
+interface SuggestionState {
+  status: 'idle' | 'pending' | 'imported' | 'dismissed' | 'error';
+  id: string | null;
+  message: string;
+}
+
+function formText(formData: FormData, key: string): string {
+  const value = formData.get(key);
+  return typeof value === 'string' ? value : '';
+}
+
+async function suggestFromSearch(
+  _previous: SuggestionState,
+  formData: FormData,
+): Promise<SuggestionState> {
+  return (await api.devSddSpec512Suggest({
+    body: {
+      title: formText(formData, 'title'),
+      url: formText(formData, 'url'),
+      reason: formText(formData, 'reason'),
+    },
+  })) as SuggestionState;
+}
+
+async function decideSuggestion(
+  _previous: SuggestionState,
+  formData: FormData,
+): Promise<SuggestionState> {
+  return (await api.devSddSpec512Decide({
+    body: {
+      id: formText(formData, 'id'),
+      decision: formText(formData, 'decision'),
+    },
+  })) as SuggestionState;
+}
 
 const ROUTES: { value: SearchWebProvider; label: string }[] = [
   { value: 'anthropic', label: 'Recherche native Anthropic' },

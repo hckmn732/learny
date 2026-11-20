@@ -1,15 +1,14 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getActiveProgramme, getModuleScreen } from '@learny/services';
+import { isActiveProgramme } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/programme';
 
 import { ModuleScreen } from '../../../../../../components/module/ModuleScreen';
 import { AppShell } from '../../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../lib/supabase/page';
-import { fr } from '../../../../../../messages/fr/programme';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,17 +29,22 @@ export default async function ModulePage({ params, searchParams }: ModulePagePro
   const { chapitre } = await searchParams;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, result] = await Promise.all([
-    loadShellForFormation(fid),
-    getActiveProgramme(ctx, fid),
-  ]);
-  if (!result.ok) {
-    if (result.error.code === 'NOT_FOUND') notFound();
-    if (result.error.code === 'CONFLICT') redirect(`/formations/${fid}/programme`);
-    throw result.error;
+  const client = await serverApi();
+  let programme;
+  let shell;
+  try {
+    [programme, shell] = await Promise.all([
+      client.api.programmeGet({ params: { fid }, query: {} }),
+      loadShellForFormation(fid),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    if (isApiError(error, 'CONFLICT')) redirect(`/formations/${fid}/programme`);
+    throw error;
   }
-  const selected = result.value.modules.find((entry) => entry.id === mid);
+  if (!isActiveProgramme(programme)) redirect(`/formations/${fid}/programme`);
+  const selected = programme.modules.find((entry) => entry.id === mid);
   if (selected === undefined) notFound();
   const locked = selected.status === 'locked';
 
@@ -88,25 +92,24 @@ export default async function ModulePage({ params, searchParams }: ModulePagePro
           </div>
         </main>
       ) : (
-        <ModuleContent ctx={ctx} mid={mid} chapterId={chapitre} />
+        <ModuleContent mid={mid} chapterId={chapitre} />
       )}
     </AppShell>
   );
 }
 
-async function ModuleContent({
-  ctx,
-  mid,
-  chapterId,
-}: {
-  ctx: ReturnType<typeof createServiceContext>;
-  mid: string;
-  chapterId: string | undefined;
-}) {
-  const screen = await getModuleScreen(ctx, mid, chapterId);
-  if (!screen.ok) {
-    if (screen.error.code === 'NOT_FOUND') notFound();
-    throw screen.error;
+async function ModuleContent({ mid, chapterId }: { mid: string; chapterId: string | undefined }) {
+  const client = await serverApi();
+  let screen;
+  try {
+    screen = await client.api.moduleScreen({
+      params: { mid },
+      query: chapterId === undefined ? {} : { chapitre: chapterId },
+    });
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
-  return <ModuleScreen initial={screen.value} />;
+  return <ModuleScreen initial={screen} />;
 }

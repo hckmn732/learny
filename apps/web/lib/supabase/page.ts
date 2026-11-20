@@ -3,12 +3,11 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-import { loadProfileRow } from './profile';
 import { supabaseConfig } from './server';
 
 export interface PageSession {
   userId: string;
-  onboardingStep: string;
+  onboardingStep?: string;
 }
 
 export async function readPageSession(): Promise<PageSession | null> {
@@ -24,11 +23,12 @@ export async function readPageSession(): Promise<PageSession | null> {
         setAll: () => undefined,
       },
     });
-    // `getUser` verifies the token with the auth service; a transient failure reads as anonymous.
-    const { data, error } = await supabase.auth.getUser();
+    // The page only uses the local session as a redirect hint. The API verifies the token and
+    // authorises every data read, avoiding a second Auth-server round trip per page render.
+    const { data, error } = await supabase.auth.getSession();
     if (error !== null) return null;
-    const profile = await loadProfileRow(supabase, data.user.id);
-    return { userId: data.user.id, onboardingStep: profile.onboardingStep };
+    const userId = data.session?.user.id;
+    return userId === undefined ? null : { userId };
   } catch {
     return null;
   }

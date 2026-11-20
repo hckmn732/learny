@@ -7,13 +7,13 @@ import { describe, expect, it } from 'vitest';
 import { ROUTES, buildOpenApiDocument, serializeOpenApiDocument } from '../../src/index';
 
 const root = resolve(import.meta.dirname, '../../../..');
-const committed = readFileSync(resolve(root, 'apps/web/public/openapi.json'), 'utf8');
+const committed = readFileSync(resolve(root, 'apps/api/openapi.json'), 'utf8');
 const version = (
   JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as { version: string }
 ).version;
 
 describe('[SPEC-201] openapi', () => {
-  it('matches the committed apps/web/public/openapi.json (CA-6)', () => {
+  it('matches the committed apps/api/openapi.json (CA-6)', () => {
     const generated = serializeOpenApiDocument(buildOpenApiDocument(ROUTES, { version }));
     expect(generated).toBe(committed);
   });
@@ -33,7 +33,22 @@ describe('[SPEC-201] openapi', () => {
       const operation = document.paths[path]?.[route.method.toLowerCase()];
       expect(operation?.operationId, route.id).toBe(route.id);
       expect(operation?.security !== undefined, route.id).toBe(route.auth === 'user');
+      if (route.auth === 'user') {
+        expect(operation?.security, route.id).toEqual([{ bearerAuth: [] }, { cookieAuth: [] }]);
+      } else {
+        expect(operation?.security, route.id).toBeUndefined();
+      }
     }
+  });
+
+  it('[SPEC-1301] déclare les transports Bearer et cookie (CA-1)', () => {
+    const document = JSON.parse(committed) as {
+      components: { securitySchemes: Record<string, Record<string, unknown>> };
+    };
+    expect(document.components.securitySchemes).toMatchObject({
+      bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      cookieAuth: { type: 'apiKey', in: 'cookie', name: 'sb-access-token' },
+    });
   });
 
   it('describes errors as problem+json and the idempotency header', () => {

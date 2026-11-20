@@ -1,6 +1,5 @@
+import { fr } from '@learny/i18n/fr/gaps';
 import { PageHeader, Skeleton, SkeletonGroup, SkeletonStatRow, SkeletonText } from '@learny/ui';
-
-import { fr } from '../../../../../messages/fr/gaps';
 
 const t = fr.gaps;
 

@@ -2,9 +2,8 @@
 
 import { useRef, useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/module';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/module';
 
 const t = fr.module;
 

@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { AiCredentialProvider } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError, Select, TextField, cn } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 import { useCredentialQualification, type QualificationStatus } from './useCredentialQualification';

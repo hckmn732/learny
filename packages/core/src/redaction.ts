@@ -14,6 +14,7 @@ export const SENSITIVE_KEY_PATTERNS = [
   'apikey',
   'api_key',
   'authorization',
+  'x-learny-proxy-secret',
   'cookie',
   'set-cookie',
   'email',
@@ -33,7 +34,7 @@ const TOKEN =
   /\b(?:sk-[A-Za-z0-9_-]{8,}|whsec_[A-Za-z0-9_-]{8,}|sb_secret_[A-Za-z0-9_-]{8,}|ghp_[A-Za-z0-9]{8,}|eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,})\b/g;
 const AUTHORIZATION = /\b(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]+/gi;
 const KEY_VALUE =
-  /\b(password|passwd|secret|token|api[_-]?key|cookie|set-cookie|authorization|prompt|response|completion|contribution|apport|body)\b(\s*[:=]\s*)("[^"]*"|'[^']*'|[^\s,;]+)/gi;
+  /\b(password|passwd|secret|x-learny-proxy-secret|token|api[_-]?key|cookie|set-cookie|authorization|prompt|response|completion|contribution|apport|body)\b(\s*[:=]\s*)("[^"]*"|'[^']*'|[^\s,;]+)/gi;
 const LONG_SECRET = /\b[A-Za-z0-9_-]{40,}\b/g;
 
 /** True when a key names data that must never leave the process. */

@@ -1,8 +1,7 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/exercises';
 import { Button } from '@learny/ui';
-
-import { fr } from '../../messages/fr/exercises';
 
 const t = fr.exercises;
 

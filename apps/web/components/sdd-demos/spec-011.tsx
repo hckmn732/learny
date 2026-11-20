@@ -1,6 +1,7 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { CI_WORKFLOW, PR_TITLE_WORKFLOW } from '../../../../tools/ci/check-workflows.mjs';
 import { readCiConfig } from '../../lib/ci-config';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec011;

@@ -8,6 +8,30 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-1302': {
+    title: 'Migration terminée',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1302'),
+  },
+  'SPEC-1301': {
+    title: 'Client natif simulé',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1301'),
+  },
+  'SPEC-1203': {
+    title: 'Web sans dépendance serveur',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1203'),
+  },
+  'SPEC-1202': {
+    title: 'Écrans alimentés par l’API',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1202'),
+  },
+  'SPEC-1201': {
+    title: "Bascule de l'API",
+    load: () => import('../../../components/sdd-demos/spec-1201'),
+  },
   'SPEC-001': {
     title: 'Monorepo, application web minimale et socle de tests',
     load: () => import('../../../components/sdd-demos/spec-001'),
@@ -346,5 +370,47 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-807'),
+  },
+  'SPEC-1001': {
+    title: 'Piste de migration',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1001'),
+  },
+  'SPEC-1002': {
+    title: 'Paquets partagés',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1002'),
+  },
+  'SPEC-1003': {
+    title: 'Couche HTTP',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1003'),
+  },
+  'SPEC-1004': {
+    title: 'Table des routes',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1004'),
+  },
+  'SPEC-1101': {
+    title: 'API autonome',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1101'),
+  },
+  'SPEC-1102': {
+    title: 'Authentification multi-clients',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1102'),
+  },
+  'SPEC-1103': {
+    title: "Déploiement de l'API",
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-1103'),
   },
 };

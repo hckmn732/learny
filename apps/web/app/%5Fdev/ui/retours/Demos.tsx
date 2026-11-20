@@ -2,6 +2,7 @@
 
 import { Bell, ChevronDown, LogOut, Pause, SlidersHorizontal, TriangleAlert } from 'lucide-react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import {
   AlertDialog,
   Avatar,
@@ -39,7 +40,6 @@ import {
 } from '@learny/ui';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.retours;
 

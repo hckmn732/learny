@@ -1,10 +1,10 @@
+import { fr } from '@learny/i18n/fr/finalReview';
 import { ErrorState } from '@learny/ui';
 
 import { FinalReviewScreen } from '../../../../../components/final-review/FinalReviewScreen';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadFinalReviewPage } from '../../../../../lib/final-review-page';
 import { loadShellPage } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr/finalReview';
 
 export const dynamic = 'force-dynamic';
 

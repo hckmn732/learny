@@ -118,7 +118,7 @@ function operation(route: AnyRoute): JsonObject {
           },
         }),
     responses: { [String(route.successStatus)]: success, ...errorResponses(route) },
-    ...(route.auth === 'user' ? { security: [{ cookieAuth: [] }] } : {}),
+    ...(route.auth === 'user' ? { security: [{ bearerAuth: [] }, { cookieAuth: [] }] } : {}),
   };
   return op;
 }
@@ -143,6 +143,7 @@ export function buildOpenApiDocument(
     components: {
       schemas: { ProblemDetails: jsonSchema(ProblemDetails, 'output') },
       securitySchemes: {
+        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
         cookieAuth: { type: 'apiKey', in: 'cookie', name: 'sb-access-token' },
       },
     },

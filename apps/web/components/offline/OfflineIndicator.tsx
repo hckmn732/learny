@@ -3,8 +3,9 @@
 import { WifiOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/offline';
+
 import { useOnlineStatus } from '../../lib/offline/use-online-status';
-import { fr } from '../../messages/fr/offline';
 
 const t = fr.offline.indicator;
 

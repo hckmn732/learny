@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { SelfGrade } from '@learny/bricks/view';
 import {
   ReviewSummaryDtoSchema,
@@ -10,11 +11,10 @@ import {
   type ReviewAnswerInput,
   type ReviewSummaryDto,
 } from '@learny/contracts/review';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { BottomActionBar, EmptyState, ErrorState } from '@learny/ui';
 
-import { api, ApiError } from '../../lib/api-client';
 import { invalidateStudyProgress } from '../../lib/study-progress';
-import { fr } from '../../messages/fr/globalQuiz';
 
 import { GamePanel } from './GamePanel';
 import { GameRail } from './GameRail';

@@ -9,6 +9,15 @@ Toutes les évolutions notables de Learny sont consignées ici. Format [Keep a C
 - Référentiel Spec-Driven Development : vision, 177 règles métier, écrans, glossaire, architecture (vue d'ensemble, modèle de données, API, IA), conventions d'ingénierie, registre des ADR, catalogue de 132 spécifications en 10 phases, checkpoints CP-0 à CP-9, outillage `tools/sdd/` (boucle autonome, validation, preuves, suivi, audit), workflow CI initial.
 - Maquettes cliquables des 14 écrans (`design/maquettes/`) et spécification historique (`docs/legacy/specification-v0/`).
 
+### Séparation backend / frontend
+
+- `apps/api` devient le serveur Hono autonome des routes, des jobs, des webhooks et de l'IA ;
+  `apps/web` est un client pur de `@learny/api-client`.
+- Authentification par cookie ou Bearer, relai de même origine, paquets partagés et contrôle
+  permanent de la frontière serveur/client.
+- Rotation sans interruption de `API_PROXY_SECRET` avec une valeur précédente temporaire.
+- Documentation d'exploitation, de déploiement et de retour arrière du couple API + web.
+
 ## [v0.6.0] — 2026-11-14
 
 ### Ajouts

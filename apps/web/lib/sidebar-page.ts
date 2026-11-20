@@ -1,16 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import type { HeaderDto, SidebarDto } from '@learny/contracts';
-import { AppError } from '@learny/core';
-import {
-  createServiceContext,
-  getHeader,
-  getSidebar,
-  selectCurrentFormation,
-} from '@learny/services';
 
+import { apiErrorRequestId, isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { readPageSession } from './supabase/page';
 
@@ -23,28 +15,36 @@ export interface ShellPageResult {
   header: HeaderPageResult;
 }
 
-async function pageContext() {
+async function pageClient() {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  return createServiceContext({ userId: session.userId, requestId: randomUUID() });
+  return serverApi();
 }
 
-function failure(error: AppError): { ok: false; requestId?: string } {
-  return error.requestId === undefined ? { ok: false } : { ok: false, requestId: error.requestId };
+function failure(error: unknown): { ok: false; requestId?: string } {
+  const requestId = apiErrorRequestId(error);
+  if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+  return requestId === undefined ? { ok: false } : { ok: false, requestId };
 }
 
 /** Sidebar data of a connected page; a failure renders the sidebar error state with retry. */
 export async function loadSidebarPage(): Promise<SidebarPageResult> {
-  const ctx = await pageContext();
-  const result = await getSidebar(ctx);
-  return result.ok ? { ok: true, data: result.value } : failure(result.error);
+  const client = await pageClient();
+  try {
+    return { ok: true, data: await client.api.sidebarGet({}) };
+  } catch (error) {
+    return failure(error);
+  }
 }
 
 /** Header data of a connected page; a failure renders the account error state with retry. */
 export async function loadHeaderPage(): Promise<HeaderPageResult> {
-  const ctx = await pageContext();
-  const result = await getHeader(ctx);
-  return result.ok ? { ok: true, data: result.value } : failure(result.error);
+  const client = await pageClient();
+  try {
+    return { ok: true, data: await client.api.headerGet({}) };
+  } catch (error) {
+    return failure(error);
+  }
 }
 
 /**
@@ -52,11 +52,16 @@ export async function loadHeaderPage(): Promise<HeaderPageResult> {
  * same request and share the same learner session. Each failure keeps its own retry state.
  */
 export async function loadShellPage(): Promise<ShellPageResult> {
-  const ctx = await pageContext();
-  const [sidebar, header] = await Promise.all([getSidebar(ctx), getHeader(ctx)]);
+  const client = await pageClient();
+  const [sidebar, header] = await Promise.allSettled([
+    client.api.sidebarGet({}),
+    client.api.headerGet({}),
+  ]);
   return {
-    sidebar: sidebar.ok ? { ok: true, data: sidebar.value } : failure(sidebar.error),
-    header: header.ok ? { ok: true, data: header.value } : failure(header.error),
+    sidebar:
+      sidebar.status === 'fulfilled' ? { ok: true, data: sidebar.value } : failure(sidebar.reason),
+    header:
+      header.status === 'fulfilled' ? { ok: true, data: header.value } : failure(header.reason),
   };
 }
 
@@ -65,22 +70,32 @@ export async function loadShellPage(): Promise<ShellPageResult> {
  * page of SPEC-606 will replace the placeholder content while keeping this contract.
  */
 export async function loadSidebarForFormation(formationId: string): Promise<SidebarPageResult> {
-  const ctx = await pageContext();
-  const result = await selectCurrentFormation(ctx, formationId);
-  if (!result.ok && result.error.code === 'NOT_FOUND') notFound();
-  return result.ok ? { ok: true, data: result.value } : failure(result.error);
+  const client = await pageClient();
+  try {
+    return {
+      ok: true,
+      data: await client.api.sidebarUpdate({
+        body: { currentFormationId: formationId },
+      }),
+    };
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    return failure(error);
+  }
 }
 
 /** Same as `loadShellPage`, after selecting the formation of the current page (ADR-0075). */
 export async function loadShellForFormation(formationId: string): Promise<ShellPageResult> {
-  const ctx = await pageContext();
-  const [sidebar, header] = await Promise.all([
-    selectCurrentFormation(ctx, formationId),
-    getHeader(ctx),
+  const client = await pageClient();
+  const [sidebar, header] = await Promise.allSettled([
+    client.api.sidebarUpdate({ body: { currentFormationId: formationId } }),
+    client.api.headerGet({}),
   ]);
-  if (!sidebar.ok && sidebar.error.code === 'NOT_FOUND') notFound();
+  if (sidebar.status === 'rejected' && isApiError(sidebar.reason, 'NOT_FOUND')) notFound();
   return {
-    sidebar: sidebar.ok ? { ok: true, data: sidebar.value } : failure(sidebar.error),
-    header: header.ok ? { ok: true, data: header.value } : failure(header.error),
+    sidebar:
+      sidebar.status === 'fulfilled' ? { ok: true, data: sidebar.value } : failure(sidebar.reason),
+    header:
+      header.status === 'fulfilled' ? { ok: true, data: header.value } : failure(header.reason),
   };
 }

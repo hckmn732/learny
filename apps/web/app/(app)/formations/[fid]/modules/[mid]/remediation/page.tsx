@@ -1,11 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
-
-import { createServiceContext, getRemediation } from '@learny/services';
 
 import { RemediationScreen } from '../../../../../../../components/remediation/RemediationScreen';
 import { AppShell } from '../../../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../../lib/supabase/page';
@@ -21,14 +18,18 @@ export default async function RemediationPage({ params }: RemediationPageProps) 
   const { fid, mid } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, remediation] = await Promise.all([
-    loadShellForFormation(fid),
-    getRemediation(ctx, mid),
-  ]);
-  if (!remediation.ok) {
-    if (remediation.error.code === 'NOT_FOUND') notFound();
-    throw remediation.error;
+  const client = await serverApi();
+  let shell;
+  let remediation;
+  try {
+    [shell, remediation] = await Promise.all([
+      loadShellForFormation(fid),
+      client.api.getRemediation({ params: { mid } }),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
   return (
     <AppShell
@@ -39,10 +40,10 @@ export default async function RemediationPage({ params }: RemediationPageProps) 
     >
       <RemediationScreen
         formationId={fid}
-        initial={remediation.value}
+        initial={remediation}
         moduleId={mid}
-        modulePosition={remediation.value.module.position}
-        moduleTitle={remediation.value.module.title}
+        modulePosition={remediation.module.position}
+        moduleTitle={remediation.module.title}
       />
     </AppShell>
   );

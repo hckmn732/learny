@@ -1,0 +1,55 @@
+{
+  "name": "@learny/api-routes",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./coverage": "./src/coverage.ts",
+    "./deps/env": "./src/deps/env.ts",
+    "./deps/health": "./src/deps/health.ts",
+    "./deps/health-database": "./src/deps/health-database.ts",
+    "./deps/onboarding-ticket": "./src/deps/onboarding-ticket.ts",
+    "./deps/personal-data-deps": "./src/deps/personal-data-deps.ts",
+    "./deps/push-deps": "./src/deps/push-deps.ts",
+    "./deps/quiz-grade-registry": "./src/deps/quiz-grade-registry.ts",
+    "./deps/resource-deps": "./src/deps/resource-deps.ts",
+    "./deps/sdd-pages": "./src/deps/sdd-pages.ts",
+    "./deps/sentry": "./src/deps/sentry.ts",
+    "./deps/supabase-server": "./src/deps/supabase-server.ts",
+    "./special/csp-nonce": "./src/special/csp-nonce.ts",
+    "./special/unsubscribe-page": "./src/special/unsubscribe-page.ts"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/lint": "^21.2.4",
+    "@learny/automations": "workspace:*",
+    "@learny/config": "workspace:*",
+    "@learny/contracts": "workspace:*",
+    "@learny/core": "workspace:*",
+    "@learny/db": "workspace:*",
+    "@learny/http": "workspace:*",
+    "@learny/i18n": "workspace:*",
+    "@learny/ingestion": "workspace:*",
+    "@learny/jobs": "workspace:*",
+    "@learny/learning-engine": "workspace:*",
+    "@learny/llm": "workspace:*",
+    "@learny/notifications": "workspace:*",
+    "@learny/services": "workspace:*",
+    "@learny/tutor": "workspace:*",
+    "@learny/ui": "workspace:*",
+    "@sentry/nextjs": "^11.12.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "inngest": "^4.26.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@learny/testing": "workspace:*",
+    "vitest": "^5.1.0"
+  }
+}

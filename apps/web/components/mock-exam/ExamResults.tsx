@@ -3,9 +3,8 @@
 import { useState } from 'react';
 
 import type { ExamResultDto, ExamReviewFilter } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/mockExam';
 import { Breadcrumb, cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/mockExam';
 
 const t = fr.mockExam;
 

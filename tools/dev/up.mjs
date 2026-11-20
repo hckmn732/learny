@@ -52,3 +52,4 @@ console.log(`  Postgres      ${urls.postgres}`);
 console.log(`  Inngest       ${urls.inngest}`);
 console.log(`  Mailpit       ${urls.mailpit} (SMTP 127.0.0.1:1025)`);
 console.log(`  Web           ${urls.web}`);
+console.log(`  API           ${urls.api} (démarrée par pnpm dev)`);

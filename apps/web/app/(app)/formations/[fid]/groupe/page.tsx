@@ -1,10 +1,10 @@
+import { fr } from '@learny/i18n/fr/group';
 import { PageHeader } from '@learny/ui';
 
 import { CreateGroupCard } from '../../../../../components/group/CreateGroupCard';
 import { GroupActions } from '../../../../../components/group/GroupActions';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGroupPage } from '../../../../../lib/group-page';
-import { fr } from '../../../../../messages/fr/group';
 
 export const dynamic = 'force-dynamic';
 

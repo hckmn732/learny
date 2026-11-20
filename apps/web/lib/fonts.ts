@@ -1,21 +1,23 @@
 // Product fonts (ADR-0059): Inter for text, Space Grotesk for titles, self-hosted by next/font.
 // `adjustFontFallback` keeps CLS below 0.1 when a font cannot be downloaded (SPEC-301, CL-4).
-import { Inter, Space_Grotesk } from 'next/font/google';
+import localFont from 'next/font/local';
 
-export const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
+export const inter = localFont({
+  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+  weight: '100 900',
+  style: 'normal',
   display: 'swap',
   variable: '--font-inter',
-  adjustFontFallback: true,
+  adjustFontFallback: 'Arial',
 });
 
-export const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['600'],
+export const spaceGrotesk = localFont({
+  src: '../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2',
+  weight: '300 700',
+  style: 'normal',
   display: 'swap',
   variable: '--font-space-grotesk',
-  adjustFontFallback: true,
+  adjustFontFallback: 'Arial',
 });
 
 export const fontVariables = `${inter.variable} ${spaceGrotesk.variable}`;

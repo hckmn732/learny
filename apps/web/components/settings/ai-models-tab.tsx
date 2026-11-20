@@ -2,6 +2,7 @@
 
 import { useCallback, useId, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import type {
   AiCredentialProvider,
   AiModelsState,
@@ -12,7 +13,6 @@ import type {
 } from '@learny/contracts';
 import { Badge, Button, Card, ErrorState, FormError, Select, TextField } from '@learny/ui';
 
-import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/bricks-settings';
 
 const t = fr.settings.aiModels;

@@ -10,7 +10,7 @@ services:
       - inngest
       - dev
       - -u
-      - ${INNGEST_WEB_URL:-http://host.docker.internal:3000/api/inngest}
+      - ${INNGEST_WEB_URL:-http://host.docker.internal:3001/api/inngest}
     ports:
       - '8288:8288'
     extra_hosts:

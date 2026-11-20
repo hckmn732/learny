@@ -10,20 +10,10 @@ import {
   RESOURCE_RULES,
   THINKING_EFFORT_BY_TASK,
 } from '@learny/config';
+import { fr } from '@learny/i18n/fr/sdd';
 
-import {
-  DEMO_INVALID_PRODUCTION_ENV,
-  DEMO_LOCAL_ENV,
-  DEMO_SECRET_KEYS,
-} from '../../lib/sdd-config-demo';
-import {
-  SERVER_VARIABLE_COUNT,
-  configurationErrorNames,
-  getPublicEnv,
-  getServerEnv,
-  secretPresence,
-} from '../../lib/server-env';
-import { fr } from '../../messages/fr/sdd';
+import { serverApi } from '../../lib/api/server-client';
+import { DEMO_SECRET_KEYS } from '../../lib/sdd-config-demo';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec009;
@@ -32,10 +22,10 @@ const cell = 'py-2 pr-4 align-top';
 const region = 'overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2';
 
 const MODES = [
-  { id: 'llm', label: t.modes.llm, key: 'LLM_MODE' },
-  { id: 'stripe', label: t.modes.stripe, key: 'STRIPE_MODE' },
-  { id: 'email', label: t.modes.email, key: 'EMAIL_MODE' },
-  { id: 'push', label: t.modes.push, key: 'PUSH_MODE' },
+  { id: 'llm', label: t.modes.llm },
+  { id: 'stripe', label: t.modes.stripe },
+  { id: 'email', label: t.modes.email },
+  { id: 'push', label: t.modes.push },
 ] as const;
 
 const FAMILIES = [
@@ -130,12 +120,15 @@ const FAMILIES = [
   },
 ] as const;
 
-export default function Spec009Demo() {
-  const env = getServerEnv();
-  const publicEnv = getPublicEnv();
-  // Presence only: the simulated values are never rendered (EF-7).
-  const simulated = secretPresence(DEMO_LOCAL_ENV, DEMO_SECRET_KEYS);
-  const invalidFields = configurationErrorNames(DEMO_INVALID_PRODUCTION_ENV);
+export default async function Spec009Demo() {
+  const data = (await (await serverApi()).api.devSddSpec009Demo({})) as {
+    appEnv: string;
+    modes: { llm: string; stripe: string; email: string; push: string };
+    publicConfigured: Record<string, boolean>;
+    serverCount: number;
+    simulated: Record<string, boolean>;
+    invalidFields: string[];
+  };
 
   return (
     <>
@@ -143,7 +136,7 @@ export default function Spec009Demo() {
         <dl className="grid grid-cols-[auto_1fr] gap-x-4">
           <dt className="font-mono">{t.environment.appEnv}</dt>
           <dd data-testid="spec-009-app-env" className="font-mono">
-            {env.APP_ENV}
+            {data.appEnv}
           </dd>
           <dt>{t.environment.counts}</dt>
           <dd>
@@ -151,7 +144,7 @@ export default function Spec009Demo() {
               {`${t.environment.publicCount} : `}
               <span data-testid="spec-009-public-count">{PUBLIC_ENV_KEYS.length}</span>
               {` · ${t.environment.serverCount} : `}
-              <span data-testid="spec-009-server-count">{SERVER_VARIABLE_COUNT}</span>
+              <span data-testid="spec-009-server-count">{data.serverCount}</span>
             </span>
           </dd>
         </dl>
@@ -175,7 +168,7 @@ export default function Spec009Demo() {
                 <tr key={name} data-testid={`spec-009-secret-${name.toLowerCase()}`}>
                   <td className={`${cell} font-mono break-all`}>{name}</td>
                   <td className={cell}>
-                    {simulated[name] ? t.environment.configured : t.environment.absent}
+                    {data.simulated[name] ? t.environment.configured : t.environment.absent}
                   </td>
                 </tr>
               ))}
@@ -186,7 +179,7 @@ export default function Spec009Demo() {
         <h3 className="mt-6 font-semibold">{t.environment.invalid}</h3>
         <p className="mt-1 text-sm">{t.environment.invalidIntro}</p>
         <ul data-testid="spec-009-invalid" className="mt-2 break-all font-mono text-sm">
-          {invalidFields.map((name) => (
+          {data.invalidFields.map((name) => (
             <li key={name} data-testid="spec-009-invalid-field">
               {name}
             </li>
@@ -215,7 +208,7 @@ export default function Spec009Demo() {
                     data-testid={`spec-009-mode-${mode.id}`}
                     className={`${cell} font-mono break-all`}
                   >
-                    {env[mode.key]}
+                    {data.modes[mode.id]}
                   </td>
                 </tr>
               ))}
@@ -244,7 +237,9 @@ export default function Spec009Demo() {
                 <tr key={key} data-testid={`spec-009-public-${key.toLowerCase()}`}>
                   <td className={`${cell} font-mono break-all`}>{key}</td>
                   <td className={cell}>
-                    {publicEnv[key] === undefined ? t.environment.absent : t.environment.configured}
+                    {data.publicConfigured[key] === true
+                      ? t.environment.configured
+                      : t.environment.absent}
                   </td>
                 </tr>
               ))}

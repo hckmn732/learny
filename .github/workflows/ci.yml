@@ -9,7 +9,8 @@ name: CI
 
 on:
   push:
-    branches: [main, 'spec/**', 'fix/**', 'release/**']
+    # La piste migration est validée par la CI avant les previews API + web de SPEC-1103.
+    branches: [main, migration, 'spec/**', 'fix/**', 'release/**']
   pull_request:
   workflow_dispatch:
     inputs:
@@ -147,9 +148,20 @@ jobs:
           restore-keys: |
             turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - run: pnpm install --frozen-lockfile
+      - name: Analyser apps/api
+        run: |
+          pnpm --filter @learny/api lint
+          pnpm --filter @learny/api typecheck
+          pnpm --filter @learny/api build
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
+      - name: Construire l'image API et contrôler la pile auto-hébergée
+        run: |
+          docker build -f docker/api.Dockerfile \
+            --build-arg "GIT_COMMIT=${GITHUB_SHA}" \
+            -t "learny-api:${GITHUB_SHA}" .
+          node tools/docker/check-selfhost.mjs --static
       - name: Tests unitaires avec couverture
         run: pnpm test:unit --coverage
       - name: Publier les rapports unitaires

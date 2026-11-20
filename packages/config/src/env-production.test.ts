@@ -6,6 +6,7 @@ import { EnvConfigError } from './env-shared';
 /** learny-test-only: complete production environment, format-valid but without any real secret. */
 const PRODUCTION_ENV: Record<string, string> = {
   APP_ENV: 'production',
+  API_INTERNAL_URL: 'https://api.learny.example',
   NEXT_PUBLIC_APP_URL: 'https://learny.example',
   NEXT_PUBLIC_SUPABASE_URL: 'https://learny-test-only.supabase.co',
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon-learni-test-only',

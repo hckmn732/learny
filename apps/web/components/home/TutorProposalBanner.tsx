@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 
 import type { AutomationActionItem } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/home';
 import { Button, Icon, toast, cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/home';
 
 import {
   proposalErrorMessage,

@@ -1,4 +1,5 @@
 import { isActiveProgramme } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/programme';
 
 import { ProgrammeGantt } from '../../../../../components/programme/ProgrammeGantt';
 import { ProgrammeModuleCard } from '../../../../../components/programme/ProgrammeModuleCard';
@@ -6,7 +7,6 @@ import { ProgrammeProposal } from '../../../../../components/programme/Programme
 import { ProgrammeStats } from '../../../../../components/programme/ProgrammeStats';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadProgrammePage } from '../../../../../lib/programme-page';
-import { fr } from '../../../../../messages/fr/programme';
 
 export const dynamic = 'force-dynamic';
 

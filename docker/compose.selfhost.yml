@@ -1,7 +1,7 @@
 # Pile auto-hébergée de Learny (SPEC-012, ADR-0053, ADR-0227, ADR-0228).
 #
 # Elle n'est pas la production gérée de la V1 : c'est une option de déploiement complète
-# (web, worker, Supabase auto-hébergé, Inngest auto-hébergé). Toutes les images tierces sont
+# (web, api, Supabase auto-hébergé, Inngest auto-hébergé). Toutes les images tierces sont
 # épinglées ; les secrets viennent de `.env.selfhost` (non versionné) et les substitutions
 # obligatoires échouent explicitement quand une valeur manque.
 #
@@ -21,6 +21,9 @@ x-app-environment: &app-environment
   LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-dev}
   GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+  API_INTERNAL_URL: http://api:3001
+  API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
+  LEARNY_API_ROLE: all
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
@@ -211,7 +214,7 @@ services:
       - --port
       - '8288'
       - --sdk-url
-      - http://worker:3001/api/inngest
+      - http://api:3001/api/inngest
       - --event-key
       - ${INNGEST_EVENT_KEY:?INNGEST_EVENT_KEY est obligatoire}
       - --signing-key
@@ -233,11 +236,11 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  worker:
-    image: ${LEARNY_WORKER_IMAGE:-learny-worker:dev}
+  api:
+    image: ${LEARNY_API_IMAGE:-learny-api:dev}
     build:
       context: ..
-      dockerfile: docker/worker.Dockerfile
+      dockerfile: docker/api.Dockerfile
       args:
         APP_VERSION: ${APP_VERSION:-dev}
         GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
@@ -251,6 +254,10 @@ services:
     environment:
       <<: *app-environment
       PORT: '3001'
+      API_INTERNAL_URL: http://api:3001
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
+      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
+      LEARNY_API_ROLE: all
     expose:
       - '3001'
     depends_on:
@@ -259,7 +266,7 @@ services:
       migrate:
         condition: service_completed_successfully
     healthcheck:
-      test: ['CMD', 'node', '/app/healthcheck.mjs']
+      test: ['CMD', 'node', '/app/healthcheck-api.mjs']
       interval: 10s
       timeout: 5s
       retries: 6
@@ -321,6 +328,8 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *app-environment
+      API_INTERNAL_URL: http://api:3001
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
     ports:
       - '${LEARNY_WEB_PORT:-8080}:3000'
     depends_on:
@@ -335,6 +344,8 @@ services:
       storage:
         condition: service_healthy
       inngest:
+        condition: service_healthy
+      api:
         condition: service_healthy
     healthcheck:
       test: ['CMD', 'node', '/app/healthcheck-web.mjs']
@@ -371,7 +382,7 @@ networks:
   # Data plane: no route to the Internet for the database, Auth, Storage and PostgREST.
   backend:
     internal: true
-  # Only web and worker (LLM, e-mail, webhooks) may reach the Internet.
+  # Only web and api (LLM, e-mail, webhooks) may reach the Internet.
   egress:
 
 volumes:

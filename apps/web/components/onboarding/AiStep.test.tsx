@@ -15,7 +15,7 @@ const apiMock = vi.hoisted(() => ({
   meAiTaskModelsUpdate: vi.fn(),
   meOnboardingUpdate: vi.fn(),
 }));
-vi.mock('../../lib/api-client', () => ({ api: apiMock }));
+vi.mock('@learny/api-client', () => ({ api: apiMock }));
 
 beforeEach(() => {
   router.push.mockReset();

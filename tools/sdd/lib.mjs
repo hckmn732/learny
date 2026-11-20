@@ -4,13 +4,23 @@ import { execSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { indexCatalog, normalizeState } from './core.mjs';
+import { activeTrack, indexCatalog, normalizeState, specTrack, trackConfig } from './core.mjs';
 
 export {
-  DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, displayStatus, emptySpecState, indexCatalog, isBlockedTransitively,
-  nextAction, nextActionJson, normalizeState, phaseUnlocked, progressSummary, readySpecs, renderProgressMarkdown,
-  e2eVerdict, summarizePlaywright, visualVerdict,
+  DEFAULT_TRACK, DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, activeTrack, displayStatus, emptySpecState, indexCatalog,
+  isBlockedTransitively, nextAction, nextActionJson, nextAdrNumber, normalizeState, phaseOf, phaseUnlocked, progressSummary,
+  readySpecs, renderProgressMarkdown, specTrack, trackConfig, trackOf, e2eVerdict, summarizePlaywright, visualVerdict,
 } from './core.mjs';
+
+/** Piste active de la commande : SDD_TRACK l'emporte sur `catalog.activeTrack` (ADR-1006). */
+export function currentTrack(catalog) {
+  return activeTrack(catalog, process.env.SDD_TRACK);
+}
+
+/** Branche de base de la piste d'une spécification (départ, fusion et push). */
+export function baseBranchOf(catalog, spec) {
+  return trackConfig(catalog, specTrack(catalog, spec)).baseBranch;
+}
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const ROOT = process.env.SDD_ROOT ? path.resolve(process.env.SDD_ROOT) : REPO_ROOT;

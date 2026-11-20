@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-18T17:10:02.633Z",
+  "updatedAt": "2026-11-19T18:02:35.567Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6309,6 +6309,290 @@
       "commit": null,
       "lastError": null,
       "validations": {}
+    },
+    "SPEC-1001": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-18T18:25:09.420Z",
+      "completedAt": "2026-11-18T19:32:58.740Z",
+      "branch": "spec/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-s",
+      "commit": "20b47c93",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-18T19:27:00.336Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-18T19:27:24.763Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-18T19:28:07.865Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-18T19:29:21.694Z",
+          "details": "16 test(s) [SPEC-1001] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-18T19:29:32.067Z",
+          "details": "8 test(s) [SPEC-1001] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.663Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.663Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-18T19:30:10.675Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-1002": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-18T19:49:41.877Z",
+      "completedAt": "2026-11-18T22:51:42.319Z",
+      "branch": "spec/SPEC-1002-paquets-partages-client-d-api-logique-pu",
+      "commit": "f48062ef",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-18T22:51:19.348Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-18T22:51:25.234Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-18T22:44:36.467Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-18T22:49:09.499Z",
+          "details": "17 test(s) [SPEC-1002] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-18T22:49:12.885Z",
+          "details": "1 test(s) [SPEC-1002] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-18T22:50:05.509Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-18T22:50:05.509Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-18T22:51:25.661Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-1003": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-18T22:57:52.370Z",
+      "completedAt": "2026-11-18T23:59:40.193Z",
+      "branch": "spec/SPEC-1003-couche-http-independante-du-framework",
+      "commit": "2d55c73e",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-18T23:59:22.623Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-18T23:59:28.509Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-18T23:45:44.477Z",
+          "details": ""
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-18T23:59:28.877Z",
+          "details": "5/5 critères ✅"
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-18T23:57:45.792Z",
+          "details": "5 test(s) [SPEC-1003] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-18T23:50:57.326Z",
+          "details": "1 test(s) [SPEC-1003] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-18T23:51:50.421Z",
+          "details": "3 réussi(s), 0 échec(s), 6 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-18T23:51:50.421Z",
+          "details": "2 test(s) @visual réussi(s) (mode demo)"
+        }
+      }
+    },
+    "SPEC-1004": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-19T11:51:59.469Z",
+      "completedAt": "2026-11-19T18:02:35.562Z",
+      "branch": "spec/SPEC-1004-table-d-implementation-des-routes",
+      "commit": "fbfb82c6",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-19T17:53:33.013Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-19T17:53:43.028Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-19T14:32:11.219Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-19T14:48:51.451Z",
+          "details": "13 test(s) [SPEC-1004] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-19T14:34:17.709Z",
+          "details": "4 test(s) [SPEC-1004] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-19T14:51:30.503Z",
+          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-19T14:51:30.503Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-19T17:53:43.794Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-1101": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1102": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1103": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1201": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1202": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1203": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1301": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-1302": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
     }
   },
   "checkpoints": {
@@ -6367,6 +6651,30 @@
       "report": null
     },
     "CP-9": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-10": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-11": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-12": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-13": {
       "status": "pending",
       "at": null,
       "tag": null,

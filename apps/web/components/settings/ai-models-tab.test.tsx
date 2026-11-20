@@ -1,10 +1,9 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { api } from '@learny/api-client';
 import type { AiModelsState } from '@learny/contracts';
 import { cleanup, renderComponent, screen, within } from '@learny/testing/render';
-
-import { api } from '../../lib/api-client';
 
 import { AiModelsTab } from './ai-models-tab';
 

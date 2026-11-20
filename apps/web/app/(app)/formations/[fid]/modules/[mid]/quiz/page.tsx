@@ -1,15 +1,14 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getActiveProgramme } from '@learny/services';
+import { isActiveProgramme } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/quiz';
 
 import { QuizScreen } from '../../../../../../../components/quiz/QuizScreen';
 import { AppShell } from '../../../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../../lib/supabase/page';
-import { fr } from '../../../../../../../messages/fr/quiz';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,17 +24,22 @@ export default async function QuizPage({ params }: QuizPageProps) {
   const { fid, mid } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, programme] = await Promise.all([
-    loadShellForFormation(fid),
-    getActiveProgramme(ctx, fid),
-  ]);
-  if (!programme.ok) {
-    if (programme.error.code === 'NOT_FOUND') notFound();
-    if (programme.error.code === 'CONFLICT') redirect(`/formations/${fid}/programme`);
-    throw programme.error;
+  const client = await serverApi();
+  let shell;
+  let programme;
+  try {
+    [shell, programme] = await Promise.all([
+      loadShellForFormation(fid),
+      client.api.programmeGet({ params: { fid }, query: {} }),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    if (isApiError(error, 'CONFLICT')) redirect(`/formations/${fid}/programme`);
+    throw error;
   }
-  const selected = programme.value.modules.find((entry) => entry.id === mid);
+  if (!isActiveProgramme(programme)) redirect(`/formations/${fid}/programme`);
+  const selected = programme.modules.find((entry) => entry.id === mid);
   if (selected === undefined) notFound();
   const programmeHref = `/formations/${encodeURIComponent(fid)}/programme`;
   const moduleHref = `/formations/${encodeURIComponent(fid)}/modules/${encodeURIComponent(mid)}`;

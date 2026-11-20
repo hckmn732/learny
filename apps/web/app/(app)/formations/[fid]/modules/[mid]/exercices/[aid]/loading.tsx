@@ -1,4 +1,4 @@
-import { fr } from '../../../../../../../../messages/fr/exercises';
+import { fr } from '@learny/i18n/fr/exercises';
 
 const t = fr.exercises;
 

@@ -1,9 +1,3 @@
-// Signed onboarding step ticket (SPEC-602 ET-3, ADR-0160).
-//
-// The proxy may trust the step for 60 seconds without reading `profiles`: the cookie carries the
-// user, the step and the issue instant, signed with the application encryption secret. A forged or
-// expired ticket is ignored. `PATCH /me/onboarding` expires it explicitly, so a step change is
-// visible on the very next navigation.
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
 import { ONBOARDING_STEP_VALUES, type OnboardingStep } from '@learny/contracts/me';
@@ -12,11 +6,8 @@ export const ONBOARDING_TICKET_COOKIE = 'learny_ob';
 export const ONBOARDING_TICKET_TTL_MS = 60_000;
 
 interface TicketPayload {
-  /** User identifier. */
   u: string;
-  /** Onboarding step. */
   s: OnboardingStep;
-  /** Issue instant, Unix milliseconds. */
   t: number;
 }
 
@@ -39,25 +30,22 @@ function isStep(value: unknown): value is OnboardingStep {
   return typeof value === 'string' && (ONBOARDING_STEP_VALUES as readonly string[]).includes(value);
 }
 
-/** Creates the cookie value; `null` when the application has no encryption secret. */
 export function createOnboardingTicket(
   input: { userId: string; step: OnboardingStep; now: Date },
   key = secret(),
 ): string | null {
   if (key === null) return null;
-  const payload: TicketPayload = {
-    u: input.userId,
-    s: input.step,
-    t: input.now.getTime(),
-  };
-  const encoded = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64url');
+  const encoded = Buffer.from(
+    JSON.stringify({
+      u: input.userId,
+      s: input.step,
+      t: input.now.getTime(),
+    } satisfies TicketPayload),
+    'utf8',
+  ).toString('base64url');
   return `${encoded}.${signature(encoded, key)}`;
 }
 
-/**
- * Verifies a ticket for `userId` at `now`. Returns `null` for a missing, malformed, expired or
- * foreign ticket: the caller then reads the profile, which stays the source of truth.
- */
 export function readOnboardingTicket(
   value: string | undefined,
   input: { userId: string; now: Date },

@@ -2,12 +2,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { api, ApiError } from '@learny/api-client';
 import type { AutomationActionItem } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/home';
 import { cleanup, renderComponent, screen, waitFor, within } from '@learny/testing/render';
 import { ToastProvider, clearToasts } from '@learny/ui';
-
-import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/home';
 
 import { TutorActivityPanel } from './TutorActivityCard';
 

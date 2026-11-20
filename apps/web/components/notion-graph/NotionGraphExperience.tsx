@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import type { NotionGraphColorMode, NotionGraphDto, NotionGraphNode } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/notionGraph';
 import { PageHeader, ResponsivePanel, SegmentedControl, useBreakpoint } from '@learny/ui';
 
 import {
@@ -19,7 +20,6 @@ import {
   type GraphViewport,
 } from '../../lib/notion-graph/pan-zoom';
 import { searchGraphNodes } from '../../lib/notion-graph/search';
-import { fr } from '../../messages/fr/notionGraph';
 
 import { GraphDetail } from './GraphDetail';
 import { GraphList } from './GraphList';

@@ -30,7 +30,10 @@ Avec Claude Code : `/sdd-loop` (boucle complète jusqu'à `v2.0.0`) ou `/sdd-nex
 | [`progress/`](progress) | suivi généré : `PROGRESS.md`, `state.json`, anomalies, blocages, audit |
 | [`evidence/`](evidence) | preuves de validation par spécification et par checkpoint |
 
-Le code applicatif (`apps/`, `packages/`, `supabase/`) est créé par les spécifications, à partir de SPEC-001.
+Les applications livrées sont `apps/api` (backend Hono, propriétaire de la base, de l'IA, des
+jobs et des webhooks) et `apps/web` (Next.js, client pur de l'API). Les contrats HTTP, le client
+typé, la logique pure, les messages et les jetons sont partagés par `packages/*` ; un futur
+`apps/mobile` s'appuiera sur la même API sans dépendre du code serveur (ADR-1001 à ADR-1007).
 
 ## Phases et versions
 
@@ -46,6 +49,7 @@ Le code applicatif (`apps/`, `packages/`, `supabase/`) est créé par les spéci
 | P7 | Révisions, agenda, engagement et réglages | CP-7 | v0.7.0 |
 | P8 | Plateforme, qualité et livraison V1 | CP-8 | **v1.0.0** |
 | P9 | V2 | CP-9 | **v2.0.0** |
+| P10 à P13 | Séparation backend / frontend et clients multiples | CP-10 à CP-13 | tags de checkpoint |
 
 ## Voir les maquettes
 
@@ -58,14 +62,19 @@ Prérequis : Node 24, pnpm 10, Docker Engine/Compose et Supabase CLI 2. Copier `
 ```bash
 pnpm install
 pnpm dev:up        # Supabase local, Inngest Dev Server et Mailpit
-pnpm dev:check     # un état par service : supabase, postgres, inngest, mailpit, web
-pnpm dev           # application web sur http://127.0.0.1:3000
+pnpm dev:check     # un état par service : supabase, postgres, inngest, mailpit, web, API
+pnpm dev           # web sur :3000 et API Hono sur :3001
 pnpm dev:down      # arrêt sans supprimer les volumes
 ```
+
+La commande `pnpm dev` démarre les deux applications par Turborepo. Le navigateur reste sur
+`:3000`; `apps/web/proxy.ts` relaie `/api/*` vers `apps/api` sur `:3001` avec les variables
+`API_INTERNAL_URL` et `API_PROXY_SECRET`.
 
 | Service | URL locale |
 |---|---|
 | Application web | http://127.0.0.1:3000 |
+| API backend / jobs | http://127.0.0.1:3001 (`LEARNY_API_ROLE=all`) |
 | Supabase API / Studio | http://127.0.0.1:54321 · http://127.0.0.1:54323 |
 | Postgres | `postgresql://postgres:postgres@127.0.0.1:54322/postgres` |
 | Inngest Dev Server | http://127.0.0.1:8288 |
@@ -78,7 +87,11 @@ pnpm dev:down      # arrêt sans supprimer les volumes
 
 ## Socle technique
 
-Node 24 LTS, pnpm, Turborepo, TypeScript strict, Next.js (App Router, React 19, Tailwind 4), Supabase (Postgres + pgvector, Auth, Storage, RLS), Drizzle, Inngest, AI SDK (Claude par tâche, clé personnelle chiffrée), Voyage, Resend, Web Push, Stripe, Sentry, Vitest, Playwright, Docker pour le développement et l'auto-hébergement. Détails et justifications : [`docs/architecture/overview.md`](docs/architecture/overview.md) et le registre des ADR.
+Node 24 LTS, pnpm, Turborepo, TypeScript strict, Next.js (App Router, React 19, Tailwind 4) et
+Hono 4 pour deux applications séparées, Supabase (Postgres + pgvector, Auth, Storage, RLS),
+Drizzle, Inngest, AI SDK (Claude par tâche, clé personnelle chiffrée), Voyage, Resend, Web Push,
+Stripe, Sentry, Vitest, Playwright et Docker. Détails et justifications :
+[`docs/architecture/overview.md`](docs/architecture/overview.md) et le registre des ADR.
 
 ## Dépôt distant
 

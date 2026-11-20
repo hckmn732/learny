@@ -1,7 +1,6 @@
-import { sanitizeSnippet } from '@learny/db';
+import { fr } from '@learny/i18n/fr/sdd';
 
 import { loadSpec112Demo, type Spec112Data } from '../../app/%5Fdev/sdd/spec-112-data';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec112;
@@ -74,7 +73,7 @@ function Search({ data }: Readonly<{ data: Spec112Data }>) {
                       {item.title}
                     </a>
                     <p className="mt-1 text-sm" data-testid="spec-112-result-snippet">
-                      {sanitizeSnippet(item.snippet)}
+                      {item.snippet}
                     </p>
                   </li>
                 ))}

@@ -26,6 +26,21 @@ importers:
       '@eslint/js':
         specifier: ^9.39.5
         version: 9.39.5
+      '@learny/automations':
+        specifier: workspace:*
+        version: link:packages/automations
+      '@learny/http':
+        specifier: workspace:*
+        version: link:packages/http
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:packages/ingestion
+      '@learny/jobs':
+        specifier: workspace:*
+        version: link:packages/jobs
+      '@learny/services':
+        specifier: workspace:*
+        version: link:packages/services
       '@lhci/cli':
         specifier: ^0.16.1
         version: 0.16.1(@types/node@24.19.2)(ajv@8.20.0)
@@ -50,6 +65,9 @@ importers:
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
+      esbuild:
+        specifier: 0.28.2
+        version: 0.28.2
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@2.7.0)
@@ -74,9 +92,6 @@ importers:
       lint-staged:
         specifier: ^17.6.0
         version: 17.6.0
-      next-test-api-route-handler:
-        specifier: ^5.0.7
-        version: 5.0.7(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))
       prettier:
         specifier: ^3.10.0
         version: 3.10.0
@@ -102,6 +117,61 @@ importers:
         specifier: ^2.9.1
         version: 2.9.1
 
+  apps/api:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^2.1.7
+        version: 2.1.7(hono@4.13.18)
+      '@learny/api-routes':
+        specifier: workspace:*
+        version: link:../../packages/api-routes
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@learny/http':
+        specifier: workspace:*
+        version: link:../../packages/http
+      '@learny/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
+      '@learny/services':
+        specifier: workspace:*
+        version: link:../../packages/services
+      '@sentry/node':
+        specifier: ^11.12.0
+        version: 11.12.0(rollup@4.68.2)
+      hono:
+        specifier: ^4.13.18
+        version: 4.13.18
+      inngest:
+        specifier: ^4.26.2
+        version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(express@4.22.3)(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
+    devDependencies:
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@learny/notifications':
+        specifier: workspace:*
+        version: link:../../packages/notifications
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../../packages/testing
+      '@supabase/supabase-js':
+        specifier: ^2.119.0
+        version: 2.119.0(@opentelemetry/api@1.10.0)
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+
   apps/web:
     dependencies:
       '@ai-sdk/react':
@@ -113,12 +183,18 @@ importers:
       '@commitlint/lint':
         specifier: ^21.2.4
         version: 21.2.4
+      '@fontsource-variable/inter':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource-variable/space-grotesk':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@hookform/resolvers':
         specifier: ^7.0.6
         version: 7.0.6(@standard-schema/spec@1.1.0)(ajv-formats@3.0.1(ajv@8.20.0))(ajv@8.20.0)(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
-      '@learny/automations':
+      '@learny/api-client':
         specifier: workspace:*
-        version: link:../../packages/automations
+        version: link:../../packages/api-client
       '@learny/bricks':
         specifier: workspace:*
         version: link:../../packages/bricks
@@ -131,30 +207,15 @@ importers:
       '@learny/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@learny/db':
+      '@learny/domain':
         specifier: workspace:*
-        version: link:../../packages/db
-      '@learny/ingestion':
+        version: link:../../packages/domain
+      '@learny/i18n':
         specifier: workspace:*
-        version: link:../../packages/ingestion
-      '@learny/jobs':
-        specifier: workspace:*
-        version: link:../../packages/jobs
+        version: link:../../packages/i18n
       '@learny/learning-engine':
         specifier: workspace:*
         version: link:../../packages/learning-engine
-      '@learny/llm':
-        specifier: workspace:*
-        version: link:../../packages/llm
-      '@learny/notifications':
-        specifier: workspace:*
-        version: link:../../packages/notifications
-      '@learny/services':
-        specifier: workspace:*
-        version: link:../../packages/services
-      '@learny/tutor':
-        specifier: workspace:*
-        version: link:../../packages/tutor
       '@learny/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -179,9 +240,6 @@ importers:
       idb:
         specifier: ^8.0.4
         version: 8.0.4
-      inngest:
-        specifier: ^4.26.2
-        version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(express@4.22.3)(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
       lucide-react:
         specifier: ^1.72.0
         version: 1.72.0(@types/react@19.3.0)(react@19.3.1)
@@ -197,6 +255,9 @@ importers:
       react-hook-form:
         specifier: ^7.92.0
         version: 7.92.0(@types/react@19.3.0)(react@19.3.1)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       serwist:
         specifier: 9.5.14
         version: 9.5.14(browserslist@4.29.5)(typescript@6.0.3)
@@ -204,6 +265,12 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
+      '@learny/api':
+        specifier: workspace:*
+        version: link:../api
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@learny/testing':
         specifier: workspace:*
         version: link:../../packages/testing
@@ -232,33 +299,97 @@ importers:
         specifier: ^4.3.5
         version: 4.3.5
 
-  apps/worker:
+  packages/api-client:
     dependencies:
-      '@hono/node-server':
-        specifier: ^2.1.7
-        version: 2.1.7(hono@4.13.18)
-      '@learny/config':
+      '@learny/contracts':
         specifier: workspace:*
-        version: link:../../packages/config
+        version: link:../contracts
       '@learny/core':
         specifier: workspace:*
-        version: link:../../packages/core
+        version: link:../core
+    devDependencies:
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+
+  packages/api-routes:
+    dependencies:
+      '@commitlint/config-conventional':
+        specifier: ^21.2.4
+        version: 21.2.4
+      '@commitlint/lint':
+        specifier: ^21.2.4
+        version: 21.2.4
+      '@learny/automations':
+        specifier: workspace:*
+        version: link:../automations
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../core
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../db
+      '@learny/http':
+        specifier: workspace:*
+        version: link:../http
+      '@learny/i18n':
+        specifier: workspace:*
+        version: link:../i18n
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:../ingestion
       '@learny/jobs':
         specifier: workspace:*
-        version: link:../../packages/jobs
-      '@sentry/node':
+        version: link:../jobs
+      '@learny/learning-engine':
+        specifier: workspace:*
+        version: link:../learning-engine
+      '@learny/llm':
+        specifier: workspace:*
+        version: link:../llm
+      '@learny/notifications':
+        specifier: workspace:*
+        version: link:../notifications
+      '@learny/services':
+        specifier: workspace:*
+        version: link:../services
+      '@learny/tutor':
+        specifier: workspace:*
+        version: link:../tutor
+      '@learny/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@sentry/nextjs':
         specifier: ^11.12.0
-        version: 11.12.0(rollup@4.68.2)
-      hono:
-        specifier: ^4.13.18
-        version: 4.13.18
+        version: 11.12.0(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+      '@supabase/ssr':
+        specifier: ^0.12.7
+        version: 0.12.7(@supabase/supabase-js@2.119.0(@opentelemetry/api@1.10.0))
+      '@supabase/supabase-js':
+        specifier: ^2.119.0
+        version: 2.119.0(@opentelemetry/api@1.10.0)
       inngest:
         specifier: ^4.26.2
         version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(express@4.22.3)(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
-      esbuild:
-        specifier: ^0.28.2
-        version: 0.28.2
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../testing
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/automations:
     dependencies:
@@ -406,6 +537,61 @@ importers:
       uuid:
         specifier: ^13.0.0
         version: 13.0.2
+
+  packages/domain:
+    dependencies:
+      '@learny/bricks':
+        specifier: workspace:*
+        version: link:../bricks
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/http:
+    dependencies:
+      '@learny/config':
+        specifier: workspace:*
+        version: link:../config
+      '@learny/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@learny/core':
+        specifier: workspace:*
+        version: link:../core
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../db
+      '@learny/services':
+        specifier: workspace:*
+        version: link:../services
+      '@supabase/ssr':
+        specifier: ^0.12.7
+        version: 0.12.7(@supabase/supabase-js@2.119.0(@opentelemetry/api@1.10.0))
+      '@supabase/supabase-js':
+        specifier: ^2.119.0
+        version: 2.119.0(@opentelemetry/api@1.10.0)
+      jose:
+        specifier: ^6.2.18
+        version: 6.2.18
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@learny/testing':
+        specifier: workspace:*
+        version: link:../testing
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@opentelemetry/api@1.10.0)(@types/node@24.19.2)(@vitest/coverage-v8@5.1.0)(jsdom@31.0.0)(msw@3.0.5(@types/node@24.19.2)(typescript@6.0.3)(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.8(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/i18n: {}
 
   packages/ingestion:
     dependencies:
@@ -642,6 +828,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../db
+      '@learny/domain':
+        specifier: workspace:*
+        version: link:../domain
       '@learny/ingestion':
         specifier: workspace:*
         version: link:../ingestion
@@ -691,6 +880,9 @@ importers:
       '@axe-core/playwright':
         specifier: ^4.14.0
         version: 4.14.0(playwright-core@1.65.0)
+      '@learny/api-client':
+        specifier: workspace:*
+        version: link:../api-client
       '@learny/config':
         specifier: workspace:*
         version: link:../config
@@ -1154,10 +1346,6 @@ packages:
 
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
-
-  '@envelop/instrumentation@1.0.1':
-    resolution: {integrity: sha512-FuexE2qd3Yc1Kh1DjTliwGxb9kyyv4ySBNnfJOxnQasVmGdcqX6AkkO5sIMxLWFRftp8PErOcIn2dQW/1RwytQ==}
-    engines: {node: '>=18.0.0'}
 
   '@esbuild-kit/core-utils@3.3.2':
     resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
@@ -1664,9 +1852,6 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@fastify/busboy@3.2.5':
-    resolution: {integrity: sha512-y8MTAeBlEQUNVnskmZQwpseZN3EgCksQNOULlfxWY6o6VEqh01+oExMgbM7gN6YLQ8pNDYeweNPKJRt8jQm2ZQ==}
-
   '@floating-ui/core@1.8.0':
     resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
 
@@ -1681,6 +1866,12 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@fontsource-variable/inter@5.3.0':
+    resolution: {integrity: sha512-OupL48va4JNofb97w6NYeF9S7W/kHNKM0Er8Dem5nqi4jeOLrVJDoE8tZEpnMJmtkvNbB1EIPPwHcdkF6b1oUA==}
+
+  '@fontsource-variable/space-grotesk@5.3.0':
+    resolution: {integrity: sha512-2IxmvfB08i9vnGB3Ym/AXvhRE+8XOjWMXIyDum03c+tPwH0FUoMNQfGpU8NXPxjbws0Vvss3AH0Zqt4oJBBAdw==}
 
   '@formatjs/ecma402-abstract@2.3.6':
     resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
@@ -4089,26 +4280,6 @@ packages:
   '@vitest/spy@5.1.0':
     resolution: {integrity: sha512-2DPO5OMHWKrBngC+fCmTQqemNF0gidRhp3lxbBmRhW+M1XJrfgPpqNqWVevXtn2f2ufD5ZaR1B6B641aAlcX5A==}
 
-  '@whatwg-node/disposablestack@0.0.6':
-    resolution: {integrity: sha512-LOtTn+JgJvX8WfBVJtF08TGrdjuFzGJc4mkP8EdDI8ADbvO7kiexYep1o8dwnt0okb0jYclCDXF13xU7Ge4zSw==}
-    engines: {node: '>=18.0.0'}
-
-  '@whatwg-node/fetch@0.10.13':
-    resolution: {integrity: sha512-b4PhJ+zYj4357zwk4TTuF2nEe0vVtOrwdsrNo5hL+u1ojXNhh1FgJ6pg1jzDlwlT4oBdzfSwaBwMCtFCsIWg8Q==}
-    engines: {node: '>=18.0.0'}
-
-  '@whatwg-node/node-fetch@0.8.6':
-    resolution: {integrity: sha512-BDMdYFcerLQkwA2RTldxOqRCs6ZQD1S7UgP3pUdGUkcbgTrP/V5ko77ZkCww9DHmC4lpoYuwigGfQYj285gMvA==}
-    engines: {node: '>=18.0.0'}
-
-  '@whatwg-node/promise-helpers@1.3.2':
-    resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
-    engines: {node: '>=16.0.0'}
-
-  '@whatwg-node/server@0.11.0':
-    resolution: {integrity: sha512-VSdkwnJRr8Yv9UgB2aXB3VUPWwd6Oqnn0hycFwhg9pZgWxJXb7JmhsiXe9tmpMwjHFxli12PGcz9aI63YYloGQ==}
-    engines: {node: '>=18.0.0'}
-
   '@workflow/serde@4.1.0':
     resolution: {integrity: sha512-pav4F2BoirECWR7Nf1TKt+2eETcBj7jj4cBefQ8VXQCA6NPkaKeLfj/zMgi+3zYV5ZIBT4GuUiphsj0/b9hPQQ==}
 
@@ -4647,9 +4818,6 @@ packages:
   cookie@2.0.2:
     resolution: {integrity: sha512-SL0cVuEdETEp7pN0FuZb01toc3vnODEfVUCooxG1SJN0yIirh7JMb9X9bvfCFf0vzzbT68RdbKDHYTiWy7a7iw==}
     engines: {node: '>=22'}
-
-  core-js@3.51.0:
-    resolution: {integrity: sha512-7bDKx/5jm5MxzsXxc93g6Z2+4ZsuT/MddrfRmTDJNAkWsYWHU8EVNEsBiIEWnMAMCHMmRfUEjkuo3jeNBOIHRw==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -5962,6 +6130,9 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
+  jose@6.2.18:
+    resolution: {integrity: sha512-doV4thUwgkrycJH4yLeqwTGIIZphHl+pk7CPReuMIhYhncmgzdko85MaCG4YQFTxqMFr1/oEH32tZuKKovcDEg==}
+
   jpeg-js@0.4.4:
     resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
@@ -6549,12 +6720,6 @@ packages:
   netmask@2.1.1:
     resolution: {integrity: sha512-eonl3sLUha+S1GzTPxychyhnUzKyeQkZ7jLjKrBagJgPla13F+uQ71HgpFefyHgqrjEbCPkDArxYsjY8/+gLKA==}
     engines: {node: '>= 0.4.0'}
-
-  next-test-api-route-handler@5.0.7:
-    resolution: {integrity: sha512-HVh4UakC5q98U0/j3CWW2JTxHBeqDmvHjg4wqpwwaQP+O6f60preyed5FYJ7Z8oHFKIeRVBCy8E6gUhUb4UHpw==}
-    engines: {node: ^20.18.0 || >=22.12.0}
-    peerDependencies:
-      next: '>=9'
 
   next@16.4.6:
     resolution: {integrity: sha512-QZJiYhaZLJMo2KpkQGQIwvmd79WVsAWeYIU554a8d7zArS3si/IRy3lBNV/rtYhE70oLwdLYhPAXLPx8HwcwtA==}
@@ -7254,6 +7419,9 @@ packages:
     resolution: {integrity: sha512-x0RTqQel6g5SY7Lg6ZreMmsOzncHFU7nhnRWkKgWuMTu5NN0DR5oruckMqRvacAN9d5w6ARnRBXl9xhDCgfMeA==}
     engines: {node: '>= 0.8.0'}
 
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+
   serwist@9.5.14:
     resolution: {integrity: sha512-DsKXY8b3hAFxHrnSDugzm29fKGHF9tnAKqvUdbGU3Ui8QHE9izeh+j1na95m3ANk/yIIAvmbpxA8XS0cs3H8Lw==}
     peerDependencies:
@@ -7773,9 +7941,6 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
-
-  urlpattern-polyfill@10.1.0:
-    resolution: {integrity: sha512-IGjKp/o0NL3Bso1PymYURCJxMPNAf/ILOpendP9f5B6e1rTJgdgiOvgfoT8VxCAdY+Wisb9uhGaJJf3yZ2V9nw==}
 
   use-callback-ref@1.3.3:
     resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
@@ -8512,11 +8677,6 @@ snapshots:
       tslib: 2.9.1
     optional: true
 
-  '@envelop/instrumentation@1.0.1':
-    dependencies:
-      '@whatwg-node/promise-helpers': 1.3.2
-      tslib: 2.9.1
-
   '@esbuild-kit/core-utils@3.3.2':
     dependencies:
       esbuild: 0.18.20
@@ -8802,8 +8962,6 @@ snapshots:
 
   '@exodus/bytes@1.16.0': {}
 
-  '@fastify/busboy@3.2.5': {}
-
   '@floating-ui/core@1.8.0':
     dependencies:
       '@floating-ui/utils': 0.2.12
@@ -8820,6 +8978,10 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@fontsource-variable/inter@5.3.0': {}
+
+  '@fontsource-variable/space-grotesk@5.3.0': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
     dependencies:
@@ -11190,35 +11352,6 @@ snapshots:
 
   '@vitest/spy@5.1.0': {}
 
-  '@whatwg-node/disposablestack@0.0.6':
-    dependencies:
-      '@whatwg-node/promise-helpers': 1.3.2
-      tslib: 2.9.1
-
-  '@whatwg-node/fetch@0.10.13':
-    dependencies:
-      '@whatwg-node/node-fetch': 0.8.6
-      urlpattern-polyfill: 10.1.0
-
-  '@whatwg-node/node-fetch@0.8.6':
-    dependencies:
-      '@fastify/busboy': 3.2.5
-      '@whatwg-node/disposablestack': 0.0.6
-      '@whatwg-node/promise-helpers': 1.3.2
-      tslib: 2.9.1
-
-  '@whatwg-node/promise-helpers@1.3.2':
-    dependencies:
-      tslib: 2.9.1
-
-  '@whatwg-node/server@0.11.0':
-    dependencies:
-      '@envelop/instrumentation': 1.0.1
-      '@whatwg-node/disposablestack': 0.0.6
-      '@whatwg-node/fetch': 0.10.13
-      '@whatwg-node/promise-helpers': 1.3.2
-      tslib: 2.9.1
-
   '@workflow/serde@4.1.0': {}
 
   abort-controller@3.0.0:
@@ -11774,8 +11907,6 @@ snapshots:
   cookie@1.1.1: {}
 
   cookie@2.0.2: {}
-
-  core-js@3.51.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -13209,6 +13340,8 @@ snapshots:
 
   jiti@2.7.0: {}
 
+  jose@6.2.18: {}
+
   jpeg-js@0.4.4: {}
 
   js-library-detector@6.7.0: {}
@@ -13974,13 +14107,6 @@ snapshots:
   negotiator@0.6.4: {}
 
   netmask@2.1.1: {}
-
-  next-test-api-route-handler@5.0.7(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)):
-    dependencies:
-      '@whatwg-node/server': 0.11.0
-      cookie~1: cookie@1.1.1
-      core-js: 3.51.0
-      next: 16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
 
   next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
@@ -14851,6 +14977,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  server-only@0.0.1: {}
+
   serwist@9.5.14(browserslist@4.29.5)(typescript@6.0.3):
     dependencies:
       '@serwist/utils': 9.5.14(browserslist@4.29.5)
@@ -15453,8 +15581,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-
-  urlpattern-polyfill@10.1.0: {}
 
   use-callback-ref@1.3.3(@types/react@19.3.0)(react@19.3.1):
     dependencies:

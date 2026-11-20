@@ -56,11 +56,11 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
       for (const file of readFiles(path.join(PACKAGES, pkg.name))) {
         // Seed and demo fixtures of SPEC-110 predate the centralised catalogue; product code is
         // covered below and by the ESLint rule.
-        if (file.path.includes('/seed/')) continue;
+        if (file.path.includes('/seed/') || file.path.includes('/dev-sdd/')) continue;
         if (/\bclaude-[a-z0-9-]+\b/.test(file.content)) offenders.push(file.path);
       }
     }
-    for (const app of ['apps/web', 'apps/worker']) {
+    for (const app of ['apps/web', 'apps/api']) {
       for (const file of readFiles(path.join(ROOT, app))) {
         // `_dev` pages of earlier specifications display historical identifiers; they are not
         // reachable in production (ADR-0049).

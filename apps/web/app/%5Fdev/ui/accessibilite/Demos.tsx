@@ -3,6 +3,7 @@
 import { X } from 'lucide-react';
 import { useRef, useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import {
   ACCESSIBLE_TOKEN_PAIRS,
   Button,
@@ -31,7 +32,6 @@ import {
 import { colors } from '@learny/ui/tokens';
 
 import { GalleryCard } from '../../../../components/dev-ui/GalleryCard';
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.accessibility;
 

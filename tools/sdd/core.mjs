@@ -52,36 +52,139 @@ export function isBlockedTransitively(catalog, st, id, seen = new Set()) {
   return catalog.byId[id].dependsOn.some((d) => isBlockedTransitively(catalog, st, d, seen));
 }
 
-/** Une phase est débloquée quand le checkpoint de la phase précédente est réussi. */
+// Pistes (ADR-1006) : une phase appartient à une piste (`track`, « produit » par défaut). Chaque piste
+// est une suite ordonnée de phases indépendante des autres ; `requires` ajoute des checkpoints d'autres
+// pistes à attendre. La piste active (`catalog.activeTrack`, surchargée par SDD_TRACK) pilote next.mjs.
+export const DEFAULT_TRACK = 'produit';
+
+export function trackOf(phase) {
+  return phase?.track ?? DEFAULT_TRACK;
+}
+
+/** Piste active : surcharge explicite, sinon `catalog.activeTrack`, sinon « produit ». */
+export function activeTrack(catalog, override) {
+  return override || catalog.activeTrack || DEFAULT_TRACK;
+}
+
+/** Configuration d'une piste : branche de base (fusions, push), tags de version SemVer et plage d'ADR. */
+export function trackConfig(catalog, track) {
+  return { baseBranch: 'main', versionTags: true, adrBase: 0, ...(catalog.tracks?.[track] ?? {}) };
+}
+
+/**
+ * Numéro du prochain ADR d'une piste : chaque piste numérote dans sa propre plage de mille
+ * (`adrBase` 0 → ADR-0001…0999, 1000 → ADR-1001…1999) pour que deux branches parallèles
+ * ne créent jamais le même identifiant (ADR-1006).
+ */
+export function nextAdrNumber(existing, adrBase = 0) {
+  const inRange = existing.filter((n) => n > adrBase && n < adrBase + 1000);
+  const n = Math.max(adrBase, ...inRange) + 1;
+  if (n >= adrBase + 1000) throw new Error(`Plage d'ADR épuisée (${adrBase + 1}–${adrBase + 999}).`);
+  return n;
+}
+
+export function phaseOf(catalog, phaseId) {
+  return catalog.phases.find((p) => p.id === phaseId);
+}
+
+/** Piste d'une spécification (celle de sa phase). */
+export function specTrack(catalog, spec) {
+  return trackOf(phaseOf(catalog, spec.phase));
+}
+
+/**
+ * Une phase est débloquée quand le checkpoint de la phase précédente **de la même piste** est réussi
+ * et que tous les checkpoints de `requires` sont réussis.
+ */
 export function phaseUnlocked(catalog, st, phaseId) {
-  const idx = catalog.phases.findIndex((p) => p.id === phaseId);
+  const phase = phaseOf(catalog, phaseId);
+  if (!phase) return false;
+  if (!(phase.requires ?? []).every((cp) => st.checkpoints[cp]?.status === 'passed')) return false;
+  const same = catalog.phases.filter((p) => trackOf(p) === trackOf(phase));
+  const idx = same.indexOf(phase);
   if (idx <= 0) return true;
-  const prev = catalog.phases[idx - 1];
-  return st.checkpoints[prev.checkpoint]?.status === 'passed';
+  return st.checkpoints[same[idx - 1].checkpoint]?.status === 'passed';
 }
 
-export function readySpecs(catalog, st) {
-  return catalog.specs.filter((s) => displayStatus(catalog, st, s.id) === 'ready');
+/** Spécifications prêtes, éventuellement limitées à une piste. */
+export function readySpecs(catalog, st, track) {
+  return catalog.specs.filter(
+    (s) => displayStatus(catalog, st, s.id) === 'ready' && (track === undefined || specTrack(catalog, s) === track),
+  );
 }
 
-/** Prochaine action : reprendre une spécification en cours, sinon checkpoint dû, sinon première spécification prête. */
-export function nextAction(catalog, st) {
-  const inProgress = catalog.specs.find((s) => st.specs[s.id].status === 'in_progress');
+/**
+ * Fusion de deux états de suivi par piste (ADR-1006 §4) : les entrées des spécifications et
+ * checkpoints de `track` viennent de `ours` (branche courante), toutes les autres de `theirs`
+ * (branche de base) — entrée entière, jamais un mélange champ par champ (CL-5). Une entrée
+ * absente du côté propriétaire retombe sur l'autre côté ; `updatedAt` garde le plus récent.
+ * Pure : aucun accès disque, aucune horloge, les arguments ne sont jamais modifiés.
+ */
+export function mergeTrackStates(catalog, ours, theirs, track) {
+  const oursSpecs = ours.specs ?? {};
+  const theirsSpecs = theirs.specs ?? {};
+  const oursCheckpoints = ours.checkpoints ?? {};
+  const theirsCheckpoints = theirs.checkpoints ?? {};
+  const cpTracks = new Map(catalog.phases.map((ph) => [ph.checkpoint, trackOf(ph)]));
+
+  const choose = (own, other, fromOurs) => (fromOurs ? own ?? other : other ?? own);
+
+  const specs = {};
+  for (const id of new Set([...Object.keys(oursSpecs), ...Object.keys(theirsSpecs)])) {
+    const fromOurs = catalog.byId[id] !== undefined && specTrack(catalog, catalog.byId[id]) === track;
+    specs[id] = choose(oursSpecs[id], theirsSpecs[id], fromOurs);
+  }
+
+  const checkpoints = {};
+  for (const id of new Set([...Object.keys(oursCheckpoints), ...Object.keys(theirsCheckpoints)])) {
+    checkpoints[id] = choose(oursCheckpoints[id], theirsCheckpoints[id], cpTracks.get(id) === track);
+  }
+
+  const anomalies = [];
+  const seen = new Set();
+  for (const entry of [...(ours.anomalies ?? []), ...(theirs.anomalies ?? [])]) {
+    const key = JSON.stringify(entry);
+    if (seen.has(key)) continue; // doublon hérité du point de départ de la piste
+    seen.add(key);
+    anomalies.push(entry);
+  }
+
+  // Le plus récent : chaque commande SDD réécrit updatedAt, la ligne conflit à chaque sync (EF-3).
+  const updatedAt = [ours.updatedAt, theirs.updatedAt].filter(Boolean).sort().at(-1) ?? null;
+  return { version: ours.version ?? theirs.version ?? 1, updatedAt, specs, checkpoints, anomalies };
+}
+
+/**
+ * Prochaine action de la piste active : reprendre une spécification en cours, sinon checkpoint dû,
+ * sinon première spécification prête.
+ */
+export function nextAction(catalog, st, track = activeTrack(catalog)) {
+  const phases = catalog.phases.filter((p) => trackOf(p) === track);
+  const ids = new Set(phases.map((p) => p.id));
+  const specsOfTrack = catalog.specs.filter((s) => ids.has(s.phase));
+  const inProgress = specsOfTrack.find((s) => st.specs[s.id].status === 'in_progress');
   if (inProgress) return { kind: 'resume', spec: inProgress };
-  for (const ph of catalog.phases) {
-    const specs = catalog.specs.filter((s) => s.phase === ph.id);
+  for (const ph of phases) {
+    const specs = specsOfTrack.filter((s) => s.phase === ph.id);
     const cp = st.checkpoints[ph.checkpoint];
     if (cp.status === 'passed') continue;
     const allDone = specs.every((s) => st.specs[s.id].status === 'done');
     if (allDone && phaseUnlocked(catalog, st, ph.id)) return { kind: 'checkpoint', checkpoint: ph.checkpoint, phase: ph };
     break;
   }
-  const ready = readySpecs(catalog, st);
+  const ready = readySpecs(catalog, st, track);
   if (ready.length) return { kind: 'start', spec: ready[0] };
-  const pending = catalog.specs.filter((s) => st.specs[s.id].status !== 'done');
-  const allCheckpointsPassed = catalog.phases.every((ph) => st.checkpoints[ph.checkpoint]?.status === 'passed');
+  const pending = specsOfTrack.filter((s) => st.specs[s.id].status !== 'done');
+  const allCheckpointsPassed = phases.every((ph) => st.checkpoints[ph.checkpoint]?.status === 'passed');
   if (pending.length === 0 && allCheckpointsPassed) return { kind: 'finished' };
-  return { kind: 'stuck', remaining: pending.map((s) => `${s.id}:${displayStatus(catalog, st, s.id)}`) };
+  const waitingFor = [
+    ...new Set(phases.flatMap((p) => (p.requires ?? []).filter((cp) => st.checkpoints[cp]?.status !== 'passed'))),
+  ];
+  return {
+    kind: 'stuck',
+    remaining: pending.map((s) => `${s.id}:${displayStatus(catalog, st, s.id)}`),
+    ...(waitingFor.length ? { waitingFor } : {}),
+  };
 }
 
 /** Sortie machine de next.mjs --json. */
@@ -90,6 +193,7 @@ export function nextActionJson(action) {
   if (action.spec) Object.assign(out, { id: action.spec.id, title: action.spec.title, path: action.spec.path, dependsOn: action.spec.dependsOn });
   if (action.checkpoint) Object.assign(out, { checkpoint: action.checkpoint, phase: action.phase.id });
   if (action.remaining) out.remaining = action.remaining;
+  if (action.waitingFor) out.waitingFor = action.waitingFor;
   return out;
 }
 
@@ -133,9 +237,10 @@ export function renderProgressMarkdown(catalog, st, now) {
 
   let md = `# Progression du projet Learny\n\n> Généré par \`node tools/sdd/status.mjs\` le ${now}. Ne pas éditer à la main.\n\n`;
   md += `## Synthèse\n\n| Indicateur | Valeur |\n|---|---|\n`;
-  md += `| Spécifications | ${all.length} (V1 : ${sum.v1Total}, V2 : ${all.length - sum.v1Total}) |\n`;
+  const others = all.filter((s) => s.priority !== 'V1' && s.priority !== 'V2').length;
+  md += `| Spécifications | ${all.length} (V1 : ${sum.v1Total}, V2 : ${all.length - sum.v1Total - others}${others ? `, migration : ${others}` : ''}) |\n`;
   md += `| Terminées | ${sum.done} |\n| En cours | ${sum.inProgress} |\n| Prêtes | ${sum.ready} |\n| En attente de dépendances | ${sum.waiting} |\n| Bloquées | ${sum.blocked} |\n| Bloquées par une dépendance | ${sum.dependencyBlocked} |\n`;
-  md += `| **Avancement global** | **${sum.globalPercent.toFixed(1)} %** |\n| Avancement V1 | ${sum.v1Percent.toFixed(1)} % |\n| Prochaine action | ${nextTxt} |\n\n`;
+  md += `| **Avancement global** | **${sum.globalPercent.toFixed(1)} %** |\n| Avancement V1 | ${sum.v1Percent.toFixed(1)} % |\n| Piste active | ${activeTrack(catalog)} |\n| Prochaine action | ${nextTxt} |\n\n`;
 
   md += `## Phases et checkpoints\n\n| Phase | Titre | Terminées | Checkpoint | Statut |\n|---|---|---|---|---|\n`;
   for (const ph of sum.phases) {
@@ -162,7 +267,9 @@ export function summarizePlaywright(report, tag) {
   const out = { passed: 0, failed: 0, videos: 0, visual: 0 };
   const walk = (suite) => {
     for (const sp of suite.specs ?? []) {
-      if (!sp.title.includes(`@${tag}`) && !(sp.tags ?? []).includes(`@${tag}`)) continue;
+      // `@SPEC-110` ne doit pas retenir `@SPEC-1101` (identifiants à 4 chiffres, ADR-1006).
+      const own = new RegExp(`@${tag}(?![0-9])`);
+      if (!own.test(sp.title) && !(sp.tags ?? []).includes(`@${tag}`)) continue;
       const isVisual = sp.title.includes('@visual') || (sp.tags ?? []).includes('@visual');
       for (const t of sp.tests ?? []) for (const r of t.results ?? []) {
         if (r.status === 'passed') { out.passed += 1; if (isVisual) out.visual += 1; }

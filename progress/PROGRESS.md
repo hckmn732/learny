@@ -1,21 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-18T17:10:02.638Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-19T18:02:35.570Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
-| Spécifications | 132 (V1 : 124, V2 : 8) |
-| Terminées | 123 |
+| Spécifications | 144 (V1 : 124, V2 : 8, migration : 12) |
+| Terminées | 127 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 9 |
+| En attente de dépendances | 17 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **93.2 %** |
+| **Avancement global** | **88.2 %** |
 | Avancement V1 | 99.2 % |
-| Prochaine action | checkpoint CP-7 |
+| Piste active | migration |
+| Prochaine action | checkpoint CP-10 |
 
 ## Phases et checkpoints
 
@@ -31,6 +32,10 @@
 | P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ⏳ |
 | P8 | Plateforme, qualité et livraison V1 | 7/8 | CP-8 | ⏳ |
 | P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
+| P10 | Migration — préparation, couche HTTP et paquets partagés | 4/4 | CP-10 | ⏳ |
+| P11 | Migration — application API autonome | 0/3 | CP-11 | ⏳ |
+| P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
+| P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
 
 ## Détail des spécifications
 
@@ -168,6 +173,18 @@
 | [SPEC-906](../specs/p9-v2/SPEC-906-projet-fil-rouge.md) | Projet fil rouge | P9 | ⏳ waiting | 0 | — | SPEC-613, SPEC-407 |
 | [SPEC-907](../specs/p9-v2/SPEC-907-detection-fine-de-la-baisse-d-engagement.md) | Détection fine de la baisse d'engagement | P9 | ⏳ waiting | 0 | — | SPEC-711 |
 | [SPEC-908](../specs/p9-v2/SPEC-908-version-2-0-0.md) | Version 2.0.0 | P9 | ⏳ waiting | 0 | — | SPEC-901, SPEC-902, SPEC-903, SPEC-904, SPEC-905, SPEC-906, SPEC-907 |
+| [SPEC-1001](../specs/p10-migration-preparation/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-separation.md) | Démarrage de la piste de migration et garde-fous de séparation | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-003, SPEC-011 |
+| [SPEC-1002](../specs/p10-migration-preparation/SPEC-1002-paquets-partages-client-d-api-logique-pure-et-messages.md) | Paquets partagés — client d’API, logique pure et messages | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1001 |
+| [SPEC-1003](../specs/p10-migration-preparation/SPEC-1003-couche-http-independante-du-framework.md) | Couche HTTP indépendante du framework (@learny/http) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓acceptance ✓unit ✓integration ✓e2e ✓visual | SPEC-1001 |
+| [SPEC-1004](../specs/p10-migration-preparation/SPEC-1004-table-d-implementation-des-routes.md) | Table d’implémentation des routes (@learny/api-routes) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1003 |
+| [SPEC-1101](../specs/p11-migration-api/SPEC-1101-application-apps-api-hono.md) | Application apps/api (Hono) servant toutes les routes | P11 | ⏳ waiting | 0 | — | SPEC-1004, SPEC-1002 |
+| [SPEC-1102](../specs/p11-migration-api/SPEC-1102-authentification-multi-clients-et-protections-derriere-proxy.md) | Authentification multi-clients et protections derrière un proxy | P11 | ⏳ waiting | 0 | — | SPEC-1101 |
+| [SPEC-1103](../specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md) | Absorption du worker, images, CI et déploiement de l’API | P11 | ⏳ waiting | 0 | — | SPEC-1102 |
+| [SPEC-1201](../specs/p12-migration-bascule/SPEC-1201-bascule-des-appels-api-du-web-vers-apps-api.md) | Bascule des appels /api du web vers apps/api | P12 | ⏳ waiting | 0 | — | SPEC-1103 |
+| [SPEC-1202](../specs/p12-migration-bascule/SPEC-1202-ecrans-et-proxy-du-web-alimentes-par-l-api.md) | Écrans et proxy du web alimentés par l’API | P12 | ⏳ waiting | 0 | — | SPEC-1201 |
+| [SPEC-1203](../specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md) | Pages de démonstration via l’API et web sans dépendance serveur | P12 | ⏳ waiting | 0 | — | SPEC-1202 |
+| [SPEC-1301](../specs/p13-migration-multi-clients/SPEC-1301-api-prete-pour-les-clients-natifs.md) | API prête pour les clients natifs | P13 | ⏳ waiting | 0 | — | SPEC-1203 |
+| [SPEC-1302](../specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md) | Clôture de la migration et retour sur main | P13 | ⏳ waiting | 0 | — | SPEC-1301 |
 
 ## Anomalies et blocages
 

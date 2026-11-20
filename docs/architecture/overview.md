@@ -2,6 +2,33 @@
 
 Complète `docs/legacy/specification-v0/3-Architecture-technique.md` (raisonnement d'origine). Les choix sont actés dans `docs/adr/`. Ce document est normatif pour la structure du dépôt et la circulation des données.
 
+## 0. Applications et frontières (ADR-1001)
+
+```
+Navigateur (PWA)                          Android / iOS (Expo, ADR-1004, plus tard)
+   │ HTTPS, même origine                       │ HTTPS, Authorization: Bearer
+   ▼                                           │
+apps/web  (Next.js, client pur, ADR-1003)      │
+   ├─ écrans React, rendu serveur              │
+   ├─ proxy.ts : session, gardes, relai /api ──┼──► en-têtes de proxy de confiance (ADR-1005)
+   └─ Server Components → @learny/api-client ──┤
+                                               ▼
+                         apps/api  (Hono, ADR-1002) — seul propriétaire des données
+                            ├─ /api/v1/* (registre ROUTES + @learny/api-routes, via @learny/http)
+                            ├─ /api/inngest (packages/jobs)   ├─ /api/v1/webhooks/stripe
+                            └─ ► Supabase, Inngest, fournisseurs IA, Resend, Web Push, Stripe, Sentry
+```
+
+| Couche | Paquets | Importables par |
+|---|---|---|
+| Partagée (ADR-1007) | `contracts`, `core` (entrée `.`), `api-client`, `domain`, `i18n`, `learning-engine`, `ui/tokens` | tous les clients, `apps/api`, paquets |
+| Interface web | `ui`, `bricks` (vues) | `apps/web` |
+| Serveur | `http`, `api-routes`, `services`, `db`, `jobs`, `llm`, `tutor`, `ingestion`, `automations`, `notifications`, `core/server` | `apps/api`, autres paquets serveur, tests |
+
+Règle vérifiée par ESLint (`learny/web-is-a-client`) et par
+`tools/migration/report.mjs --check` : `apps/web` n'importe aucun paquet serveur. Le futur
+`apps/mobile` utilisera les mêmes paquets partagés (ADR-1004) sans répéter le code des écrans web.
+
 ## 1. Principes
 
 1. **Le modèle propose, le code valide et exécute** (ADR-0021). Toute écriture (apprenant ou tuteur) passe par un service applicatif qui valide (Zod) puis persiste.
@@ -18,18 +45,21 @@ Navigateur (PWA)
    │  HTTPS
    ▼
 apps/web  (Next.js App Router, Vercel région UE fra1)
-   ├─ Server Components : lecture via services (client Supabase de l'utilisateur, RLS)
-   ├─ Route handlers /api/v1/* : mutations et lectures client (contrats Zod)
-   ├─ /api/inngest : point d'entrée des jobs (packages/jobs)
-   ├─ /api/webhooks/stripe
+   ├─ composants et Server Components : affichage et chargement via @learny/api-client
+   ├─ proxy.ts : relai de même origine de /api/* et /openapi.json
    └─ /_dev/sdd/[specId] : pages de démonstration (hors production, ADR-0049)
+   │
+   │  Requêtes relayées avec les en-têtes ADR-1005 ; aucune route Next n'héberge plus l'API.
+   └──► apps/api (Hono, Vercel/Docker, fra1)
+         ├─ /api/v1/* et flux SSE du tuteur
+         ├─ /api/inngest (rôle `all` ou `jobs`)
+         └─ rôles `all` (défaut), `api`, `jobs`
    │
    ├──► Supabase (UE) : Postgres 15+ (pgvector, unaccent, pg_trgm), Auth, Storage
    ├──► Inngest Cloud : orchestration des jobs (événements, cron, reprises)
    ├──► Fournisseurs IA via packages/llm (Anthropic par défaut ; BYOK)
    ├──► Voyage AI (embeddings), API de recherche web (repli)
    ├──► Resend (e-mail), Web Push (VAPID), Stripe (abonnement), Sentry (erreurs)
-apps/worker (Node, Hono) : sert les mêmes fonctions Inngest pour l'auto-hébergement Docker (ADR-0017)
 ```
 
 ## 3. Organisation du dépôt
@@ -38,12 +68,17 @@ apps/worker (Node, Hono) : sert les mêmes fonctions Inngest pour l'auto-héberg
 /
 ├── AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, CHANGELOG.md
 ├── apps/
-│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, middleware.ts, e2e/ (Playwright)
-│   └── worker/                 serveur Hono exposant /api/inngest (Docker)
+│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, proxy.ts, e2e/ (Playwright)
+│   └── api/                    serveur Hono : API, santé, webhook Stripe et /api/inngest
 ├── packages/
 │   ├── config/                 schéma des variables d'environnement (Zod), constantes produit, identifiants de modèles
 │   ├── core/                   horloge, fuseaux, erreurs typées, logger, utilitaires (Result, ids)
 │   ├── contracts/              schémas Zod des entrées/sorties API, événements, DTO ; génération OpenAPI
+│   ├── api-client/             client HTTP typé partagé entre clients web et natifs
+│   ├── domain/                 logique pure partagée, sans I/O serveur
+│   ├── i18n/                   messages partagés
+│   ├── http/                   transport HTTP indépendant du framework, gardes et erreurs
+│   ├── api-routes/             table des implémentations de routes, adaptateurs et dépendances serveur
 │   ├── db/                     schéma Drizzle, migrations SQL, politiques RLS, client, repositories, seed
 │   ├── ui/                     design system : jetons, composants React, icônes, utilitaires d'accessibilité
 │   ├── bricks/                 13 types de briques : schema.ts, grade.ts (si auto-corrigée), view.tsx, registre
@@ -74,13 +109,18 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 - `llm` importe `core`, `config`, `contracts`, `db`.
 - `tutor` importe `llm`, `bricks`, `learning-engine`, `contracts`, `core`, `db`, `ingestion`.
 - `services` peut importer tous les paquets sauf `ui` ; `apps/*` importent tout.
-- Aucun paquet n'importe `apps/*`.
+- `apps/api` peut importer les paquets serveur ; `apps/web` est limité aux paquets partagés et à
+  `ui`/`bricks`. Aucun paquet n'importe `apps/*`.
 
 ## 4. Flux types
 
-**Lecture d'un écran** : Server Component → `services.<domaine>.get…(ctx)` → repository Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`.
+**Lecture d'un écran** : Server Component ou chargeur de `apps/web/lib` →
+`serverApi()` (`@learny/api-client`) → relai HTTP interne → `apps/api` → service → repository
+Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`.
 
-**Mutation** : composant client → `fetch('/api/v1/...')` via le client typé `apps/web/lib/api-client.ts` → wrapper `handler()` (auth, Zod, idempotence, limitation) → service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
+**Mutation** : composant client → client typé `@learny/api-client` → relai `proxy.ts` sur la même
+origine → Hono dans `apps/api` → wrapper `handler()` (auth, Zod, idempotence, limitation) →
+service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
 
 **Traitement long** : événement Inngest → fonction de `packages/jobs` découpée en `step.run` idempotents → services → notifications.
 
@@ -131,11 +171,11 @@ Crons (UTC, Inngest) : `cron/hourly-tick` (toutes les heures, :05) → pour chaq
 
 ## 6. Environnements
 
-| Environnement | Web | Base | Jobs | IA |
-|---|---|---|---|---|
-| `local` | `pnpm dev` (localhost:3000) | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé par défaut (`LLM_MODE=mock`) ; réel si clé fournie |
-| `test` (CI) | build + `next start` | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé obligatoire |
-| `preview` | Vercel preview | Supabase projet `preview` (UE) | Inngest branche | réel, plafond bas |
-| `production` | Vercel (fra1) | Supabase projet `prod` (UE, Francfort) | Inngest Cloud | réel |
+| Environnement | Web | API | Base | Jobs | IA |
+|---|---|---|---|---|---|
+| `local` | `pnpm dev` (localhost:3000) | `pnpm dev` (localhost:3001, rôle `all`) | Supabase CLI (Docker) | Inngest Dev Server → `apps/api` | modèle simulé par défaut (`LLM_MODE=mock`) ; réel si clé fournie |
+| `test` (CI) | build + `next start` | build + Hono Node | Supabase CLI (Docker) | endpoint Inngest de `apps/api` | modèle simulé obligatoire |
+| `preview` | Vercel preview `learny-web` | Vercel `learny-api` (fra1), déployée avant le web | Supabase projet `preview` (UE) | Inngest branche → `learny-api` | réel, plafond bas |
+| `production` | Vercel `learny-web` (fra1) | Vercel `learny-api` (fra1), déployée avant le web | Supabase projet `prod` (UE, Francfort) | Inngest Cloud → `learny-api` | réel |
 
 Le détail des variables est dans `.env.example` et `packages/config` (SPEC-009).

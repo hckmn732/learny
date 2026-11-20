@@ -2,9 +2,8 @@
 
 import { Search } from 'lucide-react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { TextField } from '@learny/ui';
-
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.saisie.textFields;
 

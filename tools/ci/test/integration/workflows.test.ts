@@ -23,7 +23,7 @@ function fixture(): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'learny-ci-'));
   FIXTURES.push(dir);
   fs.mkdirSync(path.join(dir, '.github', 'workflows'), { recursive: true });
-  for (const name of ['ci.yml', 'pr-title.yml']) {
+  for (const name of ['ci.yml', 'pr-title.yml', 'deploy.yml']) {
     fs.copyFileSync(
       path.join(ROOT, '.github', 'workflows', name),
       path.join(dir, '.github', 'workflows', name),

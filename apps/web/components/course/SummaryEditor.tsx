@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { CourseSummaryView } from '@learny/contracts';
-
-import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/course';
+import { fr } from '@learny/i18n/fr/course';
 
 const t = fr.course;
 

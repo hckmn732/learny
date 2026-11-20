@@ -1,8 +1,9 @@
+import { fr } from '@learny/i18n/fr/exercises';
+
 import { ExerciseWorkspace } from '../../../../../../../../components/exercises/ExerciseWorkspace';
 import { AppShell } from '../../../../../../../../components/shell/app-shell';
 import { loadPracticeExercisePage } from '../../../../../../../../lib/exercise-page';
 import { loadShellForFormation } from '../../../../../../../../lib/sidebar-page';
-import { fr } from '../../../../../../../../messages/fr/exercises';
 
 export const dynamic = 'force-dynamic';
 

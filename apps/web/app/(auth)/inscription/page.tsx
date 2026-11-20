@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
+import { fr } from '@learny/i18n/fr/auth';
+
 import { AccountForm } from '../../../components/auth/AccountForm';
-import { fr } from '../../../messages/fr/auth';
 
 const t = fr.auth.signup;
 

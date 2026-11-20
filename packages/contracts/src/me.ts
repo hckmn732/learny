@@ -106,6 +106,20 @@ export type OnboardingUpdateOutput = z.infer<typeof OnboardingUpdateOutput>;
 export const TaskModelUpdateBody = TaskModelDto.extend({ credentialId: Uuid });
 export type TaskModelUpdateBody = z.infer<typeof TaskModelUpdateBody>;
 
+export const OnboardingReminderState = z.strictObject({
+  push: z.boolean(),
+  email: z.boolean(),
+  automations: z.boolean(),
+});
+export type OnboardingReminderState = z.infer<typeof OnboardingReminderState>;
+
+export const OnboardingState = z.strictObject({
+  profile: MeDto,
+  preferences: StudyPreferencesDto,
+  reminders: OnboardingReminderState,
+});
+export type OnboardingState = z.infer<typeof OnboardingState>;
+
 export const meGet = defineRoute({
   id: 'me.get',
   method: 'GET',
@@ -138,6 +152,17 @@ export const mePreferencesGet = defineRoute({
   successStatus: 200,
   summary: 'Lit le rythme d’étude du profil (SPEC-602).',
   errors: ['UNAUTHENTICATED', 'NOT_FOUND'],
+});
+
+export const meOnboardingGet = defineRoute({
+  id: 'me.onboarding.get',
+  method: 'GET',
+  path: '/api/v1/me/onboarding',
+  auth: 'user',
+  output: OnboardingState,
+  successStatus: 200,
+  summary: 'Lit l’état complet des écrans d’onboarding de l’apprenant (SPEC-1202).',
+  errors: ['UNAUTHENTICATED', 'NOT_FOUND', 'INTERNAL_ERROR'],
 });
 
 export const mePreferencesUpdate = defineRoute({
@@ -185,6 +210,7 @@ export const meRoutes = {
   meGet,
   meUpdate,
   mePreferencesGet,
+  meOnboardingGet,
   mePreferencesUpdate,
   meOnboardingUpdate,
   meAiTaskModelsUpdate,

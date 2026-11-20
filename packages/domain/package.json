@@ -1,0 +1,24 @@
+{
+  "name": "@learny/domain",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts",
+    "./home/derive": "./src/home/derive.ts",
+    "./review/game-response": "./src/review/game-response.ts"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings=0 .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@learny/bricks": "workspace:*",
+    "@learny/contracts": "workspace:*",
+    "@learny/core": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^5.1.0"
+  }
+}

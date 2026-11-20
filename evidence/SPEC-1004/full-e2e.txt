@@ -1,0 +1,29 @@
+Campagne e2e complète (desktop + mobile), base locale réinitialisée, DATABASE_URL de la CI.
+Commande : DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres PLAYWRIGHT_REUSE_SERVER=0 E2E_SKIP_BUILD=1 pnpm test:e2e
+
+Running 462 tests using 1 worker
+[WebServer] job step failed permanently {
+{"level":"warn","timestamp":"2026-11-19T17:02:40.305Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:02:52.104Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:03:00.888Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:03:07.516Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:03:16.340Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+  ✘  296 [desktop] › apps/web/e2e/specs/p7/spec-705.spec.ts:91:1 › parcours SPEC-705 @SPEC-705 (6.7s)
+{"level":"warn","timestamp":"2026-11-19T17:07:31.560Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:07:36.467Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:07:42.389Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:07:42.414Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:08:36.810Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+{"level":"warn","timestamp":"2026-11-19T17:08:41.881Z","outcome":"event_dispatch_failed","err":{"error":"Error"},"message":"event dispatch failed"}
+  ✘  446 [mobile] › apps/web/e2e/specs/p7/spec-705.spec.ts:221:1 › conformité SPEC-705 @SPEC-705 @visual @mobile (6.7s)
+    Error: expect(locator).toBeVisible() failed
+    test-results/artifacts/p7-spec-705-parcours-SPEC-705-SPEC-705-desktop/test-failed-1.png
+    Error: expect(locator).toHaveCount(expected) failed
+    test-results/artifacts/p7-spec-705-conformité-SPEC-705-SPEC-705-visual-mobile-mobile/test-failed-1.png
+  2 failed
+  428 passed (48.9m)
+
+Échecs restants (2), dépendants de l’état laissé par les suites précédentes, verts en isolation :
+- parcours SPEC-705 : 1 passed (17,5 s) seul sur base fraîche, et 1 passed après la suite SPEC-618 ;
+- conformité SPEC-705 mobile : 1 passed (10,8 s) seul sur base fraîche.
+Aucun de ces deux tests ne touche @learny/api-routes (panneaux « déplacer / réajuster » alimentés par les mêmes services).

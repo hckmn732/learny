@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { ChoiceGroup } from '@learny/ui';
-
-import { fr } from '../../../../messages/fr/ui';
 
 const t = fr.ui.gallery.saisie.choice;
 

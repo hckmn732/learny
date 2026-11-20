@@ -1,4 +1,5 @@
 // Flat ESLint configuration shared by every package (SPEC-001, ET-5).
+
 import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
 import importPlugin from 'eslint-plugin-import';
@@ -32,12 +33,34 @@ const ALLOWED_IMPORTS = {
   // `config` and `testing` are only partially allowed; the dedicated engine blocks below restrict
   // them to `@learny/config/product` and to fixtures (SPEC-401 ET-9).
   'learning-engine': ['core', 'config', 'testing'],
+  'api-client': ['contracts', 'core'],
+  'api-routes': [
+    'contracts',
+    'core',
+    'config',
+    'db',
+    'services',
+    'jobs',
+    'notifications',
+    'llm',
+    'tutor',
+    'ingestion',
+    'automations',
+    'learning-engine',
+    'bricks',
+    'http',
+    'i18n',
+    'ui',
+  ],
+  http: ['contracts', 'core', 'config', 'db', 'services'],
   bricks: ['core', 'contracts', 'ui'],
+  domain: ['contracts', 'core', 'learning-engine', 'bricks'],
   llm: ['core', 'config', 'contracts', 'db'],
   ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],
   contracts: ['core'],
+  i18n: [],
 };
 
 const boundaryZones = [
@@ -62,11 +85,27 @@ const boundaryZones = [
 // Web modules explicitly allowed to use the owner-role client (ADR-0022, SPEC-201 ET-4): the
 // idempotency store of the API wrapper and the integration tests that inspect the database.
 const SERVICE_DB_ALLOWED = [
-  'apps/web/lib/api/idempotency.ts',
+  'packages/http/src/idempotency.ts',
   'apps/web/test/integration/**',
   // End-to-end tests build their own committed fixtures (SPEC-206), like the integration tests.
   'apps/web/e2e/**',
 ];
+
+const WEB_IS_A_CLIENT_PACKAGES = [
+  '@learny/db',
+  '@learny/services',
+  '@learny/jobs',
+  '@learny/llm',
+  '@learny/tutor',
+  '@learny/ingestion',
+  '@learny/automations',
+  '@learny/notifications',
+  '@learny/http',
+  '@learny/api-routes',
+];
+const WEB_IS_A_CLIENT_GROUP = WEB_IS_A_CLIENT_PACKAGES.flatMap((name) => [name, `${name}/*`]);
+const WEB_IS_A_CLIENT_MESSAGE =
+  "apps/web est un client de l'API (ADR-1003) : passer par @learny/api-client.";
 
 // The `ai` package and its `ai/test` subpath are exact names: a gitignore pattern `ai` would also
 // match an internal folder such as `packages/services/src/ai`, which is not provider code.
@@ -188,6 +227,36 @@ const restrictedImportBlocks = [
       ],
     },
   },
+  {
+    files: ['apps/api/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/ui',
+              message: 'apps/api est un serveur : aucun composant UI.',
+            },
+            {
+              name: '@learny/api-client',
+              message: 'apps/api n’utilise pas le client du navigateur.',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/ui/*', '@learny/bricks/view', '@learny/bricks/view/*'],
+              message: 'apps/api n’importe aucune couche de rendu.',
+            },
+            {
+              group: ['@learny/web', '@learny/web/*', '@learny/worker', '@learny/worker/*'],
+              message: 'apps/api ne peut importer une autre application.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export default tseslint.config(
@@ -296,6 +365,165 @@ export default tseslint.config(
     },
   },
   ...restrictedImportBlocks,
+  {
+    // SPEC-1002 ET-2 — @learny/api-client est un paquet partagé (ADR-1007) : exécutable dans un
+    // navigateur, sous Node et sous React Native. Ce bloc remplace le bloc généré par
+    // ALLOWED_IMPORTS pour ce paquet (le dernier bloc gagne) : il réplique la liste blanche et
+    // interdit Node, Next, react-dom et l'entrée serveur de core.
+    files: ['packages/api-client/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/api-client est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/api-client',
+                '!@learny/api-client/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+              ],
+              message: 'packages/api-client ne peut importer que contracts, core.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/api-client est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/api-client est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/api-client est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1002 ET-2 — @learny/domain, même principe que api-client. bricks est autorisé : le
+    // module review/game-response importe opaqueMapping de @learny/bricks (écart ADR-1007
+    // consigné dans evidence/SPEC-1002/acceptance.md ; bricks est pur et déjà bundlé client).
+    files: ['packages/domain/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/domain est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/domain',
+                '!@learny/domain/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/learning-engine',
+                '!@learny/learning-engine/*',
+                '!@learny/bricks',
+                '!@learny/bricks/*',
+              ],
+              message:
+                'packages/domain ne peut importer que contracts, core, learning-engine, bricks.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/domain est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/domain est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/domain est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1002 ET-2 — @learny/i18n : messages purs, aucune dépendance interne autorisée.
+    files: ['packages/i18n/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/i18n est partagé : jamais l'entrée serveur de core (ET-2).",
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/*'],
+              message: "packages/i18n n'importe aucun autre paquet (ET-2, ADR-1007).",
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['node:*'],
+              message: '@learny/i18n est partagé : aucun module Node (ET-2, ADR-1007).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/i18n est partagé : aucun framework (ET-2).',
+            },
+            {
+              group: ['react-dom'],
+              message: '@learny/i18n est partagé : aucun rendu DOM (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   {
     // The pure engine may import @learny/core and the side-effect-free @learny/config/product
     // only (SPEC-401 ET-9, ADR-0140). Node built-ins and network globals are refused in src.
@@ -462,8 +690,68 @@ export default tseslint.config(
     },
   },
   {
-    // Same server-configuration rule, without the `serviceDb` restriction (SPEC-201 ET-4).
+    // Test fixtures may use server configuration; this block only keeps Radix encapsulated.
     files: SERVICE_DB_ALLOWED,
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1001 EF-4 — `learny/web-is-a-client` (ADR-1003): the last block for regular apps/web
+    // files replicates the restrictions of the blocks above and adds the server packages, minus
+    // the reference baseline, the tests and the demo/webhook entry points (handled just below).
+    files: ['apps/web/**/*.{ts,tsx}'],
+    ignores: ['apps/web/lib/server-env.ts', 'apps/web/test/**', 'apps/web/e2e/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@learny/db',
+              importNames: ['serviceDb'],
+              message:
+                'serviceDb est réservé à apps/web/app/_dev/** et apps/web/app/api/webhooks/** (SPEC-101, ET-6).',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@learny/config/server', '@learny/config/server/*'],
+              message:
+                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: WEB_IS_A_CLIENT_GROUP,
+              message: WEB_IS_A_CLIENT_MESSAGE,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Same rule for the _dev demo pages and the webhooks, which may import `serviceDb`: the
+    // config/server and Radix restrictions stay, the baseline still applies, and any new file
+    // importing a server package is refused (SPEC-1001 EF-4).
+    files: [
+      'apps/web/app/%5Fdev/**/*.{ts,tsx}',
+      'apps/web/app/_dev/**/*.{ts,tsx}',
+      'apps/web/app/api/webhooks/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -478,11 +766,16 @@ export default tseslint.config(
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
             },
+            {
+              group: WEB_IS_A_CLIENT_GROUP,
+              message: WEB_IS_A_CLIENT_MESSAGE,
+            },
           ],
         },
       ],
     },
   },
+
   {
     // Packages without any service-role use cannot import `serviceDb` (SPEC-101, ET-6).
     files: [
@@ -596,6 +889,128 @@ export default tseslint.config(
       'import/order': 'off',
       'no-unused-vars': 'off',
       'no-useless-escape': 'off',
+    },
+  },
+  {
+    // SPEC-1003 ET-2 — final block for all HTTP files, including idempotency (also listed in
+    // SERVICE_DB_ALLOWED). It repeats the package allowlist because the last block wins.
+    files: ['packages/http/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: AI_SDK_PATHS,
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/http',
+                '!@learny/http/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config',
+                '!@learny/config/*',
+                '!@learny/db',
+                '!@learny/db/*',
+                '!@learny/services',
+                '!@learny/services/*',
+              ],
+              message: 'packages/http ne peut importer que contracts, core, config, db, services.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['ai', 'ai/*', '@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: '@learny/http est indépendant du framework : aucun import Next (ET-2).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-1004 ET-4 - @learny/api-routes est un paquet serveur : la table d'implementation et les
+    // gestionnaires speciaux importent les services, jamais un ecran ni un framework. Seul le
+    // sous-chemin @learny/ui/tokens est admis (jetons purs de la page HTML de desinscription,
+    // ADR-1007) ; ecart documente de l'ET-4 dans evidence/SPEC-1004/acceptance.md.
+    files: ['packages/api-routes/**/*.{ts,tsx}'],
+    rules: {
+      // A route without parameters still receives the parsed arguments: the leading underscore
+      // marks the ones the table intentionally ignores (`_args`).
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: AI_SDK_PATHS,
+          patterns: [
+            {
+              group: [
+                '@learny/*',
+                '!@learny/api-routes',
+                '!@learny/api-routes/*',
+                '!@learny/contracts',
+                '!@learny/contracts/*',
+                '!@learny/core',
+                '!@learny/core/*',
+                '!@learny/config',
+                '!@learny/config/*',
+                '!@learny/db',
+                '!@learny/db/*',
+                '!@learny/services',
+                '!@learny/services/*',
+                '!@learny/jobs',
+                '!@learny/jobs/*',
+                '!@learny/notifications',
+                '!@learny/notifications/*',
+                '!@learny/llm',
+                '!@learny/llm/*',
+                '!@learny/tutor',
+                '!@learny/tutor/*',
+                '!@learny/ingestion',
+                '!@learny/ingestion/*',
+                '!@learny/automations',
+                '!@learny/automations/*',
+                '!@learny/learning-engine',
+                '!@learny/learning-engine/*',
+                '!@learny/bricks',
+                '!@learny/bricks/*',
+                '!@learny/http',
+                '!@learny/http/*',
+                '!@learny/i18n',
+                '!@learny/i18n/*',
+                '!@learny/ui',
+                '!@learny/ui/*',
+              ],
+              message:
+                'packages/api-routes ne peut importer que les paquets serveur et @learny/ui/tokens.',
+            },
+            {
+              group: ['@radix-ui/*'],
+              message: 'Radix est encapsule par packages/ui (SPEC-303, ET-1).',
+            },
+            {
+              group: ['@ai-sdk/*'],
+              message: 'Seul packages/llm importe un SDK de fournisseur (SPEC-504, BR-IA-09).',
+            },
+            {
+              group: ['next', 'next/*', '!inngest/next'],
+              message:
+                '@learny/api-routes est independant du framework : aucun import Next (SPEC-1101).',
+            },
+          ],
+        },
+      ],
     },
   },
 );

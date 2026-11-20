@@ -11,7 +11,7 @@ const router = vi.hoisted(() => ({ push: vi.fn(), refresh: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => router }));
 
 const apiMock = vi.hoisted(() => ({ meOnboardingUpdate: vi.fn() }));
-vi.mock('../../lib/api-client', () => ({ api: apiMock }));
+vi.mock('@learny/api-client', () => ({ api: apiMock }));
 
 beforeEach(() => {
   router.push.mockReset();

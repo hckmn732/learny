@@ -3,7 +3,7 @@
 // SPEC-803 and SPEC-806 add their entries without overriding the other: CGU, Confidentialité,
 // Mentions légales, then Accessibilité. The order and labels are normative and tested; no script
 // or optional cookie is loaded by the footer.
-import { fr } from '../messages/fr';
+import { fr } from '@learny/i18n';
 
 export interface SiteFooterLink {
   href: string;

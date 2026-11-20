@@ -1,5 +1,5 @@
 # Pile de QA de Learny pour Coolify : même architecture que docker/compose.coolify.yml (Supabase,
-# Inngest, worker, web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
+# Inngest, api, web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
 # simulés pour la recette visuelle et manuelle.
 #
 # Différences avec la production (valeurs par défaut, toutes modifiables depuis Coolify) :
@@ -38,6 +38,9 @@ x-app-environment: &app-environment
   # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
   # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
   GIT_COMMIT: ${GIT_COMMIT:-}
+  API_INTERNAL_URL: http://api:3001
+  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+  LEARNY_API_ROLE: all
 
   # Adresses et Supabase (les trois premières sont aussi intégrées au build du web).
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
@@ -112,7 +115,7 @@ x-app-environment: &app-environment
   LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-}
 
   # Horloge : absente ou vide = instant figé de la démo (ADR-0047) ; `real` = horloge réelle (la
-  # commande des conteneurs web, worker et seed retire alors la variable avant de lancer Node, qui
+  # commande des conteneurs web, api et seed retire alors la variable avant de lancer Node, qui
   # retombe sur l'horloge système, packages/core/src/clock.ts).
   CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
   # Pages /_dev/sdd/* : seule la valeur exacte `true` les active ; refusées en production.
@@ -354,7 +357,7 @@ services:
       - --port
       - '8288'
       - --sdk-url
-      - http://worker:3001/api/inngest
+      - http://api:3001/api/inngest
       - --event-key
       - ${INNGEST_EVENT_KEY:?}
       - --signing-key
@@ -374,10 +377,10 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  worker:
+  api:
     build:
       context: ..
-      dockerfile: docker/worker.Dockerfile
+      dockerfile: docker/api.Dockerfile
       args:
         APP_VERSION: ${APP_VERSION:-qa}
     user: '1000:1000'
@@ -396,6 +399,10 @@ services:
     environment:
       <<: *app-environment
       PORT: '3001'
+      API_INTERNAL_URL: http://api:3001
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
+      LEARNY_API_ROLE: all
     expose:
       - '3001'
     depends_on:
@@ -404,7 +411,7 @@ services:
       seed:
         condition: service_completed_successfully
     healthcheck:
-      test: ['CMD', 'node', '/app/healthcheck.mjs']
+      test: ['CMD', 'node', '/app/healthcheck-api.mjs']
       interval: 10s
       timeout: 5s
       retries: 6
@@ -438,6 +445,8 @@ services:
         exec node apps/web/server.js
     environment:
       <<: *app-environment
+      API_INTERNAL_URL: http://api:3001
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?}
     expose:
       - '3000'
     depends_on:
@@ -452,6 +461,8 @@ services:
       storage:
         condition: service_healthy
       inngest:
+        condition: service_healthy
+      api:
         condition: service_healthy
     healthcheck:
       test: ['CMD', 'node', '/app/healthcheck-web.mjs']

@@ -7,13 +7,12 @@ import { z } from 'zod';
 import { ProblemDetails, defineRoute } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-
-import { bootstrapProbe, createRateLimiter } from '../../lib/api/bootstrap-security';
-import { createRequestOriginGuard, registerSecurity } from '../../lib/api/bootstrap-security';
-import { handler } from '../../lib/api/handler';
-import { setOriginGuard } from '../../lib/api/origin';
-import { noopRateLimiter, getRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
-import { setSessionResolver } from '../../lib/api/session';
+import { handler } from '@learny/http/handler';
+import { setOriginGuard } from '@learny/http/origin';
+import { noopRateLimiter, getRateLimiter, setRateLimiter } from '@learny/http/rate-limit';
+import { bootstrapProbe, createRateLimiter } from '@learny/http/security';
+import { createRequestOriginGuard, registerSecurity } from '@learny/http/security';
+import { setSessionResolver } from '@learny/http/session';
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };
@@ -78,6 +77,7 @@ function call(
 
 beforeAll(() => {
   vi.stubEnv('TRUST_PROXY', 'true');
+  registerSecurity();
   restoreSession = setSessionResolver(() => Promise.resolve(user));
 });
 

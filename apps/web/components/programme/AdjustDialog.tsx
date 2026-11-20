@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/programme';
 import {
   Button,
   Dialog,
@@ -11,8 +12,6 @@ import {
   DialogTitle,
   Textarea,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/programme';
 
 const t = fr.programme;
 

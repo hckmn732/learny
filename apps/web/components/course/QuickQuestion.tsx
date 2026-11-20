@@ -3,8 +3,7 @@
 import { useState } from 'react';
 
 import type { CourseSection } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/course';
+import { fr } from '@learny/i18n/fr/course';
 
 const t = fr.course;
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import type { SidebarFormation } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/shell';
 import {
   Button,
   Icon,
@@ -15,8 +16,6 @@ import {
   iconRegistry,
   useBreakpoint,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/shell';
 
 const t = fr.shell.sidebar.formationManagement;
 

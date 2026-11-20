@@ -13,6 +13,35 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 
 États stockés dans `progress/state.json` (seuls les scripts `tools/sdd/*.mjs` l'écrivent). États dérivés : `ready`, `waiting`, `dependency_blocked`.
 
+## 1 bis. Pistes (ADR-1006)
+
+Le catalogue répartit les phases en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001).
+
+- Une phase est débloquée par le checkpoint de la phase précédente **de la même piste** et par les checkpoints de son champ `requires` (P12 exige CP-8).
+- `specs/catalog.json` : `activeTrack` = piste pilotée par `next.mjs` ; `SDD_TRACK=<piste>` la surcharge pour une commande. Sur la branche `migration`, `activeTrack` vaut `"migration"` ; sur `main`, `"produit"`.
+- `tracks.<piste>.baseBranch` : branche de départ (`start.mjs`), de fusion et de push (`complete.mjs`, `checkpoint.mjs`) ; `versionTags: false` pour la piste migration (tags `cp-1x` seulement) ; `adrBase: 1000` : `adr.mjs` numérote les ADR de la migration à partir d'ADR-1001, ceux du produit restent sous ADR-1000 (aucune collision entre branches).
+- `next.mjs` affiche « Piste : … » ; `AUCUNE SPÉCIFICATION EXÉCUTABLE … En attente des checkpoints d'une autre piste : CP-8` signifie qu'il faut fusionner `main` (`node tools/sdd/sync-main.mjs`) une fois ce checkpoint réussi sur `main`.
+- Invariant de la piste migration : **aucun changement fonctionnel** ; aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée ; chaque spécification rejoue en non-régression ce qu'elle peut affecter, et CP-12/CP-13 la suite complète, le cross-browser et les performances (`phase.checks`).
+- Fin de piste : après CP-13, fusion de `migration` dans `main` et `activeTrack` remis à `"produit"` (SPEC-1302).
+
+### 1 ter. Clôture de la piste
+
+SPEC-1302 prépare cette clôture sans effectuer la fusion. CP-13 est toujours exécuté sur
+`migration` avec `activeTrack: "migration"`. Ensuite, l'agent principal :
+
+1. met à jour `migration`, lance les validations complètes de CP-13 et vérifie que la CI est verte ;
+2. fusionne `main` dans `migration` dans le sens normal pour résoudre une dernière fois les
+   conflits de suivi par `tools/sdd/sync-main.mjs` ;
+3. fusionne `migration` dans `main` avec `--no-ff` ;
+4. dans le **commit de fusion uniquement**, remet `specs/catalog.json.activeTrack` à `"produit"`,
+   puis régénère le statut ;
+5. confirme que `next.mjs --json` choisit une action des phases P0 à P9 et que `status.mjs`
+   affiche à la fois les checkpoints produit et CP-10 à CP-13, terminés ou en cours, sans erreur.
+
+Le cas nominal est couvert dans `tools/sdd/test/unit/next.test.ts` avec l'état final de la piste
+et `activeTrack = "produit"`. Un conflit de suivi conserve les entrées de chaque piste comme
+décrit par ADR-1006 §4 ; il ne modifie aucune preuve ni aucun résultat de test.
+
 ## 2. Boucle (à répéter jusqu'à « TERMINÉ »)
 
 1. **Identifier** : `node tools/sdd/next.mjs` → `REPRENDRE`, `DÉMARRER`, `CHECKPOINT`, `TERMINÉ` ou `AUCUNE SPÉCIFICATION EXÉCUTABLE`.
@@ -24,7 +53,7 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 7. **Valider et générer les preuves** : `node tools/sdd/validate.mjs SPEC-xxx` (lint, typecheck, build, unitaires, intégration, e2e avec vidéo, visuel, critères) → `evidence/SPEC-xxx/`.
 8. **Vérifier les critères d'acceptation** : compléter `evidence/SPEC-xxx/acceptance.md` (✅ + preuve par critère) ; relancer `validate.mjs` jusqu'à `acceptance` réussi.
 9. **Enregistrer les preuves et mettre à jour le suivi** : `node tools/sdd/complete.mjs SPEC-xxx` (commit des preuves, statut `done`, PROGRESS.md régénéré).
-10. **Versionner** : `complete.mjs` fusionne `--no-ff` dans `main` et pousse sur `origin` si configuré (ADR-0051).
+10. **Versionner** : `complete.mjs` fusionne `--no-ff` dans la branche de base de la piste (`main` ou `migration`, §1 bis) et la pousse sur `origin` si configuré (ADR-0051).
 11. **Passer à la suite** : retour à l'étape 1. Si `CHECKPOINT` : `node tools/sdd/checkpoint.mjs CP-n` ; en cas d'échec, corriger sur `fix/<SPEC>-<slug>` puis relancer.
 
 ## 2 bis. Parallélisme contrôlé, surveillance et relance

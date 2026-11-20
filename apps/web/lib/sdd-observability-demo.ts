@@ -1,7 +1,7 @@
 // Deterministic data of the SPEC-010 demonstration (ADR-0049). Everything is computed in memory:
 // no real secret, no Sentry event and no external probe is involved.
 import type { HealthResponse } from '@learny/contracts';
-import { AppError, clock, type Clock } from '@learny/core';
+import { AppError, ERROR_CATALOG, clock, type Clock } from '@learny/core';
 import {
   createLogCapture,
   createLogger,
@@ -10,7 +10,6 @@ import {
   runWithRequestContext,
 } from '@learny/core/server';
 
-import { problemDetails, type ProblemDetails } from './api/handler';
 import { getHealth, probeDatabase } from './health';
 
 /** Safe, bounded identifier reused by the four sections of the page. */
@@ -20,6 +19,27 @@ export const DEMO_USER_ID = 'user-spec010-demo';
 export const DEMO_EMAIL = 'demo-spec010@example.test';
 export const DEMO_API_KEY = 'sk-demo-spec010-not-a-secret'; // learny-test-only
 export const DEMO_APPORT = 'apport-demo-spec010-not-real';
+
+export interface ProblemDetails {
+  type: 'about:blank';
+  title: string;
+  status: number;
+  detail: string;
+  code: string;
+  requestId: string;
+}
+
+function problemDetails(error: AppError, requestId: string): ProblemDetails {
+  const catalog = ERROR_CATALOG[error.code as keyof typeof ERROR_CATALOG];
+  return {
+    type: 'about:blank',
+    title: catalog.title,
+    status: catalog.status,
+    detail: error.detail,
+    code: error.code,
+    requestId,
+  };
+}
 
 export interface ObservabilityDemo {
   requestId: string;

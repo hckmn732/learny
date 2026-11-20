@@ -13,6 +13,8 @@ import { courseReadingRoutes } from './course-reading';
 import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
+import { devMigrationRoutes } from './dev-migration';
+import { devSddMigrationRoutes } from './dev-sdd-migration';
 import { devEmailRoutes, emailRoutes } from './email';
 import { exerciseRoutes } from './exercises';
 import { finalReviewRoutes } from './final-review';
@@ -57,6 +59,8 @@ export const ROUTES = {
   ...authRoutes,
   ...meRoutes,
   ...devRoutes,
+  ...devMigrationRoutes,
+  ...devSddMigrationRoutes,
   ...securityRoutes,
   ...uploadsRoutes,
   ...uploadsDevRoutes,

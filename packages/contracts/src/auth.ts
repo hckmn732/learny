@@ -179,6 +179,7 @@ export const authSignOut = defineRoute({
   output: null,
   successStatus: 204,
   rateLimit: 'auth',
+  freshAuth: true,
   summary: 'Ferme la session (idempotent, 204 même sans session).',
   errors: [],
 });

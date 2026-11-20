@@ -10,8 +10,23 @@ Le dépôt est initialisé localement (branche `main`). Le dépôt distant sera 
 | `spec/<SPEC-ID>-<slug>` | une branche par spécification, créée depuis `main` au démarrage (`spec/SPEC-402-fsrs`) |
 | `fix/<SPEC-ID>-<slug>` | correction d'une anomalie détectée après fusion, rattachée à la spécification d'origine |
 | `release/vX.Y.Z` | préparation d'une version (CP-8 → `v1.0.0`, CP-9 → `v2.0.0`) |
+| `migration` | branche de base de la piste « migration » (ADR-1006) : reçoit les fusions des spécifications SPEC-1001 → SPEC-1302 et, au moins chaque jour, `main` ; fusionnée dans `main` après CP-13 |
 
-Fusion : `git merge --no-ff spec/<…>` dans `main`, message `merge(SPEC-xxx): <titre>` ; la branche est ensuite supprimée localement.
+Fusion : `git merge --no-ff spec/<…>` dans la **branche de base de la piste** de la spécification (`main` pour la piste produit, `migration` pour la piste migration), message `merge(SPEC-xxx): <titre>` ; la branche est ensuite supprimée localement. Les branches `spec/SPEC-1xxx-…` partent de `migration` (`start.mjs` lit `tracks.<piste>.baseBranch` du catalogue).
+
+### 1.0 Piste de migration (ADR-1006)
+
+- Worktree dédié : `git worktree add ../learny-wt-migration migration` ; le worktree principal reste sur `main`.
+- Synchronisation : `node tools/sdd/sync-main.mjs` (livré par SPEC-1001) au moins une fois par jour et avant chaque checkpoint. Conflits de suivi (`progress/state.json`, `progress/PROGRESS.md`) résolus automatiquement par piste ; conflit de code : garder le **comportement** de `main` et la **structure** de `migration`.
+- Modification de route sur `main` : reporter le contrat et son implémentation dans
+  `packages/contracts` et `packages/api-routes`; il n'existe plus de générateur d'arborescence
+  Next.
+- La CI s'exécute sur `migration` ; aucun déploiement depuis la piste avant SPEC-1103 ; la production reste déclenchée par les tags `v*` de `main`.
+- Fin de piste : après CP-13, l'agent principal résout une dernière synchronisation dans le sens
+  `main` → `migration`, fusionne ensuite `migration` dans `main` (`--no-ff`) et remet
+  `"activeTrack": "produit"` dans `specs/catalog.json` dans ce commit de fusion. La vérification
+  se fait avec `next.mjs` et `status.mjs` ; aucune spécification de clôture ne modifie ce champ
+  avant ce moment.
 
 ### 1.1 Worktrees et travail parallèle
 

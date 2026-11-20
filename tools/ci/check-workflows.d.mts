@@ -44,6 +44,9 @@ export interface ReadWorkflowsResult {
   ciRaw: string | null;
   prTitle: WorkflowDoc | null;
   prTitleRaw: string | null;
+  /** Optionnels : apps/web/lib/ci-config.ts construit un snapshot vide sans dépôt. */
+  deploy?: WorkflowDoc | null;
+  deployRaw?: string | null;
   parseErrors: string[];
 }
 

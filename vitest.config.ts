@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
 
 import { assertMockLlm, TEST_ENCRYPTION_KEY } from './packages/testing/src/env';
@@ -19,6 +21,13 @@ const COVERAGE_FLOORS = {
 };
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'server-only': fileURLToPath(
+        new URL('./apps/web/node_modules/server-only/empty.js', import.meta.url),
+      ),
+    },
+  },
   test: {
     passWithNoTests: true,
     env: {
@@ -45,10 +54,11 @@ export default defineConfig({
             // SPEC-204: the e-mail templates live next to the preview server, outside src/.
             'packages/notifications/emails/**/*.test.{ts,tsx}',
             'apps/*/src/**/*.test.{ts,tsx}',
-            'apps/web/{app,components,lib,messages}/**/*.test.{ts,tsx}',
+            'apps/web/{app,components,lib}/**/*.test.{ts,tsx}',
             'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',
             'tools/**/test/unit/**/*.test.ts',
+            'tools/migration/*.test.ts',
             'tools/perf/test/**/*.test.ts',
             'tools/ci/*.test.ts',
             'tools/deploy/*.test.ts',

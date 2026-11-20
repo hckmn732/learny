@@ -1,27 +1,14 @@
-// Health of the web process and of its database (SPEC-006, EF-1/EF-2, ET-1).
 import {
   HealthResponse,
   type ComponentStatus,
   type DatabaseStatus,
 } from '@learny/contracts/health';
 
-/**
- * Capability given to the probe: run one trivial query (e.g. `select 1`).
- * It never exposes a connection string; its result and error message are ignored.
- */
 export type DatabaseQuery = (signal: AbortSignal) => Promise<unknown>;
-
 export const HEALTH_PROBE_TIMEOUT_MS = 2000;
-
 const VERSION_PATTERN = /^[0-9A-Za-z][0-9A-Za-z.+_-]{0,63}$/;
 const COMMIT_PATTERN = /^[0-9a-f]{7,40}$/;
-
-// Wired at startup by instrumentation.ts (lib/health-database.ts) once a database is configured;
-// otherwise the database is `not_configured`. Next.js compiles instrumentation and the routes into
-// separate bundles, each with its own copy of this module: the probe therefore lives on
-// `globalThis`, shared by every bundle of the server process.
 const DATABASE_QUERY_KEY = Symbol.for('learny.health.databaseQuery');
-
 type HealthRegistry = { [DATABASE_QUERY_KEY]?: DatabaseQuery | null };
 
 function registeredQuery(): DatabaseQuery | null {
@@ -37,13 +24,11 @@ export interface HealthOptions {
   env?: Record<string, string | undefined>;
   timeoutMs?: number;
 }
-
 export interface HealthResult {
   httpStatus: 200 | 503;
   body: HealthResponse;
 }
 
-/** Runs the probe with a bounded delay; any failure or timeout is `unavailable`, never an error message. */
 export async function probeDatabase(
   query: DatabaseQuery | null,
   timeoutMs = HEALTH_PROBE_TIMEOUT_MS,
@@ -57,20 +42,21 @@ export async function probeDatabase(
       resolve('unavailable');
     }, timeoutMs);
   });
-  const probe = Promise.resolve()
-    .then(() => query(controller.signal))
-    .then(
-      (): DatabaseStatus => 'ok',
-      (): DatabaseStatus => 'unavailable',
-    );
   try {
-    return await Promise.race([probe, timeout]);
+    return await Promise.race([
+      Promise.resolve()
+        .then(() => query(controller.signal))
+        .then(
+          (): DatabaseStatus => 'ok',
+          (): DatabaseStatus => 'unavailable',
+        ),
+      timeout,
+    ]);
   } finally {
     clearTimeout(timer);
   }
 }
 
-/** Build metadata, restricted to safe formats so that no arbitrary value leaks through. */
 export function buildInfo(env: Record<string, string | undefined> = process.env): {
   version: string;
   commit: string;
@@ -91,18 +77,11 @@ export async function getHealth(options: HealthOptions = {}): Promise<HealthResu
     status: database === 'ok' ? 'ok' : 'degraded',
     ...build,
     database,
-    components: {
-      database,
-      build: buildStatus(build),
-    },
+    components: { database, build: buildStatus(build) },
   });
   return { httpStatus: database === 'unavailable' ? 503 : 200, body };
 }
 
-/**
- * Build component state (EF-5): the deployment identifiers are `not_configured` when they fall
- * back to their safe defaults, `ok` otherwise. No build probe can be `unavailable`.
- */
 export function buildStatus(build: { version: string; commit: string }): ComponentStatus {
   return build.version === 'dev' || build.commit === 'unknown' ? 'not_configured' : 'ok';
 }

@@ -1,8 +1,7 @@
 'use client';
 
 import type { ProgrammeProposalDto } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/programme';
+import { fr } from '@learny/i18n/fr/programme';
 
 import { formatDay, formatLongDate, weeksBetween } from './dates';
 

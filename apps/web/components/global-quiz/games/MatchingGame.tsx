@@ -4,10 +4,10 @@ import { useMemo, useState, type ReactNode } from 'react';
 
 import type { PublicPayload } from '@learny/bricks';
 import type { ReviewItemDto, ReviewMatchingResponse } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { Button, cn } from '@learny/ui';
 
 import { seededShuffle } from '../../../lib/shuffle';
-import { fr } from '../../../messages/fr/globalQuiz';
 
 import { CORRECT_TILE, GameCorrection, Verdict, WRONG_TILE, gameResultOf } from './GameCorrection';
 

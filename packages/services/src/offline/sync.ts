@@ -20,12 +20,16 @@ import {
 } from '@learny/contracts';
 import { startOfUserDay, userLocalDay, type Result } from '@learny/core';
 import { upsertDailyActivity, type DbTx } from '@learny/db';
+import {
+  correctionExplanation,
+  toBrickResponse,
+  toGameCorrection,
+} from '@learny/domain/review/game-response';
 import { type FsrsRating } from '@learny/learning-engine';
 
 import type { ServiceContext } from '../context';
 import { applyReviewResult } from '../learning/apply-review';
 import { requireUser, toResult } from '../resources/result';
-import { correctionExplanation, toBrickResponse, toGameCorrection } from '../review/game-response';
 import { completeReviewSession } from '../review/global-quiz';
 
 const RETENTION_MS = 7 * 24 * 60 * 60 * 1000;

@@ -5,7 +5,9 @@ export type EnvInput = Readonly<Record<string, string | undefined>>;
 
 /** Application environments (EF-3). */
 export const APP_ENVS = ['local', 'test', 'preview', 'production'] as const;
+export const API_ROLES = ['all', 'api', 'jobs'] as const;
 export type AppEnv = (typeof APP_ENVS)[number];
+export type ApiRole = (typeof API_ROLES)[number];
 
 /** Service modes (EF-3). A simulated mode is refused where the specification forbids it. */
 export const LLM_MODES = ['mock', 'live'] as const;

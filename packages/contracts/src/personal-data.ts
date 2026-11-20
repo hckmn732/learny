@@ -43,6 +43,7 @@ export const meExportRequest = defineRoute({
   output: ExportRequestOutput,
   successStatus: 202,
   idempotent: true,
+  freshAuth: true,
   summary: 'Demande un export ZIP des données personnelles (SPEC-211).',
   errors: ['EXPORT_LIMIT_REACHED', 'IDEMPOTENCY_IN_PROGRESS', 'IDEMPOTENCY_KEY_REUSED'],
 });
@@ -68,6 +69,7 @@ export const meDeletionSchedule = defineRoute({
   auth: 'user',
   output: DeletionState,
   successStatus: 200,
+  freshAuth: true,
   summary: 'Programme la suppression du compte à J+30 (SPEC-211).',
   errors: ['NOT_FOUND'],
 });
@@ -79,6 +81,7 @@ export const meDeletionCancel = defineRoute({
   auth: 'user',
   output: null,
   successStatus: 204,
+  freshAuth: true,
   summary: 'Annule une suppression programmée (SPEC-211).',
   errors: [],
 });

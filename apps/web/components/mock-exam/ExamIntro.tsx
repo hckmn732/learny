@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { ExamIntroDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/mockExam';
 import { Breadcrumb } from '@learny/ui';
-
-import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/mockExam';
 
 const t = fr.mockExam;
 

@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { fr } from '@learny/i18n/fr/ui';
 import { SkipLink } from '@learny/ui';
 
 import { sddPagesEnabled } from '../../../lib/sdd-pages';
-import { fr } from '../../../messages/fr/ui';
 
 export const dynamic = 'force-dynamic';
 

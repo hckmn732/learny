@@ -3,9 +3,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { ApiError, api } from '../../lib/api-client';
+import { ApiError, api } from '@learny/api-client';
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { qk } from '../../lib/query-keys';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec201;

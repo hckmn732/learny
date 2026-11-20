@@ -5,7 +5,10 @@ import {
   indexCatalog,
   nextAction,
   nextActionJson,
+  nextAdrNumber,
   normalizeState,
+  renderProgressMarkdown,
+  trackConfig,
   type Catalog,
   type SddState,
 } from '../../core.mjs';
@@ -120,6 +123,95 @@ describe('[SPEC-003] next action', () => {
     expect(st.specs['SPEC-003']?.status).toBe('pending');
     // An independent branch stays selectable (CL-6).
     expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-004' });
+  });
+
+  it('runs an independent track without waiting for the product checkpoints (ADR-1006)', () => {
+    const c = catalog();
+    c.phases.push(
+      { id: 'P10', dir: 'p10', title: 'Migration A', checkpoint: 'CP-10', track: 'migration' },
+      { id: 'P11', dir: 'p11', title: 'Migration B', checkpoint: 'CP-11', track: 'migration', requires: ['CP-0'] },
+    );
+    const base = c.byId['SPEC-001'];
+    if (!base) throw new Error('fixture');
+    const mig = (id: string, phase: string, dependsOn: string[]) => {
+      const s = { ...base, id, phase, path: `specs/${id}.md`, dependsOn };
+      c.specs.push(s);
+      c.byId[id] = s;
+    };
+    mig('SPEC-1001', 'P10', ['SPEC-001']);
+    mig('SPEC-1101', 'P11', ['SPEC-1001']);
+    const st = state(c, (s) => {
+      done(s, 'SPEC-001', 'SPEC-002', 'SPEC-003', 'SPEC-004');
+    });
+    // The product track asks for CP-0; the migration track starts SPEC-1001 regardless.
+    expect(nextAction(c, st).kind).toBe('checkpoint');
+    expect(nextActionJson(nextAction(c, st, 'migration'))).toMatchObject({ kind: 'start', id: 'SPEC-1001' });
+    c.activeTrack = 'migration';
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-1001' });
+    // P11 waits for CP-10 (same track) and CP-0 (requires).
+    done(st, 'SPEC-1001');
+    const set = (cp: string) => {
+      const x = st.checkpoints[cp];
+      if (x) x.status = 'passed';
+    };
+    set('CP-10');
+    expect(displayStatus(c, st, 'SPEC-1101')).toBe('waiting');
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'stuck', waitingFor: ['CP-0'] });
+    set('CP-0');
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-1101' });
+    // Track configuration: the product track merges into main, the migration track into its branch.
+    c.tracks = { migration: { baseBranch: 'migration', versionTags: false, adrBase: 1000 } };
+    expect(trackConfig(c, 'produit')).toEqual({ baseBranch: 'main', versionTags: true, adrBase: 0 });
+    expect(trackConfig(c, 'migration')).toEqual({ baseBranch: 'migration', versionTags: false, adrBase: 1000 });
+  });
+
+  it('numbers ADRs within each track range so parallel branches never collide (ADR-1006)', () => {
+    const existing = [1, 335, 336, 1001, 1007];
+    expect(nextAdrNumber(existing, 0)).toBe(337);
+    expect(nextAdrNumber(existing, 1000)).toBe(1008);
+    expect(nextAdrNumber([1, 336], 1000)).toBe(1001);
+    expect(() => nextAdrNumber([999], 0)).toThrow();
+  });
+
+  it('[SPEC-1302] returns to the product track after the migration state is complete', () => {
+    const c = catalog();
+    const migrationPhases = [
+      { id: 'P10', dir: 'p10', title: 'Préparation API', checkpoint: 'CP-10', track: 'migration' },
+      { id: 'P11', dir: 'p11', title: 'API autonome', checkpoint: 'CP-11', track: 'migration' },
+      { id: 'P12', dir: 'p12', title: 'Bascule web', checkpoint: 'CP-12', track: 'migration' },
+      { id: 'P13', dir: 'p13', title: 'Clôture', checkpoint: 'CP-13', track: 'migration' },
+    ];
+    c.phases.push(...migrationPhases);
+    const base = c.byId['SPEC-001'];
+    if (base === undefined) throw new Error('fixture');
+    const ids = ['SPEC-1001', 'SPEC-1101', 'SPEC-1201', 'SPEC-1302'];
+    for (const [index, id] of ids.entries()) {
+      const phase = migrationPhases[index];
+      if (phase === undefined) throw new Error('fixture');
+      const spec = {
+        ...base,
+        id,
+        title: `Titre ${id}`,
+        phase: phase.id,
+        path: `specs/${id}.md`,
+        dependsOn: [],
+      };
+      c.specs.push(spec);
+      c.byId[id] = spec;
+    }
+    const st = state(c, (current) => {
+      done(current, 'SPEC-001', 'SPEC-002', 'SPEC-003', 'SPEC-004', ...ids);
+      for (const checkpoint of ['CP-0', 'CP-10', 'CP-11', 'CP-12', 'CP-13']) {
+        const value = current.checkpoints[checkpoint];
+        if (value !== undefined) value.status = 'passed';
+      }
+    });
+    c.activeTrack = 'produit';
+
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-901' });
+    const progress = renderProgressMarkdown(c, st, '2026-11-11T12:20:00Z');
+    expect(progress).toContain('| P10 | Préparation API | 1/1 | CP-10 | ✅');
+    expect(progress).toContain('| P13 | Clôture | 1/1 | CP-13 | ✅');
   });
 
   it('never selects a member of a dependency cycle (CL-2)', () => {

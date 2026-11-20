@@ -1,0 +1,53 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="51.346115">
+<testsuite name="p10/spec-1003.spec.ts" timestamp="2026-11-18T23:51:40.412Z" hostname="desktop" tests="2" failures="0" skipped="0" time="4.162" errors="0">
+<testcase name="exécute les cas de transport @SPEC-1003" classname="p10/spec-1003.spec.ts" time="2.28">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/attachments/spec-1003-http-cases-069041bb7530049c580c21ba9699eb20a5f354cf.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/attachments/axe-e0f40ed4104a49613a0a712f7cf4a2fa9ccc5b7f.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-exécute-les-cas-de-transport-SPEC-1003-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration de la couche HTTP @SPEC-1003 @visual @mobile" classname="p10/spec-1003.spec.ts" time="1.882">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-desktop/attachments/axe-669d3dcefaa85ad82e7afba641971eba58e38725.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p10/spec-1003.spec.ts" timestamp="2026-11-18T23:51:40.412Z" hostname="mobile" tests="1" failures="0" skipped="0" time="2.654" errors="0">
+<testcase name="démonstration de la couche HTTP @SPEC-1003 @visual @mobile" classname="p10/spec-1003.spec.ts" time="2.654">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-mobile/attachments/axe-8dc1d1e84bd2a3eef4eb43a7298690a34e7830ce.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1003-démonstratio-982d8-TTP-SPEC-1003-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

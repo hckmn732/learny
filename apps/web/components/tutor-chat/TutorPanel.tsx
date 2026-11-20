@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { MarkdownContent } from '@learny/bricks/view';
 import type { ContextItemDto, ConversationSummaryDto, FollowUpDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/tutorChat';
 import { ResponsivePanel } from '@learny/ui';
-
-import { fr } from '../../messages/fr/tutorChat';
 
 import {
   dataOf,

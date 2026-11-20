@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { fr } from '@learny/i18n/fr/sdd';
+
 import type { ReferenceEntryMeta, ReferenceState } from '../../lib/reference-types';
-import { fr } from '../../messages/fr/sdd';
 
 const t = fr.sdd.spec005.gallery;
 

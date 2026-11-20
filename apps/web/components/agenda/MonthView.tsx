@@ -6,11 +6,11 @@
 // another formation, the kind label otherwise.
 import { agendaSlotStyle } from '@learny/config';
 import type { AgendaSlot } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/agenda';
 import { colors } from '@learny/ui/tokens';
 
 import { civilDayNumber, civilDow, longDayLabel } from '../../lib/agenda/dates';
 import { chipLabel, monthCells } from '../../lib/agenda/format';
-import { fr } from '../../messages/fr/agenda';
 
 const t = fr.agenda;
 

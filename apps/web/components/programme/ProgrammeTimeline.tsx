@@ -1,9 +1,8 @@
 'use client';
 
 import type { ProgrammeModuleDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/programme';
 import { colors } from '@learny/ui/tokens';
-
-import { fr } from '../../messages/fr/programme';
 
 import { barGeometry, dayDiff, formatRange, mondayOf, programmeWeeks } from './dates';
 

@@ -3,8 +3,7 @@
 import { useState } from 'react';
 
 import type { ActiveProgrammeChapterDto, ActiveProgrammeModuleDto } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/programme';
+import { fr } from '@learny/i18n/fr/programme';
 
 import { formatRange } from './dates';
 

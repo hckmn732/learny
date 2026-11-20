@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
+import { api } from '@learny/api-client';
 import type {
   CompletedFormationRow,
   HomeDto,
@@ -18,7 +19,8 @@ import {
   highlightedSlot,
   minutesUntil,
   slotState,
-} from '@learny/services/home/derive';
+} from '@learny/domain/home/derive';
+import { fr } from '@learny/i18n/fr/home';
 import {
   Button,
   EmptyState,
@@ -37,9 +39,6 @@ import {
   formationAccents,
   slotKinds,
 } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/home';
 
 import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';

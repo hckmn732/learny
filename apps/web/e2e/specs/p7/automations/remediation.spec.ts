@@ -15,6 +15,7 @@ import {
   type TestSession,
 } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
+
 import { seedOwnModels } from '../../../support/own-model';
 
 const PREFIX = 'sdd-715-e2e-';

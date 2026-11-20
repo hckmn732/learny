@@ -1,8 +1,7 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/quiz';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/quiz';
 
 const t = fr.quiz;
 

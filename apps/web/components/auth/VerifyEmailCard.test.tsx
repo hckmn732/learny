@@ -14,7 +14,7 @@ const apiMock = vi.hoisted(() => ({
   meGet: vi.fn(),
   authResend: vi.fn(),
 }));
-vi.mock('../../lib/api-client', () => ({ api: apiMock }));
+vi.mock('@learny/api-client', () => ({ api: apiMock }));
 
 const NOW = '2026-11-11T12:20:00.000Z';
 

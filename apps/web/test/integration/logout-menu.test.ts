@@ -12,8 +12,10 @@ import {
   type TestSession,
 } from '@learny/testing/supabase';
 
-import { POST as signOutRoute } from '../../app/api/v1/auth/sign-out/route';
-import { GET as getHeader } from '../../app/api/v1/me/header/route';
+import { honoRoute } from './hono-route';
+
+const signOutRoute = honoRoute('/api/v1/auth/sign-out', 'POST');
+const getHeader = honoRoute('/api/v1/me/header', 'GET');
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };

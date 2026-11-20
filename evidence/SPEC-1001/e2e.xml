@@ -1,0 +1,57 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="0" time="36.842512">
+<testsuite name="p10/spec-1001.spec.ts" timestamp="2026-11-18T19:30:05.516Z" hostname="desktop" tests="2" failures="0" skipped="0" time="2.024" errors="0">
+<testcase name="affiche le couplage du web @SPEC-1001" classname="p10/spec-1001.spec.ts" time="1.037">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/attachments/spec-1001-coupling-22a5ec2428a09c0761cff8cd5c7efbf8f2fb1d9c.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/attachments/axe-dc1cb4c241396b6055342606206b108e7400eb2e.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-affiche-le-couplage-du-web-SPEC-1001-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="démonstration de la piste conforme @SPEC-1001 @visual @mobile" classname="p10/spec-1001.spec.ts" time="0.987">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/attachments/axe-8d235ace6c7e783c7347acaf24aea029ab4c9679.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/attachments/spec-1001-demo-0b1e509c8687babda36cbce81a531f7ec97e8018.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="p10/spec-1001.spec.ts" timestamp="2026-11-18T19:30:05.516Z" hostname="mobile" tests="1" failures="0" skipped="0" time="1.04" errors="0">
+<testcase name="démonstration de la piste conforme @SPEC-1001 @visual @mobile" classname="p10/spec-1001.spec.ts" time="1.04">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/attachments/axe-8d54b7930b6eed75221663ab41c2f420fc3ff88c.json]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/attachments/spec-1001-demo-001510533789f12352bb5c9ff111417cc6fefb62.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/video.webm]]
+
+[[ATTACHMENT|artifacts/p10-spec-1001-démonstratio-34dc1-rme-SPEC-1001-visual-mobile-mobile/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

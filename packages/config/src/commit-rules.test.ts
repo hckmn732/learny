@@ -25,6 +25,9 @@ describe('[SPEC-002] commit rules', () => {
     'chore(CP-0): checkpoint CP-0 réussi',
     'chore(sdd): initialise le référentiel',
     'docs(SPEC-002): complète CONTRIBUTING',
+    // ADR-1006 — piste de migration.
+    'feat(SPEC-1101): crée l application apps/api',
+    'chore(CP-10): checkpoint CP-10 réussi',
   ])('accepts %s', async (message) => {
     const report = await check(message);
     expect(report.errors).toEqual([]);
@@ -36,6 +39,7 @@ describe('[SPEC-002] commit rules', () => {
     ['feat(web): ajoute X', 'learny/scope-pattern'],
     ['feature(SPEC-001): ajoute X', 'type-enum'],
     ['feat(SPEC-1): ajoute X', 'learny/scope-pattern'],
+    ['feat(SPEC-10001): ajoute X', 'learny/scope-pattern'],
     ['feat(SPEC-001):', 'subject-empty'],
     ['feat(SPEC-001): ajoute X.', 'subject-full-stop'],
     [`feat(SPEC-001): ${'a'.repeat(73)}`, 'learny/subject-max-length'],

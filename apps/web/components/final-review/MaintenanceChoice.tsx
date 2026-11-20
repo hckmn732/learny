@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { FinalReviewDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/finalReview';
 import { ChoiceGroup } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/finalReview';
 
 const t = fr.finalReview;
 

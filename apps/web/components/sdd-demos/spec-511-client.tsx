@@ -1,11 +1,12 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/sdd';
+
 import type {
   Spec511BudgetRow,
   Spec511Data,
   Spec511ResultRow,
 } from '../../app/%5Fdev/sdd/spec-511-data';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec511;

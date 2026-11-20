@@ -4,10 +4,9 @@ import { Fragment, useMemo, useState, type KeyboardEvent, type ReactNode } from 
 
 import type { PublicPayload } from '@learny/bricks';
 import type { ReviewClozeResponse, ReviewItemDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { Button, cn } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
-
-import { fr } from '../../../messages/fr/globalQuiz';
 
 import { GameCorrection, gameResultOf } from './GameCorrection';
 

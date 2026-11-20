@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { fr } from '../../messages/fr/mockExam';
+import { fr } from '@learny/i18n/fr/mockExam';
 
 const t = fr.mockExam;
 

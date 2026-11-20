@@ -6,10 +6,10 @@
 // the empty-day message and the now line on the current day.
 import type { AgendaSlot } from '@learny/contracts';
 import type { Clock } from '@learny/core';
+import { fr } from '@learny/i18n/fr/agenda';
 import { colors } from '@learny/ui/tokens';
 
 import { gridHours, layoutDay, type GridHours } from '../../lib/agenda/grid';
-import { fr } from '../../messages/fr/agenda';
 
 import { NowLine } from './NowLine';
 import { SlotBlock } from './SlotBlock';

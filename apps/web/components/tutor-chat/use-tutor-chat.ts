@@ -4,6 +4,7 @@ import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type {
   ChatContextInput,
   ContextItemDto,
@@ -13,9 +14,7 @@ import type {
   TutorMessageDto,
   TutorSourceDto,
 } from '@learny/contracts';
-
-import { api, ApiError } from '../../lib/api-client';
-import { fr } from '../../messages/fr/tutorChat';
+import { fr } from '@learny/i18n/fr/tutorChat';
 
 import type { Selection } from './use-text-selection';
 

@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 import { brickFingerprint, stemText } from '@learny/bricks';
 import { maskFingerprint, QuestionBankPrepareInput, QuestionBankResult } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/sdd';
 
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec513;

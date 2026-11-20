@@ -1,3 +1,5 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import {
   loadSpec711Demo,
   type Spec711Data,
@@ -5,7 +7,6 @@ import {
   type Spec711KeyRow,
   type Spec711Step,
 } from '../../app/%5Fdev/sdd/spec-711-data';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec711;

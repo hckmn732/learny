@@ -41,6 +41,8 @@ const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 14
 // Shared worktrees may already run a server on the default port: allow an isolated run.
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
 const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
+const API_PORT = PORT + 1;
+const API_INTERNAL_URL = `http://127.0.0.1:${String(API_PORT)}`;
 
 export default defineConfig({
   testDir: './e2e/specs',
@@ -130,31 +132,53 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'], ...COMMON, viewport: { width: 1440, height: 900 } },
     },
   ],
-  webServer: {
-    command: 'pnpm --filter @learny/web exec node server.mjs',
-    url: `${BASE_URL}/api/v1/health`,
-    reuseExistingServer:
-      process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
-      (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
-    timeout: 120000,
-    env: {
-      ...TEST_SERVER_ENV,
-      PORT: String(PORT),
-      APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
-      ENABLE_SDD_PAGES: 'true',
-      // SPEC-804: rapport de démonstration figé pour la page de performance.
-      PERF_DEMO_FIXTURE: '1',
-      // The server sits behind a trusted proxy in these tests: each test announces its own address
-      // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.
-      TRUST_PROXY: 'true',
-      APP_ENV: 'test',
-      // SPEC-203: events run in the process, without an Inngest Dev Server (EF-6).
-      JOBS_MODE: 'inline',
-      // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
-      SDD_STACK_DEMO: 'true',
-      // SPEC-602: the onboarding reminders stub a browser whose subscription uses this test key.
-      NEXT_PUBLIC_VAPID_PUBLIC_KEY:
-        'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM',
+  webServer: [
+    {
+      command: 'pnpm --filter @learny/api dev',
+      url: `${API_INTERNAL_URL}/health`,
+      reuseExistingServer:
+        process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
+        (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
+      timeout: 120000,
+      env: {
+        ...TEST_SERVER_ENV,
+        PORT: String(API_PORT),
+        API_PORT: String(API_PORT),
+        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
+        ENABLE_SDD_PAGES: 'true',
+        APP_ENV: 'test',
+        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
+        JOBS_MODE: 'inline',
+        TRUST_PROXY: 'true',
+      },
     },
-  },
+    {
+      command: 'pnpm --filter @learny/web exec node server.mjs',
+      url: `${BASE_URL}/api/v1/health`,
+      reuseExistingServer:
+        process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
+        (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
+      timeout: 120000,
+      env: {
+        ...TEST_SERVER_ENV,
+        PORT: String(PORT),
+        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
+        ENABLE_SDD_PAGES: 'true',
+        API_INTERNAL_URL,
+        // SPEC-804: rapport de démonstration figé pour la page de performance.
+        PERF_DEMO_FIXTURE: '1',
+        // The server sits behind a trusted proxy in these tests: each test announces its own address
+        // (fixture `clientAddress`), so the IP-keyed rate-limit buckets of SPEC-208 stay independent.
+        TRUST_PROXY: 'true',
+        APP_ENV: 'test',
+        // SPEC-203: events run in the process, without an Inngest Dev Server (EF-6).
+        JOBS_MODE: 'inline',
+        // SPEC-008 demo page: a deterministic, explicitly labelled simulated state for captures.
+        SDD_STACK_DEMO: 'true',
+        // SPEC-602: the onboarding reminders stub a browser whose subscription uses this test key.
+        NEXT_PUBLIC_VAPID_PUBLIC_KEY:
+          'BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM',
+      },
+    },
+  ],
 });

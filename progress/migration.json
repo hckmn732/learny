@@ -1,0 +1,15 @@
+{
+  "coupling": {
+    "pages": 0,
+    "lib": 0,
+    "components": 0,
+    "dev": 0,
+    "proxy": 0,
+    "apiRoutes": 0
+  },
+  "routes": {
+    "registry": 219,
+    "routeFiles": 1
+  },
+  "clientComponents": []
+}

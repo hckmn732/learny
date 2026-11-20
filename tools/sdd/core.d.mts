@@ -14,6 +14,21 @@ export interface CatalogPhase {
   dir: string;
   title: string;
   checkpoint: string;
+  /** Piste de la phase (ADR-1006) ; « produit » par défaut. */
+  track?: string;
+  /** Checkpoints (d'autres pistes) à réussir avant de débloquer la phase. */
+  requires?: string[];
+  /** Contrôles supplémentaires du checkpoint : 'cross-browser', 'perf'. */
+  checks?: string[];
+}
+
+export interface TrackConfig {
+  /** Branche de départ des branches de spécification, cible des fusions et du push. */
+  baseBranch: string;
+  /** Pose les tags SemVer (v0.n.0, v1.0.0…) aux checkpoints ; sinon seulement `cp-n`. */
+  versionTags: boolean;
+  /** Début de la plage de numérotation des ADR de la piste (0 → ADR-0001…0999, 1000 → ADR-1001…1999). */
+  adrBase: number;
 }
 
 export interface CatalogSpec {
@@ -32,6 +47,8 @@ export interface CatalogSpec {
 export interface RawCatalog {
   phases: CatalogPhase[];
   specs: CatalogSpec[];
+  activeTrack?: string;
+  tracks?: Record<string, Partial<TrackConfig>>;
 }
 
 export interface Catalog extends RawCatalog {
@@ -74,7 +91,7 @@ export type NextAction =
   | { kind: 'resume' | 'start'; spec: CatalogSpec }
   | { kind: 'checkpoint'; checkpoint: string; phase: CatalogPhase }
   | { kind: 'finished' }
-  | { kind: 'stuck'; remaining: string[] };
+  | { kind: 'stuck'; remaining: string[]; waitingFor?: string[] };
 
 export interface PhaseSummary extends CatalogPhase {
   total: number;
@@ -110,9 +127,22 @@ export function isBlockedTransitively(
   id: string,
   seen?: Set<string>,
 ): boolean;
+export const DEFAULT_TRACK: string;
+export function trackOf(phase: CatalogPhase | undefined): string;
+export function activeTrack(catalog: Catalog, override?: string): string;
+export function trackConfig(catalog: Catalog, track: string): TrackConfig;
+export function nextAdrNumber(existing: number[], adrBase?: number): number;
+export function phaseOf(catalog: Catalog, phaseId: string): CatalogPhase | undefined;
+export function specTrack(catalog: Catalog, spec: CatalogSpec): string;
 export function phaseUnlocked(catalog: Catalog, st: SddState, phaseId: string): boolean;
-export function readySpecs(catalog: Catalog, st: SddState): CatalogSpec[];
-export function nextAction(catalog: Catalog, st: SddState): NextAction;
+export function readySpecs(catalog: Catalog, st: SddState, track?: string): CatalogSpec[];
+export function mergeTrackStates(
+  catalog: Catalog,
+  ours: SddState,
+  theirs: SddState,
+  track: string,
+): SddState;
+export function nextAction(catalog: Catalog, st: SddState, track?: string): NextAction;
 export function nextActionJson(action: NextAction): Record<string, unknown>;
 export function progressSummary(catalog: Catalog, st: SddState): ProgressSummary;
 export function renderProgressMarkdown(catalog: Catalog, st: SddState, now: string): string;

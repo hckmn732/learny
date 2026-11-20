@@ -19,6 +19,7 @@ import {
   expectTokens,
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
+
 import { seedOwnModels } from '../../support/own-model';
 
 const NOW = '2026-11-11T12:20:00Z';

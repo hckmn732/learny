@@ -1,5 +1,6 @@
+import { fr } from '@learny/i18n/fr/sdd';
+
 import { loadSpec110Demo, type Spec110Data } from '../../app/%5Fdev/sdd/spec-110-data';
-import { fr } from '../../messages/fr/sdd';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec110;
@@ -131,10 +132,10 @@ function Subscription({ data }: Readonly<{ data: Spec110Data }>) {
   );
 }
 
-export default function Spec110Demo() {
+export default async function Spec110Demo() {
   let data: Spec110Data;
   try {
-    data = loadSpec110Demo();
+    data = await loadSpec110Demo();
   } catch {
     return (
       <div className="mt-6">

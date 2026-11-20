@@ -1,8 +1,7 @@
 'use client';
 
 import type { ResourceSuggestionItem } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/module';
+import { fr } from '@learny/i18n/fr/module';
 
 const t = fr.module;
 

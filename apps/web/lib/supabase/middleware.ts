@@ -3,7 +3,7 @@
 import { createServerClient } from '@supabase/ssr';
 import type { NextRequest } from 'next/server';
 
-import type { DestinationProfile } from '@learny/services/destination';
+import type { DestinationProfile } from '../auth-destination';
 
 import { loadProfileRow } from './profile';
 import { sessionCookieOptions, supabaseConfig } from './server';

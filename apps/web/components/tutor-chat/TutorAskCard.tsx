@@ -1,8 +1,7 @@
 'use client';
 
 import type { CourseStarter, CourseView } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/tutorChat';
+import { fr } from '@learny/i18n/fr/tutorChat';
 
 const t = fr.tutorChat;
 

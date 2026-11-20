@@ -3,11 +3,27 @@
 import { useState } from 'react';
 
 import type { TutorRunResult } from '@learny/contracts';
-import type { TutorDemo } from '@learny/tutor/demo';
 
 import { BaseCard } from '../sdd/base-tokens';
 
 type Scenario = 'success' | 'refusal' | 'invalid';
+
+export interface TutorDemo {
+  registry: Array<{ name: string; description: string; inputKeys: string[] }>;
+  prompts: Array<{
+    id: string;
+    task: string;
+    preview: string;
+    version: string;
+    tone: string;
+    language: string;
+  }>;
+  success: TutorRunResult;
+  refusal: TutorRunResult;
+  invalid: TutorRunResult;
+  tone: { text: string };
+  injection: { dataBlock: string; toolCalls: number; text: string };
+}
 
 const SCENARIOS: { id: Scenario; label: string; testId: string }[] = [
   { id: 'success', label: 'Lancer le parcours validé', testId: 'tutor-run-success' },
@@ -118,7 +134,11 @@ export function Spec508Client({ demo }: Readonly<{ demo: TutorDemo }>) {
             </thead>
             <tbody>
               {demo.registry.map((action) => (
-                <tr key={action.name} data-testid="tutor-action-row" className="border-t border-border align-top">
+                <tr
+                  key={action.name}
+                  data-testid="tutor-action-row"
+                  className="border-t border-border align-top"
+                >
                   <th scope="row" className="px-2 py-2 font-mono">
                     {action.name}
                   </th>
@@ -158,7 +178,11 @@ export function Spec508Client({ demo }: Readonly<{ demo: TutorDemo }>) {
             </thead>
             <tbody>
               {demo.prompts.map((prompt) => (
-                <tr key={prompt.id} data-testid="tutor-prompt-row" className="border-t border-border">
+                <tr
+                  key={prompt.id}
+                  data-testid="tutor-prompt-row"
+                  className="border-t border-border"
+                >
                   <td className="px-2 py-2 font-mono">{prompt.task}</td>
                   <td className="px-2 py-2">{prompt.preview}</td>
                   <td className="px-2 py-2">{prompt.version}</td>
@@ -173,7 +197,10 @@ export function Spec508Client({ demo }: Readonly<{ demo: TutorDemo }>) {
         <p className="mt-4 text-13">
           Libellés fixes de l’interface : en français. La sortie du tuteur suit le profil :
         </p>
-        <p className="mt-2 rounded-12 border border-solid border-border p-3 text-13" data-testid="tutor-tone-output">
+        <p
+          className="mt-2 rounded-12 border border-solid border-border p-3 text-13"
+          data-testid="tutor-tone-output"
+        >
           <span className="font-semibold">tu / en</span> — {demo.tone.text}
         </p>
         <p className="mt-2 rounded-12 border border-solid border-border p-3 text-13">
@@ -208,7 +235,10 @@ export function Spec508Client({ demo }: Readonly<{ demo: TutorDemo }>) {
         <ToolTable result={result} />
         {result.corrections.length > 0 ? (
           <p className="mt-3 text-13" data-testid="tutor-corrections">
-            Corrections : {result.corrections.map((entry) => `${String(entry.corrections)}/${String(entry.errors)}`).join(', ')}
+            Corrections :{' '}
+            {result.corrections
+              .map((entry) => `${String(entry.corrections)}/${String(entry.errors)}`)
+              .join(', ')}
           </p>
         ) : null}
         {result.notification === null ? null : (

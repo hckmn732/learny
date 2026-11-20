@@ -1,6 +1,7 @@
 'use client';
 
 import type { ProgrammeProposalDto } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/programme';
 import {
   Button,
   Dialog,
@@ -9,8 +10,6 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@learny/ui';
-
-import { fr } from '../../messages/fr/programme';
 
 const t = fr.programme;
 

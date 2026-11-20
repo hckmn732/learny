@@ -18,12 +18,12 @@ import {
   correctionExplanation,
   toBrickResponse,
   toGameCorrection,
-} from '@learny/services/review/game-response';
+} from '@learny/domain/review/game-response';
+import { fr } from '@learny/i18n/fr/globalQuiz-offline';
 import { EmptyState } from '@learny/ui';
 
 import { readProgress, writeProgress, type StoredPack } from '../../lib/offline/db';
 import { enqueue } from '../../lib/offline/queue';
-import { fr } from '../../messages/fr/globalQuiz-offline';
 import { GamePanel } from '../global-quiz/GamePanel';
 import { GameRail } from '../global-quiz/GameRail';
 import { GlobalQuizHeader } from '../global-quiz/GlobalQuizHeader';

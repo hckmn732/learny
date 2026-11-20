@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const VERCEL_CONFIG = 'vercel.json';
+export const API_VERCEL_CONFIG = 'apps/api/vercel.json';
 export const DEPLOY_WORKFLOW = '.github/workflows/deploy.yml';
 export const DEPLOY_ENVS = ['preview', 'production'];
 export const DEPLOY_COMPONENTS = ['web', 'base', 'jobs', 'ai'];
@@ -32,6 +33,8 @@ export const PREVIEW_REQUIRED_KEYS = Object.freeze([
   'RESEND_API_KEY',
   'RATE_LIMIT_IP_SECRET',
   'EMAIL_LINK_SECRET',
+  'API_INTERNAL_URL',
+  'API_PROXY_SECRET',
 ]);
 
 const HEADERS = Object.freeze({
@@ -105,6 +108,21 @@ export function readVercelConfig(root = ROOT) {
     return { config: JSON.parse(raw), raw, error: null };
   } catch (error) {
     return { config: null, raw, error: `${VERCEL_CONFIG} : JSON invalide — ${error.message}` };
+  }
+}
+
+export function readApiVercelConfig(root = ROOT) {
+  const file = path.join(root, API_VERCEL_CONFIG);
+  const raw = readText(file);
+  if (raw === null) return { config: null, raw, error: `${API_VERCEL_CONFIG} est absent.` };
+  try {
+    return { config: JSON.parse(raw), raw, error: null };
+  } catch (error) {
+    return {
+      config: null,
+      raw,
+      error: `${API_VERCEL_CONFIG} : JSON invalide — ${error.message}`,
+    };
   }
 }
 

@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 
+import { fr } from '@learny/i18n/fr/auth';
+
 import { VerifyEmailCard } from '../../../components/auth/VerifyEmailCard';
-import { fr } from '../../../messages/fr/auth';
 
 const t = fr.auth.verify;
 

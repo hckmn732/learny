@@ -1,11 +1,10 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getActiveProgramme, getModuleCourse } from '@learny/services';
+import { isActiveProgramme } from '@learny/contracts';
 
 import { CourseScreen } from '../../../../../../../components/course/CourseScreen';
 import { AppShell } from '../../../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../../../lib/supabase/page';
@@ -27,17 +26,22 @@ export default async function CoursePage({ params, searchParams }: CoursePagePro
   const { chapitre } = await searchParams;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, programme] = await Promise.all([
-    loadShellForFormation(fid),
-    getActiveProgramme(ctx, fid),
-  ]);
-  if (!programme.ok) {
-    if (programme.error.code === 'NOT_FOUND') notFound();
-    if (programme.error.code === 'CONFLICT') redirect(`/formations/${fid}/programme`);
-    throw programme.error;
+  const client = await serverApi();
+  let programme;
+  let shell;
+  try {
+    [programme, shell] = await Promise.all([
+      client.api.programmeGet({ params: { fid }, query: {} }),
+      loadShellForFormation(fid),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    if (isApiError(error, 'CONFLICT')) redirect(`/formations/${fid}/programme`);
+    throw error;
   }
-  const selected = programme.value.modules.find((entry) => entry.id === mid);
+  if (!isActiveProgramme(programme)) redirect(`/formations/${fid}/programme`);
+  const selected = programme.modules.find((entry) => entry.id === mid);
   if (selected === undefined) notFound();
 
   if (selected.status === 'locked') {
@@ -69,10 +73,16 @@ export default async function CoursePage({ params, searchParams }: CoursePagePro
     );
   }
 
-  const screen = await getModuleCourse(ctx, mid, chapitre);
-  if (!screen.ok) {
-    if (screen.error.code === 'NOT_FOUND') notFound();
-    throw screen.error;
+  let screen;
+  try {
+    screen = await client.api.moduleCourse({
+      params: { mid },
+      query: chapitre === undefined ? {} : { chapitre },
+    });
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
 
   return (
@@ -82,7 +92,7 @@ export default async function CoursePage({ params, searchParams }: CoursePagePro
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
       sidebarError={!shell.sidebar.ok}
     >
-      <CourseScreen initial={screen.value} />
+      <CourseScreen initial={screen} />
     </AppShell>
   );
 }

@@ -2,10 +2,21 @@
 
 import { useActionState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { QualificationReport } from '@learny/contracts';
 import { Badge, Button, Card, ErrorState } from '@learny/ui';
 
-import { runSpec506Demo, type Spec506DemoState } from '../../app/%5Fdev/sdd/spec-506-actions';
+interface Spec506DemoState {
+  scenario: 'idle' | 'success' | 'invalid';
+  input: string;
+  report: QualificationReport | null;
+  error: string | null;
+}
+
+function formText(formData: FormData, key: string, fallback: string): string {
+  const value = formData.get(key);
+  return typeof value === 'string' ? value : fallback;
+}
 
 const INITIAL: Spec506DemoState = { scenario: 'idle', input: '{}', report: null, error: null };
 
@@ -46,6 +57,23 @@ function reportStatus(report: QualificationReport | null): string {
 }
 
 export default function Spec506Demo() {
+  const runSpec506Demo = async (
+    _previous: Spec506DemoState,
+    formData: FormData,
+  ): Promise<Spec506DemoState> => {
+    try {
+      return (await api.devSddSpec506Run({
+        body: { scenario: formText(formData, 'scenario', 'success') },
+      })) as Spec506DemoState;
+    } catch (caught) {
+      return {
+        scenario: formText(formData, 'scenario', 'success') === 'invalid' ? 'invalid' : 'success',
+        input: '{}',
+        report: null,
+        error: caught instanceof Error ? caught.message : 'Démonstration indisponible.',
+      };
+    }
+  };
   const [state, action, pending] = useActionState(runSpec506Demo, INITIAL);
   const report = state.report;
 

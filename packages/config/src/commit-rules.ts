@@ -17,7 +17,8 @@ export const COMMIT_TYPES = [
 
 export type CommitType = (typeof COMMIT_TYPES)[number];
 
-export const COMMIT_SCOPE_PATTERN = /^(SPEC-\d{3}|CP-\d|sdd)$/;
+// SPEC-1xxx et CP-1x : piste de migration (ADR-1006).
+export const COMMIT_SCOPE_PATTERN = /^(SPEC-\d{3,4}|CP-\d{1,2}|sdd)$/;
 export const SUBJECT_MAX = 72;
 export const MERGE_SUBJECT_MAX = 100;
 export const HEADER_MAX = 100;

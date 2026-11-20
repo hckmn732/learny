@@ -1,10 +1,10 @@
+import { fr } from '@learny/i18n/fr/globalQuiz';
 import { ErrorState } from '@learny/ui';
 
 import { GlobalQuizSession } from '../../../../../components/global-quiz/GlobalQuizSession';
 import { AppShell } from '../../../../../components/shell/app-shell';
 import { loadGlobalQuizPage } from '../../../../../lib/global-quiz-page';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
-import { fr } from '../../../../../messages/fr/globalQuiz';
 
 export const dynamic = 'force-dynamic';
 

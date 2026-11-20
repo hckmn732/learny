@@ -2,9 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { fr } from '@learny/i18n/fr/gaps';
 import { ErrorState } from '@learny/ui';
-
-import { fr } from '../../messages/fr/gaps';
 
 const t = fr.gaps;
 

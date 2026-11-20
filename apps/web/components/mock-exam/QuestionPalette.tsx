@@ -1,8 +1,7 @@
 'use client';
 
+import { fr } from '@learny/i18n/fr/mockExam';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/mockExam';
 
 const t = fr.mockExam;
 

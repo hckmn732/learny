@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import { RESOURCE_LIMITS, RESOURCE_RULES } from '@learny/config';
 import {
   DELETED_SOURCE_LABEL,
   SIMULATED_UPLOAD_CASES,
   type SimulatedUploadCase,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/sdd';
 
-import { ApiError, api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/sdd';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec206;

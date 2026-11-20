@@ -1,6 +1,6 @@
 'use client';
 
-import { fr } from '../../messages/fr/globalQuiz';
+import { fr } from '@learny/i18n/fr/globalQuiz';
 
 const t = fr.globalQuiz;
 

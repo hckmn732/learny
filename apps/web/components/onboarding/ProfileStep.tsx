@@ -3,13 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { CourseLanguage, TutorTone } from '@learny/contracts';
 import { AppError } from '@learny/core';
+import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError, Select, TextField } from '@learny/ui';
 import { cn } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
-import { fr } from '../../messages/fr/onboarding';
 
 import { StepHeading } from './StepHeading';
 

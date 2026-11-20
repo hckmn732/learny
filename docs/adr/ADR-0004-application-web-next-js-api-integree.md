@@ -1,9 +1,11 @@
 # ADR-0004 — Application web Next.js, API intégrée
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-1001
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-001, SPEC-006, SPEC-201
+
+> Remplacée par ADR-1001 (séparation backend/frontend, 2026-11-18) : l’API vit dans `apps/api` (ADR-1002) et `apps/web` devient un client pur (ADR-1003). Le texte ci-dessous est conservé pour l’historique.
 
 ## Contexte
 

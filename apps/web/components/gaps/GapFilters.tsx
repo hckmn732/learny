@@ -4,9 +4,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
 import type { GapCountsByNature, GapNature } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/gaps';
 import { cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/gaps';
 
 const t = fr.gaps.filters;
 

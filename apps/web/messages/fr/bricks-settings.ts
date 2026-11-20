@@ -1,5 +1,6 @@
+import { settings } from '@learny/i18n/fr/settings';
+
 import { bricks } from './bricks';
-import { settings } from './settings';
 
 export const fr = {
   bricks,

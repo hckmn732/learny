@@ -55,6 +55,18 @@ export type FormationPauseInput = z.input<typeof FormationPauseInput>;
 const idParams = z.object({ fid: Uuid });
 
 export const formationManagementRoutes = {
+  formationAccessGet: defineRoute({
+    id: 'formations.access',
+    method: 'GET',
+    path: '/api/v1/formations/:fid/access',
+    auth: 'user',
+    params: idParams,
+    output: null,
+    successStatus: 204,
+    rateLimit: 'none',
+    summary: 'Confirme avant le rendu que la formation est visible par l’apprenant (SPEC-1202).',
+    errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
+  }),
   currentFormationUpdate: defineRoute({
     id: 'formations.current',
     method: 'PATCH',

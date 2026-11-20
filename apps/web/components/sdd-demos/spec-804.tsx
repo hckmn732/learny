@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { onCLS, onINP, onLCP } from 'web-vitals';
 
-import { fr } from '../../messages/fr/sdd';
+import { fr } from '@learny/i18n/fr/sdd';
 
 const t = fr.sdd.spec804.live;
 

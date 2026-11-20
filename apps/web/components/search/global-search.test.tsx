@@ -7,9 +7,8 @@ import {
   type SearchItem,
   type SearchKind,
 } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/search';
 import { cleanup, renderComponent, screen, waitFor, within } from '@learny/testing/render';
-
-import { fr } from '../../messages/fr/search';
 
 import { GlobalSearch, type SearchFunction } from './global-search';
 

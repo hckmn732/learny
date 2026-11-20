@@ -2,6 +2,18 @@
   "project": "Learny",
   "version": 1,
   "generatedOn": "2026-11-11",
+  "activeTrack": "migration",
+  "tracks": {
+    "produit": {
+      "baseBranch": "main",
+      "versionTags": true
+    },
+    "migration": {
+      "baseBranch": "migration",
+      "versionTags": false,
+      "adrBase": 1000
+    }
+  },
   "phases": [
     {
       "id": "P0",
@@ -62,6 +74,45 @@
       "dir": "p9-v2",
       "title": "Fonctionnalités V2 et livraison V2",
       "checkpoint": "CP-9"
+    },
+    {
+      "id": "P10",
+      "dir": "p10-migration-preparation",
+      "title": "Migration — préparation, couche HTTP et paquets partagés",
+      "checkpoint": "CP-10",
+      "track": "migration"
+    },
+    {
+      "id": "P11",
+      "dir": "p11-migration-api",
+      "title": "Migration — application API autonome",
+      "checkpoint": "CP-11",
+      "track": "migration"
+    },
+    {
+      "id": "P12",
+      "dir": "p12-migration-bascule",
+      "title": "Migration — bascule du web sur l’API",
+      "checkpoint": "CP-12",
+      "track": "migration",
+      "requires": [
+        "CP-8"
+      ],
+      "checks": [
+        "cross-browser",
+        "perf"
+      ]
+    },
+    {
+      "id": "P13",
+      "dir": "p13-migration-multi-clients",
+      "title": "Migration — API multi-clients et clôture",
+      "checkpoint": "CP-13",
+      "track": "migration",
+      "checks": [
+        "cross-browser",
+        "perf"
+      ]
     }
   ],
   "specs": [
@@ -257,7 +308,7 @@
       ],
       "visual": "demo",
       "path": "specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md",
-      "scope": "Paquet @learny/jobs (client Inngest, enregistrement des fonctions, fonction de démonstration), route /api/inngest dans apps/web, apps/worker (Hono) qui sert les mêmes fonctions, tests d'exécution directe d'une fonction à étapes avec reprise.",
+      "scope": "Paquet @learny/jobs (client Inngest, enregistrement des fonctions, fonction de démonstration), route /api/inngest dans apps/web, ancien serveur Worker Hono qui sert les mêmes fonctions, tests d'exécution directe d'une fonction à étapes avec reprise.",
       "validation": {
         "unit": true,
         "integration": true,
@@ -3890,6 +3941,335 @@
       "visual": "demo",
       "path": "specs/p9-v2/SPEC-908-version-2-0-0.md",
       "scope": "Non-régression complète V1+V2, parcours V2, CHANGELOG, tag v2.0.0.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1001",
+      "phase": "P10",
+      "title": "Démarrage de la piste de migration et garde-fous de séparation",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-003",
+        "SPEC-011"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-1003",
+        "ADR-1006",
+        "ADR-0049"
+      ],
+      "visual": "demo",
+      "path": "specs/p10-migration-preparation/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-separation.md",
+      "scope": "CI sur la branche migration sans déploiement, synchronisation quotidienne de main (sync-main.mjs), règle learny/web-is-a-client avec liste de référence décroissante, rapport de couplage, pages SDD à 4 chiffres.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1002",
+      "phase": "P10",
+      "title": "Paquets partagés — client d’API, logique pure et messages",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1007",
+        "ADR-1001",
+        "ADR-1004"
+      ],
+      "visual": "demo",
+      "path": "specs/p10-migration-preparation/SPEC-1002-paquets-partages-client-d-api-logique-pure-et-messages.md",
+      "scope": "@learny/api-client, @learny/domain, @learny/i18n ; contrôle de portabilité navigateur/Node/React Native.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1003",
+      "phase": "P10",
+      "title": "Couche HTTP indépendante du framework (@learny/http)",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1002",
+        "ADR-1007",
+        "ADR-0251",
+        "ADR-0258",
+        "ADR-0120"
+      ],
+      "visual": "demo",
+      "path": "specs/p10-migration-preparation/SPEC-1003-couche-http-independante-du-framework.md",
+      "scope": "Déplacement de apps/web/lib/api vers @learny/http (Request/Response standard), configuration explicite des protections, parité des réponses.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1004",
+      "phase": "P10",
+      "title": "Table d’implémentation des routes (@learny/api-routes)",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1003"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1002",
+        "ADR-1007",
+        "ADR-0049"
+      ],
+      "visual": "demo",
+      "path": "specs/p10-migration-preparation/SPEC-1004-table-d-implementation-des-routes.md",
+      "scope": "ROUTE_IMPLEMENTATIONS et SPECIAL_HANDLERS ; fichiers route.ts Next générés ; contrôle de dérive.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1101",
+      "phase": "P11",
+      "title": "Application apps/api (Hono) servant toutes les routes",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1004",
+        "SPEC-1002"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1002",
+        "ADR-1001",
+        "ADR-0017",
+        "ADR-0049"
+      ],
+      "visual": "demo",
+      "path": "specs/p11-migration-api/SPEC-1101-application-apps-api-hono.md",
+      "scope": "Serveur Hono montant toutes les routes, /api/inngest, SSE ; parité Next/Hono par suites paramétrées ; Playwright à deux serveurs.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1102",
+      "phase": "P11",
+      "title": "Authentification multi-clients et protections derrière un proxy",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1101"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1005",
+        "ADR-0121",
+        "ADR-0252",
+        "ADR-0258",
+        "ADR-0007"
+      ],
+      "visual": "demo",
+      "path": "specs/p11-migration-api/SPEC-1102-authentification-multi-clients-et-protections-derriere-proxy.md",
+      "scope": "Bearer + cookie, vérification locale du JWT, freshAuth sur les routes sensibles, proxy de confiance (origine, adresse).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1103",
+      "phase": "P11",
+      "title": "Absorption du worker, images, CI et déploiement de l’API",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1102"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1002",
+        "ADR-0017",
+        "ADR-0329",
+        "ADR-0330",
+        "ADR-1006"
+      ],
+      "visual": "demo",
+      "path": "specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md",
+      "scope": "Suppression de l’ancien serveur Worker, rôles de l’API, image Docker, compose, CI, déploiement API puis web, prévisualisation de migration.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1201",
+      "phase": "P12",
+      "title": "Bascule des appels /api du web vers apps/api",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1103"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1003",
+        "ADR-1005",
+        "ADR-1002",
+        "ADR-0252"
+      ],
+      "visual": "demo",
+      "path": "specs/p12-migration-bascule/SPEC-1201-bascule-des-appels-api-du-web-vers-apps-api.md",
+      "scope": "Relai /api par proxy.ts vers apps/api, suppression des routes Next, OpenAPI servi par l’API, parité e2e complète et cross-browser.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1202",
+      "phase": "P12",
+      "title": "Écrans et proxy du web alimentés par l’API",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1201"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1003",
+        "ADR-1007",
+        "ADR-0041",
+        "ADR-0332",
+        "ADR-0252"
+      ],
+      "visual": "demo",
+      "path": "specs/p12-migration-bascule/SPEC-1202-ecrans-et-proxy-du-web-alimentes-par-l-api.md",
+      "scope": "Chargeurs SSR, pages, composants et proxy.ts via @learny/api-client serveur ; budget de surcoût ≤ 25 ms.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1203",
+      "phase": "P12",
+      "title": "Pages de démonstration via l’API et web sans dépendance serveur",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1202"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1003",
+        "ADR-0049",
+        "ADR-1006",
+        "ADR-1007"
+      ],
+      "visual": "demo",
+      "path": "specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md",
+      "scope": "Pages /_dev/sdd via routes dev.sdd.*, retrait des dépendances serveur du web, règle sans exception, contrôle de la construction.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1301",
+      "phase": "P13",
+      "title": "API prête pour les clients natifs",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1203"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1004",
+        "ADR-1005",
+        "ADR-1007",
+        "ADR-0120"
+      ],
+      "visual": "demo",
+      "path": "specs/p13-migration-multi-clients/SPEC-1301-api-prete-pour-les-clients-natifs.md",
+      "scope": "Sécurité OpenAPI, CORS contrôlé, mode jeton et lecteur SSE du client, politique de version, client natif simulé.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-1302",
+      "phase": "P13",
+      "title": "Clôture de la migration et retour sur main",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-1301"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-1006",
+        "ADR-1002",
+        "ADR-1003",
+        "ADR-1007"
+      ],
+      "visual": "demo",
+      "path": "specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md",
+      "scope": "Retrait du code de transition, documentation, exploitation, rotation du secret de proxy, contrôle permanent du couplage, préparation de la fusion dans main.",
       "validation": {
         "unit": true,
         "integration": true,

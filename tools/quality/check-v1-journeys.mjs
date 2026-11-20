@@ -2,8 +2,8 @@
 // Validation documentaire de la matrice des parcours V1 (SPEC-807 EF-8, ET-6, CA-5).
 //
 // Lit `docs/quality/v1-journeys.md` et vérifie chaque étape contre `specs/catalog.json`,
-// `docs/product/business-rules.md`, les routes de `apps/web/app` et les fichiers de tests et de
-// fixtures. Les champs de preuve doivent rester des liens vers `evidence/SPEC-807/` : aucune case
+// `docs/product/business-rules.md`, les routes OpenAPI et celles de `apps/web/app`, puis les
+// fichiers de tests et de fixtures. Les preuves restent des liens vers `evidence/SPEC-807/` :
 // cochée, aucun statut écrit à la main. Le script n'écrit rien ; il sort en code 1 sur toute erreur.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -132,6 +132,22 @@ export function loadRoutes(root = REPO, appDir = 'apps/web/app') {
     }
   };
   walk(base, []);
+  const openapi = path.join(root, 'apps/api/openapi.json');
+  if (fs.existsSync(openapi)) {
+    const document = JSON.parse(fs.readFileSync(openapi, 'utf8'));
+    for (const [pathname, operations] of Object.entries(document.paths ?? {})) {
+      routes.push({
+        segments: pathname
+          .split('/')
+          .filter(Boolean)
+          .map((segment) => segment.replace(/^\{(.+)\}$/, '[$1]')),
+        kind: 'api',
+        methods: HTTP_METHODS.filter((method) =>
+          Object.hasOwn(operations ?? {}, method.toLowerCase()),
+        ),
+      });
+    }
+  }
   return routes;
 }
 

@@ -1,8 +1,9 @@
+import { parsePublicEnv } from '@learny/config';
+
 import { SettingsView } from '../../../components/settings/settings-view';
 import { AppShell } from '../../../components/shell/app-shell';
 import { loadAiModelsPage } from '../../../lib/ai-models-page';
 import { loadNotificationSettingsPage } from '../../../lib/notification-settings-page';
-import { getPublicEnv } from '../../../lib/server-env';
 import { loadSettingsPage } from '../../../lib/settings-page';
 import { loadShellPage } from '../../../lib/sidebar-page';
 
@@ -30,7 +31,7 @@ export default async function ParametresPage() {
         notificationError={!notifications.ok}
         initialAiModels={aiModels.ok ? aiModels.data : null}
         aiModelsError={!aiModels.ok}
-        pushPublicKey={getPublicEnv().NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+        pushPublicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
         {...(settings.ok || settings.requestId === undefined
           ? {}
           : { requestId: settings.requestId })}

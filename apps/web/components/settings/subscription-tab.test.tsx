@@ -2,9 +2,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { api } from '@learny/api-client';
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
-
-import { api } from '../../lib/api-client';
 
 import { SubscriptionTab } from './subscription-tab';
 

@@ -3,8 +3,7 @@
 import NextLink from 'next/link';
 
 import type { NotionGraphDto, NotionGraphNode } from '@learny/contracts';
-
-import { fr } from '../../messages/fr/notionGraph';
+import { fr } from '@learny/i18n/fr/notionGraph';
 
 import { moduleColor } from './palette';
 

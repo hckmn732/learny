@@ -1,9 +1,8 @@
 'use client';
 
 import type { ExerciseCorrection } from '@learny/contracts';
+import { fr } from '@learny/i18n/fr/exercises';
 import { Button, cn } from '@learny/ui';
-
-import { fr } from '../../messages/fr/exercises';
 
 const t = fr.exercises;
 

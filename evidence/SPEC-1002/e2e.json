@@ -1,0 +1,491 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/workspaces/learny/hckmn732/learny-wt-migration/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-1002\\b",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/playwright.config.ts",
+    "rootDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys",
+        "name": "journeys",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys-firefox",
+        "name": "journeys-firefox",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "journeys-webkit",
+        "name": "journeys-webkit",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "snapshotDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3103",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "snapshotDir": "/workspaces/learny/hckmn732/learny-wt-migration/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3103",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/sdd/SPEC-1002/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": {
+      "command": "pnpm --filter @learny/web exec node server.mjs",
+      "url": "http://127.0.0.1:3103/api/v1/health",
+      "reuseExistingServer": false,
+      "timeout": 120000,
+      "env": {
+        "CLOCK_FIXED_AT": "2026-11-11T12:20:00Z",
+        "LLM_MODE": "mock",
+        "TZ": "UTC",
+        "PORT": "3103",
+        "APP_ENCRYPTION_KEY": "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=",
+        "ENABLE_SDD_PAGES": "true",
+        "PERF_DEMO_FIXTURE": "1",
+        "TRUST_PROXY": "true",
+        "APP_ENV": "test",
+        "JOBS_MODE": "inline",
+        "SDD_STACK_DEMO": "true",
+        "NEXT_PUBLIC_VAPID_PUBLIC_KEY": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM"
+      }
+    }
+  },
+  "suites": [
+    {
+      "title": "p10/spec-1002.spec.ts",
+      "file": "p10/spec-1002.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "appelle l API avec le client partagé @SPEC-1002",
+          "ok": true,
+          "tags": [
+            "SPEC-1002"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2026,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T22:49:57.315Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "spec-1002-api-call",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/attachments/spec-1002-api-call-3908128d95886fb187956b940d70abea493b56ce.png"
+                    },
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/attachments/axe-734d904d9beb6f384999a94e8451ca11ae9fc3db.json"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-appelle-l-API-avec-le-client-partagé-SPEC-1002-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "978518b6771659ca660c-b02cf4b55a2cc4f6af9c",
+          "file": "p10/spec-1002.spec.ts",
+          "line": 10,
+          "column": 1
+        },
+        {
+          "title": "démonstration des paquets partagés @SPEC-1002 @visual @mobile",
+          "ok": true,
+          "tags": [
+            "SPEC-1002",
+            "visual",
+            "mobile"
+          ],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1956,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T22:49:59.734Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/attachments/axe-8607402364d3b6160972e997977c66c34d33e3c9.json"
+                    },
+                    {
+                      "name": "spec-1002-demo",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/attachments/spec-1002-demo-bdc8283dc4e4412fd494ab3bb415a840318d25d3.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-desktop/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            },
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1958,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T22:50:03.085Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "axe",
+                      "contentType": "application/json",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/attachments/axe-9671869a1f74bc6b39f95cf2571beb9652656920.json"
+                    },
+                    {
+                      "name": "spec-1002-demo",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/attachments/spec-1002-demo-7f62ab1d8274ec3fb9c1420274460fe381d713bf.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/video.webm"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/video-1.webm"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/workspaces/learny/hckmn732/learny-wt-migration/test-results/artifacts/p10-spec-1002-démonstratio-7a5c8-gés-SPEC-1002-visual-mobile-mobile/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "978518b6771659ca660c-7f54d63f7013f0292208",
+          "file": "p10/spec-1002.spec.ts",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T22:49:15.359Z",
+    "duration": 50059.651000000005,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

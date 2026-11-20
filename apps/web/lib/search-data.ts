@@ -11,8 +11,8 @@ import {
   SEARCH_TOO_LONG_MESSAGE,
   type SearchResponse,
 } from '@learny/contracts';
-import type { ServiceContext } from '@learny/services';
-import { searchUserContent } from '@learny/services';
+
+import { apiErrorRequestId, isApiError, serverApi } from './api/server-client';
 
 /** Total of every group, before the per-kind cut of the service (EF-3). */
 export function searchTotal(response: SearchResponse): number {
@@ -34,10 +34,7 @@ export type SearchPageState =
  * Page state of `/recherche?q=` for one service context. Shared by the server component and the
  * integration test, so the page and the direct URL search run the exact same code (ET-3).
  */
-export async function searchPageForContext(
-  ctx: ServiceContext,
-  rawQuery: string,
-): Promise<SearchPageState> {
+export async function searchPageForApi(rawQuery: string): Promise<SearchPageState> {
   const query = normalizeSearchText(rawQuery);
   const length = Array.from(query).length;
   if (length < SEARCH_QUERY_MIN_LENGTH) return { status: 'short', query };
@@ -45,16 +42,22 @@ export async function searchPageForContext(
     return { status: 'error', query, message: SEARCH_TOO_LONG_MESSAGE };
   }
 
-  const result = await searchUserContent(ctx, { q: query, limit: SEARCH_MAX_LIMIT });
-  if (!result.ok) {
-    return result.error.requestId === undefined
+  try {
+    const client = await serverApi();
+    const response = await client.api.searchGlobal({
+      query: { q: query, limit: SEARCH_MAX_LIMIT },
+    });
+    return {
+      status: 'done',
+      query: response.query,
+      response,
+      total: searchTotal(response),
+    };
+  } catch (error) {
+    if (isApiError(error, 'UNAUTHENTICATED')) throw error;
+    const requestId = apiErrorRequestId(error);
+    return requestId === undefined
       ? { status: 'error', query }
-      : { status: 'error', query, requestId: result.error.requestId };
+      : { status: 'error', query, requestId };
   }
-  return {
-    status: 'done',
-    query: result.value.query,
-    response: result.value,
-    total: searchTotal(result.value),
-  };
 }

@@ -322,3 +322,70 @@ describe('[SPEC-011] workflow rules', () => {
     expect(check(workflows).errors.join('\n')).toContain('YAML invalide');
   });
 });
+
+describe('[SPEC-1001] piste de migration et garde-fous de déploiement', () => {
+  it('déclenche la CI sur migration (EF-1, CA-1)', () => {
+    const workflows = realWorkflows();
+    expect(workflows.parseErrors).toEqual([]);
+    expect(check(workflows).errors).toEqual([]);
+    expect(describeCi(workflows).triggers.push).toContain('migration');
+
+    const noMigration = copy();
+    const push = { ...(noMigration.ci?.on?.push as { branches?: string[] } | undefined) };
+    push.branches = (push.branches ?? []).filter((branch) => branch !== 'migration');
+    noMigration.ci = {
+      ...(noMigration.ci ?? {}),
+      on: { ...(noMigration.ci?.on ?? {}), push },
+    };
+    expect(check(noMigration).errors.join('\n')).toContain(
+      'Déclencheur push absent pour migration',
+    );
+  });
+
+  it('autorise la branche migration dans la preview avec l’API (SPEC-1103)', () => {
+    const condition = (realWorkflows().deploy?.jobs?.preview?.if ?? '').replaceAll(' ', '');
+    expect(condition).not.toContain("github.event.workflow_run.head_branch!='migration'");
+    expect(condition).not.toContain("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')");
+
+    const loosened = copy();
+    const preview = loosened.deploy?.jobs?.preview;
+    if (preview !== undefined)
+      preview.if =
+        "github.event.workflow_run.event == 'pull_request' && " +
+        "github.event.workflow_run.conclusion == 'success' && " +
+        "github.event.workflow_run.head_branch != 'main' && " +
+        "github.event.workflow_run.head_branch != 'migration' && " +
+        "!startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')";
+    const report = check(loosened).errors.join('\n');
+    expect(report).toContain('doit déployer la branche migration');
+    expect(report).toContain('doit accepter les branches spec/SPEC-1*');
+  });
+
+  it('refuse une exclusion des branches spec/SPEC-1* de la preview', () => {
+    const withoutGlob = copy();
+    const preview = withoutGlob.deploy?.jobs?.preview;
+    if (preview !== undefined)
+      preview.if = `${preview.if ?? ''} && !startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')`;
+    expect(check(withoutGlob).errors.join('\n')).toContain('branches spec/SPEC-1*');
+  });
+
+  it('garde la production derrière un tag v* appartenant à main (EF-2, CA-1)', () => {
+    const production = realWorkflows().deploy?.jobs?.production;
+    expect((production?.if ?? '').replaceAll(' ', '')).toContain(
+      "startsWith(github.event.workflow_run.head_branch,'v')",
+    );
+    const runs = (production?.steps ?? [])
+      .map((step) => (typeof step.run === 'string' ? step.run : ''))
+      .join('\n');
+    expect(runs).toContain('git merge-base --is-ancestor');
+    expect(runs).toContain('origin/main');
+
+    const weakened = copy();
+    const prod = weakened.deploy?.jobs?.production;
+    if (prod !== undefined)
+      prod.steps = (prod.steps ?? []).filter(
+        (step) => !(step.run ?? '').includes('merge-base --is-ancestor'),
+      );
+    expect(check(weakened).errors.join('\n')).toContain('appartient à main');
+  });
+});

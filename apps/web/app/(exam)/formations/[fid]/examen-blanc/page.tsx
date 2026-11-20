@@ -1,11 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
-
-import { createServiceContext, getExamIntro } from '@learny/services';
 
 import { ExamIntro } from '../../../../../components/mock-exam/ExamIntro';
 import { AppShell } from '../../../../../components/shell/app-shell';
+import { isApiError, serverApi } from '../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../lib/route-guard';
 import { loadShellForFormation } from '../../../../../lib/sidebar-page';
 import { readPageSession } from '../../../../../lib/supabase/page';
@@ -21,11 +18,18 @@ export default async function ExamIntroPage({ params }: ExamIntroPageProps) {
   const { fid } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [intro, shell] = await Promise.all([getExamIntro(ctx, fid), loadShellForFormation(fid)]);
-  if (!intro.ok) {
-    if (intro.error.code === 'NOT_FOUND') notFound();
-    throw intro.error;
+  const client = await serverApi();
+  let intro;
+  let shell;
+  try {
+    [intro, shell] = await Promise.all([
+      client.api.getExamIntro({ params: { fid } }),
+      loadShellForFormation(fid),
+    ]);
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
 
   return (
@@ -35,10 +39,7 @@ export default async function ExamIntroPage({ params }: ExamIntroPageProps) {
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
       sidebarError={!shell.sidebar.ok}
     >
-      <ExamIntro
-        intro={intro.value}
-        programmeHref={`/formations/${encodeURIComponent(fid)}/programme`}
-      />
+      <ExamIntro intro={intro} programmeHref={`/formations/${encodeURIComponent(fid)}/programme`} />
     </AppShell>
   );
 }

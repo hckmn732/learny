@@ -11,16 +11,16 @@ import { z } from 'zod';
 
 import { ProblemDetails, defineRoute } from '@learny/contracts';
 import { closeDb, serviceDb, sql } from '@learny/db';
-
+import { handler } from '@learny/http/handler';
+import { setOriginGuard } from '@learny/http/origin';
+import { setRateLimiter } from '@learny/http/rate-limit';
 import {
   createRateLimiter,
   createRequestOriginGuard,
   registerSecurity,
-} from '../../lib/api/bootstrap-security';
-import { handler } from '../../lib/api/handler';
-import { setOriginGuard } from '../../lib/api/origin';
-import { setRateLimiter } from '../../lib/api/rate-limit';
-import { setSessionResolver } from '../../lib/api/session';
+} from '@learny/http/security';
+import { setSessionResolver } from '@learny/http/session';
+
 import { proxy } from '../../proxy';
 
 const BASE = 'http://localhost:3000';
