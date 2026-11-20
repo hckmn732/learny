@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { createAdaptorServer } from '@hono/node-server';
 import type { Hono } from 'hono';
 
+import { registerDatabaseHealth } from '@learny/api-routes/deps/health-database';
 import { parseServerEnv } from '@learny/config/server';
 
 import { createApp, DEFAULT_PORT } from './app';
@@ -55,6 +56,7 @@ export function startServer(app: Hono, port: number, hostname = '0.0.0.0'): Prom
 export async function main(env: Env = process.env): Promise<void> {
   try {
     const config = parseServerEnv(env);
+    registerDatabaseHealth(env);
     const reporter = createApiReporter(env);
     await initApiSentry(env);
     const port = parsePort(env.PORT ?? config.API_PORT);

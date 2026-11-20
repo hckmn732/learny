@@ -244,7 +244,7 @@ export function assembleContext(
   const items: ContextItemDto[] = present.map((key) => ({
     key,
     label: CONTEXT_LABELS[key],
-    value: values[key] ?? '',
+    value: values[key] || 'Aucune information disponible',
     included: include[key] !== false,
   }));
 
