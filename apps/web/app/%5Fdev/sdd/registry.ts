@@ -8,6 +8,11 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-1202': {
+    title: 'Écrans alimentés par l’API',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1202'),
+  },
   'SPEC-1201': {
     title: "Bascule de l'API",
     load: () => import('../../../components/sdd-demos/spec-1201'),
