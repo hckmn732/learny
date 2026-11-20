@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { SPECIAL_HANDLERS } from '@learny/api-routes';
-import { functions } from '@learny/jobs';
+import { jobRegistry } from '@learny/api-routes/deps/quiz-grade-registry';
 
 import { createApp, getApiHealth } from '../../src/app';
 
@@ -52,7 +52,7 @@ describe('[SPEC-1101] health and inngest', () => {
     const nextBody = (await next.json()) as { function_count: number; functions?: unknown[] };
     expect(hono.status).toBe(200);
     expect(hono.status).toBe(next.status);
-    expect(honoBody.function_count).toBe(functions.length);
+    expect(honoBody.function_count).toBe(jobRegistry.length);
     expect(honoBody.function_count).toBe(nextBody.function_count);
   });
 });

@@ -3,6 +3,7 @@ import { createServer, type Server } from 'node:net';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { jobRegistry } from '@learny/api-routes/deps/quiz-grade-registry';
 import {
   DEMO_JOB_ID,
   EVENT_NAMES,
@@ -11,7 +12,6 @@ import {
   createFunctions,
   createLearnyClient,
   createMemoryDemoStore,
-  functions,
   inngest,
 } from '@learny/jobs';
 import { driveInngestRun } from '@learny/jobs/testing';
@@ -93,8 +93,8 @@ describe('[SPEC-1103][SPEC-007] worker absorbed by the API', () => {
     const text = await res.text();
 
     expect(res.status).toBe(200);
-    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: functions.length });
-    expect(functions.map((f) => f.id(INNGEST_APP_ID))).toEqual([
+    expect(JSON.parse(text)).toMatchObject({ mode: 'dev', function_count: jobRegistry.length });
+    expect(jobRegistry.map((f) => f.id(INNGEST_APP_ID))).toEqual([
       FN_ID,
       `${INNGEST_APP_ID}-account-deletion`,
       `${INNGEST_APP_ID}-cron-hourly-tick`,
@@ -115,6 +115,11 @@ describe('[SPEC-1103][SPEC-007] worker absorbed by the API', () => {
       `${INNGEST_APP_ID}-question-bank-nightly`,
       `${INNGEST_APP_ID}-sdd-demo-pipeline`,
       `${INNGEST_APP_ID}-security-purge`,
+      `${INNGEST_APP_ID}-quiz-grade`,
+      `${INNGEST_APP_ID}-exam-deadline`,
+      `${INNGEST_APP_ID}-module-unlock`,
+      `${INNGEST_APP_ID}-remediation-prepare`,
+      `${INNGEST_APP_ID}-remediation-prepare-requested`,
     ]);
     expect(text).not.toContain('learny-test-only');
     expect(text).not.toMatch(/signkey/i);

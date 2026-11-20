@@ -2,19 +2,14 @@ import { Hono, type Context } from 'hono';
 import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
+import { jobRegistry, registerInlineJobs } from '@learny/api-routes/deps/quiz-grade-registry';
 import type { ApiRole } from '@learny/config/server';
 import type { ErrorReporter } from '@learny/core';
 import { AppError } from '@learny/core';
 import { configureHttp, registerSecurity } from '@learny/http';
 import { apiProblemResponse } from '@learny/http/problem';
 import { resolveApiRequestId } from '@learny/http/request-id';
-import {
-  createFunctions,
-  functions as sharedFunctions,
-  inngest,
-  sddDemoStore,
-  setJobErrorReporter,
-} from '@learny/jobs';
+import { inngest, setJobErrorReporter } from '@learny/jobs';
 
 import openApiDocument from '../openapi.json';
 
@@ -73,19 +68,8 @@ export function createApp(options: AppOptions = {}): Hono {
     });
   }
 
-  const registry =
-    options.functions ??
-    (options.reporter === undefined
-      ? sharedFunctions
-      : createFunctions(client, {
-          demoStore: sddDemoStore,
-          reportError: (report) => {
-            options.reporter?.capture(report.error, {
-              ...(report.requestId === undefined ? {} : { requestId: report.requestId }),
-              ...(report.jobId === undefined ? {} : { jobId: report.jobId }),
-            });
-          },
-        }));
+  registerInlineJobs();
+  const registry = options.functions ?? jobRegistry;
 
   app.get('/health', (context) => {
     const requestId = resolveApiRequestId(context.req.header('x-request-id'));
