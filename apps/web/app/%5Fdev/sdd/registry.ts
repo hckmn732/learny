@@ -8,6 +8,11 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-1302': {
+    title: 'Migration terminée',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1302'),
+  },
   'SPEC-1301': {
     title: 'Client natif simulé',
     titleTestId: 'sdd-title',
