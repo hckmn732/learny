@@ -5,7 +5,6 @@ import { fr } from '@learny/i18n';
 
 import { SiteFooter } from '../../components/site-footer/SiteFooter';
 import { renderAccessibilityDeclaration } from '../../lib/accessibility-declaration';
-import { getServerEnv } from '../../lib/server-env';
 
 export const metadata: Metadata = {
   title: fr.accessibility.documentTitle,
@@ -17,10 +16,9 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function AccessibilitePage() {
-  const env = getServerEnv();
   const markdown = renderAccessibilityDeclaration({
-    entityName: env.LEGAL_ENTITY_NAME,
-    contactEmail: env.LEGAL_CONTACT_EMAIL,
+    entityName: process.env.LEGAL_ENTITY_NAME ?? '',
+    contactEmail: process.env.LEGAL_CONTACT_EMAIL ?? '',
   });
 
   return (

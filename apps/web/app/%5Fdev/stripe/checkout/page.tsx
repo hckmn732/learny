@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { AppError } from '@learny/core';
-import { getMockCheckoutSession } from '@learny/services/billing';
-
 import { MockCheckout } from '../../../../components/sdd/stripe-mock';
+import { serverApi } from '../../../../lib/api/server-client';
 import { sddPagesEnabled } from '../../../../lib/sdd-pages';
 
 export const dynamic = 'force-dynamic';
@@ -24,22 +22,20 @@ export default async function MockCheckoutPage({
   if (!sddPagesEnabled()) notFound();
   const { session } = await searchParams;
   const candidate = typeof session === 'string' && SESSION_PATTERN.test(session) ? session : null;
-  let known = false;
-  if (candidate !== null) {
-    try {
-      known = (await getMockCheckoutSession(candidate))?.status === 'open';
-    } catch (error) {
-      // Only a real Stripe mode (no simulated sessions) hides the page; anything else is a fault.
-      if (error instanceof AppError && error.code === 'CONFLICT') notFound();
-      throw error;
-    }
-  }
+  const result =
+    candidate === null
+      ? { sessionId: null }
+      : ((await (
+          await serverApi()
+        ).api.devSddStripeCheckout({
+          body: { id: candidate },
+        })) as { sessionId: string | null });
   return (
     <main className="mx-auto max-w-2xl p-8">
       <h1 data-testid="stripe-mock-title" className="font-display text-3xl font-semibold">
         Paiement simulé
       </h1>
-      <MockCheckout sessionId={known ? candidate : null} />
+      <MockCheckout sessionId={result.sessionId} />
     </main>
   );
 }

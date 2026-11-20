@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 
-import { BYOK_RECOMMENDED_MODELS } from '@learny/config';
+import { BYOK_RECOMMENDED_MODELS, parsePublicEnv } from '@learny/config';
 
 import { AiStep } from '../../../../components/onboarding/AiStep';
 import { DepartureStep } from '../../../../components/onboarding/DepartureStep';
@@ -8,7 +8,6 @@ import { ProfileStep } from '../../../../components/onboarding/ProfileStep';
 import { RemindersStep } from '../../../../components/onboarding/RemindersStep';
 import { RhythmStep } from '../../../../components/onboarding/RhythmStep';
 import { isApiError, serverApi } from '../../../../lib/api/server-client';
-import { getPublicEnv } from '../../../../lib/server-env';
 import { readPageSession } from '../../../../lib/supabase/page';
 
 const STEPS = ['profil', 'rythme', 'ia', 'rappels', 'depart'] as const;
@@ -81,7 +80,7 @@ export default async function OnboardingStepPage({
         <RemindersStep
           initial={reminders}
           needsCheckout={needsCheckout}
-          publicKey={getPublicEnv().NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+          publicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
         />
       );
     case 'depart':

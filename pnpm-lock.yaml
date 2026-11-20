@@ -26,6 +26,21 @@ importers:
       '@eslint/js':
         specifier: ^9.39.5
         version: 9.39.5
+      '@learny/automations':
+        specifier: workspace:*
+        version: link:packages/automations
+      '@learny/http':
+        specifier: workspace:*
+        version: link:packages/http
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:packages/ingestion
+      '@learny/jobs':
+        specifier: workspace:*
+        version: link:packages/jobs
+      '@learny/services':
+        specifier: workspace:*
+        version: link:packages/services
       '@lhci/cli':
         specifier: ^0.16.1
         version: 0.16.1(@types/node@24.19.2)(ajv@8.20.0)
@@ -180,12 +195,6 @@ importers:
       '@learny/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@learny/api-routes':
-        specifier: workspace:*
-        version: link:../../packages/api-routes
-      '@learny/automations':
-        specifier: workspace:*
-        version: link:../../packages/automations
       '@learny/bricks':
         specifier: workspace:*
         version: link:../../packages/bricks
@@ -198,39 +207,15 @@ importers:
       '@learny/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@learny/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@learny/domain':
         specifier: workspace:*
         version: link:../../packages/domain
-      '@learny/http':
-        specifier: workspace:*
-        version: link:../../packages/http
       '@learny/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@learny/ingestion':
-        specifier: workspace:*
-        version: link:../../packages/ingestion
-      '@learny/jobs':
-        specifier: workspace:*
-        version: link:../../packages/jobs
       '@learny/learning-engine':
         specifier: workspace:*
         version: link:../../packages/learning-engine
-      '@learny/llm':
-        specifier: workspace:*
-        version: link:../../packages/llm
-      '@learny/notifications':
-        specifier: workspace:*
-        version: link:../../packages/notifications
-      '@learny/services':
-        specifier: workspace:*
-        version: link:../../packages/services
-      '@learny/tutor':
-        specifier: workspace:*
-        version: link:../../packages/tutor
       '@learny/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -255,9 +240,6 @@ importers:
       idb:
         specifier: ^8.0.4
         version: 8.0.4
-      inngest:
-        specifier: ^4.26.2
-        version: 4.26.2(@opentelemetry/core@3.1.1(@opentelemetry/api@1.10.0))(express@4.22.3)(hono@4.13.18)(next@16.4.6(@babel/core@7.29.13)(@opentelemetry/api@1.10.0)(@playwright/test@1.65.0)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)(typescript@6.0.3)(zod@4.6.7)
       lucide-react:
         specifier: ^1.72.0
         version: 1.72.0(@types/react@19.3.0)(react@19.3.1)
@@ -283,6 +265,9 @@ importers:
       '@learny/api':
         specifier: workspace:*
         version: link:../api
+      '@learny/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@learny/testing':
         specifier: workspace:*
         version: link:../../packages/testing
@@ -356,15 +341,27 @@ importers:
       '@learny/i18n':
         specifier: workspace:*
         version: link:../i18n
+      '@learny/ingestion':
+        specifier: workspace:*
+        version: link:../ingestion
       '@learny/jobs':
         specifier: workspace:*
         version: link:../jobs
+      '@learny/learning-engine':
+        specifier: workspace:*
+        version: link:../learning-engine
+      '@learny/llm':
+        specifier: workspace:*
+        version: link:../llm
       '@learny/notifications':
         specifier: workspace:*
         version: link:../notifications
       '@learny/services':
         specifier: workspace:*
         version: link:../services
+      '@learny/tutor':
+        specifier: workspace:*
+        version: link:../tutor
       '@learny/ui':
         specifier: workspace:*
         version: link:../ui

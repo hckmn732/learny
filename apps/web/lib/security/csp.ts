@@ -7,9 +7,12 @@
 // for every script of the same response (ADR-0042).
 import { randomBytes } from 'node:crypto';
 
-import { CSP_NONCE_BYTES, isValidCspNonce } from '@learny/api-routes/special/csp-nonce';
+export const CSP_NONCE_BYTES = 18;
+const NONCE_PATTERN = /^[A-Za-z0-9+/]{16,}={0,2}$/;
 
-export { CSP_NONCE_BYTES, isValidCspNonce };
+export function isValidCspNonce(nonce: string): boolean {
+  return NONCE_PATTERN.test(nonce);
+}
 
 /** Versioned directive list: changing it is a deliberate security decision. */
 export const CSP_POLICY_VERSION = 1;

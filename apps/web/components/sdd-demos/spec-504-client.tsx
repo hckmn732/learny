@@ -2,9 +2,9 @@
 
 import { useActionState, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { AiTask } from '@learny/config';
 
-import { callScenario, type ActionState } from '../../app/%5Fdev/sdd/spec-504-actions';
 import type { MockCallState } from '../../app/%5Fdev/sdd/spec-504-data';
 import { BaseCard } from '../sdd/base-tokens';
 
@@ -25,7 +25,28 @@ const SCENARIOS = [
   'demo-invalid-object',
 ] as const;
 
+interface ActionState {
+  status: 'idle' | 'done';
+  call: MockCallState | null;
+}
+
 const INITIAL: ActionState = { status: 'idle', call: null };
+
+function formText(formData: FormData, key: string, fallback: string): string {
+  const value = formData.get(key);
+  return typeof value === 'string' ? value : fallback;
+}
+
+async function callScenario(_previous: ActionState, formData: FormData): Promise<ActionState> {
+  const task = formText(formData, 'task', 'tutor');
+  const scenario = formText(formData, 'scenario', 'demo');
+  return {
+    status: 'done',
+    call: (await api.devSddSpec504Call({
+      body: { task, scenario },
+    })) as MockCallState | null,
+  };
+}
 
 function callLine(call: MockCallState | null): string {
   if (call === null) return '—';
@@ -34,9 +55,7 @@ function callLine(call: MockCallState | null): string {
   return `${entry.task} · ${entry.model} · ${String(entry.inputTokens)}/${String(entry.outputTokens)} tokens · ${entry.status}${entry.errorCode === null ? '' : ` · ${entry.errorCode}`}`;
 }
 
-export function Spec504Form({
-  previews,
-}: Readonly<{ previews: Record<AiTask, unknown> }>) {
+export function Spec504Form({ previews }: Readonly<{ previews: Record<AiTask, unknown> }>) {
   const [task, setTask] = useState<AiTask>('tutor');
   const [state, action, pending] = useActionState(callScenario, INITIAL);
   const call = state.call;

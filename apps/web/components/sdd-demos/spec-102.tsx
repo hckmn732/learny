@@ -1,10 +1,25 @@
+import { revalidatePath } from 'next/cache';
+
 import { fr } from '@learny/i18n/fr/sdd';
 
-import { cleanupDemoUser, createDemoUser } from '../../app/%5Fdev/sdd/spec-102-actions';
 import { loadSpec102Demo, type Spec102Data } from '../../app/%5Fdev/sdd/spec-102-data';
+import { serverApi } from '../../lib/api/server-client';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec102;
+const PAGE = '/_dev/sdd/SPEC-102';
+
+async function createDemoUser(): Promise<void> {
+  'use server';
+  await (await serverApi()).api.devSddSpec102Create({ body: {} });
+  revalidatePath(PAGE);
+}
+
+async function cleanupDemoUser(): Promise<void> {
+  'use server';
+  await (await serverApi()).api.devSddSpec102Remove({ body: {} });
+  revalidatePath(PAGE);
+}
 
 function Badge({ testId, ok }: Readonly<{ testId: string; ok: boolean }>) {
   return (
