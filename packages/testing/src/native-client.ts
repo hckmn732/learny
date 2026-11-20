@@ -31,6 +31,7 @@ export interface NativeClientScenarioOptions {
   fetch?: typeof fetch;
   email?: string;
   password?: string;
+  prepareTutorModel?: (identity: { userId: string; email: string }) => Promise<void>;
 }
 
 function forbiddenHeaders(init: RequestInit | undefined): void {
@@ -180,6 +181,7 @@ export async function runNativeClientScenario(
           (${userId}::uuid, 'cgu'::public.legal_document, ${versions.cgu}),
           (${userId}::uuid, 'privacy'::public.legal_document, ${versions.privacy})
       `);
+      await options.prepareTutorModel?.({ userId, email });
     });
 
     await step('Profil', 200, () => client.api.meGet({}));

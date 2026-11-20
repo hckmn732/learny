@@ -1,5 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import { aiTaskModels, serviceDb } from '@learny/db';
+import { createServiceContext } from '@learny/services';
+import { createCredential } from '@learny/services/ai/credentials';
+import { qualifyCredential } from '@learny/services/ai/qualify';
 import { runNativeClientScenario } from '@learny/testing/native-client';
 
 import { createApp } from '../../src/app';
@@ -30,7 +34,35 @@ afterAll(async () => {
 
 describe('[SPEC-1301] native client', () => {
   it('réussit les sept étapes sans cookie ni Origin (CA-2)', async () => {
-    const result = await runNativeClientScenario({ apiUrl: origin });
+    const result = await runNativeClientScenario({
+      apiUrl: origin,
+      prepareTutorModel: async ({ userId, email }) => {
+        const ctx = createServiceContext({
+          userId,
+          email,
+          requestId: `native-${crypto.randomUUID()}`,
+        });
+        const credential = await createCredential(ctx, {
+          provider: 'deepseek',
+          modelIds: ['deepseek-chat'],
+          apiKey: 'deepseek-learny-test-only',
+        });
+        if (!credential.ok) throw credential.error;
+        const qualified = await qualifyCredential(
+          ctx,
+          credential.value.id,
+          'deepseek-chat',
+          { mockScenario: 'qualification-success' },
+        );
+        if (!qualified.ok) throw qualified.error;
+        await serviceDb().insert(aiTaskModels).values({
+          userId,
+          task: 'tutor',
+          credentialId: credential.value.id,
+          modelId: 'deepseek-chat',
+        });
+      },
+    });
     expect(result.ok, JSON.stringify(result.steps)).toBe(true);
     expect(result.steps.map((entry) => entry.name)).toEqual([
       'Inscription',

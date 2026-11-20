@@ -15,14 +15,21 @@ import {
   type AiCredentialProvider,
 } from '@learny/contracts';
 import { AppError, clock } from '@learny/core';
-import { sanitizeSnippet, STORAGE_BUCKETS, resourcePath } from '@learny/db';
+import {
+  aiTaskModels,
+  sanitizeSnippet,
+  serviceDb,
+  STORAGE_BUCKETS,
+  resourcePath,
+} from '@learny/db';
 import { devRoutesEnabled } from '@learny/http/dev-guard';
 import { readIdempotencyKey } from '@learny/http/idempotency';
 import type { HandlerArgs } from '@learny/http/route-handler';
 import { DEMO_JOB_ID, JOB_RETRIES, functions } from '@learny/jobs';
 import { buildAnthropicRequestPreview } from '@learny/llm';
-import { resolvePostAuthDestination } from '@learny/services';
+import { createServiceContext, resolvePostAuthDestination } from '@learny/services';
 import { createCredential, deleteCredential } from '@learny/services/ai/credentials';
+import { qualifyCredential } from '@learny/services/ai/qualify';
 import { getMockCheckoutSession } from '@learny/services/billing';
 // The scenario is dev-only and guarded by `devRoutesEnabled`; it never enters a production route.
 // eslint-disable-next-line no-restricted-imports
@@ -347,6 +354,32 @@ export const devSddImplementations = {
     guarded(() =>
       runNativeClientScenario({
         apiUrl: process.env.API_INTERNAL_URL ?? 'http://127.0.0.1:3001',
+        prepareTutorModel: async ({ userId, email }) => {
+          const ctx = createServiceContext({
+            userId,
+            email,
+            requestId: `native-demo-${String(clock.now().getTime())}`,
+          });
+          const credential = await createCredential(ctx, {
+            provider: 'deepseek',
+            modelIds: ['deepseek-chat'],
+            apiKey: 'deepseek-learny-test-only',
+          });
+          if (!credential.ok) throw credential.error;
+          const qualified = await qualifyCredential(
+            ctx,
+            credential.value.id,
+            'deepseek-chat',
+            { mockScenario: 'qualification-success' },
+          );
+          if (!qualified.ok) throw qualified.error;
+          await serviceDb().insert(aiTaskModels).values({
+            userId,
+            task: 'tutor',
+            credentialId: credential.value.id,
+            modelId: 'deepseek-chat',
+          });
+        },
       }),
     ),
   devSddStripeCheckout: ({ body, request }: HandlerArgs<typeof devSddStripeCheckout>) =>
