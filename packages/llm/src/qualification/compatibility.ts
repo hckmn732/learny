@@ -54,7 +54,7 @@ function failedProbe(
   reserves: Set<AiCompatibilityReserveCode>,
   code: AiCompatibilityReserveCode,
 ): void {
-  if (!result.ok) reserve(code, reserves);
+  if (!result.ok) reserve(result.error.code === 'AI_TIMEOUT' ? 'CHECK_TIMEOUT' : code, reserves);
 }
 
 /**
@@ -124,7 +124,7 @@ export async function evaluateTaskCompatibility(
       abortSignal: controller.signal,
     }).then((result) => {
       if (!result.ok) {
-        reserve('NO_TOOLS', reserves);
+        reserve(result.error.code === 'AI_TIMEOUT' ? 'CHECK_TIMEOUT' : 'NO_TOOLS', reserves);
       } else {
         const call = result.value.toolCalls.find(
           (candidate) => candidate.toolName === 'compatibility_probe',

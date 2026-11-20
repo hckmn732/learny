@@ -151,4 +151,20 @@ describe('[SPEC-506] compatibilité par tâche', () => {
     expect(result.reserveCodes).toEqual(['CHECK_TIMEOUT']);
     expect(result.reasons[0]?.message).toContain('15 secondes');
   });
+
+  it('classe une annulation fournisseur comme CHECK_TIMEOUT', async () => {
+    const error = new AppError('AI_TIMEOUT', 'timeout', { status: 504 });
+    const probe: CompatibilitySession = {
+      object: () => Promise.resolve({ ok: false, error }),
+      step: () => Promise.resolve({ ok: false, error }),
+    };
+    const result = await evaluateTaskCompatibility({
+      credentialId: '11111111-1111-4111-8111-111111111111',
+      modelId: 'slow-model',
+      task: 'tutor',
+      clock,
+      session: probe,
+    });
+    expect(result.reserveCodes).toEqual(['CHECK_TIMEOUT']);
+  });
 });
