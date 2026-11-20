@@ -91,10 +91,16 @@ export default function Spec501Demo({ brick, error }: Readonly<Spec501DemoProps>
   async function mutate(action: 'create' | 'report' | 'correct'): Promise<void> {
     const result =
       action === 'create'
-        ? await api.devSddSpec501Create({ body: {} })
+        ? await api.devSddSpec501Create({ body: {} }, { idempotencyKey: crypto.randomUUID() })
         : action === 'report'
-          ? await api.devSddSpec501Report({ body: { brickId: currentBrick?.brickId } })
-          : await api.devSddSpec501Correct({ body: { brickId: currentBrick?.brickId } });
+          ? await api.devSddSpec501Report(
+              { body: { brickId: currentBrick?.brickId } },
+              { idempotencyKey: crypto.randomUUID() },
+            )
+          : await api.devSddSpec501Correct(
+              { body: { brickId: currentBrick?.brickId } },
+              { idempotencyKey: crypto.randomUUID() },
+            );
     const data = result as { brick: DemoBrick | null; error: string | null };
     setCurrentBrick(data.brick);
   }

@@ -31,7 +31,7 @@ async function suggestFromSearch(
       url: formText(formData, 'url'),
       reason: formText(formData, 'reason'),
     },
-  })) as SuggestionState;
+  }, { idempotencyKey: crypto.randomUUID() })) as SuggestionState;
 }
 
 async function decideSuggestion(
@@ -43,7 +43,7 @@ async function decideSuggestion(
       id: formText(formData, 'id'),
       decision: formText(formData, 'decision'),
     },
-  })) as SuggestionState;
+  }, { idempotencyKey: crypto.randomUUID() })) as SuggestionState;
 }
 
 const ROUTES: { value: SearchWebProvider; label: string }[] = [

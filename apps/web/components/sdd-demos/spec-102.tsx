@@ -11,13 +11,19 @@ const PAGE = '/_dev/sdd/SPEC-102';
 
 async function createDemoUser(): Promise<void> {
   'use server';
-  await (await serverApi()).api.devSddSpec102Create({ body: {} });
+  await (await serverApi()).api.devSddSpec102Create(
+    { body: {} },
+    { idempotencyKey: crypto.randomUUID() },
+  );
   revalidatePath(PAGE);
 }
 
 async function cleanupDemoUser(): Promise<void> {
   'use server';
-  await (await serverApi()).api.devSddSpec102Remove({ body: {} });
+  await (await serverApi()).api.devSddSpec102Remove(
+    { body: {} },
+    { idempotencyKey: crypto.randomUUID() },
+  );
   revalidatePath(PAGE);
 }
 

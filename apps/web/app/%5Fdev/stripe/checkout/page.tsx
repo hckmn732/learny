@@ -29,7 +29,7 @@ export default async function MockCheckoutPage({
           await serverApi()
         ).api.devSddStripeCheckout({
           body: { id: candidate },
-        })) as { sessionId: string | null });
+        }, { idempotencyKey: crypto.randomUUID() })) as { sessionId: string | null });
   return (
     <main className="mx-auto max-w-2xl p-8">
       <h1 data-testid="stripe-mock-title" className="font-display text-3xl font-semibold">

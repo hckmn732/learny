@@ -44,7 +44,7 @@ async function callScenario(_previous: ActionState, formData: FormData): Promise
     status: 'done',
     call: (await api.devSddSpec504Call({
       body: { task, scenario },
-    })) as MockCallState | null,
+    }, { idempotencyKey: crypto.randomUUID() })) as MockCallState | null,
   };
 }
 

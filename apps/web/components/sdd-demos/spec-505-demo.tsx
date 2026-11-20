@@ -56,7 +56,7 @@ export default function Spec505Demo({
           baseUrl: formText(formData, 'baseUrl'),
           apiKey: formText(formData, 'apiKey'),
         },
-      });
+      }, { idempotencyKey: crypto.randomUUID() });
       router.refresh();
       return { error: null };
     } catch (caught) {
@@ -226,7 +226,10 @@ export default function Spec505Demo({
                     destructive
                     onConfirm={async () => {
                       try {
-                        await api.devSddSpec505Delete({ body: { id: credential.id } });
+                        await api.devSddSpec505Delete(
+                          { body: { id: credential.id } },
+                          { idempotencyKey: crypto.randomUUID() },
+                        );
                         setDeleteError(null);
                         router.refresh();
                       } catch (caught) {

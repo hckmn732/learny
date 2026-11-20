@@ -49,7 +49,7 @@ export default function Spec506Demo() {
     try {
       return (await api.devSddSpec506Run({
         body: { scenario: formText(formData, 'scenario', 'success') },
-      })) as Spec506DemoState;
+      }, { idempotencyKey: crypto.randomUUID() })) as Spec506DemoState;
     } catch (caught) {
       return {
         scenario: formText(formData, 'scenario', 'success') === 'invalid' ? 'invalid' : 'success',
