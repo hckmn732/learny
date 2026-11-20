@@ -135,7 +135,7 @@ async function createFixture(tx: Parameters<typeof createTestUser>[0]): Promise<
     `,
   );
   await tx.execute(
-    sql`insert into public.ai_task_models (user_id, task, model_id) values (${a.id}::uuid, 'light', 'claude-haiku')`,
+    sql`insert into public.ai_task_models (user_id, task, model_id) values (${a.id}::uuid, 'light', 'model-haiku')`,
   );
   ids.tutor_conversations = await insertId(
     tx,

@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import { api } from '@learny/api-client';
 import type { ReminderChoices } from '@learny/contracts';
-import { AppError } from '@learny/core';
 import { fr } from '@learny/i18n/fr/onboarding';
 import { Button, Card, FormError, Switch } from '@learny/ui';
 
@@ -17,19 +16,13 @@ const t = fr.onboarding.rappels;
 
 export interface RemindersStepProps {
   initial: ReminderChoices;
-  needsCheckout: boolean;
   publicKey: string | undefined;
   /** Test seam: a simulated browser, without touching the real permission prompt. */
   pushGateway?: PushGateway;
 }
 
-/** SPEC-602 EF-9, EF-10 — three switches, permission asked from the click, then Checkout or Départ. */
-export function RemindersStep({
-  initial,
-  needsCheckout,
-  publicKey,
-  pushGateway,
-}: Readonly<RemindersStepProps>) {
+/** SPEC-602 EF-9, EF-10 — three switches, permission asked from the click, then Départ. */
+export function RemindersStep({ initial, publicKey, pushGateway }: Readonly<RemindersStepProps>) {
   const router = useRouter();
   const [choices, setChoices] = useState<ReminderChoices>(initial);
   const [saving, setSaving] = useState(false);
@@ -38,16 +31,6 @@ export function RemindersStep({
   const toggle = (key: keyof ReminderChoices, value: boolean): void => {
     setChoices((previous) => ({ ...previous, [key]: value }));
     setError(null);
-  };
-
-  const startCheckout = async (): Promise<void> => {
-    const { url } = await api.billingCheckout({
-      body: {
-        successPath: '/premiers-pas/depart?abonnement=ok',
-        cancelPath: '/premiers-pas/depart?abonnement=annule',
-      },
-    });
-    window.location.assign(url);
   };
 
   const save = async (): Promise<void> => {
@@ -62,19 +45,10 @@ export function RemindersStep({
       }
       const reminders = { ...choices, push };
       await api.meOnboardingUpdate({ body: { step: 'depart', reminders } });
-      if (needsCheckout) {
-        await startCheckout();
-        return;
-      }
       router.push('/premiers-pas/depart');
       router.refresh();
-    } catch (cause) {
-      if (cause instanceof AppError && cause.code === 'ALREADY_SUBSCRIBED') {
-        router.push('/premiers-pas/depart');
-        router.refresh();
-      } else {
-        setError(fr.onboarding.common.saveError);
-      }
+    } catch {
+      setError(fr.onboarding.common.saveError);
     } finally {
       setSaving(false);
     }

@@ -4,7 +4,6 @@ import { createHash } from 'node:crypto';
 
 import { AppError } from '@learny/core';
 
-import { anthropicApiKey } from './config';
 import type { ResolvedModel } from './resolve';
 
 export interface UploadInput {
@@ -12,7 +11,7 @@ export interface UploadInput {
   bytes: Uint8Array;
   mime: string;
   filename: string;
-  /** BYOK key decrypted by SPEC-505; unused for the provided AI. */
+  /** Personal key decrypted by SPEC-505. */
   apiKey?: string | null;
 }
 
@@ -32,7 +31,7 @@ export async function uploadDocument(
       'Ce fournisseur ne prend pas en charge l’API Files ; fournir le texte extrait.',
     );
   }
-  const apiKey = anthropicApiKey() ?? input.apiKey ?? null;
+  const apiKey = input.apiKey ?? null;
   if (apiKey === null) {
     throw new AppError('AI_KEY_INVALID', 'Aucune clé Anthropic pour envoyer le document.');
   }

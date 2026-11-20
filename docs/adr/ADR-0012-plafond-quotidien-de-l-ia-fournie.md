@@ -1,9 +1,11 @@
 # ADR-0012 — Plafond quotidien de l'IA fournie
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-0340
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-507
+
+> Remplacée par ADR-0340 : sans IA fournie, il n’y a plus de plafond quotidien. Le texte ci-dessous est conservé pour l’historique.
 
 ## Contexte
 

@@ -42,10 +42,9 @@ Termes employés dans le code (identifiant anglais entre parenthèses quand il d
 | Tuteur | `tutor` | Agent IA qui propose des actions validées par le code. |
 | Action du tuteur | `tutor tool` | Outil du registre fermé (lire les ressources, créer/modifier, planifier…). |
 | Tâche IA | `ai task` | Catégorie d'appel IA : `programme`, `course`, `gaps`, `tutor`, `light`. |
-| IA fournie | `managed AI` | Modèles Claude fournis par Learny, sur abonnement. |
 | Clé personnelle | `BYOK credential` | Clé d'API d'un fournisseur apportée par l'utilisateur, chiffrée. |
 | Qualification | `qualification` | Batterie de tests qui autorise l'usage d'un modèle personnel. |
-| Plafond IA | `daily AI cap` | Dépense quotidienne maximale de l'IA fournie par apprenant. |
+| Abonnement | `subscription` | Droit d'utiliser l'application, gratuit par défaut ; sans lien avec l'IA (ADR-0340). |
 | Formation à plusieurs | `group` | Formation partagée par 2 à 10 membres (programme et jalons communs). |
 | Examen blanc | `mock exam` | Épreuve chronométrée, sans aide, au format de l'examen visé. |
 | Exercice pratique | `practice exercise` | Consigne corrigée par le tuteur selon un barème. |

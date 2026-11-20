@@ -321,32 +321,13 @@ export interface Spec110Data {
   }>;
   tasks: Array<{
     task: string;
-    modelId: string;
-    managed: boolean;
+    modelId: string | null;
     usable: boolean;
     credentialLabel: string | null;
     credentialStatus: CredentialStatusValue | null;
   }>;
-  calls: Array<{
-    task: string;
-    provider: AiProviderValue;
-    model: string;
-    managed: boolean;
-    status: AiCallStatusValue;
-    costUsd: string;
-    createdAt: string;
-  }>;
-  spend: {
-    day: string;
-    amountUsd: string;
-    capUsd: string;
-    managedCalls: number;
-    byokCalls: number;
-    billedCalls: number;
-  };
   subscription: {
     status: SubscriptionStatusValue;
-    capUsd: string;
     currentPeriodEnd: string | null;
     stripeCustomerId: string | null;
   } | null;
@@ -496,7 +477,7 @@ export interface ResolutionCell {
   reason: string | null;
 }
 export interface ResolutionRow {
-  key: 'subscriber' | 'byok' | 'none';
+  key: 'byok' | 'none';
   label: string;
   cells: ResolutionCell[];
 }

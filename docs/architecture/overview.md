@@ -35,7 +35,7 @@ Règle vérifiée par ESLint (`learny/web-is-a-client`) et par
 2. **Déterministe d'abord** (ADR-0020) : `packages/learning-engine` est du TypeScript pur, sans I/O ni IA, testé unitairement et par propriétés.
 3. **Contrats partagés** : schémas Zod dans `packages/contracts`, réutilisés par l'API, l'UI, les jobs et le tuteur.
 4. **Isolation des données au niveau base** : Row Level Security sur toutes les tables (ADR-0022).
-5. **Tout appel IA passe par `packages/llm`** (résolution du modèle, plafond, journal) ; aucun autre paquet n'importe un SDK de fournisseur.
+5. **Tout appel IA passe par `packages/llm`** (résolution du modèle choisi par l'utilisateur, journal) ; aucun autre paquet n'importe un SDK de fournisseur.
 6. **Horloge injectable** partout (ADR-0047) : aucune utilisation directe de `Date.now()` / `new Date()` hors de `packages/core/clock`.
 
 ## 2. Topologie
@@ -83,7 +83,7 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
 │   ├── ui/                     design system : jetons, composants React, icônes, utilitaires d'accessibilité
 │   ├── bricks/                 13 types de briques : schema.ts, grade.ts (si auto-corrigée), view.tsx, registre
 │   ├── learning-engine/        FSRS, maîtrise, lacunes, tirages, planificateur, rétention, série, échauffement
-│   ├── llm/                    fournisseurs (AI SDK), tâches→modèles, BYOK chiffré, qualification, plafond, journal, modèle simulé de test
+│   ├── llm/                    fournisseurs (AI SDK), tâches→modèles, BYOK chiffré, qualification, journal, modèle simulé de test
 │   ├── tutor/                  registre d'actions (outils), boucle agent, prompts par tâche, garde-fous
 │   ├── ingestion/              extraction PDF/web/YouTube/image, découpage, embeddings, recherche sémantique
 │   ├── jobs/                   client Inngest, catalogue d'événements, fonctions (handlers) et crons
@@ -124,7 +124,7 @@ service → transaction → émission d'événement (`jobs.send`) → réponse D
 
 **Traitement long** : événement Inngest → fonction de `packages/jobs` découpée en `step.run` idempotents → services → notifications.
 
-**Appel IA** : service → `tutor.run(task, input, ctx)` → `llm.resolve(user, task)` → contrôle de plafond → appel (outils stricts) → validation Zod de chaque appel d'outil → exécution par le registre → journal `ai_calls`.
+**Appel IA** : service → `tutor.run(task, input, ctx)` → `llm.resolve(user, task)` (modèle choisi par l'utilisateur, sinon `AI_UNAVAILABLE`) → appel (outils stricts) → validation Zod de chaque appel d'outil → exécution par le registre → journal `ai_calls`.
 
 ## 5. Catalogue des événements de domaine (`packages/jobs/src/events.ts`)
 
@@ -156,7 +156,7 @@ service → transaction → émission d'événement (`jobs.send`) → réponse D
 | `tutor/question-asked` | SPEC-610 | automatisme 6 |
 | `automation/action-proposed` / `-applied` / `-undone` | SPEC-711 | notifications, journal |
 | `notification/requested` | tous | SPEC-209 |
-| `billing/subscription-changed` | SPEC-210 | droits IA |
+| `billing/subscription-changed` | SPEC-210 | statut d'abonnement |
 | `billing/payment-failed` | SPEC-210 | notification d'échec de paiement (SPEC-725) |
 | `account/export-requested` / `account/deletion-requested` | SPEC-211 | jobs d'export et de suppression |
 | `group/member-joined` / `-left` | SPEC-724 | planification, notifications |

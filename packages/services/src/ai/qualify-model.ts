@@ -25,7 +25,6 @@ import {
   aiCredentials,
   aiTaskModels,
   serviceDb,
-  subscriptions,
   type AiTaskValue,
   type CredentialStatusValue,
 } from '@learny/db';
@@ -410,14 +409,14 @@ export type InvalidBrickStopResult =
       status: 'stopped';
       errorCode: 'INVALID_OUTPUT';
       attempts: number;
-      choices: ('personal_model' | 'managed_ai')[];
+      choices: 'personal_model'[];
       notified: boolean;
-      managedCalls: 0;
     };
 
 /**
  * EF-5, CA-4 — after two unsuccessful corrections the task stops with `INVALID_OUTPUT`, notifies
- * the learner and waits for their choice. No provided-AI call is made here (ADR-0013).
+ * the learner and waits for their choice: another model of their own key (the platform provides
+ * none, BR-IA-05).
  */
 export async function stopAfterInvalidBrick(
   ctx: ServiceContext,
@@ -438,15 +437,6 @@ export async function stopAfterInvalidBrick(
     if (value.attempts < 2) {
       return { status: 'retry' as const, attempts: value.attempts, remaining: 2 - value.attempts };
     }
-    const [subscription] = await serviceDb()
-      .select({ status: subscriptions.status, currentPeriodEnd: subscriptions.currentPeriodEnd })
-      .from(subscriptions)
-      .where(eq(subscriptions.userId, userId))
-      .limit(1);
-    const managedAvailable =
-      subscription?.status === 'active' &&
-      subscription.currentPeriodEnd !== null &&
-      subscription.currentPeriodEnd.getTime() > ctx.clock.now().getTime();
     const day = ctx.clock.now().toISOString().slice(0, 10);
     const notification = await notify(
       {
@@ -465,7 +455,6 @@ export async function stopAfterInvalidBrick(
           taskLabel: TASK_LABELS[value.task],
           modelLabel: value.modelId,
           href: '/parametres#modeles',
-          managedAvailable,
         },
         dedupeKey: `ai_task_failed:${value.task}:${value.modelId}:${day}`,
       },
@@ -474,11 +463,8 @@ export async function stopAfterInvalidBrick(
       status: 'stopped' as const,
       errorCode: 'INVALID_OUTPUT' as const,
       attempts: value.attempts,
-      choices: managedAvailable
-        ? (['personal_model', 'managed_ai'] satisfies ('personal_model' | 'managed_ai')[])
-        : (['personal_model'] satisfies ('personal_model' | 'managed_ai')[]),
+      choices: ['personal_model' as const],
       notified: notification.ok,
-      managedCalls: 0 as const,
     };
   });
 }

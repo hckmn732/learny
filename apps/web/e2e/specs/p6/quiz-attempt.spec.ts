@@ -9,6 +9,8 @@ import {
 } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
+import { clearOwnModels, seedOwnModels } from '../../support/own-model';
+
 const NOW = '2026-11-11T12:20:00Z';
 
 test.setTimeout(120_000);
@@ -253,10 +255,7 @@ async function seedQuiz(
           current_formation_id = ${programme.formationId}::uuid
         where id = ${userId}::uuid
       `);
-      await tx.execute(sql`
-        insert into public.subscriptions (user_id, status, current_period_end)
-        values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-      `);
+      await seedOwnModels(userId, tx);
       return { formationId: programme.formationId, moduleId, notionIds: programme.notionIds };
     }
     const programme = await makeModuleWithBank(tx, {
@@ -269,10 +268,7 @@ async function seedQuiz(
       update public.formations set title = 'SAP S/4HANA Finance'
       where id = ${programme.formationId}::uuid
     `);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await seedOwnModels(userId, tx);
     return {
       formationId: programme.formationId,
       moduleId: programme.moduleId,
@@ -484,9 +480,7 @@ test('correction en attente si le tuteur est indisponible @SPEC-611', async ({ p
         response = '{"optionIds":["a"]}'::jsonb
     where attempt_id = ${seed.attemptId}::uuid and position <> 10
   `);
-  await serviceDb().execute(sql`
-    delete from public.subscriptions where user_id = ${session.userId}::uuid
-  `);
+  await clearOwnModels(session.userId);
   await openQuiz(page, seed);
   await page.getByTestId('quiz-open-answer').fill('Une réponse complète sur la pièce comptable.');
   await page.getByTestId('quiz-check').click();

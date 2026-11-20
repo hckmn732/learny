@@ -13,6 +13,7 @@ describe('[SPEC-707] contrats des paramètres', () => {
     expect(settingsTabFromHash('#notifications')).toBe('notifications');
     expect(settingsTabFromHash('#modeles')).toBe('modeles');
     expect(settingsTabFromHash('#automatismes')).toBe('automatismes');
+    expect(settingsTabFromHash('#abonnement')).toBe('abonnement');
     expect(settingsTabFromHash('#profil')).toBe('profil');
     expect(SETTINGS_DEFAULT_TAB).toBe('profil');
     // Hash inconnu, absent ou mal casse : Profil, sans écran blanc.
@@ -23,7 +24,13 @@ describe('[SPEC-707] contrats des paramètres', () => {
   });
 
   it('CA-1 — chaque onglet s’ouvre depuis son hash, avec ou sans « # » (QA SCR-15)', () => {
-    for (const id of ['profil', 'notifications', 'automatismes', 'modeles'] as const) {
+    for (const id of [
+      'profil',
+      'notifications',
+      'automatismes',
+      'modeles',
+      'abonnement',
+    ] as const) {
       expect(settingsTabFromHash(`#${id}`)).toBe(id);
       expect(settingsTabFromHash(id)).toBe(id);
       expect(settingsTabFromHash(` #${id.toUpperCase()} `.trim())).toBe(id);

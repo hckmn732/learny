@@ -86,8 +86,6 @@ export type ReminderChoices = z.infer<typeof ReminderChoices>;
 export const OnboardingUpdateBody = z
   .object({
     step: z.enum(ONBOARDING_PATCH_STEPS),
-    /** EF-8 — the learner declares that the provided AI is the chosen model. */
-    aiChoice: z.literal('managed').optional(),
     reminders: ReminderChoices.optional(),
   })
   .superRefine((value, ctx) => {
@@ -119,7 +117,6 @@ export const OnboardingState = z.strictObject({
   profile: MeDto,
   preferences: StudyPreferencesDto,
   reminders: OnboardingReminderState,
-  needsCheckout: z.boolean(),
 });
 export type OnboardingState = z.infer<typeof OnboardingState>;
 

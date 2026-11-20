@@ -3,7 +3,7 @@
 import type { JSONValue, ModelMessage, SystemModelMessage } from 'ai';
 import { z } from 'zod';
 
-import { AI_MODEL_IDS, type AiModelId, type AiTask } from '@learny/config';
+import type { AiTask } from '@learny/config';
 import { AppError } from '@learny/core';
 
 import { TASK_CONFIG } from './tasks';
@@ -21,8 +21,6 @@ export interface AnthropicToolDefinition {
 export interface AnthropicRequestInput {
   task: AiTask;
   modelId: string;
-  /** True for the provided AI; fallback is never enabled for a personal key (ET-4). */
-  managed: boolean;
   structured?: boolean;
   system?: readonly SystemPart[];
   tools?: Record<string, AnthropicToolDefinition>;
@@ -34,41 +32,21 @@ export interface AnthropicRequestInput {
 export type AnthropicProviderOptions = {
   thinking: { type: 'adaptive' };
   effort: 'low' | 'medium' | 'high';
-  fallbacks?: 'default';
-  anthropicBeta?: string[];
 } & { [key: string]: JSONValue };
 
 export interface AnthropicOptions {
   providerOptions: { anthropic: AnthropicProviderOptions };
-  /** `anthropic-beta` values the provider must send; the fetch wrapper merges them. */
-  betas: string[];
-  fallback: boolean;
 }
 
-export const FALLBACK_BETA = 'server-side-fallback-2026-07-01';
-
-/** Adaptive thinking and effort per task; fallback only for provided Opus/Sonnet (ET-4). */
-export function isFallbackEnabled(input: Pick<AnthropicRequestInput, 'managed' | 'modelId'>): boolean {
-  return (
-    input.managed &&
-    (input.modelId === AI_MODEL_IDS.opus || input.modelId === AI_MODEL_IDS.sonnet)
-  );
-}
-
+/** ET-4 — adaptive thinking and effort per task, for the personal Anthropic key. */
 export function buildAnthropicOptions(
-  input: Pick<AnthropicRequestInput, 'task' | 'modelId' | 'managed'>,
+  input: Pick<AnthropicRequestInput, 'task' | 'modelId'>,
 ): AnthropicOptions {
-  const fallback = isFallbackEnabled(input);
   const anthropic: AnthropicProviderOptions = {
     thinking: { type: 'adaptive' },
     effort: TASK_CONFIG[input.task].effort,
-    ...(fallback ? { fallbacks: 'default' as const, anthropicBeta: [FALLBACK_BETA] } : {}),
   };
-  return {
-    providerOptions: { anthropic },
-    betas: fallback ? [FALLBACK_BETA] : [],
-    fallback,
-  };
+  return { providerOptions: { anthropic } };
 }
 
 /**
@@ -137,7 +115,6 @@ export interface AnthropicRequestPreview {
   tools?: { name: string; description: string; input_schema: unknown; strict: true }[];
   system?: { type: 'text'; text: string; cache_control?: { type: 'ephemeral' } }[];
   messages: unknown[];
-  fallbacks?: 'default';
 }
 
 export function buildAnthropicRequestPreview(input: AnthropicRequestInput): AnthropicRequestPreview {
@@ -148,7 +125,6 @@ export function buildAnthropicRequestPreview(input: AnthropicRequestInput): Anth
       'Une sortie structurée ne peut pas être combinée avec des outils.',
     );
   }
-  const options = buildAnthropicOptions(input);
   const stable = (input.system ?? []).filter((part) => part.cache);
   const volatile = (input.system ?? []).filter((part) => !part.cache);
   const system = [...stable, ...volatile].map((part, index) => ({
@@ -202,7 +178,6 @@ export function buildAnthropicRequestPreview(input: AnthropicRequestInput): Anth
     ...(tools === undefined ? {} : { tools }),
     ...(system.length === 0 ? {} : { system }),
     messages,
-    ...(options.fallback ? { fallbacks: 'default' as const } : {}),
   };
 }
 
@@ -213,5 +188,3 @@ export function countCacheBreakpoints(body: unknown): number {
 }
 
 export { MAX_CACHE_BREAKPOINTS };
-
-export type ManagedModelId = AiModelId;

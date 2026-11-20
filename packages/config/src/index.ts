@@ -61,7 +61,6 @@ export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {
   ACCOUNT_RULES,
-  AI_RULES,
   AUTOMATION_DEFAULTS,
   AUTOMATION_KEYS,
   AUTOMATION_OPTIONS,
@@ -93,26 +92,14 @@ export type {
   StudyDefaults,
 } from './product';
 export {
-  AI_MODEL_IDS,
   AI_TASKS,
   BYOK_PROVIDERS,
   BYOK_RECOMMENDED_MODELS,
-  DEFAULT_MODEL_BY_TASK,
   THINKING_EFFORT_BY_TASK,
   WEB_SEARCH_TASKS,
   isAiTask,
-  isProvidedModel,
 } from './models';
-export type { AiModelId, AiTask, ByokProvider, ThinkingEffort } from './models';
-export {
-  BATCH_DISCOUNT_RATIO,
-  CACHE_READ_RATIO,
-  CACHE_WRITE_RATIO,
-  MODEL_PRICING,
-  PRICE_UNIT,
-  modelPrices,
-} from './pricing';
-export type { ModelPrices } from './pricing';
+export type { AiTask, ByokProvider, ThinkingEffort } from './models';
 export {
   AGENDA_LEGEND_BASE_KINDS,
   AGENDA_LEGEND_EXTRA_KINDS,

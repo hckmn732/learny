@@ -39,12 +39,13 @@ export type CheckoutBody = z.infer<typeof CheckoutBody>;
 export const BillingUrlOutput = z.object({ url: z.string().min(1).max(2048) });
 export type BillingUrlOutput = z.infer<typeof BillingUrlOutput>;
 
-/** EF-3 — the learner's subscription and the entitlement decided by `hasManagedAi`. */
+/**
+ * EF-3 — the learner's subscription: the right to use the application, free by default
+ * (`status: 'none'`). It provides no AI model.
+ */
 export const SubscriptionOutput = z.object({
   status: SubscriptionStatus,
   currentPeriodEnd: IsoDateTime.nullable(),
-  hasManagedAi: z.boolean(),
-  dailyCapUsd: z.number().positive(),
 });
 export type SubscriptionOutput = z.infer<typeof SubscriptionOutput>;
 
@@ -72,7 +73,7 @@ export const billingRoutes = {
     output: BillingUrlOutput,
     successStatus: 200,
     idempotent: true,
-    summary: 'Ouvre une session Stripe Checkout pour l’abonnement à l’IA fournie.',
+    summary: 'Ouvre une session Stripe Checkout pour l’abonnement à l’application.',
     errors: ['VALIDATION_FAILED', 'ALREADY_SUBSCRIBED', 'SERVICE_UNAVAILABLE'],
   }),
   billingPortal: defineRoute({
@@ -92,7 +93,7 @@ export const billingRoutes = {
     auth: 'user',
     output: SubscriptionOutput,
     successStatus: 200,
-    summary: 'Abonnement de l’apprenant et droit à l’IA fournie.',
+    summary: 'Abonnement de l’apprenant : droit d’utiliser l’application, gratuit par défaut.',
     errors: [],
   }),
   // Public: authenticated by the Stripe signature of the raw body, not by a session. It lives under

@@ -91,7 +91,6 @@ export const devSddSpec504Call = action('call', 'SPEC-504');
 export const devSddSpec505Create = action('create', 'SPEC-505');
 export const devSddSpec505Delete = action('delete', 'SPEC-505');
 export const devSddSpec506Run = action('run', 'SPEC-506');
-export const devSddSpec507Budget = action('budget', 'SPEC-507', false);
 export const devSddSpec512Suggest = action('suggest', 'SPEC-512');
 export const devSddSpec512Decide = action('decide', 'SPEC-512');
 export const devSddStripeCheckout = action('session', 'stripe');
@@ -137,7 +136,6 @@ export const devSddMigrationRoutes = {
   devSddSpec505Create,
   devSddSpec505Delete,
   devSddSpec506Run,
-  devSddSpec507Budget,
   devSddSpec512Suggest,
   devSddSpec512Decide,
   devSddStripeCheckout,

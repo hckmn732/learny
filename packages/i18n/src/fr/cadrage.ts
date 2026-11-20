@@ -38,7 +38,7 @@ export const cadrage = {
   note: 'Les questions ne sont pas fixes : le tuteur les choisit selon la formation et s’arrête dès qu’il en sait assez.',
   errors: {
     AI_UNAVAILABLE:
-      'Aucun modèle d’IA n’est disponible pour le tuteur. Ajoutez votre clé ou souscrivez à l’IA fournie.',
+      'Aucun modèle d’IA n’est disponible pour le tuteur. Choisissez un modèle avec votre clé dans les Paramètres.',
     AI_TASK_FAILED: 'Le tuteur n’a pas pu répondre.',
     RATE_LIMITED: 'Trop de demandes en peu de temps. Patientez une minute.',
     AI_RATE_LIMITED: 'Trop de demandes en peu de temps. Patientez une minute.',

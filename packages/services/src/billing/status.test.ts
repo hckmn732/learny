@@ -5,15 +5,12 @@ import { describe, expect, it } from 'vitest';
 import { SubscriptionStatus, isSafeRelativePath, CheckoutBody } from '@learny/contracts';
 import { AppError } from '@learny/core';
 
-import { isManagedAiEntitled } from './entitlement';
 import { isKnownStripeStatus, mapStripeStatus, maskStripeId } from './status';
 import { normalizeStripeEvent, signPayload, verifySignature } from './stripe-event';
 
 const NOW = new Date('2026-11-11T12:20:00Z');
-const FUTURE = new Date('2026-12-11T12:20:00Z');
-const PAST = new Date('2026-11-11T12:19:59Z');
 
-describe('[SPEC-210] statuts et droit', () => {
+describe('[SPEC-210] statuts', () => {
   it('EF-5 — correspondance des statuts Stripe (ADR-0215)', () => {
     const expected: Record<string, string> = {
       active: 'active',
@@ -35,18 +32,6 @@ describe('[SPEC-210] statuts et droit', () => {
     expect(mapStripeStatus('quelque_chose_de_nouveau')).toBe('incomplete');
     expect(isKnownStripeStatus('quelque_chose_de_nouveau')).toBe(false);
     expect(mapStripeStatus('paused')).toBe('past_due');
-  });
-
-  it('CA-3 — hasManagedAi est vrai seulement pour active avec une période non échue', () => {
-    expect(isManagedAiEntitled({ status: 'active', currentPeriodEnd: FUTURE }, NOW)).toBe(true);
-    for (const status of ['none', 'past_due', 'incomplete', 'canceled'] as const) {
-      expect(isManagedAiEntitled({ status, currentPeriodEnd: FUTURE }, NOW), status).toBe(false);
-    }
-    expect(isManagedAiEntitled({ status: 'active', currentPeriodEnd: PAST }, NOW)).toBe(false);
-    expect(isManagedAiEntitled({ status: 'active', currentPeriodEnd: NOW }, NOW)).toBe(false);
-    expect(isManagedAiEntitled({ status: 'active', currentPeriodEnd: null }, NOW)).toBe(false);
-    expect(isManagedAiEntitled(null, NOW)).toBe(false);
-    expect(isManagedAiEntitled(undefined, NOW)).toBe(false);
   });
 
   it('CA-4, CL-5 — seuls les chemins internes sont acceptés', () => {

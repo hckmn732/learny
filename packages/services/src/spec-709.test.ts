@@ -3,7 +3,6 @@
 // the idempotent upsert of a task choice. No key, no provider and no network enter the test.
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AI_MODEL_IDS, DEFAULT_MODEL_BY_TASK } from '@learny/config';
 import type { QualificationReport } from '@learny/contracts';
 import { aiCredentials, aiTaskModels } from '@learny/db';
 
@@ -14,9 +13,7 @@ import {
   getAiModelsState,
   modelOptionsForTask,
   modelQualifiedForTask,
-  modelsGuard,
   parseModelsUpdate,
-  providedCard,
   providerCardOf,
   providerFailureOf,
   type AssignmentRow,
@@ -167,7 +164,7 @@ function optionsOf(task: Parameters<typeof modelOptionsForTask>[0], fake: FakeDb
 }
 
 describe('[SPEC-709] règles et calculs', () => {
-  it('CA-1 — un modèle failed n’apparaît dans aucun sélecteur, un modèle qualifié oui', () => {
+  it('CA-1 — un modèle failed reste un candidat à qualifier, un modèle qualifié reste affectable', () => {
     const fake: FakeDb = {
       credentials: [
         credentialRow({
@@ -193,30 +190,32 @@ describe('[SPEC-709] règles et calculs', () => {
       ],
       assignments: [],
     };
-    // CA-1 — the five selectors never propose the failed model.
+    // CA-1 — a failed model remains discoverable, but explicitly marked to requalify.
     for (const task of ['programme', 'course', 'gaps', 'tutor', 'light'] as const) {
       const options = optionsOf(task, fake);
-      expect(options.some((option) => option.credentialId === CREDENTIAL)).toBe(false);
-      // The three provided models are always proposed, without a « Hors UE » badge (ADR-0154).
-      expect(options.filter((option) => option.origin === 'provided')).toHaveLength(3);
       expect(
-        options
-          .filter((option) => option.origin === 'provided')
-          .every((option) => !option.outsideEu),
+        options.some(
+          (option) =>
+            option.credentialId === CREDENTIAL && option.qualificationStatus === 'unqualified',
+        ),
       ).toBe(true);
     }
-    // Capability filtering: the Mistral key proves `structured` only, so `programme` (web_search)
-    // and `light` (vision) do not propose it; `gaps` does.
-    expect(optionsOf('programme', fake).some((option) => option.credentialId === OTHER)).toBe(
-      false,
-    );
-    expect(optionsOf('light', fake).some((option) => option.credentialId === OTHER)).toBe(false);
-    expect(optionsOf('gaps', fake).some((option) => option.credentialId === OTHER)).toBe(true);
+    // The status is derived from the proven capabilities of each task.
+    expect(
+      optionsOf('programme', fake).find((option) => option.credentialId === OTHER)
+        ?.qualificationStatus,
+    ).toBe('unqualified');
+    expect(
+      optionsOf('light', fake).find((option) => option.credentialId === OTHER)?.qualificationStatus,
+    ).toBe('unqualified');
+    expect(
+      optionsOf('gaps', fake).find((option) => option.credentialId === OTHER)?.qualificationStatus,
+    ).toBe('qualified');
     expect(taskCapabilities('programme')).toContain('web_search');
     expect(taskCapabilities('light')).toContain('vision');
   });
 
-  it('CA-1 — un modèle qualifié est affecté puis réinitialisé sans supprimer la clé', async () => {
+  it('CA-1 — un modèle qualifié est affecté puis retiré sans supprimer la clé', async () => {
     const fake: FakeDb = { credentials: [credentialRow()], assignments: [] };
     mocks.setTaskModel.mockImplementation(
       (
@@ -242,37 +241,27 @@ describe('[SPEC-709] règles et calculs', () => {
     expect(assigned.ok).toBe(true);
     if (!assigned.ok) return;
     expect(assigned.value.tasks.find((task) => task.task === 'tutor')).toMatchObject({
-      selection: 'custom',
-      origin: 'personal',
       modelId: MODEL,
       credentialId: CREDENTIAL,
       outsideEu: true,
       available: true,
       unavailableReason: null,
     });
-    expect(assigned.value.providers).toHaveLength(2);
-    expect(assigned.value.providers[1]?.id).toBe(CREDENTIAL);
+    expect(assigned.value.providers).toHaveLength(1);
+    expect(assigned.value.providers[0]?.id).toBe(CREDENTIAL);
 
-    // EF-2 — « Revenir aux modèles par défaut » removes the rows, keeps the credential.
-    const reset = await updateAiModels(context(fake), { action: 'reset' });
-    expect(reset.ok).toBe(true);
-    if (!reset.ok) return;
+    // EF-2 — clearing a task removes its row, keeps the credential and never falls back.
+    const cleared = await updateAiModels(context(fake), { action: 'clear', task: 'tutor' });
+    expect(cleared.ok).toBe(true);
+    if (!cleared.ok) return;
     expect(fake.assignments).toHaveLength(0);
     expect(fake.credentials).toHaveLength(1);
-    expect(reset.value.tasks.map((task) => task.selection)).toEqual([
-      'default',
-      'default',
-      'default',
-      'default',
-      'default',
-    ]);
-    expect(reset.value.tasks.map((task) => task.modelId)).toEqual([
-      DEFAULT_MODEL_BY_TASK.programme,
-      DEFAULT_MODEL_BY_TASK.course,
-      DEFAULT_MODEL_BY_TASK.gaps,
-      DEFAULT_MODEL_BY_TASK.tutor,
-      DEFAULT_MODEL_BY_TASK.light,
-    ]);
+    expect(cleared.value.tasks.find((task) => task.task === 'tutor')).toMatchObject({
+      modelId: null,
+      credentialId: null,
+      available: false,
+      unavailableReason: 'no_model_selected',
+    });
   });
 
   it('CA-2 — la carte ne rend que le masque et les quatre derniers caractères', () => {
@@ -296,19 +285,24 @@ describe('[SPEC-709] règles et calculs', () => {
     ).toBeNull();
   });
 
-  it('CA-2 — la carte fournie n’a ni clé ni pastille hors UE', () => {
-    expect(providedCard()).toMatchObject({
-      id: null,
-      origin: 'provided',
-      provider: 'anthropic',
-      keyMasked: null,
-      status: 'qualified',
-      outsideEu: false,
-      models: [AI_MODEL_IDS.opus, AI_MODEL_IDS.sonnet, AI_MODEL_IDS.haiku],
-    });
+  it('aucun modèle par défaut : sans choix, les cinq tâches sont indisponibles', async () => {
+    const fake: FakeDb = { credentials: [credentialRow()], assignments: [] };
+    const state = await getAiModelsState(context(fake));
+    expect(state.ok).toBe(true);
+    if (!state.ok) return;
+    expect(state.value.tasks).toHaveLength(5);
+    for (const task of state.value.tasks) {
+      expect(task).toMatchObject({
+        modelId: null,
+        credentialId: null,
+        provider: null,
+        available: false,
+        unavailableReason: 'no_model_selected',
+      });
+    }
   });
 
-  it('CL-3 — un modèle devenu non qualifié refuse la tâche, sans bascule payante', () => {
+  it('CL-3 — un modèle devenu non qualifié refuse la tâche, sans bascule', () => {
     const fake: FakeDb = {
       credentials: [
         credentialRow({
@@ -322,9 +316,12 @@ describe('[SPEC-709] règles et calculs', () => {
     expect(tutor).toMatchObject({
       available: false,
       unavailableReason: 'credential_not_qualified',
-      selection: 'custom',
     });
-    expect(tutor.options.some((option) => option.modelId === MODEL)).toBe(false);
+    expect(
+      tutor.options.some(
+        (option) => option.modelId === MODEL && option.qualificationStatus === 'unqualified',
+      ),
+    ).toBe(true);
 
     // A deleted key leaves `credential_id = null` with the personal model identifier.
     expect(
@@ -374,6 +371,9 @@ describe('[SPEC-709] règles et calculs', () => {
       {},
       { action: 'assign', task: 'inconnu', modelId: MODEL },
       { action: 'assign', task: 'tutor', modelId: '' },
+      { action: 'assign', task: 'tutor', modelId: MODEL },
+      { action: 'assign', task: 'tutor', modelId: MODEL, credentialId: null },
+      { action: 'reset' },
       { action: 'delete' },
     ]) {
       const result = await updateAiModels(context(fake), body);
@@ -384,7 +384,7 @@ describe('[SPEC-709] règles et calculs', () => {
     }
     expect(mocks.setTaskModel).not.toHaveBeenCalled();
     expect(fake.assignments).toHaveLength(0);
-    expect(() => parseModelsUpdate({ action: 'reset' })).not.toThrow();
+    expect(() => parseModelsUpdate({ action: 'clear', task: 'tutor' })).not.toThrow();
   });
 
   it('CL-1 — une clé d’un autre utilisateur répond 404 sans révéler son existence', async () => {
@@ -440,40 +440,7 @@ describe('[SPEC-709] règles et calculs', () => {
     ).toMatchObject({ ok: false, error: { code: 'VALIDATION_FAILED' } });
   });
 
-  it('EF-2 — choisir le modèle fourni par défaut suffit à revenir au défaut', async () => {
-    const fake: FakeDb = {
-      credentials: [credentialRow()],
-      assignments: [{ task: 'tutor', credentialId: CREDENTIAL, modelId: MODEL }],
-    };
-    const result = await updateAiModels(context(fake), {
-      action: 'assign',
-      task: 'tutor',
-      modelId: DEFAULT_MODEL_BY_TASK.tutor,
-      credentialId: null,
-    });
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(fake.assignments).toHaveLength(0);
-    expect(mocks.setTaskModel).not.toHaveBeenCalled();
-    expect(result.value.tasks.find((task) => task.task === 'tutor')?.selection).toBe('default');
-  });
-
-  it('EF-2 — un modèle fourni non défaut est une pastille « Personnalisé »', () => {
-    const row = taskStateOf(
-      'programme',
-      { task: 'programme', credentialId: null, modelId: AI_MODEL_IDS.haiku },
-      [],
-    );
-    expect(row).toMatchObject({
-      selection: 'custom',
-      origin: 'provided',
-      outsideEu: false,
-      available: true,
-    });
-    expect(row.options.map((option) => option.modelId)).toContain(AI_MODEL_IDS.haiku);
-  });
-
-  it('ET-1 — l’état est ordonné et le garde-fou vient de la configuration', async () => {
+  it('ET-1 — l’état est ordonné et ne contient que des clés personnelles', async () => {
     const fake: FakeDb = { credentials: [credentialRow()], assignments: [] };
     const state = await getAiModelsState(context(fake));
     expect(state.ok).toBe(true);
@@ -485,13 +452,7 @@ describe('[SPEC-709] règles et calculs', () => {
       'tutor',
       'light',
     ]);
-    expect(state.value.providers[0]?.origin).toBe('provided');
-    expect(state.value.guard).toEqual({
-      personalKeysExemptFromCap: true,
-      managedDailyCapUsd: '1.500000',
-      alertThresholdPercent: 80,
-    });
-    expect(modelsGuard().managedDailyCapUsd).toBe('1.500000');
+    expect(state.value.providers.map((provider) => provider.id)).toEqual([CREDENTIAL]);
     expect(state.value.updatedAt).toBe(new Date(AT).toISOString());
   });
 });

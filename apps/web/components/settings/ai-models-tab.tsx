@@ -10,14 +10,10 @@ import type {
   AiProviderCard,
   AiTaskCapabilityId,
   AiTaskModelState,
-  QualificationReport,
 } from '@learny/contracts';
-import { Badge, Button, Card, ErrorState, FormError, Select, TextField, cn } from '@learny/ui';
+import { Badge, Button, Card, ErrorState, FormError, Select, TextField } from '@learny/ui';
 
 import { fr } from '../../messages/fr/bricks-settings';
-import { useCredentialQualification } from '../onboarding/useCredentialQualification';
-
-import { ManagedAiBlock } from './managed-ai-block';
 
 const t = fr.settings.aiModels;
 
@@ -37,7 +33,6 @@ const OUTSIDE_EU_PROVIDERS: readonly AiCredentialProvider[] = ['anthropic', 'ope
 function needsBaseUrl(provider: AiCredentialProvider): boolean {
   return provider === 'openai_compatible' || provider === 'local';
 }
-
 function isOutsideEu(provider: AiCredentialProvider): boolean {
   return OUTSIDE_EU_PROVIDERS.includes(provider);
 }
@@ -46,20 +41,13 @@ function capabilitiesLabel(ids: readonly AiTaskCapabilityId[]): string {
   return ids.map((id) => t.capabilities[id]).join(', ');
 }
 
-/** « 1,50 $ » from the six-decimal USD amount of the contract (BR-IA-07). */
-export function usdLabel(amount: string): string {
-  const value = Number(amount);
-  return `${(Number.isFinite(value) ? value : 0).toFixed(2).replace('.', ',')} $`;
-}
-
 function statusTone(status: AiProviderCard['status']): 'green' | 'orange' | 'neutral' {
   if (status === 'qualified') return 'green';
   if (status === 'unqualified') return 'orange';
   return 'neutral';
 }
 
-/** EF-1 — the two mockup notes only apply to personal models (provided search and citations are
- * handled by the platform). */
+/** EF-1 — the two mockup notes of the programme and course tasks. */
 const TASK_NOTES: Partial<Record<AiModelsTaskId, string>> = {
   programme: t.taskNotes.programme,
   course: t.taskNotes.course,
@@ -108,6 +96,12 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
+      if (option.qualificationStatus === 'unqualified') {
+        await api.meAiCredentialsQualify({
+          params: { id: option.credentialId },
+          body: { modelId: option.modelId },
+        });
+      }
       const next = await api.meAiModelsUpdate({
         body: {
           action: 'assign',
@@ -130,15 +124,15 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     }
   };
 
-  const resetModels = async (): Promise<void> => {
+  const clearTask = async (task: AiModelsTaskId): Promise<void> => {
     if (pending !== null) return;
-    setPending('reset');
+    setPending(`task-${task}`);
     setError(null);
     setStatus(null);
     try {
-      const next = await api.meAiModelsUpdate({ body: { action: 'reset' } });
+      const next = await api.meAiModelsUpdate({ body: { action: 'clear', task } });
       setState(next);
-      setStatus(t.resetDone);
+      setStatus(t.cleared);
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.detail : t.saveError);
     } finally {
@@ -147,7 +141,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   };
 
   const retest = async (card: AiProviderCard): Promise<void> => {
-    if (card.id === null || pending !== null) return;
+    if (pending !== null) return;
     setPending(card.id);
     setError(null);
     setStatus(null);
@@ -167,7 +161,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   };
 
   const removeKey = async (card: AiProviderCard): Promise<void> => {
-    if (card.id === null || pending !== null) return;
+    if (pending !== null) return;
     setPending(card.id);
     setError(null);
     setStatus(null);
@@ -203,6 +197,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   }
 
   const busy = pending !== null;
+  const hasQualifiedProvider = state.providers.some((card) => card.status === 'qualified');
 
   return (
     <div className="flex flex-col gap-24" data-testid="ai-models-panel">
@@ -229,64 +224,38 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         </ul>
       </section>
 
-      <ManagedAiBlock
-        providers={state.providers}
-        {...(requestId === undefined ? {} : { requestId })}
-      />
-
-      <Card as="section" className="p-8" data-testid="ai-models-tasks">
-        <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
-          <div className="flex flex-col gap-4">
-            <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
-            <p className="m-0 text-14 text-ink-muted">{t.tasksSubtitle}</p>
-          </div>
-          <Button
-            data-testid="ai-reset-models"
-            disabled={busy}
-            onClick={() => {
-              void resetModels();
-            }}
-            variant="outline"
-          >
-            {t.reset}
-          </Button>
-        </div>
-        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-models-task-list">
-          {state.tasks.map((task) => (
-            <TaskRow
-              busy={busy}
-              key={task.task}
-              onAssign={(option) => {
-                void assign(task.task, option);
-              }}
-              task={task}
-            />
-          ))}
-        </ul>
-      </Card>
-
-      <section aria-labelledby="ai-providers-title" className="flex flex-col gap-12">
+      <section
+        aria-labelledby="ai-providers-title"
+        className="flex flex-col gap-12"
+        data-testid="ai-providers"
+      >
         <div className="flex flex-col gap-2">
           <h2 className="m-0 font-display text-22 font-600 tracking-title" id="ai-providers-title">
             {t.providersTitle}
           </h2>
-          <p className="m-0 text-13 text-ink-muted">
-            {t.guard(usdLabel(state.guard.managedDailyCapUsd))}
-          </p>
         </div>
+        {state.providers.length === 0 && !formOpen ? (
+          <p
+            className="m-0 rounded-18 bg-surface-subtle px-18 py-14 text-14 text-ink-secondary"
+            data-testid="ai-providers-empty"
+            role="status"
+          >
+            {t.providersEmpty}
+          </p>
+        ) : null}
         <div className="flex flex-wrap gap-12" data-testid="ai-providers-cards">
           {state.providers.map((card) => (
             <ProviderCardView
               busy={busy}
               card={card}
-              key={card.id ?? 'provided'}
+              key={card.id}
               onDelete={() => {
                 void removeKey(card);
               }}
               onRetest={() => {
                 void retest(card);
               }}
-              pending={pending === (card.id ?? 'provided')}
+              pending={pending === card.id}
             />
           ))}
           {formOpen ? null : (
@@ -324,6 +293,39 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         ) : null}
       </section>
 
+      <Card as="section" className="p-8" data-testid="ai-models-tasks">
+        <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
+          <div className="flex flex-col gap-4">
+            <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
+            <p className="m-0 text-14 text-ink-muted">{t.tasksSubtitle}</p>
+            {hasQualifiedProvider ? null : (
+              <p
+                className="m-0 text-14 font-600 text-orange-ink"
+                data-testid="ai-tasks-no-provider"
+                role="status"
+              >
+                {t.noProviderForTasks}
+              </p>
+            )}
+          </div>
+        </div>
+        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-models-task-list">
+          {state.tasks.map((task) => (
+            <TaskRow
+              busy={busy}
+              key={task.task}
+              onAssign={(option) => {
+                void assign(task.task, option);
+              }}
+              onClear={() => {
+                void clearTask(task.task);
+              }}
+              task={task}
+            />
+          ))}
+        </ul>
+      </Card>
+
       {error === null ? null : (
         <div className="flex flex-wrap items-center justify-end gap-12">
           <FormError data-testid="ai-models-error">{error}</FormError>
@@ -343,20 +345,34 @@ interface TaskRowProps {
   task: AiTaskModelState;
   busy: boolean;
   onAssign: (option: AiTaskModelState['options'][number]) => void;
+  onClear: () => void;
 }
 
 /** EF-1, EF-2 — one task line: label, required capabilities, selector and pills. */
-function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
+function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
   const selectId = useId();
   const label = t.taskLabels[task.task];
-  const note = task.origin === 'personal' ? TASK_NOTES[task.task] : undefined;
+  const note = TASK_NOTES[task.task];
   const selectedIndex = task.options.findIndex(
-    (option) =>
-      option.modelId === task.modelId &&
-      option.credentialId === task.credentialId &&
-      option.origin === task.origin,
+    (option) => option.modelId === task.modelId && option.credentialId === task.credentialId,
   );
   const value = selectedIndex >= 0 ? String(selectedIndex) : '';
+  const groups = task.options.reduce<
+    Array<{ label: string; options: Array<{ value: string; label: string }> }>
+  >((acc, option, index) => {
+    const label = option.providerLabel;
+    const existing = acc.find((group) => group.label === label);
+    const rendered = {
+      value: String(index),
+      label:
+        option.qualificationStatus === 'qualified'
+          ? `${option.modelId} · ma clé`
+          : `${option.modelId} · ma clé · à qualifier`,
+    };
+    if (existing === undefined) acc.push({ label, options: [rendered] });
+    else existing.options.push(rendered);
+    return acc;
+  }, []);
 
   return (
     <li
@@ -377,7 +393,7 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
       <Select
         className="flex-[0_1_300px]"
         data-testid="ai-task-model"
-        disabled={busy}
+        disabled={busy || task.options.length === 0}
         hideLabel
         id={selectId}
         label={label}
@@ -386,23 +402,45 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
           if (option !== undefined) onAssign(option);
         }}
         options={[
-          ...(value === '' ? [{ value: '', label: t.unavailable }] : []),
-          ...task.options.map((option, index) => ({
-            value: String(index),
-            label: option.label,
-          })),
+          ...(value === ''
+            ? [
+                {
+                  value: '',
+                  label:
+                    task.modelId === null || task.unavailableReason === null
+                      ? t.chooseModel
+                      : t.noModelChosen,
+                },
+              ]
+            : []),
         ]}
+        groups={groups}
         value={value}
       />
       <span className="flex min-w-150 flex-wrap gap-6">
-        <Badge tone={task.selection === 'default' ? 'default-model' : 'indigo'}>
-          {task.selection === 'default' ? t.defaultPill : t.customPill}
-        </Badge>
+        {task.modelId !== null && task.available ? (
+          <Badge tone="indigo">{t.chosenPill}</Badge>
+        ) : null}
         {task.outsideEu ? <Badge tone="orange">{t.outsideEuPill}</Badge> : null}
       </span>
+      {task.modelId === null ? null : (
+        <Button
+          data-testid="ai-task-clear"
+          disabled={busy}
+          onClick={onClear}
+          size="sm"
+          variant="ghost"
+        >
+          {t.clearChoice}
+        </Button>
+      )}
       {task.available ? null : (
-        <p className="m-0 w-full text-13 font-600 text-orange-ink" role="status">
-          {t.unavailable} {t.unavailableHint}
+        <p
+          className="m-0 w-full text-13 font-600 text-orange-ink"
+          data-testid="ai-task-unavailable"
+          role="status"
+        >
+          {t.unavailable[task.unavailableReason ?? 'no_model_selected']} {t.unavailableHint}
         </p>
       )}
     </li>
@@ -435,56 +473,45 @@ function ProviderCardView({
     >
       <div className="flex items-center justify-between gap-8">
         <h3 className="m-0 text-17 font-700">{card.label}</h3>
-        <Badge tone={card.origin === 'provided' ? 'lime' : statusTone(card.status)}>
-          {card.origin === 'provided' ? t.providedBadge : t.status[card.status]}
-        </Badge>
+        <Badge tone={statusTone(card.status)}>{t.status[card.status]}</Badge>
       </div>
-      {card.origin === 'provided' ? (
-        <>
-          <p className="m-0 text-14 text-ink-muted">{card.dataNote}</p>
-          <p className="m-0 text-13 text-ink-muted">{t.providedModels}</p>
-        </>
-      ) : (
-        <>
-          <p className="m-0 text-14 text-ink-muted">
-            {card.keyMasked === null ? t.noKey : t.yourKey(card.keyMasked)}
-          </p>
-          {card.outsideEu ? (
-            <p
-              className="m-0 rounded-10 bg-orange-soft px-10 py-8 text-13 font-600 text-orange-ink"
-              data-region-warning
-              data-testid="provider-region-warning"
-            >
-              {t.regionWarning}
-            </p>
-          ) : null}
-          {failure === null ? null : (
-            <p className="m-0 text-13 leading-1.5 text-ink-muted" role="status">
-              {failure}
-            </p>
-          )}
-          <div className="flex flex-wrap gap-8">
-            <Button
-              data-testid="provider-retest"
-              disabled={busy}
-              onClick={onRetest}
-              size="sm"
-              variant={card.status === 'qualified' ? 'outline' : 'dark'}
-            >
-              {pending ? t.retesting : card.status === 'qualified' ? t.retest : t.relance}
-            </Button>
-            <Button
-              data-testid="provider-delete"
-              disabled={busy}
-              onClick={onDelete}
-              size="sm"
-              variant="ghost"
-            >
-              {pending ? t.deleting : t.deleteKey}
-            </Button>
-          </div>
-        </>
+      <p className="m-0 text-14 text-ink-muted">
+        {card.keyMasked === null ? t.noKey : t.yourKey(card.keyMasked)}
+      </p>
+      {card.outsideEu ? (
+        <p
+          className="m-0 rounded-10 bg-orange-soft px-10 py-8 text-13 font-600 text-orange-ink"
+          data-region-warning
+          data-testid="provider-region-warning"
+        >
+          {t.regionWarning}
+        </p>
+      ) : null}
+      {failure === null ? null : (
+        <p className="m-0 text-13 leading-1.5 text-ink-muted" role="status">
+          {failure}
+        </p>
       )}
+      <div className="flex flex-wrap gap-8">
+        <Button
+          data-testid="provider-retest"
+          disabled={busy}
+          onClick={onRetest}
+          size="sm"
+          variant={card.status === 'qualified' ? 'outline' : 'dark'}
+        >
+          {pending ? t.retesting : card.status === 'qualified' ? t.retest : t.relance}
+        </Button>
+        <Button
+          data-testid="provider-delete"
+          disabled={busy}
+          onClick={onDelete}
+          size="sm"
+          variant="ghost"
+        >
+          {pending ? t.deleting : t.deleteKey}
+        </Button>
+      </div>
     </Card>
   );
 }
@@ -497,24 +524,14 @@ interface AddProviderFormProps {
 /** EF-3, EF-4 — type, model, endpoint and key; the region warning appears before any submit. */
 function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
   const [provider, setProvider] = useState<AiCredentialProvider>('mistral');
-  const [model, setModel] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const qualification = useCredentialQualification({
-    provider,
-    apiKey,
-    baseUrl,
-    model,
-    recommendedModels: [],
-    onKeyAccepted: () => {
-      // BR-IA-03 — the field is cleared as soon as the key exists server-side.
-      setApiKey('');
-    },
-  });
-  const report = qualification.report;
-  const testing = qualification.status === 'testing';
-  const tested = report !== null;
+  const [discovering, setDiscovering] = useState(false);
+  const [modelIds, setModelIds] = useState<string[]>([]);
+  const [credentialId, setCredentialId] = useState<string | null>(null);
+  const tested = credentialId !== null;
+  const testing = discovering;
 
   const submit = (): void => {
     setFormError(null);
@@ -522,11 +539,39 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
       setFormError(t.formIncomplete);
       return;
     }
-    if (model.trim() === '') {
+    if (needsBaseUrl(provider) && baseUrl.trim() === '') {
       setFormError(t.formIncomplete);
       return;
     }
-    void qualification.test();
+    if (discovering) return;
+    setDiscovering(true);
+    void api
+      .meAiCredentialsDiscover({
+        body: {
+          provider,
+          ...(provider === 'local' ? {} : { apiKey: apiKey.trim() }),
+          ...(needsBaseUrl(provider) ? { baseUrl: baseUrl.trim() } : {}),
+        },
+      })
+      .then(async (discovered) => {
+        const created = await api.meAiCredentialsCreate({
+          body: {
+            provider,
+            modelIds: discovered.modelIds,
+            ...(provider === 'local' ? {} : { apiKey: apiKey.trim() }),
+            ...(needsBaseUrl(provider) ? { baseUrl: baseUrl.trim() } : {}),
+          },
+        });
+        setCredentialId(created.id);
+        setModelIds(discovered.modelIds);
+        setApiKey('');
+      })
+      .catch((cause: unknown) => {
+        setFormError(cause instanceof ApiError ? cause.detail : t.saveError);
+      })
+      .finally(() => {
+        setDiscovering(false);
+      });
   };
 
   return (
@@ -550,17 +595,6 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
           }}
           options={PROVIDER_OPTIONS.map((entry) => ({ ...entry }))}
           value={provider}
-        />
-        <TextField
-          data-testid="provider-form-model"
-          disabled={testing || tested}
-          label={t.formModel}
-          onChange={(event) => {
-            setModel(event.target.value);
-            setFormError(null);
-          }}
-          placeholder={t.formModelPlaceholder}
-          value={model}
         />
         {needsBaseUrl(provider) ? (
           <TextField
@@ -608,13 +642,17 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
           {t.qualifRunning}
         </p>
       ) : null}
-      {report === null ? null : <QualificationResult report={report} />}
+      {modelIds.length === 0 ? null : (
+        <p className="m-0 text-14 text-ink-muted" data-testid="provider-discovered-models">
+          {modelIds.length} modèle(s) disponible(s) : {modelIds.slice(0, 8).join(', ')}
+          {modelIds.length > 8 ? '…' : ''}
+        </p>
+      )}
       <div className="flex flex-wrap justify-end gap-8">
         <Button
           data-testid="provider-form-cancel"
           disabled={testing}
           onClick={() => {
-            qualification.reset();
             onClose();
           }}
           variant="ghost"
@@ -638,51 +676,5 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
         )}
       </div>
     </Card>
-  );
-}
-
-function QualificationResult({ report }: Readonly<{ report: QualificationReport }>) {
-  const failedBrick = report.bricks.find((brick) => brick.status === 'failed');
-  const failedStep = report.steps.find((step) => step.status === 'failed');
-  return (
-    <div
-      className="flex flex-col gap-10 rounded-18 bg-canvas px-18 py-16"
-      data-testid="provider-qualification-result"
-    >
-      <p className="m-0 text-14 font-700">{t.resultTitle}</p>
-      <ul className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 p-2 text-14">
-        {report.steps.map((step) => (
-          <li className="flex items-center gap-8" key={step.step}>
-            <span
-              aria-hidden
-              className={cn(
-                'inline-flex size-20 items-center justify-center rounded-full text-10 font-700 text-white',
-                step.status === 'passed' ? 'bg-green' : 'bg-orange-ink',
-              )}
-            >
-              {step.status === 'passed' ? '✓' : '×'}
-            </span>
-            {t.steps[step.step]} — {t.stepStatus[step.status]}
-          </li>
-        ))}
-      </ul>
-      <p
-        className={cn(
-          'm-0 text-13 font-700',
-          report.status === 'qualified' ? 'text-green-ink' : 'text-orange-ink',
-        )}
-        role="status"
-      >
-        {report.status === 'qualified' ? t.qualifPassed : t.qualifFailed}
-      </p>
-      {failedBrick === undefined ? null : (
-        <p className="m-0 text-13 text-ink-muted">
-          {t.failureBrick(fr.bricks.type(failedBrick.type as Parameters<typeof fr.bricks.type>[0]))}
-        </p>
-      )}
-      {failedStep === undefined || failedStep.step === 'bricks' ? null : (
-        <p className="m-0 text-13 text-ink-muted">{t.failureStep(t.steps[failedStep.step])}</p>
-      )}
-    </div>
   );
 }

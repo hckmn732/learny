@@ -155,20 +155,15 @@ export function createSupabasePdfReader(
 }
 
 /**
- * EF-2 — best-effort upload to the Anthropic Files API. Only the provided AI (`managed`) is sent:
- * a personal Anthropic key would require the decryption service of SPEC-505, which is not part of
- * the ingestion. Any upload failure leaves the extracted text usable.
+ * EF-2 — best-effort upload to the Anthropic Files API, only when the learner chose an Anthropic
+ * model for the course. The personal key is decrypted by SPEC-505, which is not part of the
+ * ingestion: in `live` mode the upload is therefore skipped, in `mock` mode it returns a stable
+ * identifier. Any upload failure leaves the extracted text usable.
  */
 export function createAnthropicPdfUploader(mode: LlmMode, logger?: LearnyLogger): PdfUploader {
   return async (input) => {
     const resolved = await resolveModel(input.db, { userId: input.userId, task: 'course' });
-    if (
-      !resolved.ok ||
-      resolved.value.provider !== 'anthropic' ||
-      resolved.value.kind !== 'managed'
-    ) {
-      return null;
-    }
+    if (!resolved.ok || resolved.value.provider !== 'anthropic') return null;
     try {
       const uploaded = await uploadDocument(
         { mode },

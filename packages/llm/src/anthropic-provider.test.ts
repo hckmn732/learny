@@ -7,7 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
 
-import { createAnthropicFetch, LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
+import { createAnthropicFetch, LEARNY_TASK_HEADER } from './anthropic-fetch';
 import { buildAnthropicOptions, buildAnthropicSystem } from './anthropic-options';
 
 const bodies: Record<string, unknown>[] = [];
@@ -22,7 +22,7 @@ const server = setupServer(
       id: `msg_${String(bodies.length)}`,
       type: 'message',
       role: 'assistant',
-      model: typeof body.model === 'string' ? body.model : 'claude-opus-5-5',
+      model: typeof body.model === 'string' ? body.model : 'test-model-a',
       content: [{ type: 'text', text: 'ok' }],
       stop_reason: 'end_turn',
       stop_sequence: null,
@@ -43,15 +43,15 @@ const PROVIDER = createAnthropic({ apiKey: 'sk-ant-test', fetch: MODEL });
 
 describe('[SPEC-504] corps de requête Anthropic (MSW)', () => {
   it.each([
-    ['programme', 'claude-opus-5-5', 'high'],
-    ['course', 'claude-opus-5-5', 'medium'],
-    ['gaps', 'claude-opus-5-5', 'medium'],
-    ['tutor', 'claude-sonnet-5-5', 'low'],
-    ['light', 'claude-haiku-5-5', 'low'],
+    ['programme', 'test-model-a', 'high'],
+    ['course', 'test-model-a', 'medium'],
+    ['gaps', 'test-model-a', 'medium'],
+    ['tutor', 'test-model-b', 'low'],
+    ['light', 'test-model-c', 'low'],
   ] as const)('CA-2 — %s : thinking adaptatif et effort %s', async (task, modelId, effort) => {
     bodies.length = 0;
     headersSeen.length = 0;
-    const options = buildAnthropicOptions({ task, modelId, managed: true });
+    const options = buildAnthropicOptions({ task, modelId });
     const system = buildAnthropicSystem([
       { text: 'Consigne stable', cache: true },
       { text: 'Question', cache: false },
@@ -70,10 +70,7 @@ describe('[SPEC-504] corps de requête Anthropic (MSW)', () => {
         }),
       },
       toolChoice: 'auto',
-      headers: {
-        [LEARNY_TASK_HEADER]: task,
-        [LEARNY_FALLBACK_HEADER]: task === 'light' ? '0' : '1',
-      },
+      headers: { [LEARNY_TASK_HEADER]: task },
       providerOptions: options.providerOptions,
     });
     expect(bodies).toHaveLength(1);
@@ -100,12 +97,8 @@ describe('[SPEC-504] corps de requête Anthropic (MSW)', () => {
     expect(sentSystem.at(-1)?.cache_control).toBeUndefined();
     expect(sentSystem.filter((part) => part.cache_control !== undefined)).toHaveLength(1);
     expect(sentSystem[0]?.text).toBe('Consigne stable');
-    const expectedFallback = task !== 'light';
-    expect(body.fallbacks).toBe(expectedFallback ? 'default' : undefined);
-    const beta = headersSeen[0]?.get('anthropic-beta') ?? '';
-    if (expectedFallback) expect(beta).toContain('server-side-fallback-2026-07-01');
-    else expect(beta).not.toContain('server-side-fallback-2026-07-01');
+    expect(body.fallbacks).toBeUndefined();
+    expect(headersSeen[0]?.get('anthropic-beta') ?? '').not.toContain('fallback');
     expect(headersSeen[0]?.get(LEARNY_TASK_HEADER)).toBeNull();
-    expect(headersSeen[0]?.get(LEARNY_FALLBACK_HEADER)).toBeNull();
   });
 });

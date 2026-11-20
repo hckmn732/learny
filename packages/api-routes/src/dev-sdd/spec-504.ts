@@ -1,10 +1,10 @@
-// Data of the SPEC-504 demonstration: three isolated accounts built for one request, then removed.
+// Data of the SPEC-504 demonstration: isolated accounts built for one request, then removed.
 // `serviceDb` is used only under `_dev` (ADR-0049); resolution itself runs against the real tables.
 import { randomUUID } from 'node:crypto';
 
 import { AI_TASKS, type AiTask } from '@learny/config';
 import { serviceDb, sql } from '@learny/db';
-import { createCredential, setTaskModel, upsertSubscription } from '@learny/db';
+import { createCredential, setTaskModel } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 import { resolveModel } from '@learny/llm';
 
@@ -19,7 +19,7 @@ export interface ResolutionCell {
 }
 
 export interface ResolutionRow {
-  key: 'subscriber' | 'byok' | 'none';
+  key: 'byok' | 'none';
   label: string;
   cells: ResolutionCell[];
 }
@@ -29,10 +29,25 @@ async function newUser(label: string): Promise<string> {
   return serviceDb().transaction(async (tx) => (await createTestUser(tx, { email })).id);
 }
 
-async function subscribe(userId: string): Promise<void> {
-  await serviceDb().transaction((tx) =>
-    upsertSubscription(tx, { userId, status: 'active', currentPeriodEnd: FUTURE }),
+async function chooseOwnModel(userId: string, tasks: readonly AiTask[]): Promise<void> {
+  const credential = await serviceDb().transaction((tx) =>
+    createCredential(tx, {
+      userId,
+      provider: 'openai',
+      label: 'Clé OpenAI de démonstration',
+      baseUrl: 'https://api.openai.com/v1',
+      modelIds: ['gpt-demo'],
+      encryptedKey: new Uint8Array(29).fill(3),
+      keyLast4: 'demo',
+      status: 'qualified',
+      qualifiedAt: FUTURE,
+    }),
   );
+  for (const task of tasks) {
+    await serviceDb().transaction((tx) =>
+      setTaskModel(tx, { userId, task, credentialId: credential.id, modelId: 'gpt-demo' }),
+    );
+  }
 }
 
 async function resolution(userId: string): Promise<ResolutionCell[]> {
@@ -59,40 +74,17 @@ async function resolution(userId: string): Promise<ResolutionCell[]> {
 }
 
 export async function loadResolutionDemo(): Promise<ResolutionRow[]> {
-  const subscriber = await newUser('subscriber');
   const byok = await newUser('byok');
   const none = await newUser('none');
   try {
-    await subscribe(subscriber);
-    const credential = await serviceDb().transaction((tx) =>
-      createCredential(tx, {
-        userId: byok,
-        provider: 'openai',
-        label: 'Clé OpenAI de démonstration',
-        baseUrl: 'https://api.openai.com/v1',
-        modelIds: ['gpt-demo'],
-        encryptedKey: new Uint8Array(29).fill(3),
-        keyLast4: 'demo',
-        status: 'qualified',
-        qualifiedAt: FUTURE,
-      }),
-    );
-    await serviceDb().transaction((tx) =>
-      setTaskModel(tx, {
-        userId: byok,
-        task: 'tutor',
-        credentialId: credential.id,
-        modelId: 'gpt-demo',
-      }),
-    );
+    await chooseOwnModel(byok, ['tutor']);
     return [
-      { key: 'subscriber', label: 'Abonné à l’IA fournie', cells: await resolution(subscriber) },
       {
         key: 'byok',
-        label: 'Non abonné, clé OpenAI qualifiée sur tuteur',
+        label: 'Clé OpenAI qualifiée choisie pour le tuteur',
         cells: await resolution(byok),
       },
-      { key: 'none', label: 'Sans abonnement ni clé', cells: await resolution(none) },
+      { key: 'none', label: 'Aucune clé, aucun modèle choisi', cells: await resolution(none) },
     ];
   } finally {
     await serviceDb().execute(sql`delete from auth.users where email like ${`${PREFIX}%`}`);
@@ -119,7 +111,7 @@ export async function runMockCall(input: {
   scenario: string;
 }): Promise<MockCallState> {
   const userId = await newUser('call');
-  await subscribe(userId);
+  await chooseOwnModel(userId, [input.task]);
   try {
     const session = await (
       await import('@learny/llm')

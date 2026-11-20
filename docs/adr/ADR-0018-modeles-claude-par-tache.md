@@ -1,9 +1,11 @@
 # ADR-0018 — Modèles Claude par tâche
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-0340
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-504
+
+> Remplacée par ADR-0340 : la plateforme ne fournit aucun modèle, donc aucun modèle par défaut par tâche. Le texte ci-dessous est conservé pour l’historique.
 
 ## Contexte
 

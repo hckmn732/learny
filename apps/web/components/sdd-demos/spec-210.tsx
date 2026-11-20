@@ -75,9 +75,6 @@ function StatusCard() {
                 : t.status.periodEnd(formatDate(data.currentPeriodEnd))}
             </dd>
           </div>
-          <div>
-            <dd data-testid="spec-210-managed-ai">{t.status.managedAi(data.hasManagedAi)}</dd>
-          </div>
         </dl>
       )}
     </BaseCard>

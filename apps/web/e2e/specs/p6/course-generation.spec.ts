@@ -13,6 +13,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { seedOwnModels } from '../../support/own-model';
+
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE = fileURLToPath(
   new URL('../../../../../design/references/SCR-07-base-desktop.png', import.meta.url),
@@ -69,10 +71,7 @@ async function seedModule(userId: string, withSource: boolean): Promise<Seeded> 
       values (${userId}::uuid, ${chapterId}::uuid, 'in_progress', ${NOW}::timestamptz)
       on conflict (user_id, chapter_id) do update set contributions_status = 'in_progress'
     `);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await seedOwnModels(userId, tx);
     if (withSource) {
       const resource = await tx.execute<{ id: string }>(sql`
         insert into public.resources (

@@ -1348,8 +1348,8 @@ export function createDbNotifier(db: UserDatabase): {
     async notifyInvalidOutput(scope, notice) {
       const body =
         notice.tone === 'tu'
-          ? 'Ta tâche IA n’a pas abouti. Choisis un autre modèle ou l’IA fournie dans tes paramètres.'
-          : 'Votre tâche IA n’a pas abouti. Choisissez un autre modèle ou l’IA fournie dans vos paramètres.';
+          ? 'Ta tâche IA n’a pas abouti. Choisis un autre modèle de ta clé dans tes paramètres.'
+          : 'Votre tâche IA n’a pas abouti. Choisissez un autre modèle de votre clé dans vos paramètres.';
       await db.run(async (tx) => {
         await createNotification(tx, {
           userId: scope.userId,

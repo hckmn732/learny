@@ -1,4 +1,4 @@
-// Demonstration of SPEC-504: real resolution on three isolated accounts and the six simulated
+// Demonstration of SPEC-504: real resolution on two isolated accounts and the six simulated
 // scenarios.
 import { AI_TASKS } from '@learny/config';
 

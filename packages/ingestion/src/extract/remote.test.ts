@@ -25,7 +25,7 @@ function visionReader(text = 'Compte 512 — banque, solde débiteur de 1 200 �
     read: () =>
       Promise.resolve({
         text,
-        origin: { task: 'light', provider: 'anthropic', modelId: 'claude-haiku-5-5' },
+        origin: { task: 'light', provider: 'anthropic', modelId: 'model-c' },
       }),
   };
 }
@@ -123,7 +123,7 @@ describe('[SPEC-510] Ingestion : pages web, YouTube et images', () => {
     expect(extraction.origin).toEqual({
       task: 'light',
       provider: 'anthropic',
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
     });
 
     const { content } = await extractImageDocument(
@@ -131,7 +131,7 @@ describe('[SPEC-510] Ingestion : pages web, YouTube et images', () => {
       { reader: visionReader(), db: {} as never, userId: '00000000-0000-4000-8000-000000000510' },
     );
     expect(content.contentOrigin).toBe('model');
-    expect(content.vision?.modelId).toBe('claude-haiku-5-5');
+    expect(content.vision?.modelId).toBe('model-c');
     expect(content.locations[0]).toMatchObject({ anchor: 'lecture-ia', charStart: 0 });
     expect(content.text.slice(content.locations[0]?.charStart, content.locations[0]?.charEnd)).toBe(
       extraction.text,

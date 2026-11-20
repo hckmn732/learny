@@ -35,7 +35,6 @@ describe('[SPEC-602] étape Rappels', () => {
     const { user } = renderComponent(
       <RemindersStep
         initial={{ push: true, email: true, automations: true }}
-        needsCheckout={false}
         publicKey="key"
         pushGateway={push}
       />,
@@ -58,7 +57,6 @@ describe('[SPEC-602] étape Rappels', () => {
     const { user } = renderComponent(
       <RemindersStep
         initial={{ push: true, email: true, automations: true }}
-        needsCheckout={false}
         publicKey="key"
         pushGateway={gateway(false)}
       />,

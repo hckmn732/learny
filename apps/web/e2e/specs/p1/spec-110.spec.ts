@@ -10,11 +10,10 @@ import {
 const SECTIONS = [
   'spec-110-credentials',
   'spec-110-tasks',
-  'spec-110-spend',
   'spec-110-subscription',
 ];
 
-const HEADINGS = ['Clé personnelle', 'Modèle par tâche', 'Dépense du jour', 'Abonnement'];
+const HEADINGS = ['Clé personnelle', 'Modèle par tâche', 'Abonnement'];
 
 async function textContents(page: Page, testId: string) {
   return page
@@ -64,7 +63,7 @@ test('inspecte les coûts IA @SPEC-110', async ({
   }
   expect(bodyText ?? '').toContain('iv‖tag‖ciphertext');
 
-  // EF-2 — five tasks; the failed DeepSeek key is never selected and falls back to provided AI.
+  // EF-2 — five tasks; the failed DeepSeek key is never used (no fallback) and a task without choice has no model.
   await expect(page.getByTestId('task-row')).toHaveCount(5);
   expect(await textContents(page, 'task-name')).toEqual([
     'programme',
@@ -78,27 +77,18 @@ test('inspecte les coûts IA @SPEC-110', async ({
     'claude-sonnet-4-5-20250929',
     'deepseek-chat',
     'claude-haiku-4-5-20251001',
-    'claude-haiku-4-5-20251001',
+    '—',
   ]);
   expect(await textContents(page, 'task-source')).toEqual([
     'clé personnelle · Clé Anthropic d’Alex',
     'clé personnelle · Clé Anthropic d’Alex',
-    'IA fournie · Clé DeepSeek (hors UE) non qualifiée',
+    'indisponible · Clé DeepSeek (hors UE) non qualifiée',
     'clé personnelle · Clé Anthropic d’Alex',
-    'IA fournie',
+    'aucun modèle choisi',
   ]);
 
-  // CA-2 / EF-5 — the provided-AI spend of the Paris day is 0.42 + 0.17 = 0.59 USD; the BYOK
-  // call and the zero-cost refusal stay out of the cap.
-  await expect(page.getByTestId('spend-amount')).toHaveText('$0.59');
-  await expect(page.getByTestId('spend-day')).toHaveText('11/11/2026');
-  await expect(page.getByTestId('spend-cap')).toHaveText('$1.50');
-  await expect(page.getByTestId('spend-calls')).toHaveText('2 facturé(s) · 1 BYOK exclu(s)');
-  await expect(page.getByTestId('spend-note')).toContainText('ne consomment pas le plafond');
-
-  // CA-4 — an active subscription, a 1.50 USD cap and no real payment.
+  // CA-4 — an active subscription (right to use the application) and no real payment.
   await expect(page.getByTestId('subscription-status')).toHaveText('actif');
-  await expect(page.getByTestId('subscription-cap')).toHaveText('$1.50');
   await expect(page.getByTestId('subscription-period-end')).toHaveText('11/12/2026');
   await expect(page.getByTestId('subscription-note')).toContainText('aucun paiement réel');
 
@@ -128,10 +118,6 @@ test('coûts IA conformes @SPEC-110 @visual @mobile', async ({ page, axeCheck })
       'border-top-left-radius': PROVISIONAL_TOKENS.radius.card,
     },
     '[data-testid="spec-110-tasks"]': {
-      'border-top-color': PROVISIONAL_TOKENS.color.border,
-      'border-top-left-radius': PROVISIONAL_TOKENS.radius.card,
-    },
-    '[data-testid="spec-110-spend"]': {
       'border-top-color': PROVISIONAL_TOKENS.color.border,
       'border-top-left-radius': PROVISIONAL_TOKENS.radius.card,
     },

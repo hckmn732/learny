@@ -1,46 +1,14 @@
 // Public API of @learny/llm (SPEC-504). This is the only package allowed to import an AI provider
 // SDK (ET-9, BR-IA-09); learning-engine and bricks must not depend on it.
 export { resolveModel } from './resolve';
-export type { ManagedModelId, ResolvedModel, ResolveInput } from './resolve';
-export {
-  BUDGET_DECISIONS,
-  BUDGET_REASONS,
-  budgetCheckSchema,
-  budgetPercent,
-  calculateUsageCost,
-  checkBudget,
-  estimateUsageCost,
-  formatUsdMicros,
-  isBudgetTask,
-  parseUsdMicros,
-  pricesForModel,
-  shouldAlert,
-} from './budget';
-export type {
-  BudgetCheckInput,
-  BudgetCheckResult,
-  BudgetDecision,
-  BudgetReason,
-  EstimatedTokens,
-  ParsedBudgetCheckInput,
-  UsageCost,
-  UsageCostInput,
-  UsageTokens,
-} from './budget';
-export {
-  defaultModelForTask,
-  needsProviderStreaming,
-  TASK_CONFIG,
-  TASK_CAPABILITIES,
-} from './tasks';
+export type { ResolvedModel, ResolveInput } from './resolve';
+export { needsProviderStreaming, TASK_CONFIG, TASK_CAPABILITIES } from './tasks';
 export type { TaskCapability, TaskConfig } from './tasks';
 export {
   buildAnthropicOptions,
   buildAnthropicRequestPreview,
   buildAnthropicSystem,
-  isFallbackEnabled,
   countCacheBreakpoints,
-  FALLBACK_BETA,
 } from './anthropic-options';
 export type {
   AnthropicOptions,
@@ -52,19 +20,14 @@ export { PROVIDER_CATALOG, providerRegion, providerSupports } from './providers/
 export type { ProviderCapabilities, ProviderCatalogEntry } from './providers/catalog';
 export { createLanguageModel } from './providers/factory';
 export type { ProviderSecrets } from './providers/factory';
+export { discoverProviderModels } from './discover-models';
+export type { DiscoverProviderModelsInput, DiscoverProviderModelsOptions } from './discover-models';
 export { createSession, outgoingMessages } from './session';
-export type {
-  BudgetGuard,
-  CallEstimate,
-  LlmContext,
-  LlmSession,
-  LlmStreamResult,
-  SessionOptions,
-} from './session';
+export type { LlmContext, LlmSession, LlmStreamResult, SessionOptions } from './session';
 export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
 export type { AiErrorContext } from './errors';
-export { logCall, zeroCost } from './log';
-export type { CallUsage, CostCalculator, CostInput, LogCallInput } from './log';
+export { logCall } from './log';
+export type { CallUsage, LogCallInput } from './log';
 export { mockFileId, uploadDocument } from './files';
 export {
   canonicalizeUrl,

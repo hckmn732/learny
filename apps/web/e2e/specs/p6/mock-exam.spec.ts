@@ -13,6 +13,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { seedOwnModels } from '../../support/own-model';
+
 const BASE = fileURLToPath(
   new URL('../../../../../design/references/SCR-11-base-desktop.png', import.meta.url),
 );
@@ -159,11 +161,7 @@ async function seedExam(options: { guide?: boolean } = {}): Promise<Seed> {
         payload: choicePayload(notion.label),
       });
     }
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-      on conflict (user_id) do update set status = excluded.status
-    `);
+    await seedOwnModels(userId, tx);
     await tx.execute(sql`
       update public.profiles
       set onboarding_step = 'done', current_formation_id = ${programme.formationId}::uuid

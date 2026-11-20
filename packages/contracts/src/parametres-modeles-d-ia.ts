@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-import { UsdAmount } from './ai';
 import { AiCredentialProvider } from './ai-credentials';
 import { IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 
 // Contracts of the « Modèles d'IA » tab of the settings screen (SPEC-709 EF-1 to EF-5, ET-1 to
-// ET-5; BR-SET-05, BR-IA-02 to BR-IA-04). The state is read with the learner's RLS client: no
-// provider key, ciphertext, prompt or qualification secret ever crosses this boundary (BR-IA-03).
+// ET-5; BR-SET-05, BR-IA-02 to BR-IA-04). The platform provides no model and no task has a default
+// one: the learner assigns a model of a qualified personal key to each task. The state is read with
+// the learner's RLS client: no provider key, ciphertext, prompt or qualification secret ever crosses
 // Credentials themselves stay owned by SPEC-505/SPEC-506: this module only projects the mask, the
 // status and the region flag that the screen renders.
 
@@ -27,23 +27,14 @@ export const AI_TASK_CAPABILITY_IDS = [
 export const AiTaskCapabilityId = z.enum(AI_TASK_CAPABILITY_IDS);
 export type AiTaskCapabilityId = z.infer<typeof AiTaskCapabilityId>;
 
-/** EF-2 — « Par défaut » is the provided model of the task; « Personnalisé » anything else. */
-export const AI_MODEL_SELECTIONS = ['default', 'custom'] as const;
-export const AiModelSelection = z.enum(AI_MODEL_SELECTIONS);
-export type AiModelSelection = z.infer<typeof AiModelSelection>;
-
-/** EF-1 — the option comes from the provided AI or from a personal key. */
-export const AI_MODEL_ORIGINS = ['provided', 'personal'] as const;
-export const AiModelOrigin = z.enum(AI_MODEL_ORIGINS);
-export type AiModelOrigin = z.infer<typeof AiModelOrigin>;
-
 /** BR-SET-05 — « Qualifié », « Non qualifié »; `pending` is the asynchronous battery (ET-4). */
 export const AI_PROVIDER_STATUSES = ['qualified', 'unqualified', 'pending'] as const;
 export const AiProviderStatus = z.enum(AI_PROVIDER_STATUSES);
 export type AiProviderStatus = z.infer<typeof AiProviderStatus>;
 
-/** CL-3 — why the resolved task model cannot run, without any paid fallback. */
+/** CL-3 — why the task cannot run: nothing chosen, or the chosen model is no longer usable. */
 export const AI_MODEL_UNAVAILABLE_REASONS = [
+  'no_model_selected',
   'credential_not_qualified',
   'personal_model_missing',
 ] as const;
@@ -54,32 +45,28 @@ export type AiModelUnavailableReason = z.infer<typeof AiModelUnavailableReason>;
 export const AiModelOption = z.object({
   modelId: z.string().min(1).max(200),
   label: z.string().min(1).max(120),
-  origin: AiModelOrigin,
-  credentialId: Uuid.nullable(),
+  credentialId: Uuid,
   provider: AiCredentialProvider,
   providerLabel: z.string().min(1).max(80),
   outsideEu: z.boolean(),
+  qualificationStatus: z.enum(['qualified', 'unqualified']),
 });
 export type AiModelOption = z.infer<typeof AiModelOption>;
 
-export const AI_MODEL_OPTIONS_MAX = 50;
-
+export const AI_MODEL_OPTIONS_MAX = 500;
 /**
- * EF-1, EF-2 — one row of « Modèle par tâche ». `modelId` is the model that resolution would use
- * (or the stored choice when it became unusable, CL-3); the pills derive from `selection` and
- * `outsideEu`, never from the client.
+ * EF-1, EF-2 — one row of « Modèle par tâche ». `modelId` is the model the learner chose (or the
+ * stored choice when it became unusable, CL-3) and is `null` while nothing is chosen; the pills
+ * derive from `outsideEu` and `available`, never from the client.
  */
 export const AiTaskModelState = z.object({
   task: AiModelsTaskId,
   requiredCapabilities: z.array(AiTaskCapabilityId).max(AI_TASK_CAPABILITY_IDS.length),
-  defaultModelId: z.string().min(1).max(200),
-  selection: AiModelSelection,
-  modelId: z.string().min(1).max(200),
-  origin: AiModelOrigin,
+  modelId: z.string().min(1).max(200).nullable(),
   credentialId: Uuid.nullable(),
-  /** `null` when the stored personal key was deleted: the row still shows the refused model. */
+  /** `null` when nothing is chosen or when the stored personal key was deleted. */
   provider: AiCredentialProvider.nullable(),
-  providerLabel: z.string().min(1).max(80),
+  providerLabel: z.string().min(1).max(80).nullable(),
   outsideEu: z.boolean(),
   available: z.boolean(),
   unavailableReason: AiModelUnavailableReason.nullable(),
@@ -94,11 +81,9 @@ export const AiProviderFailure = z.object({
 });
 export type AiProviderFailure = z.infer<typeof AiProviderFailure>;
 
-/** BR-SET-05, BR-IA-03 — one provider card: provided AI or personal key, always masked. */
+/** BR-SET-05, BR-IA-03 — one provider card: a personal key, always masked. */
 export const AiProviderCard = z.object({
-  /** `null` for the provided Anthropic card (BR-IA-01). */
-  id: Uuid.nullable(),
-  origin: AiModelOrigin,
+  id: Uuid,
   provider: AiCredentialProvider,
   providerLabel: z.string().min(1).max(80),
   label: z.string().min(1).max(80),
@@ -106,29 +91,16 @@ export const AiProviderCard = z.object({
   status: AiProviderStatus,
   outsideEu: z.boolean(),
   dataNote: z.string().min(1).max(300),
-  models: z.array(z.string().min(1).max(200)).max(10),
+  models: z.array(z.string().min(1).max(200)).max(AI_MODEL_OPTIONS_MAX),
   qualifiedAt: IsoDateTime.nullable(),
   failure: AiProviderFailure.nullable(),
 });
 export type AiProviderCard = z.infer<typeof AiProviderCard>;
 
-/**
- * ADR-0012, BR-IA-07 — the guard shown with the tab: a personal key never consumes the provided
- * allowance. The amounts come from configuration; the actual spend stays in `/me/ai/usage`
- * (SPEC-507), so no second source of truth is created here.
- */
-export const AiModelsGuard = z.object({
-  personalKeysExemptFromCap: z.literal(true),
-  managedDailyCapUsd: UsdAmount,
-  alertThresholdPercent: z.int().min(1).max(100),
-});
-export type AiModelsGuard = z.infer<typeof AiModelsGuard>;
-
 /** EF-1, EF-2 — everything the tab renders, read in one RLS transaction. */
 export const AiModelsState = z.object({
   tasks: z.array(AiTaskModelState).length(AI_MODELS_TASK_IDS.length),
-  providers: z.array(AiProviderCard).max(11),
-  guard: AiModelsGuard,
+  providers: z.array(AiProviderCard).max(10),
   /** Last write of a task choice, or the current instant when nothing was chosen (ET-2). */
   updatedAt: IsoDateTime,
 });
@@ -137,19 +109,17 @@ export type AiModelsState = z.infer<typeof AiModelsState>;
 const MODEL_ID_MAX_LENGTH = 200;
 
 /**
- * ET-1, EF-2 — one PATCH saves one task choice or removes every personal choice. Selecting the
- * provided model of the task is the per-task « revenir au défaut » and stores no row; the whole
- * reset removes the rows in one transaction and never deletes a key (BR-SET-05).
+ * ET-1, EF-2 — one PATCH assigns a model of an owned qualified key to a task, or clears the choice
+ * of a task. There is no provided model to fall back on: a cleared task is unavailable.
  */
 export const AiModelsUpdateBody = z.discriminatedUnion('action', [
   z.object({
     action: z.literal('assign'),
     task: AiModelsTaskId,
     modelId: z.string().trim().min(1).max(MODEL_ID_MAX_LENGTH),
-    /** `null` or absent for a provided model; the owned credential for a personal model. */
-    credentialId: Uuid.nullable().optional(),
+    credentialId: Uuid,
   }),
-  z.object({ action: z.literal('reset') }),
+  z.object({ action: z.literal('clear'), task: AiModelsTaskId }),
 ]);
 export type AiModelsUpdateBody = z.infer<typeof AiModelsUpdateBody>;
 
@@ -161,7 +131,7 @@ export const meAiModelsGet = defineRoute({
   output: AiModelsState,
   successStatus: 200,
   summary:
-    'État de l’onglet Modèles d’IA : cinq tâches, modèles qualifiés, fournisseurs masqués et garde-fou (SPEC-709).',
+    'État de l’onglet Modèles d’IA : cinq tâches, modèles qualifiés et fournisseurs masqués (SPEC-709).',
   errors: ['UNAUTHENTICATED'],
 });
 
@@ -175,7 +145,7 @@ export const meAiModelsUpdate = defineRoute({
   successStatus: 200,
   idempotent: true,
   summary:
-    'Affecte un modèle qualifié à une tâche ou revient aux modèles fournis, sans supprimer les clés (SPEC-709).',
+    'Affecte un modèle qualifié à une tâche ou retire le choix d’une tâche, sans supprimer les clés (SPEC-709).',
   errors: [
     'VALIDATION_FAILED',
     'NOT_FOUND',

@@ -15,16 +15,12 @@ import { schema } from '@learny/db';
 import type { ServiceContext } from '../context';
 
 import { resolveBillingDeps, type BillingDeps } from './deps';
-import { hasManagedAi } from './entitlement';
 import { maskStripeId } from './status';
 
 const { subscriptions, profiles } = schema;
 
-/** EF-3 — cap applied to an account that never subscribed (data-model §9). */
-export const DEFAULT_DAILY_CAP_USD = 1.5;
-
-/** `/parametres#modeles` — the « Modèles d’IA » tab (BR-SET-01) where the portal sends the learner back (EF-2). */
-export const PORTAL_RETURN_PATH = '/parametres#modeles';
+/** `/parametres#abonnement` — the « Abonnement » tab (BR-SET-01) where the portal sends the learner back (EF-2). */
+export const PORTAL_RETURN_PATH = '/parametres#abonnement';
 
 function requireUser(ctx: Pick<ServiceContext, 'userId'>): string {
   if (ctx.userId === null) throw new AppError('UNAUTHENTICATED', 'Vous devez être connecté.');
@@ -76,7 +72,7 @@ export async function startCheckout(
       .for('update');
     if (row === undefined) throw new AppError('INTERNAL_ERROR', 'Abonnement introuvable.');
     if (row.status === 'active') {
-      throw new AppError('ALREADY_SUBSCRIBED', 'Votre abonnement à l’IA fournie est déjà actif.');
+      throw new AppError('ALREADY_SUBSCRIBED', 'Votre abonnement est déjà actif.');
     }
 
     let customerId = row.stripeCustomerId;
@@ -137,7 +133,7 @@ export async function openPortal(
   return { url: session.url };
 }
 
-/** EF-3 — status, end of period, entitlement (decided by `hasManagedAi`) and daily cap. */
+/** EF-3 — status and end of the current period. The subscription is the right to use the application; it provides no AI model. */
 export async function getSubscription(
   ctx: Pick<ServiceContext, 'userId' | 'clock'>,
   overrides: Partial<BillingDeps> = {},
@@ -145,11 +141,8 @@ export async function getSubscription(
   const userId = requireUser(ctx);
   const db = overrides.db ?? (await resolveBillingDeps(overrides)).db;
   const [row] = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId));
-  const entitled = await hasManagedAi(userId, { db, clock: ctx.clock });
   return {
     status: row?.status ?? 'none',
     currentPeriodEnd: row?.currentPeriodEnd?.toISOString() ?? null,
-    hasManagedAi: entitled,
-    dailyCapUsd: row === undefined ? DEFAULT_DAILY_CAP_USD : Number(row.dailyCapUsd),
   };
 }

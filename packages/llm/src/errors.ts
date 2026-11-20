@@ -17,12 +17,12 @@ const REFUSAL = /refusal|refused|declined/i;
 
 /** Builds an AI_UNAVAILABLE error with the user message and the settings link of EF-2. */
 export function aiUnavailable(
-  reason: 'no_subscription_no_key' | 'credential_not_qualified',
+  reason: 'no_model_selected' | 'credential_not_qualified',
   options: { credentialId?: string | undefined } = {},
 ): AppError {
   return new AppError(
     'AI_UNAVAILABLE',
-    'Cette fonction demande un modèle d’IA. Abonnez-vous à l’IA fournie ou ajoutez votre propre clé dans Paramètres › Modèles d’IA.',
+    'Cette fonction demande un modèle d’IA. Choisissez un modèle de votre propre clé dans Paramètres › Modèles d’IA.',
     {
       status: 422,
       reason,

@@ -31,10 +31,8 @@ function isStep(value: string): value is Step {
 /** SPEC-602 EF-1 to EF-14 — one Server Component per step, state read under RLS. */
 export default async function OnboardingStepPage({
   params,
-  searchParams,
 }: Readonly<{
   params: Promise<{ etape: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }>) {
   const { etape } = await params;
   if (!isStep(etape)) notFound();
@@ -56,10 +54,7 @@ export default async function OnboardingStepPage({
   if (stored !== 'done' && RANK[etape] > RANK[stored]) {
     redirect(`/premiers-pas/${stored}`);
   }
-  const { profile, preferences, reminders, needsCheckout } = state;
-  const query = await searchParams;
-  const payment =
-    query.abonnement === 'ok' ? 'ok' : query.abonnement === 'annule' ? 'annule' : undefined;
+  const { profile, preferences, reminders } = state;
 
   switch (etape) {
     case 'profil':
@@ -79,17 +74,12 @@ export default async function OnboardingStepPage({
       return (
         <RemindersStep
           initial={reminders}
-          needsCheckout={needsCheckout}
           publicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
         />
       );
     case 'depart':
       return (
-        <DepartureStep
-          firstName={profile.firstName ?? 'Alex'}
-          payment={payment}
-          tutorTone={profile.tutorTone}
-        />
+        <DepartureStep firstName={profile.firstName ?? 'Alex'} tutorTone={profile.tutorTone} />
       );
   }
 }

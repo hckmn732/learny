@@ -5,6 +5,8 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectTokens } from '@learny/testing/visual';
 
+import { seedOwnModels } from '../../support/own-model';
+
 const NOW = '2026-11-11T12:20:00Z';
 
 let session: TestSession;
@@ -52,10 +54,7 @@ async function seedResult(userId: string): Promise<Seed> {
         current_formation_id = ${programme.formationId}::uuid
       where id = ${userId}::uuid
     `);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await seedOwnModels(userId, tx);
     const ids = programme.notionIds.slice(0, 12);
     const gaps = [
       { nature: 'confusion', mastery: 20, evidence: 'Confondue avec le type de pièce dans 2 réponses.' },

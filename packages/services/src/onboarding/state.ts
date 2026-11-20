@@ -14,8 +14,7 @@ import type { ServiceContext } from '../context';
 import { readMe } from '../me';
 import { requireUser, toResult } from '../resources/result';
 
-const { aiCredentials, aiTaskModels, automationSettings, notificationSettings, subscriptions } =
-  schema;
+const { automationSettings, notificationSettings } = schema;
 
 /** Keys toggled by the « Automatismes recommandés » switch (EF-10). */
 export const ONBOARDING_AUTOMATION_KEYS = [
@@ -35,8 +34,6 @@ export interface OnboardingState {
   profile: MeDto;
   preferences: StudyPreferencesDto;
   reminders: ReminderState;
-  /** EF-10 — a Checkout is required after Rappels. */
-  needsCheckout: boolean;
 }
 
 interface PreferenceRow {
@@ -97,57 +94,15 @@ async function readReminders(tx: DbTx, userId: string): Promise<ReminderState> {
 }
 
 /** ET-2 — a qualified personal model assigned to the five tasks of the tutor. */
-async function hasFiveQualifiedAssignments(tx: DbTx, userId: string): Promise<boolean> {
-  const [row] = await tx
-    .select({ tasks: sql<number>`count(distinct ${aiTaskModels.task})::int` })
-    .from(aiTaskModels)
-    .innerJoin(
-      aiCredentials,
-      and(
-        eq(aiCredentials.id, aiTaskModels.credentialId),
-        eq(aiCredentials.userId, userId),
-        eq(aiCredentials.status, 'qualified'),
-      ),
-    )
-    .where(eq(aiTaskModels.userId, userId));
-  return (row?.tasks ?? 0) >= 5;
-}
-
-async function subscriptionActive(tx: DbTx, userId: string, now: Date): Promise<boolean> {
-  const [row] = await tx
-    .select({ status: subscriptions.status, currentPeriodEnd: subscriptions.currentPeriodEnd })
-    .from(subscriptions)
-    .where(eq(subscriptions.userId, userId))
-    .limit(1);
-  return (
-    row?.status === 'active' &&
-    row.currentPeriodEnd !== null &&
-    row.currentPeriodEnd.getTime() > now.getTime()
-  );
-}
-
-/** EF-10 — Checkout is needed when neither five assigned models nor the provided AI are ready. */
-export function onboardingNeedsCheckout(ctx: ServiceContext): Promise<boolean> {
-  const { userId, db } = requireUser(ctx);
-  const now = ctx.clock.now();
-  return db.run(async (tx) => {
-    if (await hasFiveQualifiedAssignments(tx, userId)) return false;
-    return !(await subscriptionActive(tx, userId, now));
-  });
-}
-
-/** ET-2 — profile, rhythm, reminder switches and the Checkout decision in one read. */
+/** ET-2 — profile, rhythm and reminder switches in one read. */
 export function getOnboardingState(ctx: ServiceContext): Promise<Result<OnboardingState>> {
   return toResult(async () => {
     const { userId, db } = requireUser(ctx);
-    const now = ctx.clock.now();
     return db.run(async (tx) => {
       const profile = await readMe(tx, userId);
       const preferences = await readPreferences(tx, userId);
       const reminders = await readReminders(tx, userId);
-      const ready = await hasFiveQualifiedAssignments(tx, userId);
-      const active = ready ? true : await subscriptionActive(tx, userId, now);
-      return { profile, preferences, reminders, needsCheckout: !ready && !active };
+      return { profile, preferences, reminders };
     });
   });
 }

@@ -12,5 +12,4 @@ export {
   applyReminderChoices,
   applyReminderChoicesInTx,
   getOnboardingState,
-  onboardingNeedsCheckout,
 } from './state';

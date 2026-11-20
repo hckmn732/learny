@@ -3,7 +3,6 @@ import { ROUTES } from '@learny/contracts';
 import { agendaImplementations } from './implementations/agenda';
 import { agendaDeplacerEtReajusterLePlanningImplementations } from './implementations/agenda-deplacer-et-reajuster-le-planning';
 import { aiCredentialsImplementations } from './implementations/ai-credentials';
-import { aiUsageImplementations } from './implementations/ai-usage';
 import { attemptsImplementations } from './implementations/attempts';
 import { authImplementations } from './implementations/auth';
 import { automatisme10ModePauseEtRetourImplementations } from './implementations/automatisme-10-mode-pause-et-retour';
@@ -78,7 +77,6 @@ export const ROUTE_IMPLEMENTATIONS = {
   ...aiCredentialsImplementations,
   ...parametresModelesDIaImplementations,
   ...meImplementations,
-  ...aiUsageImplementations,
   ...moteurDAutomatismesImplementations,
   ...personalDataImplementations,
   ...headerImplementations,

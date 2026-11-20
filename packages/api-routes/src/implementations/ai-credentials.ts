@@ -1,6 +1,7 @@
 import {
   meAiCredentialsCreate,
   meAiCredentialsDelete,
+  meAiCredentialsDiscover,
   meAiCredentialsList,
   meAiCredentialsQualify,
 } from '@learny/contracts';
@@ -8,6 +9,7 @@ import type { HandlerArgs } from '@learny/http/route-handler';
 import {
   createCredential,
   deleteCredential,
+  discoverCredentialModels,
   listCredentials,
 } from '@learny/services/ai/credentials';
 import { qualifyCredential } from '@learny/services/ai/qualify';
@@ -23,6 +25,8 @@ export const aiCredentialsImplementations = {
   },
   meAiCredentialsCreate: ({ ctx, body }: HandlerArgs<typeof meAiCredentialsCreate>) =>
     createCredential(ctx, body),
+  meAiCredentialsDiscover: ({ ctx, body }: HandlerArgs<typeof meAiCredentialsDiscover>) =>
+    discoverCredentialModels(ctx, body),
   meAiCredentialsList: async ({ ctx }: HandlerArgs<typeof meAiCredentialsList>) => {
     const result = await listCredentials(ctx);
     return result.ok ? { items: result.value } : result;

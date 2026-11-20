@@ -12,6 +12,8 @@ import { createDemoSession, deleteTestSession, type TestSession } from '@learny/
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { seedOwnModels } from '../../support/own-model';
+
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const FORMATION = demoFormationId('sap');
 const MODULE = demoModuleId('sap', 3);
@@ -23,7 +25,7 @@ let session: TestSession;
 
 async function seedChunks(): Promise<void> {
   await serviceDb().transaction(async (tx) => {
-    await tx.execute(sql`insert into public.subscriptions (user_id, status, current_period_end) values (${demoUserId('alex')}::uuid, 'active', '2030-01-01T00:00:00Z') on conflict (user_id) do update set status = 'active'`);
+    await seedOwnModels(demoUserId('alex'), tx);
     const resources = await tx.execute<{ id: string; title: string }>(sql`
       select id::text as id, title from public.resources
       where owner_id = ${demoUserId('alex')}::uuid and title in ('Guide FI (PDF)', 'Note vocale, 1:42')
@@ -40,7 +42,7 @@ async function seedChunks(): Promise<void> {
 test.beforeEach(async ({ context, baseURL }) => {
   if (ALEX === undefined) throw new Error('utilisateur démo Alex absent');
   session = await createDemoSession(demoUserId('alex'), ALEX.email);
-  await serviceDb().execute(sql`insert into public.subscriptions (user_id, status, current_period_end) values (${demoUserId('alex')}::uuid, 'active', '2030-01-01T00:00:00Z') on conflict (user_id) do update set status = 'active'`);
+  await seedOwnModels(demoUserId('alex'));
   await context.addCookies(session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })));
 });
 

@@ -41,18 +41,10 @@ function fixtureFiles(dir: string, prefix = ''): string[] {
 }
 
 function resolved(provider: ResolvedModel['provider']): ResolvedModel {
-  if (provider === 'anthropic') {
-    return {
-      kind: 'managed',
-      provider: 'anthropic',
-      modelId: 'claude-opus-5-5',
-      task: 'programme',
-    };
-  }
   return {
     kind: 'byok',
     provider,
-    modelId: 'gpt-demo',
+    modelId: 'model-demo',
     credentialId: '00000000-0000-4000-8000-000000000000',
     baseUrl: null,
     outsideEu: false,

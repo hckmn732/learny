@@ -46,20 +46,14 @@ export const onboarding = {
     title: 'Votre IA',
     subtitle:
       'Le tuteur a besoin d’un modèle d’IA. Vous pourrez changer à tout moment dans les paramètres.',
-    choicesLabel: 'Choix de l’IA',
-    ownLabel: 'Ma propre clé d’IA',
-    ownPill: 'Gratuit',
-    ownDescription:
-      'Vous branchez la clé d’un fournisseur (Anthropic, OpenAI, Mistral…). Learny est gratuit ; vous payez directement votre fournisseur, à l’usage.',
-    managedLabel: 'L’IA fournie par Learny',
-    managedPill: 'Payant',
-    managedDescription:
-      'Rien à configurer : le meilleur modèle pour chaque tâche, choisi pour vous.',
+    intro:
+      'Learny ne fournit aucun modèle : vous branchez la clé d’un fournisseur (Anthropic, OpenAI, Mistral, DeepSeek…) et vous payez directement votre fournisseur, à l’usage.',
     provider: 'Fournisseur',
     providers: {
-      anthropic: 'Anthropic · Claude',
+      anthropic: 'Anthropic',
       openai: 'OpenAI',
       mistral: 'Mistral',
+      deepseek: 'DeepSeek',
       openai_compatible: 'Service compatible OpenAI',
     },
     keyLabel: 'Clé d’API',
@@ -74,16 +68,11 @@ export const onboarding = {
       qualified: 'Clé valide · modèle qualifié pour Learny',
       refused: 'Clé refusée par le fournisseur. Vérifiez-la.',
       bricks:
-        'Clé valide, mais ce modèle n’a pas réussi les tests de Learny. Essayez un autre modèle ou l’IA fournie.',
+        'Clé valide, mais ce modèle n’a pas réussi les tests de Learny. Essayez un autre modèle.',
       timeout: 'Le test a pris trop de temps. Réessayez.',
     },
     note: 'Votre clé est chiffrée et ne sert qu’à vos propres demandes. Le test vérifie que le modèle sait produire les briques de Learny (cours, quiz, jeux).',
-    continueError: 'Testez votre clé avant de continuer, ou choisissez l’IA fournie.',
-    managedTitle: 'Abonnement mensuel, sans engagement.',
-    managedCap:
-      'Il comprend un plafond d’usage quotidien ; au-delà, le tuteur passe sur un modèle plus léger jusqu’au lendemain.',
-    managedPayment:
-      'Le paiement se fera à la fin de l’inscription. Vous pourrez revenir à votre propre clé à tout moment.',
+    continueError: 'Testez votre clé avant de continuer.',
   },
   rappels: {
     title: 'Rappels et automatismes',
@@ -122,12 +111,6 @@ export const onboarding = {
         ? `Invitation acceptée : « ${title} ».`
         : `Invitation acceptée : « ${title} », avec ${names}.`,
     inviteOpenHome: 'Ouvrir l’accueil',
-    paymentActivated: 'Abonnement activé : le tuteur est prêt.',
-    paymentPending: 'Paiement reçu, activation en cours. Vous pouvez continuer.',
-    paymentCancelled:
-      'Le paiement n’a pas abouti : le tuteur restera indisponible tant que vous n’aurez ni abonnement ni clé d’IA.',
-    resumePayment: 'Reprendre le paiement',
-    useOwnKey: 'Utiliser ma propre clé',
   },
 } as const;
 

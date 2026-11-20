@@ -1,9 +1,11 @@
 # ADR-0013 — Modèle personnel défaillant
 
-- **Statut** : Acceptée
+- **Statut** : Amendée par ADR-0340
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-508, SPEC-506
+
+> Amendée par ADR-0340 : après un échec, l’utilisateur choisit un autre modèle de ses clés ; l’IA fournie n’existe plus. Le texte ci-dessous est conservé pour l’historique.
 
 ## Contexte
 

@@ -80,6 +80,9 @@ export function filePathOf(path: string): string {
 
 export function expectedRouteFiles(): GeneratedRouteFile[] {
   const files = new Map<string, Set<string>>();
+  // The Inngest endpoint is mounted directly by `apps/api`; it is not part of the contracts
+  // registry, but remains part of the route inventory exposed to migration tooling.
+  files.set(filePathOf('/api/inngest'), new Set(ALL_METHODS));
   for (const descriptor of [...standardRoutes(), ...specialRoutes()]) {
     const path = filePathOf(descriptor.path);
     const methods = files.get(path) ?? new Set<string>();

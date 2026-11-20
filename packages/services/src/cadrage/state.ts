@@ -14,7 +14,7 @@ import { serviceDb, sql } from '@learny/db';
 
 export const CADRAGE_ERROR_MESSAGES = {
   AI_UNAVAILABLE:
-    'Aucun modèle d’IA n’est disponible pour le tuteur. Ajoutez votre clé ou souscrivez à l’IA fournie.',
+    'Aucun modèle d’IA n’est choisi pour le tuteur. Choisissez un modèle de votre clé dans Paramètres › Modèles d’IA.',
   AI_TASK_FAILED: 'Le tuteur n’a pas pu répondre.',
   RATE_LIMITED: 'Trop de demandes en peu de temps. Patientez une minute.',
   AI_RATE_LIMITED: 'Trop de demandes en peu de temps. Patientez une minute.',

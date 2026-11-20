@@ -174,9 +174,8 @@ async function notifyTutorFailure(
       type: 'ai_task_failed',
       data: {
         taskLabel: 'La correction de votre quiz',
-        modelLabel: 'IA fournie',
+        modelLabel: 'personnel',
         subject: 'Correction de votre quiz',
-        managedAvailable: true,
       },
       dedupeKey: `ai_task_failed:quiz-grade:${attemptId}`,
     },

@@ -1,4 +1,4 @@
-import { AI_TASKS, DEFAULT_MODEL_BY_TASK, isAiTask, type AiTask } from '@learny/config';
+import { AI_TASKS, isAiTask } from '@learny/config';
 import {
   devSddSpec102Create,
   devSddSpec102Remove,
@@ -9,26 +9,18 @@ import {
   devSddSpec505Create,
   devSddSpec505Delete,
   devSddSpec506Run,
-  devSddSpec507Budget,
   devSddSpec512Decide,
   devSddSpec512Suggest,
   devSddStripeCheckout,
   type AiCredentialProvider,
 } from '@learny/contracts';
-import { AppError, clock, userDayBounds } from '@learny/core';
+import { AppError, clock } from '@learny/core';
 import { sanitizeSnippet, STORAGE_BUCKETS, resourcePath } from '@learny/db';
 import { devRoutesEnabled } from '@learny/http/dev-guard';
 import { readIdempotencyKey } from '@learny/http/idempotency';
 import type { HandlerArgs } from '@learny/http/route-handler';
 import { DEMO_JOB_ID, JOB_RETRIES, functions } from '@learny/jobs';
-import {
-  budgetCheckSchema,
-  buildAnthropicRequestPreview,
-  calculateUsageCost,
-  checkBudget,
-  formatUsdMicros,
-  parseUsdMicros,
-} from '@learny/llm';
+import { buildAnthropicRequestPreview } from '@learny/llm';
 import { resolvePostAuthDestination } from '@learny/services';
 import { createCredential, deleteCredential } from '@learny/services/ai/credentials';
 import { getMockCheckoutSession } from '@learny/services/billing';
@@ -137,8 +129,7 @@ function spec504Demo() {
         task,
         buildAnthropicRequestPreview({
           task,
-          modelId: DEFAULT_MODEL_BY_TASK[task],
-          managed: true,
+          modelId: 'modele-personnel',
           system: [
             { text: 'Consigne système stable de la tâche.', cache: true },
             { text: 'Question courante.', cache: false },
@@ -147,155 +138,6 @@ function spec504Demo() {
       ]),
     ),
   }));
-}
-
-interface DemoCall {
-  day: string;
-  formation: string;
-  task: AiTask;
-  model: string;
-  inputTokens: number;
-  outputTokens: number;
-  cacheReadTokens: number;
-  cacheWriteTokens: number;
-  status: 'ok' | 'error' | 'refused' | 'capped';
-  batch: boolean;
-}
-
-const BUDGET_CALLS: readonly DemoCall[] = [
-  {
-    day: '2026-11-11',
-    formation: 'SAP S/4HANA Finance',
-    task: 'tutor',
-    model: DEFAULT_MODEL_BY_TASK.tutor,
-    inputTokens: 2_400,
-    outputTokens: 600,
-    cacheReadTokens: 1_200,
-    cacheWriteTokens: 0,
-    status: 'ok',
-    batch: false,
-  },
-  {
-    day: '2026-11-11',
-    formation: 'SAP S/4HANA Finance',
-    task: 'light',
-    model: DEFAULT_MODEL_BY_TASK.light,
-    inputTokens: 800,
-    outputTokens: 200,
-    cacheReadTokens: 0,
-    cacheWriteTokens: 0,
-    status: 'ok',
-    batch: true,
-  },
-  {
-    day: '2026-11-11',
-    formation: 'SAP S/4HANA Finance',
-    task: 'programme',
-    model: DEFAULT_MODEL_BY_TASK.programme,
-    inputTokens: 0,
-    outputTokens: 0,
-    cacheReadTokens: 0,
-    cacheWriteTokens: 0,
-    status: 'capped',
-    batch: false,
-  },
-  {
-    day: '2026-11-10',
-    formation: 'Hors formation',
-    task: 'gaps',
-    model: DEFAULT_MODEL_BY_TASK.gaps,
-    inputTokens: 1_200,
-    outputTokens: 0,
-    cacheReadTokens: 0,
-    cacheWriteTokens: 0,
-    status: 'refused',
-    batch: false,
-  },
-];
-
-function callCost(call: DemoCall): string {
-  return calculateUsageCost({
-    model: call.model,
-    managed: true,
-    usage: {
-      inputTokens: call.inputTokens,
-      outputTokens: call.outputTokens,
-      cacheReadTokens: call.cacheReadTokens,
-      cacheWriteTokens: call.cacheWriteTokens,
-    },
-    batch: call.batch,
-  }).costUsd;
-}
-
-function spec507Budget(spendInput: string | undefined, taskInput: string | undefined) {
-  const candidate = taskInput ?? '';
-  const task: AiTask = isAiTask(candidate) ? candidate : 'tutor';
-  const numericSpend = Number(spendInput ?? '0');
-  const spentUsd = Number.isFinite(numericSpend)
-    ? Math.max(0, numericSpend).toFixed(6)
-    : '0.000000';
-  const at = new Date('2026-11-11T12:20:00Z');
-  const model = DEFAULT_MODEL_BY_TASK[task];
-  const decision = checkBudget({
-    userId: DEMO_USER,
-    task,
-    model,
-    estimatedTokens: { inputTokens: 4_000, outputTokens: 1_000 },
-    at,
-    capUsd: '1.500000',
-    spentUsd,
-  });
-  const validInput = {
-    userId: DEMO_USER,
-    task,
-    model,
-    estimatedTokens: { inputTokens: 4_000, outputTokens: 1_000 },
-    at: at.toISOString(),
-    capUsd: '1.500000',
-    spentUsd,
-  };
-  const invalid = budgetCheckSchema.safeParse({ ...validInput, capUsd: '0' });
-  const groups = new Map<
-    string,
-    { day: string; formation: string; calls: number; micros: number }
-  >();
-  const calls = BUDGET_CALLS.map((call) => {
-    const cost = callCost(call);
-    const key = `${call.day}/${call.formation}`;
-    const current = groups.get(key) ?? {
-      day: call.day,
-      formation: call.formation,
-      calls: 0,
-      micros: 0,
-    };
-    current.calls += 1;
-    current.micros += parseUsdMicros(cost);
-    groups.set(key, current);
-    return { ...call, cost };
-  });
-  return {
-    spentUsd,
-    spentLabel: `${formatUsdMicros(parseUsdMicros(spentUsd))} USD`,
-    task,
-    decision,
-    estimatedLabel: `${formatUsdMicros(parseUsdMicros(decision.estimatedCostUsd))} USD`,
-    validInput,
-    failure: invalid.success
-      ? 'validation inattendue'
-      : (invalid.error.issues[0]?.message ?? 'entrée refusée'),
-    resetsLabel: new Intl.DateTimeFormat('fr-FR', {
-      timeZone: 'Europe/Paris',
-      dateStyle: 'full',
-      timeStyle: 'short',
-    }).format(userDayBounds('2026-11-11', 'Europe/Paris').end),
-    calls,
-    aggregates: [...groups.values()].map((group) => ({
-      day: group.day,
-      formation: group.formation,
-      calls: group.calls,
-      cost: formatUsdMicros(group.micros),
-    })),
-  };
 }
 
 async function createSpec505Credential(body: {
@@ -469,8 +311,6 @@ export const devSddImplementations = {
     idempotent(request, () => deleteSpec505Credential(body.id)),
   devSddSpec506Run: ({ body, request }: HandlerArgs<typeof devSddSpec506Run>) =>
     idempotent(request, () => runSpec506Demo(body.scenario ?? 'success')),
-  devSddSpec507Budget: ({ body }: HandlerArgs<typeof devSddSpec507Budget>) =>
-    guarded(() => spec507Budget(body.spend, body.task)),
   devSddSpec508Demo: () => guarded(buildTutorDemo),
   devSddSpec509Demo: () => guarded(loadSpec509Demo),
   devSddSpec510Demo: () => guarded(loadSpec510Demo),

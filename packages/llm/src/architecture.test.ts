@@ -49,10 +49,10 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('CA-6 — aucun identifiant claude- en dur hors de @learny/config et de llm', () => {
+  it('CA-6 — aucun identifiant de modèle claude- en dur : la plateforme n’en fournit aucun', () => {
     const offenders: string[] = [];
     for (const pkg of fs.readdirSync(PACKAGES, { withFileTypes: true })) {
-      if (!pkg.isDirectory() || pkg.name === 'llm' || pkg.name === 'config') continue;
+      if (!pkg.isDirectory()) continue;
       for (const file of readFiles(path.join(PACKAGES, pkg.name))) {
         // Seed and demo fixtures of SPEC-110 predate the centralised catalogue; product code is
         // covered below and by the ESLint rule.

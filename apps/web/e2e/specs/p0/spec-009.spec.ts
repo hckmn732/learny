@@ -68,23 +68,23 @@ test('inspecte la configuration @SPEC-009', async ({ page, consoleErrors }) => {
     );
   }
 
-  // Models per task (BR-IA-01).
+  // Thinking effort per task: the platform provides no model (ADR-0340).
   const models = page.getByTestId('spec-009-models');
   await expect(models.getByRole('row')).toHaveCount(6);
   await expect(page.getByTestId('spec-009-model-programme')).toHaveText(
-    'Conception du programmeclaude-opus-5-5élevé',
+    'Conception du programmeélevé',
   );
   await expect(page.getByTestId('spec-009-model-course')).toHaveText(
-    'Rédaction du coursclaude-opus-5-5moyen',
+    'Rédaction du coursmoyen',
   );
   await expect(page.getByTestId('spec-009-model-gaps')).toHaveText(
-    'Analyse des lacunesclaude-opus-5-5moyen',
+    'Analyse des lacunesmoyen',
   );
   await expect(page.getByTestId('spec-009-model-tutor')).toHaveText(
-    'Tuteur, questions et jeuxclaude-sonnet-5-5faible',
+    'Tuteur, questions et jeuxfaible',
   );
   await expect(page.getByTestId('spec-009-model-light')).toHaveText(
-    'Tâches légèresclaude-haiku-5-5aucun',
+    'Tâches légèresaucun',
   );
 
   // Seven product constant families.
@@ -116,7 +116,7 @@ test('configuration conforme @SPEC-009 @visual', async ({ page, axeCheck, captur
     'Environnement',
     'Modes',
     'Variables publiques',
-    'Modèles par tâche',
+    'Effort de réflexion par tâche',
     'Constantes produit',
   ]);
 
@@ -133,7 +133,7 @@ test('configuration conforme @SPEC-009 @visual', async ({ page, axeCheck, captur
   await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
 
   // Scrollable tables are named, keyboard-reachable regions.
-  for (const name of ['Secrets', 'Modes', 'Variables publiques', 'Modèles par tâche']) {
+  for (const name of ['Secrets', 'Modes', 'Variables publiques', 'Effort de réflexion par tâche']) {
     const region = page.getByRole('region', { name });
     await expect(region, name).toHaveCount(1);
     await expect(region, name).toHaveAttribute('tabindex', '0');

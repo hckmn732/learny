@@ -4,7 +4,12 @@ import { afterAll, describe, expect, it } from 'vitest';
 
 import { type Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestCourse, createTestProgramme, createTestUser } from '@learny/db/testing';
+import {
+  createTestCourse,
+  createTestProgramme,
+  createTestUser,
+  grantTestModels,
+} from '@learny/db/testing';
 import { processQuestionBankJobs } from '@learny/tutor';
 
 import { createServiceContext } from '../../src/context';
@@ -40,10 +45,7 @@ async function createLearner(label: string): Promise<Fixture> {
     const moduleId = programme.moduleIds[0];
     if (moduleId === undefined) throw new Error('module de test absent');
     const course = await createTestCourse(tx, { ownerId: user.id, moduleId });
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${user.id}::uuid, 'active', '2030-01-01T00:00:00Z')
-    `);
+    await grantTestModels(tx, user.id);
     const notionId = programme.notionIds[0];
     if (notionId === undefined) throw new Error('notion de test absente');
     return {

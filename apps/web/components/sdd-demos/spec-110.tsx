@@ -5,30 +5,10 @@ import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec110;
 
-const usd = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-
-const dayFormatter = new Intl.DateTimeFormat('fr-FR', {
-  timeZone: 'Europe/Paris',
-  dateStyle: 'short',
-});
-
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
   timeZone: 'Europe/Paris',
   dateStyle: 'short',
 });
-
-function amount(value: string): string {
-  return usd.format(Number(value));
-}
-
-function civilDay(value: string): string {
-  return dayFormatter.format(new Date(`${value}T12:00:00Z`));
-}
 
 function instant(value: string | null): string {
   return value === null ? t.subscription.noPeriod : dateFormatter.format(new Date(value));
@@ -102,7 +82,7 @@ function Tasks({ data }: Readonly<{ data: Spec110Data }>) {
             {data.tasks.map((task) => {
               const source =
                 task.credentialLabel === null
-                  ? t.tasks.managed
+                  ? t.tasks.none
                   : task.usable
                     ? t.tasks.personal(task.credentialLabel)
                     : t.tasks.fallback(task.credentialLabel);
@@ -112,7 +92,7 @@ function Tasks({ data }: Readonly<{ data: Spec110Data }>) {
                     {t.tasks.tasks[task.task as keyof typeof t.tasks.tasks]}
                   </td>
                   <td className="px-3 py-2 font-mono text-sm" data-testid="task-model">
-                    {task.modelId}
+                    {task.modelId ?? '—'}
                   </td>
                   <td className="px-3 py-2 text-sm" data-testid="task-source">
                     {source}
@@ -123,34 +103,6 @@ function Tasks({ data }: Readonly<{ data: Spec110Data }>) {
           </tbody>
         </table>
       </div>
-    </DemoSection>
-  );
-}
-
-function Spend({ data }: Readonly<{ data: Spec110Data }>) {
-  return (
-    <DemoSection testId="spec-110-spend" title={t.spend.title}>
-      <p className="mb-3 text-sm">{t.spend.intro}</p>
-      <p className="font-display text-4xl font-semibold" data-testid="spend-amount">
-        {amount(data.spend.amountUsd)}
-      </p>
-      <dl className="mt-4 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
-        <dt>{t.spend.day}</dt>
-        <dd className="font-mono" data-testid="spend-day">
-          {civilDay(data.spend.day)}
-        </dd>
-        <dt>{t.spend.cap}</dt>
-        <dd className="font-mono" data-testid="spend-cap">
-          {amount(data.spend.capUsd)}
-        </dd>
-        <dt>{t.spend.calls}</dt>
-        <dd className="font-mono" data-testid="spend-calls">
-          {t.spend.breakdown(data.spend.billedCalls, data.spend.byokCalls)}
-        </dd>
-      </dl>
-      <p className="mt-3 text-sm" data-testid="spend-note">
-        {t.spend.note}
-      </p>
     </DemoSection>
   );
 }
@@ -166,10 +118,6 @@ function Subscription({ data }: Readonly<{ data: Spec110Data }>) {
           <dt>{t.subscription.status}</dt>
           <dd className="font-mono" data-testid="subscription-status">
             {t.subscription.statuses[data.subscription.status]}
-          </dd>
-          <dt>{t.subscription.cap}</dt>
-          <dd className="font-mono" data-testid="subscription-cap">
-            {amount(data.subscription.capUsd)}
           </dd>
           <dt>{t.subscription.periodEnd}</dt>
           <dd className="font-mono" data-testid="subscription-period-end">
@@ -201,7 +149,6 @@ export default async function Spec110Demo() {
       <p className="mt-6 text-sm">{t.intro}</p>
       <Credentials data={data} />
       <Tasks data={data} />
-      <Spend data={data} />
       <Subscription data={data} />
     </>
   );

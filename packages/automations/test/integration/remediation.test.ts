@@ -9,7 +9,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import type { Result } from '@learny/core';
 import { createLogger } from '@learny/core/server';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme, createTestUser } from '@learny/db/testing';
+import { createTestProgramme, createTestUser, grantTestModels } from '@learny/db/testing';
 import {
   completeRemediation,
   createServiceContext,
@@ -109,10 +109,7 @@ async function createUser(
             preferred_slots = '{matin,apres_midi,soir}'::study_slot[]
     `);
     if (options.subscription !== false) {
-      await tx.execute(sql`
-        insert into public.subscriptions (user_id, status, current_period_end)
-        values (${row.id}::uuid, 'active', '2030-01-01T00:00:00Z'::timestamptz)
-      `);
+      await grantTestModels(tx, row.id);
     }
     return { id: row.id, email: row.email };
   });

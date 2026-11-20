@@ -40,8 +40,8 @@ export default function AiTaskFailedEmail({
       </EmailText>
       <EmailText>
         {t(tone, {
-          vous: `Choisissez un autre modèle de votre clé${props.managedAvailable ? ' ou utilisez l’IA fournie.' : '.'}`,
-          tu: `Choisis un autre modèle de ta clé${props.managedAvailable ? ' ou utilise l’IA fournie.' : '.'}`,
+          vous: 'Choisissez un autre modèle de votre clé.',
+          tu: 'Choisis un autre modèle de ta clé.',
         })}
       </EmailText>
       <EmailButton href={`${appUrl}/parametres#modeles`} testId="email-cta">

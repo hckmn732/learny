@@ -5,7 +5,6 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./budget": "./src/budget/index.ts",
     "./credentials": "./src/credentials/index.ts",
     "./qualification": "./src/qualification/index.ts"
   },
