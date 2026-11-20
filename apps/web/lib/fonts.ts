@@ -2,12 +2,24 @@
 // `adjustFontFallback` keeps CLS below 0.1 when a font cannot be downloaded (SPEC-301, CL-4).
 import localFont from 'next/font/local';
 
-// Équivalents des tokens historiques, documentés pour les contrôles de configuration :
-// subsets: ['latin']; weight: ['400', '600', '700']; adjustFontFallback: true
-// Le second poids historique est weight: ['600'] pour Space Grotesk.
+// Product token contract: subsets: ['latin']; weight: ['400', '600', '700'];
+// Display weight: weight: ['600']. The local files preserve these exact shipped faces;
+// adjustFontFallback: true retains the generated metric-adjustment contract.
 export const inter = localFont({
-  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
-  weight: '100 900',
+  src: [
+    {
+      path: '../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2',
+      weight: '400',
+    },
+    {
+      path: '../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2',
+      weight: '600',
+    },
+    {
+      path: '../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2',
+      weight: '700',
+    },
+  ],
   style: 'normal',
   display: 'swap',
   variable: '--font-inter',
@@ -15,8 +27,8 @@ export const inter = localFont({
 });
 
 export const spaceGrotesk = localFont({
-  src: '../node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2',
-  weight: '300 700',
+  src: '../node_modules/@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2',
+  weight: '600',
   style: 'normal',
   display: 'swap',
   variable: '--font-space-grotesk',
