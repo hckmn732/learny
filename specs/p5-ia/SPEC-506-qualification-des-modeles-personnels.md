@@ -37,7 +37,7 @@ Lire `docs/product/business-rules.md` (BR-IA-02, BR-IA-05), `docs/architecture/a
 - **EF-2** — Après affectation, vérifier uniquement les capacités de `TASK_CONFIG` exigées par la tâche : outil strict si `tools`, sortie structurée si `structured`, image si `vision`. `web_search` et `passage_refs` utilisent leurs mécanismes existants ; aucune sonde supplémentaire n’est introduite.
 - **EF-3** — La route `POST /api/v1/me/ai/credentials/:id/qualify` teste la connexion sans `task`, ou la compatibilité avec `task`. Elle ne renvoie jamais la clé.
 - **EF-4** — Chaque contrôle est persisté sous la clé `(credentialId, modelId, task)` avec `checkedAt`. Un résultat existant est renvoyé dans l’état puis « Revérifier » force un nouveau contrôle.
-- **EF-5** — Le résultat vaut `compatible` ou, sans bloquer l’affectation, `reserve` avec un ou plusieurs codes : `STRUCTURED_UNRELIABLE`, `NO_VISION`, `NO_TOOLS`. Les anciens rapports `failed` restent tolérés.
+- **EF-5** — Le résultat vaut `compatible` ou, sans bloquer l’affectation, `reserve` avec un ou plusieurs codes : `STRUCTURED_UNRELIABLE`, `NO_VISION`, `NO_TOOLS`, `CHECK_TIMEOUT`. Le budget total est de 15 s ; à expiration, `CHECK_TIMEOUT` est renvoyé. Les anciens rapports `failed` restent tolérés.
 - **EF-6** — Les briques produites par les tâches normales continuent d’être validées, corrigées et arrêtées après les deux corrections infructueuses prévues par le mécanisme existant.
 
 ## 6. Exigences techniques
@@ -55,6 +55,7 @@ Lire `docs/product/business-rules.md` (BR-IA-02, BR-IA-05), `docs/architecture/a
 - **CL-3** — Un échec de sonde structurée, image ou outil devient respectivement `STRUCTURED_UNRELIABLE`, `NO_VISION`, `NO_TOOLS`, puis l’affectation demeure écrite.
 - **CL-4** — Une affectation sans résultat précédent répond immédiatement avec `pending`.
 - **CL-5** — Le même triple déjà contrôlé est réutilisé ; « Revérifier » remplace son résultat et son horodatage.
+- **CL-6** — Les sondes d’un contrôle sont lancées en parallèle sous un abort partagé, 256 jetons maximum et sans streaming ; elles n’héritent jamais du délai ni de l’effort de la tâche.
 
 ## 8. Instructions d'implémentation
 

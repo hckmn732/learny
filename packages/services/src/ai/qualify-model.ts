@@ -406,6 +406,7 @@ async function probeSession(
             : (`compatibility-${task}-success` as CompatibilityScenario)),
       },
       fixtures: [...QUALIFICATION_FIXTURES, ...COMPATIBILITY_FIXTURES],
+      probe: { timeoutMs: 12_000, maxOutputTokens: 256 },
     },
   );
 }

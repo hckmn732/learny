@@ -254,6 +254,14 @@ export const settings = {
       reserve: 'Sous réserve',
     },
     compatibilityChecking: 'Vérification de la compatibilité en cours…',
+    compatibilityReserveMessages: {
+      STRUCTURED_UNRELIABLE:
+        'La sortie structurée de ce modèle n’est pas fiable pour cette tâche. Vous pouvez le conserver avec réserve.',
+      NO_VISION: 'Ce modèle ne prend pas en charge les images requises pour cette tâche.',
+      NO_TOOLS: 'Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche.',
+      CHECK_TIMEOUT:
+        'La vérification n’a pas abouti en 15 secondes : le modèle reste utilisable, mais sa compatibilité avec cette tâche n’est pas confirmée. Vous pouvez relancer la vérification.',
+    },
     recheck: 'Revérifier',
     outsideEuPill: 'Hors UE',
     required: (capabilities: string) => `Exige : ${capabilities}`,

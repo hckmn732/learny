@@ -55,7 +55,7 @@ const ALLOWED_IMPORTS = {
   http: ['contracts', 'core', 'config', 'db', 'services'],
   bricks: ['core', 'contracts', 'ui'],
   domain: ['contracts', 'core', 'learning-engine', 'bricks'],
-  llm: ['core', 'config', 'contracts', 'db'],
+  llm: ['core', 'config', 'contracts', 'db', 'i18n'],
   ingestion: ['core', 'config', 'contracts', 'db', 'llm'],
   tutor: ['llm', 'bricks', 'learning-engine', 'contracts', 'core', 'db', 'ingestion'],
   db: ['core', 'config'],

@@ -73,6 +73,8 @@ export interface SessionOptions {
    * built from the owned credential; resolution of `ai_task_models` is skipped in that case.
    */
   resolvedOverride?: ResolvedModel;
+  /** Lightweight compatibility/connection probe, independent from the task's production budget. */
+  probe?: { timeoutMs: number; maxOutputTokens: number };
 }
 
 export type LlmStreamResult = ReturnType<typeof streamText>;
@@ -166,6 +168,7 @@ export async function createSession(
   const current = resolvedResult.value;
   const mode = opts.mode ?? llmMode();
   const mockModels = new Map<string, LearnMockModel>();
+  const execution = opts.probe ?? TASK_CONFIG[opts.task];
   const logger = createLogger({
     route: `llm:${opts.task}`,
     ...(ctx.requestId === undefined ? {} : { requestId: ctx.requestId }),
@@ -247,7 +250,7 @@ export async function createSession(
     const system = buildAnthropicSystem(input.system);
     const tools = buildTools(input, resolved.provider);
     const providerOptions =
-      resolved.provider === 'anthropic'
+      resolved.provider === 'anthropic' && opts.probe === undefined
         ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
         : undefined;
     const headers =
@@ -255,16 +258,16 @@ export async function createSession(
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
     const currentModel = mock ?? (await languageModel(resolved));
-    const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
+    const abortSignal = withTimeout(input, execution.timeoutMs);
     try {
       let result;
-      if (needsProviderStreaming(opts.task)) {
+      if (opts.probe === undefined && needsProviderStreaming(opts.task)) {
         const streamed = streamText({
           model: currentModel,
           ...(system === undefined ? {} : { system }),
           messages,
           ...(tools === undefined ? {} : { tools, toolChoice: 'auto' }),
-          maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
+          maxOutputTokens: execution.maxOutputTokens,
           ...(abortSignal === undefined ? {} : { abortSignal }),
           ...(providerOptions === undefined ? {} : { providerOptions }),
           ...(headers === undefined ? {} : { headers }),
@@ -289,7 +292,7 @@ export async function createSession(
           ...(system === undefined ? {} : { system }),
           messages,
           ...(tools === undefined ? {} : { tools, toolChoice: 'auto' }),
-          maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
+          maxOutputTokens: execution.maxOutputTokens,
           ...(abortSignal === undefined ? {} : { abortSignal }),
           ...(providerOptions === undefined ? {} : { providerOptions }),
           ...(headers === undefined ? {} : { headers }),
@@ -370,7 +373,7 @@ export async function createSession(
     const started = clock.now();
     const system = buildAnthropicSystem(input.system);
     const providerOptions =
-      resolved.provider === 'anthropic'
+      resolved.provider === 'anthropic' && opts.probe === undefined
         ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
         : undefined;
     const headers =
@@ -378,18 +381,18 @@ export async function createSession(
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
     const currentModel = mock ?? (await languageModel(resolved));
-    const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
+    const abortSignal = withTimeout(input, execution.timeoutMs);
     try {
       let object: unknown;
       let usage: Usage;
       let modelId = resolved.modelId;
-      if (needsProviderStreaming(opts.task)) {
+      if (opts.probe === undefined && needsProviderStreaming(opts.task)) {
         const streamed = streamObject({
           model: currentModel,
           schema: input.schema,
           ...(system === undefined ? {} : { system }),
           messages,
-          maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
+          maxOutputTokens: execution.maxOutputTokens,
           ...(abortSignal === undefined ? {} : { abortSignal }),
           ...(providerOptions === undefined ? {} : { providerOptions }),
           ...(headers === undefined ? {} : { headers }),
@@ -403,7 +406,7 @@ export async function createSession(
           schema: input.schema,
           ...(system === undefined ? {} : { system }),
           messages,
-          maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
+          maxOutputTokens: execution.maxOutputTokens,
           ...(abortSignal === undefined ? {} : { abortSignal }),
           ...(providerOptions === undefined ? {} : { providerOptions }),
           ...(headers === undefined ? {} : { headers }),
@@ -468,14 +471,14 @@ export async function createSession(
         resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
       const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
       const currentModel = mock ?? (await languageModel(resolved));
-      const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
+      const abortSignal = withTimeout(input, execution.timeoutMs);
       let logged = false;
       const result = streamText({
         model: currentModel,
         ...(system === undefined ? {} : { system }),
         messages: outgoingMessages(mode, input, resolved.provider),
         ...(tools === undefined ? {} : { tools, toolChoice: 'auto' }),
-        maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
+        maxOutputTokens: execution.maxOutputTokens,
         ...(abortSignal === undefined ? {} : { abortSignal }),
         ...(providerOptions === undefined ? {} : { providerOptions }),
         ...(headers === undefined ? {} : { headers }),

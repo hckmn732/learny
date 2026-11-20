@@ -162,16 +162,10 @@ export const AI_COMPATIBILITY_RESERVE_CODES = [
   'STRUCTURED_UNRELIABLE',
   'NO_VISION',
   'NO_TOOLS',
+  'CHECK_TIMEOUT',
 ] as const;
 export const AiCompatibilityReserveCode = z.enum(AI_COMPATIBILITY_RESERVE_CODES);
 export type AiCompatibilityReserveCode = z.infer<typeof AiCompatibilityReserveCode>;
-
-export const AI_COMPATIBILITY_RESERVE_MESSAGES = {
-  STRUCTURED_UNRELIABLE:
-    'La sortie structurée de ce modèle n’est pas fiable pour cette tâche. Vous pouvez le conserver avec réserve.',
-  NO_VISION: 'Ce modèle ne prend pas en charge les images requises pour cette tâche.',
-  NO_TOOLS: 'Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche.',
-} as const satisfies Record<AiCompatibilityReserveCode, string>;
 
 export const AiCompatibilityReason = z.object({
   code: AiCompatibilityReserveCode,

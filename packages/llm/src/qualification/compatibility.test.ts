@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { AI_COMPATIBILITY_RESERVE_MESSAGES } from '@learny/contracts';
 import { AppError, ok, type Clock, type Result } from '@learny/core';
+import { settings } from '@learny/i18n/fr/settings';
 
 import type { StepInput } from '../types';
 
@@ -119,7 +119,36 @@ describe('[SPEC-506] compatibilité par tâche', () => {
       status: 'reserve',
       reserveCodes: [code],
       checkedAt: FIXED.toISOString(),
-      reasons: [{ code, message: AI_COMPATIBILITY_RESERVE_MESSAGES[code] }],
+      reasons: [{ code, message: settings.aiModels.compatibilityReserveMessages[code] }],
     });
+  });
+
+  it('termine après le budget global avec CHECK_TIMEOUT et lance les sondes en parallèle', async () => {
+    let started = 0;
+    const pending = new Promise<never>(() => undefined);
+    const probe: CompatibilitySession = {
+      object: () => {
+        started += 1;
+        return pending;
+      },
+      step: () => {
+        started += 1;
+        return pending;
+      },
+    };
+    const began = performance.now();
+    const result = await evaluateTaskCompatibility({
+      credentialId: '11111111-1111-4111-8111-111111111111',
+      modelId: 'slow-model',
+      task: 'tutor',
+      clock,
+      session: probe,
+      timeoutMs: 20,
+    });
+    expect(performance.now() - began).toBeLessThan(100);
+    expect(started).toBe(2);
+    expect(result.status).toBe('reserve');
+    expect(result.reserveCodes).toEqual(['CHECK_TIMEOUT']);
+    expect(result.reasons[0]?.message).toContain('15 secondes');
   });
 });

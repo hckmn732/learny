@@ -41,7 +41,7 @@ Lire `docs/product/vision.md`, `docs/product/business-rules.md`, `docs/product/s
 - **EF-2** — « Revenir aux modèles par défaut » retire les affectations personnelles sans supprimer les clés ; les pastilles « Par défaut », « Personnalisé » et « Hors UE » reflètent le modèle réellement résolu.
 - **EF-3** — Ajouter un fournisseur découvre ses modèles de chat, teste une connexion, puis n’affiche que « Connexion vérifiée ». Il n’y a ni batterie de briques, ni statut de qualification global.
 - **EF-4** — Pour un fournisseur hors UE, afficher exactement « Traite les données hors de l’Union européenne » avant validation et dans la carte.
-- **EF-5** — Les réserves non bloquantes `STRUCTURED_UNRELIABLE`, `NO_VISION`, `NO_TOOLS` affichent leur message français serveur ; le bouton accessible « Revérifier » relance uniquement la combinaison sélectionnée.
+- **EF-5** — Les réserves non bloquantes `STRUCTURED_UNRELIABLE`, `NO_VISION`, `NO_TOOLS`, `CHECK_TIMEOUT` affichent leur message français serveur ; le bouton accessible « Revérifier » relance uniquement la combinaison sélectionnée.
 
 ## 6. Exigences techniques
 
@@ -112,5 +112,5 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent : lint, type
 ## 15. Décisions et hypothèses
 
 - ADR-0328 est amendée par ADR-0341 : la qualification bloquante et l’exclusion des modèles échoués sont remplacées par l’affectation immédiate et une compatibilité non bloquante.
-- Messages de réserve normatifs : `STRUCTURED_UNRELIABLE` « La sortie structurée de ce modèle n’est pas fiable pour cette tâche. Vous pouvez le conserver avec réserve. » ; `NO_VISION` « Ce modèle ne prend pas en charge les images requises pour cette tâche. » ; `NO_TOOLS` « Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche. »
+- Messages de réserve normatifs : `STRUCTURED_UNRELIABLE` « La sortie structurée de ce modèle n’est pas fiable pour cette tâche. Vous pouvez le conserver avec réserve. » ; `NO_VISION` « Ce modèle ne prend pas en charge les images requises pour cette tâche. » ; `NO_TOOLS` « Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche. » ; `CHECK_TIMEOUT` « La vérification n’a pas abouti en 15 secondes : le modèle reste utilisable, mais sa compatibilité avec cette tâche n’est pas confirmée. Vous pouvez relancer la vérification. »
 

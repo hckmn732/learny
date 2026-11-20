@@ -23,6 +23,7 @@
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
     "@learny/db": "workspace:*",
+    "@learny/i18n": "workspace:*",
     "ai": "^7.0.171",
     "drizzle-orm": "^0.45.2",
     "zod": "^4.6.7"

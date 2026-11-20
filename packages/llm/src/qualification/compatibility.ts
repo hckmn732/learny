@@ -2,12 +2,12 @@ import { z } from 'zod';
 
 import type { AiTask } from '@learny/config';
 import {
-  AI_COMPATIBILITY_RESERVE_MESSAGES,
   type AiCompatibilityReserveCode,
   type AiTaskCompatibility,
   type QualificationCapabilities,
 } from '@learny/contracts';
 import type { Clock, Result } from '@learny/core';
+import { settings } from '@learny/i18n/fr/settings';
 
 import type { LlmSession } from '../session';
 import { TASK_CONFIG, type TaskCapability } from '../tasks';
@@ -21,7 +21,9 @@ const RESERVE_ORDER: readonly AiCompatibilityReserveCode[] = [
   'STRUCTURED_UNRELIABLE',
   'NO_VISION',
   'NO_TOOLS',
+  'CHECK_TIMEOUT',
 ];
+export const COMPATIBILITY_TIMEOUT_MS = 12_000;
 
 const TRANSPARENT_PIXEL = new Uint8Array([
   137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0, 0,
@@ -37,6 +39,7 @@ export interface EvaluateTaskCompatibilityInput {
   task: AiTask;
   clock: Clock;
   session: CompatibilitySession;
+  timeoutMs?: number;
 }
 
 function reserve(
@@ -64,9 +67,26 @@ export async function evaluateTaskCompatibility(
   const startedAt = input.clock.now();
   const required: readonly TaskCapability[] = TASK_CONFIG[input.task].capabilities;
   const reserves = new Set<AiCompatibilityReserveCode>();
+  const controller = new AbortController();
+  const probes: Promise<void>[] = [];
+  const deadline = new Promise<void>((resolve) => {
+    controller.signal.addEventListener(
+      'abort',
+      () => {
+        resolve();
+      },
+      { once: true },
+    );
+  });
+  const timeout = setTimeout(
+    () => {
+      controller.abort();
+    },
+    input.timeoutMs ?? COMPATIBILITY_TIMEOUT_MS,
+  );
 
   if (required.includes('structured')) {
-    const result = await input.session.object({
+    probes.push(input.session.object({
       system: [
         {
           text: 'Compatibility probe: return the exact structured value requested. No explanation.',
@@ -80,12 +100,14 @@ export async function evaluateTaskCompatibility(
         },
       ],
       schema: STRUCTURED_OUTPUT,
-    });
-    failedProbe(result, reserves, 'STRUCTURED_UNRELIABLE');
+      abortSignal: controller.signal,
+    }).then((result) => {
+      failedProbe(result, reserves, 'STRUCTURED_UNRELIABLE');
+    }));
   }
 
   if (required.includes('tools')) {
-    const result = await input.session.step({
+    probes.push(input.session.step({
       system: [
         {
           text: 'Compatibility probe: call the strict tool exactly once with value "ok".',
@@ -99,21 +121,23 @@ export async function evaluateTaskCompatibility(
           inputSchema: TOOL_INPUT,
         },
       },
-    });
-    if (!result.ok) {
-      reserve('NO_TOOLS', reserves);
-    } else {
-      const call = result.value.toolCalls.find(
-        (candidate) => candidate.toolName === 'compatibility_probe',
-      );
-      if (call === undefined || !TOOL_INPUT.safeParse(call.input).success) {
+      abortSignal: controller.signal,
+    }).then((result) => {
+      if (!result.ok) {
         reserve('NO_TOOLS', reserves);
+      } else {
+        const call = result.value.toolCalls.find(
+          (candidate) => candidate.toolName === 'compatibility_probe',
+        );
+        if (call === undefined || !TOOL_INPUT.safeParse(call.input).success) {
+          reserve('NO_TOOLS', reserves);
+        }
       }
-    }
+    }));
   }
 
   if (required.includes('vision')) {
-    const result = await input.session.object({
+    probes.push(input.session.object({
       system: [
         {
           text: 'Compatibility probe: inspect the provided image and return only the exact schema.',
@@ -130,10 +154,16 @@ export async function evaluateTaskCompatibility(
         },
       ],
       schema: VISION_OUTPUT,
-    });
-    failedProbe(result, reserves, 'NO_VISION');
+      abortSignal: controller.signal,
+    }).then((result) => {
+      failedProbe(result, reserves, 'NO_VISION');
+    }));
   }
 
+  const all = Promise.all(probes).then(() => 'completed' as const);
+  const outcome = await Promise.race([all, deadline.then(() => 'timeout' as const)]);
+  clearTimeout(timeout);
+  if (outcome === 'timeout') reserves.add('CHECK_TIMEOUT');
   const reserveCodes = RESERVE_ORDER.filter((code) => reserves.has(code));
   const finishedAt = input.clock.now();
   return {
@@ -147,7 +177,7 @@ export async function evaluateTaskCompatibility(
     reserveCodes,
     reasons: reserveCodes.map((code) => ({
       code,
-      message: AI_COMPATIBILITY_RESERVE_MESSAGES[code],
+      message: settings.aiModels.compatibilityReserveMessages[code],
     })),
   };
 }
@@ -159,15 +189,17 @@ export async function evaluateTaskCompatibility(
 export function compatibilityCapabilities(
   compatibility: AiTaskCompatibility,
 ): QualificationCapabilities {
+  const timedOut = compatibility.reserveCodes.includes('CHECK_TIMEOUT');
   return {
-    tools: !compatibility.reserveCodes.includes('NO_TOOLS'),
-    structured: !compatibility.reserveCodes.includes('STRUCTURED_UNRELIABLE'),
+    tools: !timedOut && !compatibility.reserveCodes.includes('NO_TOOLS'),
+    structured: !timedOut && !compatibility.reserveCodes.includes('STRUCTURED_UNRELIABLE'),
     web_search: compatibility.requiredCapabilities.includes('web_search')
-      ? !compatibility.reserveCodes.includes('NO_TOOLS')
+      ? !timedOut && !compatibility.reserveCodes.includes('NO_TOOLS')
       : false,
     passage_refs:
       compatibility.requiredCapabilities.includes('passage_refs') &&
+      !timedOut &&
       !compatibility.reserveCodes.includes('STRUCTURED_UNRELIABLE'),
-    vision: !compatibility.reserveCodes.includes('NO_VISION'),
+    vision: !timedOut && !compatibility.reserveCodes.includes('NO_VISION'),
   };
 }

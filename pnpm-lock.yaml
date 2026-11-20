@@ -739,6 +739,9 @@ importers:
       '@learny/db':
         specifier: workspace:*
         version: link:../db
+      '@learny/i18n':
+        specifier: workspace:*
+        version: link:../i18n
       ai:
         specifier: ^7.0.171
         version: 7.0.171(zod@4.6.7)
