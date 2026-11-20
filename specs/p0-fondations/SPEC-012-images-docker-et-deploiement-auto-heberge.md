@@ -22,7 +22,7 @@ ADR-0053 réserve Docker au développement local et à l'auto-hébergement, tand
 
 ## 3. Dépendances
 
-- **SPEC-007** : `apps/worker` expose `/health` et sert le registre partagé à `/api/inngest`.
+- **SPEC-007** : l'ancien serveur Worker expose `/health` et sert le registre partagé à `/api/inngest`.
 - **SPEC-008** : extensions Postgres, scripts de vérification et connaissance des ports.
 - **Système** : Docker Engine/Compose et accès aux images au moment de l'installation. Si Docker ou le registre d'images est indisponible, les Dockerfiles et Compose sont rédigés et contrôlés statiquement, puis le test de démarrage est consigné comme blocage externe ; aucun démarrage n'est inventé.
 
@@ -70,7 +70,7 @@ Aucune règle `BR-*` produit. Les règles de confidentialité et d'hébergement 
 
 - **Créés** : `docker/web.Dockerfile`, `docker/worker.Dockerfile`, `docker/compose.selfhost.yml`, `.dockerignore`, `docs/operations/self-hosting.md`, `tools/docker/check-selfhost.mjs`, `tools/docker/test/integration/selfhost.test.ts`, `apps/web/components/sdd-demos/spec-012.tsx`, `apps/web/e2e/specs/p0/spec-012.spec.ts`.
 - **Modifiés** : `apps/web/next.config.ts`, `package.json` (scripts de contrôle), `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/messages/fr.ts`.
-- **Lus / réutilisés** : `apps/worker` SPEC-007, configuration locale SPEC-008, `.env.example` et route santé SPEC-006.
+- **Lus / réutilisés** : ancien serveur Worker de SPEC-007, configuration locale SPEC-008, `.env.example` et route santé SPEC-006.
 
 ## 10. Interface et conformité visuelle
 

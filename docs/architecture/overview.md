@@ -2,9 +2,7 @@
 
 Complète `docs/legacy/specification-v0/3-Architecture-technique.md` (raisonnement d'origine). Les choix sont actés dans `docs/adr/`. Ce document est normatif pour la structure du dépôt et la circulation des données.
 
-## 0. Architecture cible : séparation backend / frontend (ADR-1001)
-
-> Les sections 2 à 4 décrivent l'état **avant** la piste de migration. La cible ci-dessous fait foi pour toute nouvelle conception ; chaque spécification de la piste (SPEC-1001 → SPEC-1302) met à jour les sections qu'elle rend obsolètes, et SPEC-1302 retire cette section de transition.
+## 0. Applications et frontières (ADR-1001)
 
 ```
 Navigateur (PWA)                          Android / iOS (Expo, ADR-1004, plus tard)
@@ -23,11 +21,13 @@ apps/web  (Next.js, client pur, ADR-1003)      │
 
 | Couche | Paquets | Importables par |
 |---|---|---|
-| Partagée (ADR-1007) | `contracts`, `core` (entrée `.`), `api-client`, `domain`, `i18n`, `learning-engine`, `ui/tokens` | tous (web, mobile, api, paquets) |
+| Partagée (ADR-1007) | `contracts`, `core` (entrée `.`), `api-client`, `domain`, `i18n`, `learning-engine`, `ui/tokens` | tous les clients, `apps/api`, paquets |
 | Interface web | `ui`, `bricks` (vues) | `apps/web` |
 | Serveur | `http`, `api-routes`, `services`, `db`, `jobs`, `llm`, `tutor`, `ingestion`, `automations`, `notifications`, `core/server` | `apps/api`, autres paquets serveur, tests |
 
-Règle vérifiée par ESLint (`learny/web-is-a-client`, SPEC-1001) : `apps/web` n'importe aucun paquet serveur.
+Règle vérifiée par ESLint (`learny/web-is-a-client`) et par
+`tools/migration/report.mjs --check` : `apps/web` n'importe aucun paquet serveur. Le futur
+`apps/mobile` utilisera les mêmes paquets partagés (ADR-1004) sans répéter le code des écrans web.
 
 ## 1. Principes
 
@@ -45,13 +45,11 @@ Navigateur (PWA)
    │  HTTPS
    ▼
 apps/web  (Next.js App Router, Vercel région UE fra1)
-   ├─ Server Components : lecture via services (client Supabase de l'utilisateur, RLS)
-   ├─ Route handlers /api/v1/* : mutations et lectures client (contrats Zod)
-   ├─ /api/inngest : point d'entrée des jobs (packages/jobs)
-   ├─ /api/webhooks/stripe
+   ├─ composants et Server Components : affichage et chargement via @learny/api-client
+   ├─ proxy.ts : relai de même origine de /api/* et /openapi.json
    └─ /_dev/sdd/[specId] : pages de démonstration (hors production, ADR-0049)
    │
-   │  La migration livre l'API à côté du web ; les écrans produit restent encore sur Next.js.
+   │  Requêtes relayées avec les en-têtes ADR-1005 ; aucune route Next n'héberge plus l'API.
    └──► apps/api (Hono, Vercel/Docker, fra1)
          ├─ /api/v1/* et flux SSE du tuteur
          ├─ /api/inngest (rôle `all` ou `jobs`)
@@ -70,12 +68,17 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
 /
 ├── AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, CHANGELOG.md
 ├── apps/
-│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, middleware.ts, e2e/ (Playwright)
+│   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, proxy.ts, e2e/ (Playwright)
 │   └── api/                    serveur Hono : API, santé, webhook Stripe et /api/inngest
 ├── packages/
 │   ├── config/                 schéma des variables d'environnement (Zod), constantes produit, identifiants de modèles
 │   ├── core/                   horloge, fuseaux, erreurs typées, logger, utilitaires (Result, ids)
 │   ├── contracts/              schémas Zod des entrées/sorties API, événements, DTO ; génération OpenAPI
+│   ├── api-client/             client HTTP typé partagé entre clients web et natifs
+│   ├── domain/                 logique pure partagée, sans I/O serveur
+│   ├── i18n/                   messages partagés
+│   ├── http/                   transport HTTP indépendant du framework, gardes et erreurs
+│   ├── api-routes/             table des implémentations de routes, adaptateurs et dépendances serveur
 │   ├── db/                     schéma Drizzle, migrations SQL, politiques RLS, client, repositories, seed
 │   ├── ui/                     design system : jetons, composants React, icônes, utilitaires d'accessibilité
 │   ├── bricks/                 13 types de briques : schema.ts, grade.ts (si auto-corrigée), view.tsx, registre
@@ -106,13 +109,18 @@ Règles de dépendance entre paquets (vérifiées par ESLint `import/no-restrict
 - `llm` importe `core`, `config`, `contracts`, `db`.
 - `tutor` importe `llm`, `bricks`, `learning-engine`, `contracts`, `core`, `db`, `ingestion`.
 - `services` peut importer tous les paquets sauf `ui` ; `apps/*` importent tout.
-- Aucun paquet n'importe `apps/*`.
+- `apps/api` peut importer les paquets serveur ; `apps/web` est limité aux paquets partagés et à
+  `ui`/`bricks`. Aucun paquet n'importe `apps/*`.
 
 ## 4. Flux types
 
-**Lecture d'un écran** : Server Component → `services.<domaine>.get…(ctx)` → repository Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`.
+**Lecture d'un écran** : Server Component ou chargeur de `apps/web/lib` →
+`serverApi()` (`@learny/api-client`) → relai HTTP interne → `apps/api` → service → repository
+Drizzle avec client utilisateur (RLS) → DTO `contracts` → composants `ui`.
 
-**Mutation** : composant client → `fetch('/api/v1/...')` via le client typé `apps/web/lib/api-client.ts` → wrapper `handler()` (auth, Zod, idempotence, limitation) → service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
+**Mutation** : composant client → client typé `@learny/api-client` → relai `proxy.ts` sur la même
+origine → Hono dans `apps/api` → wrapper `handler()` (auth, Zod, idempotence, limitation) →
+service → transaction → émission d'événement (`jobs.send`) → réponse DTO.
 
 **Traitement long** : événement Inngest → fonction de `packages/jobs` découpée en `step.run` idempotents → services → notifications.
 

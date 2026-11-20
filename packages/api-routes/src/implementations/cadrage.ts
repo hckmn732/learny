@@ -3,6 +3,7 @@ import type { HandlerArgs } from '@learny/http/route-handler';
 import {
   completeCadrage,
   createFormation,
+  getCadragePageState,
   getCadrageState,
   listFormations,
   postCadrageMessage,
@@ -12,6 +13,8 @@ import {
 // SPEC-1004 ET-1 - implementations of the `cadrage` contract, moved verbatim from the Next route
 // files so that `apps/api` (SPEC-1101) serves exactly the same code.
 export const cadrageImplementations = {
+  cadragePageGet: ({ ctx, params }: HandlerArgs<typeof cadrageRoutes.cadragePageGet>) =>
+    getCadragePageState(ctx, params.fid),
   cadrageComplete: ({ ctx, params }: HandlerArgs<typeof cadrageRoutes.cadrageComplete>) =>
     completeCadrage(ctx, params.fid),
   cadrageGet: ({ ctx, params }: HandlerArgs<typeof cadrageRoutes.cadrageGet>) =>

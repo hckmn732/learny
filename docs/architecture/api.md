@@ -1,19 +1,30 @@
 # API v1 — conventions et inventaire
 
-Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; un document OpenAPI 3.1 est généré dans `apps/web/public/openapi.json` (SPEC-201).
+Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; un document OpenAPI 3.1 est généré dans `apps/api/openapi.json` et servi par `apps/api` sur `/openapi.json` et `/api/v1/openapi.json` (SPEC-1201).
 
-> **Séparation backend / frontend (ADR-1001, ADR-1002, ADR-1005).** Les contrats, chemins, codes et réponses de ce document ne changent pas. Ce qui change pendant la piste de migration : le wrapper `handler()` passe dans `@learny/http` (SPEC-1003) ; les implémentations des routes dans `@learny/api-routes` (SPEC-1004) ; l'API est servie par `apps/api` (SPEC-1101) puis relayée par `apps/web` sur la même origine (SPEC-1201), et OpenAPI est publié par `apps/api` ; l'authentification accepte aussi `Authorization: Bearer` avec vérification locale du jeton (SPEC-1102) ; la politique de version de `/api/v1` est fixée par SPEC-1301. Toute route ajoutée par la piste est inscrite dans l'inventaire ci-dessous dans le même commit.
+> **Séparation backend / frontend (ADR-1001, ADR-1002, ADR-1005).**
+> `apps/api` est l'unique serveur HTTP. Le transport framework-agnostique (`handler()`, gardes,
+> erreurs et sessions) vit dans `@learny/http` ; les implémentations déclarées par les contrats
+> vivent dans `@learny/api-routes`. Le web relaie la même origine vers cette API et OpenAPI est
+> publié par `apps/api`. Aucun autre emplacement n'héberge une route HTTP de production.
 
 ## 1. Conventions
 
 - Base : `/api/v1`. JSON UTF-8. Noms de champs en `camelCase`. Dates : ISO 8601 avec fuseau (`2026-11-11T13:20:00+01:00`) ; dates civiles `YYYY-MM-DD`.
 - Authentification : cookie de session Supabase (`@supabase/ssr`) ou `Authorization: Bearer` pour les clients natifs ; le Bearer est prioritaire et vérifié localement (JWKS mis en cache dix minutes, repli HS256 avec `SUPABASE_JWT_SECRET`). Les routes sensibles portent `freshAuth` et revérifient l'état du compte auprès d'Auth. Toute route exige un utilisateur sauf `/health`, `/auth/*`, `/legal/*`, `/webhooks/*`, `/invitations/:code` (lecture publique minimale).
-- Wrapper unique `handler({ auth, input, output, rateLimit, idempotent }, fn)` dans `apps/web/lib/api/handler.ts` : vérifie la session, valide `params`, `query`, `body` avec Zod, applique la limitation de débit, l'idempotence (en-tête `Idempotency-Key` obligatoire sur les POST qui créent), journalise avec `requestId`, convertit les erreurs.
+- Wrapper unique `handler({ auth, input, output, rateLimit, idempotent }, fn)` dans `@learny/http` : vérifie la session, valide `params`, `query`, `body` avec Zod, applique la limitation de débit, l'idempotence (en-tête `Idempotency-Key` obligatoire sur les POST qui créent), journalise avec `requestId`, convertit les erreurs.
 - Erreurs : `application/problem+json` (RFC 9457) : `{ type, title, status, detail, code, requestId, errors? }`. Codes métier (`code`) en `SCREAMING_SNAKE_CASE`, catalogue dans `packages/core/src/errors.ts` (ex. `FORMATION_LIMIT_REACHED`, `MODULE_LOCKED`, `AI_UNAVAILABLE`, `AI_CAP_REACHED`, `RETRY_NOT_YET_ALLOWED`, `UPLOAD_TOO_LARGE`, `UNSUPPORTED_TYPE`, `QUOTA_EXCEEDED`, `UPLOAD_INCOMPLETE`, `ALREADY_SUBSCRIBED`, `INVALID_SIGNATURE`, `SESSION_CLOSED`, `VALIDATION_FAILED`, `NOT_FOUND`, `FORBIDDEN`, `RATE_LIMITED`, `CONFLICT`).
 - Pagination : `?cursor=&limit=` (défaut 20, max 100) → `{ items, nextCursor }`.
 - Codes HTTP : 200 lecture/mise à jour, 201 création, 202 traitement asynchrone lancé (`{ jobId }`), 204 suppression, 400 validation, 401, 403, 404, 409 conflit, 422 règle métier, 429 limitation, 500.
 - Limitation de débit par défaut : 120 requêtes/min/utilisateur ; routes IA (`/tutor/*`, génération) : 20/min ; auth : 10/min/IP.
-- Les routes ne contiennent aucune logique métier : elles appellent `packages/services`.
+- Les routes ne contiennent aucune logique métier : une entrée `defineRoute` est déclarée dans
+  `packages/contracts`, puis reliée à une fonction de `packages/api-routes`, qui appelle
+  `packages/services`.
+- `apps/web/proxy.ts` relaie `/api/*` et `/openapi.json` vers `API_INTERNAL_URL` sur la même origine. Il remplace tout secret de proxy entrant, transmet `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto` et `X-Forwarded-For`, préserve les flux SSE, cookies et corps bruts. `apps/api` identifie ses réponses par `X-Served-By: learny-api`.
+- `apps/api` accepte le secret courant `API_PROXY_SECRET` et, pendant une rotation uniquement,
+  `API_PROXY_SECRET_PREVIOUS`. `apps/web` ne lit et n'envoie que le secret courant. Les deux
+  valeurs sont comparées en temps constant.
+- Si `apps/api` est indisponible, le relai répond `502` `application/problem+json` avec le code `API_UNAVAILABLE` sans empêcher le rendu des pages web.
 - Exception documentée (SPEC-206, ADR-0255) : `POST /chapters/:cid/uploads` exige l'en-tête `Idempotency-Key` mais l'idempotence est portée par le service, pas par le wrapper, car la réponse contient une URL signée qui ne doit jamais être stockée (la même clé renvoie la même ressource avec une URL fraîche).
 - Abonnement (SPEC-210, ADR-0215, ADR-0261) : `POST /billing/checkout` renvoie `{ url }` (`successPath` et `cancelPath` sont des chemins internes, `//` et URL absolues refusés, `409 ALREADY_SUBSCRIBED` pour un abonnement `active`, idempotent par `Idempotency-Key`) ; `GET /billing/subscription` renvoie `{ status, currentPeriodEnd, hasManagedAi, dailyCapUsd }`. `POST /webhooks/stripe` est public mais authentifié par la signature `Stripe-Signature` du **corps brut** (tolérance 300 s, `400 INVALID_SIGNATURE` sinon) : il répond toujours `200 { received, result }` pour un événement vérifié (`applied`, `duplicate`, `stale`, `ignored`, `unknown_customer`). Il vit sous `/webhooks/*`, exempté de la garde d'origine. En `STRIPE_MODE=mock`, `/api/v1/dev/sdd/stripe/*` et `/_dev/stripe/{checkout,portal}` simulent le parcours (`ENABLE_SDD_PAGES` seulement).
 
@@ -23,7 +34,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 |---|---|---|
 | GET `/health` | Santé (base, version) | SPEC-006, 010 |
 | POST `/auth/magic-link` · POST `/auth/sign-up` · POST `/auth/sign-in` · POST `/auth/resend` · POST `/auth/sign-out` · GET `/auth/callback` | Authentification | SPEC-202 |
-| GET/PATCH `/me` · GET/PATCH `/me/preferences` · PATCH `/me/onboarding` | Profil, rythme, onboarding | SPEC-602, 707 |
+| GET/PATCH `/me` · GET/PATCH `/me/preferences` · GET/PATCH `/me/onboarding` | Profil, rythme et état complet des écrans d’onboarding | SPEC-602, 707, 1202 |
 | GET/PATCH `/me/notification-settings` · POST/DELETE `/me/push-subscriptions` | Notifications | SPEC-205, 708 |
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
 | GET `/warmups/today` · POST `/warmups/:activityId/answers` | Échauffement : une entrée par formation triée par heure de séance ; réponse de première passe idempotente par position (409 sur une position déjà répondue, 422 hors bornes), FSRS et quiz global du soir dans la même transaction | SPEC-714 |
@@ -34,8 +45,8 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/PUT `/me/ai/task-models` · GET/POST/DELETE `/me/ai/credentials` · POST `/me/ai/credentials/:id/qualify` · GET `/me/ai/usage` | Modèles d'IA. Clés personnelles (SPEC-505) : POST 201 DTO masqué (`keyMasked`, `outsideEu`, `dataNote`), GET 200 `{ items }` (10 au plus), DELETE 204 ; 404 pour la clé d'autrui, 409 `CONFLICT` pour un doublon exact, 422 `VALIDATION_FAILED`, `LOCAL_MODELS_DISABLED`, `CREDENTIAL_LIMIT_REACHED`, `URL_INVALID`, `URL_BLOCKED_HOST` ; aucune réponse ne contient `apiKey` ni `encryptedKey` | SPEC-505, 506, 507, 709 |
 | POST `/billing/checkout` · POST `/billing/portal` · GET `/billing/subscription` · POST `/webhooks/stripe` | Abonnement | SPEC-210, 725 |
 | GET `/home` | Données de l'accueil | SPEC-603 |
-| GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · POST `/formations/:fid/(pause|resume|archive|open)` · PATCH `/me/current-formation` | Formations | SPEC-604, 618 |
-| GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage | SPEC-604 |
+| GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · GET `/formations/:fid/access` · POST `/formations/:fid/(pause|resume|archive|open)` · PATCH `/me/current-formation` | Formations ; l’accès interne répond 204 ou 404 avant le rendu et n’est pas limité | SPEC-604, 615, 618, 1202 |
+| GET `/formations/:fid/cadrage` · GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage et DTO de page | SPEC-604, 1202 |
 | POST `/formations/:fid/programme/generate` · POST `/formations/:fid/programme/import` · POST `/formations/:fid/programme/adjust` · POST `/formations/:fid/programme/validate` · GET `/formations/:fid/programme` | Programme | SPEC-605, 606 |
 | GET `/formations/:fid/modules/:mid` · PATCH `/chapters/:cid/progress` | Module, statut des chapitres | SPEC-607 |
 | POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · GET `/resources/:rid/url` (URL de lecture signée) · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
@@ -57,6 +68,9 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction : POST 201 `{ reportId, status: 'open' }` (200 si un signalement ouvert existe déjà), PATCH 200 `{ brickId, version, versionId }` ; 404 brique d'autrui, 409 version obsolète, 422 `BRICK_INVALID` avec `errors[{ code, path, message }]`, 422 `BRICK_RETIRED` | SPEC-609, 501 |
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
 | GET `/dev/sdd/api/coverage` | Couverture des routes de l'API Hono (démonstration uniquement) | SPEC-1101 |
+| GET `/dev/sdd/SPEC-1301/demo` | Scénario complet d’un client natif sans cookie ni `Origin` | SPEC-1301 |
+| GET `/dev/sdd/SPEC-xxx/demo` · POST `/dev/sdd/SPEC-xxx/<action>` | Démonstrations SDD (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-1203 |
+| GET `/dev/sdd/relay-stream` | Flux SSE à trois fragments pour vérifier le relai (`ENABLE_SDD_PAGES` seulement) | SPEC-1201 |
 | POST `/dev/sdd/auth/proxy` | Démonstration de mutation transmise par le proxy de confiance | SPEC-1102 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
 | POST `/dev/sdd/push/send` (201, notification de démonstration envoyée par le canal push simulé) | Démonstration des notifications navigateur (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-205 |
@@ -64,3 +78,17 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/dev/sdd/email/preview?template=&tone=` (JSON, ou `text/html` sans `Accept: application/json`) · POST `/dev/sdd/email/send` (idempotent, 201 `{ messageId, transport }`) · GET `/dev/sdd/email/outbox` | Démonstration des gabarits d'e-mail (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-204 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.
+
+## 3. Versions et clients
+
+`/api/v1` n’accepte que des changements rétrocompatibles : ajout d’un champ facultatif, d’une
+route ou d’un code d’erreur. Toute modification incompatible exige une nouvelle base `/api/v2`.
+Le retrait d’une route est annoncé par les en-têtes `Deprecation` et `Sunset` au moins quatre-vingt-
+dix jours avant son application. Cette stabilité est nécessaire aux clients natifs, qui ne sont
+pas nécessairement mis à jour en même temps que le serveur (ADR-1004, ADR-1007, SPEC-1301).
+
+Les clients peuvent s’authentifier par cookie Supabase ou par
+`Authorization: Bearer <jeton d’accès>`. Le client partagé `@learny/api-client` prend en charge le
+renouvellement unique du jeton après une réponse 401 et la lecture du flux SSE du tuteur. Les
+clients natifs n’envoient ni cookie ni `Origin`; une WebView qui envoie `Origin` reste soumise à la
+politique CORS et à la garde d’origine définie par ADR-1005.

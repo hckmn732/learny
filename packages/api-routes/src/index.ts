@@ -11,7 +11,6 @@ export {
   type GeneratedRouteFile,
   type RouteCoverage,
 } from './coverage';
-export { nextRoute, nextSpecial, type SpecialKey } from './next-route';
-export { SPECIAL_HANDLERS, type SpecialHandler } from './special';
+export { SPECIAL_HANDLERS, type SpecialHandler, type SpecialKey } from './special';
 export { ROUTE_IMPLEMENTATIONS } from './tables';
 export type { RouteImplementation } from './types';

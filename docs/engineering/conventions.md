@@ -36,9 +36,25 @@ packages/<nom>/
 - États obligatoires pour toute donnée asynchrone : chargement (squelette), vide (EmptyState), erreur (message + réessayer).
 - Accessibilité : rôles ARIA corrects (onglets, menus, dialogues, interrupteurs `role="switch"`, groupes), focus visible, gestion du focus à l'ouverture/fermeture des panneaux, `aria-live` pour les mises à jour asynchrones.
 
+### 4.1 Où placer le code lié à l'API
+
+1. **Route** : déclarer le contrat `defineRoute` dans `packages/contracts`, enregistrer
+   l'implémentation dans `packages/api-routes`, puis garder toute règle métier dans
+   `packages/services`. Aucun fichier `route.ts` n'est ajouté sous `apps/web`.
+2. **Chargeur d'écran** : un module serveur de `apps/web/lib/<domaine>-page.ts` peut appeler
+   `serverApi()` pour transmettre session, secret de proxy et identifiant de requête. Il ne
+   lit jamais directement la base ni un paquet serveur.
+3. **Logique pure consommée par l'interface** : placer les dérivations partagées dans
+   `@learny/domain`, jamais dans `apps/web` ni `packages/services`.
+4. **Appel du navigateur** : utiliser `@learny/api-client` directement. Le web ne contient pas de
+   réexportation locale du client.
+
 ## 5. Textes et langue
 
-- Interface en français ; tous les libellés dans `apps/web/messages/fr.ts` (objet typé par écran), y compris les textes repris des maquettes. Typographie française : espace insécable avant `: ; ! ? %` et dans « », apostrophe typographique `’` dans les contenus, guillemets « ».
+- Interface en français ; les libellés partagés vivent dans `@learny/i18n` et les catalogues
+  spécifiques au web dans `apps/web/messages/fr/`, y compris les textes repris des maquettes.
+  Typographie française : espace insécable avant `: ; ! ? %` et dans « », apostrophe
+  typographique `’` dans les contenus, guillemets « ».
 - Les formats : `Intl.DateTimeFormat('fr-FR', { timeZone })`, nombres `Intl.NumberFormat('fr-FR')`, durées « 1 h 30 ».
 - Les textes produits par le tuteur respectent le ton (`vous`/`tu`) et la langue des cours.
 

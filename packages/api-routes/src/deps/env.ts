@@ -63,3 +63,50 @@ export function configurationErrorNames(env: Env): readonly string[] {
 export function resetServerEnv(): void {
   cached = undefined;
 }
+
+export function buildSddConfigDemo() {
+  const simulated = {
+    APP_ENV: 'local',
+    APP_ENCRYPTION_KEY: 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=',
+    ANTHROPIC_API_KEY: 'sk-ant-learny-test-only-sentinel',
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role-learny-test-only-sentinel',
+    VAPID_PRIVATE_KEY: 'vapid-private-learny-test-only-sentinel',
+    STRIPE_SECRET_KEY: 'sk_live_learny-test-only-sentinel',
+    RESEND_API_KEY: 'resend-learny-test-only-sentinel',
+  } as const;
+  const parsed = parseServerEnv(simulated);
+  let invalidFields: string[] = [];
+  try {
+    parseServerEnv({
+      APP_ENV: 'production',
+      ENABLE_SDD_PAGES: 'true',
+      DATABASE_URL: 'postgresql://learny:learny-test-only-sentinel@db.example/learny',
+    });
+  } catch (error) {
+    invalidFields = error instanceof EnvConfigError ? [...error.names] : ['ENV'];
+  }
+  const current = parseServerEnv(process.env);
+  const publicEnv = parsePublicEnv(process.env);
+  return {
+    appEnv: current.APP_ENV,
+    modes: {
+      llm: current.LLM_MODE,
+      stripe: current.STRIPE_MODE,
+      email: current.EMAIL_MODE,
+      push: current.PUSH_MODE,
+    },
+    publicConfigured: Object.fromEntries(
+      Object.keys(publicEnv).map((key) => [
+        key,
+        publicEnv[key as keyof typeof publicEnv] !== undefined,
+      ]),
+    ),
+    serverCount: SERVER_ENV_KEYS.length,
+    simulated: Object.fromEntries(
+      Object.entries(simulated)
+        .filter(([key]) => key !== 'APP_ENV')
+        .map(([key]) => [key, parsed[key as keyof typeof parsed] !== undefined]),
+    ),
+    invalidFields,
+  };
+}

@@ -1,7 +1,9 @@
 import { formationManagementRoutes } from '@learny/contracts';
+import { AppError } from '@learny/core';
 import type { HandlerArgs } from '@learny/http/route-handler';
 import {
   archiveFormation,
+  canAccessFormation,
   pauseFormation,
   resumeFormation,
   switchCurrentFormation,
@@ -10,6 +12,15 @@ import {
 // SPEC-1004 ET-1 - implementations of the `formation-management` contract, moved verbatim from the Next route
 // files so that `apps/api` (SPEC-1101) serves exactly the same code.
 export const formationManagementImplementations = {
+  formationAccessGet: async ({
+    ctx,
+    params,
+  }: HandlerArgs<typeof formationManagementRoutes.formationAccessGet>) => {
+    const access = await canAccessFormation(ctx, params.fid);
+    if (!access.ok) throw access.error;
+    if (!access.value) throw new AppError('NOT_FOUND', 'Formation introuvable.');
+    return undefined;
+  },
   formationArchive: ({
     ctx,
     params,

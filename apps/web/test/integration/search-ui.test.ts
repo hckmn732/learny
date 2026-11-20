@@ -15,9 +15,13 @@ import {
   type TestSession,
 } from '@learny/testing/supabase';
 
-import { GET as searchRoute } from '../../app/api/v1/search/route';
 import { SearchPageView } from '../../components/search/search-results';
-import { searchPageForContext, type SearchPageState } from '../../lib/search-data';
+import { type SearchPageState } from '../../lib/search-data';
+import { searchPageForContext } from '../helpers/search-data';
+
+import { honoRoute } from './hono-route';
+
+const searchRoute = honoRoute('/api/v1/search', 'GET');
 
 const BASE = 'http://localhost:3000';
 const NO_SEGMENT = { params: Promise.resolve({}) };

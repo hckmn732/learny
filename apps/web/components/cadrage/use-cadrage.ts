@@ -3,10 +3,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { CadrageMessageCreateInput, CadrageStateDto } from '@learny/contracts';
 import { AppError } from '@learny/core';
-
-import { api } from '../../lib/api-client';
 
 // TanStack Query state of one cadrage (SPEC-604 ET-6, §9). The learner message is shown
 // optimistically; the server state replaces it after the turn. A network failure keeps the same
@@ -40,10 +39,7 @@ function asAppError(error: unknown): AppError {
   return new AppError('INTERNAL_ERROR', 'Une erreur est survenue. Réessayez.');
 }
 
-export function useCadrage(
-  fid: string,
-  initialData?: CadrageStateDto,
-): UseCadrageResult {
+export function useCadrage(fid: string, initialData?: CadrageStateDto): UseCadrageResult {
   const queryClient = useQueryClient();
   const queryKey = ['cadrage', fid] as const;
   const [error, setError] = useState<AppError | null>(null);

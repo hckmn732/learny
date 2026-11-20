@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 
+import { apiFetch } from '@learny/api-client';
 import { HealthResponse } from '@learny/contracts';
 import { AppError, isAppError } from '@learny/core';
 import { fr } from '@learny/i18n/fr/sdd';
-
-import { apiFetch } from '../../lib/api-client';
 
 const t = fr.sdd.spec006.client;
 

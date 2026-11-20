@@ -132,6 +132,12 @@ export type CadrageMessageCreateInput = z.input<typeof CadrageMessageCreateInput
 export const CadrageCompleteOutput = z.object({ formationId: Uuid });
 export type CadrageCompleteOutput = z.infer<typeof CadrageCompleteOutput>;
 
+export const CadragePageState = z.strictObject({
+  state: CadrageStateDto,
+  status: FormationSummary.shape.status,
+});
+export type CadragePageState = z.infer<typeof CadragePageState>;
+
 const idParams = z.object({ fid: Uuid });
 
 export const formationRoutes = {
@@ -181,6 +187,17 @@ export const formationRoutes = {
 } as const;
 
 export const cadrageRoutes = {
+  cadragePageGet: defineRoute({
+    id: 'cadrage.page',
+    method: 'GET',
+    path: '/api/v1/formations/:fid/cadrage',
+    auth: 'user',
+    params: idParams,
+    output: CadragePageState,
+    successStatus: 200,
+    summary: 'État de l’écran de cadrage, avec le statut courant de la formation (SPEC-1202).',
+    errors: ['NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
+  }),
   cadrageGet: defineRoute({
     id: 'cadrage.get',
     method: 'GET',

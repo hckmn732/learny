@@ -2,11 +2,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppError, type Clock, type SafeSentryEvent } from '@learny/core';
 import { createLogCapture, createLogger } from '@learny/core/server';
+import { handler, type HandlerOptions } from '@learny/http/handler';
 
-import { GET as healthRoute } from '../../app/api/v1/health/route';
-import { handler, type HandlerOptions } from '../../lib/api/handler';
 import { setDatabaseQuery } from '../../lib/health';
 import { createServerReporter, resetSentryForTests, sanitizeSentryEvent } from '../../lib/sentry';
+
+import { honoRoute } from './hono-route';
+
+const healthRoute = honoRoute('/api/v1/health', 'GET');
 
 const FIXED: Clock = { now: () => new Date('2026-11-11T12:20:00Z') };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;

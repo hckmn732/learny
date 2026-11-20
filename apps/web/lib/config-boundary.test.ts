@@ -28,7 +28,14 @@ function sources(dir: string): string[] {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) files.push(...sources(full));
     // Tests may quote an import in a lint probe: they never run in the browser bundle.
-    else if (/\.tsx?$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name)) files.push(full);
+    else if (
+      /\.tsx?$/.test(entry.name) &&
+      !/\.test\.tsx?$/.test(entry.name) &&
+      !full.includes(`${path.sep}test${path.sep}`) &&
+      !full.includes(`${path.sep}e2e${path.sep}`)
+    ) {
+      files.push(full);
+    }
   }
   return files;
 }

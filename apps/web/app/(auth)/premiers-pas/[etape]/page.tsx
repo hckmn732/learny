@@ -1,17 +1,13 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
-import { BYOK_RECOMMENDED_MODELS } from '@learny/config';
-import { clock } from '@learny/core';
-import { createServiceContext, getOnboardingState } from '@learny/services';
+import { BYOK_RECOMMENDED_MODELS, parsePublicEnv } from '@learny/config';
 
 import { AiStep } from '../../../../components/onboarding/AiStep';
 import { DepartureStep } from '../../../../components/onboarding/DepartureStep';
 import { ProfileStep } from '../../../../components/onboarding/ProfileStep';
 import { RemindersStep } from '../../../../components/onboarding/RemindersStep';
 import { RhythmStep } from '../../../../components/onboarding/RhythmStep';
-import { getPublicEnv } from '../../../../lib/server-env';
+import { isApiError, serverApi } from '../../../../lib/api/server-client';
 import { readPageSession } from '../../../../lib/supabase/page';
 
 const STEPS = ['profil', 'rythme', 'ia', 'rappels', 'depart'] as const;
@@ -46,18 +42,21 @@ export default async function OnboardingStepPage({
   if (session === null) {
     redirect(`/connexion?suite=${encodeURIComponent(`/premiers-pas/${etape}`)}`);
   }
-  const ctx = createServiceContext({
-    userId: session.userId,
-    requestId: randomUUID(),
-    clock,
-  });
-  const state = await getOnboardingState(ctx);
-  if (!state.ok) throw state.error;
-  const stored = state.value.profile.onboardingStep;
+  const client = await serverApi();
+  let state;
+  try {
+    state = await client.api.meOnboardingGet({});
+  } catch (error) {
+    if (isApiError(error, 'UNAUTHENTICATED')) {
+      redirect(`/connexion?suite=${encodeURIComponent(`/premiers-pas/${etape}`)}`);
+    }
+    throw error;
+  }
+  const stored = state.profile.onboardingStep;
   if (stored !== 'done' && RANK[etape] > RANK[stored]) {
     redirect(`/premiers-pas/${stored}`);
   }
-  const { profile, preferences, reminders, needsCheckout } = state.value;
+  const { profile, preferences, reminders, needsCheckout } = state;
   const query = await searchParams;
   const payment =
     query.abonnement === 'ok' ? 'ok' : query.abonnement === 'annule' ? 'annule' : undefined;
@@ -81,7 +80,7 @@ export default async function OnboardingStepPage({
         <RemindersStep
           initial={reminders}
           needsCheckout={needsCheckout}
-          publicKey={getPublicEnv().NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+          publicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
         />
       );
     case 'depart':

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { GET as health } from '../../app/api/v1/health/route';
+import { honoRoute } from './hono-route';
+
+const health = honoRoute('/api/v1/health', 'GET');
 
 describe('[SPEC-804] en-tête Server-Timing', () => {
   it('expose la durée du handler sans donnée personnelle', async () => {

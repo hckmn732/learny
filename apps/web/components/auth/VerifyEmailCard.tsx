@@ -4,11 +4,11 @@ import { ChevronLeft, Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
 
+import { api } from '@learny/api-client';
 import { AppError, clock } from '@learny/core';
 import { fr } from '@learny/i18n/fr/auth';
 import { Button, Card } from '@learny/ui';
 
-import { api } from '../../lib/api-client';
 import {
   pendingAuthSnapshot,
   saveAuthDraft,

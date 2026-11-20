@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ApiError } from '../lib/api-client';
+import { ApiError } from '@learny/api-client';
 
 import { createQueryClient } from './providers';
 

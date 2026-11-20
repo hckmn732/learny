@@ -7,6 +7,7 @@ import {
   nextActionJson,
   nextAdrNumber,
   normalizeState,
+  renderProgressMarkdown,
   trackConfig,
   type Catalog,
   type SddState,
@@ -170,6 +171,47 @@ describe('[SPEC-003] next action', () => {
     expect(nextAdrNumber(existing, 1000)).toBe(1008);
     expect(nextAdrNumber([1, 336], 1000)).toBe(1001);
     expect(() => nextAdrNumber([999], 0)).toThrow();
+  });
+
+  it('[SPEC-1302] returns to the product track after the migration state is complete', () => {
+    const c = catalog();
+    const migrationPhases = [
+      { id: 'P10', dir: 'p10', title: 'Préparation API', checkpoint: 'CP-10', track: 'migration' },
+      { id: 'P11', dir: 'p11', title: 'API autonome', checkpoint: 'CP-11', track: 'migration' },
+      { id: 'P12', dir: 'p12', title: 'Bascule web', checkpoint: 'CP-12', track: 'migration' },
+      { id: 'P13', dir: 'p13', title: 'Clôture', checkpoint: 'CP-13', track: 'migration' },
+    ];
+    c.phases.push(...migrationPhases);
+    const base = c.byId['SPEC-001'];
+    if (base === undefined) throw new Error('fixture');
+    const ids = ['SPEC-1001', 'SPEC-1101', 'SPEC-1201', 'SPEC-1302'];
+    for (const [index, id] of ids.entries()) {
+      const phase = migrationPhases[index];
+      if (phase === undefined) throw new Error('fixture');
+      const spec = {
+        ...base,
+        id,
+        title: `Titre ${id}`,
+        phase: phase.id,
+        path: `specs/${id}.md`,
+        dependsOn: [],
+      };
+      c.specs.push(spec);
+      c.byId[id] = spec;
+    }
+    const st = state(c, (current) => {
+      done(current, 'SPEC-001', 'SPEC-002', 'SPEC-003', 'SPEC-004', ...ids);
+      for (const checkpoint of ['CP-0', 'CP-10', 'CP-11', 'CP-12', 'CP-13']) {
+        const value = current.checkpoints[checkpoint];
+        if (value !== undefined) value.status = 'passed';
+      }
+    });
+    c.activeTrack = 'produit';
+
+    expect(nextActionJson(nextAction(c, st))).toMatchObject({ kind: 'start', id: 'SPEC-901' });
+    const progress = renderProgressMarkdown(c, st, '2026-11-11T12:20:00Z');
+    expect(progress).toContain('| P10 | Préparation API | 1/1 | CP-10 | ✅');
+    expect(progress).toContain('| P13 | Clôture | 1/1 | CP-13 | ✅');
   });
 
   it('never selects a member of a dependency cycle (CL-2)', () => {

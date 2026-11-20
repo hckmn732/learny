@@ -4,11 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import NextLink from 'next/link';
 import { useId, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import { formatWeeklyStudy } from '@learny/contracts/automatisme-9-bilan-de-la-semaine';
 import { fr } from '@learny/i18n/fr/home';
 import { Button, EmptyState, ErrorState, SkeletonCard, SkeletonGroup, cn } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
 
 const t = fr.home.weeklyReview;
 

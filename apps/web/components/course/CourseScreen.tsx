@@ -4,11 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { CourseReadingProgress, ModuleCourseScreen } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/course-module';
 import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
-
-import { api, ApiError } from '../../lib/api-client';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';

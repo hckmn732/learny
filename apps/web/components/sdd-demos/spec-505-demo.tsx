@@ -1,12 +1,13 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useActionState, useState } from 'react';
 
+import { api } from '@learny/api-client';
 import type { CredentialDto } from '@learny/contracts';
 import { AlertDialog, Badge, Button, Card, ErrorState } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
-import { createDemoCredential, deleteDemoCredential } from '../../app/%5Fdev/sdd/spec-505-actions';
 import type {
   DemoActionState,
   DemoProviderOption,
@@ -29,6 +30,11 @@ export interface Spec505DemoProps {
 
 const INITIAL: DemoActionState = { error: null };
 
+function formText(formData: FormData, key: string): string | undefined {
+  const value = formData.get(key);
+  return typeof value === 'string' && value !== '' ? value : undefined;
+}
+
 export default function Spec505Demo({
   credentials,
   providers,
@@ -36,7 +42,29 @@ export default function Spec505Demo({
   rawJson,
   error,
 }: Readonly<Spec505DemoProps>) {
+  const router = useRouter();
   const [provider, setProvider] = useState('openai');
+  const createDemoCredential = async (
+    _previous: DemoActionState,
+    formData: FormData,
+  ): Promise<DemoActionState> => {
+    try {
+      await api.devSddSpec505Create({
+        body: {
+          provider: formText(formData, 'provider') ?? '',
+          model: formText(formData, 'model') ?? '',
+          baseUrl: formText(formData, 'baseUrl'),
+          apiKey: formText(formData, 'apiKey'),
+        },
+      });
+      router.refresh();
+      return { error: null };
+    } catch (caught) {
+      return {
+        error: caught instanceof Error ? caught.message : 'Enregistrement impossible.',
+      };
+    }
+  };
   const [state, formAction, pending] = useActionState(createDemoCredential, INITIAL);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const selected = providers.find((entry) => entry.value === provider) ?? providers[0];
@@ -197,8 +225,15 @@ export default function Spec505Demo({
                     confirmLabel="Supprimer"
                     destructive
                     onConfirm={async () => {
-                      const result = await deleteDemoCredential(credential.id);
-                      setDeleteError(result.error);
+                      try {
+                        await api.devSddSpec505Delete({ body: { id: credential.id } });
+                        setDeleteError(null);
+                        router.refresh();
+                      } catch (caught) {
+                        setDeleteError(
+                          caught instanceof Error ? caught.message : 'Suppression impossible.',
+                        );
+                      }
                     }}
                   />
                   {deleteError === null ? null : (

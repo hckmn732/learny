@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setNonce } from 'get-nonce';
 import { useEffect, useState, type ReactNode } from 'react';
 
-import { ApiError } from '../lib/api-client';
+import { ApiError } from '@learny/api-client';
 
 /** Client rules of SPEC-201 ET-10: no retry on a 4xx, two retries otherwise; mutations never. */
 export function createQueryClient(): QueryClient {

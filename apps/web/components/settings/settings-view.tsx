@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import type { AiModelsState } from '@learny/contracts/parametres-modeles-d-ia';
 import type { NotificationSettingsDto } from '@learny/contracts/parametres-notifications';
 import {
@@ -33,7 +34,6 @@ import {
 } from '@learny/ui';
 import { cn } from '@learny/ui';
 
-import { ApiError, api } from '../../lib/api-client';
 import { detectedTimeZone } from '../onboarding/ProfileStep';
 import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboarding/RhythmSummary';
 

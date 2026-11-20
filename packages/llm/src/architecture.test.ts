@@ -56,7 +56,7 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
       for (const file of readFiles(path.join(PACKAGES, pkg.name))) {
         // Seed and demo fixtures of SPEC-110 predate the centralised catalogue; product code is
         // covered below and by the ESLint rule.
-        if (file.path.includes('/seed/')) continue;
+        if (file.path.includes('/seed/') || file.path.includes('/dev-sdd/')) continue;
         if (/\bclaude-[a-z0-9-]+\b/.test(file.content)) offenders.push(file.path);
       }
     }

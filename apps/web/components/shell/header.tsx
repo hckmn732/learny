@@ -4,11 +4,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, type ReactNode, type RefObject } from 'react';
 
+import { api } from '@learny/api-client';
 import type { HeaderDto } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/offline-shell';
 import { AlertDialog, IconButton, ResponsivePanel, iconRegistry, useBreakpoint } from '@learny/ui';
 
-import { api } from '../../lib/api-client';
 import { NotificationBell } from '../notifications/notification-panel';
 import { OfflineIndicator } from '../offline/OfflineIndicator';
 import { flushBeforeSignOut } from '../offline/OfflineProvider';

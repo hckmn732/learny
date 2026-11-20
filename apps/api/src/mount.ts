@@ -19,6 +19,7 @@ const METHODS: readonly HttpMethod[] = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
 export function mountedRoutes(): MountedRoute[] {
   return [
+    { method: 'ALL', path: '/api/inngest' },
     ...Object.entries(ROUTE_IMPLEMENTATIONS).map(([key]) => {
       const route = (ROUTES as Record<string, AnyRoute>)[key];
       if (route === undefined) throw new Error(`route inconnue du registre : ${key}`);

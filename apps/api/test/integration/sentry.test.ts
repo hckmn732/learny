@@ -1,10 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  createApiReporter,
-  initApiSentry,
-  sentryEnabled,
-} from '../../src/sentry';
+import { createApiReporter, initApiSentry, sentryEnabled } from '../../src/sentry';
 
 afterEach(() => {
   vi.restoreAllMocks();

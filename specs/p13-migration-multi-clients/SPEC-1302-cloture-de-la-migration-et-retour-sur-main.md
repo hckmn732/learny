@@ -44,7 +44,7 @@ Aucune règle `BR-*`.
 - **ET-2** — `pnpm lint` exécute `tools/migration/report.mjs --check` (échec si une catégorie est > 0).
 - **ET-3** — `tools/sdd/test/unit/next.test.ts` gagne un cas `[SPEC-1302]` : piste `migration` terminée, `activeTrack` remis à `produit`, prochaine action = piste produit.
 - **ET-4** — `CHANGELOG.md` reçoit une section « Séparation backend / frontend » (générée par `tools/sdd/changelog.mjs` si applicable, sinon écrite à la main au même format).
-- **ET-5** — Les mentions de `apps/worker` disparaissent du dépôt hors historique (`docs/legacy/`, `docs/adr/` et `evidence/` exclus de la recherche).
+- **ET-5** — Les mentions de l'ancien chemin du serveur Worker disparaissent du dépôt hors historique (`docs/legacy/`, `docs/adr/` et `evidence/` exclus de la recherche).
 
 ## 7. Comportements attendus et cas limites
 
@@ -77,11 +77,11 @@ Mode `demo`. `/_dev/sdd/SPEC-1302` : `h1` « Migration terminée » ; tableau `d
 - **CA-2** — `pnpm lint` échoue si un fichier du web importe un paquet serveur (test avec un fichier temporaire).
 - **CA-3** — La rotation du secret de proxy accepte les deux valeurs pendant la rotation et seulement la nouvelle ensuite.
 - **CA-4** — Le test de fin de piste passe : avec `activeTrack = "produit"`, `next.mjs` propose la piste produit.
-- **CA-5** — La recherche de `apps/worker` hors historique ne renvoie rien et la démonstration affiche la synthèse complète.
+- **CA-5** — La recherche de l'ancien chemin du serveur Worker hors historique ne renvoie rien et la démonstration affiche la synthèse complète.
 
 ## 12. Plan de tests
 
-- **Unitaires** — `packages/http/src/security.test.ts`, `describe('[SPEC-1302] proxy secret rotation')` (CA-3) ; `tools/sdd/test/unit/next.test.ts`, cas `[SPEC-1302]` (CA-4) ; `tools/migration/test/unit/report.test.ts`, `describe('[SPEC-1302] permanent coupling check')` (CA-2) ; test de recherche `apps/worker` (CA-5).
+- **Unitaires** — `packages/http/src/security.test.ts`, `describe('[SPEC-1302] proxy secret rotation')` (CA-3) ; `tools/sdd/test/unit/next.test.ts`, cas `[SPEC-1302]` (CA-4) ; `tools/migration/test/unit/report.test.ts`, `describe('[SPEC-1302] permanent coupling check')` (CA-2) ; test de recherche de l'ancien chemin du serveur Worker (CA-5).
 - **Intégration** — `apps/api/test/integration/proxy-trust.test.ts` (cas `[SPEC-1302]` : rotation au travers du relai) (CA-3) ; typecheck et lint complets (CA-1).
 - **End-to-end** — `apps/web/e2e/specs/p13/spec-1302.spec.ts`, `test('affiche la synthèse de la migration @SPEC-1302')` (CA-5), vidéo ; suite complète.
 - **Visuel** — `test('démonstration de fin de migration @SPEC-1302 @visual')` (CA-5).

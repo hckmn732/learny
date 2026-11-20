@@ -1,6 +1,6 @@
 import { fr } from '@learny/i18n/fr/sdd';
-import { DEMO_JOB_ID, JOB_RETRIES, functions } from '@learny/jobs';
 
+import { serverApi } from '../../lib/api/server-client';
 import { DemoSection } from '../sdd/demo-shell';
 
 import { DemoJobRunner } from './spec-007-run';
@@ -12,12 +12,11 @@ const HOSTS = [
   { id: t.hosts.worker, adapter: t.hosts.workerAdapter, endpoint: t.hosts.workerEndpoint },
 ] as const;
 
-export default function Spec007Demo() {
-  // This page demonstrates the SPEC-007 job: the functions added by SPEC-203 are not listed here.
-  const ids = functions
-    .map((f) => f.id())
-    .filter((id) => id === DEMO_JOB_ID)
-    .join(', ');
+export default async function Spec007Demo() {
+  const data = (await (await serverApi()).api.devSddSpec007Demo({})) as {
+    ids: string;
+    retries: number;
+  };
 
   return (
     <>
@@ -38,7 +37,7 @@ export default function Spec007Demo() {
           ))}
         </ul>
         <p data-testid="spec-007-registry" className="mt-4 font-mono">
-          {t.hosts.registry(ids, JOB_RETRIES)}
+          {t.hosts.registry(data.ids, data.retries)}
         </p>
       </DemoSection>
       <DemoJobRunner />

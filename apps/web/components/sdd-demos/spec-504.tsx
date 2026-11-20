@@ -1,32 +1,14 @@
 // Demonstration of SPEC-504: real resolution on three isolated accounts and the six simulated
-// scenarios. The preview is built by the pure Anthropic contract used by the provider wrapper.
-import { AI_TASKS, DEFAULT_MODEL_BY_TASK, type AiTask } from '@learny/config';
-import { buildAnthropicRequestPreview } from '@learny/llm';
+// scenarios.
+import { AI_TASKS } from '@learny/config';
 
-import { loadResolutionDemo } from '../../app/%5Fdev/sdd/spec-504-data';
+import { loadSpec504Demo } from '../../app/%5Fdev/sdd/spec-504-data';
 import { BaseCard } from '../sdd/base-tokens';
 
 import { Spec504Form } from './spec-504-client';
 
-function previews(): Record<AiTask, unknown> {
-  return Object.fromEntries(
-    AI_TASKS.map((task) => [
-      task,
-      buildAnthropicRequestPreview({
-        task,
-        modelId: DEFAULT_MODEL_BY_TASK[task],
-        managed: true,
-        system: [
-          { text: 'Consigne système stable de la tâche.', cache: true },
-          { text: 'Question courante.', cache: false },
-        ],
-      }),
-    ]),
-  ) as Record<AiTask, unknown>;
-}
-
 export default async function Spec504Demo() {
-  const resolution = await loadResolutionDemo();
+  const { resolution, previews } = await loadSpec504Demo();
   return (
     <>
       <BaseCard testId="llm-resolution" title="Résolution">
@@ -74,7 +56,7 @@ export default async function Spec504Demo() {
           </table>
         </div>
       </BaseCard>
-      <Spec504Form previews={previews()} />
+      <Spec504Form previews={previews} />
     </>
   );
 }

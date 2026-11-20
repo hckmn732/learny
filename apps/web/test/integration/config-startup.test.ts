@@ -8,12 +8,13 @@ import { describe, expect, it } from 'vitest';
 
 import { DEMO_LOCAL_ENV, DEMO_SECRET_KEYS } from '../../lib/sdd-config-demo';
 import { sddPagesEnabled } from '../../lib/sdd-pages';
+
 import {
   configurationErrorNames,
   getPublicEnv,
   getServerEnv,
   secretPresence,
-} from '../../lib/server-env';
+} from './helpers/server-env';
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const FIXTURE = path.join(ROOT, 'apps', 'web', 'test', 'integration', 'fixtures', 'web-startup.ts');

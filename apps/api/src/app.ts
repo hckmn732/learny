@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import type { Inngest } from 'inngest';
 import { serve } from 'inngest/hono';
 
@@ -16,6 +16,9 @@ import {
   setJobErrorReporter,
 } from '@learny/jobs';
 
+import openApiDocument from '../openapi.json';
+
+import { createCorsMiddleware } from './cors';
 import { methodsForPath, mountApiRoutes } from './mount';
 
 export const DEFAULT_PORT = 3001;
@@ -49,6 +52,12 @@ export function getApiHealth(env: Env = process.env): ApiHealth {
 
 export function createApp(options: AppOptions = {}): Hono {
   const app = new Hono();
+  const env = options.env ?? process.env;
+  app.use('*', createCorsMiddleware(env));
+  app.use('*', async (context, next) => {
+    await next();
+    context.header('X-Served-By', 'learny-api');
+  });
   const role = options.role ?? 'all';
   const client = options.client ?? inngest;
   if (options.env !== undefined) registerSecurity(options.env);
@@ -84,6 +93,9 @@ export function createApp(options: AppOptions = {}): Hono {
     context.header('cache-control', 'no-store');
     return context.json(getApiHealth(options.env));
   });
+  const openApi = (context: Context) => context.json(openApiDocument);
+  app.get('/openapi.json', openApi);
+  app.get('/api/v1/openapi.json', openApi);
   if (role !== 'jobs') mountApiRoutes(app, { omitSpecial: ['inngest'] });
   if (role !== 'api') {
     const inngestHandler = serve({ client, functions: registry });

@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 
+import { api } from '@learny/api-client';
 import type { NotificationFilter, NotificationItem, NotificationListDto } from '@learny/contracts';
 import { formatUserDate, toUserZone } from '@learny/core';
 import { fr } from '@learny/i18n/fr/shell';
@@ -21,8 +22,6 @@ import {
   useBreakpoint,
   type IconName,
 } from '@learny/ui';
-
-import { api } from '../../lib/api-client';
 
 const t = fr.shell.notifications;
 

@@ -7,12 +7,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import NextLink from 'next/link';
 import { useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { AgendaSlot } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/agenda';
 import { SkeletonText } from '@learny/ui';
 
 import { longDayLabel, minutesToClock } from '../../lib/agenda/dates';
-import { api, ApiError } from '../../lib/api-client';
 
 const t = fr.agenda.moveDialog;
 

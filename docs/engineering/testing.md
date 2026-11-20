@@ -7,7 +7,7 @@ Normatif. Le socle est livré par SPEC-001 (minimal) et SPEC-004 (complet). Une 
 | Niveau | Outil | Emplacement | Commande | Contenu |
 |---|---|---|---|---|
 | Unitaire | Vitest | `**/src/**/*.test.ts(x)` | `pnpm test:unit` | fonctions pures, composants (Testing Library), schémas |
-| Intégration | Vitest (projet `integration`) | `**/test/integration/**/*.test.ts` | `pnpm test:int` | services + base réelle (Supabase local), RLS, jobs Inngest (exécution directe des handlers), API (route handlers via `next-test-api-route-handler` ou appels HTTP sur serveur de test) |
+| Intégration | Vitest (projet `integration`) | `**/test/integration/**/*.test.ts` | `pnpm test:int` | services + base réelle (Supabase local), RLS, jobs Inngest (exécution directe des handlers), API Hono via `requestApi` |
 | End-to-end | Playwright | `apps/web/e2e/specs/**/*.spec.ts` | `pnpm test:e2e` | parcours navigateur réels sur `next start`, base locale réinitialisée et ensemencée |
 | Visuel | Playwright | dans les tests e2e, étiquette `@visual` | `pnpm test:visual` | conformité aux maquettes et non-régression (§6) |
 | Accessibilité | `@axe-core/playwright` | dans les tests e2e | inclus dans `test:e2e` | aucune violation `serious`/`critical` sur les pages testées |
@@ -48,6 +48,13 @@ TEST_BASE=HEAD~5 pnpm test:related    # base de comparaison explicite
 ## 4. Configuration Playwright (SPEC-004)
 
 `apps/web/playwright.config.ts` : `use: { baseURL, trace: 'on', video: 'on', screenshot: 'on', viewport: { width: 1440, height: 900 }, locale: 'fr-FR', timezoneId: 'Europe/Paris' }` ; projets `desktop` (1440×900) et `mobile` (390×844, `isMobile`) ; reporters `list`, `json` (`test-results/playwright.json`), `junit` (`test-results/playwright.xml`), `html` (`test-results/html`, ouvert jamais). `outputDir: test-results/artifacts`.
+
+Playwright démarre toujours les deux processus du système : `apps/api` sur le port interne
+isolé, puis `apps/web` avec `API_INTERNAL_URL` pointant vers lui. Un même test prend donc en
+charge le navigateur, le relai Next, l'API Hono et les contrats. Les suites d'intégration
+réutilisent `requestApi` de `packages/testing/src/api.ts` : elles enregistrent une fabrique
+`createApp()` puis exécutent `app.request()` sans lancer un port réseau. Aucune assertion n'est
+placée dans `apps/web/app/api/`.
 
 ## 5. Preuves (evidence)
 

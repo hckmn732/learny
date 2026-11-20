@@ -34,8 +34,8 @@ describe('[SPEC-1103] api roles', () => {
 
   it('defaults to all and validates the role at startup', () => {
     expect(parseServerEnv({ APP_ENV: 'test' }).LEARNY_API_ROLE).toBe('all');
-    expect(() =>
-      parseServerEnv({ APP_ENV: 'test', LEARNY_API_ROLE: 'invalid' }),
-    ).toThrow('LEARNY_API_ROLE invalide : valeurs permises : all, api, jobs.');
+    expect(() => parseServerEnv({ APP_ENV: 'test', LEARNY_API_ROLE: 'invalid' })).toThrow(
+      'LEARNY_API_ROLE invalide : valeurs permises : all, api, jobs.',
+    );
   });
 });

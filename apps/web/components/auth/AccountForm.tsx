@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useId, useState } from 'react';
 import { useForm, useWatch, type FieldErrors, type Resolver } from 'react-hook-form';
 
+import { api } from '@learny/api-client';
 import { ACCOUNT_RULES } from '@learny/config/product';
 // Zod-free validation: the sign-in and sign-up pages never download the Zod runtime (SPEC-804).
 import { validateAccountForm, type AccountFormMessages } from '@learny/contracts/account-form';
@@ -12,7 +13,6 @@ import { fr } from '@learny/i18n/fr/auth';
 import { Button, Card, Checkbox, ChoiceGroup, FormError, Link, TextField } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
-import { api } from '../../lib/api-client';
 import { passwordStrength } from '../../lib/auth/password-strength';
 import {
   readAuthDraft,

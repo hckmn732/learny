@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import {
   managedAiAvailability,
   managedAiAvailabilityReason,
@@ -13,8 +14,6 @@ import type { AiProviderCard } from '@learny/contracts/parametres-modeles-d-ia';
 import { formatUserDate } from '@learny/core';
 import { fr } from '@learny/i18n/fr/settings';
 import { Badge, Button, Card, ErrorState, SkeletonGroup } from '@learny/ui';
-
-import { ApiError, api } from '../../lib/api-client';
 
 const t = fr.settings.aiModels.managed;
 

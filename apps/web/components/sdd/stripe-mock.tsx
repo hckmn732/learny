@@ -2,10 +2,9 @@
 
 import { useMutation } from '@tanstack/react-query';
 
+import { ApiError, api } from '@learny/api-client';
 import { isSafeRelativePath } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/sdd';
-
-import { ApiError, api } from '../../lib/api-client';
 
 import { BaseCard } from './base-tokens';
 

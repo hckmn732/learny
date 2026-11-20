@@ -3,14 +3,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { api, ApiError } from '@learny/api-client';
 import {
   GlobalQuizSessionDtoSchema,
   ReviewAnswerResultDtoSchema,
   type GlobalQuizSessionDto,
   type ReviewAnswerInput,
 } from '@learny/contracts';
-
-import { api, ApiError } from '../../lib/api-client';
 
 import { GlobalQuizSession } from './GlobalQuizSession';
 

@@ -1,8 +1,8 @@
-// SPEC-1004 EF-2 - method and path of every special handler. Data only: the Next generator
-// (tools/migration/generate-next-routes.mjs) reads it to lay out apps/web/app/api, and the coverage
-// test compares it with SPECIAL_HANDLERS so the two can never drift.
+// SPEC-1004 EF-2 / SPEC-1201 - method and path of every special Hono handler. The coverage test
+// compares this data with SPECIAL_HANDLERS so the two can never drift.
 export const SPECIAL_ROUTE_MANIFEST = [
   { key: 'health', method: 'GET', path: '/api/v1/health' },
+  { key: 'relayStream', method: 'GET', path: '/api/v1/dev/sdd/relay-stream' },
   { key: 'authCallback', method: 'GET', path: '/api/v1/auth/callback' },
   { key: 'devCronHourlyTick', method: 'POST', path: '/api/v1/dev/sdd/cron/hourly-tick' },
   { key: 'devEcho', method: 'POST', path: '/api/v1/dev/sdd/echo' },
@@ -49,5 +49,4 @@ export const SPECIAL_ROUTE_MANIFEST = [
   { key: 'sddDemoJob', method: 'POST', path: '/api/v1/_dev/demo-job' },
   { key: 'sddCommitCheck', method: 'POST', path: '/api/v1/_dev/commit-check' },
   { key: 'sddSecretScan', method: 'POST', path: '/api/v1/_dev/secret-scan' },
-  { key: 'inngest', method: 'ALL', path: '/api/inngest' },
 ] as const;

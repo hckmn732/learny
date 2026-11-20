@@ -1,16 +1,14 @@
-import { STORAGE_BUCKETS, resourcePath, type StorageBucket } from '@learny/db';
 import { fr } from '@learny/i18n/fr/sdd';
 
+import { serverApi } from '../../lib/api/server-client';
 import { DemoSection } from '../sdd/demo-shell';
 
 const t = fr.sdd.spec114;
+type StorageBucket = 'resources' | 'exports';
 
 // Fixed fictional identifiers: the page never shows a real user, resource or signed token.
 const DEMO_USER = '11111111-1111-4111-8111-111111111111';
 const DEMO_RESOURCE = '22222222-2222-4222-8222-222222222222';
-const DEMO_PATH = resourcePath(DEMO_USER, DEMO_RESOURCE, 'guide.pdf');
-
-const BUCKETS: StorageBucket[] = [STORAGE_BUCKETS.resources, STORAGE_BUCKETS.exports];
 
 const ACCESS_ROWS = [
   { key: 'list', owner: true, member: false, anonymous: false },
@@ -20,12 +18,12 @@ const ACCESS_ROWS = [
   { key: 'export', owner: true, member: false, anonymous: false },
 ] as const;
 
-function Buckets() {
+function Buckets({ buckets }: Readonly<{ buckets: StorageBucket[] }>) {
   return (
     <DemoSection testId="spec-114-buckets" title={t.buckets.title}>
       <p className="mb-4 text-sm">{t.buckets.intro}</p>
       <ul aria-label={t.buckets.label} className="grid gap-3 sm:grid-cols-2">
-        {BUCKETS.map((bucket) => (
+        {buckets.map((bucket) => (
           <li
             key={bucket}
             data-testid="spec-114-bucket"
@@ -50,7 +48,7 @@ function Buckets() {
   );
 }
 
-function Path() {
+function Path({ demoPath }: Readonly<{ demoPath: string }>) {
   return (
     <DemoSection testId="spec-114-path" title={t.path.title}>
       <p className="mb-4 text-sm">{t.path.intro}</p>
@@ -58,7 +56,7 @@ function Path() {
         data-testid="spec-114-path-value"
         className="block overflow-x-auto rounded-[8px] border border-solid border-border px-3 py-2 font-mono text-sm"
       >
-        {DEMO_PATH}
+        {demoPath}
       </code>
       <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
         <div>
@@ -155,12 +153,16 @@ function Access() {
   );
 }
 
-export default function Spec114Demo() {
+export default async function Spec114Demo() {
+  const data = (await (await serverApi()).api.devSddSpec114Demo({})) as {
+    buckets: StorageBucket[];
+    path: string;
+  };
   return (
     <>
       <p className="mt-6 text-sm">{t.intro}</p>
-      <Buckets />
-      <Path />
+      <Buckets buckets={data.buckets} />
+      <Path demoPath={data.path} />
       <Ttl />
       <Access />
     </>

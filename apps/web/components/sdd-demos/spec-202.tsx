@@ -1,6 +1,6 @@
 import { fr } from '@learny/i18n/fr/sdd';
-import { resolvePostAuthDestination } from '@learny/services/destination';
 
+import { serverApi } from '../../lib/api/server-client';
 import { readPageSession } from '../../lib/supabase/page';
 import { BaseCard } from '../sdd/base-tokens';
 
@@ -35,13 +35,17 @@ const CASES = [
 
 export default async function Spec202Demo() {
   const session = await readPageSession();
+  const data = (await (await serverApi()).api.devSddSpec202Demo({})) as {
+    destinations: Array<{ id: string; value: string }>;
+  };
+  const destinations = new Map(data.destinations.map((entry) => [entry.id, entry.value]));
   return (
     <>
       <BaseCard testId="auth-session" title={t.session.title}>
         <p role="status" data-testid="auth-session-state">
           {session === null
             ? t.session.anonymous
-            : t.session.signedIn(session.userId, session.onboardingStep)}
+            : t.session.signedIn(session.userId, session.onboardingStep ?? 'profil')}
         </p>
       </BaseCard>
       <MagicLinkCard />
@@ -64,12 +68,7 @@ export default async function Spec202Demo() {
               {CASES.map((entry) => (
                 <tr key={entry.id} data-testid="auth-destination-row">
                   <td className="py-1 pr-4">{entry.label}</td>
-                  <td className="py-1 font-mono">
-                    {resolvePostAuthDestination(
-                      entry.profile,
-                      'next' in entry ? entry.next : undefined,
-                    )}
-                  </td>
+                  <td className="py-1 font-mono">{destinations.get(entry.id)}</td>
                 </tr>
               ))}
             </tbody>

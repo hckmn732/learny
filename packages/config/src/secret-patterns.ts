@@ -17,7 +17,7 @@ export const SECRET_PATTERNS: ReadonlyArray<SecretPattern> = [
   { id: 'resend-key', regex: /re_[A-Za-z0-9]{8,}_[A-Za-z0-9]{16,}/ },
   {
     id: 'api-proxy-secret',
-    regex: /API_PROXY_SECRET\s*[=:]\s*['"]?[A-Za-z0-9_./+-]{32,}/,
+    regex: /API_PROXY_SECRET(?:_PREVIOUS)?\s*[=:]\s*['"]?[A-Za-z0-9_./+-]{32,}/,
   },
   { id: 'voyage-key', regex: /pa-[A-Za-z0-9_-]{30,}/ },
   { id: 'tavily-key', regex: /tvly-[A-Za-z0-9]{20,}/ },

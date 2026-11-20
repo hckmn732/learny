@@ -1,0 +1,6 @@
+{
+  "status": "blocked",
+  "phase": "before",
+  "command": "pnpm test:perf",
+  "reason": "DATABASE_URL absent; Supabase local could not start in this environment."
+}

@@ -1,6 +1,4 @@
-import { testApiHandler, type NtarhInitAppRouter } from 'next-test-api-route-handler';
-
-export type ApiTarget = 'next' | 'hono';
+export type ApiTarget = 'hono';
 
 interface ApiHarnessFetch {
   (init?: RequestInit): Promise<Response>;
@@ -11,7 +9,7 @@ export interface ApiHarnessContext {
 }
 
 export interface ApiRequestOptions {
-  appHandler: NtarhInitAppRouter['appHandler'];
+  appHandler: unknown;
   url: string;
   params?: Record<string, string | string[]>;
   test: (context: ApiHarnessContext) => Promise<void>;
@@ -34,14 +32,10 @@ export function setApiAppFactory(factory: ApiAppFactory): void {
 }
 
 export async function requestApi(
-  target: ApiTarget,
+  _target: ApiTarget,
   options: ApiRequestOptions,
   appOptions: ApiTestOptions = {},
 ): Promise<void> {
-  if (target === 'next') {
-    await testApiHandler(options);
-    return;
-  }
   if (createHonoApp === undefined) throw new Error('Fabrique Hono non enregistrée pour les tests.');
   const app = createHonoApp(appOptions);
   await options.test({

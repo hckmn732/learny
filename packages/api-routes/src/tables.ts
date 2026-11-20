@@ -14,6 +14,7 @@ import { cadrageImplementations } from './implementations/cadrage';
 import { courseImplementations } from './implementations/course';
 import { courseReadingImplementations } from './implementations/course-reading';
 import { devImplementations } from './implementations/dev';
+import { devSddImplementations } from './implementations/dev-sdd';
 import { emailImplementations } from './implementations/email';
 import { exercisesImplementations } from './implementations/exercises';
 import { finalReviewImplementations } from './implementations/final-review';
@@ -59,6 +60,7 @@ export const ROUTE_IMPLEMENTATIONS = {
   ...uploadsImplementations,
   ...courseReadingImplementations,
   ...devImplementations,
+  ...devSddImplementations,
   ...tutorChatImplementations,
   ...emailImplementations,
   ...exercisesImplementations,

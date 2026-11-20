@@ -3,11 +3,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useId, useState } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import { EMAIL_TEMPLATE_KEYS, type EmailTemplateKey, type EmailTone } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/sdd';
 import { colors } from '@learny/ui/tokens';
 
-import { ApiError, api } from '../../lib/api-client';
 import { qk } from '../../lib/query-keys';
 
 import { BaseCard } from './base-tokens';

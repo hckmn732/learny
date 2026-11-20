@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
 import type { CadrageStateDto } from '@learny/contracts';
-import { createServiceContext, getCadragePageState } from '@learny/services';
 
+import { isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
 import { loadShellPage, type ShellPageResult } from './sidebar-page';
 import { readPageSession } from './supabase/page';
@@ -21,16 +19,19 @@ export interface CadragePageResult {
 export async function loadCadragePage(formationId: string): Promise<CadragePageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const [shell, result] = await Promise.all([loadShellPage(), getCadragePageState(ctx, formationId)]);
-  if (!result.ok) {
-    if (result.error.code === 'NOT_FOUND') notFound();
-    throw result.error;
-  }
-  if (result.value.status !== 'cadrage') {
+  const client = await serverApi();
+  const [shell, state] = await Promise.all([
+    loadShellPage(),
+    client.api.cadragePageGet({ params: { fid: formationId } }).catch((error: unknown) => {
+      if (isApiError(error, 'NOT_FOUND')) notFound();
+      if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+      throw error;
+    }),
+  ]);
+  if (state.status !== 'cadrage') {
     redirect(`/formations/${formationId}/programme`);
   }
-  return { shell, state: result.value.state };
+  return { shell, state: state.state };
 }
 
 /** Re-exported so the page keeps one import for its shell error rendering. */

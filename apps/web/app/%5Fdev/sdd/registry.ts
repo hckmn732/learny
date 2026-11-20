@@ -8,6 +8,30 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-1302': {
+    title: 'Migration terminée',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1302'),
+  },
+  'SPEC-1301': {
+    title: 'Client natif simulé',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1301'),
+  },
+  'SPEC-1203': {
+    title: 'Web sans dépendance serveur',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1203'),
+  },
+  'SPEC-1202': {
+    title: 'Écrans alimentés par l’API',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-1202'),
+  },
+  'SPEC-1201': {
+    title: "Bascule de l'API",
+    load: () => import('../../../components/sdd-demos/spec-1201'),
+  },
   'SPEC-001': {
     title: 'Monorepo, application web minimale et socle de tests',
     load: () => import('../../../components/sdd-demos/spec-001'),

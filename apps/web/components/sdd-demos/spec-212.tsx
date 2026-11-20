@@ -2,10 +2,10 @@
 
 import { useId, useState, type ReactNode } from 'react';
 
+import { ApiError, api } from '@learny/api-client';
 import type { Highlight, SearchResponse } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/sdd';
 
-import { ApiError, api } from '../../lib/api-client';
 import { BaseCard } from '../sdd/base-tokens';
 
 const t = fr.sdd.spec212;

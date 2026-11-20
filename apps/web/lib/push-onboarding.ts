@@ -1,6 +1,6 @@
+import { api } from '@learny/api-client';
 import type { PushSubscriptionBody } from '@learny/contracts';
 
-import { api } from './api-client';
 import { detectPushBrowser, enableBrowserPush, type BrowserPermission } from './push';
 
 export interface PushGateway {

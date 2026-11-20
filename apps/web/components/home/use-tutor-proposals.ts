@@ -3,10 +3,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 
+import { api, ApiError } from '@learny/api-client';
 import type { AutomationActionItem } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/home';
-
-import { api, ApiError } from '../../lib/api-client';
 
 const t = fr.home.proposal;
 const ACCEPTED_KEY = 'learny:tutor-proposal-accepted';

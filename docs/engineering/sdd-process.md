@@ -24,6 +24,24 @@ Le catalogue répartit les phases en **pistes** indépendantes : `produit` (P0 �
 - Invariant de la piste migration : **aucun changement fonctionnel** ; aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée ; chaque spécification rejoue en non-régression ce qu'elle peut affecter, et CP-12/CP-13 la suite complète, le cross-browser et les performances (`phase.checks`).
 - Fin de piste : après CP-13, fusion de `migration` dans `main` et `activeTrack` remis à `"produit"` (SPEC-1302).
 
+### 1 ter. Clôture de la piste
+
+SPEC-1302 prépare cette clôture sans effectuer la fusion. CP-13 est toujours exécuté sur
+`migration` avec `activeTrack: "migration"`. Ensuite, l'agent principal :
+
+1. met à jour `migration`, lance les validations complètes de CP-13 et vérifie que la CI est verte ;
+2. fusionne `main` dans `migration` dans le sens normal pour résoudre une dernière fois les
+   conflits de suivi par `tools/sdd/sync-main.mjs` ;
+3. fusionne `migration` dans `main` avec `--no-ff` ;
+4. dans le **commit de fusion uniquement**, remet `specs/catalog.json.activeTrack` à `"produit"`,
+   puis régénère le statut ;
+5. confirme que `next.mjs --json` choisit une action des phases P0 à P9 et que `status.mjs`
+   affiche à la fois les checkpoints produit et CP-10 à CP-13, terminés ou en cours, sans erreur.
+
+Le cas nominal est couvert dans `tools/sdd/test/unit/next.test.ts` avec l'état final de la piste
+et `activeTrack = "produit"`. Un conflit de suivi conserve les entrées de chaque piste comme
+décrit par ADR-1006 §4 ; il ne modifie aucune preuve ni aucun résultat de test.
+
 ## 2. Boucle (à répéter jusqu'à « TERMINÉ »)
 
 1. **Identifier** : `node tools/sdd/next.mjs` → `REPRENDRE`, `DÉMARRER`, `CHECKPOINT`, `TERMINÉ` ou `AUCUNE SPÉCIFICATION EXÉCUTABLE`.
