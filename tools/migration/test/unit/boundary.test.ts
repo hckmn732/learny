@@ -59,16 +59,11 @@ describe('[SPEC-1001] web boundary', () => {
     expect(categorizeWebFile('apps/web/test/unit/x.test.ts')).toBeNull();
   });
 
-  it('couvre exactement la liste de référence (EF-4, CA-2)', () => {
-    const coupled = measureWebBoundary()
-      .coupled.filter((entry) => entry.category !== 'apiRoutes')
-      .map((entry) => entry.file);
-    const baseline = JSON.parse(
-      fs.readFileSync(path.join(ROOT, 'tools/migration/web-boundary-baseline.json'), 'utf8'),
-    ) as { files: string[]; globs: string[] };
-    expect(baseline.files.slice().sort(), 'fichiers de la liste').toEqual(coupled);
-    expect(baseline.globs).toEqual(['apps/web/app/api/**']);
-    expect(baselineErrors(baseline), 'entrées de la liste').toEqual([]);
+  it('n’accepte aucune exception de couplage de production', () => {
+    expect(measureWebBoundary().coupled).toEqual([]);
+    expect(fs.existsSync(path.join(ROOT, 'tools/migration/web-boundary-baseline.json'))).toBe(
+      false,
+    );
   });
 
   it("échoue sur une entrée qui n'importe plus de paquet serveur (EF-5, CL-2)", () => {
@@ -103,10 +98,6 @@ describe('[SPEC-1002] boundary', () => {
       'apps/web/components/home/home-view.tsx',
       'apps/web/components/offline/OfflineQuizGlobal.tsx',
     ];
-    const baseline = JSON.parse(
-      fs.readFileSync(path.join(ROOT, 'tools/migration/web-boundary-baseline.json'), 'utf8'),
-    ) as { files: string[]; globs: string[] };
-    for (const file of decoupled) expect(baseline.files, file).not.toContain(file);
     const coupled = measureWebBoundary();
     for (const file of decoupled) {
       expect(coupled.clientComponents, file).not.toContain(file);
@@ -134,5 +125,33 @@ describe('[SPEC-1202] production web boundary', () => {
       ),
     );
     expect(allowed).toBe(true);
+  });
+});
+
+describe('[SPEC-1203] no exception', () => {
+  it('interdit les paquets serveur dans tout apps/web hors tests', () => {
+    const measure = measureWebBoundary();
+    expect(Object.values(measure.byCategory).every((count) => count === 0)).toBe(true);
+    expect(measure.clientComponents).toEqual([]);
+  });
+
+  it('ne déclare aucun paquet serveur dans les dépendances livrées du web', () => {
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'apps/web/package.json'), 'utf8'),
+    ) as { dependencies: Record<string, string> };
+    const forbidden = new Set([
+      '@learny/db',
+      '@learny/services',
+      '@learny/jobs',
+      '@learny/llm',
+      '@learny/tutor',
+      '@learny/ingestion',
+      '@learny/automations',
+      '@learny/notifications',
+      '@learny/http',
+      '@learny/api-routes',
+      'inngest',
+    ]);
+    expect(Object.keys(manifest.dependencies).filter((name) => forbidden.has(name))).toEqual([]);
   });
 });

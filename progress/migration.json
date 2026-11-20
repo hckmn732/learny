@@ -2,17 +2,14 @@
   "coupling": {
     "pages": 0,
     "lib": 0,
-    "components": 8,
-    "dev": 28,
+    "components": 0,
+    "dev": 0,
     "proxy": 0,
     "apiRoutes": 0
   },
   "routes": {
-    "registry": 174,
+    "registry": 219,
     "routeFiles": 1
   },
-  "clientComponents": [
-    "apps/web/components/sdd-demos/spec-507.tsx",
-    "apps/web/components/sdd-demos/spec-508-client.tsx"
-  ]
+  "clientComponents": []
 }

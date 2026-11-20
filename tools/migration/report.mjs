@@ -22,6 +22,8 @@ export const SERVER_PACKAGES = [
   'ingestion',
   'automations',
   'notifications',
+  'http',
+  'api-routes',
 ];
 
 // `from '@learny/db/…'`, `} from "@learny/services"`, `import('@learny/llm/budget')`… Le nom du
@@ -83,7 +85,10 @@ export function countRegistryRoutes(root = ROOT) {
   for (const name of modules) {
     const file = path.join(root, 'packages', 'contracts', 'src', `${name}.ts`);
     if (!fs.existsSync(file)) continue;
-    total += fs.readFileSync(file, 'utf8').match(/defineRoute\(/g)?.length ?? 0;
+    const source = fs.readFileSync(file, 'utf8');
+    const explicit = source.match(/defineRoute\(/g)?.length ?? 0;
+    const factories = source.match(/= (?:demo|action)\(/g)?.length ?? 0;
+    total += explicit + factories;
   }
   return total;
 }
@@ -129,7 +134,7 @@ export function progressFrom(measure) {
   };
 }
 
-/** Liste de référence (ET-3) : fichiers couplés hors `app/api` (couverts par le glob), triés. */
+/** Legacy helper kept for migration report unit fixtures; production no longer writes a baseline. */
 export function baselineFrom(measure) {
   return {
     files: measure.coupled
@@ -167,11 +172,6 @@ export function baselineErrors(baseline, root = ROOT) {
   return errors;
 }
 
-function readBaseline(root = ROOT) {
-  const file = path.join(root, 'tools', 'migration', 'web-boundary-baseline.json');
-  return fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
-}
-
 function writeJson(file, data) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
@@ -186,7 +186,6 @@ export function writeProgress(report, root = ROOT) {
 /** Point d'entrée : affiche le rapport, écrit progress/migration.json, puis contrôle la liste. */
 export function main(argv = process.argv.slice(2), root = ROOT) {
   const measure = measureWebBoundary(root);
-  const existing = readBaseline(root);
 
   console.log('Couplage de apps/web (SPEC-1001, ADR-1003) :');
   for (const category of WEB_CATEGORIES) {
@@ -206,32 +205,17 @@ export function main(argv = process.argv.slice(2), root = ROOT) {
   console.log(`Rapport écrit : ${path.relative(root, written)}`);
 
   if (argv.includes('--write-baseline')) {
-    const next = baselineFrom(measure);
-    if (existing !== null && existing.files.length > 0) {
-      const previous = new Set(existing.files);
-      const added = next.files.filter((file) => !previous.has(file));
-      if (added.length > 0) {
-        console.error('La liste de référence ne peut que diminuer (ET-3) ; refus d’ajouter :');
-        for (const file of added) console.error(`  ${file}`);
-        process.exitCode = 1;
-        return;
-      }
-    }
-    const file = path.join(root, 'tools', 'migration', 'web-boundary-baseline.json');
-    writeJson(file, next);
-    console.log(`Liste de référence écrite : ${path.relative(root, file)}`);
+    console.error('La liste de référence est supprimée (SPEC-1203) : aucune exception autorisée.');
+    process.exitCode = 1;
     return;
   }
-  if (existing === null) {
-    console.log('Liste de référence absente : node tools/migration/report.mjs --write-baseline');
+  if (measure.coupled.length === 0) {
+    console.log('Aucune exception : apps/web est un client pur de l’API.');
     return;
   }
-  console.log(
-    `Liste de référence : ${String(existing.files.length)} fichiers + ${existing.globs.join(', ')}`,
-  );
-  const errors = baselineErrors(existing, root);
-  for (const error of errors) console.error(error);
-  if (errors.length > 0) process.exitCode = 1;
+  console.error('Fichiers couplés interdits :');
+  for (const entry of measure.coupled) console.error(`  ${entry.file}`);
+  process.exitCode = 1;
 }
 
 // Exécution directe uniquement (`node tools/migration/report.mjs`) : les tests importent le

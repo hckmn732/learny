@@ -1,5 +1,4 @@
 // Flat ESLint configuration shared by every package (SPEC-001, ET-5).
-import { readFileSync } from 'node:fs';
 
 import js from '@eslint/js';
 import nextPlugin from '@next/eslint-plugin-next';
@@ -92,13 +91,6 @@ const SERVICE_DB_ALLOWED = [
   'apps/web/e2e/**',
 ];
 
-// SPEC-1001, EF-4 — `learny/web-is-a-client` (ADR-1003): apps/web imports no server package
-// outside the reference baseline. The list is versioned and can only shrink (EF-5); loading it
-// here keeps the lint rule and the boundary test on the same source of truth.
-const webBoundaryBaseline = JSON.parse(
-  readFileSync(new URL('./tools/migration/web-boundary-baseline.json', import.meta.url), 'utf8'),
-);
-
 const WEB_IS_A_CLIENT_PACKAGES = [
   '@learny/db',
   '@learny/services',
@@ -108,15 +100,12 @@ const WEB_IS_A_CLIENT_PACKAGES = [
   '@learny/ingestion',
   '@learny/automations',
   '@learny/notifications',
+  '@learny/http',
+  '@learny/api-routes',
 ];
 const WEB_IS_A_CLIENT_GROUP = WEB_IS_A_CLIENT_PACKAGES.flatMap((name) => [name, `${name}/*`]);
 const WEB_IS_A_CLIENT_MESSAGE =
   "apps/web est un client de l'API (ADR-1003) : passer par @learny/api-client.";
-
-// The baseline contains literal paths with parentheses and brackets ((app), [fid]…): as ESLint
-// ignore patterns they are glob metacharacters and must be escaped to match themselves.
-const escapeGlobPath = (file) =>
-  file.replaceAll('(', '\\(').replaceAll(')', '\\)').replaceAll('[', '\\[').replaceAll(']', '\\]');
 
 // The `ai` package and its `ai/test` subpath are exact names: a gitignore pattern `ai` would also
 // match an internal folder such as `packages/services/src/ai`, which is not provider code.
@@ -701,18 +690,13 @@ export default tseslint.config(
     },
   },
   {
-    // Same server-configuration rule, without the `serviceDb` restriction (SPEC-201 ET-4).
+    // Test fixtures may use server configuration; this block only keeps Radix encapsulated.
     files: SERVICE_DB_ALLOWED,
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            {
-              group: ['@learny/config/server', '@learny/config/server/*'],
-              message:
-                'Seul apps/web/lib/server-env.ts importe la configuration serveur (SPEC-009, ET-6).',
-            },
             {
               group: ['@radix-ui/*'],
               message: 'Radix est encapsulé par packages/ui (SPEC-303, ET-1).',
@@ -727,13 +711,7 @@ export default tseslint.config(
     // files replicates the restrictions of the blocks above and adds the server packages, minus
     // the reference baseline, the tests and the demo/webhook entry points (handled just below).
     files: ['apps/web/**/*.{ts,tsx}'],
-    ignores: [
-      'apps/web/lib/server-env.ts',
-      'apps/web/test/**',
-      'apps/web/e2e/**',
-      ...webBoundaryBaseline.files.map(escapeGlobPath),
-      ...webBoundaryBaseline.globs,
-    ],
+    ignores: ['apps/web/lib/server-env.ts', 'apps/web/test/**', 'apps/web/e2e/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -774,7 +752,6 @@ export default tseslint.config(
       'apps/web/app/_dev/**/*.{ts,tsx}',
       'apps/web/app/api/webhooks/**/*.{ts,tsx}',
     ],
-    ignores: [...webBoundaryBaseline.files.map(escapeGlobPath), ...webBoundaryBaseline.globs],
     rules: {
       'no-restricted-imports': [
         'error',

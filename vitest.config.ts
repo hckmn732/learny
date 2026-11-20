@@ -49,6 +49,7 @@ export default defineConfig({
             'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',
             'tools/**/test/unit/**/*.test.ts',
+            'tools/migration/*.test.ts',
             'tools/perf/test/**/*.test.ts',
             'tools/ci/*.test.ts',
             'tools/deploy/*.test.ts',
