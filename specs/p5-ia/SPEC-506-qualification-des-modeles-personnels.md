@@ -84,8 +84,8 @@ Mode `demo`. Page SDD : capacités exigées, état `compatible` ou `reserve`, co
 
 ## 12. Plan de tests
 
-- **Unitaires** — filtres de découverte, sondes conditionnelles, messages des trois réserves, contrats additifs, filtrage de `CONTEXT_TOO_LONG` et assainissement des journaux (CA-1 à CA-4).
-- **Intégration** — connexion persistée, RLS, affectation immédiate `pending`, compatibilité persistée/réutilisée, ancien `failed` toléré et absence de `AI_MODEL_NOT_QUALIFIED` (CA-1 à CA-4).
+- **Unitaires `[SPEC-506]`** — filtres de découverte, sondes conditionnelles, messages des trois réserves, contrats additifs, filtrage de `CONTEXT_TOO_LONG` et assainissement des journaux (CA-1 à CA-4).
+- **Intégration `[SPEC-506]`** — connexion persistée, RLS, affectation immédiate `pending`, compatibilité persistée/réutilisée, ancien `failed` toléré et absence de `AI_MODEL_NOT_QUALIFIED` (CA-1 à CA-4).
 - **End-to-end** — `apps/web/e2e/specs/p5/spec-506.spec.ts` : connexion simulée, contrôle compatible puis réserve visible, vidéo et capture (CA-1 à CA-5).
 - **Visuel** — `test('démonstration de qualification @SPEC-506 @visual')` : jetons, structure, axe, desktop/mobile à 1 % sans régénérer la référence visuelle (CA-5).
 - **Non-régression** — rejouer les étiquettes `[SPEC-505]` / `@SPEC-505`, `[SPEC-501]` / `@SPEC-501`.
