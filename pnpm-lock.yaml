@@ -140,6 +140,9 @@ importers:
       '@learny/jobs':
         specifier: workspace:*
         version: link:../../packages/jobs
+      '@learny/services':
+        specifier: workspace:*
+        version: link:../../packages/services
       '@sentry/node':
         specifier: ^11.12.0
         version: 11.12.0(rollup@4.68.2)
@@ -156,9 +159,6 @@ importers:
       '@learny/notifications':
         specifier: workspace:*
         version: link:../../packages/notifications
-      '@learny/services':
-        specifier: workspace:*
-        version: link:../../packages/services
       '@learny/testing':
         specifier: workspace:*
         version: link:../../packages/testing
