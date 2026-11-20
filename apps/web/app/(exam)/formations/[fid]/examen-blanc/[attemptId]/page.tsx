@@ -1,10 +1,7 @@
-import { randomUUID } from 'node:crypto';
-
 import { notFound, redirect } from 'next/navigation';
 
-import { createServiceContext, getExamAttempt } from '@learny/services';
-
 import { ExamScreen } from '../../../../../../components/mock-exam/ExamScreen';
+import { isApiError, serverApi } from '../../../../../../lib/api/server-client';
 import { SIGN_IN_PATH } from '../../../../../../lib/route-guard';
 import { readPageSession } from '../../../../../../lib/supabase/page';
 
@@ -22,16 +19,19 @@ export default async function ExamAttemptPage({ params }: ExamAttemptPageProps) 
   const { fid, attemptId } = await params;
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const attempt = await getExamAttempt(ctx, attemptId);
-  if (!attempt.ok) {
-    if (attempt.error.code === 'NOT_FOUND') notFound();
-    throw attempt.error;
+  const client = await serverApi();
+  let attempt;
+  try {
+    attempt = await client.api.getExamAttempt({ params: { aid: attemptId } });
+  } catch (error) {
+    if (isApiError(error, 'NOT_FOUND')) notFound();
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    throw error;
   }
 
   return (
     <ExamScreen
-      initialAttempt={attempt.value}
+      initialAttempt={attempt}
       programmeHref={`/formations/${encodeURIComponent(fid)}/programme`}
     />
   );
