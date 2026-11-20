@@ -4,7 +4,11 @@
 // 401 replay; the module-level exports are bound to the default web client of `/api/v1`.
 import type { AnyRoute, RouteInput, RouteOutput } from '@learny/contracts/define-route';
 import type { ROUTES } from '@learny/contracts/routes';
+import type { SendMessageInput } from '@learny/contracts/tutor-chat';
 import { AppError, ERROR_CATALOG, type ErrorCode } from '@learny/core';
+
+import { readTutorReplyStream, StreamInterruptedError, type TutorReplyPart } from './sse';
+import { createTokenManager, type TokenAuthOptions } from './token';
 
 /**
  * Minimal schema surface used by the client: any Zod schema satisfies it. Declaring it here keeps
@@ -186,6 +190,11 @@ export interface CallOptions {
   networkRetries?: number;
 }
 
+export interface StreamCallOptions {
+  signal?: AbortSignal;
+  fetch?: typeof fetch;
+}
+
 function toApiError(error: AppError): ApiError {
   return new ApiError(error.code, error.detail, {
     status: error.status ?? 0,
@@ -238,6 +247,11 @@ export interface ApiClient {
   callApi: CallApi;
   api: Api;
   loadRoutes: () => Promise<ApiRoutes>;
+  streamTutorReply: (
+    conversationId: string,
+    body: SendMessageInput,
+    options?: StreamCallOptions,
+  ) => AsyncGenerator<TutorReplyPart>;
 }
 
 /**
@@ -248,7 +262,7 @@ export interface ApiClient {
  * once with refreshed headers, `false` (or a second 401) raises the error as is (CL-3). The
  * web default uses none of it: cookies flow through `credentials: 'same-origin'`.
  */
-export interface ApiClientOptions {
+export interface ApiClientOptions extends TokenAuthOptions {
   /** Base of the API for `apiFetch` paths; the default client uses `/api/v1`. */
   baseUrl: string;
   /** Transport override; otherwise the client uses `globalThis.fetch` (CL-2). */
@@ -261,8 +275,16 @@ export interface ApiClientOptions {
 
 /** Builds a client of `/api/v1` bound to the given options (EF-1, CA-4). */
 export function createApiClient(options: ApiClientOptions): ApiClient {
-  const providedHeaders = async (): Promise<Record<string, string>> =>
-    options.headers === undefined ? {} : await options.headers();
+  const token = createTokenManager(options);
+  const providedHeaders = async (): Promise<Record<string, string>> => {
+    const custom = options.headers === undefined ? {} : await options.headers();
+    return { ...custom, ...(await token.headers()) };
+  };
+
+  async function replayUnauthorized(): Promise<boolean> {
+    if (options.refreshAccessToken !== undefined) return token.refresh();
+    return options.onUnauthorized === undefined ? false : await options.onUnauthorized();
+  }
 
   function transport(override: typeof fetch | undefined): typeof fetch {
     const send = (override ?? options.fetch ?? globalThis.fetch) as typeof fetch | undefined;
@@ -308,7 +330,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     const send = transport(req.fetch);
     const baseHeaders: Record<string, string> = { Accept: 'application/json' };
     if (hasBody) baseHeaders['Content-Type'] = 'application/json';
-    const init: RequestInit = { method: req.method, credentials: 'same-origin' };
+    const init: RequestInit = {
+      method: req.method,
+      credentials: token.enabled ? 'omit' : 'same-origin',
+    };
     if (payload !== undefined) init.body = payload;
     if (req.signal !== undefined) init.signal = req.signal;
     init.headers = { ...baseHeaders, ...(await providedHeaders()) };
@@ -323,10 +348,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       });
     }
 
-    if (response.status === 401 && options.onUnauthorized !== undefined) {
+    if (response.status === 401 && (options.onUnauthorized !== undefined || token.enabled)) {
       // CL-3 — one replay only, with the headers of the provider re-evaluated. A fresh
       // RequestInit: the first attempt keeps its own headers, never mutated in place.
-      if (await options.onUnauthorized()) {
+      if (await replayUnauthorized()) {
         const replay: RequestInit = {
           ...init,
           headers: { ...baseHeaders, ...(await providedHeaders()) },
@@ -385,7 +410,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       body?: unknown;
     };
     // Registered routes carry their full path (`/api/v1/…`): the base is already part of it.
-    const url = buildUrl(route, typed);
+    const path = buildUrl(route, typed);
+    const url = /^https?:\/\//.test(options.baseUrl)
+      ? new URL(path, options.baseUrl).toString()
+      : path;
     // The key is generated once: the 401 replay (CL-3) and the network retries (EF-9) reuse it,
     // so the server never runs the service twice.
     const idempotencyKey =
@@ -401,7 +429,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       }
       return { ...headers, ...(await providedHeaders()) };
     };
-    const init: RequestInit = { method: route.method, credentials: 'same-origin' };
+    const init: RequestInit = {
+      method: route.method,
+      credentials: token.enabled ? 'omit' : 'same-origin',
+    };
     if (typed.body !== undefined) init.body = JSON.stringify(typed.body);
     if (callOptions.signal !== undefined) init.signal = callOptions.signal;
     init.headers = await buildHeaders();
@@ -426,10 +457,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       }
     }
 
-    if (response.status === 401 && options.onUnauthorized !== undefined) {
+    if (response.status === 401 && (options.onUnauthorized !== undefined || token.enabled)) {
       // CL-3 — one replay only, same Idempotency-Key, provider headers re-evaluated. A
       // fresh RequestInit: the first attempt keeps its own headers, never mutated in place.
-      if (await options.onUnauthorized()) {
+      if (await replayUnauthorized()) {
         const replay: RequestInit = { ...init, headers: await buildHeaders() };
         try {
           response = await send(url, replay);
@@ -512,7 +543,56 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     },
   }) as unknown as Api;
 
-  return { apiFetch, callApi, api, loadRoutes };
+  async function* streamTutorReply(
+    conversationId: string,
+    body: SendMessageInput,
+    callOptions: StreamCallOptions = {},
+  ): AsyncGenerator<TutorReplyPart> {
+    const path = `/api/v1/conversations/${encodeURIComponent(conversationId)}/messages`;
+    const url = /^https?:\/\//.test(options.baseUrl)
+      ? new URL(path, options.baseUrl).toString()
+      : path;
+    const send = transport(callOptions.fetch);
+    const buildHeaders = async () => ({
+      Accept: 'text/event-stream',
+      'Content-Type': 'application/json',
+      ...(await providedHeaders()),
+    });
+    const init: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify(body),
+      credentials: token.enabled ? 'omit' : 'same-origin',
+      ...(callOptions.signal === undefined ? {} : { signal: callOptions.signal }),
+      headers: await buildHeaders(),
+    };
+
+    let response: Response;
+    try {
+      response = await send(url, init);
+    } catch (cause) {
+      throw new AppError('NETWORK_ERROR', 'Le serveur est injoignable. Vérifiez votre connexion.', {
+        cause,
+      });
+    }
+    if (response.status === 401 && (options.onUnauthorized !== undefined || token.enabled)) {
+      if (await replayUnauthorized()) {
+        try {
+          response = await send(url, { ...init, headers: await buildHeaders() });
+        } catch (cause) {
+          throw new AppError(
+            'NETWORK_ERROR',
+            'Le serveur est injoignable. Vérifiez votre connexion.',
+            { cause },
+          );
+        }
+      }
+    }
+    if (!response.ok) throw await toAppError(response);
+    if (response.body === null) throw new StreamInterruptedError();
+    yield* readTutorReplyStream(response.body);
+  }
+
+  return { apiFetch, callApi, api, loadRoutes, streamTutorReply };
 }
 
 // ---------------------------------------------------------------------------------------------
