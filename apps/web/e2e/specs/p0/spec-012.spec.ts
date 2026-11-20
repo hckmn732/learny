@@ -18,8 +18,8 @@ test('inspecte la pile auto-hébergée @SPEC-012', async ({
   );
   await expect(services.getByRole('listitem')).toHaveCount(2);
   await expect(services.getByRole('listitem').first()).toContainText('Web');
-  await expect(services.getByRole('listitem').first()).toContainText('Supabase / Inngest');
-  await expect(services.getByRole('listitem').nth(1)).toContainText('Worker');
+  await expect(services.getByRole('listitem').first()).toContainText('API / Supabase / Inngest');
+  await expect(services.getByRole('listitem').nth(1)).toContainText('API');
   await expect(services.getByRole('row')).toHaveCount(10);
   await expect(services).toContainText('migrate');
   await expect(services).toContainText('Volumes persistants');
@@ -27,7 +27,7 @@ test('inspecte la pile auto-hébergée @SPEC-012', async ({
   const images = page.getByTestId('spec-012-images');
   await expect(images.getByRole('row')).toHaveCount(10);
   await expect(images).toContainText('learny-web');
-  await expect(images).toContainText('learny-worker');
+  await expect(images).toContainText('learny-api');
   await expect(images).toContainText('supabase/postgres');
   await expect(images).toContainText('17.11.0.006');
   await expect(images).toContainText('inngest/inngest');

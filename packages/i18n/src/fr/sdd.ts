@@ -122,7 +122,7 @@ export const sdd = {
       adapter: 'Adaptateur',
       endpoint: 'Point d’entrée',
       web: 'web',
-      worker: 'worker',
+      worker: 'api',
       webAdapter: 'inngest/next (Next.js)',
       workerAdapter: 'inngest/hono (Hono)',
       webEndpoint: 'POST /api/inngest',
@@ -1873,7 +1873,7 @@ export const sdd = {
     services: {
       title: 'Composants du Compose',
       intro:
-        'Chaîne d’appels : le web joint Supabase et Inngest ; le worker sert les fonctions Inngest.',
+        'Chaîne d’appels : le web joint l’API, Supabase et Inngest ; l’API sert les fonctions Inngest.',
       compose: 'Service',
       state: 'État',
     },

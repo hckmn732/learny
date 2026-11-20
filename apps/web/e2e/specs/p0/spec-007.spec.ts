@@ -107,7 +107,7 @@ test('démonstration des jobs conforme @SPEC-007 @visual', async ({ page }) => {
   ]);
   await expect(page.getByTestId('spec-007-hosts').getByRole('listitem')).toHaveText([
     'webAdaptateur : inngest/next (Next.js)Point d’entrée : POST /api/inngest',
-    'workerAdaptateur : inngest/hono (Hono)Point d’entrée : POST /api/inngest, GET /health',
+    'apiAdaptateur : inngest/hono (Hono)Point d’entrée : POST /api/inngest, GET /health',
   ]);
   await expect(page.getByTestId('spec-007-steps').getByRole('listitem')).toHaveText([
     'validate-input — Terminée',

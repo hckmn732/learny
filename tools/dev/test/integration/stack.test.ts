@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const WEB_PORT = 3300;
+const API_PORT = 3301;
 const DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
 const ENV = {
   APP_ENV: 'test',
@@ -16,7 +17,8 @@ const ENV = {
   CLOCK_FIXED_AT: '2026-11-11T12:20:00Z',
   INNGEST_DEV: '1',
   JOBS_MODE: 'inngest',
-  INNGEST_WEB_URL: `http://host.docker.internal:${String(WEB_PORT)}/api/inngest`,
+  INNGEST_WEB_URL: `http://host.docker.internal:${String(API_PORT)}/api/inngest`,
+  API_INTERNAL_URL: `http://127.0.0.1:${String(API_PORT)}`,
   NEXT_PUBLIC_APP_URL: `http://127.0.0.1:${String(WEB_PORT)}`,
   MAILPIT_URL: 'http://127.0.0.1:8025',
   // SPEC-009 CL-3: a test environment only accepts the in-memory e-mail transport; Mailpit is
@@ -27,6 +29,7 @@ const ENV = {
 };
 
 let web: ChildProcess | null = null;
+let api: ChildProcess | null = null;
 
 function script(name: string, ...args: string[]) {
   const result = spawnSync('node', [path.join('tools', 'dev', `${name}.mjs`), ...args], {
@@ -99,6 +102,13 @@ async function sendSmtp(subject: string): Promise<void> {
 
 describe('[SPEC-008] Docker stack', () => {
   beforeAll(async () => {
+    api = spawn('pnpm', ['--filter', '@learny/api', 'exec', 'tsx', 'src/server.ts'], {
+      cwd: ROOT,
+      env: { ...process.env, ...ENV, PORT: String(API_PORT), API_PORT: String(API_PORT) },
+      stdio: 'ignore',
+      detached: true,
+    });
+    await waitFor(`http://127.0.0.1:${String(API_PORT)}/health`, (response) => response.ok);
     web = spawn(
       'pnpm',
       ['--filter', '@learny/web', 'exec', 'next', 'start', '-p', String(WEB_PORT)],
@@ -113,6 +123,13 @@ describe('[SPEC-008] Docker stack', () => {
   }, 180000);
 
   afterAll(() => {
+    if (api?.pid) {
+      try {
+        process.kill(-api.pid, 'SIGTERM');
+      } catch {
+        // already stopped
+      }
+    }
     if (web?.pid) {
       try {
         process.kill(-web.pid, 'SIGTERM');

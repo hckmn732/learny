@@ -7,13 +7,13 @@ import path from 'node:path';
 import { findRepoRoot } from './sdd-status';
 
 export const SELFHOST_CHAINS = [
-  { source: 'Web', target: 'Supabase / Inngest' },
-  { source: 'Worker', target: 'Inngest' },
+  { source: 'Web', target: 'API / Supabase / Inngest' },
+  { source: 'API', target: 'Inngest / services' },
 ] as const;
 
 export const SELFHOST_COMPOSE_SERVICES = [
   'web',
-  'worker',
+  'api',
   'kong',
   'auth',
   'rest',
@@ -35,7 +35,7 @@ export const SELFHOST_PINNED_IMAGES = [
 
 export const SELFHOST_PROBES = [
   { name: 'web', target: '/api/v1/health' },
-  { name: 'worker', target: '/health' },
+  { name: 'api', target: '/health' },
   { name: 'postgres', target: 'pg_isready -U postgres' },
   { name: 'auth', target: '/health' },
   { name: 'storage', target: '/status' },
@@ -107,7 +107,7 @@ function fromCheck(raw: CachedCheck): SelfhostSnapshot {
     };
   });
   const found = new Map((raw.images ?? []).map((image) => [image.name, image]));
-  const local = (['web', 'worker'] as const).map((name) => {
+  const local = (['web', 'api'] as const).map((name) => {
     const image = found.get(name);
     return {
       name: `learny-${name}`,
@@ -151,7 +151,7 @@ function simulated(): SelfhostSnapshot {
     services: SELFHOST_COMPOSE_SERVICES.map((name) => ({ name, state: 'Démonstration' })),
     images: [
       { name: 'learny-web', version: 'démo', commit: 'démo', state: 'Démonstration' },
-      { name: 'learny-worker', version: 'démo', commit: 'démo', state: 'Démonstration' },
+      { name: 'learny-api', version: 'démo', commit: 'démo', state: 'Démonstration' },
       ...SELFHOST_PINNED_IMAGES.map((image) => ({
         name: image.name,
         version: image.version,
@@ -177,7 +177,7 @@ function unverified(): SelfhostSnapshot {
     images: [
       { name: 'learny-web', version: 'Non vérifié', commit: 'Non vérifié', state: 'Non vérifié' },
       {
-        name: 'learny-worker',
+        name: 'learny-api',
         version: 'Non vérifié',
         commit: 'Non vérifié',
         state: 'Non vérifié',

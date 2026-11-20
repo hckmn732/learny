@@ -12,6 +12,7 @@ export const STACK: {
   mailpitSmtp: number;
   mailpitUi: number;
   web: number;
+  api: number;
 };
 export function serviceUrls(env?: NodeJS.ProcessEnv): {
   supabase: string;
@@ -19,6 +20,7 @@ export function serviceUrls(env?: NodeJS.ProcessEnv): {
   inngest: string;
   mailpit: string;
   web: string;
+  api: string;
 };
 export function loadEnvFiles(files?: string[]): void;
 export function databaseResetGuard(env?: NodeJS.ProcessEnv): { ok: boolean; reason: string };
