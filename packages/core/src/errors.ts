@@ -12,6 +12,7 @@ export const ERROR_CATALOG = {
   EMAIL_NOT_CONFIRMED: { status: 403, title: 'Adresse e-mail non vérifiée' },
   ORIGIN_REJECTED: { status: 403, title: 'Origine non autorisée' },
   NOT_FOUND: { status: 404, title: 'Introuvable' },
+  METHOD_NOT_ALLOWED: { status: 405, title: 'Méthode non prise en charge' },
   CONFLICT: { status: 409, title: 'Conflit' },
   LEGAL_ACCEPTANCE_REQUIRED: { status: 422, title: 'Acceptation des CGU requise' },
   GROUP_FULL: { status: 409, title: 'Formation à plusieurs complète' },

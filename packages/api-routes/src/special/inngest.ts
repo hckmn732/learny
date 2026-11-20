@@ -1,8 +1,7 @@
 import { serve } from 'inngest/next';
 
-import { inngest, setJobErrorReporter } from '@learny/jobs';
+import { functions, inngest, setJobErrorReporter } from '@learny/jobs';
 
-import { jobRegistry } from '../deps/quiz-grade-registry';
 import { getServerReporter } from '../deps/sentry';
 
 import type { SpecialHandler } from './types';
@@ -20,7 +19,7 @@ setJobErrorReporter((report) => {
 
 type FrameworkHandler = (request: Request, context: unknown) => Promise<Response>;
 
-const served = serve({ client: inngest, functions: jobRegistry }) as unknown as Record<
+const served = serve({ client: inngest, functions }) as unknown as Record<
   'GET' | 'POST' | 'PUT',
   FrameworkHandler
 >;

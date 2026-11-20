@@ -56,6 +56,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/streak` · GET `/milestones` | Série et jalons | SPEC-723 |
 | POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction : POST 201 `{ reportId, status: 'open' }` (200 si un signalement ouvert existe déjà), PATCH 200 `{ brickId, version, versionId }` ; 404 brique d'autrui, 409 version obsolète, 422 `BRICK_INVALID` avec `errors[{ code, path, message }]`, 422 `BRICK_RETIRED` | SPEC-609, 501 |
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
+| GET `/dev/sdd/api/coverage` | Couverture des routes de l'API Hono (démonstration uniquement) | SPEC-1101 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
 | POST `/dev/sdd/push/send` (201, notification de démonstration envoyée par le canal push simulé) | Démonstration des notifications navigateur (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-205 |
 | POST `/email/unsubscribe?token=` (public, `rateLimit: auth`, 200 page HTML ou `{ ok: true }` avec `Accept: application/json`, 400 `UNSUBSCRIBE_TOKEN_INVALID`) · GET `/email/unsubscribe?token=` (page de confirmation, aucun changement d'état) | Désinscription en un clic (RFC 8058, ADR-0124) | SPEC-204 |

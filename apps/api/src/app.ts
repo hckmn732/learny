@@ -92,7 +92,6 @@ export function createApp(options: AppOptions = {}): Hono {
       new AppError(
         methods.length === 0 ? 'NOT_FOUND' : 'METHOD_NOT_ALLOWED',
         methods.length === 0 ? 'Ressource introuvable.' : 'Méthode non prise en charge.',
-        methods.length === 0 ? undefined : { status: 405 },
       ),
       requestId,
     );
