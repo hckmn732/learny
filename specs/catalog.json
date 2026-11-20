@@ -308,7 +308,7 @@
       ],
       "visual": "demo",
       "path": "specs/p0-fondations/SPEC-007-worker-inngest-et-paquet-jobs.md",
-      "scope": "Paquet @learny/jobs (client Inngest, enregistrement des fonctions, fonction de démonstration), route /api/inngest dans apps/web, application Worker historique (Hono) qui sert les mêmes fonctions, tests d'exécution directe d'une fonction à étapes avec reprise.",
+      "scope": "Paquet @learny/jobs (client Inngest, enregistrement des fonctions, fonction de démonstration), route /api/inngest dans apps/web, ancien serveur Worker Hono qui sert les mêmes fonctions, tests d'exécution directe d'une fonction à étapes avec reprise.",
       "validation": {
         "unit": true,
         "integration": true,
@@ -4132,7 +4132,7 @@
       ],
       "visual": "demo",
       "path": "specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md",
-      "scope": "Suppression de application Worker historique, rôles de l’API, image Docker, compose, CI, déploiement API puis web, prévisualisation de migration.",
+      "scope": "Suppression de l’ancien serveur Worker, rôles de l’API, image Docker, compose, CI, déploiement API puis web, prévisualisation de migration.",
       "validation": {
         "unit": true,
         "integration": true,

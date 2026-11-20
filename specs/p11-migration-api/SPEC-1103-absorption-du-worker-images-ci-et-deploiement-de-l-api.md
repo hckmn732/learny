@@ -14,11 +14,11 @@ visual: demo
 
 ## 1. Objectif
 
-Faire de `apps/api` le seul processus backend livrable : il absorbe `application Worker historique`, dispose de son image Docker, est construit et testé par la CI, et se déploie dans chaque environnement (local Docker, auto-hébergé, Coolify QA, prévisualisation et production gérées) **à côté** du web, sans que le web ne l'utilise encore pour ses écrans.
+Faire de `apps/api` le seul processus backend livrable : il absorbe l'ancien serveur Worker, dispose de son image Docker, est construit et testé par la CI, et se déploie dans chaque environnement (local Docker, auto-hébergé, Coolify QA, prévisualisation et production gérées) **à côté** du web, sans que le web ne l'utilise encore pour ses écrans.
 
 ## 2. Contexte
 
-ADR-1002 §4–5 : `LEARNY_API_ROLE` (`all`, `api`, `jobs`), image `docker/api.Dockerfile`, projet Vercel `learny-api` en `fra1`. Existant : `application Worker historique` (Hono, `/api/inngest`, santé, Sentry), `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`, `docker/compose.{dev,selfhost,coolify,coolify-qa}.yml` (ADR-0329, ADR-0330), `.github/workflows/{ci,deploy}.yml`, `tools/deploy/check.mjs`, `tools/docker/check-selfhost.mjs`, `vercel.json`. SPEC-1001 a interdit tout déploiement depuis la piste : cette spécification réactive la prévisualisation pour la branche `migration` une fois les deux applications déployables ensemble. Lire ADR-1002, ADR-0329, ADR-0330, `docs/architecture/overview.md` §6.
+ADR-1002 §4–5 : `LEARNY_API_ROLE` (`all`, `api`, `jobs`), image `docker/api.Dockerfile`, projet Vercel `learny-api` en `fra1`. Existant : l'ancien serveur Worker (Hono, `/api/inngest`, santé, Sentry), `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`, `docker/compose.{dev,selfhost,coolify,coolify-qa}.yml` (ADR-0329, ADR-0330), `.github/workflows/{ci,deploy}.yml`, `tools/deploy/check.mjs`, `tools/docker/check-selfhost.mjs`, `vercel.json`. SPEC-1001 a interdit tout déploiement depuis la piste : cette spécification réactive la prévisualisation pour la branche `migration` une fois les deux applications déployables ensemble. Lire ADR-1002, ADR-0329, ADR-0330, `docs/architecture/overview.md` §6.
 
 ## 3. Dépendances
 
@@ -31,7 +31,7 @@ Aucune règle `BR-*`.
 
 ## 5. Exigences fonctionnelles
 
-- **EF-1** — `application Worker historique` est supprimé ; ses tests (santé, Sentry, rapporteur) sont portés dans `apps/api`. `apps/api` avec `LEARNY_API_ROLE=jobs` ne sert que `/health` et `/api/inngest` ; avec `api`, tout sauf `/api/inngest` ; avec `all` (défaut), tout.
+- **EF-1** — L'ancien serveur Worker est supprimé ; ses tests (santé, Sentry, rapporteur) sont portés dans `apps/api`. `apps/api` avec `LEARNY_API_ROLE=jobs` ne sert que `/health` et `/api/inngest` ; avec `api`, tout sauf `/api/inngest` ; avec `all` (défaut), tout.
 - **EF-2** — `docker/api.Dockerfile` construit une image Node 24 non root, `HEALTHCHECK` par `docker/healthcheck-api.mjs` (`GET /health` = `ok`), port 3001.
 - **EF-3** — Les fichiers compose remplacent le service `worker` par `api` (même variables Inngest, plus `API_PROXY_SECRET`, `SUPABASE_*`, `APP_ENCRYPTION_KEY` et les secrets serveur nécessaires aux routes) ; le service `web` reçoit `API_INTERNAL_URL=http://api:3001` et `API_PROXY_SECRET`. Inngest est configuré pour appeler `http://api:3001/api/inngest`.
 - **EF-4** — La CI construit, analyse (lint, typecheck) et teste `apps/api`, construit l'image `api` et exécute `tools/docker/check-selfhost.mjs` mis à jour.
@@ -57,7 +57,7 @@ Aucune règle `BR-*`.
 
 ## 8. Instructions d'implémentation
 
-1. Rôles dans `apps/api`, portage des tests du worker, suppression de `application Worker historique`. Commit `refactor(SPEC-1103): absorbe le worker dans apps/api`.
+1. Rôles dans `apps/api`, portage des tests du worker, suppression de l'ancien serveur Worker. Commit `refactor(SPEC-1103): absorbe le worker dans apps/api`.
 2. `docker/api.Dockerfile`, healthcheck, compose (dev, selfhost, coolify, coolify-qa), `check-selfhost.mjs`. Commit `build(SPEC-1103): construit et compose l'image de l'API`.
 3. CI et déploiement (`ci.yml`, `deploy.yml`, `apps/api/vercel.json`, `tools/deploy/check.mjs`), réactivation de la prévisualisation. Commit `ci(SPEC-1103): déploie l'API avant le web`.
 4. Documentation, démonstration, e2e, visuel. `validate.mjs`, `complete.mjs`.
@@ -65,7 +65,7 @@ Aucune règle `BR-*`.
 ## 9. Fichiers et composants concernés
 
 - **Créés** : `docker/api.Dockerfile`, `docker/api.Dockerfile.dockerignore`, `docker/healthcheck-api.mjs`, `apps/api/vercel.json`, `apps/api/api/index.ts`, `apps/api/test/integration/roles.test.ts`, `apps/web/components/sdd-demos/spec-1103.tsx`, `apps/web/e2e/specs/p11/spec-1103.spec.ts`.
-- **Supprimés** : `application Worker historique/**`, `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`.
+- **Supprimés** : ancien serveur Worker, `docker/worker.Dockerfile`, `docker/healthcheck-worker.mjs`.
 - **Modifiés** : `docker/compose.dev.yml`, `docker/compose.selfhost.yml`, `docker/compose.coolify.yml`, `docker/compose.coolify-qa.yml`, `.github/workflows/ci.yml`, `.github/workflows/deploy.yml`, `tools/deploy/check.mjs` et tests, `tools/docker/check-selfhost.mjs` et tests, `tools/dev/up.mjs` (si le worker y est démarré), `package.json`, `turbo.json`, `packages/config/src/server.ts`, `.env.example`, `docs/architecture/overview.md`, `README.md`, `apps/web/app/%5Fdev/sdd/registry.ts`.
 
 ## 10. Interface et conformité visuelle
@@ -74,7 +74,7 @@ Mode `demo`. `/_dev/sdd/SPEC-1103` : `h1` « Déploiement de l'API » ; liste `d
 
 ## 11. Critères d'acceptation
 
-- **CA-1** — Le dépôt ne contient plus `application Worker historique` ; les tests portés passent ; les trois rôles servent exactement les sous-ensembles d'EF-1.
+- **CA-1** — Le dépôt ne contient plus l'ancien serveur Worker ; les tests portés passent ; les trois rôles servent exactement les sous-ensembles d'EF-1.
 - **CA-2** — L'image `api` se construit et son `HEALTHCHECK` passe dans `docker compose -f docker/compose.selfhost.yml up` (contrôle `pnpm docker:check:selfhost`).
 - **CA-3** — `node tools/ci/check-workflows.mjs` et `node tools/deploy/check.mjs --dry-run` passent ; le flux de déploiement ordonne API puis web.
 - **CA-4** — Aucun secret n'est présent dans les fichiers compose, Dockerfile ou workflows (contrôle `secret-patterns`).

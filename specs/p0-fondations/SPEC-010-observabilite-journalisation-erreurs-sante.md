@@ -69,8 +69,8 @@ Aucune règle `BR-*` spécifique. L'exigence est transversale : diagnostic explo
 
 ## 9. Fichiers et composants concernés
 
-- **Créés** : `packages/core/src/logger.ts`, `packages/core/src/logger.test.ts`, `packages/core/src/request-context.ts`, `packages/core/src/request-context.test.ts`, `apps/web/sentry.server.config.ts`, `apps/web/sentry.client.config.ts`, `application Worker historique/src/sentry.ts`, `apps/web/components/sdd-demos/spec-010.tsx`, `apps/web/test/integration/observability.test.ts`, `apps/web/e2e/specs/p0/spec-010.spec.ts`.
-- **Modifiés** : `packages/core/src/index.ts`, `apps/web/lib/api/handler.ts` (ou wrapper existant), `apps/web/app/api/v1/health/route.ts`, `packages/jobs/src/index.ts`, `application Worker historique/src/server.ts`, `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/messages/fr.ts`.
+- **Créés** : `packages/core/src/logger.ts`, `packages/core/src/logger.test.ts`, `packages/core/src/request-context.ts`, `packages/core/src/request-context.test.ts`, `apps/web/sentry.server.config.ts`, `apps/web/sentry.client.config.ts`, instrumentation Sentry de l'ancien serveur Worker, `apps/web/components/sdd-demos/spec-010.tsx`, `apps/web/test/integration/observability.test.ts`, `apps/web/e2e/specs/p0/spec-010.spec.ts`.
+- **Modifiés** : `packages/core/src/index.ts`, `apps/web/lib/api/handler.ts` (ou wrapper existant), `apps/web/app/api/v1/health/route.ts`, `packages/jobs/src/index.ts`, serveur de l'ancien worker, `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/messages/fr.ts`.
 - **Lus / réutilisés** : configuration SPEC-009, `AppError`, route santé SPEC-006 et événements de SPEC-007.
 
 ## 10. Interface et conformité visuelle

@@ -23,7 +23,7 @@ Créer un seul catalogue de fonctions Inngest réutilisé par l'application web 
 ## 3. Dépendances
 
 - **SPEC-001** : `apps/web`, Node 24, TypeScript strict, scripts `build`, `lint`, `typecheck`, Vitest et Playwright.
-- **Bibliothèques** : `inngest` SDK 3 ou version stable compatible ; `hono` pour `application Worker historique`. Les versions installées sont figées dans `pnpm-lock.yaml`.
+- **Bibliothèques** : `inngest` SDK 3 ou version stable compatible ; `hono` pour l'ancien serveur Worker. Les versions installées sont figées dans `pnpm-lock.yaml`.
 - **Service externe** : Inngest Dev Server pour l'essai HTTP local. Les tests unitaires et d'intégration appellent directement les fonctions avec un adaptateur simulé ; ils n'utilisent pas Inngest Cloud. L'absence du service local ne rend pas une preuve HTTP réussie.
 
 ## 4. Règles métier couvertes
@@ -32,9 +32,9 @@ Aucune règle produit `BR-*`. Cette spécification applique ADR-0017 : fonctions
 
 ## 5. Exigences fonctionnelles
 
-- **EF-1** — `@learny/jobs` exporte un client Inngest nommé `learny`, un registre de fonctions et un catalogue d'événements typé. Les deux hôtes importent exactement le même registre ; aucune fonction n'est dupliquée dans `apps/web` ou `application Worker historique`.
+- **EF-1** — `@learny/jobs` exporte un client Inngest nommé `learny`, un registre de fonctions et un catalogue d'événements typé. Les deux hôtes importent exactement le même registre ; aucune fonction n'est dupliquée dans `apps/web` ou l'ancien serveur Worker.
 - **EF-2** — `POST /api/inngest` et les méthodes attendues par l'adaptateur Inngest répondent selon son protocole, sans session utilisateur. La route ne fournit pas d'API métier publique ; les clés de signature restent côté serveur. En mode test, la vérification de signature est remplacée par l'adaptateur contrôlé du harnais, jamais désactivée en production.
-- **EF-3** — `application Worker historique` démarre un serveur Hono sur `PORT` (défaut local explicite), expose `GET /health` et sert le même adaptateur Inngest à `/api/inngest`. `GET /health` n'inclut que `status`, `version` et `commit` sûrs ; la construction du worker réussit dans le monorepo.
+- **EF-3** — L'ancien serveur Worker démarre un serveur Hono sur `PORT` (défaut local explicite), expose `GET /health` et sert le même adaptateur Inngest à `/api/inngest`. `GET /health` n'inclut que `status`, `version` et `commit` sûrs ; la construction du worker réussit dans le monorepo.
 - **EF-4** — Une fonction `sdd/demo-job` accepte `{ runId, value }`, exécute deux étapes nommées (`validate-input`, `persist-result`) et retourne `{ runId, doubledValue }`. Le stockage de démonstration est un adaptateur injecté, non une table fictive ; `persist-result` est idempotente sur `runId`.
 - **EF-5** — En cas d'erreur transitoire dans une étape, la fonction reprend au plus trois fois avec le backoff ADR-0017 ; une étape déjà terminée n'est pas réexécutée. Une erreur permanente est visible dans le résultat de test et dans les journaux sûrs, sans contenu d'entrée sensible.
 - **EF-6** — La page `/_dev/sdd/SPEC-007` permet de lancer le job de démonstration en environnement SDD, affiche l'identifiant, les deux étapes et leur état, puis le résultat calculé. Les données d'exemple sont fixes et ne touchent aucune donnée utilisateur.
@@ -42,11 +42,11 @@ Aucune règle produit `BR-*`. Cette spécification applique ADR-0017 : fonctions
 ## 6. Exigences techniques
 
 - **ET-1** — `packages/jobs/src/client.ts` instancie Inngest une seule fois ; `packages/jobs/src/functions/index.ts` exporte `functions` ; `packages/jobs/src/events.ts` contient les schémas d'événement. `packages/jobs/src/index.ts` est l'API publique du paquet.
-- **ET-2** — `apps/web/app/api/inngest/route.ts` utilise l'adaptateur Next.js du SDK ; `application Worker historique/src/server.ts` utilise l'adaptateur Hono. Les deux reçoivent `client` et `functions` de `@learny/jobs`.
+- **ET-2** — `apps/web/app/api/inngest/route.ts` utilise l'adaptateur Next.js du SDK ; le serveur de l'ancien worker utilise l'adaptateur Hono. Les deux reçoivent `client` et `functions` de `@learny/jobs`.
 - **ET-3** — La fonction de démonstration a une entrée Zod avec `runId` non vide et `value` entier borné ; elle valide l'entrée avant la première étape. La clé d'idempotence est `runId`; une seconde livraison avec le même `runId` et la même valeur retourne le résultat stocké, avec une valeur différente elle échoue en conflit.
 - **ET-4** — Les accès externes (stockage, transport) passent par des interfaces injectées. Le test d'intégration utilise un stockage mémoire qui compte les écritures ; le job réel pourra employer une base après SPEC-101 sans changement de signature publique.
 - **ET-5** — Les étapes sont nommées de manière stable pour que la reprise Inngest reconnaisse leur résultat ; ne pas inclure de valeur utilisateur dans le nom de l'étape. Les erreurs métier ne sont pas reprises comme les erreurs transitoires.
-- **ET-6** — `application Worker historique` possède ses scripts `dev`, `build`, `start`, `lint`, `typecheck`; `turbo.json` inclut sa construction. Le worker n'importe pas `apps/web`.
+- **ET-6** — L'ancien serveur Worker possède ses scripts `dev`, `build`, `start`, `lint`, `typecheck`; `turbo.json` inclut sa construction. Le worker n'importe pas `apps/web`.
 
 ## 7. Comportements attendus et cas limites
 
@@ -62,13 +62,13 @@ Aucune règle produit `BR-*`. Cette spécification applique ADR-0017 : fonctions
 
 1. Créer `packages/jobs` avec client, schémas d'événement, registre et README ; installer Inngest. Commit `build(SPEC-007): crée le paquet jobs`.
 2. Écrire le job de démonstration avec stockage injectable, idempotence et deux `step.run` ; tester directement le handler, les doublons et les reprises. Commit `feat(SPEC-007): ajoute un job durable de démonstration`.
-3. Ajouter la route Next.js puis `application Worker historique` Hono et sa route de santé ; brancher le même registre et construire les deux hôtes. Commit `feat(SPEC-007): sert les jobs dans web et worker`.
+3. Ajouter la route Next.js puis l'ancien serveur Worker Hono et sa route de santé ; brancher le même registre et construire les deux hôtes. Commit `feat(SPEC-007): sert les jobs dans web et worker`.
 4. Ajouter la page SDD, les tests HTTP, e2e et visuels. Commit `test(SPEC-007): vérifie les deux hôtes et la reprise`.
 5. Exécuter `validate.mjs`, renseigner les CA avec les rapports observés, terminer par `complete.mjs`.
 
 ## 9. Fichiers et composants concernés
 
-- **Créés** : `packages/jobs/package.json`, `packages/jobs/README.md`, `packages/jobs/tsconfig.json`, `packages/jobs/src/index.ts`, `packages/jobs/src/client.ts`, `packages/jobs/src/events.ts`, `packages/jobs/src/functions/index.ts`, `packages/jobs/src/functions/demo-job.ts`, `packages/jobs/src/functions/demo-job.test.ts`, `packages/jobs/test/integration/demo-job.test.ts`, `apps/web/app/api/inngest/route.ts`, `application Worker historique/package.json`, `application Worker historique/tsconfig.json`, `application Worker historique/src/server.ts`, `application Worker historique/test/integration/server.test.ts`, `apps/web/components/sdd-demos/spec-007.tsx`, `apps/web/e2e/specs/p0/spec-007.spec.ts`.
+- **Créés** : `packages/jobs/package.json`, `packages/jobs/README.md`, `packages/jobs/tsconfig.json`, `packages/jobs/src/index.ts`, `packages/jobs/src/client.ts`, `packages/jobs/src/events.ts`, `packages/jobs/src/functions/index.ts`, `packages/jobs/src/functions/demo-job.ts`, `packages/jobs/src/functions/demo-job.test.ts`, `packages/jobs/test/integration/demo-job.test.ts`, `apps/web/app/api/inngest/route.ts`, fichiers du paquet Hono de l'ancien serveur Worker, `apps/web/components/sdd-demos/spec-007.tsx`, `apps/web/e2e/specs/p0/spec-007.spec.ts`.
 - **Modifiés** : `package.json`, `pnpm-lock.yaml`, `turbo.json`, `apps/web/app/%5Fdev/sdd/registry.ts`, `apps/web/messages/fr.ts`.
 - **Lus / réutilisés** : `@learny/core` (horloge et erreurs), configuration SDD de SPEC-001, adaptateurs officiels du SDK verrouillé.
 
@@ -89,7 +89,7 @@ Contrôles visuels : `expectTokens`, ordre des quatre régions, axe, capture `to
 ## 12. Plan de tests
 
 - **Unitaires** — `packages/jobs/src/functions/demo-job.test.ts`, `describe('[SPEC-007] demo job')` : schéma d'entrée, étapes et sortie, idempotence, conflit, reprise transitoire/permanente (CA-2, CA-3).
-- **Intégration** — `packages/jobs/test/integration/demo-job.test.ts`, `describe('[SPEC-007] Inngest function')` : adaptateur simulé, compteur d'écritures et réexécution ; `application Worker historique/test/integration/server.test.ts`, `describe('[SPEC-007] worker')` : santé, registre partagé et signature invalide (CA-1, CA-4).
+- **Intégration** — `packages/jobs/test/integration/demo-job.test.ts`, `describe('[SPEC-007] Inngest function')` : adaptateur simulé, compteur d'écritures et réexécution ; test d'intégration du serveur de l'ancien worker, `describe('[SPEC-007] worker')` : santé, registre partagé et signature invalide (CA-1, CA-4).
 - **End-to-end** — `apps/web/e2e/specs/p0/spec-007.spec.ts`, `test('exécute un job SDD @SPEC-007')` : lancer la valeur 4, attendre les deux étapes, lire 8 et conserver la vidéo (CA-2, CA-5).
 - **Visuel** — `test('démonstration des jobs conforme @SPEC-007 @visual')` : structure, jetons, axe, captures desktop/mobile ≤ 1 % (CA-5).
 - **Non-régression** — `[SPEC-001]` et `@SPEC-001`.

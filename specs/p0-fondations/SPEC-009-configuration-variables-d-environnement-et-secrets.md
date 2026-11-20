@@ -72,7 +72,7 @@ Aucune règle `BR-*` n'est attribuée directement dans le catalogue. `product.ts
 ## 9. Fichiers et composants concernés
 
 - **Créés** : `packages/config/src/env.ts`, `packages/config/src/env-shared.ts`, `packages/config/src/env-public.ts`, `packages/config/src/server.ts`, `packages/config/src/env.test.ts`, `packages/config/src/product.ts`, `packages/config/src/product.test.ts`, `packages/config/src/models.ts`, `packages/config/src/pricing.ts`, `packages/config/test/integration/startup.test.ts`, `apps/web/lib/server-env.ts`, `apps/web/lib/sdd-config-demo.ts`, `apps/web/components/sdd-demos/spec-009.tsx`, `apps/web/e2e/specs/p0/spec-009.spec.ts`, `apps/web/test/integration/config-startup.test.ts`.
-- **Modifiés** : `.env.example`, `packages/config/src/index.ts`, `packages/config/package.json` (export serveur), `packages/config/tsconfig.json`, points de démarrage de `apps/web` (`instrumentation.ts`) et `application Worker historique` (`main`), lint de frontière `eslint.config.mjs`, `apps/web/app/%5Fdev/sdd/registry.ts` et `apps/web/messages/fr.ts`.
+- **Modifiés** : `.env.example`, `packages/config/src/index.ts`, `packages/config/package.json` (export serveur), `packages/config/tsconfig.json`, points de démarrage de `apps/web` (`instrumentation.ts`) et de l'ancien serveur Worker (`main`), lint de frontière `eslint.config.mjs`, `apps/web/app/%5Fdev/sdd/registry.ts` et `apps/web/messages/fr.ts`.
 - **Lus / réutilisés** : `sddPagesEnabled` de SPEC-001, `HOSTING_REGIONS`, `docs/product/business-rules.md`, `docs/architecture/ai.md`.
 
 ## 10. Interface et conformité visuelle

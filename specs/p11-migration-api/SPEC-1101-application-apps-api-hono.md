@@ -18,13 +18,13 @@ Créer le backend autonome `apps/api` : un serveur Hono qui monte toutes les rou
 
 ## 2. Contexte
 
-ADR-1002 : Hono 4, port local 3001, absorption future du worker (SPEC-1103). ADR-0017 amendé : `/api/inngest` servi par `apps/api`. `application Worker historique/src/server.ts` montre déjà l'usage de `@hono/node-server`, `inngest/hono`, Sentry Node et la santé `{ status, version, commit }`. `apps/web/server.mjs` montre les délais de connexion à reprendre (keep-alive 65 s). Lire ADR-1002, `docs/architecture/api.md`, `docs/engineering/testing.md` §3–4, `apps/web/playwright.config.ts` (`webServer`), `packages/config/src/server.ts`.
+ADR-1002 : Hono 4, port local 3001, absorption future du worker (SPEC-1103). ADR-0017 amendé : `/api/inngest` servi par `apps/api`. L'ancien serveur Worker montre déjà l'usage de `@hono/node-server`, `inngest/hono`, Sentry Node et la santé `{ status, version, commit }`. `apps/web/server.mjs` montre les délais de connexion à reprendre (keep-alive 65 s). Lire ADR-1002, `docs/architecture/api.md`, `docs/engineering/testing.md` §3–4, `apps/web/playwright.config.ts` (`webServer`), `packages/config/src/server.ts`.
 
 ## 3. Dépendances
 
 - **SPEC-1004** : `ROUTE_IMPLEMENTATIONS`, `SPECIAL_HANDLERS`, `routeCoverage()`.
 - **SPEC-1002** : `@learny/api-client` (utilisé par la démonstration et les tests de parité).
-- Bibliothèques : `hono` 4 et `@hono/node-server` (versions de `application Worker historique`), `inngest` (version de `packages/jobs`), `@sentry/node`.
+- Bibliothèques : `hono` 4 et `@hono/node-server` (versions de l'ancien serveur Worker), `inngest` (version de `packages/jobs`), `@sentry/node`.
 - Services locaux : Supabase CLI et Inngest Dev Server comme pour le web ; sans Inngest Dev Server, `/api/inngest` répond selon le protocole et les tests directs restent possibles (comportement SPEC-007).
 
 ## 4. Règles métier couvertes
@@ -60,7 +60,7 @@ Aucune règle `BR-*` ; mêmes services, mêmes contrats.
 
 ## 8. Instructions d'implémentation
 
-1. Créer `apps/api` (package, tsconfig, `build.mjs` esbuild calqué sur `application Worker historique`), `createApp`, santé. Commit `feat(SPEC-1101): crée l'application apps/api`.
+1. Créer `apps/api` (package, tsconfig, `build.mjs` esbuild calqué sur l'ancien serveur Worker), `createApp`, santé. Commit `feat(SPEC-1101): crée l'application apps/api`.
 2. Montage générique des routes standard et spéciales, `/api/inngest`. Commit `feat(SPEC-1101): sert toutes les routes du registre`.
 3. Configuration (`API_INTERNAL_URL`, `API_PORT`), scripts, Turbo, `pnpm dev`. Commit `build(SPEC-1101): intègre apps/api au monorepo`.
 4. Harnais `requestApi`, paramétrage des 9 suites, test de couverture HTTP, test SSE. Commit `test(SPEC-1101): prouve la parité Next et Hono`.
@@ -70,7 +70,7 @@ Aucune règle `BR-*` ; mêmes services, mêmes contrats.
 
 - **Créés** : `apps/api/{package.json,tsconfig.json,build.mjs,src/app.ts,src/server.ts,src/sentry.ts,src/mount.ts,test/integration/coverage.test.ts,test/integration/sse.test.ts,test/integration/health.test.ts}`, `packages/testing/src/api.ts`, `packages/contracts/src/dev-migration.ts` (route `dev.sddApiCoverage`), `apps/web/components/sdd-demos/spec-1101.tsx`, `apps/web/e2e/specs/p11/spec-1101.spec.ts`.
 - **Modifiés** : `packages/contracts/src/routes.ts` (inscription de la route de démonstration), `packages/api-routes/src/implementations/dev.ts`, `packages/config/src/server.ts`, `.env.example`, `package.json` (`dev`), `turbo.json`, `pnpm-workspace.yaml` (inchangé si `apps/*`), `apps/web/playwright.config.ts`, les 9 suites `apps/web/test/integration/*` qui utilisent `next-test-api-route-handler`, `vitest.config.ts` (inclure `apps/api/test/**`), `eslint.config.mjs`, `docs/architecture/api.md` (inventaire : route de démonstration), `apps/web/app/%5Fdev/sdd/registry.ts`, `pnpm-lock.yaml`.
-- **Lus** : `application Worker historique/src/*`, `apps/web/server.mjs`, `packages/jobs/src/index.ts`.
+- **Lus** : sources de l'ancien serveur Worker, `apps/web/server.mjs`, `packages/jobs/src/index.ts`.
 
 ## 10. Interface et conformité visuelle
 

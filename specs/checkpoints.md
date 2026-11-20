@@ -86,7 +86,7 @@ Préparation, couche HTTP et paquets partagés (P10).
 Application API autonome (P11).
 - `apps/api` sert 100 % des routes et gestionnaires spéciaux, `/api/inngest` et `/health` ; les suites paramétrées passent pour `next` et `hono`.
 - Authentification par cookie et par Bearer avec vérification locale (0 appel au serveur d'authentification pour une lecture) ; mutations relayées acceptées seulement avec le secret de proxy.
-- `application Worker historique` supprimé ; image `api` construite et saine en auto-hébergé ; `deploy:check --dry-run` vert.
+- L'ancien serveur Worker est supprimé ; image `api` construite et saine en auto-hébergé ; `deploy:check --dry-run` vert.
 
 ## CP-12
 
