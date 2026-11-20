@@ -77,6 +77,7 @@ function call(
 
 beforeAll(() => {
   vi.stubEnv('TRUST_PROXY', 'true');
+  registerSecurity();
   restoreSession = setSessionResolver(() => Promise.resolve(user));
 });
 

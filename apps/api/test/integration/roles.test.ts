@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { jobRegistry } from '@learny/api-routes/deps/quiz-grade-registry';
 import { parseServerEnv } from '@learny/config/server';
-import { functions } from '@learny/jobs';
 
 import { createApp } from '../../src/app';
 
@@ -28,7 +28,7 @@ describe('[SPEC-1103] api roles', () => {
     for (const role of ['all', 'jobs'] as const) {
       const response = await createApp({ role }).request('/api/inngest');
       expect(response.status).toBe(200);
-      expect(await response.json()).toMatchObject({ function_count: functions.length });
+      expect(await response.json()).toMatchObject({ function_count: jobRegistry.length });
     }
   });
 

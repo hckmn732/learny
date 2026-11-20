@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
 export const PERF_PORT = 3100;
+export const PERF_API_PORT = PERF_PORT + 1;
 
 export function portInUse(port = PERF_PORT) {
   return new Promise((resolve) => {
@@ -40,18 +41,39 @@ export async function waitForHealth(base, timeoutMs = 60_000) {
 }
 
 export async function startServer(env = process.env) {
-  if (await portInUse()) {
-    throw new Error(`Port ${PERF_PORT} déjà occupé : libérez-le avant de lancer test:perf.`);
+  if ((await portInUse()) || (await portInUse(PERF_API_PORT))) {
+    throw new Error(
+      `Ports ${PERF_PORT}/${PERF_API_PORT} déjà occupés : libérez-les avant de lancer test:perf.`,
+    );
   }
-  const child = spawn('pnpm', ['--filter', '@learny/web', 'exec', 'node', 'server.mjs'], {
+  const commonEnv = { ...process.env, ...env };
+  const api = spawn('pnpm', ['--filter', '@learny/api', 'exec', 'tsx', 'src/server.ts'], {
     cwd: ROOT,
-    env: { ...process.env, ...env, PORT: String(PERF_PORT) },
+    env: { ...commonEnv, PORT: String(PERF_API_PORT), API_PORT: String(PERF_API_PORT) },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
+  const child = spawn('pnpm', ['--filter', '@learny/web', 'exec', 'node', 'server.mjs'], {
+    cwd: ROOT,
+    env: {
+      ...commonEnv,
+      PORT: String(PERF_PORT),
+      API_INTERNAL_URL: `http://127.0.0.1:${String(PERF_API_PORT)}`,
+    },
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  api.stdout.on('data', (chunk) => process.stdout.write(`[perf-api] ${chunk}`));
+  api.stderr.on('data', (chunk) => process.stderr.write(`[perf-api] ${chunk}`));
   child.stdout.on('data', (chunk) => process.stdout.write(`[perf-server] ${chunk}`));
   child.stderr.on('data', (chunk) => process.stderr.write(`[perf-server] ${chunk}`));
+  const apiBase = `http://127.0.0.1:${String(PERF_API_PORT)}`;
   const base = `http://127.0.0.1:${String(PERF_PORT)}`;
+  if (!(await waitForHealth(apiBase))) {
+    api.kill('SIGTERM');
+    child.kill('SIGTERM');
+    throw new Error('API locale indisponible : /api/v1/health ne répond pas ok.');
+  }
   if (!(await waitForHealth(base))) {
+    api.kill('SIGTERM');
     child.kill('SIGTERM');
     throw new Error('Base locale ou serveur indisponible : /api/v1/health ne répond pas ok.');
   }
@@ -59,12 +81,19 @@ export async function startServer(env = process.env) {
     base,
     stop: () =>
       new Promise((resolve) => {
-        child.once('exit', () => resolve());
-        child.kill('SIGTERM');
-        setTimeout(() => {
-          child.kill('SIGKILL');
-          resolve();
-        }, 5000).unref();
+        let remaining = 2;
+        const stopped = () => {
+          remaining -= 1;
+          if (remaining === 0) resolve();
+        };
+        for (const process of [child, api]) {
+          process.once('exit', stopped);
+          process.kill('SIGTERM');
+          setTimeout(() => {
+            process.kill('SIGKILL');
+            stopped();
+          }, 5000).unref();
+        }
       }),
   };
 }

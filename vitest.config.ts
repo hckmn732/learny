@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import { defineConfig } from 'vitest/config';
 
 import { assertMockLlm, TEST_ENCRYPTION_KEY } from './packages/testing/src/env';
@@ -19,6 +21,13 @@ const COVERAGE_FLOORS = {
 };
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'server-only': fileURLToPath(
+        new URL('./apps/web/node_modules/server-only/empty.js', import.meta.url),
+      ),
+    },
+  },
   test: {
     passWithNoTests: true,
     env: {
