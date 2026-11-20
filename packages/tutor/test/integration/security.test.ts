@@ -154,7 +154,7 @@ describe('[SPEC-508] service', () => {
     if (!result.ok) return;
     expect(result.value.status).toBe('completed');
     expect(result.value.text).toContain('vous allez apprendre');
-    expect(result.value.model).toBe('model-b');
+    expect(result.value.model).toBe('test-model');
     const calls = await serviceDb().execute<{ status: string; task: string }>(sql`
       select status::text as status, task::text as task
       from public.ai_calls where user_id = ${a.userId}::uuid order by created_at desc limit 1

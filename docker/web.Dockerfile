@@ -19,6 +19,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/api/package.json ./apps/api/package.json
+COPY packages/api-client/package.json ./packages/api-client/package.json
 COPY packages/api-routes/package.json ./packages/api-routes/package.json
 COPY packages/automations/package.json ./packages/automations/package.json
 COPY packages/bricks/package.json ./packages/bricks/package.json
@@ -26,7 +27,9 @@ COPY packages/config/package.json ./packages/config/package.json
 COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
+COPY packages/domain/package.json ./packages/domain/package.json
 COPY packages/http/package.json ./packages/http/package.json
+COPY packages/i18n/package.json ./packages/i18n/package.json
 COPY packages/ingestion/package.json ./packages/ingestion/package.json
 COPY packages/jobs/package.json ./packages/jobs/package.json
 COPY packages/learning-engine/package.json ./packages/learning-engine/package.json

@@ -18,9 +18,9 @@ export function portInUse(port = PERF_PORT) {
   });
 }
 
-async function healthy(base) {
+async function healthy(base, path = '/api/v1/health') {
   try {
-    const response = await fetch(`${base}/api/v1/health`);
+    const response = await fetch(`${base}${path}`);
     if (!response.ok) return false;
     const body = await response.json();
     return body?.status === 'ok';
@@ -29,12 +29,12 @@ async function healthy(base) {
   }
 }
 
-export async function waitForHealth(base, timeoutMs = 60_000) {
+export async function waitForHealth(base, timeoutMs = 60_000, path = '/api/v1/health') {
   // eslint-disable-next-line no-restricted-syntax -- outil hors application, pas de données personnelles
   const deadline = Date.now() + timeoutMs;
   // eslint-disable-next-line no-restricted-syntax
   while (Date.now() < deadline) {
-    if (await healthy(base)) return true;
+    if (await healthy(base, path)) return true;
     await new Promise((r) => setTimeout(r, 500));
   }
   return false;
@@ -67,7 +67,7 @@ export async function startServer(env = process.env) {
   child.stderr.on('data', (chunk) => process.stderr.write(`[perf-server] ${chunk}`));
   const apiBase = `http://127.0.0.1:${String(PERF_API_PORT)}`;
   const base = `http://127.0.0.1:${String(PERF_PORT)}`;
-  if (!(await waitForHealth(apiBase))) {
+  if (!(await waitForHealth(apiBase, 60_000, '/health'))) {
     api.kill('SIGTERM');
     child.kill('SIGTERM');
     throw new Error('API locale indisponible : /api/v1/health ne répond pas ok.');

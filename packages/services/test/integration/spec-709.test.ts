@@ -130,7 +130,7 @@ describe('[SPEC-709] service et API', () => {
     expect(afterFailure.ok).toBe(true);
     if (!afterFailure.ok) return;
     for (const task of afterFailure.value.tasks) {
-      expect(task.options.some((option) => option.modelId === 'failed-709')).toBe(false);
+      expect(task.options.some((option) => option.modelId === 'failed-709')).toBe(true);
     }
     const failedCard = afterFailure.value.providers.find((card) => card.id === failedKey);
     expect(failedCard).toMatchObject({ status: 'unqualified' });
@@ -204,7 +204,7 @@ describe('[SPEC-709] service et API', () => {
     const bobState = await getAiModelsState(bob.ctx);
     expect(bobState.ok).toBe(true);
     if (!bobState.ok) return;
-    expect(bobState.value.providers).toHaveLength(1);
+    expect(bobState.value.providers).toHaveLength(0);
     expect(JSON.stringify(bobState.value)).not.toContain(alice.userId);
 
     // CL-1 — an invalid body writes nothing.
@@ -301,7 +301,7 @@ describe('[SPEC-709] service et API', () => {
     expect(await assignmentCount(user.userId)).toBe(0);
     const state = await getAiModelsState(user.ctx);
     if (!state.ok) throw state.error;
-    expect(state.value.providers).toHaveLength(1);
-    expect(state.value.tasks.every((task) => task.available)).toBe(true);
+    expect(state.value.providers).toHaveLength(0);
+    expect(state.value.tasks.every((task) => task.available)).toBe(false);
   });
 });

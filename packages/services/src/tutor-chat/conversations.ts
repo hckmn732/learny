@@ -222,7 +222,9 @@ export async function createConversation(
         )
       `);
     });
-    return conversationById(ctx, created);
+    const conversation = await conversationById(ctx, created);
+    if (!conversation.ok) throw conversation.error;
+    return conversation.value as ConversationDto;
   });
 }
 

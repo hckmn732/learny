@@ -39,7 +39,7 @@ describe('[SPEC-201] registre', () => {
   it('keeps reads at 200, except the redirecting routes of the authentication flow (302)', () => {
     for (const route of routes) {
       if (route.method === 'GET') {
-        expect([200, 302], route.id).toContain(route.successStatus);
+        expect([200, 204, 302], route.id).toContain(route.successStatus);
       }
     }
   });

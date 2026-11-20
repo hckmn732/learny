@@ -217,7 +217,7 @@ describe('[SPEC-510] service', () => {
       expect(imageRow?.metadata.ingestion).toMatchObject({
         contentOrigin: 'model',
         visionTask: 'light',
-        visionModel: 'model-c',
+        visionModel: 'test-model',
       });
       const youtubeRow = statuses.find((row) => row.kind === 'youtube');
       expect(youtubeRow?.metadata).toMatchObject({ youtubeId: 'dQw4w9WgXcQ' });
