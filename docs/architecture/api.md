@@ -25,7 +25,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 |---|---|---|
 | GET `/health` | Santé (base, version) | SPEC-006, 010 |
 | POST `/auth/magic-link` · POST `/auth/sign-up` · POST `/auth/sign-in` · POST `/auth/resend` · POST `/auth/sign-out` · GET `/auth/callback` | Authentification | SPEC-202 |
-| GET/PATCH `/me` · GET/PATCH `/me/preferences` · PATCH `/me/onboarding` | Profil, rythme, onboarding | SPEC-602, 707 |
+| GET/PATCH `/me` · GET/PATCH `/me/preferences` · GET/PATCH `/me/onboarding` | Profil, rythme et état complet des écrans d’onboarding | SPEC-602, 707, 1202 |
 | GET/PATCH `/me/notification-settings` · POST/DELETE `/me/push-subscriptions` | Notifications | SPEC-205, 708 |
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
 | GET `/warmups/today` · POST `/warmups/:activityId/answers` | Échauffement : une entrée par formation triée par heure de séance ; réponse de première passe idempotente par position (409 sur une position déjà répondue, 422 hors bornes), FSRS et quiz global du soir dans la même transaction | SPEC-714 |
@@ -36,8 +36,8 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET/PUT `/me/ai/task-models` · GET/POST/DELETE `/me/ai/credentials` · POST `/me/ai/credentials/:id/qualify` · GET `/me/ai/usage` | Modèles d'IA. Clés personnelles (SPEC-505) : POST 201 DTO masqué (`keyMasked`, `outsideEu`, `dataNote`), GET 200 `{ items }` (10 au plus), DELETE 204 ; 404 pour la clé d'autrui, 409 `CONFLICT` pour un doublon exact, 422 `VALIDATION_FAILED`, `LOCAL_MODELS_DISABLED`, `CREDENTIAL_LIMIT_REACHED`, `URL_INVALID`, `URL_BLOCKED_HOST` ; aucune réponse ne contient `apiKey` ni `encryptedKey` | SPEC-505, 506, 507, 709 |
 | POST `/billing/checkout` · POST `/billing/portal` · GET `/billing/subscription` · POST `/webhooks/stripe` | Abonnement | SPEC-210, 725 |
 | GET `/home` | Données de l'accueil | SPEC-603 |
-| GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · POST `/formations/:fid/(pause|resume|archive|open)` · PATCH `/me/current-formation` | Formations | SPEC-604, 618 |
-| GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage | SPEC-604 |
+| GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · GET `/formations/:fid/access` · POST `/formations/:fid/(pause|resume|archive|open)` · PATCH `/me/current-formation` | Formations ; l’accès interne répond 204 ou 404 avant le rendu et n’est pas limité | SPEC-604, 615, 618, 1202 |
+| GET `/formations/:fid/cadrage` · GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage et DTO de page | SPEC-604, 1202 |
 | POST `/formations/:fid/programme/generate` · POST `/formations/:fid/programme/import` · POST `/formations/:fid/programme/adjust` · POST `/formations/:fid/programme/validate` · GET `/formations/:fid/programme` | Programme | SPEC-605, 606 |
 | GET `/formations/:fid/modules/:mid` · PATCH `/chapters/:cid/progress` | Module, statut des chapitres | SPEC-607 |
 | POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · GET `/resources/:rid/url` (URL de lecture signée) · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
