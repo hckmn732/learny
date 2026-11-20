@@ -68,3 +68,17 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/dev/sdd/email/preview?template=&tone=` (JSON, ou `text/html` sans `Accept: application/json`) · POST `/dev/sdd/email/send` (idempotent, 201 `{ messageId, transport }`) · GET `/dev/sdd/email/outbox` | Démonstration des gabarits d'e-mail (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-204 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.
+
+## 3. Versions et clients
+
+`/api/v1` n’accepte que des changements rétrocompatibles : ajout d’un champ facultatif, d’une
+route ou d’un code d’erreur. Toute modification incompatible exige une nouvelle base `/api/v2`.
+Le retrait d’une route est annoncé par les en-têtes `Deprecation` et `Sunset` au moins quatre-vingt-
+dix jours avant son application. Cette stabilité est nécessaire aux clients natifs, qui ne sont
+pas nécessairement mis à jour en même temps que le serveur (ADR-1004, ADR-1007, SPEC-1301).
+
+Les clients peuvent s’authentifier par cookie Supabase ou par
+`Authorization: Bearer <jeton d’accès>`. Le client partagé `@learny/api-client` prend en charge le
+renouvellement unique du jeton après une réponse 401 et la lecture du flux SSE du tuteur. Les
+clients natifs n’envoient ni cookie ni `Origin`; une WebView qui envoie `Origin` reste soumise à la
+politique CORS et à la garde d’origine définie par ADR-1005.
