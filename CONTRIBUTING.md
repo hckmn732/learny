@@ -31,9 +31,24 @@ git config core.hooksPath   # doit afficher .husky/_
 
 En CI (`CI=true`) ou hors dépôt Git, `husky` n'installe rien et ne fait pas échouer l'installation.
 
+Pour travailler sur le produit, démarrer l'infrastructure puis les deux applications :
+
+```bash
+pnpm dev:up
+pnpm dev:check
+pnpm dev             # web :3000 + API Hono :3001
+```
+
+Une modification de route suit `contracts` → `api-routes` → `services`; un rendu Next charge ses
+données avec `serverApi()` ; une logique pure partagée va dans `@learny/domain`. `apps/web` ne
+doit importer aucun paquet serveur, contrôle permanent inclus dans `pnpm lint`.
+
 ## 4. Branches et commits
 
-Branches : `main` (fusions `--no-ff` uniquement), `spec/SPEC-xxx-slug`, `fix/SPEC-xxx-slug`, `release/vX.Y.Z` ([`docs/engineering/git.md`](docs/engineering/git.md)).
+Branches : `main` (fusions `--no-ff` uniquement), `migration` pour la piste technique arrivée à
+son terme, `spec/SPEC-xxx-slug`, `fix/SPEC-xxx-slug`, `release/vX.Y.Z`
+([`docs/engineering/git.md`](docs/engineering/git.md)). La piste active est déterminée par le
+catalogue SDD ; ne pas la changer dans un commit de spécification.
 
 Format imposé par commitlint (`commitlint.config.ts`, règles dans `packages/config/src/commit-rules.ts`, ADR-0103) :
 

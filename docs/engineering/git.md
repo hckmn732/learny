@@ -18,9 +18,15 @@ Fusion : `git merge --no-ff spec/<…>` dans la **branche de base de la piste** 
 
 - Worktree dédié : `git worktree add ../learny-wt-migration migration` ; le worktree principal reste sur `main`.
 - Synchronisation : `node tools/sdd/sync-main.mjs` (livré par SPEC-1001) au moins une fois par jour et avant chaque checkpoint. Conflits de suivi (`progress/state.json`, `progress/PROGRESS.md`) résolus automatiquement par piste ; conflit de code : garder le **comportement** de `main` et la **structure** de `migration`.
-- Fichier `route.ts` modifié sur `main` après SPEC-1004 : reporter la modification dans `packages/api-routes`, puis `node tools/migration/generate-next-routes.mjs` (jusqu'à SPEC-1201) ; après SPEC-1201, reporter directement dans `packages/api-routes`.
+- Modification de route sur `main` : reporter le contrat et son implémentation dans
+  `packages/contracts` et `packages/api-routes`; il n'existe plus de générateur d'arborescence
+  Next.
 - La CI s'exécute sur `migration` ; aucun déploiement depuis la piste avant SPEC-1103 ; la production reste déclenchée par les tags `v*` de `main`.
-- Fin de piste : après CP-13, l'agent principal fusionne `migration` dans `main` (`--no-ff`) et remet `"activeTrack": "produit"` dans `specs/catalog.json` dans le commit de fusion.
+- Fin de piste : après CP-13, l'agent principal résout une dernière synchronisation dans le sens
+  `main` → `migration`, fusionne ensuite `migration` dans `main` (`--no-ff`) et remet
+  `"activeTrack": "produit"` dans `specs/catalog.json` dans ce commit de fusion. La vérification
+  se fait avec `next.mjs` et `status.mjs` ; aucune spécification de clôture ne modifie ce champ
+  avant ce moment.
 
 ### 1.1 Worktrees et travail parallèle
 

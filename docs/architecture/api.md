@@ -2,7 +2,11 @@
 
 Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; un document OpenAPI 3.1 est généré dans `apps/api/openapi.json` et servi par `apps/api` sur `/openapi.json` et `/api/v1/openapi.json` (SPEC-1201).
 
-> **Séparation backend / frontend (ADR-1001, ADR-1002, ADR-1005).** Les contrats, chemins, codes et réponses de ce document ne changent pas. Ce qui change pendant la piste de migration : le wrapper `handler()` passe dans `@learny/http` (SPEC-1003) ; les implémentations des routes dans `@learny/api-routes` (SPEC-1004) ; l'API est servie par `apps/api` (SPEC-1101) puis relayée par `apps/web` sur la même origine (SPEC-1201), et OpenAPI est publié par `apps/api` ; l'authentification accepte aussi `Authorization: Bearer` avec vérification locale du jeton (SPEC-1102) ; la politique de version de `/api/v1` est fixée par SPEC-1301. Toute route ajoutée par la piste est inscrite dans l'inventaire ci-dessous dans le même commit.
+> **Séparation backend / frontend (ADR-1001, ADR-1002, ADR-1005).**
+> `apps/api` est l'unique serveur HTTP. Le transport framework-agnostique (`handler()`, gardes,
+> erreurs et sessions) vit dans `@learny/http` ; les implémentations déclarées par les contrats
+> vivent dans `@learny/api-routes`. Le web relaie la même origine vers cette API et OpenAPI est
+> publié par `apps/api`. Aucun autre emplacement n'héberge une route HTTP de production.
 
 ## 1. Conventions
 
@@ -13,8 +17,13 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 - Pagination : `?cursor=&limit=` (défaut 20, max 100) → `{ items, nextCursor }`.
 - Codes HTTP : 200 lecture/mise à jour, 201 création, 202 traitement asynchrone lancé (`{ jobId }`), 204 suppression, 400 validation, 401, 403, 404, 409 conflit, 422 règle métier, 429 limitation, 500.
 - Limitation de débit par défaut : 120 requêtes/min/utilisateur ; routes IA (`/tutor/*`, génération) : 20/min ; auth : 10/min/IP.
-- Les routes ne contiennent aucune logique métier : elles appellent `packages/services`.
+- Les routes ne contiennent aucune logique métier : une entrée `defineRoute` est déclarée dans
+  `packages/contracts`, puis reliée à une fonction de `packages/api-routes`, qui appelle
+  `packages/services`.
 - `apps/web/proxy.ts` relaie `/api/*` et `/openapi.json` vers `API_INTERNAL_URL` sur la même origine. Il remplace tout secret de proxy entrant, transmet `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto` et `X-Forwarded-For`, préserve les flux SSE, cookies et corps bruts. `apps/api` identifie ses réponses par `X-Served-By: learny-api`.
+- `apps/api` accepte le secret courant `API_PROXY_SECRET` et, pendant une rotation uniquement,
+  `API_PROXY_SECRET_PREVIOUS`. `apps/web` ne lit et n'envoie que le secret courant. Les deux
+  valeurs sont comparées en temps constant.
 - Si `apps/api` est indisponible, le relai répond `502` `application/problem+json` avec le code `API_UNAVAILABLE` sans empêcher le rendu des pages web.
 - Exception documentée (SPEC-206, ADR-0255) : `POST /chapters/:cid/uploads` exige l'en-tête `Idempotency-Key` mais l'idempotence est portée par le service, pas par le wrapper, car la réponse contient une URL signée qui ne doit jamais être stockée (la même clé renvoie la même ressource avec une URL fraîche).
 - Abonnement (SPEC-210, ADR-0215, ADR-0261) : `POST /billing/checkout` renvoie `{ url }` (`successPath` et `cancelPath` sont des chemins internes, `//` et URL absolues refusés, `409 ALREADY_SUBSCRIBED` pour un abonnement `active`, idempotent par `Idempotency-Key`) ; `GET /billing/subscription` renvoie `{ status, currentPeriodEnd, hasManagedAi, dailyCapUsd }`. `POST /webhooks/stripe` est public mais authentifié par la signature `Stripe-Signature` du **corps brut** (tolérance 300 s, `400 INVALID_SIGNATURE` sinon) : il répond toujours `200 { received, result }` pour un événement vérifié (`applied`, `duplicate`, `stale`, `ignored`, `unknown_customer`). Il vit sous `/webhooks/*`, exempté de la garde d'origine. En `STRIPE_MODE=mock`, `/api/v1/dev/sdd/stripe/*` et `/_dev/stripe/{checkout,portal}` simulent le parcours (`ENABLE_SDD_PAGES` seulement).
@@ -60,7 +69,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
 | GET `/dev/sdd/api/coverage` | Couverture des routes de l'API Hono (démonstration uniquement) | SPEC-1101 |
 | GET `/dev/sdd/SPEC-1301/demo` | Scénario complet d’un client natif sans cookie ni `Origin` | SPEC-1301 |
-| GET `/dev/sdd/SPEC-xxx/demo` · POST `/dev/sdd/SPEC-xxx/<action>` | Démonstrations SDD de la piste de migration (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-1203 |
+| GET `/dev/sdd/SPEC-xxx/demo` · POST `/dev/sdd/SPEC-xxx/<action>` | Démonstrations SDD (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-1203 |
 | GET `/dev/sdd/relay-stream` | Flux SSE à trois fragments pour vérifier le relai (`ENABLE_SDD_PAGES` seulement) | SPEC-1201 |
 | POST `/dev/sdd/auth/proxy` | Démonstration de mutation transmise par le proxy de confiance | SPEC-1102 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` · GET `/dev/sdd/events/outbox` · POST `/dev/sdd/cron/hourly-tick` | Démonstration des événements, des jobs et du tick horaire (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-203 |
