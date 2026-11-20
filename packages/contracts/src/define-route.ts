@@ -41,6 +41,8 @@ export interface RouteDef<
   validationStatus?: 400 | 422;
   /** French summary, used by OpenAPI. */
   summary: string;
+  /** Rechecks the account with the Auth server for state-changing, high-risk operations. */
+  freshAuth?: true;
   /** Business error codes the route may return (documentation). */
   errors: ErrorCode[];
   /**
