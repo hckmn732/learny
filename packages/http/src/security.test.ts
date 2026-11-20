@@ -5,6 +5,7 @@ import { AppError } from '@learny/core';
 import { clientAddress, createRequestOriginGuard, requestOrigin } from './security';
 
 const SECRET = 'learny-test-only-api-proxy-secret-value';
+const PREVIOUS_SECRET = 'learny-test-only-api-proxy-secret-previous';
 const env = { API_PROXY_SECRET: SECRET, NEXT_PUBLIC_APP_URL: 'https://learny.example' };
 
 describe('[SPEC-1102] trusted proxy', () => {
@@ -81,5 +82,48 @@ describe('[SPEC-1102] trusted proxy', () => {
     });
     expect(() => guard.check(bearer)).not.toThrow();
     expect(() => guard.check(cookie)).toThrow(AppError);
+  });
+});
+
+describe('[SPEC-1302] proxy secret rotation', () => {
+  it('trusts the current and previous secrets, then rejects the removed one', () => {
+    const rotatingEnv = {
+      API_PROXY_SECRET: SECRET,
+      API_PROXY_SECRET_PREVIOUS: PREVIOUS_SECRET,
+    };
+    const requestWith = (secret: string) =>
+      new Request('http://api.internal/api/v1/me', {
+        headers: {
+          host: 'api.internal',
+          'x-learny-proxy-secret': secret,
+          'x-forwarded-host': 'learny.example',
+          'x-forwarded-proto': 'https',
+          'x-forwarded-for': '198.51.100.7',
+        },
+      });
+
+    for (const secret of [SECRET, PREVIOUS_SECRET]) {
+      expect(requestOrigin(requestWith(secret), rotatingEnv)).toBe('https://learny.example');
+      expect(clientAddress(requestWith(secret), rotatingEnv)).toBe('198.51.100.7');
+    }
+    expect(requestOrigin(requestWith(PREVIOUS_SECRET), env)).toBe('http://api.internal');
+    expect(clientAddress(requestWith(PREVIOUS_SECRET), env)).toBeNull();
+  });
+
+  it('accepts the previous secret without enabling legacy forwarded headers', () => {
+    const previousOnlyEnv = {
+      API_PROXY_SECRET_PREVIOUS: PREVIOUS_SECRET,
+      TRUST_PROXY: 'true',
+    };
+    const request = new Request('http://api.internal/api/v1/me', {
+      headers: {
+        host: 'api.internal',
+        'x-forwarded-host': 'evil.example',
+        'x-forwarded-proto': 'https',
+        'x-forwarded-for': '198.51.100.9',
+      },
+    });
+    expect(requestOrigin(request, previousOnlyEnv)).toBe('http://api.internal');
+    expect(clientAddress(request, previousOnlyEnv)).toBeNull();
   });
 });

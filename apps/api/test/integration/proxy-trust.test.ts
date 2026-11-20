@@ -118,4 +118,44 @@ describe('[SPEC-1102] proxy trust', () => {
     expect(response.status).toBe(200);
     expect(consumed[0]?.ip).toBe('198.51.100.22');
   });
+
+  it('[SPEC-1302] accepts a previous relay secret during rotation (CA-3)', async () => {
+    const previous = 'learny-test-only-api-proxy-secret-previous';
+    restoreIdentity = setIdentityResolver(() => Promise.resolve(identity));
+    setOriginGuard(
+      createRequestOriginGuard({
+        API_PROXY_SECRET: SECRET,
+        API_PROXY_SECRET_PREVIOUS: previous,
+      }),
+    );
+    setRateLimiter({
+      consume: () =>
+        Promise.resolve({ allowed: true, limit: 0, remaining: 0, retryAfterSec: null }),
+    });
+    const app = new Hono();
+    const handler = routeHandler(mutation, () => Promise.resolve(undefined));
+    app.post(mutation.path, (context) =>
+      handler(context.req.raw, { params: Promise.resolve(context.req.param()) }),
+    );
+    const headers = {
+      authorization: 'Bearer token',
+      origin: 'https://learny.example',
+      host: 'api.internal',
+      'x-forwarded-host': 'learny.example',
+      'x-forwarded-proto': 'https',
+    };
+
+    const rotating = await app.request(`http://api.internal${mutation.path}`, {
+      method: 'POST',
+      headers: { ...headers, 'x-learny-proxy-secret': previous },
+    });
+    expect(rotating.status).toBe(200);
+
+    setOriginGuard(createRequestOriginGuard({ API_PROXY_SECRET: SECRET }));
+    const rotated = await app.request(`http://api.internal${mutation.path}`, {
+      method: 'POST',
+      headers: { ...headers, 'x-learny-proxy-secret': previous },
+    });
+    expect(rotated.status).toBe(403);
+  });
 });

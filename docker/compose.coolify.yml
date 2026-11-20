@@ -317,6 +317,7 @@ services:
       PORT: '3001'
       API_INTERNAL_URL: http://api:3001
       API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
       LEARNY_API_ROLE: all
     expose:
       - '3001'

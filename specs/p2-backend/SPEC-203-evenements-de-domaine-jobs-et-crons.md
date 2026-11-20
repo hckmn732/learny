@@ -18,13 +18,13 @@ Fournir le catalogue typé de tous les événements de domaine (`docs/architectu
 
 ## 2. Contexte
 
-- Jobs durables Inngest servis par `apps/web` (`/api/inngest`) et `apps/worker` (ADR-0017), crons par fuseau (ADR-0067).
+- Jobs durables Inngest servis par `apps/web` (`/api/inngest`) et `application Worker historique` (ADR-0017), crons par fuseau (ADR-0067).
 - Catalogue d'événements et crons : `docs/architecture/overview.md` §5 ; flux « Mutation » et « Traitement long » : §4.
 - Documents : ADR-0017, ADR-0067, ADR-0030, ADR-0047, ADR-0122, ADR-0123, `docs/engineering/testing.md` §1 (jobs testés par exécution directe des handlers).
 
 ## 3. Dépendances
 
-- **SPEC-007** : `@learny/jobs` (client Inngest `inngest`, enregistrement `functions`, fonction de démonstration), `/api/inngest`, `apps/worker`.
+- **SPEC-007** : `@learny/jobs` (client Inngest `inngest`, enregistrement `functions`, fonction de démonstration), `/api/inngest`, `application Worker historique`.
 - **SPEC-201** : `ServiceContext`, `AppError`, `@learny/contracts` (les schémas d'événements y vivent), `handler()` pour les routes de démonstration.
 - Déjà présents : `@learny/db` (transactions Drizzle, `serviceDb`), `@learny/core` (`clock`, `logger`), `profiles` et `notification_settings` (SPEC-102).
 - Bibliothèques : `inngest` ≥ 3, `@inngest/test` ≥ 0.1 (exécution directe), `@date-fns/tz` ≥ 1 (ADR-0030).
@@ -145,7 +145,7 @@ Algorithme : pour la date locale de `windowStart` et celle de `windowEnd`, conve
 | GET `/api/v1/dev/sdd/events/demo/:runId` | — | 200 `{ runId, steps: { name, at }[], attempts, finishedAt }` |
 | POST `/api/v1/dev/sdd/cron/hourly-tick` | `{ at?: IsoDateTime }` (défaut `clock.now()`) | 200 `{ tickAt, users: { userId, timezone, windowStart, windowEnd, localDate, localWeekday, localStart: 'HH:MM' }[] }` limité aux utilisateurs de fabrique préfixés `sdd-203-` |
 
-**ET-8 — Enregistrement** : `packages/jobs/src/functions/index.ts` exporte le tableau `functions` ; `/api/inngest` (`serve` de `inngest/next`) et `apps/worker` le réutilisent ; test : chaque fonction a un `id` unique et un déclencheur présent dans `EVENTS` ou un cron valide.
+**ET-8 — Enregistrement** : `packages/jobs/src/functions/index.ts` exporte le tableau `functions` ; `/api/inngest` (`serve` de `inngest/next`) et `application Worker historique` le réutilisent ; test : chaque fonction a un `id` unique et un déclencheur présent dans `EVENTS` ou un cron valide.
 
 ## 7. Comportements attendus et cas limites
 
@@ -219,7 +219,7 @@ Vidéo du test e2e, captures de la frise terminée et du tableau du tick, mesure
 
 ## 14. Définition de terminé
 
-Définition commune (`docs/engineering/testing.md` §7) ; en plus : `pnpm db:reset` applique la migration, `apps/worker` démarre avec le registre complet (test de fumée SPEC-007 rejoué), `JOBS_MODE=inline` refusé quand `NODE_ENV=production` (test unitaire de configuration).
+Définition commune (`docs/engineering/testing.md` §7) ; en plus : `pnpm db:reset` applique la migration, `application Worker historique` démarre avec le registre complet (test de fumée SPEC-007 rejoué), `JOBS_MODE=inline` refusé quand `NODE_ENV=production` (test unitaire de configuration).
 
 ## 15. Décisions et hypothèses
 

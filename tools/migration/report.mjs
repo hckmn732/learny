@@ -1,5 +1,5 @@
-// Rapport de couplage de apps/web pour la piste de migration (SPEC-1001, EF-6 ; ADR-1003,
-// ADR-1006). Aucune dépendance externe (ET-5) : Node.js ≥ 24 pur, l'analyse des imports se fait
+// Contrôle permanent du couplage de apps/web (SPEC-1302, ADR-1003, ADR-1007).
+// Aucune dépendance externe : Node.js ≥ 24 pur, l'analyse des imports se fait
 // par expressions régulières sur `from '…'` et `import('…')`, jamais par exécution du code.
 // Racine injectable : MIGRATION_ROOT est réservée aux tests (comme SDD_ROOT dans tools/sdd).
 import fs from 'node:fs';
@@ -35,8 +35,6 @@ const IMPORT_RE = new RegExp(
 );
 
 export const WEB_CATEGORIES = ['pages', 'lib', 'components', 'dev', 'proxy', 'apiRoutes'];
-const API_GLOB = 'apps/web/app/api/**';
-
 /** Catégorie d'un fichier de apps/web (EF-6) ; `null` hors périmètre (test/, e2e/, scripts/…). */
 export function categorizeWebFile(file) {
   if (file === 'apps/web/proxy.ts') return 'proxy';
@@ -125,69 +123,12 @@ export function measureWebBoundary(root = ROOT) {
   };
 }
 
-/** Rapport écrit dans progress/migration.json (EF-6) ; aucune date : le fichier est versionné. */
-export function progressFrom(measure) {
-  return {
-    coupling: measure.byCategory,
-    routes: { registry: measure.routesRegistry, routeFiles: measure.routeFiles },
-    clientComponents: measure.clientComponents,
-  };
-}
-
-/** Legacy helper kept for migration report unit fixtures; production no longer writes a baseline. */
-export function baselineFrom(measure) {
-  return {
-    files: measure.coupled
-      .filter((entry) => entry.category !== 'apiRoutes')
-      .map((entry) => entry.file)
-      .sort(),
-    globs: [API_GLOB],
-  };
-}
-
-/**
- * EF-5 — la liste de référence ne peut que diminuer : chaque entrée doit exister, importer
- * encore un paquet serveur et rester dans le périmètre mesuré. Retourne les erreurs (vide si la
- * liste est à jour).
- */
-export function baselineErrors(baseline, root = ROOT) {
-  const errors = [];
-  const coupled = new Set(
-    measureWebBoundary(root)
-      .coupled.filter((entry) => entry.category !== 'apiRoutes')
-      .map((entry) => entry.file),
-  );
-  for (const file of baseline.files) {
-    const full = path.join(root, file);
-    if (!fs.existsSync(full)) {
-      errors.push(`fichier absent : ${file}`);
-      continue;
-    }
-    if (!importsServerPackage(fs.readFileSync(full, 'utf8'))) {
-      errors.push(`entrée périmée : ${file}`);
-      continue;
-    }
-    if (!coupled.has(file)) errors.push(`entrée hors périmètre : ${file}`);
-  }
-  return errors;
-}
-
-function writeJson(file, data) {
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
-}
-
-export function writeProgress(report, root = ROOT) {
-  const file = path.join(root, 'progress', 'migration.json');
-  writeJson(file, report);
-  return file;
-}
-
-/** Point d'entrée : affiche le rapport, écrit progress/migration.json, puis contrôle la liste. */
+/** Point d'entrée : affiche le rapport puis impose zéro couplage. */
 export function main(argv = process.argv.slice(2), root = ROOT) {
+  const check = argv.includes('--check');
   const measure = measureWebBoundary(root);
 
-  console.log('Couplage de apps/web (SPEC-1001, ADR-1003) :');
+  console.log('Couplage de apps/web (ADR-1003, ADR-1007) :');
   for (const category of WEB_CATEGORIES) {
     console.log(`  ${category.padEnd(11)}${String(measure.byCategory[category] ?? 0)}`);
   }
@@ -201,16 +142,10 @@ export function main(argv = process.argv.slice(2), root = ROOT) {
   console.log(`Composants client couplés : ${String(measure.clientComponents.length)}`);
   for (const file of measure.clientComponents) console.log(`  ${file}`);
 
-  const written = writeProgress(progressFrom(measure), root);
-  console.log(`Rapport écrit : ${path.relative(root, written)}`);
-
-  if (argv.includes('--write-baseline')) {
-    console.error('La liste de référence est supprimée (SPEC-1203) : aucune exception autorisée.');
-    process.exitCode = 1;
-    return;
-  }
   if (measure.coupled.length === 0) {
-    console.log('Aucune exception : apps/web est un client pur de l’API.');
+    console.log(
+      `${check ? 'Contrôle réussi' : 'Rapport réussi'} : apps/web est un client pur de l’API.`,
+    );
     return;
   }
   console.error('Fichiers couplés interdits :');

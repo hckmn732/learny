@@ -51,10 +51,14 @@ function sameSecret(expected: string, received: string): boolean {
 }
 
 export function isTrustedProxy(request: Request, env: Env = process.env): boolean {
-  const expected = env.API_PROXY_SECRET;
-  if (expected === undefined || expected === '') return false;
+  const expected = [env.API_PROXY_SECRET, env.API_PROXY_SECRET_PREVIOUS].filter(
+    (secret): secret is string => secret !== undefined && secret !== '',
+  );
+  if (expected.length === 0) return false;
   const received = request.headers.get('x-learny-proxy-secret');
-  return received !== null && sameSecret(expected, received);
+  if (received === null) return false;
+  const matches = expected.map((secret) => sameSecret(secret, received));
+  return matches.includes(true);
 }
 
 /** Reconstructs the browser-facing origin only through a cryptographically trusted relay. */
@@ -68,7 +72,9 @@ export function requestOrigin(request: Request, env: Env = process.env): string 
     : (request.headers.get('host') ?? url.host);
   const forwardedProto = trusted
     ? firstForwarded(request.headers.get('x-forwarded-proto'))
-    : env.API_PROXY_SECRET === undefined && env.TRUST_PROXY === 'true'
+    : env.API_PROXY_SECRET === undefined &&
+        env.API_PROXY_SECRET_PREVIOUS === undefined &&
+        env.TRUST_PROXY === 'true'
       ? firstForwarded(request.headers.get('x-forwarded-proto'))
       : null;
   const protocol =
@@ -85,7 +91,9 @@ export function requestOrigin(request: Request, env: Env = process.env): string 
 export function clientAddress(request: Request, env: Env = process.env): string | null {
   const acceptsForwarded =
     isTrustedProxy(request, env) ||
-    (env.API_PROXY_SECRET === undefined && env.TRUST_PROXY === 'true');
+    (env.API_PROXY_SECRET === undefined &&
+      env.API_PROXY_SECRET_PREVIOUS === undefined &&
+      env.TRUST_PROXY === 'true');
   if (!acceptsForwarded) return null;
   return firstForwarded(request.headers.get('x-forwarded-for'));
 }

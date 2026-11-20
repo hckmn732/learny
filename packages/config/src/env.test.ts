@@ -91,6 +91,15 @@ describe('[SPEC-009] environment', () => {
     expect(Buffer.from(env.APP_ENCRYPTION_KEY ?? '', 'base64')).toEqual(KEY_BYTES);
   });
 
+  it('accepts an optional previous proxy secret for rotation [SPEC-1302]', () => {
+    const previous = 'learny-test-only-api-proxy-secret-previous';
+    const env = parseServerEnv({ ...PRODUCTION_ENV, API_PROXY_SECRET_PREVIOUS: previous });
+    expect(env.API_PROXY_SECRET_PREVIOUS).toBe(previous);
+    expect(() => parseServerEnv({ ...PRODUCTION_ENV, API_PROXY_SECRET_PREVIOUS: 'short' })).toThrow(
+      EnvConfigError,
+    );
+  });
+
   it('rejects a simulated mode in test before any provider starts (CL-3)', () => {
     for (const overrides of [
       { LLM_MODE: 'live' },

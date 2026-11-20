@@ -59,6 +59,11 @@ describe('[SPEC-002] secret patterns', () => {
     expect(scanText(`ANTHROPIC_API_KEY=${key}`, 'f').map((f) => f.rule)).toEqual(['anthropic-key']);
   });
 
+  it('detects the previous proxy secret', () => {
+    const text = fake('API_PROXY_SECRET_PREVIOUS=', 'P'.repeat(40));
+    expect(scanText(text, 'f.ts').map((finding) => finding.rule)).toContain('api-proxy-secret');
+  });
+
   it('ignores lines holding the learny-test-only marker', () => {
     expect(scanText('sk-ant-learny-test-only-0000000000000000', 'f.ts')).toEqual([]);
   });

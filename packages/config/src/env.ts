@@ -31,6 +31,7 @@ export const SERVER_ENV_KEYS = [
   'GIT_COMMIT',
   'API_INTERNAL_URL',
   'API_PROXY_SECRET',
+  'API_PROXY_SECRET_PREVIOUS',
   'LEARNY_API_ROLE',
   'API_PORT',
   'RATE_LIMIT_IP_SECRET',
@@ -226,6 +227,7 @@ const serverFields = {
   GIT_COMMIT: commit.optional(),
   API_INTERNAL_URL: serviceUrl.optional(),
   API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
+  API_PROXY_SECRET_PREVIOUS: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
   LEARNY_API_ROLE: enumOf(API_ROLES),
   API_PORT: integer(1, 65535),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
@@ -361,9 +363,7 @@ export function parseServerEnv(raw: EnvInput = {}, appEnv?: AppEnv): ServerEnv {
     input.LEARNY_API_ROLE !== undefined &&
     !(API_ROLES as readonly string[]).includes(input.LEARNY_API_ROLE)
   ) {
-    throw new Error(
-      `LEARNY_API_ROLE invalide : valeurs permises : ${API_ROLES.join(', ')}.`,
-    );
+    throw new Error(`LEARNY_API_ROLE invalide : valeurs permises : ${API_ROLES.join(', ')}.`);
   }
   const requested = appEnv ?? input.APP_ENV ?? 'local';
   const effectiveEnv = isAppEnv(requested) ? requested : 'local';
