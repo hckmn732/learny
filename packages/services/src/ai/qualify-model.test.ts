@@ -158,7 +158,10 @@ describe('[SPEC-506] qualification et affectation', () => {
     expect(absent).toMatchObject({ ok: false, error: { code: 'VALIDATION_FAILED' } });
   });
 
-  it('refuse un modèle non qualifié ou une capacité manquante (EF-4)', async () => {
+  it('tolère un ancien failed et accepte une capacité non contrôlée (EF-4)', async () => {
+    mocks.insert.mockReturnValue({
+      values: () => ({ onConflictDoUpdate: () => Promise.resolve() }),
+    });
     mocks.select.mockReturnValueOnce(
       chain([credentialRow({ qualification: { models: { 'model-c': { status: 'failed' } } } })]),
     );
@@ -167,7 +170,7 @@ describe('[SPEC-506] qualification et affectation', () => {
       credentialId: CREDENTIAL,
       modelId: 'model-c',
     });
-    expect(failed).toMatchObject({ ok: false, error: { code: 'AI_MODEL_NOT_QUALIFIED' } });
+    expect(failed).toMatchObject({ ok: true });
 
     mocks.select.mockReturnValueOnce(
       chain([
@@ -194,10 +197,7 @@ describe('[SPEC-506] qualification et affectation', () => {
       credentialId: CREDENTIAL,
       modelId: 'model-c',
     });
-    expect(missingCapability).toMatchObject({
-      ok: false,
-      error: { code: 'AI_MODEL_NOT_QUALIFIED' },
-    });
+    expect(missingCapability).toMatchObject({ ok: true });
   });
 
   it('affecte un modèle qualifié à une tâche (EF-4)', async () => {

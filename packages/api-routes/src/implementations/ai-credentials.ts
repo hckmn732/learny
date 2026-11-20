@@ -18,7 +18,9 @@ import { qualifyCredential } from '@learny/services/ai/qualify';
 // files so that `apps/api` (SPEC-1101) serves exactly the same code.
 export const aiCredentialsImplementations = {
   meAiCredentialsQualify: ({ ctx, params, body }: HandlerArgs<typeof meAiCredentialsQualify>) =>
-    qualifyCredential(ctx, params.id, body.modelId),
+    qualifyCredential(ctx, params.id, body.modelId, {
+      ...(body.task === undefined ? {} : { task: body.task }),
+    }),
   meAiCredentialsDelete: async ({ ctx, params }: HandlerArgs<typeof meAiCredentialsDelete>) => {
     const result = await deleteCredential(ctx, params.id);
     return result.ok ? undefined : result;

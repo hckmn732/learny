@@ -15,9 +15,12 @@ import {
   type BrickType,
 } from '@learny/bricks';
 import {
+  AiConnectionReport,
   AiQualificationBody,
+  AiTaskCompatibility,
   QualificationReport,
   TaskModelDto,
+  type AiTaskCompatibility as AiTaskCompatibilityDto,
   type QualificationIssue,
 } from '@learny/contracts';
 import { AppError, err, type Result } from '@learny/core';
@@ -28,11 +31,16 @@ import {
   type AiTaskValue,
   type CredentialStatusValue,
 } from '@learny/db';
-import { TASK_CONFIG } from '@learny/llm';
+import { createSession } from '@learny/llm';
 import {
+  evaluateTaskCompatibility,
+  COMPATIBILITY_FIXTURES,
+  isQualificationScenario,
+  QUALIFICATION_FIXTURES,
   runQualification,
   type QualificationBrickBattery,
   type QualificationScenario,
+  type CompatibilityScenario,
 } from '@learny/llm/qualification';
 import { notify } from '@learny/notifications';
 
@@ -144,8 +152,11 @@ export const qualificationBrickBattery: QualificationBrickBattery = {
 
 export interface QualifyOptions {
   /** Simulated scenario of the demonstration and tests; live calls ignore it. */
-  mockScenario?: QualificationScenario;
+  mockScenario?: QualificationScenario | CompatibilityScenario;
   mode?: 'live' | 'mock';
+  task?: 'programme' | 'course' | 'gaps' | 'tutor' | 'light';
+  /** SDD demonstration only; production connection/task checks never run the old brick battery. */
+  legacyBattery?: boolean;
 }
 
 interface ClaimedCredential {
@@ -261,12 +272,27 @@ export async function qualifyCredential(
   credentialId: string,
   modelId: string,
   options: QualifyOptions = {},
-): Promise<Result<QualificationReport>> {
+): Promise<Result<QualificationReport | AiConnectionReport | AiTaskCompatibilityDto>> {
   const { userId } = requireUser(ctx);
   if (!z.uuid().safeParse(credentialId).success) return err(notFound());
-  const parsed = AiQualificationBody.safeParse({ modelId });
+  const parsed = AiQualificationBody.safeParse({
+    modelId,
+    ...(options.task === undefined ? {} : { task: options.task }),
+  });
   if (!parsed.success) {
     return err(validationError('Identifiant de modèle invalide.', 'body.modelId'));
+  }
+  if (options.legacyBattery !== true) {
+    return parsed.data.task === undefined
+      ? checkCredentialConnection(ctx, userId, credentialId, parsed.data.modelId, options)
+      : checkTaskCompatibility(
+          ctx,
+          userId,
+          credentialId,
+          parsed.data.modelId,
+          parsed.data.task,
+          options,
+        );
   }
   const key = `${userId}:${credentialId}:${parsed.data.modelId}`;
   const running = IN_FLIGHT.get(key);
@@ -285,7 +311,9 @@ export async function qualifyCredential(
           modelId: parsed.data.modelId,
           battery: qualificationBrickBattery,
           clock: ctx.clock,
-          ...(options.mockScenario === undefined ? {} : { mockScenario: options.mockScenario }),
+          ...(options.mockScenario !== undefined && isQualificationScenario(options.mockScenario)
+            ? { mockScenario: options.mockScenario }
+            : {}),
           ...(options.mode === undefined ? {} : { mode: options.mode }),
         },
       );
@@ -312,6 +340,194 @@ export async function qualifyCredential(
   }
 }
 
+interface ProbeCredential {
+  provider: 'anthropic' | 'openai' | 'mistral' | 'deepseek' | 'openai_compatible' | 'local';
+  baseUrl: string | null;
+  modelIds: string[];
+  outsideEu: boolean;
+}
+
+async function loadProbeCredential(
+  ctx: ServiceContext,
+  userId: string,
+  credentialId: string,
+  modelId: string,
+): Promise<ProbeCredential> {
+  const { db } = requireUser(ctx);
+  const rows = await db.run((tx) =>
+    tx
+      .select({
+        provider: aiCredentials.provider,
+        baseUrl: aiCredentials.baseUrl,
+        modelIds: aiCredentials.modelIds,
+        outsideEu: aiCredentials.outsideEu,
+      })
+      .from(aiCredentials)
+      .where(and(eq(aiCredentials.id, credentialId), eq(aiCredentials.userId, userId)))
+      .limit(1),
+  );
+  const row = rows[0];
+  if (row === undefined) throw notFound();
+  if (!row.modelIds.includes(modelId)) {
+    throw validationError('Ce modèle ne fait pas partie des modèles de cette clé.');
+  }
+  return row;
+}
+
+async function probeSession(
+  ctx: ServiceContext,
+  credential: ProbeCredential,
+  credentialId: string,
+  modelId: string,
+  task: AiTaskValue,
+  options: QualifyOptions,
+  connectionOnly: boolean,
+) {
+  return createSession(
+    { userId: requireUser(ctx).userId, db: serviceDb(), requestId: ctx.requestId },
+    {
+      task,
+      promptId: connectionOnly ? 'qualification.connection' : 'qualification.compatibility',
+      resolvedOverride: {
+        kind: 'byok',
+        provider: credential.provider,
+        modelId,
+        credentialId,
+        baseUrl: credential.baseUrl,
+        outsideEu: credential.outsideEu,
+        task,
+      },
+      ...(options.mode === undefined ? {} : { mode: options.mode }),
+      mock: {
+        scenario:
+          options.mockScenario ??
+          (connectionOnly
+            ? 'qualification-success'
+            : (`compatibility-${task}-success` as CompatibilityScenario)),
+      },
+      fixtures: [...QUALIFICATION_FIXTURES, ...COMPATIBILITY_FIXTURES],
+    },
+  );
+}
+
+function compatibilityStorageKey(credentialId: string, modelId: string, task: AiTaskValue): string {
+  return `${credentialId}:${modelId}:${task}`;
+}
+
+async function persistProbe(
+  ctx: ServiceContext,
+  userId: string,
+  credentialId: string,
+  merge: (qualification: Record<string, unknown>) => Record<string, unknown>,
+): Promise<void> {
+  const { db } = requireUser(ctx);
+  await db.run(async (tx) => {
+    const rows = await tx
+      .select({ qualification: aiCredentials.qualification })
+      .from(aiCredentials)
+      .where(and(eq(aiCredentials.id, credentialId), eq(aiCredentials.userId, userId)))
+      .for('update')
+      .limit(1);
+    const qualification = rows[0];
+    if (qualification === undefined) throw notFound();
+    const clean = { ...merge(recordOf(qualification.qualification)) };
+    delete clean.run;
+    await tx
+      .update(aiCredentials)
+      .set({ qualification: clean, updatedAt: ctx.clock.now() })
+      .where(and(eq(aiCredentials.id, credentialId), eq(aiCredentials.userId, userId)));
+  });
+}
+
+async function checkCredentialConnection(
+  ctx: ServiceContext,
+  userId: string,
+  credentialId: string,
+  modelId: string,
+  options: QualifyOptions,
+): Promise<Result<AiConnectionReport>> {
+  return toResult(async () => {
+    const credential = await loadProbeCredential(ctx, userId, credentialId, modelId);
+    const startedAt = ctx.clock.now();
+    const session = await probeSession(
+      ctx,
+      credential,
+      credentialId,
+      modelId,
+      'light',
+      options,
+      true,
+    );
+    if (!session.ok) throw session.error;
+    const connected = await session.value.step({
+      system: [
+        {
+          text: 'Connection probe: answer with one short sentence confirming the chat is reachable.',
+          cache: false,
+        },
+      ],
+      messages: [{ role: 'user', content: 'Confirm that this chat model is reachable.' }],
+    });
+    if (!connected.ok) throw connected.error;
+    if (connected.value.text.trim() === '') {
+      throw new AppError('AI_PROVIDER_ERROR', 'Le modèle de chat n’a pas confirmé la connexion.');
+    }
+    const finishedAt = ctx.clock.now();
+    const report = AiConnectionReport.parse({
+      credentialId,
+      modelId,
+      status: 'connected',
+      checkedAt: finishedAt.toISOString(),
+      durationMs: Math.max(0, finishedAt.getTime() - startedAt.getTime()),
+    });
+    await persistProbe(ctx, userId, credentialId, (qualification) => ({
+      ...qualification,
+      connection: report,
+    }));
+    return report;
+  });
+}
+
+async function checkTaskCompatibility(
+  ctx: ServiceContext,
+  userId: string,
+  credentialId: string,
+  modelId: string,
+  task: AiTaskValue,
+  options: QualifyOptions,
+): Promise<Result<AiTaskCompatibilityDto>> {
+  return toResult(async () => {
+    const credential = await loadProbeCredential(ctx, userId, credentialId, modelId);
+    const session = await probeSession(
+      ctx,
+      credential,
+      credentialId,
+      modelId,
+      task,
+      options,
+      false,
+    );
+    if (!session.ok) throw session.error;
+    const report = AiTaskCompatibility.parse(
+      await evaluateTaskCompatibility({
+        credentialId,
+        modelId,
+        task,
+        clock: ctx.clock,
+        session: session.value,
+      }),
+    );
+    await persistProbe(ctx, userId, credentialId, (qualification) => ({
+      ...qualification,
+      compatibilities: {
+        ...recordOf(qualification.compatibilities),
+        [compatibilityStorageKey(credentialId, modelId, task)]: report,
+      },
+    }));
+    return report;
+  });
+}
+
 const TaskModelAssignment = z.object({
   task: z.enum(['programme', 'course', 'gaps', 'tutor', 'light']),
   credentialId: z.uuid(),
@@ -320,10 +536,7 @@ const TaskModelAssignment = z.object({
 
 export type AssignTaskModelInput = z.infer<typeof TaskModelAssignment>;
 
-/**
- * EF-4 — assigns a personal model to one task only when its model-specific qualification passed
- * and every capability of the task is proven. A failed report blocks the assignment.
- */
+/** EF-4 — assignment is immediate; compatibility is reported and persisted separately. */
 export async function assignTaskModel(
   ctx: ServiceContext,
   input: AssignTaskModelInput,
@@ -338,7 +551,6 @@ export async function assignTaskModel(
         .select({
           modelIds: aiCredentials.modelIds,
           qualification: aiCredentials.qualification,
-          status: aiCredentials.status,
         })
         .from(aiCredentials)
         .where(and(eq(aiCredentials.id, value.credentialId), eq(aiCredentials.userId, userId)))
@@ -348,26 +560,6 @@ export async function assignTaskModel(
     if (row === undefined) throw notFound();
     if (!row.modelIds.includes(value.modelId)) {
       throw validationError('Ce modèle ne fait pas partie des modèles de cette clé.');
-    }
-    const report = QualificationReport.safeParse(
-      recordOf(recordOf(row.qualification).models)[value.modelId],
-    );
-    if (!report.success || report.data.status !== 'qualified') {
-      throw new AppError(
-        'AI_MODEL_NOT_QUALIFIED',
-        'Ce modèle n’est pas qualifié pour cette clé. Lancez la qualification puis réessayez.',
-        { status: 422 },
-      );
-    }
-    const missing = TASK_CONFIG[value.task].capabilities.filter(
-      (capability) => !report.data.capabilities[capability],
-    );
-    if (missing.length > 0) {
-      throw new AppError(
-        'AI_MODEL_NOT_QUALIFIED',
-        `Ce modèle ne fournit pas les capacités requises : ${missing.join(', ')}.`,
-        { status: 422 },
-      );
     }
     await db.run((tx) =>
       tx

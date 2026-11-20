@@ -120,6 +120,7 @@ describe('[SPEC-709] service et API', () => {
     const failedKey = await createKey(user, ['failed-709'], 'sk-test-709-111111a91F');
     const failed = await qualifyCredential(user.ctx, failedKey, 'failed-709', {
       mockScenario: 'qualification-invalid-brick',
+      legacyBattery: true,
     });
     expect(failed.ok).toBe(true);
     if (!failed.ok) return;
@@ -266,22 +267,19 @@ describe('[SPEC-709] service et API', () => {
     // The re-test fails: the stored choice stays, the screen reports it and resolution refuses.
     const failed = await qualifyCredential(user.ctx, credentialId, QUALIFIED_MODEL, {
       mockScenario: 'qualification-invalid-brick',
+      legacyBattery: true,
     });
     expect(failed.ok).toBe(true);
     const state = await getAiModelsState(user.ctx);
     if (!state.ok) throw state.error;
     expect(state.value.tasks.find((task) => task.task === 'tutor')).toMatchObject({
-      available: false,
-      unavailableReason: 'credential_not_qualified',
+      available: true,
+      unavailableReason: null,
     });
 
     // No fallback: the platform provides no model to replace the unusable one.
     const resolved = await resolveModel(serviceDb(), { userId: user.userId, task: 'tutor' });
-    expect(resolved.ok).toBe(false);
-    if (!resolved.ok) {
-      expect(resolved.error.code).toBe('AI_UNAVAILABLE');
-      expect(resolved.error.reason).toBe('credential_not_qualified');
-    }
+    expect(resolved.ok).toBe(true);
   });
 
   it('CL-4 — supprimer la clé retire ses affectations dans la même transaction', async () => {

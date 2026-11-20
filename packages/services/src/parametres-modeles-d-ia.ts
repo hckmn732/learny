@@ -13,6 +13,7 @@ import { and, asc, eq } from 'drizzle-orm';
 import { AI_TASKS } from '@learny/config';
 import {
   AiModelsUpdateBody,
+  AiTaskCompatibility,
   QualificationReport,
   type AiModelOption,
   type AiModelUnavailableReason,
@@ -30,7 +31,7 @@ import {
   type AiTaskValue,
   type DbTx,
 } from '@learny/db';
-import { TASK_CONFIG, providerRegion, type TaskCapability } from '@learny/llm';
+import { TASK_CAPABILITIES, TASK_CONFIG, providerRegion, type TaskCapability } from '@learny/llm';
 import { maskKey } from '@learny/llm/credentials';
 
 import type { ServiceContext } from './context';
@@ -109,12 +110,12 @@ export function modelQualifiedForTask(
   modelId: string,
   capabilities: readonly TaskCapability[],
 ): boolean {
-  if (row.status !== 'qualified') return false;
+  // Legacy failed batteries are no longer a gate. A model is assignable once its key owns it;
+  // compatibility is additive and task-specific.
   if (!row.modelIds.includes(modelId)) return false;
-  const report = qualificationReportOf(row.qualification, modelId);
-  if (report === null) return Object.keys(recordOf(row.qualification.models)).length === 0;
-  if (report.status !== 'qualified') return false;
-  return capabilities.every((capability) => report.capabilities[capability]);
+  return capabilities.every((capability) =>
+    (TASK_CAPABILITIES as readonly TaskCapability[]).includes(capability),
+  );
 }
 
 function personalOptionsFor(
@@ -136,10 +137,22 @@ function personalOptionsFor(
     provider: row.provider,
     providerLabel: region.providerLabel,
     outsideEu: region.outsideEu,
-    qualificationStatus: modelQualifiedForTask(row, modelId, capabilities)
-      ? ('qualified' as const)
-      : ('unqualified' as const),
+    qualificationStatus: legacyQualificationStatus(row, modelId, capabilities),
   }));
+}
+
+function legacyQualificationStatus(
+  row: CredentialRow,
+  modelId: string,
+  capabilities: readonly TaskCapability[],
+): 'qualified' | 'unqualified' {
+  if (row.status !== 'qualified') return 'unqualified';
+  const report = qualificationReportOf(row.qualification, modelId);
+  if (report === null) return 'qualified';
+  return report.status === 'qualified' &&
+    capabilities.every((capability) => report.capabilities[capability])
+    ? 'qualified'
+    : 'unqualified';
 }
 
 /** EF-1 — every model a task can select: the qualified models of the learner's keys. */
@@ -215,7 +228,42 @@ export function taskStateOf(
     outsideEu: region?.outsideEu ?? false,
     available: reason === null,
     unavailableReason: reason,
+    compatibility:
+      row === undefined || reason !== null
+        ? null
+        : taskCompatibilityStateOf(row.qualification, row.id, assignment.modelId, task),
     options,
+  };
+}
+
+export function taskCompatibilityStateOf(
+  qualification: Record<string, unknown>,
+  credentialId: string,
+  modelId: string,
+  task: AiTaskValue,
+): AiTaskCompatibility | ReturnType<typeof pendingCompatibility> | null {
+  const key = compatibilityStorageKey(credentialId, modelId, task);
+  const parsed = AiTaskCompatibility.safeParse(
+    recordOf(recordOf(qualification).compatibilities)[key],
+  );
+  return parsed.success ? parsed.data : pendingCompatibility(credentialId, modelId, task);
+}
+
+function compatibilityStorageKey(credentialId: string, modelId: string, task: AiTaskValue): string {
+  return `${credentialId}:${modelId}:${task}`;
+}
+
+function pendingCompatibility(credentialId: string, modelId: string, task: AiTaskValue) {
+  return {
+    credentialId,
+    modelId,
+    task,
+    status: 'pending' as const,
+    checkedAt: null,
+    durationMs: 0,
+    requiredCapabilities: taskCapabilities(task),
+    reserveCodes: [] as [],
+    reasons: [] as [],
   };
 }
 
@@ -254,6 +302,10 @@ export function providerCardOf(row: CredentialRow): AiProviderCard {
     label: row.label,
     keyMasked: row.keyLast4 === null ? null : maskKey(row.keyLast4, prefix),
     status: row.status === 'qualified' ? 'qualified' : running ? 'pending' : 'unqualified',
+    connectionStatus:
+      recordOf(row.qualification.connection).status === 'connected' || row.status === 'qualified'
+        ? 'connected'
+        : 'unknown',
     outsideEu: region.outsideEu,
     dataNote: region.dataNote,
     models: [...row.modelIds],
@@ -357,13 +409,6 @@ export function updateAiModels(
         throw validationFailure(
           'Ce modèle ne fait pas partie des modèles de cette clé.',
           'body.modelId',
-        );
-      }
-      if (!modelQualifiedForTask(row, value.modelId, taskCapabilities(value.task))) {
-        throw new AppError(
-          'AI_MODEL_NOT_QUALIFIED',
-          'Ce modèle n’est pas qualifié pour cette tâche. Lancez la qualification puis réessayez.',
-          { status: 422 },
         );
       }
       await setTaskModel(tx, {

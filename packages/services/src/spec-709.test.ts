@@ -302,7 +302,7 @@ describe('[SPEC-709] règles et calculs', () => {
     }
   });
 
-  it('CL-3 — un modèle devenu non qualifié refuse la tâche, sans bascule', () => {
+  it('CL-3 — un ancien modèle failed reste affectable sans bascule', () => {
     const fake: FakeDb = {
       credentials: [
         credentialRow({
@@ -314,8 +314,9 @@ describe('[SPEC-709] règles et calculs', () => {
     };
     const tutor = taskStateOf('tutor', fake.assignments[0], fake.credentials);
     expect(tutor).toMatchObject({
-      available: false,
-      unavailableReason: 'credential_not_qualified',
+      available: true,
+      unavailableReason: null,
+      compatibility: { status: 'pending' },
     });
     expect(
       tutor.options.some(
@@ -356,13 +357,13 @@ describe('[SPEC-709] règles et calculs', () => {
     expect(providerFailureOf({ models: { [MODEL]: report(MODEL) } })).toBeNull();
   });
 
-  it('ET-4 — une qualification en cours est « pending » et aucun modèle n’est proposé', () => {
+  it('ET-4 — une ancienne qualification en cours ne retire plus le modèle', () => {
     const pending = credentialRow({
       status: 'untested',
       qualification: { run: { status: 'running', startedAt: AT } },
     });
     expect(providerCardOf(pending).status).toBe('pending');
-    expect(modelQualifiedForTask(pending, MODEL, taskCapabilities('tutor'))).toBe(false);
+    expect(modelQualifiedForTask(pending, MODEL, taskCapabilities('tutor'))).toBe(true);
   });
 
   it('CL-1 — un corps invalide est refusé avant toute écriture', async () => {
@@ -399,7 +400,7 @@ describe('[SPEC-709] règles et calculs', () => {
     expect(fake.assignments).toHaveLength(0);
   });
 
-  it('ET-3 — le serveur re-vérifie la qualification à la sauvegarde', async () => {
+  it('ET-3 — le serveur accepte l’ancien failed et le rend pending', async () => {
     const failed: FakeDb = {
       credentials: [
         credentialRow({
@@ -409,15 +410,29 @@ describe('[SPEC-709] règles et calculs', () => {
       ],
       assignments: [],
     };
-    expect(
-      await updateAiModels(context(failed), {
-        action: 'assign',
-        task: 'tutor',
-        credentialId: CREDENTIAL,
-        modelId: MODEL,
-      }),
-    ).toMatchObject({ ok: false, error: { code: 'AI_MODEL_NOT_QUALIFIED', status: 422 } });
-    expect(failed.assignments).toHaveLength(0);
+    mocks.setTaskModel.mockImplementation(
+      (
+        _tx: unknown,
+        input: { task: AssignmentRow['task']; credentialId: string; modelId: string },
+      ) => {
+        failed.assignments = [{ ...input }];
+        return Promise.resolve();
+      },
+    );
+    const accepted = await updateAiModels(context(failed), {
+      action: 'assign',
+      task: 'tutor',
+      credentialId: CREDENTIAL,
+      modelId: MODEL,
+    });
+    expect(accepted.ok).toBe(true);
+    if (!accepted.ok) return;
+    expect(accepted.value.tasks.find((task) => task.task === 'tutor')?.compatibility).toMatchObject(
+      {
+        status: 'pending',
+      },
+    );
+    expect(failed.assignments).toHaveLength(1);
 
     const ready: FakeDb = { credentials: [credentialRow()], assignments: [] };
     expect(

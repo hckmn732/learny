@@ -9,19 +9,10 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { z } from 'zod';
 
 import { closeDb, serviceDb, sql } from '@learny/db';
-import {
-  createCredential,
-  setTaskModel,
-  upsertSubscription,
-  listAiCalls,
-} from '@learny/db';
+import { createCredential, setTaskModel, upsertSubscription, listAiCalls } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 
-import {
-  createSession,
-  resolveModel,
-  type ResolvedModel,
-} from '../../src/index';
+import { createSession, resolveModel, type ResolvedModel } from '../../src/index';
 
 const PREFIX = 'sdd-504-';
 const FUTURE = new Date('2026-12-11T12:20:00.000Z');
@@ -148,24 +139,26 @@ describe('[SPEC-504] résolution et journal', () => {
     });
   });
 
-  it('CA-1 — non abonné avec clé non qualifiée : AI_UNAVAILABLE', async () => {
+  it('CA-1 — ancien failed toléré pour la clé personnelle', async () => {
     const userId = await user('unqualified');
     const credentialId = await personalKey(userId, { status: 'failed' });
     await choose(userId, 'tutor', 'gpt-test', credentialId);
-    const error = await unavailable(userId);
-    expect(error.code).toBe('AI_UNAVAILABLE');
-    expect(error.reason).toBe('credential_not_qualified');
-    expect(error.credentialId).toBe(credentialId);
+    await expect(model(userId, 'tutor')).resolves.toMatchObject({
+      kind: 'byok',
+      credentialId,
+      modelId: 'gpt-test',
+    });
   });
 
-  it('CA-1, SPEC-709 CL-3 — abonné avec clé devenue non qualifiée : AI_UNAVAILABLE, sans bascule payante', async () => {
+  it('CA-1, SPEC-709 CL-3 — abonnement et ancien untested ne remplacent pas le choix', async () => {
     const userId = await subscriber('sub-unqualified');
     const credentialId = await personalKey(userId, { status: 'untested' });
     await choose(userId, 'tutor', 'gpt-test', credentialId);
-    const error = await unavailable(userId);
-    expect(error.code).toBe('AI_UNAVAILABLE');
-    expect(error.reason).toBe('credential_not_qualified');
-    expect(error.credentialId).toBe(credentialId);
+    await expect(model(userId, 'tutor')).resolves.toMatchObject({
+      kind: 'byok',
+      credentialId,
+      modelId: 'gpt-test',
+    });
   });
 
   it('CA-1 — clé supprimée (credential_id nul) : AI_UNAVAILABLE sans abonnement', async () => {

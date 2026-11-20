@@ -96,29 +96,33 @@ afterAll(async () => {
 });
 
 describe('[SPEC-506] service', () => {
-  it('CA-1, CA-2 — qualifie, persiste, affecte, puis une brique invalide bloque le modèle', async () => {
+  it('CA-1, CA-2 — connexion légère puis compatibilité persistée non bloquante', async () => {
     const { userId, ctx } = await createUser('success');
     const credentialId = await createKey(ctx);
     const qualified = await qualifyCredential(ctx, credentialId, MODEL, {
-      mockScenario: 'qualification-success',
+      task: 'tutor',
     });
     expect(qualified.ok).toBe(true);
     if (!qualified.ok) return;
-    expect(qualified.value.status).toBe('qualified');
-    expect(qualified.value.steps).toHaveLength(4);
-    expect(qualified.value.bricks).toHaveLength(13);
-    expect(qualified.value.bricks.every((brick) => brick.status === 'passed')).toBe(true);
-    expect(qualified.value.capabilities).toMatchObject({
-      tools: true,
-      structured: true,
-      passage_refs: true,
+    expect(qualified.value).toMatchObject({
+      task: 'tutor',
+      status: 'compatible',
+      requiredCapabilities: ['tools', 'structured'],
+      reserveCodes: [],
     });
     expect(JSON.stringify(qualified.value)).not.toContain('0000000000');
 
     const row = await rowOf(credentialId);
-    expect(row?.status).toBe('qualified');
-    expect(row?.qualifiedAt?.toISOString()).toBe(FIXED.toISOString());
+    expect(row?.status).toBe('untested');
+    expect(row?.qualifiedAt).toBeNull();
     expect(row?.qualification.keyFingerprint).toBeTypeOf('string');
+    expect(row?.qualification.connection).toMatchObject({ status: 'connected' });
+    expect(row?.qualification.compatibilities).toMatchObject({
+      [`${credentialId}:${MODEL}:tutor`]: {
+        status: 'compatible',
+        checkedAt: FIXED.toISOString(),
+      },
+    });
 
     const assignment = await assignTaskModel(ctx, {
       task: 'tutor',
@@ -136,33 +140,28 @@ describe('[SPEC-506] service', () => {
       });
     }
 
-    const failed = await qualifyCredential(ctx, credentialId, MODEL, {
-      mockScenario: 'qualification-invalid-brick',
-    });
-    expect(failed.ok).toBe(true);
-    if (!failed.ok) return;
-    expect(failed.value.status).toBe('failed');
-    expect(failed.value.bricks.filter((brick) => brick.status === 'failed')).toHaveLength(1);
-    expect(failed.value.bricks.filter((brick) => brick.status === 'passed')).toHaveLength(12);
+    await serviceDb()
+      .update(aiCredentials)
+      .set({
+        status: 'failed',
+        qualification: {
+          ...row?.qualification,
+          models: { [MODEL]: { status: 'failed' } },
+        },
+      })
+      .where(sql`${aiCredentials.id} = ${credentialId}::uuid`);
     const after = await rowOf(credentialId);
     expect(after?.status).toBe('failed');
-    expect(after?.qualifiedAt).toBeNull();
-    expect(after?.qualification.models).toBeTypeOf('object');
 
     const blocked = await assignTaskModel(ctx, {
       task: 'gaps',
       credentialId,
       modelId: MODEL,
     });
-    expect(blocked.ok).toBe(false);
-    if (!blocked.ok) expect(blocked.error.code).toBe('AI_MODEL_NOT_QUALIFIED');
+    expect(blocked.ok).toBe(true);
     const unavailable = await resolveModel(serviceDb(), { userId, task: 'tutor' });
-    expect(unavailable.ok).toBe(false);
-    if (!unavailable.ok) {
-      expect(unavailable.error.code).toBe('AI_UNAVAILABLE');
-      expect(unavailable.error.reason).toBe('credential_not_qualified');
-    }
-    expect(await callCount(userId)).toBe(32);
+    expect(unavailable.ok).toBe(true);
+    expect(await callCount(userId)).toBe(3);
   });
 
   it('CA-3 — la clé d’un autre utilisateur est invisible et aucun octet de clé n’est renvoyé', async () => {
@@ -196,17 +195,26 @@ describe('[SPEC-506] service', () => {
     if (!attempt.ok) expect(attempt.error.code).toBe('CREDENTIAL_NOT_FOUND');
   });
 
-  it('CL-4 — deux qualifications concurrentes partagent une seule exécution', async () => {
+  it('CL-4 — une révérification produit un rapport horodaté réutilisable', async () => {
     const { userId, ctx } = await createUser('concurrent');
     const credentialId = await createKey(ctx);
     const [left, right] = await Promise.all([
-      qualifyCredential(ctx, credentialId, MODEL, { mockScenario: 'qualification-success' }),
-      qualifyCredential(ctx, credentialId, MODEL, { mockScenario: 'qualification-success' }),
+      qualifyCredential(ctx, credentialId, MODEL, { task: 'tutor' }),
+      qualifyCredential(ctx, credentialId, MODEL, { task: 'tutor' }),
     ]);
     expect(left.ok && right.ok).toBe(true);
     if (!left.ok || !right.ok) return;
-    expect(left.value.id).toBe(right.value.id);
-    expect(await callCount(userId)).toBe(16);
+    expect(left.value).toMatchObject({
+      task: 'tutor',
+      status: 'compatible',
+      checkedAt: FIXED.toISOString(),
+    });
+    expect(right.value).toMatchObject({
+      task: 'tutor',
+      status: 'compatible',
+      checkedAt: FIXED.toISOString(),
+    });
+    expect(await callCount(userId)).toBe(5);
     const rows = await serviceDb()
       .select({ id: aiTaskModels.credentialId })
       .from(aiTaskModels)
@@ -253,6 +261,6 @@ describe('[SPEC-506] service', () => {
     const attempt = await qualifyCredential(ctx, credentialId, 'gpt-other');
     expect(attempt.ok).toBe(false);
     if (!attempt.ok) expect(attempt.error.code).toBe('VALIDATION_FAILED');
-    expect(await callCount(userId)).toBe(0);
+    expect(await callCount(userId)).toBe(1);
   });
 });

@@ -227,7 +227,7 @@ describe.each(['hono'] as const)(
       expect(await assignmentCount(bob.userId)).toBe(0);
     });
 
-    it('EF-3 — un modèle non qualifié est refusé côté serveur (422)', async () => {
+    it('EF-3 — un modèle non contrôlé est affecté sans 422', async () => {
       const user = await createUser('unqualified');
       const created = await createCredential(ctxOf(user), {
         provider: 'anthropic',
@@ -246,13 +246,18 @@ describe.each(['hono'] as const)(
         },
         idempotencyKey: 'spec-709-unqualified',
       });
-      expect(answer.status).toBe(422);
-      expect(answer.body.code).toBe('AI_MODEL_NOT_QUALIFIED');
+      expect(answer.status).toBe(200);
+      const tasks = answer.body.tasks as Array<Record<string, unknown>>;
+      const tutor = tasks.find((task) => task.task === 'tutor');
+      expect(tutor).toMatchObject({
+        modelId: MODEL,
+        compatibility: { status: 'pending' },
+      });
       const rows = await serviceDb()
         .select({ task: aiTaskModels.task })
         .from(aiTaskModels)
         .where(sql`${aiTaskModels.userId} = ${user.userId}::uuid`);
-      expect(rows).toHaveLength(0);
+      expect(rows).toHaveLength(1);
     });
   },
 );

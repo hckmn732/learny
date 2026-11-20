@@ -117,7 +117,7 @@ describe.each(['hono'] as const)('[SPEC-506] route de qualification [SPEC-1101] 
   beforeEach(() => {
     apiTarget = target;
   });
-  it('EF-3, CA-1 — qualifie un modèle et ne renvoie ni clé ni chiffré', async () => {
+  it('EF-3, CA-1 — teste uniquement la connexion et ne renvoie ni clé ni chiffré', async () => {
     const user = await createUser('owner');
     const credentialId = await createKey(user);
     asUser(user);
@@ -126,16 +126,32 @@ describe.each(['hono'] as const)('[SPEC-506] route de qualification [SPEC-1101] 
     expect(answer.body).toMatchObject({
       credentialId,
       modelId: MODEL,
-      provider: 'openai',
-      status: 'qualified',
+      status: 'connected',
     });
-    expect(answer.body.steps).toHaveLength(4);
-    expect(answer.body.bricks).toHaveLength(13);
+    expect(answer.body).not.toHaveProperty('steps');
+    expect(answer.body).not.toHaveProperty('bricks');
     const serialised = JSON.stringify(answer.body);
     expect(serialised).not.toContain('0000000000');
     expect(serialised).not.toContain('apiKey');
     expect(serialised).not.toContain('encryptedKey');
     expect(serialised).not.toContain('payload');
+  });
+
+  it('EF-3 — un contrôle par tâche renvoie compatible et son horodatage', async () => {
+    const user = await createUser('compatibility');
+    const credentialId = await createKey(user);
+    asUser(user);
+    const answer = await call(credentialId, { modelId: MODEL, task: 'tutor' });
+    expect(answer.status).toBe(200);
+    expect(answer.body).toMatchObject({
+      credentialId,
+      modelId: MODEL,
+      task: 'tutor',
+      status: 'compatible',
+      checkedAt: FIXED.toISOString(),
+      reserveCodes: [],
+      requiredCapabilities: ['tools', 'structured'],
+    });
   });
 
   it('CA-3 — refuse la clé d’un autre utilisateur sans exposer la clé', async () => {

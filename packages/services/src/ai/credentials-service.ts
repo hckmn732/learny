@@ -19,12 +19,12 @@ import {
   aiCredentials,
   aiTaskModels,
   credentialStatusSchema,
+  serviceDb,
   type AiCredential,
   type AiProviderValue,
   type CredentialStatusValue,
 } from '@learny/db';
-import { providerRegion } from '@learny/llm';
-import { discoverProviderModels } from '@learny/llm';
+import { createSession, discoverProviderModels, providerRegion } from '@learny/llm';
 import {
   credentialAad,
   encryptSecret,
@@ -35,6 +35,7 @@ import {
   maskKey,
   sameFingerprint,
 } from '@learny/llm/credentials';
+import { QUALIFICATION_FIXTURES } from '@learny/llm/qualification';
 
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
@@ -126,11 +127,21 @@ function toDto(row: AiCredential): CredentialDto {
     modelIds: row.modelIds,
     keyMasked: row.keyLast4 === null ? null : maskKey(row.keyLast4, prefix),
     status: row.status,
+    connectionStatus:
+      typeof recordOf(row.qualification.connection).status === 'string'
+        ? (recordOf(row.qualification.connection).status as 'connected')
+        : 'unknown',
     outsideEu: region.outsideEu,
     dataNote: region.dataNote,
     qualifiedAt: row.qualifiedAt === null ? null : row.qualifiedAt.toISOString(),
     createdAt: row.createdAt.toISOString(),
   };
+}
+
+function recordOf(value: unknown): Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 async function checkEndpoint(provider: AiProviderValue, baseUrl: string): Promise<void> {
@@ -188,6 +199,52 @@ export async function createCredential(
     const fingerprint = plain === undefined ? null : keyFingerprint(plain, ring.current);
     const region = providerRegion(parsed.provider);
     const label = parsed.label ?? region.defaultLabel;
+    const probeModelId = parsed.modelIds[0];
+    if (probeModelId === undefined) {
+      throw validationFailure([{ path: 'body.modelIds', message: 'un modèle de chat est requis' }]);
+    }
+    const probeStartedAt = ctx.clock.now();
+    const session = await createSession(
+      { userId, db: serviceDb(), requestId: ctx.requestId },
+      {
+        task: 'light',
+        promptId: 'credential.connection',
+        resolvedOverride: {
+          kind: 'byok',
+          provider: parsed.provider,
+          modelId: probeModelId,
+          credentialId: id,
+          baseUrl: parsed.baseUrl ?? null,
+          outsideEu: region.outsideEu,
+          task: 'light',
+        },
+        secrets: plain === undefined ? {} : { apiKey: plain },
+        mock: { scenario: 'qualification-success' },
+        fixtures: QUALIFICATION_FIXTURES,
+      },
+    );
+    if (!session.ok) throw session.error;
+    const connection = await session.value.step({
+      system: [
+        {
+          text: 'Connection probe: answer with one short sentence confirming the chat is reachable.',
+          cache: false,
+        },
+      ],
+      messages: [{ role: 'user', content: 'Confirm that this chat model is reachable.' }],
+    });
+    if (!connection.ok) throw connection.error;
+    if (connection.value.text.trim() === '') {
+      throw new AppError('AI_PROVIDER_ERROR', 'Le modèle de chat n’a pas confirmé la connexion.', {
+        status: 502,
+      });
+    }
+    const connectionReport = {
+      status: 'connected' as const,
+      modelId: probeModelId,
+      checkedAt: ctx.clock.now().toISOString(),
+      durationMs: Math.max(0, ctx.clock.now().getTime() - probeStartedAt.getTime()),
+    };
 
     return db.run(async (tx) => {
       // Serialises creations of one learner: the 10-credential cap and EF-6 cannot race.
@@ -231,7 +288,9 @@ export async function createCredential(
           keyLast4: last4,
           status: 'untested',
           qualification:
-            fingerprint === null ? {} : { keyFingerprint: fingerprint, keyPrefix: prefix },
+            fingerprint === null
+              ? { connection: connectionReport }
+              : { keyFingerprint: fingerprint, keyPrefix: prefix, connection: connectionReport },
           outsideEu: region.outsideEu,
           qualifiedAt: null,
           createdAt: ctx.clock.now(),
