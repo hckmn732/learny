@@ -10,7 +10,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "dev": "turbo run dev --filter=@learny/web",
+    "dev": "turbo run dev --filter=@learny/web --filter=@learny/api",
     "dev:up": "node tools/dev/up.mjs",
     "dev:down": "node tools/dev/down.mjs",
     "dev:check": "node tools/dev/check.mjs",

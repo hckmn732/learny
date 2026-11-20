@@ -12,7 +12,9 @@
     "INNGEST_DEV",
     "INNGEST_SIGNING_KEY",
     "INNGEST_SIGNING_KEY_FALLBACK",
-    "INNGEST_EVENT_KEY"
+    "INNGEST_EVENT_KEY",
+    "API_INTERNAL_URL",
+    "API_PORT"
   ],
   "tasks": {
     "build": {

@@ -28,6 +28,8 @@ export const SERVER_ENV_KEYS = [
   'LOG_LEVEL',
   'APP_VERSION',
   'GIT_COMMIT',
+  'API_INTERNAL_URL',
+  'API_PORT',
   'RATE_LIMIT_IP_SECRET',
   'RATE_LIMIT_MODE',
   'TRUST_PROXY',
@@ -134,6 +136,7 @@ export const PRODUCTION_REQUIRED_KEYS = [
   'LEGAL_ENTITY_ADDRESS',
   'LEGAL_CONTACT_EMAIL',
   'LEGAL_HOST_NAME',
+  'API_INTERNAL_URL',
 ] as const;
 
 const STATIC_DEFAULTS = {
@@ -156,6 +159,8 @@ export function envDefaults(appEnv: AppEnv): Record<string, string> {
   const simulated = appEnv === 'local' || appEnv === 'test';
   return {
     ...STATIC_DEFAULTS,
+    API_PORT: '3001',
+    ...(appEnv === 'production' ? {} : { API_INTERNAL_URL: 'http://127.0.0.1:3001' }),
     APP_ENV: appEnv,
     LLM_MODE: simulated ? 'mock' : 'live',
     STRIPE_MODE: appEnv === 'production' ? 'live' : appEnv === 'preview' ? 'test' : 'mock',
@@ -213,6 +218,8 @@ const serverFields = {
   LOG_LEVEL: enumOf(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']),
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
+  API_INTERNAL_URL: serviceUrl.optional(),
+  API_PORT: integer(1, 65535),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
   /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
   RATE_LIMIT_MODE: enumOf(['on', 'off']),
