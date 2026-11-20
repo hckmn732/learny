@@ -1,9 +1,9 @@
-import { randomUUID } from 'node:crypto';
+import { redirect } from 'next/navigation';
 
 import type { SettingsState } from '@learny/contracts';
-import { AppError } from '@learny/core';
-import { createServiceContext, getSettingsState } from '@learny/services';
 
+import { apiErrorRequestId, isApiError, serverApi } from './api/server-client';
+import { SIGN_IN_PATH } from './route-guard';
 import { readPageSession } from './supabase/page';
 
 export type SettingsPageResult =
@@ -15,9 +15,12 @@ export async function loadSettingsPage(): Promise<SettingsPageResult> {
   if (session === null) {
     return { ok: false };
   }
-  const ctx = createServiceContext({ userId: session.userId, requestId: randomUUID() });
-  const result = await getSettingsState(ctx);
-  if (result.ok) return { ok: true, data: result.value };
-  const error: AppError = result.error;
-  return error.requestId === undefined ? { ok: false } : { ok: false, requestId: error.requestId };
+  try {
+    const client = await serverApi();
+    return { ok: true, data: await client.api.meProfileGet({}) };
+  } catch (error) {
+    if (isApiError(error, 'UNAUTHENTICATED')) redirect(SIGN_IN_PATH);
+    const requestId = apiErrorRequestId(error);
+    return requestId === undefined ? { ok: false } : { ok: false, requestId };
+  }
 }

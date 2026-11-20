@@ -9,8 +9,8 @@ import {
   resolveRequestId,
   runWithRequestContext,
 } from '@learny/core/server';
+import { problemDetails, type ProblemDetails } from '@learny/http/handler';
 
-import { problemDetails, type ProblemDetails } from './api/handler';
 import { getHealth, probeDatabase } from './health';
 
 /** Safe, bounded identifier reused by the four sections of the page. */

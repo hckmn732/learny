@@ -3,7 +3,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 
-import type { DestinationProfile } from '@learny/services/destination';
+import type { DestinationProfile } from '../auth-destination';
 
 const ProfileRow = z
   .object({ onboarding_step: z.string(), deletion_scheduled_for: z.string().nullable() })

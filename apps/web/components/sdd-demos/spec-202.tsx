@@ -41,7 +41,7 @@ export default async function Spec202Demo() {
         <p role="status" data-testid="auth-session-state">
           {session === null
             ? t.session.anonymous
-            : t.session.signedIn(session.userId, session.onboardingStep)}
+            : t.session.signedIn(session.userId, session.onboardingStep ?? 'profil')}
         </p>
       </BaseCard>
       <MagicLinkCard />

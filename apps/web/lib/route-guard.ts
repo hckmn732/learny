@@ -3,11 +3,12 @@
 // or Supabase. The signed `learny_ob` ticket may carry the step for 60 seconds; the profile stays
 // the source of truth once it expires or after any onboarding PATCH.
 import type { OnboardingStep } from '@learny/contracts';
+
 import {
   isSafeNextPath,
   resolvePostAuthDestination,
   type DestinationProfile,
-} from '@learny/services/destination';
+} from './auth-destination';
 
 export const SIGN_IN_PATH = '/connexion';
 export const SIGN_UP_PATH = '/inscription';
