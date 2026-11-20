@@ -1,3 +1,7 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/space-grotesk/600.css';
 @import 'tailwindcss';
 @import '@learny/ui/theme.css';
 @import '@learny/ui/accessibility.css';
@@ -10,8 +14,8 @@
  */
 @layer base {
   :root {
-    --font-inter: 'Inter Variable' !important;
-    --font-space-grotesk: 'Space Grotesk Variable' !important;
+    --font-inter: 'Inter';
+    --font-space-grotesk: 'Space Grotesk';
   }
 
   html {
