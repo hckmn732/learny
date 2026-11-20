@@ -45,7 +45,7 @@ function demoCookie(supabaseUrl: string, accessToken: string, issuedAt: number):
     token_type: 'bearer',
     expires_in: 3600,
     expires_at: issuedAt + 3600,
-    refresh_token: 'demo-refresh-token-never-used',
+    refresh_token: 'learny-test-only-demo-refresh-token-never-used',
     user: {
       id: DEMO_USER,
       aud: 'authenticated',
