@@ -4,7 +4,7 @@ Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions
 
 ## 1. Tâches et modèles
 
-| Tâche (`ai_task`) | Usages | Effort de réflexion | Capacités exigées (qualification du modèle personnel) |
+| Tâche (`ai_task`) | Usages | Effort de réflexion | Capacités exigées (compatibilité non bloquante) |
 |---|---|---|---|
 | `programme` | conception et ajustement du programme, structuration d'un import, recherche web | élevé | outils, sortie structurée, recherche web (sinon `SEARCH_API_KEY`) |
 | `course` | rédaction du cours avec citations, fiches « À retenir », notions et liens | moyen | sortie structurée, références aux passages |
@@ -12,7 +12,7 @@ Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions
 | `tutor` | discussion, questions et jeux, banques, correction (ouvertes, exercices, résumés), cadrage | faible | outils, sortie structurée |
 | `light` | classification, découpage, titres, variantes simples, lecture d'images courtes | aucun | sortie structurée |
 
-**Aucun modèle par défaut** (BR-IA-01, ADR-0340) : la plateforme ne fournit aucun modèle. Le modèle d'une tâche est celui que l'utilisateur a choisi parmi les modèles qualifiés de ses clés (`ai_task_models`) ; la résolution (`packages/llm/src/resolve.ts`) ne connaît que ce choix et renvoie `AI_UNAVAILABLE` sans repli quand il manque ou n'est plus qualifié. Aucun identifiant de modèle n'est écrit en dur dans le code ; les efforts de réflexion par tâche sont dans `packages/config/src/models.ts`. Les tarifs, quand ils existent, sont des valeurs de configuration révisables (`packages/config/src/pricing.ts`).
+**Aucun modèle par défaut** (BR-IA-01, ADR-0340, ADR-0341) : la plateforme ne fournit aucun modèle. Le modèle d'une tâche est celui que l'utilisateur a choisi parmi les modèles de chat de ses clés (`ai_task_models`). La résolution ne connaît que ce choix et renvoie `AI_UNAVAILABLE` sans repli lorsqu'une clé ou un identifiant manque ; une réserve de compatibilité reste non bloquante. Aucun identifiant de modèle n'est écrit en dur dans le code ; les efforts de réflexion par tâche sont dans `packages/config/src/models.ts`. Les tarifs, quand ils existent, sont des valeurs de configuration révisables (`packages/config/src/pricing.ts`).
 
 ## 2. Accès aux modèles
 

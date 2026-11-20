@@ -1,9 +1,9 @@
 # ADR-0298 — Qualification des modèles personnels : batterie, capacités et exécution
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-0341
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
 - **Date** : 2026-11-13
-- **Liens** : SPEC-506, SPEC-501, SPEC-505, ADR-0013, ADR-0048
+- **Liens** : SPEC-506, SPEC-501, SPEC-505, ADR-0013, ADR-0048, ADR-0341
 
 ## Contexte
 

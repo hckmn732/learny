@@ -218,3 +218,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-1007](ADR-1007-paquets-partages-entre-clients-et-serveur.md) | Paquets partagés entre clients et serveur | Validée | SPEC-1002, SPEC-1003, SPEC-1004 |
 | [ADR-1008](ADR-1008-statut-de-succes-de-la-demonstration-http.md) | Statut de succès de la démonstration HTTP | Déduite | SPEC-1003, ADR-1001, ADR-1002 |
 | [ADR-1009](ADR-1009-verification-jwt-locale-avec-jose-faute-de-getclaims.md) | Vérification JWT locale avec JOSE faute de getClaims | Déduite | ADR-1005,SPEC-1102 |
+| [ADR-0341](ADR-0341-cles-d-ia-sans-qualification-bloquante-et-compatibilite-par-.md) | Clés d'IA sans qualification bloquante et compatibilité par tâche | Déduite | SPEC-506, SPEC-709, ADR-0298, ADR-0328 |

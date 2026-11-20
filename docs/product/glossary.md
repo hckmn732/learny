@@ -43,7 +43,7 @@ Termes employés dans le code (identifiant anglais entre parenthèses quand il d
 | Action du tuteur | `tutor tool` | Outil du registre fermé (lire les ressources, créer/modifier, planifier…). |
 | Tâche IA | `ai task` | Catégorie d'appel IA : `programme`, `course`, `gaps`, `tutor`, `light`. |
 | Clé personnelle | `BYOK credential` | Clé d'API d'un fournisseur apportée par l'utilisateur, chiffrée. |
-| Qualification | `qualification` | Batterie de tests qui autorise l'usage d'un modèle personnel. |
+| Compatibilité par tâche | `compatibility` | Sondes non bloquantes des capacités exigées pour une combinaison clé/modèle/tâche, résultat horodaté `compatible` ou `reserve`. |
 | Abonnement | `subscription` | Droit d'utiliser l'application, gratuit par défaut ; sans lien avec l'IA (ADR-0340). |
 | Formation à plusieurs | `group` | Formation partagée par 2 à 10 membres (programme et jalons communs). |
 | Examen blanc | `mock exam` | Épreuve chronométrée, sans aide, au format de l'examen visé. |
