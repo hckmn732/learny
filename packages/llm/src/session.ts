@@ -29,7 +29,7 @@ import {
   documentMessage,
 } from './anthropic-options';
 import { llmMode } from './config';
-import { mapProviderError, providerErrorClass, refused } from './errors';
+import { mapProviderError, providerErrorClass, refused, sanitizedProviderText } from './errors';
 import { logCall, type CallUsage } from './log';
 import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
@@ -175,7 +175,12 @@ export async function createSession(
   function logProviderFailure(error: unknown, code: string): void {
     logger.error(
       'provider call failed',
-      { code, component: 'llm', outcome: providerErrorClass(error) },
+      {
+        code,
+        component: 'llm',
+        outcome: providerErrorClass(error),
+        providerMessage: sanitizedProviderText(error),
+      },
       error,
     );
   }

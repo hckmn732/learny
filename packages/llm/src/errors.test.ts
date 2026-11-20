@@ -1,7 +1,12 @@
 import { APICallError, TypeValidationError } from 'ai';
 import { describe, expect, it } from 'vitest';
 
-import { aiUnavailable, mapProviderError, providerErrorClass } from './errors';
+import {
+  aiUnavailable,
+  mapProviderError,
+  providerErrorClass,
+  sanitizedProviderText,
+} from './errors';
 
 function apiError(statusCode: number, responseBody?: string, message = 'failure'): APICallError {
   return new APICallError({
@@ -46,6 +51,21 @@ describe('[SPEC-504] conversion des erreurs', () => {
     expect(
       mapProviderError(apiError(400, 'prompt is too long: 300000 tokens > 200000 maximum')).code,
     ).toBe('AI_CONTEXT_TOO_LONG');
+    expect(
+      mapProviderError(apiError(400, 'invalid context parameter for this endpoint')).code,
+    ).toBe('AI_PROVIDER_ERROR');
+  });
+
+  it('journalise uniquement un extrait fournisseur tronqué et assaini', () => {
+    const provider = apiError(
+      500,
+      `failure for sk-test-super-secret-0000000000 https://example.invalid api_key=secret ${'x'.repeat(500)}`,
+    );
+    const safe = sanitizedProviderText(provider);
+    expect(safe).toHaveLength(240);
+    expect(safe).not.toContain('sk-test-super-secret');
+    expect(safe).not.toContain('example.invalid');
+    expect(safe).not.toContain('api_key=secret');
   });
 
   it('CA-3 — sortie structurée non conforme → INVALID_OUTPUT avec les erreurs Zod', () => {

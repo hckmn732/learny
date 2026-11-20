@@ -9,7 +9,11 @@ export type {
 } from './run';
 export {
   isQualificationScenario,
+  COMPATIBILITY_FIXTURES,
+  COMPATIBILITY_SCENARIOS,
   QUALIFICATION_FIXTURES,
   QUALIFICATION_SCENARIOS,
 } from './fixtures';
-export type { QualificationScenario } from './fixtures';
+export type { CompatibilityScenario, QualificationScenario } from './fixtures';
+export { compatibilityCapabilities, evaluateTaskCompatibility } from './compatibility';
+export type { CompatibilitySession, EvaluateTaskCompatibilityInput } from './compatibility';

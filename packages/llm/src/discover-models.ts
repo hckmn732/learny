@@ -16,6 +16,8 @@ export interface DiscoverProviderModelsOptions {
 
 const MODEL_ID_PATTERN = /^[A-Za-z0-9._:/-]+$/;
 const MAX_MODELS = 500;
+const NON_CHAT_MODEL =
+  /(?:^|[-_.:/])(embed(?:ding)?|rerank(?:er)?|moderation|whisper|transcri(?:be|ption)|tts|speech|audio|dall-e|image|vision-only|realtime|ada|babbage|curie|davinci|codex)(?:$|[-_.:/])/i;
 
 function mockModels(provider: AiProviderValue): string[] {
   switch (provider) {
@@ -67,7 +69,32 @@ function headersOf(input: DiscoverProviderModelsInput): Record<string, string> {
   }
 }
 
-function modelIdsOf(payload: unknown): string[] {
+function recordOf(value: unknown): Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function isChatModel(record: Record<string, unknown>, modelId: string): boolean {
+  const capabilities = recordOf(record.capabilities);
+  for (const key of ['completionChat', 'completion_chat', 'chat', 'chatCompletion']) {
+    if (capabilities[key] === true) return true;
+    if (capabilities[key] === false) return false;
+  }
+  const modalities = Array.isArray(record.modalities)
+    ? record.modalities.filter((value): value is string => typeof value === 'string')
+    : [];
+  if (modalities.length > 0 && !modalities.some((value) => /^(text|image)$/i.test(value))) {
+    return false;
+  }
+  const endpoint = typeof record.endpoint === 'string' ? record.endpoint.toLowerCase() : '';
+  if (endpoint !== '' && !/(chat|completion)/.test(endpoint)) return false;
+  const object = typeof record.object === 'string' ? record.object.toLowerCase() : '';
+  if (object.includes('embedding') || object.includes('moderation')) return false;
+  return !NON_CHAT_MODEL.test(modelId);
+}
+
+export function chatModelIdsOf(payload: unknown): string[] {
   if (typeof payload !== 'object' || payload === null) return [];
   const root = payload as { data?: unknown; models?: unknown };
   const entries = Array.isArray(root.data)
@@ -80,7 +107,8 @@ function modelIdsOf(payload: unknown): string[] {
     if (typeof entry !== 'object' || entry === null) return [];
     const record = entry as { id?: unknown; model?: unknown; name?: unknown };
     const value = record.id ?? record.model ?? record.name;
-    return typeof value === 'string' ? [value] : [];
+    if (typeof value !== 'string' || !isChatModel(recordOf(entry), value.trim())) return [];
+    return [value];
   });
   return [...new Set(ids)]
     .map((id) => id.trim())
@@ -110,7 +138,7 @@ export async function discoverProviderModels(
     if (!response.ok) {
       throw new Error(`Provider model discovery failed (${String(response.status)})`);
     }
-    return modelIdsOf(await response.json());
+    return chatModelIdsOf(await response.json());
   } finally {
     clearTimeout(timeout);
   }

@@ -12,8 +12,10 @@ export interface AiErrorContext {
   modelId?: string | undefined;
 }
 
-const CONTEXT_TOO_LONG = /context|too long|maximum.*token|prompt is too long|input length/i;
+const CONTEXT_TOO_LONG =
+  /\bcontext[_ -]?length[_ -]?exceeded\b|\bmaximum context (?:length|window)\b|\b(?:prompt|input) (?:is )?too long\b|\b(?:input|prompt).{0,40}\bmaximum (?:token|tokens|length)\b|\bmax(?:imum)?[_ -]tokens?\b.{0,40}\b(?:input|prompt|context)\b/i;
 const REFUSAL = /refusal|refused|declined/i;
+const PROVIDER_TEXT_MAX = 240;
 
 export function providerErrorClass(error: unknown): string {
   if (error instanceof Error) {
@@ -22,10 +24,36 @@ export function providerErrorClass(error: unknown): string {
   }
   if (error !== null && typeof error === 'object') {
     const constructorName = error.constructor.name;
-    if (typeof constructorName === 'string' && constructorName !== '' && constructorName !== 'Object')
+    if (
+      typeof constructorName === 'string' &&
+      constructorName !== '' &&
+      constructorName !== 'Object'
+    )
       return constructorName;
   }
   return 'UnknownError';
+}
+
+function rawProviderText(error: unknown): string {
+  if (APICallError.isInstance(error)) return providerMessage(error);
+  if (error instanceof Error) return error.message;
+  return '';
+}
+
+/** Short provider diagnostic; secrets, URLs and control characters never reach structured logs. */
+export function sanitizedProviderText(error: unknown): string {
+  let text = Array.from(rawProviderText(error), (char) =>
+    char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127 ? ' ' : char,
+  )
+    .join('')
+    .replace(/\b(?:sk|pk|rk)[-_][A-Za-z0-9_-]{8,}\b|Bearer\s+[A-Za-z0-9._~+/=-]+/gi, '[redacted]')
+    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]')
+    .replace(/https?:\/\/[^\s"'<>]+/gi, '[url]')
+    .replace(/\b(?:api[_-]?key|token|secret|authorization)\b\s*[:=]\s*[^\s,;}]+/gi, '$1=[redacted]')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (text.length > PROVIDER_TEXT_MAX) text = `${text.slice(0, PROVIDER_TEXT_MAX - 1)}…`;
+  return text;
 }
 
 /** Builds an AI_UNAVAILABLE error with the user message and the settings link of EF-2. */
@@ -131,10 +159,15 @@ export function mapProviderError(error: unknown, context: AiErrorContext = {}): 
       cause: error,
     });
   }
-  return withCode('AI_PROVIDER_ERROR', 'Le fournisseur d’IA est momentanément indisponible.', context, {
-    status: 503,
-    cause: error,
-  });
+  return withCode(
+    'AI_PROVIDER_ERROR',
+    'Le fournisseur d’IA est momentanément indisponible.',
+    context,
+    {
+      status: 503,
+      cause: error,
+    },
+  );
 }
 
 /** Zod / AI SDK structured-output failure, with the field errors kept for the caller (CL-5). */
@@ -158,16 +191,12 @@ export function invalidOutput(error: unknown, context: AiErrorContext = {}): App
       }
     }
   }
-  return new AppError(
-    'INVALID_OUTPUT',
-    'La sortie du modèle ne respecte pas le schéma attendu.',
-    {
-      status: 502,
-      errors: issues.length > 0 ? issues : [{ path: '', message: 'sortie non conforme' }],
-      ...(context.credentialId === undefined ? {} : { credentialId: context.credentialId }),
-      cause: error,
-    },
-  );
+  return new AppError('INVALID_OUTPUT', 'La sortie du modèle ne respecte pas le schéma attendu.', {
+    status: 502,
+    errors: issues.length > 0 ? issues : [{ path: '', message: 'sortie non conforme' }],
+    ...(context.credentialId === undefined ? {} : { credentialId: context.credentialId }),
+    cause: error,
+  });
 }
 
 /** A refusal is a normal model outcome, not a provider failure (ET-7, CL-3). */

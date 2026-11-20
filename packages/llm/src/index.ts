@@ -24,7 +24,13 @@ export { discoverProviderModels } from './discover-models';
 export type { DiscoverProviderModelsInput, DiscoverProviderModelsOptions } from './discover-models';
 export { createSession, outgoingMessages } from './session';
 export type { LlmContext, LlmSession, LlmStreamResult, SessionOptions } from './session';
-export { aiUnavailable, invalidOutput, mapProviderError, refused } from './errors';
+export {
+  aiUnavailable,
+  invalidOutput,
+  mapProviderError,
+  refused,
+  sanitizedProviderText,
+} from './errors';
 export type { AiErrorContext } from './errors';
 export { logCall } from './log';
 export type { CallUsage, LogCallInput } from './log';

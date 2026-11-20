@@ -39,6 +39,7 @@ export const SAFE_LOG_FIELDS = [
   'outcome',
   'queryLength',
   'resultCount',
+  'providerMessage',
   // SPEC-204: e-mail sends are logged by template and provider message id, never by address.
   'template',
   'messageId',
