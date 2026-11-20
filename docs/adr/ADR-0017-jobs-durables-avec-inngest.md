@@ -13,7 +13,7 @@ Ingestion et génération longues, reprenables.
 
 ## Décision
 
-Inngest. Fonctions et événements dans `packages/jobs`, servies par `apps/web` à `/api/inngest` (Vercel) ; `apps/worker` (Hono) sert les mêmes fonctions pour l'auto-hébergement. Étapes `step.run` idempotentes, 3 reprises avec backoff, crons horaires et nocturnes (docs/architecture/overview.md §5).
+Inngest. Fonctions et événements dans `packages/jobs`, servies par `apps/web` à `/api/inngest` pendant la transition (Vercel) et par `apps/api` dans les déploiements Docker et Vercel autonomes (rôle `all` ou `jobs`). Étapes `step.run` idempotentes, 3 reprises avec backoff, crons horaires et nocturnes (docs/architecture/overview.md §5).
 
 ## Conséquences
 

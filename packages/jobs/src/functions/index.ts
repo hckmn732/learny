@@ -1,4 +1,4 @@
-// The single registry of Inngest functions, served by apps/web and apps/worker (EF-1).
+// The single registry of Inngest functions, served by apps/web and apps/api (EF-1).
 import type { Inngest } from 'inngest';
 
 import { inngest } from '../client';

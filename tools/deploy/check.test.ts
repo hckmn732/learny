@@ -8,7 +8,11 @@ import { PRODUCTION_REQUIRED_KEYS } from '../../packages/config/src/env';
 import { EU_REGIONS, HOSTING_REGIONS, isEuRegion } from '../../packages/config/src/platform';
 
 import { runCheck, validateDeployment, validateRef } from './check.mjs';
-import { maskDestination, readManagedConfig, readVercelConfig } from './lib.mjs';
+import {
+  maskDestination,
+  readManagedConfig,
+  readVercelConfig,
+} from './lib.mjs';
 import type { DeployJob, DeployStep, DeployWorkflowDoc } from './workflow.mjs';
 import { readDeployWorkflow, validateDeployWorkflow } from './workflow.mjs';
 
@@ -36,12 +40,19 @@ function realWorkflow() {
 function baseInput() {
   const managed = readManagedConfig(ROOT);
   const vercel = readVercelConfig(ROOT);
+  const apiRaw = fs.readFileSync(path.join(ROOT, 'apps/api/vercel.json'), 'utf8');
+  const apiVercel = {
+    config: JSON.parse(apiRaw) as Record<string, unknown>,
+    raw: apiRaw,
+    error: null,
+  };
   const workflow = realWorkflow();
   return {
     envName: 'preview',
     env: {},
     managed,
     vercel,
+    apiVercel,
     vercelRaw: vercel.raw,
     workflow: workflow.doc,
     workflowError: workflow.error,
@@ -261,6 +272,36 @@ describe('[SPEC-013] managed regions', () => {
     );
     const sdd = config.headers.find((entry) => entry.source === '/_dev/(.*)');
     expect(sdd?.headers[0]?.value).toContain('noindex');
+  });
+
+  it('[SPEC-1103] configure une fonction API unique dans fra1 pendant 60 secondes', () => {
+    const raw = fs.readFileSync(path.join(ROOT, 'apps/api/vercel.json'), 'utf8');
+    const config = JSON.parse(raw) as {
+      regions: string[];
+      functions: Record<string, { maxDuration: number; runtime: string }>;
+    };
+    expect(config.regions).toEqual(['fra1']);
+    expect(Object.keys(config.functions)).toEqual(['api/index.ts']);
+    expect(config.functions['api/index.ts']?.maxDuration).toBe(60);
+    expect(config.functions['api/index.ts']?.runtime).toMatch(/^nodejs/);
+    expect(raw).not.toMatch(/sk-|service_role|eyJhbGci|BEGIN [A-Z ]*PRIVATE KEY/);
+  });
+
+  it('[SPEC-1103] déploie l’API avant le web et active la preview migration', () => {
+    const workflow = realWorkflow();
+    const preview = workflowJob(workflow.doc, 'preview');
+    const apiStep = workflowStep(preview, '--cwd apps/api');
+    const webStep = (preview.steps ?? []).find((step) => step.id === 'deploy');
+    if (webStep === undefined) throw new Error('étape web deploy absente du fixture');
+    const syncStep = workflowStep(preview, 'sync-inngest.mjs');
+    expect((preview.steps ?? []).indexOf(apiStep)).toBeLessThan(
+      (preview.steps ?? []).indexOf(syncStep),
+    );
+    expect((preview.steps ?? []).indexOf(syncStep)).toBeLessThan(
+      (preview.steps ?? []).indexOf(webStep),
+    );
+    expect(String(preview.if)).not.toContain("head_branch != 'migration'");
+    expect(String(preview.if)).not.toContain("startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')");
   });
 
   it('validates the real deployment workflow (ET-1, EF-3)', () => {

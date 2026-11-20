@@ -1,7 +1,7 @@
 # Production sur Coolify — pile complète
 
 Ce guide met Learny en production sur un serveur **Coolify** avec **une seule ressource** qui
-contient tout : Supabase (Postgres, Auth, PostgREST, Storage, Kong), Inngest, le worker, le web, les
+contient tout : Supabase (Postgres, Auth, PostgREST, Storage, Kong), Inngest, le api, le web, les
 migrations et les modèles d'e-mails. Tous les services partagent le réseau Docker que Coolify crée
 pour la ressource : ils se joignent par leur nom de service (`db`, `auth`, `kong`…).
 
@@ -10,7 +10,7 @@ Fichiers de référence :
 - `docker/compose.coolify.yml` — la pile déployée par Coolify ;
 - `docker/coolify-support.Dockerfile` — images d'appoint qui embarquent la configuration
   versionnée (Coolify ne monte pas les fichiers du dépôt) ;
-- `docker/web.Dockerfile`, `docker/worker.Dockerfile` — les images applicatives.
+- `docker/web.Dockerfile`, `docker/api.Dockerfile` — les images applicatives.
 
 L'architecture et les images épinglées sont celles de la pile auto-hébergée
 (`docs/operations/self-hosting.md`, SPEC-012) ; les décisions propres à Coolify sont consignées
@@ -27,7 +27,7 @@ reste décrite dans `docs/operations/deployment.md`.
 | `auth` | Supabase Auth (GoTrue) | non (via Kong) |
 | `rest` | PostgREST | non (via Kong) |
 | `storage` | Supabase Storage, fichiers sur volume | non (via Kong) |
-| `worker` | jobs Inngest : IA, e-mails, automatismes | non |
+| `api` | jobs Inngest : IA, e-mails, automatismes | non |
 | `inngest` | Inngest auto-hébergé (SQLite) | non |
 | `migrate` | job unique : applique `supabase/migrations`, puis s'arrête | non |
 | `auth-templates` | sert les modèles d'e-mails lus par `auth` | non |
@@ -167,7 +167,7 @@ Le Compose fixe le reste : `APP_ENV=production`, `LLM_MODE=live`, `PUSH_MODE=liv
 
 Coolify construit sept images (le build Next.js du web prend plusieurs minutes), puis démarre la
 pile dans l'ordre des dépendances : `db` → `storage` → `migrate` → `auth`, `rest` → `kong` ;
-`inngest` → `worker` ; enfin `web`. Au premier démarrage, `db` initialise le volume et donne aux
+`inngest` → `api` ; enfin `web`. Au premier démarrage, `db` initialise le volume et donne aux
 rôles Supabase le mot de passe `POSTGRES_PASSWORD`.
 
 1. **Migrations** : les logs de `migrate` se terminent par
@@ -206,7 +206,7 @@ inexploitable) et testez une restauration sur une machine isolée.
 ## 7. Mettre à jour, revenir en arrière
 
 **Mise à jour** : fusionner sur `main`, puis **Deploy** dans Coolify. Les migrations s'appliquent
-avant le démarrage du nouveau web et du nouveau worker ; si l'une échoue, ils ne démarrent pas.
+avant le démarrage du nouveau web et du nouveau api ; si l'une échoue, ils ne démarrent pas.
 Prévoyez donc une courte coupure possible et une sauvegarde récente.
 
 **Images tierces** : les versions de Supabase et d'Inngest sont épinglées (dans le Compose et dans
@@ -224,7 +224,7 @@ le job refuse une empreinte différente.
 - **« required variable X is missing a value »** : renseignez `X` dans les variables de
   l'application.
 - **`migrate` en échec** : ses logs nomment le fichier fautif. Ce fichier est annulé (une
-  transaction par fichier) et rien n'est appliqué après lui ; `auth`, `rest`, `worker` et `web`
+  transaction par fichier) et rien n'est appliqué après lui ; `auth`, `rest`, `api` et `web`
   ne démarrent pas tant que les migrations n'ont pas réussi.
 - **`auth`, `storage` ou `rest` refusent la connexion à la base** : `POSTGRES_PASSWORD` a changé
   depuis l'initialisation du volume `db-data` (section 2). Remettez l'ancienne valeur.
@@ -246,7 +246,7 @@ le job refuse une empreinte différente.
   Coolify. Les autres services restent sur le réseau de la ressource. Contrairement à la pile
   auto-hébergée, il n'y a pas de réseau interne séparé : Postgres, Auth et Storage peuvent sortir
   vers Internet.
-- `web` et `worker` tournent sans root, avec un système de fichiers en lecture seule et sans
+- `web` et `api` tournent sans root, avec un système de fichiers en lecture seule et sans
   capacités Linux.
 - Supabase Studio n'est pas inclus. Pour inspecter la base :
   `docker exec -it db-<uuid> psql -U postgres -d postgres`.

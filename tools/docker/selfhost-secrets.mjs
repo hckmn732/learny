@@ -57,6 +57,7 @@ export function generateSecrets(now) {
     INNGEST_EVENT_KEY: crypto.randomBytes(24).toString('hex'),
     INNGEST_SIGNING_KEY: crypto.randomBytes(32).toString('hex'),
     APP_ENCRYPTION_KEY: crypto.randomBytes(32).toString('base64'),
+    API_PROXY_SECRET: crypto.randomBytes(32).toString('hex'),
     RATE_LIMIT_IP_SECRET: crypto.randomBytes(32).toString('hex'),
     EMAIL_LINK_SECRET: crypto.randomBytes(32).toString('hex'),
   };

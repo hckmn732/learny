@@ -5,16 +5,21 @@
 // implementations and the session is injected, like the other route suites.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeEach, afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
+import { type ApiTarget, requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import { GET, PATCH } from '../../app/api/v1/me/notification-settings/route';
 import { noopOriginGuard, setOriginGuard } from '../../lib/api/origin';
 import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
+
+let apiTarget: ApiTarget = 'next';
+
+setApiAppFactory(createApp);
 
 const PREFIX = 'sdd-708-routes-';
 
@@ -53,7 +58,7 @@ async function call(
   } = {},
 ): Promise<ApiAnswer> {
   let answer: ApiAnswer = { status: 0, body: {}, headers: new Headers() };
-  await testApiHandler({
+  await requestApi(apiTarget, {
     appHandler: { GET, PATCH },
     url: 'http://localhost/api/v1/me/notification-settings',
     test: async ({ fetch }) => {
@@ -103,7 +108,10 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-708] service et API', () => {
+describe.each(['next', 'hono'] as const)('[SPEC-708] service et API [SPEC-1101] (%s)', (target) => {
+  beforeEach(() => {
+    apiTarget = target;
+  });
   it('CA-1 — GET rend les six types et le compteur, PATCH le met à jour', async () => {
     const user = await createUser('get');
     asUser(user);

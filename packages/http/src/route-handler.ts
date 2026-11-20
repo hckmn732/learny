@@ -35,7 +35,8 @@ import { getOriginGuard } from './origin';
 import { apiProblemResponse, problemStatus } from './problem';
 import { getRateLimiter } from './rate-limit';
 import { API_REQUEST_ID_HEADER, resolveApiRequestId } from './request-id';
-import { getSessionUser } from './session';
+import { clientAddress } from './security';
+import { resolveFreshIdentity, resolveIdentity } from './session';
 import { invalidInput, queryToObject, validateInput } from './validate';
 
 export const MAX_BODY_BYTES = 1024 * 1024;
@@ -77,12 +78,6 @@ function isResult(value: unknown): value is Result<unknown> {
  * unchanged. The header is therefore trusted only behind a proxy that sets it (`TRUST_PROXY=true`,
  * Vercel); otherwise the address is unknown and the IP-keyed profiles share one bucket (ADR-0213).
  */
-function clientIp(request: Request): string | null {
-  if (process.env.TRUST_PROXY !== 'true') return null;
-  const forwarded = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
-  return forwarded === undefined || forwarded === '' ? null : forwarded;
-}
-
 async function readJsonBody(request: Request): Promise<unknown> {
   const declared = Number(request.headers.get('content-length') ?? '0');
   if (declared > MAX_BODY_BYTES) {
@@ -162,7 +157,7 @@ export function routeHandler<R extends AnyRoute>(
       await getOriginGuard().check(request);
 
       const profile = route.rateLimit ?? 'default';
-      const ip = clientIp(request);
+      const ip = clientAddress(request);
       const limit = async (limitedUserId: string | null): Promise<void> => {
         if (profile === 'none') return;
         const decision = await getRateLimiter().consume({
@@ -191,23 +186,35 @@ export function routeHandler<R extends AnyRoute>(
 
       // 4. authentication
       let email: string | null = null;
-      if (route.auth === 'user') {
-        const session = await getSessionUser(request);
-        if (session === null) {
+      if (route.auth === 'user' || route.freshAuth === true) {
+        let identity = await resolveIdentity(request);
+        const presentedBearer = /^Bearer\b/i.test(request.headers.get('authorization') ?? '');
+        if (identity === null && (route.auth === 'user' || presentedBearer)) {
           throw new AppError(
             'UNAUTHENTICATED',
             'Vous devez être connecté pour effectuer cette action.',
           );
         }
-        if (!session.emailConfirmed) {
+        if (identity !== null && route.freshAuth === true) {
+          identity = await resolveFreshIdentity(request, identity);
+          if (identity === null) {
+            throw new AppError(
+              'UNAUTHENTICATED',
+              'Vous devez être connecté pour effectuer cette action.',
+            );
+          }
+        }
+        if (identity !== null && !identity.emailConfirmed) {
           throw new AppError(
             'EMAIL_NOT_CONFIRMED',
             'Confirmez votre adresse e-mail pour continuer.',
           );
         }
-        userId = session.userId;
-        email = session.email;
-        await limit(userId);
+        if (identity !== null) {
+          userId = identity.userId;
+          email = identity.email;
+          await limit(userId);
+        }
       }
 
       // 5. validation

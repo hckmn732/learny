@@ -18,12 +18,15 @@ const KEY_BYTES = Buffer.from(KEY_32_BYTES, 'base64');
 /** learny-test-only: complete production environment, format-valid but without any real secret. */
 const PRODUCTION_ENV: Record<string, string> = {
   APP_ENV: 'production',
+  API_INTERNAL_URL: 'https://api.learny.example',
+  API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
   NEXT_PUBLIC_APP_URL: 'https://learny.example',
   NEXT_PUBLIC_SUPABASE_URL: 'https://learny-test-only.supabase.co',
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon-learni-test-only',
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: 'vapid-public-learny-test-only',
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_live_learny-test-only',
   SUPABASE_SERVICE_ROLE_KEY: 'service-role-learny-test-only',
+  SUPABASE_JWKS_URL: 'https://learny-test-only.supabase.co/auth/v1/.well-known/jwks.json',
   DATABASE_URL: 'postgresql://learny:learny-test-only@db.example:5432/learny',
   APP_ENCRYPTION_KEY: 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=', // learny-test-only
   INNGEST_EVENT_KEY: 'event-key-learny-test-only',

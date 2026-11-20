@@ -60,6 +60,7 @@ describe('[SPEC-008] local stack guards', () => {
     expect(urls.inngest).toBe(`http://127.0.0.1:${String(STACK.inngest)}`);
     expect(urls.mailpit).toBe(`http://127.0.0.1:${String(STACK.mailpitUi)}`);
     expect(urls.web).toBe(`http://127.0.0.1:${String(STACK.web)}`);
+    expect(urls.api).toBe(`http://127.0.0.1:${String(STACK.api)}`);
     expect(urls.postgres).toContain(`:${String(STACK.postgres)}`);
   });
 

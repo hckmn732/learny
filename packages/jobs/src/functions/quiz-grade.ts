@@ -3,7 +3,7 @@ import type { Clock, LearnyLogger } from '@learny/core';
 import { defineFunction } from '../define';
 
 // SPEC-611 ET-8, BR-QUI-04, CL-6 — durable correction of one submitted validation attempt.
-// The handler is injected by the host (apps/web, apps/worker): `packages/jobs` cannot import
+// The handler is injected by the host (apps/web, apps/api): `packages/jobs` cannot import
 // `packages/services` because services already imports the transaction/outbox helpers of jobs.
 // The function stays a thin, idempotent step; every business write is performed by the service.
 

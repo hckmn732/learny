@@ -12,6 +12,7 @@
     "./msw": "./src/msw.ts",
     "./render": "./src/render.tsx",
     "./supabase": "./src/supabase.ts",
+    "./api": "./src/api.ts",
     "./auth": "./src/auth.ts",
     "./mail": "./src/mail.ts",
     "./touch-targets": "./src/touch-targets.ts"
@@ -31,6 +32,7 @@
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.9",
     "msw": "^3.0.5",
+    "next-test-api-route-handler": "^5.0.7",
     "pixelmatch": "^8.0.0",
     "pngjs": "^7.0.0"
   },

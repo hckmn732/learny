@@ -30,9 +30,9 @@ export const REQUIRED_SERVICES = [
   'inngest',
   'kong',
   'web',
-  'worker',
+  'api',
 ];
-export const HEALTHCHECKED_SERVICES = ['db', 'auth', 'storage', 'inngest', 'kong', 'web', 'worker'];
+export const HEALTHCHECKED_SERVICES = ['db', 'auth', 'storage', 'inngest', 'kong', 'web', 'api'];
 export const EXPECTED_VOLUMES = {
   'db-data': '/var/lib/postgresql/data',
   'storage-data': '/var/lib/storage',
@@ -136,7 +136,7 @@ export function validateComposeDocument(doc, text) {
   if ((services.mailpit?.profiles ?? []).length === 0) {
     errors.push('service mailpit : doit rester optionnel via un profil');
   }
-  for (const name of ['web', 'worker']) {
+  for (const name of ['web', 'api']) {
     const service = services[name];
     const user = String(service?.user ?? '');
     if (!/^(?:[1-9][0-9]*|[a-z][a-z0-9_-]*)(?::[0-9]+)?$/.test(user) || /^root(:|$)/.test(user)) {
@@ -155,11 +155,18 @@ export function validateComposeDocument(doc, text) {
     }
   }
   const webDeps = services.web?.depends_on ?? {};
-  for (const dep of ['db', 'auth', 'storage', 'inngest', 'migrate']) {
+  for (const dep of ['db', 'auth', 'storage', 'inngest', 'migrate', 'api']) {
     if (webDeps[dep] === undefined) errors.push(`web : dépendance ${dep} absente`);
   }
   if (webDeps.migrate?.condition !== 'service_completed_successfully') {
     errors.push('web : les migrations doivent se terminer avant le démarrage');
+  }
+  if (webDeps.api?.condition !== 'service_healthy') {
+    errors.push('web : l’API doit être saine avant le démarrage');
+  }
+  const appEnv = services.api?.environment ?? {};
+  for (const name of ['API_INTERNAL_URL', 'API_PROXY_SECRET', 'LEARNY_API_ROLE']) {
+    if (appEnv[name] === undefined) errors.push(`service api : ${name} absent`);
   }
   const volumes = doc.volumes ?? {};
   for (const volume of Object.keys(EXPECTED_VOLUMES)) {
@@ -200,7 +207,7 @@ export function validateResolvedConfig(config) {
       errors.push(`config résolue : ${name} sans contrôle de santé`);
     }
   }
-  for (const name of ['web', 'worker']) {
+  for (const name of ['web', 'api']) {
     const user = String(services[name]?.user ?? '');
     if (user === '' || /^0(:|$)/.test(user) || /^root(:|$)/.test(user)) {
       errors.push(`config résolue : ${name} ne doit pas tourner en root`);
@@ -216,6 +223,13 @@ export function validateResolvedConfig(config) {
   if (webEnv.DATABASE_URL === undefined) errors.push('config résolue : web sans DATABASE_URL');
   if (webEnv.ENABLE_SDD_PAGES !== 'false' && webEnv.ENABLE_SDD_PAGES !== '0') {
     errors.push('config résolue : les pages SDD doivent être désactivées');
+  }
+  for (const name of ['API_INTERNAL_URL', 'API_PROXY_SECRET']) {
+    if (webEnv[name] === undefined) errors.push(`config résolue : web sans ${name}`);
+  }
+  const apiEnv = services.api?.environment ?? {};
+  if (apiEnv.LEARNY_API_ROLE !== 'all') {
+    errors.push('config résolue : LEARNY_API_ROLE doit valoir all');
   }
   for (const name of ['db', 'auth', 'rest', 'storage']) {
     if ((services[name]?.ports ?? []).length > 0) {
@@ -522,7 +536,7 @@ export async function probeStack(project, envFile, env, webPort) {
     probes.push({ name: 'web', target: '/api/v1/health', ok: false, detail: String(error) });
   }
   const execProbes = [
-    ['worker', ['exec', '-T', 'worker', 'node', '/app/healthcheck.mjs'], '/health'],
+    ['api', ['exec', '-T', 'api', 'node', '/app/healthcheck-api.mjs'], '/health'],
     [
       'postgres',
       ['exec', '-T', 'db', 'pg_isready', '-U', 'postgres', '-d', 'postgres'],
@@ -555,7 +569,7 @@ export async function collectStatus({ project, envFile, env, webPort }) {
     image: service.Image ?? '',
   }));
   const webInfo = serviceImageInfo(project, envFile, env, 'web');
-  const workerInfo = serviceImageInfo(project, envFile, env, 'worker');
+  const apiInfo = serviceImageInfo(project, envFile, env, 'api');
   const images = [
     {
       name: 'web',
@@ -565,11 +579,11 @@ export async function collectStatus({ project, envFile, env, webPort }) {
       user: webInfo?.user ?? 'Non vérifié',
     },
     {
-      name: 'worker',
-      tag: workerInfo?.image ?? env.LEARNY_WORKER_IMAGE ?? 'Non vérifié',
-      version: workerInfo?.labels['org.opencontainers.image.version'] ?? 'Non vérifié',
-      commit: workerInfo?.labels['org.opencontainers.image.revision'] ?? 'Non vérifié',
-      user: workerInfo?.user ?? 'Non vérifié',
+      name: 'api',
+      tag: apiInfo?.image ?? env.LEARNY_API_IMAGE ?? 'Non vérifié',
+      version: apiInfo?.labels['org.opencontainers.image.version'] ?? 'Non vérifié',
+      commit: apiInfo?.labels['org.opencontainers.image.revision'] ?? 'Non vérifié',
+      user: apiInfo?.user ?? 'Non vérifié',
     },
   ];
   const probes = await probeStack(project, envFile, env, webPort);
@@ -614,27 +628,31 @@ async function main() {
   }
   if (doc !== null) errors.push(...validateComposeDocument(doc, composeText));
   errors.push(...validateDockerfile(readFile('docker/web.Dockerfile')));
-  errors.push(...validateDockerfile(readFile('docker/worker.Dockerfile')));
+  errors.push(...validateDockerfile(readFile('docker/api.Dockerfile')));
   errors.push(...validateDockerignore(readFile(DOCKERIGNORE_FILE)));
+  errors.push(...validateDockerignore(readFile('docker/api.Dockerfile.dockerignore')));
   errors.push(...validateGuide(readFile(GUIDE_FILE)));
 
   let env = {};
   let envPath = envFileOption;
-  try {
-    const loaded = loadEnvFile(envFileOption);
-    envPath = loaded.path;
-    env = { ...loaded.vars, ...process.env };
-    const missing = missingRequiredVariables(composeText, env);
-    for (const name of missing) errors.push(`variable obligatoire absente : ${name}`);
-  } catch (error) {
-    errors.push(error instanceof Error ? error.message : String(error));
+  const staticOnly = process.argv.includes('--static');
+  if (!staticOnly) {
+    try {
+      const loaded = loadEnvFile(envFileOption);
+      envPath = loaded.path;
+      env = { ...loaded.vars, ...process.env };
+      const missing = missingRequiredVariables(composeText, env);
+      for (const name of missing) errors.push(`variable obligatoire absente : ${name}`);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
   }
 
-  if (errors.length === 0 && dockerAvailable()) {
+  if (errors.length === 0 && !staticOnly && dockerAvailable()) {
     const resolved = composeConfig(envPath, env);
     if (!resolved.ok) errors.push(`docker compose config : ${resolved.error ?? 'échec'}`);
     else errors.push(...validateResolvedConfig(resolved.config));
-  } else if (!dockerAvailable()) {
+  } else if (!staticOnly && !dockerAvailable()) {
     console.warn('Docker indisponible : validation statique seulement (CL-7).');
     if (up) errors.push('Docker est requis pour --up : aucun démarrage inventé.');
   }
@@ -643,9 +661,11 @@ async function main() {
     for (const error of errors) console.error(`✖ ${error}`);
     process.exit(1);
   }
-  console.log('✔ configuration auto-hébergée valide (Compose, Dockerfiles, guide).');
+  console.log(
+    `✔ configuration auto-hébergée valide (Compose, Dockerfiles, guide${staticOnly ? ', contrôle statique' : ''}).`,
+  );
 
-  if (!up) return;
+  if (!up || staticOnly) return;
 
   const webPort = env.LEARNY_WEB_PORT ?? '8080';
   console.log(`Démarrage réel du projet ${project}…`);

@@ -51,12 +51,17 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
    ├─ /api/webhooks/stripe
    └─ /_dev/sdd/[specId] : pages de démonstration (hors production, ADR-0049)
    │
+   │  La migration livre l'API à côté du web ; les écrans produit restent encore sur Next.js.
+   └──► apps/api (Hono, Vercel/Docker, fra1)
+         ├─ /api/v1/* et flux SSE du tuteur
+         ├─ /api/inngest (rôle `all` ou `jobs`)
+         └─ rôles `all` (défaut), `api`, `jobs`
+   │
    ├──► Supabase (UE) : Postgres 15+ (pgvector, unaccent, pg_trgm), Auth, Storage
    ├──► Inngest Cloud : orchestration des jobs (événements, cron, reprises)
    ├──► Fournisseurs IA via packages/llm (Anthropic par défaut ; BYOK)
    ├──► Voyage AI (embeddings), API de recherche web (repli)
    ├──► Resend (e-mail), Web Push (VAPID), Stripe (abonnement), Sentry (erreurs)
-apps/worker (Node, Hono) : sert les mêmes fonctions Inngest pour l'auto-hébergement Docker (ADR-0017)
 ```
 
 ## 3. Organisation du dépôt
@@ -66,7 +71,7 @@ apps/worker (Node, Hono) : sert les mêmes fonctions Inngest pour l'auto-héberg
 ├── AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, CHANGELOG.md
 ├── apps/
 │   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, middleware.ts, e2e/ (Playwright)
-│   └── worker/                 serveur Hono exposant /api/inngest (Docker)
+│   └── api/                    serveur Hono : API, santé, webhook Stripe et /api/inngest
 ├── packages/
 │   ├── config/                 schéma des variables d'environnement (Zod), constantes produit, identifiants de modèles
 │   ├── core/                   horloge, fuseaux, erreurs typées, logger, utilitaires (Result, ids)
@@ -158,11 +163,11 @@ Crons (UTC, Inngest) : `cron/hourly-tick` (toutes les heures, :05) → pour chaq
 
 ## 6. Environnements
 
-| Environnement | Web | Base | Jobs | IA |
-|---|---|---|---|---|
-| `local` | `pnpm dev` (localhost:3000) | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé par défaut (`LLM_MODE=mock`) ; réel si clé fournie |
-| `test` (CI) | build + `next start` | Supabase CLI (Docker) | Inngest Dev Server | modèle simulé obligatoire |
-| `preview` | Vercel preview | Supabase projet `preview` (UE) | Inngest branche | réel, plafond bas |
-| `production` | Vercel (fra1) | Supabase projet `prod` (UE, Francfort) | Inngest Cloud | réel |
+| Environnement | Web | API | Base | Jobs | IA |
+|---|---|---|---|---|---|
+| `local` | `pnpm dev` (localhost:3000) | `pnpm dev` (localhost:3001, rôle `all`) | Supabase CLI (Docker) | Inngest Dev Server → `apps/api` | modèle simulé par défaut (`LLM_MODE=mock`) ; réel si clé fournie |
+| `test` (CI) | build + `next start` | build + Hono Node | Supabase CLI (Docker) | endpoint Inngest de `apps/api` | modèle simulé obligatoire |
+| `preview` | Vercel preview `learny-web` | Vercel `learny-api` (fra1), déployée avant le web | Supabase projet `preview` (UE) | Inngest branche → `learny-api` | réel, plafond bas |
+| `production` | Vercel `learny-web` (fra1) | Vercel `learny-api` (fra1), déployée avant le web | Supabase projet `prod` (UE, Francfort) | Inngest Cloud → `learny-api` | réel |
 
 Le détail des variables est dans `.env.example` et `packages/config` (SPEC-009).

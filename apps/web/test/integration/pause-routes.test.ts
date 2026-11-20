@@ -5,11 +5,12 @@
 // planning and the journal rows are read back exactly as the browser sees them.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
-import { afterAll, afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, afterAll, afterEach, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
+import { type ApiTarget, requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import {
   DELETE as endRoute,
@@ -19,6 +20,10 @@ import {
 import { noopOriginGuard, setOriginGuard } from '../../lib/api/origin';
 import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
+
+let apiTarget: ApiTarget = 'next';
+
+setApiAppFactory(createApp);
 
 const PAUSE = { GET: stateRoute, POST: startRoute, DELETE: endRoute };
 const PREFIX = 'sdd-721-routes-';
@@ -54,7 +59,7 @@ async function call(
   options: { method: string; body?: unknown; idempotencyKey?: string },
 ): Promise<ApiAnswer> {
   let answer: ApiAnswer = { status: 0, body: {} };
-  await testApiHandler({
+  await requestApi(apiTarget, {
     appHandler: appHandler as never,
     url: 'http://localhost/api/v1/me/pause',
     test: async ({ fetch }) => {
@@ -107,7 +112,10 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-721] service et API', () => {
+describe.each(['next', 'hono'] as const)('[SPEC-721] service et API [SPEC-1101] (%s)', (target) => {
+  beforeEach(() => {
+    apiTarget = target;
+  });
   it('CA-3, CL-1, CL-3 — état isolé, date passée 422, double envoi idempotent', async () => {
     setOriginGuard(noopOriginGuard);
     setRateLimiter(noopRateLimiter);

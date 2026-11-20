@@ -1,5 +1,3 @@
-// Conditional Sentry integration of the self-hosted worker (SPEC-010, EF-3/EF-4, ET-4).
-// The Node SDK is loaded lazily and only when SENTRY_DSN is defined outside the test environment.
 import {
   buildSafeSentryEvent,
   sanitizeSentryEvent,
@@ -13,11 +11,6 @@ type SentrySdk = typeof import('@sentry/node');
 let sdkPromise: Promise<SentrySdk> | undefined;
 let initialized = false;
 
-function loadSdk(): Promise<SentrySdk> {
-  sdkPromise ??= import('@sentry/node');
-  return sdkPromise;
-}
-
 function dsn(env: Env): string | undefined {
   const value = env.SENTRY_DSN?.trim();
   return value === undefined || value === '' ? undefined : value;
@@ -27,11 +20,11 @@ export function sentryEnabled(env: Env = process.env): boolean {
   return dsn(env) !== undefined && env.APP_ENV !== 'test' && env.NODE_ENV !== 'test';
 }
 
-/** Initialises the Node SDK; returns whether it is active. Never throws (CL-3, CL-4). */
-export async function initWorkerSentry(env: Env = process.env): Promise<boolean> {
+export async function initApiSentry(env: Env = process.env): Promise<boolean> {
   if (!sentryEnabled(env)) return false;
   try {
-    const Sentry = await loadSdk();
+    sdkPromise ??= import('@sentry/node');
+    const Sentry = await sdkPromise;
     Sentry.init({
       dsn: dsn(env),
       environment: env.APP_ENV ?? env.NODE_ENV ?? 'development',
@@ -46,13 +39,7 @@ export async function initWorkerSentry(env: Env = process.env): Promise<boolean>
   }
 }
 
-/** Test hook: forget the initialisation state between two environments. */
-export function resetWorkerSentryForTests(): void {
-  initialized = false;
-}
-
-/** Reporter injected into the job registry; a fake transport can capture events in tests. */
-export function createWorkerReporter(
+export function createApiReporter(
   env: Env = process.env,
   transport?: (event: SafeSentryEvent) => void,
 ): ErrorReporter {
@@ -67,7 +54,7 @@ export function createWorkerReporter(
         return event;
       }
       if (initialized) {
-        void loadSdk().then((Sentry) => {
+        void sdkPromise?.then((Sentry) => {
           Sentry.captureEvent(event as unknown as Parameters<typeof Sentry.captureEvent>[0]);
         });
       }

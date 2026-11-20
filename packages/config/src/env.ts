@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { PUBLIC_ENV_KEYS, publicEnvSchema } from './env-public';
 import {
+  API_ROLES,
   APP_ENVS,
   EMAIL_MODES,
   EnvConfigError,
@@ -28,12 +29,17 @@ export const SERVER_ENV_KEYS = [
   'LOG_LEVEL',
   'APP_VERSION',
   'GIT_COMMIT',
+  'API_INTERNAL_URL',
+  'API_PROXY_SECRET',
+  'LEARNY_API_ROLE',
+  'API_PORT',
   'RATE_LIMIT_IP_SECRET',
   'RATE_LIMIT_MODE',
   'TRUST_PROXY',
   'ALLOWED_ORIGINS',
   'SUPABASE_SERVICE_ROLE_KEY',
   'SUPABASE_JWT_SECRET',
+  'SUPABASE_JWKS_URL',
   'DATABASE_URL',
   'DATABASE_POOL_MAX',
   'DB_LOG_QUERIES',
@@ -134,6 +140,8 @@ export const PRODUCTION_REQUIRED_KEYS = [
   'LEGAL_ENTITY_ADDRESS',
   'LEGAL_CONTACT_EMAIL',
   'LEGAL_HOST_NAME',
+  'API_INTERNAL_URL',
+  'API_PROXY_SECRET',
 ] as const;
 
 const STATIC_DEFAULTS = {
@@ -156,6 +164,9 @@ export function envDefaults(appEnv: AppEnv): Record<string, string> {
   const simulated = appEnv === 'local' || appEnv === 'test';
   return {
     ...STATIC_DEFAULTS,
+    API_PORT: '3001',
+    LEARNY_API_ROLE: 'all',
+    ...(appEnv === 'production' ? {} : { API_INTERNAL_URL: 'http://127.0.0.1:3001' }),
     APP_ENV: appEnv,
     LLM_MODE: simulated ? 'mock' : 'live',
     STRIPE_MODE: appEnv === 'production' ? 'live' : appEnv === 'preview' ? 'test' : 'mock',
@@ -213,6 +224,10 @@ const serverFields = {
   LOG_LEVEL: enumOf(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']),
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
+  API_INTERNAL_URL: serviceUrl.optional(),
+  API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
+  LEARNY_API_ROLE: enumOf(API_ROLES),
+  API_PORT: integer(1, 65535),
   RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
   /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
   RATE_LIMIT_MODE: enumOf(['on', 'off']),
@@ -223,6 +238,7 @@ const serverFields = {
     .optional(),
   SUPABASE_SERVICE_ROLE_KEY: secret.optional(),
   SUPABASE_JWT_SECRET: secret.optional(),
+  SUPABASE_JWKS_URL: serviceUrl.optional(),
   DATABASE_URL: z
     .string()
     .regex(/^postgres(ql)?:\/\/\S+$/, 'postgres-url')
@@ -341,6 +357,14 @@ assertKeys('ENV', serverEnvShape, RUNTIME_ENV_KEYS);
  */
 export function parseServerEnv(raw: EnvInput = {}, appEnv?: AppEnv): ServerEnv {
   const input = normalizeEnv(raw);
+  if (
+    input.LEARNY_API_ROLE !== undefined &&
+    !(API_ROLES as readonly string[]).includes(input.LEARNY_API_ROLE)
+  ) {
+    throw new Error(
+      `LEARNY_API_ROLE invalide : valeurs permises : ${API_ROLES.join(', ')}.`,
+    );
+  }
   const requested = appEnv ?? input.APP_ENV ?? 'local';
   const effectiveEnv = isAppEnv(requested) ? requested : 'local';
   // Defaults first, then the provided values: an empty variable falls back to its documented

@@ -193,6 +193,7 @@ export const meAiCredentialsCreate = defineRoute({
   successStatus: 201,
   idempotent: true,
   rateLimit: 'ai',
+  freshAuth: true,
   validationStatus: 422,
   summary: 'Enregistre une clé personnelle chiffrée auprès d’un fournisseur d’IA (SPEC-505).',
   errors: [
@@ -226,6 +227,7 @@ export const meAiCredentialsDelete = defineRoute({
   output: null,
   successStatus: 204,
   rateLimit: 'ai',
+  freshAuth: true,
   summary:
     'Supprime une clé personnelle et les affectations de tâches qui la référencent (SPEC-505).',
   errors: ['NOT_FOUND'],

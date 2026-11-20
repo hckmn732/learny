@@ -58,14 +58,15 @@ Prérequis : Node 24, pnpm 10, Docker Engine/Compose et Supabase CLI 2. Copier `
 ```bash
 pnpm install
 pnpm dev:up        # Supabase local, Inngest Dev Server et Mailpit
-pnpm dev:check     # un état par service : supabase, postgres, inngest, mailpit, web
-pnpm dev           # application web sur http://127.0.0.1:3000
+pnpm dev:check     # un état par service : supabase, postgres, inngest, mailpit, web, API
+pnpm dev           # web sur :3000 et API Hono sur :3001
 pnpm dev:down      # arrêt sans supprimer les volumes
 ```
 
 | Service | URL locale |
 |---|---|
 | Application web | http://127.0.0.1:3000 |
+| API backend / jobs | http://127.0.0.1:3001 (`LEARNY_API_ROLE=all`) |
 | Supabase API / Studio | http://127.0.0.1:54321 · http://127.0.0.1:54323 |
 | Postgres | `postgresql://postgres:postgres@127.0.0.1:54322/postgres` |
 | Inngest Dev Server | http://127.0.0.1:8288 |

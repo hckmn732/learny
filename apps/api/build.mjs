@@ -1,4 +1,3 @@
-// Bundles the worker and its workspace packages into dist/server.mjs (ET-6).
 import { build } from 'esbuild';
 
 await build({
@@ -10,7 +9,6 @@ await build({
   format: 'esm',
   sourcemap: true,
   logLevel: 'warning',
-  // CommonJS dependencies bundled in ESM still call require().
   banner: {
     js: "import { createRequire as __createRequire } from 'node:module'; const require = __createRequire(import.meta.url);",
   },

@@ -20,6 +20,7 @@ import {
   maskDestination,
   missingKeys,
   readManagedConfig,
+  readApiVercelConfig,
   readVercelConfig,
 } from './lib.mjs';
 import { readDeployWorkflow, validateDeployWorkflow } from './workflow.mjs';
@@ -154,6 +155,44 @@ function validateHeaders(vercel, vercelRaw) {
   return { errors, warnings };
 }
 
+function validateApiVercel(apiVercel, managed) {
+  const errors = [];
+  if (apiVercel?.error !== undefined && apiVercel?.error !== null) {
+    return { errors: [apiVercel.error], warnings: [] };
+  }
+  const config = apiVercel?.config;
+  const regions = Array.isArray(config?.regions) ? config.regions.map(String) : [];
+  if (regions.length !== 1 || regions[0] !== managed.regions.vercel) {
+    errors.push(
+      `apps/api/vercel.json doit cibler uniquement ${managed.regions.vercel}, reçu ${regions.join(', ')}.`,
+    );
+  }
+  const functions = config?.functions;
+  const names = functions !== null && typeof functions === 'object' ? Object.keys(functions) : [];
+  if (names.length !== 1 || names[0] !== 'api/index.ts') {
+    errors.push('apps/api/vercel.json doit déclarer une fonction unique api/index.ts.');
+  } else {
+    const entry = functions[names[0]];
+    if (entry?.maxDuration !== 60) {
+      errors.push('La fonction API doit conserver maxDuration=60 comme les routes IA du web.');
+    }
+    if (!String(entry?.runtime ?? '').startsWith('nodejs')) {
+      errors.push('La fonction API doit utiliser le runtime Node de Vercel.');
+    }
+  }
+  if (config?.env !== undefined || config?.build?.env !== undefined) {
+    errors.push('apps/api/vercel.json ne doit contenir aucun secret ni bloc env.');
+  }
+  if (
+    /sk-[A-Za-z0-9]|service_role|eyJhbGci|BEGIN [A-Z ]*PRIVATE KEY/.test(
+      String(apiVercel?.raw ?? ''),
+    )
+  ) {
+    errors.push('apps/api/vercel.json semble contenir un secret.');
+  }
+  return { errors, warnings: [] };
+}
+
 function validateWorkflow(workflow, workflowError) {
   if (workflowError !== null && workflowError !== undefined)
     return { errors: [workflowError], warnings: [] };
@@ -167,6 +206,7 @@ export function validateDeployment(input) {
     env,
     managed,
     vercel,
+    apiVercel,
     vercelRaw,
     workflow,
     workflowError,
@@ -194,13 +234,21 @@ export function validateDeployment(input) {
   if (vercel?.error !== undefined && vercel?.error !== null) errors.push(vercel.error);
   const regions = validateRegions({ envName, env, managed, vercel: vercel?.config, dryRun });
   const headers = validateHeaders(vercel?.config, vercelRaw);
+  const apiConfig = validateApiVercel(apiVercel, managed);
   const refResult = validateRef({ envName, ref, branch, event, dryRun });
   const workflowResult = validateWorkflow(workflow, workflowError);
 
-  errors.push(...regions.errors, ...headers.errors, ...refResult.errors, ...workflowResult.errors);
+  errors.push(
+    ...regions.errors,
+    ...headers.errors,
+    ...apiConfig.errors,
+    ...refResult.errors,
+    ...workflowResult.errors,
+  );
   warnings.push(
     ...regions.warnings,
     ...headers.warnings,
+    ...apiConfig.warnings,
     ...refResult.warnings,
     ...workflowResult.warnings,
   );
@@ -274,8 +322,8 @@ export function buildPlan({ envName, env }) {
     {
       id: 'vercel',
       label: production
-        ? 'Déployer Vercel en production (fra1)'
-        : 'Déployer la preview Vercel (fra1)',
+        ? 'Déployer l’API puis le web Vercel en production (fra1)'
+        : 'Déployer la preview de l’API puis du web Vercel (fra1)',
       destination: production ? app : UNCONFIGURED,
       note: production
         ? undefined
@@ -302,7 +350,12 @@ function failureReport(message, input) {
     actions: [],
     warnings: [],
     errors: [message],
-    destinations: { web: UNCONFIGURED, database: UNCONFIGURED, jobs: UNCONFIGURED },
+    destinations: {
+      web: UNCONFIGURED,
+      api: UNCONFIGURED,
+      database: UNCONFIGURED,
+      jobs: UNCONFIGURED,
+    },
   };
 }
 
@@ -324,9 +377,11 @@ export function runCheck(options = {}) {
 
   let managed;
   let vercel;
+  let apiVercel;
   try {
     managed = readManagedConfig(root);
     vercel = readVercelConfig(root);
+    apiVercel = readApiVercelConfig(root);
   } catch (error) {
     const result = { ok: false, code: EXIT.config, report: failureReport(error.message, input) };
     return result;
@@ -338,6 +393,7 @@ export function runCheck(options = {}) {
     env,
     managed,
     vercel,
+    apiVercel,
     vercelRaw: vercel.raw,
     workflow: workflow.doc,
     workflowError: workflow.error,
@@ -361,6 +417,7 @@ export function runCheck(options = {}) {
     errors: validation.errors,
     destinations: {
       web: maskDestination(env.NEXT_PUBLIC_APP_URL ?? env.APP_URL),
+      api: maskDestination(env.API_INTERNAL_URL),
       database: maskDestination(env.SUPABASE_DB_URL ?? env.DATABASE_URL),
       jobs: maskDestination(env.INNGEST_APP_URL),
     },

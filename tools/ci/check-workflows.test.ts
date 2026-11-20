@@ -342,10 +342,10 @@ describe('[SPEC-1001] piste de migration et garde-fous de déploiement', () => {
     );
   });
 
-  it('ne déploie jamais la branche migration depuis la preview (EF-2, CA-1)', () => {
+  it('autorise la branche migration dans la preview avec l’API (SPEC-1103)', () => {
     const condition = (realWorkflows().deploy?.jobs?.preview?.if ?? '').replaceAll(' ', '');
-    expect(condition).toContain("github.event.workflow_run.head_branch!='migration'");
-    expect(condition).toContain("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')");
+    expect(condition).not.toContain("github.event.workflow_run.head_branch!='migration'");
+    expect(condition).not.toContain("!startsWith(github.event.workflow_run.head_branch,'spec/SPEC-1')");
 
     const loosened = copy();
     const preview = loosened.deploy?.jobs?.preview;
@@ -353,20 +353,19 @@ describe('[SPEC-1001] piste de migration et garde-fous de déploiement', () => {
       preview.if =
         "github.event.workflow_run.event == 'pull_request' && " +
         "github.event.workflow_run.conclusion == 'success' && " +
-        "github.event.workflow_run.head_branch != 'main'";
+        "github.event.workflow_run.head_branch != 'main' && " +
+        "github.event.workflow_run.head_branch != 'migration' && " +
+        "!startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')";
     const report = check(loosened).errors.join('\n');
-    expect(report).toContain('ne doit jamais déployer la branche migration');
-    expect(report).toContain('branches spec/SPEC-1*');
+    expect(report).toContain('doit déployer la branche migration');
+    expect(report).toContain('doit accepter les branches spec/SPEC-1*');
   });
 
-  it('exclut explicitement les branches spec/SPEC-1* de la preview (EF-2, CA-1)', () => {
+  it('refuse une exclusion des branches spec/SPEC-1* de la preview', () => {
     const withoutGlob = copy();
     const preview = withoutGlob.deploy?.jobs?.preview;
     if (preview !== undefined)
-      preview.if = (preview.if ?? '').replace(
-        "!startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')",
-        '',
-      );
+      preview.if = `${preview.if ?? ''} && !startsWith(github.event.workflow_run.head_branch, 'spec/SPEC-1')`;
     expect(check(withoutGlob).errors.join('\n')).toContain('branches spec/SPEC-1*');
   });
 

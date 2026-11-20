@@ -3,9 +3,9 @@
 // limiter and the origin guard are replaced by their no-op implementations.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
 import { afterAll, afterEach, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import type { Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestProgramme, createTestUser } from '@learny/db/testing';
@@ -15,6 +15,7 @@ import {
   retireBrick,
   type ServiceContext,
 } from '@learny/services';
+import { requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import { POST as REPORT } from '../../app/api/v1/bricks/[bid]/report/route';
 import { PATCH } from '../../app/api/v1/bricks/[bid]/route';
@@ -22,6 +23,7 @@ import { noopOriginGuard, setOriginGuard } from '../../lib/api/origin';
 import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
 
+setApiAppFactory(createApp);
 const PREFIX = 'sdd-501-routes-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
 
@@ -116,131 +118,134 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-501] routes des briques', () => {
-  it('PATCH corrige une brique et renvoie 200 (EF-4)', async () => {
-    const fx = await fixture('patch');
-    asUser(fx);
-    await testApiHandler({
-      appHandler: { PATCH },
-      params: { bid: fx.brickId },
-      url: `http://localhost/api/v1/bricks/${fx.brickId}`,
-      test: async ({ fetch }) => {
-        const response = await fetch({
-          method: 'PATCH',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            expectedVersion: 1,
-            payload: choicePayload(fx.notionIds, 'Correction par la route ?'),
-          }),
-        });
-        expect(response.status).toBe(200);
-        const body = (await response.json()) as { brickId: string; version: number };
-        expect(body.brickId).toBe(fx.brickId);
-        expect(body.version).toBe(2);
-      },
-    });
-  });
-
-  it('PATCH renvoie 409 sur version obsolète et 422 BRICK_INVALID', async () => {
-    const fx = await fixture('patch-errors');
-    asUser(fx);
-    await testApiHandler({
-      appHandler: { PATCH },
-      params: { bid: fx.brickId },
-      url: `http://localhost/api/v1/bricks/${fx.brickId}`,
-      test: async ({ fetch }) => {
-        const stale = await fetch({
-          method: 'PATCH',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ expectedVersion: 9, payload: choicePayload(fx.notionIds) }),
-        });
-        expect(stale.status).toBe(409);
-
-        const invalid = await fetch({
-          method: 'PATCH',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ expectedVersion: 1, payload: { stem: 'x' } }),
-        });
-        expect(invalid.status).toBe(422);
-        const body = (await invalid.json()) as {
-          code: string;
-          errors?: { code?: string }[];
-        };
-        expect(body.code).toBe('BRICK_INVALID');
-        expect(body.errors?.some((issue) => issue.code === 'SCHEMA_INVALID')).toBe(true);
-      },
-    });
-  });
-
-  it('PATCH renvoie 404 sur la brique d’un autre utilisateur (CA-6)', async () => {
-    const alice = await fixture('alice');
-    const bob = await fixture('bob');
-    asUser(bob);
-    await testApiHandler({
-      appHandler: { PATCH },
-      params: { bid: alice.brickId },
-      url: `http://localhost/api/v1/bricks/${alice.brickId}`,
-      test: async ({ fetch }) => {
-        const response = await fetch({
-          method: 'PATCH',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ expectedVersion: 1, payload: choicePayload(bob.notionIds) }),
-        });
-        expect(response.status).toBe(404);
-      },
-    });
-  });
-
-  it('POST signale en 201 puis 200, et 422 sur brique retirée (EF-3, CL-9)', async () => {
-    const fx = await fixture('report');
-    asUser(fx);
-    await testApiHandler({
-      appHandler: { POST: REPORT },
-      params: { bid: fx.brickId },
-      url: `http://localhost/api/v1/bricks/${fx.brickId}/report`,
-      test: async ({ fetch }) => {
-        const first = await fetch({
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'idempotency-key': `report-${randomUUID()}`,
-          },
-          body: JSON.stringify({ reason: 'Formulation ambiguë.' }),
-        });
-        expect(first.status).toBe(201);
-        const body = (await first.json()) as { reportId: string; status: string };
-        expect(body.status).toBe('open');
-
-        const second = await fetch({
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'idempotency-key': `report-${randomUUID()}`,
-          },
-          body: JSON.stringify({ reason: 'Encore une fois.' }),
-        });
-        expect(second.status).toBe(200);
-        expect(((await second.json()) as { reportId: string }).reportId).toBe(body.reportId);
-      },
+describe.each(['next', 'hono'] as const)(
+  '[SPEC-501] routes des briques [SPEC-1101] (%s)',
+  (target) => {
+    it('PATCH corrige une brique et renvoie 200 (EF-4)', async () => {
+      const fx = await fixture('patch');
+      asUser(fx);
+      await requestApi(target, {
+        appHandler: { PATCH },
+        params: { bid: fx.brickId },
+        url: `http://localhost/api/v1/bricks/${fx.brickId}`,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PATCH',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              expectedVersion: 1,
+              payload: choicePayload(fx.notionIds, 'Correction par la route ?'),
+            }),
+          });
+          expect(response.status).toBe(200);
+          const body = (await response.json()) as { brickId: string; version: number };
+          expect(body.brickId).toBe(fx.brickId);
+          expect(body.version).toBe(2);
+        },
+      });
     });
 
-    await retireBrick(fx.ctx, fx.brickId);
-    await testApiHandler({
-      appHandler: { POST: REPORT },
-      params: { bid: fx.brickId },
-      url: `http://localhost/api/v1/bricks/${fx.brickId}/report`,
-      test: async ({ fetch }) => {
-        const response = await fetch({
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            'idempotency-key': `report-${randomUUID()}`,
-          },
-          body: JSON.stringify({ reason: 'Brique retirée.' }),
-        });
-        expect(response.status).toBe(422);
-        expect(((await response.json()) as { code: string }).code).toBe('BRICK_RETIRED');
-      },
+    it('PATCH renvoie 409 sur version obsolète et 422 BRICK_INVALID', async () => {
+      const fx = await fixture('patch-errors');
+      asUser(fx);
+      await requestApi(target, {
+        appHandler: { PATCH },
+        params: { bid: fx.brickId },
+        url: `http://localhost/api/v1/bricks/${fx.brickId}`,
+        test: async ({ fetch }) => {
+          const stale = await fetch({
+            method: 'PATCH',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ expectedVersion: 9, payload: choicePayload(fx.notionIds) }),
+          });
+          expect(stale.status).toBe(409);
+
+          const invalid = await fetch({
+            method: 'PATCH',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ expectedVersion: 1, payload: { stem: 'x' } }),
+          });
+          expect(invalid.status).toBe(422);
+          const body = (await invalid.json()) as {
+            code: string;
+            errors?: { code?: string }[];
+          };
+          expect(body.code).toBe('BRICK_INVALID');
+          expect(body.errors?.some((issue) => issue.code === 'SCHEMA_INVALID')).toBe(true);
+        },
+      });
     });
-  });
-});
+
+    it('PATCH renvoie 404 sur la brique d’un autre utilisateur (CA-6)', async () => {
+      const alice = await fixture('alice');
+      const bob = await fixture('bob');
+      asUser(bob);
+      await requestApi(target, {
+        appHandler: { PATCH },
+        params: { bid: alice.brickId },
+        url: `http://localhost/api/v1/bricks/${alice.brickId}`,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'PATCH',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ expectedVersion: 1, payload: choicePayload(bob.notionIds) }),
+          });
+          expect(response.status).toBe(404);
+        },
+      });
+    });
+
+    it('POST signale en 201 puis 200, et 422 sur brique retirée (EF-3, CL-9)', async () => {
+      const fx = await fixture('report');
+      asUser(fx);
+      await requestApi(target, {
+        appHandler: { POST: REPORT },
+        params: { bid: fx.brickId },
+        url: `http://localhost/api/v1/bricks/${fx.brickId}/report`,
+        test: async ({ fetch }) => {
+          const first = await fetch({
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'idempotency-key': `report-${randomUUID()}`,
+            },
+            body: JSON.stringify({ reason: 'Formulation ambiguë.' }),
+          });
+          expect(first.status).toBe(201);
+          const body = (await first.json()) as { reportId: string; status: string };
+          expect(body.status).toBe('open');
+
+          const second = await fetch({
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'idempotency-key': `report-${randomUUID()}`,
+            },
+            body: JSON.stringify({ reason: 'Encore une fois.' }),
+          });
+          expect(second.status).toBe(200);
+          expect(((await second.json()) as { reportId: string }).reportId).toBe(body.reportId);
+        },
+      });
+
+      await retireBrick(fx.ctx, fx.brickId);
+      await requestApi(target, {
+        appHandler: { POST: REPORT },
+        params: { bid: fx.brickId },
+        url: `http://localhost/api/v1/bricks/${fx.brickId}/report`,
+        test: async ({ fetch }) => {
+          const response = await fetch({
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'idempotency-key': `report-${randomUUID()}`,
+            },
+            body: JSON.stringify({ reason: 'Brique retirée.' }),
+          });
+          expect(response.status).toBe(422);
+          expect(((await response.json()) as { code: string }).code).toBe('BRICK_RETIRED');
+        },
+      });
+    });
+  },
+);

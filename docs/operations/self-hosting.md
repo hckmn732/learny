@@ -1,6 +1,6 @@
 # Auto-hébergement de Learny
 
-Ce guide décrit l'option Docker complète de Learny : deux images applicatives (`web`, `worker`), un
+Ce guide décrit l'option Docker complète de Learny : deux images applicatives (`web`, `api`), un
 Supabase auto-hébergé (Postgres, Auth, Storage, API PostgREST derrière Kong) et un Inngest
 auto-hébergé. **Ce n'est pas la production gérée de la V1** : les environnements gérés (Vercel,
 Supabase Cloud, Inngest Cloud) restent la cible de référence et sont décrits dans
@@ -81,9 +81,9 @@ docker compose --env-file .env.selfhost -f docker/compose.selfhost.yml ps
 ```
 
 Les deux images portent l'étiquette `org.opencontainers.image.revision` ; elle doit être identique
-pour `web` et `worker`. Le web écoute sur `LEARNY_WEB_PORT` (8080 par défaut), Kong sur
+pour `web` et `api`. Le web écoute sur `LEARNY_WEB_PORT` (8080 par défaut), Kong sur
 `LEARNY_SUPABASE_PORT` (8000) et l'interface Inngest sur `LEARNY_INNGEST_PORT` (8288). Postgres,
-Auth, Storage, PostgREST et le worker ne sont pas publiés sur l'hôte.
+Auth, Storage, PostgREST et l’API ne sont pas publiés sur l'hôte.
 
 Pour un essai local avec le capteur d'e-mails Mailpit, ajoutez le profil `local` :
 
@@ -92,14 +92,14 @@ docker compose --env-file .env.selfhost -f docker/compose.selfhost.yml \
   --profile local up -d --build
 ```
 
-Mailpit reste optionnel. Sans ce profil, `web` et `worker` démarrent avec le transport e-mail
+Mailpit reste optionnel. Sans ce profil, `web` et `api` démarrent avec le transport e-mail
 configuré dans `.env.selfhost` ; un transport de production doit être renseigné avant toute
 exposition publique.
 
 ## 4. Appliquer les migrations
 
 Le service `migrate` s'exécute à chaque démarrage, après que Postgres est sain, et avant `web`,
-`worker`, Auth et Storage. Il monte `supabase/migrations` en lecture seule et applique chaque
+`api`, Auth et Storage. Il monte `supabase/migrations` en lecture seule et applique chaque
 fichier une seule fois, dans l'ordre lexical, dans sa propre transaction. Chaque application est
 enregistrée avec son empreinte SHA-256 dans `public.selfhost_schema_migrations`.
 
@@ -129,7 +129,7 @@ vérifie les sondes. Les contrôles disponibles sont :
 | Composant | Sonde | Attendu |
 |---|---|---|
 | web | `GET /api/v1/health` | HTTP 200, base non `unavailable` |
-| worker | `GET /health` | `{"status":"ok"}` |
+| api | `GET /health` | `{"status":"ok"}` |
 | Postgres | `pg_isready -U postgres` | `accepting connections` |
 | Auth | `GET /health` | HTTP 200 |
 | Storage | `GET /status` | HTTP 200 |
@@ -172,9 +172,9 @@ git fetch --tags
 git checkout <tag-ou-commit>
 # Sauvegardez d'abord (section 6), puis :
 GIT_COMMIT="$(git rev-parse HEAD)" docker compose --env-file .env.selfhost \
-  -f docker/compose.selfhost.yml build --pull web worker
+  -f docker/compose.selfhost.yml build --pull web api
 GIT_COMMIT="$(git rev-parse HEAD)" docker compose --env-file .env.selfhost \
-  -f docker/compose.selfhost.yml up -d --no-deps web worker
+  -f docker/compose.selfhost.yml up -d --no-deps web api
 node tools/docker/check-selfhost.mjs --env-file .env.selfhost
 ```
 
@@ -208,7 +208,7 @@ n'exécuter qu'après une sauvegarde vérifiée.
 - **Auth ou Storage en boucle** : vérifiez que `migrate` s'est terminé avec le code 0 et que les
   rôles Supabase (`supabase_auth_admin`, `supabase_storage_admin`) existent ; l'image Postgres
   épinglée les crée à l'initialisation.
-- **Inngest ne synchronise pas le worker** : vérifiez `http://worker:3001/api/inngest` depuis le
+- **Inngest ne synchronise pas l’API** : vérifiez `http://api:3001/api/inngest` depuis le
   réseau interne et que `INNGEST_SIGNING_KEY` est un hexadécimal de longueur paire.
 - **E-mails absents** : sans profil `local`, Mailpit n'existe pas ; configurez un SMTP réel. Avec
   Mailpit, l'interface est sur `LEARNY_MAILPIT_UI_PORT`.
@@ -219,7 +219,7 @@ n'exécuter qu'après une sauvegarde vérifiée.
 
 Seuls `web`, Kong, Inngest et (avec le profil local) Mailpit publient un port. Placez un reverse
 proxy TLS devant `web` et Kong, limitez l'accès à l'interface Inngest, et n'exposez jamais
-Postgres. Les images `web` et `worker` s'exécutent sous l'utilisateur non root `node`, avec un
+Postgres. Les images `web` et `api` s'exécutent sous l'utilisateur non root `node`, avec un
 système de fichiers en lecture seule et sans capacités Linux. Les secrets sont fournis à
 l'exécution ; seules les variables `NEXT_PUBLIC_*` nécessaires sont passées au build.
 

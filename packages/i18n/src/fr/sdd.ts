@@ -122,7 +122,7 @@ export const sdd = {
       adapter: 'Adaptateur',
       endpoint: 'Point d’entrée',
       web: 'web',
-      worker: 'worker',
+      worker: 'api',
       webAdapter: 'inngest/next (Next.js)',
       workerAdapter: 'inngest/hono (Hono)',
       webEndpoint: 'POST /api/inngest',
@@ -1873,7 +1873,7 @@ export const sdd = {
     services: {
       title: 'Composants du Compose',
       intro:
-        'Chaîne d’appels : le web joint Supabase et Inngest ; le worker sert les fonctions Inngest.',
+        'Chaîne d’appels : le web joint l’API, Supabase et Inngest ; l’API sert les fonctions Inngest.',
       compose: 'Service',
       state: 'État',
     },
@@ -2728,6 +2728,29 @@ export const sdd = {
       region: 'Gestionnaires spéciaux : méthode et chemin',
       columns: ['Méthode', 'Chemin'],
     },
+  },
+  spec1101: {
+    health: {
+      title: 'Santé de l’API',
+      status: 'Statut',
+      version: 'Version',
+      commit: 'Commit',
+    },
+    coverage: {
+      title: 'Couverture des routes servies',
+      region: 'Couverture de l’API Hono',
+      columns: ['Indicateur', 'Valeur'],
+      registry: 'Routes du registre',
+      served: 'Routes servies par l’API',
+      specials: 'Gestionnaires spéciaux',
+    },
+    parity: {
+      title: 'Parité web / API',
+      label: 'GET /api/v1/health — web et API identiques',
+      yes: 'Oui',
+      no: 'Non',
+    },
+    unavailable: 'API indisponible',
   },
 } as const;
 
