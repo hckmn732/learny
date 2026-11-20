@@ -202,28 +202,27 @@ export async function runNativeClientScenario(
       throw new Error('Le rejeu idempotent a créé une autre formation.');
     }
 
-    const tutor = await serviceDb().transaction(async (tx) => {
-      const module = await createModule(tx, {
-        ownerId: userId ?? '',
-        formationId: created.formation.id,
-        status: 'open',
-        chapters: ['Discussion native'],
-      });
-      const course = await createCourse(tx, {
-        ownerId: userId ?? '',
-        formationId: created.formation.id,
-        moduleId: module.id,
-      });
-      const chapterId = module.chapterIds[0];
-      if (chapterId === undefined) throw new Error('Chapitre de discussion absent.');
-      return { courseId: course.id, chapterId };
-    });
-    const conversation = await client.api.courseConversationCreate({
-      params: { cid: tutor.courseId },
-      body: { chapterId: tutor.chapterId },
-    });
-
     await step('Discussion en flux', 200, async () => {
+      const tutor = await serviceDb().transaction(async (tx) => {
+        const module = await createModule(tx, {
+          ownerId: userId ?? '',
+          formationId: created.formation.id,
+          status: 'open',
+          chapters: ['Discussion native'],
+        });
+        const course = await createCourse(tx, {
+          ownerId: userId ?? '',
+          formationId: created.formation.id,
+          moduleId: module.id,
+        });
+        const chapterId = module.chapterIds[0];
+        if (chapterId === undefined) throw new Error('Chapitre de discussion absent.');
+        return { courseId: course.id, chapterId };
+      });
+      const conversation = await client.api.courseConversationCreate({
+        params: { cid: tutor.courseId },
+        body: { chapterId: tutor.chapterId },
+      });
       let text = '';
       let sources = 0;
       let followUps = 0;

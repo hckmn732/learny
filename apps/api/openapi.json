@@ -6416,6 +6416,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -6447,6 +6457,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action create de la démonstration SPEC-102."
       }
     },
@@ -6573,6 +6591,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -6604,6 +6632,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action remove de la démonstration SPEC-102."
       }
     },
@@ -7306,6 +7342,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7337,6 +7383,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action correct de la démonstration SPEC-501."
       }
     },
@@ -7427,6 +7481,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7458,6 +7522,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action create de la démonstration SPEC-501."
       }
     },
@@ -7584,6 +7656,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7615,6 +7697,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action report de la démonstration SPEC-501."
       }
     },
@@ -7705,6 +7795,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7736,6 +7836,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action call de la démonstration SPEC-504."
       }
     },
@@ -7862,6 +7970,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7893,6 +8011,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action create de la démonstration SPEC-505."
       }
     },
@@ -7983,6 +8109,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8014,6 +8150,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action delete de la démonstration SPEC-505."
       }
     },
@@ -8140,6 +8284,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8171,6 +8325,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action run de la démonstration SPEC-506."
       }
     },
@@ -8405,6 +8567,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8436,6 +8608,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action decide de la démonstration SPEC-512."
       }
     },
@@ -8562,6 +8742,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8593,6 +8783,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action suggest de la démonstration SPEC-512."
       }
     },
@@ -12121,6 +12319,16 @@
             },
             "description": "Erreur (RFC 9457)"
           },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -12152,6 +12360,14 @@
             "description": "Erreur (RFC 9457)"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "cookieAuth": []
+          }
+        ],
         "summary": "Action session de la démonstration stripe."
       }
     },

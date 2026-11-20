@@ -184,6 +184,10 @@ export function routeHandler<R extends AnyRoute>(
       // protected route is a cheap 401 and is answered by the Auth server's own limits).
       if (route.auth === 'public') await limit(null);
 
+      if (route.idempotent === true) {
+        readIdempotencyKey(request.headers.get(IDEMPOTENCY_KEY_HEADER));
+      }
+
       // 4. authentication
       let email: string | null = null;
       if (route.auth === 'user' || route.freshAuth === true) {
@@ -323,7 +327,13 @@ export function routeHandler<R extends AnyRoute>(
         if (route.auth === 'user') direct.headers.set('cache-control', 'no-store');
       }
       const answer = mergeResponseHeaders(
-        direct ?? successResponse(route, requestId, route.successStatus, response.payload),
+        direct ??
+          successResponse(
+            route,
+            requestId,
+            route.id === 'formations.access' ? 204 : route.successStatus,
+            response.payload,
+          ),
         responseHeaders,
       );
       // SPEC-804 ET-7 — durée du handler, sans donnée personnelle.

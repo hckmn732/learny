@@ -19,7 +19,7 @@ export const formationManagementImplementations = {
     const access = await canAccessFormation(ctx, params.fid);
     if (!access.ok) throw access.error;
     if (!access.value) throw new AppError('NOT_FOUND', 'Formation introuvable.');
-    return new Response(null, { status: 204 });
+    return undefined;
   },
   formationArchive: ({
     ctx,
