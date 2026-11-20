@@ -24,7 +24,7 @@ export type AiCredentialStatus = z.infer<typeof AiCredentialStatus>;
 /** EF-5 — model identifier accepted by the providers (1..120 characters). */
 export const MODEL_ID_PATTERN = /^[A-Za-z0-9._:/-]+$/;
 export const MODEL_ID_MAX_LENGTH = 120;
-export const MODEL_IDS_MAX = 10;
+export const MODEL_IDS_MAX = 500;
 export const API_KEY_MIN_LENGTH = 8;
 export const API_KEY_MAX_LENGTH = 512;
 export const BASE_URL_MAX_LENGTH = 2048;
@@ -106,6 +106,43 @@ export const CredentialListDto = z.object({
 export type CredentialListDto = z.infer<typeof CredentialListDto>;
 
 export const CredentialParams = z.object({ id: Uuid });
+
+export const AiCredentialDiscoverBody = z
+  .object({
+    provider: AiCredentialProvider,
+    baseUrl: z.string().trim().min(1).max(BASE_URL_MAX_LENGTH).optional(),
+    apiKey: z
+      .string()
+      .min(API_KEY_MIN_LENGTH)
+      .max(API_KEY_MAX_LENGTH)
+      .regex(/^\S+$/, { message: 'la clé ne contient aucun blanc' })
+      .optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.provider !== 'local' && value.apiKey === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['apiKey'],
+        message: 'la clé d’API est obligatoire',
+      });
+    }
+    if (
+      (value.provider === 'openai_compatible' || value.provider === 'local') &&
+      value.baseUrl === undefined
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['baseUrl'],
+        message: 'l’adresse du point d’accès est obligatoire pour ce fournisseur',
+      });
+    }
+  });
+export type AiCredentialDiscoverBody = z.infer<typeof AiCredentialDiscoverBody>;
+
+export const AiCredentialDiscoverDto = z.object({
+  modelIds: z.array(z.string().min(1).max(MODEL_ID_MAX_LENGTH)).max(MODEL_IDS_MAX),
+});
+export type AiCredentialDiscoverDto = z.infer<typeof AiCredentialDiscoverDto>;
 
 // SPEC-506 — qualification of one personal model. The report contains statuses, durations, safe
 // error codes and schema issues only: never the key, the ciphertext or a prompt.
@@ -217,6 +254,20 @@ export const meAiCredentialsList = defineRoute({
   errors: [],
 });
 
+export const meAiCredentialsDiscover = defineRoute({
+  id: 'me.ai.credentials.discover',
+  method: 'POST',
+  path: '/api/v1/me/ai/credentials/discover',
+  auth: 'user',
+  body: AiCredentialDiscoverBody,
+  output: AiCredentialDiscoverDto,
+  successStatus: 200,
+  rateLimit: 'ai',
+  validationStatus: 422,
+  summary: 'Découvre les modèles disponibles auprès d’un fournisseur à partir de ses identifiants.',
+  errors: ['VALIDATION_FAILED', 'URL_INVALID', 'URL_BLOCKED_HOST', 'AI_PROVIDER_ERROR'],
+});
+
 export const meAiCredentialsDelete = defineRoute({
   id: 'me.ai.credentials.delete',
   method: 'DELETE',
@@ -261,6 +312,7 @@ export const meAiCredentialsQualify = defineRoute({
 export const aiCredentialRoutes = {
   meAiCredentialsCreate,
   meAiCredentialsList,
+  meAiCredentialsDiscover,
   meAiCredentialsDelete,
   meAiCredentialsQualify,
 } as const;

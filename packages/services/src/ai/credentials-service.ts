@@ -8,6 +8,7 @@ import { and, asc, eq, sql } from 'drizzle-orm';
 
 import {
   AiCredentialCreateBody,
+  AiCredentialDiscoverBody,
   CREDENTIAL_LIMIT,
   CREDENTIAL_LIMIT_MESSAGE,
   type CredentialDto,
@@ -23,6 +24,7 @@ import {
   type CredentialStatusValue,
 } from '@learny/db';
 import { providerRegion } from '@learny/llm';
+import { discoverProviderModels } from '@learny/llm';
 import {
   credentialAad,
   encryptSecret,
@@ -67,6 +69,47 @@ function parseInput(input: unknown): AiCredentialCreateBody {
 
 function baseUrlFailure(message: string): AppError {
   return validationFailure([{ path: 'body.baseUrl', message }]);
+}
+
+export interface DiscoveredCredentialModels {
+  modelIds: string[];
+}
+
+/** Discovers the provider catalogue without creating or retaining a credential. */
+export async function discoverCredentialModels(
+  ctx: ServiceContext,
+  input: unknown,
+): Promise<Result<DiscoveredCredentialModels>> {
+  return toResult(async () => {
+    requireUser(ctx);
+    const parsed = AiCredentialDiscoverBody.safeParse(input);
+    if (!parsed.success) {
+      throw new AppError('VALIDATION_FAILED', 'Les données envoyées sont invalides.', {
+        status: 422,
+        errors: parsed.error.issues.map((issue) => ({
+          path: issue.path.map(String).join('.') || 'body',
+          message: issue.message,
+        })),
+      });
+    }
+    const value = parsed.data;
+    if (value.provider === 'openai_compatible' || value.provider === 'local') {
+      await checkEndpoint(value.provider, value.baseUrl as string);
+    }
+    const modelIds = await discoverProviderModels({
+      provider: value.provider,
+      ...(value.apiKey === undefined ? {} : { apiKey: value.apiKey }),
+      ...(value.baseUrl === undefined ? {} : { baseUrl: value.baseUrl }),
+    });
+    if (modelIds.length === 0) {
+      throw new AppError(
+        'AI_PROVIDER_ERROR',
+        'Le fournisseur n’a retourné aucun modèle disponible.',
+        { status: 502 },
+      );
+    }
+    return { modelIds };
+  });
 }
 
 /** EF-4 — one row to the only public shape, with the catalogue's region and note (CA-5). */

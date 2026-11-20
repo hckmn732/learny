@@ -9,13 +9,11 @@ import type {
   AiProviderCard,
   AiTaskCapabilityId,
   AiTaskModelState,
-  QualificationReport,
 } from '@learny/contracts';
-import { Badge, Button, Card, ErrorState, FormError, Select, TextField, cn } from '@learny/ui';
+import { Badge, Button, Card, ErrorState, FormError, Select, TextField } from '@learny/ui';
 
 import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/bricks-settings';
-import { useCredentialQualification } from '../onboarding/useCredentialQualification';
 
 const t = fr.settings.aiModels;
 
@@ -35,7 +33,6 @@ const OUTSIDE_EU_PROVIDERS: readonly AiCredentialProvider[] = ['anthropic', 'ope
 function needsBaseUrl(provider: AiCredentialProvider): boolean {
   return provider === 'openai_compatible' || provider === 'local';
 }
-
 function isOutsideEu(provider: AiCredentialProvider): boolean {
   return OUTSIDE_EU_PROVIDERS.includes(provider);
 }
@@ -99,6 +96,12 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
+      if (option.qualificationStatus === 'unqualified') {
+        await api.meAiCredentialsQualify({
+          params: { id: option.credentialId },
+          body: { modelId: option.modelId },
+        });
+      }
       const next = await api.meAiModelsUpdate({
         body: {
           action: 'assign',
@@ -354,6 +357,22 @@ function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
     (option) => option.modelId === task.modelId && option.credentialId === task.credentialId,
   );
   const value = selectedIndex >= 0 ? String(selectedIndex) : '';
+  const groups = task.options.reduce<
+    Array<{ label: string; options: Array<{ value: string; label: string }> }>
+  >((acc, option, index) => {
+    const label = option.providerLabel;
+    const existing = acc.find((group) => group.label === label);
+    const rendered = {
+      value: String(index),
+      label:
+        option.qualificationStatus === 'qualified'
+          ? `${option.modelId} · ma clé`
+          : `${option.modelId} · ma clé · à qualifier`,
+    };
+    if (existing === undefined) acc.push({ label, options: [rendered] });
+    else existing.options.push(rendered);
+    return acc;
+  }, []);
 
   return (
     <li
@@ -394,11 +413,8 @@ function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
                 },
               ]
             : []),
-          ...task.options.map((option, index) => ({
-            value: String(index),
-            label: option.label,
-          })),
         ]}
+        groups={groups}
         value={value}
       />
       <span className="flex min-w-150 flex-wrap gap-6">
@@ -508,24 +524,14 @@ interface AddProviderFormProps {
 /** EF-3, EF-4 — type, model, endpoint and key; the region warning appears before any submit. */
 function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
   const [provider, setProvider] = useState<AiCredentialProvider>('mistral');
-  const [model, setModel] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const qualification = useCredentialQualification({
-    provider,
-    apiKey,
-    baseUrl,
-    model,
-    recommendedModels: [],
-    onKeyAccepted: () => {
-      // BR-IA-03 — the field is cleared as soon as the key exists server-side.
-      setApiKey('');
-    },
-  });
-  const report = qualification.report;
-  const testing = qualification.status === 'testing';
-  const tested = report !== null;
+  const [discovering, setDiscovering] = useState(false);
+  const [modelIds, setModelIds] = useState<string[]>([]);
+  const [credentialId, setCredentialId] = useState<string | null>(null);
+  const tested = credentialId !== null;
+  const testing = discovering;
 
   const submit = (): void => {
     setFormError(null);
@@ -533,11 +539,39 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
       setFormError(t.formIncomplete);
       return;
     }
-    if (model.trim() === '') {
+    if (needsBaseUrl(provider) && baseUrl.trim() === '') {
       setFormError(t.formIncomplete);
       return;
     }
-    void qualification.test();
+    if (discovering) return;
+    setDiscovering(true);
+    void api
+      .meAiCredentialsDiscover({
+        body: {
+          provider,
+          ...(provider === 'local' ? {} : { apiKey: apiKey.trim() }),
+          ...(needsBaseUrl(provider) ? { baseUrl: baseUrl.trim() } : {}),
+        },
+      })
+      .then(async (discovered) => {
+        const created = await api.meAiCredentialsCreate({
+          body: {
+            provider,
+            modelIds: discovered.modelIds,
+            ...(provider === 'local' ? {} : { apiKey: apiKey.trim() }),
+            ...(needsBaseUrl(provider) ? { baseUrl: baseUrl.trim() } : {}),
+          },
+        });
+        setCredentialId(created.id);
+        setModelIds(discovered.modelIds);
+        setApiKey('');
+      })
+      .catch((cause: unknown) => {
+        setFormError(cause instanceof ApiError ? cause.detail : t.saveError);
+      })
+      .finally(() => {
+        setDiscovering(false);
+      });
   };
 
   return (
@@ -561,17 +595,6 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
           }}
           options={PROVIDER_OPTIONS.map((entry) => ({ ...entry }))}
           value={provider}
-        />
-        <TextField
-          data-testid="provider-form-model"
-          disabled={testing || tested}
-          label={t.formModel}
-          onChange={(event) => {
-            setModel(event.target.value);
-            setFormError(null);
-          }}
-          placeholder={t.formModelPlaceholder}
-          value={model}
         />
         {needsBaseUrl(provider) ? (
           <TextField
@@ -619,13 +642,17 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
           {t.qualifRunning}
         </p>
       ) : null}
-      {report === null ? null : <QualificationResult report={report} />}
+      {modelIds.length === 0 ? null : (
+        <p className="m-0 text-14 text-ink-muted" data-testid="provider-discovered-models">
+          {modelIds.length} modèle(s) disponible(s) : {modelIds.slice(0, 8).join(', ')}
+          {modelIds.length > 8 ? '…' : ''}
+        </p>
+      )}
       <div className="flex flex-wrap justify-end gap-8">
         <Button
           data-testid="provider-form-cancel"
           disabled={testing}
           onClick={() => {
-            qualification.reset();
             onClose();
           }}
           variant="ghost"
@@ -649,51 +676,5 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
         )}
       </div>
     </Card>
-  );
-}
-
-function QualificationResult({ report }: Readonly<{ report: QualificationReport }>) {
-  const failedBrick = report.bricks.find((brick) => brick.status === 'failed');
-  const failedStep = report.steps.find((step) => step.status === 'failed');
-  return (
-    <div
-      className="flex flex-col gap-10 rounded-18 bg-canvas px-18 py-16"
-      data-testid="provider-qualification-result"
-    >
-      <p className="m-0 text-14 font-700">{t.resultTitle}</p>
-      <ul className="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 p-2 text-14">
-        {report.steps.map((step) => (
-          <li className="flex items-center gap-8" key={step.step}>
-            <span
-              aria-hidden
-              className={cn(
-                'inline-flex size-20 items-center justify-center rounded-full text-10 font-700 text-white',
-                step.status === 'passed' ? 'bg-green' : 'bg-orange-ink',
-              )}
-            >
-              {step.status === 'passed' ? '✓' : '×'}
-            </span>
-            {t.steps[step.step]} — {t.stepStatus[step.status]}
-          </li>
-        ))}
-      </ul>
-      <p
-        className={cn(
-          'm-0 text-13 font-700',
-          report.status === 'qualified' ? 'text-green-ink' : 'text-orange-ink',
-        )}
-        role="status"
-      >
-        {report.status === 'qualified' ? t.qualifPassed : t.qualifFailed}
-      </p>
-      {failedBrick === undefined ? null : (
-        <p className="m-0 text-13 text-ink-muted">
-          {t.failureBrick(fr.bricks.type(failedBrick.type as Parameters<typeof fr.bricks.type>[0]))}
-        </p>
-      )}
-      {failedStep === undefined || failedStep.step === 'bricks' ? null : (
-        <p className="m-0 text-13 text-ink-muted">{t.failureStep(t.steps[failedStep.step])}</p>
-      )}
-    </div>
   );
 }

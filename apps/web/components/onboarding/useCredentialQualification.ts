@@ -16,8 +16,8 @@ export interface CredentialQualificationOptions {
   provider: AiCredentialProvider;
   apiKey: string;
   baseUrl: string;
-  model: string;
-  recommendedModels: readonly string[];
+  model?: string;
+  recommendedModels?: readonly string[];
   onKeyAccepted: () => void;
 }
 
@@ -51,7 +51,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
     setError(null);
   }, []);
 
-  const model = options.model.trim() || options.recommendedModels[0] || '';
+  const model = options.model?.trim() || options.recommendedModels?.[0] || '';
 
   const assignAll = useCallback(async (credential: string, testedModel: string): Promise<void> => {
     for (const task of AI_TASKS) {

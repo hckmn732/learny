@@ -122,9 +122,7 @@ function personalOptionsFor(
   row: CredentialRow,
   capabilities: readonly TaskCapability[],
 ): AiModelOption[] {
-  const models = row.modelIds.filter((modelId) =>
-    modelQualifiedForTask(row, modelId, capabilities),
-  );
+  const models = row.modelIds;
   const region = providerRegion(row.provider);
   return models.map((modelId) => ({
     modelId,
@@ -138,6 +136,9 @@ function personalOptionsFor(
     provider: row.provider,
     providerLabel: region.providerLabel,
     outsideEu: region.outsideEu,
+    qualificationStatus: modelQualifiedForTask(row, modelId, capabilities)
+      ? ('qualified' as const)
+      : ('unqualified' as const),
   }));
 }
 

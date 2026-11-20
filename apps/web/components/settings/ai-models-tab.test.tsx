@@ -24,6 +24,7 @@ function state(withProvider: boolean, assigned: boolean): AiModelsState {
     provider: 'openai' as const,
     providerLabel: 'OpenAI',
     outsideEu: true,
+    qualificationStatus: 'qualified' as const,
   };
   return {
     tasks: TASKS.map((task) => {
@@ -110,8 +111,20 @@ describe('[SPEC-709] onglet Modèles d’IA sans modèle par défaut', () => {
     expect(programme.value).toBe('');
     expect(Array.from(programme.options).map((option) => option.textContent)).toEqual([
       'Choisir un modèle',
-      'OpenAI · ma clé',
+      'gpt-5.5-e2e · ma clé',
     ]);
+    expect(Array.from(programme.querySelectorAll('optgroup')).map((group) => group.label)).toEqual([
+      'OpenAI',
+    ]);
+  });
+
+  it('n’exige plus de nom de modèle lors de l’ajout d’un fournisseur', async () => {
+    const { user } = renderComponent(
+      <AiModelsTab initial={state(false, false)} initialError={false} />,
+    );
+    await user.click(screen.getByTestId('provider-add'));
+    expect(screen.getByTestId('provider-form')).toBeTruthy();
+    expect(screen.queryByTestId('provider-form-model')).toBeNull();
   });
 
   it('affecte un modèle puis retire le choix (action clear)', async () => {

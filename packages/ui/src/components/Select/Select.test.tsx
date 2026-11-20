@@ -30,4 +30,20 @@ describe('[SPEC-302] Select', () => {
     });
     expect(disabled.disabled).toBe(true);
   });
+
+  it('rend les options dans des groupes natives', () => {
+    renderComponent(
+      <Select
+        label="Modèle"
+        options={[{ value: '', label: 'Choisir un modèle' }]}
+        groups={[
+          {
+            label: 'OpenAI',
+            options: [{ value: 'gpt-5', label: 'gpt-5 · ma clé' }],
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByRole('group', { name: 'OpenAI' })).toBeTruthy();
+  });
 });

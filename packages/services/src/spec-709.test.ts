@@ -164,7 +164,7 @@ function optionsOf(task: Parameters<typeof modelOptionsForTask>[0], fake: FakeDb
 }
 
 describe('[SPEC-709] règles et calculs', () => {
-  it('CA-1 — un modèle failed n’apparaît dans aucun sélecteur, un modèle qualifié oui', () => {
+  it('CA-1 — un modèle failed reste un candidat à qualifier, un modèle qualifié reste affectable', () => {
     const fake: FakeDb = {
       credentials: [
         credentialRow({
@@ -190,18 +190,27 @@ describe('[SPEC-709] règles et calculs', () => {
       ],
       assignments: [],
     };
-    // CA-1 — the five selectors never propose the failed model.
+    // CA-1 — a failed model remains discoverable, but explicitly marked to requalify.
     for (const task of ['programme', 'course', 'gaps', 'tutor', 'light'] as const) {
       const options = optionsOf(task, fake);
-      expect(options.some((option) => option.credentialId === CREDENTIAL)).toBe(false);
+      expect(
+        options.some(
+          (option) =>
+            option.credentialId === CREDENTIAL && option.qualificationStatus === 'unqualified',
+        ),
+      ).toBe(true);
     }
-    // Capability filtering: the Mistral key proves `structured` only, so `programme` (web_search)
-    // and `light` (vision) do not propose it; `gaps` does.
-    expect(optionsOf('programme', fake).some((option) => option.credentialId === OTHER)).toBe(
-      false,
-    );
-    expect(optionsOf('light', fake).some((option) => option.credentialId === OTHER)).toBe(false);
-    expect(optionsOf('gaps', fake).some((option) => option.credentialId === OTHER)).toBe(true);
+    // The status is derived from the proven capabilities of each task.
+    expect(
+      optionsOf('programme', fake).find((option) => option.credentialId === OTHER)
+        ?.qualificationStatus,
+    ).toBe('unqualified');
+    expect(
+      optionsOf('light', fake).find((option) => option.credentialId === OTHER)?.qualificationStatus,
+    ).toBe('unqualified');
+    expect(
+      optionsOf('gaps', fake).find((option) => option.credentialId === OTHER)?.qualificationStatus,
+    ).toBe('qualified');
     expect(taskCapabilities('programme')).toContain('web_search');
     expect(taskCapabilities('light')).toContain('vision');
   });
@@ -308,7 +317,11 @@ describe('[SPEC-709] règles et calculs', () => {
       available: false,
       unavailableReason: 'credential_not_qualified',
     });
-    expect(tutor.options.some((option) => option.modelId === MODEL)).toBe(false);
+    expect(
+      tutor.options.some(
+        (option) => option.modelId === MODEL && option.qualificationStatus === 'unqualified',
+      ),
+    ).toBe(true);
 
     // A deleted key leaves `credential_id = null` with the personal model identifier.
     expect(
