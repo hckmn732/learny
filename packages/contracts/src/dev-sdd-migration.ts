@@ -80,6 +80,7 @@ export const devSddSpec511Demo = demo('retrieval', 'SPEC-511');
 export const devSddSpec512Demo = demo('recherche web', 'SPEC-512');
 export const devSddSpec711Demo = demo('automatismes', 'SPEC-711');
 export const devSddSpec1203Demo = demo('frontière web', 'SPEC-1203');
+export const devSddSpec1301Demo = demo('client natif', 'SPEC-1301');
 
 export const devSddSpec102Create = action('create', 'SPEC-102');
 export const devSddSpec102Remove = action('remove', 'SPEC-102');
@@ -126,6 +127,7 @@ export const devSddMigrationRoutes = {
   devSddSpec512Demo,
   devSddSpec711Demo,
   devSddSpec1203Demo,
+  devSddSpec1301Demo,
   devSddSpec102Create,
   devSddSpec102Remove,
   devSddSpec501Create,

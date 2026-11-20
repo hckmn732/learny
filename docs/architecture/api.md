@@ -59,6 +59,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction : POST 201 `{ reportId, status: 'open' }` (200 si un signalement ouvert existe déjà), PATCH 200 `{ brickId, version, versionId }` ; 404 brique d'autrui, 409 version obsolète, 422 `BRICK_INVALID` avec `errors[{ code, path, message }]`, 422 `BRICK_RETIRED` | SPEC-609, 501 |
 | `/api/inngest` | Point d'entrée des jobs | SPEC-203 |
 | GET `/dev/sdd/api/coverage` | Couverture des routes de l'API Hono (démonstration uniquement) | SPEC-1101 |
+| GET `/dev/sdd/SPEC-1301/demo` | Scénario complet d’un client natif sans cookie ni `Origin` | SPEC-1301 |
 | GET `/dev/sdd/SPEC-xxx/demo` · POST `/dev/sdd/SPEC-xxx/<action>` | Démonstrations SDD de la piste de migration (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-1203 |
 | GET `/dev/sdd/relay-stream` | Flux SSE à trois fragments pour vérifier le relai (`ENABLE_SDD_PAGES` seulement) | SPEC-1201 |
 | POST `/dev/sdd/auth/proxy` | Démonstration de mutation transmise par le proxy de confiance | SPEC-1102 |

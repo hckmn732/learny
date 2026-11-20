@@ -7120,6 +7120,42 @@
         "summary": "Démonstration SPEC-1203 (frontière web)."
       }
     },
+    "/api/v1/dev/sdd/SPEC-1301/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-1301.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-1301 (client natif)."
+      }
+    },
     "/api/v1/dev/sdd/SPEC-202/demo": {
       "get": {
         "operationId": "dev.sdd.spec-202.demo",

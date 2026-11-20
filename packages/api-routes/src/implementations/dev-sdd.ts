@@ -32,6 +32,9 @@ import {
 import { resolvePostAuthDestination } from '@learny/services';
 import { createCredential, deleteCredential } from '@learny/services/ai/credentials';
 import { getMockCheckoutSession } from '@learny/services/billing';
+// The scenario is dev-only and guarded by `devRoutesEnabled`; it never enters a production route.
+// eslint-disable-next-line no-restricted-imports
+import { runNativeClientScenario } from '@learny/testing/native-client';
 import { decideResourceSuggestion, suggestResource } from '@learny/tutor';
 import { buildTutorDemo } from '@learny/tutor/demo';
 
@@ -500,6 +503,12 @@ export const devSddImplementations = {
       ],
       serverModules: 0,
     })),
+  devSddSpec1301Demo: () =>
+    guarded(() =>
+      runNativeClientScenario({
+        apiUrl: process.env.API_INTERNAL_URL ?? 'http://127.0.0.1:3001',
+      }),
+    ),
   devSddStripeCheckout: ({ body, request }: HandlerArgs<typeof devSddStripeCheckout>) =>
     idempotent(request, async () => {
       try {
