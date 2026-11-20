@@ -6,7 +6,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 
 import type { Result } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme, createTestUser } from '@learny/db/testing';
+import { createTestProgramme, createTestUser, grantTestModels } from '@learny/db/testing';
 import { setEventSender } from '@learny/jobs';
 
 import {
@@ -111,9 +111,7 @@ async function fixture(withSubscription = true): Promise<Fixture> {
       sql`insert into public.reading_progress (user_id, course_id, chapter_id, percent, seconds_spent, updated_at) values (${a.id}::uuid, ${courseId}::uuid, ${chapterId}::uuid, 45, 1200, ${NOW}::timestamptz)`,
     );
     if (withSubscription) {
-      await tx.execute(
-        sql`insert into public.subscriptions (user_id, status, current_period_end) values (${a.id}::uuid, 'active', '2030-01-01T00:00:00Z')`,
-      );
+      await grantTestModels(tx, a.id);
     }
     await tx.execute(
       sql`update public.profiles set onboarding_step = 'done', current_formation_id = ${programme.formationId}::uuid where id = ${a.id}::uuid`,

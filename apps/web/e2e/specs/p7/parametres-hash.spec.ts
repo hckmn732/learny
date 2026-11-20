@@ -3,7 +3,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 // QA regression of SCR-15 (BR-SET-01): every tab opens from its hash on a full page load and on a
-// later `hashchange`, so the Stripe returns (`/parametres#modeles`) land on « Modèles d’IA ».
+// later `hashchange`, so the Stripe portal return (`/parametres#abonnement`) lands on « Abonnement ».
 
 const NOW = new Date('2026-11-11T12:20:00Z');
 const TABS = [
@@ -11,6 +11,7 @@ const TABS = [
   { id: 'notifications', title: 'Notifications' },
   { id: 'automatismes', title: 'Automatismes' },
   { id: 'modeles', title: 'Modèles d’IA' },
+  { id: 'abonnement', title: 'Abonnement' },
 ] as const;
 
 let session: TestSession | null = null;
@@ -77,18 +78,13 @@ test('ouvre chaque onglet depuis le hash @SPEC-707 @parametres-hash', async ({ p
   await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
   await expect(page).toHaveURL(/\/parametres#modeles$/);
 
-  // « Annuler » of the simulated Checkout comes back to « Modèles d’IA » (SPEC-725 cancelPath).
-  await page.getByTestId('managed-ai-subscribe').click();
-  await page.waitForURL(/\/_dev\/stripe\/checkout/);
-  await page.getByRole('button', { name: 'Annuler' }).click();
-  await expect(page).toHaveURL(/\/parametres#modeles$/);
-  await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByTestId('settings-title')).toHaveText('Modèles d’IA');
-
-  // « Retour » of the simulated customer portal lands on « Modèles d’IA » (SPEC-210 EF-2).
+  // « Retour » of the simulated customer portal lands on « Abonnement » (SPEC-210 EF-2, ADR-0340).
   await page.goto('/_dev/stripe/portal');
   await page.getByRole('button', { name: 'Retour' }).click();
-  await expect(page).toHaveURL(/\/parametres#modeles$/);
-  await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByTestId('settings-title')).toHaveText('Modèles d’IA');
+  await expect(page).toHaveURL(/\/parametres#abonnement$/);
+  await expect(page.getByTestId('settings-tab-abonnement')).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await expect(page.getByTestId('settings-title')).toHaveText('Abonnement');
 });

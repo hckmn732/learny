@@ -1,18 +1,18 @@
 # Intelligence artificielle — normes d'implémentation
 
-Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions : ADR-0018 à ADR-0023, ADR-0026, ADR-0048.
+Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions : ADR-0019 à ADR-0023, ADR-0026, ADR-0048, ADR-0340 (la plateforme ne fournit aucun modèle ; l'ADR-0018 est remplacé).
 
 ## 1. Tâches et modèles
 
-| Tâche (`ai_task`) | Usages | Modèle IA fournie | Effort de réflexion | Capacités exigées (qualification BYOK) |
-|---|---|---|---|---|
-| `programme` | conception et ajustement du programme, structuration d'un import, recherche web | `claude-opus-5-5` | élevé | outils, sortie structurée, recherche web (sinon `SEARCH_API_KEY`) |
-| `course` | rédaction du cours avec citations, fiches « À retenir », notions et liens | `claude-opus-5-5` | moyen | sortie structurée, références aux passages |
-| `gaps` | analyse des lacunes, plan de remédiation, extraction du format d'examen | `claude-opus-5-5` | moyen | sortie structurée |
-| `tutor` | discussion, questions et jeux, banques, correction (ouvertes, exercices, résumés), cadrage | `claude-sonnet-5-5` | faible | outils, sortie structurée |
-| `light` | classification, découpage, titres, variantes simples, lecture d'images courtes | `claude-haiku-5-5` | aucun | sortie structurée |
+| Tâche (`ai_task`) | Usages | Effort de réflexion | Capacités exigées (qualification du modèle personnel) |
+|---|---|---|---|
+| `programme` | conception et ajustement du programme, structuration d'un import, recherche web | élevé | outils, sortie structurée, recherche web (sinon `SEARCH_API_KEY`) |
+| `course` | rédaction du cours avec citations, fiches « À retenir », notions et liens | moyen | sortie structurée, références aux passages |
+| `gaps` | analyse des lacunes, plan de remédiation, extraction du format d'examen | moyen | sortie structurée |
+| `tutor` | discussion, questions et jeux, banques, correction (ouvertes, exercices, résumés), cadrage | faible | outils, sortie structurée |
+| `light` | classification, découpage, titres, variantes simples, lecture d'images courtes | aucun | sortie structurée |
 
-Identifiants centralisés dans `packages/config/src/models.ts`. Tarifs dans `packages/config/src/pricing.ts` (USD par million de tokens, entrée/sortie/lecture cache/écriture cache) pour le calcul de coût ; ils sont des valeurs de configuration révisables.
+**Aucun modèle par défaut** (BR-IA-01, ADR-0340) : la plateforme ne fournit aucun modèle. Le modèle d'une tâche est celui que l'utilisateur a choisi parmi les modèles qualifiés de ses clés (`ai_task_models`) ; la résolution (`packages/llm/src/resolve.ts`) ne connaît que ce choix et renvoie `AI_UNAVAILABLE` sans repli quand il manque ou n'est plus qualifié. Aucun identifiant de modèle n'est écrit en dur dans le code ; les efforts de réflexion par tâche sont dans `packages/config/src/models.ts`. Les tarifs, quand ils existent, sont des valeurs de configuration révisables (`packages/config/src/pricing.ts`).
 
 ## 2. Accès aux modèles
 
@@ -55,4 +55,4 @@ Une action = un fichier exportant `{ name, description, inputSchema (Zod), outpu
 
 ## 6. Coûts
 
-Garde-fou avant chaque appel (`packages/llm/src/budget.ts`) : estimation des tokens (compte approximatif 4 caractères = 1 token + plafond de sortie) ; si `managed` et dépense du jour + estimation > plafond → bascule `light` (Haiku) ou report (tâche `programme`), journal `status='capped'`. Alerte à 80 % (notification `ai_cost_alert`, une fois par jour).
+Aucun plafond ni garde-fou de dépense : les appels sont faits avec la clé de l'utilisateur, qui paie directement son fournisseur (ADR-0340, BR-IA-07 retirée). Chaque appel reste journalisé (BR-IA-08) avec ses tokens et son coût estimé, agrégés par formation et par jour.

@@ -5,6 +5,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
+import { clearOwnModels, seedOwnModels } from '../../support/own-model';
 
 const NEW = '/formations/nouvelle';
 const Q1 = 'SAP S/4HANA Finance couvre plusieurs domaines. Lesquels voulez-vous maîtriser ?';
@@ -17,13 +18,6 @@ const DONE = 'Merci, j’ai ce qu’il me faut. Générez le programme quand vou
 
 let session: TestSession;
 
-async function subscribe(userId: string): Promise<void> {
-  await serviceDb().execute(sql`
-    insert into public.subscriptions (user_id, status, current_period_end)
-    values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    on conflict (user_id) do update set status = 'active', current_period_end = '2030-01-01T00:00:00Z'
-  `);
-}
 
 async function answer(page: import('@playwright/test').Page, text: string): Promise<void> {
   await page.getByTestId('cadrage-reply').fill(text);
@@ -35,7 +29,7 @@ test.beforeEach(async ({ context, baseURL }) => {
   await serviceDb().execute(sql`
     update public.profiles set onboarding_step = 'done' where id = ${session.userId}::uuid
   `);
-  await subscribe(session.userId);
+  await seedOwnModels(session.userId);
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),
   );
@@ -113,14 +107,12 @@ test('cadrage interrompu puis repris @SPEC-604', async ({ page, axeCheck }) => {
 });
 
 test('erreurs du tuteur @SPEC-604', async ({ page, axeCheck, captureEvidence }) => {
-  await serviceDb().execute(
-    sql`delete from public.subscriptions where user_id = ${session.userId}::uuid`,
-  );
+  await clearOwnModels(session.userId);
   await page.goto(NEW);
-  await page.getByTestId('cadrage-title-input').fill('Sans abonnement');
+  await page.getByTestId('cadrage-title-input').fill('Sans clé');
   await page.getByTestId('cadrage-start').click();
   await expect(page.getByTestId('cadrage-error')).toContainText(
-    'Aucun modèle d’IA n’est disponible pour le tuteur. Ajoutez votre clé ou souscrivez à l’IA fournie.',
+    'Aucun modèle d’IA n’est disponible pour le tuteur. Choisissez un modèle avec votre clé dans les Paramètres.',
   );
   await expect(page.getByRole('link', { name: 'Ouvrir les paramètres' })).toBeVisible();
   await captureEvidence('cadrage-erreur');
@@ -131,7 +123,7 @@ test('erreurs du tuteur @SPEC-604', async ({ page, axeCheck, captureEvidence }) 
   await serviceDb().execute(sql`
     update public.profiles set onboarding_step = 'done' where id = ${session.userId}::uuid
   `);
-  await subscribe(session.userId);
+  await seedOwnModels(session.userId);
   const baseURL = new URL(page.url()).origin;
   await page.context().addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL })),

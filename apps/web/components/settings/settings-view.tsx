@@ -40,6 +40,7 @@ import { rhythmSummary, togglePreferredSlot, toggleStudyDay } from '../onboardin
 import { AiModelsTab } from './ai-models-tab';
 import { AutomationSettingsTab } from './automation-settings-tab';
 import { NotificationSettingsTab } from './notification-settings-tab';
+import { SubscriptionTab } from './subscription-tab';
 
 const t = fr.settings;
 const onboardingT = fr.onboarding;
@@ -776,10 +777,17 @@ export function SettingsView({
           />
         </TabsContent>
 
-        <TabsContent className="mt-0" value="modeles">
+        <TabsContent className="mt-24" value="modeles">
           <AiModelsTab
             initial={initialAiModels}
             initialError={aiModelsError}
+            {...(requestId === undefined ? {} : { requestId })}
+          />
+        </TabsContent>
+
+        <TabsContent className="mt-24" value="abonnement">
+          <SubscriptionTab
+            timeZone={me.timezone}
             {...(requestId === undefined ? {} : { requestId })}
           />
         </TabsContent>

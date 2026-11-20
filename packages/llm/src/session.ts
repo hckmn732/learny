@@ -20,17 +20,16 @@ import type { AiTask, LlmMode } from '@learny/config';
 import { AppError, clock, err, ok, type Result } from '@learny/core';
 import type { AiProviderValue, Db } from '@learny/db';
 
-import { LEARNY_FALLBACK_HEADER, LEARNY_TASK_HEADER } from './anthropic-fetch';
+import { LEARNY_TASK_HEADER } from './anthropic-fetch';
 import {
   assertCitationsCompatible,
   buildAnthropicOptions,
   buildAnthropicSystem,
   documentMessage,
 } from './anthropic-options';
-import { calculateUsageCost } from './budget/price';
 import { llmMode } from './config';
 import { mapProviderError, refused } from './errors';
-import { logCall, type CallUsage, type CostCalculator } from './log';
+import { logCall, type CallUsage } from './log';
 import type { FixtureFile } from './mock/fixture-schema';
 import { createMockModel, type LearnMockModel } from './mock/mock-model';
 import { selectFixture, stripMockMarkers } from './mock/select';
@@ -39,7 +38,6 @@ import { resolveModel, type ResolvedModel } from './resolve';
 import { TASK_CONFIG, needsProviderStreaming } from './tasks';
 import {
   emptyUsage,
-  estimateTokens,
   type StepFinishReason,
   type StepInput,
   type StepOutput,
@@ -52,33 +50,12 @@ export interface LlmContext {
   requestId?: string;
 }
 
-export interface CallEstimate {
-  task: AiTask;
-  inputTokens: number;
-  maxOutputTokens: number;
-  provider: AiProviderValue;
-  modelId: string;
-  managed: boolean;
-}
-
-export type BudgetSettlement = (input: {
-  usage: CallUsage;
-  status: 'ok' | 'error' | 'refused' | 'invalid_output';
-}) => Promise<void>;
-
-export type BudgetGuard = (
-  ctx: LlmContext,
-  input: { resolved: ResolvedModel; estimate: CallEstimate },
-) => Promise<Result<{ resolved: ResolvedModel; settle?: BudgetSettlement }, AppError>>;
-
 export interface SessionOptions {
   task: AiTask;
   formationId?: string | null;
   promptId: string;
   /** Explicit scenario of the simulated model (tests and demonstration page). */
   mock?: { scenario?: string };
-  budgetGuard?: BudgetGuard;
-  costCalculator?: CostCalculator;
   /** Key decrypted by SPEC-505 just before the session, kept in memory only. */
   secrets?: { apiKey?: string | null };
   /** Test seam; production uses LLM_MODE from the server environment. */
@@ -87,7 +64,7 @@ export interface SessionOptions {
   fixtures?: readonly { path: string; fixture: FixtureFile }[];
   /**
    * BR-IA-13 — marks the call as part of a non-urgent provider batch: the journal row carries
-   * `batch = true` and the price calculator applies the documented discount.
+   * `batch = true`.
    */
   batch?: boolean;
   /**
@@ -106,32 +83,6 @@ export interface LlmSession {
     input: Omit<StepInput, 'tools'> & { schema: S },
   ): Promise<Result<z.infer<S>, AppError>>;
   stream(input: StepInput): Promise<Result<LlmStreamResult, AppError>>;
-}
-
-/** SPEC-507 ET-2 — the journal uses the configured prices; a personal model stays at zero. */
-const pricedCost: CostCalculator = (input) =>
-  calculateUsageCost({
-    model: input.model,
-    managed: input.managed,
-    usage: {
-      inputTokens: input.usage.inputTokens,
-      outputTokens: input.usage.outputTokens,
-      cacheReadTokens: input.usage.cacheReadTokens,
-      cacheWriteTokens: input.usage.cacheWriteTokens,
-    },
-  }).costUsd;
-
-/** A lease always expires; a settlement failure must never change the outcome of a call. */
-async function settleQuietly(
-  settle: BudgetSettlement | undefined,
-  input: Parameters<BudgetSettlement>[0],
-): Promise<void> {
-  if (settle === undefined) return;
-  try {
-    await settle(input);
-  } catch {
-    // The short lease of the reservation bounds the impact of a failed release.
-  }
 }
 
 function providerOf(resolved: ResolvedModel): AiProviderValue {
@@ -191,11 +142,6 @@ function citationsOf(content: readonly unknown[]): StepOutput['citations'] {
   return citations.length === 0 ? undefined : citations;
 }
 
-function promptText(input: StepInput): string {
-  const system = input.system.map((part) => part.text).join('\n');
-  return `${system}\n${JSON.stringify(input.messages)}\n${JSON.stringify(input.tools ?? {})}`;
-}
-
 function withTimeout(input: StepInput, timeoutMs: number): AbortSignal | undefined {
   const controller = new AbortController();
   const timer = setTimeout(() => {
@@ -216,11 +162,8 @@ export async function createSession(
       ? await resolveModel(ctx.db, { userId: ctx.userId, task: opts.task })
       : ok(opts.resolvedOverride);
   if (!resolvedResult.ok) return resolvedResult;
-  let current = resolvedResult.value;
+  const current = resolvedResult.value;
   const mode = opts.mode ?? llmMode();
-  const costCalculator = opts.costCalculator ?? pricedCost;
-  const budgetGuard: BudgetGuard =
-    opts.budgetGuard ?? ((_, input) => Promise.resolve(ok({ resolved: input.resolved })));
   const mockModels = new Map<string, LearnMockModel>();
 
   async function languageModel(resolved: ResolvedModel): Promise<LanguageModel> {
@@ -232,15 +175,6 @@ export async function createSession(
     );
     if (!secrets.ok) throw secrets.error;
     return createLanguageModel(resolved, secrets.value);
-  }
-
-  async function modelFor(
-    estimate: CallEstimate,
-  ): Promise<Result<{ resolved: ResolvedModel; settle?: BudgetSettlement }, AppError>> {
-    const guarded = await budgetGuard(ctx, { resolved: current, estimate });
-    if (!guarded.ok) return guarded;
-    current = guarded.value.resolved;
-    return ok(guarded.value);
   }
 
   async function persist(input: {
@@ -257,25 +191,12 @@ export async function createSession(
       task: opts.task,
       provider: providerOf(input.resolved),
       model: input.effectiveModel,
-      managed: input.resolved.kind === 'managed',
       usage: input.usage,
       latencyMs: input.latencyMs,
       status: input.status,
       errorCode: input.errorCode ?? null,
       batch: opts.batch ?? false,
-      costCalculator,
     });
-  }
-
-  function estimateFor(input: StepInput): CallEstimate {
-    return {
-      task: opts.task,
-      inputTokens: estimateTokens(promptText(input)),
-      maxOutputTokens: TASK_CONFIG[opts.task].maxOutputTokens,
-      provider: providerOf(current),
-      modelId: current.modelId,
-      managed: current.kind === 'managed',
-    };
   }
 
   function mockFor(input: StepInput): Result<LearnMockModel, AppError> {
@@ -301,28 +222,17 @@ export async function createSession(
   async function executeStep(
     resolved: ResolvedModel,
     input: StepInput,
-    settle?: BudgetSettlement,
   ): Promise<Result<StepOutput, AppError>> {
     assertCitationsCompatible({ citations: input.citations, structured: false });
     const started = clock.now();
     const system = buildAnthropicSystem(input.system);
     const tools = buildTools(input, resolved.provider);
-    const isManaged = resolved.kind === 'managed';
     const providerOptions =
       resolved.provider === 'anthropic'
-        ? buildAnthropicOptions({
-            task: opts.task,
-            modelId: resolved.modelId,
-            managed: isManaged,
-          }).providerOptions
+        ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
         : undefined;
     const headers =
-      resolved.provider === 'anthropic'
-        ? {
-            [LEARNY_TASK_HEADER]: opts.task,
-            [LEARNY_FALLBACK_HEADER]: isManaged ? '1' : '0',
-          }
-        : undefined;
+      resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
     const currentModel = mock ?? (await languageModel(resolved));
@@ -406,7 +316,6 @@ export async function createSession(
         status: refusedNow ? 'refused' : 'ok',
         errorCode: refusedNow ? 'AI_REFUSED' : null,
       });
-      await settleQuietly(settle, { usage, status: refusedNow ? 'refused' : 'ok' });
       if (refusedNow) return err(refused({ credentialId: credentialOf(resolved) }));
       return ok(output);
     } catch (error) {
@@ -429,7 +338,6 @@ export async function createSession(
         status: failedStatus,
         errorCode: mapped.code,
       });
-      await settleQuietly(settle, { usage, status: failedStatus });
       return err(mapped);
     }
   }
@@ -437,27 +345,16 @@ export async function createSession(
   async function executeObject<S extends z.ZodType>(
     resolved: ResolvedModel,
     input: Omit<StepInput, 'tools'> & { schema: S },
-    settle?: BudgetSettlement,
   ): Promise<Result<z.infer<S>, AppError>> {
     assertCitationsCompatible({ citations: input.citations, structured: true });
     const started = clock.now();
     const system = buildAnthropicSystem(input.system);
-    const isManaged = resolved.kind === 'managed';
     const providerOptions =
       resolved.provider === 'anthropic'
-        ? buildAnthropicOptions({
-            task: opts.task,
-            modelId: resolved.modelId,
-            managed: isManaged,
-          }).providerOptions
+        ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
         : undefined;
     const headers =
-      resolved.provider === 'anthropic'
-        ? {
-            [LEARNY_TASK_HEADER]: opts.task,
-            [LEARNY_FALLBACK_HEADER]: isManaged ? '1' : '0',
-          }
-        : undefined;
+      resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
     const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
     const currentModel = mock ?? (await languageModel(resolved));
@@ -506,7 +403,6 @@ export async function createSession(
         effectiveModel: mode === 'mock' ? resolved.modelId : modelId,
         status: 'ok',
       });
-      await settleQuietly(settle, { usage: effectiveUsage, status: 'ok' });
       return ok(object as z.infer<S>);
     } catch (error) {
       const mapped = mapProviderError(error, {
@@ -523,7 +419,6 @@ export async function createSession(
         status: failedStatus,
         errorCode: mapped.code,
       });
-      await settleQuietly(settle, { usage, status: failedStatus });
       return err(mapped);
     }
   }
@@ -532,44 +427,24 @@ export async function createSession(
     get resolved() {
       return current;
     },
-    async step(input) {
-      const estimate = estimateFor(input);
-      const guarded = await modelFor(estimate);
-      if (!guarded.ok) return guarded;
-      return executeStep(guarded.value.resolved, input, guarded.value.settle);
+    step(input) {
+      return executeStep(current, input);
     },
-    async object(input) {
-      const estimate = estimateFor(input);
-      const guarded = await modelFor(estimate);
-      if (!guarded.ok) return guarded;
-      return executeObject(guarded.value.resolved, input, guarded.value.settle);
+    object(input) {
+      return executeObject(current, input);
     },
     async stream(input) {
-      const estimate = estimateFor(input);
-      const guarded = await modelFor(estimate);
-      if (!guarded.ok) return guarded;
-      const resolved = guarded.value.resolved;
-      const settle = guarded.value.settle;
+      const resolved = current;
       assertCitationsCompatible({ citations: input.citations, structured: false });
       const started = clock.now();
       const system = buildAnthropicSystem(input.system);
       const tools = buildTools(input, resolved.provider);
-      const isManaged = resolved.kind === 'managed';
       const providerOptions =
         resolved.provider === 'anthropic'
-          ? buildAnthropicOptions({
-              task: opts.task,
-              modelId: resolved.modelId,
-              managed: isManaged,
-            }).providerOptions
+          ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
           : undefined;
       const headers =
-        resolved.provider === 'anthropic'
-          ? {
-              [LEARNY_TASK_HEADER]: opts.task,
-              [LEARNY_FALLBACK_HEADER]: isManaged ? '1' : '0',
-            }
-          : undefined;
+        resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
       const mock = mode === 'mock' ? mockOrThrow(mockFor(input)) : undefined;
       const currentModel = mock ?? (await languageModel(resolved));
       const abortSignal = withTimeout(input, TASK_CONFIG[opts.task].timeoutMs);
@@ -595,7 +470,7 @@ export async function createSession(
             effectiveModel: mode === 'mock' ? resolved.modelId : event.response.modelId,
             status,
             errorCode: status === 'refused' ? 'AI_REFUSED' : null,
-          }).then(() => settleQuietly(settle, { usage, status }));
+          });
         },
         onError: (event) => {
           if (logged) return;
@@ -615,7 +490,7 @@ export async function createSession(
             effectiveModel: resolved.modelId,
             status,
             errorCode: mapped.code,
-          }).then(() => settleQuietly(settle, { usage, status }));
+          });
         },
       });
       return ok(result);
@@ -625,7 +500,7 @@ export async function createSession(
 }
 
 function credentialOf(resolved: ResolvedModel): string | undefined {
-  return resolved.kind === 'byok' ? resolved.credentialId : undefined;
+  return resolved.credentialId;
 }
 
 /** Marker stripping is a mock-only behaviour; a live provider receives the text untouched. */

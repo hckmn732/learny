@@ -112,7 +112,6 @@ export function buildEmailContent(
           taskLabel: text(data, 'taskLabel', 'Une tâche IA'),
           modelLabel: text(data, 'modelLabel', 'modèle personnel'),
           subject: text(data, 'subject', rendered.title).slice(0, 120),
-          managedAvailable: data.managedAvailable === true,
         },
       };
     case 'reminder':

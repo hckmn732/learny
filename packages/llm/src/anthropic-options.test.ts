@@ -8,7 +8,6 @@ import {
   buildAnthropicOptions,
   buildAnthropicRequestPreview,
   buildAnthropicSystem,
-  isFallbackEnabled,
 } from './anthropic-options';
 
 describe('[SPEC-504] options Anthropic', () => {
@@ -18,8 +17,7 @@ describe('[SPEC-504] options Anthropic', () => {
     tasks.forEach((task, index) => {
       const options = buildAnthropicOptions({
         task,
-        modelId: 'claude-opus-5-5',
-        managed: true,
+        modelId: 'test-model',
       });
       expect(options.providerOptions.anthropic.thinking).toEqual({ type: 'adaptive' });
       expect(options.providerOptions.anthropic.effort).toBe(efforts[index]);
@@ -28,24 +26,10 @@ describe('[SPEC-504] options Anthropic', () => {
     });
   });
 
-  it('CA-2 — repli serveur réservé à Opus/Sonnet de l’IA fournie', () => {
-    expect(isFallbackEnabled({ managed: true, modelId: 'claude-opus-5-5' })).toBe(true);
-    expect(isFallbackEnabled({ managed: true, modelId: 'claude-sonnet-5-5' })).toBe(true);
-    expect(isFallbackEnabled({ managed: true, modelId: 'claude-haiku-5-5' })).toBe(false);
-    expect(isFallbackEnabled({ managed: false, modelId: 'claude-opus-5-5' })).toBe(false);
-    const fallback = buildAnthropicOptions({
-      task: 'programme',
-      modelId: 'claude-opus-5-5',
-      managed: true,
-    });
-    expect(fallback.providerOptions.anthropic.fallbacks).toBe('default');
-    expect(fallback.betas).toEqual(['server-side-fallback-2026-07-01']);
-    const personal = buildAnthropicOptions({
-      task: 'programme',
-      modelId: 'claude-opus-5-5',
-      managed: false,
-    });
-    expect(personal.providerOptions.anthropic.fallbacks).toBeUndefined();
+  it('CA-2 — aucun repli serveur n’est jamais demandé', () => {
+    const options = buildAnthropicOptions({ task: 'programme', modelId: 'test-model' });
+    expect(options.providerOptions.anthropic).not.toHaveProperty('fallbacks');
+    expect(options.providerOptions.anthropic).not.toHaveProperty('anthropicBeta');
   });
 
   it('CA-2 — les parties stables passent en tête, seule la dernière est mise en cache', () => {
@@ -69,8 +53,7 @@ describe('[SPEC-504] options Anthropic', () => {
   it('CA-2 — l’aperçu contient outils stricts, additionalProperties false et tool_choice auto', () => {
     const preview = buildAnthropicRequestPreview({
       task: 'programme',
-      modelId: 'claude-opus-5-5',
-      managed: true,
+      modelId: 'test-model',
       structured: false,
       system: [{ text: 'Consigne stable', cache: true }],
       tools: {
@@ -89,7 +72,7 @@ describe('[SPEC-504] options Anthropic', () => {
       text: 'Consigne stable',
       cache_control: { type: 'ephemeral' },
     });
-    expect(preview.fallbacks).toBe('default');
+    expect(preview).not.toHaveProperty('fallbacks');
     expect(JSON.stringify(preview)).not.toContain('budget_tokens');
     expect(preview).not.toHaveProperty('temperature');
   });
@@ -107,8 +90,7 @@ describe('[SPEC-504] options Anthropic', () => {
   it('EF-4 — un document utilise file_id et active les citations', () => {
     const preview = buildAnthropicRequestPreview({
       task: 'course',
-      modelId: 'claude-opus-5-5',
-      managed: true,
+      modelId: 'test-model',
       documents: [{ fileId: 'file_123' }],
       citations: true,
     });

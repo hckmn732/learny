@@ -21,7 +21,6 @@ import {
   WebhookJournal,
   getSubscription,
   handleWebhook,
-  hasManagedAi,
   mapStripeStatus,
   openPortal,
   resolveBillingConfig,
@@ -137,8 +136,6 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect(await getSubscription({ userId, clock: h.clock }, h.deps)).toEqual({
       status: 'none',
       currentPeriodEnd: null,
-      hasManagedAi: false,
-      dailyCapUsd: 1.5,
     });
 
     const checkout = await startCheckout({ userId }, SUCCESS, {}, h.deps);
@@ -150,11 +147,9 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect(paid.result).toBe('applied');
     const active = await getSubscription({ userId, clock: h.clock }, h.deps);
     expect(active.status).toBe('active');
-    expect(active.hasManagedAi).toBe(true);
     expect(active.currentPeriodEnd).toBe(
       new Date(h.clock.now().getTime() + 30 * DAY_MS).toISOString(),
     );
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(true);
     expect((await row(userId))?.stripe_subscription_id).toBe('sub_mock_1');
 
     const already = await errorOf(startCheckout({ userId }, SUCCESS, {}, h.deps));
@@ -164,7 +159,6 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect(ended.result).toBe('applied');
     const canceled = await getSubscription({ userId, clock: h.clock }, h.deps);
     expect(canceled.status).toBe('canceled');
-    expect(canceled.hasManagedAi).toBe(false);
 
     // ET-5 — one `billing/subscription-changed` per change of status.
     expect(await outboxNames(userId)).toEqual([
@@ -250,7 +244,6 @@ describe("[SPEC-210] service d'abonnement", () => {
     const state = await row(userId);
     expect(state?.status).toBe('canceled');
     expect(new Date(String(state?.stripe_event_at)).getTime()).toBe((now + 10) * 1000);
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(false);
     // Same second: applied (the comparison is strict).
     h.gateway.setSubscriptionState(
       'sub_mock_1',
@@ -298,55 +291,20 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect(events[0]?.n).toBe(0);
   });
 
-  it('CL-7, CA-3 — échec de paiement : past_due, plus de droit, événement de notification', async () => {
+  it('CL-7 — échec de paiement : past_due et événement de notification', async () => {
     const h = harness();
     const userId = await createUser('retard');
     await startCheckout({ userId }, SUCCESS, {}, h.deps);
     await receive(h.gateway.completeCheckout('cs_mock_1'), h);
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(true);
 
     h.clock.advance(1000);
     expect((await receive(h.gateway.failPayment('sub_mock_1'), h)).result).toBe('applied');
     expect((await row(userId))?.status).toBe('past_due');
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(false);
     expect((await outboxNames(userId)).sort()).toEqual([
       'billing/payment-failed',
       'billing/subscription-changed',
       'billing/subscription-changed',
     ]);
-  });
-
-  it('CL-4 — période échue sans webhook : hasManagedAi est faux bien que le statut soit active', async () => {
-    const h = harness();
-    const userId = await createUser('echue');
-    await startCheckout({ userId }, SUCCESS, {}, h.deps);
-    await receive(h.gateway.completeCheckout('cs_mock_1'), h);
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(true);
-
-    h.clock.advance(31 * DAY_MS);
-    expect((await row(userId))?.status).toBe('active');
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(false);
-    expect((await getSubscription({ userId, clock: h.clock }, h.deps)).hasManagedAi).toBe(false);
-  });
-
-  it('CA-3 — hasManagedAi lit la base à chaque appel et refuse chaque statut sans droit', async () => {
-    const h = harness();
-    const userId = await createUser('statuts');
-    const db = serviceDb();
-    await db.execute(sql`insert into public.subscriptions (user_id) values (${userId}::uuid)`);
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(false);
-    const future = new Date(h.clock.now().getTime() + DAY_MS).toISOString();
-    for (const status of ['none', 'past_due', 'incomplete', 'canceled']) {
-      await db.execute(
-        sql`update public.subscriptions set status = ${status}::subscription_status, current_period_end = ${future}::timestamptz where user_id = ${userId}::uuid`,
-      );
-      expect(await hasManagedAi(userId, { clock: h.clock }), status).toBe(false);
-    }
-    await db.execute(
-      sql`update public.subscriptions set status = 'active' where user_id = ${userId}::uuid`,
-    );
-    expect(await hasManagedAi(userId, { clock: h.clock })).toBe(true);
-    expect(await hasManagedAi(randomUUID(), { clock: h.clock })).toBe(false);
   });
 
   it('CA-4, CL-5 — chemins externes refusés par le service, rien n’est créé', async () => {
@@ -423,14 +381,14 @@ describe("[SPEC-210] service d'abonnement", () => {
     expect((await receive(delivery, h)).result).toBe('applied');
   });
 
-  it('EF-2 — portail : introuvable sans client Stripe, puis URL de retour /parametres#modeles', async () => {
+  it('EF-2 — portail : introuvable sans client Stripe, puis URL de retour /parametres#abonnement', async () => {
     const h = harness();
     const userId = await createUser('portail');
     expect((await errorOf(openPortal({ userId }, h.deps))).code).toBe('NOT_FOUND');
     await startCheckout({ userId }, SUCCESS, {}, h.deps);
     const portal = await openPortal({ userId }, h.deps);
     expect(portal.url).toBe(
-      `/_dev/stripe/portal?return=${encodeURIComponent('/parametres#modeles')}`,
+      `/_dev/stripe/portal?return=${encodeURIComponent('/parametres#abonnement')}`,
     );
   });
 

@@ -17,8 +17,6 @@ import { ApiError, api } from '../../lib/api-client';
 import { fr } from '../../messages/fr/bricks-settings';
 import { useCredentialQualification } from '../onboarding/useCredentialQualification';
 
-import { ManagedAiBlock } from './managed-ai-block';
-
 const t = fr.settings.aiModels;
 
 /** EF-3 — the six providers of BR-IA-02, in the order of the rule. */
@@ -46,20 +44,13 @@ function capabilitiesLabel(ids: readonly AiTaskCapabilityId[]): string {
   return ids.map((id) => t.capabilities[id]).join(', ');
 }
 
-/** « 1,50 $ » from the six-decimal USD amount of the contract (BR-IA-07). */
-export function usdLabel(amount: string): string {
-  const value = Number(amount);
-  return `${(Number.isFinite(value) ? value : 0).toFixed(2).replace('.', ',')} $`;
-}
-
 function statusTone(status: AiProviderCard['status']): 'green' | 'orange' | 'neutral' {
   if (status === 'qualified') return 'green';
   if (status === 'unqualified') return 'orange';
   return 'neutral';
 }
 
-/** EF-1 — the two mockup notes only apply to personal models (provided search and citations are
- * handled by the platform). */
+/** EF-1 — the two mockup notes of the programme and course tasks. */
 const TASK_NOTES: Partial<Record<AiModelsTaskId, string>> = {
   programme: t.taskNotes.programme,
   course: t.taskNotes.course,
@@ -130,15 +121,15 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     }
   };
 
-  const resetModels = async (): Promise<void> => {
+  const clearTask = async (task: AiModelsTaskId): Promise<void> => {
     if (pending !== null) return;
-    setPending('reset');
+    setPending(`task-${task}`);
     setError(null);
     setStatus(null);
     try {
-      const next = await api.meAiModelsUpdate({ body: { action: 'reset' } });
+      const next = await api.meAiModelsUpdate({ body: { action: 'clear', task } });
       setState(next);
-      setStatus(t.resetDone);
+      setStatus(t.cleared);
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.detail : t.saveError);
     } finally {
@@ -147,7 +138,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   };
 
   const retest = async (card: AiProviderCard): Promise<void> => {
-    if (card.id === null || pending !== null) return;
+    if (pending !== null) return;
     setPending(card.id);
     setError(null);
     setStatus(null);
@@ -167,7 +158,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   };
 
   const removeKey = async (card: AiProviderCard): Promise<void> => {
-    if (card.id === null || pending !== null) return;
+    if (pending !== null) return;
     setPending(card.id);
     setError(null);
     setStatus(null);
@@ -203,6 +194,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   }
 
   const busy = pending !== null;
+  const hasQualifiedProvider = state.providers.some((card) => card.status === 'qualified');
 
   return (
     <div className="flex flex-col gap-24" data-testid="ai-models-panel">
@@ -229,64 +221,38 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         </ul>
       </section>
 
-      <ManagedAiBlock
-        providers={state.providers}
-        {...(requestId === undefined ? {} : { requestId })}
-      />
-
-      <Card as="section" className="p-8" data-testid="ai-models-tasks">
-        <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
-          <div className="flex flex-col gap-4">
-            <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
-            <p className="m-0 text-14 text-ink-muted">{t.tasksSubtitle}</p>
-          </div>
-          <Button
-            data-testid="ai-reset-models"
-            disabled={busy}
-            onClick={() => {
-              void resetModels();
-            }}
-            variant="outline"
-          >
-            {t.reset}
-          </Button>
-        </div>
-        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-models-task-list">
-          {state.tasks.map((task) => (
-            <TaskRow
-              busy={busy}
-              key={task.task}
-              onAssign={(option) => {
-                void assign(task.task, option);
-              }}
-              task={task}
-            />
-          ))}
-        </ul>
-      </Card>
-
-      <section aria-labelledby="ai-providers-title" className="flex flex-col gap-12">
+      <section
+        aria-labelledby="ai-providers-title"
+        className="flex flex-col gap-12"
+        data-testid="ai-providers"
+      >
         <div className="flex flex-col gap-2">
           <h2 className="m-0 font-display text-22 font-600 tracking-title" id="ai-providers-title">
             {t.providersTitle}
           </h2>
-          <p className="m-0 text-13 text-ink-muted">
-            {t.guard(usdLabel(state.guard.managedDailyCapUsd))}
-          </p>
         </div>
+        {state.providers.length === 0 && !formOpen ? (
+          <p
+            className="m-0 rounded-18 bg-surface-subtle px-18 py-14 text-14 text-ink-secondary"
+            data-testid="ai-providers-empty"
+            role="status"
+          >
+            {t.providersEmpty}
+          </p>
+        ) : null}
         <div className="flex flex-wrap gap-12" data-testid="ai-providers-cards">
           {state.providers.map((card) => (
             <ProviderCardView
               busy={busy}
               card={card}
-              key={card.id ?? 'provided'}
+              key={card.id}
               onDelete={() => {
                 void removeKey(card);
               }}
               onRetest={() => {
                 void retest(card);
               }}
-              pending={pending === (card.id ?? 'provided')}
+              pending={pending === card.id}
             />
           ))}
           {formOpen ? null : (
@@ -324,6 +290,39 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         ) : null}
       </section>
 
+      <Card as="section" className="p-8" data-testid="ai-models-tasks">
+        <div className="flex flex-wrap items-center justify-between gap-12 px-16 pb-10 pt-16">
+          <div className="flex flex-col gap-4">
+            <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
+            <p className="m-0 text-14 text-ink-muted">{t.tasksSubtitle}</p>
+            {hasQualifiedProvider ? null : (
+              <p
+                className="m-0 text-14 font-600 text-orange-ink"
+                data-testid="ai-tasks-no-provider"
+                role="status"
+              >
+                {t.noProviderForTasks}
+              </p>
+            )}
+          </div>
+        </div>
+        <ul className="m-0 flex list-none flex-col gap-6 p-0" data-testid="ai-models-task-list">
+          {state.tasks.map((task) => (
+            <TaskRow
+              busy={busy}
+              key={task.task}
+              onAssign={(option) => {
+                void assign(task.task, option);
+              }}
+              onClear={() => {
+                void clearTask(task.task);
+              }}
+              task={task}
+            />
+          ))}
+        </ul>
+      </Card>
+
       {error === null ? null : (
         <div className="flex flex-wrap items-center justify-end gap-12">
           <FormError data-testid="ai-models-error">{error}</FormError>
@@ -343,18 +342,16 @@ interface TaskRowProps {
   task: AiTaskModelState;
   busy: boolean;
   onAssign: (option: AiTaskModelState['options'][number]) => void;
+  onClear: () => void;
 }
 
 /** EF-1, EF-2 — one task line: label, required capabilities, selector and pills. */
-function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
+function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
   const selectId = useId();
   const label = t.taskLabels[task.task];
-  const note = task.origin === 'personal' ? TASK_NOTES[task.task] : undefined;
+  const note = TASK_NOTES[task.task];
   const selectedIndex = task.options.findIndex(
-    (option) =>
-      option.modelId === task.modelId &&
-      option.credentialId === task.credentialId &&
-      option.origin === task.origin,
+    (option) => option.modelId === task.modelId && option.credentialId === task.credentialId,
   );
   const value = selectedIndex >= 0 ? String(selectedIndex) : '';
 
@@ -377,7 +374,7 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
       <Select
         className="flex-[0_1_300px]"
         data-testid="ai-task-model"
-        disabled={busy}
+        disabled={busy || task.options.length === 0}
         hideLabel
         id={selectId}
         label={label}
@@ -386,7 +383,17 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
           if (option !== undefined) onAssign(option);
         }}
         options={[
-          ...(value === '' ? [{ value: '', label: t.unavailable }] : []),
+          ...(value === ''
+            ? [
+                {
+                  value: '',
+                  label:
+                    task.modelId === null || task.unavailableReason === null
+                      ? t.chooseModel
+                      : t.noModelChosen,
+                },
+              ]
+            : []),
           ...task.options.map((option, index) => ({
             value: String(index),
             label: option.label,
@@ -395,14 +402,29 @@ function TaskRow({ task, busy, onAssign }: Readonly<TaskRowProps>) {
         value={value}
       />
       <span className="flex min-w-150 flex-wrap gap-6">
-        <Badge tone={task.selection === 'default' ? 'default-model' : 'indigo'}>
-          {task.selection === 'default' ? t.defaultPill : t.customPill}
-        </Badge>
+        {task.modelId !== null && task.available ? (
+          <Badge tone="indigo">{t.chosenPill}</Badge>
+        ) : null}
         {task.outsideEu ? <Badge tone="orange">{t.outsideEuPill}</Badge> : null}
       </span>
+      {task.modelId === null ? null : (
+        <Button
+          data-testid="ai-task-clear"
+          disabled={busy}
+          onClick={onClear}
+          size="sm"
+          variant="ghost"
+        >
+          {t.clearChoice}
+        </Button>
+      )}
       {task.available ? null : (
-        <p className="m-0 w-full text-13 font-600 text-orange-ink" role="status">
-          {t.unavailable} {t.unavailableHint}
+        <p
+          className="m-0 w-full text-13 font-600 text-orange-ink"
+          data-testid="ai-task-unavailable"
+          role="status"
+        >
+          {t.unavailable[task.unavailableReason ?? 'no_model_selected']} {t.unavailableHint}
         </p>
       )}
     </li>
@@ -435,56 +457,45 @@ function ProviderCardView({
     >
       <div className="flex items-center justify-between gap-8">
         <h3 className="m-0 text-17 font-700">{card.label}</h3>
-        <Badge tone={card.origin === 'provided' ? 'lime' : statusTone(card.status)}>
-          {card.origin === 'provided' ? t.providedBadge : t.status[card.status]}
-        </Badge>
+        <Badge tone={statusTone(card.status)}>{t.status[card.status]}</Badge>
       </div>
-      {card.origin === 'provided' ? (
-        <>
-          <p className="m-0 text-14 text-ink-muted">{card.dataNote}</p>
-          <p className="m-0 text-13 text-ink-muted">{t.providedModels}</p>
-        </>
-      ) : (
-        <>
-          <p className="m-0 text-14 text-ink-muted">
-            {card.keyMasked === null ? t.noKey : t.yourKey(card.keyMasked)}
-          </p>
-          {card.outsideEu ? (
-            <p
-              className="m-0 rounded-10 bg-orange-soft px-10 py-8 text-13 font-600 text-orange-ink"
-              data-region-warning
-              data-testid="provider-region-warning"
-            >
-              {t.regionWarning}
-            </p>
-          ) : null}
-          {failure === null ? null : (
-            <p className="m-0 text-13 leading-1.5 text-ink-muted" role="status">
-              {failure}
-            </p>
-          )}
-          <div className="flex flex-wrap gap-8">
-            <Button
-              data-testid="provider-retest"
-              disabled={busy}
-              onClick={onRetest}
-              size="sm"
-              variant={card.status === 'qualified' ? 'outline' : 'dark'}
-            >
-              {pending ? t.retesting : card.status === 'qualified' ? t.retest : t.relance}
-            </Button>
-            <Button
-              data-testid="provider-delete"
-              disabled={busy}
-              onClick={onDelete}
-              size="sm"
-              variant="ghost"
-            >
-              {pending ? t.deleting : t.deleteKey}
-            </Button>
-          </div>
-        </>
+      <p className="m-0 text-14 text-ink-muted">
+        {card.keyMasked === null ? t.noKey : t.yourKey(card.keyMasked)}
+      </p>
+      {card.outsideEu ? (
+        <p
+          className="m-0 rounded-10 bg-orange-soft px-10 py-8 text-13 font-600 text-orange-ink"
+          data-region-warning
+          data-testid="provider-region-warning"
+        >
+          {t.regionWarning}
+        </p>
+      ) : null}
+      {failure === null ? null : (
+        <p className="m-0 text-13 leading-1.5 text-ink-muted" role="status">
+          {failure}
+        </p>
       )}
+      <div className="flex flex-wrap gap-8">
+        <Button
+          data-testid="provider-retest"
+          disabled={busy}
+          onClick={onRetest}
+          size="sm"
+          variant={card.status === 'qualified' ? 'outline' : 'dark'}
+        >
+          {pending ? t.retesting : card.status === 'qualified' ? t.retest : t.relance}
+        </Button>
+        <Button
+          data-testid="provider-delete"
+          disabled={busy}
+          onClick={onDelete}
+          size="sm"
+          variant="ghost"
+        >
+          {pending ? t.deleting : t.deleteKey}
+        </Button>
+      </div>
     </Card>
   );
 }

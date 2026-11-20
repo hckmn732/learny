@@ -26,13 +26,14 @@ const step = await session.value.step({
 });
 ```
 
-- `resolveModel` applique EF-1 dans l'ordre : modèle personnel qualifié, IA fournie (surcharge
-  Claude autorisée), sinon `AI_UNAVAILABLE` avec `reason` (`no_subscription_no_key` ou
-  `credential_not_qualified`) et le lien `/parametres#modeles`.
+- `resolveModel` ne connaît que le modèle personnel choisi par l'apprenant pour la tâche : sans
+  affectation, `AI_UNAVAILABLE` avec `reason: 'no_model_selected'` (quel que soit l'abonnement) ;
+  affectation vers une clé ou un modèle inutilisable, `credential_not_qualified` ; le lien est
+  `/parametres#modeles`. La plateforme ne fournit aucun modèle.
 - `step` déclare les outils mais ne les exécute jamais (la boucle est dans SPEC-508) ; `object`
   produit une sortie structurée validée par Zod ; `stream` renvoie le `StreamTextResult` de l'AI SDK.
-- Chaque appel écrit exactement une ligne `ai_calls`. `costCalculator` et `budgetGuard` sont les
-  crochets de SPEC-507 ; leur défaut autorise l'appel et journalise un coût nul.
+- Chaque appel écrit exactement une ligne `ai_calls`, au coût nul (la clé de l'apprenant n'est pas
+  facturée par Learny).
 - `uploadDocument` renvoie `file_mock_<sha256 tronqué>` en mode `mock` ; en `live`, seule l'API
   Files d'Anthropic est utilisée (`FILES_UNSUPPORTED` sinon).
 

@@ -5,17 +5,12 @@
 // learner's credential is invisible and answers `NOT_FOUND` without revealing its existence
 // (CL-1). Credentials stay owned by SPEC-505/SPEC-506; this module projects the mask, the status
 // and the region flag and never selects `encrypted_key`. Qualification gates every assignment
-// server-side (ET-3), not only in the selector (CA-1, CL-5). A personal model that became
-// unqualified is reported as unavailable instead of switching silently to the paid AI (CL-3).
+// server-side (ET-3), not only in the selector (CA-1, CL-5). The platform provides no model: a task
+// without a choice, or whose chosen model became unusable, is reported as unavailable and never
+// falls back to another model (CL-3).
 import { and, asc, eq } from 'drizzle-orm';
 
-import {
-  DEFAULT_MODEL_BY_TASK,
-  AI_MODEL_IDS,
-  AI_RULES,
-  AI_TASKS,
-  isProvidedModel,
-} from '@learny/config';
+import { AI_TASKS } from '@learny/config';
 import {
   AiModelsUpdateBody,
   QualificationReport,
@@ -40,21 +35,6 @@ import { maskKey } from '@learny/llm/credentials';
 
 import type { ServiceContext } from './context';
 import { requireUser, toResult } from './resources/result';
-
-/** BR-IA-01 — the provided Anthropic card and its three models, in mockup order. */
-export const PROVIDED_PROVIDER: AiProviderValue = 'anthropic';
-
-const PROVIDED_MODEL_LABELS: Readonly<Record<string, string>> = {
-  [AI_MODEL_IDS.opus]: 'Claude Opus',
-  [AI_MODEL_IDS.sonnet]: 'Claude Sonnet',
-  [AI_MODEL_IDS.haiku]: 'Claude Haiku',
-};
-
-const PROVIDED_MODEL_ORDER: readonly string[] = [
-  AI_MODEL_IDS.opus,
-  AI_MODEL_IDS.sonnet,
-  AI_MODEL_IDS.haiku,
-];
 
 /** Rows as selected by this module: never `encryptedKey`, never a raw report key (BR-IA-03). */
 export interface CredentialRow {
@@ -104,11 +84,6 @@ export function parseModelsUpdate(input: unknown): AiModelsUpdateBody {
   return parsed.data;
 }
 
-/** EF-1 — the French label of a provided model. */
-export function providedModelLabel(modelId: string): string {
-  return PROVIDED_MODEL_LABELS[modelId] ?? modelId;
-}
-
 /** EF-1 — routing capabilities of a task, from the single source of `@learny/llm`. */
 export function taskCapabilities(task: AiTaskValue): TaskCapability[] {
   return [...TASK_CONFIG[task].capabilities];
@@ -142,20 +117,6 @@ export function modelQualifiedForTask(
   return capabilities.every((capability) => report.capabilities[capability]);
 }
 
-function providedOption(modelId: string): AiModelOption {
-  return {
-    modelId,
-    label: providedModelLabel(modelId),
-    origin: 'provided',
-    credentialId: null,
-    provider: PROVIDED_PROVIDER,
-    providerLabel: providerRegion(PROVIDED_PROVIDER).providerLabel,
-    // ADR-0154 point 4 — the provided AI shows no « Hors UE » badge; its processing is declared
-    // in the subcontractors list (SPEC-806), not in the personal-provider warning.
-    outsideEu: false,
-  };
-}
-
 function personalOptionsFor(
   task: AiTaskValue,
   row: CredentialRow,
@@ -173,7 +134,6 @@ function personalOptionsFor(
       models.length === 1
         ? `${region.providerLabel} · ma clé`
         : `${region.providerLabel} · ${modelId}`,
-    origin: 'personal',
     credentialId: row.id,
     provider: row.provider,
     providerLabel: region.providerLabel,
@@ -181,14 +141,13 @@ function personalOptionsFor(
   }));
 }
 
-/** EF-1 — every model a task can select: the three provided models, then qualified keys. */
+/** EF-1 — every model a task can select: the qualified models of the learner's keys. */
 export function modelOptionsForTask(
   task: AiTaskValue,
   credentials: readonly CredentialRow[],
 ): AiModelOption[] {
   const capabilities = taskCapabilities(task);
-  const personal = credentials.flatMap((row) => personalOptionsFor(task, row, capabilities));
-  return [...PROVIDED_MODEL_ORDER.map((modelId) => providedOption(modelId)), ...personal];
+  return credentials.flatMap((row) => personalOptionsFor(task, row, capabilities));
 }
 
 function unavailableReason(
@@ -201,61 +160,37 @@ function unavailableReason(
   return modelQualifiedForTask(row, modelId, capabilities) ? null : 'credential_not_qualified';
 }
 
-/** EF-2, CL-3 — one row of « Modèle par tâche », with the pills derived from the resolved model. */
+/** EF-2, CL-3 — one row of « Modèle par tâche », with the pills derived from the chosen model. */
 export function taskStateOf(
   task: AiTaskValue,
   assignment: AssignmentRow | undefined,
   credentials: readonly CredentialRow[],
 ): AiTaskModelState {
   const capabilities = taskCapabilities(task);
-  const defaultModelId = DEFAULT_MODEL_BY_TASK[task];
   const options = modelOptionsForTask(task, credentials);
 
+  // No default model: nothing chosen means the task cannot run.
   if (assignment === undefined) {
     return {
       task,
       requiredCapabilities: capabilities,
-      defaultModelId,
-      selection: 'default',
-      modelId: defaultModelId,
-      origin: 'provided',
+      modelId: null,
       credentialId: null,
-      provider: PROVIDED_PROVIDER,
-      providerLabel: providerRegion(PROVIDED_PROVIDER).providerLabel,
+      provider: null,
+      providerLabel: null,
       outsideEu: false,
-      available: true,
-      unavailableReason: null,
+      available: false,
+      unavailableReason: 'no_model_selected',
       options,
     };
   }
 
+  // CL-3 — the personal key was deleted: the task refuses instead of picking another model.
   if (assignment.credentialId === null) {
-    if (isProvidedModel(assignment.modelId)) {
-      const isDefault = assignment.modelId === defaultModelId;
-      return {
-        task,
-        requiredCapabilities: capabilities,
-        defaultModelId,
-        selection: isDefault ? 'default' : 'custom',
-        modelId: assignment.modelId,
-        origin: 'provided',
-        credentialId: null,
-        provider: PROVIDED_PROVIDER,
-        providerLabel: providerRegion(PROVIDED_PROVIDER).providerLabel,
-        outsideEu: false,
-        available: true,
-        unavailableReason: null,
-        options,
-      };
-    }
-    // CL-3 — the personal key was deleted: the task refuses instead of falling back to the paid AI.
     return {
       task,
       requiredCapabilities: capabilities,
-      defaultModelId,
-      selection: 'custom',
       modelId: assignment.modelId,
-      origin: 'personal',
       credentialId: null,
       provider: null,
       providerLabel: 'Modèle personnel',
@@ -272,10 +207,7 @@ export function taskStateOf(
   return {
     task,
     requiredCapabilities: capabilities,
-    defaultModelId,
-    selection: 'custom',
     modelId: assignment.modelId,
-    origin: 'personal',
     credentialId: assignment.credentialId,
     provider: row?.provider ?? null,
     providerLabel: region?.providerLabel ?? 'Modèle personnel',
@@ -316,7 +248,6 @@ export function providerCardOf(row: CredentialRow): AiProviderCard {
   const running = recordOf(row.qualification.run).status === 'running';
   return {
     id: row.id,
-    origin: 'personal',
     provider: row.provider,
     providerLabel: region.providerLabel,
     label: row.label,
@@ -330,37 +261,9 @@ export function providerCardOf(row: CredentialRow): AiProviderCard {
   };
 }
 
-/** BR-IA-01 — the provided card: no key, no « Hors UE » badge (ADR-0154 point 4). */
-export function providedCard(): AiProviderCard {
-  const region = providerRegion(PROVIDED_PROVIDER);
-  return {
-    id: null,
-    origin: 'provided',
-    provider: PROVIDED_PROVIDER,
-    providerLabel: region.providerLabel,
-    label: `${region.providerLabel} · Claude`,
-    keyMasked: null,
-    status: 'qualified',
-    outsideEu: false,
-    dataNote: 'Fourni par la plateforme. Aucune clé à renseigner.',
-    models: [...PROVIDED_MODEL_ORDER],
-    qualifiedAt: null,
-    failure: null,
-  };
-}
-
-/** ADR-0012, BR-IA-07 — a personal key never consumes the provided daily allowance. */
-export function modelsGuard(): AiModelsState['guard'] {
-  return {
-    personalKeysExemptFromCap: true,
-    managedDailyCapUsd: AI_RULES.dailyCapUsd.toFixed(6),
-    alertThresholdPercent: AI_RULES.alertThresholdPercent,
-  };
-}
-
 /**
- * EF-1, EF-2 — reads the whole tab in one RLS transaction: credentials (masked), assignments,
- * the five task rows and the guard. The order is deterministic: mockup task order, then
+ * EF-1, EF-2 — reads the whole tab in one RLS transaction: credentials (masked), assignments
+ * and the five task rows. The order is deterministic: mockup task order, then
  * credentials oldest first and models in declaration order.
  */
 export async function readAiModelsState(
@@ -401,8 +304,7 @@ export async function readAiModelsState(
         credentials,
       ),
     ),
-    providers: [providedCard(), ...credentials.map((row) => providerCardOf(row))],
-    guard: modelsGuard(),
+    providers: credentials.map((row) => providerCardOf(row)),
     updatedAt: now.toISOString(),
   };
 }
@@ -416,10 +318,10 @@ export function getAiModelsState(ctx: ServiceContext): Promise<Result<AiModelsSt
 }
 
 /**
- * PATCH /api/v1/me/ai/models — saves one task choice or resets every personal choice. The write
+ * PATCH /api/v1/me/ai/models — assigns a model to one task or clears that task. The write
  * and the returned state share one transaction; a repeated request only updates the same
  * `(user_id, task)` row, so no write is ever duplicated (CL-2). The key rows are never touched
- * (EF-2): resetting keeps the credentials and their qualification.
+ * (EF-2): clearing a task keeps the credentials and their qualification.
  */
 export function updateAiModels(
   ctx: ServiceContext,
@@ -430,31 +332,10 @@ export function updateAiModels(
     const value = parseModelsUpdate(input);
     const now = ctx.clock.now();
     return db.run(async (tx) => {
-      if (value.action === 'reset') {
-        await tx.delete(aiTaskModels).where(eq(aiTaskModels.userId, userId));
-        return readAiModelsState(tx, userId, now);
-      }
-
-      if (value.credentialId === null || value.credentialId === undefined) {
-        if (!isProvidedModel(value.modelId)) {
-          throw validationFailure(
-            'Un modèle personnel exige la clé qui le fournit.',
-            'body.credentialId',
-          );
-        }
-        if (value.modelId === DEFAULT_MODEL_BY_TASK[value.task]) {
-          // Per-task « revenir au défaut »: the row disappears, the key stays untouched.
-          await tx
-            .delete(aiTaskModels)
-            .where(and(eq(aiTaskModels.userId, userId), eq(aiTaskModels.task, value.task)));
-        } else {
-          await setTaskModel(tx, {
-            userId,
-            task: value.task,
-            credentialId: null,
-            modelId: value.modelId,
-          });
-        }
+      if (value.action === 'clear') {
+        await tx
+          .delete(aiTaskModels)
+          .where(and(eq(aiTaskModels.userId, userId), eq(aiTaskModels.task, value.task)));
         return readAiModelsState(tx, userId, now);
       }
 

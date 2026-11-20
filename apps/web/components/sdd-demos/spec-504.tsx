@@ -1,6 +1,6 @@
 // Demonstration of SPEC-504: real resolution on three isolated accounts and the six simulated
 // scenarios. The preview is built by the pure Anthropic contract used by the provider wrapper.
-import { AI_TASKS, DEFAULT_MODEL_BY_TASK, type AiTask } from '@learny/config';
+import { AI_TASKS, type AiTask } from '@learny/config';
 import { buildAnthropicRequestPreview } from '@learny/llm';
 
 import { loadResolutionDemo } from '../../app/%5Fdev/sdd/spec-504-data';
@@ -14,8 +14,7 @@ function previews(): Record<AiTask, unknown> {
       task,
       buildAnthropicRequestPreview({
         task,
-        modelId: DEFAULT_MODEL_BY_TASK[task],
-        managed: true,
+        modelId: 'modele-personnel',
         system: [
           { text: 'Consigne système stable de la tâche.', cache: true },
           { text: 'Question courante.', cache: false },

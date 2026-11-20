@@ -193,7 +193,7 @@ const FIXTURES: Fixture[] = [
       userId: USER,
       taskId: '88888888-8888-4888-8888-888888888888',
       taskLabel: 'Correction du quiz',
-      modelLabel: 'IA fournie',
+      modelLabel: 'personnel',
     },
     href: '/parametres#modeles',
     dedupeKey: 'ai_task_failed:88888888-8888-4888-8888-888888888888',

@@ -9,7 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import type { Result } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme, createTestUser } from '@learny/db/testing';
+import { createTestProgramme, createTestUser, grantTestModels } from '@learny/db/testing';
 import { setEventSender } from '@learny/jobs';
 
 import {
@@ -153,11 +153,7 @@ async function fixture(): Promise<Fixture> {
       )
       returning id::text as id
     `);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${a.id}::uuid, 'active', '2030-01-01T00:00:00Z')
-      on conflict (user_id) do update set status = 'active'
-    `);
+    await grantTestModels(tx, a.id);
     await tx.execute(sql`
       update public.profiles
       set onboarding_step = 'done', current_formation_id = ${programme.formationId}::uuid

@@ -1,4 +1,3 @@
-export * from './ai';
 export * from './auth';
 export * from './common';
 export * from './cursor';
@@ -59,7 +58,6 @@ export * from './automatisme-9-bilan-de-la-semaine';
 export * from './automatisme-8-sprint-avant-un-jalon';
 export * from './automatisme-10-mode-pause-et-retour';
 export * from './billing';
-export * from './abonnement-a-l-ia-fournie-interface-et-plafond';
 export * from './bricks';
 export * from './cadrage';
 export * from './formation-management';

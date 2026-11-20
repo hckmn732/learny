@@ -214,7 +214,7 @@ export function Spec508Client({ demo }: Readonly<{ demo: TutorDemo }>) {
         {result.notification === null ? null : (
           <p className="mt-3 text-13" data-testid="tutor-notification">
             Notification {result.notification.type} · motif {result.notification.reason} · choix
-            humain exigé, aucune bascule vers l’IA fournie.
+            humain exigé, aucune bascule automatique.
           </p>
         )}
       </BaseCard>

@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import type { TutorProfile } from '@learny/contracts';
 import { closeDb, serviceDb, sql, userDb } from '@learny/db';
-import { createTestProgramme, createTestUser } from '@learny/db/testing';
+import { createTestProgramme, createTestUser, grantTestModels } from '@learny/db/testing';
 import type { StepInput, StepOutput } from '@learny/llm';
 
 import type { TutorLlmSession } from '../../src/context';
@@ -34,11 +34,7 @@ async function fixture(label: string, withProgramme = true): Promise<Fixture> {
     const programme = withProgramme
       ? await createTestProgramme(tx, user.id, { modules: 1, chaptersPerModule: 1, notionsPerChapter: 1 })
       : { formationId: randomUUID(), notionIds: [randomUUID()], moduleIds: [randomUUID()] };
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${user.id}::uuid, 'active', '2027-01-01T00:00:00Z'::timestamptz)
-      on conflict (user_id) do update set status = 'active'
-    `);
+    await grantTestModels(tx, user.id);
     return {
       userId: user.id,
       email,
@@ -158,7 +154,7 @@ describe('[SPEC-508] service', () => {
     if (!result.ok) return;
     expect(result.value.status).toBe('completed');
     expect(result.value.text).toContain('vous allez apprendre');
-    expect(result.value.model).toBe('claude-sonnet-5-5');
+    expect(result.value.model).toBe('model-b');
     const calls = await serviceDb().execute<{ status: string; task: string }>(sql`
       select status::text as status, task::text as task
       from public.ai_calls where user_id = ${a.userId}::uuid order by created_at desc limit 1

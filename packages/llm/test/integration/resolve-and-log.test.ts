@@ -41,18 +41,6 @@ async function subscriber(label: string): Promise<string> {
   return id;
 }
 
-async function pastDue(label: string): Promise<string> {
-  const id = await user(label);
-  await serviceDb().transaction((tx) =>
-    upsertSubscription(tx, {
-      userId: id,
-      status: 'past_due',
-      currentPeriodEnd: new Date('2026-10-11T12:20:00.000Z'),
-    }),
-  );
-  return id;
-}
-
 async function personalKey(
   userId: string,
   options: {
@@ -84,6 +72,14 @@ async function choose(
   credentialId: string | null,
 ): Promise<void> {
   await serviceDb().transaction((tx) => setTaskModel(tx, { userId, task, credentialId, modelId }));
+}
+
+/** A learner who chose the same qualified personal model for every task. */
+async function withModels(label: string): Promise<string> {
+  const id = await user(label);
+  const credentialId = await personalKey(id);
+  for (const task of TASKS) await choose(id, task, 'gpt-test', credentialId);
+  return id;
 }
 
 async function model(
@@ -122,24 +118,20 @@ afterEach(async () => {
 });
 
 describe('[SPEC-504] résolution et journal', () => {
-  it('CA-1 — abonné sans choix : les cinq modèles fournis par défaut', async () => {
-    const userId = await subscriber('managed');
-    const models = await Promise.all(TASKS.map((task) => model(userId, task)));
-    expect(models.map((resolved) => resolved.modelId)).toEqual([
-      'claude-opus-5-5',
-      'claude-opus-5-5',
-      'claude-opus-5-5',
-      'claude-sonnet-5-5',
-      'claude-haiku-5-5',
-    ]);
-    expect(models.every((resolved) => resolved.kind === 'managed')).toBe(true);
+  it('CA-1 — aucun modèle par défaut : sans choix, AI_UNAVAILABLE no_model_selected', async () => {
+    const userId = await user('no-choice');
+    for (const task of TASKS) {
+      const error = await unavailable(userId, task);
+      expect(error.code).toBe('AI_UNAVAILABLE');
+      expect(error.reason).toBe('no_model_selected');
+    }
   });
 
-  it('CA-1 — abonné avec surcharge Claude : le modèle choisi est conservé', async () => {
-    const userId = await subscriber('override');
-    await choose(userId, 'tutor', 'claude-haiku-5-5', null);
-    const resolved = await model(userId, 'tutor');
-    expect(resolved).toMatchObject({ kind: 'managed', modelId: 'claude-haiku-5-5' });
+  it('CA-1 — un abonnement actif ne fournit aucun modèle : sans choix, no_model_selected', async () => {
+    const userId = await subscriber('subscribed-no-choice');
+    const error = await unavailable(userId);
+    expect(error.code).toBe('AI_UNAVAILABLE');
+    expect(error.reason).toBe('no_model_selected');
   });
 
   it('CA-1 — non abonné avec clé qualifiée : modèle personnel', async () => {
@@ -176,13 +168,6 @@ describe('[SPEC-504] résolution et journal', () => {
     expect(error.credentialId).toBe(credentialId);
   });
 
-  it('CA-1 — past_due : aucun droit fourni, AI_UNAVAILABLE sans clé', async () => {
-    const userId = await pastDue('pastdue');
-    const error = await unavailable(userId);
-    expect(error.code).toBe('AI_UNAVAILABLE');
-    expect(error.reason).toBe('no_subscription_no_key');
-  });
-
   it('CA-1 — clé supprimée (credential_id nul) : AI_UNAVAILABLE sans abonnement', async () => {
     const userId = await user('deleted');
     await choose(userId, 'tutor', 'gpt-deleted', null);
@@ -200,7 +185,7 @@ describe('[SPEC-504] résolution et journal', () => {
   });
 
   it('CA-5 — session mock : une ligne ok avec tokens et latence de la fixture', async () => {
-    const userId = await subscriber('session');
+    const userId = await withModels('session');
     const session = await createSession(
       { userId, db: serviceDb() },
       { task: 'tutor', promptId: 'tutor.demo', mock: { scenario: 'demo' } },
@@ -218,9 +203,9 @@ describe('[SPEC-504] résolution et journal', () => {
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({
       task: 'tutor',
-      provider: 'anthropic',
-      model: 'claude-sonnet-5-5',
-      managed: true,
+      provider: 'openai',
+      model: 'gpt-test',
+      managed: false,
       inputTokens: 24,
       outputTokens: 4,
       latencyMs: 120,
@@ -231,7 +216,7 @@ describe('[SPEC-504] résolution et journal', () => {
   });
 
   it('CA-5 — refus : une ligne refused et AI_REFUSED', async () => {
-    const userId = await subscriber('refusal');
+    const userId = await withModels('refusal');
     const session = await createSession(
       { userId, db: serviceDb() },
       { task: 'tutor', promptId: 'tutor.demo', mock: { scenario: 'demo-refusal' } },
@@ -249,7 +234,7 @@ describe('[SPEC-504] résolution et journal', () => {
   });
 
   it('CA-5 — sortie structurée invalide : INVALID_OUTPUT journalisé', async () => {
-    const userId = await subscriber('invalid');
+    const userId = await withModels('invalid');
     const session = await createSession(
       { userId, db: serviceDb() },
       { task: 'light', promptId: 'light.demo-object', mock: { scenario: 'demo-invalid-object' } },
@@ -281,9 +266,9 @@ describe('[SPEC-504] résolution et journal', () => {
     const userId = await user('auth');
     const credentialId = await personalKey(userId, {
       provider: 'anthropic',
-      modelIds: ['claude-haiku-5-5'],
+      modelIds: ['test-model'],
     });
-    await choose(userId, 'tutor', 'claude-haiku-5-5', credentialId);
+    await choose(userId, 'tutor', 'test-model', credentialId);
     server.use(
       http.post('https://api.anthropic.com/v1/messages', () =>
         HttpResponse.json({ error: { message: 'invalid key' } }, { status: 401 }),
@@ -317,9 +302,9 @@ describe('[SPEC-504] résolution et journal', () => {
     const userId = await user('server');
     const credentialId = await personalKey(userId, {
       provider: 'anthropic',
-      modelIds: ['claude-haiku-5-5'],
+      modelIds: ['test-model'],
     });
-    await choose(userId, 'tutor', 'claude-haiku-5-5', credentialId);
+    await choose(userId, 'tutor', 'test-model', credentialId);
     let attempts = 0;
     server.use(
       http.post('https://api.anthropic.com/v1/messages', () => {
@@ -355,16 +340,16 @@ describe('[SPEC-504] résolution et journal', () => {
     const userId = await user('provider-refusal');
     const credentialId = await personalKey(userId, {
       provider: 'anthropic',
-      modelIds: ['claude-haiku-5-5'],
+      modelIds: ['test-model'],
     });
-    await choose(userId, 'tutor', 'claude-haiku-5-5', credentialId);
+    await choose(userId, 'tutor', 'test-model', credentialId);
     server.use(
       http.post('https://api.anthropic.com/v1/messages', () =>
         HttpResponse.json({
           id: 'msg_refusal',
           type: 'message',
           role: 'assistant',
-          model: 'claude-haiku-5-5',
+          model: 'test-model',
           content: [],
           stop_reason: 'refusal',
           stop_sequence: null,

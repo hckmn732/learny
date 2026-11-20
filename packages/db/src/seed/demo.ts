@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto';
 
 import { SQL, sql } from 'drizzle-orm';
 
-import { LEGAL_VERSIONS } from '@learny/config';
+import { AI_TASKS, LEGAL_VERSIONS } from '@learny/config';
 
 import { serviceDb, type DbTx } from '../client';
 
@@ -408,11 +408,8 @@ async function seedAccounts(tx: DbTx): Promise<void> {
     { conflict: 'user_id' },
   );
 
-  // Extension QA (ADR-0336) — les comptes de démonstration sont abonnés à l'IA fournie : sans
-  // droit actif, `resolveModel` refuse chaque tâche (`AI_UNAVAILABLE`, SPEC-504 EF-1) et la pile
-  // de recette ne peut ni générer un cours, ni discuter avec le tuteur, ni remplir la banque de
-  // questions, alors même que le mode simulé rend ces appels déterministes. La fin de période
-  // dépasse l'horloge figée du jeu et le plafond journalier laisse la recette respirer.
+  // Extension QA (ADR-0336) — les comptes de démonstration ont un abonnement actif (droit d'usage
+  // de l'application) dont la fin de période dépasse l'horloge figée du jeu.
   await insertRows(
     tx,
     'public.subscriptions',
@@ -422,7 +419,6 @@ async function seedAccounts(tx: DbTx): Promise<void> {
       'stripe_subscription_id',
       'status',
       'current_period_end',
-      'daily_cap_usd',
       'updated_at',
     ],
     DEMO_USERS.map((user) => [
@@ -431,10 +427,59 @@ async function seedAccounts(tx: DbTx): Promise<void> {
       `sub_demo_${user.key}`,
       'active',
       timestamp('2030-01-01T00:00:00+00:00'),
-      '10.000000',
       timestamp('2026-11-11T07:15:00+01:00'),
     ]),
     { conflict: 'user_id' },
+  );
+
+  // La plateforme ne fournit aucun modèle : sans choix, `resolveModel` refuse chaque tâche
+  // (`AI_UNAVAILABLE`, SPEC-504 EF-1). Pour que la pile de recette en mode simulé puisse générer
+  // un cours, discuter avec le tuteur et remplir la banque de questions, chaque compte de
+  // démonstration reçoit un modèle local qualifié affecté aux cinq tâches. Aucun appel réseau n'a
+  // lieu en mode simulé ; en mode réel l'apprenant ajoute sa propre clé et réaffecte ses tâches.
+  const demoCredentialId = (key: string): string => demoId('ai-credential', key);
+  await insertRows(
+    tx,
+    'public.ai_credentials',
+    [
+      'id',
+      'user_id',
+      'provider',
+      'label',
+      'base_url',
+      'model_ids',
+      'status',
+      'qualified_at',
+      'created_at',
+      'updated_at',
+    ],
+    DEMO_USERS.map((user) => [
+      demoCredentialId(user.key),
+      demoUserId(user.key),
+      'local',
+      'Modèle de démonstration',
+      'http://localhost:11434/v1',
+      array(['demo-model'], 'text[]'),
+      'qualified',
+      timestamp('2026-11-11T07:15:00+01:00'),
+      timestamp('2026-11-11T07:15:00+01:00'),
+      timestamp('2026-11-11T07:15:00+01:00'),
+    ]),
+    { conflict: 'id' },
+  );
+  await insertRows(
+    tx,
+    'public.ai_task_models',
+    ['user_id', 'task', 'credential_id', 'model_id'],
+    DEMO_USERS.flatMap((user) =>
+      AI_TASKS.map((task) => [
+        demoUserId(user.key),
+        sql`${task}::public.ai_task`,
+        demoCredentialId(user.key),
+        'demo-model',
+      ]),
+    ),
+    { conflict: 'user_id, task' },
   );
 
   await insertRows(
@@ -1495,29 +1540,29 @@ interface CourseDefinition {
 }
 
 const COURSES: readonly CourseDefinition[] = [
-  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 1, model: 'claude-sonnet' },
-  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 2, model: 'claude-sonnet' },
-  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 3, model: 'claude-sonnet' },
+  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 1, model: 'modele-demo-a' },
+  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 2, model: 'modele-demo-a' },
+  { owner: 'alex', formation: SAP_FORMATION, modulePosition: 3, model: 'modele-demo-a' },
   {
     owner: 'alex',
     formation: DEMO_FORMATIONS[1] as DemoFormationFixture,
     modulePosition: 5,
-    model: 'claude-sonnet',
+    model: 'modele-demo-a',
   },
   {
     owner: 'camille',
     formation: DEMO_FORMATIONS[1] as DemoFormationFixture,
     modulePosition: 4,
-    model: 'claude-haiku',
+    model: 'modele-demo-b',
   },
   {
     owner: 'hugo',
     formation: DEMO_FORMATIONS[1] as DemoFormationFixture,
     modulePosition: 3,
-    model: 'claude-haiku',
+    model: 'modele-demo-b',
   },
   // Extension QA (hors SPEC-115) — cours du module ouvert au moment de la mise en pause.
-  { owner: 'hugo', formation: SCRUM_FORMATION, modulePosition: 3, model: 'claude-haiku' },
+  { owner: 'hugo', formation: SCRUM_FORMATION, modulePosition: 3, model: 'modele-demo-b' },
 ];
 
 async function seedCourses(tx: DbTx, catalog: SeededCatalog): Promise<void> {

@@ -469,7 +469,7 @@ describe('[SPEC-211] export et suppression', () => {
     await shareFormation(alice.userId, bob.userId, seed.formationId, clock);
     await serviceDb().execute(sql`
       insert into public.ai_calls (user_id, task, provider, model, status)
-      values (${alice.userId}::uuid, 'course', 'anthropic', 'claude-test', 'ok')
+      values (${alice.userId}::uuid, 'course', 'anthropic', 'model-test', 'ok')
     `);
     const client = context(clock, alice.userId);
     const scheduled = await scheduleDeletion(client);
@@ -496,7 +496,7 @@ describe('[SPEC-211] export et suppression', () => {
     );
     expect(auth[0]?.present).toBe(false);
     const anonymised = await serviceDb().execute<{ user_id: string | null }>(
-      sql`select user_id::text as user_id from public.ai_calls where model = 'claude-test'`,
+      sql`select user_id::text as user_id from public.ai_calls where model = 'model-test'`,
     );
     expect(anonymised[0]?.user_id).toBeNull();
 

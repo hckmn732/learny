@@ -20,7 +20,7 @@ Les maquettes cliquables sont dans `design/maquettes/` (fichiers `*.dc.html`, mo
 | SCR-12 | Agenda | `/agenda?vue=jour|semaine|mois&date=YYYY-MM-DD&formation=all|[fid]` | `Agenda.dc.html` | SPEC-704, 705 |
 | SCR-13 | Mes lacunes | `/formations/[fid]/lacunes?nature=` | `Lacunes.dc.html` | SPEC-615 |
 | SCR-14 | Carte des notions | `/formations/[fid]/carte` | `Carte.dc.html` | SPEC-616 |
-| SCR-15 | Paramètres | `/parametres#profil|notifications|automatismes|modeles` | `Parametres.dc.html` | SPEC-707 à 710, 725 |
+| SCR-15 | Paramètres | `/parametres#profil|notifications|automatismes|modeles|abonnement` | `Parametres.dc.html` | SPEC-707 à 710, 725 |
 | SCR-16 | Bilan final de formation | `/formations/[fid]/bilan` | *aucune* — composer selon §3 | SPEC-617 |
 | SCR-17 | Formation à plusieurs (membres, invitation) | `/formations/[fid]/groupe`, `/invitation/[code]` | *aucune* — composer selon §3 | SPEC-724 |
 | SCR-18 | Résultats de recherche | `/recherche?q=` | *aucune* (le panneau d'en-tête suit la maquette du panneau notifications) | SPEC-307 |

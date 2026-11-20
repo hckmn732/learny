@@ -14,7 +14,6 @@ import {
   notifications,
   serviceDb,
   sql,
-  upsertSubscription,
 } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 import { resolveModel } from '@learny/llm';
@@ -29,7 +28,6 @@ import { createServiceContext, type ServiceContext } from '../../src/context';
 
 const PREFIX = 'sdd-506-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
-const FUTURE = new Date('2026-12-11T12:20:00Z');
 const MODEL = 'gpt-qualification-demo';
 const SECRET = 'sk-test-506-00000000a91F'; // learny-test-only
 
@@ -216,11 +214,8 @@ describe('[SPEC-506] service', () => {
     expect(rows).toEqual([]);
   });
 
-  it('CA-4 — après deux corrections, la tâche s’arrête sans appel à l’IA fournie', async () => {
+  it('CA-4 — après deux corrections, la tâche s’arrête et propose un autre modèle de la clé', async () => {
     const { userId, ctx } = await createUser('invalid-output');
-    await serviceDb().transaction((tx) =>
-      upsertSubscription(tx, { userId, status: 'active', currentPeriodEnd: FUTURE }),
-    );
     const stopped = await stopAfterInvalidBrick(ctx, {
       task: 'tutor',
       modelId: MODEL,
@@ -232,12 +227,9 @@ describe('[SPEC-506] service', () => {
       status: 'stopped',
       errorCode: 'INVALID_OUTPUT',
       attempts: 2,
-      managedCalls: 0,
+      choices: ['personal_model'],
       notified: true,
     });
-    if (stopped.value.status === 'stopped') {
-      expect(stopped.value.choices).toEqual(['personal_model', 'managed_ai']);
-    }
     expect(await callCount(userId)).toBe(0);
     const rows = await serviceDb()
       .select({ type: notifications.type, dedupeKey: notifications.dedupeKey })
@@ -253,21 +245,6 @@ describe('[SPEC-506] service', () => {
       attempts: 1,
     });
     expect(retry).toEqual({ ok: true, value: { status: 'retry', attempts: 1, remaining: 1 } });
-  });
-
-  it('CA-4 — sans abonnement, seule l’autre clé personnelle est proposée', async () => {
-    const { ctx } = await createUser('no-sub');
-    const stopped = await stopAfterInvalidBrick(ctx, {
-      task: 'gaps',
-      modelId: MODEL,
-      attempts: 2,
-    });
-    expect(stopped.ok).toBe(true);
-    if (!stopped.ok) return;
-    if (stopped.value.status === 'stopped') {
-      expect(stopped.value.choices).toEqual(['personal_model']);
-      expect(stopped.value.managedCalls).toBe(0);
-    }
   });
 
   it('EF-4 — un modèle non enregistré sur la clé est refusé avant tout appel', async () => {

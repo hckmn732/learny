@@ -15,6 +15,7 @@ import {
   type TestSession,
 } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
+import { seedOwnModels } from '../../../support/own-model';
 
 const PREFIX = 'sdd-715-e2e-';
 const NOW = '2026-11-11T12:20:00.000Z';
@@ -70,10 +71,7 @@ async function seed(userId: string): Promise<Seed> {
         set study_days = '{1,2,3,4,5,6,7}'::smallint[],
             preferred_slots = '{matin,apres_midi,soir}'::study_slot[]
     `);
-    await tx.execute(sql`
-      insert into public.subscriptions (user_id, status, current_period_end)
-      values (${userId}::uuid, 'active', '2030-01-01T00:00:00Z'::timestamptz)
-    `);
+    await seedOwnModels(userId, tx);
     await makeModuleWithBank(tx, {
       userId,
       formationId: programme.formationId,

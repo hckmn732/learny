@@ -11,7 +11,6 @@ const mocks = vi.hoisted(() => ({
   insert: vi.fn(),
   notify: vi.fn(),
   run: vi.fn(),
-  serviceSelect: vi.fn(),
 }));
 
 vi.mock('@learny/contracts', async (importOriginal) => {
@@ -32,8 +31,7 @@ vi.mock('@learny/contracts', async (importOriginal) => {
 vi.mock('@learny/db', () => ({
   aiCredentials: { id: 'id', userId: 'user_id', qualification: 'q', status: 's', modelIds: 'm' },
   aiTaskModels: { userId: 'user_id', task: 'task' },
-  subscriptions: { userId: 'user_id', status: 'status', currentPeriodEnd: 'end' },
-  serviceDb: () => ({ select: mocks.serviceSelect }),
+  serviceDb: () => ({}),
 }));
 
 vi.mock('@learny/llm/qualification', () => ({ runQualification: mocks.run }));
@@ -65,10 +63,10 @@ function context(): ServiceContext {
 
 function credentialRow(partial: Record<string, unknown> = {}) {
   return {
-    modelIds: ['claude-haiku-5-5'],
+    modelIds: ['model-c'],
     qualification: {
       models: {
-        'claude-haiku-5-5': {
+        'model-c': {
           status: 'qualified',
           capabilities: {
             tools: true,
@@ -91,9 +89,7 @@ function chain(rows: unknown[]) {
 
 describe('[SPEC-506] qualification et affectation', () => {
   it('refuse un identifiant de clé ou de modèle invalide (ET-1)', async () => {
-    await expect(
-      qualifyCredential(context(), 'pas-un-uuid', 'claude-haiku-5-5'),
-    ).resolves.toMatchObject({
+    await expect(qualifyCredential(context(), 'pas-un-uuid', 'model-c')).resolves.toMatchObject({
       ok: false,
       error: { code: 'CREDENTIAL_NOT_FOUND' },
     });
@@ -109,9 +105,10 @@ describe('[SPEC-506] qualification et affectation', () => {
       limit: () => Promise.resolve([]),
     };
     mocks.select.mockReturnValueOnce(foreignChain);
-    await expect(
-      qualifyCredential(context(), CREDENTIAL, 'claude-haiku-5-5'),
-    ).resolves.toMatchObject({ ok: false, error: { code: 'CREDENTIAL_NOT_FOUND' } });
+    await expect(qualifyCredential(context(), CREDENTIAL, 'model-c')).resolves.toMatchObject({
+      ok: false,
+      error: { code: 'CREDENTIAL_NOT_FOUND' },
+    });
   });
 
   it('expose la batterie des treize types et refuse un type inconnu (ET-2)', () => {
@@ -148,7 +145,7 @@ describe('[SPEC-506] qualification et affectation', () => {
     const missing = await assignTaskModel(context(), {
       task: 'tutor',
       credentialId: CREDENTIAL,
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
     });
     expect(missing).toMatchObject({ ok: false, error: { code: 'CREDENTIAL_NOT_FOUND' } });
 
@@ -156,21 +153,19 @@ describe('[SPEC-506] qualification et affectation', () => {
     const absent = await assignTaskModel(context(), {
       task: 'tutor',
       credentialId: CREDENTIAL,
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
     });
     expect(absent).toMatchObject({ ok: false, error: { code: 'VALIDATION_FAILED' } });
   });
 
   it('refuse un modèle non qualifié ou une capacité manquante (EF-4)', async () => {
     mocks.select.mockReturnValueOnce(
-      chain([
-        credentialRow({ qualification: { models: { 'claude-haiku-5-5': { status: 'failed' } } } }),
-      ]),
+      chain([credentialRow({ qualification: { models: { 'model-c': { status: 'failed' } } } })]),
     );
     const failed = await assignTaskModel(context(), {
       task: 'tutor',
       credentialId: CREDENTIAL,
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
     });
     expect(failed).toMatchObject({ ok: false, error: { code: 'AI_MODEL_NOT_QUALIFIED' } });
 
@@ -179,7 +174,7 @@ describe('[SPEC-506] qualification et affectation', () => {
         credentialRow({
           qualification: {
             models: {
-              'claude-haiku-5-5': {
+              'model-c': {
                 status: 'qualified',
                 capabilities: {
                   tools: true,
@@ -197,7 +192,7 @@ describe('[SPEC-506] qualification et affectation', () => {
     const missingCapability = await assignTaskModel(context(), {
       task: 'tutor',
       credentialId: CREDENTIAL,
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
     });
     expect(missingCapability).toMatchObject({
       ok: false,
@@ -215,40 +210,27 @@ describe('[SPEC-506] qualification et affectation', () => {
       assignTaskModel(context(), {
         task: 'tutor',
         credentialId: CREDENTIAL,
-        modelId: 'claude-haiku-5-5',
+        modelId: 'model-c',
       }),
     ).resolves.toEqual({
       ok: true,
-      value: { task: 'tutor', credentialId: CREDENTIAL, modelId: 'claude-haiku-5-5' },
+      value: { task: 'tutor', credentialId: CREDENTIAL, modelId: 'model-c' },
     });
   });
 
   it('réessaie avant deux échecs puis arrête avec une notification (EF-5, CA-4)', async () => {
     const retry = await stopAfterInvalidBrick(context(), {
       task: 'course',
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
       attempts: 0,
     });
     expect(retry).toEqual({ ok: true, value: { status: 'retry', attempts: 0, remaining: 2 } });
 
-    mocks.serviceSelect.mockReturnValue({
-      from: () => ({
-        where: () => ({
-          limit: () =>
-            Promise.resolve([
-              {
-                status: 'active',
-                currentPeriodEnd: new Date('2026-12-01T00:00:00Z'),
-              },
-            ]),
-        }),
-      }),
-    });
     mocks.notify.mockResolvedValue({ ok: true });
 
     const stopped = await stopAfterInvalidBrick(context(), {
       task: 'course',
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
       attempts: 2,
     });
     expect(stopped).toMatchObject({
@@ -256,22 +238,18 @@ describe('[SPEC-506] qualification et affectation', () => {
       value: {
         status: 'stopped',
         errorCode: 'INVALID_OUTPUT',
-        choices: ['personal_model', 'managed_ai'],
+        choices: ['personal_model'],
         notified: true,
-        managedCalls: 0,
       },
     });
 
-    mocks.serviceSelect.mockReturnValue({
-      from: () => ({ where: () => ({ limit: () => Promise.resolve([]) }) }),
-    });
     mocks.notify.mockResolvedValue({ ok: false });
-    const withoutManaged = await stopAfterInvalidBrick(context(), {
+    const failedNotice = await stopAfterInvalidBrick(context(), {
       task: 'course',
-      modelId: 'claude-haiku-5-5',
+      modelId: 'model-c',
       attempts: 3,
     });
-    expect(withoutManaged).toMatchObject({
+    expect(failedNotice).toMatchObject({
       ok: true,
       value: { choices: ['personal_model'], notified: false },
     });

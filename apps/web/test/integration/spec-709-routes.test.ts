@@ -20,7 +20,7 @@ import { setSessionResolver } from '../../lib/api/session';
 
 const PREFIX = 'sdd-709-routes-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
-const MODEL = 'claude-personal-709-routes';
+const MODEL = 'model-personal-709-routes';
 const SECRET = 'sk-sentinel-0123456789abcdef'; // learny-test-only
 
 class TestClock implements Clock {
@@ -147,8 +147,8 @@ describe('[SPEC-709] routes de l’onglet Modèles d’IA', () => {
     expect(answer.status).toBe(200);
     const tasks = answer.body.tasks as Array<Record<string, unknown>>;
     expect(tasks).toHaveLength(5);
+    expect(tasks.every((task) => task.modelId === null && task.available === false)).toBe(true);
     const providers = answer.body.providers as Array<Record<string, unknown>>;
-    expect(providers[0]?.origin).toBe('provided');
     expect(providers.some((card) => card.id === credentialId)).toBe(true);
     const personal = providers.find((card) => card.id === credentialId);
     // The mask keeps the last four characters of the stored key (`sk-sentinel-0123456789abcdef`).

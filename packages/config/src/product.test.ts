@@ -2,24 +2,9 @@ import fs from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
-import {
-  AI_MODEL_IDS,
-  AI_TASKS,
-  DEFAULT_MODEL_BY_TASK,
-  THINKING_EFFORT_BY_TASK,
-  WEB_SEARCH_TASKS,
-} from './models';
-import {
-  BATCH_DISCOUNT_RATIO,
-  CACHE_READ_RATIO,
-  CACHE_WRITE_RATIO,
-  MODEL_PRICING,
-  PRICE_UNIT,
-  modelPrices,
-} from './pricing';
+import { AI_TASKS, THINKING_EFFORT_BY_TASK, WEB_SEARCH_TASKS } from './models';
 import {
   ACCOUNT_RULES,
-  AI_RULES,
   AUTOMATION_DEFAULTS,
   ENGINE,
   FORMATION_RULES,
@@ -32,7 +17,6 @@ import {
 
 const RULES = {
   ACCOUNT: ACCOUNT_RULES,
-  AI: AI_RULES,
   RESOURCE: RESOURCE_RULES,
   QUIZ: QUIZ_RULES,
   MEMORY: MEMORY_RULES,
@@ -49,11 +33,6 @@ const AI_DOC = fs.readFileSync(
   new URL('../../../docs/architecture/ai.md', import.meta.url),
   'utf8',
 );
-const PRICING_ADR = fs.readFileSync(
-  new URL('../../../docs/adr/ADR-0073-tarifs-de-l-ia-en-configuration.md', import.meta.url),
-  'utf8',
-);
-
 interface Mirror {
   readonly path: string;
   readonly br: string;
@@ -89,8 +68,6 @@ const MIRROR: readonly Mirror[] = [
   },
   { path: 'ACCOUNT.defaultCourseLanguage', br: 'BR-ACC-06', value: 'fr', text: 'défaut fr' },
   { path: 'ACCOUNT.defaultTimeZone', br: 'BR-ACC-07', value: 'Europe/Paris', text: 'Europe/Paris' },
-  { path: 'AI.dailyCapUsd', br: 'BR-IA-07', value: 1.5, text: '1,50 USD par jour' },
-  { path: 'AI.alertThresholdPercent', br: 'BR-IA-07', value: 80, text: 'Alerte in-app à 80 %' },
   { path: 'ACCOUNT.studyHoursPerDay.min', br: 'BR-ACC-08', value: 1, text: 'entier 1 à 6' },
   { path: 'ACCOUNT.studyHoursPerDay.max', br: 'BR-ACC-08', value: 6, text: 'entier 1 à 6' },
   { path: 'ACCOUNT.studyHoursPerDay.default', br: 'BR-ACC-08', value: 2, text: 'défaut 2' },
@@ -288,10 +265,9 @@ describe('[SPEC-009] product', () => {
     }
   });
 
-  it('covers the seven families required by EF-5', () => {
+  it('covers the families required by EF-5', () => {
     expect(Object.keys(RULES)).toEqual([
       'ACCOUNT',
-      'AI',
       'RESOURCE',
       'QUIZ',
       'MEMORY',
@@ -373,14 +349,8 @@ describe('[SPEC-009] models', () => {
     return row;
   }
 
-  it('maps each task to the provided model of BR-IA-01 (EF-6, CA-4)', () => {
-    expect(Object.keys(DEFAULT_MODEL_BY_TASK)).toEqual([...AI_TASKS]);
-    for (const task of AI_TASKS) {
-      const model = DEFAULT_MODEL_BY_TASK[task];
-      expect(aiRow(task), task).toContain(`\`${model}\``);
-      expect(ruleRow('BR-IA-01'), task).toContain(`\`${model}\``);
-    }
-    expect(Object.values(AI_MODEL_IDS)).toHaveLength(3);
+  it('lists the five tasks and no provided model (BR-IA-02, BR-IA-06)', () => {
+    expect(AI_TASKS).toEqual(['programme', 'course', 'gaps', 'tutor', 'light']);
   });
 
   it('records the thinking effort of each task (EF-6)', () => {
@@ -393,48 +363,5 @@ describe('[SPEC-009] models', () => {
   it('restricts web search to programme design (BR-IA-12)', () => {
     expect(WEB_SEARCH_TASKS).toEqual(['programme']);
     expect(ruleRow('BR-IA-12')).toContain('concevoir le programme');
-  });
-});
-
-describe('[SPEC-009] pricing', () => {
-  it('exposes the ADR-0073 prices per million tokens (EF-6, CA-4)', () => {
-    expect(PRICE_UNIT).toBe('USD_PER_MILLION_TOKENS');
-    expect(MODEL_PRICING[AI_MODEL_IDS.opus]).toEqual({ input: 4, output: 20 });
-    expect(MODEL_PRICING[AI_MODEL_IDS.sonnet]).toEqual({ input: 2, output: 10 });
-    expect(MODEL_PRICING[AI_MODEL_IDS.haiku]).toEqual({ input: 0.1, output: 0.5 });
-    expect(PRICING_ADR).toContain('4/20');
-    expect(PRICING_ADR).toContain('2/10');
-    expect(PRICING_ADR).toContain('0,10/0,50');
-  });
-
-  it('derives cache and batch prices from ADR-0073 ratios (EF-6)', () => {
-    expect(CACHE_READ_RATIO).toBe(0.05);
-    expect(CACHE_WRITE_RATIO).toBe(1.25);
-    expect(BATCH_DISCOUNT_RATIO).toBe(0.5);
-    expect(PRICING_ADR).toContain('5 %');
-    expect(PRICING_ADR).toContain('50 %');
-    expect(modelPrices(AI_MODEL_IDS.opus)).toEqual({
-      input: 4,
-      output: 20,
-      cacheRead: 0.2,
-      cacheWrite: 5,
-      batchInput: 2,
-      batchOutput: 10,
-    });
-    expect(modelPrices(AI_MODEL_IDS.haiku)).toEqual({
-      input: 0.1,
-      output: 0.5,
-      cacheRead: 0.005,
-      cacheWrite: 0.125,
-      batchInput: 0.05,
-      batchOutput: 0.25,
-    });
-  });
-
-  it('never depends on a network call to be read (EF-6)', () => {
-    // Pure data: computing every price must not throw nor wait for a provider.
-    for (const model of Object.values(AI_MODEL_IDS)) {
-      expect(modelPrices(model).input).toBeGreaterThan(0);
-    }
   });
 });

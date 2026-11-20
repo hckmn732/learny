@@ -267,7 +267,7 @@ export const sdd = {
           web: 'Vercel preview (fra1) — Non configuré',
           base: 'Supabase preview (UE) — Non configuré',
           jobs: 'Branche Inngest (UE) — Non configuré',
-          ai: 'réel, plafond bas',
+          ai: 'réel, clé personnelle',
         },
         production: {
           web: 'Vercel production (fra1) — Non configuré',
@@ -883,14 +883,14 @@ export const sdd = {
     tasks: {
       title: 'Modèle par tâche',
       intro:
-        'Une clé non qualifiée n’est jamais choisie : la tâche bascule sur l’IA fournie, comme le montre la ligne « lacunes ».',
+        'Une clé non qualifiée n’est jamais utilisée : la tâche est indisponible, sans repli, comme le montre la ligne « lacunes ». Sans choix, une tâche n’a aucun modèle.',
       region: 'Modèles par tâche (tableau défilant)',
       task: 'Tâche',
       model: 'Modèle',
       source: 'Source',
-      managed: 'IA fournie',
+      none: 'aucun modèle choisi',
       personal: (label: string) => `clé personnelle · ${label}`,
-      fallback: (label: string) => `IA fournie · ${label} non qualifiée`,
+      fallback: (label: string) => `indisponible · ${label} non qualifiée`,
       tasks: {
         programme: 'programme',
         course: 'cours',
@@ -899,23 +899,11 @@ export const sdd = {
         light: 'tâches légères',
       },
     },
-    spend: {
-      title: 'Dépense du jour',
-      intro:
-        'Somme des appels gérés réellement facturés du jour civil de l’apprenant, dans son fuseau Europe/Paris.',
-      day: 'Jour local',
-      cap: 'Plafond quotidien',
-      calls: 'Appels',
-      breakdown: (billed: number, byok: number) =>
-        `${String(billed)} facturé(s) · ${String(byok)} BYOK exclu(s)`,
-      note: 'Les appels BYOK et les refus ou plafonnements à coût nul ne consomment pas le plafond de l’IA fournie.',
-    },
     subscription: {
       title: 'Abonnement',
       intro:
-        'Le statut « actif » est la seule base du droit à l’IA fournie ; le plafond par défaut est de 1,50 USD par jour.',
+        'Le statut « actif » est la seule base du droit d’utiliser l’application, gratuite par défaut ; il n’a aucun lien avec l’IA.',
       status: 'Statut',
-      cap: 'Plafond quotidien',
       periodEnd: 'Fin de période',
       noPeriod: '—',
       none: 'Aucun abonnement enregistré.',
@@ -1178,8 +1166,6 @@ export const sdd = {
       },
       periodEnd: (date: string) => `Fin de période : ${date}`,
       noPeriod: 'Fin de période : —',
-      managedAi: (available: boolean) =>
-        `IA fournie : ${available ? 'disponible' : 'indisponible'}`,
       loading: 'Chargement du statut…',
     },
     actions: {
@@ -1206,7 +1192,7 @@ export const sdd = {
       title: 'Paiement simulé',
       notice: 'Paiement simulé — aucun débit',
       intro:
-        'Abonnement à l’IA fournie. Aucune carte n’est demandée : ce parcours remplace Stripe Checkout en mode simulé.',
+        'Abonnement à l’application. Aucune carte n’est demandée : ce parcours remplace Stripe Checkout en mode simulé.',
       pay: 'Payer',
       cancel: 'Annuler',
       missing: 'Session de paiement introuvable ou expirée.',
@@ -1215,53 +1201,9 @@ export const sdd = {
     portal: {
       title: 'Portail client simulé',
       notice: 'Portail simulé — aucun débit',
-      intro: 'Gérez votre abonnement à l’IA fournie.',
+      intro: 'Gérez votre abonnement à l’application.',
       cancel: 'Résilier',
       back: 'Retour',
-    },
-  },
-  spec507: {
-    title: 'SPEC-507 · Garde-fou de coût et journal des appels',
-    budget: {
-      title: 'Dépense simulée du jour',
-      intro:
-        'Scénario déterministe : la dépense est simulée dans le navigateur, aucun fournisseur n’est appelé.',
-      spend: 'Dépense du jour (USD)',
-      task: 'Tâche',
-      cap: (value: string) => `Plafond : ${value} USD`,
-      percent: (value: number) => `${String(value)} % du plafond`,
-      alert: 'Alerte à 80 % : une notification sera créée pour ce jour local.',
-      noAlert: 'Aucune alerte : la dépense reste sous 80 % du plafond.',
-      decision: 'Décision',
-      model: 'Modèle effectif',
-      estimate: 'Coût estimé',
-      resets: 'Prochain minuit local',
-      decisions: { allow: 'Appel autorisé', downgrade: 'Bascule sur Haiku', defer: 'Reporté' },
-      tasks: {
-        programme: 'Programme',
-        course: 'Cours',
-        gaps: 'Lacunes',
-        tutor: 'Tuteur',
-        light: 'Tâche légère',
-      },
-    },
-    calls: {
-      title: 'Journal et agrégats factices',
-      intro: 'Chaque ligne est calculée avec les tarifs de packages/config (ADR-0073).',
-      columns: ['Jour', 'Formation', 'Tâche', 'Modèle', 'Tokens', 'Coût USD', 'Statut', 'Lot'],
-      aggregates: 'Agrégats par formation et par jour',
-      aggregateColumns: ['Jour', 'Formation', 'Appels', 'Coût USD'],
-      none: 'Hors formation',
-      batchYes: 'Oui',
-      batchNo: 'Non',
-    },
-    contract: {
-      title: 'Contrat d’entrée et échec lisible',
-      intro:
-        'L’entrée est validée par Zod ; aucune clé, aucun contenu d’apport et aucun résultat inventé.',
-      input: 'Entrée validée',
-      result: 'Décision validée',
-      error: 'Échec sûr',
     },
   },
   spec211: {
@@ -1823,7 +1765,7 @@ export const sdd = {
     },
     modes: {
       title: 'Modes',
-      llm: 'IA fournie',
+      llm: 'IA',
       stripe: 'Paiement',
       email: 'E-mail',
       push: 'Notifications',
@@ -1836,9 +1778,8 @@ export const sdd = {
       note: 'Liste blanche des NEXT_PUBLIC_* : aucune autre variable n’atteint le navigateur.',
     },
     models: {
-      title: 'Modèles par tâche',
+      title: 'Effort de réflexion par tâche',
       task: 'Tâche',
-      model: 'Modèle',
       effort: 'Effort de réflexion',
       tasks: {
         programme: 'Conception du programme',

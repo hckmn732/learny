@@ -11,34 +11,27 @@ import {
 } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
+// SPEC-725 (ADR-0340) — onglet « Abonnement » : droit d'utiliser l'application, gratuit par défaut,
+// sans aucune notion d'IA fournie, de plafond ni de consommation.
+
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const NOW = new Date('2026-11-11T12:20:00Z');
 const PREFIX = 'sdd-725-e2e-';
 
 let session: TestSession | null = null;
 
-async function clearHostedAi(): Promise<void> {
+async function clearSubscription(): Promise<void> {
   const alexId = demoUserId('alex');
-  await serviceDb().execute(sql`delete from public.ai_calls where user_id = ${alexId}::uuid`);
   await serviceDb().execute(sql`delete from public.subscriptions where user_id = ${alexId}::uuid`);
 }
 
-async function seedActiveSubscription(spent: string): Promise<void> {
+async function seedSubscription(status: 'active' | 'past_due'): Promise<void> {
   const alexId = demoUserId('alex');
   await serviceDb().execute(sql`
-    insert into public.subscriptions (user_id, status, current_period_end, daily_cap_usd)
-    values (${alexId}::uuid, 'active', '2026-12-11T00:00:00Z'::timestamptz, 1.5)
+    insert into public.subscriptions (user_id, status, current_period_end)
+    values (${alexId}::uuid, ${status}::subscription_status, '2026-12-11T00:00:00Z'::timestamptz)
     on conflict (user_id) do update
-      set status = 'active', current_period_end = excluded.current_period_end,
-          daily_cap_usd = excluded.daily_cap_usd
-  `);
-  await serviceDb().execute(sql`
-    insert into public.ai_calls (
-      user_id, task, provider, model, managed, cost_usd, status, created_at
-    ) values (
-      ${alexId}::uuid, 'light', 'anthropic', 'claude-haiku-4-5-20251001', true,
-      ${spent}::numeric, 'ok', '2026-11-11T10:00:00Z'::timestamptz
-    )
+      set status = excluded.status, current_period_end = excluded.current_period_end
   `);
 }
 
@@ -61,7 +54,7 @@ async function useDemoUser(
 
 test.beforeAll(async () => {
   await restoreDemoData();
-  await clearHostedAi();
+  await clearSubscription();
 });
 
 test.beforeEach(async ({ context, baseURL }) => {
@@ -83,84 +76,75 @@ test.afterEach(async () => {
 });
 
 test.afterAll(async () => {
-  await clearHostedAi();
+  await clearSubscription();
   await closeDb();
 });
 
 test('parcours SPEC-725 @SPEC-725', async ({ page, axeCheck, baseURL, context }) => {
   await page.clock.setFixedTime(NOW);
-  await page.goto('/parametres#modeles');
+  await page.goto('/parametres#abonnement');
 
-  // CA-1 — ni abonnement ni clé qualifiée : IA_UNAVAILABLE, le reste de l'écran demeure utilisable.
-  const block = page.getByTestId('managed-ai-subscription');
-  await expect(block).toBeVisible();
-  await expect(page.getByTestId('managed-ai-status')).toHaveText('IA indisponible');
-  await expect(page.getByTestId('managed-ai-unavailable')).toContainText('IA indisponible');
-  await expect(page.getByTestId('managed-ai-subscribe')).toHaveText('Souscrire');
-  await expect(page.getByTestId('managed-ai-usage')).toContainText('0,00 $');
-  await expect(page.getByTestId('ai-models-task-list')).toBeVisible();
+  // CA-1 — sans abonnement, l'application est gratuite : aucune souscription ni notion d'IA.
+  await expect(page.getByTestId('settings-tab-abonnement')).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+  await expect(page.getByTestId('settings-title')).toHaveText('Abonnement');
+  await expect(page.getByTestId('subscription-status')).toHaveText('Gratuit');
+  await expect(page.getByTestId('subscription-summary')).toContainText('Learny est gratuit');
+  await expect(page.getByTestId('subscription-portal')).toHaveCount(0);
+  await expect(page.getByTestId('subscription-period')).toHaveCount(0);
+  await expect(page.getByTestId('subscription-panel')).not.toContainText('plafond');
+  await expect(page.getByTestId('subscription-panel')).not.toContainText('Souscrire');
 
-  // CA-2 — abonnement actif et consommation réelle : 80 % affiche la jauge et l'alerte.
+  // CA-2 — l'onglet Modèles d'IA ne porte plus aucun abonnement.
+  await page.getByTestId('settings-tab-modeles').click();
+  await expect(page.getByTestId('managed-ai-subscription')).toHaveCount(0);
+  await expect(page.getByTestId('ai-models-panel')).not.toContainText('Souscrire');
+
+  // CA-3 — abonnement actif : statut, fin de période et portail.
   await useDemoUser(context, baseURL, page);
-  await seedActiveSubscription('1.200000');
-  await page.goto('/parametres#modeles');
+  await seedSubscription('active');
+  await page.goto('/parametres#abonnement');
   await page.reload();
-  await expect(page.getByTestId('managed-ai-status')).toHaveText('IA fournie active');
-  await expect(page.getByTestId('managed-ai-portal')).toHaveText('Gérer l’abonnement');
-  await expect(page.getByTestId('managed-ai-usage')).toHaveText('1,20 $ dépensés sur 1,50 $');
-  await expect(page.getByTestId('managed-ai-gauge')).toHaveAttribute('aria-valuenow', '80');
-  await expect(page.getByTestId('managed-ai-cap-alert')).toContainText('80 %');
+  await expect(page.getByTestId('subscription-status')).toHaveText('Actif');
+  await expect(page.getByTestId('subscription-period')).toContainText('11 décembre 2026');
+  await expect(page.getByTestId('subscription-portal')).toHaveText('Gérer l’abonnement');
 
-  // Au plafond, le programme est reporté et la date locale de reprise est affichée.
-  await serviceDb().execute(sql`
-    insert into public.ai_calls (
-      user_id, task, provider, model, managed, cost_usd, status, created_at
-    ) values (
-      ${demoUserId('alex')}::uuid, 'light', 'anthropic', 'claude-haiku-4-5-20251001', true,
-      0.5, 'ok', '2026-11-11T10:05:00Z'::timestamptz
-    )
-  `);
+  // CA-4 — paiement en retard : le statut le dit, le portail reste proposé.
+  await seedSubscription('past_due');
   await page.reload();
-  await expect(page.getByTestId('managed-ai-gauge')).toHaveAttribute('aria-valuenow', '100');
-  await expect(page.getByTestId('managed-ai-cap-reached')).toContainText('Plafond atteint');
-  await expect(page.getByTestId('managed-ai-cap-reached')).toContainText('jeudi 12 novembre');
-  await expect(page.getByTestId('managed-ai-subscribe')).toHaveCount(0);
+  await expect(page.getByTestId('subscription-status')).toHaveText('Paiement en retard');
+  await expect(page.getByTestId('subscription-portal')).toBeVisible();
 
   // CL-4 — une erreur de lecture garde « Réessayer ».
   await page.route('**/api/v1/billing/subscription', (route) => route.abort());
   await page.reload();
-  await expect(page.getByTestId('managed-ai-error')).toBeVisible();
+  await expect(page.getByTestId('subscription-error')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Réessayer' })).toBeVisible();
   await page.unroute('**/api/v1/billing/subscription');
   await page.getByRole('button', { name: 'Réessayer' }).click();
-  await expect(page.getByTestId('managed-ai-status')).toBeVisible();
+  await expect(page.getByTestId('subscription-status')).toBeVisible();
 
   await axeCheck();
 });
 
-test('conformité SPEC-725 @SPEC-725 @visual', async ({
-  page,
-  axeCheck,
-  baseURL,
-  context,
-}, testInfo) => {
+test('conformité SPEC-725 @SPEC-725 @visual', async ({ page, axeCheck, baseURL, context }) => {
   await useDemoUser(context, baseURL, page);
-  await seedActiveSubscription('1.200000');
+  await seedSubscription('active');
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/parametres#modeles');
+  await page.goto('/parametres#abonnement');
 
-  const block = page.getByTestId('managed-ai-subscription');
+  const block = page.getByTestId('subscription-plan');
   await expect(block).toBeVisible();
-  await expect(page.getByTestId('managed-ai-status')).toHaveText('IA fournie active');
-  await expect(page.getByTestId('managed-ai-usage')).toBeVisible();
+  await expect(page.getByTestId('subscription-status')).toHaveText('Actif');
 
   await expectTokens(page, {
-    '[data-testid="managed-ai-subscription"]': { 'background-color': '#FFFFFF' },
-    '[data-testid="managed-ai-gauge"]': { 'background-color': '#F4F4F1' },
+    '[data-testid="subscription-plan"]': { 'background-color': '#FFFFFF' },
   });
   await axeCheck();
-  await expectScreenshotBaseline(block, 'spec-725-abonnement-ia-desktop.png');
+  await expectScreenshotBaseline(block, 'spec-725-abonnement-desktop.png');
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -170,11 +154,7 @@ test('conformité SPEC-725 @SPEC-725 @visual', async ({
   expect(overflow).toBeLessThanOrEqual(0);
   await axeCheck();
   await expectScreenshotBaseline(
-    page.getByTestId('managed-ai-subscription'),
-    'spec-725-abonnement-ia-mobile.png',
+    page.getByTestId('subscription-plan'),
+    'spec-725-abonnement-mobile.png',
   );
-  await testInfo.attach('managed-ai-state', {
-    body: JSON.stringify({ status: 'active', percent: 80 }),
-    contentType: 'application/json',
-  });
 });

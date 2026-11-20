@@ -35,17 +35,27 @@ const MODELS = {
   anthropic: ['personal-model'],
   openai: [],
   mistral: [],
+  deepseek: [],
   openai_compatible: [],
 };
 
 describe('[SPEC-602] étape IA', () => {
+  it('ne propose aucune IA fournie : une clé personnelle est la seule voie (BR-IA-06)', () => {
+    renderComponent(<AiStep recommendedModels={MODELS} />);
+    expect(screen.queryByTestId('ai-choice-managed')).toBeNull();
+    expect(screen.getByTestId('ai-key')).toBeTruthy();
+    expect(screen.getByTestId('ai-intro').textContent).toContain('ne fournit aucun modèle');
+    const providers = Array.from(screen.getByTestId<HTMLSelectElement>('ai-provider').options).map(
+      (option) => option.value,
+    );
+    expect(providers).toContain('deepseek');
+  });
+
   it('bloque Continuer tant que la clé n’est pas qualifiée (EF-8, CA-4)', async () => {
     const { user } = renderComponent(<AiStep recommendedModels={MODELS} />);
     expect(screen.getByTestId('ai-status').textContent).toBe('Pas encore testée');
     await user.click(screen.getByTestId('onboarding-continue'));
-    expect(screen.getByTestId('ai-error').textContent).toBe(
-      'Testez votre clé avant de continuer, ou choisissez l’IA fournie.',
-    );
+    expect(screen.getByTestId('ai-error').textContent).toBe('Testez votre clé avant de continuer.');
     expect(apiMock.meOnboardingUpdate).not.toHaveBeenCalled();
   });
 

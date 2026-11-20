@@ -5,6 +5,7 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { compareRegions, expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
+import { seedOwnModels } from '../../support/own-model';
 
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE = fileURLToPath(
@@ -73,11 +74,7 @@ test.beforeEach(async ({ context, baseURL }) => {
     set onboarding_step = 'done', streak_days = 12
     where id = ${session.userId}::uuid
   `);
-  await serviceDb().execute(sql`
-    insert into public.subscriptions (user_id, status, current_period_end)
-    values (${session.userId}::uuid, 'active', '2030-01-01T00:00:00Z')
-    on conflict (user_id) do update set status = 'active', current_period_end = '2030-01-01T00:00:00Z'
-  `);
+  await seedOwnModels(session.userId);
   formationId = await seedProposal(session.userId);
   await context.addCookies(
     session.cookies.map((cookie) => ({ ...cookie, url: baseURL ?? 'http://127.0.0.1:3100' })),

@@ -8,13 +8,19 @@ import { ExportStatus } from './personal-data';
 import { COURSE_LANGUAGES, TUTOR_TONES, type CourseLanguage, type TutorTone } from './tutor';
 
 // Contracts of the settings screen (SPEC-707 ET-1, ET-3, ET-5; BR-SET-01, BR-SET-02, BR-ACC-05 to
-// BR-ACC-08, BR-ACC-10 to BR-ACC-12). The four ARIA tabs are a pure rule of the screen; the saved
+// BR-ACC-08, BR-ACC-10 to BR-ACC-12). The five ARIA tabs are a pure rule of the screen; the saved
 // payload reuses the bounds of SPEC-602 (`ProfileUpdateBody`, `StudyPreferencesDto`) and adds the
 // optimistic version of ET-3. Export and deletion stay owned by SPEC-211: their DTOs are only
 // mirrored here as read-only state.
 
-/** BR-SET-01 — the four tabs, in mockup order; the hash mirrors the active tab. */
-export const SETTINGS_TAB_IDS = ['profil', 'notifications', 'automatismes', 'modeles'] as const;
+/** BR-SET-01 — the five tabs, in display order; the hash mirrors the active tab. */
+export const SETTINGS_TAB_IDS = [
+  'profil',
+  'notifications',
+  'automatismes',
+  'modeles',
+  'abonnement',
+] as const;
 export const SettingsTab = z.enum(SETTINGS_TAB_IDS);
 export type SettingsTab = z.infer<typeof SettingsTab>;
 

@@ -69,16 +69,14 @@ test("cycle d'abonnement simulé @SPEC-210", async ({
   await expect(title).toHaveText(TITLE);
   expect(await title.evaluate((element) => element.tagName)).toBe('H1');
 
-  // Before anything: no subscription, no provided AI, no event.
+  // Before anything: no subscription, no event.
   await expect(page.getByTestId('spec-210-badge')).toHaveText('Aucun abonnement');
-  await expect(page.getByTestId('spec-210-managed-ai')).toHaveText('IA fournie : indisponible');
   await expect(page.getByTestId('spec-210-period')).toHaveText('Fin de période : —');
   await expect(page.getByTestId('spec-210-event-row')).toHaveCount(0);
 
   await subscribeAndPay(page);
 
-  // CA-1 — the signed webhook made the subscription active and the provided AI available.
-  await expect(page.getByTestId('spec-210-managed-ai')).toHaveText('IA fournie : disponible');
+  // CA-1 — the signed webhook made the subscription active.
   await expect(page.getByTestId('spec-210-period')).toContainText('Fin de période : ');
   await expect(page.getByTestId('spec-210-period')).not.toHaveText('Fin de période : —');
   let rows = page.getByTestId('spec-210-event-row');
@@ -98,12 +96,10 @@ test("cycle d'abonnement simulé @SPEC-210", async ({
   // CL-7 — a failed payment removes the right.
   await page.getByRole('button', { name: FAIL_PAYMENT }).click();
   await expect(page.getByTestId('spec-210-badge')).toHaveText('Paiement en retard');
-  await expect(page.getByTestId('spec-210-managed-ai')).toHaveText('IA fournie : indisponible');
 
   // CA-1 — the cancellation ends it.
   await page.getByRole('button', { name: CANCEL }).click();
   await expect(page.getByTestId('spec-210-badge')).toHaveText('Résilié');
-  await expect(page.getByTestId('spec-210-managed-ai')).toHaveText('IA fournie : indisponible');
   rows = page.getByTestId('spec-210-event-row');
   await expect(rows).toHaveCount(4);
   await expect(rows.nth(2)).toContainText('invoice.payment_failed');
@@ -145,12 +141,7 @@ test('contrats de facturation et webhook signé @SPEC-210', async ({ page }, tes
   // CA-4 — SPEC-602 reads `{ status }` of the subscription of a learner who never subscribed.
   const fresh = await request.get('/api/v1/billing/subscription');
   expect(fresh.status()).toBe(200);
-  expect(await jsonOf(fresh)).toEqual({
-    status: 'none',
-    currentPeriodEnd: null,
-    hasManagedAi: false,
-    dailyCapUsd: 1.5,
-  });
+  expect(await jsonOf(fresh)).toEqual({ status: 'none', currentPeriodEnd: null });
 
   // CA-4, CL-5 — external return paths are refused, nothing is created.
   for (const successPath of ['https://evil.example/x', '//evil.example', '/\\evil.example']) {
@@ -185,7 +176,7 @@ test('contrats de facturation et webhook signé @SPEC-210', async ({ page }, tes
   expect(replay.headers()['idempotent-replayed']).toBe('true');
   const portal = await request.post('/api/v1/billing/portal', { headers: { origin: ORIGIN } });
   expect(portal.status()).toBe(200);
-  expect((await jsonOf(portal)).url).toBe('/_dev/stripe/portal?return=%2Fparametres%23modeles');
+  expect((await jsonOf(portal)).url).toBe('/_dev/stripe/portal?return=%2Fparametres%23abonnement');
 
   // CA-2 — the webhook is public but signed: a missing or wrong signature is a 400.
   const signatureCases: Array<{ case: string; status: number; code?: string }> = [];
