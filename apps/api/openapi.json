@@ -61,6 +61,11 @@
       }
     },
     "securitySchemes": {
+      "bearerAuth": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      },
       "cookieAuth": {
         "in": "cookie",
         "name": "sb-access-token",
@@ -530,6 +535,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -1073,6 +1081,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -1229,6 +1240,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -1654,6 +1668,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -2143,6 +2160,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -2271,6 +2291,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -2912,6 +2935,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -2995,6 +3021,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -3086,6 +3115,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -3238,6 +3270,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -3378,6 +3413,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -3562,6 +3600,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -3801,6 +3842,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -4029,6 +4073,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -4192,6 +4239,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -4498,6 +4548,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -4683,6 +4736,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -4955,6 +5011,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -5128,6 +5187,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -5315,6 +5377,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -5465,6 +5530,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -5599,6 +5667,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -5944,6 +6015,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -6110,6 +6184,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -8920,6 +8997,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9060,6 +9140,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9156,6 +9239,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9249,6 +9335,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -9402,6 +9491,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9550,6 +9642,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9664,6 +9759,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -9792,6 +9890,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -9867,6 +9968,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -9991,6 +10095,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -10316,6 +10423,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -10696,6 +10806,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -10792,6 +10905,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -10897,6 +11013,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -11027,6 +11146,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -11205,6 +11327,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -11400,6 +11525,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -11756,6 +11884,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -11869,6 +12000,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -11973,6 +12107,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -12217,6 +12354,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -12368,6 +12508,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -12740,6 +12883,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -13122,6 +13268,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -13215,6 +13364,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -13607,6 +13759,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -13739,6 +13894,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -13806,6 +13964,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -14057,6 +14218,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -14410,6 +14574,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -14525,6 +14692,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -14856,6 +15026,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -15256,6 +15429,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -15841,6 +16017,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -16236,6 +16415,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -16739,6 +16921,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -17036,6 +17221,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -17341,6 +17529,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -17964,6 +18155,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -18278,6 +18472,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -18395,6 +18592,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -18572,6 +18772,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -19558,6 +19761,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -20006,6 +20212,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -20256,6 +20465,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -21077,6 +21289,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -21530,6 +21745,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -21974,6 +22192,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -22468,6 +22689,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -22905,6 +23129,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -23101,6 +23328,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -23374,6 +23604,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -23640,6 +23873,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -23793,6 +24029,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -24102,6 +24341,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -24408,6 +24650,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -25255,6 +25500,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -25517,6 +25765,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -25684,6 +25935,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -25902,6 +26156,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -26064,6 +26321,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -26308,6 +26568,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -26385,6 +26648,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -26770,6 +27036,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -27207,6 +27476,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -27748,6 +28020,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -27902,6 +28177,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -28097,6 +28375,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -28386,6 +28667,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -28619,6 +28903,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -28832,6 +29119,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29057,6 +29347,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -29181,6 +29474,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29338,6 +29634,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29541,6 +29840,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -29586,6 +29888,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29658,6 +29963,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29763,6 +30071,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -29925,6 +30236,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -30043,6 +30357,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -30171,6 +30488,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -30359,6 +30679,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -30663,6 +30986,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -30905,6 +31231,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -31050,6 +31379,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -31285,6 +31617,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -31496,6 +31831,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -31763,6 +32101,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -32036,6 +32377,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -32134,6 +32478,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -32286,6 +32633,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -32598,6 +32948,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -33013,6 +33366,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -33088,6 +33444,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -33238,6 +33597,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -33507,6 +33869,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -33814,6 +34179,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -34138,6 +34506,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -34355,6 +34726,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -34883,6 +35257,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -35028,6 +35405,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -35168,6 +35548,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -35569,6 +35952,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -35692,6 +36078,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -36151,6 +36540,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -36967,6 +37359,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -37096,6 +37491,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -37263,6 +37661,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -37441,6 +37842,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -37610,6 +38014,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -38203,6 +38610,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -38325,6 +38735,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -38449,6 +38862,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -38689,6 +39105,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -38763,6 +39182,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -38836,6 +39258,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -38932,6 +39357,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -39477,6 +39905,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -39564,6 +39995,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -39716,6 +40150,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -39851,6 +40288,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -40029,6 +40469,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -40164,6 +40607,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -40320,6 +40766,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -40440,6 +40889,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -40657,6 +41109,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -40799,6 +41254,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -41006,6 +41464,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -41195,6 +41656,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -41859,6 +42323,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -42025,6 +42492,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -42268,6 +42738,9 @@
         },
         "security": [
           {
+            "bearerAuth": []
+          },
+          {
             "cookieAuth": []
           }
         ],
@@ -42495,6 +42968,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }
@@ -42776,6 +43252,9 @@
           }
         },
         "security": [
+          {
+            "bearerAuth": []
+          },
           {
             "cookieAuth": []
           }

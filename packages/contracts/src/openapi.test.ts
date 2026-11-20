@@ -24,10 +24,7 @@ describe('[SPEC-201] document OpenAPI', () => {
     const { version } = JSON.parse(
       readFileSync(resolve(__dirname, '../../../package.json'), 'utf8'),
     ) as { version: string };
-    const committed = readFileSync(
-      resolve(__dirname, '../../../apps/api/openapi.json'),
-      'utf8',
-    );
+    const committed = readFileSync(resolve(__dirname, '../../../apps/api/openapi.json'), 'utf8');
     const built = serializeOpenApiDocument(buildOpenApiDocument(ROUTES, { version }));
     expect(built).toBe(committed);
   });
@@ -69,7 +66,7 @@ describe('[SPEC-201] document OpenAPI', () => {
       { content?: Record<string, { schema: Record<string, unknown> }> }
     >;
     expect(Object.keys(responses)).toEqual(['200', '400', '401', '404', '429', '500']);
-    expect(op.security).toEqual([{ cookieAuth: [] }]);
+    expect(op.security).toEqual([{ bearerAuth: [] }, { cookieAuth: [] }]);
     const schema = responses['200']?.content?.['application/json']?.schema;
     expect(schema).toBeDefined();
     expect(schema?.$schema).toBeUndefined();

@@ -33,7 +33,22 @@ describe('[SPEC-201] openapi', () => {
       const operation = document.paths[path]?.[route.method.toLowerCase()];
       expect(operation?.operationId, route.id).toBe(route.id);
       expect(operation?.security !== undefined, route.id).toBe(route.auth === 'user');
+      if (route.auth === 'user') {
+        expect(operation?.security, route.id).toEqual([{ bearerAuth: [] }, { cookieAuth: [] }]);
+      } else {
+        expect(operation?.security, route.id).toBeUndefined();
+      }
     }
+  });
+
+  it('[SPEC-1301] déclare les transports Bearer et cookie (CA-1)', () => {
+    const document = JSON.parse(committed) as {
+      components: { securitySchemes: Record<string, Record<string, unknown>> };
+    };
+    expect(document.components.securitySchemes).toMatchObject({
+      bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      cookieAuth: { type: 'apiKey', in: 'cookie', name: 'sb-access-token' },
+    });
   });
 
   it('describes errors as problem+json and the idempotency header', () => {
