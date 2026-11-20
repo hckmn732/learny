@@ -20,7 +20,7 @@ const MAX_MODELS = 500;
 function mockModels(provider: AiProviderValue): string[] {
   switch (provider) {
     case 'anthropic':
-      return ['claude-sonnet-4-5', 'claude-haiku-4-5'];
+      return ['anthropic-model-a', 'anthropic-model-b'];
     case 'openai':
       return ['gpt-5.5', 'gpt-5-mini'];
     case 'mistral':

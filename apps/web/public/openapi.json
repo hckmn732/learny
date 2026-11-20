@@ -22743,7 +22743,7 @@
                             "items": {
                               "type": "string"
                             },
-                            "maxItems": 10,
+                            "maxItems": 500,
                             "type": "array"
                           },
                           "outsideEu": {
@@ -22893,7 +22893,7 @@
                       "pattern": "^[A-Za-z0-9._:/-]+$",
                       "type": "string"
                     },
-                    "maxItems": 10,
+                    "maxItems": 500,
                     "minItems": 1,
                     "type": "array"
                   },
@@ -22965,7 +22965,7 @@
                       "items": {
                         "type": "string"
                       },
-                      "maxItems": 10,
+                      "maxItems": 500,
                       "type": "array"
                     },
                     "outsideEu": {
@@ -23094,6 +23094,141 @@
           }
         ],
         "summary": "Enregistre une clé personnelle chiffrée auprès d’un fournisseur d’IA (SPEC-505)."
+      }
+    },
+    "/api/v1/me/ai/credentials/discover": {
+      "post": {
+        "operationId": "me.ai.credentials.discover",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "apiKey": {
+                    "maxLength": 512,
+                    "minLength": 8,
+                    "pattern": "^\\S+$",
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "maxLength": 2048,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "provider": {
+                    "enum": [
+                      "anthropic",
+                      "openai",
+                      "mistral",
+                      "deepseek",
+                      "openai_compatible",
+                      "local"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "provider"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "modelIds": {
+                      "items": {
+                        "maxLength": 120,
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "maxItems": 500,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "modelIds"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "summary": "Découvre les modèles disponibles auprès d’un fournisseur à partir de ses identifiants."
       }
     },
     "/api/v1/me/ai/credentials/{id}": {
@@ -23643,7 +23778,7 @@
                               "minLength": 1,
                               "type": "string"
                             },
-                            "maxItems": 10,
+                            "maxItems": 500,
                             "type": "array"
                           },
                           "outsideEu": {
@@ -23772,6 +23907,13 @@
                                   "maxLength": 80,
                                   "minLength": 1,
                                   "type": "string"
+                                },
+                                "qualificationStatus": {
+                                  "enum": [
+                                    "qualified",
+                                    "unqualified"
+                                  ],
+                                  "type": "string"
                                 }
                               },
                               "required": [
@@ -23780,11 +23922,12 @@
                                 "credentialId",
                                 "provider",
                                 "providerLabel",
-                                "outsideEu"
+                                "outsideEu",
+                                "qualificationStatus"
                               ],
                               "type": "object"
                             },
-                            "maxItems": 50,
+                            "maxItems": 500,
                             "type": "array"
                           },
                           "outsideEu": {
@@ -24096,7 +24239,7 @@
                               "minLength": 1,
                               "type": "string"
                             },
-                            "maxItems": 10,
+                            "maxItems": 500,
                             "type": "array"
                           },
                           "outsideEu": {
@@ -24225,6 +24368,13 @@
                                   "maxLength": 80,
                                   "minLength": 1,
                                   "type": "string"
+                                },
+                                "qualificationStatus": {
+                                  "enum": [
+                                    "qualified",
+                                    "unqualified"
+                                  ],
+                                  "type": "string"
                                 }
                               },
                               "required": [
@@ -24233,11 +24383,12 @@
                                 "credentialId",
                                 "provider",
                                 "providerLabel",
-                                "outsideEu"
+                                "outsideEu",
+                                "qualificationStatus"
                               ],
                               "type": "object"
                             },
-                            "maxItems": 50,
+                            "maxItems": 500,
                             "type": "array"
                           },
                           "outsideEu": {
