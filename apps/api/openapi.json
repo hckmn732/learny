@@ -6117,6 +6117,2527 @@
         "summary": "Enregistre la progression de lecture d’un chapitre sans jamais la faire reculer (SPEC-609)."
       }
     },
+    "/api/v1/dev/sdd/SPEC-007/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-007.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-007 (jobs durables)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-009/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-009.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-009 (configuration)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-1004/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-1004.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-1004 (couverture des routes)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-101/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-101.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-101 (schéma de base)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-102/create": {
+      "post": {
+        "operationId": "dev.sdd.spec-102.create",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action create de la démonstration SPEC-102."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-102/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-102.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-102 (identité)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-102/remove": {
+      "post": {
+        "operationId": "dev.sdd.spec-102.remove",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action remove de la démonstration SPEC-102."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-103/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-103.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-103 (formations)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-104/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-104.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-104 (ressources)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-105/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-105.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-105 (cours)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-106/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-106.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-106 (briques et activités)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-107/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-107.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-107 (mémorisation)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-108/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-108.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-108 (agenda)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-109/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-109.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-109 (notifications)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-110/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-110.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-110 (IA et facturation)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-111/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-111.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-111 (formations partagées)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-112/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-112.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-112 (recherche et droits)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-113/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-113.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-113 (RLS)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-114/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-114.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-114 (stockage)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-115/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-115.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-115 (données de démonstration)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-1203/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-1203.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-1203 (frontière web)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-202/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-202.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-202 (authentification)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-411/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-411.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-411 (moteur pédagogique)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-501/correct": {
+      "post": {
+        "operationId": "dev.sdd.spec-501.correct",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action correct de la démonstration SPEC-501."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-501/create": {
+      "post": {
+        "operationId": "dev.sdd.spec-501.create",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action create de la démonstration SPEC-501."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-501/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-501.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-501 (briques)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-501/report": {
+      "post": {
+        "operationId": "dev.sdd.spec-501.report",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action report de la démonstration SPEC-501."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-504/call": {
+      "post": {
+        "operationId": "dev.sdd.spec-504.call",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action call de la démonstration SPEC-504."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-504/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-504.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-504 (modèles IA)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-505/create": {
+      "post": {
+        "operationId": "dev.sdd.spec-505.create",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action create de la démonstration SPEC-505."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-505/delete": {
+      "post": {
+        "operationId": "dev.sdd.spec-505.delete",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action delete de la démonstration SPEC-505."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-505/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-505.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-505 (clés personnelles)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-506/run": {
+      "post": {
+        "operationId": "dev.sdd.spec-506.run",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action run de la démonstration SPEC-506."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-507/budget": {
+      "post": {
+        "operationId": "dev.sdd.spec-507.budget",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action budget de la démonstration SPEC-507."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-508/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-508.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-508 (tuteur)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-509/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-509.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-509 (ingestion documents)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-510/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-510.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-510 (ingestion web)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-511/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-511.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-511 (retrieval)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-512/decide": {
+      "post": {
+        "operationId": "dev.sdd.spec-512.decide",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action decide de la démonstration SPEC-512."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-512/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-512.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-512 (recherche web)."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-512/suggest": {
+      "post": {
+        "operationId": "dev.sdd.spec-512.suggest",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action suggest de la démonstration SPEC-512."
+      }
+    },
+    "/api/v1/dev/sdd/SPEC-711/demo": {
+      "get": {
+        "operationId": "dev.sdd.spec-711.demo",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Démonstration SPEC-711 (automatismes)."
+      }
+    },
     "/api/v1/dev/sdd/api/coverage": {
       "get": {
         "operationId": "dev.sddApiCoverage",
@@ -9457,6 +11978,127 @@
           }
         ],
         "summary": "Route de démonstration : historique des webhooks Stripe simulés (SPEC-210)."
+      }
+    },
+    "/api/v1/dev/sdd/stripe/session": {
+      "post": {
+        "operationId": "dev.sdd.stripe.session",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{8,128}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "brickId": {
+                    "type": "string"
+                  },
+                  "decision": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "scenario": {
+                    "type": "string"
+                  },
+                  "spend": {
+                    "type": "string"
+                  },
+                  "task": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Succès"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          },
+          "500": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            },
+            "description": "Erreur (RFC 9457)"
+          }
+        },
+        "summary": "Action session de la démonstration stripe."
       }
     },
     "/api/v1/dev/sdd/stripe/simulate": {
