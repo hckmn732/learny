@@ -184,7 +184,7 @@ export function routeHandler<R extends AnyRoute>(
       // protected route is a cheap 401 and is answered by the Auth server's own limits).
       if (route.auth === 'public') await limit(null);
 
-      if (route.idempotent === true) {
+      if (route.idempotent === true || route.requiresIdempotencyKey === true) {
         readIdempotencyKey(request.headers.get(IDEMPOTENCY_KEY_HEADER));
       }
 

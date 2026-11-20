@@ -36,6 +36,6 @@ describe('[SPEC-1203] dev sdd routes', () => {
     });
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({ code: 'IDEMPOTENCY_KEY_REQUIRED' });
-    expect(ROUTES.devSddSpec102Create.idempotent).toBe(true);
+    expect(ROUTES.devSddSpec102Create.requiresIdempotencyKey).toBe(true);
   });
 });

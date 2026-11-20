@@ -6332,17 +6332,6 @@
     "/api/v1/dev/sdd/SPEC-102/create": {
       "post": {
         "operationId": "dev.sdd.spec-102.create",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6416,16 +6405,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -6457,14 +6436,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action create de la démonstration SPEC-102."
       }
     },
@@ -6507,17 +6478,6 @@
     "/api/v1/dev/sdd/SPEC-102/remove": {
       "post": {
         "operationId": "dev.sdd.spec-102.remove",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -6591,16 +6551,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -6632,14 +6582,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action remove de la démonstration SPEC-102."
       }
     },
@@ -7258,17 +7200,6 @@
     "/api/v1/dev/sdd/SPEC-501/correct": {
       "post": {
         "operationId": "dev.sdd.spec-501.correct",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7342,16 +7273,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7383,31 +7304,12 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action correct de la démonstration SPEC-501."
       }
     },
     "/api/v1/dev/sdd/SPEC-501/create": {
       "post": {
         "operationId": "dev.sdd.spec-501.create",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7481,16 +7383,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7522,14 +7414,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action create de la démonstration SPEC-501."
       }
     },
@@ -7572,17 +7456,6 @@
     "/api/v1/dev/sdd/SPEC-501/report": {
       "post": {
         "operationId": "dev.sdd.spec-501.report",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7656,16 +7529,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7697,31 +7560,12 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action report de la démonstration SPEC-501."
       }
     },
     "/api/v1/dev/sdd/SPEC-504/call": {
       "post": {
         "operationId": "dev.sdd.spec-504.call",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7795,16 +7639,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -7836,14 +7670,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action call de la démonstration SPEC-504."
       }
     },
@@ -7886,17 +7712,6 @@
     "/api/v1/dev/sdd/SPEC-505/create": {
       "post": {
         "operationId": "dev.sdd.spec-505.create",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7970,16 +7785,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8011,31 +7816,12 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action create de la démonstration SPEC-505."
       }
     },
     "/api/v1/dev/sdd/SPEC-505/delete": {
       "post": {
         "operationId": "dev.sdd.spec-505.delete",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8109,16 +7895,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8150,14 +7926,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action delete de la démonstration SPEC-505."
       }
     },
@@ -8200,17 +7968,6 @@
     "/api/v1/dev/sdd/SPEC-506/run": {
       "post": {
         "operationId": "dev.sdd.spec-506.run",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8284,16 +8041,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8325,14 +8072,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action run de la démonstration SPEC-506."
       }
     },
@@ -8483,17 +8222,6 @@
     "/api/v1/dev/sdd/SPEC-512/decide": {
       "post": {
         "operationId": "dev.sdd.spec-512.decide",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8567,16 +8295,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8608,14 +8326,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action decide de la démonstration SPEC-512."
       }
     },
@@ -8658,17 +8368,6 @@
     "/api/v1/dev/sdd/SPEC-512/suggest": {
       "post": {
         "operationId": "dev.sdd.spec-512.suggest",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -8742,16 +8441,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -8783,14 +8472,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action suggest de la démonstration SPEC-512."
       }
     },
@@ -12235,17 +11916,6 @@
     "/api/v1/dev/sdd/stripe/session": {
       "post": {
         "operationId": "dev.sdd.stripe.session",
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Idempotency-Key",
-            "required": true,
-            "schema": {
-              "pattern": "^[A-Za-z0-9_-]{8,128}$",
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -12319,16 +11989,6 @@
             },
             "description": "Erreur (RFC 9457)"
           },
-          "401": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            },
-            "description": "Erreur (RFC 9457)"
-          },
           "404": {
             "content": {
               "application/problem+json": {
@@ -12360,14 +12020,6 @@
             "description": "Erreur (RFC 9457)"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          },
-          {
-            "cookieAuth": []
-          }
-        ],
         "summary": "Action session de la démonstration stripe."
       }
     },

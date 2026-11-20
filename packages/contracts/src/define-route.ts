@@ -32,6 +32,8 @@ export interface RouteDef<
   successStatus: SuccessStatus;
   /** POST that creates: requires `Idempotency-Key` (ADR-0120). Only for `auth: 'user'`. */
   idempotent?: boolean;
+  /** Development action: requires the key but keeps its isolated public demo implementation. */
+  requiresIdempotencyKey?: true;
   /** Defaults to `'default'`. */
   rateLimit?: RateLimitProfile;
   /**
