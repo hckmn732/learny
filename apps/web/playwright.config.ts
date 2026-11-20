@@ -165,6 +165,7 @@ export default defineConfig({
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         ENABLE_SDD_PAGES: 'true',
         API_INTERNAL_URL,
+        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         // SPEC-804: rapport de démonstration figé pour la page de performance.
         PERF_DEMO_FIXTURE: '1',
         // The server sits behind a trusted proxy in these tests: each test announces its own address

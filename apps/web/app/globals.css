@@ -1,3 +1,5 @@
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/space-grotesk/wght.css';
 @import 'tailwindcss';
 @import '@learny/ui/theme.css';
 @import '@learny/ui/accessibility.css';
@@ -9,6 +11,11 @@
  * mockups (BR-NAV-06, ADR-0034) without `zoom`; every size token is expressed in rem.
  */
 @layer base {
+  :root {
+    --font-inter: 'Inter Variable' !important;
+    --font-space-grotesk: 'Space Grotesk Variable' !important;
+  }
+
   html {
     font-size: 90%;
     color-scheme: light;

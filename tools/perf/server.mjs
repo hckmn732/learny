@@ -46,7 +46,11 @@ export async function startServer(env = process.env) {
       `Ports ${PERF_PORT}/${PERF_API_PORT} déjà occupés : libérez-les avant de lancer test:perf.`,
     );
   }
-  const commonEnv = { ...process.env, ...env };
+  const commonEnv = {
+    ...process.env,
+    API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
+    ...env,
+  };
   const api = spawn('pnpm', ['--filter', '@learny/api', 'exec', 'tsx', 'src/server.ts'], {
     cwd: ROOT,
     env: { ...commonEnv, PORT: String(PERF_API_PORT), API_PORT: String(PERF_API_PORT) },
