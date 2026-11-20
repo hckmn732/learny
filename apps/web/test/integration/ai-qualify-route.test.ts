@@ -2,19 +2,24 @@
 // The wrapper, session, ownership check and problem+json run for real; the model is simulated.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeEach, afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import type { Clock } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 import { createServiceContext } from '@learny/services';
 import { createCredential } from '@learny/services/ai/credentials';
+import { type ApiTarget, requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import { POST } from '../../app/api/v1/me/ai/credentials/[id]/qualify/route';
 import { noopOriginGuard, setOriginGuard } from '../../lib/api/origin';
 import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
+
+let apiTarget: ApiTarget = 'next';
+
+setApiAppFactory(createApp);
 
 const PREFIX = 'sdd-506-routes-';
 const SECRET = 'sk-test-0000000000a91F'; // learny-test-only
@@ -67,7 +72,7 @@ async function call(
   body: unknown,
 ): Promise<{ status: number; body: Record<string, unknown> }> {
   let answer = { status: 0, body: {} as Record<string, unknown> };
-  await testApiHandler({
+  await requestApi(apiTarget, {
     appHandler: { POST },
     params: { id },
     url: `http://localhost/api/v1/me/ai/credentials/${id}/qualify`,
@@ -105,48 +110,54 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-506] route de qualification', () => {
-  it('EF-3, CA-1 — qualifie un modèle et ne renvoie ni clé ni chiffré', async () => {
-    const user = await createUser('owner');
-    const credentialId = await createKey(user);
-    asUser(user);
-    const answer = await call(credentialId, { modelId: MODEL });
-    expect(answer.status).toBe(200);
-    expect(answer.body).toMatchObject({
-      credentialId,
-      modelId: MODEL,
-      provider: 'openai',
-      status: 'qualified',
+describe.each(['next', 'hono'] as const)(
+  '[SPEC-506] route de qualification [SPEC-1101] (%s)',
+  (target) => {
+    beforeEach(() => {
+      apiTarget = target;
     });
-    expect(answer.body.steps).toHaveLength(4);
-    expect(answer.body.bricks).toHaveLength(13);
-    const serialised = JSON.stringify(answer.body);
-    expect(serialised).not.toContain('0000000000');
-    expect(serialised).not.toContain('apiKey');
-    expect(serialised).not.toContain('encryptedKey');
-    expect(serialised).not.toContain('payload');
-  });
+    it('EF-3, CA-1 — qualifie un modèle et ne renvoie ni clé ni chiffré', async () => {
+      const user = await createUser('owner');
+      const credentialId = await createKey(user);
+      asUser(user);
+      const answer = await call(credentialId, { modelId: MODEL });
+      expect(answer.status).toBe(200);
+      expect(answer.body).toMatchObject({
+        credentialId,
+        modelId: MODEL,
+        provider: 'openai',
+        status: 'qualified',
+      });
+      expect(answer.body.steps).toHaveLength(4);
+      expect(answer.body.bricks).toHaveLength(13);
+      const serialised = JSON.stringify(answer.body);
+      expect(serialised).not.toContain('0000000000');
+      expect(serialised).not.toContain('apiKey');
+      expect(serialised).not.toContain('encryptedKey');
+      expect(serialised).not.toContain('payload');
+    });
 
-  it('CA-3 — refuse la clé d’un autre utilisateur sans exposer la clé', async () => {
-    const alice = await createUser('alice');
-    const bob = await createUser('bob');
-    const credentialId = await createKey(alice);
-    asUser(bob);
-    const answer = await call(credentialId, { modelId: MODEL });
-    expect(answer.status).toBe(404);
-    expect(answer.body.code).toBe('CREDENTIAL_NOT_FOUND');
-    expect(JSON.stringify(answer.body)).not.toContain('0000000000');
-    expect(answer.body).not.toHaveProperty('steps');
-    expect(answer.body).not.toHaveProperty('bricks');
-  });
+    it('CA-3 — refuse la clé d’un autre utilisateur sans exposer la clé', async () => {
+      const alice = await createUser('alice');
+      const bob = await createUser('bob');
+      const credentialId = await createKey(alice);
+      asUser(bob);
+      const answer = await call(credentialId, { modelId: MODEL });
+      expect(answer.status).toBe(404);
+      expect(answer.body.code).toBe('CREDENTIAL_NOT_FOUND');
+      expect(JSON.stringify(answer.body)).not.toContain('0000000000');
+      expect(answer.body).not.toHaveProperty('steps');
+      expect(answer.body).not.toHaveProperty('bricks');
+    });
 
-  it('EF-3 — un modèle absent de la clé répond 422 sans appel', async () => {
-    const user = await createUser('wrong-model');
-    const credentialId = await createKey(user);
-    asUser(user);
-    const answer = await call(credentialId, { modelId: 'not-registered' });
-    expect(answer.status).toBe(422);
-    expect(answer.body.code).toBe('VALIDATION_FAILED');
-    expect(JSON.stringify(answer.body)).not.toContain('0000000000');
-  });
-});
+    it('EF-3 — un modèle absent de la clé répond 422 sans appel', async () => {
+      const user = await createUser('wrong-model');
+      const credentialId = await createKey(user);
+      asUser(user);
+      const answer = await call(credentialId, { modelId: 'not-registered' });
+      expect(answer.status).toBe(422);
+      expect(answer.body.code).toBe('VALIDATION_FAILED');
+      expect(JSON.stringify(answer.body)).not.toContain('0000000000');
+    });
+  },
+);

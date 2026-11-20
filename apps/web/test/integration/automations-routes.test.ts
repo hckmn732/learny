@@ -5,13 +5,14 @@
 // RLS, the status checks and the row locks behave as in production.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
-import { afterAll, afterEach, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import { EVENT_AUTOMATION_KEYS } from '@learny/contracts';
 import { closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 import { createAutomationActionQuiet } from '@learny/services';
+import { type ApiTarget, requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import { POST as acceptRoute } from '../../app/api/v1/me/automation-actions/[id]/accept/route';
 import { POST as declineRoute } from '../../app/api/v1/me/automation-actions/[id]/decline/route';
@@ -23,6 +24,8 @@ import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
 
 // `next-test-api-route-handler` receives the App Router module (one key per HTTP method).
+
+setApiAppFactory(createApp);
 const ACCEPT = { POST: acceptRoute };
 const DECLINE = { POST: declineRoute };
 const UNDO = { POST: undoRoute };
@@ -45,6 +48,7 @@ interface ApiAnswer {
 }
 
 let restoreSession: () => void = () => undefined;
+let apiTarget: ApiTarget = 'next';
 
 function asUser(user: User): void {
   restoreSession = setSessionResolver(() =>
@@ -73,7 +77,7 @@ async function call(
   const id = options.id ?? '';
   const path = options.url ?? `/api/v1/me/automation-actions${id === '' ? '' : `/${id}/accept`}`;
   let answer: ApiAnswer = { status: 0, body: {}, headers: new Headers() };
-  await testApiHandler({
+  await requestApi(apiTarget, {
     appHandler: appHandler as never,
     ...(id === '' ? {} : { params: { id } }),
     url: `http://localhost${path}`,
@@ -149,7 +153,11 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-711] service et API', () => {
+describe.each(['next', 'hono'] as const)('[SPEC-711] service et API [SPEC-1101] (%s)', (target) => {
+  beforeEach(() => {
+    apiTarget = target;
+  });
+
   it('CA-3 — la lecture des réglages et du journal passe par la session, sans fuite entre apprenants', async () => {
     setOriginGuard(noopOriginGuard);
     setRateLimiter(noopRateLimiter);

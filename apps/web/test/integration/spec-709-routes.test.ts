@@ -3,20 +3,25 @@
 // guard are replaced by their no-op implementations.
 import { randomUUID } from 'node:crypto';
 
-import { testApiHandler } from 'next-test-api-route-handler';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeEach, afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
+import { createApp } from '@learny/api';
 import type { Clock } from '@learny/core';
 import { aiTaskModels, closeDb, serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
 import { createServiceContext } from '@learny/services';
 import { createCredential } from '@learny/services/ai/credentials';
 import { qualifyCredential } from '@learny/services/ai/qualify';
+import { type ApiTarget, requestApi, setApiAppFactory } from '@learny/testing/api';
 
 import { GET, PATCH } from '../../app/api/v1/me/ai/models/route';
 import { noopOriginGuard, setOriginGuard } from '../../lib/api/origin';
 import { noopRateLimiter, setRateLimiter } from '../../lib/api/rate-limit';
 import { setSessionResolver } from '../../lib/api/session';
+
+let apiTarget: ApiTarget = 'next';
+
+setApiAppFactory(createApp);
 
 const PREFIX = 'sdd-709-routes-';
 const FIXED = new Date('2026-11-11T12:20:00Z');
@@ -87,7 +92,7 @@ async function call(
   } = {},
 ): Promise<ApiAnswer> {
   let answer: ApiAnswer = { status: 0, body: {}, replay: false };
-  await testApiHandler({
+  await requestApi(apiTarget, {
     appHandler: { GET, PATCH },
     url: 'http://localhost/api/v1/me/ai/models',
     test: async ({ fetch }) => {
@@ -137,107 +142,113 @@ afterAll(async () => {
   await closeDb();
 });
 
-describe('[SPEC-709] routes de l’onglet Modèles d’IA', () => {
-  it('CA-2 — GET rend l’état des cinq tâches et la carte masquée, jamais la clé', async () => {
-    const user = await createUser('get');
-    const credentialId = await qualifiedKey(user);
-    asUser(user);
-
-    const answer = await call();
-    expect(answer.status).toBe(200);
-    const tasks = answer.body.tasks as Array<Record<string, unknown>>;
-    expect(tasks).toHaveLength(5);
-    const providers = answer.body.providers as Array<Record<string, unknown>>;
-    expect(providers[0]?.origin).toBe('provided');
-    expect(providers.some((card) => card.id === credentialId)).toBe(true);
-    const personal = providers.find((card) => card.id === credentialId);
-    // The mask keeps the last four characters of the stored key (`sk-sentinel-0123456789abcdef`).
-    expect(personal?.keyMasked).toBe('sk-••••••••cdef');
-    const serialized = JSON.stringify(answer.body);
-    expect(serialized).not.toContain(SECRET);
-    expect(serialized).not.toContain('encrypted');
-  });
-
-  it('CA-3 — PATCH idempotent : deux envois identiques ne créent qu’une écriture', async () => {
-    const user = await createUser('idempotent');
-    const credentialId = await qualifiedKey(user);
-    asUser(user);
-    const key = 'spec-709-replay';
-    const body = { action: 'assign', task: 'tutor', credentialId, modelId: MODEL };
-
-    const first = await call({ method: 'PATCH', body, idempotencyKey: key });
-    expect(first.status).toBe(200);
-    expect(first.replay).toBe(false);
-    const second = await call({ method: 'PATCH', body, idempotencyKey: key });
-    expect(second.status).toBe(200);
-    expect(second.replay).toBe(true);
-    expect(second.body).toEqual(first.body);
-    expect(await assignmentCount(user.userId)).toBe(1);
-
-    // A different key replays the same business effect: the upsert stays unique.
-    const third = await call({
-      method: 'PATCH',
-      body,
-      idempotencyKey: 'spec-709-replay-2',
+describe.each(['next', 'hono'] as const)(
+  '[SPEC-709] routes de l’onglet Modèles d’IA [SPEC-1101] (%s)',
+  (target) => {
+    beforeEach(() => {
+      apiTarget = target;
     });
-    expect(third.status).toBe(200);
-    expect(await assignmentCount(user.userId)).toBe(1);
-  });
+    it('CA-2 — GET rend l’état des cinq tâches et la carte masquée, jamais la clé', async () => {
+      const user = await createUser('get');
+      const credentialId = await qualifiedKey(user);
+      asUser(user);
 
-  it('CA-3 — un corps invalide répond 400 sans écrire', async () => {
-    const user = await createUser('invalid');
-    asUser(user);
-    const answer = await call({
-      method: 'PATCH',
-      body: { action: 'assign', task: 'tutor', modelId: '' },
-      idempotencyKey: 'spec-709-invalid',
+      const answer = await call();
+      expect(answer.status).toBe(200);
+      const tasks = answer.body.tasks as Array<Record<string, unknown>>;
+      expect(tasks).toHaveLength(5);
+      const providers = answer.body.providers as Array<Record<string, unknown>>;
+      expect(providers[0]?.origin).toBe('provided');
+      expect(providers.some((card) => card.id === credentialId)).toBe(true);
+      const personal = providers.find((card) => card.id === credentialId);
+      // The mask keeps the last four characters of the stored key (`sk-sentinel-0123456789abcdef`).
+      expect(personal?.keyMasked).toBe('sk-••••••••cdef');
+      const serialized = JSON.stringify(answer.body);
+      expect(serialized).not.toContain(SECRET);
+      expect(serialized).not.toContain('encrypted');
     });
-    expect(answer.status).toBe(400);
-    expect(answer.body.code).toBe('VALIDATION_FAILED');
-    expect(await assignmentCount(user.userId)).toBe(0);
-  });
 
-  it('CA-3 — la clé d’un autre apprenant répond 404 sans la révéler', async () => {
-    const alice = await createUser('alice');
-    const bob = await createUser('bob');
-    const credentialId = await qualifiedKey(alice);
-    asUser(bob);
-    const answer = await call({
-      method: 'PATCH',
-      body: { action: 'assign', task: 'tutor', credentialId, modelId: MODEL },
-      idempotencyKey: 'spec-709-foreign',
-    });
-    expect(answer.status).toBe(404);
-    expect(answer.body.code).toBe('NOT_FOUND');
-    expect(JSON.stringify(answer.body)).not.toContain(alice.userId);
-    expect(await assignmentCount(bob.userId)).toBe(0);
-  });
+    it('CA-3 — PATCH idempotent : deux envois identiques ne créent qu’une écriture', async () => {
+      const user = await createUser('idempotent');
+      const credentialId = await qualifiedKey(user);
+      asUser(user);
+      const key = 'spec-709-replay';
+      const body = { action: 'assign', task: 'tutor', credentialId, modelId: MODEL };
 
-  it('EF-3 — un modèle non qualifié est refusé côté serveur (422)', async () => {
-    const user = await createUser('unqualified');
-    const created = await createCredential(ctxOf(user), {
-      provider: 'anthropic',
-      modelIds: [MODEL],
-      apiKey: SECRET,
+      const first = await call({ method: 'PATCH', body, idempotencyKey: key });
+      expect(first.status).toBe(200);
+      expect(first.replay).toBe(false);
+      const second = await call({ method: 'PATCH', body, idempotencyKey: key });
+      expect(second.status).toBe(200);
+      expect(second.replay).toBe(true);
+      expect(second.body).toEqual(first.body);
+      expect(await assignmentCount(user.userId)).toBe(1);
+
+      // A different key replays the same business effect: the upsert stays unique.
+      const third = await call({
+        method: 'PATCH',
+        body,
+        idempotencyKey: 'spec-709-replay-2',
+      });
+      expect(third.status).toBe(200);
+      expect(await assignmentCount(user.userId)).toBe(1);
     });
-    if (!created.ok) throw created.error;
-    asUser(user);
-    const answer = await call({
-      method: 'PATCH',
-      body: {
-        action: 'assign',
-        task: 'tutor',
-        credentialId: created.value.id,
-        modelId: MODEL,
-      },
-      idempotencyKey: 'spec-709-unqualified',
+
+    it('CA-3 — un corps invalide répond 400 sans écrire', async () => {
+      const user = await createUser('invalid');
+      asUser(user);
+      const answer = await call({
+        method: 'PATCH',
+        body: { action: 'assign', task: 'tutor', modelId: '' },
+        idempotencyKey: 'spec-709-invalid',
+      });
+      expect(answer.status).toBe(400);
+      expect(answer.body.code).toBe('VALIDATION_FAILED');
+      expect(await assignmentCount(user.userId)).toBe(0);
     });
-    expect(answer.status).toBe(422);
-    expect(answer.body.code).toBe('AI_MODEL_NOT_QUALIFIED');
-    const rows = await serviceDb()
-      .select({ task: aiTaskModels.task })
-      .from(aiTaskModels)
-      .where(sql`${aiTaskModels.userId} = ${user.userId}::uuid`);
-    expect(rows).toHaveLength(0);
-  });
-});
+
+    it('CA-3 — la clé d’un autre apprenant répond 404 sans la révéler', async () => {
+      const alice = await createUser('alice');
+      const bob = await createUser('bob');
+      const credentialId = await qualifiedKey(alice);
+      asUser(bob);
+      const answer = await call({
+        method: 'PATCH',
+        body: { action: 'assign', task: 'tutor', credentialId, modelId: MODEL },
+        idempotencyKey: 'spec-709-foreign',
+      });
+      expect(answer.status).toBe(404);
+      expect(answer.body.code).toBe('NOT_FOUND');
+      expect(JSON.stringify(answer.body)).not.toContain(alice.userId);
+      expect(await assignmentCount(bob.userId)).toBe(0);
+    });
+
+    it('EF-3 — un modèle non qualifié est refusé côté serveur (422)', async () => {
+      const user = await createUser('unqualified');
+      const created = await createCredential(ctxOf(user), {
+        provider: 'anthropic',
+        modelIds: [MODEL],
+        apiKey: SECRET,
+      });
+      if (!created.ok) throw created.error;
+      asUser(user);
+      const answer = await call({
+        method: 'PATCH',
+        body: {
+          action: 'assign',
+          task: 'tutor',
+          credentialId: created.value.id,
+          modelId: MODEL,
+        },
+        idempotencyKey: 'spec-709-unqualified',
+      });
+      expect(answer.status).toBe(422);
+      expect(answer.body.code).toBe('AI_MODEL_NOT_QUALIFIED');
+      const rows = await serviceDb()
+        .select({ task: aiTaskModels.task })
+        .from(aiTaskModels)
+        .where(sql`${aiTaskModels.userId} = ${user.userId}::uuid`);
+      expect(rows).toHaveLength(0);
+    });
+  },
+);
