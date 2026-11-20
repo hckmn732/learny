@@ -60,7 +60,7 @@ describe('[SPEC-504] frontières des fournisseurs', () => {
         if (/\bclaude-[a-z0-9-]+\b/.test(file.content)) offenders.push(file.path);
       }
     }
-    for (const app of ['apps/web', 'apps/worker']) {
+    for (const app of ['apps/web', 'apps/api']) {
       for (const file of readFiles(path.join(ROOT, app))) {
         // `_dev` pages of earlier specifications display historical identifiers; they are not
         // reachable in production (ADR-0049).

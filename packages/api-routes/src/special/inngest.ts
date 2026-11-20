@@ -6,7 +6,7 @@ import { getServerReporter } from '../deps/sentry';
 
 import type { SpecialHandler } from './types';
 
-// SPEC-1004 EF-2 — Inngest entry point (ADR-0017): same client and registry as `apps/worker`. No
+// SPEC-1004 EF-2 — Inngest entry point (ADR-0017): same client and registry as `apps/api`. No
 // user session: the SDK verifies Inngest's signature, the signing key stays server side.
 // Final failures of the functions go to the same safe reporter as the API (SPEC-203 ET-4).
 setJobErrorReporter((report) => {

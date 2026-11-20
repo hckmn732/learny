@@ -1,6 +1,6 @@
 # @learny/jobs
 
-Jobs durables Inngest (ADR-0017) : un seul client, un seul catalogue d'événements et un seul registre de fonctions, servis à l'identique par `apps/web` (`/api/inngest`, adaptateur Next.js) et `apps/worker` (`/api/inngest`, adaptateur Hono).
+Jobs durables Inngest (ADR-0017) : un seul client, un seul catalogue d'événements et un seul registre de fonctions, servis à l'identique par `apps/web` (`/api/inngest`, adaptateur Next.js) pendant la transition et `apps/api` (`/api/inngest`, adaptateur Hono).
 
 ## API publique (`@learny/jobs`)
 
