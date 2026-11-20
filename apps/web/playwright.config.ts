@@ -147,6 +147,7 @@ export default defineConfig({
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         ENABLE_SDD_PAGES: 'true',
         APP_ENV: 'test',
+        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         JOBS_MODE: 'inline',
         TRUST_PROXY: 'true',
       },

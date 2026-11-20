@@ -14,6 +14,8 @@ export const ApiCoverageResponse = z.strictObject({
   specialDrift: z.array(z.string()),
 });
 
+export const AuthProxyDemoResponse = z.strictObject({ ok: z.literal(true) });
+
 export const devSddApiCoverage = defineRoute({
   id: 'dev.sddApiCoverage',
   method: 'GET',
@@ -26,4 +28,16 @@ export const devSddApiCoverage = defineRoute({
   errors: ['NOT_FOUND'],
 });
 
-export const devMigrationRoutes = { devSddApiCoverage } as const;
+export const devSddAuthProxy = defineRoute({
+  id: 'dev.sddAuthProxy',
+  method: 'POST',
+  path: '/api/v1/dev/sdd/auth/proxy',
+  auth: 'public',
+  output: AuthProxyDemoResponse,
+  successStatus: 200,
+  rateLimit: 'none',
+  summary: 'Mutation de démonstration du relais authentifié (SPEC-1102).',
+  errors: ['NOT_FOUND'],
+});
+
+export const devMigrationRoutes = { devSddApiCoverage, devSddAuthProxy } as const;
