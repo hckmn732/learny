@@ -42,6 +42,7 @@ describe('[SPEC-012] selfhost config', () => {
       'APP_ENCRYPTION_KEY',
       'RATE_LIMIT_IP_SECRET',
       'EMAIL_LINK_SECRET',
+      'API_PROXY_SECRET',
       'INNGEST_EVENT_KEY',
       'INNGEST_SIGNING_KEY',
       'GIT_COMMIT',
@@ -63,7 +64,7 @@ describe('[SPEC-012] selfhost config', () => {
     for (const service of PUBLISHED_SERVICES) {
       expect((doc.services[service]?.ports ?? []).length).toBeGreaterThan(0);
     }
-    for (const service of ['db', 'migrate', 'auth', 'rest', 'storage', 'worker']) {
+    for (const service of ['db', 'migrate', 'auth', 'rest', 'storage', 'api']) {
       expect(doc.services[service]?.ports ?? []).toEqual([]);
     }
     expect(doc.networks?.backend?.internal).toBe(true);
@@ -90,7 +91,7 @@ describe('[SPEC-012] selfhost config', () => {
   });
 
   test('Dockerfiles : lockfile gelé, multi-étapes, non root, sans fichier .env', () => {
-    for (const file of ['docker/web.Dockerfile', 'docker/worker.Dockerfile']) {
+    for (const file of ['docker/web.Dockerfile', 'docker/api.Dockerfile']) {
       const text = readFile(file);
       expect(validateDockerfile(text), file).toEqual([]);
       expect(text).toContain('pnpm install --frozen-lockfile');
@@ -110,6 +111,40 @@ describe('[SPEC-012] selfhost config', () => {
     );
   });
 
+  test('[SPEC-1103] compose utilise apps/api avec la dépendance saine du web', () => {
+    const doc = parseComposeYaml(composeText);
+    expect(doc.services.worker).toBeUndefined();
+    expect(doc.services.api?.build?.dockerfile).toBe('docker/api.Dockerfile');
+    expect(doc.services.api?.environment?.API_INTERNAL_URL).toBe('http://api:3001');
+    expect(doc.services.api?.environment?.API_PROXY_SECRET).toContain('${API_PROXY_SECRET:?');
+    expect(doc.services.api?.environment?.LEARNY_API_ROLE).toBe('all');
+    expect(doc.services.web?.environment?.API_INTERNAL_URL).toBe('http://api:3001');
+    expect(doc.services.web?.depends_on?.api?.condition).toBe('service_healthy');
+    expect(composeText).toContain('http://api:3001/api/inngest');
+  });
+
+  test('[SPEC-1103] toutes les topologies remplacent worker sans secret en clair', () => {
+    for (const file of [
+      'docker/compose.dev.yml',
+      'docker/compose.selfhost.yml',
+      'docker/compose.coolify.yml',
+      'docker/compose.coolify-qa.yml',
+    ]) {
+      const text = readFile(file);
+      expect(text, file).not.toContain('http://worker:3001');
+      expect(text, file).not.toContain('docker/worker.Dockerfile');
+      expect(text, file).not.toContain('LEARNY_WORKER_IMAGE');
+      if (file !== 'docker/compose.dev.yml') {
+        const doc = parseComposeYaml(text);
+        expect(doc.services.worker, file).toBeUndefined();
+        expect(doc.services.api, file).toBeDefined();
+        expect(doc.services.web?.environment?.API_INTERNAL_URL, file).toBe('http://api:3001');
+        expect(doc.services.web?.depends_on?.api?.condition, file).toBe('service_healthy');
+      }
+      expect(text, file).not.toMatch(/sk-[A-Za-z0-9]{10,}|eyJ[A-Za-z0-9_-]{20,}\./);
+    }
+  });
+
   test('.dockerignore exclut secrets, dépendances et historique Git', () => {
     const text = readFile('.dockerignore');
     expect(validateDockerignore(text)).toEqual([]);
@@ -117,6 +152,7 @@ describe('[SPEC-012] selfhost config', () => {
       '.dockerignore : motif .env.* absent',
     );
     expect(text).not.toContain('!.env');
+    expect(validateDockerignore(readFile('docker/api.Dockerfile.dockerignore'))).toEqual([]);
   });
 
   test('le guide couvre démarrage, migrations, sauvegarde, mise à jour et arrêt', () => {
