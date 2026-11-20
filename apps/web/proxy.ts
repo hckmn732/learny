@@ -9,15 +9,14 @@
 // 3. Authentication and onboarding (SPEC-202, EF-9, ET-6): refresh the Supabase session, send an
 //    anonymous visitor of a protected page to `/connexion`, a signed-in one away from the sign-in
 //    pages, and a learner who has not finished the first steps to `/premiers-pas/<step>`.
-import { randomUUID } from 'node:crypto';
-
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { ApiError } from '@learny/api-client';
 import { clock } from '@learny/core';
-import { canAccessFormation, createServiceContext } from '@learny/services';
 
 import { sddDemos } from './app/%5Fdev/sdd/registry';
 import { relayToApi } from './lib/api/relay';
+import { serverApi } from './lib/api/server-client';
 import {
   ONBOARDING_TICKET_TTL_MS,
   createOnboardingTicket,
@@ -89,7 +88,6 @@ function sddGuard(request: NextRequest, requestHeaders: Headers): NextResponse {
 async function formationGuard(
   request: NextRequest,
   requestHeaders: Headers,
-  userId: string,
 ): Promise<NextResponse | null> {
   const match = FORMATION_PATH.exec(request.nextUrl.pathname);
   if (match === null) return null;
@@ -97,13 +95,11 @@ async function formationGuard(
   // `/formations/nouvelle` is not a formation id; the page keeps its own validation.
   if (formationId === 'nouvelle') return null;
   try {
-    const ctx = createServiceContext({ userId, requestId: randomUUID() });
-    const access = await canAccessFormation(ctx, formationId);
-    if (access.ok && access.value) return null;
-    // A transient read failure lets the page show its controlled error state.
-    if (!access.ok && access.error.code !== 'NOT_FOUND') return null;
-  } catch {
+    const client = await serverApi(request.headers);
+    await client.api.formationAccessGet({ params: { fid: formationId } });
     return null;
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status !== 404) return null;
   }
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), {
     status: 404,
@@ -149,7 +145,7 @@ async function sessionGuard(request: NextRequest, requestHeaders: Headers): Prom
       ? NextResponse.redirect(new URL(decision.to, request.url), 307)
       : NextResponse.next({ request: { headers: requestHeaders } });
   if (decision.kind !== 'redirect' && session.userId !== null) {
-    const denied = await formationGuard(request, requestHeaders, session.userId);
+    const denied = await formationGuard(request, requestHeaders);
     if (denied !== null) response = denied;
   }
   for (const write of session.writes) response.cookies.set(write.name, write.value, write.options);
