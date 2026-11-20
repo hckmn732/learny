@@ -5,7 +5,7 @@
 // and never returned; only the qualification report reaches the browser.
 import { randomUUID } from 'node:crypto';
 
-import { QualificationReport } from '@learny/contracts';
+import { AiTaskCompatibility } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { serviceDb, sql } from '@learny/db';
 import { createTestUser } from '@learny/db/testing';
@@ -19,13 +19,13 @@ const SECRET = 'sk-test-0000000000a91F'; // learny-test-only
 export interface Spec506DemoState {
   scenario: 'idle' | 'success' | 'invalid';
   input: string;
-  report: QualificationReport | null;
+  report: AiTaskCompatibility | null;
   error: string | null;
 }
 
 export async function runSpec506Demo(scenarioInput: string): Promise<Spec506DemoState> {
   const scenario = scenarioInput === 'invalid' ? 'invalid' : 'success';
-  const input = JSON.stringify({ modelId: MODEL }, null, 2);
+  const input = JSON.stringify({ modelId: MODEL, task: 'tutor' }, null, 2);
   const email = `sdd-506-demo-${randomUUID()}@test.learny.test`;
   const user = await serviceDb().transaction((tx) => createTestUser(tx, { email }));
   try {
@@ -42,8 +42,9 @@ export async function runSpec506Demo(scenarioInput: string): Promise<Spec506Demo
     if (!created.ok) return { scenario, input, report: null, error: created.error.detail };
     const qualified = await qualifyCredential(ctx, created.value.id, MODEL, {
       mode: 'mock',
+      task: 'tutor',
       mockScenario:
-        scenario === 'invalid' ? 'qualification-invalid-brick' : 'qualification-success',
+        scenario === 'invalid' ? 'compatibility-tutor-reserve' : 'compatibility-tutor-success',
     });
     if (!qualified.ok) {
       return { scenario, input, report: null, error: qualified.error.detail };
@@ -51,7 +52,7 @@ export async function runSpec506Demo(scenarioInput: string): Promise<Spec506Demo
     return {
       scenario,
       input,
-      report: QualificationReport.parse(qualified.value),
+      report: AiTaskCompatibility.parse(qualified.value),
       error: null,
     };
   } catch (error) {

@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { api } from '@learny/api-client';
 import { AI_TASKS } from '@learny/config';
-import type { AiCredentialProvider, QualificationReport, TaskModelDto } from '@learny/contracts';
+import type { AiConnectionReport, AiCredentialProvider, TaskModelDto } from '@learny/contracts';
 
 export const QUALIFICATION_TIMEOUT_MS = 120_000;
 
@@ -20,14 +20,8 @@ export interface CredentialQualificationOptions {
   onKeyAccepted: () => void;
 }
 
-function statusOf(report: QualificationReport): QualificationStatus {
-  if (report.status === 'qualified') return 'qualified';
-  const failed = report.steps.find((step) => step.status === 'failed');
-  return failed?.step === 'connection' ? 'refused' : 'bricks';
-}
-
 /**
- * SPEC-602 EF-6, EF-8, ET-8 — creates the key once, qualifies the tested model and assigns it to
+ * SPEC-602 EF-6, EF-8, ET-8 — creates the key once, verifies one chat connection and assigns it to
  * the five tasks. The key only travels to `POST /me/ai/credentials`; it is cleared from the field as
  * soon as the identifier exists. A second click while a test runs is ignored.
  */
@@ -35,7 +29,7 @@ export function useCredentialQualification(options: CredentialQualificationOptio
   const [status, setStatus] = useState<QualificationStatus>('untested');
   const [credentialId, setCredentialId] = useState<string | null>(null);
   const [modelId, setModelId] = useState<string | null>(null);
-  const [report, setReport] = useState<QualificationReport | null>(null);
+  const [report, setReport] = useState<AiConnectionReport | null>(null);
   const [error, setError] = useState<string | null>(null);
   const epoch = useRef(0);
   const running = useRef(false);
@@ -79,7 +73,6 @@ export function useCredentialQualification(options: CredentialQualificationOptio
       return;
     }
 
-    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       let id = credentialId;
       let tested = modelId;
@@ -97,35 +90,24 @@ export function useCredentialQualification(options: CredentialQualificationOptio
         setCredentialId(id);
         setModelId(tested);
         options.onKeyAccepted();
+        if (created.connectionStatus !== 'connected') {
+          setStatus('refused');
+          return;
+        }
+        setStatus('qualified');
+        return;
       } else if (status === 'timeout') {
-        // CL-5 — a new click reads the stored status instead of starting a second battery.
+        // A retry can reuse a connection already persisted by the server.
         const list = await api.meAiCredentialsList({});
         const stored = list.items.find((item) => item.id === id);
-        if (stored?.status === 'qualified') {
+        if (stored?.connectionStatus === 'connected') {
           setStatus('qualified');
           return;
         }
       }
-
-      const report = await Promise.race([
-        api.meAiCredentialsQualify({ params: { id }, body: { modelId: tested } }),
-        new Promise<null>((resolve) => {
-          timer = setTimeout(() => {
-            resolve(null);
-          }, QUALIFICATION_TIMEOUT_MS);
-        }),
-      ]);
-      if (current !== epoch.current) return;
-      if (report === null) {
-        setStatus('timeout');
-        return;
-      }
-      setReport(report);
-      setStatus(statusOf(report));
     } catch {
       if (current === epoch.current) setStatus('refused');
     } finally {
-      if (timer !== undefined) clearTimeout(timer);
       running.current = false;
     }
   }, [credentialId, model, modelId, options, status]);

@@ -76,7 +76,7 @@ describe('[SPEC-709] onglet Modèles d’IA sans modèle par défaut', () => {
     expect(within(providers).getByTestId('provider-add')).toBeTruthy();
     expect(screen.queryAllByTestId('provider-card')).toHaveLength(0);
     expect(screen.getByTestId('ai-tasks-no-provider').textContent).toContain(
-      'tant qu’aucun fournisseur n’est qualifié',
+      'tant qu’aucun fournisseur n’est connecté',
     );
   });
 
@@ -147,5 +147,32 @@ describe('[SPEC-709] onglet Modèles d’IA sans modèle par défaut', () => {
     expect(update).toHaveBeenNthCalledWith(2, { body: { action: 'clear', task: 'tutor' } });
     expect(await within(tutor).findByTestId('ai-task-unavailable')).toBeTruthy();
     expect(within(tutor).queryByText('Votre choix')).toBeNull();
+  });
+
+  it('affiche immédiatement pending puis la compatibilité et ses raisons', () => {
+    const pending = state(true, true);
+    const task = pending.tasks.find((entry) => entry.task === 'tutor');
+    if (task === undefined) throw new Error('tâche tutor absente');
+    task.compatibility = {
+      credentialId: CREDENTIAL,
+      modelId: 'gpt-5.5-e2e',
+      task: 'tutor',
+      status: 'reserve',
+      checkedAt: '2026-11-11T12:20:00.000Z',
+      durationMs: 12,
+      requiredCapabilities: ['tools', 'structured'],
+      reserveCodes: ['NO_TOOLS'],
+      reasons: [
+        {
+          code: 'NO_TOOLS',
+          message: 'Ce modèle ne prend pas en charge les appels d’outils requis pour cette tâche.',
+        },
+      ],
+    };
+    renderComponent(<AiModelsTab initial={pending} initialError={false} />);
+    const row = screen.getByTestId('ai-task-tutor');
+    expect(within(row).getByText('Sous réserve')).toBeTruthy();
+    expect(within(row).getByText(/n[eé] prend pas en charge les appels d’outils/)).toBeTruthy();
+    expect(within(row).getByTestId('ai-compatibility-recheck')).toBeTruthy();
   });
 });

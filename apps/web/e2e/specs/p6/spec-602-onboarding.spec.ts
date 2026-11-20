@@ -194,9 +194,10 @@ test('premiers pas avec clé personnelle qualifiée @SPEC-602', async ({
 
     await page.getByTestId('ai-key').fill(`sk-ant-e2e-${randomBytes(6).toString('hex')}`);
     await page.getByTestId('ai-test').click();
-    await expect(page.getByTestId('ai-status')).toHaveText('Clé valide · modèle qualifié pour Learny', {
-      timeout: 30_000,
-    });
+    await expect(page.getByTestId('ai-status')).toHaveText(
+      'Connexion vérifiée · le modèle peut être affecté aux tâches',
+      { timeout: 30_000 },
+    );
     await captureEvidence('ia-cle-qualifiee');
     await page.getByTestId('onboarding-continue').click();
     await expect(page).toHaveURL(/\/premiers-pas\/rappels$/);

@@ -65,13 +65,13 @@ export const onboarding = {
     status: {
       untested: 'Pas encore testée',
       testing: 'Test en cours…',
-      qualified: 'Clé valide · modèle qualifié pour Learny',
+      qualified: 'Connexion vérifiée · le modèle peut être affecté aux tâches',
       refused: 'Clé refusée par le fournisseur. Vérifiez-la.',
       bricks:
         'Clé valide, mais ce modèle n’a pas réussi les tests de Learny. Essayez un autre modèle.',
       timeout: 'Le test a pris trop de temps. Réessayez.',
     },
-    note: 'Votre clé est chiffrée et ne sert qu’à vos propres demandes. Le test vérifie que le modèle sait produire les briques de Learny (cours, quiz, jeux).',
+    note: 'Votre clé est chiffrée et ne sert qu’à vos propres demandes. Le test vérifie uniquement la connexion à un modèle de chat ; la compatibilité est contrôlée séparément pour chaque tâche.',
     continueError: 'Testez votre clé avant de continuer.',
   },
   rappels: {

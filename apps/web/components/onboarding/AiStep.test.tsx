@@ -19,7 +19,9 @@ vi.mock('@learny/api-client', () => ({ api: apiMock }));
 
 beforeEach(() => {
   router.push.mockReset();
-  apiMock.meAiCredentialsCreate.mockReset().mockResolvedValue({ id: 'cred-1' });
+  apiMock.meAiCredentialsCreate
+    .mockReset()
+    .mockResolvedValue({ id: 'cred-1', connectionStatus: 'connected' });
   apiMock.meAiCredentialsList.mockReset().mockResolvedValue({ items: [] });
   apiMock.meAiCredentialsQualify.mockReset().mockResolvedValue({
     status: 'qualified',
@@ -59,15 +61,16 @@ describe('[SPEC-602] étape IA', () => {
     expect(apiMock.meOnboardingUpdate).not.toHaveBeenCalled();
   });
 
-  it('qualifie la clé, puis remet le statut à zéro au changement de fournisseur (EF-6)', async () => {
+  it('teste une connexion, puis remet le statut à zéro au changement de fournisseur (EF-6)', async () => {
     const { user } = renderComponent(<AiStep recommendedModels={MODELS} />);
     await user.type(screen.getByTestId('ai-key'), 'sk-ant-test-000000000000');
     await user.click(screen.getByTestId('ai-test'));
     await waitFor(() => {
       expect(screen.getByTestId('ai-status').textContent).toBe(
-        'Clé valide · modèle qualifié pour Learny',
+        'Connexion vérifiée · le modèle peut être affecté aux tâches',
       );
     });
+    expect(apiMock.meAiCredentialsQualify).not.toHaveBeenCalled();
     expect(screen.getByTestId('ai-key')).toHaveProperty('value', '');
     await user.selectOptions(screen.getByTestId('ai-provider'), 'openai');
     expect(screen.getByTestId('ai-status').textContent).toBe('Pas encore testée');

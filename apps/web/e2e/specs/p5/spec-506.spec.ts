@@ -20,30 +20,31 @@ test('Qualification des modèles personnels @SPEC-506', async ({
   await expect(page.getByTestId('spec-506-steps-empty')).toBeVisible();
   await expect(page.getByTestId('spec-506-bricks-empty')).toBeVisible();
 
-  // CA-1 — the complete mock battery qualifies and details the four stages and thirteen bricks.
+  // CA-1 — the task checks only its strict tool and structured capabilities.
   await page.getByTestId('spec-506-run-success').click();
-  await expect(page.getByTestId('spec-506-status')).toHaveText('Qualifié', { timeout: 30_000 });
-  await expect(page.getByTestId('spec-506-step-row')).toHaveCount(4);
-  await expect(page.getByTestId('spec-506-brick-row')).toHaveCount(13);
-  await expect(page.getByTestId('spec-506-step-row').getByText('Réussi')).toHaveCount(4);
-  await expect(page.getByTestId('spec-506-brick-row').getByText('Réussi')).toHaveCount(13);
-  await expect(page.getByTestId('spec-506-contract-result')).toContainText('"status": "qualified"');
-  await expect(page.getByTestId('spec-506-contract-result')).toContainText('"bricks"');
+  await expect(page.getByTestId('spec-506-status')).toHaveText('Compatible', { timeout: 30_000 });
+  await expect(page.getByTestId('spec-506-step-row')).toHaveCount(2);
+  await expect(page.getByTestId('spec-506-step-row').getByText('Réussi')).toHaveCount(2);
+  await expect(page.getByTestId('spec-506-contract-result')).toContainText(
+    '"status": "compatible"',
+  );
+  await expect(page.getByTestId('spec-506-contract-result')).toContainText(
+    '"requiredCapabilities"',
+  );
   expect(await page.content()).not.toContain('0000000000');
   await captureEvidence('spec-506-success');
 
-  // CA-2, CA-5 — one invalid brick fails the model while the other twelve stay green.
+  // CA-2, CA-5 — a failed structured probe becomes a visible, non-blocking reserve.
   await page.getByTestId('spec-506-run-invalid').click();
-  await expect(page.getByTestId('spec-506-status')).toHaveText('Échec de qualification', {
+  await expect(page.getByTestId('spec-506-status')).toHaveText('Sous réserve', {
     timeout: 30_000,
   });
-  await expect(page.getByTestId('spec-506-brick-row')).toHaveCount(13);
-  await expect(page.getByTestId('spec-506-brick-row').getByText('Réussi')).toHaveCount(12);
-  await expect(page.getByTestId('spec-506-brick-row').getByText('Échec')).toHaveCount(1);
+  await expect(page.getByTestId('spec-506-step-row')).toHaveCount(2);
+  await expect(page.getByTestId('spec-506-step-row').getByText('Sous réserve')).toHaveCount(1);
   await expect(page.getByTestId('spec-506-contract-result')).toContainText(
-    'CRITERIA_POINTS_MISMATCH',
+    'STRUCTURED_UNRELIABLE',
   );
-  await expect(page.getByTestId('spec-506-contract-result')).toContainText('"status": "failed"');
+  await expect(page.getByTestId('spec-506-contract-result')).toContainText('"status": "reserve"');
   expect(await page.content()).not.toContain('0000000000');
   await captureEvidence('spec-506-invalid');
 

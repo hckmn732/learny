@@ -197,7 +197,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   expect(tasksBox).not.toBeNull();
   expect(providersBox?.y ?? 0).toBeLessThan(tasksBox?.y ?? 0);
   await expect(page.getByTestId('ai-tasks-no-provider')).toContainText(
-    'Aucun choix n’est possible tant qu’aucun fournisseur n’est qualifié',
+    'Aucun choix n’est possible tant qu’aucun fournisseur n’est connecté',
   );
 
   // EF-1 — five task rows without any model: the selector is locked and nothing is « par défaut ».
@@ -223,6 +223,9 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await page.getByTestId('provider-form-key').fill(KEY);
   await page.getByTestId('provider-qualify').click();
   await expect(page.getByTestId('provider-discovered-models')).toBeVisible();
+  await expect(page.getByTestId('provider-connection-status')).toContainText(
+    'Connexion vérifiée',
+  );
   await page.getByTestId('provider-save').click();
   await expect(page.getByTestId('provider-card')).toHaveCount(1);
   await expect(page.getByTestId('ai-providers-empty')).toHaveCount(0);
@@ -235,7 +238,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await expect(openaiCard.getByTestId('provider-region-warning')).toHaveText(
     'Traite les données hors de l’Union européenne',
   );
-  await expect(openaiCard).toContainText('Qualifié');
+  await expect(openaiCard).toContainText('Connexion vérifiée');
 
   // CA-1, EF-2 — a qualified model is assigned, survives a reload, then the choice is cleared.
   const tutor = page.getByTestId('ai-task-tutor');
@@ -248,6 +251,8 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await tutor.getByTestId('ai-task-model').selectOption({ label: 'OpenAI · ma clé' });
   expect((await assigned).status()).toBe(200);
   await expect(tutor).toContainText('Votre choix');
+  await expect(tutor).toContainText('Compatible');
+  await expect(tutor.getByTestId('ai-compatibility-recheck')).toBeVisible();
   await expect(tutor).toContainText('Hors UE');
   await page.reload();
   await expect(page.getByTestId('settings-tab-modeles')).toHaveAttribute('aria-selected', 'true');
@@ -260,20 +265,22 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
     'Aucun modèle choisi pour cette tâche.',
   );
 
-  // CA-1 — a failed model of the learner never appears in the five selectors (CL-5 card kept).
+  // CA-1 — an old failed model stays selectable; its card keeps the safe legacy reason.
   if (session !== null) {
     await seedKeys(session.userId, { qualified: false, failed: true });
   }
   await page.reload();
   await expect(page.getByTestId('provider-card')).toHaveCount(2);
   const failedCard = page.getByTestId('provider-card').filter({ hasText: 'DeepSeek' });
-  await expect(failedCard).toContainText('Non qualifié');
+  await expect(failedCard).toContainText('Connexion non vérifiée');
   await expect(failedCard).toContainText('brique « Association »');
   for (const task of ['programme', 'course', 'gaps', 'tutor', 'light']) {
-    await expect(page.getByTestId('ai-task-' + task)).not.toContainText(FAILED_MODEL);
+    await expect(page.getByTestId('ai-task-' + task)).toContainText(FAILED_MODEL);
   }
   for (const select of await page.getByTestId('ai-task-model').all()) {
-    expect(await select.locator('option').allTextContents()).not.toContain(FAILED_MODEL);
+    expect(await select.locator('option').allTextContents()).toContain(
+      `${FAILED_MODEL} · ma clé`,
+    );
   }
 
   // EF-2 — clearing a choice keeps the keys and leaves the task without any model.

@@ -112,11 +112,11 @@ test('première formation : inscription jusqu’au module suivant @SPEC-807 @SPE
       await page.getByTestId('onboarding-continue').click();
       await expect(page).toHaveURL(/\/premiers-pas\/ia$/);
 
-      // Personal key qualified by the mock provider (fixture qualification/qualification-success).
+      // One chat-model connection is verified by the mock provider.
       await page.getByTestId('ai-key').fill('sk-ant-e2e-journey-807');
       await page.getByTestId('ai-test').click();
       await expect(page.getByTestId('ai-status')).toHaveText(
-        'Clé valide · modèle qualifié pour Learny',
+        'Connexion vérifiée · le modèle peut être affecté aux tâches',
         { timeout: 30_000 },
       );
       await page.getByTestId('onboarding-continue').click();

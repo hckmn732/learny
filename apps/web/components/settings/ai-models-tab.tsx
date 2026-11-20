@@ -41,10 +41,11 @@ function capabilitiesLabel(ids: readonly AiTaskCapabilityId[]): string {
   return ids.map((id) => t.capabilities[id]).join(', ');
 }
 
-function statusTone(status: AiProviderCard['status']): 'green' | 'orange' | 'neutral' {
-  if (status === 'qualified') return 'green';
-  if (status === 'unqualified') return 'orange';
-  return 'neutral';
+function connected(card: AiProviderCard): boolean {
+  return (
+    card.connectionStatus === 'connected' ||
+    (card.connectionStatus === undefined && card.status === 'qualified')
+  );
 }
 
 /** EF-1 — the two mockup notes of the programme and course tasks. */
@@ -96,12 +97,6 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
-      if (option.qualificationStatus === 'unqualified') {
-        await api.meAiCredentialsQualify({
-          params: { id: option.credentialId },
-          body: { modelId: option.modelId },
-        });
-      }
       const next = await api.meAiModelsUpdate({
         body: {
           action: 'assign',
@@ -111,6 +106,15 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
         },
       });
       setState(next);
+      const assigned = next.tasks.find((candidate) => candidate.task === task);
+      if (assigned?.compatibility?.status === 'pending') {
+        setStatus(t.compatibilityChecking);
+        await api.meAiCredentialsQualify({
+          params: { id: option.credentialId },
+          body: { modelId: option.modelId, task },
+        });
+        await refresh();
+      }
       setStatus(t.assignmentDone);
     } catch (cause) {
       try {
@@ -146,13 +150,11 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
-      // EF-3 — « Tester à nouveau » replays the battery of every model of the key; a failed report
-      // is a normal 200 answer and keeps the card (CL-5).
-      for (const modelId of card.models) {
-        await api.meAiCredentialsQualify({ params: { id: card.id }, body: { modelId } });
-      }
+      const modelId = card.models[0];
+      if (modelId === undefined) throw new Error('Aucun modèle à tester.');
+      await api.meAiCredentialsQualify({ params: { id: card.id }, body: { modelId } });
       await refresh();
-      setStatus(t.assignmentDone);
+      setStatus(t.connectionChecked);
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.detail : t.testError);
     } finally {
@@ -172,6 +174,24 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
       setStatus(t.deleted);
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.detail : t.saveError);
+    } finally {
+      setPending(null);
+    }
+  };
+
+  const recheckCompatibility = async (task: AiTaskModelState): Promise<void> => {
+    if (pending !== null || task.credentialId === null || task.modelId === null) return;
+    setPending(`compatibility-${task.task}`);
+    setError(null);
+    setStatus(t.compatibilityChecking);
+    try {
+      await api.meAiCredentialsQualify({
+        params: { id: task.credentialId },
+        body: { modelId: task.modelId, task: task.task },
+      });
+      await refresh();
+    } catch (cause) {
+      setError(cause instanceof ApiError ? cause.detail : t.testError);
     } finally {
       setPending(null);
     }
@@ -197,7 +217,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
   }
 
   const busy = pending !== null;
-  const hasQualifiedProvider = state.providers.some((card) => card.status === 'qualified');
+  const hasAssignableProvider = state.providers.some((card) => card.models.length > 0);
 
   return (
     <div className="flex flex-col gap-24" data-testid="ai-models-panel">
@@ -298,7 +318,7 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
           <div className="flex flex-col gap-4">
             <h2 className="m-0 font-display text-22 font-600 tracking-title">{t.tasksTitle}</h2>
             <p className="m-0 text-14 text-ink-muted">{t.tasksSubtitle}</p>
-            {hasQualifiedProvider ? null : (
+            {hasAssignableProvider ? null : (
               <p
                 className="m-0 text-14 font-600 text-orange-ink"
                 data-testid="ai-tasks-no-provider"
@@ -319,6 +339,9 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
               }}
               onClear={() => {
                 void clearTask(task.task);
+              }}
+              onRecheck={() => {
+                void recheckCompatibility(task);
               }}
               task={task}
             />
@@ -346,10 +369,11 @@ interface TaskRowProps {
   busy: boolean;
   onAssign: (option: AiTaskModelState['options'][number]) => void;
   onClear: () => void;
+  onRecheck: () => void;
 }
 
 /** EF-1, EF-2 — one task line: label, required capabilities, selector and pills. */
-function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
+function TaskRow({ task, busy, onAssign, onClear, onRecheck }: Readonly<TaskRowProps>) {
   const selectId = useId();
   const label = t.taskLabels[task.task];
   const note = TASK_NOTES[task.task];
@@ -364,10 +388,7 @@ function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
     const existing = acc.find((group) => group.label === label);
     const rendered = {
       value: String(index),
-      label:
-        option.qualificationStatus === 'qualified'
-          ? `${option.modelId} · ma clé`
-          : `${option.modelId} · ma clé · à qualifier`,
+      label: `${option.modelId} · ma clé`,
     };
     if (existing === undefined) acc.push({ label, options: [rendered] });
     else existing.options.push(rendered);
@@ -422,6 +443,19 @@ function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
           <Badge tone="indigo">{t.chosenPill}</Badge>
         ) : null}
         {task.outsideEu ? <Badge tone="orange">{t.outsideEuPill}</Badge> : null}
+        {task.compatibility === undefined || task.compatibility === null ? null : (
+          <Badge
+            tone={
+              task.compatibility.status === 'compatible'
+                ? 'green'
+                : task.compatibility.status === 'reserve'
+                  ? 'orange'
+                  : 'neutral'
+            }
+          >
+            {t.compatibilityStatus[task.compatibility.status]}
+          </Badge>
+        )}
       </span>
       {task.modelId === null ? null : (
         <Button
@@ -433,6 +467,29 @@ function TaskRow({ task, busy, onAssign, onClear }: Readonly<TaskRowProps>) {
         >
           {t.clearChoice}
         </Button>
+      )}
+      {task.compatibility === undefined || task.compatibility === null ? null : (
+        <div className="flex w-full flex-wrap items-center gap-8">
+          {task.compatibility.reasons.map((reason) => (
+            <p
+              className="m-0 flex-[1_1_420px] text-13 text-orange-ink"
+              data-testid={`ai-compatibility-reason-${reason.code}`}
+              key={reason.code}
+              role="status"
+            >
+              {reason.message}
+            </p>
+          ))}
+          <Button
+            data-testid="ai-compatibility-recheck"
+            disabled={busy}
+            onClick={onRecheck}
+            size="sm"
+            variant="outline"
+          >
+            {t.recheck}
+          </Button>
+        </div>
       )}
       {task.available ? null : (
         <p
@@ -473,7 +530,9 @@ function ProviderCardView({
     >
       <div className="flex items-center justify-between gap-8">
         <h3 className="m-0 text-17 font-700">{card.label}</h3>
-        <Badge tone={statusTone(card.status)}>{t.status[card.status]}</Badge>
+        <Badge tone={connected(card) ? 'green' : 'neutral'}>
+          {connected(card) ? t.connectionConnected : t.connectionUnknown}
+        </Badge>
       </div>
       <p className="m-0 text-14 text-ink-muted">
         {card.keyMasked === null ? t.noKey : t.yourKey(card.keyMasked)}
@@ -498,9 +557,9 @@ function ProviderCardView({
           disabled={busy}
           onClick={onRetest}
           size="sm"
-          variant={card.status === 'qualified' ? 'outline' : 'dark'}
+          variant={connected(card) ? 'outline' : 'dark'}
         >
-          {pending ? t.retesting : card.status === 'qualified' ? t.retest : t.relance}
+          {pending ? t.retesting : connected(card) ? t.retest : t.relance}
         </Button>
         <Button
           data-testid="provider-delete"
@@ -648,6 +707,16 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
           {modelIds.length > 8 ? '…' : ''}
         </p>
       )}
+      {tested ? (
+        <p
+          aria-live="polite"
+          className="m-0 text-14 font-600 text-green-ink"
+          data-testid="provider-connection-status"
+          role="status"
+        >
+          {t.qualifPassed}
+        </p>
+      ) : null}
       <div className="flex flex-wrap justify-end gap-8">
         <Button
           data-testid="provider-form-cancel"
@@ -671,7 +740,7 @@ function AddProviderForm({ onClose, onSaved }: Readonly<AddProviderFormProps>) {
             onClick={submit}
             variant="dark"
           >
-            {t.testAndQualify}
+            {t.testConnection}
           </Button>
         )}
       </div>
