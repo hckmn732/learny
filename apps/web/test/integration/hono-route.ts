@@ -1,5 +1,5 @@
-import type { HttpMethod } from '@learny/contracts';
 import { createApp } from '@learny/api';
+import type { HttpMethod } from '@learny/contracts';
 
 type Segment = { params: Promise<Record<string, string | string[]>> };
 

@@ -7,12 +7,11 @@ import { z } from 'zod';
 import { ProblemDetails, defineRoute } from '@learny/contracts';
 import { AppError } from '@learny/core';
 import { closeDb, serviceDb, sql } from '@learny/db';
-
-import { bootstrapProbe, createRateLimiter } from '@learny/http/security';
-import { createRequestOriginGuard, registerSecurity } from '@learny/http/security';
 import { handler } from '@learny/http/handler';
 import { setOriginGuard } from '@learny/http/origin';
 import { noopRateLimiter, getRateLimiter, setRateLimiter } from '@learny/http/rate-limit';
+import { bootstrapProbe, createRateLimiter } from '@learny/http/security';
+import { createRequestOriginGuard, registerSecurity } from '@learny/http/security';
 import { setSessionResolver } from '@learny/http/session';
 
 const BASE = 'http://localhost:3000';

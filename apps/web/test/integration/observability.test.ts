@@ -2,10 +2,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppError, type Clock, type SafeSentryEvent } from '@learny/core';
 import { createLogCapture, createLogger } from '@learny/core/server';
-
 import { handler, type HandlerOptions } from '@learny/http/handler';
+
 import { setDatabaseQuery } from '../../lib/health';
 import { createServerReporter, resetSentryForTests, sanitizeSentryEvent } from '../../lib/sentry';
+
 import { honoRoute } from './hono-route';
 
 const healthRoute = honoRoute('/api/v1/health', 'GET');

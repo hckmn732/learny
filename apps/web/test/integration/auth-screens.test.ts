@@ -8,6 +8,7 @@ import { closeDb, serviceDb, sql } from '@learny/db';
 import { setSignedUpEmitter } from '@learny/services';
 import { extractAuthLink, waitForMail } from '@learny/testing/auth';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
+
 import { honoRoute } from './hono-route';
 
 const callback = honoRoute('/api/v1/auth/callback', 'GET');

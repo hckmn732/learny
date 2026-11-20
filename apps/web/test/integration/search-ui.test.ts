@@ -17,6 +17,7 @@ import {
 
 import { SearchPageView } from '../../components/search/search-results';
 import { searchPageForContext, type SearchPageState } from '../../lib/search-data';
+
 import { honoRoute } from './hono-route';
 
 const searchRoute = honoRoute('/api/v1/search', 'GET');

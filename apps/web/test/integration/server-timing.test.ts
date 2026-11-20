@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { honoRoute } from './hono-route';
 
 const health = honoRoute('/api/v1/health', 'GET');
