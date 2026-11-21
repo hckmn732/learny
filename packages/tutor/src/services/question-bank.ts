@@ -325,7 +325,8 @@ async function readPassages(
 ): Promise<QuestionBankPassage[]> {
   const vector =
     embedding === null ? null : `[${embedding.map((value) => String(value)).join(',')}]`;
-  const ranking = vector === null ? sql`null::float8` : sql`c.embedding <=> ${vector}::extensions.vector`;
+  const ranking =
+    vector === null ? sql`null::float8` : sql`c.embedding <=> ${vector}::extensions.vector`;
   const rows = await tx.execute<{
     chunk_id: string;
     source: string;
@@ -669,6 +670,8 @@ function createResolver(tx: DbTx, userId: string): BrickReferenceResolver {
  * Hotfix QA: models often write a notion label or an invented id in `notionId` fields (options,
  * pairs). A known id or label is mapped to the notion id; anything else falls back to the target.
  */
+const DISTRACTOR_KEY = '__learny_distractor__';
+
 function normalizeNotionIds(
   node: unknown,
   byKey: ReadonlyMap<string, string>,
@@ -677,9 +680,14 @@ function normalizeNotionIds(
   if (Array.isArray(node)) return node.map((item) => normalizeNotionIds(item, byKey, fallback));
   if (node === null || typeof node !== 'object') return node;
   const out: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+  const record = node as Record<string, unknown>;
+  // A wrong option must represent another notion (BR distractor rule): never the target itself.
+  const wrongOption = record.correct === false || record.isCorrect === false;
+  for (const [key, value] of Object.entries(record)) {
     if (key === 'notionId' && typeof value === 'string') {
-      out[key] = byKey.get(value) ?? byKey.get(value.trim().toLowerCase()) ?? fallback;
+      const resolved = byKey.get(value) ?? byKey.get(value.trim().toLowerCase()) ?? fallback;
+      out[key] =
+        wrongOption && resolved === fallback ? (byKey.get(DISTRACTOR_KEY) ?? resolved) : resolved;
     } else {
       out[key] = normalizeNotionIds(value, byKey, fallback);
     }
@@ -701,6 +709,8 @@ async function validateCandidates(
     notionIdsByLabel.set(id, id);
     notionIdsByLabel.set(label.trim().toLowerCase(), id);
   }
+  const distractor = [...labels.keys()].find((id) => id !== target.notionId);
+  if (distractor !== undefined) notionIdsByLabel.set(DISTRACTOR_KEY, distractor);
   const accepted: ValidCandidate[] = [];
   const fingerprints = new Set(existing);
   for (const candidate of current) fingerprints.add(candidate.fingerprint);
