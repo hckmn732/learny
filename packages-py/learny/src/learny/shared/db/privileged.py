@@ -31,6 +31,7 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.formation.application.programme": "failed import and adjustment reasons, programme events",
         # SPEC-2202 - milestones are system-managed and read-only for the authenticated role
         "learny.learning.application.series": "milestone rows are read-only for the authenticated role",
+        "learny.learning.application.final_review": "skips the reminders of a stopped interview (ADR-0112)",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

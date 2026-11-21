@@ -2,8 +2,9 @@
 
 Every literal is copied verbatim from the TypeScript backend: the agenda labels come from
 `packages/config/src/agenda.ts`, the service messages and the contract refinements from
-`packages/services/src/{agenda,gaps,serie-regularite-et-jalons-interface}/*.ts` and
-`packages/contracts/src/agenda.ts`. Codes reference the constant, never an inline French string.
+`packages/services/src/{agenda,gaps,serie-regularite-et-jalons-interface,formations}/*.ts` and
+`packages/contracts/src/{agenda,agenda-deplacer-et-reajuster-le-planning}.ts`. Codes reference the
+constant, never an inline French string.
 """
 
 # packages/config/src/agenda.ts (SPEC-704 ET-3, BR-AGE-02): labels of the twelve slot kinds.
@@ -46,3 +47,28 @@ SERIES_MODULE_TO_VALIDATE_LABEL = "Module « {title} » à valider"
 SERIES_MILESTONE_NOTIONS = "100 notions retenues"
 SERIES_MILESTONE_STREAK = "30 jours de série"
 SERIES_MILESTONE_DEFAULT = "Jalon atteint"
+
+# packages/services/src/formations/{get-final-review,set-maintenance,final-review}.ts (SPEC-617).
+FINAL_REVIEW_INVALID_FORMATION_ID = "Identifiant de formation invalide."
+FINAL_REVIEW_FORMATION_NOT_FOUND = "Formation introuvable."
+FINAL_REVIEW_NOT_COMPLETE = "Le bilan final n’est disponible qu’une fois tous les modules validés."
+MAINTENANCE_NOT_COMPLETE = "L’entretien de mémoire ne se règle qu’une fois tous les modules validés."
+MAINTENANCE_INVALID_VERSION = "Version de formation invalide."
+MAINTENANCE_CONFLICT = "Cette formation a changé entre-temps. Rechargez le bilan avant de choisir."
+MAINTENANCE_VERSION_LABEL = "Version actuelle : {version}"
+MAINTENANCE_UNKNOWN_MODE = "Mode d’entretien inconnu."
+RETENTION_UNAVAILABLE = "Pas encore disponible"
+RETENTION_PERCENT = "{rate} %"
+GAP_DEFAULT_LABEL = "Lacune"
+GAP_NATURE_LABELS: dict[str, str] = {
+    "confusion": "Confusion",
+    "misunderstanding": "Incompréhension",
+    "application": "Difficulté d'application",
+    "forgetting": "Oubli",
+}
+
+# packages/services/src/quiz/result.ts `evidenceOf` (SPEC-612 ET-6, reused by SPEC-617).
+GAP_EVIDENCE_CONFUSION = "Confondue avec une autre notion dans vos réponses."
+GAP_EVIDENCE_MISUNDERSTANDING = "Réponses incomplètes ou à côté du sujet."
+GAP_EVIDENCE_APPLICATION = "Définition juste, mais l’exercice n’a pas abouti."
+GAP_EVIDENCE_FORGETTING = "Notion oubliée depuis la dernière révision."

@@ -684,3 +684,361 @@ async def read_series_milestone_items(
         parameters["formation_id"] = formation_id
     result = await tx.conn.execute(statement, parameters)
     return [row_of(item) for item in result.mappings().all()]
+
+
+# --------------------------------------------------------------------------------------------------
+# formations.finalReview, formations.maintenance
+# (packages/services/src/formations/{get-final-review,set-maintenance}.ts, SPEC-617)
+# --------------------------------------------------------------------------------------------------
+
+READ_FINAL_REVIEW_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.owner_id::text as owner_id,
+           f.title,
+           f.monogram,
+           f.accent_color::text as accent,
+           f.status::text as status,
+           f.default_threshold::int as default_threshold,
+           f.start_date::text as start_date,
+           f.completed_at,
+           f.maintenance_mode::text as maintenance_mode,
+           f.updated_at
+    from public.formations f
+    where f.id = cast(:formation_id as uuid)
+      and (
+        f.owner_id = cast(:user_id as uuid)
+        or exists (
+          select 1
+          from public.groups g
+          join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = cast(:user_id as uuid)
+            and gm.member_status = 'active'
+            and gm.left_at is null
+        )
+      )
+    limit 1
+    """
+)
+
+READ_FINAL_REVIEW_MODULES = text(
+    """
+    select m.id::text as id,
+           m.position::int as position,
+           m.title,
+           m.threshold::int as threshold,
+           coalesce(mp.status, m.status)::text as status,
+           mp.validated_at,
+           mp.best_score::float8 as best_score
+    from public.modules m
+    left join public.module_progress mp
+      on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid)
+    where m.formation_id = cast(:formation_id as uuid)
+    order by m.position asc, m.id asc
+    """
+)
+
+READ_FINAL_REVIEW_NOTIONS = text(
+    """
+    select n.id::text as id,
+           n.label,
+           n.module_id::text as module_id,
+           m.position::int as module_position,
+           m.title as module_title,
+           coalesce(ns.mastery, 0)::float8 as mastery,
+           ns.gap_nature::text as gap_nature,
+           ns.gap_evidence,
+           conf.label as confused_with_label
+    from public.notions n
+    join public.modules m on m.id = n.module_id
+    left join public.notion_states ns
+      on ns.notion_id = n.id and ns.user_id = cast(:user_id as uuid)
+    left join public.notions conf on conf.id = ns.gap_confused_with
+    where n.formation_id = cast(:formation_id as uuid)
+    order by m.position asc, n.position asc, n.id asc
+    """
+)
+
+READ_FINAL_REVIEW_SLOTS = text(
+    """
+    select s.id::text as id,
+           s.kind::text as kind,
+           s.status::text as status,
+           s.starts_at,
+           s.ends_at,
+           s.moved_from_id::text as moved_from_id
+    from public.schedule_slots s
+    where s.user_id = cast(:user_id as uuid)
+      and s.formation_id = cast(:formation_id as uuid)
+      and s.status in ('done', 'planned', 'missed', 'moved', 'cancelled')
+    order by s.starts_at asc, s.id asc
+    """
+)
+
+READ_FINAL_REVIEW_MILESTONES = text(
+    """
+    select ms.id::text as id,
+           ms.key::text as key,
+           ms.ref_id::text as ref_id,
+           ms.formation_id::text as formation_id,
+           f.title as formation_title,
+           m.title as module_title,
+           ms.achieved_at
+    from public.milestones ms
+    left join public.formations f on f.id = ms.formation_id
+    left join public.modules m on m.id = ms.ref_id
+    where ms.user_id = cast(:user_id as uuid)
+      and (
+        ms.formation_id = cast(:formation_id as uuid)
+        or ms.key in ('notions_100', 'streak_30')
+      )
+    order by ms.achieved_at desc, ms.id asc
+    """
+)
+
+READ_FINAL_REVIEW_RETENTION_MODULES = text(
+    """
+    select m.id::text as module_id,
+           mp.validated_at,
+           coalesce(array_agg(n.id::text) filter (where n.id is not null), '{}') as notion_ids
+    from public.modules m
+    join public.module_progress mp on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid)
+    left join public.notions n on n.module_id = m.id
+    where m.formation_id = cast(:formation_id as uuid)
+      and mp.status = 'validated'
+      and mp.validated_at is not null
+    group by m.id, mp.validated_at
+    order by m.position asc, m.id asc
+    """
+)
+
+READ_FINAL_REVIEW_REVIEWS = text(
+    """
+    select rl.id::text as review_id,
+           rl.notion_id::text as notion_id,
+           rl.reviewed_at,
+           coalesce(rl.correct, false) as correct
+    from public.review_logs rl
+    join public.notions n on n.id = rl.notion_id
+    where rl.user_id = cast(:user_id as uuid)
+      and n.formation_id = cast(:formation_id as uuid)
+    """
+)
+
+READ_FINAL_REVIEW_DUE_COUNT = text(
+    """
+    select count(*)::int as due_count
+    from public.notion_states ns
+    join public.notions n on n.id = ns.notion_id
+    where ns.user_id = cast(:user_id as uuid)
+      and n.formation_id = cast(:formation_id as uuid)
+      and ns.in_review
+      and not ns.suspended
+      and ns.due_at <= cast(:now as timestamptz)
+    """
+)
+
+READ_FINAL_REVIEW_PROGRAM_VERSION = text(
+    """
+    select max(version)::int as version
+    from public.programme_proposals
+    where formation_id = cast(:formation_id as uuid)
+      and user_id = cast(:user_id as uuid)
+    """
+)
+
+READ_FINAL_REVIEW_TIMEZONE = text(
+    """
+    select timezone from public.profiles where id = cast(:user_id as uuid)
+    """
+)
+
+READ_MAINTENANCE_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.owner_id::text as owner_id,
+           f.title,
+           f.monogram,
+           f.accent_color::text as accent,
+           f.status::text as status,
+           f.default_threshold::int as default_threshold,
+           f.start_date::text as start_date,
+           f.completed_at,
+           f.maintenance_mode::text as maintenance_mode,
+           f.updated_at,
+           (
+             select count(*)::int
+             from public.modules m
+             where m.formation_id = f.id
+           ) as module_count,
+           (
+             select count(*)::int
+             from public.modules m
+             left join public.module_progress mp
+               on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid)
+             where m.formation_id = f.id
+               and coalesce(mp.status, m.status) = 'validated'
+           ) as validated_count
+    from public.formations f
+    where f.id = cast(:formation_id as uuid)
+      and f.owner_id = cast(:user_id as uuid)
+    for update
+    """
+)
+
+LOCK_MAINTENANCE_EXCLUSIVE = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
+
+UPDATE_MAINTENANCE_MODE = text(
+    """
+    update public.formations
+    set maintenance_mode = cast(:mode as public.maintenance_mode),
+        updated_at = cast(:now as timestamptz)
+    where id = cast(:formation_id as uuid)
+      and owner_id = cast(:user_id as uuid)
+    """
+)
+
+CANCEL_FUTURE_SLOTS = text(
+    """
+    update public.schedule_slots
+    set status = 'cancelled',
+        updated_at = cast(:now as timestamptz)
+    where user_id = cast(:user_id as uuid)
+      and formation_id = cast(:formation_id as uuid)
+      and status = 'planned'
+      and starts_at >= cast(:now as timestamptz)
+    """
+)
+
+SKIP_SCHEDULED_REMINDERS = text(
+    """
+    update public.notification_deliveries d
+    set status = 'skipped_pref'::public.delivery_status,
+        scheduled_for = null,
+        error = 'maintenance_stopped'
+    from public.notifications n
+    where n.id = d.notification_id
+      and n.user_id = cast(:user_id as uuid)
+      and n.formation_id = cast(:formation_id as uuid)
+      and d.status in ('scheduled', 'deferred_quiet')
+    """
+)
+
+
+async def read_final_review_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """CL-1 - the owner or an active member reads the formation, nobody else."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_FORMATION, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_final_review_modules(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """The modules with the caller's own progress, by position."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_MODULES, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_notions(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """The notions with the caller's own memory state, in programme order."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_NOTIONS, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_slots(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """CA-3 - the same done/moved rules as the progress indicator, by start instant."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_SLOTS, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_milestones(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """SPEC-723 EF-3 - the milestones of the formation plus the global thresholds."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_MILESTONES, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_retention_modules(
+    tx: Tx, user_id: str, formation_id: str
+) -> list[Mapping[str, Any]]:
+    """The validated modules and the notions each one teaches."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_RETENTION_MODULES, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_reviews(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """Every persisted review of the formation, for the retention horizon."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_REVIEWS, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_final_review_due_count(tx: Tx, user_id: str, formation_id: str, now: str) -> int:
+    """BR-PRO-03 - the notions still due at the reference instant."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_DUE_COUNT,
+        {"user_id": user_id, "formation_id": formation_id, "now": now},
+    )
+    found = result.mappings().all()
+    return max(0, int(found[0]["due_count"] or 0)) if found else 0
+
+
+async def read_final_review_program_version(tx: Tx, user_id: str, formation_id: str) -> int | None:
+    """ET-5 - the programme version the bilan refers to, null when not versioned."""
+    result = await tx.conn.execute(
+        READ_FINAL_REVIEW_PROGRAM_VERSION, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().all()
+    value = None if not found else found[0]["version"]
+    return None if value is None else int(value)
+
+
+async def read_final_review_timezone(tx: Tx, user_id: str) -> str:
+    """The learner's zone, `UTC` when the profile has none (the join guarantees one)."""
+    result = await tx.conn.execute(READ_FINAL_REVIEW_TIMEZONE, {"user_id": user_id})
+    found = result.mappings().all()
+    return "UTC" if not found else str(found[0]["timezone"])
+
+
+async def lock_maintenance(tx: Tx, formation_id: str) -> None:
+    """Serialises the memory-interview transitions of one formation."""
+    await tx.conn.execute(LOCK_MAINTENANCE_EXCLUSIVE, {"key": f"formation-maintenance:{formation_id}"})
+
+
+async def read_maintenance_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """EF-2, ET-3 - the owner-only formation row, locked for update."""
+    result = await tx.conn.execute(
+        READ_MAINTENANCE_FORMATION, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def update_maintenance_mode(tx: Tx, user_id: str, formation_id: str, mode: str, now: str) -> None:
+    """Stores the chosen memory interview and its content version."""
+    await tx.conn.execute(
+        UPDATE_MAINTENANCE_MODE,
+        {"user_id": user_id, "formation_id": formation_id, "mode": mode, "now": now},
+    )
+
+
+async def cancel_future_slots(tx: Tx, user_id: str, formation_id: str, now: str) -> None:
+    """ADR-0112 - a stopped interview cancels every future planned slot of the formation."""
+    await tx.conn.execute(CANCEL_FUTURE_SLOTS, {"user_id": user_id, "formation_id": formation_id, "now": now})
+
+
+async def skip_scheduled_reminders(tx: Tx, user_id: str, formation_id: str) -> None:
+    """ADR-0112, ADR-0015 - a stopped interview skips the reminders already scheduled."""
+    await tx.conn.execute(SKIP_SCHEDULED_REMINDERS, {"user_id": user_id, "formation_id": formation_id})
