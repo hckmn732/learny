@@ -236,3 +236,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2015](ADR-2015-bibliotheques-python-retenues.md) | Bibliothèques Python retenues | Déduite | ADR-2002, ADR-2011 |
 | [ADR-2016](ADR-2016-parite-normalisee-et-scenarios-de-lecture-generes.md) | Parite normalisee et scenarios de lecture generes | Déduite | SPEC-2001 |
 | [ADR-2017](ADR-2017-contrat-openapi-enrichi-sans-modifier-le-json-servi.md) | Contrat OpenAPI enrichi sans modifier le JSON servi | Déduite | SPEC-2002 |
+| [ADR-2018](ADR-2018-ports-playwright-avec-la-facade-python.md) | Ports Playwright avec la facade Python | Déduite | SPEC-2003 |
