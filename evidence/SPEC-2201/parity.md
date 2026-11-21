@@ -37,9 +37,9 @@ renvoie à un test exécuté.
 | Cas d'usage identity (profil, rythme, onboarding, légal, réglages, menu, en-tête, modèles IA) | `uv run pytest packages-py/learny/tests/integration/identity -q` | ✅ 41 cas sur la base locale, transaction annulée |
 | Dérivations pures (sigle, accent, jours civils, fuseau, e-mail abrégé) | `packages-py/learny/tests/unit/identity/test_views_helpers.py` | ✅ 7 cas |
 | Raffinements de contrat perdus par la génération | `apps/api-py/tests/unit/test_validate.py` | ✅ 11 cas (champ requis, unicité, rappels/`depart`, fuseau IANA, `trim`, `null` refusé) |
-| Couverture des handlers | script de contrôle : `HANDLERS` = exactement les 13 entrées `py` de `api/ownership.yaml`, aucune entrée `ts` | ✅ 13 / 13 |
+| Couverture des handlers | `apps/api-py/tests/unit/test_handlers.py` | ✅ 13 / 13, aucune route `ts` servie par Python |
 | Sorties conformes au contrat | `MeGetOutput`, `MeUpdateOutput`, `MePreferencesGetOutput`, `MeOnboardingGetOutput`, `MeOnboardingUpdateOutput`, `MeLegalAcceptOutput`, `MeProfileGetOutput`, `MeProfileUpdateOutput`, `MeAiTaskModelsUpdateOutput`, `HeaderGetOutput`, `SidebarGetOutput`, `SidebarUpdateOutput` validés dans les tests | ✅ |
-| Suite complète | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 474 tests (60 ajoutés par la bascule identity) |
+| Suite complète | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 477 tests (63 ajoutés par la bascule identity) |
 | Lint, format, types | `uv run ruff check .`, `uv run ruff format --check packages-py apps`, `uv run mypy packages-py apps` | ✅ verts |
 | Artefacts de contrat | `node tools/contract/generate-py-contract.mjs --check` | ✅ à jour (aucune modification de `generated/`) |
 | Inventaire | `corepack pnpm exec tsx tools/migration/inventory.mjs` | ✅ inchangé (217 opérations, 32 routes spéciales) |

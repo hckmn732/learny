@@ -31,7 +31,7 @@ partagée, sous le verrou `flock`, et chaque cas est annulé (transaction `rolle
 | `packages/services/src/ai/qualify-model.test.ts` (9) | affectation de modèle | `.../integration/identity/test_ai_models.py` | 3 des 9 cas concernent `assignTaskModel` (affectation, clé absente ou modèle hors liste, affectation valide) ; les 6 autres portent sur la qualification des clés (`me.ai.credentials.*`, SPEC-2204) |
 
 Total : **42 tests d'intégration** + **7 tests unitaires** de dérivations + **11 tests** de
-raffinements de validation, soit 60 cas `[SPEC-2201]` ajoutés par cette bascule (414 → 474).
+raffinements de validation, plus 3 cas de couverture des handlers (`apps/api-py/tests/unit/test_handlers.py`), soit 63 cas `[SPEC-2201]` ajoutés par cette bascule (414 → 477).
 
 ### Cas non portés, avec motif
 

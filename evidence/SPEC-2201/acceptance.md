@@ -17,13 +17,13 @@ partielle et `validate.mjs` / `complete.mjs` n'ont pas été lancés.
 
 | Commande | Résultat |
 |---|---|
-| `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 474 tests (60 ajoutés par la bascule identity) |
+| `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 477 tests (63 ajoutés par la bascule identity) |
 | `uv run pytest packages-py/learny/tests/integration/identity -q` | ✅ 42 cas, base locale, transactions annulées |
 | `uv run ruff check .` / `uv run ruff format --check packages-py apps` | ✅ |
 | `uv run mypy packages-py apps` | ✅ |
 | `node tools/contract/generate-py-contract.mjs --check` | ✅ artefacts à jour, `generated/` jamais édité |
 | `corepack pnpm exec tsx tools/migration/inventory.mjs` | ✅ inventaire inchangé (217 opérations) |
-| contrôle de couverture des handlers | ✅ `HANDLERS` = exactement les 13 entrées `py`, aucune entrée `ts` |
+| contrôle de couverture des handlers | ✅ `apps/api-py/tests/unit/test_handlers.py` : 13 entrées `py` = 13 handlers, aucune route `ts` |
 
 ## Reprise — ordre exact
 
