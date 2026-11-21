@@ -15,6 +15,12 @@ from typing import Any
 import pytest
 from learny.identity.public import Actor
 from learny.shared.errors import AppError, ErrorEntry, load_catalog
+from learny.shared.locale_fr.details import (
+    INVALID_JSON_BODY,
+    ORIGIN_REJECTED,
+    RATE_LIMITED,
+    UNAUTHENTICATED,
+)
 from learny_api.generated.routes import ROUTES, ROUTES_BY_ID, RouteSpec
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
@@ -233,7 +239,7 @@ async def test_origin_runs_before_the_rate_limit_and_before_the_body() -> None:
 
     def blocking_origin(request: Request) -> None:
         events.append("origin")
-        raise AppError("ORIGIN_REJECTED", "Requête refusée : origine non autorisée.")
+        raise AppError("ORIGIN_REJECTED", ORIGIN_REJECTED)
 
     context.origin_guard.check = blocking_origin  # type: ignore[assignment]
     spec = synthetic()
@@ -292,7 +298,7 @@ async def test_a_bearer_header_on_a_fresh_auth_route_is_reverified(
         return actor()
 
     async def stale(deps: Any, who: Actor, headers: Any) -> Actor:
-        raise AppError("UNAUTHENTICATED", "Vous devez être connecté pour effectuer cette action.")
+        raise AppError("UNAUTHENTICATED", UNAUTHENTICATED)
 
     monkeypatch.setattr("learny_api.pipeline.authenticate", fake_authenticate)
     monkeypatch.setattr("learny_api.pipeline.assert_fresh", stale)
@@ -366,9 +372,7 @@ async def test_an_invalid_json_body_is_a_validation_error(authenticated: Actor) 
 
     assert response.status_code == spec.validation_status
     problem = body_of(response)
-    assert problem["errors"] == [
-        {"path": "body", "message": "Le corps de la requête n’est pas un JSON valide."}
-    ]
+    assert problem["errors"] == [{"path": "body", "message": INVALID_JSON_BODY}]
 
 
 async def test_an_idempotent_route_reserves_then_finishes(
@@ -453,7 +457,7 @@ async def test_a_denied_rate_limit_carries_the_retry_after_header(authenticated:
     assert response.headers["retry-after"] == "7"
     assert response.headers["ratelimit-limit"] == "120"
     assert response.headers["ratelimit-remaining"] == "0"
-    assert body_of(response)["detail"].endswith("Réessayez dans 7 s.")
+    assert body_of(response)["detail"] == RATE_LIMITED.format(seconds=7)
 
 
 async def test_legal_acceptance_runs_after_the_idempotency_reservation(

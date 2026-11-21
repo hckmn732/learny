@@ -33,6 +33,17 @@ IDEMPOTENCY_IN_PROGRESS = "La requête initiale est encore en cours."
 IDEMPOTENCY_RESERVATION_NOT_FOUND = "Réservation d’idempotence introuvable."
 IDEMPOTENCY_KEY_NOT_FOUND = "Clé d’idempotence réservée introuvable."
 
+# packages/llm/src/credentials/crypto.ts (SPEC-505 ET-1, ported by SPEC-2201).
+CREDENTIAL_DECRYPT_FAILED = (
+    "La clé enregistrée n’a pas pu être déchiffrée. Supprimez-la puis enregistrez-la à nouveau."
+)
+
+# packages/llm/src/mock/select.ts (SPEC-504 ET-6, ported by SPEC-2201).
+MOCK_SCENARIO_TRIED = "scénario « {scenario} »"
+MOCK_FIXTURE_NOT_FOUND = (
+    "Aucune fixture pour la tâche « {task} » et la consigne « {prompt_id} » (candidats : {candidates})."
+)
+
 # packages/http/src/route-handler.ts authentication steps (SPEC-201).
 UNAUTHENTICATED = "Vous devez être connecté pour effectuer cette action."
 EMAIL_NOT_CONFIRMED = "Confirmez votre adresse e-mail pour continuer."

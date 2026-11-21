@@ -8,6 +8,7 @@ from typing import Any, Literal
 
 import pytest
 from learny.shared.errors import AppError
+from learny.shared.locale_fr.details import INVALID_JSON_BODY
 from learny_api.validate import invalid_input, issues_of, query_to_object, validate_input
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
@@ -51,7 +52,7 @@ def test_a_missing_field_is_reported_like_zod() -> None:
     issues = problem_of(raised.value)["errors"]
     assert {
         "path": "body.name",
-        "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu",
+        "message": "Entr\u00e9e invalide : cha\u00eene de caract\u00e8res attendu, ind\u00e9fini re\u00e7u",
     } in issues
 
 
@@ -62,7 +63,7 @@ def test_a_wrong_type_names_both_sides() -> None:
     issues = problem_of(raised.value)["errors"]
     assert {
         "path": "body.name",
-        "message": "Entrée invalide : chaîne de caractères attendu, nombre reçu",
+        "message": "Entr\u00e9e invalide : cha\u00eene de caract\u00e8res attendu, nombre re\u00e7u",
     } in issues
 
 
@@ -82,7 +83,9 @@ def test_a_pattern_mismatch_reuses_the_contract_pattern() -> None:
         validate_input(Body, {"name": "abc", "age": 20, "tag": "ABC"}, "body")
 
     issues = problem_of(raised.value)["errors"]
-    assert issues[0]["message"] == ("Chaîne de caractères invalide : doit correspondre au motif ^[a-z]+$")
+    assert issues[0]["message"] == (
+        "Cha\u00eene de caract\u00e8res invalide : doit correspondre au motif ^[a-z]+$"
+    )
 
 
 def test_a_string_length_bound_is_a_sizing_message() -> None:
@@ -90,7 +93,9 @@ def test_a_string_length_bound_is_a_sizing_message() -> None:
         validate_input(Body, {"name": "ab", "age": 20, "tag": "ab"}, "body")
 
     issues = problem_of(raised.value)["errors"]
-    assert issues[0]["message"] == "Trop petit : chaîne de caractères doit avoir >=3 caractères"
+    assert (
+        issues[0]["message"] == "Trop petit : cha\u00eene de caract\u00e8res doit avoir >=3 caract\u00e8res"
+    )
 
 
 def test_a_numeric_bound_is_an_unsized_message() -> None:
@@ -98,7 +103,7 @@ def test_a_numeric_bound_is_an_unsized_message() -> None:
         validate_input(Body, {"name": "abc", "age": 17, "tag": "ab"}, "body")
 
     issues = problem_of(raised.value)["errors"]
-    assert issues[0]["message"] == "Trop petit : entier doit être >=18"
+    assert issues[0]["message"] == "Trop petit : entier doit \u00eatre >=18"
 
 
 def test_an_unknown_key_is_reported_as_a_single_issue() -> None:
@@ -106,7 +111,7 @@ def test_an_unknown_key_is_reported_as_a_single_issue() -> None:
         validate_input(Body, {"name": "abc", "age": 20, "tag": "ab", "extra": 1}, "body")
 
     issues = problem_of(raised.value)["errors"]
-    assert {"path": "body", "message": 'Clé non reconnue : "extra"'} in issues
+    assert {"path": "body", "message": 'Cl\u00e9 non reconnue : "extra"'} in issues
 
 
 def test_a_literal_mismatch_lists_the_allowed_values() -> None:
@@ -133,12 +138,10 @@ def test_the_path_is_prefixed_by_the_input_location() -> None:
 
 
 def test_invalid_input_builds_a_single_body_issue() -> None:
-    error = invalid_input("body", "Le corps de la requête n’est pas un JSON valide.")
+    error = invalid_input("body", INVALID_JSON_BODY)
 
     assert error.code == "VALIDATION_FAILED"
-    assert error.extra["errors"] == [
-        {"path": "body", "message": "Le corps de la requête n’est pas un JSON valide."}
-    ]
+    assert error.extra["errors"] == [{"path": "body", "message": INVALID_JSON_BODY}]
 
 
 def test_the_issues_helper_accepts_a_pydantic_error_directly() -> None:
