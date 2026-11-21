@@ -248,7 +248,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
       response.url().includes('/api/v1/me/ai/models') &&
       response.request().method() === 'PATCH',
   );
-  await tutor.getByTestId('ai-task-model').selectOption({ label: `${MODEL} · ma clé` });
+  await tutor.getByTestId('ai-task-model').selectOption('0');
   expect((await assigned).status()).toBe(200);
   await expect(tutor).toContainText('Votre choix');
   await expect(tutor).toContainText('Compatible');
@@ -301,7 +301,7 @@ test('parcours SPEC-709 @SPEC-709', async ({ page, axeCheck, captureEvidence }) 
   await page
     .getByTestId('ai-task-tutor')
     .getByTestId('ai-task-model')
-    .selectOption({ label: `${MODEL} · ma clé` });
+    .selectOption('0');
   await expect(page.getByTestId('ai-task-tutor')).toContainText('Votre choix');
   await page.route('**/api/v1/me/ai/models', async (route) => {
     if (route.request().method() !== 'PATCH') {
