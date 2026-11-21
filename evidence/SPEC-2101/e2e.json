@@ -1,0 +1,258 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/home/ubuntu/projects/learny-wt-SPEC-2101/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "apps/web/playwright.config.ts",
+      "--grep",
+      "@SPEC-2101\\b",
+      "--project=desktop",
+      "--project=mobile"
+    ],
+    "configFile": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/playwright.config.ts",
+    "rootDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "journeys",
+        "name": "journeys",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "journeys-firefox",
+        "name": "journeys-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "journeys-webkit",
+        "name": "journeys-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/journeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "cross-browser-firefox",
+        "name": "cross-browser-firefox",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "cross-browser-webkit",
+        "name": "cross-browser-webkit",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/specs/p6/**/*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "name": "desktop",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Safari/537.36",
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "name": "mobile",
+        "testDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "snapshotDir": "/home/ubuntu/projects/learny-wt-SPEC-2101/apps/web/e2e/specs",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3100",
+          "trace": "on",
+          "video": "on",
+          "screenshot": "on",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "locale": "fr-FR",
+          "timezoneId": "Europe/Paris",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.8127.18 Mobile Safari/537.36",
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/sdd/SPEC-2101/e2e.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/playwright.xml"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/home/ubuntu/projects/learny-wt-SPEC-2101/test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: No tests found",
+      "stack": "Error: No tests found"
+    }
+  ],
+  "stats": {
+    "startTime": "2026-11-21T15:13:43.553Z",
+    "duration": 62422.08900000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

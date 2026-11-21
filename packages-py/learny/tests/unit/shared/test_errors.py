@@ -38,10 +38,46 @@ def test_status_override() -> None:
     assert problem["detail"].endswith("req-3.")
 
 
-def test_extra_fields_are_merged() -> None:
+def test_validation_errors_are_merged() -> None:
+    errors = [{"path": ["a"], "message": "x"}]
     problem = to_problem(
-        AppError("VALIDATION_FAILED", "invalid payload", errors=[{"path": ["a"], "message": "x"}]),
+        AppError("VALIDATION_FAILED", "invalid payload", errors=errors),
         "req-4",
         CATALOG,
     )
-    assert problem["errors"] == [{"path": ["a"], "message": "x"}]
+    assert problem["errors"] == errors
+
+
+def test_errors_are_not_merged_outside_the_three_validation_codes() -> None:
+    problems = [
+        to_problem(AppError(code, "detail", errors=[{"path": [], "message": "x"}]), "req", CATALOG)
+        for code in ("NOT_FOUND", "ORIGIN_REJECTED", "RATE_LIMITED")
+    ]
+    assert all("errors" not in problem for problem in problems)
+
+
+def test_retry_after_never_reaches_the_body() -> None:
+    # `retryAfterSec` drives the `Retry-After` header of packages/http/src/problem.ts, not the body.
+    problem = to_problem(AppError("RATE_LIMITED", "too many", retry_after=2), "req-5", CATALOG)
+    assert "retryAfterSec" not in problem
+    assert "retry_after" not in problem
+    assert list(problem.keys()) == ["type", "title", "status", "detail", "code", "requestId"]
+
+
+def test_reason_and_available_at_are_kept() -> None:
+    problem = to_problem(
+        AppError(
+            "SERVICE_UNAVAILABLE", "down", reason="AI_UNAVAILABLE", availableAt="2026-11-11T12:20:00.000Z"
+        ),
+        "req-6",
+        CATALOG,
+    )
+    assert problem["reason"] == "AI_UNAVAILABLE"
+    assert problem["availableAt"] == "2026-11-11T12:20:00.000Z"
+
+
+def test_unknown_code_becomes_internal_error() -> None:
+    problem = to_problem(AppError("NOT_A_CODE", "detail"), "req-7", CATALOG)
+    assert problem["code"] == "INTERNAL_ERROR"
+    assert problem["status"] == 500
+    assert "detail" not in problem["detail"]

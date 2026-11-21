@@ -44,10 +44,17 @@ def test_event_id_is_name_colon_sha256_prefix() -> None:
     assert identifier == event_id_for("quiz/submitted", {"attemptId": "a1", "score": 1})
 
 
-def test_event_id_ignores_key_order_and_null_members() -> None:
-    first = event_id_for("user/signed-up", {"b": 1, "a": None, "A": 2})
-    second = event_id_for("user/signed-up", {"A": 2, "b": 1})
+def test_event_id_ignores_key_order() -> None:
+    first = event_id_for("user/signed-up", {"b": 1, "a": 2, "A": 3})
+    second = event_id_for("user/signed-up", {"A": 3, "b": 1, "a": 2})
     assert first == second
+
+
+def test_event_id_keeps_null_members_like_canonical_json() -> None:
+    # `canonicalJson` only drops `undefined`; an explicit `null` changes the payload, hence the id.
+    with_null = event_id_for("user/signed-up", {"b": 1, "a": None})
+    without = event_id_for("user/signed-up", {"b": 1})
+    assert with_null != without
 
 
 def test_event_id_changes_with_the_payload() -> None:

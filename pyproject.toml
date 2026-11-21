@@ -29,6 +29,9 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 [tool.ruff.lint.per-file-ignores]
 # Les tests utilisent des jetons et des cles factices : ce ne sont pas des secrets.
 "**/tests/**" = ["S105", "S106"]
+# Les textes francais vus par l utilisateur sont copies mot pour mot du TypeScript : leur
+# typographie (apostrophe courbe, espaces insecables) est normative et non une ambiguite.
+"**/locale_fr/*.py" = ["RUF001", "RUF002", "RUF003"]
 # The system clock is the one legitimate use of datetime.now(): every other module goes through it.
 "packages-py/learny/src/learny/shared/clock.py" = ["TID251"]
 
