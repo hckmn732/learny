@@ -47,6 +47,10 @@ const FACADE_PORT = PORT + 1;
 const API_PORT = PORT + 12;
 const HONO_URL = `http://127.0.0.1:${String(API_PORT)}`;
 const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
+// SPEC-2102: the Python worker is the fourth process of the stack; its health server proves it is
+// alive before the end-to-end test emits an event. A dedicated port, like the other three.
+const WORKER_PORT = PORT + 3;
+const WORKER_URL = `http://127.0.0.1:${String(WORKER_PORT)}`;
 
 export default defineConfig({
   testDir: './e2e/specs',
@@ -137,6 +141,23 @@ export default defineConfig({
     },
   ],
   webServer: [
+    {
+      // SPEC-2102: the durable worker (dispatcher, runner, singleton scheduler). It is started
+      // last, once the database of the stack is reset, and stopped with the run.
+      command: 'uv run python -m learny_worker',
+      url: `${WORKER_URL}/health/live`,
+      cwd: ROOT,
+      reuseExistingServer: false,
+      timeout: 120000,
+      env: {
+        ...TEST_SERVER_ENV,
+        DATABASE_URL:
+          process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
+        PY_WORKER_HEALTH_PORT: String(WORKER_PORT),
+        JOBS_MODE: 'worker',
+        APP_ENV: 'test',
+      },
+    },
     {
       // The upstream must be healthy before the facade is probed: Playwright starts
       // the servers in this order and waits for each readiness URL in turn (SPEC-2003).
