@@ -1042,3 +1042,547 @@ async def cancel_future_slots(tx: Tx, user_id: str, formation_id: str, now: str)
 async def skip_scheduled_reminders(tx: Tx, user_id: str, formation_id: str) -> None:
     """ADR-0112, ADR-0015 - a stopped interview skips the reminders already scheduled."""
     await tx.conn.execute(SKIP_SCHEDULED_REMINDERS, {"user_id": user_id, "formation_id": formation_id})
+
+
+# --------------------------------------------------------------------------------------------------
+# slots.alternatives, slots.move, formations.replan-options, formations.replan
+# (packages/services/src/agenda-deplacer-et-reajuster-le-planning.ts, SPEC-705)
+# --------------------------------------------------------------------------------------------------
+
+READ_PLANNING_PROFILE = text(
+    """
+    select p.timezone,
+           sp.hours_per_day,
+           sp.study_days,
+           sp.preferred_slots::text[] as preferred_slots
+    from public.profiles p
+    left join public.study_preferences sp on sp.user_id = p.id
+    where p.id = cast(:user_id as uuid)
+    """
+)
+
+READ_PLANNING_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.title,
+           f.status::text as status,
+           f.start_date::text as start_date,
+           f.end_date::text as end_date,
+           f.volume_hours,
+           f.objectives::text[] as objectives
+    from public.formations f
+    where f.id = cast(:formation_id as uuid)
+      and (f.owner_id = cast(:user_id as uuid) or exists (
+        select 1 from public.groups g
+        join public.group_members gm on gm.group_id = g.id
+        where g.formation_id = f.id
+          and gm.user_id = cast(:user_id as uuid)
+          and gm.member_status = 'active'
+      ))
+    """
+)
+
+READ_PLANNING_MODULES = text(
+    """
+    select m.id::text as module_id,
+           m.formation_id::text as formation_id,
+           m.position::int as position,
+           m.title,
+           m.status::text as status,
+           m.planned_start::text as planned_start,
+           m.planned_end::text as planned_end,
+           c.id::text as chapter_id,
+           c.position::int as chapter_position,
+           c.title as chapter_title
+    from public.modules m
+    left join public.chapters c on c.module_id = m.id
+    where m.formation_id = cast(:formation_id as uuid)
+    order by m.position, c.position
+    """
+)
+
+READ_PLANNING_SLOTS = text(
+    """
+    select ss.id::text as id,
+           ss.formation_id::text as formation_id,
+           ss.module_id::text as module_id,
+           ss.kind::text as kind,
+           ss.title,
+           ss.meta,
+           ss.starts_at,
+           ss.ends_at,
+           ss.status::text as status,
+           ss.activity_id::text as activity_id,
+           ss.created_by::text as created_by,
+           ss.moved_from_id::text as moved_from_id,
+           ss.group_milestone
+    from public.schedule_slots ss
+    where ss.user_id = cast(:user_id as uuid)
+      and ss.status in ('planned', 'done', 'missed', 'moved')
+      and ss.ends_at >= cast(:since as timestamptz)
+    """
+)
+
+READ_SLOT_OF_USER = text(
+    """
+    select ss.id::text as id,
+           ss.formation_id::text as formation_id,
+           ss.module_id::text as module_id,
+           ss.kind::text as kind,
+           ss.title,
+           ss.meta,
+           ss.starts_at,
+           ss.ends_at,
+           ss.status::text as status,
+           ss.activity_id::text as activity_id,
+           ss.created_by::text as created_by,
+           ss.moved_from_id::text as moved_from_id,
+           ss.group_milestone
+    from public.schedule_slots ss
+    where ss.id = cast(:slot_id as uuid)
+      and ss.user_id = cast(:user_id as uuid)
+    limit 1
+    """
+)
+
+READ_MOVED_SUCCESSOR = text(
+    """
+    select id::text as id
+    from public.schedule_slots
+    where moved_from_id = cast(:slot_id as uuid)
+      and status in ('planned', 'done', 'missed')
+    limit 1
+    """
+)
+
+READ_OVERLAPPING_SLOT = text(
+    """
+    select id::text as id
+    from public.schedule_slots
+    where user_id = cast(:user_id as uuid)
+      and id <> cast(:slot_id as uuid)
+      and status in ('planned', 'done', 'missed')
+      and starts_at < cast(:ends_at as timestamptz)
+      and ends_at > cast(:starts_at as timestamptz)
+    limit 1
+    """
+)
+
+LOCK_AGENDA_MOVE = text(
+    "select pg_advisory_xact_lock(hashtextextended('agenda-move:' || cast(:user_id as text), 0))"
+)
+
+LOCK_AGENDA_REPLAN = text(
+    "select pg_advisory_xact_lock("
+    "hashtextextended('agenda-replan:' || cast(:user_id as text) || ':' || cast(:formation_id as text), 0))"
+)
+
+MARK_SLOT_MOVED = text(
+    """
+    update public.schedule_slots
+    set status = 'moved',
+        updated_at = cast(:now as timestamptz)
+    where id = cast(:slot_id as uuid)
+      and user_id = cast(:user_id as uuid)
+      and status = 'planned'
+    """
+)
+
+INSERT_MOVED_SLOT = text(
+    """
+    insert into public.schedule_slots (
+      id, user_id, formation_id, module_id, kind, title, meta, starts_at, ends_at,
+      status, activity_id, created_by, moved_from_id, group_milestone, created_at, updated_at
+    ) values (
+      cast(:id as uuid), cast(:user_id as uuid), cast(:formation_id as uuid),
+      cast(:module_id as uuid), cast(:kind as public.slot_kind), :title, :meta,
+      cast(:starts_at as timestamptz), cast(:ends_at as timestamptz),
+      'planned', cast(:activity_id as uuid), 'learner', cast(:moved_from_id as uuid),
+      :group_milestone, cast(:now as timestamptz), cast(:now as timestamptz)
+    )
+    returning id::text as id
+    """
+)
+
+READ_TIMEZONE = text("select timezone from public.profiles where id = cast(:user_id as uuid)")
+
+UPDATE_FORMATION_END_DATE = text(
+    """
+    update public.formations
+    set end_date = cast(:end_date as date),
+        updated_at = cast(:now as timestamptz)
+    where id = cast(:formation_id as uuid)
+      and owner_id = cast(:user_id as uuid)
+    """
+)
+
+UPDATE_HOURS_PER_DAY = text(
+    """
+    update public.study_preferences
+    set hours_per_day = :hours,
+        updated_at = cast(:now as timestamptz)
+    where user_id = cast(:user_id as uuid)
+    """
+)
+
+READ_PLANNER_SLOTS_OF_PLAN = text(
+    """
+    select
+      id::text as id,
+      planner_key,
+      kind::text as kind,
+      title,
+      module_id::text as module_id,
+      starts_at,
+      ends_at,
+      status::text as status,
+      created_by::text as created_by
+    from public.schedule_slots
+    where user_id = cast(:user_id as uuid)
+      and formation_id = cast(:formation_id as uuid)
+      and planner_key is not null
+    """
+)
+
+LOCK_PLANNER = text("select pg_advisory_xact_lock(hashtextextended('planner:' || cast(:user_id as text), 0))")
+
+INSERT_PLANNER_SLOT = text(
+    """
+    insert into public.schedule_slots (
+      user_id, formation_id, module_id, kind, title, starts_at, ends_at,
+      status, created_by, planner_key
+    ) values (
+      cast(:user_id as uuid), cast(:formation_id as uuid), cast(:module_id as uuid),
+      cast(:kind as public.slot_kind), :title, cast(:starts_at as timestamptz),
+      cast(:ends_at as timestamptz), 'planned', 'planner', :planner_key
+    )
+    """
+)
+
+UPDATE_PLANNER_SLOT = text(
+    """
+    update public.schedule_slots
+    set module_id = cast(:module_id as uuid),
+        kind = cast(:kind as public.slot_kind),
+        title = :title,
+        starts_at = cast(:starts_at as timestamptz),
+        ends_at = cast(:ends_at as timestamptz)
+    where id = cast(:slot_id as uuid)
+      and user_id = cast(:user_id as uuid)
+      and status = 'planned'
+    """
+)
+
+CANCEL_PLANNER_SLOT = text(
+    """
+    update public.schedule_slots
+    set status = 'cancelled'
+    where id = cast(:slot_id as uuid)
+      and user_id = cast(:user_id as uuid)
+      and status = 'planned'
+    """
+)
+
+INSERT_AUTOMATION_ACTION_QUIET = text(
+    """
+    insert into public.automation_actions
+      (user_id, formation_id, automation, kind, summary, payload, undo_payload,
+       requires_consent, status, decided_at, created_at)
+    values (
+      cast(:user_id as uuid),
+      cast(:formation_id as uuid),
+      cast(:automation as public.automation_key),
+      :kind,
+      :summary,
+      cast(:payload as jsonb),
+      null,
+      true,
+      'pending_consent'::public.automation_status,
+      null,
+      cast(:created_at as timestamptz)
+    )
+    on conflict (user_id, automation, (payload ->> 'dedupeKey')) where payload ? 'dedupeKey'
+    do nothing
+    returning id::text as id,
+              user_id::text as user_id,
+              formation_id::text as formation_id,
+              automation::text as automation,
+              kind,
+              summary,
+              payload,
+              status::text as status,
+              created_at
+    """
+)
+
+READ_AUTOMATION_ACTION_BY_DEDUPE = text(
+    """
+    select id::text as id,
+           user_id::text as user_id,
+           formation_id::text as formation_id,
+           automation::text as automation,
+           kind,
+           summary,
+           payload,
+           status::text as status,
+           created_at
+    from public.automation_actions
+    where user_id = cast(:user_id as uuid)
+      and automation = cast(:automation as public.automation_key)
+      and payload ->> 'dedupeKey' = :dedupe_key
+    limit 1
+    """
+)
+
+
+async def read_planning_profile(tx: Tx, user_id: str) -> Mapping[str, Any] | None:
+    """The zone, the daily volume, the study days and the preferred moments."""
+    result = await tx.conn.execute(READ_PLANNING_PROFILE, {"user_id": user_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_planning_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The formation visible to the caller, owner or active member."""
+    result = await tx.conn.execute(
+        READ_PLANNING_FORMATION, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_planning_modules(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """The modules and their chapters, by module position then chapter position."""
+    result = await tx.conn.execute(READ_PLANNING_MODULES, {"formation_id": formation_id})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_planning_slots(tx: Tx, user_id: str, since: str) -> list[Mapping[str, Any]]:
+    """The live slots of the learner whose end is not older than the horizon."""
+    result = await tx.conn.execute(READ_PLANNING_SLOTS, {"user_id": user_id, "since": since})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_slot_of_user(tx: Tx, user_id: str, slot_id: str) -> Mapping[str, Any] | None:
+    """One slot of the caller, whatever its status."""
+    result = await tx.conn.execute(READ_SLOT_OF_USER, {"user_id": user_id, "slot_id": slot_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_moved_successor(tx: Tx, slot_id: str) -> str | None:
+    """The single active successor of a moved slot."""
+    result = await tx.conn.execute(READ_MOVED_SUCCESSOR, {"slot_id": slot_id})
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def read_overlapping_slot(
+    tx: Tx, user_id: str, slot_id: str, starts_at: str, ends_at: str
+) -> str | None:
+    """The first other live slot that overlaps the new window."""
+    result = await tx.conn.execute(
+        READ_OVERLAPPING_SLOT,
+        {
+            "user_id": user_id,
+            "slot_id": slot_id,
+            "starts_at": starts_at,
+            "ends_at": ends_at,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def lock_agenda_move(tx: Tx, user_id: str) -> None:
+    """Serialises the moves of one learner."""
+    await tx.conn.execute(LOCK_AGENDA_MOVE, {"user_id": user_id})
+
+
+async def lock_agenda_replan(tx: Tx, user_id: str, formation_id: str) -> None:
+    """Serialises the replans of one learner and one formation."""
+    await tx.conn.execute(LOCK_AGENDA_REPLAN, {"user_id": user_id, "formation_id": formation_id})
+
+
+async def mark_slot_moved(tx: Tx, user_id: str, slot_id: str, now: str) -> None:
+    """A moved slot is never rewritten: the new slot references it."""
+    await tx.conn.execute(MARK_SLOT_MOVED, {"user_id": user_id, "slot_id": slot_id, "now": now})
+
+
+async def insert_moved_slot(
+    tx: Tx,
+    *,
+    slot_id: str,
+    user_id: str,
+    formation_id: str,
+    module_id: str | None,
+    kind: str,
+    title: str,
+    meta: str | None,
+    starts_at: str,
+    ends_at: str,
+    activity_id: str | None,
+    moved_from_id: str,
+    group_milestone: bool,
+    now: str,
+) -> str | None:
+    """The successor of a moved slot, created by the learner."""
+    result = await tx.conn.execute(
+        INSERT_MOVED_SLOT,
+        {
+            "id": slot_id,
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "module_id": module_id,
+            "kind": kind,
+            "title": title,
+            "meta": meta,
+            "starts_at": starts_at,
+            "ends_at": ends_at,
+            "activity_id": activity_id,
+            "moved_from_id": moved_from_id,
+            "group_milestone": group_milestone,
+            "now": now,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def read_timezone(tx: Tx, user_id: str) -> str | None:
+    """The learner's IANA zone."""
+    result = await tx.conn.execute(READ_TIMEZONE, {"user_id": user_id})
+    found = result.mappings().all()
+    return None if not found else str(found[0]["timezone"])
+
+
+async def update_formation_end_date(tx: Tx, user_id: str, formation_id: str, end_date: str, now: str) -> None:
+    """`shift_end` - the owner moves the formation end date."""
+    await tx.conn.execute(
+        UPDATE_FORMATION_END_DATE,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "end_date": end_date,
+            "now": now,
+        },
+    )
+
+
+async def update_hours_per_day(tx: Tx, user_id: str, hours: int, now: str) -> None:
+    """`increase_volume` - the daily volume of the learner."""
+    await tx.conn.execute(UPDATE_HOURS_PER_DAY, {"user_id": user_id, "hours": hours, "now": now})
+
+
+async def read_planner_slots_of_plan(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """The planner-owned slots of the formation, keyed by `planner_key`."""
+    result = await tx.conn.execute(
+        READ_PLANNER_SLOTS_OF_PLAN, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def lock_planner(tx: Tx, user_id: str) -> None:
+    """Serialises the plan reconciliation of one learner."""
+    await tx.conn.execute(LOCK_PLANNER, {"user_id": user_id})
+
+
+async def insert_planner_slot(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    module_id: str | None,
+    kind: str,
+    title: str,
+    starts_at: str,
+    ends_at: str,
+    planner_key: str,
+) -> None:
+    """A computed future slot that does not exist yet."""
+    await tx.conn.execute(
+        INSERT_PLANNER_SLOT,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "module_id": module_id,
+            "kind": kind,
+            "title": title,
+            "starts_at": starts_at,
+            "ends_at": ends_at,
+            "planner_key": planner_key,
+        },
+    )
+
+
+async def update_planner_slot(
+    tx: Tx,
+    *,
+    user_id: str,
+    slot_id: str,
+    module_id: str | None,
+    kind: str,
+    title: str,
+    starts_at: str,
+    ends_at: str,
+) -> None:
+    """A computed future slot whose content changed."""
+    await tx.conn.execute(
+        UPDATE_PLANNER_SLOT,
+        {
+            "user_id": user_id,
+            "slot_id": slot_id,
+            "module_id": module_id,
+            "kind": kind,
+            "title": title,
+            "starts_at": starts_at,
+            "ends_at": ends_at,
+        },
+    )
+
+
+async def cancel_planner_slot(tx: Tx, user_id: str, slot_id: str) -> None:
+    """A planned planner slot missing from the new plan."""
+    await tx.conn.execute(CANCEL_PLANNER_SLOT, {"user_id": user_id, "slot_id": slot_id})
+
+
+async def insert_automation_action_quiet(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    automation: str,
+    kind: str,
+    summary: str,
+    payload: Mapping[str, Any],
+    created_at: str,
+) -> Mapping[str, Any] | None:
+    """`createAutomationActionQuiet`: one pending action, deduplicated by its payload key."""
+    import json
+
+    result = await tx.conn.execute(
+        INSERT_AUTOMATION_ACTION_QUIET,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "automation": automation,
+            "kind": kind,
+            "summary": summary,
+            "payload": json.dumps(dict(payload), ensure_ascii=False),
+            "created_at": created_at,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_automation_action_by_dedupe(
+    tx: Tx, user_id: str, automation: str, dedupe_key: str
+) -> Mapping[str, Any] | None:
+    """The pending action already stored for this dedupe key."""
+    result = await tx.conn.execute(
+        READ_AUTOMATION_ACTION_BY_DEDUPE,
+        {"user_id": user_id, "automation": automation, "dedupe_key": dedupe_key},
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])

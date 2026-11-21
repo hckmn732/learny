@@ -397,6 +397,22 @@ def _agenda_range(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
     return None
 
 
+def _slot_move_window(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`SlotMoveInput` refinement: the end of the moved window must follow its start."""
+    start = value.get("startsAt")
+    end = value.get("endsAt")
+    if not isinstance(start, str) or not isinstance(end, str):
+        return None
+    if end <= start:
+        return [
+            _issue(
+                learning_texts.PLANNING_MOVE_WINDOW_PATH,
+                learning_texts.PLANNING_MOVE_WINDOW_ORDER,
+            )
+        ]
+    return None
+
+
 def _civil_day_distance(start: str, end: str) -> int:
     """`civilDayDistance`: civil days between two `YYYY-MM-DD` values (`to - from`)."""
     from datetime import date
@@ -417,6 +433,7 @@ REFINEMENTS: dict[str, Refinement] = {
     "me.legal.accept": _legal_versions,
     "sidebar.update": _sidebar_update,
     "agenda.get": _agenda_range,
+    "slots.move": _slot_move_window,
 }
 
 
