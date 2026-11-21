@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-21T14:26:02.289Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-21T16:37:15.459Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 158 (V1 : 124, V2 : 8, migration : 26) |
-| Terminées | 130 |
+| Terminées | 131 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 27 |
+| En attente de dépendances | 26 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **82.3 %** |
+| **Avancement global** | **82.9 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | python-migration |
-| Prochaine action | start SPEC-2101 — Connexion PostgreSQL, identité, RLS et Storage en Python |
+| Prochaine action | start SPEC-2102 — Outbox et worker Python remplaçant Inngest |
 
 ## Phases et checkpoints
 
@@ -37,7 +37,7 @@
 | P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
 | P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
-| P21 | Migration Python — données, identité et worker | 0/2 | CP-21 | ⏳ |
+| P21 | Migration Python — données, identité et worker | 1/2 | CP-21 | ⏳ |
 | P22 | Migration Python — domaines métier | 0/7 | CP-22 | ⏳ |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 
@@ -192,8 +192,8 @@
 | [SPEC-2001](../specs/p20-python-socle/SPEC-2001-inventaire-parite-oracles.md) | Inventaire, matrice de parité et oracles de référence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-2002](../specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md) | Contrat OpenAPI source unique et SDK TypeScript généré | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |
 | [SPEC-2003](../specs/p20-python-socle/SPEC-2003-socle-python-facade.md) | Socle Python FastAPI, outillage SDD et façade de coexistence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |
-| [SPEC-2101](../specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md) | Connexion PostgreSQL, identité, RLS et Storage en Python | P21 | 🟢 ready | 0 | — | SPEC-2002, SPEC-2003 |
-| [SPEC-2102](../specs/p21-python-donnees/SPEC-2102-outbox-worker.md) | Outbox et worker Python remplaçant Inngest | P21 | ⏳ waiting | 0 | — | SPEC-2101 |
+| [SPEC-2101](../specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md) | Connexion PostgreSQL, identité, RLS et Storage en Python | P21 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2002, SPEC-2003 |
+| [SPEC-2102](../specs/p21-python-donnees/SPEC-2102-outbox-worker.md) | Outbox et worker Python remplaçant Inngest | P21 | 🟢 ready | 0 | — | SPEC-2101 |
 | [SPEC-2201](../specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md) | Domaines Identity & Access et Formation & Programme en Python | P22 | ⏳ waiting | 0 | — | SPEC-2101, SPEC-2102 |
 | [SPEC-2202](../specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md) | Domaines Learning State & Planning et Assessments en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
 | [SPEC-2203](../specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md) | Domaine Content & Retrieval et ingestion en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |

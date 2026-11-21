@@ -1,8 +1,8 @@
 """JSON rendering identical to the TypeScript backend (00-conventions section 7).
 
 `dumps` mirrors `JSON.stringify` (no spaces, no ASCII escaping, insertion order) and `canonical`
-mirrors `canonicalJson` from `packages/db` (keys sorted by UTF-16 code units, `None` members
-omitted). Both are used for API bodies, event ids and idempotency request hashes, so they must be
+mirrors `canonicalJson` from `packages/db` (keys sorted by UTF-16 code units, `null` members kept).
+Both are used for API bodies, event ids and idempotency request hashes, so they must be
 byte-identical across runtimes.
 """
 
@@ -49,12 +49,10 @@ def _utf16_key(key: str) -> bytes:
 
 def _canonical(value: JsonValue) -> str:
     if isinstance(value, dict):
+        # `canonicalJson` drops `undefined` members only; a `null` member is kept (it is JSON).
         members = []
-        for key in sorted(value, key=_utf16_key):
-            item = value[key]
-            if item is None:
-                continue
-            members.append(f"{_encode_string(str(key))}:{_canonical(item)}")
+        for key in sorted(value, key=lambda item: _utf16_key(str(item))):
+            members.append(f"{_encode_string(str(key))}:{_canonical(value[key])}")
         return "{" + ",".join(members) + "}"
     if isinstance(value, (list, tuple)):
         return "[" + ",".join(_canonical(item) for item in value) + "]"

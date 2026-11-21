@@ -1,0 +1,1692 @@
+{
+  "source": "packages/db/src/rls/matrix.ts",
+  "tables": [
+    {
+      "table": "profiles",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "profiles_owner_select",
+        "profiles_owner_update"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": true,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "study_preferences",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "study_preferences_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notification_settings",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "notification_settings_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "push_subscriptions",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "push_subscriptions_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "offline_sync_receipts",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "offline_sync_receipts_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "automation_settings",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "automation_settings_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "pauses",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "pauses_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "formations",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "formations_owner_select",
+        "formations_member_select",
+        "formations_owner_insert",
+        "formations_owner_update",
+        "formations_owner_delete"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "modules",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "modules_owner_all",
+        "modules_member_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "chapters",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "chapters_owner_all",
+        "chapters_member_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notions",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "notions_owner_all",
+        "notions_member_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notion_links",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "notion_links_owner_all",
+        "notion_links_programme_select",
+        "notion_links_programme_owner_insert",
+        "notion_links_programme_owner_update",
+        "notion_links_programme_owner_delete"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "groups",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "id",
+      "policies": [
+        "groups_member_select",
+        "groups_owner_insert",
+        "groups_owner_update",
+        "groups_owner_delete"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "group_members",
+      "category": "shared-programme",
+      "scenario": "shared-programme",
+      "probeColumn": "user_id",
+      "policies": [
+        "group_members_member_select",
+        "group_members_owner_insert",
+        "group_members_owner_update",
+        "group_members_owner_delete"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "cadrage_messages",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "cadrage_messages_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "programme_imports",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "programme_imports_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "programme_proposals",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "programme_proposals_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "programme_change_requests",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "programme_change_requests_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "chapter_progress",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "chapter_progress_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "module_progress",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "module_progress_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "resources",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "resources_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "resource_chunks",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "resource_chunks_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "courses",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "courses_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "course_sections",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "course_sections_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "course_section_revisions",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "course_section_revisions_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "course_section_reports",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "course_section_reports_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "citations",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "citations_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "reading_progress",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "reading_progress_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "chapter_summaries",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "chapter_summaries_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "tutor_conversations",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "tutor_conversations_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "tutor_messages",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "tutor_messages_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "bricks",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "bricks_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "brick_versions",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "brick_versions_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "brick_reports",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "brick_reports_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "question_bank_jobs",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "question_bank_jobs_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "activities",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "activities_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "attempts",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "attempts_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "answers",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "answers_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notion_states",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "notion_states_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "review_logs",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "review_logs_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "gap_events",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "gap_events_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "schedule_slots",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "schedule_slots_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "automation_actions",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "automation_actions_owner_select",
+        "automation_actions_owner_update"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": true,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "daily_activity",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "daily_activity_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "milestones",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "milestones_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notifications",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "notifications_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "notification_deliveries",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "notification_deliveries_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "ai_credentials",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "ai_credentials_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "ai_task_models",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "ai_task_models_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "ai_calls",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "ai_calls_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "subscriptions",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "user_id",
+      "policies": [
+        "subscriptions_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "ai_budget_reservations",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Réservations de budget du service IA (SPEC-507 ET-2, CL-5, ADR-0294) ; aucune lecture ni écriture client."
+    },
+    {
+      "table": "data_exports",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "data_exports_owner_select"
+      ],
+      "owner": {
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "legal_acceptances",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "id",
+      "policies": [
+        "legal_acceptances_owner_select",
+        "legal_acceptances_owner_insert"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "idempotency_keys",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Clés d’idempotence manipulées exclusivement par le wrapper d’API (SPEC-112 EF-3, ADR-0120) ; aucune lecture ni écriture client."
+    },
+    {
+      "table": "rate_limits",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Seaux de limitation de débit réservés au service (SPEC-112 EF-4, SPEC-208) ; aucune lecture ni écriture client."
+    },
+    {
+      "table": "event_outbox",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Boîte d’envoi des événements de domaine (SPEC-203 ET-2, ADR-0122) : écrite uniquement par la fonction security definer enqueue_event, lue et mise à jour par le service ; aucun accès client."
+    },
+    {
+      "table": "sdd_demo_runs",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Exécutions du pipeline de démonstration SDD (SPEC-203 ET-7) : réservées au service, jamais exposées au client."
+    },
+    {
+      "table": "stripe_events",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Événements Stripe déjà reçus (SPEC-210 ET-3, ADR-0215) : insérés (on conflict do nothing) et marqués traités par le webhook via serviceDb ; aucun accès client."
+    }
+  ],
+  "categoryCounts": {
+    "shared-programme": 7,
+    "personal": 46,
+    "service": 6
+  },
+  "policyNames": [
+    "activities_owner_all",
+    "ai_calls_owner_select",
+    "ai_credentials_owner_all",
+    "ai_task_models_owner_all",
+    "answers_owner_all",
+    "attempts_owner_all",
+    "automation_actions_owner_select",
+    "automation_actions_owner_update",
+    "automation_settings_owner_all",
+    "brick_reports_owner_all",
+    "brick_versions_owner_all",
+    "bricks_owner_all",
+    "cadrage_messages_owner_all",
+    "chapter_progress_owner_all",
+    "chapter_summaries_owner_all",
+    "chapters_member_select",
+    "chapters_owner_all",
+    "citations_owner_all",
+    "course_section_reports_owner_all",
+    "course_section_revisions_owner_select",
+    "course_sections_owner_all",
+    "courses_owner_all",
+    "daily_activity_owner_all",
+    "data_exports_owner_select",
+    "formations_member_select",
+    "formations_owner_delete",
+    "formations_owner_insert",
+    "formations_owner_select",
+    "formations_owner_update",
+    "gap_events_owner_select",
+    "group_members_member_select",
+    "group_members_owner_delete",
+    "group_members_owner_insert",
+    "group_members_owner_update",
+    "groups_member_select",
+    "groups_owner_delete",
+    "groups_owner_insert",
+    "groups_owner_update",
+    "legal_acceptances_owner_insert",
+    "legal_acceptances_owner_select",
+    "milestones_owner_select",
+    "module_progress_owner_all",
+    "modules_member_select",
+    "modules_owner_all",
+    "notification_deliveries_owner_select",
+    "notification_settings_owner_all",
+    "notifications_owner_all",
+    "notion_links_owner_all",
+    "notion_links_programme_owner_delete",
+    "notion_links_programme_owner_insert",
+    "notion_links_programme_owner_update",
+    "notion_links_programme_select",
+    "notion_states_owner_all",
+    "notions_member_select",
+    "notions_owner_all",
+    "offline_sync_receipts_owner_all",
+    "pauses_owner_all",
+    "profiles_owner_select",
+    "profiles_owner_update",
+    "programme_change_requests_owner_all",
+    "programme_imports_owner_all",
+    "programme_proposals_owner_all",
+    "push_subscriptions_owner_all",
+    "question_bank_jobs_owner_all",
+    "reading_progress_owner_all",
+    "resource_chunks_owner_select",
+    "resources_owner_all",
+    "review_logs_owner_select",
+    "schedule_slots_owner_all",
+    "study_preferences_owner_all",
+    "subscriptions_owner_select",
+    "tutor_conversations_owner_all",
+    "tutor_messages_owner_all"
+  ]
+}

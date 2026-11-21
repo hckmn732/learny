@@ -38,13 +38,16 @@ def test_dumps_rejects_unknown_types() -> None:
         dumps({"when": object()})
 
 
-def test_canonical_omits_none_and_sorts_by_utf16_code_units() -> None:
+def test_canonical_keeps_null_members_and_sorts_by_utf16_code_units() -> None:
+    # `canonicalJson({ a: undefined, b: null })` returns `{"b":null}`: only `undefined` is dropped,
+    # and Python has no `undefined`, so a `None` member must survive.
     value = {"b": 1, "a": None, "A": 2, ACCENTED: 3}
-    assert canonical(value).decode() == f'{{"A":2,"b":1,"{ACCENTED}":3}}'
+    assert canonical(value).decode() == f'{{"A":2,"a":null,"b":1,"{ACCENTED}":3}}'
 
 
 def test_canonical_vector_keys_order() -> None:
+    # The Node-generated vector is authoritative: it keeps the `null` member of its input.
     case = VECTORS["canonical"][0]
-    expected = [key for key in case["keys"] if case["input"].get(key) is not None]
     produced = json.loads(canonical(case["input"]).decode())
-    assert list(produced.keys()) == expected
+    assert list(produced.keys()) == case["keys"]
+    assert produced["a"] is None

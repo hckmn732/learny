@@ -12,6 +12,9 @@ from typing import Any
 
 from learny.shared.locale_fr.details import UNEXPECTED_ERROR
 
+# `toProblem` only copies these codes' `errors` list into the body (packages/core/src/errors.ts).
+ERRORS_IN_BODY = frozenset({"VALIDATION_FAILED", "BRICK_INVALID", "RESPONSE_INVALID"})
+
 
 @dataclass(frozen=True, slots=True)
 class ErrorEntry:
@@ -29,6 +32,10 @@ def load_catalog(path: Path) -> dict[str, ErrorEntry]:
         code: ErrorEntry(status=entry["status"], title=entry["title"], type=entry["type"])
         for code, entry in raw.items()
     }
+
+
+class JwksUnavailable(Exception):
+    """The key set could not be consulted: the caller falls back to the Auth server (ADR-1009)."""
 
 
 class AppError(Exception):
@@ -56,19 +63,38 @@ def to_problem(
     request_id: str,
     catalog: dict[str, ErrorEntry],
 ) -> dict[str, Any]:
-    """Port of `toProblem` (`packages/core/src/errors.ts`): same fields, same order."""
-    entry = catalog.get(error.code) or catalog["INTERNAL_ERROR"]
-    status = error.status if error.status is not None else entry.status
-    detail = error.detail if error.detail is not None and status < 500 else _unexpected(request_id)
+    """Port of `toProblem` (`packages/core/src/errors.ts`): same fields, same order.
+
+    An unknown code becomes `INTERNAL_ERROR`; a server error never echoes its message and only
+    gives the request reference. `retry_after` drives the `Retry-After` header, never the body.
+    """
+    known = catalog.get(error.code)
+    entry = known if known is not None else catalog["INTERNAL_ERROR"]
+    code = error.code if known is not None else "INTERNAL_ERROR"
+    status = error.status if known is not None and error.status is not None else entry.status
+    detail = (
+        (error.detail if error.detail is not None else entry.title)
+        if known is not None and status < 500
+        else _unexpected(request_id)
+    )
     problem: dict[str, Any] = {
         "type": entry.type,
         "title": entry.title,
         "status": status,
         "detail": detail,
-        "code": error.code,
+        "code": code,
         "requestId": request_id,
     }
-    problem.update(error.extra)
+    errors = error.extra.get("errors")
+    if code in ERRORS_IN_BODY and errors is not None:
+        problem["errors"] = errors
+    for key, value in (
+        ("reason", error.extra.get("reason")),
+        ("availableAt", error.extra.get("availableAt")),
+        ("remediationRequired", error.extra.get("remediationRequired")),
+    ):
+        if value is not None:
+            problem[key] = value
     return problem
 
 
