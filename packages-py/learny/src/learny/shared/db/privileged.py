@@ -21,5 +21,10 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.platform.storage": "signed URLs and export objects",
         # Admin Auth calls (user creation, deletion) need the service role key.
         "learny.identity.infrastructure.gotrue": "GoTrue admin endpoints",
+        # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
+        "learny_worker.dispatcher": "outbox fan-out into job deliveries",
+        "learny_worker.runner": "claims, completion and backoff of the deliveries",
+        "learny_worker.scheduler": "cron ticks written to the outbox",
+        "learny_worker.health": "readiness probe of the worker",
     }
 )
