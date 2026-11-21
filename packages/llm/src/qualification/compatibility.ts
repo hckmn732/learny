@@ -25,11 +25,13 @@ const RESERVE_ORDER: readonly AiCompatibilityReserveCode[] = [
 ];
 export const COMPATIBILITY_TIMEOUT_MS = 12_000;
 
-const TRANSPARENT_PIXEL = new Uint8Array([
-  137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0, 0,
-  0, 31, 21, 196, 137, 0, 0, 0, 13, 73, 68, 65, 84, 8, 215, 99, 248, 207, 192, 0, 16, 5, 1, 1, 20,
-  176, 157, 179, 0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130,
-]);
+// Valid 16×16 RGB PNG (CRC checked); the former 1×1 pixel was corrupted and rejected by providers.
+const TRANSPARENT_PIXEL = new Uint8Array(
+  Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAFklEQVR4nGO4IydHEmIY1TCqYfhqAACaMxgQdGu1YAAAAABJRU5ErkJggg==',
+    'base64',
+  ),
+);
 
 export type CompatibilitySession = Pick<LlmSession, 'step' | 'object'>;
 
@@ -78,86 +80,95 @@ export async function evaluateTaskCompatibility(
       { once: true },
     );
   });
-  const timeout = setTimeout(
-    () => {
-      controller.abort();
-    },
-    input.timeoutMs ?? COMPATIBILITY_TIMEOUT_MS,
-  );
+  const timeout = setTimeout(() => {
+    controller.abort();
+  }, input.timeoutMs ?? COMPATIBILITY_TIMEOUT_MS);
 
   if (required.includes('structured')) {
-    probes.push(input.session.object({
-      system: [
-        {
-          text: 'Compatibility probe: return the exact structured value requested. No explanation.',
-          cache: false,
-        },
-      ],
-      messages: [
-        {
-          role: 'user',
-          content: 'Return {"compatible":true,"summary":"Sortie structurée disponible."}.',
-        },
-      ],
-      schema: STRUCTURED_OUTPUT,
-      abortSignal: controller.signal,
-    }).then((result) => {
-      failedProbe(result, reserves, 'STRUCTURED_UNRELIABLE');
-    }));
+    probes.push(
+      input.session
+        .object({
+          system: [
+            {
+              text: 'Compatibility probe: return the exact structured value requested. No explanation.',
+              cache: false,
+            },
+          ],
+          messages: [
+            {
+              role: 'user',
+              content: 'Return {"compatible":true,"summary":"Sortie structurée disponible."}.',
+            },
+          ],
+          schema: STRUCTURED_OUTPUT,
+          abortSignal: controller.signal,
+        })
+        .then((result) => {
+          failedProbe(result, reserves, 'STRUCTURED_UNRELIABLE');
+        }),
+    );
   }
 
   if (required.includes('tools')) {
-    probes.push(input.session.step({
-      system: [
-        {
-          text: 'Compatibility probe: call the strict tool exactly once with value "ok".',
-          cache: false,
-        },
-      ],
-      messages: [{ role: 'user', content: 'Call compatibility_probe with {"value":"ok"}.' }],
-      tools: {
-        compatibility_probe: {
-          description: 'Strict compatibility probe. It must be called exactly once.',
-          inputSchema: TOOL_INPUT,
-        },
-      },
-      abortSignal: controller.signal,
-    }).then((result) => {
-      if (!result.ok) {
-        reserve(result.error.code === 'AI_TIMEOUT' ? 'CHECK_TIMEOUT' : 'NO_TOOLS', reserves);
-      } else {
-        const call = result.value.toolCalls.find(
-          (candidate) => candidate.toolName === 'compatibility_probe',
-        );
-        if (call === undefined || !TOOL_INPUT.safeParse(call.input).success) {
-          reserve('NO_TOOLS', reserves);
-        }
-      }
-    }));
+    probes.push(
+      input.session
+        .step({
+          system: [
+            {
+              text: 'Compatibility probe: call the strict tool exactly once with value "ok".',
+              cache: false,
+            },
+          ],
+          messages: [{ role: 'user', content: 'Call compatibility_probe with {"value":"ok"}.' }],
+          tools: {
+            compatibility_probe: {
+              description: 'Strict compatibility probe. It must be called exactly once.',
+              inputSchema: TOOL_INPUT,
+            },
+          },
+          abortSignal: controller.signal,
+        })
+        .then((result) => {
+          if (!result.ok) {
+            reserve(result.error.code === 'AI_TIMEOUT' ? 'CHECK_TIMEOUT' : 'NO_TOOLS', reserves);
+          } else {
+            const call = result.value.toolCalls.find(
+              (candidate) => candidate.toolName === 'compatibility_probe',
+            );
+            if (call === undefined || !TOOL_INPUT.safeParse(call.input).success) {
+              reserve('NO_TOOLS', reserves);
+            }
+          }
+        }),
+    );
   }
 
   if (required.includes('vision')) {
-    probes.push(input.session.object({
-      system: [
-        {
-          text: 'Compatibility probe: inspect the provided image and return only the exact schema.',
-          cache: false,
-        },
-      ],
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: 'Confirm that one opaque image was supplied.' },
-            { type: 'image', image: TRANSPARENT_PIXEL, mediaType: 'image/png' },
+    probes.push(
+      input.session
+        .object({
+          system: [
+            {
+              text: 'Compatibility probe: inspect the provided image and return only the exact schema.',
+              cache: false,
+            },
           ],
-        },
-      ],
-      schema: VISION_OUTPUT,
-      abortSignal: controller.signal,
-    }).then((result) => {
-      failedProbe(result, reserves, 'NO_VISION');
-    }));
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'Confirm that one opaque image was supplied.' },
+                { type: 'image', image: TRANSPARENT_PIXEL, mediaType: 'image/png' },
+              ],
+            },
+          ],
+          schema: VISION_OUTPUT,
+          abortSignal: controller.signal,
+        })
+        .then((result) => {
+          failedProbe(result, reserves, 'NO_VISION');
+        }),
+    );
   }
 
   const all = Promise.all(probes).then(() => 'completed' as const);

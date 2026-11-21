@@ -5,11 +5,14 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import {
   NoObjectGeneratedError,
+  asSchema,
   generateObject,
+  jsonSchema,
   generateText,
   streamObject,
   streamText,
   tool,
+  type JSONSchema7,
   type LanguageModel,
   type ModelMessage,
   type ToolSet,
@@ -389,7 +392,7 @@ export async function createSession(
       if (opts.probe === undefined && needsProviderStreaming(opts.task)) {
         const streamed = streamObject({
           model: currentModel,
-          schema: input.schema,
+          schema: strictCompatibleSchema(input.schema, resolved.provider),
           ...(system === undefined ? {} : { system }),
           messages,
           maxOutputTokens: execution.maxOutputTokens,
@@ -403,7 +406,7 @@ export async function createSession(
       } else {
         const generated = await generateObject({
           model: currentModel,
-          schema: input.schema,
+          schema: strictCompatibleSchema(input.schema, resolved.provider),
           ...(system === undefined ? {} : { system }),
           messages,
           maxOutputTokens: execution.maxOutputTokens,
@@ -567,4 +570,35 @@ function usageFromError(error: unknown): CallUsage {
     return usageOf(error.usage);
   }
   return emptyUsage();
+}
+
+/**
+ * OpenAI-compatible strict structured outputs reject `oneOf` (only `anyOf` is accepted). Zod
+ * discriminated unions convert to `oneOf`, so non-Anthropic providers receive the same schema with
+ * `oneOf` rewritten to `anyOf`; validation still runs through the original Zod schema.
+ */
+function strictCompatibleSchema<S extends z.ZodType>(
+  schema: S,
+  provider: AiProviderValue,
+): S | ReturnType<typeof jsonSchema<z.infer<S>>> {
+  if (provider === 'anthropic') return schema;
+  const base = asSchema(schema);
+  return jsonSchema<z.infer<S>>(async () => rewriteOneOf(await base.jsonSchema) as JSONSchema7, {
+    validate: (value: unknown) => {
+      const parsed = schema.safeParse(value);
+      return parsed.success
+        ? { success: true as const, value: parsed.data }
+        : { success: false as const, error: parsed.error };
+    },
+  });
+}
+
+function rewriteOneOf(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(rewriteOneOf);
+  if (node === null || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+    out[key === 'oneOf' ? 'anyOf' : key] = rewriteOneOf(value);
+  }
+  return out;
 }
