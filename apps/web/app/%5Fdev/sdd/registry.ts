@@ -413,4 +413,10 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-1103'),
   },
+  'SPEC-2001': {
+    title: 'Inventaire et parité du backend',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2001'),
+  },
 };
