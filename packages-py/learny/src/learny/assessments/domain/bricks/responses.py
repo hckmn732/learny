@@ -16,12 +16,12 @@ def _trim(value: str) -> str:
     return value.strip()
 
 
-def read_object(response: Any, expected: Sequence[str]) -> dict[str, Any]:
-    """A strict object: unknown keys and missing keys each produce one issue."""
+def read_object(response: Any, expected: Sequence[str], optional: Sequence[str] = ()) -> dict[str, Any]:
+    """A strict object: unknown keys and missing required keys each produce one issue."""
     if not isinstance(response, Mapping):
         raise invalid_response([{"path": "response", "message": "An object is required."}])
     unknown = [key for key in response if key not in expected]
-    missing = [key for key in expected if key not in response]
+    missing = [key for key in expected if key not in response and key not in optional]
     if not unknown and not missing:
         return dict(response)
     issues = [{"path": f"response.{key}", "message": f'Missing field: "{key}".'} for key in missing]
