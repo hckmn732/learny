@@ -5,7 +5,7 @@
     "special": 32,
     "events": 49,
     "jobs": 22,
-    "gaps": 140
+    "gaps": 138
   },
   "operations": [
     {
@@ -578,6 +578,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2201.spec.ts",
         "packages/services/test/integration/cadrage.test.ts"
       ],
       "gap": false
@@ -5794,6 +5795,7 @@
         "apps/api/src/mount.test.ts",
         "apps/api/test/integration/global-quiz-api.test.ts",
         "apps/api/test/integration/sync-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2201.spec.ts",
         "apps/web/e2e/specs/p7/global-quiz.spec.ts",
         "apps/web/e2e/specs/p7/micro-session.spec.ts",
         "apps/web/e2e/specs/p7/spec-718.spec.ts",
@@ -6051,6 +6053,7 @@
         "apps/api/src/mount.test.ts",
         "apps/api/test/integration/global-quiz-api.test.ts",
         "apps/api/test/integration/sync-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2201.spec.ts",
         "apps/web/e2e/specs/p7/global-quiz.spec.ts",
         "apps/web/e2e/specs/p7/micro-session.spec.ts",
         "apps/web/e2e/specs/p7/spec-718.spec.ts",
@@ -8252,8 +8255,10 @@
         "resources"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2201.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "offlinePack",
@@ -8615,8 +8620,10 @@
         "study_preferences"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2201.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "pushSubscriptionsDelete",

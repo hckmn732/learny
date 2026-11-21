@@ -13,10 +13,11 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from learny.shared.config import Settings
+from learny.shared.deps import build_deps
 from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
 from starlette.responses import JSONResponse, Response
 
-from learny_api import relay
+from learny_api import handlers, pipeline, relay  # noqa: F401 - handlers registers @handler roles
 from learny_api.ownership import (
     Ownership,
     load_ownership,
@@ -93,12 +94,22 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
         await client.aclose()
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
-    """Builds the facade; later specs register Python-owned routes on the returned app."""
+def create_app(
+    settings: Settings | None = None,
+    *,
+    ownership: Ownership | None = None,
+    context: pipeline.PipelineContext | None = None,
+) -> FastAPI:
+    """Builds the facade; `py`-owned operations are registered before the relay catch-all.
+
+    `ownership` and `context` are injectable so a test can serve one operation with fake guards
+    without touching the real table or opening a database connection.
+    """
     resolved = settings or Settings()
     global CATALOG
     CATALOG = load_catalog(_api_dir() / "errors.json")
-    ownership = load_ownership_checked(resolved)
+    resolved_ownership = ownership or load_ownership_checked(resolved)
+    resolved_context = context or pipeline.build_context(build_deps(resolved), resolved, CATALOG)
 
     app = FastAPI(
         title="Learny API",
@@ -109,7 +120,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         lifespan=_lifespan,
     )
     app.state.settings = resolved
-    app.state.ownership = ownership
+    app.state.ownership = resolved_ownership
+    app.state.pipeline = resolved_context
+
+    # Python-owned operations first: the catch-all relay below only sees what is still `ts`.
+    pipeline.install(app, resolved_context, resolved_ownership)
 
     @app.api_route(
         "/{path:path}",

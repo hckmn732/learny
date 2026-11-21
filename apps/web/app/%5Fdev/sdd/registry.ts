@@ -8,6 +8,11 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-2201': {
+    title: 'Domaines identity et formation en Python',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-2201'),
+  },
   'SPEC-1302': {
     title: 'Migration terminée',
     titleTestId: 'sdd-title',

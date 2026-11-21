@@ -2,10 +2,10 @@
   "version": 1,
   "groups": [
     {
-      "group": "assessments",
+      "group": "formation",
       "scenarios": [
         {
-          "name": "offline.pack",
+          "name": "formations.list",
           "steps": [
             {
               "status": 200,
@@ -14,11 +14,33 @@
                 "cache-control": "no-store"
               },
               "body": {
-                "ownerId": "<uuid>",
-                "localDate": "2026-11-11",
-                "generatedAt": "<timestamp>",
-                "expiresAt": "<timestamp>",
-                "formations": []
+                "items": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "search.global",
+          "steps": [
+            {
+              "status": 400,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "detail": "Les données envoyées sont invalides.",
+                "errors": [
+                  {
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu",
+                    "path": "query.q"
+                  }
+                ],
+                "requestId": "<uuid>",
+                "status": 400,
+                "title": "Données invalides",
+                "type": "https://learny.app/errors/validation-failed"
               }
             }
           ]
@@ -26,10 +48,10 @@
       ]
     },
     {
-      "group": "billing",
+      "group": "identity",
       "scenarios": [
         {
-          "name": "billing.subscription",
+          "name": "header.get",
           "steps": [
             {
               "status": 200,
@@ -38,8 +60,259 @@
                 "cache-control": "no-store"
               },
               "body": {
-                "status": "none",
-                "currentPeriodEnd": null
+                "activeFormationCount": 0,
+                "emailLabel": "s***@test.learny.test",
+                "firstName": null,
+                "lastName": null,
+                "unreadNotificationCount": 0
+              }
+            }
+          ]
+        },
+        {
+          "name": "home.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "formations": {
+                  "completed": [],
+                  "ongoing": []
+                },
+                "globalQuiz": null,
+                "retention": {
+                  "oneMonth": null,
+                  "twoMonths": null
+                },
+                "today": {
+                  "date": "2026-11-11",
+                  "doneMinutes": 0,
+                  "label": "Mercredi 11 novembre",
+                  "plannedMinutes": 0,
+                  "primaryAction": null,
+                  "slots": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "courseLanguage": "fr",
+                "currentFormationId": null,
+                "email": "<email>",
+                "firstName": null,
+                "id": "<uuid>",
+                "lastName": null,
+                "onboardingCompletedAt": null,
+                "onboardingStep": "profil",
+                "timezone": "Europe/Paris",
+                "tutorTone": "vous"
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.onboarding.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "preferences": {
+                  "hoursPerDay": 2,
+                  "preferredSlots": [
+                    "soir"
+                  ],
+                  "studyDays": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                  ]
+                },
+                "profile": {
+                  "courseLanguage": "fr",
+                  "currentFormationId": null,
+                  "email": "<email>",
+                  "firstName": null,
+                  "id": "<uuid>",
+                  "lastName": null,
+                  "onboardingCompletedAt": null,
+                  "onboardingStep": "profil",
+                  "timezone": "Europe/Paris",
+                  "tutorTone": "vous"
+                },
+                "reminders": {
+                  "automations": true,
+                  "email": true,
+                  "push": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.preferences.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "hoursPerDay": 2,
+                "preferredSlots": [
+                  "soir"
+                ],
+                "studyDays": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.profile.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "activeFormationCount": 0,
+                "createdAt": "<timestamp>",
+                "deletionScheduledFor": null,
+                "export": null,
+                "me": {
+                  "courseLanguage": "fr",
+                  "currentFormationId": null,
+                  "email": "<email>",
+                  "firstName": null,
+                  "id": "<uuid>",
+                  "lastName": null,
+                  "onboardingCompletedAt": null,
+                  "onboardingStep": "profil",
+                  "timezone": "Europe/Paris",
+                  "tutorTone": "vous"
+                },
+                "rhythm": {
+                  "hoursPerDay": 2,
+                  "preferredSlots": [
+                    "soir"
+                  ],
+                  "studyDays": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                  ]
+                },
+                "updatedAt": "<timestamp>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "sidebar.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "collapsed": false,
+                "currentFormation": null,
+                "formations": [],
+                "gapCount": 0,
+                "quizDueCount": 0,
+                "streak": {
+                  "days": 0,
+                  "regularity": [
+                    {
+                      "date": "2026-10-29",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-10-30",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-10-31",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-01",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-02",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-03",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-04",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-05",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-06",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-07",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-08",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-09",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-10",
+                      "status": "none"
+                    },
+                    {
+                      "date": "2026-11-11",
+                      "status": "none"
+                    }
+                  ]
+                }
               }
             }
           ]
@@ -47,8 +320,41 @@
       ]
     },
     {
-      "group": "dev",
       "scenarios": [
+        {
+          "name": "agenda.get",
+          "steps": [
+            {
+              "status": 400,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/validation-failed",
+                "title": "Données invalides",
+                "status": 400,
+                "detail": "Les données envoyées sont invalides.",
+                "code": "VALIDATION_FAILED",
+                "requestId": "<uuid>",
+                "errors": [
+                  {
+                    "path": "query.from",
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
+                  },
+                  {
+                    "path": "query.to",
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
+                  },
+                  {
+                    "path": "query.formation",
+                    "message": "Entrée invalide"
+                  }
+                ]
+              }
+            }
+          ]
+        },
         {
           "name": "auth.callback",
           "steps": [
@@ -65,6 +371,22 @@
                 "detail": "Ressource introuvable.",
                 "code": "NOT_FOUND",
                 "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "billing.subscription",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "status": "none",
+                "currentPeriodEnd": null
               }
             }
           ]
@@ -4355,33 +4677,6 @@
           ]
         },
         {
-          "name": "health.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "status": "ok",
-                "version": "dev",
-                "commit": "unknown",
-                "database": "ok",
-                "components": {
-                  "database": "ok",
-                  "build": "not_configured"
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "engagement",
-      "scenarios": [
-        {
           "name": "email.unsubscribe.page",
           "steps": [
             {
@@ -4403,6 +4698,196 @@
                     "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
                   }
                 ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "errors.unauthenticated",
+          "steps": [
+            {
+              "status": 401,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/unauthenticated",
+                "title": "Connexion requise",
+                "status": 401,
+                "detail": "Vous devez être connecté pour effectuer cette action.",
+                "code": "UNAUTHENTICATED",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "errors.unknown-route",
+          "steps": [
+            {
+              "status": 404,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/not-found",
+                "title": "Introuvable",
+                "status": 404,
+                "detail": "Ressource introuvable.",
+                "code": "NOT_FOUND",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "errors.validation",
+          "steps": [
+            {
+              "status": 403,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/origin-rejected",
+                "title": "Origine non autorisée",
+                "status": 403,
+                "detail": "Requête refusée : origine non autorisée.",
+                "code": "ORIGIN_REJECTED",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "health.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "status": "ok",
+                "version": "dev",
+                "commit": "unknown",
+                "database": "ok",
+                "components": {
+                  "database": "ok",
+                  "build": "not_configured"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.ai.credentials.list",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.ai.models.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "tasks": [
+                  {
+                    "task": "programme",
+                    "requiredCapabilities": [
+                      "tools",
+                      "structured",
+                      "web_search"
+                    ],
+                    "modelId": null,
+                    "credentialId": null,
+                    "provider": null,
+                    "providerLabel": null,
+                    "outsideEu": false,
+                    "available": false,
+                    "unavailableReason": "no_model_selected",
+                    "options": []
+                  },
+                  {
+                    "task": "course",
+                    "requiredCapabilities": [
+                      "structured",
+                      "passage_refs"
+                    ],
+                    "modelId": null,
+                    "credentialId": null,
+                    "provider": null,
+                    "providerLabel": null,
+                    "outsideEu": false,
+                    "available": false,
+                    "unavailableReason": "no_model_selected",
+                    "options": []
+                  },
+                  {
+                    "task": "gaps",
+                    "requiredCapabilities": [
+                      "structured"
+                    ],
+                    "modelId": null,
+                    "credentialId": null,
+                    "provider": null,
+                    "providerLabel": null,
+                    "outsideEu": false,
+                    "available": false,
+                    "unavailableReason": "no_model_selected",
+                    "options": []
+                  },
+                  {
+                    "task": "tutor",
+                    "requiredCapabilities": [
+                      "tools",
+                      "structured"
+                    ],
+                    "modelId": null,
+                    "credentialId": null,
+                    "provider": null,
+                    "providerLabel": null,
+                    "outsideEu": false,
+                    "available": false,
+                    "unavailableReason": "no_model_selected",
+                    "options": []
+                  },
+                  {
+                    "task": "light",
+                    "requiredCapabilities": [
+                      "structured",
+                      "vision"
+                    ],
+                    "modelId": null,
+                    "credentialId": null,
+                    "provider": null,
+                    "providerLabel": null,
+                    "outsideEu": false,
+                    "available": false,
+                    "unavailableReason": "no_model_selected",
+                    "options": []
+                  }
+                ],
+                "providers": [],
+                "updatedAt": "<timestamp>"
               }
             }
           ]
@@ -4640,79 +5125,9 @@
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "group": "errors",
-      "scenarios": [
-        {
-          "name": "errors.unauthenticated",
-          "steps": [
-            {
-              "status": 401,
-              "headers": {
-                "content-type": "application/problem+json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "type": "https://learny.app/errors/unauthenticated",
-                "title": "Connexion requise",
-                "status": 401,
-                "detail": "Vous devez être connecté pour effectuer cette action.",
-                "code": "UNAUTHENTICATED",
-                "requestId": "<uuid>"
-              }
-            }
-          ]
         },
         {
-          "name": "errors.unknown-route",
-          "steps": [
-            {
-              "status": 404,
-              "headers": {
-                "content-type": "application/problem+json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "type": "https://learny.app/errors/not-found",
-                "title": "Introuvable",
-                "status": 404,
-                "detail": "Ressource introuvable.",
-                "code": "NOT_FOUND",
-                "requestId": "<uuid>"
-              }
-            }
-          ]
-        },
-        {
-          "name": "errors.validation",
-          "steps": [
-            {
-              "status": 403,
-              "headers": {
-                "content-type": "application/problem+json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "type": "https://learny.app/errors/origin-rejected",
-                "title": "Origine non autorisée",
-                "status": 403,
-                "detail": "Requête refusée : origine non autorisée.",
-                "code": "ORIGIN_REJECTED",
-                "requestId": "<uuid>"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "formation",
-      "scenarios": [
-        {
-          "name": "formations.list",
+          "name": "offline.pack",
           "steps": [
             {
               "status": 200,
@@ -4721,344 +5136,11 @@
                 "cache-control": "no-store"
               },
               "body": {
-                "items": []
-              }
-            }
-          ]
-        },
-        {
-          "name": "search.global",
-          "steps": [
-            {
-              "status": 400,
-              "headers": {
-                "content-type": "application/problem+json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "type": "https://learny.app/errors/validation-failed",
-                "title": "Données invalides",
-                "status": 400,
-                "detail": "Les données envoyées sont invalides.",
-                "code": "VALIDATION_FAILED",
-                "requestId": "<uuid>",
-                "errors": [
-                  {
-                    "path": "query.q",
-                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "identity",
-      "scenarios": [
-        {
-          "name": "header.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "firstName": null,
-                "lastName": null,
-                "emailLabel": "s***@test.learny.test",
-                "activeFormationCount": 0,
-                "unreadNotificationCount": 0
-              }
-            }
-          ]
-        },
-        {
-          "name": "home.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "today": {
-                  "date": "2026-11-11",
-                  "label": "Mercredi 11 novembre",
-                  "plannedMinutes": 0,
-                  "doneMinutes": 0,
-                  "slots": [],
-                  "primaryAction": null
-                },
-                "retention": {
-                  "oneMonth": null,
-                  "twoMonths": null
-                },
-                "globalQuiz": null,
-                "formations": {
-                  "ongoing": [],
-                  "completed": []
-                }
-              }
-            }
-          ]
-        },
-        {
-          "name": "me.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "id": "<uuid>",
-                "email": "<email>",
-                "firstName": null,
-                "lastName": null,
-                "tutorTone": "vous",
-                "courseLanguage": "fr",
-                "timezone": "Europe/Paris",
-                "onboardingStep": "profil",
-                "onboardingCompletedAt": null,
-                "currentFormationId": null
-              }
-            }
-          ]
-        },
-        {
-          "name": "me.onboarding.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "profile": {
-                  "id": "<uuid>",
-                  "email": "<email>",
-                  "firstName": null,
-                  "lastName": null,
-                  "tutorTone": "vous",
-                  "courseLanguage": "fr",
-                  "timezone": "Europe/Paris",
-                  "onboardingStep": "profil",
-                  "onboardingCompletedAt": null,
-                  "currentFormationId": null
-                },
-                "preferences": {
-                  "hoursPerDay": 2,
-                  "studyDays": [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                  ],
-                  "preferredSlots": [
-                    "soir"
-                  ]
-                },
-                "reminders": {
-                  "push": true,
-                  "email": true,
-                  "automations": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "name": "me.preferences.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "hoursPerDay": 2,
-                "studyDays": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5
-                ],
-                "preferredSlots": [
-                  "soir"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "me.profile.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "me": {
-                  "id": "<uuid>",
-                  "email": "<email>",
-                  "firstName": null,
-                  "lastName": null,
-                  "tutorTone": "vous",
-                  "courseLanguage": "fr",
-                  "timezone": "Europe/Paris",
-                  "onboardingStep": "profil",
-                  "onboardingCompletedAt": null,
-                  "currentFormationId": null
-                },
-                "rhythm": {
-                  "hoursPerDay": 2,
-                  "studyDays": [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5
-                  ],
-                  "preferredSlots": [
-                    "soir"
-                  ]
-                },
-                "updatedAt": "<timestamp>",
-                "createdAt": "<timestamp>",
-                "activeFormationCount": 0,
-                "deletionScheduledFor": null,
-                "export": null
-              }
-            }
-          ]
-        },
-        {
-          "name": "sidebar.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "collapsed": false,
-                "currentFormation": null,
-                "formations": [],
-                "quizDueCount": 0,
-                "gapCount": 0,
-                "streak": {
-                  "days": 0,
-                  "regularity": [
-                    {
-                      "date": "2026-10-29",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-10-30",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-10-31",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-01",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-02",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-03",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-04",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-05",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-06",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-07",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-08",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-09",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-10",
-                      "status": "none"
-                    },
-                    {
-                      "date": "2026-11-11",
-                      "status": "none"
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "learning",
-      "scenarios": [
-        {
-          "name": "agenda.get",
-          "steps": [
-            {
-              "status": 400,
-              "headers": {
-                "content-type": "application/problem+json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "type": "https://learny.app/errors/validation-failed",
-                "title": "Données invalides",
-                "status": 400,
-                "detail": "Les données envoyées sont invalides.",
-                "code": "VALIDATION_FAILED",
-                "requestId": "<uuid>",
-                "errors": [
-                  {
-                    "path": "query.from",
-                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
-                  },
-                  {
-                    "path": "query.to",
-                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu"
-                  },
-                  {
-                    "path": "query.formation",
-                    "message": "Entrée invalide"
-                  }
-                ]
+                "ownerId": "<uuid>",
+                "localDate": "2026-11-11",
+                "generatedAt": "<timestamp>",
+                "expiresAt": "<timestamp>",
+                "formations": []
               }
             }
           ]
@@ -5177,119 +5259,6 @@
               },
               "body": {
                 "items": []
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "tutor",
-      "scenarios": [
-        {
-          "name": "me.ai.credentials.list",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "items": []
-              }
-            }
-          ]
-        },
-        {
-          "name": "me.ai.models.get",
-          "steps": [
-            {
-              "status": 200,
-              "headers": {
-                "content-type": "application/json; charset=utf-<n>",
-                "cache-control": "no-store"
-              },
-              "body": {
-                "tasks": [
-                  {
-                    "task": "programme",
-                    "requiredCapabilities": [
-                      "tools",
-                      "structured",
-                      "web_search"
-                    ],
-                    "modelId": null,
-                    "credentialId": null,
-                    "provider": null,
-                    "providerLabel": null,
-                    "outsideEu": false,
-                    "available": false,
-                    "unavailableReason": "no_model_selected",
-                    "options": []
-                  },
-                  {
-                    "task": "course",
-                    "requiredCapabilities": [
-                      "structured",
-                      "passage_refs"
-                    ],
-                    "modelId": null,
-                    "credentialId": null,
-                    "provider": null,
-                    "providerLabel": null,
-                    "outsideEu": false,
-                    "available": false,
-                    "unavailableReason": "no_model_selected",
-                    "options": []
-                  },
-                  {
-                    "task": "gaps",
-                    "requiredCapabilities": [
-                      "structured"
-                    ],
-                    "modelId": null,
-                    "credentialId": null,
-                    "provider": null,
-                    "providerLabel": null,
-                    "outsideEu": false,
-                    "available": false,
-                    "unavailableReason": "no_model_selected",
-                    "options": []
-                  },
-                  {
-                    "task": "tutor",
-                    "requiredCapabilities": [
-                      "tools",
-                      "structured"
-                    ],
-                    "modelId": null,
-                    "credentialId": null,
-                    "provider": null,
-                    "providerLabel": null,
-                    "outsideEu": false,
-                    "available": false,
-                    "unavailableReason": "no_model_selected",
-                    "options": []
-                  },
-                  {
-                    "task": "light",
-                    "requiredCapabilities": [
-                      "structured",
-                      "vision"
-                    ],
-                    "modelId": null,
-                    "credentialId": null,
-                    "provider": null,
-                    "providerLabel": null,
-                    "outsideEu": false,
-                    "available": false,
-                    "unavailableReason": "no_model_selected",
-                    "options": []
-                  }
-                ],
-                "providers": [],
-                "updatedAt": "<timestamp>"
               }
             }
           ]
