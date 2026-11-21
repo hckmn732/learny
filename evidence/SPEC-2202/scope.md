@@ -25,6 +25,31 @@ Les 32 routes spéciales de l’inventaire appartiennent toutes à SPEC-2207 : h
 Les consommateurs et crons restent `ts` jusqu’à SPEC-2207 (ADR-2014) ; leurs cas d’usage sont
 portés et testés ici (EF-1) mais le branchement au worker est fait en SPEC-2207.
 
+## Avancement du portage (état de la branche)
+
+Étape 2 du plan P22 (domaine pur) partiellement livrée ; les étapes 3 à 9 (requêtes, cas d'usage,
+handlers, tests d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est encore
+basculée : `api/ownership.yaml` est inchangé, les 41 opérations restent `ts`.
+
+| Module du domaine | État | Preuve |
+|---|---|---|
+| `learny/shared/prng.py` (PRNG ensemencé) | porté | `tests/unit/learning-engine/test_random.py` |
+| `learny/shared/time.py` (fuseaux, jour civil, lecture décalée) | porté | `tests/unit/learning-engine/test_time.py` |
+| `learny/learning/domain/params.py` (`ENGINE`) | porté | `tests/unit/learning-engine/test_params.py` |
+| `learny/learning/domain/fsrs.py` (FSRS 5.4.2, médiane, note) | porté | `tests/unit/learning-engine/test_review.py` |
+| `learny/learning/domain/mastery.py` | porté | `tests/unit/learning-engine/test_calculate.py` |
+| `learny/learning/domain/retention.py` | porté | `tests/unit/learning-engine/test_retention.py` |
+| `learny/learning/domain/progress.py` | porté | `tests/unit/learning-engine/test_metrics.py` |
+| `learny/learning/domain/streak.py` (série et jalons) | porté | `tests/unit/learning-engine/test_calculate.py` |
+| `learny/learning/domain/gaps.py` | porté | `tests/unit/learning-engine/test_detect.py` |
+| `learny/learning/domain/global_quiz.py` (session, lissage, format) | porté | `tests/unit/learning-engine/test_build_daily_session.py` |
+| `learny/learning/domain/warmup.py` | porté | `tests/unit/learning-engine/test_select.py` |
+| `learny/learning/domain/draw.py` | porté | `tests/unit/learning-engine/test_draw_attempt.py` |
+| `learny/learning/domain/planner.py` (`planSchedule`, `replan`) | **à porter** | — |
+| `learny/assessments/domain/bricks/` (13 types) | **à porter** | — |
+
+Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map.md`.
+
 ## Opérations du périmètre (liste cochable)
 
 ### learning (15)
