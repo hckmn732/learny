@@ -1,7 +1,7 @@
 # Preuves — SPEC-2003 : Socle Python FastAPI, outillage SDD et façade de coexistence
 
-- Date : 2026-11-21T12:13:21.056Z
-- Commit : 21679d6c
+- Date : 2026-11-21T13:21:44.469Z
+- Commit : ef8c9c77
 - Spécification : `specs/p20-python-socle/SPEC-2003-socle-python-facade.md`
 
 ## Rapports
@@ -14,10 +14,10 @@
 
 ## Vidéos
 
-- `video/02-presente-la-facade-python-et-la-propriete-des-rout-desktop.webm` — SHA-256 14ae6d67756b74ab53458f07794121e43f1660d0ff5f1c58d03144ccbaf8c068 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/09-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 44eae35523d0b0a989586c140c1c35148e9bb9caae438cc295f8c20c08f8c042 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/10-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 dffe52fc06f8032e4e802d5d433c7f3f1325266be0c8a8026546f5337ad4983c (hors Git : Git LFS indisponible, ADR-0050)
-- `video/11-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 8551da6d8ebd2203701f6c0f120d0fd9901f1a27bdd9aad33c5a26561c9d3b04 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/02-presente-la-facade-python-et-la-propriete-des-rout-desktop.webm` — SHA-256 3c22b7bc73f27aeeaa63b4c51e74703f18f0cbcd6c5f714ee764fa38b7093368 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/09-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 4cb600db872c883a13f9f4c26b7ef6345c893e999b332c4130c6fb49a7399113 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/10-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 a6b954293a0de79d9a4c7b46f068c684238e3c20569247f1bea21ae6b03cff1e (hors Git : Git LFS indisponible, ADR-0050)
+- `video/11-conformite-visuelle-de-la-facade-desktop.webm` — SHA-256 cca9df9396d5f46a7a45de768c7d2360ad77e61d814e677ced9fa56af94c739c (hors Git : Git LFS indisponible, ADR-0050)
 
 ## Captures
 
