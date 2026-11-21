@@ -5264,6 +5264,163 @@
           ]
         }
       ]
+    },
+    {
+      "group": "learning",
+      "scenarios": [
+        {
+          "name": "agenda.get",
+          "steps": [
+            {
+              "status": 400,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "detail": "Les données envoyées sont invalides.",
+                "errors": [
+                  {
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu",
+                    "path": "query.from"
+                  },
+                  {
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu",
+                    "path": "query.to"
+                  },
+                  {
+                    "message": "Entrée invalide",
+                    "path": "query.formation"
+                  }
+                ],
+                "requestId": "<uuid>",
+                "status": 400,
+                "title": "Données invalides",
+                "type": "https://learny.app/errors/validation-failed"
+              }
+            }
+          ]
+        },
+        {
+          "name": "series.milestones",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": [],
+                "nextMilestone": {
+                  "key": "streak_30",
+                  "kind": "streak_30",
+                  "label": "30 jours de série",
+                  "remaining": 30
+                },
+                "timezone": "Europe/Paris"
+              }
+            }
+          ]
+        },
+        {
+          "name": "series.streak",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "computedOn": "2026-11-11",
+                "days": 0,
+                "nextMilestone": {
+                  "key": "streak_30",
+                  "kind": "streak_30",
+                  "label": "30 jours de série",
+                  "remaining": 30
+                },
+                "regularity": [
+                  {
+                    "date": "2026-10-29",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-10-30",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-10-31",
+                    "status": "neutral"
+                  },
+                  {
+                    "date": "2026-11-01",
+                    "status": "neutral"
+                  },
+                  {
+                    "date": "2026-11-02",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-03",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-04",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-05",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-06",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-07",
+                    "status": "neutral"
+                  },
+                  {
+                    "date": "2026-11-08",
+                    "status": "neutral"
+                  },
+                  {
+                    "date": "2026-11-09",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-10",
+                    "status": "none"
+                  },
+                  {
+                    "date": "2026-11-11",
+                    "status": "neutral"
+                  }
+                ],
+                "timezone": "Europe/Paris"
+              }
+            }
+          ]
+        },
+        {
+          "name": "warmups.today.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": []
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
