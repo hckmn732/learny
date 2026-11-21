@@ -73,3 +73,54 @@ Deux anomalies préexistantes de `main` ont été corrigées en cours de route, 
 2. **Store pnpm** : un `pnpm store prune` agressif casse la résolution des dépendances du dépôt principal (liens vers des fichiers de store supprimés). Remède : `corepack pnpm install --frozen-lockfile --force`.
 3. **Staging de SPEC-2301** : toujours absent (ADR-2009) ; le blocage `--external` sera attendu à ce moment-là et n'est pas une anomalie.
 4. **`pnpm db:reset`** est requis par le `global-setup` des tests e2e : les campagnes e2e réinitialisent la base partagée, à sérialiser par `flock /tmp/learny-sdd-db.lock`.
+
+## Addendum — SPEC-2003 (en cours au moment du rapport)
+
+**État : `in_progress`, non fusionnée, non validée.** Le travail est commité et poussé sur la
+branche `spec/SPEC-2003-socle-python-facade` (dernier commit `1decb2bb`, `origin` à jour), pour
+reprise par `next.mjs` sans perte.
+
+### Livré sur la branche
+
+- **Workspace uv** (`pyproject.toml`, `.python-version` 3.13, `uv.lock`, `packages-py/learny`,
+  `apps/api-py`, `apps/worker-py`) avec ruff, **mypy strict**, import-linter et pytest
+  (`asyncio_mode=auto`). Les versions résolues correspondent à ADR-2015 (SQLAlchemy 2.1.9,
+  structlog 26.1.0, uvicorn 0.54.0, starlette 1.10.0, tzdata 2026.6).
+- **Modules partagés** : `jsonx` (dumps/canonical identiques à JavaScript), `jsmath`
+  (`js_number`, `js_round`, `to_fixed`), `clock` (Clock/FixedClock/`from_env`), `time`,
+  `ids`, `errors` (problem+json sur le catalogue généré), `locale_fr` (textes français isolés).
+  **59 tests pytest** rejouent les vecteurs produits par SPEC-2001 ; test de politique de langue
+  actif (aucun texte français hors `locale_fr`).
+- **Façade FastAPI** : `main.create_app`, relais streaming vers Hono (en-têtes bruts préservés,
+  plusieurs `Set-Cookie`, 502 `API_UNAVAILABLE` si l'amont est injoignable), `ownership.py`
+  (table `api/ownership.yaml` : **217 opérations + 32 routes spéciales**, refus de démarrer si une
+  entrée manque).
+- **Preuve de transparence du relais** : les **67 oracles** de SPEC-2001 rejoués contre la façade
+  Python rendent exactement les mêmes réponses que contre Hono
+  (`evidence/SPEC-2003/relay-parity.log` sur la branche).
+- **Playwright** : le web ne connaît plus que la façade (Hono sur `PORT+2`, façade sur `PORT+1`).
+- **validate.mjs** exécute désormais les tests pytest étiquetés (`tools/sdd/pytest.mjs`), compte
+  leurs cas depuis le rapport JUnit et les copie dans `evidence/`.
+
+### Reste à faire pour terminer SPEC-2003
+
+1. **e2e web à travers la façade** : la campagne ciblée échoue sur `Timed out waiting 180000ms`,
+   la façade répondant `502` tant que Hono n'est pas sain (les deux `webServer` démarrent en
+   parallèle). À corriger (ordre de démarrage ou `reuseExistingServer`/health dédié), puis lancer
+   la **suite e2e et visuelle complète** (CA-2).
+2. **`pipeline.py`** (12 étapes du contrat, étapes identité/idempotence à l'état de stubs comme le
+   prévoit le plan P20), **codegen** (`generated/routes.py`, `models.py`, `events.py`) et
+   `special/` (health, openapi).
+3. **Docker** `docker/api-py.Dockerfile` + double construction identique et démarrage api/worker
+   (CA-4).
+4. Page `/_dev/sdd/SPEC-2003`, `evidence/SPEC-2003/acceptance.md`, puis
+   `validate.mjs SPEC-2003` → `complete.mjs` → fusion `--no-ff` dans `main`.
+
+### Trois ajustements d'assertions existantes, justifiés
+
+- `tools/migration/test/unit/report.test.ts` : exclusions documentaires (`specs/`,
+  `docs/architecture/`) et caches locaux (`.venv`) — l'assertion continue d'interdire toute
+  référence **exécutable** à l'application retirée.
+- `packages/config/src/commit-rules.test.ts` : libellé aligné sur la règle `CP-NOM` (fait pour
+  SPEC-2001, sur `main`).
+- Aucune assertion d'oracle HTTP, e2e, visuelle ou d'accessibilité n'a été modifiée.
