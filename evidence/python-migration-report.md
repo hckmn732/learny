@@ -164,3 +164,25 @@ les caches Python y ont été ajoutés.
 | CA-2 (suite e2e et visuelle complète via la façade) | ❌ **bloqué** par les 3 échecs préexistants de SPEC-006 |
 | CA-3 (`validate.mjs` exécute pytest et échoue si un test échoue) | ✅ prouvé — implémenté, testé, rapport JUnit dans `evidence/` |
 | CA-4 (image construite deux fois, api + worker) | ✅ prouvé — voir ci-dessus |
+
+### Addendum 3 — SPEC-2003 livrée, piste bloquée à CP-20
+
+**SPEC-2003 est terminée et fusionnée** (`6b47c408`, poussée, puis suivi `d24eeb69`). La phase P20
+est complète : SPEC-2001, SPEC-2002 et SPEC-2003 sont `done`.
+
+Validation finale de SPEC-2003 : lint, typecheck, build, unit (4 étiquetés + **59 pytest**),
+intégration (**4 pytest** d'intégration de la façade), e2e (2 tests, 4 vidéos), visuel (1 test),
+acceptance 4/4 ✅.
+
+**CP-20 ne peut pas être passé.** Le checkpoint rejoue la suite complète (`pnpm test:e2e`) et
+échoue sur les trois tests préexistants de SPEC-006, dont la contradiction interne est désormais
+prouvée par l'image elle-même : la ligne de base versionnée affiche `status degraded` /
+`database not_configured`, alors que le test attend `ok`. Aucun des deux oracles ne peut être
+modifié (ADR-2008), et le checkpoint n offre aucune option de filtrage. Deux tentatives ont été
+lancées ; la seconde a tourné plus de 75 minutes sans conclure, la suite complète étant très lente
+sur cette VM.
+
+**Conséquence : la piste est structurellement bloquée.** SPEC-2101 et les suivantes ne peuvent pas
+démarrer avant CP-20. La sortie de blocage demande une décision du porteur du projet sur SPEC-006 :
+soit régénérer la ligne de base visuelle, soit corriger la page de démonstration, soit marquer
+CP-20 comme réussi avec une exception consignée. ADR-2019 documente l'analyse.
