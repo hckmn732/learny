@@ -49,8 +49,7 @@ partagée, sous le verrou `flock`, et chaque cas est annulé (transaction `rolle
 
 Total : **27 tests d'intégration** (dont 22 formation + 5 identity déjà comptés), **15 tests
 unitaires de dérivation** de formation, **3 tests de normalisation** du code d'invitation et
-**3 cas de couverture des handlers** (`apps/api-py/tests/unit/test_handlers.py`), soit 63 cas
-`[SPEC-2201]` de la bascule identity (414 → 477) plus 45 cas formation (477 → 522).
+**3 cas de couverture des handlers** (`apps/api-py/tests/unit/test_handlers.py`), soit 63 cas de la bascule identity (414 → 477) plus 45 cas formation (477 → 522).
 
 ### Cas non portés, avec motif
 

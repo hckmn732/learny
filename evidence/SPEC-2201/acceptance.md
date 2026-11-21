@@ -63,8 +63,10 @@ sont listés avec leur motif (auth, home, resume, opérations hors périmètre).
 - Les e2e SPEC-618 (`apps/web/e2e/specs/p6/formation-management.spec.ts`) passent sans modification
   à travers la façade : la reprise reste servie par Hono (ADR-2024) et la pause, l'archive, la
   formation courante et les groupes sont servis par Python.
-- Aucune assertion d'oracle, aucune ligne de base visuelle et aucun libellé n'a été modifié
-  (ADR-1001, ADR-2008) : `git diff main -- apps/web/e2e apps/web/__screenshots__` est vide.
+- Aucune assertion d'oracle ni ligne de base visuelle existante n'a été modifiée (ADR-1001,
+  ADR-2008) : `git diff main -- apps/web/__screenshots__` est vide et les fichiers e2e antérieurs
+  sont inchangés ; seuls `apps/web/e2e/specs/p22/spec-2201.spec.ts` et la page de démonstration
+  sont ajoutés.
 
 ## Contrôles de qualité
 
@@ -72,7 +74,7 @@ sont listés avec leur motif (auth, home, resume, opérations hors périmètre).
 |---|---|---|
 | Lint Python | `uv run ruff check .` et `uv run ruff format --check packages-py apps` | vert |
 | Types Python | `uv run mypy packages-py apps` | vert |
-| Unités et intégration Python | `uv run pytest packages-py apps -q` | vert (522 tests) |
+| Unités et intégration Python | `uv run pytest packages-py apps -q` | vert (**522 tests**) |
 | Contrat Python | `pnpm py:contract:check` | vert (artefacts générés inchangés) |
 | Lint racine | `pnpm lint` | vert |
 | Types racine | `pnpm typecheck` | vert |

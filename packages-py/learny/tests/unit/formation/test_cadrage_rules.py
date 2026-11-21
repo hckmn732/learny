@@ -12,6 +12,7 @@ from learny.formation.domain.cadrage import (
     read_profile,
 )
 from learny.shared.errors import AppError
+from learny.shared.locale_fr.details import CADRAGE_AI_TASK_FAILED, CADRAGE_DONE_FALLBACK
 
 pytestmark = pytest.mark.spec("SPEC-2201")
 
@@ -56,7 +57,7 @@ def test_a_sixth_question_is_replaced_by_the_conclusion() -> None:
     )
     applied = apply_turn(empty_profile(), turn, ApplyConstraints(questions_asked=5))
     assert applied.finished is True
-    assert applied.content == "Merci, j’ai ce qu’il me faut. Générez le programme quand vous voulez."
+    assert applied.content == CADRAGE_DONE_FALLBACK
 
 
 def test_a_multiple_choice_needs_two_suggestions() -> None:
@@ -140,6 +141,6 @@ def test_build_state_reports_an_interrupted_turn() -> None:
         cadrage_profile = None
 
     state = build_state(Formation(), [Row()])
-    assert state["error"] == {"code": "AI_TASK_FAILED", "message": "Le tuteur n’a pas pu répondre."}
+    assert state["error"] == {"code": "AI_TASK_FAILED", "message": CADRAGE_AI_TASK_FAILED}
     assert state["canGenerate"] is False
     assert state["pendingQuestion"] is None
