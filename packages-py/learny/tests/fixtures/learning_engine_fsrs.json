@@ -1,0 +1,322 @@
+[
+  {
+    "sequence": ["good", "good", "good"],
+    "retention": 0.9,
+    "steps": [
+      {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      },
+      {
+        "due": "2026-11-11T12:30:00.000Z",
+        "stability": 2.3065,
+        "difficulty": 2.11810397,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 1,
+        "reps": 1,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-19T12:20:00.000Z",
+        "stability": 7.31530068,
+        "difficulty": 2.11121424,
+        "elapsed_days": 1,
+        "scheduled_days": 7,
+        "learning_steps": 0,
+        "reps": 2,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-11-12T12:20:00.000Z"
+      },
+      {
+        "due": "2026-12-27T12:20:00.000Z",
+        "stability": 36.37308279,
+        "difficulty": 2.1043314,
+        "elapsed_days": 9,
+        "scheduled_days": 36,
+        "learning_steps": 0,
+        "reps": 3,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-11-21T12:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "sequence": ["again", "hard", "good", "easy"],
+    "retention": 0.85,
+    "steps": [
+      {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      },
+      {
+        "due": "2026-11-11T12:21:00.000Z",
+        "stability": 0.212,
+        "difficulty": 6.4133,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 1,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-12T12:26:00.000Z",
+        "stability": 1.21921728,
+        "difficulty": 7.60420977,
+        "elapsed_days": 1,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 2,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-12T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-21T12:30:00.000Z",
+        "stability": 7.65983907,
+        "difficulty": 7.59183393,
+        "elapsed_days": 9,
+        "scheduled_days": 0,
+        "learning_steps": 1,
+        "reps": 3,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-21T12:20:00.000Z"
+      },
+      {
+        "due": "2027-03-01T12:20:00.000Z",
+        "stability": 42.09461658,
+        "difficulty": 6.77236542,
+        "elapsed_days": 20,
+        "scheduled_days": 80,
+        "learning_steps": 0,
+        "reps": 4,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-12-11T12:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "sequence": ["easy", "easy", "again", "good", "good", "hard"],
+    "retention": 0.95,
+    "steps": [
+      {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      },
+      {
+        "due": "2026-11-14T12:20:00.000Z",
+        "stability": 8.2956,
+        "difficulty": 1,
+        "elapsed_days": 0,
+        "scheduled_days": 3,
+        "learning_steps": 0,
+        "reps": 1,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-19T12:20:00.000Z",
+        "stability": 18.01494386,
+        "difficulty": 1,
+        "elapsed_days": 1,
+        "scheduled_days": 7,
+        "learning_steps": 0,
+        "reps": 2,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-11-12T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-21T12:30:00.000Z",
+        "stability": 1.91339706,
+        "difficulty": 7.02698957,
+        "elapsed_days": 9,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 3,
+        "lapses": 1,
+        "state": "relearning",
+        "last_review": "2026-11-21T12:20:00.000Z"
+      },
+      {
+        "due": "2026-12-17T12:20:00.000Z",
+        "stability": 14.39657513,
+        "difficulty": 7.01519095,
+        "elapsed_days": 20,
+        "scheduled_days": 6,
+        "learning_steps": 0,
+        "reps": 4,
+        "lapses": 1,
+        "state": "review",
+        "last_review": "2026-12-11T12:20:00.000Z"
+      },
+      {
+        "due": "2027-01-09T12:20:00.000Z",
+        "stability": 34.80378954,
+        "difficulty": 7.00340413,
+        "elapsed_days": 15,
+        "scheduled_days": 14,
+        "learning_steps": 0,
+        "reps": 5,
+        "lapses": 1,
+        "state": "review",
+        "last_review": "2026-12-26T12:20:00.000Z"
+      },
+      {
+        "due": "2027-03-07T12:20:00.000Z",
+        "stability": 64.61570849,
+        "difficulty": 7.99594839,
+        "elapsed_days": 45,
+        "scheduled_days": 26,
+        "learning_steps": 0,
+        "reps": 6,
+        "lapses": 1,
+        "state": "review",
+        "last_review": "2027-02-09T12:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "sequence": ["good", "again", "again", "good", "good", "good", "good"],
+    "retention": 0.9,
+    "steps": [
+      {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      },
+      {
+        "due": "2026-11-11T12:30:00.000Z",
+        "stability": 2.3065,
+        "difficulty": 2.11810397,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 1,
+        "reps": 1,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-12T12:21:00.000Z",
+        "stability": 0.57129918,
+        "difficulty": 7.39450274,
+        "elapsed_days": 1,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 2,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-12T12:20:00.000Z"
+      },
+      {
+        "due": "2026-11-21T12:21:00.000Z",
+        "stability": 0.29500122,
+        "difficulty": 9.12881914,
+        "elapsed_days": 9,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 3,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-11-21T12:20:00.000Z"
+      },
+      {
+        "due": "2026-12-11T12:30:00.000Z",
+        "stability": 2.32996117,
+        "difficulty": 9.11491869,
+        "elapsed_days": 20,
+        "scheduled_days": 0,
+        "learning_steps": 1,
+        "reps": 4,
+        "lapses": 0,
+        "state": "learning",
+        "last_review": "2026-12-11T12:20:00.000Z"
+      },
+      {
+        "due": "2027-01-03T12:20:00.000Z",
+        "stability": 8.13547711,
+        "difficulty": 9.10103214,
+        "elapsed_days": 15,
+        "scheduled_days": 8,
+        "learning_steps": 0,
+        "reps": 5,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2026-12-26T12:20:00.000Z"
+      },
+      {
+        "due": "2027-03-05T12:20:00.000Z",
+        "stability": 23.68825131,
+        "difficulty": 9.08715948,
+        "elapsed_days": 45,
+        "scheduled_days": 24,
+        "learning_steps": 0,
+        "reps": 6,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2027-02-09T12:20:00.000Z"
+      },
+      {
+        "due": "2027-04-21T12:20:00.000Z",
+        "stability": 40.66689767,
+        "difficulty": 9.07330069,
+        "elapsed_days": 30,
+        "scheduled_days": 41,
+        "learning_steps": 0,
+        "reps": 7,
+        "lapses": 0,
+        "state": "review",
+        "last_review": "2027-03-11T12:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "preview": {
+      "again": "2026-11-11T12:21:00.000Z",
+      "hard": "2026-11-11T12:26:00.000Z",
+      "good": "2026-11-11T12:30:00.000Z",
+      "easy": "2026-11-19T12:20:00.000Z"
+    }
+  }
+]
