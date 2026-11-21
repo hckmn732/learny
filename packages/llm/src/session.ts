@@ -592,8 +592,15 @@ function strictCompatibleSchema<S extends z.ZodType>(
       const parsed = schema.safeParse(value);
       if (parsed.success) return { success: true as const, value: parsed.data };
       // Non-strict providers often emit `null` for optional fields: retry without them.
-      const retried = schema.safeParse(stripNulls(value));
+      const cleaned = stripNulls(value);
+      const retried = schema.safeParse(cleaned);
       if (retried.success) return { success: true as const, value: retried.data };
+      // Over-long strings only: truncate them to the schema maximum instead of failing the turn.
+      const truncated = truncateTooLongStrings(cleaned, retried.error.issues);
+      if (truncated !== undefined) {
+        const fixed = schema.safeParse(truncated);
+        if (fixed.success) return { success: true as const, value: fixed.data };
+      }
       console.warn(
         JSON.stringify({
           level: 'warn',
@@ -609,6 +616,33 @@ function strictCompatibleSchema<S extends z.ZodType>(
       return { success: false as const, error: retried.error };
     },
   });
+}
+
+function truncateTooLongStrings(value: unknown, issues: readonly z.core.$ZodIssue[]): unknown {
+  if (issues.length === 0) return undefined;
+  const copy: unknown = structuredClone(value);
+  for (const issue of issues) {
+    if (issue.code !== 'too_big' || issue.origin !== 'string') return undefined;
+    const maximum = Number(issue.maximum);
+    let parent: unknown = copy;
+    for (const key of issue.path.slice(0, -1)) {
+      parent = (parent as Record<PropertyKey, unknown> | undefined)?.[key];
+    }
+    const last = issue.path[issue.path.length - 1];
+    const holder = parent as Record<PropertyKey, unknown> | undefined;
+    if (
+      holder === undefined ||
+      last === undefined ||
+      typeof holder[last] !== 'string'
+    ) {
+      return undefined;
+    }
+    holder[last] = (holder[last])
+      .trim()
+      .slice(0, maximum)
+      .trim();
+  }
+  return copy;
 }
 
 function stripNulls(node: unknown): unknown {
