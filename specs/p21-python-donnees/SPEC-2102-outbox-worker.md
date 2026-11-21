@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2101]
 business_rules: []
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0017, ADR-2006]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0017, ADR-2006, ADR-2014]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Fournir l'exécution asynchrone durable qui remplacera Inngest, prête à recevo
 ## 2. Contexte
 
 Les jobs et automatismes tournent sur Inngest (ADR-0017) ; l'outbox transactionnelle existe déjà en base. ADR-2006 fixe le remplacement par un worker maison.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2102 de `docs/architecture/python-backend/P21-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -33,10 +35,11 @@ Aucune règle `BR-*` nouvelle. Toutes les règles couvertes par le code porté r
 
 ## 5. Exigences fonctionnelles
 
-- **EF-1** — Consommation de l'outbox par lots, appel direct des cas d'usage, backoff exponentiel borné et lettres mortes.
-- **EF-2** — Déduplication (événement, consommateur) garantissant un seul effet par livraison répétée.
-- **EF-3** — Planificateur singleton des tâches périodiques, horloge injectable, historique d'exécution.
-- **EF-4** — Respect de `api/ownership.yaml` : le worker ignore les événements et tâches encore possédés par Inngest.
+- **EF-1** — Migration additive : table `job_deliveries` et colonne `event_outbox.dispatched_at` (ADR-2014), ignorées par le TypeScript.
+- **EF-2** — Répartition de l'outbox vers une livraison par consommateur Python, réclamation avec bail, appel direct des cas d'usage, backoff exponentiel borné et échecs définitifs.
+- **EF-3** — Déduplication (événement, consommateur) garantissant un seul effet par livraison répétée.
+- **EF-4** — Planificateur singleton des tâches périodiques, horloge injectable ; inactif tant que les crons sont à `ts`.
+- **EF-5** — Mode `inline` pour les tests avec pont vers Hono pour les consommateurs encore TypeScript ; les 4 routes `dev-jobs` et le consommateur de démonstration basculent à `py`.
 
 ## 6. Exigences techniques
 
@@ -51,6 +54,8 @@ Aucune règle `BR-*` nouvelle. Toutes les règles couvertes par le code porté r
 - **CL-3** — Deux instances du planificateur : une seule exécute.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2102 de `docs/architecture/python-backend/P21-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Implémenter `learny.shared.outbox` et `apps/worker-py`.
 2. Écrire les tests de crash, concurrence et doublons sur Supabase local.
@@ -93,6 +98,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0017, ADR-2006.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0017, ADR-2006, ADR-2014.
 - ADR-2006.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

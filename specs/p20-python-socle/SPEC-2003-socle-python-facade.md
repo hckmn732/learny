@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2001]
 business_rules: [BR-PLA-08]
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2002, ADR-2003, ADR-2007]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2002, ADR-2003, ADR-2007, ADR-2012, ADR-2015]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Mettre en place le runtime Python et la façade de coexistence sans changer aucu
 ## 2. Contexte
 
 Playwright démarre aujourd'hui l'API par `pnpm --filter @learny/api dev` (`apps/web/playwright.config.ts`) ; c'est le point de branchement de la façade. `validate.mjs` n'exécute que Vitest et Playwright.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2003 de `docs/architecture/python-backend/P20-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -53,6 +55,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-08. Toutes les 
 - **CL-3** — Entrée absente de `api/ownership.yaml` : démarrage refusé.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2003 de `docs/architecture/python-backend/P20-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Créer le workspace uv et les trois projets, la configuration ruff/mypy/import-linter et les scripts.
 2. Écrire la façade et ses tests de relais (statuts, cookies, SSE, erreurs).
@@ -97,6 +101,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2002, ADR-2003, ADR-2007.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2002, ADR-2003, ADR-2007, ADR-2012, ADR-2015.
 - ADR-2002, ADR-2003, ADR-2005, ADR-2007.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2001]
 business_rules: []
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2004]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004, ADR-2012]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Faire d'`api/openapi.yaml` la source unique du contrat, consommée par le web vi
 ## 2. Contexte
 
 Le contrat vit aujourd'hui en Zod dans `packages/contracts` et est exporté dans `apps/api/openapi.json` (217 opérations). Le web consomme `packages/api-client`.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2002 de `docs/architecture/python-backend/P20-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -51,6 +53,8 @@ Aucune règle `BR-*` nouvelle. Toutes les règles couvertes par le code porté r
 - **CL-3** — Exception de contrat sans ADR : refusée par la CI.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2002 de `docs/architecture/python-backend/P20-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Écrire l'export Zod → OpenAPI 3.1 et figer `api/openapi.yaml`.
 2. Choisir le générateur de SDK, l'ajouter au workspace pnpm et générer le client.
@@ -94,6 +98,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2004.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004, ADR-2012.
 - ADR-2004. Le choix précis du générateur est consigné par ADR déduit si plusieurs options sont équivalentes.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

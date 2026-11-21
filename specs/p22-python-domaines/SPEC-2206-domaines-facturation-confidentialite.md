@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205]
 business_rules: [BR-PLA-05]
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0011, ADR-0012]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0011, ADR-0012]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Porter en Python les contextes billing et privacy et basculer toutes leurs entr�
 ## 2. Contexte
 
 Périmètre TypeScript source : `packages/services` (facturation, droits, export, suppression, rétention), `packages/api-routes/src/implementations/billing.ts`. L'inventaire et les oracles de SPEC-2001 donnent la liste exacte des opérations, événements et tâches, et les références de parité.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2206 de `docs/architecture/python-backend/P22-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -36,8 +38,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-05. Toutes les 
 
 ## 5. Exigences fonctionnelles
 
-- **EF-1** — Tous les cas d'usage du périmètre billing et privacy existent dans `packages-py/learny` selon ADR-2003 et sont appelés à l'identique par HTTP, SSE, webhooks et worker.
-- **EF-2** — Toutes les opérations, événements et tâches du périmètre listés dans `evidence/SPEC-2001/inventory.md` passent à `py` dans `api/ownership.yaml` ; aucune entrée du périmètre ne reste sans propriétaire.
+- **EF-1** — Tous les cas d'usage du périmètre billing et privacy existent dans `packages-py/learny` selon ADR-2003, y compris ceux qu'appellent les jobs (branchés au worker en SPEC-2207), et sont appelés à l'identique par HTTP, SSE et webhooks.
+- **EF-2** — Toutes les opérations et routes spéciales du périmètre listées dans `evidence/SPEC-2001/inventory.md` passent à `py` dans `api/ownership.yaml` ; les consommateurs et crons restent à `ts` jusqu'à SPEC-2207 (ADR-2014).
 - **EF-3** — Réponses, statuts, codes d'erreur, en-têtes, idempotence, effets en base et événements émis sont identiques à ceux du TypeScript sur les oracles de SPEC-2001.
 - **EF-4** — Le code TypeScript du périmètre n'est plus exécuté pour les entrées basculées mais reste présent (retrait en SPEC-2302) ; remettre une entrée à `ts` restaure l'ancien comportement.
 
@@ -57,6 +59,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-05. Toutes les 
 - **CL-4** — Dépendance externe indisponible (fournisseur IA, e-mail, stockage, paiement) : délai borné, erreur stable du contrat, aucune donnée validée perdue ; le mode mock couvre les tests.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2206 de `docs/architecture/python-backend/P22-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Relire les specs historiques du périmètre billing et privacy, leurs règles `BR-*` et les tests TypeScript correspondants ; dresser la liste exacte des opérations, événements et tâches depuis `evidence/SPEC-2001/inventory.md`.
 2. Porter d'abord le domaine pur avec ses tests pytest (oracles et propriétés), puis la couche application (cas d'usage, contrôles d'accès, ports), puis l'infrastructure (requêtes SQLAlchemy, adaptateurs).
@@ -79,7 +83,7 @@ Aucun écran ni libellé ne change. Mode de validation `demo` : une page de dém
 
 ## 11. Critères d'acceptation
 
-- **CA-1** — Toutes les entrées du périmètre billing et privacy sont à `py` dans `api/ownership.yaml` et la matrice `parity.md` (entrée → cas d'usage → règles → tables → tests) est complète.
+- **CA-1** — Toutes les opérations du périmètre billing et privacy sont à `py` dans `api/ownership.yaml`, les cas d'usage des jobs du périmètre sont portés et testés, et la matrice `parity.md` (entrée → cas d'usage → règles → tables → tests) est complète.
 - **CA-2** — Les tests de parité contractuelle du périmètre passent avec zéro divergence inexpliquée contre les oracles de SPEC-2001.
 - **CA-3** — Les tests TypeScript du périmètre ont tous un équivalent pytest vert, référencé dans `test-port-map.md`.
 - **CA-4** — Les contrats import-linter du périmètre passent et aucun adaptateur ne contient de règle métier.
@@ -103,6 +107,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0011, ADR-0012.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0011, ADR-0012.
 - La suppression orchestre des commandes explicites de chaque contexte et produit un reçu par domaine.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

@@ -11,7 +11,8 @@ Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuiv
 - **Specs gelées** : piste `produit` (SPEC-808, SPEC-901 → 908, CP-7 → CP-9) et piste `migration` Hono (SPEC-1101 → SPEC-1302, CP-10 → CP-13, branche `migration`, worktree `learny-wt-migration`). Ne jamais les démarrer, les modifier ni les supprimer.
 - **Invariant absolu : conserver le fonctionnel actuel** (ADR-1001, précisé par ADR-2008). Aucune assertion d'oracle (e2e, visuel, accessibilité, contrat HTTP) modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Les tests TypeScript des paquets retirés sont portés en pytest avec les mêmes cas (`evidence/SPEC-2001/test-port-map.md`). Un écart est une anomalie à corriger dans le code Python, jamais dans le test.
 - **Coexistence** (ADR-2005) : la façade FastAPI reçoit tout le trafic et relaie vers Hono les entrées dont `api/ownership.yaml` indique `ts` ; une entrée passe à `py` seulement avec parité prouvée. Jamais deux écrivains.
-- Jobs : worker Python maison sur outbox PostgreSQL, Inngest retiré à la fin (ADR-2006). Hébergement : Coolify (ADR-2007). Preuves de charge, canary, rollback et restauration : staging fourni par le porteur, sinon blocage `--external` (ADR-2009).
+- Jobs : worker Python maison sur outbox PostgreSQL, Inngest retiré à la fin (ADR-2006, ADR-2014). Hébergement : Coolify (ADR-2007). Preuves de charge, canary, rollback et restauration : staging fourni par le porteur, sinon blocage `--external` (ADR-2009).
+- **Canevas technique obligatoire** (ADR-2011) : avant toute spec SPEC-2xxx, lire `docs/architecture/python-backend/00-conventions.md` puis le plan de la phase (`P20-plan.md` … `P23-plan.md`) et le suivre pas à pas. Le backend Python est écrit **en anglais** (code, commentaires, journaux, tests) ; seuls les textes vus par l'utilisateur restent en français, copiés à l'identique du TypeScript dans `learny/shared/locale_fr/` et les gabarits. Pas de sur-ingénierie : la liste des motifs autorisés et interdits (§4 des conventions) est contraignante.
 
 ## Règle absolue : zéro intervention humaine
 
@@ -28,6 +29,7 @@ Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuiv
 5. `docs/engineering/conventions.md`, `testing.md`, `git.md`.
 6. `docs/adr/README.md` — **les ADR priment** sur tout autre document.
 7. La spécification à exécuter (`specs/<phase>/SPEC-xxx-*.md`) et sa maquette (`design/maquettes/*.dc.html`, ouvrir `design/maquettes/index.html`).
+8. Pour SPEC-2xxx : `docs/architecture/python-backend/README.md`, `00-conventions.md` et le plan de la phase.
 
 Priorité en cas de conflit : ADR > business-rules > spécification > maquette > autres documents > `docs/legacy/` (historique, non normatif).
 

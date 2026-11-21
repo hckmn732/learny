@@ -22,7 +22,7 @@ Dossier produit le 21 novembre 2026 à partir du checkout main, commit 6881478a.
 
 ## Exécution SDD
 
-Le dépôt porte la piste `python-migration` (ADR-2001) : 13 spécifications SPEC-2001 → SPEC-2302 en 4 phases (P20 → P23, checkpoints CP-20 → CP-23), partant de `main` sans dépendance à une autre piste. Voir [12 — Feuille de route SDD](12-feuille-de-route-sdd.md). Les validations listées dans chaque spec sont exécutées au moment de son implémentation.
+Le dépôt porte la piste `python-migration` (ADR-2001) : 14 spécifications SPEC-2001 → SPEC-2302 en 4 phases (P20 → P23, checkpoints CP-20 → CP-23), partant de `main` sans dépendance à une autre piste. Voir [12 — Feuille de route SDD](12-feuille-de-route-sdd.md) et le canevas technique [python-backend](../python-backend/README.md). Les validations listées dans chaque spec sont exécutées au moment de son implémentation.
 
 ## Conclusion d’audit à retenir
 

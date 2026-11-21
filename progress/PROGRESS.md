@@ -1,19 +1,19 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-21T07:45:39.229Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-21T08:18:02.307Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
-| Spécifications | 157 (V1 : 124, V2 : 8, migration : 25) |
+| Spécifications | 158 (V1 : 124, V2 : 8, migration : 26) |
 | Terminées | 127 |
 | En cours | 0 |
 | Prêtes | 1 |
-| En attente de dépendances | 29 |
+| En attente de dépendances | 30 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **80.9 %** |
+| **Avancement global** | **80.4 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | python-migration |
 | Prochaine action | start SPEC-2001 — Inventaire, matrice de parité et oracles de référence |
@@ -38,7 +38,7 @@
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
 | P20 | Migration Python — inventaire, contrat et socle | 0/3 | CP-20 | ⏳ |
 | P21 | Migration Python — données, identité et worker | 0/2 | CP-21 | ⏳ |
-| P22 | Migration Python — domaines métier | 0/6 | CP-22 | ⏳ |
+| P22 | Migration Python — domaines métier | 0/7 | CP-22 | ⏳ |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 
 ## Détail des spécifications
@@ -199,8 +199,9 @@
 | [SPEC-2203](../specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md) | Domaine Content & Retrieval et ingestion en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
 | [SPEC-2204](../specs/p22-python-domaines/SPEC-2204-domaine-tuteur-sse.md) | Domaine Tutor & Conversations et flux SSE IA en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202, SPEC-2203 |
 | [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202 |
+| [SPEC-2207](../specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md) | Bascule des jobs, des crons et des routes de démonstration vers Python | P22 | ⏳ waiting | 0 | — | SPEC-2206 |
 | [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
-| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⏳ waiting | 0 | — | SPEC-2206 |
+| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⏳ waiting | 0 | — | SPEC-2207 |
 | [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | ⏳ waiting | 0 | — | SPEC-2301 |
 
 ## Anomalies et blocages

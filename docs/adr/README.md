@@ -229,3 +229,8 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2008](ADR-2008-oracles-de-non-regression-et-portage-des-tests-en-python.md) | Oracles de non-régression et portage des tests en Python | Déduite | ADR-1001, ADR-0047, ADR-0048, SPEC-2001, SPEC-2302 |
 | [ADR-2009](ADR-2009-environnement-de-preuve-de-la-bascule-staging-fourni-par-le.md) | Environnement de preuve de la bascule : staging fourni par le porteur | Validée | ADR-0041, ADR-2007, SPEC-2301, SPEC-2302 |
 | [ADR-2010](ADR-2010-identite-verification-jwt-et-rls-cote-python.md) | Identité, vérification JWT et RLS côté Python | Déduite | ADR-0022, ADR-1005, ADR-1009, SPEC-2101 |
+| [ADR-2011](ADR-2011-backend-python-redige-en-anglais-et-canevas-technique-normat.md) | Backend Python rédigé en anglais et canevas technique normatif | Validée | ADR-2001, ADR-2003, docs/architecture/python-backend |
+| [ADR-2012](ADR-2012-pipeline-http-pilote-par-le-contrat-et-modeles-generes.md) | Pipeline HTTP piloté par le contrat et modèles générés | Déduite | ADR-2002, ADR-2004, SPEC-2002, SPEC-2003 |
+| [ADR-2013](ADR-2013-persistance-sqlalchemy-core-avec-sql-explicite-sans-orm.md) | Persistance SQLAlchemy Core avec SQL explicite, sans ORM | Déduite | ADR-2002, ADR-2010, SPEC-2101 |
+| [ADR-2014](ADR-2014-livraisons-de-jobs-coexistence-asynchrone-et-bascule-groupee.md) | Livraisons de jobs, coexistence asynchrone et bascule groupée des consommateurs | Déduite | ADR-2005, ADR-2006, SPEC-2102, SPEC-2207 |
+| [ADR-2015](ADR-2015-bibliotheques-python-retenues.md) | Bibliothèques Python retenues | Déduite | ADR-2002, ADR-2011 |

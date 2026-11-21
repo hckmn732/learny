@@ -4331,6 +4331,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-2004"
       ],
       "visual": "demo",
@@ -4359,7 +4360,9 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
-        "ADR-2004"
+        "ADR-2011",
+        "ADR-2004",
+        "ADR-2012"
       ],
       "visual": "demo",
       "path": "specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md",
@@ -4389,9 +4392,12 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-2002",
         "ADR-2003",
-        "ADR-2007"
+        "ADR-2007",
+        "ADR-2012",
+        "ADR-2015"
       ],
       "visual": "demo",
       "path": "specs/p20-python-socle/SPEC-2003-socle-python-facade.md",
@@ -4423,10 +4429,12 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0022",
         "ADR-1005",
         "ADR-1009",
-        "ADR-2010"
+        "ADR-2010",
+        "ADR-2013"
       ],
       "visual": "demo",
       "path": "specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md",
@@ -4454,12 +4462,14 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0017",
-        "ADR-2006"
+        "ADR-2006",
+        "ADR-2014"
       ],
       "visual": "demo",
       "path": "specs/p21-python-donnees/SPEC-2102-outbox-worker.md",
-      "scope": "Worker maison : consommation de l'outbox par SKIP LOCKED, retries, lettres mortes, déduplication par consommateur, planificateur singleton à verrou consultatif, observabilité ; coexistence avec Inngest par table de propriété.",
+      "scope": "Migration additive job_deliveries + dispatched_at, répartiteur, runner à baux SKIP LOCKED, reprises, échecs définitifs, planificateur singleton, mode inline et pont vers Hono ; seule la démonstration dev-jobs (4 routes + consommateur) bascule à py.",
       "validation": {
         "unit": true,
         "integration": true,
@@ -4486,8 +4496,11 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-2003",
-        "ADR-2010"
+        "ADR-2010",
+        "ADR-0019",
+        "ADR-2015"
       ],
       "visual": "demo",
       "path": "specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md",
@@ -4515,6 +4528,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0020",
         "ADR-0025",
         "ADR-0029"
@@ -4547,6 +4561,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0023"
       ],
       "visual": "demo",
@@ -4576,6 +4591,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0019",
         "ADR-0021",
         "ADR-0023",
@@ -4607,13 +4623,45 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0031",
         "ADR-0032",
         "ADR-2006"
       ],
       "visual": "demo",
       "path": "specs/p22-python-domaines/SPEC-2205-domaine-engagement.md",
-      "scope": "Notifications, e-mails, rappels, séries et automatismes portés en Python ; consommateurs et tâches planifiées basculés d'Inngest vers le worker.",
+      "scope": "Notifications, e-mails (gabarits Jinja2 identiques), push, désinscription, rappels, séries et moteur d'automatismes portés en Python ; cas d'usage des jobs portés, branchés en SPEC-2207.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2207",
+      "phase": "P22",
+      "title": "Bascule des jobs, des crons et des routes de démonstration vers Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2206"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-2011",
+        "ADR-0017",
+        "ADR-2006",
+        "ADR-2014"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md",
+      "scope": "Branchement des 22 consommateurs et des 2 crons sur le worker Python, événement interne job/daily-digest, bascule groupée consumers/crons à py, suppression du pont inline, portage des 47 routes de démonstration et des routes spéciales restantes.",
       "validation": {
         "unit": true,
         "integration": true,
@@ -4642,6 +4690,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0011",
         "ADR-0012"
       ],
@@ -4662,7 +4711,7 @@
       "title": "Déploiement Coolify, bascule progressive et rollback",
       "priority": "migration",
       "dependsOn": [
-        "SPEC-2206"
+        "SPEC-2207"
       ],
       "businessRules": [
         "BR-PLA-04",
@@ -4674,6 +4723,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0041",
         "ADR-2007",
         "ADR-2009"
@@ -4707,6 +4757,7 @@
         "ADR-2001",
         "ADR-2005",
         "ADR-2008",
+        "ADR-2011",
         "ADR-0017",
         "ADR-1002",
         "ADR-2006"

@@ -6,7 +6,7 @@ priority: migration
 depends_on: []
 business_rules: []
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2004]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ visual: demo
 ## 2. Contexte
 
 L'audit `docs/architecture/python-headless-migration/` donne une première image (documents 02, 02b et 03). L'écart 217/219 est expliqué par ADR-2004 : `countRegistryRoutes` compte les deux `defineRoute(` internes aux fabriques de `dev-sdd-migration.ts`.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2001 de `docs/architecture/python-backend/P20-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -52,6 +54,8 @@ Aucune règle `BR-*` nouvelle. Toutes les règles couvertes par le code porté r
 - **CL-3** — Entrée classée hors périmètre (routes de démonstration SDD) : listée avec la justification et l'ADR applicable.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2001 de `docs/architecture/python-backend/P20-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Écrire l'extracteur d'inventaire à partir de `packages/contracts/src/routes.ts`, de `apps/api/src/mount.ts` et de `packages/jobs`/`packages/automations`.
 2. Croiser avec les tests existants (étiquettes `[SPEC-xxx]`/`@SPEC-xxx`) pour relier chaque entrée à ses preuves.
@@ -97,6 +101,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2004.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004.
 - ADR-2004 explique l'écart 217/219. Aucune décision d'architecture nouvelle.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

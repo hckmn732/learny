@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2301]
 business_rules: [BR-PLA-03, BR-PLA-07]
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0017, ADR-1002, ADR-2006]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0017, ADR-1002, ADR-2006]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Terminer la migration : prouver la non-régression complète puis retirer le run
 ## 2. Contexte
 
 Après SPEC-2301, la production est servie par Python. Les tests TypeScript portés ont leurs équivalents pytest (ADR-2008).
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2302 de `docs/architecture/python-backend/P23-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -51,6 +53,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-03, BR-PLA-07. 
 - **CL-3** — Régression détectée : corrigée dans le Python, jamais dans le test.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2302 de `docs/architecture/python-backend/P23-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Lancer la suite complète et traiter chaque écart.
 2. Retirer le code par commits atomiques, en rejouant lint, typecheck et build à chaque étape.
@@ -94,6 +98,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0017, ADR-1002, ADR-2006.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0017, ADR-1002, ADR-2006.
 - ADR-2006 et ADR-2008 ; ADR-1002 et ADR-0017 sont marqués remplacés à la clôture.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

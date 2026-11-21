@@ -121,8 +121,9 @@ Données, identité et worker (SPEC-2101, SPEC-2102).
 
 ## CP-22
 
-Domaines métier (SPEC-2201, SPEC-2202, SPEC-2203, SPEC-2204, SPEC-2205, SPEC-2206).
-- Toutes les entrées de `api/ownership.yaml` sont à `py` ; matrices de parité sans divergence inexpliquée.
+Domaines métier (SPEC-2201, SPEC-2202, SPEC-2203, SPEC-2204, SPEC-2205, SPEC-2207, SPEC-2206).
+- Toutes les entrées de `api/ownership.yaml` (opérations, routes spéciales, consommateurs, crons) sont à `py` ; la façade ne relaie plus rien ; matrices de parité sans divergence inexpliquée.
+- Tous les consommateurs tournent sur le worker Python (SPEC-2207) ; Hono tourne sans Inngest.
 - Tous les tests TypeScript backend ont un équivalent pytest vert ; suite e2e, visuelle et cross-browser verte via Python.
 
 ## CP-23

@@ -3,10 +3,10 @@ id: SPEC-2301
 title: Déploiement Coolify, bascule progressive et rollback
 phase: P23
 priority: migration
-depends_on: [SPEC-2206]
+depends_on: [SPEC-2207]
 business_rules: [BR-PLA-04, BR-PLA-07]
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0041, ADR-2007, ADR-2009]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0041, ADR-2007, ADR-2009]
 visual: demo
 ---
 
@@ -20,11 +20,13 @@ Mettre en production le runtime Python de façon réversible, avec des preuves m
 
 À l'entrée de cette spec, toutes les entrées sont à `py` en local. ADR-2009 fixe l'environnement de preuve et le traitement des blocages externes.
 
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2301 de `docs/architecture/python-backend/P23-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
+
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
 ## 3. Dépendances
 
-- **SPEC-2206** — terminée et fusionnée dans `main`.
+- **SPEC-2207** — terminée et fusionnée dans `main`.
 - Supabase local (PostgreSQL, Auth, Storage) pour l'intégration ; fournisseurs externes en mode mock (ADR-0048).
 
 ## 4. Règles métier couvertes
@@ -51,6 +53,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-04, BR-PLA-07. 
 - **CL-3** — Staging indisponible : `fail.mjs SPEC-2301 … --external` pour les critères concernés, le reste prouvé en local.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2301 de `docs/architecture/python-backend/P23-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Configurer Coolify (services, secrets, sondes) et le pipeline de déploiement.
 2. Exercer la bascule et le rollback sur staging, mesurer la charge.
@@ -94,6 +98,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0041, ADR-2007, ADR-2009.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0041, ADR-2007, ADR-2009.
 - ADR-2007, ADR-2009.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

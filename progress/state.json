@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T07:45:39.193Z",
+  "updatedAt": "2026-11-21T08:18:02.300Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6715,6 +6715,16 @@
       "validations": {}
     },
     "SPEC-2302": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-2207": {
       "status": "pending",
       "attempts": 0,
       "startedAt": null,

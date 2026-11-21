@@ -6,7 +6,7 @@ priority: migration
 depends_on: [SPEC-2002, SPEC-2003]
 business_rules: [BR-PLA-04, BR-PLA-08]
 screens: []
-adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0022, ADR-1005, ADR-1009, ADR-2010]
+adrs: [ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0022, ADR-1005, ADR-1009, ADR-2010, ADR-2013]
 visual: demo
 ---
 
@@ -19,6 +19,8 @@ Donner au Python un accès aux données strictement équivalent au TypeScript : 
 ## 2. Contexte
 
 Le TypeScript vérifie les jetons localement (ADR-1009), accepte cookie relayé et Bearer (ADR-1005) et exécute ses requêtes sous RLS (ADR-0022) avec un `serviceDb` privilégié pour des cas listés.
+
+**Canevas technique normatif (ADR-2011)** : `docs/architecture/python-backend/00-conventions.md` puis la section SPEC-2101 de `docs/architecture/python-backend/P21-plan.md`, à suivre pas à pas ; les prototypes validés sont décrits dans `docs/architecture/python-backend/spikes.md`. Le code Python est rédigé en anglais ; les textes vus par l'utilisateur restent en français, copiés à l'identique.
 
 État de départ : branche `main` (ADR-2001) ; le web est un client pur de l'API Hono `apps/api` (217 opérations). Références : `docs/architecture/python-headless-migration/` (audit 01–15), `docs/product/business-rules.md`, `docs/architecture/{overview,data-model,api,ai}.md`, `docs/engineering/{conventions,testing,git}.md` et les ADR de la section 15. Invariant (ADR-1001, ADR-2008) : aucun changement fonctionnel visible, aucune assertion d'oracle modifiée, aucune ligne de base visuelle régénérée.
 
@@ -54,6 +56,8 @@ Aucune règle nouvelle. Règles directement concernées : BR-PLA-04, BR-PLA-08. 
 - **CL-4** — JWKS inaccessible : repli identique à ADR-1009.
 
 ## 8. Instructions d'implémentation
+
+Le détail technique (structure, motifs, extraits de code, pièges) est dans la section SPEC-2101 de `docs/architecture/python-backend/P21-plan.md` ; les étapes ci-dessous en sont le résumé.
 
 1. Écrire `learny.shared` (UoW, pool, horloge, erreurs) et `learny.identity.infrastructure` (JWT, JWKS).
 2. Rejouer la matrice RLS existante sous Python pour toutes les tables.
@@ -96,6 +100,6 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 ## 15. Décisions et hypothèses
 
-- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-0022, ADR-1005, ADR-1009, ADR-2010.
+- ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0022, ADR-1005, ADR-1009, ADR-2010, ADR-2013.
 - ADR-2010.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.
