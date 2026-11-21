@@ -126,8 +126,8 @@ operations:
   'formations.list': py
   'formations.maintenance': py
   'formations.pause': py
-  'formations.replan': ts
-  'formations.replan-options': ts
+  'formations.replan': py
+  'formations.replan-options': py
   'formations.resume': ts
   'formations.update': py
   'gaps.list': py
@@ -213,8 +213,8 @@ operations:
   'series.streak': py
   'sidebar.get': py
   'sidebar.update': py
-  'slots.alternatives': ts
-  'slots.move': ts
+  'slots.alternatives': py
+  'slots.move': py
   'suggestions.dismiss': ts
   'suggestions.import': ts
   'uploads.create': ts

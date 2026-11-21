@@ -79,3 +79,28 @@ async def formations_final_review(call: Call) -> Any:
 @handler("formations.maintenance")
 async def formations_maintenance(call: Call) -> Any:
     return await learning.set_maintenance(call.deps, _actor(call), _params(call)["fid"], _body(call))
+
+
+# --- agenda replan -------------------------------------------------------------------------------
+
+
+@handler("slots.alternatives")
+async def slots_alternatives(call: Call) -> Any:
+    return await learning.get_slot_alternatives(call.deps, _actor(call), _params(call)["sid"])
+
+
+@handler("slots.move")
+async def slots_move(call: Call) -> Any:
+    return await learning.move_slot(call.deps, _actor(call), _params(call)["sid"], _body(call))
+
+
+@handler("formations.replan-options")
+async def formations_replan_options(call: Call) -> Any:
+    return await learning.get_replan_options(call.deps, _actor(call), _params(call)["fid"])
+
+
+@handler("formations.replan")
+async def formations_replan(call: Call) -> Any:
+    body = _body(call)
+    body["choice"] = getattr(body["choice"], "value", body["choice"])
+    return await learning.apply_replan(call.deps, _actor(call), _params(call)["fid"], body)
