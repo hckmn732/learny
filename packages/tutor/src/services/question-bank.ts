@@ -1204,8 +1204,17 @@ export async function processQuestionBankJobs(
       processed += 1;
       inserted += result.group.inserted;
       if (!result.group.complete) incomplete += 1;
-    } catch {
+    } catch (error) {
       failed += 1;
+      // Hotfix QA: a failed job used to vanish without a trace; log its stable code and class.
+      ctx.logger?.warn('question bank job failed', {
+        jobId: row.job_id,
+        code:
+          error !== null && typeof error === 'object' && 'code' in error
+            ? String(error.code)
+            : 'UNKNOWN',
+        outcome: error instanceof Error ? `${error.name}: ${error.message}`.slice(0, 300) : 'error',
+      });
     }
   }
   return { processed, inserted, failed, incomplete };
