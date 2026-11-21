@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  brickRegistry,
   stemText,
   validateBrick,
   type BrickIssue,
@@ -853,7 +854,9 @@ function defaultGenerator(): QuestionBankGenerator {
             z.object({
               notionId: z.string().min(1).max(100),
               format: z.enum(QUESTION_BANK_FORMATS),
-              payload: z.record(z.string(), z.unknown()),
+              // Hotfix QA: the exact brick payload schema of the requested format, so the provider's
+              // structured output follows the real field names instead of guessing them.
+              payload: brickRegistry[input.format].schema as z.ZodType<Record<string, unknown>>,
             }),
           )
           .min(1)
