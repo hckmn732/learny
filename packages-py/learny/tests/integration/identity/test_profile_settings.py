@@ -17,7 +17,7 @@ from factories.identity_support import (
 from learny.identity.application.profile import get_settings_state, update_settings_profile
 from learny.shared.db.uow import Database
 from learny.shared.errors import AppError
-from learny.shared.locale_fr.details import PROFILE_VERSION_CONFLICT
+from learny.shared.locale_fr.details import PROFILE_NOT_FOUND, PROFILE_VERSION_CONFLICT
 from learny.shared.time import parse_iso, to_iso
 from learny_api.generated.models import MeProfileGetOutput, MeProfileUpdateOutput
 
@@ -152,6 +152,21 @@ async def test_current_expected_version_is_accepted(database: Database) -> None:
 
     result = await rolled_back(database, scenario)
     assert result["me"]["firstName"] == "Alicia"
+
+
+async def test_update_profile_without_profile_is_not_found(database: Database) -> None:
+    async def scenario(tx: Any) -> Any:
+        with pytest.raises(AppError) as raised:
+            await update_settings_profile(
+                deps_for(tx),
+                actor_for("11111111-1111-4111-8111-111111111111"),
+                {"firstName": "Alicia"},
+            )
+        return raised.value
+
+    error = await rolled_back(database, scenario)
+    assert error.code == "NOT_FOUND"
+    assert error.detail == PROFILE_NOT_FOUND
 
 
 async def test_active_formation_count_covers_owned_and_group_formations(database: Database) -> None:
