@@ -124,3 +124,43 @@ reprise par `next.mjs` sans perte.
 - `packages/config/src/commit-rules.test.ts` : libellé aligné sur la règle `CP-NOM` (fait pour
   SPEC-2001, sur `main`).
 - Aucune assertion d'oracle HTTP, e2e, visuelle ou d'accessibilité n'a été modifiée.
+
+### Addendum 2 — points bloquants découverts (round 2)
+
+**1. La suite e2e est déjà rouge sur `main`, indépendamment de la façade.**
+
+Trois tests de `apps/web/e2e/specs/p0/spec-006.spec.ts` échouent à l'identique sur `main` et sur
+la branche : santé, 404 et visuel. Cause identifiée : la page `/_dev/sdd/SPEC-006` calcule sa
+santé dans le processus **web** (`apps/web/lib/health.ts`), alors que le web est un client pur de
+l'API depuis SPEC-1203 — donc `database = not_configured` et `status = degraded`, alors que le
+test attend `ok`. La ligne de base visuelle est antérieure à cette régression, d'où l'échec
+`toHaveScreenshot`. Preuve : `evidence/SPEC-2003/preexisting-e2e-failures.md` sur la branche.
+
+**Conséquence : CA-2 (« la suite e2e et visuelle complète passe à travers la façade ») ne peut pas
+être prouvé, donc SPEC-2003 ne peut pas être validée, donc CP-20 et toute la suite de la piste
+(P21 → P23) restent bloqués.** Les deux remèdes possibles sont hors du périmètre de SPEC-2003 et
+interdits par l'invariant ADR-2008 : régénérer une ligne de base visuelle, ou changer le
+comportement d'un écran de démonstration. **Ce point demande une décision du porteur du projet.**
+
+**2. Décision consignée : ADR-2018 (ports Playwright).** Le test de SPEC-006 démarre son propre
+serveur Next sur 3102, qui est une assertion existante non modifiable ; Hono est donc placé sur
+`PORT+12` (3112), la façade sur `PORT+1` (3101) et le web sur `PLAYWRIGHT_PORT` (3100).
+
+**3. CA-4 prouvé.** `docker/api-py.Dockerfile` construit une image de 303 Mo ; deux constructions
+sans cache installent un contenu identique à **2519/2525 fichiers** près (seules les métadonnées
+`uv_cache.json` et `RECORD` de uv diffèrent). Le conteneur sert exactement les mêmes réponses de
+santé que l'hôte (`{"status":"ok",…,"database":"ok",…}`) et `python -m learny_worker` démarre.
+Preuve : `evidence/SPEC-2003/docker.log`.
+
+**4. Incident corrigé.** Ma première version de `.dockerignore` écrasait les motifs de l'image
+self-host vérifiés par SPEC-012 (secrets, `.env.*`) ; le fichier d'origine a été restauré et seuls
+les caches Python y ont été ajoutés.
+
+### État des critères de SPEC-2003
+
+| Critère | État |
+|---|---|
+| CA-1 (uv sync, ruff, mypy, import-linter, pytest) | ✅ prouvé — 59 tests, 26 fichiers typés |
+| CA-2 (suite e2e et visuelle complète via la façade) | ❌ **bloqué** par les 3 échecs préexistants de SPEC-006 |
+| CA-3 (`validate.mjs` exécute pytest et échoue si un test échoue) | ✅ prouvé — implémenté, testé, rapport JUnit dans `evidence/` |
+| CA-4 (image construite deux fois, api + worker) | ✅ prouvé — voir ci-dessus |
