@@ -1,7 +1,7 @@
 # Preuves — SPEC-2002 : Contrat OpenAPI source unique et SDK TypeScript généré
 
-- Date : 2026-11-21T10:33:08.677Z
-- Commit : 6b87e0b6
+- Date : 2026-11-21T10:37:08.301Z
+- Commit : 7ace9d52
 - Spécification : `specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md`
 
 ## Rapports
@@ -14,10 +14,10 @@
 
 ## Vidéos
 
-- `video/02-presente-le-contrat-source-unique-et-le-sdk-genere-desktop.webm` — SHA-256 b0e92f8b1b1e310281292c7115f402e09f8cfa923a6d345f8377d45e7009a47c (hors Git : Git LFS indisponible, ADR-0050)
-- `video/09-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 b0e7c58404907257a2ac9ff168299b32d0a9516e62d9ade53e1866ac49248d19 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/10-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 ec218610d87ef0be38093dc5007f63bd35bb22efad57557e847265043ae8a87e (hors Git : Git LFS indisponible, ADR-0050)
-- `video/11-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 3693e065de41a03220f6eb5f0326a275807766068fb3598386a2d24d9b31f64b (hors Git : Git LFS indisponible, ADR-0050)
+- `video/02-presente-le-contrat-source-unique-et-le-sdk-genere-desktop.webm` — SHA-256 3081fac50dc131572a2304add2ff74eec5fc3570f97f84417a7bf15c3c28a3e4 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/09-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 16c67d8b0342df00aff8443a1e189dfe04306d82bd7e3ec5bfad163b597e3672 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/10-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 247f12597fccc95a53e9dc4da0c9e184d881a35cdcbdf859044bce6b14669096 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/11-conformite-visuelle-du-contrat-desktop.webm` — SHA-256 9e68d8a501bdc82959400883904bc08e34c83a617fee7641836876b095eced9a (hors Git : Git LFS indisponible, ADR-0050)
 
 ## Captures
 
