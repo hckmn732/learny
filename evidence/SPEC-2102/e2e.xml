@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="50.960788">
+<testsuite name="p21/spec-2102.spec.ts" timestamp="2026-11-21T18:24:42.961Z" hostname="desktop" tests="2" failures="0" skipped="0" time="5.031" errors="0">
+<testcase name="traite un événement de bout en bout via le worker @SPEC-2102" classname="p21/spec-2102.spec.ts" time="1.616">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p21-spec-2102-traite-un-év-b1515-out-via-le-worker-SPEC-2102-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-traite-un-év-b1515-out-via-le-worker-SPEC-2102-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-traite-un-év-b1515-out-via-le-worker-SPEC-2102-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="conformité visuelle du worker durable @SPEC-2102 @visual" classname="p21/spec-2102.spec.ts" time="3.415">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/attachments/axe-90015a29f94145e76e710dde4ea9f08dd424c197.json]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/attachments/spec-2102-desktop-674e3843b71e81b32ccd21f88f41d1cf368a6dcf.png]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/attachments/axe-77279917a6940c80a491905196cc4cffeba08796.json]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/attachments/spec-2102-mobile-b766b3fa8c9e29ab8d0b978498538a8fc4f73d9e.png]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/test-finished-1.png]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/video-2.webm]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/video.webm]]
+
+[[ATTACHMENT|artifacts/p21-spec-2102-conformité-v-6dc85-er-durable-SPEC-2102-visual-desktop/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
