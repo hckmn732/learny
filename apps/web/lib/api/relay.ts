@@ -50,8 +50,13 @@ export async function relayToApi(request: NextRequest): Promise<NextResponse> {
     const response = await fetch(target, {
       method: request.method,
       headers,
-      body:       request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS' ? undefined : request.body,
+      body:
+        request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS'
+          ? undefined
+          : request.body,
       duplex: 'half',
+      // The API's redirects (auth callback, 302 with session cookies) belong to the browser.
+      redirect: 'manual',
       signal: request.signal,
     } as RequestInit & { duplex: 'half' });
     const responseHeaders = new Headers(response.headers);
