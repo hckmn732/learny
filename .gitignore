@@ -70,3 +70,6 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 *.pyc
+
+# Les journaux de preuve de evidence/ sont versionnés (SPEC-2003).
+!evidence/**/*.log
