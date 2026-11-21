@@ -66,7 +66,7 @@
     "sdk:check": "node tools/contract/generate-sdk.mjs --check",
     "py:sync": "uv sync --frozen",
     "py:lint": "uv run ruff format --check . && uv run ruff check . && uv run lint-imports",
-    "py:typecheck": "uv run mypy packages-py apps/api-py apps/worker-py",
+    "py:typecheck": "uv run mypy packages-py apps",
     "py:test:unit": "uv run pytest packages-py/learny/tests/unit apps/api-py/tests/unit apps/worker-py/tests/unit"
   },
   "devDependencies": {
