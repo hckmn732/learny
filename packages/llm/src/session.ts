@@ -590,11 +590,35 @@ function strictCompatibleSchema<S extends z.ZodType>(
   return jsonSchema<z.infer<S>>(async () => rewriteOneOf(await base.jsonSchema) as JSONSchema7, {
     validate: (value: unknown) => {
       const parsed = schema.safeParse(value);
-      return parsed.success
-        ? { success: true as const, value: parsed.data }
-        : { success: false as const, error: parsed.error };
+      if (parsed.success) return { success: true as const, value: parsed.data };
+      // Non-strict providers often emit `null` for optional fields: retry without them.
+      const retried = schema.safeParse(stripNulls(value));
+      if (retried.success) return { success: true as const, value: retried.data };
+      console.warn(
+        JSON.stringify({
+          level: 'warn',
+          component: 'llm',
+          message: 'structured output rejected',
+          provider,
+          issues: retried.error.issues.slice(0, 10).map((issue) => ({
+            path: issue.path.map(String).join('.'),
+            code: issue.code,
+          })),
+        }),
+      );
+      return { success: false as const, error: retried.error };
     },
   });
+}
+
+function stripNulls(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(stripNulls);
+  if (node === null || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+    if (value !== null) out[key] = stripNulls(value);
+  }
+  return out;
 }
 
 function rewriteOneOf(node: unknown): unknown {
