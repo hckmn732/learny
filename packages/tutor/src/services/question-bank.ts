@@ -679,9 +679,10 @@ async function validateCandidates(
   const issues: string[] = [];
 
   for (const candidate of candidates) {
-    const candidateNotionId = candidate.notionId.replaceAll('{{notionId}}', target.notionId);
-    if (candidate.format !== target.format || candidateNotionId !== target.notionId) {
-      issues.push(`format ou notion inattendue (${candidate.format})`);
+    // Hotfix QA: each job targets exactly one notion, so the model's `notionId` echo (often a label
+    // or an invented id) is not trusted; the target notion is used. Only the format must match.
+    if (candidate.format !== target.format) {
+      issues.push(`format inattendu (${candidate.format})`);
       continue;
     }
     const payload = replacePlaceholders(candidate.payload, target.notionId, target.notionId);
