@@ -11,6 +11,13 @@ from learny.learning.application.ports import (
     LearningDeps,
     Transactions,
 )
+from learny.learning.application.series import (
+    get_milestones,
+    get_streak,
+    milestone_label,
+    next_milestone_of,
+    reconcile_milestones,
+)
 
 __all__ = [
     "BrickReferenceResolver",
@@ -20,7 +27,12 @@ __all__ = [
     "agenda_totals",
     "course_target",
     "get_agenda",
+    "get_milestones",
+    "get_streak",
     "list_gaps",
+    "milestone_label",
+    "next_milestone_of",
+    "reconcile_milestones",
     "slot_href",
     "slot_label",
     "training_target",

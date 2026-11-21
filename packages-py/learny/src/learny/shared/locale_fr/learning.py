@@ -36,3 +36,13 @@ GAPS_FORMATION_NOT_FOUND = "Formation introuvable."
 GAPS_NATURE_UNKNOWN = "Nature de lacune inconnue."
 GAPS_NATURE_EXPECTED = "Valeur attendue parmi les quatre natures."
 GAPS_NATURE_PATH = "nature"
+
+# packages/services/src/serie-regularite-et-jalons-interface.ts (SPEC-723).
+SERIES_PROFILE_NOT_FOUND = "Profil introuvable."
+SERIES_FORMATION_NOT_FOUND = "Formation introuvable."
+SERIES_MODULE_VALIDATED = "Module validé"
+SERIES_MODULE_VALIDATED_LABEL = "Module « {title} » validé"
+SERIES_MODULE_TO_VALIDATE_LABEL = "Module « {title} » à valider"
+SERIES_MILESTONE_NOTIONS = "100 notions retenues"
+SERIES_MILESTONE_STREAK = "30 jours de série"
+SERIES_MILESTONE_DEFAULT = "Jalon atteint"

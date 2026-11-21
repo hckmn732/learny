@@ -418,3 +418,269 @@ def _instant(value: Any) -> str:
     from learny.shared.time import to_iso
 
     return value if isinstance(value, str) else to_iso(value)
+
+
+# --------------------------------------------------------------------------------------------------
+# series.streak, series.milestones (packages/services/src/serie-regularite-et-jalons-interface.ts,
+# SPEC-723)
+# --------------------------------------------------------------------------------------------------
+
+READ_SERIES_PROFILE = text(
+    """
+    select timezone, current_formation_id::text as current_formation_id
+    from public.profiles
+    where id = cast(:user_id as uuid)
+    """
+)
+
+READ_SERIES_PREFERENCES = text(
+    """
+    select study_days from public.study_preferences where user_id = cast(:user_id as uuid)
+    """
+)
+
+READ_SERIES_PAUSES = text(
+    """
+    select starts_on::text as starts_on, ends_on::text as ends_on
+    from public.pauses
+    where user_id = cast(:user_id as uuid)
+    order by starts_on asc, ends_on asc
+    """
+)
+
+READ_SERIES_ACTIVITIES = text(
+    """
+    select day::text as day, minutes::int as minutes, qualifying
+    from public.daily_activity
+    where user_id = cast(:user_id as uuid)
+      and day between cast(:lookback_start as date) and cast(:today as date)
+    order by day asc
+    """
+)
+
+READ_SERIES_VALIDATED_MODULES = text(
+    """
+    select m.id::text as id, m.formation_id::text as formation_id, m.title
+    from public.module_progress mp
+    join public.modules m on m.id = mp.module_id
+    where mp.user_id = cast(:user_id as uuid) and mp.status = 'validated'
+    order by m.formation_id asc, m.position asc, m.id asc
+    """
+)
+
+READ_SERIES_MASTERED_NOTIONS = text(
+    """
+    select count(*)::int as count
+    from public.notion_states ns
+    join public.notions n on n.id = ns.notion_id
+    where ns.user_id = cast(:user_id as uuid)
+      and ns.mastery >= :mastery_threshold
+    """
+)
+
+READ_SERIES_OPEN_MODULE = text(
+    """
+    select m.id::text as id, m.title
+    from public.modules m
+    left join public.module_progress mp
+      on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid)
+    where m.formation_id = cast(:formation_id as uuid)
+      and coalesce(mp.status, m.status) = 'open'
+    order by m.position asc, m.id asc
+    limit 1
+    """
+)
+
+READ_SERIES_MILESTONES = text(
+    """
+    select id::text as id,
+           key::text as key,
+           ref_id::text as ref_id,
+           formation_id::text as formation_id,
+           achieved_at
+    from public.milestones
+    where user_id = cast(:user_id as uuid)
+    order by achieved_at desc, id asc
+    """
+)
+
+INSERT_SERIES_MILESTONE = text(
+    """
+    insert into public.milestones (user_id, formation_id, key, ref_id, achieved_at)
+    values (
+      cast(:user_id as uuid),
+      cast(:formation_id as uuid),
+      cast(:kind as public.milestone_key),
+      cast(:module_id as uuid),
+      cast(:now as timestamptz)
+    )
+    on conflict (user_id, key, ref_id) do nothing
+    returning id::text as id,
+              key::text as key,
+              ref_id::text as ref_id,
+              formation_id::text as formation_id,
+              achieved_at
+    """
+)
+
+READ_SERIES_FORMATION_ACCESS = text(
+    """
+    select f.id::text as id
+    from public.formations f
+    where f.id = cast(:formation_id as uuid)
+      and (
+        f.owner_id = cast(:user_id as uuid)
+        or exists (
+          select 1
+          from public.groups g
+          join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = cast(:user_id as uuid)
+            and gm.member_status = 'active'
+            and gm.left_at is null
+        )
+      )
+    limit 1
+    """
+)
+
+READ_SERIES_MILESTONE_ITEMS = text(
+    """
+    select ms.id::text as id,
+           ms.key::text as key,
+           ms.ref_id::text as ref_id,
+           ms.formation_id::text as formation_id,
+           f.title as formation_title,
+           m.title as module_title,
+           ms.achieved_at
+    from public.milestones ms
+    left join public.formations f on f.id = ms.formation_id
+    left join public.modules m on m.id = ms.ref_id
+    where ms.user_id = cast(:user_id as uuid)
+    order by ms.achieved_at desc, ms.id asc
+    """
+)
+
+READ_SERIES_MILESTONE_ITEMS_OF_FORMATION = text(
+    """
+    select ms.id::text as id,
+           ms.key::text as key,
+           ms.ref_id::text as ref_id,
+           ms.formation_id::text as formation_id,
+           f.title as formation_title,
+           m.title as module_title,
+           ms.achieved_at
+    from public.milestones ms
+    left join public.formations f on f.id = ms.formation_id
+    left join public.modules m on m.id = ms.ref_id
+    where ms.user_id = cast(:user_id as uuid)
+      and (ms.formation_id = cast(:formation_id as uuid) or ms.key in ('notions_100', 'streak_30'))
+    order by ms.achieved_at desc, ms.id asc
+    """
+)
+
+
+async def read_series_profile(tx: Tx, user_id: str) -> Mapping[str, Any] | None:
+    """The zone and the current formation of the learner."""
+    result = await tx.conn.execute(READ_SERIES_PROFILE, {"user_id": user_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_series_preferences(tx: Tx, user_id: str) -> Mapping[str, Any] | None:
+    """The study days of the learner, if their preferences row exists."""
+    result = await tx.conn.execute(READ_SERIES_PREFERENCES, {"user_id": user_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_series_pauses(tx: Tx, user_id: str) -> list[Mapping[str, Any]]:
+    """Every pause of the learner, oldest first."""
+    result = await tx.conn.execute(READ_SERIES_PAUSES, {"user_id": user_id})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_series_activities(
+    tx: Tx, user_id: str, lookback_start: str, today: str
+) -> list[Mapping[str, Any]]:
+    """The persisted daily activity of the lookback window, oldest first."""
+    result = await tx.conn.execute(
+        READ_SERIES_ACTIVITIES,
+        {"user_id": user_id, "lookback_start": lookback_start, "today": today},
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_series_validated_modules(tx: Tx, user_id: str) -> list[Mapping[str, Any]]:
+    """The validated modules of the learner, by formation then position."""
+    result = await tx.conn.execute(READ_SERIES_VALIDATED_MODULES, {"user_id": user_id})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_series_mastered_notions(tx: Tx, user_id: str, mastery_threshold: int) -> Mapping[str, Any]:
+    """The number of notions at or above the milestone mastery threshold."""
+    result = await tx.conn.execute(
+        READ_SERIES_MASTERED_NOTIONS,
+        {"user_id": user_id, "mastery_threshold": mastery_threshold},
+    )
+    found = result.mappings().all()
+    return {} if not found else row_of(found[0])
+
+
+async def read_series_open_module(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The first open module of the current formation, if any."""
+    result = await tx.conn.execute(
+        READ_SERIES_OPEN_MODULE, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_series_milestones(tx: Tx, user_id: str) -> list[Mapping[str, Any]]:
+    """Every stored milestone of the learner, newest first."""
+    result = await tx.conn.execute(READ_SERIES_MILESTONES, {"user_id": user_id})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def insert_series_milestone(
+    tx: Tx,
+    user_id: str,
+    formation_id: str | None,
+    kind: str,
+    module_id: str | None,
+    now: str,
+) -> Mapping[str, Any] | None:
+    """Stores one milestone; a duplicate `(user, key, ref)` inserts nothing."""
+    result = await tx.conn.execute(
+        INSERT_SERIES_MILESTONE,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "kind": kind,
+            "module_id": module_id,
+            "now": now,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_series_formation_access(tx: Tx, user_id: str, formation_id: str) -> bool:
+    """The owner or an active member reads the formation filter, nobody else."""
+    result = await tx.conn.execute(
+        READ_SERIES_FORMATION_ACCESS, {"user_id": user_id, "formation_id": formation_id}
+    )
+    return bool(result.mappings().all())
+
+
+async def read_series_milestone_items(
+    tx: Tx, user_id: str, formation_id: str | None
+) -> list[Mapping[str, Any]]:
+    """The milestone cards, optionally restricted to one formation plus the global thresholds."""
+    parameters: dict[str, Any] = {"user_id": user_id}
+    statement = READ_SERIES_MILESTONE_ITEMS
+    if formation_id is not None:
+        statement = READ_SERIES_MILESTONE_ITEMS_OF_FORMATION
+        parameters["formation_id"] = formation_id
+    result = await tx.conn.execute(statement, parameters)
+    return [row_of(item) for item in result.mappings().all()]
