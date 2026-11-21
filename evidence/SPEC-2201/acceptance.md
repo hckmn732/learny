@@ -85,7 +85,7 @@ sont listés avec leur motif (auth, home, resume, opérations hors périmètre).
 | Visuel du périmètre | `pnpm test:visual` | vert |
 | Validation SDD | `node tools/sdd/validate.mjs SPEC-2201` | 8 étapes vertes |
 
-## Écarts résiduels connus (consignés, sans ❌)
+## Écarts résiduels connus (consignés)
 
 1. **`null` explicite sur un champ optionnel.** Là où Zod refuse `null` (`z.string().optional()`),
    Pydantic l'accepte et le traite comme absent. Le seul cas du périmètre est un corps envoyé à la
