@@ -71,8 +71,13 @@ messages internes anglais. La comparaison d'oracle porte donc, pour ce seul code
 | `packages/bricks/src/validate.test.ts` + `validate-locations.test.ts` | 40 | `.../test_bricks_validation.py` | 93 cas : 61 brouillons enregistrés avec un résolveur en mémoire, empreinte, type de contenu sans empreinte, chemin exact d'une clé inconnue, aucun appel au résolveur sur schéma invalide, toutes les issues d'une étape ensemble, injection traitée comme donnée (CL-10), règles d'origine et de notion, références inconnues, ressource supprimée, emplacements | égalité stricte ; messages comparés sauf `SCHEMA_INVALID` |
 | `packages/bricks/src/registry.test.ts` + `architecture.test.ts` | 7 | `.../test_registry.py` | 10 cas : treize types enregistrés, contrat de chaque définition, mode de correction de BR-BRI-08, exigence de notion, empreinte des sept questions, projection ensemblée, absence d'import interdit et d'horloge (CA-7) | contrôle d'architecture par AST |
 
-Total : **1157 tests pytest**, dont **509 ajoutés par cette tranche** (86 planificateur, 399 briques,
+Total : **1242 tests pytest**, dont **594 ajoutés par cette tranche** (86 planificateur, 484 briques,
 24 contrats de types), tous marqués `pytestmark = pytest.mark.spec("SPEC-2202")`.
+
+| `packages/bricks/src/types/instruction/response.ts` | 7 | `.../test_helpers.py` | 8 cas : tableau dans les bornes, tableau trop court, clé inconnue, texte dans les bornes, texte trop court, fichier, lien HTTPS accepté puis refusé | égalité stricte (valeur ou `path` des issues) |
+| `packages/bricks/src/types/instruction/table-checks.ts` | 7 | `.../test_helpers.py` | 20 nombres français analysés, 10 formats `Intl`, 4 contrôles de somme (vide, déséquilibré, groupe inconnu), côté de chaque ligne | égalité stricte, séparateur de milliers U+202F compris |
+| `packages/bricks/src/types/timer/state.ts` | 8 | `.../test_helpers.py` | 10 affichages `mm:ss`/`h:mm:ss`, 7 états (démarrage, en cours, alerte, seuil exact, expiré, horloge reculée, longue durée) | égalité stricte, horloge passée en millisecondes |
+| `packages/bricks/src/types/scoring/compute.ts` | 11 | `.../test_helpers.py` | 5 barèmes d'activité (égal, pondéré, ratios hors bornes, sans item, total nul), erreur `SCORING_ITEM_UNKNOWN`, 8 verdicts d'exercice (indices, indices négatifs ou fractionnaires, critère inconnu) | égalité stricte |
 
 ## Modules du domaine restant à porter
 
@@ -80,10 +85,6 @@ Total : **1157 tests pytest**, dont **509 ajoutés par cette tranche** (86 plani
 |---|---|---|
 | `packages/learning-engine/test/integration/{planner,gaps,fsrs,mastery,metrics,engine-boundaries,draw-attempt}.test.ts` | `tests/integration/learning-engine/test_*.py` | à porter (30 cas) |
 | `packages/learning-engine/src/fixtures/{builders,sap-reference}.test.ts` (10 cas) | `tests/unit/learning-engine/test_builders.py`, `test_sap_reference.py` | à porter (jeux de démonstration) |
-| `packages/bricks/src/types/instruction/response.ts` (7 cas) | `tests/unit/assessments/test_response.py` | à porter : production texte/fichier/lien/tableau d'un exercice |
-| `packages/bricks/src/types/instruction/table-checks.ts` (7 cas) | `.../test_table_checks.py` | à porter : contrôle de somme d'un tableau |
-| `packages/bricks/src/types/scoring/compute.ts` (11 cas) | `.../test_compute.py` | à porter : note d'activité et d'exercice |
-| `packages/bricks/src/types/timer/state.ts` (8 cas) | `.../test_state.py` | à porter : état et formatage du minuteur |
 | `packages/bricks/src/types/*/response.ts` (6 types) | couvert | porté avec la correction |
 | `packages/bricks/src/{correction-view,examples}.ts` et `types/*/examples.ts` | `.../test_correction_view.py` | à porter : vue de correction des types non corrigés, exemples de référence |
 | `packages/bricks/src/view/*` et `types/*/view.tsx` (≈ 20 cas) | — | hors périmètre (vues React, SPEC-503) |
