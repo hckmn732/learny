@@ -1,0 +1,28 @@
+{
+  "constants": {
+    "ivBytes": 12,
+    "tagBytes": 16
+  },
+  "keyHex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "aad": {
+    "credentialId": "cred-1",
+    "userId": "user-1",
+    "value": "learny:ai_credentials:cred-1:user-1"
+  },
+  "roundTrip": {
+    "plain": "sk-live-0123456789abcdef",
+    "envelopeLength": 52,
+    "decrypted": "sk-live-0123456789abcdef",
+    "usedPrevious": false,
+    "ok": true
+  },
+  "fingerprint": {
+    "plain": "sk-live-0123456789abcdef",
+    "value": "ea30920103640aeaf25a15432ee801b330ee9ab6b93bf09c39d04f1a0661519d"
+  },
+  "mask": {
+    "prefix": "sk",
+    "last4": "cdef",
+    "masked": "sk-••••••••cdef"
+  }
+}

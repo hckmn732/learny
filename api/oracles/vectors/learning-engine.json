@@ -1,0 +1,202 @@
+{
+  "now": "2026-11-11T12:20:00.000Z",
+  "mastery": [
+    {
+      "input": {
+        "answers": [
+          {
+            "answerId": "a1",
+            "attemptId": "t1",
+            "score": 1,
+            "answeredAt": "2026-11-01T09:00:00.000Z"
+          },
+          {
+            "answerId": "a2",
+            "attemptId": "t2",
+            "score": 0.5,
+            "answeredAt": "2026-11-05T18:30:00.000Z"
+          },
+          {
+            "answerId": "a3",
+            "attemptId": "t3",
+            "score": 0,
+            "answeredAt": "2026-11-10T07:15:00.000Z"
+          },
+          {
+            "answerId": "a4",
+            "attemptId": "t4",
+            "score": 1,
+            "answeredAt": "2026-11-11T12:00:00.000Z"
+          }
+        ],
+        "at": "2026-11-11T12:20:00.000Z",
+        "threshold": 80,
+        "halfLifeDays": 14
+      },
+      "output": {
+        "mastery": 60.04685520058486,
+        "threshold": 80,
+        "mastered": false,
+        "answerCount": 4,
+        "weightSum": 3.2989193204007305,
+        "weightedScore": 1.9808973075051446,
+        "weights": [
+          {
+            "answerId": "a1",
+            "attemptId": "t1",
+            "score": 1,
+            "answeredAt": "2026-11-01T09:00:00.000Z",
+            "ageDays": 10.13888888888889,
+            "weight": 0.6053299552153317
+          },
+          {
+            "answerId": "a2",
+            "attemptId": "t2",
+            "score": 0.5,
+            "answeredAt": "2026-11-05T18:30:00.000Z",
+            "ageDays": 5.743055555555555,
+            "weight": 0.7525095238558753
+          },
+          {
+            "answerId": "a3",
+            "attemptId": "t3",
+            "score": 0,
+            "answeredAt": "2026-11-10T07:15:00.000Z",
+            "ageDays": 1.2118055555555556,
+            "weight": 0.9417672509676485
+          },
+          {
+            "answerId": "a4",
+            "attemptId": "t4",
+            "score": 1,
+            "answeredAt": "2026-11-11T12:00:00.000Z",
+            "ageDays": 0.013888888888888888,
+            "weight": 0.9993125903618753
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "answers": [
+          {
+            "answerId": "a1",
+            "attemptId": "t1",
+            "score": 1,
+            "answeredAt": "2026-11-01T09:00:00.000Z"
+          },
+          {
+            "answerId": "a2",
+            "attemptId": "t2",
+            "score": 0.5,
+            "answeredAt": "2026-11-05T18:30:00.000Z"
+          },
+          {
+            "answerId": "a3",
+            "attemptId": "t3",
+            "score": 0,
+            "answeredAt": "2026-11-10T07:15:00.000Z"
+          },
+          {
+            "answerId": "a4",
+            "attemptId": "t4",
+            "score": 1,
+            "answeredAt": "2026-11-11T12:00:00.000Z"
+          }
+        ],
+        "at": "2026-11-20T00:00:00.000Z",
+        "threshold": 60,
+        "halfLifeDays": 7
+      },
+      "output": {
+        "mastery": 58.48265957088212,
+        "threshold": 60,
+        "mastered": false,
+        "answerCount": 4,
+        "weightSum": 1.2162974052804716,
+        "weightedScore": 0.7113230708996506,
+        "weights": [
+          {
+            "answerId": "a1",
+            "attemptId": "t1",
+            "score": 1,
+            "answeredAt": "2026-11-01T09:00:00.000Z",
+            "ageDays": 18.625,
+            "weight": 0.15814125831248205
+          },
+          {
+            "answerId": "a2",
+            "attemptId": "t2",
+            "score": 0.5,
+            "answeredAt": "2026-11-05T18:30:00.000Z",
+            "ageDays": 14.229166666666666,
+            "weight": 0.24439080392735937
+          },
+          {
+            "answerId": "a3",
+            "attemptId": "t3",
+            "score": 0,
+            "answeredAt": "2026-11-10T07:15:00.000Z",
+            "ageDays": 9.697916666666666,
+            "weight": 0.38277893241714134
+          },
+          {
+            "answerId": "a4",
+            "attemptId": "t4",
+            "score": 1,
+            "answeredAt": "2026-11-11T12:00:00.000Z",
+            "ageDays": 8.5,
+            "weight": 0.4309864106234889
+          }
+        ]
+      }
+    }
+  ],
+  "notionCard": [
+    {
+      "retention": 0.9,
+      "output": {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    },
+    {
+      "retention": 0.8,
+      "output": {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    },
+    {
+      "retention": 0.95,
+      "output": {
+        "due": "2026-11-11T12:20:00.000Z",
+        "stability": 0,
+        "difficulty": 0,
+        "elapsed_days": 0,
+        "scheduled_days": 0,
+        "learning_steps": 0,
+        "reps": 0,
+        "lapses": 0,
+        "state": "new",
+        "last_review": null
+      }
+    }
+  ]
+}
