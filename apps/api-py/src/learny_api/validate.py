@@ -14,6 +14,7 @@ from typing import Annotated, Any, Literal, Union, get_args, get_origin
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import learning as learning_texts
 from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_INPUT, INVITATION_CODE_FORMAT
 from pydantic import BaseModel, ValidationError
@@ -383,6 +384,30 @@ def _legal_versions(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
     return errors or None
 
 
+def _agenda_range(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`AgendaQuery` refinements: ordered civil bounds and a window of 42 days at most."""
+    start = value.get("from_")
+    end = value.get("to")
+    if not isinstance(start, str) or not isinstance(end, str):
+        return None
+    if start > end:
+        return [_issue("query", learning_texts.AGENDA_RANGE_ORDER)]
+    if _civil_day_distance(start, end) > MAX_AGENDA_RANGE_DAYS:
+        return [_issue("query", learning_texts.AGENDA_RANGE_TOO_WIDE)]
+    return None
+
+
+def _civil_day_distance(start: str, end: str) -> int:
+    """`civilDayDistance`: civil days between two `YYYY-MM-DD` values (`to - from`)."""
+    from datetime import date
+
+    first = date(int(start[0:4]), int(start[5:7]), int(start[8:10]))
+    second = date(int(end[0:4]), int(end[5:7]), int(end[8:10]))
+    return (second - first).days
+
+
+MAX_AGENDA_RANGE_DAYS = 42
+
 REFINEMENTS: dict[str, Refinement] = {
     "me.update": _at_least_one_profile_field,
     "me.profile.update": _at_least_one_settings_field,
@@ -391,6 +416,7 @@ REFINEMENTS: dict[str, Refinement] = {
     "me.ai.task-models.update": _task_model,
     "me.legal.accept": _legal_versions,
     "sidebar.update": _sidebar_update,
+    "agenda.get": _agenda_range,
 }
 
 
