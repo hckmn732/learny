@@ -7,8 +7,6 @@ missing, paused or inaccessible, the first active formation is used. Paused form
 switcher but are never rendered as the current formation (ET-1).
 """
 
-import re
-import unicodedata
 from collections.abc import Mapping
 from datetime import date, datetime, timedelta
 from typing import Any
@@ -21,27 +19,10 @@ from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.jsmath import js_round
 from learny.shared.locale_fr.details import FORMATION_NOT_FOUND, PROFILE_NOT_FOUND
+from learny.shared.naming import accent_of as accent_of
+from learny.shared.naming import formation_monogram as formation_monogram
 
 STREAK_REGULARITY_DAYS = 14
-FORMATION_ACCENTS = ("indigo", "green", "orange", "violet", "teal")
-FORMATION_MONOGRAM_MAX_LENGTH = 2
-_NON_ALPHANUMERIC = re.compile(r"[^A-Z0-9]")
-
-
-def accent_of(value: str) -> str:
-    """ADR-0162 - the stored accent wins, `indigo` is the defensive fallback."""
-    return value if value in FORMATION_ACCENTS else "indigo"
-
-
-def formation_monogram(title: str, monogram: str | None) -> str:
-    """ADR-0162 fallback, identical to `formationMonogram` (`packages/db`)."""
-    stored = (monogram or "").strip()
-    if stored != "":
-        return stored[:FORMATION_MONOGRAM_MAX_LENGTH]
-    decomposed = unicodedata.normalize("NFKD", title)
-    without_marks = "".join(char for char in decomposed if not unicodedata.combining(char))
-    folded = _NON_ALPHANUMERIC.sub("", without_marks.upper())
-    return "?" if folded[:FORMATION_MONOGRAM_MAX_LENGTH] == "" else folded[:FORMATION_MONOGRAM_MAX_LENGTH]
 
 
 def shift_civil_day(day: str, delta: int) -> str:

@@ -38,6 +38,9 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 # Les textes francais vus par l utilisateur sont copies mot pour mot du TypeScript : leur
 # typographie (apostrophe courbe, espaces insecables) est normative et non une ambiguite.
 "**/locale_fr/*.py" = ["RUF001", "RUF002", "RUF003", "S105", "S106"]
+# La copie d un programme compose un `values` de paires d identifiants : seuls des fragments
+# litteraux et des parametres lies sont concatenes, jamais une valeur issue d une requete.
+"packages-py/learny/src/learny/formation/infrastructure/copy_programme.py" = ["S608"]
 # The system clock is the one legitimate use of datetime.now(): every other module goes through it.
 "packages-py/learny/src/learny/shared/clock.py" = ["TID251"]
 

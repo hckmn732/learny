@@ -6,6 +6,7 @@ Zod issue shape (`path` prefixed by the input location, `message` from `locale_f
 `400`/`422` answer is byte-identical to the one the Hono backend sends (ADR-2012, ADR-1001).
 """
 
+import re
 from collections.abc import Callable, Iterable, Mapping, Sequence, Sized
 from enum import Enum
 from types import NoneType, UnionType
@@ -14,7 +15,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import validation
-from learny.shared.locale_fr.details import INVALID_INPUT
+from learny.shared.locale_fr.details import INVALID_INPUT, INVITATION_CODE_FORMAT
 from pydantic import BaseModel, ValidationError
 
 InputLocation = Literal["params", "query", "body"]
@@ -391,6 +392,35 @@ REFINEMENTS: dict[str, Refinement] = {
     "me.legal.accept": _legal_versions,
     "sidebar.update": _sidebar_update,
 }
+
+
+# --------------------------------------------------------------------------------------------------
+# Transforms the generated model cannot express, applied before validation
+# --------------------------------------------------------------------------------------------------
+#
+# `InvitationCode` is `z.string().trim().toUpperCase().regex(/^LRN-[A-Z2-9]{4}$/)`: the normalisation
+# happens *before* the pattern, so `' lrn-ab23 '` is a valid code. OpenAPI cannot express a
+# transform, and `datamodel-codegen` drops it; the pipeline therefore normalises the path parameter
+# here and renders the same Zod issue for a value that stays invalid.
+
+INVITE_CODE_ROUTE_IDS = frozenset({"invitations.get", "invitations.accept"})
+_INVITE_CODE_PATTERN = re.compile(r"^LRN-[A-Z2-9]{4}$")
+
+
+def normalize_params(route_id: str, value: Mapping[str, Any], *, status: int | None = None) -> dict[str, Any]:
+    """Applies the contract transforms of the path parameters before the generated model runs."""
+    params = dict(value)
+    if route_id in INVITE_CODE_ROUTE_IDS and isinstance(params.get("code"), str):
+        code = params["code"].strip().upper()
+        if _INVITE_CODE_PATTERN.match(code) is None:
+            raise AppError(
+                "VALIDATION_FAILED",
+                INVALID_INPUT,
+                **({} if status is None else {"status": status}),
+                errors=[{"path": "params.code", "message": INVITATION_CODE_FORMAT}],
+            )
+        params["code"] = code
+    return params
 
 
 def apply_refinement(route_id: str, value: Any, *, status: int | None = None) -> None:

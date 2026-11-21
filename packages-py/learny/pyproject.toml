@@ -13,6 +13,7 @@ dependencies = [
   "sqlalchemy[asyncio]>=2.0",
   "psycopg[binary,pool]>=3.2",
   "tzdata>=2024.1",
+  "pypdf>=5.1",
 ]
 
 [build-system]

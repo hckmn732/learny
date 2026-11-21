@@ -16,10 +16,10 @@ operations:
   'billing.webhook': ts
   'bricks.correct': ts
   'bricks.report': ts
-  'cadrage.complete': ts
-  'cadrage.get': ts
-  'cadrage.message': ts
-  'cadrage.page': ts
+  'cadrage.complete': py
+  'cadrage.get': py
+  'cadrage.message': py
+  'cadrage.page': py
   'chapters.complete': ts
   'chapters.summary': ts
   'conversations.get': ts
@@ -116,29 +116,29 @@ operations:
   'exercises.saveDraft': ts
   'exercises.start': ts
   'exercises.submit': ts
-  'formations.access': ts
-  'formations.archive': ts
-  'formations.create': ts
-  'formations.current': ts
+  'formations.access': py
+  'formations.archive': py
+  'formations.create': py
+  'formations.current': py
   'formations.finalReview': ts
-  'formations.group.create': ts
-  'formations.group.get': ts
-  'formations.list': ts
+  'formations.group.create': py
+  'formations.group.get': py
+  'formations.list': py
   'formations.maintenance': ts
-  'formations.pause': ts
+  'formations.pause': py
   'formations.replan': ts
   'formations.replan-options': ts
   'formations.resume': ts
-  'formations.update': ts
+  'formations.update': py
   'gaps.list': ts
-  'groups.leave': ts
-  'groups.members.remove': ts
-  'groups.rotateCode': ts
+  'groups.leave': py
+  'groups.members.remove': py
+  'groups.rotateCode': py
   'header.get': py
   'health.get': ts
   'home.get': ts
-  'invitations.accept': ts
-  'invitations.get': ts
+  'invitations.accept': py
+  'invitations.get': py
   'me.ai.credentials.create': ts
   'me.ai.credentials.delete': ts
   'me.ai.credentials.discover': ts
@@ -180,14 +180,14 @@ operations:
   'notifications.read': ts
   'notifications.readAll': ts
   'notifications.unreadCount': ts
-  'notionGraph.get': ts
+  'notionGraph.get': py
   'offline.pack': ts
   'offline.sync': ts
-  'programme.adjust': ts
-  'programme.generate': ts
-  'programme.get': ts
-  'programme.import': ts
-  'programme.validate': ts
+  'programme.adjust': py
+  'programme.generate': py
+  'programme.get': py
+  'programme.import': py
+  'programme.validate': py
   'pushSubscriptions.delete': ts
   'pushSubscriptions.upsert': ts
   'quiz.answers.check': ts
@@ -208,7 +208,7 @@ operations:
   'review.answer': ts
   'review.complete': ts
   'review.globalQuizToday': ts
-  'search.global': ts
+  'search.global': py
   'series.milestones': ts
   'series.streak': ts
   'sidebar.get': py

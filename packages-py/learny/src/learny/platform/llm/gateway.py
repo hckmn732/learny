@@ -6,6 +6,7 @@ OpenAI-compatible) implement the same three calls; this spec ships the protocol,
 BYOK and the mock adapter, and later specs wire the live providers.
 """
 
+import json
 from collections.abc import AsyncIterator, Sequence
 from typing import Any, Protocol
 
@@ -115,6 +116,14 @@ class MockGateway:
                 return StepOutput(
                     text=step.text,
                     finish_reason=step.finishReason,
+                    usage=_usage(step),
+                    model_id=f"mock:{fixture.scenario}",
+                )
+            if isinstance(step, ObjectStep):
+                # `mock-model.ts` serialises a structured step as JSON text for `step()`.
+                return StepOutput(
+                    text=json.dumps(step.object, ensure_ascii=False, separators=(",", ":")),
+                    finish_reason="stop",
                     usage=_usage(step),
                     model_id=f"mock:{fixture.scenario}",
                 )

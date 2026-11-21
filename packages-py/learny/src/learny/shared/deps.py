@@ -15,6 +15,8 @@ import structlog
 
 from learny.identity.infrastructure.gotrue import GoTrueClient
 from learny.identity.infrastructure.jwt import JwtVerifier
+from learny.platform.llm.gateway import LlmGateway, MockGateway
+from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
 from learny.shared.clock import Clock, from_env
 from learny.shared.config import Settings
@@ -34,6 +36,7 @@ class Deps:
     gotrue: GoTrueClient
     storage: SupabaseStorage
     logger: Any
+    llm: LlmGateway
 
 
 def jwks_fetcher(settings: Settings) -> Any:
@@ -60,4 +63,18 @@ def build_deps(settings: Settings) -> Deps:
         gotrue=GoTrueClient(settings),
         storage=SupabaseStorage(settings, clock),
         logger=structlog.get_logger("learny"),
+        llm=build_llm(settings),
     )
+
+
+def build_llm(settings: Settings) -> LlmGateway:
+    """The AI capability of the use cases (SPEC-2201).
+
+    Only the deterministic mock adapter ships with this specification: the live providers land with
+    the spec that first needs them (SPEC-2204). A non-mock `LLM_MODE` therefore fails at startup
+    instead of silently serving simulated answers in production.
+    """
+    mode = os.environ.get("LLM_MODE", "mock")
+    if mode not in ("", "mock"):
+        raise RuntimeError(f"LLM_MODE={mode} is not served yet: only the mock adapter ships")
+    return MockGateway(load_registry())

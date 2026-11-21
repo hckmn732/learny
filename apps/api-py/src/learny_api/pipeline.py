@@ -46,7 +46,13 @@ from learny_api.guards.origin import (
     settings_env,
 )
 from learny_api.guards.rate_limit import RateLimitRequest, create_rate_limiter
-from learny_api.validate import apply_refinement, invalid_input, query_to_object, validate_input
+from learny_api.validate import (
+    apply_refinement,
+    invalid_input,
+    normalize_params,
+    query_to_object,
+    validate_input,
+)
 
 if TYPE_CHECKING:
     from learny.shared.config import Settings
@@ -341,7 +347,7 @@ async def handle(spec: RouteSpec, request: Request, context: PipelineContext) ->
 def _validate_params(spec: RouteSpec, request: Request) -> BaseModel | None:
     if spec.params is None:
         return None
-    raw = dict(request.path_params)
+    raw = normalize_params(spec.id, dict(request.path_params), status=spec.validation_status)
     return validate_input(spec.params, raw, "params", status=spec.validation_status)
 
 

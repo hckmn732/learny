@@ -21,6 +21,14 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.platform.storage": "signed URLs and export objects",
         # Admin Auth calls (user creation, deletion) need the service role key.
         "learny.identity.infrastructure.gotrue": "GoTrue admin endpoints",
+        # SPEC-2201 - outbox metadata of the cadrage conclusion (ADR-0246)
+        "learny.formation.application.cadrage": "outbox metadata of the cadrage conclusion (ADR-0246)",
+        # SPEC-2201 - transition events written after the status change
+        "learny.formation.application.formations": "transition events written after the status change",
+        # SPEC-2201 - invitee has no membership yet (ADR-0246) and member events
+        "learny.formation.application.groups": "invitee has no membership yet (ADR-0246) and member events",
+        # SPEC-2201 - failed import and adjustment reasons, programme events
+        "learny.formation.application.programme": "failed import and adjustment reasons, programme events",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
