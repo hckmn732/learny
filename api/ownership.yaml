@@ -134,7 +134,7 @@ operations:
   'groups.leave': ts
   'groups.members.remove': ts
   'groups.rotateCode': ts
-  'header.get': ts
+  'header.get': py
   'health.get': ts
   'home.get': ts
   'invitations.accept': ts
@@ -146,7 +146,7 @@ operations:
   'me.ai.credentials.qualify': ts
   'me.ai.models.get': ts
   'me.ai.models.update': ts
-  'me.ai.task-models.update': ts
+  'me.ai.task-models.update': py
   'me.automation-actions.accept': ts
   'me.automation-actions.decline': ts
   'me.automation-actions.list': ts
@@ -157,21 +157,21 @@ operations:
   'me.deletion.schedule': ts
   'me.export.read': ts
   'me.export.request': ts
-  'me.get': ts
-  'me.legal.accept': ts
+  'me.get': py
+  'me.legal.accept': py
   'me.notificationSettings.get': ts
   'me.notificationSettings.update': ts
-  'me.onboarding.get': ts
-  'me.onboarding.update': ts
+  'me.onboarding.get': py
+  'me.onboarding.update': py
   'me.pause.diagnostic': ts
   'me.pause.end': ts
   'me.pause.get': ts
   'me.pause.start': ts
-  'me.preferences.get': ts
-  'me.preferences.update': ts
-  'me.profile.get': ts
-  'me.profile.update': ts
-  'me.update': ts
+  'me.preferences.get': py
+  'me.preferences.update': py
+  'me.profile.get': py
+  'me.profile.update': py
+  'me.update': py
   'me.weekly-review.get': ts
   'modules.course': ts
   'modules.generateCourse': ts
@@ -211,8 +211,8 @@ operations:
   'search.global': ts
   'series.milestones': ts
   'series.streak': ts
-  'sidebar.get': ts
-  'sidebar.update': ts
+  'sidebar.get': py
+  'sidebar.update': py
   'slots.alternatives': ts
   'slots.move': ts
   'suggestions.dismiss': ts
