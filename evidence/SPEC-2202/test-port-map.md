@@ -57,7 +57,7 @@ messages internes anglais. La comparaison d'oracle porte donc, pour ce seul code
 | `packages/learning-engine/src/types.test.ts` | 9 | `.../test_types.py` | 24 cas : disponibilité valide et ses 8 refus `INVALID_AVAILABILITY` (CL-6), carte FSRS valide et 8 refus de champ, `-0`/NaN/Infini/champ manquant/champ inconnu (CL-9), `DateRange`, `NotionRef`, `AnswerRecord`, `GapState`, heure locale, fuseau | égalité stricte ; les propriétés *fast-check* deviennent des cas explicites |
 | `packages/learning-engine/src/planner/plan.test.ts` | 20 | `.../test_plan.py` | 49 cas : 22 plans enregistrés, replanification, 5 recherches de créneaux, capacité quotidienne, marges de 60 min, quiz global quotidien, jours d'étude et fériés, indépendance à l'ordre, examens blancs et sprints, changement d'heure | égalité stricte, PRNG et arrondis identiques |
 | `packages/learning-engine/src/planner/plan-validation.test.ts` | 10 | `.../test_plan_validation.py` | 37 cas : 22 erreurs d'entrée enregistrées, 4 valeurs de `maxChunkMinutes`, créneaux annulés/déplacés, formation en pause, déplacement manuel hors jour d'étude et en chevauchement, quiz global existant, dépassement de capacité, créneau à cheval sur minuit | égalité stricte (code, chemin et message des erreurs) |
-| `packages/learning-engine/test/integration/planner.test.ts` | 6 | `tests/integration/learning-engine/test_planner.py` | — | **à porter** (étape suivante) |
+| `packages/learning-engine/test/integration/planner.test.ts` | 6 | `tests/integration/learning-engine/test_learning_planner_composition.py` | 6 | égalité stricte : capacité cumulée, rejeu d'une séance manquée, changements d'heure |
 
 ## Modules portés — briques (`learny/assessments/domain/bricks/`)
 
@@ -71,8 +71,8 @@ messages internes anglais. La comparaison d'oracle porte donc, pour ce seul code
 | `packages/bricks/src/validate.test.ts` + `validate-locations.test.ts` | 40 | `.../test_bricks_validation.py` | 93 cas : 61 brouillons enregistrés avec un résolveur en mémoire, empreinte, type de contenu sans empreinte, chemin exact d'une clé inconnue, aucun appel au résolveur sur schéma invalide, toutes les issues d'une étape ensemble, injection traitée comme donnée (CL-10), règles d'origine et de notion, références inconnues, ressource supprimée, emplacements | égalité stricte ; messages comparés sauf `SCHEMA_INVALID` |
 | `packages/bricks/src/registry.test.ts` + `architecture.test.ts` | 7 | `.../test_registry.py` | 10 cas : treize types enregistrés, contrat de chaque définition, mode de correction de BR-BRI-08, exigence de notion, empreinte des sept questions, projection ensemblée, absence d'import interdit et d'horloge (CA-7) | contrôle d'architecture par AST |
 
-Total : **1242 tests pytest**, dont **594 ajoutés par cette tranche** (86 planificateur, 484 briques,
-24 contrats de types), tous marqués `pytestmark = pytest.mark.spec("SPEC-2202")`.
+Total : **1313 tests pytest**, dont **71 ajoutés par cette tranche** (49 tests d'intégration du
+moteur et 22 helpers de lecture), tous marqués `pytestmark = pytest.mark.spec("SPEC-2202")`.
 
 | `packages/bricks/src/types/instruction/response.ts` | 7 | `.../test_helpers.py` | 8 cas : tableau dans les bornes, tableau trop court, clé inconnue, texte dans les bornes, texte trop court, fichier, lien HTTPS accepté puis refusé | égalité stricte (valeur ou `path` des issues) |
 | `packages/bricks/src/types/instruction/table-checks.ts` | 7 | `.../test_helpers.py` | 20 nombres français analysés, 10 formats `Intl`, 4 contrôles de somme (vide, déséquilibré, groupe inconnu), côté de chaque ligne | égalité stricte, séparateur de milliers U+202F compris |
@@ -81,11 +81,26 @@ Total : **1242 tests pytest**, dont **594 ajoutés par cette tranche** (86 plani
 
 ## Modules du domaine restant à porter
 
-| Test TypeScript | Module pytest prévu | État |
-|---|---|---|
-| `packages/learning-engine/test/integration/{planner,gaps,fsrs,mastery,metrics,engine-boundaries,draw-attempt}.test.ts` | `tests/integration/learning-engine/test_*.py` | à porter (30 cas) |
-| `packages/learning-engine/src/fixtures/{builders,sap-reference}.test.ts` (10 cas) | `tests/unit/learning-engine/test_builders.py`, `test_sap_reference.py` | à porter (jeux de démonstration) |
-| `packages/bricks/src/types/*/response.ts` (6 types) | couvert | porté avec la correction |
-| `packages/bricks/src/{correction-view,examples}.ts` et `types/*/examples.ts` | `.../test_correction_view.py` | à porter : vue de correction des types non corrigés, exemples de référence |
-| `packages/bricks/src/view/*` et `types/*/view.tsx` (≈ 20 cas) | — | hors périmètre (vues React, SPEC-503) |
-| `packages/bricks/src/view/{labels,markdown}.test.ts` | `.../test_labels.py`, `test_markdown.py` | hors périmètre (rendu, SPEC-503) |
+| Test TypeScript | Module pytest | Cas | État |
+|---|---|---|---|
+| `packages/learning-engine/test/integration/planner.test.ts` | `tests/integration/learning-engine/test_learning_planner_composition.py` | 6 | porté |
+| `.../integration/gaps.test.ts` | `.../test_learning_gaps_composition.py` | 7 | porté |
+| `.../integration/fsrs.test.ts` | `.../test_learning_fsrs_composition.py` | 5 | porté |
+| `.../integration/mastery.test.ts` | `.../test_learning_mastery_composition.py` | 4 | porté |
+| `.../integration/streak.test.ts` | `.../test_learning_streak_composition.py` | 4 | porté |
+| `.../integration/draw-attempt.test.ts` | `.../test_learning_draw_composition.py` | 4 | porté |
+| `.../integration/engine-boundaries.test.ts` | `.../test_learning_engine_boundaries.py` | 3 | porté (analyse par AST des sources Python) |
+| `.../integration/metrics.test.ts` | `tests/unit/learning-engine/test_metrics.py` | 4 | déjà porté (tranche précédente) |
+| `packages/learning-engine/src/fixtures/builders.test.ts` | `.../test_learning_engine_factories.py` | 9 | porté (les propriétés *fast-check* deviennent des cas explicites) |
+| `packages/learning-engine/src/fixtures/sap-reference.test.ts` | `.../test_learning_sap_reference.py` | 7 | porté |
+| `packages/bricks/src/types/*/response.ts` (6 types) | couvert | — | porté avec la correction |
+| `packages/bricks/src/registry-answers.test.ts` | `tests/unit/assessments/test_registry.py`, `test_normalize.py` | 2 | déjà porté |
+| `packages/bricks/src/correction-view.ts` | aucun module | 0 | **union de types seulement** : aucun code exécutable côté TypeScript, donc rien à porter en Python (les formes sont décrites par les modèles du contrat) |
+| `packages/bricks/src/examples.ts` et `types/*/examples.ts` | `bricks_contract.json` | 13 | déjà enregistrés dans la fixture des briques (exemples `valid`/`invalid`) |
+| `packages/bricks/src/view/*` et `types/*/view.tsx` (≈ 20 cas) | — | — | hors périmètre (vues React, SPEC-503) |
+| `packages/bricks/src/view/{labels,markdown}.test.ts` | — | — | hors périmètre (rendu, SPEC-503) |
+
+Les fixtures `learning_engine_reference.json` (instantané de référence, jeu SAP de 7 modules,
+24 chapitres et 48 notions, liens, maîtrise, lacunes, fabriques) et le helper
+`tests/factories/learning_support.py` sont **enregistrés depuis le moteur TypeScript** le 2026-11-21 :
+les tests rejouent ces sorties au lieu de les transcrire.

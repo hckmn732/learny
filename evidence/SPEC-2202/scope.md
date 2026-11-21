@@ -29,9 +29,18 @@ portés et testés ici (EF-1) mais le branchement au worker est fait en SPEC-220
 
 Étape 2 du plan P22 (domaine pur) **livrée** : moteur d'apprentissage complet (planificateur
 compris) et contrat des briques complet (schémas, règles, correction par le code, empreinte, payload
-public, mélange déterministe). Les étapes 3 à 9 (requêtes SQL, cas d'usage, handlers, tests
-d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est encore basculée :
-`api/ownership.yaml` est inchangé, les 41 opérations restent `ts`.
+public, mélange déterministe). Les tests d'intégration du moteur sont portés (49 cas) ainsi que les
+jeux de démonstration.
+
+Étape 3 **partielle** : `agenda.get` et `gaps.list` ont leurs requêtes SQL, leurs cas d'usage et
+leurs ports (`learny/learning/{infrastructure/queries,application/*}.py`, `learning/public.py`),
+plus les deux raffinements de période du contrat d'agenda dans `validate.REFINEMENTS`. Les handlers
+ne sont pas enregistrés : `apps/api-py/tests/unit/test_handlers.py` interdit un handler pour une
+opération `ts`, et une bascule sans parité prouvée est exclue (ADR-2005). La tranche suivante
+enregistre les handlers en même temps que la parité et la bascule.
+
+Aucune opération n'est encore basculée : `api/ownership.yaml` est inchangé, les 41 opérations
+restent `ts`.
 
 | Module du domaine | État | Preuve |
 |---|---|---|
@@ -54,7 +63,7 @@ d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est
 | `learny/assessments/domain/bricks/` — correction par le code des six types | porté | `tests/unit/assessments/test_grade.py` |
 | `learny/assessments/domain/bricks/` — réponse d'exercice, contrôle de tableau, minuteur, barème | porté | `tests/unit/assessments/test_helpers.py` |
 
-Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map.md`.
+Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map.md`. Legende : `[x]` servie et basculee, `[~]` requetes, cas d'usage et tests livres mais handler et bascule en attente de parite, `[ ]` reste a porter.
 
 ## Opérations du périmètre (liste cochable)
 
@@ -62,12 +71,12 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 
 | Fait | Opération | Méthode | Chemin | Propriétaire | Implémentation TS | Tables | Tests TS |
 |---|---|---|---|---|---|---|---|
-| [ ] | `agenda.get` | GET | `/api/v1/agenda` | ts | `agenda.ts` | formations, group_members, groups, modules, profiles, schedule_slots, study_preferences | `agenda.spec.ts`, `spec-705.spec.ts`, `schema.test.ts`, `agenda.test.ts` |
+| [~] | `agenda.get` | GET | `/api/v1/agenda` | ts | `agenda.ts` | formations, group_members, groups, modules, profiles, schedule_slots, study_preferences | `agenda.spec.ts`, `spec-705.spec.ts`, `schema.test.ts`, `agenda.test.ts` |
 | [ ] | `formations.finalReview` | GET | `/api/v1/formations/:fid/final-review` | ts | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
 | [ ] | `formations.maintenance` | POST | `/api/v1/formations/:fid/maintenance` | ts | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
 | [ ] | `formations.replan` | POST | `/api/v1/formations/:fid/replan` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
 | [ ] | `formations.replan-options` | POST | `/api/v1/formations/:fid/replan-options` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
-| [ ] | `gaps.list` | GET | `/api/v1/formations/:fid/gaps` | ts | `gaps.ts` | chapters, course_sections, courses, formations, free, gap_events, group_members, groups, modules, notion_states, notions, profiles | — |
+| [~] | `gaps.list` | GET | `/api/v1/formations/:fid/gaps` | ts | `gaps.ts` | chapters, course_sections, courses, formations, free, gap_events, group_members, groups, modules, notion_states, notions, profiles | — |
 | [ ] | `review.answer` | POST | `/api/v1/review-sessions/:sid/answers` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
 | [ ] | `review.complete` | POST | `/api/v1/review-sessions/:sid/complete` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | `final-review.test.ts` |
 | [ ] | `review.globalQuizToday` | GET | `/api/v1/formations/:fid/global-quiz/today` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
