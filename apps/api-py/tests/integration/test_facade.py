@@ -9,7 +9,6 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from learny.shared.config import Settings
-from learny_api import relay
 from learny_api.main import create_app
 
 pytestmark = pytest.mark.spec("SPEC-2003")
@@ -81,5 +80,5 @@ def test_the_contract_artefacts_are_loaded_from_the_repository() -> None:
     ownership = (ROOT / "api" / "ownership.yaml").read_text("utf-8")
     assert "operations:" in ownership
     assert (ROOT / "api" / "errors.json").exists()
-    app, client = build_app()
+    app, _client = build_app()
     assert app.state.ownership.operations["health.get"] == "ts"
