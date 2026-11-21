@@ -188,3 +188,14 @@ def invalid_element(origin: str) -> str:
 def generic() -> str:
     """`default`: the fallback message of the Zod locale."""
     return "Entrée invalide"
+
+
+# Refinements of `packages/contracts/src/{me,parametres-onglets-et-profil,sidebar,legal}.ts` that the
+# OpenAPI schema cannot carry: `datamodel-codegen` drops `.refine(...)`, `.trim()` and the IANA
+# check. `learny_api.validate.REFINEMENTS` applies them after the generated model, with these texts.
+PROFILE_FIELD_REQUIRED = "au moins un champ du profil est attendu"
+STUDY_DAYS_UNIQUE = "les jours doivent être uniques"
+STUDY_SLOTS_UNIQUE = "les moments doivent être uniques"
+REMINDERS_NEED_DEPART = "les rappels ne sont acceptés qu’avec l’étape depart"
+SIDEBAR_UPDATE_REQUIRED = "Indiquez le menu masqué ou la formation courante."
+UNKNOWN_TIME_ZONE = "Fuseau horaire inconnu"

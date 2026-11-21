@@ -61,6 +61,20 @@ AUTH_NOT_CONFIGURED = "Le service d’authentification n’est pas configuré."
 # packages/services/src/legal/accept.ts (SPEC-806 ET-3, ET-4, ported by SPEC-2101).
 LEGAL_ACCEPTANCE_REQUIRED = "Une nouvelle version des conditions doit être acceptée avant cette action."
 LEGAL_VERSIONS_CONFLICT = "Les versions soumises ne sont plus les versions actives. Rechargez la page."
+LEGAL_VERSIONS_INVALID = "Les versions soumises sont invalides."
+
+# packages/services/src/me.ts, header.ts, sidebar.ts, onboarding/*.ts, parametres-onglets-et-profil.ts
+# and ai/qualify-model.ts (SPEC-2201). Every literal is copied verbatim from its TypeScript source.
+PROFILE_NOT_FOUND = "Profil introuvable."
+PREFERENCES_NOT_FOUND = "Préférences introuvables."
+PROFILE_VERSION_CONFLICT = "Le profil a été modifié ailleurs. Rechargez vos réglages."
+SETTINGS_STATE_INCONSISTENT = "État des paramètres incohérent."
+FORMATION_NOT_FOUND = "Formation introuvable."
+CREDENTIAL_NOT_FOUND = "Cette clé personnelle est introuvable."
+MODEL_NOT_IN_CREDENTIAL = "Ce modèle ne fait pas partie des modèles de cette clé."
+TASK_MODEL_INVALID = "Affectation de modèle invalide."
+ONBOARDING_AI_REQUIRED = "Testez une clé personnelle et affectez-la aux cinq tâches."
+LEGAL_ACCEPTANCE_STORED_NOT_FOUND = "Acceptation introuvable après insertion."
 
 # packages/db/src/storage/paths.ts and signed-urls.ts (SPEC-114, ported by SPEC-2101).
 STORAGE_PATH_REFUSED = "Chemin de stockage refusé."
