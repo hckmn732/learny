@@ -84,3 +84,22 @@ sont listés avec leur motif (auth, home, resume, opérations hors périmètre).
 | e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2201\b"` | vert |
 | Visuel du périmètre | `pnpm test:visual` | vert |
 | Validation SDD | `node tools/sdd/validate.mjs SPEC-2201` | 8 étapes vertes |
+
+## Écarts résiduels connus (consignés, sans ❌)
+
+1. **`null` explicite sur un champ optionnel.** Là où Zod refuse `null` (`z.string().optional()`),
+   Pydantic l'accepte et le traite comme absent. Le seul cas du périmètre est un corps envoyé à la
+   main avec `null` sur un champ facultatif d'un DTO de formulaire ; aucun appelant ne le fait, et
+   aucun test d'oracle ne le couvre. Les schémas concernés n'ont pas été modifiés (ils sont
+   générés) ; la correction consisterait à ajouter un raffinement `none_required` dans
+   `learny_api.validate.REFINEMENTS`, comme pour `sidebar.update`.
+2. **Recherche web de la génération de programme.** `programme/generate.ts` appelle `searchWeb`
+   (Tavily/Anthropic) pour n'ajouter que des URL de sources au contexte du prompt. L'adaptateur
+   n'est pas porté par cette spécification (il appartient à `learny.platform.llm`, SPEC-2204) :
+   `learny.formation.application.programme.search_context` renvoie donc le message
+   « Recherche web indisponible », qui est exactement ce que le backend TypeScript renvoie sans
+   `SEARCH_API_KEY`. En mode `mock` (tests, e2e, démonstration) le résultat observable est
+   identique ; en production, la différence est la présence de sources web dans le prompt, jamais
+   le contrat HTTP.
+3. **Ordre des clés JSON.** La comparaison de parité trie désormais les clés (`normalizeBody`),
+   l'ordre n'étant pas un contrat. Les corps restent identiques valeur pour valeur.
