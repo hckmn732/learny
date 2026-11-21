@@ -50,6 +50,16 @@ class Settings(BaseSettings):
     legal_cgu_version: str = "2026-11-11"
     legal_privacy_version: str = "2026-11-11"
 
+    # Asynchronous execution (SPEC-2102): jobs mode and worker tuning.
+    jobs_mode: str = "worker"
+    py_dispatch_interval_ms: int = 500
+    py_dispatch_batch_size: int = 100
+    py_worker_concurrency: int = 8
+    py_worker_poll_interval_ms: int = 500
+    py_worker_health_port: int = 0
+    py_scheduler_retry_interval_s: int = 15
+    py_scheduler_poll_interval_s: int = 20
+
     @property
     def is_test(self) -> bool:
         return self.app_env in ("test", "local")

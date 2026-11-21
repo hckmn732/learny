@@ -123,5 +123,10 @@ class Database:
         async with self._engine.begin() as connection:
             yield Tx(conn=connection, actor=None)
 
+    @property
+    def engine(self) -> AsyncEngine:
+        """The engine, for the dedicated connection of the scheduler advisory lock."""
+        return self._engine
+
     async def close(self) -> None:
         await self._engine.dispose()

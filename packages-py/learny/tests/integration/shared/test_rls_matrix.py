@@ -159,7 +159,7 @@ async def test_personal_tables_refuse_every_foreign_operation(database: Database
             table = entry["table"]
             column = entry["probeColumn"]
             value = seed.rows.get(table)
-            assert value is not None, f"fixture absente pour {table}"
+            assert value is not None, f"missing fixture for {table}"
 
             assert await count_as(tx, seed.a, table, column, value) >= 1, f"{table}: owner read"
             assert await count_as(tx, seed.b, table, column, value) == 0, f"{table}: member read"
@@ -180,7 +180,7 @@ async def test_personal_tables_refuse_every_foreign_operation(database: Database
             assert delete == 0, f"{table}: member delete"
 
             foreign = FOREIGN_INSERTS.get(table)
-            assert foreign is not None, f"insertion etrangere non declaree pour {table}"
+            assert foreign is not None, f"no foreign insert declared for {table}"
             code = await refused(tx, seed.b, foreign, seed)
             assert code in ("42501", "23505", "23514"), f"{table}: forged insert accepted ({code})"
 
@@ -270,6 +270,11 @@ async def test_service_tables_stay_invisible_and_unwritable(database: Database) 
         "event_outbox": (
             "insert into public.event_outbox (event_id, name, data)"
             " values ('rls-forged-event', 'cron/nightly', '{}'::jsonb)",
+            {},
+        ),
+        "job_deliveries": (
+            "insert into public.job_deliveries (event_id, consumer, run_after)"
+            " values ('rls-forged-event', 'devtools.demo_job', now())",
             {},
         ),
         "idempotency_keys": (

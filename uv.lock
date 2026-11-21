@@ -482,14 +482,18 @@ name = "learny-worker"
 version = "0.0.0"
 source = { editable = "apps/worker-py" }
 dependencies = [
+    { name = "fastapi" },
     { name = "learny" },
     { name = "sentry-sdk" },
+    { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "fastapi", specifier = ">=0.115" },
     { name = "learny", editable = "packages-py/learny" },
     { name = "sentry-sdk", specifier = ">=2.14" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.30" },
 ]
 
 [[package]]

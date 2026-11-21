@@ -255,6 +255,9 @@ special:
   'POST /api/v1/dev/sdd/uploads': ts
   'POST /api/v1/formations/:fid/sprints': ts
 
-consumers: {}
+consumers:
+  'devtools.demo_job': py
 
-crons: {}
+crons:
+  'cron/hourly-tick': ts
+  'cron/nightly': ts

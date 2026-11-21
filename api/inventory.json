@@ -5,7 +5,7 @@
     "special": 32,
     "events": 49,
     "jobs": 22,
-    "gaps": 141
+    "gaps": 140
   },
   "operations": [
     {
@@ -1345,8 +1345,10 @@
       "implementation": null,
       "tables": [],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p21/spec-2102.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "devEventsOutbox",

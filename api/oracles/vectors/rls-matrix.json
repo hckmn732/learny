@@ -1531,6 +1531,32 @@
       "justification": "Seaux de limitation de débit réservés au service (SPEC-112 EF-4, SPEC-208) ; aucune lecture ni écriture client."
     },
     {
+      "table": "job_deliveries",
+      "category": "service",
+      "scenario": "service-table",
+      "probeColumn": "id",
+      "policies": [],
+      "owner": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "justification": "Livraisons durables du worker Python (SPEC-2102 ET-1, ADR-2014) ; aucune lecture ni écriture client."
+    },
+    {
       "table": "event_outbox",
       "category": "service",
       "scenario": "service-table",
@@ -1612,7 +1638,7 @@
   "categoryCounts": {
     "shared-programme": 7,
     "personal": 46,
-    "service": 6
+    "service": 7
   },
   "policyNames": [
     "activities_owner_all",
