@@ -219,3 +219,13 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-1008](ADR-1008-statut-de-succes-de-la-demonstration-http.md) | Statut de succès de la démonstration HTTP | Déduite | SPEC-1003, ADR-1001, ADR-1002 |
 | [ADR-1009](ADR-1009-verification-jwt-locale-avec-jose-faute-de-getclaims.md) | Vérification JWT locale avec JOSE faute de getClaims | Déduite | ADR-1005,SPEC-1102 |
 | [ADR-0341](ADR-0341-cles-d-ia-sans-qualification-bloquante-et-compatibilite-par-.md) | Clés d'IA sans qualification bloquante et compatibilité par tâche | Déduite | SPEC-506, SPEC-709, ADR-0298, ADR-0328 |
+| [ADR-2001](ADR-2001-recentrage-exclusif-sur-la-migration-python-depuis-main.md) | Recentrage exclusif sur la migration Python depuis main | Validée | ADR-1001, ADR-1002, ADR-1006, SPEC-2001 |
+| [ADR-2002](ADR-2002-runtime-python-fastapi.md) | Runtime Python FastAPI | Validée | ADR-2001, SPEC-2003 |
+| [ADR-2003](ADR-2003-monolithe-modulaire-python-et-frontieres-de-domaines.md) | Monolithe modulaire Python et frontières de domaines | Déduite | ADR-2002, SPEC-2003, SPEC-2201 |
+| [ADR-2004](ADR-2004-contrat-openapi-3-1-source-unique-et-sdk-typescript-genere.md) | Contrat OpenAPI 3.1 source unique et SDK TypeScript généré | Déduite | ADR-1001, ADR-2003, SPEC-2002 |
+| [ADR-2005](ADR-2005-coexistence-par-facade-python-et-table-de-propriete-des-rout.md) | Coexistence par façade Python et table de propriété des routes | Déduite | ADR-1001, ADR-2001, ADR-2004, SPEC-2003, SPEC-2301 |
+| [ADR-2006](ADR-2006-worker-python-maison-sur-outbox-postgresql-en-remplacement-d.md) | Worker Python maison sur outbox PostgreSQL en remplacement d’Inngest | Validée | ADR-0017, ADR-2003, ADR-2005, SPEC-2102 |
+| [ADR-2007](ADR-2007-hebergement-de-l-api-et-du-worker-python-sur-coolify.md) | Hébergement de l’API et du worker Python sur Coolify | Validée | ADR-0006, ADR-2003, SPEC-2301 |
+| [ADR-2008](ADR-2008-oracles-de-non-regression-et-portage-des-tests-en-python.md) | Oracles de non-régression et portage des tests en Python | Déduite | ADR-1001, ADR-0047, ADR-0048, SPEC-2001, SPEC-2302 |
+| [ADR-2009](ADR-2009-environnement-de-preuve-de-la-bascule-staging-fourni-par-le.md) | Environnement de preuve de la bascule : staging fourni par le porteur | Validée | ADR-0041, ADR-2007, SPEC-2301, SPEC-2302 |
+| [ADR-2010](ADR-2010-identite-verification-jwt-et-rls-cote-python.md) | Identité, vérification JWT et RLS côté Python | Déduite | ADR-0022, ADR-1005, ADR-1009, SPEC-2101 |

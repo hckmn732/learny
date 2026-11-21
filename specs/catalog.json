@@ -120,14 +120,35 @@
       ]
     },
     {
-      "id": "PM",
-      "dir": "p-migration",
-      "title": "Migration complète vers l'API Python headless",
-      "checkpoint": "CP-MIGRATION",
+      "id": "P20",
+      "dir": "p20-python-socle",
+      "title": "Migration Python — inventaire, contrat et socle",
+      "checkpoint": "CP-20",
+      "track": "python-migration"
+    },
+    {
+      "id": "P21",
+      "dir": "p21-python-donnees",
+      "title": "Migration Python — données, identité et worker",
+      "checkpoint": "CP-21",
+      "track": "python-migration"
+    },
+    {
+      "id": "P22",
+      "dir": "p22-python-domaines",
+      "title": "Migration Python — domaines métier",
+      "checkpoint": "CP-22",
       "track": "python-migration",
-      "requires": [
-        "CP-8"
-      ],
+      "checks": [
+        "cross-browser"
+      ]
+    },
+    {
+      "id": "P23",
+      "dir": "p23-python-bascule",
+      "title": "Migration Python — bascule et retrait du backend TypeScript",
+      "checkpoint": "CP-23",
+      "track": "python-migration",
       "checks": [
         "cross-browser",
         "perf"
@@ -4298,25 +4319,401 @@
       }
     },
     {
-      "id": "SPEC-MIGRATION",
-      "phase": "PM",
-      "title": "Migration complète vers une API Python headless organisée par domaines",
-      "priority": "V1",
+      "id": "SPEC-2001",
+      "phase": "P20",
+      "title": "Inventaire, matrice de parité et oracles de référence",
+      "priority": "migration",
       "dependsOn": [],
       "businessRules": [],
       "screens": [],
       "adrs": [
         "ADR-1001",
-        "ADR-1002",
-        "ADR-1003",
-        "ADR-1006",
-        "ADR-1007",
-        "ADR-1008",
-        "ADR-1009"
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-2004"
       ],
       "visual": "demo",
-      "path": "specs/p-migration/SPEC-MIGRATION-api-python-headless.md",
-      "scope": "Une seule spécification SDD pour réconcilier la trajectoire existante, décider l'architecture Python headless, créer le runtime et le contrat, connecter auth/DB/RLS, migrer les services organisés par domaines et les routes/jobs par lots, raccorder les clients, basculer avec rollback éprouvé, valider toutes les couches et retirer l'ancien runtime backend.",
+      "path": "specs/p20-python-socle/SPEC-2001-inventaire-parite-oracles.md",
+      "scope": "Inventaire exhaustif des 217 opérations, SSE, webhooks, événements et tâches ; matrice entrée → règles → tables → tests ; export des oracles TypeScript ; carte de portage des tests.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2002",
+      "phase": "P20",
+      "title": "Contrat OpenAPI source unique et SDK TypeScript généré",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2001"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-2004"
+      ],
+      "visual": "demo",
+      "path": "specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md",
+      "scope": "api/openapi.yaml OpenAPI 3.1 source, SDK TypeScript généré pour le web, contrôle de dérive Zod ↔ OpenAPI et contrôle de compatibilité en CI.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2003",
+      "phase": "P20",
+      "title": "Socle Python FastAPI, outillage SDD et façade de coexistence",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2001"
+      ],
+      "businessRules": [
+        "BR-PLA-08"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-2002",
+        "ADR-2003",
+        "ADR-2007"
+      ],
+      "visual": "demo",
+      "path": "specs/p20-python-socle/SPEC-2003-socle-python-facade.md",
+      "scope": "Workspace uv, apps/api-py et apps/worker-py, CI Python, image Docker, validate.mjs étendu à pytest, façade FastAPI relayant toutes les opérations vers Hono selon api/ownership.yaml, e2e via la façade.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2101",
+      "phase": "P21",
+      "title": "Connexion PostgreSQL, identité, RLS et Storage en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2002",
+        "SPEC-2003"
+      ],
+      "businessRules": [
+        "BR-PLA-04",
+        "BR-PLA-08"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0022",
+        "ADR-1005",
+        "ADR-1009",
+        "ADR-2010"
+      ],
+      "visual": "demo",
+      "path": "specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md",
+      "scope": "Pool SQLAlchemy/psycopg, UoW, vérification JWT cookie/Bearer, ActorContext, claims RLS transactionnels, rôle de service restreint, adaptateur Storage, matrice RLS rejouée.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2102",
+      "phase": "P21",
+      "title": "Outbox et worker Python remplaçant Inngest",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2101"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0017",
+        "ADR-2006"
+      ],
+      "visual": "demo",
+      "path": "specs/p21-python-donnees/SPEC-2102-outbox-worker.md",
+      "scope": "Worker maison : consommation de l'outbox par SKIP LOCKED, retries, lettres mortes, déduplication par consommateur, planificateur singleton à verrou consultatif, observabilité ; coexistence avec Inngest par table de propriété.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2201",
+      "phase": "P22",
+      "title": "Domaines Identity & Access et Formation & Programme en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2101",
+        "SPEC-2102"
+      ],
+      "businessRules": [
+        "BR-PLA-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-2003",
+        "ADR-2010"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md",
+      "scope": "Profils, préférences, adhésions, formations, cadrage et programmes portés en Python et basculés.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2202",
+      "phase": "P22",
+      "title": "Domaines Learning State & Planning et Assessments en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2201"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0020",
+        "ADR-0025",
+        "ADR-0029"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md",
+      "scope": "Moteur d'apprentissage déterministe (FSRS, maîtrise, lacunes, planificateur), quiz, examens et tentatives portés en Python avec oracles et tests de propriétés.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2203",
+      "phase": "P22",
+      "title": "Domaine Content & Retrieval et ingestion en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2201"
+      ],
+      "businessRules": [
+        "BR-PLA-04"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0023"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md",
+      "scope": "Ressources, ingestion, découpage, embeddings, recherche hybride pgvector et cours portés en Python ; même modèle et dimension d'embedding.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2204",
+      "phase": "P22",
+      "title": "Domaine Tutor & Conversations et flux SSE IA en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2202",
+        "SPEC-2203"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0019",
+        "ADR-0021",
+        "ADR-0023",
+        "ADR-0048"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2204-domaine-tuteur-sse.md",
+      "scope": "Tuteur, conversations, couche multi-fournisseurs, sorties structurées, budgets et flux SSE portés en Python avec protocole de flux identique octet pour octet sur les fixtures.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2205",
+      "phase": "P22",
+      "title": "Domaine Engagement : notifications et automatismes en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2202"
+      ],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0031",
+        "ADR-0032",
+        "ADR-2006"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2205-domaine-engagement.md",
+      "scope": "Notifications, e-mails, rappels, séries et automatismes portés en Python ; consommateurs et tâches planifiées basculés d'Inngest vers le worker.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2206",
+      "phase": "P22",
+      "title": "Domaines Billing & Entitlements et Privacy & Accounts en Python",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2201",
+        "SPEC-2203",
+        "SPEC-2204",
+        "SPEC-2205"
+      ],
+      "businessRules": [
+        "BR-PLA-05"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0011",
+        "ADR-0012"
+      ],
+      "visual": "demo",
+      "path": "specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md",
+      "scope": "Facturation, webhooks signés, droits, export et suppression RGPD orchestrés sur tous les contextes, rétention ; dernières entrées basculées à py.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2301",
+      "phase": "P23",
+      "title": "Déploiement Coolify, bascule progressive et rollback",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2206"
+      ],
+      "businessRules": [
+        "BR-PLA-04",
+        "BR-PLA-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0041",
+        "ADR-2007",
+        "ADR-2009"
+      ],
+      "visual": "demo",
+      "path": "specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md",
+      "scope": "Déploiement api/worker sur Coolify staging puis production, bascule par drapeaux et canary en lecture, un seul écrivain, exercices de rollback et de restauration, mesures de charge sur le staging fourni.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-2302",
+      "phase": "P23",
+      "title": "Non-régression complète et retrait du backend TypeScript",
+      "priority": "migration",
+      "dependsOn": [
+        "SPEC-2301"
+      ],
+      "businessRules": [
+        "BR-PLA-03",
+        "BR-PLA-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-2001",
+        "ADR-2005",
+        "ADR-2008",
+        "ADR-0017",
+        "ADR-1002",
+        "ADR-2006"
+      ],
+      "visual": "demo",
+      "path": "specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md",
+      "scope": "Suite complète (e2e, visuel, axe, cross-browser, charge, sécurité) contre Python ; retrait de apps/api Hono, des paquets backend TS, d'Inngest et de la façade de relais ; inventaire final prouvant l'absence de chemin résiduel.",
       "validation": {
         "unit": true,
         "integration": true,

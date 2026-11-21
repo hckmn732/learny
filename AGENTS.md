@@ -2,14 +2,16 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
-## Objectif prioritaire : séparation backend / frontend (piste « migration »)
+## Objectif unique : migration du backend vers une API Python headless (piste « python-migration »)
 
-Learny devient plusieurs applications : `apps/api` (backend TypeScript, Hono), `apps/web` (frontend React, Next.js client pur de l'API) et, plus tard, `apps/mobile` (Android et iOS, React Native + Expo). Décisions : ADR-1001 à ADR-1007.
+Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuivie.** Le backend TypeScript (`apps/api` Hono, paquets `services`, `db`, `jobs`, `llm`, `tutor`…) est remplacé par une API FastAPI et un worker Python organisés par domaines ; le web Next.js reste un client de l'API. Décisions : ADR-2001 à ADR-2010.
 
-- Le travail se fait sur la branche **`migration`**, dans le worktree `../learny-wt-migration` ; le worktree principal reste sur `main` (livraison V1).
-- Sur cette branche, `node tools/sdd/next.mjs` pilote la piste `migration` (P10 → P13, SPEC-1001 → SPEC-1302, checkpoints CP-10 → CP-13). Les spécifications partent de `migration` et y sont fusionnées (`docs/engineering/sdd-process.md` §1 bis, `docs/engineering/git.md` §1.0).
-- **Invariant absolu : conserver le fonctionnel actuel.** Aucune assertion de test existante modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Un écart est une anomalie à corriger dans le nouveau code, jamais dans le test.
-- `node tools/sdd/sync-main.mjs` (après SPEC-1001) au moins une fois par jour et avant chaque checkpoint. P12 attend CP-8 (V1 livrée sur `main`).
+- **Point de départ : `main`.** Les spécifications partent de `main` et y sont fusionnées ; aucune branche ni worktree de piste.
+- `node tools/sdd/next.mjs` pilote la piste `python-migration` (P20 → P23, SPEC-2001 → SPEC-2302, checkpoints CP-20 → CP-23). Les ADR de la piste sont numérotés à partir d'ADR-2001.
+- **Specs gelées** : piste `produit` (SPEC-808, SPEC-901 → 908, CP-7 → CP-9) et piste `migration` Hono (SPEC-1101 → SPEC-1302, CP-10 → CP-13, branche `migration`, worktree `learny-wt-migration`). Ne jamais les démarrer, les modifier ni les supprimer.
+- **Invariant absolu : conserver le fonctionnel actuel** (ADR-1001, précisé par ADR-2008). Aucune assertion d'oracle (e2e, visuel, accessibilité, contrat HTTP) modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Les tests TypeScript des paquets retirés sont portés en pytest avec les mêmes cas (`evidence/SPEC-2001/test-port-map.md`). Un écart est une anomalie à corriger dans le code Python, jamais dans le test.
+- **Coexistence** (ADR-2005) : la façade FastAPI reçoit tout le trafic et relaie vers Hono les entrées dont `api/ownership.yaml` indique `ts` ; une entrée passe à `py` seulement avec parité prouvée. Jamais deux écrivains.
+- Jobs : worker Python maison sur outbox PostgreSQL, Inngest retiré à la fin (ADR-2006). Hébergement : Coolify (ADR-2007). Preuves de charge, canary, rollback et restauration : staging fourni par le porteur, sinon blocage `--external` (ADR-2009).
 
 ## Règle absolue : zéro intervention humaine
 

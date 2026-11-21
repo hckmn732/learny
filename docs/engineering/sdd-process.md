@@ -13,9 +13,11 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 
 États stockés dans `progress/state.json` (seuls les scripts `tools/sdd/*.mjs` l'écrivent). États dérivés : `ready`, `waiting`, `dependency_blocked`.
 
-## 1 bis. Pistes (ADR-1006)
+## 1 bis. Pistes (ADR-1006, ADR-2001)
 
-Le catalogue répartit les phases en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001).
+**Piste active : `python-migration`** (P20 → P23, SPEC-2001 → SPEC-2302, CP-20 → CP-23, branche de base `main`, ADR à partir d'ADR-2001). Elle ne dépend d'aucun checkpoint d'une autre piste. Les pistes `produit` et `migration` décrites ci-dessous sont **gelées** par ADR-2001 : leurs specs en attente ne sont ni démarrées ni modifiées, leur historique est conservé. `validate.mjs` exécute aussi les tests pytest étiquetés `[SPEC-xxxx]` dès SPEC-2003.
+
+Historique : le catalogue répartissait les phases en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001).
 
 - Une phase est débloquée par le checkpoint de la phase précédente **de la même piste** et par les checkpoints de son champ `requires` (P12 exige CP-8).
 - `specs/catalog.json` : `activeTrack` = piste pilotée par `next.mjs` ; `SDD_TRACK=<piste>` la surcharge pour une commande. Sur la branche `migration`, `activeTrack` vaut `"migration"` ; sur `main`, `"produit"`.

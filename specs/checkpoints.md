@@ -102,16 +102,31 @@ API multi-clients et clôture (P13).
 - Aucun code de transition ; documentation et guide d'exploitation à jour ; `report.mjs --check` actif dans `pnpm lint`.
 - Suite e2e complète, cross-browser et performances vertes. Après réussite : fusion de `migration` dans `main` par l'agent principal, `activeTrack` remis à `"produit"` dans le commit de fusion (ADR-1006 §9).
 
-# Migration Python headless (piste dédiée)
+# Migration Python headless (piste `python-migration`, ADR-2001)
 
-La piste `python-migration` suit une seule spécification, `SPEC-MIGRATION`, découpée en lots internes définis dans sa section 8. Elle démarre depuis `main` uniquement après CP-8. Les anciens P10–P13 restent des documents et preuves historiques de la trajectoire Hono; ils ne sont pas supprimés ni exécutés en parallèle du portage Python. Les contrôles complets ci-dessous sont obligatoires après la clôture de SPEC-MIGRATION.
+Piste unique active, partie de `main`, sans dépendance à une autre piste. Les pistes `produit` et `migration` (Hono) sont gelées.
 
-## CP-MIGRATION
+## CP-20
 
-Architecture et migration Python headless complète.
-- Les lots internes 0–6 de SPEC-MIGRATION sont fermés, les ADR de décision sont enregistrés, et l'inventaire routes/jobs/règles n'a aucune entrée inexpliquée.
-- OpenAPI/SDK, compatibilité des contrats, tests RLS et d'autorisation, parité de tous les lots, redelivery/outbox et tests workers sont verts.
-- API, web relay/SSR et client Bearer externe simulé passent les parcours e2e et visuels; les navigateurs requis et axe/WCAG sont verts.
-- Lint, vérification de types, build API/web/worker, unitaires, intégration, e2e complet, sécurité et performances passent; mesures brutes et environnement figurent dans `evidence/SPEC-MIGRATION/`.
-- Exercice backup/restore et rollback exécuté; cohérence DB/outbox et règle d'un seul écrivain démontrées; runbooks d'exploitation et de reprise à jour.
-- Le runtime backend/worker TypeScript visé a été retiré après le cutover; toute dépendance conservée est recensée. Aucune régression ou divergence métier inexpliquée n'est ouverte.
+Inventaire, contrat et socle (SPEC-2001, SPEC-2002, SPEC-2003).
+- Inventaire de 217 opérations, des SSE, webhooks, événements et tâches complet ; oracles rejouables ; carte de portage des tests.
+- `api/openapi.yaml` source unique, SDK généré, contrôle de dérive et de compatibilité en CI.
+- Façade FastAPI relayant tout vers Hono ; suite e2e et visuelle complète verte via la façade ; `validate.mjs` exécute pytest.
+
+## CP-21
+
+Données, identité et worker (SPEC-2101, SPEC-2102).
+- Matrice RLS complète rejouée sous Python ; JWT cookie et Bearer vérifiés ; rôle de service restreint.
+- Worker et outbox : crash, concurrence et doublons sans double effet ; planificateur singleton.
+
+## CP-22
+
+Domaines métier (SPEC-2201, SPEC-2202, SPEC-2203, SPEC-2204, SPEC-2205, SPEC-2206).
+- Toutes les entrées de `api/ownership.yaml` sont à `py` ; matrices de parité sans divergence inexpliquée.
+- Tous les tests TypeScript backend ont un équivalent pytest vert ; suite e2e, visuelle et cross-browser verte via Python.
+
+## CP-23
+
+Bascule et retrait (SPEC-2301, SPEC-2302).
+- Production servie par Python sur Coolify ; rollback et restauration exercés sur le staging fourni ; budgets d'ADR-0041 mesurés.
+- `apps/api` Hono, Inngest et paquets backend TypeScript retirés ; inventaire final sans chemin résiduel ; suite complète, cross-browser et performances vertes.

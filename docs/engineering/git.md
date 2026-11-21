@@ -14,7 +14,13 @@ Le dépôt est initialisé localement (branche `main`). Le dépôt distant sera 
 
 Fusion : `git merge --no-ff spec/<…>` dans la **branche de base de la piste** de la spécification (`main` pour la piste produit, `migration` pour la piste migration), message `merge(SPEC-xxx): <titre>` ; la branche est ensuite supprimée localement. Les branches `spec/SPEC-1xxx-…` partent de `migration` (`start.mjs` lit `tracks.<piste>.baseBranch` du catalogue).
 
-### 1.0 Piste de migration (ADR-1006)
+### 1.0 Piste python-migration (ADR-2001) — active
+
+- Branches `spec/SPEC-2xxx-slug` créées depuis `main` par `start.mjs`, fusionnées dans `main` (`--no-ff`) par `complete.mjs`. Aucune branche ni worktree de piste ; `sync-main.mjs` n'est pas utilisé.
+- Tags `cp-20` → `cp-23` uniquement (`versionTags: false`).
+- La branche `migration` et le worktree `learny-wt-migration` sont archivés : aucun commit, aucune fusion, aucune suppression.
+
+### 1.0 bis Piste de migration Hono (ADR-1006) — gelée par ADR-2001
 
 - Worktree dédié : `git worktree add ../learny-wt-migration migration` ; le worktree principal reste sur `main`.
 - Synchronisation : `node tools/sdd/sync-main.mjs` (livré par SPEC-1001) au moins une fois par jour et avant chaque checkpoint. Conflits de suivi (`progress/state.json`, `progress/PROGRESS.md`) résolus automatiquement par piste ; conflit de code : garder le **comportement** de `main` et la **structure** de `migration`.
@@ -50,7 +56,7 @@ node tools/sdd/start.mjs SPEC-xxx     # verrou SDD propre au worktree
 Format : `<type>(<SPEC-ID>): <description à l'impératif, en français, ≤ 72 caractères>`
 
 - Types : `feat`, `fix`, `test`, `docs`, `refactor`, `perf`, `build`, `ci`, `chore`, `style`, `revert`, `evidence`.
-- La portée est **obligatoirement** l'identifiant de la spécification (`SPEC-402` ou identifiant nommé comme `SPEC-MIGRATION`), `CP-n`/`CP-NOM` pour un checkpoint, ou `sdd` pour l'outillage du référentiel.
+- La portée est **obligatoirement** l'identifiant de la spécification (`SPEC-402` ou identifiant nommé), `CP-n`/`CP-NOM` pour un checkpoint, ou `sdd` pour l'outillage du référentiel.
 - Corps facultatif : pourquoi, décisions (référence ADR). Pied : `Refs: SPEC-402`, `ADR: ADR-0025` le cas échéant.
 - Atomicité : un commit = un changement cohérent qui compile et passe les tests. Une spécification produit typiquement 2 à 6 commits : implémentation, tests, preuves (`evidence(SPEC-402): preuves de validation`), suivi (`chore(SPEC-402): marque la spécification terminée`).
 - Aucun commit sur `main` d'un état qui ne passe pas `pnpm lint && pnpm typecheck && pnpm test:unit`.

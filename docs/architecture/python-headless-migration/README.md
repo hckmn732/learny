@@ -22,13 +22,15 @@ Dossier produit le 21 novembre 2026 à partir du checkout main, commit 6881478a.
 
 ## Exécution SDD
 
-Le dépôt porte désormais une seule spécification exécutable pour cette trajectoire: [SPEC-MIGRATION](../../../specs/p-migration/SPEC-MIGRATION-api-python-headless.md). Les phases détaillées dans les anciens drafts ont été regroupées en lots internes de cette spécification; aucun SPEC-PY-xxxx séparé n'est requis. Elle dépend de CP-8 et les validations/tests listés dans la spec sont à effectuer au moment de son exécution.
+Le dépôt porte la piste `python-migration` (ADR-2001) : 13 spécifications SPEC-2001 → SPEC-2302 en 4 phases (P20 → P23, checkpoints CP-20 → CP-23), partant de `main` sans dépendance à une autre piste. Voir [12 — Feuille de route SDD](12-feuille-de-route-sdd.md). Les validations listées dans chaque spec sont exécutées au moment de son implémentation.
 
 ## Conclusion d’audit à retenir
 
 Learny a une API séparée Hono et le web ne dépend plus directement des paquets serveur. L’autonomie runtime du web est partielle: Next reste proxy et gardien de session/route. La migration Python serait un portage du backend et de ses contrats, DB/RLS, workflows, IA et ingestion; elle ne part pas d’un backend encore intégré aux routes Next.
 
 Le choix FastAPI est un candidat provisoire, pas une décision acceptée. Il faut d’abord résoudre l’incohérence de la piste SDD Hono/Python, terminer ou réviser la dépendance CP-8, dresser l’inventaire des 219 routes, et démontrer les bénéfices de Python par POC avec même RLS, SSE, jobs et charge. Les limites de sécurité et les règles métier existantes restent normatives.
+
+**Mise à jour du 21 novembre 2026 (ADR-2001 à ADR-2010)** : FastAPI, worker maison sur outbox, Coolify et staging fourni sont décidés ; la piste Python est la seule active et ne dépend plus de CP-8 ; l’écart 217/219 est un artefact de comptage (ADR-2004), il y a 217 opérations réelles.
 
 ## Sources de vérité internes
 
