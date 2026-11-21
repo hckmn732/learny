@@ -28,6 +28,9 @@ function forwardedHeaders(source: HeaderSource): Record<string, string> {
   result['X-Request-Id'] = requestId;
   result['X-Forwarded-Host'] = host;
   result['X-Forwarded-Proto'] = proto;
+  // Server-rendered mutations (e.g. selecting the current formation) carry no browser `Origin`;
+  // the page origin is the application's own, so the CSRF guard of the API accepts them.
+  result.Origin = `${proto}://${host}`;
   if (address !== null) result['X-Forwarded-For'] = address;
   if (secret !== undefined && secret !== '') result['X-Learny-Proxy-Secret'] = secret;
   return result;
