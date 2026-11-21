@@ -6,10 +6,11 @@ Zod issue shape (`path` prefixed by the input location, `message` from `locale_f
 `400`/`422` answer is byte-identical to the one the Hono backend sends (ADR-2012, ADR-1001).
 """
 
-from collections.abc import Iterable, Mapping, Sequence, Sized
+from collections.abc import Callable, Iterable, Mapping, Sequence, Sized
 from enum import Enum
 from types import NoneType, UnionType
 from typing import Annotated, Any, Literal, Union, get_args, get_origin
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import validation
@@ -276,3 +277,132 @@ def _zod_type(annotation: Any) -> str | None:
         if issubclass(unwrapped, str):
             return "string"
     return None
+
+
+# --------------------------------------------------------------------------------------------------
+# Refinements the generated model cannot express
+# --------------------------------------------------------------------------------------------------
+#
+# `datamodel-codegen` keeps the shape of an OpenAPI schema but drops the Zod refinements and
+# transforms of `packages/contracts`: "at least one field", uniqueness of an array, a reminder only
+# on the `depart` step, an IANA time zone, and the `trim()` every string goes through. Applying them
+# here keeps the pipeline the single validation point (ADR-2012) and the answer byte-identical.
+
+Refinement = Callable[[Mapping[str, Any]], list[dict[str, str]] | None]
+
+PROFILE_FIELDS = ("firstName", "lastName", "tutorTone", "courseLanguage", "timezone")
+SETTINGS_FIELDS = (*PROFILE_FIELDS, "rhythm")
+
+
+def _issue(path: str, message: str) -> dict[str, str]:
+    return {"path": path, "message": message}
+
+
+def _blank_string_issue(path: str) -> list[dict[str, str]]:
+    return [_issue(path, validation.too_small("string", 1, inclusive=True))]
+
+
+def _at_least_one_profile_field(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    if not any(field in value for field in PROFILE_FIELDS):
+        return [_issue("body", validation.PROFILE_FIELD_REQUIRED)]
+    return _trimmed_profile(value)
+
+
+def _at_least_one_settings_field(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    if not any(field in value for field in SETTINGS_FIELDS):
+        return [_issue("body", validation.PROFILE_FIELD_REQUIRED)]
+    return _trimmed_profile(value)
+
+
+def _trimmed_profile(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`z.string().trim()`: the name is validated after trimming; the IANA zone is checked here."""
+    errors: list[dict[str, str]] = []
+    first_name = value.get("firstName")
+    if isinstance(first_name, str) and first_name.strip() == "":
+        errors.extend(_blank_string_issue("body.firstName"))
+    timezone = value.get("timezone")
+    if isinstance(timezone, str) and not _is_iana_zone(timezone):
+        errors.append(_issue("body.timezone", validation.UNKNOWN_TIME_ZONE))
+    return errors or None
+
+
+def _is_iana_zone(value: str) -> bool:
+    try:
+        ZoneInfo(value)
+    except (ZoneInfoNotFoundError, ValueError):
+        return False
+    return True
+
+
+def _unique_preferences(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    errors: list[dict[str, str]] = []
+    days = value.get("studyDays")
+    if isinstance(days, list) and len(set(days)) != len(days):
+        errors.append(_issue("body.studyDays", validation.STUDY_DAYS_UNIQUE))
+    slots = value.get("preferredSlots")
+    if isinstance(slots, list) and len(set(slots)) != len(slots):
+        errors.append(_issue("body.preferredSlots", validation.STUDY_SLOTS_UNIQUE))
+    return errors or None
+
+
+def _onboarding_reminders(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    if "reminders" not in value:
+        return None
+    if value["reminders"] is None:
+        return [_issue("body.reminders", validation.invalid_type("object", "null"))]
+    if value.get("step") != "depart":
+        return [_issue("body.reminders", validation.REMINDERS_NEED_DEPART)]
+    return None
+
+
+def _sidebar_update(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    errors: list[dict[str, str]] = []
+    if "collapsed" not in value and "currentFormationId" not in value:
+        return [_issue("body", validation.SIDEBAR_UPDATE_REQUIRED)]
+    if "collapsed" in value and value["collapsed"] is None:
+        errors.append(_issue("body.collapsed", validation.invalid_type("boolean", "null")))
+    if "currentFormationId" in value and value["currentFormationId"] is None:
+        errors.append(_issue("body.currentFormationId", validation.invalid_type("UUID", "null")))
+    return errors or None
+
+
+def _task_model(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    model_id = value.get("modelId")
+    if isinstance(model_id, str) and model_id.strip() == "":
+        return _blank_string_issue("body.modelId")
+    return None
+
+
+def _legal_versions(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    errors: list[dict[str, str]] = []
+    for field in ("cguVersion", "privacyVersion"):
+        version = value.get(field)
+        if isinstance(version, str) and version.strip() == "":
+            errors.extend(_blank_string_issue(f"body.{field}"))
+    return errors or None
+
+
+REFINEMENTS: dict[str, Refinement] = {
+    "me.update": _at_least_one_profile_field,
+    "me.profile.update": _at_least_one_settings_field,
+    "me.preferences.update": _unique_preferences,
+    "me.onboarding.update": _onboarding_reminders,
+    "me.ai.task-models.update": _task_model,
+    "me.legal.accept": _legal_versions,
+    "sidebar.update": _sidebar_update,
+}
+
+
+def apply_refinement(route_id: str, value: Any, *, status: int | None = None) -> None:
+    """Applies the contract refinements of one route after the generated model validated `value`."""
+    refine = REFINEMENTS.get(route_id)
+    if refine is None or not isinstance(value, Mapping):
+        return
+    errors = refine(value)
+    if errors:
+        raise AppError(
+            "VALIDATION_FAILED",
+            INVALID_INPUT,
+            **({} if status is None else {"status": status}),
+            errors=errors,
+        )

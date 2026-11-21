@@ -17,7 +17,7 @@ from learny.shared.deps import build_deps
 from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
 from starlette.responses import JSONResponse, Response
 
-from learny_api import pipeline, relay
+from learny_api import handlers, pipeline, relay  # noqa: F401 - handlers registers @handler roles
 from learny_api.ownership import (
     Ownership,
     load_ownership,

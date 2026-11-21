@@ -46,7 +46,7 @@ from learny_api.guards.origin import (
     settings_env,
 )
 from learny_api.guards.rate_limit import RateLimitRequest, create_rate_limiter
-from learny_api.validate import invalid_input, query_to_object, validate_input
+from learny_api.validate import apply_refinement, invalid_input, query_to_object, validate_input
 
 if TYPE_CHECKING:
     from learny.shared.config import Settings
@@ -356,7 +356,9 @@ async def _validate_body(spec: RouteSpec, request: Request) -> BaseModel | None:
     if spec.body is None:
         return None
     value = await read_json_body(request)
-    return validate_input(spec.body, value, "body", status=spec.validation_status, strict=True)
+    parsed = validate_input(spec.body, value, "body", status=spec.validation_status, strict=True)
+    apply_refinement(spec.id, value, status=spec.validation_status)
+    return parsed
 
 
 async def read_json_body(request: Request) -> Any:
