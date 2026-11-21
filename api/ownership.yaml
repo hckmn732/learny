@@ -120,11 +120,11 @@ operations:
   'formations.archive': py
   'formations.create': py
   'formations.current': py
-  'formations.finalReview': ts
+  'formations.finalReview': py
   'formations.group.create': py
   'formations.group.get': py
   'formations.list': py
-  'formations.maintenance': ts
+  'formations.maintenance': py
   'formations.pause': py
   'formations.replan': ts
   'formations.replan-options': ts

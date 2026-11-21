@@ -16,6 +16,11 @@ def _actor(call: Call) -> Any:
     return cast(Any, call.actor)
 
 
+def _body(call: Call, *, partial: bool = False) -> dict[str, Any]:
+    """The validated body as a plain mapping; `partial` keeps only the fields the caller sent."""
+    return cast(dict[str, Any], cast(Any, call.body).model_dump(exclude_unset=partial))
+
+
 def _params(call: Call) -> dict[str, Any]:
     """The validated path parameters as a plain mapping."""
     return cast(dict[str, Any], cast(Any, call.params).model_dump())
@@ -37,3 +42,16 @@ async def series_streak(call: Call) -> Any:
 @handler("series.milestones")
 async def series_milestones(call: Call) -> Any:
     return await learning.get_milestones(call.deps, _actor(call), _query(call).get("formationId"))
+
+
+# --- final review --------------------------------------------------------------------------------
+
+
+@handler("formations.finalReview")
+async def formations_final_review(call: Call) -> Any:
+    return await learning.get_final_review(call.deps, _actor(call), _params(call)["fid"])
+
+
+@handler("formations.maintenance")
+async def formations_maintenance(call: Call) -> Any:
+    return await learning.set_maintenance(call.deps, _actor(call), _params(call)["fid"], _body(call))
