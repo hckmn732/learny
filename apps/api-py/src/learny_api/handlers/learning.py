@@ -31,6 +31,30 @@ def _query(call: Call) -> dict[str, Any]:
     return cast(dict[str, Any], cast(Any, call.query).model_dump())
 
 
+# --- agenda --------------------------------------------------------------------------------------
+
+
+@handler("agenda.get")
+async def agenda_get(call: Call) -> Any:
+    query = _query(call)
+    return await learning.get_agenda(
+        call.deps,
+        _actor(call),
+        {"formation": query["formation"], "from": query["from_"], "to": query["to"]},
+    )
+
+
+@handler("gaps.list")
+async def gaps_list(call: Call) -> Any:
+    nature = _query(call).get("nature")
+    return await learning.list_gaps(
+        call.deps,
+        _actor(call),
+        _params(call)["fid"],
+        None if nature is None else str(getattr(nature, "value", nature)),
+    )
+
+
 # --- series --------------------------------------------------------------------------------------
 
 

@@ -3,7 +3,7 @@
 # An operation may only switch to `py` once parity is proven.
 
 operations:
-  'agenda.get': ts
+  'agenda.get': py
   'auth.callback': ts
   'auth.magicLink': ts
   'auth.resend': ts
@@ -130,7 +130,7 @@ operations:
   'formations.replan-options': ts
   'formations.resume': ts
   'formations.update': py
-  'gaps.list': ts
+  'gaps.list': py
   'groups.leave': py
   'groups.members.remove': py
   'groups.rotateCode': py
