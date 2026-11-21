@@ -19,7 +19,7 @@ dev = [
 
 [tool.ruff]
 target-version = "py313"
-exclude = ["node_modules", ".next", ".venv", "dist", "test-results", "coverage"]
+exclude = ["node_modules", ".next", ".venv", "dist", "test-results", "coverage", "docs", "evidence", "design"]
 line-length = 110
 
 [tool.ruff.lint]

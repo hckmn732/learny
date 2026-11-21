@@ -15,6 +15,12 @@ import {
   summarizePlaywright, visualVerdict, writeFileAtomic,
 } from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
+import {
+  parseJunit,
+  pytestVerdict,
+  selectPythonTests,
+  stepSummary,
+} from './pytest.mjs';
 
 const STEPS = ['lint', 'typecheck', 'build', 'unit', 'integration', 'e2e', 'visual', 'acceptance'];
 const ALWAYS = ['lint', 'typecheck', 'acceptance'];
@@ -74,6 +80,17 @@ function taggedTestFiles() {
     .filter((f) => /\.test\.(ts|tsx|mts|js|mjs)$/.test(f) && !f.includes('node_modules'));
 }
 const tagged = taggedTestFiles();
+/** Fichiers de test Python qui contiennent « [SPEC-xxx] » (SPEC-2003). */
+function taggedPythonFiles() {
+  const r = shOk(
+    `git ls-files -co --exclude-standard -z | xargs -0 grep -lF -- "[${tag}]" 2>/dev/null`,
+  );
+  return (r.out ?? "")
+    .split("\n")
+    .map((x) => x.trim())
+    .filter((f) => f.endsWith(".py") && !f.includes("node_modules") && !f.includes("/.venv/"));
+}
+const pythonTagged = taggedPythonFiles();
 
 function vitest(kind, script) {
   const file = path.join(out, `${kind}.json`);
@@ -96,7 +113,25 @@ function vitest(kind, script) {
       else if (a.status === 'failed') failed += 1;
     }
   }
-  record(kind, code === 0 && failed === 0 && n > 0, `${n} test(s) [${tag}] réussi(s), ${failed} échec(s)`);
+  // SPEC-2003 CA-3 : les tests pytest étiquetés comptent pour la même étape.
+  const pythonFiles = selectPythonTests(pythonTagged, kind);
+  let python = { cases: 0, failures: 0, errors: 0, skipped: 0, passed: 0 };
+  let pythonCode = 0;
+  if (pythonFiles.length) {
+    const xml = path.join(out, `py-${kind}.xml`);
+    fs.rmSync(xml, { force: true });
+    pythonCode = timed(
+      `py-${kind}`,
+      () =>
+        run(
+          `uv run pytest ${pythonFiles.map((f) => JSON.stringify(f)).join(" ")} --junitxml=${JSON.stringify(xml)} -q`,
+        ),
+    );
+    if (fs.existsSync(xml)) python = parseJunit(fs.readFileSync(xml, "utf8"));
+  }
+  const pythonOk = pytestVerdict(pythonCode, python, pythonFiles.length > 0);
+  const ok = code === 0 && failed === 0 && pythonOk && (n > 0 || python.passed > 0);
+  record(kind, ok, stepSummary(n, failed, python, pythonFiles.length > 0));
 }
 
 for (const [kind, script] of [['unit', 'test:unit'], ['integration', 'test:int']]) {
