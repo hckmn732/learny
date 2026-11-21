@@ -27,9 +27,11 @@ portés et testés ici (EF-1) mais le branchement au worker est fait en SPEC-220
 
 ## Avancement du portage (état de la branche)
 
-Étape 2 du plan P22 (domaine pur) partiellement livrée ; les étapes 3 à 9 (requêtes, cas d'usage,
-handlers, tests d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est encore
-basculée : `api/ownership.yaml` est inchangé, les 41 opérations restent `ts`.
+Étape 2 du plan P22 (domaine pur) **livrée** : moteur d'apprentissage complet (planificateur
+compris) et contrat des briques complet (schémas, règles, correction par le code, empreinte, payload
+public, mélange déterministe). Les étapes 3 à 9 (requêtes SQL, cas d'usage, handlers, tests
+d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est encore basculée :
+`api/ownership.yaml` est inchangé, les 41 opérations restent `ts`.
 
 | Module du domaine | État | Preuve |
 |---|---|---|
@@ -45,8 +47,11 @@ basculée : `api/ownership.yaml` est inchangé, les 41 opérations restent `ts`.
 | `learny/learning/domain/global_quiz.py` (session, lissage, format) | porté | `tests/unit/learning-engine/test_build_daily_session.py` |
 | `learny/learning/domain/warmup.py` | porté | `tests/unit/learning-engine/test_select.py` |
 | `learny/learning/domain/draw.py` | porté | `tests/unit/learning-engine/test_draw_attempt.py` |
-| `learny/learning/domain/planner.py` (`planSchedule`, `replan`) | **à porter** | — |
-| `learny/assessments/domain/bricks/` (13 types) | **à porter** | — |
+| `learny/learning/domain/planner.py` (`planSchedule`, `findCompatibleSlots`, `replan`) | porté | `tests/unit/learning-engine/test_plan.py`, `test_plan_validation.py` |
+| `learny/learning/domain/types.py` (`assert_availability`, CL-6 et CL-9) | porté | `tests/unit/learning-engine/test_types.py` |
+| `learny/assessments/domain/bricks/` — schémas des 13 types, règles internes, registre, références, validation | porté | `tests/unit/assessments/test_schema.py`, `test_bricks_validation.py`, `test_registry.py` |
+| `learny/assessments/domain/bricks/` — normalisation, SHA-256, mélange, empreinte, payload public | porté | `tests/unit/assessments/test_normalize.py`, `test_sha256.py`, `test_bricks_random.py`, `test_fingerprint.py`, `test_public.py` |
+| `learny/assessments/domain/bricks/` — correction par le code des six types | porté | `tests/unit/assessments/test_grade.py` |
 
 Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map.md`.
 
