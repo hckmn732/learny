@@ -375,10 +375,14 @@ export async function createSession(
     assertCitationsCompatible({ citations: input.citations, structured: true });
     const started = clock.now();
     const system = buildAnthropicSystem(input.system);
+    // OpenAI strict JSON schema forbids optional fields and several keywords used by product
+    // schemas; the response is still validated by Zod, so the non-strict mode is used instead.
     const providerOptions =
       resolved.provider === 'anthropic' && opts.probe === undefined
         ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
-        : undefined;
+        : resolved.provider === 'openai'
+          ? { openai: { strictJsonSchema: false } }
+          : undefined;
     const headers =
       resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
