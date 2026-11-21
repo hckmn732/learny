@@ -61,6 +61,17 @@ export async function relayToApi(request: NextRequest): Promise<NextResponse> {
     } as RequestInit & { duplex: 'half' });
     const responseHeaders = new Headers(response.headers);
     if (!responseHeaders.has('x-request-id')) responseHeaders.set('x-request-id', id);
+    // Next rejects relative `Location` headers in proxy responses: resolve them on the public origin.
+    const location = responseHeaders.get('location');
+    if (location !== null && !/^https?:\/\//u.test(location)) {
+      const proto =
+        request.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() ??
+        request.nextUrl.protocol.replace(':', '');
+      responseHeaders.set(
+        'location',
+        new URL(location, `${proto}://${forwardedHost(request)}`).href,
+      );
+    }
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,
