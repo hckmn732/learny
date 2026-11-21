@@ -813,6 +813,24 @@ async function readContext(
   });
 }
 
+const PAYLOAD_GUIDES = new Map<string, string>();
+
+/** JSON Schema of one brick payload, computed once per format (hotfix QA guidance). */
+function payloadGuide(format: QuestionBankFormat): string {
+  const cached = PAYLOAD_GUIDES.get(format);
+  if (cached !== undefined) return cached;
+  let guide: string;
+  try {
+    guide = JSON.stringify(
+      z.toJSONSchema(brickRegistry[format].schema, { io: 'input', unrepresentable: 'any' }),
+    );
+  } catch {
+    guide = '{}';
+  }
+  PAYLOAD_GUIDES.set(format, guide);
+  return guide;
+}
+
 function defaultGenerator(): QuestionBankGenerator {
   return {
     async generate(input) {
@@ -852,11 +870,15 @@ function defaultGenerator(): QuestionBankGenerator {
         variants: z
           .array(
             z.object({
-              notionId: z.string().min(1).max(100),
-              format: z.enum(QUESTION_BANK_FORMATS),
-              // Hotfix QA: the exact brick payload schema of the requested format, so the provider's
-              // structured output follows the real field names instead of guessing them.
-              payload: brickRegistry[input.format].schema as z.ZodType<Record<string, unknown>>,
+              notionId: z.string().max(100).optional(),
+              format: z.string().max(40).optional(),
+              // Hotfix QA: the exact brick payload JSON Schema is given as guidance (field names,
+              // ids, `{{notionId}}` placeholders); the strict check is `validateBrick` afterwards.
+              payload: z
+                .record(z.string(), z.unknown())
+                .describe(
+                  `Payload of a ${input.format} brick. JSON Schema: ${payloadGuide(input.format)}`,
+                ),
             }),
           )
           .min(1)
@@ -875,8 +897,8 @@ function defaultGenerator(): QuestionBankGenerator {
       if (!generated.ok) return generated;
       return ok(
         generated.value.variants.map((variant) => ({
-          notionId: variant.notionId,
-          format: variant.format,
+          notionId: variant.notionId ?? input.notion.id,
+          format: input.format,
           payload: variant.payload,
         })),
       );
