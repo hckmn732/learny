@@ -4,7 +4,11 @@ The variable names are the ones the TypeScript backend already reads; Python-spe
 prefixed with `PY_`. Nothing is renamed, so an existing deployment keeps working.
 """
 
+from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+RateLimitMode = Literal["on", "off"]
 
 
 class Settings(BaseSettings):
@@ -30,11 +34,25 @@ class Settings(BaseSettings):
     supabase_service_role_key: str = ""
     supabase_jwt_secret: str = ""
     supabase_jwt_audience: str = "authenticated"
+    supabase_jwks_url: str | None = None
     jwt_issuer_override: str | None = None
+
+    # HTTP protections (SPEC-208, ported by SPEC-2101).
+    next_public_app_url: str | None = None
+    allowed_origins: str | None = None
+    api_proxy_secret: str | None = None
+    api_proxy_secret_previous: str | None = None
+    trust_proxy: bool = False
+    rate_limit_mode: RateLimitMode = "on"
+    rate_limit_ip_secret: str | None = None
 
     @property
     def is_test(self) -> bool:
         return self.app_env in ("test", "local")
+
+    @property
+    def is_production(self) -> bool:
+        return self.app_env == "production"
 
     @property
     def supabase_jwt_issuer(self) -> str:
@@ -42,3 +60,10 @@ class Settings(BaseSettings):
         if self.jwt_issuer_override is not None:
             return self.jwt_issuer_override
         return f"{self.supabase_url.rstrip('/')}/auth/v1"
+
+    @property
+    def supabase_jwks(self) -> str:
+        """JWKS endpoint, `<SUPABASE_URL>/auth/v1/.well-known/jwks.json` by default."""
+        if self.supabase_jwks_url is not None:
+            return self.supabase_jwks_url
+        return f"{self.supabase_url.rstrip('/')}/auth/v1/.well-known/jwks.json"
