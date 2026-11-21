@@ -101,3 +101,17 @@ API multi-clients et clôture (P13).
 - OpenAPI valide avec schémas de sécurité ; client natif simulé réussi sans cookie ni `Origin` ; CORS limité aux origines déclarées.
 - Aucun code de transition ; documentation et guide d'exploitation à jour ; `report.mjs --check` actif dans `pnpm lint`.
 - Suite e2e complète, cross-browser et performances vertes. Après réussite : fusion de `migration` dans `main` par l'agent principal, `activeTrack` remis à `"produit"` dans le commit de fusion (ADR-1006 §9).
+
+# Migration Python headless (piste dédiée)
+
+La piste `python-migration` suit une seule spécification, `SPEC-MIGRATION`, découpée en lots internes définis dans sa section 8. Elle démarre depuis `main` uniquement après CP-8. Les anciens P10–P13 restent des documents et preuves historiques de la trajectoire Hono; ils ne sont pas supprimés ni exécutés en parallèle du portage Python. Les contrôles complets ci-dessous sont obligatoires après la clôture de SPEC-MIGRATION.
+
+## CP-MIGRATION
+
+Architecture et migration Python headless complète.
+- Les lots internes 0–6 de SPEC-MIGRATION sont fermés, les ADR de décision sont enregistrés, et l'inventaire routes/jobs/règles n'a aucune entrée inexpliquée.
+- OpenAPI/SDK, compatibilité des contrats, tests RLS et d'autorisation, parité de tous les lots, redelivery/outbox et tests workers sont verts.
+- API, web relay/SSR et client Bearer externe simulé passent les parcours e2e et visuels; les navigateurs requis et axe/WCAG sont verts.
+- Lint, vérification de types, build API/web/worker, unitaires, intégration, e2e complet, sécurité et performances passent; mesures brutes et environnement figurent dans `evidence/SPEC-MIGRATION/`.
+- Exercice backup/restore et rollback exécuté; cohérence DB/outbox et règle d'un seul écrivain démontrées; runbooks d'exploitation et de reprise à jour.
+- Le runtime backend/worker TypeScript visé a été retiré après le cutover; toute dépendance conservée est recensée. Aucune régression ou divergence métier inexpliquée n'est ouverte.

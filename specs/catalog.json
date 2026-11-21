@@ -2,7 +2,7 @@
   "project": "Learny",
   "version": 1,
   "generatedOn": "2026-11-11",
-  "activeTrack": "migration",
+  "activeTrack": "python-migration",
   "tracks": {
     "produit": {
       "baseBranch": "main",
@@ -12,6 +12,11 @@
       "baseBranch": "migration",
       "versionTags": false,
       "adrBase": 1000
+    },
+    "python-migration": {
+      "baseBranch": "main",
+      "versionTags": false,
+      "adrBase": 2000
     }
   },
   "phases": [
@@ -109,6 +114,20 @@
       "title": "Migration — API multi-clients et clôture",
       "checkpoint": "CP-13",
       "track": "migration",
+      "checks": [
+        "cross-browser",
+        "perf"
+      ]
+    },
+    {
+      "id": "PM",
+      "dir": "p-migration",
+      "title": "Migration complète vers l'API Python headless",
+      "checkpoint": "CP-MIGRATION",
+      "track": "python-migration",
+      "requires": [
+        "CP-8"
+      ],
       "checks": [
         "cross-browser",
         "perf"
@@ -4270,6 +4289,34 @@
       "visual": "demo",
       "path": "specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md",
       "scope": "Retrait du code de transition, documentation, exploitation, rotation du secret de proxy, contrôle permanent du couplage, préparation de la fusion dans main.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-MIGRATION",
+      "phase": "PM",
+      "title": "Migration complète vers une API Python headless organisée par domaines",
+      "priority": "V1",
+      "dependsOn": [],
+      "businessRules": [],
+      "screens": [],
+      "adrs": [
+        "ADR-1001",
+        "ADR-1002",
+        "ADR-1003",
+        "ADR-1006",
+        "ADR-1007",
+        "ADR-1008",
+        "ADR-1009"
+      ],
+      "visual": "demo",
+      "path": "specs/p-migration/SPEC-MIGRATION-api-python-headless.md",
+      "scope": "Une seule spécification SDD pour réconcilier la trajectoire existante, décider l'architecture Python headless, créer le runtime et le contrat, connecter auth/DB/RLS, migrer les services organisés par domaines et les routes/jobs par lots, raccorder les clients, basculer avec rollback éprouvé, valider toutes les couches et retirer l'ancien runtime backend.",
       "validation": {
         "unit": true,
         "integration": true,

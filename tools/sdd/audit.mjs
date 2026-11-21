@@ -75,7 +75,7 @@ export function auditRepository(root = ROOT) {
     for (const b of s.businessRules) if (!txt.includes(b)) err(`${s.id} : règle ${b} non citée dans le texte`);
     for (const m of txt.matchAll(/\bBR-[A-Z]+-\d+\b/g)) { brCitedAnywhere.add(m[0]); if (!brDefined.has(m[0])) err(`${s.id} : règle citée inexistante ${m[0]}`); }
     for (const m of txt.matchAll(/\bADR-\d{4}\b/g)) if (!adrDefined.has(m[0])) err(`${s.id} : ADR cité inexistant ${m[0]}`);
-    for (const m of txt.matchAll(/\bSPEC-\d{3,4}\b/g)) if (!ids.has(m[0])) err(`${s.id} : spécification citée inexistante ${m[0]}`);
+    for (const m of txt.matchAll(/\bSPEC-(?:\d{3,4}|[A-Z][A-Z0-9]+(?:-[A-Z0-9]+)*)\b/g)) if (!ids.has(m[0])) err(`${s.id} : spécification citée inexistante ${m[0]}`);
     const ca = new Set([...txt.matchAll(/\bCA-\d+\b/g)].map((m) => m[0]));
     if (ca.size < 3) err(`${s.id} : moins de 3 critères d'acceptation`);
     const plan = txt.split('## 12. Plan de tests')[1]?.split('## 13.')[0] ?? '';

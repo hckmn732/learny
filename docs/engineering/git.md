@@ -50,7 +50,7 @@ node tools/sdd/start.mjs SPEC-xxx     # verrou SDD propre au worktree
 Format : `<type>(<SPEC-ID>): <description à l'impératif, en français, ≤ 72 caractères>`
 
 - Types : `feat`, `fix`, `test`, `docs`, `refactor`, `perf`, `build`, `ci`, `chore`, `style`, `revert`, `evidence`.
-- La portée est **obligatoirement** l'identifiant de la spécification (`SPEC-402`), `CP-n` pour un checkpoint, ou `sdd` pour l'outillage du référentiel.
+- La portée est **obligatoirement** l'identifiant de la spécification (`SPEC-402` ou identifiant nommé comme `SPEC-MIGRATION`), `CP-n`/`CP-NOM` pour un checkpoint, ou `sdd` pour l'outillage du référentiel.
 - Corps facultatif : pourquoi, décisions (référence ADR). Pied : `Refs: SPEC-402`, `ADR: ADR-0025` le cas échéant.
 - Atomicité : un commit = un changement cohérent qui compile et passe les tests. Une spécification produit typiquement 2 à 6 commits : implémentation, tests, preuves (`evidence(SPEC-402): preuves de validation`), suivi (`chore(SPEC-402): marque la spécification terminée`).
 - Aucun commit sur `main` d'un état qui ne passe pas `pnpm lint && pnpm typecheck && pnpm test:unit`.
