@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ROOT, main, measureWebBoundary } from '../../report.mjs';
+import { ROOT, countRegistryRoutes, main, measureWebBoundary } from '../../report.mjs';
 
 const fixtureRoot = path.join(ROOT, '.sdd', `report-test-${String(process.pid)}`);
 
@@ -46,18 +46,32 @@ describe('[SPEC-1302] permanent coupling check', () => {
     expect(process.exitCode).toBeUndefined();
   });
 
-  it('retains only the permanent report as a root-level script', () => {
+  it('retains only the permanent report and the SPEC-2001 inventory as root-level scripts', () => {
     const scripts = fs
       .readdirSync(path.join(ROOT, 'tools', 'migration'), { withFileTypes: true })
       .filter((entry) => entry.isFile() && /\.(?:mjs|mts)$/.test(entry.name))
       .map((entry) => entry.name);
-    expect(scripts).toEqual(['report.mjs']);
+    expect(scripts.sort()).toEqual(['inventory.mjs', 'report.mjs']);
+  });
+
+  it('counts the 217 real routes and ignores the factory definitions (CA-5)', () => {
+    expect(countRegistryRoutes(ROOT)).toBe(217);
   });
 
   it('contains no reference to the removed worker application outside historical material', () => {
     const forbidden = ['apps', 'worker'].join('/');
     const excluded = new Set(['.git', 'node_modules', '.next']);
-    const historical = new Set(['docs/legacy', 'docs/adr', 'evidence', 'design/references']);
+    // Documentation that *describes* the removal: ADRs, the python-migration specs and the
+    // technical canvas necessarily name the retired application. Only executable files must stay
+    // free of it (SPEC-2001, ADR-2001).
+    const historical = new Set([
+      'docs/legacy',
+      'docs/adr',
+      'docs/architecture',
+      'evidence',
+      'design/references',
+      'specs',
+    ]);
     const matches: string[] = [];
     const visit = (directory: string): void => {
       for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
