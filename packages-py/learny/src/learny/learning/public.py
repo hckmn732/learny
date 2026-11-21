@@ -32,6 +32,7 @@ from learny.learning.application.series import (
     next_milestone_of,
     reconcile_milestones,
 )
+from learny.learning.application.warmups import get_today_warmups
 
 __all__ = [
     "BrickReferenceResolver",
@@ -48,6 +49,7 @@ __all__ = [
     "get_replan_options",
     "get_slot_alternatives",
     "get_streak",
+    "get_today_warmups",
     "is_uuid",
     "list_gaps",
     "milestone_label",

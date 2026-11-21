@@ -1586,3 +1586,160 @@ async def read_automation_action_by_dedupe(
     )
     found = result.mappings().all()
     return None if not found else row_of(found[0])
+
+
+# --------------------------------------------------------------------------------------------------
+# warmups.today.get (packages/services/src/warmup/get-today.ts, SPEC-714)
+# --------------------------------------------------------------------------------------------------
+
+READ_WARMUP_PROFILE = text("select timezone from public.profiles where id = cast(:user_id as uuid)")
+
+READ_WARMUPS_TODAY = text(
+    """
+    select a.id::text as id,
+           a.formation_id::text as formation_id,
+           a.module_id::text as module_id,
+           m.position as module_position,
+           a.config,
+           a.items,
+           a.status::text as status,
+           a.for_date::text as for_date,
+           t.id::text as attempt_id,
+           t.status::text as attempt_status,
+           t.submitted_at as attempt_submitted_at,
+           (
+             select ss.starts_at
+             from public.schedule_slots ss
+             where ss.activity_id = a.id
+               and ss.status in ('planned', 'done', 'moved')
+             order by ss.starts_at desc
+             limit 1
+           ) as slot_starts_at,
+           (
+             select (aa.payload ->> 'reviewRemaining')::boolean
+             from public.automation_actions aa
+             where aa.user_id = a.owner_id
+               and aa.automation = 'echauffement'
+               and (aa.payload ->> 'activityId') = a.id::text
+             order by aa.created_at desc
+             limit 1
+           ) as review_remaining
+    from public.activities a
+    left join public.modules m on m.id = a.module_id
+    left join public.attempts t
+      on t.activity_id = a.id and t.user_id = a.owner_id and t.attempt_no = 1
+    where a.owner_id = cast(:user_id as uuid)
+      and a.kind = 'warmup'
+      and a.for_date = cast(:today as date)
+      and a.status = 'ready'
+    order by a.created_at asc
+    """
+)
+
+READ_WARMUP_DAY_SESSIONS = text(
+    """
+    select ss.id::text as id,
+           ss.kind::text as kind,
+           ss.starts_at,
+           ss.module_id::text as module_id,
+           ss.activity_id::text as activity_id
+    from public.schedule_slots ss
+    where ss.user_id = cast(:user_id as uuid)
+      and ss.formation_id = cast(:formation_id as uuid)
+      and ss.status = 'planned'
+      and ss.kind::text in ('course', 'exercise', 'validation_quiz', 'contributions', 'mock_exam')
+      and ss.starts_at >= cast(:day_start as timestamptz)
+      and ss.starts_at < cast(:day_end as timestamptz)
+    order by ss.starts_at asc
+    """
+)
+
+READ_WARMUP_VERSIONS = text(
+    """
+    select bv.id::text as version_id,
+           b.id::text as brick_id,
+           b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           bv.payload
+    from public.brick_versions bv
+    join public.bricks b on b.id = bv.brick_id
+    where bv.id = any(
+      array(select jsonb_array_elements_text(cast(:version_ids as jsonb))::uuid)
+    )
+    """
+)
+
+READ_WARMUP_NOTIONS = text(
+    """
+    select n.id::text as id, n.label, m.position as module_position
+    from public.notions n
+    join public.modules m on m.id = n.module_id
+    where n.id = any(
+      array(select jsonb_array_elements_text(cast(:notion_ids as jsonb))::uuid)
+    )
+    """
+)
+
+READ_WARMUP_ANSWERS = text(
+    """
+    select position, is_correct, response
+    from public.answers
+    where attempt_id = cast(:attempt_id as uuid)
+    order by position asc
+    """
+)
+
+
+async def read_warmup_timezone(tx: Tx, user_id: str) -> str:
+    """The learner's zone, `Europe/Paris` when the profile has none."""
+    result = await tx.conn.execute(READ_WARMUP_PROFILE, {"user_id": user_id})
+    found = result.mappings().all()
+    return "Europe/Paris" if not found else str(found[0]["timezone"])
+
+
+async def read_warmups_today(tx: Tx, user_id: str, today: str) -> list[Mapping[str, Any]]:
+    """EF-7 - the ready warm-ups of the civil day, oldest first."""
+    result = await tx.conn.execute(READ_WARMUPS_TODAY, {"user_id": user_id, "today": today})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_warmup_day_sessions(
+    tx: Tx, user_id: str, formation_id: str, day_start: str, day_end: str
+) -> list[Mapping[str, Any]]:
+    """EF-2 - the planned sessions of the day, ordered, so the next one is chosen in memory."""
+    result = await tx.conn.execute(
+        READ_WARMUP_DAY_SESSIONS,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "day_start": day_start,
+            "day_end": day_end,
+        },
+    )
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_warmup_versions(tx: Tx, version_ids: list[str]) -> list[Mapping[str, Any]]:
+    """The exact brick versions the activity stores, with their notions."""
+    import json
+
+    if not version_ids:
+        return []
+    result = await tx.conn.execute(READ_WARMUP_VERSIONS, {"version_ids": json.dumps(version_ids)})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_warmup_notions(tx: Tx, notion_ids: list[str]) -> list[Mapping[str, Any]]:
+    """The labels of the notions used by the warm-up."""
+    import json
+
+    if not notion_ids:
+        return []
+    result = await tx.conn.execute(READ_WARMUP_NOTIONS, {"notion_ids": json.dumps(notion_ids)})
+    return [row_of(item) for item in result.mappings().all()]
+
+
+async def read_warmup_answers(tx: Tx, attempt_id: str) -> list[Mapping[str, Any]]:
+    """The recorded first-pass answers of the attempt, by position."""
+    result = await tx.conn.execute(READ_WARMUP_ANSWERS, {"attempt_id": attempt_id})
+    return [row_of(item) for item in result.mappings().all()]
