@@ -38,9 +38,9 @@ def _imul(left: int, right: int) -> int:
     return (left * right) & _MASK
 
 
-def seeded_random(seed: str) -> Callable[[], float]:
-    """mulberry32 generator seeded by `fnv1a32(seed)`; every call returns a number in [0, 1)."""
-    state = fnv1a32(seed)
+def mulberry32(seed: int) -> Callable[[], float]:
+    """mulberry32 generator seeded by a 32-bit integer; every call returns a number in [0, 1)."""
+    state = seed & _MASK
 
     def next_value() -> float:
         nonlocal state
@@ -51,6 +51,11 @@ def seeded_random(seed: str) -> Callable[[], float]:
         return ((value ^ (value >> 14)) & _MASK) / UINT32
 
     return next_value
+
+
+def seeded_random(seed: str) -> Callable[[], float]:
+    """mulberry32 generator seeded by `fnv1a32(seed)`; every call returns a number in [0, 1)."""
+    return mulberry32(fnv1a32(seed))
 
 
 def stable_shuffle[T](items: Iterable[T], seed: str, key: Callable[[T], str]) -> list[T]:
