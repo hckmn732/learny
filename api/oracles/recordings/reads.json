@@ -4644,6 +4644,71 @@
       ]
     },
     {
+      "group": "errors",
+      "scenarios": [
+        {
+          "name": "errors.unauthenticated",
+          "steps": [
+            {
+              "status": 401,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/unauthenticated",
+                "title": "Connexion requise",
+                "status": 401,
+                "detail": "Vous devez être connecté pour effectuer cette action.",
+                "code": "UNAUTHENTICATED",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "errors.unknown-route",
+          "steps": [
+            {
+              "status": 404,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/not-found",
+                "title": "Introuvable",
+                "status": 404,
+                "detail": "Ressource introuvable.",
+                "code": "NOT_FOUND",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        },
+        {
+          "name": "errors.validation",
+          "steps": [
+            {
+              "status": 403,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "type": "https://learny.app/errors/origin-rejected",
+                "title": "Origine non autorisée",
+                "status": 403,
+                "detail": "Requête refusée : origine non autorisée.",
+                "code": "ORIGIN_REJECTED",
+                "requestId": "<uuid>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "group": "formation",
       "scenarios": [
         {

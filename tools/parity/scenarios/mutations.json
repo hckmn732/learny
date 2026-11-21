@@ -1,0 +1,25 @@
+[
+  {
+    "group": "errors",
+    "name": "errors.unauthenticated",
+    "steps": [{ "as": "anonymous", "method": "GET", "path": "/api/v1/me" }]
+  },
+  {
+    "group": "errors",
+    "name": "errors.unknown-route",
+    "steps": [{ "as": "anonymous", "method": "GET", "path": "/api/v1/route-inexistante" }]
+  },
+  {
+    "group": "errors",
+    "name": "errors.validation",
+    "steps": [
+      {
+        "as": "anonymous",
+        "method": "POST",
+        "path": "/api/v1/auth/sign-in",
+        "body": {},
+        "idempotencyKey": "parity-validation"
+      }
+    ]
+  }
+]

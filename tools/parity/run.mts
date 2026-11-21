@@ -27,6 +27,8 @@ export interface Step {
   method: string;
   path: string;
   body?: unknown;
+  /** Hand-written chains pin the key to observe a replay (`idempotent-replayed: true`). */
+  idempotencyKey?: string;
   expect?: { normalize?: string[] };
 }
 
@@ -126,7 +128,7 @@ async function executeStep(
   if (session !== null && session !== undefined) headers.cookie = session.cookieHeader;
   if (step.body !== undefined) {
     headers['content-type'] = 'application/json';
-    headers['idempotency-key'] = idempotencyKey;
+    headers['idempotency-key'] = step.idempotencyKey ?? idempotencyKey;
   }
   const response = await fetch(`${target}${step.path}`, {
     method: step.method,

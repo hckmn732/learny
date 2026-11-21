@@ -1,4 +1,7 @@
 // [SPEC-2001] Inventory, parity matrix and reference oracles.
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { EVENTS } from '../../../../packages/contracts/src/events';
@@ -35,6 +38,11 @@ function realInventory() {
 }
 
 describe('[SPEC-2001] inventory extractor', () => {
+  it('fails when the committed inventory drifts from the registries (CA-2)', () => {
+    const committed = fs.readFileSync(path.join(ROOT, 'api', 'inventory.json'), 'utf8');
+    expect(committed).toBe(serialize(realInventory()));
+  });
+
   it('covers the 217 operations of the registry and every event and job (CA-1)', () => {
     const inventory = realInventory();
     expect(inventory.counts.operations).toBe(217);
