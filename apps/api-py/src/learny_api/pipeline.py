@@ -348,21 +348,34 @@ def _validate_params(spec: RouteSpec, request: Request) -> BaseModel | None:
     if spec.params is None:
         return None
     raw = normalize_params(spec.id, dict(request.path_params), status=spec.validation_status)
-    return validate_input(spec.params, raw, "params", status=spec.validation_status)
+    return validate_input(spec.params, raw, "params", status=spec.validation_status, route_id=spec.id)
 
 
 def _validate_query(spec: RouteSpec, request: Request) -> BaseModel | None:
     if spec.query is None:
         return None
     items: Iterable[tuple[str, str]] = request.query_params.multi_items()
-    return validate_input(spec.query, query_to_object(items), "query", status=spec.validation_status)
+    return validate_input(
+        spec.query,
+        query_to_object(items),
+        "query",
+        status=spec.validation_status,
+        route_id=spec.id,
+    )
 
 
 async def _validate_body(spec: RouteSpec, request: Request) -> BaseModel | None:
     if spec.body is None:
         return None
     value = await read_json_body(request)
-    parsed = validate_input(spec.body, value, "body", status=spec.validation_status, strict=True)
+    parsed = validate_input(
+        spec.body,
+        value,
+        "body",
+        status=spec.validation_status,
+        strict=True,
+        route_id=spec.id,
+    )
     apply_refinement(spec.id, value, status=spec.validation_status)
     return parsed
 

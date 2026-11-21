@@ -21,6 +21,13 @@ from pydantic import BaseModel, ValidationError
 
 InputLocation = Literal["params", "query", "body"]
 
+# The OpenAPI document loses the object key order of the Zod contract, so the generated models
+# validate alphabetically. Zod reports the issues in declaration order; this table restores it for
+# the routes whose contract order is observable in the 400 body (ADR-1001).
+ISSUE_ORDER: dict[str, tuple[str, ...]] = {
+    "agenda.get": ("query.from", "query.to", "query.formation"),
+}
+
 # Pydantic error type -> the Zod expected type it stands for.
 _TYPE_ERRORS: dict[str, str] = {
     "string_type": "string",
@@ -74,6 +81,7 @@ def validate_input(
     *,
     status: int | None = None,
     strict: bool = False,
+    route_id: str | None = None,
 ) -> BaseModel:
     """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues."""
     try:
@@ -83,7 +91,7 @@ def validate_input(
             "VALIDATION_FAILED",
             INVALID_INPUT,
             **({} if status is None else {"status": status}),
-            errors=issues_of(model, error, location),
+            errors=issues_of(model, error, location, issue_order=ISSUE_ORDER.get(route_id or "")),
         ) from error
 
 
@@ -96,6 +104,8 @@ def issues_of(
     model: type[BaseModel],
     error: ValidationError,
     location: InputLocation,
+    *,
+    issue_order: Sequence[str] | None = None,
 ) -> list[dict[str, str]]:
     """Turns Pydantic errors into the `{path, message}` list `validate.ts` builds from Zod."""
     issues: list[dict[str, str]] = []
@@ -120,6 +130,9 @@ def issues_of(
             _insertion_index(issues, error, parent),
             {"path": _path(location, parent), "message": validation.unrecognized_keys(keys)},
         )
+    if issue_order:
+        ranked = {path: index for index, path in enumerate(issue_order)}
+        issues.sort(key=lambda issue: ranked.get(issue["path"], len(ranked)))
     return issues
 
 
@@ -232,6 +245,11 @@ def _annotation(model: type[BaseModel], loc: tuple[Any, ...]) -> Any:
         if not (isinstance(current, type) and issubclass(current, BaseModel)):
             return None
         field = current.model_fields.get(str(part))
+        if field is None:
+            field = next(
+                (item for item in current.model_fields.values() if item.alias == str(part)),
+                None,
+            )
         if field is None:
             return None
         current = field.annotation
