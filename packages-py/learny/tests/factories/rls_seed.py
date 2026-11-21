@@ -234,8 +234,7 @@ async def create_group(conn: Any, formation_id: str, owner_id: str) -> str:
     )
     await conn.execute(
         text(
-            "update public.formations set group_id = cast(:group as uuid)"
-            " where id = cast(:formation as uuid)"
+            "update public.formations set group_id = cast(:group as uuid) where id = cast(:formation as uuid)"
         ),
         {"group": group_id, "formation": formation_id},
     )
