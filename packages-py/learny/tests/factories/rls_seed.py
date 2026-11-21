@@ -213,7 +213,7 @@ async def create_test_course(conn: Any, owner_id: str, module_id: str) -> tuple[
                     position=position,
                     anchor=f"section-{chapter_index + 1}-{position}",
                     title=f"Section {position}",
-                    content=f"Contenu de la section {position}.",
+                    content=f"Section content {position}.",
                 )
             )
     return course_id, section_ids
@@ -580,7 +580,7 @@ async def create_seed(conn: Any) -> Seed:
         """
         insert into public.notifications (user_id, formation_id, type, title, body, href, icon)
         values (cast(:user as uuid), cast(:formation as uuid), 'course_ready', 'Cours pret',
-                'Votre cours est pret.', '/formations', 'book')
+                'Course ready.', '/formations', 'book')
         returning id::text as id
         """,
         user=a,
