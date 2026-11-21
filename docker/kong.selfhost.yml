@@ -2,6 +2,8 @@ _format_version: '2.1'
 # Public Supabase API of the self-hosted stack (SPEC-012, ET-3).
 # Only these routes are published; Postgres, Auth, Storage and PostgREST stay on the internal
 # `backend` network. No key is stored here: clients send the anon/service JWT as usual.
+# The `cors` plugin answers browser preflights (storage uploads use signed URLs from the web origin),
+# as in the upstream Supabase Kong configuration.
 services:
   - name: auth-v1
     url: http://auth:9999/
@@ -10,6 +12,8 @@ services:
         strip_path: true
         paths:
           - /auth/v1/
+    plugins:
+      - name: cors
   - name: rest-v1
     url: http://rest:3000/
     routes:
@@ -17,6 +21,8 @@ services:
         strip_path: true
         paths:
           - /rest/v1/
+    plugins:
+      - name: cors
   - name: storage-v1
     url: http://storage:5000/
     routes:
@@ -24,3 +30,5 @@ services:
         strip_path: true
         paths:
           - /storage/v1/
+    plugins:
+      - name: cors
