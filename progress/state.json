@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T09:42:11.909Z",
+  "updatedAt": "2026-11-21T10:44:21.878Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6646,14 +6646,55 @@
       }
     },
     "SPEC-2002": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-21T09:52:40.024Z",
+      "completedAt": "2026-11-21T10:44:21.872Z",
+      "branch": "spec/SPEC-2002-contrat-openapi-sdk",
+      "commit": "6026c8ee",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-21T10:34:07.966Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-21T10:34:20.328Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-21T10:34:21.422Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-21T10:36:16.912Z",
+          "details": "10 test(s) [SPEC-2002] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-21T10:36:19.249Z",
+          "details": "2 test(s) [SPEC-2002] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-21T10:37:08.278Z",
+          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-21T10:37:08.278Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-21T10:37:08.309Z",
+          "details": "3/3 critères ✅"
+        }
+      }
     },
     "SPEC-2003": {
       "status": "pending",
