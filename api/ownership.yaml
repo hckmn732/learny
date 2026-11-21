@@ -209,8 +209,8 @@ operations:
   'review.complete': ts
   'review.globalQuizToday': ts
   'search.global': py
-  'series.milestones': ts
-  'series.streak': ts
+  'series.milestones': py
+  'series.streak': py
   'sidebar.get': py
   'sidebar.update': py
   'slots.alternatives': ts
