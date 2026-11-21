@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T20:41:36.258Z",
+  "updatedAt": "2026-11-21T20:41:53.288Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6850,12 +6850,12 @@
       }
     },
     "SPEC-2201": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-21T18:35:49.561Z",
-      "completedAt": null,
+      "completedAt": "2026-11-21T20:41:53.281Z",
       "branch": "spec/SPEC-2201-domaines-identite-formation",
-      "commit": null,
+      "commit": "f99cb039",
       "lastError": null,
       "validations": {
         "lint": {
