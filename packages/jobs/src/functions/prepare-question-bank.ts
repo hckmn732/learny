@@ -31,15 +31,19 @@ export const prepareQuestionBankForCourse = defineFunction(
     trigger: { event: 'course/generated' },
     // The same course event never overlaps: the enqueue upserts the same job rows.
     concurrency: { key: 'event.data.courseId', limit: 1 },
-    timeouts: { finish: '10m' },
+    timeouts: { finish: '30m' },
   },
   async ({ event, ctx }) => {
-    const result = await enqueueCourseQuestionBanks(bankContext(ctx, event.data.userId), {
+    const bank = bankContext(ctx, event.data.userId);
+    const result = await enqueueCourseQuestionBanks(bank, {
       courseId: event.data.courseId,
       moduleId: event.data.moduleId,
       reason: 'course_generated',
     });
-    return { requestId: result.requestId, jobs: result.jobs.length };
+    // Hotfix QA: the validation quiz needs its bank right after the course, not after the nightly
+    // batch; the queued jobs are generated now (the nightly run stays the fallback).
+    const processed = await processQuestionBankJobs(bank, { limit: 50 });
+    return { requestId: result.requestId, jobs: result.jobs.length, ...processed };
   },
 );
 
