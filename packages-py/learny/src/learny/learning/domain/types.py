@@ -175,14 +175,16 @@ def validate_card(value: Any) -> SerializedFsrsCard:
     _strict_keys(value, CARD_FIELDS, "")
     if not is_instant_iso(value["due"]):
         raise invalid_input("due", "Invalid ISO 8601 UTC instant.")
-    if not isinstance(value["stability"], (int, float)) or value["stability"] < 0:
+    stability = _finite(value["stability"], "stability")
+    if stability < 0:
         raise invalid_input("stability", "A non-negative number is required.")
-    if not isinstance(value["difficulty"], (int, float)) or value["difficulty"] < 0:
+    difficulty = _finite(value["difficulty"], "difficulty")
+    if difficulty < 0:
         raise invalid_input("difficulty", "A non-negative number is required.")
     return SerializedFsrsCard(
         due=str(value["due"]),
-        stability=float(value["stability"]),
-        difficulty=float(value["difficulty"]),
+        stability=stability,
+        difficulty=difficulty,
         elapsed_days=_integer(value["elapsed_days"], "elapsed_days", 0),
         scheduled_days=_integer(value["scheduled_days"], "scheduled_days", 0),
         learning_steps=_integer(value["learning_steps"], "learning_steps", 0),
