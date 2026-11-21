@@ -22,3 +22,13 @@ packages/ui/src/styles/theme.css
 apps/web/public/sw.js
 apps/web/public/swe-worker-*.js
 apps/web/public/swe-worker-build.txt
+
+# Artefacts générés de la piste python (SPEC-2001, SPEC-2002, SPEC-2003).
+# Ils sont comparés octet pour octet à la sortie de leur générateur : le formateur ne doit pas
+# les réécrire (inventory.mjs, export-contract.ts, generate-sdk.mjs).
+api/inventory.json
+api/openapi.yaml
+api/errors.json
+api/events.schema.json
+api/oracles/
+packages/api-sdk/src/schema.d.ts
