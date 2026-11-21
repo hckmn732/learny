@@ -26,3 +26,21 @@ GAP_CLEARANCE_KEPT = "Lacune maintenue."
 GAP_CLEARANCE_DONE = (
     "Lacune levée : {count} réussites espacées de {interval} h, maîtrise {mastery} % ≥ {threshold} %."
 )
+
+# Planner (SPEC-407): the slot titles, the conflict messages and the BR-FOR-14 option reasons all
+# cross the HTTP contract, so they are copied verbatim from `packages/learning-engine/src/planner/plan.ts`.
+PLANNER_SLOT_CONTRIBUTIONS = "Apports — {label}"
+PLANNER_SLOT_COURSE = "Cours — {label}"
+PLANNER_SLOT_EXERCISE = "Exercice — {label}"
+PLANNER_SLOT_VALIDATION_QUIZ = "Quiz de validation — {label}"
+PLANNER_SLOT_VALIDATION_QUIZ_PREFIX = "Quiz de validation — "
+PLANNER_SLOT_BUFFER = "Marge de rattrapage — {label}"
+PLANNER_SLOT_MOCK_EXAM = "Examen blanc {number} — {title}"
+PLANNER_SLOT_SPRINT = "Sprint — {title}"
+PLANNER_SLOT_GLOBAL_QUIZ = "Quiz global"
+PLANNER_REASON_UNSCHEDULED = "Aucun créneau compatible dans l’horizon de 366 jours."
+PLANNER_REASON_MANUAL_MOVE = "Déplacement manuel incompatible avec le rythme : il sera recalculé."
+PLANNER_CONFLICT_OVERLAP = "Chevauchement de créneaux le {date}."
+PLANNER_CONFLICT_CAPACITY = "Capacité dépassée le {date} : {used} min pour {capacity} min."
+PLANNER_REASON_VOLUME = "Capacité insuffisante même à {hours} h/jour."
+PLANNER_REASON_LIGHTEN = "Même allégé de 90 %, le programme ne tient pas dans l’échéance."
