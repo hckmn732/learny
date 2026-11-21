@@ -1,5 +1,17 @@
 # Périmètre — SPEC-2201 (identity + formation)
 
+## État de la bascule (dernier commit de la branche)
+
+| Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
+|---|---|---|---|---|
+| identity | 19 | **13** | 6 | 5 × `auth.*` (ADR-2022 : cookies non comparables) ; `home.get` (ADR-2023 : moteur d'apprentissage de SPEC-2202) |
+| formation | 26 | 0 | 26 | non commencé |
+
+Les 13 opérations identity servies et basculées : `header.get`, `me.ai.task-models.update`, `me.get`,
+`me.legal.accept`, `me.onboarding.get`, `me.onboarding.update`, `me.preferences.get`,
+`me.preferences.update`, `me.profile.get`, `me.profile.update`, `me.update`, `sidebar.get`,
+`sidebar.update`.
+
 Source unique : `api/inventory.json` (généré par SPEC-2001, `pnpm migration:report`), filtré sur
 `context == "identity"` et `context == "formation"`. Les 32 routes spéciales de l'inventaire
 appartiennent toutes à `SPEC-2207` (dev-jobs, health, `auth/callback`, sprints) : elles restent

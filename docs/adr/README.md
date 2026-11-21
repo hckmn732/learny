@@ -240,3 +240,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2019](ADR-2019-ca-2-de-spec-2003-interprete-comme-absence-de-regression.md) | CA-2 de SPEC-2003 interprete comme absence de regression | Déduite | SPEC-2003 |
 | [ADR-2020](ADR-2020-routes-dev-jobs-encore-typescript-jusqu-au-pipeline-python.md) | Routes dev-jobs encore TypeScript jusqu au pipeline Python | Déduite | SPEC-2102, SPEC-2003, ADR-2005, ADR-2011, ADR-2014 |
 | [ADR-2021](ADR-2021-pipeline-de-contrat-python-livre-par-spec-2201-et-bascule-de.md) | Pipeline de contrat Python livre par SPEC-2201 et bascule dev-jobs laissee a SPEC-2207 | Déduite | SPEC-2201, ADR-2012, ADR-2020, SPEC-2207 |
+| [ADR-2022](ADR-2022-routes-auth-encore-typescript-faute-de-cookies-byte-identiqu.md) | Routes auth encore TypeScript faute de cookies byte-identiques | Déduite | SPEC-2201, ADR-2005, ADR-2008, ADR-2010 |
+| [ADR-2023](ADR-2023-home-get-encore-typescript-car-il-depend-du-moteur-d-apprent.md) | home.get encore TypeScript car il depend du moteur d apprentissage | Déduite | SPEC-2201, SPEC-2202, ADR-2001, ADR-2005 |
