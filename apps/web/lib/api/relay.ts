@@ -50,12 +50,28 @@ export async function relayToApi(request: NextRequest): Promise<NextResponse> {
     const response = await fetch(target, {
       method: request.method,
       headers,
-      body:       request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS' ? undefined : request.body,
+      body:
+        request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS'
+          ? undefined
+          : request.body,
       duplex: 'half',
+      // The API's redirects (auth callback, 302 with session cookies) belong to the browser.
+      redirect: 'manual',
       signal: request.signal,
     } as RequestInit & { duplex: 'half' });
     const responseHeaders = new Headers(response.headers);
     if (!responseHeaders.has('x-request-id')) responseHeaders.set('x-request-id', id);
+    // Next rejects relative `Location` headers in proxy responses: resolve them on the public origin.
+    const location = responseHeaders.get('location');
+    if (location !== null && !/^https?:\/\//u.test(location)) {
+      const proto =
+        request.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() ??
+        request.nextUrl.protocol.replace(':', '');
+      responseHeaders.set(
+        'location',
+        new URL(location, `${proto}://${forwardedHost(request)}`).href,
+      );
+    }
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,

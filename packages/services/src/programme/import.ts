@@ -9,7 +9,7 @@ import { requireUser, toResult } from '../resources/result';
 
 import { programmeLock, tutorProfile } from './generate';
 import { extractProgrammeText } from './import-file';
-import { normalizeDraft } from './rules';
+import { anchorProgrammeDates, normalizeDraft } from './rules';
 import { currentVersion, readFormation, readProfile, readProgrammeState } from './state';
 
 // Import of a programme (SPEC-605 EF-2, CL-5). The extracted text is structured by the tutor
@@ -92,7 +92,7 @@ export function importProposal(
       await markImportFailed(ctx, prepare.importId, generated.error.detail);
       throw generated.error;
     }
-    const payload = normalizeDraft(generated.value.draft);
+    const payload = anchorProgrammeDates(normalizeDraft(generated.value.draft), ctx.clock.now());
 
     await db.run(async (tx) => {
       await programmeLock(tx, formationId);

@@ -33,6 +33,7 @@ interface ModuleRow {
 interface ChapterRow {
   [key: string]: unknown;
   id: string;
+  title: string | null;
   module_id: string;
   position: number;
 }
@@ -76,7 +77,7 @@ export const planProgramme = defineFunction(
       if (modules.length === 0) return { planned: 0, reason: 'programme vide' };
 
       const chapters = await tx.execute<ChapterRow>(sql`
-        select c.id::text as id, c.module_id::text as module_id, c.position
+        select c.id::text as id, c.module_id::text as module_id, c.position, c.title
         from public.chapters c
         join public.modules m on m.id = c.module_id
         where m.formation_id = ${formationId}::uuid
@@ -108,6 +109,7 @@ export const planProgramme = defineFunction(
         chapters: (byModule.get(module.id) ?? []).map((chapter) => ({
           chapterId: chapter.id,
           position: chapter.position,
+          ...(chapter.title === null ? {} : { title: chapter.title }),
         })),
         hasExercise: true,
         ...(module.planned_end === null ? {} : { deadline: module.planned_end }),

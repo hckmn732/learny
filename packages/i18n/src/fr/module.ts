@@ -63,6 +63,7 @@ export const moduleMessages = {
   courseOpen:
     'Un chapitre est encore ouvert. Vous pouvez lancer le cours maintenant : le tuteur le complétera à partir de ses connaissances, en le signalant.',
   generate: 'Générer le cours',
+  openCourse: 'Ouvrir le cours',
   generating: 'Génération demandée…',
   generationRequested: 'Génération du cours demandée.',
   noteAdded: 'Note ajoutée.',
