@@ -8,8 +8,15 @@ from typing import Any, Literal
 
 import pytest
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_JSON_BODY
-from learny_api.validate import invalid_input, issues_of, query_to_object, validate_input
+from learny_api.validate import (
+    apply_refinement,
+    invalid_input,
+    issues_of,
+    query_to_object,
+    validate_input,
+)
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 pytestmark = pytest.mark.spec("SPEC-2201")
@@ -152,3 +159,90 @@ def test_the_issues_helper_accepts_a_pydantic_error_directly() -> None:
 
     assert issues
     assert all(set(issue) == {"path", "message"} for issue in issues)
+
+
+# Refinements of `packages/contracts` that the generated model drops (SPEC-2201).
+def refinement_issue(route_id: str, value: Any) -> dict[str, Any]:
+    with pytest.raises(AppError) as raised:
+        apply_refinement(route_id, value, status=400)
+    error = raised.value
+    assert error.code == "VALIDATION_FAILED"
+    assert error.status == 400
+    return dict(error.extra)
+
+
+def test_me_update_requires_at_least_one_profile_field() -> None:
+    problem = refinement_issue("me.update", {})
+
+    assert problem["errors"] == [{"path": "body", "message": validation.PROFILE_FIELD_REQUIRED}]
+
+
+def test_me_update_requires_a_non_blank_first_name() -> None:
+    problem = refinement_issue("me.update", {"firstName": "   "})
+
+    assert problem["errors"] == [
+        {"path": "body.firstName", "message": validation.too_small("string", 1, inclusive=True)}
+    ]
+
+
+def test_me_profile_update_ignores_expected_updated_at_for_the_non_empty_rule() -> None:
+    problem = refinement_issue("me.profile.update", {"expectedUpdatedAt": "2026-11-11T12:20:00.000Z"})
+
+    assert problem["errors"][0]["path"] == "body"
+
+
+def test_me_profile_update_rejects_an_unknown_time_zone() -> None:
+    problem = refinement_issue("me.profile.update", {"timezone": "Mars/Olympus"})
+
+    assert problem["errors"] == [{"path": "body.timezone", "message": validation.UNKNOWN_TIME_ZONE}]
+
+
+def test_preferences_reject_duplicate_days_and_slots() -> None:
+    problem = refinement_issue(
+        "me.preferences.update",
+        {"hoursPerDay": 2, "studyDays": [1, 1], "preferredSlots": ["soir", "soir"]},
+    )
+
+    assert problem["errors"] == [
+        {"path": "body.studyDays", "message": validation.STUDY_DAYS_UNIQUE},
+        {"path": "body.preferredSlots", "message": validation.STUDY_SLOTS_UNIQUE},
+    ]
+
+
+def test_reminders_are_only_accepted_on_the_depart_step() -> None:
+    problem = refinement_issue(
+        "me.onboarding.update",
+        {"step": "rythme", "reminders": {"push": True, "email": True, "automations": True}},
+    )
+
+    assert problem["errors"] == [{"path": "body.reminders", "message": validation.REMINDERS_NEED_DEPART}]
+
+
+def test_sidebar_update_requires_one_of_its_fields() -> None:
+    problem = refinement_issue("sidebar.update", {})
+
+    assert problem["errors"] == [{"path": "body", "message": validation.SIDEBAR_UPDATE_REQUIRED}]
+
+
+def test_sidebar_update_rejects_an_explicit_null() -> None:
+    problem = refinement_issue("sidebar.update", {"collapsed": None})
+
+    assert problem["errors"] == [
+        {"path": "body.collapsed", "message": validation.invalid_type("boolean", "null")}
+    ]
+
+
+def test_a_blank_model_id_is_a_validation_failure() -> None:
+    problem = refinement_issue("me.ai.task-models.update", {"modelId": "  "})
+
+    assert problem["errors"][0]["path"] == "body.modelId"
+
+
+def test_a_blank_legal_version_is_a_validation_failure() -> None:
+    problem = refinement_issue("me.legal.accept", {"cguVersion": " ", "privacyVersion": "2026-11-11"})
+
+    assert problem["errors"][0]["path"] == "body.cguVersion"
+
+
+def test_a_route_without_refinement_is_left_untouched() -> None:
+    apply_refinement("me.get", {}, status=400)
