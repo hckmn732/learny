@@ -325,7 +325,7 @@ async function readPassages(
 ): Promise<QuestionBankPassage[]> {
   const vector =
     embedding === null ? null : `[${embedding.map((value) => String(value)).join(',')}]`;
-  const ranking = vector === null ? sql`0` : sql`c.embedding <=> ${vector}::extensions.vector`;
+  const ranking = vector === null ? sql`null::float8` : sql`c.embedding <=> ${vector}::extensions.vector`;
   const rows = await tx.execute<{
     chunk_id: string;
     source: string;
