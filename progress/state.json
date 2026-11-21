@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T20:41:53.288Z",
+  "updatedAt": "2026-11-21T20:47:26.697Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6901,11 +6901,11 @@
       }
     },
     "SPEC-2202": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-21T20:47:26.697Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2202-domaines-apprentissage-evaluations",
       "commit": null,
       "lastError": null,
       "validations": {}
