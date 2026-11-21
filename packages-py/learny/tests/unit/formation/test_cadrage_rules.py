@@ -101,9 +101,7 @@ def test_the_learner_answer_completes_the_answered_rubric() -> None:
     applied = apply_turn(
         empty_profile(),
         turn,
-        ApplyConstraints(
-            questions_asked=1, pending_question_key="scope", learner_answer="  Module FI  "
-        ),
+        ApplyConstraints(questions_asked=1, pending_question_key="scope", learner_answer="  Module FI  "),
     )
     assert applied.profile["scope"] == {"value": "Module FI", "state": "done"}
     assert applied.finished is True

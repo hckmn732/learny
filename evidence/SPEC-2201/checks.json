@@ -1,0 +1,42 @@
+{
+  "lint": {
+    "status": "failed",
+    "at": "2026-11-21T20:05:50.366Z",
+    "details": ""
+  },
+  "typecheck": {
+    "status": "passed",
+    "at": "2026-11-21T20:07:03.934Z",
+    "details": ""
+  },
+  "build": {
+    "status": "passed",
+    "at": "2026-11-21T20:08:12.501Z",
+    "details": ""
+  },
+  "unit": {
+    "status": "failed",
+    "at": "2026-11-21T20:08:14.566Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "integration": {
+    "status": "failed",
+    "at": "2026-11-21T20:08:14.567Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "e2e": {
+    "status": "failed",
+    "at": "2026-11-21T20:08:14.567Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "visual": {
+    "status": "failed",
+    "at": "2026-11-21T20:08:14.567Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "acceptance": {
+    "status": "passed",
+    "at": "2026-11-21T20:08:14.584Z",
+    "details": "5/5 critères ✅"
+  }
+}

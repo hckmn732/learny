@@ -28,9 +28,7 @@ def test_pasted_text_is_cleaned() -> None:
 
 def test_markdown_file_is_decoded() -> None:
     content = base64.b64encode(b"# Module 1\n\n- Notion A\n- Notion B\n").decode("ascii")
-    extracted = extract_programme_text(
-        {"kind": "file", "filename": "programme.md", "contentBase64": content}
-    )
+    extracted = extract_programme_text({"kind": "file", "filename": "programme.md", "contentBase64": content})
     assert extracted["kind"] == "file"
     assert extracted["filename"] == "programme.md"
     assert "Notion A" in extracted["text"]

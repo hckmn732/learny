@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T18:31:16.627Z",
+  "updatedAt": "2026-11-21T20:08:14.585Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6856,8 +6856,49 @@
       "completedAt": null,
       "branch": "spec/SPEC-2201-domaines-identite-formation",
       "commit": null,
-      "lastError": null,
-      "validations": {}
+      "lastError": "lint:  | unit: non exécuté : lint/typecheck/build en échec | integration: non exécuté : lint/typecheck/build en échec | e2e: non exécuté : lint/typecheck/build en échec | visual: non exécuté : lint/typecheck/build en échec",
+      "validations": {
+        "lint": {
+          "status": "failed",
+          "at": "2026-11-21T20:05:50.366Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-21T20:07:03.934Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-21T20:08:12.501Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "failed",
+          "at": "2026-11-21T20:08:14.566Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
+        },
+        "integration": {
+          "status": "failed",
+          "at": "2026-11-21T20:08:14.567Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
+        },
+        "e2e": {
+          "status": "failed",
+          "at": "2026-11-21T20:08:14.567Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
+        },
+        "visual": {
+          "status": "failed",
+          "at": "2026-11-21T20:08:14.567Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-21T20:08:14.584Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-2202": {
       "status": "pending",
