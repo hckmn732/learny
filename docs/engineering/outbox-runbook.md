@@ -1,7 +1,7 @@
 # Runbook — outbox et worker Python (SPEC-2102)
 
 Exploitation de l'exécution asynchrone durable qui remplace Inngest (ADR-2006, ADR-2014). Le worker
-Python (`apps/worker-py`) répartit l'outbox transactionnelle (`public.event_outbox`) vers une
+Python (paquet `learny-worker`) répartit l'outbox transactionnelle (`public.event_outbox`) vers une
 livraison par consommateur (`public.job_deliveries`), réclame chaque livraison sous bail, appelle le
 cas d'usage directement (aucun appel HTTP interne, ET-3) puis la clôt.
 
@@ -68,12 +68,17 @@ L'historique n'est jamais rejoué : la migration `0055_jobs_rules.sql` a estampi
 
 ## 4. Diagnostic
 
-Toutes les requêtes passent par la base locale de développement :
+Toutes les requêtes passent par la base locale de développement, dans le conteneur de la stack
+(idiome de `tools/dev/check.mjs`) :
 
 ```bash
-export DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:54322/postgres"
-flock /tmp/learny-sdd-db.lock psql "$DATABASE_URL" -c "…"
+flock /tmp/learny-sdd-db.lock \
+  docker exec supabase_db_learny psql -U postgres -d postgres -c "…"
 ```
+
+Le verrou `/tmp/learny-sdd-db.lock` serialise les accès avec les suites de tests. Ne jamais
+l'imbriquer : la fixture `database` des tests d'intégration le prend elle-même pour toute la durée
+de la session, donc un `flock` autour d'un `uv run pytest` d'intégration se bloquerait.
 
 ### 4.1 État général
 
@@ -225,7 +230,7 @@ PostgreSQL à la fermeture de la session.
 ## 8. Vérifications avant de conclure un incident
 
 ```bash
-flock /tmp/learny-sdd-db.lock uv run pytest apps/worker-py/tests/integration -q
+uv run pytest -k worker_outbox -q   # la fixture `database` prend le verrou elle-meme
 ```
 
 Ces tests couvrent les cas d'incident : crash et reprise après expiration du bail, deux exécuteurs
