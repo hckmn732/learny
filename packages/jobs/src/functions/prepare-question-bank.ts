@@ -42,7 +42,7 @@ export const prepareQuestionBankForCourse = defineFunction(
     });
     // Hotfix QA: the validation quiz needs its bank right after the course, not after the nightly
     // batch; the queued jobs are generated now (the nightly run stays the fallback).
-    const processed = await processQuestionBankJobs(bank, { limit: 50 });
+    const processed = await processQuestionBankJobs(bank, { limit: 50, userId: event.data.userId });
     return { requestId: result.requestId, jobs: result.jobs.length, ...processed };
   },
 );

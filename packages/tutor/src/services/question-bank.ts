@@ -320,9 +320,11 @@ async function readPassages(
   userId: string,
   course: CourseRow,
   notion: NotionRow,
-  embedding: readonly number[],
+  embedding: readonly number[] | null,
 ): Promise<QuestionBankPassage[]> {
-  const vector = `[${embedding.map((value) => String(value)).join(',')}]`;
+  const vector =
+    embedding === null ? null : `[${embedding.map((value) => String(value)).join(',')}]`;
+  const ranking = vector === null ? sql`0` : sql`c.embedding <=> ${vector}::extensions.vector`;
   const rows = await tx.execute<{
     chunk_id: string;
     source: string;
@@ -344,7 +346,7 @@ async function readPassages(
       and r.deleted_at is null
       and r.status = 'ready'
     order by
-      c.embedding <=> ${vector}::extensions.vector,
+      ${ranking},
       r.title asc,
       c.position asc,
       c.id asc
@@ -786,9 +788,15 @@ async function readContext(
       [...labels.keys()].find((notionId) => notionId !== target.notionId) ?? target.notionId;
     return { course, notion, labels, distractor };
   });
-  const [embedding] = await embeddingClient.embed([generationQuery(base.notion)]);
-  if (embedding === undefined) {
-    throw appError('EMBEDDING_UNAVAILABLE', 'Le contexte du cours n’a pas pu être préparé.');
+  // Hotfix QA: the query vector only ranks passages. When the embedding provider is rate limited
+  // (dozens of notions at once), passages are taken in document order instead of failing the job.
+  let embedding: number[] | null = null;
+  try {
+    [embedding = null] = await embeddingClient.embed([generationQuery(base.notion)]);
+  } catch (error) {
+    ctx.logger?.warn('question bank embedding skipped', {
+      code: error instanceof Error ? error.name : 'error',
+    });
   }
   return ctx.store.run(async (tx) => {
     await upsertJob(tx, target, 'running');
@@ -1158,8 +1166,9 @@ export interface QuestionBankProcessResult {
 /** ET-2, CL-5 — retries queued and transient failures; never invents a variant. */
 export async function processQuestionBankJobs(
   ctx: QuestionBankContext,
-  input: { limit?: number } = {},
+  input: { limit?: number; userId?: string } = {},
 ): Promise<QuestionBankProcessResult> {
+  const owner = input.userId ?? null;
   const limit = Math.max(1, Math.min(50, input.limit ?? 20));
   const rows = await ctx.store.run((tx) =>
     tx.execute<JobRow>(sql`
@@ -1181,6 +1190,7 @@ export async function processQuestionBankJobs(
       from public.question_bank_jobs j
       where j.status in ('queued', 'failed')
         and (j.error_code is null or j.error_code not in ('INVALID_OUTPUT', 'INCOMPLETE_BANK'))
+        and (${owner}::uuid is null or j.user_id = ${owner}::uuid)
       order by j.updated_at asc, j.id asc
       limit ${limit}
     `),
