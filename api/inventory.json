@@ -43,6 +43,7 @@
       "tests": [
         "apps/web/e2e/specs/p7/agenda.spec.ts",
         "apps/web/e2e/specs/p7/spec-705.spec.ts",
+        "packages/api-sdk/src/schema.test.ts",
         "packages/contracts/src/agenda.test.ts"
       ],
       "gap": false
@@ -6608,6 +6609,7 @@
         "apps/web/test/integration/observability.test.ts",
         "apps/web/test/integration/server-timing.test.ts",
         "packages/api-client/src/client.test.ts",
+        "packages/api-sdk/src/schema.test.ts",
         "packages/core/src/sentry.test.ts"
       ],
       "gap": false

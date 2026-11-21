@@ -1,0 +1,522 @@
+{
+  "AI_CAP_REACHED": {
+    "status": 422,
+    "title": "Plafond d'IA du jour atteint",
+    "type": "https://learny.app/errors/ai-cap-reached"
+  },
+  "AI_CONTEXT_TOO_LONG": {
+    "status": 422,
+    "title": "Contexte trop long pour le modèle",
+    "type": "https://learny.app/errors/ai-context-too-long"
+  },
+  "AI_KEY_INVALID": {
+    "status": 422,
+    "title": "Clé IA invalide",
+    "type": "https://learny.app/errors/ai-key-invalid"
+  },
+  "AI_MODEL_NOT_QUALIFIED": {
+    "status": 422,
+    "title": "Modèle personnel non qualifié",
+    "type": "https://learny.app/errors/ai-model-not-qualified"
+  },
+  "AI_PROVIDER_ERROR": {
+    "status": 503,
+    "title": "Fournisseur IA indisponible",
+    "type": "https://learny.app/errors/ai-provider-error"
+  },
+  "AI_RATE_LIMITED": {
+    "status": 429,
+    "title": "Fournisseur IA saturé",
+    "type": "https://learny.app/errors/ai-rate-limited"
+  },
+  "AI_REFUSED": {
+    "status": 422,
+    "title": "Réponse refusée par le modèle",
+    "type": "https://learny.app/errors/ai-refused"
+  },
+  "AI_TASK_FAILED": {
+    "status": 503,
+    "title": "Le tuteur n’a pas pu répondre",
+    "type": "https://learny.app/errors/ai-task-failed"
+  },
+  "AI_TIMEOUT": {
+    "status": 504,
+    "title": "Fournisseur IA trop lent",
+    "type": "https://learny.app/errors/ai-timeout"
+  },
+  "AI_UNAVAILABLE": {
+    "status": 422,
+    "title": "IA indisponible pour cette tâche",
+    "type": "https://learny.app/errors/ai-unavailable"
+  },
+  "ALREADY_SUBSCRIBED": {
+    "status": 409,
+    "title": "Abonnement déjà actif",
+    "type": "https://learny.app/errors/already-subscribed"
+  },
+  "API_UNAVAILABLE": {
+    "status": 502,
+    "title": "API indisponible",
+    "type": "https://learny.app/errors/api-unavailable"
+  },
+  "AUTOMATION_ACTION_CONSUMED": {
+    "status": 422,
+    "title": "Action déjà consommée",
+    "type": "https://learny.app/errors/automation-action-consumed"
+  },
+  "BRICK_INVALID": {
+    "status": 422,
+    "title": "Brique invalide",
+    "type": "https://learny.app/errors/brick-invalid"
+  },
+  "BRICK_RETIRED": {
+    "status": 422,
+    "title": "Brique retirée",
+    "type": "https://learny.app/errors/brick-retired"
+  },
+  "CADRAGE_INCOMPLETE": {
+    "status": 422,
+    "title": "Cadrage incomplet",
+    "type": "https://learny.app/errors/cadrage-incomplete"
+  },
+  "CITATIONS_WITH_STRUCTURED_OUTPUT": {
+    "status": 422,
+    "title": "Citations incompatibles avec une sortie structurée",
+    "type": "https://learny.app/errors/citations-with-structured-output"
+  },
+  "CONFLICT": {
+    "status": 409,
+    "title": "Conflit",
+    "type": "https://learny.app/errors/conflict"
+  },
+  "COURSE_NOT_READY": {
+    "status": 422,
+    "title": "Cours non prêt",
+    "type": "https://learny.app/errors/course-not-ready"
+  },
+  "CREDENTIAL_DECRYPT_FAILED": {
+    "status": 500,
+    "title": "Clé enregistrée illisible",
+    "type": "https://learny.app/errors/credential-decrypt-failed"
+  },
+  "CREDENTIAL_LIMIT_REACHED": {
+    "status": 422,
+    "title": "Dix fournisseurs au plus",
+    "type": "https://learny.app/errors/credential-limit-reached"
+  },
+  "CREDENTIAL_NOT_FOUND": {
+    "status": 404,
+    "title": "Clé personnelle introuvable",
+    "type": "https://learny.app/errors/credential-not-found"
+  },
+  "EMAIL_NOT_CONFIRMED": {
+    "status": 403,
+    "title": "Adresse e-mail non vérifiée",
+    "type": "https://learny.app/errors/email-not-confirmed"
+  },
+  "EMBEDDING_INVALID": {
+    "status": 502,
+    "title": "Vecteur de passage invalide",
+    "type": "https://learny.app/errors/embedding-invalid"
+  },
+  "EMBEDDING_KEY_INVALID": {
+    "status": 422,
+    "title": "Clé d’embeddings invalide",
+    "type": "https://learny.app/errors/embedding-key-invalid"
+  },
+  "EMBEDDING_UNAVAILABLE": {
+    "status": 503,
+    "title": "Service d’embeddings indisponible",
+    "type": "https://learny.app/errors/embedding-unavailable"
+  },
+  "EXAM_TIME_OVER": {
+    "status": 409,
+    "title": "Temps d’examen écoulé",
+    "type": "https://learny.app/errors/exam-time-over"
+  },
+  "EXPORT_EXPIRED": {
+    "status": 410,
+    "title": "Export expiré",
+    "type": "https://learny.app/errors/export-expired"
+  },
+  "EXPORT_LIMIT_REACHED": {
+    "status": 422,
+    "title": "Trois exports par jour au plus",
+    "type": "https://learny.app/errors/export-limit-reached"
+  },
+  "EXTRACTION_FAILED": {
+    "status": 422,
+    "title": "Extraction impossible",
+    "type": "https://learny.app/errors/extraction-failed"
+  },
+  "FETCH_FAILED": {
+    "status": 503,
+    "title": "Site inaccessible",
+    "type": "https://learny.app/errors/fetch-failed"
+  },
+  "FETCH_HTTP_ERROR": {
+    "status": 502,
+    "title": "Réponse du site en erreur",
+    "type": "https://learny.app/errors/fetch-http-error"
+  },
+  "FETCH_TIMEOUT": {
+    "status": 504,
+    "title": "Site trop lent",
+    "type": "https://learny.app/errors/fetch-timeout"
+  },
+  "FETCH_TOO_LARGE": {
+    "status": 422,
+    "title": "Page trop volumineuse",
+    "type": "https://learny.app/errors/fetch-too-large"
+  },
+  "FETCH_TOO_MANY_REDIRECTS": {
+    "status": 422,
+    "title": "Trop de redirections",
+    "type": "https://learny.app/errors/fetch-too-many-redirects"
+  },
+  "FILES_UNSUPPORTED": {
+    "status": 422,
+    "title": "Documents non pris en charge par ce modèle",
+    "type": "https://learny.app/errors/files-unsupported"
+  },
+  "FORBIDDEN": {
+    "status": 403,
+    "title": "Accès refusé",
+    "type": "https://learny.app/errors/forbidden"
+  },
+  "FORMATION_LIMIT_REACHED": {
+    "status": 422,
+    "title": "Trois formations actives au plus",
+    "type": "https://learny.app/errors/formation-limit-reached"
+  },
+  "FORMAT_NOT_CONFIRMED": {
+    "status": 409,
+    "title": "Format d’examen non confirmé",
+    "type": "https://learny.app/errors/format-not-confirmed"
+  },
+  "GRADED_BY_TUTOR": {
+    "status": 422,
+    "title": "Brique corrigée par le tuteur",
+    "type": "https://learny.app/errors/graded-by-tutor"
+  },
+  "GROUP_FULL": {
+    "status": 409,
+    "title": "Formation à plusieurs complète",
+    "type": "https://learny.app/errors/group-full"
+  },
+  "IDEMPOTENCY_IN_PROGRESS": {
+    "status": 409,
+    "title": "Requête déjà en cours",
+    "type": "https://learny.app/errors/idempotency-in-progress"
+  },
+  "IDEMPOTENCY_KEY_REQUIRED": {
+    "status": 400,
+    "title": "Clé d'idempotence manquante",
+    "type": "https://learny.app/errors/idempotency-key-required"
+  },
+  "IDEMPOTENCY_KEY_REUSED": {
+    "status": 422,
+    "title": "Clé d'idempotence déjà utilisée",
+    "type": "https://learny.app/errors/idempotency-key-reused"
+  },
+  "IMAGE_EMPTY_TEXT": {
+    "status": 422,
+    "title": "Image sans texte lisible",
+    "type": "https://learny.app/errors/image-empty-text"
+  },
+  "IMAGE_TOO_LARGE": {
+    "status": 422,
+    "title": "Image trop volumineuse",
+    "type": "https://learny.app/errors/image-too-large"
+  },
+  "IMAGE_UNREADABLE": {
+    "status": 422,
+    "title": "Image illisible",
+    "type": "https://learny.app/errors/image-unreadable"
+  },
+  "IMAGE_VISION_UNAVAILABLE": {
+    "status": 422,
+    "title": "Lecture d’image indisponible",
+    "type": "https://learny.app/errors/image-vision-unavailable"
+  },
+  "INCOMPLETE_BANK": {
+    "status": 422,
+    "title": "Banque incomplète",
+    "type": "https://learny.app/errors/incomplete-bank"
+  },
+  "INTERNAL_ERROR": {
+    "status": 500,
+    "title": "Erreur interne",
+    "type": "https://learny.app/errors/internal-error"
+  },
+  "INVALID_CREDENTIALS": {
+    "status": 401,
+    "title": "Identifiants incorrects",
+    "type": "https://learny.app/errors/invalid-credentials"
+  },
+  "INVALID_OUTPUT": {
+    "status": 502,
+    "title": "Sortie du modèle invalide",
+    "type": "https://learny.app/errors/invalid-output"
+  },
+  "INVALID_RESPONSE": {
+    "status": 502,
+    "title": "Réponse invalide",
+    "type": "https://learny.app/errors/invalid-response"
+  },
+  "INVALID_SIGNATURE": {
+    "status": 400,
+    "title": "Signature invalide",
+    "type": "https://learny.app/errors/invalid-signature"
+  },
+  "LEGAL_ACCEPTANCE_REQUIRED": {
+    "status": 422,
+    "title": "Acceptation des CGU requise",
+    "type": "https://learny.app/errors/legal-acceptance-required"
+  },
+  "LOCAL_MODELS_DISABLED": {
+    "status": 422,
+    "title": "Modèles locaux désactivés",
+    "type": "https://learny.app/errors/local-models-disabled"
+  },
+  "METHOD_NOT_ALLOWED": {
+    "status": 405,
+    "title": "Méthode non prise en charge",
+    "type": "https://learny.app/errors/method-not-allowed"
+  },
+  "MOCK_FIXTURE_NOT_FOUND": {
+    "status": 500,
+    "title": "Fixture du modèle simulé introuvable",
+    "type": "https://learny.app/errors/mock-fixture-not-found"
+  },
+  "MOCK_STEPS_EXHAUSTED": {
+    "status": 500,
+    "title": "Étapes du modèle simulé épuisées",
+    "type": "https://learny.app/errors/mock-steps-exhausted"
+  },
+  "MODULE_LOCKED": {
+    "status": 422,
+    "title": "Module verrouillé",
+    "type": "https://learny.app/errors/module-locked"
+  },
+  "NETWORK_ERROR": {
+    "status": 503,
+    "title": "Réseau indisponible",
+    "type": "https://learny.app/errors/network-error"
+  },
+  "NOTE_EMPTY": {
+    "status": 422,
+    "title": "Note vide",
+    "type": "https://learny.app/errors/note-empty"
+  },
+  "NOTE_TOO_LARGE": {
+    "status": 422,
+    "title": "Note trop longue",
+    "type": "https://learny.app/errors/note-too-large"
+  },
+  "NOT_FOUND": {
+    "status": 404,
+    "title": "Introuvable",
+    "type": "https://learny.app/errors/not-found"
+  },
+  "NO_FAILED_ATTEMPT": {
+    "status": 422,
+    "title": "Aucune tentative échouée",
+    "type": "https://learny.app/errors/no-failed-attempt"
+  },
+  "ONBOARDING_AI_REQUIRED": {
+    "status": 422,
+    "title": "IA requise avant l'étape Rappels",
+    "type": "https://learny.app/errors/onboarding-ai-required"
+  },
+  "ORIGIN_REJECTED": {
+    "status": 403,
+    "title": "Origine non autorisée",
+    "type": "https://learny.app/errors/origin-rejected"
+  },
+  "PAYLOAD_TOO_LARGE": {
+    "status": 413,
+    "title": "Requête trop volumineuse",
+    "type": "https://learny.app/errors/payload-too-large"
+  },
+  "PDF_CORRUPTED": {
+    "status": 422,
+    "title": "PDF illisible",
+    "type": "https://learny.app/errors/pdf-corrupted"
+  },
+  "PDF_EMPTY_TEXT": {
+    "status": 422,
+    "title": "PDF sans texte",
+    "type": "https://learny.app/errors/pdf-empty-text"
+  },
+  "PDF_ENCRYPTED": {
+    "status": 422,
+    "title": "PDF protégé par mot de passe",
+    "type": "https://learny.app/errors/pdf-encrypted"
+  },
+  "PDF_TOO_LARGE": {
+    "status": 422,
+    "title": "PDF trop volumineux",
+    "type": "https://learny.app/errors/pdf-too-large"
+  },
+  "PDF_TOO_MANY_PAGES": {
+    "status": 422,
+    "title": "PDF trop long",
+    "type": "https://learny.app/errors/pdf-too-many-pages"
+  },
+  "PROGRAMME_INCOMPLETE": {
+    "status": 422,
+    "title": "Programme incomplet",
+    "type": "https://learny.app/errors/programme-incomplete"
+  },
+  "QUALIFICATION_IN_PROGRESS": {
+    "status": 409,
+    "title": "Qualification déjà en cours",
+    "type": "https://learny.app/errors/qualification-in-progress"
+  },
+  "QUOTA_EXCEEDED": {
+    "status": 422,
+    "title": "Quota atteint",
+    "type": "https://learny.app/errors/quota-exceeded"
+  },
+  "RATE_LIMITED": {
+    "status": 429,
+    "title": "Trop de requêtes",
+    "type": "https://learny.app/errors/rate-limited"
+  },
+  "RESEND_TOO_SOON": {
+    "status": 429,
+    "title": "Renvoi trop rapproché",
+    "type": "https://learny.app/errors/resend-too-soon"
+  },
+  "RESOURCE_FILE_MISSING": {
+    "status": 422,
+    "title": "Fichier de l’apport introuvable",
+    "type": "https://learny.app/errors/resource-file-missing"
+  },
+  "RESOURCE_UNSUPPORTED": {
+    "status": 422,
+    "title": "Apport non pris en charge",
+    "type": "https://learny.app/errors/resource-unsupported"
+  },
+  "RESOURCE_URL_MISSING": {
+    "status": 422,
+    "title": "Adresse de l’apport introuvable",
+    "type": "https://learny.app/errors/resource-url-missing"
+  },
+  "RESPONSE_INVALID": {
+    "status": 422,
+    "title": "Réponse invalide",
+    "type": "https://learny.app/errors/response-invalid"
+  },
+  "RETRY_NOT_YET_ALLOWED": {
+    "status": 422,
+    "title": "Nouvelle tentative pas encore possible",
+    "type": "https://learny.app/errors/retry-not-yet-allowed"
+  },
+  "ROBOTS_DISALLOWED": {
+    "status": 422,
+    "title": "Lecture interdite par robots.txt",
+    "type": "https://learny.app/errors/robots-disallowed"
+  },
+  "SEARCH_UNAVAILABLE": {
+    "status": 503,
+    "title": "Recherche web indisponible",
+    "type": "https://learny.app/errors/search-unavailable"
+  },
+  "SERVICE_UNAVAILABLE": {
+    "status": 503,
+    "title": "Service momentanément indisponible",
+    "type": "https://learny.app/errors/service-unavailable"
+  },
+  "SESSION_CLOSED": {
+    "status": 422,
+    "title": "Session déjà clôturée",
+    "type": "https://learny.app/errors/session-closed"
+  },
+  "TEXT_EMPTY": {
+    "status": 422,
+    "title": "Texte vide",
+    "type": "https://learny.app/errors/text-empty"
+  },
+  "TOOL_NOT_ALLOWED": {
+    "status": 403,
+    "title": "Action non autorisée pour cette tâche",
+    "type": "https://learny.app/errors/tool-not-allowed"
+  },
+  "UNAUTHENTICATED": {
+    "status": 401,
+    "title": "Connexion requise",
+    "type": "https://learny.app/errors/unauthenticated"
+  },
+  "UNSUBSCRIBE_TOKEN_INVALID": {
+    "status": 400,
+    "title": "Lien de désinscription invalide",
+    "type": "https://learny.app/errors/unsubscribe-token-invalid"
+  },
+  "UNSUPPORTED_TYPE": {
+    "status": 422,
+    "title": "Type de fichier non pris en charge",
+    "type": "https://learny.app/errors/unsupported-type"
+  },
+  "UPLOAD_INCOMPLETE": {
+    "status": 422,
+    "title": "Envoi incomplet",
+    "type": "https://learny.app/errors/upload-incomplete"
+  },
+  "UPLOAD_TOO_LARGE": {
+    "status": 422,
+    "title": "Fichier trop volumineux",
+    "type": "https://learny.app/errors/upload-too-large"
+  },
+  "URL_BLOCKED_HOST": {
+    "status": 422,
+    "title": "Adresse réseau refusée",
+    "type": "https://learny.app/errors/url-blocked-host"
+  },
+  "URL_INVALID": {
+    "status": 422,
+    "title": "Adresse invalide",
+    "type": "https://learny.app/errors/url-invalid"
+  },
+  "VALIDATION_FAILED": {
+    "status": 400,
+    "title": "Données invalides",
+    "type": "https://learny.app/errors/validation-failed"
+  },
+  "WEB_EMPTY_TEXT": {
+    "status": 422,
+    "title": "Page sans texte lisible",
+    "type": "https://learny.app/errors/web-empty-text"
+  },
+  "WEB_ROBOTS_DISALLOWED": {
+    "status": 422,
+    "title": "Lecture interdite par robots.txt",
+    "type": "https://learny.app/errors/web-robots-disallowed"
+  },
+  "WEB_TOO_LARGE": {
+    "status": 422,
+    "title": "Page trop longue",
+    "type": "https://learny.app/errors/web-too-large"
+  },
+  "WEB_UNSUPPORTED_CONTENT": {
+    "status": 422,
+    "title": "Page non textuelle",
+    "type": "https://learny.app/errors/web-unsupported-content"
+  },
+  "YOUTUBE_INVALID_URL": {
+    "status": 422,
+    "title": "Adresse YouTube invalide",
+    "type": "https://learny.app/errors/youtube-invalid-url"
+  },
+  "YOUTUBE_NO_CAPTIONS": {
+    "status": 422,
+    "title": "Vidéo sans sous-titres publics",
+    "type": "https://learny.app/errors/youtube-no-captions"
+  },
+  "YOUTUBE_UNAVAILABLE": {
+    "status": 503,
+    "title": "Vidéo YouTube indisponible",
+    "type": "https://learny.app/errors/youtube-unavailable"
+  }
+}
