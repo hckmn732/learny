@@ -104,3 +104,25 @@ Les fixtures `learning_engine_reference.json` (instantané de référence, jeu S
 24 chapitres et 48 notions, liens, maîtrise, lacunes, fabriques) et le helper
 `tests/factories/learning_support.py` sont **enregistrés depuis le moteur TypeScript** le 2026-11-21 :
 les tests rejouent ces sorties au lieu de les transcrire.
+
+## Étape 3 — services et handlers `learning` (11 opérations basculées)
+
+Les cas ci-dessous ne rejouent pas de fixtures TypeScript : ils exercent les cas d'usage Python
+contre la pile Postgres locale, sous la transaction RLS de l'apprenant, et vérifient les mêmes
+règles métier que les tests de service équivalents (`packages/services/test/integration/*.test.ts`
+et les cas de route de `packages/services/src/**/*.test.ts`).
+
+| Test TypeScript source | Cas source | Module pytest | Cas portés | Écart |
+|---|---|---|---|---|
+| `agenda/get-agenda.test.ts`, `spec-705.spec.ts` | 7 + agenda | `tests/integration/learning-engine/test_learning_agenda_gaps.py` | cibles de créneaux, libellés, totaux, raffinements de période | lecture pure ; la parité HTTP couvre le 400 |
+| `gaps/links.test.ts`, `gaps/list-gaps.test.ts` | 4 + 6 | idem | liens d'entraînement et de cours | idem |
+| `serie-regularite-et-jalons-interface.test.ts`, `streak-milestones-route.test.ts` | 5 | `tests/integration/learning/test_learning_series.py` | série, régularité, jalons idempotents, 404, prochain jalon | notification de jalon non portée (dette SPEC-209) |
+| `final-review.test.ts` | 6 | `tests/integration/learning/test_learning_final_review.py` | agrégats, incomplet 409, 404/400, modes, version périmée | le cas `unlockModule` (SPEC-612) n'est pas rejoué ici |
+| `agenda-deplacer-et-reajuster-le-planning.test.ts` | 2 | `tests/integration/learning/test_learning_slots_replan.py` | alternatives, déplacement, chevauchement, options, allègement, version de plan | couverture élargie aux refus |
+| `warmup/warmup.test.ts`, `derive.test.ts` (partie lecture) | 5 + 9 | `tests/integration/learning/test_learning_warmups.py` | carte du jour, statut, RLS, item illisible, dérivées pures | l'écriture d'une réponse (EF-8/9) reste `ts` |
+
+Reste non porté dans ce contexte : `warmups.answers.create`, `review.globalQuizToday`,
+`review.answer`, `review.complete`. Ils dépendent de `packages/services/src/learning/apply-result.ts`
+(FSRS, maîtrise, lacunes, `review_logs`) et du service `review` (session du jour, correction,
+complétion), dont le portage est la tranche suivante. Leurs entrées restent `ts` et leurs
+handlers ne sont pas enregistrés, ce que vérifie `apps/api-py/tests/unit/test_handlers.py`.

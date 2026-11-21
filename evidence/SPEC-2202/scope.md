@@ -9,9 +9,9 @@ dont **0** sont déjà `py` dans `api/ownership.yaml` au démarrage (toutes `ts`
 
 | Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
 |---|---|---|---|---|
-| learning | 15 | 0 | 15 | domaine à porter (étape 2) |
+| learning | 15 | 11 | 4 | `apply-result.ts` (1338 lignes) et le service `review` (2598 lignes) restent à porter : `warmups.answers.create`, `review.globalQuizToday`, `review.answer`, `review.complete` |
 | assessments | 26 | 0 | 26 | domaine à porter (étape 2) |
-| **Total** | **41** | **0** | **41** | |
+| **Total** | **41** | **11** | **30** | |
 
 ## Comptage
 
@@ -32,15 +32,26 @@ compris) et contrat des briques complet (schémas, règles, correction par le co
 public, mélange déterministe). Les tests d'intégration du moteur sont portés (49 cas) ainsi que les
 jeux de démonstration.
 
-Étape 3 **partielle** : `agenda.get` et `gaps.list` ont leurs requêtes SQL, leurs cas d'usage et
-leurs ports (`learny/learning/{infrastructure/queries,application/*}.py`, `learning/public.py`),
-plus les deux raffinements de période du contrat d'agenda dans `validate.REFINEMENTS`. Les handlers
-ne sont pas enregistrés : `apps/api-py/tests/unit/test_handlers.py` interdit un handler pour une
-opération `ts`, et une bascule sans parité prouvée est exclue (ADR-2005). La tranche suivante
-enregistre les handlers en même temps que la parité et la bascule.
+Étape 3 **avancée** : 11 des 15 opérations `learning` sont servies par Python et basculées dans
+`api/ownership.yaml`. Les requêtes SQL, les cas d'usage et les handlers de `agenda.get`,
+`gaps.list`, `series.streak`, `series.milestones`, `formations.finalReview`,
+`formations.maintenance`, `slots.alternatives`, `slots.move`, `formations.replan-options`,
+`formations.replan` et `warmups.today.get` sont livrés avec leurs tests d'intégration serveur.
+Les quatre opérations restantes (`warmups.answers.create`, `review.globalQuizToday`,
+`review.answer`, `review.complete`) restent `ts` : elles dépendent du portage complet de
+`packages/services/src/learning/apply-result.ts` (FSRS, maîtrise, lacunes, journal) et du service
+`review`, hors de la tranche. Aucune n'est enregistrée comme handler, donc
+`apps/api-py/tests/unit/test_handlers.py` reste vert.
 
-Aucune opération n'est encore basculée : `api/ownership.yaml` est inchangé, les 41 opérations
-restent `ts`.
+Dette explicite : `series.milestones` insère le jalon de façon idempotente mais n'émet pas la
+notification `milestone` de SPEC-209 ; le service `notify` (routage, plafond quotidien, modèles
+d'e-mail) relève du contexte engagement du P23 et n'est pas encore porté. Ce n'est pas observable
+par la parité HTTP et le jalon lui-même est conservé.
+
+Parité : `pnpm parity:record --group learning` puis `parity:check` sur la façade donnent
+**4 scénarios, 0 divergence** (`evidence/SPEC-2202/parity.md`). Les opérations à paramètre de
+chemin et les mutations ne sont pas générées par l'outil ; elles sont couvertes par les tests
+d'intégration serveur.
 
 | Module du domaine | État | Preuve |
 |---|---|---|
@@ -71,21 +82,21 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 
 | Fait | Opération | Méthode | Chemin | Propriétaire | Implémentation TS | Tables | Tests TS |
 |---|---|---|---|---|---|---|---|
-| [~] | `agenda.get` | GET | `/api/v1/agenda` | ts | `agenda.ts` | formations, group_members, groups, modules, profiles, schedule_slots, study_preferences | `agenda.spec.ts`, `spec-705.spec.ts`, `schema.test.ts`, `agenda.test.ts` |
-| [ ] | `formations.finalReview` | GET | `/api/v1/formations/:fid/final-review` | ts | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
-| [ ] | `formations.maintenance` | POST | `/api/v1/formations/:fid/maintenance` | ts | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
-| [ ] | `formations.replan` | POST | `/api/v1/formations/:fid/replan` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
-| [ ] | `formations.replan-options` | POST | `/api/v1/formations/:fid/replan-options` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
-| [~] | `gaps.list` | GET | `/api/v1/formations/:fid/gaps` | ts | `gaps.ts` | chapters, course_sections, courses, formations, free, gap_events, group_members, groups, modules, notion_states, notions, profiles | — |
+| [x] | `agenda.get` | GET | `/api/v1/agenda` | py | `agenda.ts` | formations, group_members, groups, modules, profiles, schedule_slots, study_preferences | `agenda.spec.ts`, `spec-705.spec.ts`, `schema.test.ts`, `agenda.test.ts` |
+| [x] | `formations.finalReview` | GET | `/api/v1/formations/:fid/final-review` | py | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
+| [x] | `formations.maintenance` | POST | `/api/v1/formations/:fid/maintenance` | py | `final-review.ts` | formations, group_members, groups, milestones, module_progress, modules, notification_deliveries, notifications, notion_states, notions, profiles, programme_proposals, review_logs, rows, schedule_slots | — |
+| [x] | `formations.replan` | POST | `/api/v1/formations/:fid/replan` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
+| [x] | `formations.replan-options` | POST | `/api/v1/formations/:fid/replan-options` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
+| [x] | `gaps.list` | GET | `/api/v1/formations/:fid/gaps` | py | `gaps.ts` | chapters, course_sections, courses, formations, free, gap_events, group_members, groups, modules, notion_states, notions, profiles | — |
 | [ ] | `review.answer` | POST | `/api/v1/review-sessions/:sid/answers` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
 | [ ] | `review.complete` | POST | `/api/v1/review-sessions/:sid/complete` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | `final-review.test.ts` |
 | [ ] | `review.globalQuizToday` | GET | `/api/v1/formations/:fid/global-quiz/today` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
-| [ ] | `series.milestones` | GET | `/api/v1/milestones` | ts | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts`, `spec-723.spec.ts` |
-| [ ] | `series.streak` | GET | `/api/v1/streak` | ts | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts` |
-| [ ] | `slots.alternatives` | GET | `/api/v1/slots/:sid/alternatives` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
-| [ ] | `slots.move` | POST | `/api/v1/slots/:sid/move` | ts | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
+| [x] | `series.milestones` | GET | `/api/v1/milestones` | py | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts`, `spec-723.spec.ts` |
+| [x] | `series.streak` | GET | `/api/v1/streak` | py | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts` |
+| [x] | `slots.alternatives` | GET | `/api/v1/slots/:sid/alternatives` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
+| [x] | `slots.move` | POST | `/api/v1/slots/:sid/move` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
 | [ ] | `warmups.answers.create` | POST | `/api/v1/warmups/:activityId/answers` | ts | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
-| [ ] | `warmups.today.get` | GET | `/api/v1/warmups/today` | ts | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
+| [x] | `warmups.today.get` | GET | `/api/v1/warmups/today` | py | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
 
 ### assessments (26)
 
@@ -289,3 +300,39 @@ Modules TS : `packages/jobs/src/functions/quiz-grade.ts`, `packages/jobs/src/fun
 | `packages/services/test/integration/bricks.test.ts` | 7 | SPEC-501 | `packages-py/learny/tests/integration/assessments/test_bricks.py` |
 | `packages/services/test/integration/final-review.test.ts` | 6 | SPEC-617 | `packages-py/learny/tests/integration/learning/test_final_review.py` |
 | `packages/services/test/integration/quiz-result.test.ts` | 10 | SPEC-612 | `packages-py/learny/tests/integration/assessments/test_quiz_result.py` |
+
+## Étape 3 — mise en œuvre du contexte `learning`
+
+| Opération | Requêtes | Cas d'usage | Handler | Tests d'intégration serveur |
+|---|---|---|---|---|
+| `agenda.get` | `read_agenda_*` | `application/agenda.get_agenda` | `handlers/learning.py` | `test_learning_agenda_gaps.py` (helpers) + parité |
+| `gaps.list` | `read_gaps_*` | `application/gaps.list_gaps` | idem | `test_learning_agenda_gaps.py` (helpers) |
+| `series.streak` | `read_series_*` | `application/series.get_streak` | idem | `test_learning_series.py` |
+| `series.milestones` | `read_series_*`, `insert_series_milestone` | `application/series.get_milestones` | idem | `test_learning_series.py` |
+| `formations.finalReview` | `read_final_review_*` | `application/final_review.get_final_review` | idem | `test_learning_final_review.py` |
+| `formations.maintenance` | `lock_maintenance`, `read_maintenance_formation`, `update_maintenance_mode`, `cancel_future_slots`, `skip_scheduled_reminders` | `application/final_review.set_maintenance` | idem | `test_learning_final_review.py` |
+| `slots.alternatives` | `read_slot_of_user`, `read_planning_*` | `application/planning.get_slot_alternatives` | idem | `test_learning_slots_replan.py` |
+| `slots.move` | `lock_agenda_move`, `mark_slot_moved`, `insert_moved_slot` | `application/planning.move_slot` | idem | `test_learning_slots_replan.py` |
+| `formations.replan-options` | `read_planning_*` | `application/planning.get_replan_options` | idem | `test_learning_slots_replan.py` |
+| `formations.replan` | `lock_agenda_replan`, `update_formation_end_date`, `update_hours_per_day`, `insert_automation_action_quiet` | `application/planning.apply_replan` | idem | `test_learning_slots_replan.py` |
+| `warmups.today.get` | `read_warmup_*` | `application/warmups.get_today_warmups` | idem | `test_learning_warmups.py` |
+
+Conventions respectées : SQL copié du TypeScript (mêmes colonnes, `order by`, `for update`,
+verrous consultatifs et dérivation de clé), un cas d'usage par fonction de service, mêmes codes
+`AppError` et textes de `locale_fr`, ports explicites, handlers sans logique. Les événements
+`formation/maintenance-changed`, `agenda/slot-moved`, `plan/replanned` et
+`automation/action-proposed` portent les identifiants de déduplication du TypeScript.
+
+### Tests
+
+| Fichier | Cas | Couverture |
+|---|---|---|
+| `tests/integration/learning/test_learning_series.py` | 5 | série et régularité, absence d'activité, jalon idempotent et libellé, 404 de formation étrangère, prochain jalon |
+| `tests/integration/learning/test_learning_final_review.py` | 5 | agrégats du bilan, 409 incomplet, 404/400, cycle light/stopped/light, version périmée |
+| `tests/integration/learning/test_learning_slots_replan.py` | 7 | alternatives, déplacement rejouable, refus durée/chevauchement, module bloqué, options, allègement, version de plan |
+| `tests/integration/learning/test_learning_warmups.py` | 5 | carte du jour, statut, RLS, item illisible, dérivées pures |
+| `tests/integration/learning-engine/test_learning_agenda_gaps.py` | 8 | cibles et totaux d'agenda, liens de lacunes, raffinements de période |
+
+Total de la suite Python après la tranche : **1335 tests**, dont 22 ajoutés par les quatre fichiers
+d'intégration ci-dessus. `api/inventory.json` reste à jour (`inventory.mjs --check`) : il ne liste
+que les tests TypeScript sources.
