@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-21T10:44:21.884Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-21T10:50:10.905Z. Ne pas éditer à la main.
 
 ## Synthèse
 

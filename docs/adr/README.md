@@ -234,3 +234,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2013](ADR-2013-persistance-sqlalchemy-core-avec-sql-explicite-sans-orm.md) | Persistance SQLAlchemy Core avec SQL explicite, sans ORM | Déduite | ADR-2002, ADR-2010, SPEC-2101 |
 | [ADR-2014](ADR-2014-livraisons-de-jobs-coexistence-asynchrone-et-bascule-groupee.md) | Livraisons de jobs, coexistence asynchrone et bascule groupée des consommateurs | Déduite | ADR-2005, ADR-2006, SPEC-2102, SPEC-2207 |
 | [ADR-2015](ADR-2015-bibliotheques-python-retenues.md) | Bibliothèques Python retenues | Déduite | ADR-2002, ADR-2011 |
+| [ADR-2016](ADR-2016-parite-normalisee-et-scenarios-de-lecture-generes.md) | Parite normalisee et scenarios de lecture generes | Déduite | SPEC-2001 |
+| [ADR-2017](ADR-2017-contrat-openapi-enrichi-sans-modifier-le-json-servi.md) | Contrat OpenAPI enrichi sans modifier le JSON servi | Déduite | SPEC-2002 |
