@@ -27,6 +27,8 @@ select = ["E", "F", "W", "I", "B", "UP", "S", "DTZ", "ASYNC", "RUF", "SIM", "PT"
 ignore = ["S101"] # plain asserts are the single assertion style of the test suite
 
 [tool.ruff.lint.per-file-ignores]
+# Les tests utilisent des jetons et des cles factices : ce ne sont pas des secrets.
+"**/tests/**" = ["S105", "S106"]
 # The system clock is the one legitimate use of datetime.now(): every other module goes through it.
 "packages-py/learny/src/learny/shared/clock.py" = ["TID251"]
 
