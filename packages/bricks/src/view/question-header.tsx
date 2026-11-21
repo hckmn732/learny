@@ -4,6 +4,7 @@ import { Badge, cn } from '@learny/ui';
 
 import type { BrickVariant } from '../view-types';
 
+import { InlineCode } from './inline-code';
 import { resolveLabels, type BrickViewLabelsOverride } from './labels';
 
 export interface QuestionHeaderProps {
@@ -47,7 +48,7 @@ export function QuestionHeader({
         )}
         id={titleId}
       >
-        {stem}
+        <InlineCode text={stem} />
       </h2>
     </header>
   );
