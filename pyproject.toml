@@ -45,8 +45,8 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 python_version = "3.13"
 strict = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["packages-py/learny/src", "apps/api-py/src", "apps/worker-py/src"]
-exclude = ["generated/"]
+mypy_path = ["packages-py/learny/src", "packages-py/learny/tests", "apps/api-py/src", "apps/worker-py/src"]
+exclude = ["generated/", "conftest.py"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
