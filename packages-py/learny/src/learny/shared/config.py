@@ -46,6 +46,10 @@ class Settings(BaseSettings):
     rate_limit_mode: RateLimitMode = "on"
     rate_limit_ip_secret: str | None = None
 
+    # Legal documents whose acceptance is tracked (SPEC-806, ported by SPEC-2101).
+    legal_cgu_version: str = "2026-11-11"
+    legal_privacy_version: str = "2026-11-11"
+
     @property
     def is_test(self) -> bool:
         return self.app_env in ("test", "local")

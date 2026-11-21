@@ -34,6 +34,10 @@ def load_catalog(path: Path) -> dict[str, ErrorEntry]:
     }
 
 
+class JwksUnavailable(Exception):
+    """The key set could not be consulted: the caller falls back to the Auth server (ADR-1009)."""
+
+
 class AppError(Exception):
     """A business error carrying a catalog code and an already user-facing French detail."""
 

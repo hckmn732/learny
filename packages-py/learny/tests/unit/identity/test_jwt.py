@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.shared.clock import FixedClock
 from learny.shared.config import Settings
-from learny.shared.errors import AppError
+from learny.shared.errors import AppError, JwksUnavailable
 from learny.shared.time import parse_iso
 
 pytestmark = pytest.mark.spec("SPEC-2101")
@@ -101,8 +101,9 @@ def test_an_asymmetric_token_is_verified_with_the_jwks_cache() -> None:
         headers={"kid": "key-1"},
     )
 
-    # Unknown kid before the cache is filled: refused, never trusted blindly.
-    with pytest.raises(AppError):
+    # Unknown kid before the cache is filled: refused, never trusted blindly, and the caller is
+    # told the key set could not be consulted so it can fall back to GET /auth/v1/user (ADR-1009).
+    with pytest.raises(JwksUnavailable):
         configured.verify(asymmetric)
 
     import asyncio

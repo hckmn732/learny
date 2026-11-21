@@ -1,8 +1,9 @@
-"""Local JWT verification (SPEC-2101 step 2, ADR-2010).
+"""Local JWT verification (SPEC-2101 step 2, ADR-2010, ADR-1009).
 
 Expiry is checked against the injected clock, never the system clock: PyJWT would read
 `time.time()`, which the backend bans. A token is accepted with HS256 (`SUPABASE_JWT_SECRET`) or
-with an asymmetric algorithm whose `kid` is present in the JWKS cache.
+with an asymmetric algorithm whose `kid` is present in the JWKS cache. When the JWKS cannot be
+consulted (`JwksUnavailable`), the caller falls back to `GET /auth/v1/user`, exactly like ADR-1009.
 """
 
 import time
@@ -15,7 +16,7 @@ import jwt
 from learny.identity.domain.actor import Actor, Transport
 from learny.shared.clock import Clock
 from learny.shared.config import Settings
-from learny.shared.errors import AppError
+from learny.shared.errors import AppError, JwksUnavailable
 
 ASYMMETRIC_ALGORITHMS = ("RS256", "ES256", "EdDSA")
 JWKS_TTL_SECONDS = 600
@@ -43,12 +44,24 @@ class JwtVerifier:
         self._jwks_fetcher = jwks_fetcher
         self._cache = _JwksCache()
 
-    def verify(self, token: str, transport: Transport = "bearer") -> Actor:
-        """Decodes and validates one token; raises `UNAUTHENTICATED` when it is not acceptable."""
+    async def verify_token(self, token: str, transport: Transport = "bearer") -> Actor:
+        """Async entry point: refetches the JWKS on an unknown `kid`, then verifies synchronously."""
+        header = self.peek_header(token)
+        algorithm = str(header.get("alg", ""))
+        if algorithm in ASYMMETRIC_ALGORITHMS and header.get("kid") not in self._cache.keys:
+            await self.refresh_jwks(force=True)
+        return self.verify(token, transport)
+
+    def peek_header(self, token: str) -> Mapping[str, Any]:
+        """Unverified JOSE header; a malformed token is simply unauthenticated."""
         try:
-            header = jwt.get_unverified_header(token)
+            return jwt.get_unverified_header(token)
         except jwt.PyJWTError as error:
             raise _unauthenticated() from error
+
+    def verify(self, token: str, transport: Transport = "bearer") -> Actor:
+        """Decodes and validates one token; raises `UNAUTHENTICATED` when it is not acceptable."""
+        header = self.peek_header(token)
         algorithm = str(header.get("alg", ""))
         key = self._key_for(algorithm, header)
         try:
@@ -75,6 +88,10 @@ class JwtVerifier:
             raise _unauthenticated()
         key = self._cache.keys.get(kid)
         if key is None:
+            # The cache was refreshed already (see `verify_token`): the token is not signed by this
+            # key set, unless no key set can be consulted at all.
+            if self._jwks_fetcher is None or not self._cache.keys:
+                raise JwksUnavailable("the JWKS can not be consulted")
             raise _unauthenticated()
         return cast("str | bytes", key)
 
@@ -91,14 +108,18 @@ class JwtVerifier:
         if isinstance(issued_at, (int, float)) and issued_at > now + 60:
             raise _unauthenticated()
 
-    async def refresh_jwks(self) -> None:
-        """Refetches the JWKS when the cache is older than ten minutes."""
+    async def refresh_jwks(self, *, force: bool = False) -> None:
+        """Refetches the key set when it is older than ten minutes, or when `force` is set."""
         if self._jwks_fetcher is None:
-            return
+            raise JwksUnavailable("no JWKS fetcher configured")
         monotonic = time.monotonic()
-        if self._cache.fetched_at is not None and monotonic - self._cache.fetched_at < JWKS_TTL_SECONDS:
+        fresh = self._cache.fetched_at is not None and monotonic - self._cache.fetched_at < JWKS_TTL_SECONDS
+        if fresh and not force:
             return
-        document = await self._jwks_fetcher()
+        try:
+            document = await self._jwks_fetcher()
+        except Exception as error:
+            raise JwksUnavailable("the JWKS endpoint is unavailable") from error
         keys: dict[str, Any] = {}
         for entry in document.get("keys", []):
             kid = entry.get("kid")
