@@ -1,4 +1,4 @@
-// SPEC-2001 — cross-runtime oracle vectors (P20 plan §4).
+﻿// SPEC-2001 â€” cross-runtime oracle vectors (P20 plan Â§4).
 //
 // Writes the JSON vectors the Python unit tests replay so that `learny.shared.*` and the learning
 // engine produce exactly what TypeScript produces. Everything is deterministic: fixed clock,
@@ -7,8 +7,10 @@
 //   corepack pnpm exec tsx tools/parity/export-vectors.mts [--check]
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { createNotionCard } from '../../packages/learning-engine/src/fsrs/review';
+import { calculateMastery } from '../../packages/learning-engine/src/mastery/calculate';
 import {
   AES_GCM_IV_BYTES,
   AES_GCM_TAG_BYTES,
@@ -20,8 +22,6 @@ import {
   keyPrefixOf,
   maskKey,
 } from '../../packages/llm/src/credentials/crypto';
-import { calculateMastery } from '../../packages/learning-engine/src/mastery/calculate';
-import { createNotionCard } from '../../packages/learning-engine/src/fsrs/review';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUT = path.join(REPO_ROOT, 'api', 'oracles', 'vectors');
@@ -30,7 +30,7 @@ const FIXED_KEY = Buffer.from(Array.from({ length: 32 }, (_, index) => index));
 
 /** `JSON.stringify`, `Date#toISOString`, `Math.round` and `toFixed` as JavaScript renders them. */
 export function jsonxVectors() {
-  const numbers = [0, -0, 1, 1.5, 1e21, 1e-7, 1 / 3, 1e300, -1e-7, 123456789012345678901234567890];
+  const numbers = [0, -0, 1, 1.5, 1e21, 1e-7, 1 / 3, 1e300, -1e-7, 2 ** 53 + 2];
   const dates = [
     '2026-11-11T12:20:00.000Z',
     '2026-03-29T01:30:00.000Z',
@@ -50,8 +50,8 @@ export function jsonxVectors() {
     canonical: [
       {
         // Keys sorted by UTF-16 code units, `null` members omitted.
-        input: { b: 1, a: null, A: 2, 'é': 3, z: [1, { d: 4, c: 5 }] },
-        keys: Object.keys({ b: 1, a: null, A: 2, 'é': 3, z: [1, { d: 4, c: 5 }] }).sort((left, right) =>
+        input: { b: 1, a: null, A: 2, 'Ã©': 3, z: [1, { d: 4, c: 5 }] },
+        keys: Object.keys({ b: 1, a: null, A: 2, 'Ã©': 3, z: [1, { d: 4, c: 5 }] }).sort((left, right) =>
           Buffer.compare(Buffer.from(left, 'utf16le'), Buffer.from(right, 'utf16le')),
         ),
       },
@@ -59,7 +59,7 @@ export function jsonxVectors() {
   };
 }
 
-/** Mastery and card creation of the learning engine on fixed inputs (P20 plan §4). */
+/** Mastery and card creation of the learning engine on fixed inputs (P20 plan Â§4). */
 export function learningEngineVectors() {
   const answers = [
     { answerId: 'a1', attemptId: 't1', score: 1, answeredAt: '2026-11-01T09:00:00.000Z' },
@@ -83,7 +83,7 @@ export function learningEngineVectors() {
   };
 }
 
-/** AES-256-GCM envelope constants, AAD, fingerprints and masking (P20 plan §4). */
+/** AES-256-GCM envelope constants, AAD, fingerprints and masking (P20 plan Â§4). */
 export function cryptoVectors() {
   const aad = credentialAad('cred-1', 'user-1');
   const plain = 'sk-live-0123456789abcdef';
@@ -140,8 +140,9 @@ export function writeVectors(checkOnly = false): string[] {
   return written;
 }
 
-const invokedDirectly = process.argv[1]?.endsWith('export-vectors.mts') ?? false;
-if (invokedDirectly) {
-  const files = writeVectors(process.argv.includes('--check'));
-  console.log(`${process.argv.includes('--check') ? 'Checked' : 'Wrote'} ${String(files.length)} vector files`);
+const entry = process.argv[1] === undefined ? null : pathToFileURL(process.argv[1]).href;
+if (entry !== null && fileURLToPath(entry) === fileURLToPath(import.meta.url)) {
+  const checkOnly = process.argv.includes('--check');
+  const files = writeVectors(checkOnly);
+  console.log(`${checkOnly ? 'Checked' : 'Wrote'} ${String(files.length)} vector files`);
 }

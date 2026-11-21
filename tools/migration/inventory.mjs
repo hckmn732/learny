@@ -14,7 +14,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-export const ROOT = process.env.MIGRATION_ROOT ? path.resolve(process.env.MIGRATION_ROOT) : REPO_ROOT;
+export const ROOT = process.env.MIGRATION_ROOT
+  ? path.resolve(process.env.MIGRATION_ROOT)
+  : REPO_ROOT;
 
 /** Target context of every implementation module (ADR-2003, P20 plan §"Default mapping"). */
 export const CONTEXT_BY_MODULE = {
@@ -134,7 +136,10 @@ function resolveJobId(source) {
 export function jobDefinitions(root = ROOT) {
   const dir = path.join(root, 'packages', 'jobs', 'src', 'functions');
   const jobs = [];
-  for (const file of listFiles(dir, (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f) && f !== 'index.ts')) {
+  for (const file of listFiles(
+    dir,
+    (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f) && f !== 'index.ts',
+  )) {
     const source = readText(file);
     if (!source.includes('defineFunction(')) continue;
     const id = resolveJobId(source);
@@ -173,7 +178,9 @@ export function eventUsage(root = ROOT) {
     }
   }
   const toSorted = (map) =>
-    Object.fromEntries([...map.entries()].map(([k, v]) => [k, [...v].sort()]).sort(([a], [b]) => a.localeCompare(b)));
+    Object.fromEntries(
+      [...map.entries()].map(([k, v]) => [k, [...v].sort()]).sort(([a], [b]) => a.localeCompare(b)),
+    );
   return { producers: toSorted(producers), consumers: toSorted(consumers) };
 }
 
@@ -221,8 +228,27 @@ function servicesIndex(root) {
 }
 
 const SQL_STOPWORDS = new Set([
-  'select', 'where', 'set', 'values', 'on', 'the', 'and', 'null', 'true', 'false', 'into',
-  'from', 'join', 'left', 'right', 'inner', 'outer', 'cross', 'lateral', 'with', 'using',
+  'select',
+  'where',
+  'set',
+  'values',
+  'on',
+  'the',
+  'and',
+  'null',
+  'true',
+  'false',
+  'into',
+  'from',
+  'join',
+  'left',
+  'right',
+  'inner',
+  'outer',
+  'cross',
+  'lateral',
+  'with',
+  'using',
 ]);
 
 /** SQL table names read/written by an implementation and the services it calls (ET-3, best effort). */
@@ -240,9 +266,14 @@ export function tablesForModule(root, moduleFile) {
       const name = match[1].toLowerCase();
       if (!SQL_STOPWORDS.has(name)) tables.add(name);
     }
-    for (const importMatch of source.matchAll(/import\s*\{([^}]+)\}\s*from\s*'@learny\/services'/g)) {
+    for (const importMatch of source.matchAll(
+      /import\s*\{([^}]+)\}\s*from\s*'@learny\/services'/g,
+    )) {
       for (const rawName of importMatch[1].split(',')) {
-        const name = rawName.trim().split(/\s+as\s+/)[0]?.trim();
+        const name = rawName
+          .trim()
+          .split(/\s+as\s+/)[0]
+          ?.trim();
         const target = name === undefined ? undefined : index.get(name);
         if (target !== undefined) scan(target, depth + 1);
       }
@@ -257,7 +288,8 @@ export function tablesForModule(root, moduleFile) {
 }
 
 function contextOf(key, moduleName) {
-  if (key.startsWith('devJobs')) return { context: 'jobs-demo', spec: SPEC_BY_CONTEXT['jobs-demo'] };
+  if (key.startsWith('devJobs'))
+    return { context: 'jobs-demo', spec: SPEC_BY_CONTEXT['jobs-demo'] };
   if (moduleName !== undefined && CONTEXT_BY_MODULE[moduleName] !== undefined) {
     const context = CONTEXT_BY_MODULE[moduleName];
     return { context, spec: SPEC_BY_CONTEXT[context] };
@@ -301,7 +333,14 @@ export function buildInventory({ root = ROOT, deps }) {
             ? []
             : tablesForModule(
                 root,
-                path.join(root, 'packages', 'api-routes', 'src', 'implementations', `${moduleName}.ts`),
+                path.join(
+                  root,
+                  'packages',
+                  'api-routes',
+                  'src',
+                  'implementations',
+                  `${moduleName}.ts`,
+                ),
               ),
         events: [],
         tests: [],
@@ -316,7 +355,10 @@ export function buildInventory({ root = ROOT, deps }) {
   for (const [name, producers] of Object.entries(usage.producers)) {
     for (const file of producers) {
       for (const entry of operations) {
-        if (entry.implementation !== null && file.startsWith(entry.implementation.replace(/\.ts$/, ''))) {
+        if (
+          entry.implementation !== null &&
+          file.startsWith(entry.implementation.replace(/\.ts$/, ''))
+        ) {
           if (!entry.events.includes(name)) entry.events.push(name);
         }
       }
@@ -400,9 +442,7 @@ export function renderInventoryMarkdown(inventory) {
   lines.push('');
   lines.push('## Operations');
   lines.push('');
-  lines.push(
-    '| Id | Method | Path | Auth | Context | Spec | Impl | Tables | Tests | Gap |',
-  );
+  lines.push('| Id | Method | Path | Auth | Context | Spec | Impl | Tables | Tests | Gap |');
   lines.push('|---|---|---|---|---|---|---|---|---|---|');
   for (const op of inventory.operations) {
     const tests = op.tests.length === 0 ? '—' : op.tests.map((t) => `\`${t}\``).join('<br>');
@@ -436,7 +476,12 @@ export function renderInventoryMarkdown(inventory) {
   lines.push('| Id | Trigger | Retries | Module |');
   lines.push('|---|---|---|---|');
   for (const job of inventory.jobs) {
-    const trigger = typeof job.trigger === 'string' ? job.trigger : job.trigger === null ? '—' : `cron ${job.trigger.cron}`;
+    const trigger =
+      typeof job.trigger === 'string'
+        ? job.trigger
+        : job.trigger === null
+          ? '—'
+          : `cron ${job.trigger.cron}`;
     lines.push(`| \`${job.id}\` | ${trigger} | ${job.retries ?? '—'} | \`${job.module}\` |`);
   }
   lines.push('');
@@ -485,9 +530,7 @@ function portArea(relativePath) {
   if (srcIndex !== -1 && parts.length > srcIndex + 2) raw = parts[srcIndex + 1];
   else if (kindIndex !== -1 && parts.length > kindIndex + 2) raw = parts[kindIndex + 1];
   if (raw === undefined) {
-    raw = path
-      .basename(parts[parts.length - 1])
-      .replace(/\.(?:test|spec)\.tsx?$/, '');
+    raw = path.basename(parts[parts.length - 1]).replace(/\.(?:test|spec)\.tsx?$/, '');
   }
   const area =
     packageName === 'services' || packageName === 'api-routes'
@@ -515,7 +558,8 @@ export function trackSpecFor(packageName, area) {
     notifications: 'SPEC-2205',
     testing: 'SPEC-2003',
   };
-  if (packageName === 'services') return SPEC_BY_CONTEXT[CONTEXT_BY_MODULE[area] ?? area] ?? 'SPEC-2207';
+  if (packageName === 'services')
+    return SPEC_BY_CONTEXT[CONTEXT_BY_MODULE[area] ?? area] ?? 'SPEC-2207';
   return byPackage[packageName] ?? 'SPEC-2207';
 }
 
@@ -527,11 +571,15 @@ export function trackSpecFor(packageName, area) {
 export function buildPortMap(root = ROOT) {
   const rows = [];
   for (const packageName of BACKEND_PACKAGES) {
-    for (const file of listFiles(path.join(root, 'packages', packageName), (f) => TEST_FILE_RE.test(f))) {
+    for (const file of listFiles(path.join(root, 'packages', packageName), (f) =>
+      TEST_FILE_RE.test(f),
+    )) {
       const source = readText(file);
       const rel = relative(root, file);
       const count = source.match(/\b(?:it|test)(?:\.\w+)?\(\s*['"`]/g)?.length ?? 0;
-      const tags = [...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2]))].sort();
+      const tags = [
+        ...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2])),
+      ].sort();
       const integration = rel.includes('/test/integration/') || rel.includes('/tests/integration/');
       const kind = integration ? 'integration' : 'unit';
       const { area, raw } = portArea(rel);
@@ -549,7 +597,9 @@ export function buildPortMap(root = ROOT) {
   for (const file of listFiles(path.join(root, 'apps', 'api'), (f) => TEST_FILE_RE.test(f))) {
     const source = readText(file);
     const rel = relative(root, file);
-    const tags = [...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2]))].sort();
+    const tags = [
+      ...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2])),
+    ].sort();
     const integration = rel.includes('/test/integration/');
     rows.push({
       file: rel,
@@ -588,8 +638,7 @@ export function renderPortMap(rows) {
 }
 
 async function loadRegistries(root) {
-  const load = async (relativePath) =>
-    import(pathToFileURL(path.join(root, relativePath)).href);
+  const load = async (relativePath) => import(pathToFileURL(path.join(root, relativePath)).href);
   const { ROUTES } = await load('packages/contracts/src/routes.ts');
   const { SPECIAL_ROUTE_MANIFEST } = await load('packages/api-routes/src/special/manifest.ts');
   const { EVENTS } = await load('packages/contracts/src/events.ts');
@@ -605,7 +654,9 @@ export async function main(argv = process.argv.slice(2), root = ROOT) {
     if (check) {
       const current = fs.existsSync(markdownPath) ? readText(markdownPath) : '';
       if (current !== markdown) {
-        console.error('Test port map drift: regenerate evidence/SPEC-2001/test-port-map.md (CA-4).');
+        console.error(
+          'Test port map drift: regenerate evidence/SPEC-2001/test-port-map.md (CA-4).',
+        );
         process.exitCode = 1;
       } else {
         console.log(`Test port map up to date: ${rows.length} files.`);

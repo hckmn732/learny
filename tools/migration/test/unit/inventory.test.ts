@@ -4,9 +4,9 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { SPECIAL_ROUTE_MANIFEST } from '../../../../packages/api-routes/src/special/manifest';
 import { EVENTS } from '../../../../packages/contracts/src/events';
 import { ROUTES } from '../../../../packages/contracts/src/routes';
-import { SPECIAL_ROUTE_MANIFEST } from '../../../../packages/api-routes/src/special/manifest';
 import {
   ROOT,
   buildInventory,
@@ -19,13 +19,42 @@ import {
   trackSpecFor,
 } from '../../inventory.mjs';
 
+interface InventoryOperation {
+  id: string;
+  method: string;
+  path: string;
+  auth: string;
+  context: string;
+  spec: string;
+  implementation: string | null;
+  tables: string[];
+  tests: string[];
+  gap: boolean;
+}
+
+interface Inventory {
+  counts: { operations: number; special: number; events: number; jobs: number; gaps: number };
+  operations: InventoryOperation[];
+  special: { key: string; path: string; method: string }[];
+  events: { name: string }[];
+  jobs: { id: string }[];
+}
+
+interface PortMapRow {
+  file: string;
+  tests: number;
+  python: string;
+  spec: string;
+  status: string;
+}
+
 const registry = {
   routes: ROUTES as unknown as Record<string, never>,
   special: SPECIAL_ROUTE_MANIFEST,
   events: EVENTS as unknown as Record<string, unknown>,
 };
 
-function realInventory() {
+function realInventory(): Inventory {
   return buildInventory({
     root: ROOT,
     deps: {
@@ -34,7 +63,11 @@ function realInventory() {
       usage: eventUsage(ROOT),
       index: testIndex(ROOT),
     },
-  });
+  }) as unknown as Inventory;
+}
+
+function portMap(): PortMapRow[] {
+  return buildPortMap(ROOT);
 }
 
 describe('[SPEC-2001] inventory extractor', () => {
@@ -86,7 +119,9 @@ describe('[SPEC-2001] inventory extractor', () => {
   it('renders every operation id in the markdown matrix (CA-1)', () => {
     const inventory = realInventory();
     const markdown = renderInventoryMarkdown(inventory);
-    const missing = inventory.operations.filter((operation) => !markdown.includes(`\`${operation.id}\``));
+    const missing = inventory.operations.filter(
+      (operation) => !markdown.includes(`\`${operation.id}\``),
+    );
     expect(missing).toEqual([]);
     expect(markdown).toContain('| Operations (`ROUTES`) | 217 |');
   });
@@ -94,7 +129,7 @@ describe('[SPEC-2001] inventory extractor', () => {
 
 describe('[SPEC-2001] test port map', () => {
   it('maps every backend test file to a pytest module and a python-track spec (CA-4)', () => {
-    const rows = buildPortMap(ROOT);
+    const rows = portMap();
     expect(rows.length).toBeGreaterThan(400);
     for (const row of rows) {
       expect(row.python).toMatch(/tests\/(?:unit|integration)\/(?:.*\/)?test_.+\.py$/);

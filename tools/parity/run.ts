@@ -1,4 +1,4 @@
-// SPEC-2001 — parity runner (ADR-2008, P20 plan §3).
+﻿// SPEC-2001 â€” parity runner (ADR-2008, P20 plan Â§3).
 //
 // Records the reference responses of the TypeScript backend and replays them against any target
 // (the Hono API today, the Python facade tomorrow). Comparison is semantic: status, an allow-list
@@ -8,7 +8,7 @@
 //   corepack pnpm exec tsx tools/parity/run.mts --check  --target http://127.0.0.1:3102
 //
 // Generated scenarios cover every side-effect-free read operation of the inventory (one success
-// scenario per read route, P20 plan §3). Mutations are hand-written in
+// scenario per read route, P20 plan Â§3). Mutations are hand-written in
 // `tools/parity/scenarios/mutations.json` because they need an ordered chain of fixtures.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,7 +44,7 @@ export interface Captured {
   body: unknown;
 }
 
-/** Headers compared between the two runtimes (00-conventions §11). */
+/** Headers compared between the two runtimes (00-conventions Â§11). */
 export const COMPARED_HEADERS = [
   'content-type',
   'cache-control',
@@ -65,7 +65,10 @@ export function normalizeBody(value: unknown): unknown {
     // `EXPLAIN (FORMAT JSON)` blocks exposed by the dev demo pages: planner costs vary with
     // statistics between two runs, the shape does not (CL-2).
     if (value.includes('"Node Type"') && value.includes('"Startup Cost"')) return '<explain>';
-    return value.replace(UUID_RE, '<uuid>').replace(ISO_RE, '<timestamp>').replace(EMAIL_RE, '<email>');
+    return value
+      .replace(UUID_RE, '<uuid>')
+      .replace(ISO_RE, '<timestamp>')
+      .replace(EMAIL_RE, '<email>');
   }
   if (Array.isArray(value)) return value.map(normalizeBody);
   if (value !== null && typeof value === 'object') {
@@ -88,7 +91,7 @@ export function normalizeHeaders(headers: Headers): Record<string, string> {
   return out;
 }
 
-/** Generated read scenarios: one GET per operation without a path parameter (P20 plan §3). */
+/** Generated read scenarios: one GET per operation without a path parameter (P20 plan Â§3). */
 export function generatedScenarios(inventory: {
   operations: { id: string; method: string; path: string; auth: string; context: string }[];
 }): Scenario[] {
@@ -126,15 +129,13 @@ async function executeStep(
   const session = step.as === 'freshUser' ? actors.get('freshUser') : null;
   const headers: Record<string, string> = { accept: 'application/json' };
   if (session !== null && session !== undefined) headers.cookie = session.cookieHeader;
+  const init: RequestInit = { method: step.method, headers };
   if (step.body !== undefined) {
     headers['content-type'] = 'application/json';
     headers['idempotency-key'] = step.idempotencyKey ?? idempotencyKey;
+    init.body = JSON.stringify(step.body);
   }
-  const response = await fetch(`${target}${step.path}`, {
-    method: step.method,
-    headers,
-    body: step.body === undefined ? undefined : JSON.stringify(step.body),
-  });
+  const response = await fetch(`${target}${step.path}`, init);
   const text = await response.text();
   let body: unknown = text;
   try {
@@ -155,7 +156,10 @@ export interface ScenarioResult {
   steps: Captured[];
 }
 
-export async function runScenarios(scenarios: Scenario[], target: string): Promise<ScenarioResult[]> {
+export async function runScenarios(
+  scenarios: Scenario[],
+  target: string,
+): Promise<ScenarioResult[]> {
   const results: ScenarioResult[] = [];
   for (const scenario of scenarios) {
     const actors = new Map<string, TestSession | null>();
@@ -164,7 +168,9 @@ export async function runScenarios(scenarios: Scenario[], target: string): Promi
     try {
       const steps: Captured[] = [];
       for (const [index, step] of scenario.steps.entries()) {
-        steps.push(await executeStep(step, target, `parity-${scenario.name}-${String(index)}`, actors));
+        steps.push(
+          await executeStep(step, target, `parity-${scenario.name}-${String(index)}`, actors),
+        );
       }
       results.push({ name: scenario.name, group: scenario.group, steps });
     } finally {
@@ -251,7 +257,7 @@ async function main(argv: string[]): Promise<void> {
   if (!check) {
     fs.mkdirSync(path.dirname(RECORDING_FILE), { recursive: true });
     fs.writeFileSync(RECORDING_FILE, serializeRecording(results));
-    console.log(`Recorded ${results.length} scenarios against ${target}`);
+    console.log(`Recorded ${String(results.length)} scenarios against ${target}`);
     return;
   }
 
@@ -262,12 +268,14 @@ async function main(argv: string[]): Promise<void> {
   const expected = recording.groups.flatMap((group) => group.scenarios);
   const diffs = diffRecordings(expected, results);
   if (diffs.length > 0) {
-    console.error(`Parity failed against ${target}: ${diffs.length} divergence(s)`);
+    console.error(`Parity failed against ${target}: ${String(diffs.length)} divergence(s)`);
     for (const diff of diffs.slice(0, 40)) console.error(`  ${diff}`);
     process.exitCode = 1;
     return;
   }
-  console.log(`Parity OK: ${results.length} scenarios replay identically against ${target}.`);
+  console.log(
+    `Parity OK: ${String(results.length)} scenarios replay identically against ${target}.`,
+  );
 }
 
 const entry = process.argv[1] === undefined ? null : pathToFileURL(process.argv[1]).href;

@@ -1,0 +1,42 @@
+{
+  "lint": {
+    "status": "passed",
+    "at": "2026-11-21T09:12:51.838Z",
+    "details": ""
+  },
+  "typecheck": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:24.077Z",
+    "details": ""
+  },
+  "build": {
+    "status": "passed",
+    "at": "2026-11-21T09:17:25.347Z",
+    "details": ""
+  },
+  "unit": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:26.680Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "integration": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:26.680Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "e2e": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:26.680Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "visual": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:26.680Z",
+    "details": "non exécuté : lint/typecheck/build en échec"
+  },
+  "acceptance": {
+    "status": "failed",
+    "at": "2026-11-21T09:17:26.701Z",
+    "details": "0/5 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5 ; 1 ❌"
+  }
+}
