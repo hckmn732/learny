@@ -14,6 +14,7 @@ dev = [
   "ruff>=0.8",
   "mypy>=1.13",
   "import-linter>=2.1",
+  "types-PyYAML>=6.0",
 ]
 
 [tool.ruff]
@@ -39,16 +40,18 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 python_version = "3.13"
 strict = true
 plugins = ["pydantic.mypy"]
+mypy_path = ["packages-py/learny/src", "apps/api-py/src", "apps/worker-py/src"]
 exclude = ["generated/"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 markers = ["spec(id): SDD spec id"]
 testpaths = ["packages-py", "apps/api-py", "apps/worker-py"]
 pythonpath = ["packages-py/learny/src", "apps/api-py/src", "apps/worker-py/src"]
 
 [tool.importlinter]
-root_packages = ["learny", "learny_api", "learny_worker", "learny_api.main"]
+root_packages = ["learny", "learny_api", "learny_worker"]
 
 [[tool.importlinter.contracts]]
 name = "Nobody imports views or apps"
