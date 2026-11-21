@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-21T13:52:43.630Z",
+  "updatedAt": "2026-11-21T14:26:02.284Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6944,10 +6944,12 @@
       "report": null
     },
     "CP-20": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-21T14:26:02.176Z",
+      "tag": "cp-20",
+      "report": "evidence/checkpoints/CP-20/summary.md",
+      "exception": true,
+      "reason": "Suite e2e complete rouge sur main (SPEC-006) ; exception autorisee par le porteur du projet."
     },
     "CP-21": {
       "status": "pending",
