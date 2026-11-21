@@ -970,6 +970,13 @@ async function runTarget(
     );
     duplicates += validation.duplicates;
     issues = validation.issues;
+    if (issues.length > 0) {
+      // Hotfix QA: rejected candidates were invisible; log the first validation paths and codes.
+      ctx.logger?.warn('question bank candidates rejected', {
+        code: target.format,
+        outcome: issues.slice(0, 8).join(' | ').slice(0, 600),
+      });
+    }
     accepted.push(...validation.accepted);
     if (accepted.length >= target.count) break;
   }
