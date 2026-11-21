@@ -48,14 +48,16 @@ def test_bearer_wins_over_the_cookie() -> None:
         verifier,  # type: ignore[arg-type]
         {"authorization": "Bearer header-token", "cookie": f"{BASE}={cookie_value('cookie-token')}"},
     )
-    assert actor is not None and actor.transport == "bearer"
+    assert actor is not None
+    assert actor.transport == "bearer"
     assert verifier.calls == [("header-token", "bearer")]
 
 
 def test_the_cookie_is_used_without_a_bearer() -> None:
     verifier = FakeVerifier()
     actor = authenticate(verifier, {"cookie": f"{BASE}={cookie_value('cookie-token')}"})  # type: ignore[arg-type]
-    assert actor is not None and actor.transport == "cookie"
+    assert actor is not None
+    assert actor.transport == "cookie"
     assert verifier.calls == [("cookie-token", "cookie")]
 
 
