@@ -6,6 +6,7 @@ fallback for everything else.
 """
 
 import json
+import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -28,12 +29,27 @@ CATALOG: dict[str, ErrorEntry] = {}
 ROOT = Path(__file__).resolve().parents[4]
 
 
+def _api_dir() -> Path:
+    """Directory holding the generated contract artefacts.
+
+    In a source checkout it is `<repo>/api`. In the container the library is installed in
+    site-packages, so `PY_API_DIR=/app/api` names it explicitly (SPEC-2003).
+    """
+    override = os.environ.get("PY_API_DIR")
+    if override:
+        return Path(override)
+    for candidate in (ROOT / "api", Path.cwd() / "api"):
+        if (candidate / "ownership.yaml").exists():
+            return candidate
+    return ROOT / "api"
+
+
 def _ownership_file() -> Path:
-    return ROOT / "api" / "ownership.yaml"
+    return _api_dir() / "ownership.yaml"
 
 
 def _inventory_file() -> Path:
-    return ROOT / "api" / "inventory.json"
+    return _api_dir() / "inventory.json"
 
 
 def _load_contract_entries() -> tuple[list[str], list[str]]:
@@ -81,7 +97,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     """Builds the facade; later specs register Python-owned routes on the returned app."""
     resolved = settings or Settings()
     global CATALOG
-    CATALOG = load_catalog(ROOT / "api" / "errors.json")
+    CATALOG = load_catalog(_api_dir() / "errors.json")
     ownership = load_ownership_checked(resolved)
 
     app = FastAPI(
