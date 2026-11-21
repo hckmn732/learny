@@ -219,7 +219,7 @@ operations:
   'suggestions.import': ts
   'uploads.create': ts
   'warmups.answers.create': ts
-  'warmups.today.get': ts
+  'warmups.today.get': py
 
 special:
   'DELETE /api/v1/dev/sdd/email/outbox': ts

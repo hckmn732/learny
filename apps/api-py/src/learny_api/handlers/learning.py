@@ -104,3 +104,11 @@ async def formations_replan(call: Call) -> Any:
     body = _body(call)
     body["choice"] = getattr(body["choice"], "value", body["choice"])
     return await learning.apply_replan(call.deps, _actor(call), _params(call)["fid"], body)
+
+
+# --- warmups -------------------------------------------------------------------------------------
+
+
+@handler("warmups.today.get")
+async def warmups_today_get(call: Call) -> Any:
+    return await learning.get_today_warmups(call.deps, _actor(call))
