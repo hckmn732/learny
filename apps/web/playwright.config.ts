@@ -41,8 +41,11 @@ const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 14
 // Shared worktrees may already run a server on the default port: allow an isolated run.
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
 const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
-const API_PORT = PORT + 1;
-const API_INTERNAL_URL = `http://127.0.0.1:${String(API_PORT)}`;
+// SPEC-2003: the Python facade sits on PORT+1 and relays to Hono on PORT+2.
+const FACADE_PORT = PORT + 1;
+const API_PORT = PORT + 2;
+const HONO_URL = `http://127.0.0.1:${String(API_PORT)}`;
+const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
 
 export default defineConfig({
   testDir: './e2e/specs',
@@ -134,8 +137,21 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'pnpm --filter @learny/api dev',
+      // SPEC-2003: the web only talks to the facade; every operation is still relayed to Hono.
+      command: `uv run uvicorn learny_api.main:app --host 127.0.0.1 --port ${String(FACADE_PORT)}`,
       url: `${API_INTERNAL_URL}/health`,
+      cwd: ROOT,
+      reuseExistingServer: false,
+      timeout: 180000,
+      env: {
+        ...TEST_SERVER_ENV,
+        PY_HONO_UPSTREAM_URL: HONO_URL,
+        APP_ENV: 'test',
+      },
+    },
+    {
+      command: 'pnpm --filter @learny/api dev',
+      url: `${HONO_URL}/health`,
       reuseExistingServer:
         process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
         (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
