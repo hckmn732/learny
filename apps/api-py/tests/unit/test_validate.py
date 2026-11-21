@@ -9,11 +9,12 @@ from typing import Any, Literal
 import pytest
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import validation
-from learny.shared.locale_fr.details import INVALID_JSON_BODY
+from learny.shared.locale_fr.details import INVALID_JSON_BODY, INVITATION_CODE_FORMAT
 from learny_api.validate import (
     apply_refinement,
     invalid_input,
     issues_of,
+    normalize_params,
     query_to_object,
     validate_input,
 )
@@ -246,3 +247,25 @@ def test_a_blank_legal_version_is_a_validation_failure() -> None:
 
 def test_a_route_without_refinement_is_left_untouched() -> None:
     apply_refinement("me.get", {}, status=400)
+
+
+# --------------------------------------------------------------------------------------------------
+# Transforms of the path parameters (SPEC-2201)
+# --------------------------------------------------------------------------------------------------
+
+
+def test_invitation_code_is_normalized_before_the_generated_pattern() -> None:
+    """`InvitationCode` trims and upper-cases before its regex: the pipeline does the same."""
+    params = normalize_params("invitations.get", {"code": " lrn-ab23 "})
+    assert params["code"] == "LRN-AB23"
+
+
+def test_an_ambiguous_invitation_code_is_refused_with_the_zod_issue() -> None:
+    with pytest.raises(AppError) as failure:
+        normalize_params("invitations.accept", {"code": "LRN-AB1O"})
+    assert failure.value.code == "VALIDATION_FAILED"
+    assert failure.value.extra["errors"] == [{"path": "params.code", "message": INVITATION_CODE_FORMAT}]
+
+
+def test_another_route_keeps_its_parameters_untouched() -> None:
+    assert normalize_params("formations.pause", {"fid": "abc"}) == {"fid": "abc"}

@@ -76,7 +76,11 @@ export function normalizeBody(value: unknown): unknown {
     for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
       out[key] = DURATION_KEY_RE.test(key) ? '<duration>' : normalizeBody(item);
     }
-    return out;
+    // JSON object order is not part of the contract: canonicalising it keeps the oracle stable
+    // between two runtimes whose serialisers order their keys differently (CL-2).
+    const sorted: Record<string, unknown> = {};
+    for (const key of Object.keys(out).sort()) sorted[key] = out[key];
+    return sorted;
   }
   return value;
 }
@@ -214,7 +218,9 @@ export function firstDifference(expected: unknown, actual: unknown, pointer = ''
       const diff = firstDifference(expectedObject[key], actualObject[key], `${pointer}/${key}`);
       if (diff !== null) return diff;
     }
-    return `${pointer || '/'}: object shape differs`;
+    const missing = Object.keys(expectedObject).filter((key) => !(key in actualObject));
+    const extra = Object.keys(actualObject).filter((key) => !(key in expectedObject));
+    return `${pointer || '/'}: object shape differs (missing: [${missing.join(', ')}], extra: [${extra.join(', ')}])`;
   }
   return `${pointer || '/'}: ${JSON.stringify(expected)} != ${JSON.stringify(actual)}`;
 }
@@ -241,31 +247,60 @@ export function diffRecordings(expected: ScenarioResult[], actual: ScenarioResul
 
 export const RECORDING_FILE = path.join(REPO_ROOT, 'api', 'oracles', 'recordings', 'reads.json');
 
+/** `--group <context>` restricts the run to the scenarios of one context (identity, formation...). */
+function selectedGroups(argv: string[]): string[] {
+  const groups: string[] = [];
+  for (let index = 0; index < argv.length; index += 1) {
+    if (argv[index] !== '--group') continue;
+    const value = argv[index + 1];
+    if (value === undefined) throw new Error('--group <name> is required');
+    groups.push(value);
+  }
+  return groups;
+}
+
 async function main(argv: string[]): Promise<void> {
   const targetIndex = argv.indexOf('--target');
   const target = targetIndex === -1 ? 'http://127.0.0.1:3102' : argv[targetIndex + 1];
   if (target === undefined) throw new Error('--target <url> is required');
   const check = argv.includes('--check');
+  const groups = selectedGroups(argv);
   const inventory = JSON.parse(
     fs.readFileSync(path.join(REPO_ROOT, 'api', 'inventory.json'), 'utf8'),
   ) as {
     operations: { id: string; method: string; path: string; auth: string; context: string }[];
   };
-  const scenarios = [...generatedScenarios(inventory), ...loadMutations(REPO_ROOT)];
+  const all = [...generatedScenarios(inventory), ...loadMutations(REPO_ROOT)];
+  const scenarios =
+    groups.length === 0 ? all : all.filter((scenario) => groups.includes(scenario.group));
+  if (scenarios.length === 0) throw new Error(`no scenario in group(s) ${groups.join(', ')}`);
   const results = await runScenarios(scenarios, target);
 
   if (!check) {
+    // A group-filtered recording keeps the other groups of the committed oracle untouched.
+    const kept =
+      groups.length === 0 || !fs.existsSync(RECORDING_FILE)
+        ? []
+        : (
+            JSON.parse(fs.readFileSync(RECORDING_FILE, 'utf8')) as {
+              groups: { group: string; scenarios: ScenarioResult[] }[];
+            }
+          ).groups
+            .filter((group) => !groups.includes(group.group))
+            .flatMap((group) => group.scenarios);
     fs.mkdirSync(path.dirname(RECORDING_FILE), { recursive: true });
-    fs.writeFileSync(RECORDING_FILE, serializeRecording(results));
+    fs.writeFileSync(RECORDING_FILE, serializeRecording([...kept, ...results]));
     console.log(`Recorded ${String(results.length)} scenarios against ${target}`);
     return;
   }
 
   if (!fs.existsSync(RECORDING_FILE)) throw new Error('No recording: run --record first');
   const recording = JSON.parse(fs.readFileSync(RECORDING_FILE, 'utf8')) as {
-    groups: { scenarios: ScenarioResult[] }[];
+    groups: { group: string; scenarios: ScenarioResult[] }[];
   };
-  const expected = recording.groups.flatMap((group) => group.scenarios);
+  const expected = recording.groups
+    .filter((group) => groups.length === 0 || groups.includes(group.group))
+    .flatMap((group) => group.scenarios);
   const diffs = diffRecordings(expected, results);
   if (diffs.length > 0) {
     console.error(`Parity failed against ${target}: ${String(diffs.length)} divergence(s)`);

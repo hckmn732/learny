@@ -5,7 +5,16 @@
 | Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
 |---|---|---|---|---|
 | identity | 19 | **13** | 6 | 5 × `auth.*` (ADR-2022 : cookies non comparables) ; `home.get` (ADR-2023 : moteur d'apprentissage de SPEC-2202) |
-| formation | 26 | 0 | 26 | non commencé |
+| formation | 26 | **25** | 1 | `formations.resume` (ADR-2024 : planificateur de SPEC-2202) |
+| **Total** | **45** | **38** | **7** | |
+
+Les 25 opérations formation basculées : `cadrage.complete`, `cadrage.get`, `cadrage.message`,
+`cadrage.page`, `formations.access`, `formations.archive`, `formations.create`,
+`formations.current`, `formations.group.create`, `formations.group.get`, `formations.list`,
+`formations.pause`, `formations.update`, `groups.leave`, `groups.members.remove`,
+`groups.rotateCode`, `invitations.accept`, `invitations.get`, `notionGraph.get`,
+`programme.adjust`, `programme.generate`, `programme.get`, `programme.import`,
+`programme.validate`, `search.global`.
 
 Les 13 opérations identity servies et basculées : `header.get`, `me.ai.task-models.update`, `me.get`,
 `me.legal.accept`, `me.onboarding.get`, `me.onboarding.update`, `me.preferences.get`,

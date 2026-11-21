@@ -198,6 +198,10 @@ export default defineConfig({
         ...TEST_SERVER_ENV,
         PY_HONO_UPSTREAM_URL: HONO_URL,
         APP_ENV: 'test',
+        // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
+        // relay exactly like Hono does (SPEC-208 origin guard) — same secret, same forwarded host.
+        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
+        TRUST_PROXY: 'true',
       },
     },
     {

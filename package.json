@@ -62,6 +62,8 @@
     "quality:journeys": "node tools/quality/check-v1-journeys.mjs",
     "contract:export": "tsx packages/contracts/scripts/export-contract.ts",
     "contract:check": "tsx packages/contracts/scripts/export-contract.ts --check",
+    "parity:record": "tsx tools/parity/run.ts --record",
+    "parity:check": "tsx tools/parity/run.ts --check",
     "rls:export": "tsx packages/db/scripts/export-rls-matrix.ts",
     "rls:check": "tsx packages/db/scripts/export-rls-matrix.ts --check",
     "sdk:generate": "node tools/contract/generate-sdk.mjs",

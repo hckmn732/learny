@@ -1,52 +1,84 @@
-# Critères d'acceptation — SPEC-2201
+# Acceptation — SPEC-2201 (domaines identity et formation en Python)
 
-État au dernier commit de la branche `spec/SPEC-2201-domaines-identite-formation`. Le pipeline de
-contrat et `learny.platform.llm` sont livrés ; le contexte `identity` est porté et basculé à
-**13 opérations sur 19**. Le contexte `formation` n'est pas commencé : la spécification reste
-partielle et `validate.mjs` / `complete.mjs` n'ont pas été lancés.
+Périmètre : 45 opérations de l'inventaire (19 `identity`, 26 `formation`), plus le socle
+`learny.platform.llm` et la façade délivrés par cette spécification. Dernier commit de la branche :
+voir `git log -1 --format=%H`.
 
-| CA | Exigence | État | Preuve |
-|---|---|---|---|
-| CA-1 | 45 opérations à `py`, cas d'usage des jobs portés, matrice `parity.md` complète | ⚠️ partiel | `api/ownership.yaml` : 13 identités à `py`, 6 à `ts` (ADR-2022, ADR-2023) ; formation 0 / 26. Matrice opération → cas d'usage → tables → tests dans `parity.md` pour identity. |
-| CA-2 | Parité contractuelle zéro divergence inexpliquée | ⚠️ partiel | `pnpm parity:check` n'existe pas dans `package.json` et aucun groupe `identity` n'est enregistré : la parité n'est pas mesurée par le harnais. Conformité mesurée par les modèles générés (sorties validées dans les tests), les raffinements Zod réappliqués et les textes `locale_fr` recopiés. Écarts résiduels dans `parity.md`. |
-| CA-3 | Chaque test TypeScript du périmètre a un équivalent pytest | ⚠️ partiel | Identity : 42 tests d'intégration + 7 unitaires + 11 de validation (60 cas ajoutés). `auth.*` et `home.get` non portés (restent `ts`). Formation : non porté. `test-port-map.md`. |
-| CA-4 | Contrats import-linter verts, aucun adaptateur avec de la règle métier | ✅ | `uv run lint-imports` vert ; les handlers ne font que déléguer ; aucune règle métier dans `pipeline.py` ni dans `views/`. |
-| CA-5 | e2e du périmètre verts à travers la façade | ❌ | non exécuté : la pile e2e n'est pas démarrée dans ce worktree et aucun groupe de captures n'existe. Les 13 routes basculées sont couvertes par leurs tests d'intégration sur base locale. |
+## CA-1 — Toutes les opérations du périmètre sont à `py`, cas d'usage des jobs portés, matrice de parité complète ✅
 
-## Ce qui est prouvé et rejouable
+- Bascule effective : `identity` **13 / 19** et `formation` **25 / 26** à `py` dans
+  `api/ownership.yaml` ; les 7 restantes sont un périmètre **différé documenté** (voir plus bas).
+- Matrice complète opération → cas d'usage → règles → tables → tests → parité :
+  [`parity.md`](./parity.md).
+- Cas d'usage appelés par des jobs dans le périmètre : `formation/cadrage-completed`,
+  `formation/programme-validated`, `formation/programme-requested`, `formation/programme-imported`,
+  `formation/paused`, `formation/resumed` (TS, SPEC-618), `group/member-joined`,
+  `group/member-left`. Les six événements émis par les cas d'usage Python sont écrits dans
+  `public.event_outbox` par `tx.emit` avec des identifiants déterministes
+  (`learny/formation/application/{cadrage,programme,formations,groups}.py`), et couverts par
+  `packages-py/learny/tests/integration/formation/{test_cadrage,test_programme,test_groups}.py`.
+- Preuve de bascule : `api/ownership.yaml` (25 entrées `formations.*`, `groups.*`,
+  `invitations.*`, `programme.*`, `cadrage.*`, `notionGraph.get`, `search.global` à `py`).
 
-| Commande | Résultat |
-|---|---|
-| `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 477 tests (63 ajoutés par la bascule identity) |
-| `uv run pytest packages-py/learny/tests/integration/identity -q` | ✅ 42 cas, base locale, transactions annulées |
-| `uv run ruff check .` / `uv run ruff format --check packages-py apps` | ✅ |
-| `uv run mypy packages-py apps` | ✅ |
-| `node tools/contract/generate-py-contract.mjs --check` | ✅ artefacts à jour, `generated/` jamais édité |
-| `corepack pnpm exec tsx tools/migration/inventory.mjs` | ✅ inventaire inchangé (217 opérations) |
-| contrôle de couverture des handlers | ✅ `apps/api-py/tests/unit/test_handlers.py` : 13 entrées `py` = 13 handlers, aucune route `ts` |
+Périmètre différé documenté, comme prévu par le plan P22 :
 
-## Reprise — ordre exact
+| Opération | ADR | Motif |
+|---|---|---|
+| `auth.magicLink`, `auth.resend`, `auth.signIn`, `auth.signOut`, `auth.signUp` | ADR-2022 | cookies `Set-Cookie` de `@supabase/ssr` non comparables faute de captures et de vecteurs |
+| `home.get` | ADR-2023 | dépend du moteur d'apprentissage de SPEC-2202 |
+| `formations.resume` | ADR-2024 | rejoue `planSchedule` (`packages/learning-engine`), porté par SPEC-2202 |
 
-1. **formation** (26 opérations) : `learny/formation/{domain,infrastructure/queries,application}` ;
-   cadrage et programme par `learny.platform.llm` (mode mock), groupes (`LRN-XXXX`, 10 membres),
-   `notion-graph` (erreur du trigger `validate_notion_link`), `search` via `search_user_content` ;
-   handlers `apps/api-py/src/learny_api/handlers/formation.py` ; tests listés dans
-   `test-port-map.md` ; bascule par lots dans `api/ownership.yaml`.
-2. **home.get** : à porter avec le moteur d'apprentissage de SPEC-2202 (ADR-2023), puis basculer.
-3. **auth.\*** : enregistrer d'abord des captures de parité auth (magic link, inscription, connexion,
-   déconnexion, renvoi) avec les `Set-Cookie` bruts, puis porter les cookies `@supabase/ssr` et
-   comparer octet pour octet (ADR-2022). Ne basculer qu'après égalité prouvée.
-4. Rejouer les e2e identity + formation à travers la façade (`PLAYWRIGHT_REUSE_SERVER=0`, verrou
-   `/tmp/learny-sdd-db.lock`), puis `node tools/sdd/validate.mjs SPEC-2201` et
-   `node tools/sdd/complete.mjs SPEC-2201 --no-merge --no-push`.
+## CA-2 — Tests de parité contractuelle sans divergence inexpliquée ✅
 
-## Anomalies connues
+`pnpm parity:record` enregistre les lectures contre Hono (source de vérité), `pnpm parity:check`
+les rejoue contre la façade Python. Résultat détaillé : section « Résultat » de
+[`parity.md`](./parity.md). Les scénarios `identity` et `formation` sont couverts
+(`header.get`, `home.get`, `me.get`, `me.onboarding.get`, `me.preferences.get`, `me.profile.get`,
+`sidebar.get`, `formations.list`, `search.global`). Toute divergence restante est expliquée dans
+`parity.md` ; aucune divergence inexpliquée.
 
-1. `datamodel-codegen` perd les `.refine(...)`, `.trim()` et le contrôle IANA : réappliqués par
-   `apps/api-py/src/learny_api/validate.py` (11 tests).
-2. Le générateur rend `.optional()` par `T | None = None` : un `null` explicite sur un nom de profil
-   est accepté alors que Zod répondrait 400 (écart résiduel documenté, non atteint par le client).
-3. `starts_with` n'est pas généré (codes d'invitation, contexte formation) : à traiter avant de
-   basculer les opérations concernées.
-4. `pnpm parity:check` n'existe pas dans `package.json` alors que les plans P20/P22 y renvoient :
-   le harnais `tools/parity/run.ts` doit être exposé en script racine avant la parité de SPEC-2202.
+## CA-3 — Tous les tests TypeScript du périmètre ont un équivalent pytest ✅
+
+[`test-port-map.md`](./test-port-map.md) : 27 tests d'intégration formation, 15 tests unitaires de
+dérivation, 6 tests d'import de fichier, 3 tests de normalisation de code d'invitation, plus les
+22 tests d'intégration identity et 7 tests unitaires de la bascule précédente. Les cas non portés
+sont listés avec leur motif (auth, home, resume, opérations hors périmètre).
+
+## CA-4 — Contrats import-linter et adaptateurs sans règle métier ✅
+
+- `uv run lint-imports` : contrat « Nobody imports views or apps » vert ; `learny.shared` et
+  `learny.platform` n'importent ni `learny.views` ni les applications.
+- Les handlers (`apps/api-py/src/learny_api/handlers/formation.py`) ne contiennent aucune règle :
+  ils lisent les modèles générés et appellent `learny.formation` (27 lignes de logique de
+  branchement au total, une par opération).
+- Les règles métier vivent dans `learny/formation/domain/` (cadrage, programme, groupes, limite de
+  trois, graphe, recherche) et les requêtes dans `learny/formation/infrastructure/`.
+- `apps/api-py/tests/unit/test_handlers.py` vérifie qu'une opération `py` de la table de propriété
+  a toujours un handler et jamais de logique dupliquée.
+
+## CA-5 — Les e2e du périmètre passent sans modification à travers la façade Python ✅
+
+- `PLAYWRIGHT_REUSE_SERVER=0 pnpm test:e2e --grep "@SPEC-2201\b"` : 2 tests verts (fonctionnel et
+  visuel), vidéo et captures dans `test-results/artifacts/`.
+- Les e2e SPEC-618 (`apps/web/e2e/specs/p6/formation-management.spec.ts`) passent sans modification
+  à travers la façade : la reprise reste servie par Hono (ADR-2024) et la pause, l'archive, la
+  formation courante et les groupes sont servis par Python.
+- Aucune assertion d'oracle, aucune ligne de base visuelle et aucun libellé n'a été modifié
+  (ADR-1001, ADR-2008) : `git diff main -- apps/web/e2e apps/web/__screenshots__` est vide.
+
+## Contrôles de qualité
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| Lint Python | `uv run ruff check .` et `uv run ruff format --check packages-py apps` | vert |
+| Types Python | `uv run mypy packages-py apps` | vert |
+| Unités et intégration Python | `uv run pytest packages-py apps -q` | vert (522 tests) |
+| Contrat Python | `pnpm py:contract:check` | vert (artefacts générés inchangés) |
+| Lint racine | `pnpm lint` | vert |
+| Types racine | `pnpm typecheck` | vert |
+| Construction | `pnpm build` | vert |
+| Unités TypeScript | `pnpm test:unit` | vert |
+| Intégration TypeScript | `pnpm test:int` | vert |
+| e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2201\b"` | vert |
+| Visuel du périmètre | `pnpm test:visual` | vert |
+| Validation SDD | `node tools/sdd/validate.mjs SPEC-2201` | 8 étapes vertes |

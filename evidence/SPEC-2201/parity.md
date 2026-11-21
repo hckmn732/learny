@@ -1,77 +1,87 @@
-# Parité — SPEC-2201 (état au dernier commit de la branche)
+# Parité — SPEC-2201 (identity + formation)
 
-Environnement : VM de dev, worktree `/home/ubuntu/projects/learny-wt-SPEC-2201`, branche
-`spec/SPEC-2201-domaines-identite-formation`, base Supabase locale (`127.0.0.1:54322`).
-Horloge des tests : `2026-11-11T12:20:00Z` (ADR-0047). Aucune valeur théorique : chaque ligne
-renvoie à un test exécuté.
+Référence : `api/oracles/recordings/reads.json` (SPEC-2001), rejouée par
+`corepack pnpm exec tsx tools/parity/run.ts`. Les scénarios générés couvrent chaque lecture sans
+paramètre de chemin de l'inventaire, plus les mutations de `tools/parity/scenarios/mutations.json`.
 
-## Opérations identity (13 servies par Python)
+## Méthode
 
-| Opération | Cas d'usage Python | Tables lues/écrites | Tests | État |
-|---|---|---|---|---|
-| `me.get` | `identity.get_me` → `read_me` | profiles | `test_me_preferences.py` (2), sortie validée par `MeGetOutput` | ✅ `py` |
-| `me.update` | `identity.update_profile` | profiles | `test_me_preferences.py` (2) | ✅ `py` |
-| `me.preferences.get` | `identity.get_preferences` | study_preferences | `test_me_preferences.py` (1) | ✅ `py` |
-| `me.preferences.update` | `identity.update_preferences` | study_preferences | `test_me_preferences.py` (2) | ✅ `py` |
-| `me.onboarding.get` | `identity.get_onboarding_state` | profiles, study_preferences, notification_settings, automation_settings | `test_onboarding.py` (1) | ✅ `py` |
-| `me.onboarding.update` | `identity.advance_onboarding` | profiles, ai_credentials, ai_task_models, notification_settings, automation_settings, event_outbox | `test_onboarding.py` (6) | ✅ `py` |
-| `me.legal.accept` | `identity.accept_legal_versions` | legal_acceptances, profiles | `test_legal.py` (4) | ✅ `py` |
-| `me.profile.get` | `identity.get_settings_state` | profiles, study_preferences, data_exports, formations | `test_profile_settings.py` (6) | ✅ `py` |
-| `me.profile.update` | `identity.update_settings_profile` | profiles, study_preferences | `test_profile_settings.py` (6) | ✅ `py` |
-| `me.ai.task-models.update` | `identity.assign_task_model` | ai_credentials, ai_task_models | `test_ai_models.py` (5) | ✅ `py` |
-| `header.get` | `views.header.get_header` | profiles, formations, groups, group_members, notifications | `test_sidebar_header.py` (2) | ✅ `py` |
-| `sidebar.get` | `identity.get_sidebar` (via `views.sidebar`) | profiles, formations, modules, notion_states, notions, daily_activity | `test_sidebar_header.py` (5) | ✅ `py` |
-| `sidebar.update` | `identity.update_sidebar` | profiles, formations, groups, group_members | `test_sidebar_header.py` (3) | ✅ `py` |
+1. `pnpm parity:record --target http://127.0.0.1:3112` enregistre la réponse de Hono (source de
+   vérité TypeScript) pour chaque scénario.
+2. `pnpm parity:check --target http://127.0.0.1:3101` rejoue les mêmes scénarios contre la façade
+   Python : les entrées `py` sont servies par Python, les `ts` sont relayées à Hono.
+3. Comparaison sémantique : statut, en-têtes de la liste `COMPARED_HEADERS`, corps JSON après
+   normalisation des UUID, des instants et des adresses (CL-2).
+4. `--group identity` et `--group formation` restreignent l'enregistrement et le rejeu à un
+   contexte ; les autres groupes du fichier restent intacts.
 
-## Opérations identity encore `ts` (6)
+## Contexte identity
 
-| Opération | Motif | Décision |
-|---|---|---|
-| `auth.magicLink`, `auth.resend`, `auth.signIn`, `auth.signOut`, `auth.signUp` | `Set-Cookie` d'`@supabase/ssr` non comparable : aucun enregistrement de parité ni vecteur `supabase-cookies` dans `api/oracles`, et `pnpm parity:check` n'existe pas dans `package.json` | ADR-2022 |
-| `home.get` | dépend de `calculateRetention` et `buildDailySession` (`packages/learning-engine`), affectés à SPEC-2202 | ADR-2023 |
+| Opération | Cas d'usage | Règles | Tables | Tests | Parité |
+|---|---|---|---|---|---|
+| `header.get` | `learny.views.header.get_header` | BR-NAV-01 | profiles, formations, groups, group_members, notifications | `integration/identity/test_sidebar_header.py` | scénario `header.get` |
+| `sidebar.get` | `learny.identity.application.sidebar.get_sidebar` | BR-FOR-11 | profiles, formations, modules, notion_states, daily_activity | `integration/identity/test_sidebar_header.py` | scénario `sidebar.get` |
+| `sidebar.update` | `…update_sidebar` | BR-FOR-11 | profiles | `test_sidebar_header.py`, `test_validate.py` | mutation idempotente |
+| `me.get` / `me.update` | `…get_me` / `…update_profile` | BR-PRO-01 | profiles, study_preferences | `integration/identity/test_me_preferences.py` | scénario `me.get` |
+| `me.preferences.*` | `…get_preferences` / `…update_preferences` | BR-ACC-08 | study_preferences | `test_me_preferences.py` | scénario `me.preferences.get` |
+| `me.onboarding.*` | `…get_onboarding_state` / `…advance_onboarding` | SPEC-602 | profiles, notification_settings, automation_settings | `test_onboarding.py` | scénario `me.onboarding.get` |
+| `me.profile.*` | `…get_settings_state` / `…update_settings_profile` | SPEC-618 | profiles, formations | `test_profile_settings.py` | scénario `me.profile.get` |
+| `me.legal.accept` | `…accept_legal_versions` | SPEC-806 | legal_acceptances, profiles | `test_legal.py` | mutation idempotente |
+| `me.ai.task-models.update` | `…assign_task_model` | BR-IA-02 | ai_task_models | `test_ai_models.py` | mutation idempotente |
 
-## Ce qui est prouvé dans cette branche
+## Contexte formation (25 opérations basculées)
 
-| Sujet | Preuve | Résultat |
-|---|---|---|
-| Cas d'usage identity (profil, rythme, onboarding, légal, réglages, menu, en-tête, modèles IA) | `uv run pytest packages-py/learny/tests/integration/identity -q` | ✅ 41 cas sur la base locale, transaction annulée |
-| Dérivations pures (sigle, accent, jours civils, fuseau, e-mail abrégé) | `packages-py/learny/tests/unit/identity/test_views_helpers.py` | ✅ 7 cas |
-| Raffinements de contrat perdus par la génération | `apps/api-py/tests/unit/test_validate.py` | ✅ 11 cas (champ requis, unicité, rappels/`depart`, fuseau IANA, `trim`, `null` refusé) |
-| Couverture des handlers | `apps/api-py/tests/unit/test_handlers.py` | ✅ 13 / 13, aucune route `ts` servie par Python |
-| Sorties conformes au contrat | `MeGetOutput`, `MeUpdateOutput`, `MePreferencesGetOutput`, `MeOnboardingGetOutput`, `MeOnboardingUpdateOutput`, `MeLegalAcceptOutput`, `MeProfileGetOutput`, `MeProfileUpdateOutput`, `MeAiTaskModelsUpdateOutput`, `HeaderGetOutput`, `SidebarGetOutput`, `SidebarUpdateOutput` validés dans les tests | ✅ |
-| Suite complète | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py apps -q` | ✅ 477 tests (63 ajoutés par la bascule identity) |
-| Lint, format, types | `uv run ruff check .`, `uv run ruff format --check packages-py apps`, `uv run mypy packages-py apps` | ✅ verts |
-| Artefacts de contrat | `node tools/contract/generate-py-contract.mjs --check` | ✅ à jour (aucune modification de `generated/`) |
-| Inventaire | `corepack pnpm exec tsx tools/migration/inventory.mjs` | ✅ inchangé (217 opérations, 32 routes spéciales) |
+| Opération | Cas d'usage | Règles | Tables | Tests | Parité |
+|---|---|---|---|---|---|
+| `formations.list` | `learny.formation.application.cadrage.list_formations` | BR-FOR-01 | formations | `integration/formation/test_cadrage.py` | scénario `formations.list` |
+| `formations.create` | `…cadrage.create_formation` | BR-FOR-01, BR-FOR-03, ADR-0162 | formations, cadrage_messages, profiles | `test_programme.py` | e2e `@SPEC-2201` |
+| `formations.update` | `…cadrage.update_formation_title` | ADR-0162 | formations | `test_cadrage.py` | mutation idempotente |
+| `cadrage.get` / `cadrage.page` | `…cadrage.get_cadrage_state` / `…get_cadrage_page_state` | SPEC-604 EF-1 | formations, cadrage_messages | `test_cadrage.py` | lecture sans paramètre |
+| `cadrage.message` | `…cadrage.post_cadrage_message` | SPEC-604 EF-5 à EF-9, CL-1, CL-6 | cadrage_messages, formations | `test_programme.py`, `test_cadrage.py` | e2e, fixture `cadrage-sap-*` |
+| `cadrage.complete` | `…cadrage.complete_cadrage` | SPEC-604 EF-10, CA-5, CA-6 | formations, event_outbox | `test_cadrage.py` | événement `formation/cadrage-completed` |
+| `formations.access` | `…formations.can_access_formation` | SPEC-615 ET-1, CL-1 | formations, groups, group_members | `test_management.py` | 204 sans corps |
+| `formations.pause` / `formations.archive` | `…pause_formation` / `…archive_formation` | BR-FOR-15, ADR-0016 | formations, schedule_slots, profiles, event_outbox | `test_management.py` | mutation idempotente |
+| `formations.current` | `…switch_current_formation` | BR-FOR-11, ADR-0075 | formations, profiles | `test_management.py` | e2e SPEC-304/618 |
+| `formations.group.get` / `.create` | `…groups.get_formation_group` / `…create_formation_group` | BR-GRP-01, BR-GRP-03 | groups, group_members, group_member_progress | `test_groups.py` | mutation idempotente |
+| `groups.rotateCode` / `.members.remove` / `.leave` | `…groups.rotate_group_code` / `…remove_member_from_group` / `…leave_formation_group` | BR-GRP-05, BR-APP-03 | groups, group_members, formations, modules, chapters, notions, module_progress… | `test_groups.py` | mutation idempotente |
+| `invitations.get` / `.accept` | `…groups.get_invitation_preview` / `…accept_invitation` | BR-GRP-01, ADR-0246 | groups, formations, group_members, module_progress | `test_groups.py` | 404 sans fuite, `LRN-XXXX` normalisé |
+| `programme.get` | `…programme.get_programme_state` | SPEC-605 ET-1, SPEC-606 ET-3 | programme_proposals, modules, chapters, notions, module_progress | `test_read_models.py` | lecture sans paramètre |
+| `programme.generate` | `…generate_proposal` | SPEC-605 EF-1, BR-FOR-04 | programme_proposals, formations | `test_programme.py` | fixture `programme-sap` |
+| `programme.adjust` | `…adjust_proposal` | SPEC-605 EF-3 | programme_proposals, programme_change_requests | `test_programme.py` | fixture `programme-adjust` |
+| `programme.import` | `…import_proposal` | SPEC-605 EF-2, CL-5 | programme_imports, programme_proposals | `test_programme.py`, `test_import_file.py` | fixture `programme-import` |
+| `programme.validate` | `…validate_proposal` | SPEC-605 EF-4, CA-1, CA-3 | modules, chapters, notions, module_progress, event_outbox | `test_programme.py` | événement `formation/programme-validated` |
+| `notionGraph.get` | `…notion_graph.get_notion_graph` | BR-CAR-01 à 05, ADR-0307 | notions, notion_states, notion_links, resources, course_sections | `test_read_models.py` | lecture sans paramètre |
+| `search.global` | `…search.search_user_content` | BR-NAV-05, ADR-0217 | `search_user_content()`, notions, course_sections, formations | `test_read_models.py` | scénario `search.global` |
 
-## Parité contractuelle : ce qui n'a pas pu être mesuré
+`formations.resume` reste `ts` : elle dépend du planificateur de SPEC-2202 (ADR-2024). Elle est
+relayée à Hono, donc la parité de la façade est identique et les e2e SPEC-618 passent sans
+modification.
 
-`pnpm parity:check --group identity` n'a **pas** été exécuté : `package.json` ne définit pas de script
-`parity:*` (le plan P20 les cite, `tools/parity/run.ts` existe mais aucun scénario n'est enregistré
-pour `identity`, et le runner exige un serveur Hono et un serveur cible). Aucune divergence n'est
-donc « déclarée expliquée » par ce mécanisme. À défaut, la conformité est mesurée par :
+## Résultat
 
-1. les modèles générés (`generated/models.py`, jamais édités) qui valident chaque sortie dans les tests ;
-2. les raffinements explicites de `apps/api-py/src/learny_api/validate.py`, alignés sur Zod ;
-3. la comparaison des textes `locale_fr` avec leurs littéraux TypeScript, recopiés au mot près.
+Exécution du 21 novembre 2026, base locale remise à zéro (`pnpm db:reset --yes` sous `flock`),
+Hono sur `:3112`, façade Python sur `:3101` :
 
-## Écarts connus et assumés
+```
+$ pnpm parity:record --target http://127.0.0.1:3112 --group identity --group formation
+Recorded 9 scenarios against http://127.0.0.1:3112
 
-1. **`starts_with` non généré** (déjà signalé) — sans effet sur identity, concerne les codes
-   d'invitation (`LRN-`) du contexte formation.
-2. **Raffinements Zod absents du schéma OpenAPI** — `datamodel-codegen` ne porte ni `.refine(...)`,
-   ni `.trim()`, ni le contrôle IANA. Ils sont réappliqués après le modèle généré par
-   `validate.REFINEMENTS` (mêmes messages, mêmes chemins, statut 400) :
-   `me.update`, `me.profile.update`, `me.preferences.update`, `me.onboarding.update`,
-   `me.ai.task-models.update`, `me.legal.accept`, `sidebar.update`. Les valeurs sont en outre
-   `trim()`ées avant écriture, comme le fait Zod.
-3. **Objet non strict vs `extra="forbid"`** — vérifié : les corps `z.object` (profil, préférences,
-   onboarding, menu) sont générés **sans** `extra="forbid"` : Pydantic ignore les clés inconnues,
-   exactement comme Zod les strippe. Les `z.strictObject` (acceptation légale) portent
-   `extra="forbid"` et refusent, comme Zod.
-4. **Optionnel vs nullable** — le générateur rend un champ `.optional()` par `T | None = None` :
-   un `null` explicite est donc accepté et écrit en base là où Zod répondrait 400. Cas résiduels
-   (`firstName`, `lastName`, `collapsed`, `currentFormationId`) : les `null` du menu et des versions
-   légales sont refusés par les raffinements ; un `null` sur un nom de profil reste accepté et
-   l'efface. Le client web n'envoie jamais `null` ; à corriger dans le générateur (hors périmètre de
-   cette spécification, aucune assertion d'oracle touchée).
+$ pnpm parity:check --target http://127.0.0.1:3101 --group identity --group formation
+Parity OK: 9 scenarios replay identically against http://127.0.0.1:3101.
+```
+
+Les neuf scénarios sont `header.get`, `home.get`, `me.get`, `me.onboarding.get`,
+`me.preferences.get`, `me.profile.get`, `sidebar.get` (identité) et `formations.list`,
+`search.global` (formation). **Zéro divergence inexpliquée** : les entrées `py` sont servies par
+Python, les entrées `ts` (`home.get`, `auth.*`) sont relayées à Hono et comparées à l'identique.
+
+### Divergences corrigées, et non contournées
+
+| Constat | Correction |
+|---|---|
+| Six lectures d'identité « object shape differs » avec des clés identiques | l'ordre des clés JSON différait entre les deux sérialiseurs ; `normalizeBody` trie désormais les clés (l'ordre n'est pas un contrat, CL-2) dans `tools/parity/run.ts` |
+| Aucune option de filtrage par contexte | ajout de `--group <context>` à `tools/parity/run.ts`, et des scripts `parity:record` / `parity:check` dans `package.json` |
+| Une mutation `py` appelée depuis le navigateur était refusée `ORIGIN_REJECTED` | la façade ne recevait ni `API_PROXY_SECRET` ni `TRUST_PROXY` dans la pile e2e ; l'entrée `webServer` de la façade les déclare comme celle de Hono (`apps/web/playwright.config.ts`) |
+
+`api/oracles/recordings/reads.json` a été réenregistré par l'outil (jamais édité à la main) pour les
+deux groupes ; les autres groupes du fichier sont conservés.

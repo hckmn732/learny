@@ -242,3 +242,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2021](ADR-2021-pipeline-de-contrat-python-livre-par-spec-2201-et-bascule-de.md) | Pipeline de contrat Python livre par SPEC-2201 et bascule dev-jobs laissee a SPEC-2207 | Déduite | SPEC-2201, ADR-2012, ADR-2020, SPEC-2207 |
 | [ADR-2022](ADR-2022-routes-auth-encore-typescript-faute-de-cookies-byte-identiqu.md) | Routes auth encore TypeScript faute de cookies byte-identiques | Déduite | SPEC-2201, ADR-2005, ADR-2008, ADR-2010 |
 | [ADR-2023](ADR-2023-home-get-encore-typescript-car-il-depend-du-moteur-d-apprent.md) | home.get encore TypeScript car il depend du moteur d apprentissage | Déduite | SPEC-2201, SPEC-2202, ADR-2001, ADR-2005 |
+| [ADR-2024](ADR-2024-reprise-de-formation-laissee-en-typescript.md) | Reprise de formation laissee en TypeScript | Déduite | — |
