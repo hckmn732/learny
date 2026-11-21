@@ -35,3 +35,10 @@ secrets
 *.log
 .DS_Store
 Thumbs.db
+
+# Python (SPEC-2003) — venv local et caches d'outils
+.venv
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache

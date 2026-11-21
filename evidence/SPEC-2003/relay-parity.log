@@ -1,0 +1,17 @@
+# Relais de la façade — SPEC-2003 (CA-2)
+
+- Date : 2026-11-21T11:02:35+00:00
+- Commit : 2be492b3
+- Hono (référence) : http://127.0.0.1:3102
+- Façade Python : http://127.0.0.1:3101 (PY_HONO_UPSTREAM_URL=http://127.0.0.1:3102)
+
+```
+== /health direct Hono ==
+{"status":"ok","version":"dev","commit":"unknown"}
+== /health via la façade ==
+{"status":"ok","version":"dev","commit":"unknown"}
+== rapport de parité contre Hono ==
+Parity OK: 67 scenarios replay identically against http://127.0.0.1:3102.
+== rapport de parité contre la façade ==
+Parity OK: 67 scenarios replay identically against http://127.0.0.1:3101.
+```

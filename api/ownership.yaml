@@ -1,0 +1,260 @@
+# Owner of every entry of the contract (ADR-2005, SPEC-2003).
+# `ts` = relayed to the Hono upstream, `py` = served by the Python facade.
+# An operation may only switch to `py` once parity is proven.
+
+operations:
+  'agenda.get': ts
+  'auth.callback': ts
+  'auth.magicLink': ts
+  'auth.resend': ts
+  'auth.signIn': ts
+  'auth.signOut': ts
+  'auth.signUp': ts
+  'billing.checkout': ts
+  'billing.portal': ts
+  'billing.subscription': ts
+  'billing.webhook': ts
+  'bricks.correct': ts
+  'bricks.report': ts
+  'cadrage.complete': ts
+  'cadrage.get': ts
+  'cadrage.message': ts
+  'cadrage.page': ts
+  'chapters.complete': ts
+  'chapters.summary': ts
+  'conversations.get': ts
+  'conversations.messages': ts
+  'conversations.self-test.answer': ts
+  'course-citations.source': ts
+  'course-sections.edit': ts
+  'course-sections.report': ts
+  'courses.conversations.create': ts
+  'courses.conversations.list': ts
+  'courses.progress': ts
+  'dev.cron.hourlyTick': ts
+  'dev.echo': ts
+  'dev.email.outbox': ts
+  'dev.email.outbox.purge': ts
+  'dev.email.preview': ts
+  'dev.email.send': ts
+  'dev.events.demo.run': ts
+  'dev.events.demo.start': ts
+  'dev.events.outbox': ts
+  'dev.items': ts
+  'dev.notificationsGenerate': ts
+  'dev.notify': ts
+  'dev.personal-data.deletion.cancel': ts
+  'dev.personal-data.deletion.schedule': ts
+  'dev.personal-data.execute': ts
+  'dev.personal-data.export': ts
+  'dev.pushSend': ts
+  'dev.rateLimit.burst': ts
+  'dev.rateLimit.origin': ts
+  'dev.rateLimit.purge': ts
+  'dev.sdd.spec-007.demo': ts
+  'dev.sdd.spec-009.demo': ts
+  'dev.sdd.spec-1004.demo': ts
+  'dev.sdd.spec-101.demo': ts
+  'dev.sdd.spec-102.create': ts
+  'dev.sdd.spec-102.demo': ts
+  'dev.sdd.spec-102.remove': ts
+  'dev.sdd.spec-103.demo': ts
+  'dev.sdd.spec-104.demo': ts
+  'dev.sdd.spec-105.demo': ts
+  'dev.sdd.spec-106.demo': ts
+  'dev.sdd.spec-107.demo': ts
+  'dev.sdd.spec-108.demo': ts
+  'dev.sdd.spec-109.demo': ts
+  'dev.sdd.spec-110.demo': ts
+  'dev.sdd.spec-111.demo': ts
+  'dev.sdd.spec-112.demo': ts
+  'dev.sdd.spec-113.demo': ts
+  'dev.sdd.spec-114.demo': ts
+  'dev.sdd.spec-115.demo': ts
+  'dev.sdd.spec-1203.demo': ts
+  'dev.sdd.spec-1301.demo': ts
+  'dev.sdd.spec-202.demo': ts
+  'dev.sdd.spec-411.demo': ts
+  'dev.sdd.spec-501.correct': ts
+  'dev.sdd.spec-501.create': ts
+  'dev.sdd.spec-501.demo': ts
+  'dev.sdd.spec-501.report': ts
+  'dev.sdd.spec-504.call': ts
+  'dev.sdd.spec-504.demo': ts
+  'dev.sdd.spec-505.create': ts
+  'dev.sdd.spec-505.delete': ts
+  'dev.sdd.spec-505.demo': ts
+  'dev.sdd.spec-506.run': ts
+  'dev.sdd.spec-508.demo': ts
+  'dev.sdd.spec-509.demo': ts
+  'dev.sdd.spec-510.demo': ts
+  'dev.sdd.spec-511.demo': ts
+  'dev.sdd.spec-512.decide': ts
+  'dev.sdd.spec-512.demo': ts
+  'dev.sdd.spec-512.suggest': ts
+  'dev.sdd.spec-711.demo': ts
+  'dev.sdd.stripe.session': ts
+  'dev.sddApiCoverage': ts
+  'dev.sddAuthProxy': ts
+  'dev.stripe.checkoutCancel': ts
+  'dev.stripe.checkoutPay': ts
+  'dev.stripe.events': ts
+  'dev.stripe.simulate': ts
+  'dev.uploadSimulation': ts
+  'email.unsubscribe': ts
+  'email.unsubscribe.page': ts
+  'exam.answers.save': ts
+  'exam.attempts.create': ts
+  'exam.attempts.get': ts
+  'exam.attempts.result': ts
+  'exam.attempts.submit': ts
+  'exam.format.confirm': ts
+  'exam.intro': ts
+  'exam.questions.mark': ts
+  'exercises.detail': ts
+  'exercises.hint': ts
+  'exercises.saveDraft': ts
+  'exercises.start': ts
+  'exercises.submit': ts
+  'formations.access': ts
+  'formations.archive': ts
+  'formations.create': ts
+  'formations.current': ts
+  'formations.finalReview': ts
+  'formations.group.create': ts
+  'formations.group.get': ts
+  'formations.list': ts
+  'formations.maintenance': ts
+  'formations.pause': ts
+  'formations.replan': ts
+  'formations.replan-options': ts
+  'formations.resume': ts
+  'formations.update': ts
+  'gaps.list': ts
+  'groups.leave': ts
+  'groups.members.remove': ts
+  'groups.rotateCode': ts
+  'header.get': ts
+  'health.get': ts
+  'home.get': ts
+  'invitations.accept': ts
+  'invitations.get': ts
+  'me.ai.credentials.create': ts
+  'me.ai.credentials.delete': ts
+  'me.ai.credentials.discover': ts
+  'me.ai.credentials.list': ts
+  'me.ai.credentials.qualify': ts
+  'me.ai.models.get': ts
+  'me.ai.models.update': ts
+  'me.ai.task-models.update': ts
+  'me.automation-actions.accept': ts
+  'me.automation-actions.decline': ts
+  'me.automation-actions.list': ts
+  'me.automation-actions.undo': ts
+  'me.automations.list': ts
+  'me.automations.update': ts
+  'me.deletion.cancel': ts
+  'me.deletion.schedule': ts
+  'me.export.read': ts
+  'me.export.request': ts
+  'me.get': ts
+  'me.legal.accept': ts
+  'me.notificationSettings.get': ts
+  'me.notificationSettings.update': ts
+  'me.onboarding.get': ts
+  'me.onboarding.update': ts
+  'me.pause.diagnostic': ts
+  'me.pause.end': ts
+  'me.pause.get': ts
+  'me.pause.start': ts
+  'me.preferences.get': ts
+  'me.preferences.update': ts
+  'me.profile.get': ts
+  'me.profile.update': ts
+  'me.update': ts
+  'me.weekly-review.get': ts
+  'modules.course': ts
+  'modules.generateCourse': ts
+  'modules.screen': ts
+  'notifications.list': ts
+  'notifications.read': ts
+  'notifications.readAll': ts
+  'notifications.unreadCount': ts
+  'notionGraph.get': ts
+  'offline.pack': ts
+  'offline.sync': ts
+  'programme.adjust': ts
+  'programme.generate': ts
+  'programme.get': ts
+  'programme.import': ts
+  'programme.validate': ts
+  'pushSubscriptions.delete': ts
+  'pushSubscriptions.upsert': ts
+  'quiz.answers.check': ts
+  'quiz.answers.save': ts
+  'quiz.attempts.create': ts
+  'quiz.attempts.get': ts
+  'quiz.attempts.result': ts
+  'quiz.attempts.submit': ts
+  'remediation.complete': ts
+  'remediation.get': ts
+  'remediation.prepare': ts
+  'resources.create': ts
+  'resources.delete': ts
+  'resources.finalize': ts
+  'resources.readUrl': ts
+  'resources.rename': ts
+  'resources.retry': ts
+  'review.answer': ts
+  'review.complete': ts
+  'review.globalQuizToday': ts
+  'search.global': ts
+  'series.milestones': ts
+  'series.streak': ts
+  'sidebar.get': ts
+  'sidebar.update': ts
+  'slots.alternatives': ts
+  'slots.move': ts
+  'suggestions.dismiss': ts
+  'suggestions.import': ts
+  'uploads.create': ts
+  'warmups.answers.create': ts
+  'warmups.today.get': ts
+
+special:
+  'DELETE /api/v1/dev/sdd/email/outbox': ts
+  'DELETE /api/v1/dev/sdd/personal-data/deletion': ts
+  'GET /api/v1/auth/callback': ts
+  'GET /api/v1/dev/sdd/email/outbox': ts
+  'GET /api/v1/dev/sdd/email/preview': ts
+  'GET /api/v1/dev/sdd/events/demo/:runId': ts
+  'GET /api/v1/dev/sdd/events/outbox': ts
+  'GET /api/v1/dev/sdd/items': ts
+  'GET /api/v1/dev/sdd/relay-stream': ts
+  'GET /api/v1/dev/sdd/stripe/events': ts
+  'GET /api/v1/health': ts
+  'POST /api/v1/_dev/commit-check': ts
+  'POST /api/v1/_dev/demo-job': ts
+  'POST /api/v1/_dev/secret-scan': ts
+  'POST /api/v1/dev/sdd/cron/hourly-tick': ts
+  'POST /api/v1/dev/sdd/echo': ts
+  'POST /api/v1/dev/sdd/email/send': ts
+  'POST /api/v1/dev/sdd/events/demo': ts
+  'POST /api/v1/dev/sdd/notifications/generate': ts
+  'POST /api/v1/dev/sdd/notify': ts
+  'POST /api/v1/dev/sdd/personal-data/deletion': ts
+  'POST /api/v1/dev/sdd/personal-data/execute': ts
+  'POST /api/v1/dev/sdd/personal-data/export': ts
+  'POST /api/v1/dev/sdd/push/send': ts
+  'POST /api/v1/dev/sdd/rate-limit/burst': ts
+  'POST /api/v1/dev/sdd/rate-limit/origin': ts
+  'POST /api/v1/dev/sdd/rate-limit/purge': ts
+  'POST /api/v1/dev/sdd/stripe/checkout/cancel': ts
+  'POST /api/v1/dev/sdd/stripe/checkout/pay': ts
+  'POST /api/v1/dev/sdd/stripe/simulate': ts
+  'POST /api/v1/dev/sdd/uploads': ts
+  'POST /api/v1/formations/:fid/sprints': ts
+
+consumers: {}
+
+crons: {}

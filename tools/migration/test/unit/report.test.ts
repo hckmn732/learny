@@ -60,7 +60,8 @@ describe('[SPEC-1302] permanent coupling check', () => {
 
   it('contains no reference to the removed worker application outside historical material', () => {
     const forbidden = ['apps', 'worker'].join('/');
-    const excluded = new Set(['.git', 'node_modules', '.next']);
+    // Local dependency caches are not source code (SPEC-2003 adds the Python venv).
+    const excluded = new Set(['.git', 'node_modules', '.next', '.venv']);
     // Documentation that *describes* the removal: ADRs, the python-migration specs and the
     // technical canvas necessarily name the retired application. Only executable files must stay
     // free of it (SPEC-2001, ADR-2001).
