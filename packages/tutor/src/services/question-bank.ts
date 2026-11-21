@@ -665,6 +665,28 @@ function createResolver(tx: DbTx, userId: string): BrickReferenceResolver {
   };
 }
 
+/**
+ * Hotfix QA: models often write a notion label or an invented id in `notionId` fields (options,
+ * pairs). A known id or label is mapped to the notion id; anything else falls back to the target.
+ */
+function normalizeNotionIds(
+  node: unknown,
+  byKey: ReadonlyMap<string, string>,
+  fallback: string,
+): unknown {
+  if (Array.isArray(node)) return node.map((item) => normalizeNotionIds(item, byKey, fallback));
+  if (node === null || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+    if (key === 'notionId' && typeof value === 'string') {
+      out[key] = byKey.get(value) ?? byKey.get(value.trim().toLowerCase()) ?? fallback;
+    } else {
+      out[key] = normalizeNotionIds(value, byKey, fallback);
+    }
+  }
+  return out;
+}
+
 async function validateCandidates(
   tx: DbTx,
   target: Target,
@@ -673,6 +695,12 @@ async function validateCandidates(
   current: readonly ValidCandidate[],
 ): Promise<CandidateValidation> {
   const resolver = createResolver(tx, target.userId);
+  const labels = await readNotionLabels(tx, target.formationId);
+  const notionIdsByLabel = new Map<string, string>();
+  for (const [id, label] of labels) {
+    notionIdsByLabel.set(id, id);
+    notionIdsByLabel.set(label.trim().toLowerCase(), id);
+  }
   const accepted: ValidCandidate[] = [];
   const fingerprints = new Set(existing);
   for (const candidate of current) fingerprints.add(candidate.fingerprint);
@@ -686,7 +714,11 @@ async function validateCandidates(
       issues.push(`format inattendu (${candidate.format})`);
       continue;
     }
-    const payload = replacePlaceholders(candidate.payload, target.notionId, target.notionId);
+    const payload = normalizeNotionIds(
+      replacePlaceholders(candidate.payload, target.notionId, target.notionId),
+      notionIdsByLabel,
+      target.notionId,
+    );
     const draft = {
       type: target.format,
       formationId: target.formationId,
