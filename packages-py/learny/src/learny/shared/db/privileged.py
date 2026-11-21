@@ -17,6 +17,8 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_api.guards.rate_limit": "token buckets of the request pipeline",
         # `idempotency_keys` is a service-only table (SPEC-112 EF-3, ADR-0120).
         "learny_api.guards.idempotency": "idempotency reservations and replays",
+        # The smoothing journal of the daily quiz is an automation proposal (SPEC-718 ET-4).
+        "learny.learning.application.review": "quiz smoothing automation journal row",
         # Storage objects and export archives are signed or written with the service role.
         "learny.platform.storage": "signed URLs and export objects",
         # Admin Auth calls (user creation, deletion) need the service role key.

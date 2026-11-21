@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import learning as learning_texts
+from learny.shared.locale_fr import review as review_texts
 from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_INPUT, INVITATION_CODE_FORMAT
 from pydantic import BaseModel, ValidationError
@@ -442,6 +443,16 @@ def _civil_day_distance(start: str, end: str) -> int:
 
 MAX_AGENDA_RANGE_DAYS = 42
 
+
+def _review_answer_choice(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`ReviewAnswerInputSchema` refinement: exactly one of `skipped` or `response` is required."""
+    has_skipped = value.get("skipped") is True
+    has_response = "response" in value and value.get("response") is not None
+    if has_skipped == has_response:
+        return [_issue("body", review_texts.REVIEW_ANSWER_EXCLUSIVE)]
+    return None
+
+
 REFINEMENTS: dict[str, Refinement] = {
     "me.update": _at_least_one_profile_field,
     "me.profile.update": _at_least_one_settings_field,
@@ -452,6 +463,7 @@ REFINEMENTS: dict[str, Refinement] = {
     "sidebar.update": _sidebar_update,
     "agenda.get": _agenda_range,
     "slots.move": _slot_move_window,
+    "review.answer": _review_answer_choice,
 }
 
 

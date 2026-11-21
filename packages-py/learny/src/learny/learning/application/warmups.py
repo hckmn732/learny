@@ -5,15 +5,20 @@ versions the activity stores, the next session comes from the day's schedule, an
 in the learner's RLS transaction, so a foreign activity never appears (CA-7).
 """
 
+import json
+import uuid
 from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import Any
 
 from learny.identity.domain.actor import Actor
+from learny.learning.application.apply_result import apply_review_result
 from learny.learning.application.ports import LearningDeps
 from learny.learning.domain.time import add_days, local_date_of
 from learny.learning.infrastructure import queries
 from learny.shared import time as shared_time
+from learny.shared.errors import AppError
+from learny.shared.locale_fr import review as texts_warmup
 from learny.shared.time import to_iso
 
 SESSION_KINDS = ("course", "exercise", "validation_quiz", "contributions", "mock_exam")
@@ -344,4 +349,327 @@ __all__ = [
     "tag_of",
     "warmup_scope_of",
     "warmup_status",
+]
+
+
+# --- EF-8, EF-9, EF-11, ET-4 - answer side of the daily warm-up --------------------------------
+
+
+def next_local_day(day: str) -> str:
+    """EF-8 - the local civil day after the given one."""
+    return add_days(day, 1)
+
+
+def warmup_minutes(started_at: Any, now: Any) -> int:
+    """Duration of an answered first pass, in minutes, at least one."""
+    elapsed = _epoch(now) - _epoch(started_at)
+    return max(1, -(-elapsed // 60_000))
+
+
+def warmup_consumed_summary(
+    *, knew_count: int, count: int, review_labels: Sequence[str], next_quiz: bool
+) -> str:
+    """EF-10 - one-line explanation of the consumed action."""
+    text = texts_warmup.WARMUP_SCORE.format(knew=knew_count, count=count)
+    if review_labels:
+        if len(review_labels) > 1:
+            verb = texts_warmup.WARMUP_CONSUMED_REVIEW_MANY.format(count=len(review_labels))
+        else:
+            verb = texts_warmup.WARMUP_CONSUMED_REVIEW_ONE
+        moment = (
+            texts_warmup.WARMUP_CONSUMED_NEXT_QUIZ if next_quiz else texts_warmup.WARMUP_CONSUMED_EVENING_QUIZ
+        )
+        text = f"{text} ; {verb} {moment}"
+    return f"{text}."
+
+
+def item_refs(raw: Any) -> list[dict[str, str]]:
+    """The `{brickId, brickVersionId}` references stored in an activity."""
+    refs: list[dict[str, str]] = []
+    if not isinstance(raw, list):
+        return refs
+    for item in raw:
+        if not isinstance(item, Mapping):
+            continue
+        raw_brick_id = item.get("brickId")
+        raw_version_id = item.get("brickVersionId")
+        brick_id: str = raw_brick_id if isinstance(raw_brick_id, str) else ""
+        version_id: str = raw_version_id if isinstance(raw_version_id, str) else ""
+        if brick_id == "" or version_id == "":
+            continue
+        refs.append({"brickId": brick_id, "brickVersionId": version_id})
+    return refs
+
+
+async def _reschedule_notion(
+    tx: Any, user_id: str, notion_id: str, today: str, time_zone: str, due_today: bool
+) -> None:
+    """EF-8 - due today when the session is not played, tomorrow once it is (CL-8)."""
+    day = today if due_today else next_local_day(today)
+    due_at = to_iso(shared_time.from_epoch_ms(shared_time.start_of_user_day(day, time_zone)))
+    await queries.reschedule_notion(tx, user_id=user_id, notion_id=notion_id, due_at=due_at)
+
+
+async def _add_to_evening_quiz(
+    tx: Any, user_id: str, formation_id: str, notion_id: str, today: str, time_zone: str
+) -> bool:
+    """EF-8 - adds the notion at the head of the day's quiz; `True` when it is due tomorrow."""
+    session = await queries.read_evening_quiz(tx, user_id, formation_id, today)
+    if session is None:
+        await _reschedule_notion(tx, user_id, notion_id, today, time_zone, True)
+        return False
+    if int(session["answer_count"] or 0) > 0:
+        await _reschedule_notion(tx, user_id, notion_id, today, time_zone, False)
+        return True
+    brick = await queries.read_quiz_brick_of_notion(tx, user_id, formation_id, notion_id)
+    config = parse_warmup_config(session["config"])
+    raw_items = config.get("items")
+    items_meta: list[Any] = raw_items if isinstance(raw_items, list) else []
+    if brick is None or not isinstance(session["config"], Mapping):
+        await _reschedule_notion(tx, user_id, notion_id, today, time_zone, True)
+        return False
+    refs = item_refs(session["items"])
+    due_count = config.get("dueCount")
+    estimated_sec = config.get("estimatedSec")
+    shifted = [
+        {**dict(item), "position": int(item.get("position") or 0) + 1}
+        for item in items_meta
+        if isinstance(item, Mapping)
+    ]
+    next_config = {
+        **dict(session["config"]),
+        "dueCount": (due_count if isinstance(due_count, int) else len(items_meta)) + 1,
+        "estimatedSec": (estimated_sec if isinstance(estimated_sec, int) else 0) + 45,
+        "items": [
+            {
+                "position": 0,
+                "format": brick["type"],
+                "reasonKey": None,
+                "displayLabel": texts_warmup.NOTE_WARMUP_ITEM,
+                "moduleIds": [brick["module_id"]],
+                "notionIds": [notion_id],
+            },
+            *shifted,
+        ],
+    }
+    next_items: list[dict[str, Any]] = [
+        {"brickId": str(brick["brick_id"]), "brickVersionId": str(brick["version_id"])},
+        *refs,
+    ]
+    await queries.update_evening_quiz(
+        tx,
+        activity_id=str(session["id"]),
+        config=json.dumps(next_config),
+        items=json.dumps(next_items),
+    )
+    await _reschedule_notion(tx, user_id, notion_id, today, time_zone, True)
+    return False
+
+
+async def _complete_first_pass(
+    tx: Any,
+    user_id: str,
+    activity: Mapping[str, Any],
+    attempt_id: str,
+    started_at: Any,
+    now: datetime,
+    time_zone: str,
+    knew_count: int,
+    total: int,
+    review_notion_ids: Sequence[str],
+    next_quiz: bool,
+) -> None:
+    """ET-4 - grades the first pass, closes its slot and consumes the automation action."""
+    minutes = warmup_minutes(started_at, now)
+    duration_ms = max(0, _epoch(now) - _epoch(started_at))
+    score = None if total == 0 else round((knew_count / total) * 100)
+    await queries.mark_attempt_graded(
+        tx,
+        attempt_id=attempt_id,
+        submitted_at=to_iso(now),
+        duration_ms=duration_ms,
+        score=score,
+    )
+    config = parse_warmup_config(activity["config"])
+    slot_id = config.get("slotId")
+    if isinstance(slot_id, str) and slot_id != "":
+        await queries.complete_warmup_slot(tx, user_id=user_id, slot_id=slot_id, now=to_iso(now))
+    await queries.upsert_daily_activity(
+        tx,
+        user_id=user_id,
+        day=local_date_of(to_iso(now), time_zone),
+        minutes=minutes,
+        qualifying=False,
+        sources=[f"warmup:{activity['id']}"],
+    )
+    action = await queries.read_warmup_action(tx, user_id, str(activity["id"]))
+    if action is None:
+        return
+    labels: list[str] = []
+    for notion_id in review_notion_ids:
+        label = await queries.read_notion_label(tx, notion_id)
+        if label is not None:
+            labels.append(label)
+    payload = dict(action["payload"] if isinstance(action["payload"], Mapping) else {})
+    payload.update(
+        {
+            "knewCount": knew_count,
+            "reviewNotionIds": list(review_notion_ids),
+            "reviewNotionLabels": labels,
+            "reviewRemaining": next_quiz,
+        }
+    )
+    await queries.update_warmup_action_payload(
+        tx,
+        action_id=str(action["id"]),
+        user_id=user_id,
+        payload=json.dumps(payload),
+        summary=warmup_consumed_summary(
+            knew_count=knew_count, count=total, review_labels=labels, next_quiz=next_quiz
+        ),
+    )
+    await queries.consume_automation_action(tx, user_id, str(action["id"]))
+
+
+async def answer_warmup(
+    deps: LearningDeps, actor: Actor, activity_id: str, body: Mapping[str, Any]
+) -> dict[str, Any]:
+    """ET-2, EF-8 - records one first-pass answer and returns the updated DTO."""
+    from learny.learning.application.final_review import is_uuid
+
+    if not is_uuid(activity_id):
+        raise AppError("VALIDATION_FAILED", texts_warmup.WARMUP_ID_INVALID)
+    position = body.get("position")
+    if not isinstance(position, int) or isinstance(position, bool) or position < 0:
+        raise AppError(
+            "VALIDATION_FAILED",
+            texts_warmup.WARMUP_POSITION_INVALID,
+            errors=[{"path": "position", "message": texts_warmup.WARMUP_POSITION_HINT}],
+        )
+    knew = body.get("knew") is True
+    user_id = actor.user_id
+    now = deps.clock.now()
+    async with deps.db.user_tx(actor) as tx:
+        time_zone = await queries.read_warmup_timezone(tx, user_id)
+        today = local_date_of(to_iso(now), time_zone)
+        activity = await queries.lock_warmup_activity(tx, user_id, activity_id)
+        if activity is None or activity["for_date"] != today:
+            raise AppError("NOT_FOUND", texts_warmup.WARMUP_NOT_FOUND)
+        if activity["status"] != "ready":
+            raise AppError("CONFLICT", texts_warmup.WARMUP_UNAVAILABLE)
+        refs = item_refs(activity["items"])
+        if position >= len(refs):
+            raise AppError(
+                "VALIDATION_FAILED",
+                texts_warmup.WARMUP_POSITION_OUT_OF_RANGE,
+                errors=[{"path": "position", "message": texts_warmup.WARMUP_POSITION_RANGE_HINT}],
+            )
+        attempt = await queries.ensure_warmup_attempt(tx, user_id, str(activity["id"]), to_iso(now))
+        if attempt is None:
+            raise AppError("INTERNAL_ERROR", texts_warmup.WARMUP_ATTEMPT_MISSING)
+        attempt_id = str(attempt["id"])
+        existing = await queries.read_warmup_answer_positions(tx, attempt_id)
+        if position + 1 in existing:
+            raise AppError("CONFLICT", texts_warmup.WARMUP_ALREADY_ANSWERED)
+        brick = await queries.read_warmup_item_brick(tx, refs[position]["brickVersionId"])
+        if brick is None:
+            raise AppError("NOT_FOUND", texts_warmup.WARMUP_QUESTION_NOT_FOUND)
+        answer_id = str(uuid.uuid4())
+        await queries.insert_warmup_answer(
+            tx,
+            answer_id=answer_id,
+            attempt_id=attempt_id,
+            version_id=refs[position]["brickVersionId"],
+            position=position + 1,
+            response=json.dumps({"knew": knew}),
+            is_correct=knew,
+            answered_at=to_iso(now),
+        )
+        notion_ids = [str(item) for item in brick["notion_ids"] or []]
+        notion_id = notion_ids[0] if notion_ids else None
+        if notion_id is not None:
+            await apply_review_result(
+                tx,
+                user_id=user_id,
+                notion_id=notion_id,
+                source="warmup",
+                format_name=str(brick["type"]),
+                correct=knew,
+                rating="good" if knew else "again",
+                time_ms=0,
+                answer_id=answer_id,
+                attempt_id=attempt_id,
+                attempt_no=1,
+                reviewed_at=to_iso(now),
+            )
+            await tx.emit(
+                "review/answered",
+                {
+                    "userId": user_id,
+                    "notionId": notion_id,
+                    "source": "warmup",
+                    "correct": knew,
+                    "reviewedAt": to_iso(now),
+                },
+                event_id=f"warmup:{activity['id']}:{position}",
+            )
+        previous = await queries.read_warmup_action(tx, user_id, str(activity["id"]))
+        previous_payload = (
+            previous["payload"] if previous is not None and isinstance(previous["payload"], Mapping) else {}
+        )
+        previous_review = previous_payload.get("reviewNotionIds")
+        review_notion_ids: list[str] = [
+            str(notion) for notion in (previous_review if isinstance(previous_review, list) else [])
+        ]
+        next_quiz = previous_payload.get("reviewRemaining") is True
+        if not knew and notion_id is not None:
+            if notion_id not in review_notion_ids:
+                review_notion_ids.append(notion_id)
+            addition = await _add_to_evening_quiz(
+                tx, user_id, str(activity["formation_id"]), notion_id, today, time_zone
+            )
+            next_quiz = next_quiz or addition
+        answered = len(existing) + 1
+        if answered >= len(refs):
+            previous_answers = await queries.read_warmup_answers(tx, attempt_id)
+            total_knew = len([row for row in previous_answers if row["is_correct"] is True])
+            await _complete_first_pass(
+                tx,
+                user_id,
+                activity,
+                attempt_id,
+                attempt["started_at"],
+                now,
+                time_zone,
+                total_knew,
+                len(refs),
+                review_notion_ids,
+                next_quiz,
+            )
+        elif previous is not None and review_notion_ids:
+            payload = dict(previous_payload)
+            payload["reviewNotionIds"] = review_notion_ids
+            await queries.update_warmup_action_payload(
+                tx,
+                action_id=str(previous["id"]),
+                user_id=user_id,
+                payload=json.dumps(payload),
+                summary=str(previous_payload.get("summary") or ""),
+            )
+        refreshed = await queries.lock_warmup_activity(tx, user_id, str(activity["id"]))
+        if refreshed is None:
+            raise AppError("NOT_FOUND", texts_warmup.WARMUP_NOT_FOUND)
+        start, end = day_bounds(today, time_zone)
+        sessions = await queries.read_warmup_day_sessions(
+            tx, user_id, str(activity["formation_id"]), start, end
+        )
+        return await load_warmup_dto(tx, refreshed, str(activity["formation_id"]), time_zone, now, sessions)
+
+
+__all__ += [
+    "answer_warmup",
+    "item_refs",
+    "next_local_day",
+    "warmup_consumed_summary",
+    "warmup_minutes",
 ]

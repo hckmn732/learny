@@ -205,9 +205,9 @@ operations:
   'resources.readUrl': ts
   'resources.rename': ts
   'resources.retry': ts
-  'review.answer': ts
-  'review.complete': ts
-  'review.globalQuizToday': ts
+  'review.answer': py
+  'review.complete': py
+  'review.globalQuizToday': py
   'search.global': py
   'series.milestones': py
   'series.streak': py
@@ -218,7 +218,7 @@ operations:
   'suggestions.dismiss': ts
   'suggestions.import': ts
   'uploads.create': ts
-  'warmups.answers.create': ts
+  'warmups.answers.create': py
   'warmups.today.get': py
 
 special:

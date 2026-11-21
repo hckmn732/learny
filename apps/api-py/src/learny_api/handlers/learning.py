@@ -112,3 +112,29 @@ async def formations_replan(call: Call) -> Any:
 @handler("warmups.today.get")
 async def warmups_today_get(call: Call) -> Any:
     return await learning.get_today_warmups(call.deps, _actor(call))
+
+
+# --- review --------------------------------------------------------------------------------------
+
+
+@handler("warmups.answers.create")
+async def warmups_answers_create(call: Call) -> Any:
+    return await learning.answer_warmup(call.deps, _actor(call), _params(call)["activityId"], _body(call))
+
+
+@handler("review.globalQuizToday")
+async def review_global_quiz_today(call: Call) -> Any:
+    mode = _query(call).get("mode") or "full"
+    return await learning.get_or_create_today_session(
+        call.deps, _actor(call), _params(call)["fid"], str(getattr(mode, "value", mode))
+    )
+
+
+@handler("review.answer")
+async def review_answer(call: Call) -> Any:
+    return await learning.answer_review_item(call.deps, _actor(call), _params(call)["sid"], _body(call))
+
+
+@handler("review.complete")
+async def review_complete(call: Call) -> Any:
+    return await learning.complete_review_session(call.deps, _actor(call), _params(call)["sid"])

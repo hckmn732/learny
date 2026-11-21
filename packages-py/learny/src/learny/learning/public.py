@@ -4,6 +4,10 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.learning.application.agenda import agenda_totals, get_agenda, slot_href, slot_label
+from learny.learning.application.apply_result import (
+    plan_notion_reviews,
+    previous_state_of,
+)
 from learny.learning.application.final_review import (
     build_final_review,
     get_final_review,
@@ -25,6 +29,11 @@ from learny.learning.application.ports import (
     LearningDeps,
     Transactions,
 )
+from learny.learning.application.review import (
+    answer_review_item,
+    complete_review_session,
+    get_or_create_today_session,
+)
 from learny.learning.application.series import (
     get_milestones,
     get_streak,
@@ -32,7 +41,7 @@ from learny.learning.application.series import (
     next_milestone_of,
     reconcile_milestones,
 )
-from learny.learning.application.warmups import get_today_warmups
+from learny.learning.application.warmups import answer_warmup, get_today_warmups
 
 __all__ = [
     "BrickReferenceResolver",
@@ -40,12 +49,16 @@ __all__ = [
     "LearningDeps",
     "Transactions",
     "agenda_totals",
+    "answer_review_item",
+    "answer_warmup",
     "apply_replan",
     "build_final_review",
+    "complete_review_session",
     "course_target",
     "get_agenda",
     "get_final_review",
     "get_milestones",
+    "get_or_create_today_session",
     "get_replan_options",
     "get_slot_alternatives",
     "get_streak",
@@ -55,6 +68,8 @@ __all__ = [
     "milestone_label",
     "move_slot",
     "next_milestone_of",
+    "plan_notion_reviews",
+    "previous_state_of",
     "reconcile_milestones",
     "reconcile_plan_slots",
     "set_maintenance",
