@@ -9,6 +9,13 @@ UNEXPECTED_ERROR = "Une erreur inattendue est survenue. Référence : {request_i
 # packages/services/src/security/origin-guard.ts (SPEC-208 EF-6, ported by SPEC-2101).
 ORIGIN_REJECTED = "Requête refusée : origine non autorisée."
 
+# packages/http/src/route-handler.ts (SPEC-201 ET-3, SPEC-2201): request body reading.
+PAYLOAD_TOO_LARGE = "La requête dépasse la taille maximale de 1 Mo."
+INVALID_JSON_BODY = "Le corps de la requête n’est pas un JSON valide."
+
+# packages/http/src/validate.ts (SPEC-201 EF-1).
+INVALID_INPUT = "Les données envoyées sont invalides."
+
 # packages/http/src/route-handler.ts (SPEC-208 EF-2).
 RATE_LIMITED = "Vous avez envoyé trop de requêtes. Réessayez dans {seconds} s."
 

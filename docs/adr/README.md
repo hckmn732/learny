@@ -239,3 +239,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2018](ADR-2018-ports-playwright-avec-la-facade-python.md) | Ports Playwright avec la facade Python | Déduite | SPEC-2003 |
 | [ADR-2019](ADR-2019-ca-2-de-spec-2003-interprete-comme-absence-de-regression.md) | CA-2 de SPEC-2003 interprete comme absence de regression | Déduite | SPEC-2003 |
 | [ADR-2020](ADR-2020-routes-dev-jobs-encore-typescript-jusqu-au-pipeline-python.md) | Routes dev-jobs encore TypeScript jusqu au pipeline Python | Déduite | SPEC-2102, SPEC-2003, ADR-2005, ADR-2011, ADR-2014 |
+| [ADR-2021](ADR-2021-pipeline-de-contrat-python-livre-par-spec-2201-et-bascule-de.md) | Pipeline de contrat Python livre par SPEC-2201 et bascule dev-jobs laissee a SPEC-2207 | Déduite | SPEC-2201, ADR-2012, ADR-2020, SPEC-2207 |

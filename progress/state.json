@@ -6850,11 +6850,11 @@
       }
     },
     "SPEC-2201": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-21T18:35:49.561Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2201-domaines-identite-formation",
       "commit": null,
       "lastError": null,
       "validations": {}

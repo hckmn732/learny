@@ -15,11 +15,16 @@ dev = [
   "mypy>=1.13",
   "import-linter>=2.1",
   "types-PyYAML>=6.0",
+  "datamodel-code-generator>=0.31",
 ]
 
 [tool.ruff]
 target-version = "py313"
-exclude = ["node_modules", ".next", ".venv", "dist", "test-results", "coverage", "docs", "evidence", "design"]
+exclude = [
+  "node_modules", ".next", ".venv", "dist", "test-results", "coverage", "docs", "evidence", "design",
+  # Generated from api/openapi.yaml (ADR-2012): never edited, formatted or linted by hand.
+  "apps/api-py/src/learny_api/generated",
+]
 line-length = 110
 
 [tool.ruff.lint]
@@ -28,7 +33,8 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 
 [tool.ruff.lint.per-file-ignores]
 # Les tests utilisent des jetons et des cles factices : ce ne sont pas des secrets.
-"**/tests/**" = ["S105", "S106"]
+# Les tests rejouent les textes francais vus par l utilisateur, apostrophe courbe comprise.
+"**/tests/**" = ["S105", "S106", "RUF001", "RUF002", "RUF003"]
 # Les textes francais vus par l utilisateur sont copies mot pour mot du TypeScript : leur
 # typographie (apostrophe courbe, espaces insecables) est normative et non une ambiguite.
 "**/locale_fr/*.py" = ["RUF001", "RUF002", "RUF003", "S105", "S106"]
