@@ -52,6 +52,7 @@ d'intégration, parité, bascule, e2e) restent à faire. Aucune opération n'est
 | `learny/assessments/domain/bricks/` — schémas des 13 types, règles internes, registre, références, validation | porté | `tests/unit/assessments/test_schema.py`, `test_bricks_validation.py`, `test_registry.py` |
 | `learny/assessments/domain/bricks/` — normalisation, SHA-256, mélange, empreinte, payload public | porté | `tests/unit/assessments/test_normalize.py`, `test_sha256.py`, `test_bricks_random.py`, `test_fingerprint.py`, `test_public.py` |
 | `learny/assessments/domain/bricks/` — correction par le code des six types | porté | `tests/unit/assessments/test_grade.py` |
+| `learny/assessments/domain/bricks/` — réponse d'exercice, contrôle de tableau, minuteur, barème | porté | `tests/unit/assessments/test_helpers.py` |
 
 Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map.md`.
 
