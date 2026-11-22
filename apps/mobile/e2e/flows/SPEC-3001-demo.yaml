@@ -1,0 +1,24 @@
+# SPEC-3001 — page de démonstration du socle mobile (EF-2, CA-1, CA-3).
+# Le build e2e fige l'horloge (EXPO_PUBLIC_CLOCK_FIXED_AT=2026-11-11T12:20:00Z, 13:20 à Paris)
+# et pointe EXPO_PUBLIC_API_URL sur l'API locale exposée à l'émulateur.
+appId: fr.learny.app
+name: SPEC-3001 demo
+tags:
+  - SPEC-3001
+  - visual
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: sdd-title
+- assertVisible: SPEC-3001 · socle mobile
+- assertVisible:
+    id: sdd-clock
+- assertVisible: '13:20'
+- assertVisible:
+    id: sdd-health
+- assertVisible: API joignable
+- assertVisible:
+    id: sdd-api-url
+# Capture comparée à la ligne de base de e2e/visual/baselines/ (ADR-3003 § 4).
+- takeScreenshot: SPEC-3001-demo
