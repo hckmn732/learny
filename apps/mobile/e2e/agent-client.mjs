@@ -21,8 +21,12 @@ export const DEFAULT_JOB_TIMEOUT_MS = 1_800_000;
 /** Intervalle de scrutation du statut. */
 export const DEFAULT_POLL_INTERVAL_MS = 2_000;
 
-/** Nombre d'échecs de scrutation consécutifs tolérés avant d'abandonner le travail. */
-const MAX_CONSECUTIVE_POLL_FAILURES = 5;
+/**
+ * Nombre d'échecs de scrutation consécutifs tolérés avant d'abandonner le travail.
+ * L'edge hoquette et la VM téléphone peut manquer de mémoire pendant Maestro : une scrutation
+ * perdue n'est pas une campagne perdue, le délai global reste le seul juge (~25 s de patience).
+ */
+const MAX_CONSECUTIVE_POLL_FAILURES = 12;
 
 export class AgentError extends Error {
   constructor(message, options = {}) {

@@ -287,6 +287,32 @@ async function cleanupAgent(baseUrl, token) {
   return response;
 }
 
+/** Relance l'agent appareil par l'API sandbox (la VM téléphone n'est joignable que par HTTP). */
+async function restartAgent({ key, instance }) {
+  if (key === null || instance === null) return false;
+  try {
+    const response = await fetch(`${SANDBOX_ROOT}/instances/${instance}/exec`, {
+      method: 'POST',
+      headers: { 'X-Agent37-Key': key, 'content-type': 'application/json' },
+      body: JSON.stringify({ command: 'sh /root/agent-deploy.sh', user: 'root', background: true }),
+      signal: globalThis.AbortSignal.timeout(30_000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/** Attend le retour de l'agent après un redémarrage (30 s au plus). */
+async function waitForAgent(base, token) {
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    const state = await probe(`${base}/jobs`, { token, timeoutMs: 5_000 });
+    if (state.status === 200) return true;
+    await new Promise((resolve) => setTimeout(resolve, 3_000));
+  }
+  return false;
+}
+
 async function main(argv) {
   const json = argv.includes('--json');
   const quiet = argv.includes('--quiet');
@@ -454,11 +480,19 @@ async function main(argv) {
         `agent occupé : travail ${String(verdict.jobId)} annulé (${String(cancel.status)})`,
       );
     } else {
+      // Agent injoignable : on tente un redémarrage (API sandbox) avant d'abandonner.
+      const restarted = await restartAgent({
+        key: capability.key,
+        instance: capability.phoneInstance,
+      });
+      const back = restarted && (await waitForAgent(base, token));
       record(
         'agent',
-        false,
-        verdict.detail,
-        'relancer l’agent : `sh /root/agent-deploy.sh` sur la VM téléphone',
+        back,
+        back
+          ? 'agent redémarré puis joignable'
+          : `${verdict.detail}${restarted ? ' (redémarrage demandé, toujours muet)' : ''}`,
+        back ? null : 'relancer l’agent : `sh /root/agent-deploy.sh` sur la VM téléphone',
       );
     }
 
