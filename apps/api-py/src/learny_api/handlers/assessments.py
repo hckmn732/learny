@@ -1,0 +1,59 @@
+"""HTTP handlers of the assessments context (SPEC-2202).
+
+One `@handler("<route id>")` per operation, no logic: the body is the generated contract model and
+the use case lives in `learny.assessments`.
+"""
+
+from typing import Any, cast
+
+from learny.assessments import public as assessments
+from learny.shared.jsonx import dumps
+from starlette.responses import Response
+
+from learny_api.pipeline import Call, handler
+
+
+def _actor(call: Call) -> Any:
+    """The pipeline guarantees an actor on a `user` route; this is only a typing cast."""
+    return cast(Any, call.actor)
+
+
+def _body(call: Call, *, partial: bool = False) -> dict[str, Any]:
+    """The validated body as a plain mapping; `partial` keeps only the fields the caller sent."""
+    return cast(dict[str, Any], cast(Any, call.body).model_dump(exclude_unset=partial))
+
+
+def _params(call: Call) -> dict[str, Any]:
+    """The validated path parameters as a plain mapping."""
+    return cast(dict[str, Any], cast(Any, call.params).model_dump())
+
+
+def _query(call: Call) -> dict[str, Any]:
+    """The validated query string as a plain mapping, defaults included."""
+    return cast(dict[str, Any], cast(Any, call.query).model_dump())
+
+
+def _json(payload: Any, status: int) -> Response:
+    """A handler-owned status code: the pipeline only writes the headers."""
+    return Response(
+        content=dumps(payload),
+        status_code=status,
+        headers={"content-type": "application/json; charset=utf-8"},
+    )
+
+
+# --- bricks --------------------------------------------------------------------------------------
+
+
+@handler("bricks.correct")
+async def bricks_correct(call: Call) -> Any:
+    return await assessments.correct_brick(call.deps, _actor(call), _params(call)["bid"], _body(call))
+
+
+@handler("bricks.report")
+async def bricks_report(call: Call) -> Any:
+    result = await assessments.report_brick(call.deps, _actor(call), _params(call)["bid"], _body(call))
+    payload = {"reportId": result["reportId"], "status": result["status"]}
+    if result["created"]:
+        return payload
+    return _json(payload, 200)

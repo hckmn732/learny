@@ -15,3 +15,16 @@ TABLE_CHECK_EMPTY = "Pas encore de montant"
 TABLE_CHECK_BALANCED = "✓ Pièce équilibrée"
 TABLE_CHECK_DIFFERENCE = "Écart : {amount}"
 TABLE_CHECK_EURO = "{amount} €"
+
+# --- bricks (packages/services/src/bricks/brick-service.ts) ---------------------------------------
+
+BRICK_DATA_INVALID = "Les données envoyées sont invalides."
+BRICK_INVALID = "La brique est invalide."
+FORMATION_NOT_FOUND = "Formation introuvable."
+BRICK_NOT_FOUND = "Brique introuvable."
+BRICK_RETIRED = "Cette brique a été retirée."
+BRICK_VERSION_OUTDATED = "Version obsolète : la brique est en version {version}."
+BRICK_CHANGED_MEANWHILE = "La brique a été modifiée entre-temps."
+BRICK_CURRENT_VERSION_MISSING = "Version courante de la brique introuvable."
+BRICK_REPORT_NOT_CREATED = "Signalement non créé."
+BRICK_VERSION_NOT_CREATED = "Version de brique non créée."

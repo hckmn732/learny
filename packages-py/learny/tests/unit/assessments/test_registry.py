@@ -83,7 +83,10 @@ def test_the_public_projection_of_a_definition_is_seeded() -> None:
         assert first == second, type_name
 
 
-DOMAIN = Path(__file__).resolve().parents[3] / "src" / "learny" / "assessments"
+CONTEXT = Path(__file__).resolve().parents[3] / "src" / "learny" / "assessments"
+# The purity guard covers the pure domain only: the use cases and their SQL adapters may import
+# sqlalchemy, just like `learny/learning/{application,infrastructure}` (SPEC-2202).
+DOMAIN = CONTEXT / "domain"
 FORBIDDEN = (
     "sqlalchemy",
     "fastapi",
@@ -126,5 +129,5 @@ def test_the_domain_reads_no_clock_and_no_global_randomness() -> None:
 
 
 def test_the_domain_tree_is_complete() -> None:
-    names = {file.stem for file in (DOMAIN / "domain" / "bricks").glob("*.py")}
+    names = {file.stem for file in (DOMAIN / "bricks").glob("*.py")}
     assert {"registry", "schema", "checks", "references", "validate", "public", "grade"} <= names

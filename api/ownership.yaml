@@ -14,8 +14,8 @@ operations:
   'billing.portal': ts
   'billing.subscription': ts
   'billing.webhook': ts
-  'bricks.correct': ts
-  'bricks.report': ts
+  'bricks.correct': py
+  'bricks.report': py
   'cadrage.complete': py
   'cadrage.get': py
   'cadrage.message': py
