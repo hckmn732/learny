@@ -503,6 +503,8 @@ async def test_the_plan_selects_only_the_active_learners_due_in_the_window(
             )
             == 0
         )
+        await tx.conn.execute(text("update public.profiles set onboarding_step = 'profil'"))
+        assert await plan_daily_digests(deps, tick) == []
 
     await rolled_back(database, run)
 
