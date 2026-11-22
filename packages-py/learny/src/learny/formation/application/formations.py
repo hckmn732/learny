@@ -9,21 +9,29 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from learny.formation.application.ports import FormationDeps
-from learny.formation.domain.active_limit import TransitionDecision, transition_for
+from learny.formation.domain.active_limit import (
+    TransitionDecision,
+    active_limit_decision,
+    transition_for,
+)
 from learny.formation.infrastructure import queries
 from learny.identity.domain.actor import Actor
+from learny.learning.application.planning import replan_formation_in_tx
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.locale_fr.details import (
     FORMATION_CANNOT_ACTIVATE,
     FORMATION_CANNOT_ARCHIVE,
     FORMATION_CANNOT_PAUSE,
+    FORMATION_CANNOT_RESUME,
     FORMATION_CHANGED,
     FORMATION_NOT_FOUND,
+    FORMATION_PAUSE_CHOICE_REQUIRED,
+    FORMATION_PAUSE_CHOICE_STALE,
     PROFILE_NOT_FOUND,
 )
 from learny.shared.naming import accent_of, formation_monogram
-from learny.shared.time import parse_iso, to_iso
+from learny.shared.time import parse_iso, to_epoch_ms, to_iso, user_local_day
 
 UUID_PATTERN = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 
@@ -155,6 +163,83 @@ async def pause_formation(
         event_id=f"formation-paused:{formation_id}:{to_iso(now)}",
     )
     return {"outcome": "applied", "state": state, "pausedFormationId": None}
+
+
+async def resume_formation(
+    deps: FormationDeps, actor: Actor, formation_id: str, body: Mapping[str, Any]
+) -> dict[str, Any]:
+    """`POST /formations/:fid/resume` (EF-2, EF-3, ET-2 to ET-4; BR-FOR-10, ADR-0016).
+
+    One transaction: the formation chosen in the limit dialog is paused, the target becomes active
+    and the planner recreates its future slots from the learner's local day. When the limit would
+    be exceeded without an explicit choice, the answer is `limit` and nothing is written.
+    """
+    now = deps.clock.now()
+    paused_formation_id: str | None = None
+    resumed_on: str | None = None
+    async with deps.db.user_tx(actor) as tx:
+        await queries.lock_formation_transitions(tx, actor.user_id)
+        profile = await queries.read_profile_for_update(tx, actor.user_id)
+        if profile is None:
+            raise AppError("NOT_FOUND", PROFILE_NOT_FOUND)
+        formation = await _read_formation_for_update(tx, actor.user_id, formation_id)
+        decision = transition_for(str(formation["status"]), "resume")
+        if decision is None:
+            raise AppError("CONFLICT", FORMATION_CANNOT_RESUME, status=409)
+        if decision.outcome == "unchanged":
+            return {
+                "outcome": "unchanged",
+                "state": await read_management_state(tx, actor.user_id),
+                "pausedFormationId": None,
+            }
+        _assert_updated_at(formation, body.get("expectedUpdatedAt"))
+
+        active_ids = await queries.read_active_formation_ids(tx, actor.user_id, formation_id)
+        limit = active_limit_decision(len(active_ids), body.get("pauseFormationId"))
+        if limit == "requires-pause":
+            return {
+                "outcome": "limit",
+                "state": await read_management_state(tx, actor.user_id),
+                "pausedFormationId": None,
+            }
+        if limit == "allowed-with-pause":
+            chosen = body.get("pauseFormationId")
+            if chosen is None:
+                raise AppError("CONFLICT", FORMATION_PAUSE_CHOICE_REQUIRED, status=409)
+            if str(chosen) not in active_ids:
+                raise AppError("CONFLICT", FORMATION_PAUSE_CHOICE_STALE, status=409)
+            paused_formation_id = str(chosen)
+            await queries.pause_formation(tx, actor.user_id, paused_formation_id, now)
+            await queries.cancel_future_slots(tx, actor.user_id, paused_formation_id, now)
+            await queries.fallback_current_formation(tx, actor.user_id, paused_formation_id)
+
+        await queries.resume_formation(tx, actor.user_id, formation_id, now)
+        await replan_formation_in_tx(tx, actor.user_id, formation_id, now)
+        await queries.set_current_formation_if_null(tx, actor.user_id, formation_id)
+        state = await read_management_state(tx, actor.user_id)
+        resumed_on = user_local_day(to_epoch_ms(now), str(profile["timezone"]))
+
+    if paused_formation_id is not None:
+        await _emit(
+            deps,
+            actor,
+            "formation/paused",
+            {
+                "userId": actor.user_id,
+                "formationId": paused_formation_id,
+                "pausedAt": to_iso(now),
+            },
+            event_id=f"formation-paused:{paused_formation_id}:{to_iso(now)}",
+        )
+    if resumed_on is not None:
+        await _emit(
+            deps,
+            actor,
+            "formation/resumed",
+            {"userId": actor.user_id, "formationId": formation_id, "resumedOn": resumed_on},
+            event_id=f"formation-resumed:{formation_id}:{to_iso(now)}",
+        )
+    return {"outcome": "applied", "state": state, "pausedFormationId": paused_formation_id}
 
 
 async def archive_formation(

@@ -128,7 +128,7 @@ operations:
   'formations.pause': py
   'formations.replan': py
   'formations.replan-options': py
-  'formations.resume': ts
+  'formations.resume': py
   'formations.update': py
   'gaps.list': py
   'groups.leave': py

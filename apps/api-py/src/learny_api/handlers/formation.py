@@ -99,6 +99,13 @@ async def formations_archive(call: Call) -> Any:
     )
 
 
+@handler("formations.resume")
+async def formations_resume(call: Call) -> Any:
+    return await formation.resume_formation(
+        call.deps, _actor(call), _params(call)["fid"], _body(call, partial=True)
+    )
+
+
 @handler("formations.current")
 async def formations_current(call: Call) -> Any:
     return await formation.switch_current_formation(call.deps, _actor(call), _body(call))

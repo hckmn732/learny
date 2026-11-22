@@ -18,6 +18,7 @@ from learny.formation.application.formations import (
     can_access_formation,
     pause_formation,
     read_management_state,
+    resume_formation,
     switch_current_formation,
     to_managed_formation,
 )
@@ -99,6 +100,7 @@ __all__ = [
     "read_management_state",
     "read_programme_state",
     "remove_member_from_group",
+    "resume_formation",
     "rotate_group_code",
     "search_rules",
     "search_user_content",
