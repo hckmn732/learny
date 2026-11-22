@@ -94,5 +94,8 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the initial planning writes the slots of the formation owner after the
         # programme validation, exactly like the TypeScript `ctx.sdb` of the job (SPEC-605 EF-4).
         "learny.learning.application.plan_programme": "initial planning of a validated programme",
+        # SPEC-2207 - the unlock writes the `module_validated` milestone, a system-managed row
+        # read-only for the authenticated role (SPEC-408 policy, SPEC-612 EF-7).
+        "learny.formation.application.unlock_module": "module validation milestone row",
     }
 )

@@ -45,6 +45,7 @@ from learny.formation.application.programme import (
 )
 from learny.formation.application.search import search_user_content
 from learny.formation.application.tutor import TutorProfile, build_tutor_prompt
+from learny.formation.application.unlock_module import unlock_module
 from learny.formation.domain import cadrage as cadrage_rules
 from learny.formation.domain import groups as group_rules
 from learny.formation.domain import programme as programme_rules
@@ -104,6 +105,7 @@ __all__ = [
     "switch_current_formation",
     "to_managed_formation",
     "transition_for",
+    "unlock_module",
     "update_formation_title",
     "validate_proposal",
 ]

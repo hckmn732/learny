@@ -224,3 +224,9 @@ PROGRAMME_PROPOSAL_VERSION_TITLE = "Version {version} de la proposition"
 
 # packages/services/src/resources/storage.ts — the Storage JWT secret is missing.
 STORAGE_ACCESS_SECRET_MISSING = "Accès au stockage indisponible : secret JWT absent."
+
+# --------------------------------------------------------------------------------------------------
+# Job use cases of SPEC-2207, copied verbatim from the TypeScript services they replace.
+# --------------------------------------------------------------------------------------------------
+USER_ID_INVALID = "Identifiant utilisateur invalide."
+MODULE_NOT_FOUND = "Module introuvable."
