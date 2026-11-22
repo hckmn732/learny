@@ -54,17 +54,17 @@ operations:
   'dev.sdd.spec-007.demo': py
   'dev.sdd.spec-009.demo': ts
   'dev.sdd.spec-1004.demo': py
-  'dev.sdd.spec-101.demo': ts
-  'dev.sdd.spec-102.create': ts
-  'dev.sdd.spec-102.demo': ts
-  'dev.sdd.spec-102.remove': ts
+  'dev.sdd.spec-101.demo': py
+  'dev.sdd.spec-102.create': py
+  'dev.sdd.spec-102.demo': py
+  'dev.sdd.spec-102.remove': py
   'dev.sdd.spec-103.demo': ts
   'dev.sdd.spec-104.demo': ts
   'dev.sdd.spec-105.demo': ts
   'dev.sdd.spec-106.demo': ts
   'dev.sdd.spec-107.demo': ts
   'dev.sdd.spec-108.demo': ts
-  'dev.sdd.spec-109.demo': ts
+  'dev.sdd.spec-109.demo': py
   'dev.sdd.spec-110.demo': py
   'dev.sdd.spec-111.demo': ts
   'dev.sdd.spec-112.demo': ts
@@ -73,7 +73,7 @@ operations:
   'dev.sdd.spec-115.demo': ts
   'dev.sdd.spec-1203.demo': py
   'dev.sdd.spec-1301.demo': ts
-  'dev.sdd.spec-202.demo': ts
+  'dev.sdd.spec-202.demo': py
   'dev.sdd.spec-411.demo': ts
   'dev.sdd.spec-501.correct': ts
   'dev.sdd.spec-501.create': ts
@@ -83,7 +83,7 @@ operations:
   'dev.sdd.spec-504.demo': ts
   'dev.sdd.spec-505.create': ts
   'dev.sdd.spec-505.delete': ts
-  'dev.sdd.spec-505.demo': ts
+  'dev.sdd.spec-505.demo': py
   'dev.sdd.spec-506.run': ts
   'dev.sdd.spec-508.demo': ts
   'dev.sdd.spec-509.demo': ts

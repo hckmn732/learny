@@ -22,6 +22,13 @@ from learny.identity.application.profile import get_settings_state, update_setti
 from learny.identity.application.purge_security import purge_rows_in_tx, purge_security_rows
 from learny.identity.application.sidebar import get_sidebar, read_sidebar, update_sidebar
 from learny.identity.domain.actor import Actor, Transport
+from learny.identity.domain.destination import (
+    DEFAULT_DESTINATION,
+    PROFILE_DELETION_DESTINATION,
+    is_safe_next_path,
+    onboarding_destination,
+    resolve_post_auth_destination,
+)
 from learny.identity.infrastructure.gotrue import (
     GoTrueClient,
     GoTrueError,
@@ -33,6 +40,8 @@ from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.identity.infrastructure.supabase_cookies import access_token_from_cookies
 
 __all__ = [
+    "DEFAULT_DESTINATION",
+    "PROFILE_DELETION_DESTINATION",
     "Actor",
     "AuthDeps",
     "GoTrueClient",
@@ -57,12 +66,15 @@ __all__ = [
     "get_settings_state",
     "get_sidebar",
     "is_legal_exempt",
+    "is_safe_next_path",
     "map_gotrue_error",
+    "onboarding_destination",
     "parse_cookie_header",
     "purge_rows_in_tx",
     "purge_security_rows",
     "read_me",
     "read_sidebar",
+    "resolve_post_auth_destination",
     "update_preferences",
     "update_profile",
     "update_settings_profile",

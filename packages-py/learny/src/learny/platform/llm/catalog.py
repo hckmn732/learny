@@ -39,6 +39,8 @@ class ProviderRegion:
     data_note: str
     provider_label: str
     default_label: str
+    requires_base_url: bool = False
+    key_optional: bool = False
 
 
 PROVIDER_REGIONS: dict[AiProvider, ProviderRegion] = {
@@ -71,12 +73,15 @@ PROVIDER_REGIONS: dict[AiProvider, ProviderRegion] = {
         data_note=texts.COMPATIBLE_NOTE,
         provider_label=texts.COMPATIBLE_LABEL,
         default_label=texts.COMPATIBLE_LABEL,
+        requires_base_url=True,
     ),
     "local": ProviderRegion(
         outside_eu=False,
         data_note=texts.LOCAL_NOTE,
         provider_label=texts.LOCAL_LABEL,
         default_label=texts.LOCAL_LABEL,
+        requires_base_url=True,
+        key_optional=True,
     ),
 }
 

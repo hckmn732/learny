@@ -7,7 +7,7 @@ same handlers with the development guard, so a call is served exactly like `devR
 
 from typing import Any
 
-from learny_api.dev_demos import notifications, personal_data, push, sdd
+from learny_api.dev_demos import notifications, personal_data, push, sdd, sdd_state
 from learny_api.pipeline import Call, handler
 from learny_api.special import (
     dev_echo,
@@ -182,3 +182,38 @@ async def dev_spec_114_demo(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.spec-1203.demo")
 async def dev_spec_1203_demo(call: Call) -> dict[str, Any]:
     return await sdd.spec_1203(call)
+
+
+@handler("dev.sdd.spec-101.demo")
+async def dev_spec_101_demo(call: Call) -> dict[str, Any]:
+    return await sdd_state.spec_101(call)
+
+
+@handler("dev.sdd.spec-102.demo")
+async def dev_spec_102_demo(call: Call) -> Any:
+    return await sdd_state.spec_102(call)
+
+
+@handler("dev.sdd.spec-102.create")
+async def dev_spec_102_create(call: Call) -> Any:
+    return await sdd_state.spec_102_create(call)
+
+
+@handler("dev.sdd.spec-102.remove")
+async def dev_spec_102_remove(call: Call) -> Any:
+    return await sdd_state.spec_102_remove(call)
+
+
+@handler("dev.sdd.spec-109.demo")
+async def dev_spec_109_demo(call: Call) -> dict[str, Any]:
+    return await sdd_state.spec_109(call)
+
+
+@handler("dev.sdd.spec-202.demo")
+async def dev_spec_202_demo(call: Call) -> dict[str, Any]:
+    return await sdd_state.spec_202(call)
+
+
+@handler("dev.sdd.spec-505.demo")
+async def dev_spec_505_demo(call: Call) -> dict[str, Any]:
+    return await sdd_state.spec_505(call)

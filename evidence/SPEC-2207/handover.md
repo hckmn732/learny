@@ -1,4 +1,4 @@
-# SPEC-2207 — handover après la cinquième tranche (routes `dev.*` en cours)
+# SPEC-2207 — handover après la sixième tranche (routes `dev.*` en cours)
 
 Date : 2026-11-22. Branche : `spec/SPEC-2207-bascule-jobs-crons-demos`. HEAD de la tranche :
 `96a3eaa8`. État : **22 consommateurs et deux crons `py`, pont inline retiré, et 18 des 70
@@ -93,6 +93,8 @@ note `{runId}` (FastAPI). Toute recherche de clé spéciale doit passer par `spe
 
 ## 5. Cinquième tranche : quinze routes de plus (33/70), 37 restantes
 
+> Le décompte de cette section est historique : voir la section 7 pour l'état courant (40/70).
+
 Date : 2026-11-22. HEAD de la tranche : `8ff21447` (puis le commit de documentation). Les détails et
 les décisions sont dans `scope.md` §8 ; voici l'état exact pour reprendre.
 
@@ -170,3 +172,35 @@ façade Python**, qui sert désormais ces routes ; `devOnly` répondait donc 404
 Ces quatre points sont indépendants des 15 routes basculées dans cette tranche et touchent des
 opérations déjà servies par Python (SPEC-205/206/210/203). Ils constituent la preuve e2e à obtenir
 avant `validate.mjs`.
+
+## 7. Sixième tranche : les démos d'état (40/70), 30 restantes
+
+Date : 2026-11-22. Les sept opérations suivantes sont servies par Python, sans clé spéciale (elles
+traversent le pipeline et la garde est dans le handler, comme `guarded()` côté TypeScript) :
+`dev.sdd.spec-101.demo`, `spec-102.{demo,create,remove}`, `spec-109.demo`, `spec-202.demo`,
+`spec-505.demo`.
+
+- **Module** : `learny_api/dev_demos/sdd_state.py` (une fonction par page, 15-30 lignes utiles) et
+  `learny_api/dev_demos/support.py::rolled_back`, le pendant de `withRollback` : une transaction du
+  rôle propriétaire ouverte sur le moteur partagé et **toujours annulée**, donc une page ne laisse
+  jamais de trace (spec-101, spec-102 contraintes, spec-109).
+- **`spec-202`** : `resolvePostAuthDestination` est portée dans
+  `learny/identity/domain/destination.py` (`is_safe_next_path` en `TypeGuard[str]`) et exportée par
+  `identity/public.py` ; la table des sept profils du TypeScript est reproduite telle quelle.
+- **`spec-505`** : `tutor.list_credentials` (service réel) plus la lecture de la taille et de l'IV
+  du chiffré ; `ProviderRegion` gagne `requires_base_url` et `key_optional`, les deux drapeaux du
+  formulaire. La page répond `DEMO_SEED_MISSING` quand le compte de démonstration est absent.
+- **`spec-102.create`/`remove`** : la page crée (ou supprime) le compte `spec102-…@test.learny.test`
+  par une insertion dans `auth.users`, le déclencheur d'inscription construisant les six lignes
+  dépendantes (EF-1, EF-4). `demoEmail()` reste calée sur l'horloge injectée.
+- **Réponses vides** : `ensureDemoUser`/`removeDemoUser` ne rendent rien et `loadSpec102Demo` rend
+  `null` sans compte. Le pipeline rendant un corps vide pour `None`, ces trois cas répondent
+  explicitement le JSON `null` (`nothing()`), pour que le client web retrouve le corps du TypeScript.
+- **Tests** : `packages-py/learny/tests/integration/dev/test_dev_sdd_state_demos.py` (12 cas :
+  nominal par famille + la garde sur les sept chemins). `ruff`, `ruff format --check`, `mypy` et les
+  suites unitaires (`3659 passed`) sont verts ; `inventory.mjs --check` reste à 217 opérations.
+- **Reste : 30 opérations `dev.sdd.spec-*`** — 009, 103, 104, 105, 106, 107, 108, 111, 112, 113, 115,
+  1301, 411, 501 (demo/create/report/correct), 504 (demo/call), 505 (create/delete), 506, 508, 509,
+  510, 511, 512 (demo/suggest/decide), 711. Les conseils de la section 5 restent valables :
+  `spec-111` et `spec-1301` exigent des ports dédiés, `spec-508` doit porter `buildTutorDemo`, et
+  les démos 103 à 107 construisent leurs fixtures dans `withRollback` (utiliser `rolled_back`).

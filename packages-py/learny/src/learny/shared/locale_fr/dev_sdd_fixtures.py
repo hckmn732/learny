@@ -86,3 +86,54 @@ DEPENDENCIES = (
     "@learny/learning-engine",
     "@learny/ui",
 )
+
+# SPEC-101 - the sample of the unaccented search function.
+UNACCENT_SAMPLE = "Écriture comptable"
+UNACCENT_EXPECTED = "Ecriture comptable"
+
+# SPEC-102 - the demonstration account the page creates then removes.
+DEMO_102_EMAIL_PATTERN = "spec102-%@test.learny.test"
+DEMO_102_FIRST_NAME = "Alex"
+DEMO_102_LAST_NAME = "Perrin"
+DEMO_102_TIMEZONE = "Europe/Paris"
+
+# SPEC-109 - the three notifications of the delivery demonstration (EF-6).
+DEMO_DIGEST = {
+    "type": "daily_digest",
+    "title": "Votre programme du jour",
+    "body": "Trois activités vous attendent aujourd’hui, dont un quiz de validation.",
+    "href": "/agenda",
+    "icon": "calendar",
+    "dedupeKey": "digest:2026-11-11",
+    "createdAt": "2026-11-11T07:00:00.000Z",
+}
+DEMO_GAP = {
+    "type": "new_gap",
+    "title": "Nouvelle lacune : TVA intracommunautaire",
+    "body": "Deux réponses confondent le taux normal et le taux réduit. Une révision est proposée.",
+    "href": "/formations/finance/lacunes",
+    "icon": "alert-triangle",
+    "dedupeKey": "gap:2026-11-11",
+    "createdAt": "2026-11-11T09:30:00.000Z",
+}
+DEMO_WEEKLY_REVIEW = {
+    "type": "weekly_review",
+    "title": "Votre bilan de la semaine",
+    "body": "Quatre séances terminées, une notion validée et deux révisions dues demain.",
+    "href": "/bilan",
+    "icon": "chart-line",
+    "dedupeKey": "weekly:2026-11-11",
+    "createdAt": "2026-11-11T10:15:00.000Z",
+}
+DEMO_NOTIFICATIONS = (DEMO_DIGEST, DEMO_GAP, DEMO_WEEKLY_REVIEW)
+DEMO_DIGEST_READ_AT = "2026-11-11T08:30:00.000Z"
+DEMO_DIGEST_SENT_AT = "2026-11-11T07:00:00.000Z"
+DEMO_QUIET_SCHEDULED_FOR = "2026-11-12T07:00:00.000Z"
+NO_SUBSCRIPTION = "no_subscription"
+
+# SPEC-505 - the two error texts of the credential page.
+DEMO_SEED_MISSING = "Jeu de démonstration absent : lancer `pnpm db:seed:demo`."
+DEMO_UNAVAILABLE = "Démonstration indisponible."
+
+# SPEC-505 - the seeded account whose credentials are listed.
+DEMO_USER_EMAIL = "alex.perrin@demo.learny.test"

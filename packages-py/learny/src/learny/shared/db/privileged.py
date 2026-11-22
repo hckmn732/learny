@@ -25,6 +25,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_api.dev_demos.notifications": "simulated settings and tone of the demonstration",
         "learny_api.dev_demos.push": "notification row of the push demonstration",
         # SPEC-2207 - the rate-limit demonstration owns synthetic buckets and rows it deletes.
+        # SPEC-2207 - the SDD demonstration pages build their fixture in a transaction that is
+        # always rolled back and read the seeded account of the credential page (EF-9).
+        "learny_api.dev_demos.sdd_state": "rolled-back demo fixtures and the seeded account",
         "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
         # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.
         "learny_api.special.dev_events": "factory users and outbox counts of the demonstration",
