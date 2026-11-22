@@ -31,15 +31,15 @@ operations:
   'courses.conversations.create': py
   'courses.conversations.list': py
   'courses.progress': py
-  'dev.cron.hourlyTick': ts
+  'dev.cron.hourlyTick': py
   'dev.echo': py
   'dev.email.outbox': py
   'dev.email.outbox.purge': py
   'dev.email.preview': py
   'dev.email.send': py
-  'dev.events.demo.run': ts
-  'dev.events.demo.start': ts
-  'dev.events.outbox': ts
+  'dev.events.demo.run': py
+  'dev.events.demo.start': py
+  'dev.events.outbox': py
   'dev.items': py
   'dev.notificationsGenerate': ts
   'dev.notify': ts
@@ -227,8 +227,8 @@ special:
   'GET /api/v1/auth/callback': ts
   'GET /api/v1/dev/sdd/email/outbox': py
   'GET /api/v1/dev/sdd/email/preview': py
-  'GET /api/v1/dev/sdd/events/demo/:runId': ts
-  'GET /api/v1/dev/sdd/events/outbox': ts
+  'GET /api/v1/dev/sdd/events/demo/:runId': py
+  'GET /api/v1/dev/sdd/events/outbox': py
   'GET /api/v1/dev/sdd/items': py
   'GET /api/v1/dev/sdd/relay-stream': ts
   'GET /api/v1/dev/sdd/stripe/events': py
@@ -236,10 +236,10 @@ special:
   'POST /api/v1/_dev/commit-check': ts
   'POST /api/v1/_dev/demo-job': ts
   'POST /api/v1/_dev/secret-scan': ts
-  'POST /api/v1/dev/sdd/cron/hourly-tick': ts
+  'POST /api/v1/dev/sdd/cron/hourly-tick': py
   'POST /api/v1/dev/sdd/echo': py
   'POST /api/v1/dev/sdd/email/send': py
-  'POST /api/v1/dev/sdd/events/demo': ts
+  'POST /api/v1/dev/sdd/events/demo': py
   'POST /api/v1/dev/sdd/notifications/generate': ts
   'POST /api/v1/dev/sdd/notify': ts
   'POST /api/v1/dev/sdd/personal-data/deletion': ts

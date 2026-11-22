@@ -8,7 +8,14 @@ same handlers with the development guard, so a call is served exactly like `devR
 from typing import Any
 
 from learny_api.pipeline import Call, handler
-from learny_api.special import dev_echo, dev_email, dev_rate_limit, dev_stripe, dev_upload
+from learny_api.special import (
+    dev_echo,
+    dev_email,
+    dev_events,
+    dev_rate_limit,
+    dev_stripe,
+    dev_upload,
+)
 
 
 @handler("dev.echo")
@@ -79,3 +86,23 @@ async def stripe_simulate(call: Call) -> dict[str, Any]:
 @handler("dev.uploadSimulation")
 async def upload_simulation(call: Call) -> dict[str, Any]:
     return await dev_upload.uploads(call)
+
+
+@handler("dev.cron.hourlyTick")
+async def cron_hourly_tick(call: Call) -> dict[str, Any]:
+    return await dev_events.tick(call)
+
+
+@handler("dev.events.demo.run")
+async def events_demo_run(call: Call) -> dict[str, Any]:
+    return await dev_events.run(call)
+
+
+@handler("dev.events.demo.start")
+async def events_demo_start(call: Call) -> dict[str, Any]:
+    return await dev_events.start(call)
+
+
+@handler("dev.events.outbox")
+async def events_outbox(call: Call) -> dict[str, Any]:
+    return await dev_events.outbox(call)

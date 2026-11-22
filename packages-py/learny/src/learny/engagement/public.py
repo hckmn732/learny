@@ -95,6 +95,7 @@ from learny.engagement.application.unsubscribe import (
 )
 from learny.engagement.application.weekly_review import get_weekly_review
 from learny.engagement.domain.automations import decode_cursor, encode_cursor
+from learny.engagement.domain.tick import build_local_tick, tick_instant
 
 __all__ = [
     "LOCAL_TICK_EVENT",
@@ -104,6 +105,7 @@ __all__ = [
     "accept_automation_action",
     "active_notification_type_count",
     "build_digest_data",
+    "build_local_tick",
     "can_send_service_email",
     "complete_pause_diagnostic",
     "count_sent_notifications",
@@ -157,6 +159,7 @@ __all__ = [
     "settings_of",
     "start_pause",
     "sync_validation_quiz_reminders",
+    "tick_instant",
     "undo_automation_action",
     "unsubscribe_by_token",
     "unsubscribe_done",
