@@ -204,3 +204,101 @@ traversent le pipeline et la garde est dans le handler, comme `guarded()` côté
   510, 511, 512 (demo/suggest/decide), 711. Les conseils de la section 5 restent valables :
   `spec-111` et `spec-1301` exigent des ports dédiés, `spec-508` doit porter `buildTutorDemo`, et
   les démos 103 à 107 construisent leurs fixtures dans `withRollback` (utiliser `rolled_back`).
+
+## 7 bis. Septième tranche : les démos d'action (44/70), 26 différées
+
+Date : 2026-11-22. HEAD de la tranche : `a9fbd54b`. Quatre opérations de plus sont servies par
+Python, sans clé spéciale (pipeline et garde dans le handler, comme `guarded()`) :
+`dev.sdd.spec-501.demo`, `dev.sdd.spec-505.create`, `dev.sdd.spec-505.delete` et
+`dev.sdd.spec-506.run`.
+
+- **Module** : `learny_api/dev_demos/sdd_actions.py`. `demo_identity` lit le compte de démonstration
+  (`profiles.email = fixture.DEMO_USER_EMAIL`) et rend un `identity.Actor` ; les pages qui écrivent
+  appellent le cas d'usage réel (`tutor.create_credential`, `tutor.delete_credential`,
+  `tutor.qualify_credential`) puis rechargent la page d'état `sdd_state.spec_505`, exactement comme
+  `loadSpec505Demo` côté TypeScript. Aucune logique métier n'est dupliquée dans la démo.
+- **Socle** : `support.new_user` et `support.demo_email` remplacent les doublons de `sdd_state`
+  (adresse horodatée par l'horloge injectée, jamais `random`) ; `support.DELETE_AUTH_USER` supprime
+  dans un `finally` le compte isolé que `spec-506` construit pour une requête. `DevDeps` du harnais
+  gagne `llm` (`MockGateway(load_registry())`), la dépendance que la qualification lit.
+- **Textes** : `DEMO_ABSENT`, `CHOOSE_PROVIDER_MODEL`, `KEY_ID_MISSING` rejoignent
+  `locale_fr/dev_sdd_fixtures.py`, copiés mot pour mot de `implementations/dev-sdd.ts`.
+- **Tests** : `packages-py/learny/tests/integration/dev/test_dev_sdd_action_demos.py`, 8 cas — la
+  page 501 avec et sans compte, le cycle création/lecture/suppression d'une clé et ses deux refus
+  400, le run de qualification qui ne laisse aucun compte (`auth.users`), le refus 404 sans compte
+  de démonstration, la garde 404 sur les quatre chemins. Vérifications : `ruff check`,
+  `ruff format --check packages-py apps`, `mypy packages-py apps`, `pytest apps/api-py/tests/unit`
+  (162 passés), puis base remise à zéro (`db:reset --yes`) et
+  `pytest packages-py/learny/tests/integration/dev apps/api-py/tests/integration/test_dev_routes_install.py`
+  (232 passés, 11 sautés).
+
+## 8. Démos différées (26 des 30 restantes)
+
+Décision assumée de cette tranche : une démo qui ne se porte pas en ~10 minutes reste `ts` et est
+documentée ici. Trois causes expliquent les 26 lignes.
+
+### 8.1 Cause A — les fabriques de `@learny/db/testing` n'existent pas en Python (10 routes)
+
+Les pages 103 à 115 construisent de trois à six fixtures dans `withRollback` avec `createTestUser`
+et `asUser` (`packages/db/src/testing/index.ts`), `createTestProgramme` et `createTestCourse`
+(`packages/db/src/testing/programme.ts`), ou avec des dépôts `@learny/db` sans équivalent Python
+exposé (`createGroup`/`joinGroup`, `packages/db/src/repositories/groups.ts:143,312` ;
+`createScheduleSlot`, `moveScheduleSlot`, `getDailyActivity`, `listMilestones`,
+`createAutomationAction` ; `sanitizeSnippet`, `packages/db/src/schema/privacy-search.ts:81`).
+Porter ces fabriques est un chantier à part, pas une démo : `support.rolled_back` et
+`sdd_state._page_user` en couvrent seulement la transaction et le compte.
+
+| Route | Raison précise | Ce qu'il faudrait pour la porter |
+| --- | --- | --- |
+| `dev.sdd.spec-103.demo` | arbre de programme + six sondes de contraintes en savepoints + plan FTS ; > 10 min | `loadSpec103Demo` (`spec-103.ts`) et `createTestUser`/`createTestProgramme` |
+| `dev.sdd.spec-104.demo` | note, passages et sondes de contraintes, tous en `withRollback` | `loadSpec104Demo` (`spec-104.ts`) et les deux fabriques |
+| `dev.sdd.spec-105.demo` | deux versions de cours, section corrigée, citation et discussion | `loadSpec105Demo` (`spec-105.ts`) plus `createTestCourse` |
+| `dev.sdd.spec-106.demo` | treize briques, trois versions ordonnées, tentative et réponses liées à leur version | `loadSpec106Demo` (`spec-106.ts`) et les deux fabriques |
+| `dev.sdd.spec-107.demo` | trois états de notion, historique de révision, lacune active et un second élève | `loadSpec107Demo` (`spec-107.ts`) et les deux fabriques |
+| `dev.sdd.spec-108.demo` | cinq créneaux, un déplacement, action à consentement, activité et deux jalons | `loadSpec108Demo` (`spec-108.ts`) et les cinq dépôts de créneaux/activités |
+| `dev.sdd.spec-111.demo` | groupe de trois membres, code d'invitation déterministe, vue de progression, compteur | `loadSpec111Demo` (`spec-111.ts`), `createGroup`/`joinGroup`, `listGroupProgress`, `countActiveFormations` |
+| `dev.sdd.spec-112.demo` | deux élèves, cours, exports, acceptations et clés d'idempotence, recherche sous JWT | `loadSpec112Demo` (`spec-112.ts`), `createTestCourse`, `asUser`, `sanitizeSnippet` |
+| `dev.sdd.spec-113.demo` | matrice RLS à trois comptes sous JWT réels + catalogue de politiques | `loadSpec113Demo` (`spec-113.ts`), `createGroup`/`joinGroup`, `RLS_MATRIX`/`categoryCounts`, `asUser` |
+| `dev.sdd.spec-115.demo` | lit le jeu de démonstration semé, y compris les attendus du seed | `loadSpec115Demo` (`spec-115.ts`) et les constantes `DEMO_*`, `demoUserId`, `demoFormationId` de `packages/db/src/seed/fixtures.ts` |
+
+### 8.2 Cause B — le cas d'usage appelé n'existe pas encore en Python (11 routes)
+
+Une démo doit appeler le cas d'usage Python existant, jamais le réécrire : ces routes attendent
+donc le port du service, pas un handler de démonstration.
+
+| Route | Raison précise | Ce qu'il faudrait pour la porter |
+| --- | --- | --- |
+| `dev.sdd.spec-009.demo` | `buildSddConfigDemo` rend `simulated` et `invalidFields` en rejouant `parseServerEnv` sur un environnement simulé ; `Settings` (pydantic) ne porte ni cette validation ni la liste `SERVER_ENV_KEYS` | `buildSddConfigDemo` (`deps/env.ts:67`) et le schéma `packages/config/src/env.ts` (`parseServerEnv`, `parsePublicEnv`) |
+| `dev.sdd.spec-501.create` | la page crée une brique par le service, absent côté Python | `createDemoBrick` (`spec-501.ts`) et `createBrick` (`packages/services/src/bricks/brick-service.ts:167`) |
+| `dev.sdd.spec-501.report` | la page signale la brique puis relit sa charge publique | `reportDemoBrick` (`spec-501.ts`), `report_brick` existe, mais `getPublicBrick` (`brick-service.ts:391`) manque |
+| `dev.sdd.spec-501.correct` | idem : correction puis relecture de la charge publique | `correctDemoBrick` (`spec-501.ts`) et `getPublicBrick` ; `correct_brick` existe déjà |
+| `dev.sdd.spec-504.demo` | la table de résolution des modèles n'a pas d'équivalent Python (aucun `resolve_model` dans `learny.platform.llm`) | `loadResolutionDemo` (`spec-504.ts`) et `resolveModel` (`packages/llm/src/resolve.ts:29`) |
+| `dev.sdd.spec-504.call` | idem, plus l'ouverture d'une session simulée par scénario | `runMockCall` (`spec-504.ts`), `resolveModel` et `createSession` (`packages/llm/src/session.ts:159`) |
+| `dev.sdd.spec-508.demo` | `buildTutorDemo` est un service entier (487 lignes) qui compose sept étapes de tuteur | `buildTutorDemo` (`packages/tutor/src/demo.ts`) porté dans `learny.tutor` |
+| `dev.sdd.spec-512.demo` | la recherche web simulée n'existe pas côté Python | `loadSearchWebDemo` (`spec-512.ts`), `searchWeb` (`packages/tutor/src/tools/search-web.ts:156`), `createProviderSearch` |
+| `dev.sdd.spec-512.suggest` | la suggestion de ressource n'existe pas côté Python | `suggestSpec512` (`implementations/dev-sdd.ts`) et `suggestResource` (`packages/tutor/src/services/resource-suggestions.ts:85`) |
+| `dev.sdd.spec-512.decide` | la décision de suggestion n'existe pas côté Python | `decideSpec512` et `decideResourceSuggestion` (`resource-suggestions.ts:161`) |
+| `dev.sdd.spec-1301.demo` | le scénario est un pilote de client natif (HTTP réel + modèle de tuteur préparé), sans équivalent Python | `devSddSpec1301Demo` et `runNativeClientScenario` (`packages/testing/src/native-client`) |
+
+### 8.3 Cause C — un pipeline réel à rejouer dans une transaction annulée (5 routes)
+
+Ces pages ne lisent pas des tables : elles font tourner l'ingestion ou la notation réelles sur une
+fixture construite en SQL (ressource, passages, injections, tentative notée), puis mesurent le
+résultat. Le port demande le pipeline complet plus la fixture, très au-delà de dix minutes.
+
+| Route | Raison précise | Ce qu'il faudrait pour la porter |
+| --- | --- | --- |
+| `dev.sdd.spec-411.demo` | tentative réellement notée (activité, brique, réponses, lacunes) puis lecture de l'outbox et des créneaux | `loadSpec411Demo` (`spec-411.ts`) avec `createTestProgramme` et la fixture de notation |
+| `dev.sdd.spec-509.demo` | deux ingestions réelles et un échec + reprise, vecteurs simulés | `loadSpec509Demo` (`spec-509.ts`) et `createTestProgramme` |
+| `dev.sdd.spec-510.demo` | extraction et découpage réels, légendes et vision simulées | `loadSpec510Demo` (`spec-510.ts`) et `createTestProgramme` |
+| `dev.sdd.spec-511.demo` | recherche sémantique déterministe, deux élèves du même groupe, quatre budgets | `loadSpec511Demo` (`spec-511.ts`), `createTestProgramme` et `asUser` |
+| `dev.sdd.spec-711.demo` | les dix clés du registre et le moteur réel sur un compte fixture supprimé ensuite | `loadSpec711Demo` (`spec-711.ts`) et `createTestUser` |
+
+### 8.4 Conséquence pour la clôture
+
+Il ne reste donc plus de démo « bon marché » : `py_operations == HANDLERS` couvre 44 des 70
+opérations `dev.*`, les 26 autres sont `ts` avec leur raison ci-dessus. Les trois causes sont des
+chantiers identifiés (fabriques de test, services `@learny/llm` et `@learny/tutor`, pipelines
+d'ingestion), pas des oublis de la tranche. Les quatre chantiers e2e du §6 restent ouverts et
+indépendants.
+
