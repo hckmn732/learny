@@ -142,3 +142,6 @@ DEMO_USER_EMAIL = "alex.perrin@demo.learny.test"
 DEMO_ABSENT = "Jeu de démonstration absent."
 CHOOSE_PROVIDER_MODEL = "Choisissez un fournisseur et un nom de modèle."
 KEY_ID_MISSING = "Identifiant de clé manquant."
+
+# SPEC-002 - the `file` a scanned secret is reported under (`scanText(text, 'saisie')`).
+SECRET_SCAN_SOURCE = "saisie"

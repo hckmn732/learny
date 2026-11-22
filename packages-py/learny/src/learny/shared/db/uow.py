@@ -128,5 +128,10 @@ class Database:
         """The engine, for the dedicated connection of the scheduler advisory lock."""
         return self._engine
 
+    async def ping(self) -> None:
+        """`pingDatabase`: one trivial query on a pooled connection, for the health probe."""
+        async with self._engine.connect() as connection:
+            await connection.execute(text("select 1"))
+
     async def close(self) -> None:
         await self._engine.dispose()

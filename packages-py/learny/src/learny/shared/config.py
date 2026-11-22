@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     sentry_dsn: str | None = None
     commit: str = "unknown"
     version: str = "dev"
+    # Build metadata of the health probe (SPEC-006 EF-1): the names the deployment already sets.
+    git_commit: str | None = None
+    app_version: str | None = None
 
     # PostgreSQL (SPEC-2101).
     database_url: str = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
@@ -99,6 +102,11 @@ class Settings(BaseSettings):
             "STRIPE_PRICE_ID": self.stripe_price_id,
             "NEXT_PUBLIC_APP_URL": self.next_public_app_url,
         }
+
+    @property
+    def database_configured(self) -> bool:
+        """`DATABASE_URL` explicitly set: without it the probe answers `not_configured`."""
+        return "database_url" in self.model_fields_set
 
     @property
     def is_test(self) -> bool:

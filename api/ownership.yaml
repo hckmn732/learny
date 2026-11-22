@@ -135,7 +135,7 @@ operations:
   'groups.members.remove': py
   'groups.rotateCode': py
   'header.get': py
-  'health.get': ts
+  'health.get': py
   'home.get': ts
   'invitations.accept': py
   'invitations.get': py
@@ -230,12 +230,12 @@ special:
   'GET /api/v1/dev/sdd/events/demo/:runId': py
   'GET /api/v1/dev/sdd/events/outbox': py
   'GET /api/v1/dev/sdd/items': py
-  'GET /api/v1/dev/sdd/relay-stream': ts
+  'GET /api/v1/dev/sdd/relay-stream': py
   'GET /api/v1/dev/sdd/stripe/events': py
-  'GET /api/v1/health': ts
+  'GET /api/v1/health': py
   'POST /api/v1/_dev/commit-check': ts
   'POST /api/v1/_dev/demo-job': ts
-  'POST /api/v1/_dev/secret-scan': ts
+  'POST /api/v1/_dev/secret-scan': py
   'POST /api/v1/dev/sdd/cron/hourly-tick': py
   'POST /api/v1/dev/sdd/echo': py
   'POST /api/v1/dev/sdd/email/send': py

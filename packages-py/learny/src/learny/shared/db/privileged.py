@@ -28,6 +28,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the SDD demonstration pages build their fixture in a transaction that is
         # always rolled back and read the seeded account of the credential page (EF-9).
         "learny_api.dev_demos.sdd_state": "rolled-back demo fixtures and the seeded account",
+        # SPEC-2207 - the action pages call the real use cases on the seeded account and read
+        # the throwaway account of the qualification run with the owner role.
+        "learny_api.dev_demos.sdd_actions": "seeded demo account and throwaway qualification user",
         "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
         # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.
         "learny_api.special.dev_events": "factory users and outbox counts of the demonstration",

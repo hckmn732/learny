@@ -137,6 +137,11 @@ FORMATION_CANNOT_ARCHIVE = "Cette formation ne peut pas être archivée."
 FORMATION_CANNOT_RESUME = "Cette formation ne peut pas être reprise."
 FORMATION_CANNOT_ACTIVATE = "Seule une formation active peut devenir la formation courante."
 FORMATION_CHANGED = "Cette formation a changé entre-temps. Rechargez la liste."
+FORMATION_PAUSE_CHOICE_REQUIRED = "Choisissez une formation à mettre en pause."
+FORMATION_PAUSE_CHOICE_STALE = (
+    "La formation choisie n’est plus active. Rechargez la liste et choisissez à nouveau."
+)
+INVALID_REQUEST_TITLE = "Requête invalide"
 FORMATION_NOT_CREATED = "Formation non créée."
 FORMATION_ONLY_ACTIVE_COPY = "Seule une formation active peut être copiée."
 FORMATION_COPY_MISSING = "La copie individuelle n’a pas pu être créée."
