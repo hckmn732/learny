@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="agent37" tests="1" failures="1" time="26.895" timestamp="2026-11-22T20:32:46">
-    <testcase id="SPEC-3003 session" name="SPEC-3003 session" classname="SPEC-3003 session" file="/tmp/learny-device-agent/flows/SPEC-3003-session.yaml" time="26.837" timestamp="2026-11-22T20:32:46" status="ERROR">
+  <testsuite name="Test Suite" device="agent37" tests="1" failures="0" time="20.069" timestamp="2026-11-22T21:34:58">
+    <testcase id="SPEC-3003 session" name="SPEC-3003 session" classname="SPEC-3003 session" file="/tmp/learny-device-agent/jobs/20261122213449-004/flows/SPEC-3003-session.yaml" time="20.029" timestamp="2026-11-22T21:34:58" status="SUCCESS">
       <properties>
         <property name="tags" value="SPEC-3003, visual"/>
       </properties>
-      <failure>Assertion is false: ".*Hors ligne.*" is visible</failure>
     </testcase>
   </testsuite>
 </testsuites>
