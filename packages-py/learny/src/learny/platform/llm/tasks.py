@@ -9,6 +9,9 @@ from typing import Literal
 
 AiTask = Literal["programme", "course", "gaps", "tutor", "light"]
 ThinkingEffort = Literal["low", "medium", "high"]
+
+# `AI_TASKS` (`packages/config/src/models.ts`): the mockup order of the five AI tasks.
+AI_TASKS: tuple[AiTask, ...] = ("programme", "course", "gaps", "tutor", "light")
 TaskCapability = Literal["tools", "structured", "web_search", "passage_refs", "vision"]
 
 TASK_CAPABILITIES: tuple[TaskCapability, ...] = (

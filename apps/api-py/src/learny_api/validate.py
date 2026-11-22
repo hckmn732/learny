@@ -14,10 +14,21 @@ from typing import Annotated, Any, Literal, Union, get_args, get_origin
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
+from learny.shared.jsonx import dumps
+from learny.shared.locale_fr import ai as ai_texts
 from learny.shared.locale_fr import learning as learning_texts
 from learny.shared.locale_fr import review as review_texts
 from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_INPUT, INVITATION_CODE_FORMAT
+from learny.tutor.public import (
+    create_body_issues as credential_create_issues,
+)
+from learny.tutor.public import (
+    discover_body_issues as credential_discover_issues,
+)
+from learny.tutor.public import (
+    models_update_issues as models_tab_update_issues,
+)
 from pydantic import BaseModel, ValidationError
 
 InputLocation = Literal["params", "query", "body"]
@@ -28,6 +39,33 @@ InputLocation = Literal["params", "query", "body"]
 ISSUE_ORDER: dict[str, tuple[str, ...]] = {
     "agenda.get": ("query.from", "query.to", "query.formation"),
 }
+
+# Zod carries a custom message for some `.regex(...)` rules; OpenAPI keeps only the pattern, so the
+# generic `invalid_format` wording would replace the contract's message. The generic wording stays
+# for every failure but the pattern mismatch of these paths (ADR-1001, ADR-2012).
+MESSAGE_OVERRIDES: dict[str, dict[str, str]] = {
+    "me.ai.credentials.create": {
+        "body.apiKey": ai_texts.API_KEY_NO_BLANK,
+        "body.modelIds.*": ai_texts.MODEL_ID_PATTERN,
+    },
+    "me.ai.credentials.discover": {
+        "body.apiKey": ai_texts.API_KEY_NO_BLANK,
+    },
+}
+
+
+def _message_override(messages: Mapping[str, str] | None, path: str) -> str | None:
+    """The custom message of one path, honouring the `<prefix>.*` entries of the table."""
+    if messages is None:
+        return None
+    exact = messages.get(path)
+    if exact is not None:
+        return exact
+    for key, message in messages.items():
+        if key.endswith(".*") and path.startswith(key[:-1]):
+            return message
+    return None
+
 
 # Pydantic error type -> the Zod expected type it stands for.
 _TYPE_ERRORS: dict[str, str] = {
@@ -84,15 +122,28 @@ def validate_input(
     strict: bool = False,
     route_id: str | None = None,
 ) -> BaseModel:
-    """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues."""
+    """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues.
+
+    A body is validated from its JSON form, like `schema.safeParse` on a decoded body: Pydantic's
+    JSON mode accepts the string value of a `StrEnum` while still refusing `"20"` for an `int`
+    (ADR-2030). Path and query inputs keep the object mode.
+    """
     try:
+        if strict:
+            return model.model_validate_json(dumps(value), strict=True)
         return model.model_validate(value, strict=strict)
     except ValidationError as error:
         raise AppError(
             "VALIDATION_FAILED",
             INVALID_INPUT,
             **({} if status is None else {"status": status}),
-            errors=issues_of(model, error, location, issue_order=ISSUE_ORDER.get(route_id or "")),
+            errors=issues_of(
+                model,
+                error,
+                location,
+                issue_order=ISSUE_ORDER.get(route_id or ""),
+                messages=MESSAGE_OVERRIDES.get(route_id or ""),
+            ),
         ) from error
 
 
@@ -107,6 +158,7 @@ def issues_of(
     location: InputLocation,
     *,
     issue_order: Sequence[str] | None = None,
+    messages: Mapping[str, str] | None = None,
 ) -> list[dict[str, str]]:
     """Turns Pydantic errors into the `{path, message}` list `validate.ts` builds from Zod."""
     issues: list[dict[str, str]] = []
@@ -122,9 +174,11 @@ def issues_of(
                 order.append(parent)
             extras[parent].append(str(loc[-1]))
             continue
-        issues.append(
-            {"path": _path(location, loc), "message": _message(model, entry, kind)},
-        )
+        path = _path(location, loc)
+        message = _message(model, entry, kind)
+        if kind == "string_pattern_mismatch":
+            message = _message_override(messages, path) or message
+        issues.append({"path": path, "message": message})
     for parent in order:
         keys = extras[parent]
         issues.insert(
@@ -458,6 +512,9 @@ REFINEMENTS: dict[str, Refinement] = {
     "me.profile.update": _at_least_one_settings_field,
     "me.preferences.update": _unique_preferences,
     "me.onboarding.update": _onboarding_reminders,
+    "me.ai.credentials.create": credential_create_issues,
+    "me.ai.credentials.discover": credential_discover_issues,
+    "me.ai.models.update": models_tab_update_issues,
     "me.ai.task-models.update": _task_model,
     "me.legal.accept": _legal_versions,
     "sidebar.update": _sidebar_update,

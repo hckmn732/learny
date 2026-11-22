@@ -4,6 +4,7 @@ The wrapper answers `VALIDATION_FAILED` with `{path, message}` issues built from
 locale; the Python pipeline must produce the same strings from Pydantic errors.
 """
 
+from enum import StrEnum
 from typing import Any, Literal
 
 import pytest
@@ -75,9 +76,30 @@ def test_a_wrong_type_names_both_sides() -> None:
     } in issues
 
 
+class Provider(StrEnum):
+    anthropic = "anthropic"
+    openai = "openai"
+
+
+class EnumBody(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    provider: Provider
+
+
 def test_a_number_sent_as_a_string_is_refused_in_strict_mode() -> None:
     with pytest.raises(AppError):
         validate_input(Body, {"name": "abc", "age": "20", "tag": "ab"}, "body", strict=True)
+
+
+def test_an_enum_accepts_its_string_value_in_strict_mode() -> None:
+    parsed = validate_input(EnumBody, {"provider": "openai"}, "body", strict=True)
+
+    assert parsed.provider is Provider.openai  # type: ignore[attr-defined]
+
+
+def test_an_unknown_enum_value_is_still_refused_in_strict_mode() -> None:
+    with pytest.raises(AppError):
+        validate_input(EnumBody, {"provider": "unknown"}, "body", strict=True)
 
 
 def test_a_number_sent_as_a_string_is_accepted_in_lax_mode() -> None:
