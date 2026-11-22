@@ -91,6 +91,7 @@ class DevDeps:
     gotrue: Any = None
     storage: Any = None
     push: Any = None
+    llm: Any = None
 
 
 def ownership_of(route_ids: tuple[str, ...], pipeline_ids: tuple[str, ...] = ()) -> Ownership:

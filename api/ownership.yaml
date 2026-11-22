@@ -77,14 +77,14 @@ operations:
   'dev.sdd.spec-411.demo': ts
   'dev.sdd.spec-501.correct': ts
   'dev.sdd.spec-501.create': ts
-  'dev.sdd.spec-501.demo': ts
+  'dev.sdd.spec-501.demo': py
   'dev.sdd.spec-501.report': ts
   'dev.sdd.spec-504.call': ts
   'dev.sdd.spec-504.demo': ts
-  'dev.sdd.spec-505.create': ts
-  'dev.sdd.spec-505.delete': ts
+  'dev.sdd.spec-505.create': py
+  'dev.sdd.spec-505.delete': py
   'dev.sdd.spec-505.demo': py
-  'dev.sdd.spec-506.run': ts
+  'dev.sdd.spec-506.run': py
   'dev.sdd.spec-508.demo': ts
   'dev.sdd.spec-509.demo': ts
   'dev.sdd.spec-510.demo': ts

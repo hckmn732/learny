@@ -7,7 +7,6 @@ mutates the database. The French texts of the pages live in `locale_fr/dev_sdd_f
 """
 
 import json
-from datetime import datetime
 from typing import Any
 
 from learny.identity import public as identity
@@ -21,7 +20,7 @@ from sqlalchemy.exc import DBAPIError
 from starlette.responses import Response
 
 from learny_api.dev_demos.guard import require_dev
-from learny_api.dev_demos.support import rolled_back
+from learny_api.dev_demos.support import demo_email, new_user, rolled_back
 from learny_api.pipeline import Call
 
 SET_CLAIMS = text(
@@ -57,13 +56,6 @@ SELECT_IDENTITY = text("select auth.uid()::text as uid, current_user as role")
 
 SELECT_DEMO_USER = text(
     "select id::text as id, email from auth.users where email like :pattern order by created_at desc limit 1"
-)
-INSERT_AUTH_USER = text(
-    "insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, "
-    "raw_app_meta_data, created_at, updated_at) values (gen_random_uuid(), "
-    "'00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', :email, "
-    "cast(:metadata as jsonb), cast(:app_metadata as jsonb), now(), now()) "
-    "returning id::text as id"
 )
 DELETE_DEMO_USERS = text("delete from auth.users where email like :pattern")
 SELECT_102_PROFILE = text(
@@ -196,12 +188,6 @@ async def _sqlstate(conn: Any, name: str, statement: Any, params: dict[str, Any]
     return "00000"
 
 
-def _demo_email(instant: datetime) -> str:
-    """`demoEmail`: a recognisable address stamped with the fixed clock of the request."""
-    stamp = to_iso(instant).replace(":", "-").replace(".", "-")
-    return f"spec102-{stamp}@test.learny.test"
-
-
 def _claims(actor: Any) -> str:
     """The Supabase claims of a demonstration identity (`buildUserClaims`)."""
     return json.dumps(
@@ -234,30 +220,15 @@ async def _identity(conn: Any, user_id: str) -> dict[str, Any]:
     }
 
 
-async def _new_user(conn: Any, metadata: dict[str, Any]) -> str:
-    """A throwaway account; the sign-up trigger builds every dependent row (EF-1)."""
-    row = (
-        (
-            await conn.execute(
-                INSERT_AUTH_USER,
-                {
-                    "email": f"spec-demo-{metadata.get('first_name', 'page')}@test.learny.test",
-                    "metadata": json.dumps(metadata),
-                    "app_metadata": json.dumps({"provider": "email", "providers": ["email"]}),
-                },
-            )
-        )
-        .mappings()
-        .first()
-    )
-    if row is None:
-        raise AppError("INTERNAL_ERROR")
-    return str(row["id"])
+async def _page_user(conn: Any, metadata: dict[str, Any]) -> str:
+    """A throwaway account of a page, named after its first name."""
+    email = f"spec-demo-{metadata.get('first_name', 'page')}@test.learny.test"
+    return await new_user(conn, email=email, metadata=metadata)
 
 
 async def _constraints(conn: Any) -> list[dict[str, Any]]:
     """The four integrity probes of SPEC-102 ET-4, each in its own savepoint."""
-    user_id = await _new_user(conn, {"first_name": "Alex", "timezone": "Europe/Paris"})
+    user_id = await _page_user(conn, {"first_name": "Alex", "timezone": "Europe/Paris"})
     probes = (
         ("cl2", "22023", UPDATE_102_TIMEZONE, {"user_id": user_id}),
         ("cl3", "23514", UPDATE_102_STUDY_DAYS, {"user_id": user_id}),
@@ -297,8 +268,8 @@ async def spec_101(call: Call) -> dict[str, Any]:
             (await conn.execute(SELECT_FUNCTIONS, {"sample": fixture.UNACCENT_SAMPLE})).mappings().all()
         )
         enums = (await conn.execute(SELECT_ENUMS, {"names": list(ENUM_NAMES)})).mappings().all()
-        user_a = await _new_user(conn, {"first_name": "A"})
-        user_b = await _new_user(conn, {"first_name": "B"})
+        user_a = await _page_user(conn, {"first_name": "A"})
+        user_b = await _page_user(conn, {"first_name": "B"})
         identity_a = await _identity(conn, user_a)
         identity_b = await _identity(conn, user_b)
         service = (await conn.execute(SELECT_IDENTITY)).mappings().first()
@@ -394,13 +365,10 @@ async def spec_102_create(call: Call) -> Any:
                 "timezone": fixture.DEMO_102_TIMEZONE,
                 "course_language": "fr",
             }
-            await tx.conn.execute(
-                INSERT_AUTH_USER,
-                {
-                    "email": _demo_email(call.deps.clock.now()),
-                    "metadata": json.dumps(metadata),
-                    "app_metadata": json.dumps({"provider": "email", "providers": ["email"]}),
-                },
+            await new_user(
+                tx.conn,
+                email=demo_email(call.deps.clock.now(), "spec102"),
+                metadata=metadata,
             )
     return nothing()
 
@@ -418,7 +386,7 @@ async def spec_109(call: Call) -> dict[str, Any]:
     require_dev(call.deps)
     async with rolled_back(call.deps) as tx:
         conn = tx.conn
-        user_id = await _new_user(conn, {"first_name": "Alex", "timezone": "Europe/Paris"})
+        user_id = await _page_user(conn, {"first_name": "Alex", "timezone": "Europe/Paris"})
         identifiers: dict[str, str] = {}
         for entry in fixture.DEMO_NOTIFICATIONS:
             row = (

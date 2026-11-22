@@ -137,3 +137,8 @@ DEMO_UNAVAILABLE = "Démonstration indisponible."
 
 # SPEC-505 - the seeded account whose credentials are listed.
 DEMO_USER_EMAIL = "alex.perrin@demo.learny.test"
+
+# SPEC-501 / SPEC-505 - the action pages of the demonstration account.
+DEMO_ABSENT = "Jeu de démonstration absent."
+CHOOSE_PROVIDER_MODEL = "Choisissez un fournisseur et un nom de modèle."
+KEY_ID_MISSING = "Identifiant de clé manquant."

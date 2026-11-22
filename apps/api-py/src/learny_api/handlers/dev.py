@@ -7,7 +7,7 @@ same handlers with the development guard, so a call is served exactly like `devR
 
 from typing import Any
 
-from learny_api.dev_demos import notifications, personal_data, push, sdd, sdd_state
+from learny_api.dev_demos import notifications, personal_data, push, sdd, sdd_actions, sdd_state
 from learny_api.pipeline import Call, handler
 from learny_api.special import (
     dev_echo,
@@ -217,3 +217,23 @@ async def dev_spec_202_demo(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.spec-505.demo")
 async def dev_spec_505_demo(call: Call) -> dict[str, Any]:
     return await sdd_state.spec_505(call)
+
+
+@handler("dev.sdd.spec-501.demo")
+async def dev_spec_501_demo(call: Call) -> dict[str, Any]:
+    return await sdd_actions.spec_501(call)
+
+
+@handler("dev.sdd.spec-505.create")
+async def dev_spec_505_create(call: Call) -> dict[str, Any]:
+    return await sdd_actions.spec_505_create(call)
+
+
+@handler("dev.sdd.spec-505.delete")
+async def dev_spec_505_delete(call: Call) -> dict[str, Any]:
+    return await sdd_actions.spec_505_delete(call)
+
+
+@handler("dev.sdd.spec-506.run")
+async def dev_spec_506_run(call: Call) -> dict[str, Any]:
+    return await sdd_actions.spec_506(call)
