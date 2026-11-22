@@ -10,8 +10,8 @@ dont **0** sont déjà `py` dans `api/ownership.yaml` au démarrage (toutes `ts`
 | Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
 |---|---|---|---|---|
 | learning | 15 | 15 | 0 | contexte terminé : `apply-result.ts` et le service `review` sont portés |
-| assessments | 26 | 0 | 26 | domaine à porter (étape 2) |
-| **Total** | **41** | **15** | **26** | |
+| assessments | 26 | 6 | 20 | domaine porté ; 6 operations servies (etape 5) |
+| **Total** | **41** | **21** | **20** | |
 
 ## Comptage
 
@@ -102,8 +102,8 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 
 | Fait | Opération | Méthode | Chemin | Propriétaire | Implémentation TS | Tables | Tests TS |
 |---|---|---|---|---|---|---|---|
-| [ ] | `bricks.correct` | PATCH | `/api/v1/bricks/:bid` | ts | `bricks.ts` | brick_reports, brick_versions, bricks, draws, formations, notions, public, resource_chunks, resources | — |
-| [ ] | `bricks.report` | POST | `/api/v1/bricks/:bid/report` | ts | `bricks.ts` | brick_reports, brick_versions, bricks, draws, formations, notions, public, resource_chunks, resources | — |
+| [x] | `bricks.correct` | PATCH | `/api/v1/bricks/:bid` | ts | `bricks.ts` | brick_reports, brick_versions, bricks, draws, formations, notions, public, resource_chunks, resources | — |
+| [x] | `bricks.report` | POST | `/api/v1/bricks/:bid/report` | ts | `bricks.ts` | brick_reports, brick_versions, bricks, draws, formations, notions, public, resource_chunks, resources | — |
 | [ ] | `exam.answers.save` | PUT | `/api/v1/mock-exams/:aid/answers/:pos` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
 | [ ] | `exam.attempts.create` | POST | `/api/v1/formations/:fid/mock-exams/attempts` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
 | [ ] | `exam.attempts.get` | GET | `/api/v1/mock-exams/:aid` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
@@ -117,17 +117,61 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 | [ ] | `exercises.saveDraft` | PUT | `/api/v1/exercises/:aid/draft` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
 | [ ] | `exercises.start` | POST | `/api/v1/modules/:mid/exercises/:aid/attempts` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
 | [ ] | `exercises.submit` | POST | `/api/v1/exercises/:aid/submissions` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [ ] | `offline.pack` | GET | `/api/v1/offline/pack` | ts | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `offline.spec.ts` |
+| [x] | `offline.pack` | GET | `/api/v1/offline/pack` | ts | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `offline.spec.ts` |
 | [ ] | `offline.sync` | POST | `/api/v1/sync/offline-answers` | ts | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `sync-route.test.ts`, `review-automations.spec.ts`, `offline.spec.ts` |
-| [ ] | `quiz.answers.check` | POST | `/api/v1/attempts/:aid/answers/:pos/check` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
-| [ ] | `quiz.answers.save` | PUT | `/api/v1/attempts/:aid/answers/:pos` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
+| [x] | `quiz.answers.check` | POST | `/api/v1/attempts/:aid/answers/:pos/check` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
+| [x] | `quiz.answers.save` | PUT | `/api/v1/attempts/:aid/answers/:pos` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [ ] | `quiz.attempts.create` | POST | `/api/v1/modules/:mid/quiz/attempts` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
-| [ ] | `quiz.attempts.get` | GET | `/api/v1/attempts/:aid` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
+| [x] | `quiz.attempts.get` | GET | `/api/v1/attempts/:aid` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [ ] | `quiz.attempts.result` | GET | `/api/v1/attempts/:aid/result` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
 | [ ] | `quiz.attempts.submit` | POST | `/api/v1/attempts/:aid/submit` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [ ] | `remediation.complete` | POST | `/api/v1/modules/:mid/remediation/complete` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
 | [ ] | `remediation.get` | GET | `/api/v1/modules/:mid/remediation` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
 | [ ] | `remediation.prepare` | POST | `/api/v1/modules/:mid/remediation` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
+
+## Étape 5 — tranche `assessments` (6 des 26 opérations)
+
+| Opération | Requêtes (`infrastructure/queries.py`) | Cas d'usage | Handler | Tests d'intégration serveur |
+|---|---|---|---|---|
+| `bricks.report` | `lock_brick`, `read_open_report`, `read_brick_version_id`, `insert_brick_report`, `mark_brick_reported` | `application/bricks.report_brick` | `handlers/assessments.py` | `test_assessments_bricks.py` |
+| `bricks.correct` | `lock_brick`, `insert_brick_version`, `update_brick_current_version`, `resolve_open_reports`, `resolve_*` | `application/bricks.correct_brick` | idem | `test_assessments_bricks.py` |
+| `offline.pack` | `read_offline_profile`, `read_offline_formations`, `read_brick_payloads`, `read_offline_extra_cards` | `application/offline.build_pack` | idem | `test_assessments_offline.py` |
+| `quiz.attempts.get` | `read_quiz_attempt`, `read_quiz_answers` | `application/quiz.get_attempt` | idem | `test_assessments_quiz_check.py` |
+| `quiz.answers.save` | `lock_quiz_answer`, `read_quiz_attempt`, `read_quiz_answer`, `update_quiz_answer_draft` | `application/quiz.save_draft` | idem | `test_assessments_quiz_check.py` |
+| `quiz.answers.check` | `lock_quiz_answer`, `read_quiz_attempt`, `read_quiz_answer`, `update_quiz_answer_open_checked`, `update_quiz_answer_checked` | `application/quiz.check_answer` | idem | `test_assessments_quiz_check.py` |
+
+Conventions respectées : SQL copié du TypeScript (mêmes colonnes, `order by`, `for update`,
+verrou consultatif `quiz-answer:<tentative>:<position>` et listes d'identifiants en `uuid[]`),
+un cas d'usage par fonction de service, mêmes codes `AppError`, textes de `locale_fr` copiés au
+mot près, ports explicites, handlers sans logique. Le domaine de briques reste la seule autorité
+de validation, de correction et de projection publique ; aucune règle n'est dupliquée.
+
+Le resolveur de références (`infrastructure/references.py`) filtre explicitement sur l'apprenant
+et la formation en plus de RLS (BR-BRI-05) : aucune notion, chunk, ressource ni brique d'autrui
+n'est découvrable par un message de validation.
+
+### Tests
+
+| Fichier | Cas | Couverture |
+|---|---|---|
+| `tests/integration/assessments/test_assessments_bricks.py` | 7 | signalement et exclusion des tirages, rejeu du signalement, correction et résolution des signalements, correction invalide sans effet, version périmée en conflit, brique retirée, isolation RLS |
+| `tests/integration/assessments/test_assessments_offline.py` | 5 | paquet vide, charge complète des cartes de rappel, plafond de trois formations, formation terminée exclue, isolation RLS |
+| `tests/integration/assessments/test_assessments_quiz_check.py` | 10 | modèle de lecture sans correction, brouillon non noté, bonne et mauvaise réponse, rejeu de la correction, question ouverte en attente du tuteur, réponse vide ou option inconnue, tentative close, isolation RLS |
+
+Total de la suite Python après la tranche : **1377 tests**, dont 22 ajoutés.
+
+### Dettes consignées (reprises par leur spec propriétaire)
+
+- Les 20 opérations restantes du contexte (`quiz.attempts.create`, `quiz.attempts.submit`,
+  `quiz.attempts.result`, les 8 `exam.*`, les 5 `exercises.*`, les 3 `remediation.*`,
+  `offline.sync`) restent `ts` : elles sont relayées à Hono et ne sont donc pas servies par
+  Python. Leur portage est la suite de cette spec.
+- `offline.pack` n'émet ni notification (`engagement`, SPEC-2205) ni demande de génération de
+  variantes (`requestRefill`, SPEC-513) : le TypeScript n'en émet pas non plus sur ce chemin et le
+  DTO reste identique.
+- `quiz.answers.check` écrit la correction par le code comme le TypeScript ; la correction par le
+  tuteur d'une question ouverte relève du contexte `engagement` (SPEC-2205) et n'est pas portée :
+  la question reste `pending`, exactement comme côté TypeScript.
 
 ## Modules d’implémentation source
 

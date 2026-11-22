@@ -62,3 +62,41 @@ Python, sans scénario de parité. Leurs écritures sont prouvées par les tests
 - Les écritures (`formations.maintenance`, `slots.move`, `formations.replan`) sont couvertes par
   les tests d'intégration serveur (`packages-py/learny/tests/integration/learning/`) : statuts,
   version de contenu, idempotence des événements et effets de bord en base.
+
+## Contexte `assessments` (tranche livrée)
+
+Même méthode, exécutée après la bascule de `offline.pack` : base remise à zéro sous `flock`,
+Hono sur `:3112` avec `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`, `EMAIL_MODE=memory`, puis façade sur `:3101`
+(`PY_HONO_UPSTREAM_URL=http://127.0.0.1:3112`).
+
+```
+$ pnpm parity:record --target http://127.0.0.1:3112 --group assessments
+Recorded 1 scenarios against http://127.0.0.1:3112
+
+$ pnpm parity:check --target http://127.0.0.1:3101 --group assessments
+Parity OK: 1 scenarios replay identically against http://127.0.0.1:3101.
+```
+
+| Scénario | Opération | Propriétaire | Ce qui est comparé |
+|---|---|---|---|
+| `offline.pack` | GET `/api/v1/offline/pack` | `py` | paquet vide d'un compte neuf : `ownerId`, `localDate`, `generatedAt`, `expiresAt`, `formations: []` |
+
+`offline.pack` est la seule lecture du contexte sans paramètre de chemin : l'outil ne génère un
+scénario que pour celles-là. Les autres opérations `py` de la tranche portent un paramètre de
+chemin (`bricks.correct`, `bricks.report`, `quiz.attempts.get`, `quiz.answers.save`,
+`quiz.answers.check`) ou sont des mutations : leur comportement est prouvé par les tests
+d'intégration serveur (`packages-py/learny/tests/integration/assessments/`), pas par la parité.
+
+Aucune divergence n'a été constatée sur la tranche : l'oracle `assessments` est enregistré dans
+`api/oracles/recordings/reads.json` et les 71 scénarios des autres contextes sont inchangés
+(24 lignes ajoutées, aucune modifiée).
+
+### Dettes de la tranche (reprises par leur spec propriétaire)
+
+- `offline.sync` reste `ts` : la synchronisation hors ligne dépend du journal de révision et du
+  service `apply-result` côté worker ; elle est relayée à Hono et n'est donc pas encore servie par
+  Python. Le DTO n'est pas modifié.
+- `offline.pack` ne déclenche aucune demande de génération de variantes (`requestRefill`,
+  SPEC-513) ni notification (`engagement`, SPEC-2205) : ces services n'existent pas encore et le
+  TypeScript n'en émet pas non plus sur ce chemin. Rien n'est inventé.

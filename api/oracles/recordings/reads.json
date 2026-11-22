@@ -5421,6 +5421,30 @@
           ]
         }
       ]
+    },
+    {
+      "group": "assessments",
+      "scenarios": [
+        {
+          "name": "offline.pack",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "expiresAt": "<timestamp>",
+                "formations": [],
+                "generatedAt": "<timestamp>",
+                "localDate": "2026-11-11",
+                "ownerId": "<uuid>"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
