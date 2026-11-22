@@ -65,3 +65,27 @@ async def bricks_report(call: Call) -> Any:
 @handler("offline.pack")
 async def offline_pack(call: Call) -> Any:
     return await assessments.build_pack(call.deps, _actor(call))
+
+
+# --- quiz attempts -------------------------------------------------------------------------------
+
+
+@handler("quiz.attempts.get")
+async def quiz_attempts_get(call: Call) -> Any:
+    return await assessments.get_attempt(call.deps, _actor(call), _params(call)["aid"])
+
+
+@handler("quiz.answers.save")
+async def quiz_answers_save(call: Call) -> Any:
+    params = _params(call)
+    return await assessments.save_draft(
+        call.deps, _actor(call), params["aid"], int(params["pos"]), _body(call)
+    )
+
+
+@handler("quiz.answers.check")
+async def quiz_answers_check(call: Call) -> Any:
+    params = _params(call)
+    return await assessments.check_answer(
+        call.deps, _actor(call), params["aid"], int(params["pos"]), _body(call)
+    )

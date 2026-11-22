@@ -420,9 +420,7 @@ async def read_brick_payloads(tx: Tx, version_ids: Sequence[str]) -> dict[str, A
     """ET-5 - the full payload of every version of the session, correct answers included."""
     if not version_ids:
         return {}
-    result = await tx.conn.execute(
-        READ_BRICK_PAYLOADS, {"ids": list(dict.fromkeys(version_ids))}
-    )
+    result = await tx.conn.execute(READ_BRICK_PAYLOADS, {"ids": list(dict.fromkeys(version_ids))})
     return {str(row["id"]): row["payload"] for row in result.mappings().all()}
 
 
@@ -435,3 +433,190 @@ async def read_offline_extra_cards(
         {"user_id": user_id, "formation_id": formation_id, "start": start, "end": end},
     )
     return [row_of(row) for row in result.mappings().all()]
+
+
+# --------------------------------------------------------------------------------------------------
+# quiz.attempts.get / quiz.answers.save / quiz.answers.check
+# (packages/services/src/quiz/check.ts, SPEC-611 EF-1 to EF-7)
+# --------------------------------------------------------------------------------------------------
+
+READ_QUIZ_ATTEMPT = text(
+    """
+    select at.id::text as id,
+           at.activity_id::text as activity_id,
+           at.attempt_no,
+           at.status::text as status,
+           at.started_at,
+           at.submitted_at,
+           at.score::text as score,
+           at.passed,
+           at.per_notion,
+           act.module_id::text as module_id,
+           act.formation_id::text as formation_id,
+           act.config,
+           act.items
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.id = cast(:attempt_id as uuid)
+       and at.user_id = cast(:user_id as uuid)
+       and act.kind in ('validation_quiz', 'remediation')
+     limit 1
+    """
+)
+
+READ_QUIZ_ANSWERS = text(
+    """
+    select id::text as id,
+           position,
+           brick_version_id::text as brick_version_id,
+           response,
+           is_correct,
+           score::text as score,
+           max_score::text as max_score,
+           time_ms,
+           graded_by::text as graded_by,
+           feedback,
+           chosen_distractor_notion_id::text as chosen_distractor_notion_id
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid)
+     order by position asc
+    """
+)
+
+READ_QUIZ_ANSWER = text(
+    """
+    select id::text as id,
+           position,
+           brick_version_id::text as brick_version_id,
+           response,
+           is_correct,
+           score::text as score,
+           max_score::text as max_score,
+           time_ms,
+           graded_by::text as graded_by,
+           feedback,
+           chosen_distractor_notion_id::text as chosen_distractor_notion_id
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid) and position = :position
+     limit 1
+    """
+)
+
+LOCK_QUIZ_ANSWER = text("select pg_advisory_xact_lock(hashtextextended(cast(:key as text), 0))")
+
+UPDATE_QUIZ_ANSWER_DRAFT = text(
+    """
+    update public.answers
+       set response = cast(:response as jsonb),
+           time_ms = :time_ms,
+           answered_at = cast(:now as timestamptz)
+     where id = cast(:answer_id as uuid)
+    """
+)
+
+UPDATE_QUIZ_ANSWER_OPEN_CHECKED = text(
+    """
+    update public.answers
+       set response = cast(:response as jsonb),
+           time_ms = :time_ms,
+           answered_at = cast(:now as timestamptz),
+           max_score = :max_score,
+           feedback = '{"checked": true}'::jsonb
+     where id = cast(:answer_id as uuid)
+    """
+)
+
+UPDATE_QUIZ_ANSWER_CHECKED = text(
+    """
+    update public.answers
+       set response = cast(:response as jsonb),
+           is_correct = :is_correct,
+           score = :score,
+           max_score = :max_score,
+           time_ms = :time_ms,
+           graded_by = 'code',
+           feedback = cast(:feedback as jsonb),
+           chosen_distractor_notion_id = cast(:chosen_distractor_notion_id as uuid),
+           answered_at = cast(:now as timestamptz)
+     where id = cast(:answer_id as uuid)
+    """
+)
+
+
+async def read_quiz_attempt(tx: Tx, user_id: str, attempt_id: str) -> Mapping[str, Any] | None:
+    """`readAttemptRow`: the attempt of this learner and its activity, or nothing (404)."""
+    result = await tx.conn.execute(READ_QUIZ_ATTEMPT, {"user_id": user_id, "attempt_id": attempt_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_quiz_answers(tx: Tx, attempt_id: str) -> list[Mapping[str, Any]]:
+    """`readAnswers`: every answer of the attempt, in position order."""
+    result = await tx.conn.execute(READ_QUIZ_ANSWERS, {"attempt_id": attempt_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_quiz_answer(tx: Tx, attempt_id: str, position: int) -> Mapping[str, Any] | None:
+    """`readAnswer`: the answer stored at one position of the attempt."""
+    result = await tx.conn.execute(READ_QUIZ_ANSWER, {"attempt_id": attempt_id, "position": position})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def lock_quiz_answer(tx: Tx, attempt_id: str, position: int) -> None:
+    """`pg_advisory_xact_lock(hashtextextended('quiz-answer:<id>:<pos>', 0))` of the service."""
+    await tx.conn.execute(LOCK_QUIZ_ANSWER, {"key": f"quiz-answer:{attempt_id}:{position}"})
+
+
+async def update_quiz_answer_draft(tx: Tx, *, answer_id: str, response: str, time_ms: int, now: str) -> None:
+    """`saveDraft`: stores the draft response and its elapsed time."""
+    await tx.conn.execute(
+        UPDATE_QUIZ_ANSWER_DRAFT,
+        {"answer_id": answer_id, "response": response, "time_ms": time_ms, "now": now},
+    )
+
+
+async def update_quiz_answer_open_checked(
+    tx: Tx, *, answer_id: str, response: str, time_ms: int, max_score: float, now: str
+) -> None:
+    """`checkAnswer` on an open question: recorded, waiting for the tutor."""
+    await tx.conn.execute(
+        UPDATE_QUIZ_ANSWER_OPEN_CHECKED,
+        {
+            "answer_id": answer_id,
+            "response": response,
+            "time_ms": time_ms,
+            "max_score": max_score,
+            "now": now,
+        },
+    )
+
+
+async def update_quiz_answer_checked(
+    tx: Tx,
+    *,
+    answer_id: str,
+    response: str,
+    is_correct: bool,
+    score: float,
+    max_score: float,
+    time_ms: int,
+    feedback: str,
+    chosen_distractor_notion_id: str | None,
+    now: str,
+) -> None:
+    """`checkAnswer` on a closed question: code correction and its feedback."""
+    await tx.conn.execute(
+        UPDATE_QUIZ_ANSWER_CHECKED,
+        {
+            "answer_id": answer_id,
+            "response": response,
+            "is_correct": is_correct,
+            "score": score,
+            "max_score": max_score,
+            "time_ms": time_ms,
+            "feedback": feedback,
+            "chosen_distractor_notion_id": chosen_distractor_notion_id,
+            "now": now,
+        },
+    )

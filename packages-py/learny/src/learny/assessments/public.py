@@ -10,12 +10,16 @@ from learny.assessments.application.ports import (
     ClockPort,
     Transactions,
 )
+from learny.assessments.application.quiz import check_answer, get_attempt, save_draft
 
 __all__ = [
     "AssessmentDeps",
     "ClockPort",
     "Transactions",
     "build_pack",
+    "check_answer",
     "correct_brick",
+    "get_attempt",
     "report_brick",
+    "save_draft",
 ]

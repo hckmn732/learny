@@ -190,10 +190,10 @@ operations:
   'programme.validate': py
   'pushSubscriptions.delete': ts
   'pushSubscriptions.upsert': ts
-  'quiz.answers.check': ts
-  'quiz.answers.save': ts
+  'quiz.answers.check': py
+  'quiz.answers.save': py
   'quiz.attempts.create': ts
-  'quiz.attempts.get': ts
+  'quiz.attempts.get': py
   'quiz.attempts.result': ts
   'quiz.attempts.submit': ts
   'remediation.complete': ts
