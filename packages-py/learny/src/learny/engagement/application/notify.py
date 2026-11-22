@@ -471,6 +471,7 @@ async def _record_push_delivery(
                 status=status,
                 scheduled_for=None,
                 error=error,
+                sent_at=sent_at,
             )
         if existing.status == "sent":
             return existing
