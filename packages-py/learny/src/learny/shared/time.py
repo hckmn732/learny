@@ -166,3 +166,47 @@ def local_time_to_shifted_instant(day: str, time: str, time_zone: str) -> int:
         if shifted:
             return shifted[0]
     return instants_from_wall(wall, time_zone)[0]
+
+
+FRENCH_WEEKDAYS = (
+    "lundi",
+    "mardi",
+    "mercredi",
+    "jeudi",
+    "vendredi",
+    "samedi",
+    "dimanche",
+)
+"""`Intl.DateTimeFormat('fr-FR', {weekday: 'long'})`."""
+
+FRENCH_MONTHS_SHORT = (
+    "janv.",
+    "f\u00e9vr.",
+    "mars",
+    "avr.",
+    "mai",
+    "juin",
+    "juil.",
+    "ao\u00fbt",
+    "sept.",
+    "oct.",
+    "nov.",
+    "d\u00e9c.",
+)
+"""`Intl.DateTimeFormat('fr-FR', {month: 'short'})`."""
+
+
+def format_user_date(instant: datetime, time_zone: str, *, weekday: bool = True) -> str:
+    """French rendering of an instant in the zone, e.g. "jeudi 12 nov., 14:20" (EF-2).
+
+    Port of `formatUserDate` with the options of the retry guard: the zone always comes from the
+    caller, never from the process, and the layout is the one `Intl` produces for `fr-FR`.
+    """
+    milliseconds = to_epoch_ms(instant)
+    local = from_epoch_ms(wall_ms_of(milliseconds, time_zone))
+    day = local.day
+    month = FRENCH_MONTHS_SHORT[local.month - 1]
+    clock = f"{local.hour:02d}:{local.minute:02d}"
+    if not weekday:
+        return f"{day} {month}, {clock}"
+    return f"{FRENCH_WEEKDAYS[local.weekday()]} {day} {month}, {clock}"

@@ -75,6 +75,11 @@ async def quiz_attempts_get(call: Call) -> Any:
     return await assessments.get_attempt(call.deps, _actor(call), _params(call)["aid"])
 
 
+@handler("quiz.attempts.result")
+async def quiz_attempts_result(call: Call) -> Any:
+    return await assessments.get_quiz_result(call.deps, _actor(call), _params(call)["aid"])
+
+
 @handler("quiz.answers.save")
 async def quiz_answers_save(call: Call) -> Any:
     params = _params(call)

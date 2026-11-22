@@ -93,3 +93,37 @@ EXAM_PLAN_DIAGNOSTIC = (
     "Les modules diagnostiques seront travaill\u00e9s dans l\u2019ordre du programme, "
     "sans p\u00e9naliser {label}."
 )
+
+# --- retry gate of a validation attempt (packages/services/src/quiz/retry-guard.ts) ---------------
+
+RETRY_REMEDIATION_DETAIL = "Terminez d\u2019abord la rem\u00e9diation cibl\u00e9e."
+RETRY_AVAILABLE_AT = "Nouvelle tentative possible {label}."
+RETRY_NOT_AVAILABLE = "La nouvelle tentative n\u2019est pas encore disponible."
+
+# --- result of a validation attempt (packages/services/src/quiz/result.ts) ------------------------
+
+RESULT_GAP_DEFAULT_LABEL = "Lacune"
+RESULT_EVIDENCE_CONFUSION = "Confondue avec une autre notion dans vos r\u00e9ponses."
+RESULT_EVIDENCE_MISUNDERSTANDING = "R\u00e9ponses incompl\u00e8tes ou \u00e0 c\u00f4t\u00e9 du sujet."
+RESULT_EVIDENCE_APPLICATION = "D\u00e9finition juste, mais l\u2019exercice n\u2019a pas abouti."
+RESULT_EVIDENCE_FORGETTING = "Notion oubli\u00e9e depuis la derni\u00e8re r\u00e9vision."
+RESULT_DEFAULT_NOTION_LABEL = "Notion"
+
+GAP_NATURE_LABELS = {
+    "confusion": "Confusion",
+    "misunderstanding": "Incompr\u00e9hension",
+    "application": "Difficult\u00e9 d\u2019application",
+    "forgetting": "Oubli",
+}
+"""GAP_NATURE_LABELS of `packages/config/src/product.ts` (BR-LAC-04)."""
+
+GAP_PROPOSALS = {
+    "confusion": "une question qui oppose les deux notions.",
+    "misunderstanding": "une nouvelle explication, sous un autre angle.",
+    "application": "un exercice pratique.",
+    "forgetting": "une r\u00e9vision dans le quiz global.",
+}
+"""GAP_PROPOSALS of `packages/config/src/product.ts` (BR-LAC-04)."""
+
+REMEDIATION_MAX_GAPS = 3
+"""REMEDIATION_RULES.maxGaps (ADR-0173)."""

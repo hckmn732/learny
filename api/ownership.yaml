@@ -194,7 +194,7 @@ operations:
   'quiz.answers.save': py
   'quiz.attempts.create': ts
   'quiz.attempts.get': py
-  'quiz.attempts.result': ts
+  'quiz.attempts.result': py
   'quiz.attempts.submit': ts
   'remediation.complete': ts
   'remediation.get': ts

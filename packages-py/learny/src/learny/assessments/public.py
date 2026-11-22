@@ -23,6 +23,7 @@ from learny.assessments.application.ports import (
     Transactions,
 )
 from learny.assessments.application.quiz import check_answer, get_attempt, save_draft
+from learny.assessments.application.quiz_result import get_quiz_result
 
 __all__ = [
     "AssessmentDeps",
@@ -37,6 +38,7 @@ __all__ = [
     "get_exam_attempt",
     "get_exam_intro",
     "get_exam_result",
+    "get_quiz_result",
     "mark_exam_question",
     "report_brick",
     "save_draft",
