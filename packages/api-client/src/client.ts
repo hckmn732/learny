@@ -175,10 +175,22 @@ async function toAppError(response: Response): Promise<AppError> {
 // SPEC-201: client built on the route contracts.
 
 /** Error of a call through `callApi`: HTTP status, business code, request reference (EF-9). */
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging -- the interface below only narrows a member inherited from AppError, it adds nothing. */
 export class ApiError extends AppError {
   override readonly name = 'ApiError';
-  declare readonly status: number;
 }
+
+/**
+ * The HTTP status is carried by the `AppError` this class extends; the interface only narrows its
+ * type (declaration merging). It used to be a `declare` class field, which React Native's Babel
+ * pipeline rejects: `babel-preset-expo` strips Flow types before TypeScript ones, and Flow refuses
+ * `declare` inside a class body. ADR-3005 § 3 requires every shared client package to stay
+ * executable under React Native (SPEC-3001 ET-2).
+ */
+export interface ApiError {
+  readonly status: number;
+}
+/* eslint-enable @typescript-eslint/no-unsafe-declaration-merging */
 
 export interface CallOptions {
   /** Reused as is when given; otherwise generated once per call for an idempotent route. */
