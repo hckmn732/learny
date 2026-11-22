@@ -78,8 +78,21 @@ async def test_the_origin_demonstration_refuses_a_foreign_mutation(app: tuple[An
     assert body["detail"] == ORIGIN_REJECTED
 
 
-async def test_the_purge_removes_the_expired_rows_and_keeps_the_recent(app: tuple[Any, Any]) -> None:
+async def test_the_purge_removes_the_expired_rows_and_keeps_the_recent(
+    app: tuple[Any, Any], database: Database
+) -> None:
     _app, client = app
+    # the demonstration writes its expired idempotency rows for the first profile of the base.
+    async with database.service_tx() as tx:
+        await tx.conn.execute(
+            text(
+                "insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, "
+                "raw_app_meta_data, created_at, updated_at) values "
+                "(gen_random_uuid(), '00000000-0000-0000-0000-000000000000', 'authenticated', "
+                "'authenticated', 'dev-purge-' || left(gen_random_uuid()::text, 8) || "
+                "'@test.learny.test', '{}'::jsonb, '{}'::jsonb, now(), now())"
+            )
+        )
     response = client.post("/api/v1/dev/sdd/rate-limit/purge")
 
     assert response.status_code == 200

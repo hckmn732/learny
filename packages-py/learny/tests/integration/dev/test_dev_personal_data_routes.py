@@ -150,6 +150,12 @@ async def test_the_export_runs_the_real_job_on_the_demo_programme(
 
     assert response.status_code == 200
     body = response.json()
+    # the row is real: remove it so the purge test of SPEC-211 keeps its global count.
+    async with database.service_tx() as tx:
+        await tx.conn.execute(
+            text("delete from public.data_exports where id = cast(:id as uuid)"),
+            {"id": body["export"]["id"]},
+        )
     assert body["export"]["status"] == "done"
     assert body["export"]["sizeBytes"] > 0
     assert body["tree"]
