@@ -196,6 +196,22 @@ FRENCH_MONTHS_SHORT = (
 )
 """`Intl.DateTimeFormat('fr-FR', {month: 'short'})`."""
 
+FRENCH_MONTHS_LONG = (
+    "janvier",
+    "f\u00e9vrier",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "ao\u00fbt",
+    "septembre",
+    "octobre",
+    "novembre",
+    "d\u00e9cembre",
+)
+"""`Intl.DateTimeFormat('fr-FR', {month: 'long'})`."""
+
 
 def format_user_date(instant: datetime, time_zone: str, *, weekday: bool = True) -> str:
     """French rendering of an instant in the zone, e.g. "jeudi 12 nov., 14:20" (EF-2).

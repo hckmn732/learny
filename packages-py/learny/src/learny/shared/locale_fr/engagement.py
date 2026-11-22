@@ -159,6 +159,9 @@ DELIVERY_EMAIL_REJECTED = "L’adresse e-mail est refusée."
 DELIVERY_PUSH_TOO_LARGE = "Notification push trop volumineuse."
 DELIVERY_PUSH_INVALID = "Notification push invalide."
 DIGEST_HELD_OTHERS = "{planned} et {count} autres dans l’agenda"
+DIGEST_MINUTES = "{minutes} min"
+DIGEST_HOURS = "{hours} h"
+DIGEST_HOURS_MINUTES = "{hours} h {minutes}"
 DIGEST_SLOT_LABELS: dict[str, str] = {
     "contributions": "Contributions",
     "course": "Cours",
@@ -211,3 +214,19 @@ PUSH_NOT_CONFIGURED = "Le canal push n’est pas configuré (clés VAPID absente
 # packages/notifications/src/templates/index.ts — the truncation mark of a clamped text.
 NOTIFICATION_ELLIPSIS = "…"
 NOTIFICATION_WHEN_SHORT = "bientôt"
+
+# packages/notifications/src/producers/{index,reminders}.ts (SPEC-706, BR-NOT-07).
+REMINDER_INVALID = "Rappel invalide."
+REMINDER_SLOT_MOVED = "Le cr\u00e9neau a \u00e9t\u00e9 d\u00e9plac\u00e9."
+REMINDER_PROFILE_NOT_FOUND = "Profil introuvable."
+TIMEZONE_INVALID = "Fuseau horaire IANA invalide."
+REMINDER_TODAY = "aujourd\u2019hui \u00e0 {time}"
+REMINDER_TOMORROW = "demain \u00e0 {time}"
+REMINDER_OTHER = "le {date}"
+
+# packages/services/src/exercises/ensure-practice-exercise.ts (SPEC-613 ET-4).
+PRACTICE_NOTION_INVALID = "Identifiant de notion invalide."
+PRACTICE_NOTION_NOT_FOUND = "Notion introuvable."
+PRACTICE_BRICK_NOT_CREATED = "Brique non cr\u00e9\u00e9e."
+PRACTICE_VERSION_NOT_CREATED = "Version non cr\u00e9\u00e9e."
+PRACTICE_ACTIVITY_NOT_CREATED = "Activit\u00e9 non cr\u00e9\u00e9e."

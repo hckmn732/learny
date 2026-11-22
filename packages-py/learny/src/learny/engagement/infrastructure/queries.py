@@ -1140,3 +1140,468 @@ async def update_automation_action_effect(
         },
     )
     return _automation_action(result.mappings().one())
+
+
+# --- job use cases (SPEC-2205): daily digest, reminders and practice exercises ---------------------
+#
+# The SQL below is copied from `packages/notifications/src/digest.ts`,
+# `packages/notifications/src/producers/reminders.ts`, `packages/jobs/src/tick.ts` and
+# `packages/services/src/exercises/ensure-practice-exercise.ts`, with `${x}` turned into a bound
+# `:x` parameter.
+
+SELECT_TICK_USERS = text(
+    "select id::text as user_id, timezone from public.profiles "
+    "where onboarding_step in ('rappels', 'depart', 'done') "
+    "and (deletion_scheduled_for is null or deletion_scheduled_for > cast(:tick as timestamptz)) "
+    "and (cast(:after as uuid) is null or id > cast(:after as uuid)) "
+    "order by id asc limit :limit"
+)
+
+SELECT_DIGEST_SLOTS = text(
+    "select s.kind::text as kind, s.title, s.meta, s.starts_at, s.ends_at, "
+    "f.title as formation_title "
+    "from public.schedule_slots s "
+    "join public.formations f on f.id = s.formation_id "
+    "where s.user_id = cast(:user_id as uuid) "
+    "and s.status in ('planned', 'done') "
+    "and s.starts_at < cast(:day_end as timestamptz) "
+    "and s.ends_at >= cast(:day_start as timestamptz) "
+    "order by s.starts_at asc"
+)
+
+SELECT_CAPPED_NOTIFICATIONS = text(
+    "select distinct n.id::text as id, n.title, n.created_at "
+    "from public.notification_deliveries d "
+    "join public.notifications n on n.id = d.notification_id "
+    "where n.user_id = cast(:user_id as uuid) "
+    "and d.status = 'capped' "
+    "and n.created_at >= cast(:day_start as timestamptz) "
+    "and n.created_at < cast(:day_end as timestamptz) "
+    "order by n.created_at asc"
+)
+
+SELECT_PRACTICE_NOTION = text(
+    "select n.id::text as id, n.label, n.short_definition, n.module_id::text as module_id, "
+    "n.formation_id::text as formation_id, m.position as module_position "
+    "from public.notions n "
+    "join public.modules m on m.id = n.module_id "
+    "where n.id = cast(:notion_id as uuid)"
+)
+
+SELECT_COURSE_VERSION = text(
+    "select coalesce(max(version), 0)::int as version from public.courses "
+    "where owner_id = cast(:user_id as uuid) "
+    "and module_id = cast(:module_id as uuid) "
+    "and status = 'ready'"
+)
+
+SELECT_EXISTING_EXERCISE = text(
+    "select id::text as id from public.activities "
+    "where owner_id = cast(:user_id as uuid) "
+    "and kind = 'exercise' "
+    "and status in ('draft', 'ready') "
+    "and config->>'notionId' = :notion_id "
+    "and coalesce((config->>'courseVersion')::int, 0) = :course_version "
+    "order by created_at asc limit 1"
+)
+
+PRACTICE_LOCK = text("select pg_advisory_xact_lock(hashtextextended(cast(:key as text), 0))")
+
+INSERT_PRACTICE_BRICK = text(
+    "insert into public.bricks "
+    "(owner_id, formation_id, type, notion_ids, purpose, status, current_version, created_at) "
+    "values (cast(:user_id as uuid), cast(:formation_id as uuid), 'instruction', "
+    "cast(:notion_ids as uuid[]), 'exercise', 'active', 1, cast(:created_at as timestamptz)) "
+    "returning id::text as id"
+)
+
+INSERT_PRACTICE_BRICK_VERSION = text(
+    "insert into public.brick_versions "
+    "(brick_id, version, payload, fingerprint, origin, created_by, created_at) "
+    "values (cast(:brick_id as uuid), 1, cast(:payload as jsonb), null, 'tutor', 'tutor', "
+    "cast(:created_at as timestamptz)) "
+    "returning id::text as id"
+)
+
+INSERT_PRACTICE_ACTIVITY = text(
+    "insert into public.activities "
+    "(owner_id, formation_id, module_id, kind, config, items, status, created_at) "
+    "values (cast(:user_id as uuid), cast(:formation_id as uuid), cast(:module_id as uuid), "
+    "'exercise', cast(:config as jsonb), cast(:items as jsonb), 'ready', "
+    "cast(:created_at as timestamptz)) "
+    "returning id::text as id"
+)
+
+SELECT_PROFILE_TIMEZONE = text(
+    "select timezone from public.profiles where id = cast(:user_id as uuid) limit 1"
+)
+
+SELECT_SLOT_START = text(
+    "select starts_at from public.schedule_slots "
+    "where id = cast(:slot_id as uuid) and user_id = cast(:user_id as uuid) limit 1"
+)
+
+LIST_OTHER_REMINDERS = text(
+    "select id::text as id, dedupe_key from public.notifications "
+    "where user_id = cast(:user_id as uuid) "
+    "and type = 'validation_soon' "
+    "and dedupe_key like :pattern "
+    "and dedupe_key <> :current_key"
+)
+
+HAS_SENT_DELIVERY = text(
+    "select id::text as id from public.notification_deliveries "
+    "where notification_id = cast(:notification_id as uuid) and status = 'sent' limit 1"
+)
+
+DELETE_NOTIFICATION = text(
+    "delete from public.notifications "
+    "where id = cast(:notification_id as uuid) and user_id = cast(:user_id as uuid)"
+)
+
+LIST_UPCOMING_REMINDER_SLOTS = text(
+    "select s.id::text as id, s.user_id::text as user_id, s.formation_id::text as formation_id, "
+    "s.module_id::text as module_id, s.title, m.title as module_title, s.starts_at "
+    "from public.schedule_slots s "
+    "left join public.modules m on m.id = s.module_id "
+    "where s.kind = 'validation_quiz' "
+    "and s.status = 'planned' "
+    "and s.starts_at >= cast(:window_from as timestamptz) "
+    "and s.starts_at <= cast(:window_to as timestamptz) "
+    "order by s.starts_at asc limit :limit"
+)
+
+LIST_PLANNED_QUIZ_STARTS = text(
+    "select id::text as id, starts_at from public.schedule_slots "
+    "where user_id = cast(:user_id as uuid) "
+    "and kind = 'validation_quiz' and status = 'planned'"
+)
+
+LIST_VALIDATION_REMINDERS = text(
+    "select id::text as id, dedupe_key from public.notifications "
+    "where user_id = cast(:user_id as uuid) and type = 'validation_soon' "
+    "order by created_at asc"
+)
+
+LIST_REMINDER_OWNERS = text(
+    "select distinct user_id::text as user_id from public.notifications "
+    "where type = 'validation_soon' limit :limit"
+)
+
+
+@dataclass(frozen=True, slots=True)
+class TickUser:
+    """One active learner of a tick page."""
+
+    user_id: str
+    timezone: str
+
+
+@dataclass(frozen=True, slots=True)
+class DigestSlot:
+    """One planned or done slot of the local day, with its formation."""
+
+    kind: str
+    title: str
+    meta: str | None
+    starts_at: datetime
+    ends_at: datetime
+    formation_title: str
+
+
+@dataclass(frozen=True, slots=True)
+class CappedNotification:
+    """One distinct notification with no send left on a capped delivery."""
+
+    id: str
+    title: str
+
+
+@dataclass(frozen=True, slots=True)
+class ReminderSlot:
+    """One planned validation quiz of the next hour."""
+
+    id: str
+    user_id: str
+    formation_id: str
+    module_id: str | None
+    title: str
+    module_title: str | None
+    starts_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class PlannedQuizStart:
+    """The start of one planned validation quiz of a learner."""
+
+    id: str
+    starts_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class ReminderRow:
+    """One validation-quiz reminder of a learner."""
+
+    id: str
+    dedupe_key: str | None
+
+
+def _tick_user(row: Any) -> TickUser:
+    return TickUser(user_id=str(row["user_id"]), timezone=str(row["timezone"]))
+
+
+def _digest_slot(row: Any) -> DigestSlot:
+    return DigestSlot(
+        kind=str(row["kind"]),
+        title=str(row["title"]),
+        meta=None if row["meta"] is None else str(row["meta"]),
+        starts_at=row["starts_at"],
+        ends_at=row["ends_at"],
+        formation_title=str(row["formation_title"]),
+    )
+
+
+def _reminder_slot(row: Any) -> ReminderSlot:
+    return ReminderSlot(
+        id=str(row["id"]),
+        user_id=str(row["user_id"]),
+        formation_id=str(row["formation_id"]),
+        module_id=None if row["module_id"] is None else str(row["module_id"]),
+        title=str(row["title"]),
+        module_title=None if row["module_title"] is None else str(row["module_title"]),
+        starts_at=row["starts_at"],
+    )
+
+
+async def select_tick_users(
+    tx: Tx,
+    tick: datetime,
+    after: str | None,
+    limit: int,
+) -> list[TickUser]:
+    """One page of active learners after `after` (excluded), by identifier."""
+    result = await tx.conn.execute(
+        SELECT_TICK_USERS,
+        {"tick": tick, "after": after, "limit": limit},
+    )
+    return [_tick_user(row) for row in result.mappings()]
+
+
+async def list_digest_slots(
+    tx: Tx,
+    *,
+    user_id: str,
+    day_start: datetime,
+    day_end: datetime,
+) -> list[DigestSlot]:
+    """The slots of the local day that overlap it, oldest first."""
+    result = await tx.conn.execute(
+        SELECT_DIGEST_SLOTS,
+        {"user_id": user_id, "day_start": day_start, "day_end": day_end},
+    )
+    return [_digest_slot(row) for row in result.mappings()]
+
+
+async def list_capped_notifications(
+    tx: Tx,
+    *,
+    user_id: str,
+    day_start: datetime,
+    day_end: datetime,
+) -> list[CappedNotification]:
+    """The distinct notifications capped between two instants, oldest first."""
+    result = await tx.conn.execute(
+        SELECT_CAPPED_NOTIFICATIONS,
+        {"user_id": user_id, "day_start": day_start, "day_end": day_end},
+    )
+    return [CappedNotification(id=str(row["id"]), title=str(row["title"])) for row in result.mappings()]
+
+
+async def read_practice_notion(tx: Tx, notion_id: str) -> dict[str, Any] | None:
+    """The notion and its module position, for the exercise fixture."""
+    result = await tx.conn.execute(SELECT_PRACTICE_NOTION, {"notion_id": notion_id})
+    row = result.mappings().first()
+    if row is None:
+        return None
+    return {
+        "id": str(row["id"]),
+        "label": str(row["label"]),
+        "shortDefinition": None if row["short_definition"] is None else str(row["short_definition"]),
+        "moduleId": str(row["module_id"]),
+        "formationId": str(row["formation_id"]),
+        "modulePosition": int(row["module_position"]),
+    }
+
+
+async def current_course_version(tx: Tx, user_id: str, module_id: str) -> int:
+    """The highest ready course version of the module, or zero."""
+    result = await tx.conn.execute(
+        SELECT_COURSE_VERSION,
+        {"user_id": user_id, "module_id": module_id},
+    )
+    row = result.mappings().first()
+    return 0 if row is None else int(row["version"])
+
+
+async def find_existing_exercise(
+    tx: Tx,
+    user_id: str,
+    notion_id: str,
+    course_version: int,
+) -> str | None:
+    """The exercise already created for this `(owner, notion, course version)`."""
+    result = await tx.conn.execute(
+        SELECT_EXISTING_EXERCISE,
+        {"user_id": user_id, "notion_id": notion_id, "course_version": course_version},
+    )
+    row = result.mappings().first()
+    return None if row is None else str(row["id"])
+
+
+async def lock_practice(tx: Tx, key: str) -> None:
+    """ET-4 - two concurrent calls serialise on the notion and the course version."""
+    await tx.conn.execute(PRACTICE_LOCK, {"key": key})
+
+
+async def insert_practice_brick(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    notion_id: str,
+    created_at: datetime,
+) -> str | None:
+    result = await tx.conn.execute(
+        INSERT_PRACTICE_BRICK,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "notion_ids": [notion_id],
+            "created_at": created_at,
+        },
+    )
+    row = result.mappings().first()
+    return None if row is None else str(row["id"])
+
+
+async def insert_practice_brick_version(
+    tx: Tx,
+    *,
+    brick_id: str,
+    payload: str,
+    created_at: datetime,
+) -> str | None:
+    result = await tx.conn.execute(
+        INSERT_PRACTICE_BRICK_VERSION,
+        {"brick_id": brick_id, "payload": payload, "created_at": created_at},
+    )
+    row = result.mappings().first()
+    return None if row is None else str(row["id"])
+
+
+async def insert_practice_activity(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    module_id: str,
+    config: str,
+    items: str,
+    created_at: datetime,
+) -> str | None:
+    result = await tx.conn.execute(
+        INSERT_PRACTICE_ACTIVITY,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "module_id": module_id,
+            "config": config,
+            "items": items,
+            "created_at": created_at,
+        },
+    )
+    row = result.mappings().first()
+    return None if row is None else str(row["id"])
+
+
+async def read_profile_timezone(tx: Tx, user_id: str) -> str | None:
+    result = await tx.conn.execute(SELECT_PROFILE_TIMEZONE, {"user_id": user_id})
+    row = result.mappings().first()
+    return None if row is None else str(row["timezone"])
+
+
+async def read_slot_start(tx: Tx, *, user_id: str, slot_id: str) -> datetime | None:
+    result = await tx.conn.execute(SELECT_SLOT_START, {"user_id": user_id, "slot_id": slot_id})
+    row = result.mappings().first()
+    return None if row is None else row["starts_at"]
+
+
+async def list_other_reminders(
+    tx: Tx,
+    *,
+    user_id: str,
+    slot_id: str,
+    current_key: str,
+) -> list[ReminderRow]:
+    result = await tx.conn.execute(
+        LIST_OTHER_REMINDERS,
+        {
+            "user_id": user_id,
+            "pattern": f"validation_soon:{slot_id}:%",
+            "current_key": current_key,
+        },
+    )
+    return [
+        ReminderRow(
+            id=str(row["id"]),
+            dedupe_key=None if row["dedupe_key"] is None else str(row["dedupe_key"]),
+        )
+        for row in result.mappings()
+    ]
+
+
+async def has_sent_delivery(tx: Tx, notification_id: str) -> bool:
+    result = await tx.conn.execute(HAS_SENT_DELIVERY, {"notification_id": notification_id})
+    return result.mappings().first() is not None
+
+
+async def delete_notification(tx: Tx, *, notification_id: str, user_id: str) -> None:
+    await tx.conn.execute(
+        DELETE_NOTIFICATION,
+        {"notification_id": notification_id, "user_id": user_id},
+    )
+
+
+async def list_upcoming_reminder_slots(
+    tx: Tx,
+    *,
+    window_from: datetime,
+    window_to: datetime,
+    limit: int,
+) -> list[ReminderSlot]:
+    result = await tx.conn.execute(
+        LIST_UPCOMING_REMINDER_SLOTS,
+        {"window_from": window_from, "window_to": window_to, "limit": limit},
+    )
+    return [_reminder_slot(row) for row in result.mappings()]
+
+
+async def list_planned_quiz_starts(tx: Tx, user_id: str) -> list[PlannedQuizStart]:
+    result = await tx.conn.execute(LIST_PLANNED_QUIZ_STARTS, {"user_id": user_id})
+    return [PlannedQuizStart(id=str(row["id"]), starts_at=row["starts_at"]) for row in result.mappings()]
+
+
+async def list_validation_reminders(tx: Tx, user_id: str) -> list[ReminderRow]:
+    result = await tx.conn.execute(LIST_VALIDATION_REMINDERS, {"user_id": user_id})
+    return [
+        ReminderRow(
+            id=str(row["id"]),
+            dedupe_key=None if row["dedupe_key"] is None else str(row["dedupe_key"]),
+        )
+        for row in result.mappings()
+    ]
+
+
+async def list_reminder_owners(tx: Tx, *, limit: int) -> list[str]:
+    result = await tx.conn.execute(LIST_REMINDER_OWNERS, {"limit": limit})
+    return [str(row["user_id"]) for row in result.mappings()]

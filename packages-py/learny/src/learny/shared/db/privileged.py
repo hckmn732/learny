@@ -49,6 +49,12 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the sender reads the recipient address and tone, and the welcome job checks the
         # e-mail channel, on rows the authenticated role may not read for another purpose (EF-6).
         "learny.engagement.application.email": "recipient address and tone of the e-mail channel",
+        # SPEC-2205 - the digest tick reads the agenda and the capped sends of every learner
+        # with the owner role, exactly like the TypeScript `sdb` of the job (SPEC-209).
+        "learny.engagement.application.digest": "hourly tick of the daily digests",
+        # SPEC-2205 - the reminder tick reads and cancels the unsent reminders of every
+        # learner, which the authenticated role of one learner cannot do (BR-NOT-07).
+        "learny.engagement.application.reminders": "hourly tick of the quiz reminders",
         # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
         # authenticated role of one learner may not update (CL-3, SPEC-711).
         "learny.engagement.application.automations": "hourly tick expires the pending actions",
