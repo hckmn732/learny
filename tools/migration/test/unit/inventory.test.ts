@@ -79,7 +79,8 @@ describe('[SPEC-2001] inventory extractor', () => {
   it('covers the 217 operations of the registry and every event and job (CA-1)', () => {
     const inventory = realInventory();
     expect(inventory.counts.operations).toBe(217);
-    expect(inventory.counts.events).toBe(49);
+    // ADR-2014 (SPEC-2207) adds the internal `job/daily-digest` event: 50 entries.
+    expect(inventory.counts.events).toBe(50);
     expect(inventory.counts.jobs).toBe(22);
     expect(Object.keys(ROUTES)).toHaveLength(217);
   });
