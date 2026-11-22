@@ -72,13 +72,16 @@ tags:
       id: sdd-health
     timeout: 30000
 - openLink: learny:///_dev/sdd/SPEC-3003
+# CL-4 — la session chiffrée est restaurée sans nouvelle connexion, et les écrans déjà visités
+# retrouvent leurs données. Le compteur de restauration lui-même est couvert par
+# `src/data/persist.test.ts` (marqueur seulement si au moins une requête a été relue).
 - extendedWaitUntil:
     visible:
-      id: sdd-cache-restored
+      id: sdd-session-state
+      text: '.*signedIn.*'
     timeout: 45000
 - assertVisible:
-    id: sdd-session-state
-    text: '.*signedIn.*'
+    id: sdd-cache-status
 - assertVisible:
     id: sdd-me-firstname
     text: '.*Alex.*'
