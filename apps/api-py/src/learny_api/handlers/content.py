@@ -9,6 +9,7 @@ from typing import Any, cast
 from learny.content import public as content
 from learny.shared.errors import AppError
 
+from learny_api.guards.idempotency import read_idempotency_key
 from learny_api.pipeline import Call, handler
 
 
@@ -35,10 +36,9 @@ def _query(call: Call) -> dict[str, Any]:
     return cast(dict[str, Any], cast(Any, call.query).model_dump())
 
 
-def _request_key(call: Call) -> str | None:
-    """The `Idempotency-Key` header of the route, absent when the client sent none."""
-    value = call.request.headers.get("idempotency-key")
-    return value if value else None
+def _request_key(call: Call) -> str:
+    """The mandatory `Idempotency-Key` header of the upload route (`readIdempotencyKey`, EF-1)."""
+    return read_idempotency_key(call.request.headers.get("idempotency-key"))
 
 
 # --- contributions -------------------------------------------------------------------------------
