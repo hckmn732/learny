@@ -111,8 +111,8 @@ test('conformité visuelle de la bascule @SPEC-2207 @visual', async ({
   await expect(page.getByTestId('spec-2207-consumers')).toContainText('devtools.demo_job');
   await expect(page.getByTestId('spec-2207-consumers')).toContainText('tutor.generate_course');
   await expect(page.getByTestId('spec-2207-crons').locator('li')).toHaveCount(2);
-  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron-hourly-tick');
-  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron-nightly');
+  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/hourly-tick');
+  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/nightly');
   const deferred = page.getByTestId('spec-2207-deferred');
   await expect(deferred.locator('span')).toHaveCount(30);
   await expect(deferred).toContainText('fabriques de');

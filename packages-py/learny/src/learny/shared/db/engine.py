@@ -23,5 +23,9 @@ def create_engine(settings: Settings) -> AsyncEngine:
         max_overflow=0,
         pool_timeout=5,
         pool_recycle=1800,
+        # A local stack resets its database between two test campaigns, and a restarted server
+        # closes every pooled connection: the checkout pings first so the first request of a run
+        # never fails on a dead connection (503) instead of opening a fresh one.
+        pool_pre_ping=True,
         connect_args={"prepare_threshold": None, "connect_timeout": 10},
     )

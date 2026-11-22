@@ -32,11 +32,16 @@ SELECT_RUN = text(
     "select run_id::text as run_id, steps, attempts, finished_at "
     "from public.sdd_demo_runs where run_id = cast(:run_id as uuid)"
 )
+# `selectTickUsers` (packages/jobs/src/tick.ts) with the factory prefix of the demonstration: an
+# active learner only, and never one whose account deletion is scheduled at the tick instant.
 SELECT_TICK_USERS = text(
     """
     select p.id::text as id, p.timezone
     from public.profiles p
-    where p.email like :prefix and p.id::text > :after
+    where p.email like :prefix
+      and p.onboarding_step in ('rappels', 'depart', 'done')
+      and (p.deletion_scheduled_for is null or p.deletion_scheduled_for > cast(:tick as timestamptz))
+      and p.id::text > :after
     order by p.id::text
     limit :limit
     """
@@ -102,7 +107,12 @@ async def tick(call: Call) -> dict[str, Any]:
                 (
                     await tx.conn.execute(
                         SELECT_TICK_USERS,
-                        {"prefix": f"{SDD_203_USER_PREFIX}%", "after": cursor, "limit": PAGE_SIZE},
+                        {
+                            "prefix": f"{SDD_203_USER_PREFIX}%",
+                            "tick": to_iso(tick_at),
+                            "after": cursor,
+                            "limit": PAGE_SIZE,
+                        },
                     )
                 )
                 .mappings()
