@@ -1,7 +1,7 @@
 # Preuves — SPEC-3003 : Client d'API, session sécurisée et cache hors ligne
 
-- Date : 2026-11-22T21:35:22.870Z
-- Commit : 36574a70
+- Date : 2026-11-22T21:42:20.497Z
+- Commit : dd873728
 - Spécification : `specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md`
 
 ## Rapports

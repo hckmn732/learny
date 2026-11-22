@@ -2,7 +2,7 @@
   "spec": "SPEC-3003",
   "platform": "android",
   "transport": "agent",
-  "jobId": "20261122213449-004",
+  "jobId": "20261122214151-006",
   "device": {
     "serial": "emulator-5554",
     "model": "sdk_gphone64_x86_64",
@@ -13,8 +13,8 @@
   "tags": [
     "SPEC-3003"
   ],
-  "startedAt": "2026-11-22T21:34:49.701Z",
-  "finishedAt": "2026-11-22T21:35:22.853Z",
+  "startedAt": "2026-11-22T21:41:51.191Z",
+  "finishedAt": "2026-11-22T21:42:20.478Z",
   "passed": 1,
   "failed": 0,
   "videos": 1,
@@ -30,7 +30,7 @@
         "visual"
       ],
       "status": "passed",
-      "durationSec": 20.029,
+      "durationSec": 17.145,
       "message": null,
       "videos": [],
       "screenshots": [
