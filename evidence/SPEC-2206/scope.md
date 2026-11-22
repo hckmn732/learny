@@ -9,16 +9,16 @@ ci-dessous et consigné dans l'`acceptance.md`.
 
 | Fait | Opération | Méthode | Chemin | Implémentation TS |
 |---|---|---|---|---|
-| [ ] | `billing.checkout` | POST | `/api/v1/billing/checkout` | `services/src/billing/checkout.ts` |
-| [ ] | `billing.portal` | POST | `/api/v1/billing/portal` | `services/src/billing/checkout.ts` |
-| [ ] | `billing.subscription` | GET | `/api/v1/billing/subscription` | `services/src/billing/checkout.ts` |
-| [ ] | `billing.webhook` | POST | `/api/v1/webhooks/stripe` | `services/src/billing/webhook.ts` |
-| [ ] | `me.export.request` | POST | `/api/v1/me/export` | `services/src/personal-data/export.ts` |
-| [ ] | `me.export.read` | GET | `/api/v1/me/exports/:id` | `services/src/personal-data/export.ts` |
-| [ ] | `me.deletion.schedule` | POST | `/api/v1/me/deletion` | `services/src/personal-data/deletion.ts` |
-| [ ] | `me.deletion.cancel` | DELETE | `/api/v1/me/deletion` | `services/src/personal-data/deletion.ts` |
+| [x] | `billing.checkout` | POST | `/api/v1/billing/checkout` | `services/src/billing/checkout.ts` |
+| [x] | `billing.portal` | POST | `/api/v1/billing/portal` | `services/src/billing/checkout.ts` |
+| [x] | `billing.subscription` | GET | `/api/v1/billing/subscription` | `services/src/billing/checkout.ts` |
+| [x] | `billing.webhook` | POST | `/api/v1/webhooks/stripe` | `services/src/billing/webhook.ts` |
+| [x] | `me.export.request` | POST | `/api/v1/me/export` | `services/src/personal-data/export.ts` |
+| [x] | `me.export.read` | GET | `/api/v1/me/exports/:id` | `services/src/personal-data/export.ts` |
+| [x] | `me.deletion.schedule` | POST | `/api/v1/me/deletion` | `services/src/personal-data/deletion.ts` |
+| [x] | `me.deletion.cancel` | DELETE | `/api/v1/me/deletion` | `services/src/personal-data/deletion.ts` |
 
-État de la bascule : 0/8 `py`, 8/8 `ts` au démarrage.
+État de la bascule : **8/8 `py`**, 0/8 `ts` (commit `1c1236bb`, handlers dans le même commit).
 
 ## Cas d'usage appelés par les jobs (portés ici, branchés au worker en SPEC-2207)
 
