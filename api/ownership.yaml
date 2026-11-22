@@ -93,9 +93,9 @@ operations:
   'dev.sdd.spec-512.demo': ts
   'dev.sdd.spec-512.suggest': ts
   'dev.sdd.spec-711.demo': ts
-  'dev.sdd.stripe.session': ts
-  'dev.sddApiCoverage': ts
-  'dev.sddAuthProxy': ts
+  'dev.sdd.stripe.session': py
+  'dev.sddApiCoverage': py
+  'dev.sddAuthProxy': py
   'dev.stripe.checkoutCancel': py
   'dev.stripe.checkoutPay': py
   'dev.stripe.events': py

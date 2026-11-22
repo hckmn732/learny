@@ -151,11 +151,7 @@ async def run_notify(call: Call) -> dict[str, Any]:
             raise AppError("NOT_FOUND", fr.INBOX_NOTIFICATION_NOT_FOUND)
         async with call.deps.db.service_tx() as tx:
             journal = (
-                (
-                    await tx.conn.execute(
-                        SELECT_DELIVERIES, {"notification_id": result["notificationId"]}
-                    )
-                )
+                (await tx.conn.execute(SELECT_DELIVERIES, {"notification_id": result["notificationId"]}))
                 .mappings()
                 .all()
             )
@@ -204,9 +200,7 @@ async def run_notify(call: Call) -> dict[str, Any]:
             {
                 "channel": str(line["channel"]),
                 "status": str(line["status"]),
-                "scheduledFor": None
-                if line["scheduled_for"] is None
-                else to_iso(line["scheduled_for"]),
+                "scheduledFor": None if line["scheduled_for"] is None else to_iso(line["scheduled_for"]),
                 "error": line["error"],
             }
             for line in journal
