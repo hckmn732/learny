@@ -66,7 +66,9 @@ function Row({ testID, label, value, detail, figure = false }: RowProps) {
 // (Jest + jest-expo), la vue animée n'est pas attachée à l'arbre natif au moment où l'effet
 // démarre: le pilote natif lève « Unable to locate attached view in the native tree ». Le pilote JS
 // y produit la même opacité finale, sans dépendre de l'arbre natif (SPEC-3001 EF-2).
-const NATIVE_ANIMATION_DRIVER = process.env.NODE_ENV !== 'test';
+// `JEST_WORKER_ID` n'est défini que dans un worker Jest : `validate.mjs` source `.env.local`, qui
+// pose `NODE_ENV=development`, donc NODE_ENV ne suffit pas à reconnaître l'environnement de test.
+const NATIVE_ANIMATION_DRIVER = process.env.JEST_WORKER_ID === undefined;
 
 /** Page `/_dev/sdd/SPEC-3001`. */
 export function SddSpecPage(props: SddSpecPageProps) {
