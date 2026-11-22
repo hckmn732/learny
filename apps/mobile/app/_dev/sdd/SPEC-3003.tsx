@@ -108,6 +108,11 @@ export default function Spec3003Route() {
         <Text variant="title" testID="sdd-session-status">
           {statusLabel}
         </Text>
+        {/* ASCII state, asserted by the Maestro flow: the accented label above is for humans and
+            Maestro 2.12.1 mangles non-ASCII in its `text` matcher. */}
+        <Text variant="caption" tone="secondary" testID="sdd-session-state">
+          {`état : ${session.status}`}
+        </Text>
 
         <Text variant="rowSubtitle" tone="secondary">
           {t.firstNameLabel}

@@ -6,6 +6,10 @@
 # démonstration `sdd-offline-toggle` (Maestro 2.12.1 ne pilote pas le mode avion, voir
 # `evidence/SPEC-3003/acceptance.md`), puis l'application est tuée et relancée : la session et le
 # cache persisté doivent revenir seuls (CL-4).
+#
+# Les assertions n'utilisent que des `id` et des textes ASCII : Maestro 2.12.1 abîme les
+# caractères accentués de son matcher `text` (« Connecté » arrive en « Connect? »), d'où
+# `sdd-session-state` qui expose l'état technique `signedIn` / `signedOut`.
 appId: fr.learny.app
 name: SPEC-3003 session
 tags:
@@ -20,8 +24,8 @@ tags:
 # CA-1 — connexion du compte de démonstration et lecture de /me avec le Bearer.
 - extendedWaitUntil:
     visible:
-      id: sdd-session-status
-      text: Connecté
+      id: sdd-session-state
+      text: signedIn
     timeout: 45000
 - extendedWaitUntil:
     visible:
@@ -41,7 +45,7 @@ tags:
     id: sdd-offline-toggle
 - assertVisible:
     id: offline-banner
-- assertVisible: Hors ligne · affichage des données enregistrées
+- assertVisible: Hors ligne
 - assertVisible:
     id: sdd-me-firstname
     text: Alex
@@ -55,8 +59,8 @@ tags:
       id: sdd-cache-restored
     timeout: 45000
 - assertVisible:
-    id: sdd-session-status
-    text: Connecté
+    id: sdd-session-state
+    text: signedIn
 - assertVisible:
     id: sdd-me-firstname
     text: Alex

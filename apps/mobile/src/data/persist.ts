@@ -15,7 +15,7 @@ export const QUERY_CACHE_STORAGE_KEY = 'learny.query-cache.v1';
 /** Maximum age of a restored cache: beyond it the screens refetch (EF-4). */
 export const QUERY_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 /** Writes are batched: a burst of queries produces one write (MMKV stays fast). */
-export const QUERY_CACHE_THROTTLE_MS = 1_000;
+export const QUERY_CACHE_THROTTLE_MS = 250;
 
 /** Storage interface expected by the async persister (`@tanstack/query-async-storage-persister`). */
 export interface AsyncKeyValueStore {

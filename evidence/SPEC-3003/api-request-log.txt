@@ -1,0 +1,23 @@
+# SPEC-3003 — CA-1 : requête native observée sur l’API locale
+# Exécuté le 2026-11-22T18:19:53.902Z par apps/mobile/e2e/request-log.mjs
+
+GET http://127.0.0.1:3001/api/v1/me
+statut : 200
+en-têtes envoyés :
+  Accept: application/json
+  Authorization: Bearer eyJhbG…(masqué, 906 caractères)
+  X-Request-Id: 7a9a277e-b330-4150-8f5c-0602283f456c
+  Accept-Language: fr
+  Origin: absent
+  Cookie: absent
+  credentials: omit
+
+prénom renvoyé par /me : Alex
+fuseau renvoyé par /me : Europe/Paris
+
+# Contrôles
+- Bearer présent : oui
+- aucun en-tête Origin : ok
+- aucun cookie : ok
+- X-Request-Id au format UUID v4 : oui
+
