@@ -8,6 +8,7 @@ Sources: `packages/services/src/personal-data/{export,deletion}.ts`,
 EXPORT_LIMIT_MESSAGE = "Vous avez déjà demandé 3 exports aujourd’hui. Réessayez demain."
 EXPORT_EXPIRED_MESSAGE = "Cet export a expiré. Demandez-en un nouveau depuis Paramètres."
 EXPORT_NOT_FOUND = "Export introuvable."
+EXPORT_JOB_MISSING = "export introuvable"
 PROFILE_NOT_FOUND = "Profil introuvable."
 UNAUTHENTICATED = "Vous devez être connecté."
 
@@ -56,3 +57,15 @@ ARCHIVE_PROFILE_MISSING = "profil absent"
 DELETION_SCHEDULED_TEMPLATE = "deletion_scheduled"
 DELETION_COMPLETED_TEMPLATE = "deletion_completed"
 EXPORT_READY_TEMPLATE = "export_ready"
+
+# `data-export.ts` - a job still running after fifteen minutes fails without an e-mail (EF-4).
+EXPORT_TIMEOUT = "Export interrompu après quinze minutes."
+# `deletion.ts` - the answer of the nightly job, and the two states of the Auth user (CL-8).
+AUTH_DELETED = "supprimé"
+AUTH_PRESENT = "présent"
+PROFILE_PATH = "/parametres#profil"
+DELETE_DEFAULT_TIMEZONE = "Europe/Paris"
+
+# `deps.ts` - the storage and Auth providers are not configured or unreachable (CL-8).
+STORAGE_NOT_CONFIGURED = "Stockage indisponible."
+AUTH_UNAVAILABLE = "Auth indisponible."

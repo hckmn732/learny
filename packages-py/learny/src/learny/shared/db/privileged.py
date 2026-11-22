@@ -70,6 +70,13 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.privacy.application.export": "export job row, quota and outbox event",
         # SPEC-2206 - the deletion schedule locks and updates the profile columns (SPEC-211 EF-5).
         "learny.privacy.application.deletion": "deletion schedule of the profile",
+        # SPEC-2206 - the data-export job reads and writes the job row with the owner role, like the
+        # TypeScript `ctx.sdb` of the Inngest function (SPEC-211 EF-1, ET-2).
+        "learny.privacy.application.export_job": "data-export job row and archive finalisation",
+        # SPEC-2206 - the nightly account deletion and the purge act on behalf of a learner who may
+        # already be gone, so they need the owner role (SPEC-211 EF-7, EF-8).
+        "learny.privacy.application.deletion_job": "nightly deletion of due accounts",
+        "learny.privacy.application.purge": "nightly purge of expired exports",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
