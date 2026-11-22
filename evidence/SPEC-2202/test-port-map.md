@@ -136,3 +136,17 @@ services `review` et `warmup`.
 
 Quatre fichiers, 26 cas, tous marqués `pytestmark = pytest.mark.spec("SPEC-2202")`. La suite
 Python passe de 1335 à **1355 tests**. `api/inventory.json` reste à jour (aucune dérive).
+
+## Étape 6 — cas des services d'évaluation portés
+
+Les fonctions de service listées ci-dessus qui restaient sans fichier Python ont désormais un
+fichier d'intégration serveur dédié (la parité ne couvrant que les lectures sans paramètre de
+chemin, ces tests portent les cas de comportement) :
+
+| Fichier TypeScript | Cas portés | Fichier Python |
+|---|---|---|
+| `packages/services/src/mock-exams/format.ts` | 8 cas d'introduction et de confirmation du format (défaut, guide proposé, format stocké prioritaire, confirmation idempotente, deux examens planifiés, dernière tentative, 404) | `tests/integration/assessments/test_assessments_exam_format.py` |
+| `packages/services/src/mock-exams/attempt.ts` | 11 cas de tentative, soumission et résultat (création, reprise, format non confirmé, banque vide, lecture sans correction, soumission unique, expiration paresseuse, échéance, lacunes étudiées, RLS) | `tests/integration/assessments/test_assessments_exam_attempts.py` |
+| `packages/services/src/quiz/start.ts` | 8 cas de création (matérialisation, reprise, module verrouillé, module sans notion, banque vide ou trop petite en `preparing`, portail de nouvelle tentative, RLS) | `tests/integration/assessments/test_assessments_quiz_start.py` |
+| `packages/services/src/quiz/submit.ts` | 7 cas de soumission et de score final (événement, rejeu à identifiant distinct, tentative déjà notée, question non vérifiée, attente de correction ouverte, score calculé, RLS) | `tests/integration/assessments/test_assessments_quiz_submit.py` |
+| `packages/services/src/quiz/result.ts` + `retry-gate.ts` | 6 cas de résultat (score provisoire, lacunes et points manquants, notions maîtrisées et historique, portail lu dans l'action gelée, message de délai dans le fuseau, RLS) | `tests/integration/assessments/test_assessments_quiz_result.py` |

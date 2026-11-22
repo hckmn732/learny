@@ -100,3 +100,47 @@ Aucune divergence n'a été constatée sur la tranche : l'oracle `assessments` e
 - `offline.pack` ne déclenche aucune demande de génération de variantes (`requestRefill`,
   SPEC-513) ni notification (`engagement`, SPEC-2205) : ces services n'existent pas encore et le
   TypeScript n'en émet pas non plus sur ce chemin. Rien n'est inventé.
+
+## Contexte `assessments` (étape 6 — examens blancs et tentatives de quiz)
+
+Même méthode, exécutée après la bascule des neuf opérations de l'étape 6 : base remise à zéro sous
+`flock /tmp/learny-sdd-db.lock`, clés Supabase locales lues par `supabase status -o env`, Hono sur
+`:3112` (`PORT=3112`, `JOBS_MODE=inline`, `EMAIL_MODE=memory`, `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`,
+`LLM_MODE=mock`, `TZ=UTC`), puis façade sur `:3101`
+(`PY_HONO_UPSTREAM_URL=http://127.0.0.1:3112`).
+
+```
+$ pnpm parity:record --target http://127.0.0.1:3112 --group assessments
+Recorded 1 scenarios against http://127.0.0.1:3112
+
+$ git status --short api/oracles/recordings/reads.json
+(vide : l'oracle réenregistré est identique à celui de l'étape 5)
+
+$ pnpm parity:check --target http://127.0.0.1:3101 --group assessments
+Parity OK: 1 scenarios replay identically against http://127.0.0.1:3101.
+```
+
+**Zéro divergence.** L'enregistrement n'a modifié aucune ligne de `api/oracles/recordings/reads.json`
+(les 71 scénarios des autres contextes et le scénario `offline.pack` sont inchangés), et le rejeu
+contre la façade est identique.
+
+`offline.pack` reste la seule lecture du contexte sans paramètre de chemin, donc la seule que l'outil
+génère. Les neuf opérations de l'étape 6 portent un paramètre de chemin
+(`exam.intro`, `exam.format.confirm`, `exam.attempts.*`, `quiz.attempts.*`) ou sont des mutations :
+leur comportement est prouvé par les tests d'intégration serveur
+(`packages-py/learny/tests/integration/assessments/`) — statuts, événements, idempotence, verrous
+consultatif et effets de bord en base.
+
+### Dettes de l'étape 6 (reprises par leur spec propriétaire)
+
+- `quiz.attempts.create` renvoie `preparing` sur une banque épuisée sans demander la génération de
+  variantes (`requestQuizRegeneration`, SPEC-513) : service absent côté Python, DTO identique.
+- La correction des réponses ouvertes (`gradeOpenAnswers`, contexte IA) n'est pas portée ;
+  `finalize_attempt` laisse la tentative `submitted` tant qu'une réponse ouverte reste non corrigée.
+- L'application du résultat d'apprentissage (`applyLearningResult`,
+  `packages/services/src/learning/apply-result.ts`) et le déblocage du module (`module-unlock`)
+  sont déclenchés par les consommateurs d'événements, qui restent `ts` jusqu'à SPEC-2207 : la
+  tentative est écrite `graded` avec son score, son `per_notion` et son verdict, mais aucune notion
+  n'est encore révisée par FSRS côté Python.
+- `exercises.*` (5), `remediation.*` (3) et `offline.sync` restent `ts` : génération d'exercices et
+  de remédiation par le tuteur et journal de révision hors ligne, hors de cette tranche.
