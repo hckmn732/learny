@@ -181,7 +181,7 @@ operations:
   'notifications.readAll': ts
   'notifications.unreadCount': ts
   'notionGraph.get': py
-  'offline.pack': ts
+  'offline.pack': py
   'offline.sync': ts
   'programme.adjust': py
   'programme.generate': py

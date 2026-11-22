@@ -57,3 +57,11 @@ async def bricks_report(call: Call) -> Any:
     if result["created"]:
         return payload
     return _json(payload, 200)
+
+
+# --- offline ------------------------------------------------------------------------------------
+
+
+@handler("offline.pack")
+async def offline_pack(call: Call) -> Any:
+    return await assessments.build_pack(call.deps, _actor(call))

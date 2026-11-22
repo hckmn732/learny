@@ -9,6 +9,7 @@ import json
 from typing import Any
 
 import pytest
+from factories.assessments_deps import assessment_deps
 from factories.db_support import rolled_back
 from factories.identity_support import (
     actor_for,
@@ -17,7 +18,6 @@ from factories.identity_support import (
     create_module,
     create_notion,
     create_user,
-    deps_for,
     one,
 )
 from learny.assessments.application import bricks as brick_service
@@ -101,7 +101,10 @@ async def test_a_report_opens_and_excludes_the_brick_from_draws(database: Databa
         alice = await seed_learner(tx.conn, "Alice")
         brick = await seed_brick(tx.conn, alice)
         result = await brick_service.report_brick(
-            deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Ambiguous wording."}
+            assessment_deps(tx),
+            actor_for(alice["userId"]),
+            brick["brickId"],
+            {"reason": "Ambiguous wording."},
         )
         report = await one(
             tx.conn,
@@ -127,10 +130,13 @@ async def test_a_second_report_is_the_same_open_report(database: Database) -> No
         alice = await seed_learner(tx.conn, "Alice")
         brick = await seed_brick(tx.conn, alice)
         first = await brick_service.report_brick(
-            deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Ambiguous wording."}
+            assessment_deps(tx),
+            actor_for(alice["userId"]),
+            brick["brickId"],
+            {"reason": "Ambiguous wording."},
         )
         second = await brick_service.report_brick(
-            deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Again."}
+            assessment_deps(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Again."}
         )
         count = await one(
             tx.conn,
@@ -154,10 +160,13 @@ async def test_a_correction_creates_the_next_version_and_resolves_the_reports(da
         alice = await seed_learner(tx.conn, "Alice")
         brick = await seed_brick(tx.conn, alice)
         report = await brick_service.report_brick(
-            deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Ambiguous wording."}
+            assessment_deps(tx),
+            actor_for(alice["userId"]),
+            brick["brickId"],
+            {"reason": "Ambiguous wording."},
         )
         corrected = await brick_service.correct_brick(
-            deps_for(tx),
+            assessment_deps(tx),
             actor_for(alice["userId"]),
             brick["brickId"],
             {
@@ -198,13 +207,13 @@ async def test_an_invalid_correction_changes_nothing(database: Database) -> None
         alice = await seed_learner(tx.conn, "Alice")
         brick = await seed_brick(tx.conn, alice)
         await brick_service.report_brick(
-            deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "To be corrected."}
+            assessment_deps(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "To be corrected."}
         )
         invalid = choice_payload(alice["notionIds"])
         invalid["options"] = [invalid["options"][0]]
         with pytest.raises(AppError) as error:
             await brick_service.correct_brick(
-                deps_for(tx),
+                assessment_deps(tx),
                 actor_for(alice["userId"]),
                 brick["brickId"],
                 {"payload": invalid, "expectedVersion": 1},
@@ -228,14 +237,14 @@ async def test_a_stale_correction_is_a_conflict(database: Database) -> None:
         alice = await seed_learner(tx.conn, "Alice")
         brick = await seed_brick(tx.conn, alice)
         await brick_service.correct_brick(
-            deps_for(tx),
+            assessment_deps(tx),
             actor_for(alice["userId"]),
             brick["brickId"],
             {"payload": choice_payload(alice["notionIds"], "First correction?"), "expectedVersion": 1},
         )
         with pytest.raises(AppError) as error:
             await brick_service.correct_brick(
-                deps_for(tx),
+                assessment_deps(tx),
                 actor_for(alice["userId"]),
                 brick["brickId"],
                 {"payload": choice_payload(alice["notionIds"], "Second correction?"), "expectedVersion": 1},
@@ -264,7 +273,7 @@ async def test_a_retired_brick_cannot_be_reported(database: Database) -> None:
         )
         with pytest.raises(AppError) as error:
             await brick_service.report_brick(
-                deps_for(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Too late."}
+                assessment_deps(tx), actor_for(alice["userId"]), brick["brickId"], {"reason": "Too late."}
             )
         return error.value
 
@@ -279,11 +288,11 @@ async def test_another_learner_cannot_report_or_correct_the_brick(database: Data
         brick = await seed_brick(tx.conn, alice)
         with pytest.raises(AppError) as report_error:
             await brick_service.report_brick(
-                deps_for(tx), actor_for(bob["userId"]), brick["brickId"], {"reason": "Not mine."}
+                assessment_deps(tx), actor_for(bob["userId"]), brick["brickId"], {"reason": "Not mine."}
             )
         with pytest.raises(AppError) as correct_error:
             await brick_service.correct_brick(
-                deps_for(tx),
+                assessment_deps(tx),
                 actor_for(bob["userId"]),
                 brick["brickId"],
                 {"payload": choice_payload(bob["notionIds"]), "expectedVersion": 1},
