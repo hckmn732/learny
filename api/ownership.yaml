@@ -101,8 +101,8 @@ operations:
   'dev.stripe.events': ts
   'dev.stripe.simulate': ts
   'dev.uploadSimulation': ts
-  'email.unsubscribe': ts
-  'email.unsubscribe.page': ts
+  'email.unsubscribe': py
+  'email.unsubscribe.page': py
   'exam.answers.save': py
   'exam.attempts.create': py
   'exam.attempts.get': py
@@ -159,8 +159,8 @@ operations:
   'me.export.request': ts
   'me.get': py
   'me.legal.accept': py
-  'me.notificationSettings.get': ts
-  'me.notificationSettings.update': ts
+  'me.notificationSettings.get': py
+  'me.notificationSettings.update': py
   'me.onboarding.get': py
   'me.onboarding.update': py
   'me.pause.diagnostic': ts
@@ -176,10 +176,10 @@ operations:
   'modules.course': py
   'modules.generateCourse': py
   'modules.screen': py
-  'notifications.list': ts
-  'notifications.read': ts
-  'notifications.readAll': ts
-  'notifications.unreadCount': ts
+  'notifications.list': py
+  'notifications.read': py
+  'notifications.readAll': py
+  'notifications.unreadCount': py
   'notionGraph.get': py
   'offline.pack': py
   'offline.sync': py
@@ -188,8 +188,8 @@ operations:
   'programme.get': py
   'programme.import': py
   'programme.validate': py
-  'pushSubscriptions.delete': ts
-  'pushSubscriptions.upsert': ts
+  'pushSubscriptions.delete': py
+  'pushSubscriptions.upsert': py
   'quiz.answers.check': py
   'quiz.answers.save': py
   'quiz.attempts.create': py

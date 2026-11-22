@@ -24,6 +24,7 @@ from learny.engagement.application.unsubscribe import (
     unsubscribe_form,
     unsubscribe_invalid,
 )
+from learny.engagement.domain.templates import Tone
 from learny.engagement.infrastructure import queries
 from learny.engagement.infrastructure.email import (
     DEFAULT_EMAIL_FROM,
@@ -120,7 +121,7 @@ def fixed_clock() -> FixedClock:
     return FixedClock(parse_iso("2026-11-11T12:20:00Z"))
 
 
-def render(content: dict[str, Any], tone: str = "vous") -> Any:
+def render(content: dict[str, Any], tone: Tone = "vous") -> Any:
     return render_email(content, tone=tone, user_id=USER_ID, app_url="https://learny.app", link_secret=SECRET)
 
 
