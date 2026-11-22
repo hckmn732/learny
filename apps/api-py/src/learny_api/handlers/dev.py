@@ -157,3 +157,28 @@ async def dev_sdd_auth_proxy(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.stripe.session")
 async def dev_sdd_stripe_session(call: Call) -> dict[str, Any]:
     return await sdd.stripe_session(call)
+
+
+@handler("dev.sdd.spec-007.demo")
+async def dev_spec_007_demo(call: Call) -> dict[str, Any]:
+    return await sdd.spec_007(call)
+
+
+@handler("dev.sdd.spec-1004.demo")
+async def dev_spec_1004_demo(call: Call) -> dict[str, Any]:
+    return await sdd.spec_1004(call)
+
+
+@handler("dev.sdd.spec-110.demo")
+async def dev_spec_110_demo(call: Call) -> dict[str, Any]:
+    return await sdd.spec_110(call)
+
+
+@handler("dev.sdd.spec-114.demo")
+async def dev_spec_114_demo(call: Call) -> dict[str, Any]:
+    return await sdd.spec_114(call)
+
+
+@handler("dev.sdd.spec-1203.demo")
+async def dev_spec_1203_demo(call: Call) -> dict[str, Any]:
+    return await sdd.spec_1203(call)
