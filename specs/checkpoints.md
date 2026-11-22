@@ -131,3 +131,43 @@ Domaines métier (SPEC-2201, SPEC-2202, SPEC-2203, SPEC-2204, SPEC-2205, SPEC-22
 Bascule et retrait (SPEC-2301, SPEC-2302).
 - Production servie par Python sur Coolify ; rollback et restauration exercés sur le staging fourni ; budgets d'ADR-0041 mesurés.
 - `apps/api` Hono, Inngest et paquets backend TypeScript retirés ; inventaire final sans chemin résiduel ; suite complète, cross-browser et performances vertes.
+
+## CP-30
+
+Mobile — socle (SPEC-3001, SPEC-3002, SPEC-3003). Piste `mobile`, branche `mobile` (ADR-3001).
+- `apps/mobile` démarre sur Android et iOS ; `validate.mjs` exécute Jest et Maestro (vidéo, comparaison visuelle) pour les spécifications de la piste, sans changer les autres pistes.
+- Thème, polices, icônes et composants natifs dans la galerie `/_dev/ui`, contrastes AA et cibles vérifiés.
+- Bearer, renouvellement unique, flux SSE via `expo/fetch`, session chiffrée et cache persistant prouvés contre l'API locale.
+- `P23-plan.md` tient compte des imports de `apps/mobile` (ADR-3005) et le commit est rapatrié sur `main`.
+
+## CP-31
+
+Mobile — accès et coquille (SPEC-3101, SPEC-3102).
+- Connexion par mot de passe et par lien magique ouvert dans l'application, inscription avec case CGU, déconnexion et purge.
+- Cinq onglets natifs avec une pile chacun, centre de notifications, feuille compte, garde d'onboarding, états communs et renvois au web.
+
+## CP-32
+
+Mobile — quotidien (SPEC-3201, SPEC-3202, SPEC-3203).
+- Aujourd'hui, Programme (Modules et Calendrier) et Agenda (Jour, Semaine, Mois) affichent exactement les données de démonstration du 11 novembre 2026 à 13:20 et sont conformes aux exports de `design/app-mobile/` (écart ≤ 12 % hors zones natives).
+- Actions du tuteur, report et replanification de séance visibles dans les trois écrans.
+
+## CP-33
+
+Mobile — apprentissage (SPEC-3301 à SPEC-3305).
+- Registre natif couvrant les treize types de briques ; cours lu avec progression enregistrée ; tuteur en flux avec sources, historique et interruption gérée.
+- Quiz de validation conforme à BR-QUI-04 et BR-QUI-07 (« Vérifier », aucun chronomètre) jusqu'au résultat ; quiz global et échauffement jouables, y compris hors ligne avec synchronisation sans doublon.
+- Non-régression web `@SPEC-611`, `@SPEC-701`, `@SPEC-801` verte.
+
+## CP-34
+
+Mobile — compte (SPEC-3401, SPEC-3402).
+- Profil et réglages enregistrés et relus sur le web ; pause, export, suppression et annulation fonctionnels ; aucun achat ni portail d'abonnement (ADR-3006).
+- Apple et Google proposés ensemble, première connexion soumise aux CGU (identifiants réels ou blocage `--external` consigné).
+
+## CP-35
+
+Mobile — notifications et publication (SPEC-3501, SPEC-3502). Exige CP-23 (backend Python).
+- Canaux push natifs APNs et FCM dans le worker Python, soumis aux préférences, heures calmes et plafond ; contrat compatible ; aucune régression Web Push.
+- Parcours de bout en bout Android et iOS, audit d'accessibilité sans anomalie bloquante, budgets mobiles mesurés, builds de production signés en test interne (ou blocage `--external`).
+- Après réussite : fusion de `mobile` dans `main` selon ADR-3001 §6.

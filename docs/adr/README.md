@@ -234,3 +234,14 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2013](ADR-2013-persistance-sqlalchemy-core-avec-sql-explicite-sans-orm.md) | Persistance SQLAlchemy Core avec SQL explicite, sans ORM | Déduite | ADR-2002, ADR-2010, SPEC-2101 |
 | [ADR-2014](ADR-2014-livraisons-de-jobs-coexistence-asynchrone-et-bascule-groupee.md) | Livraisons de jobs, coexistence asynchrone et bascule groupée des consommateurs | Déduite | ADR-2005, ADR-2006, SPEC-2102, SPEC-2207 |
 | [ADR-2015](ADR-2015-bibliotheques-python-retenues.md) | Bibliothèques Python retenues | Déduite | ADR-2002, ADR-2011 |
+| [ADR-3001](ADR-3001-piste-sdd-mobile-et-branche-mobile.md) | Piste SDD « mobile » sur la branche `mobile` | Validée | ADR-1004, ADR-1006, ADR-2001, SPEC-3001 |
+| [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
+| [ADR-3003](ADR-3003-maquette-mobile-de-reference-et-corrections-normatives.md) | Maquette mobile de référence et corrections normatives | Déduite | ADR-0034, SPEC-3002, SPEC-3304, SPEC-3305 |
+| [ADR-3004](ADR-3004-socle-technique-de-l-application-mobile.md) | Socle technique de l'application mobile | Déduite | ADR-1004, SPEC-3001, SPEC-3002, SPEC-3003 |
+| [ADR-3005](ADR-3005-paquets-partages-conserves-pour-le-client-mobile.md) | Paquets partagés conservés pour le client mobile | Déduite | ADR-1007, ADR-2004, SPEC-3001 |
+| [ADR-3006](ADR-3006-regles-des-stores-abonnement-et-suppression-de-compte.md) | Règles des stores : abonnement, suppression du compte et connexion tierce | Déduite | ADR-0215, SPEC-3401, SPEC-3402, SPEC-3502 |
+| [ADR-3007](ADR-3007-notifications-push-natives-par-fcm-et-apns.md) | Notifications push natives par FCM et APNs | Déduite | ADR-0055, ADR-2006, SPEC-3501 |
+| [ADR-3008](ADR-3008-authentification-et-session-de-l-application-mobile.md) | Authentification et session de l'application mobile | Déduite | ADR-1005, SPEC-3003, SPEC-3101, SPEC-3402 |
+| [ADR-3009](ADR-3009-rendu-natif-des-briques-et-du-markdown.md) | Rendu natif des briques et du Markdown | Déduite | ADR-0150, ADR-3004, SPEC-3301 |
+| [ADR-3010](ADR-3010-adaptations-tactiles-des-interactions-du-web.md) | Adaptations tactiles des interactions du web | Déduite | ADR-3003, SPEC-3302, SPEC-3303 |
+| [ADR-3011](ADR-3011-connexion-apple-et-google-sur-mobile.md) | Connexion avec Apple et Google sur l'application mobile | Déduite | ADR-0007, ADR-3006, SPEC-3402 |

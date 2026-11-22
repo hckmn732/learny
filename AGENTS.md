@@ -2,6 +2,16 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
+## Branche `mobile` : piste « mobile » (ADR-3001)
+
+Sur la branche `mobile` (partie de `main` le 2026-11-22), la piste pilotée par `node tools/sdd/next.mjs` est **`mobile`** (`activeTrack`) : application Android et iOS en React Native + Expo (ADR-1004, ADR-3001 à ADR-3011), phases P30 → P35, SPEC-3001 → SPEC-3502, checkpoints CP-30 → CP-35, ADR numérotés à partir d’ADR-3001. Les branches de spécification partent de `mobile` et y sont fusionnées.
+
+- **Canevas obligatoire** : lire `docs/architecture/mobile/README.md` avant toute spec SPEC-3xxx, puis la spécification et la maquette `design/app-mobile/` (lue avec les corrections d’ADR-3003, jamais modifiée).
+- **Un seul écrivain par zone** : la piste mobile n’écrit que dans `apps/mobile/` et les zones listées par ADR-3001 §4 ; aucune modification du backend ni du contrat avant P35 (qui exige CP-23).
+- Fusionner `main` dans `mobile` (`node tools/sdd/sync-main.mjs`) à chaque checkpoint et après chaque checkpoint de la piste Python.
+- Validation : `validate.mjs` exécute Vitest, Jest (`pnpm test:mobile`) et Maestro (`pnpm test:e2e:mobile`) pour les specs mobiles (ADR-3004, livré par SPEC-3001).
+- Le reste de ce fichier (piste `python-migration`) décrit l’état de `main` et s’applique tel quel à la piste Python.
+
 ## Objectif unique : migration du backend vers une API Python headless (piste « python-migration »)
 
 Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuivie.** Le backend TypeScript (`apps/api` Hono, paquets `services`, `db`, `jobs`, `llm`, `tutor`…) est remplacé par une API FastAPI et un worker Python organisés par domaines ; le web Next.js reste un client de l'API. Décisions : ADR-2001 à ADR-2010.
