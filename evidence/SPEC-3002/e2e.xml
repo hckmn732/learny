@@ -1,26 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="agent37" tests="4" failures="1" time="199.405" timestamp="2026-11-22T16:49:10">
-    <testcase id="SPEC-3002 jetons" name="SPEC-3002 jetons" classname="SPEC-3002 jetons" file="/tmp/learny-device-agent/flows/SPEC-3002-jetons.yaml" time="7.049" timestamp="2026-11-22T16:49:10" status="SUCCESS">
+  <testsuite name="Test Suite" device="agent37" tests="1" failures="0" time="6.171" timestamp="2026-11-22T17:45:20">
+    <testcase id="SPEC-3002 jetons" name="SPEC-3002 jetons" classname="SPEC-3002 jetons" file="/tmp/learny-device-agent/flows/SPEC-3002-jetons.yaml" time="6.163" timestamp="2026-11-22T17:45:20" status="SUCCESS">
       <properties>
         <property name="tags" value="SPEC-3002, visual"/>
       </properties>
-    </testcase>
-    <testcase id="SPEC-3002 feuilles" name="SPEC-3002 feuilles" classname="SPEC-3002 feuilles" file="/tmp/learny-device-agent/flows/SPEC-3002-feuilles.yaml" time="47.723" timestamp="2026-11-22T16:49:18" status="SUCCESS">
-      <properties>
-        <property name="tags" value="SPEC-3002, visual"/>
-      </properties>
-    </testcase>
-    <testcase id="SPEC-3002 controles" name="SPEC-3002 controles" classname="SPEC-3002 controles" file="/tmp/learny-device-agent/flows/SPEC-3002-controles.yaml" time="118.158" timestamp="2026-11-22T16:50:05" status="SUCCESS">
-      <properties>
-        <property name="tags" value="SPEC-3002, visual"/>
-      </properties>
-    </testcase>
-    <testcase id="SPEC-3002 galerie" name="SPEC-3002 galerie" classname="SPEC-3002 galerie" file="/tmp/learny-device-agent/flows/SPEC-3002-galerie.yaml" time="26.369" timestamp="2026-11-22T16:52:03" status="ERROR">
-      <properties>
-        <property name="tags" value="SPEC-3002"/>
-      </properties>
-      <failure>Assertion is false: id: ui-button-loading is visible</failure>
     </testcase>
   </testsuite>
 </testsuites>
