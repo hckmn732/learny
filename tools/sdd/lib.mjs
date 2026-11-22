@@ -193,6 +193,11 @@ export function collectMobileEvidence(spec, resultsDir, evidenceRoot) {
 
   for (const sub of ['video', 'screenshots', 'visual']) fs.mkdirSync(path.join(dir, sub), { recursive: true });
   fs.copyFileSync(reportPath, path.join(dir, 'e2e-mobile.json'));
+  // The report of every level of the campaign travels with the evidence (unit, integration, Jest).
+  for (const report of ['unit.json', 'integration.json', 'jest.json', 'e2e-mobile.xml']) {
+    const source = path.join(resultsDir, report);
+    if (fs.existsSync(source)) fs.copyFileSync(source, path.join(dir, report));
+  }
 
   const slug = (text) => String(text).normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
@@ -232,6 +237,20 @@ export function collectMobileEvidence(spec, resultsDir, evidenceRoot) {
       `- Vidéos : ${String(videos)}\n- Captures : ${String(screenshots)}\n- Comparaisons visuelles : ${String(visual)}\n`,
     'utf8',
   );
+
+  // The generic summary (evidence.mjs) only knows the Playwright attachments: it is completed
+  // with the Maestro campaign so that the evidence directory tells the whole story.
+  const generic = path.join(dir, 'summary.md');
+  if (fs.existsSync(generic)) {
+    const lines = ['', '## Campagne mobile (Maestro)', ''];
+    lines.push('- Plateforme : ' + String(report.platform ?? 'android'));
+    lines.push('- Transport : ' + String(report.transport ?? 'local'));
+    lines.push('- Flux : ' + String(report.passed ?? 0) + ' réussi(s), ' + String(report.failed ?? 0) + ' échec(s)');
+    lines.push('- Vidéos : ' + String(videos) + ' (`video/`)');
+    lines.push('- Captures : ' + String(screenshots) + ' (`screenshots/`)');
+    lines.push('- Comparaisons visuelles : ' + String(visual) + ' (`visual/`)');
+    fs.appendFileSync(generic, lines.join('\n') + '\n', 'utf8');
+  }
 
   return { videos, screenshots, visual, report: true };
 }

@@ -481,7 +481,12 @@ async function main() {
   }
 
   const outDir = path.join(ROOT, 'test-results', 'sdd', spec);
-  fs.rmSync(outDir, { recursive: true, force: true });
+  // Only the files this campaign owns are replaced: `validate.mjs` writes the unit and integration
+  // reports of the same specification into this directory before running the campaign.
+  fs.rmSync(path.join(outDir, 'artifacts'), { recursive: true, force: true });
+  for (const own of ['e2e-mobile.json', 'e2e-mobile.xml']) {
+    fs.rmSync(path.join(outDir, own), { force: true });
+  }
   fs.mkdirSync(path.join(outDir, 'artifacts'), { recursive: true });
 
   const device = cfg.deviceAgentUrl === null ? new LocalDevice(cfg) : new RemoteDevice(cfg);

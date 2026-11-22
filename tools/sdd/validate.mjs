@@ -57,6 +57,18 @@ const out = path.join(ROOT, 'test-results', 'sdd', spec.id);
 if (!only) fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
 const tag = spec.id;
+
+/**
+ * Fichiers de tests unitaires déjà rouges sur la branche `mobile`, hors périmètre de la piste
+ * mobile (décision du porteur, consignée dans `evidence/SPEC-3001/acceptance.md`) : ils sont
+ * exécutés et comptés comme les autres, mais leur échec n'invalide pas l'étape `unit` d'une
+ * spécification mobile. Aucun autre fichier n'est toléré en échec.
+ */
+const KNOWN_RED_UNIT = [
+  'packages/config/src/commit-rules.test.ts',
+  'apps/web/test/unit/bundle-split.test.ts',
+  'tools/migration/test/unit/report.test.ts',
+];
 const results = only ? { ...(s.validations ?? {}) } : {};
 const record = (name, ok, details = '') => {
   results[name] = { status: ok ? 'passed' : 'failed', at: nowIso(), details };
@@ -99,16 +111,21 @@ function vitestRun(kind, script) {
   const code = timed(kind, () => run(`pnpm -s ${script}${filter}${kind === 'integration' ? ` -t "\\[${tag}\\]"` : ''} --reporter=default --reporter=json --outputFile.json="${file}"`));
   let n = 0;
   let failed = 0;
+  const failedFiles = [];
   if (fs.existsSync(file)) {
     const j = JSON.parse(fs.readFileSync(file, 'utf8'));
-    for (const f of j.testResults ?? []) for (const a of f.assertionResults ?? []) {
-      const full = [...(a.ancestorTitles ?? []), a.title].join(' ');
-      if (!full.includes(`[${tag}]`)) continue;
-      if (a.status === 'passed') n += 1;
-      else if (a.status === 'failed') failed += 1;
+    for (const f of j.testResults ?? []) {
+      const name = path.relative(ROOT, f.name ?? '').replaceAll('\\', '/');
+      if ((f.assertionResults ?? []).some((a) => a.status === 'failed')) failedFiles.push(name);
+      for (const a of f.assertionResults ?? []) {
+        const full = [...(a.ancestorTitles ?? []), a.title].join(' ');
+        if (!full.includes(`[${tag}]`)) continue;
+        if (a.status === 'passed') n += 1;
+        else if (a.status === 'failed') failed += 1;
+      }
     }
   }
-  return { code, passed: n, failed };
+  return { code, passed: n, failed, failedFiles };
 }
 
 function vitest(kind, script) {
@@ -146,11 +163,19 @@ if (wanted('unit')) {
     // Piste mobile : Vitest (logique pure) + Jest (composants), comptés ensemble (EF-4).
     const vitestPart = vitestRun('unit', 'test:unit');
     const jestPart = jestRun(plan.jest);
+    const knownRed = vitestPart.failedFiles.filter((file) => KNOWN_RED_UNIT.includes(file));
+    const unexpected = vitestPart.failedFiles.filter((file) => !KNOWN_RED_UNIT.includes(file));
+    if (knownRed.length > 0) {
+      console.log(
+        `(fichiers préexistants hors périmètre, non réparés : ${knownRed.join(', ')})`,
+      );
+    }
     const failed = vitestPart.failed + jestPart.failed;
     record(
       'unit',
-      vitestPart.code === 0 && jestPart.code === 0 && failed === 0 && vitestPart.passed + jestPart.passed > 0,
-      `${vitestPart.passed} Vitest + ${jestPart.passed} Jest test(s) [${tag}] réussi(s), ${failed} échec(s)`,
+      failed === 0 && unexpected.length === 0 && vitestPart.passed + jestPart.passed > 0 && jestPart.code === 0,
+      `${vitestPart.passed} Vitest + ${jestPart.passed} Jest test(s) [${tag}] réussi(s), ${failed} échec(s)` +
+        `${unexpected.length === 0 ? '' : ` ; fichiers inattendus en échec : ${unexpected.join(', ')}`}`,
     );
   }
 }
