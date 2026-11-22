@@ -891,3 +891,145 @@ async def expire_due_automation_actions(tx: Tx, now: datetime) -> int:
     """CL-3 - expires every pending action whose `expiresAt` has passed; returns the count."""
     result = await tx.conn.execute(EXPIRE_DUE_AUTOMATION_ACTIONS, {"now": now})
     return len(list(result.mappings()))
+
+
+# --- weekly review of SPEC-2205 ----------------------------------------------------------------
+#
+# Copied from `packages/services/src/weekly-review.ts`: the four measures of the local week and the
+# two reads of the `bilan` journal row.
+
+SELECT_WEEKLY_STUDY_MINUTES = text(
+    "select coalesce(sum(extract(epoch from (least(ss.ends_at, cast(:end as timestamptz)) "
+    "- greatest(ss.starts_at, cast(:start as timestamptz)))) / 60), 0)::int as minutes "
+    "from public.schedule_slots ss "
+    "where ss.user_id = cast(:user_id as uuid) and ss.status = 'done' "
+    "and ss.starts_at < cast(:end as timestamptz) "
+    "and ss.ends_at > cast(:start as timestamptz)"
+)
+
+SELECT_RETENTION_MODULES = text(
+    "select m.id::text as module_id, mp.validated_at, "
+    "coalesce(array_agg(n.id::text) filter (where n.id is not null), '{}') as notion_ids "
+    "from public.modules m "
+    "join public.module_progress mp on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid) "
+    "left join public.notions n on n.module_id = m.id "
+    "where mp.status = 'validated' and mp.validated_at is not null "
+    "group by m.id, mp.validated_at"
+)
+
+SELECT_RETENTION_REVIEWS = text(
+    "select rl.id::text as review_id, rl.notion_id::text as notion_id, rl.reviewed_at, "
+    "coalesce(rl.correct, false) as correct "
+    "from public.review_logs rl join public.notions n on n.id = rl.notion_id "
+    "where rl.user_id = cast(:user_id as uuid)"
+)
+
+SELECT_AT_RISK_NOTIONS = text(
+    "select ns.notion_id::text as notion_id, n.label, ns.mastery, ns.due_at, "
+    "ns.gap_nature::text as gap_nature, ns.gap_cleared_at "
+    "from public.notion_states ns join public.notions n on n.id = ns.notion_id "
+    "where ns.user_id = cast(:user_id as uuid) and not ns.suspended "
+    "and ns.mastery < cast(:mastery as numeric) "
+    "and ((ns.gap_nature is not null and ns.gap_cleared_at is null) "
+    "     or ns.due_at <= cast(:now as timestamptz)) "
+    "order by ns.mastery asc, n.label asc, ns.notion_id asc"
+)
+
+SELECT_NEXT_WEEK_PLAN = text(
+    "select to_char((ss.starts_at at time zone :time_zone)::date, 'YYYY-MM-DD') as day, "
+    "coalesce(sum(extract(epoch from (ss.ends_at - ss.starts_at)) / 60), 0)::int as minutes, "
+    "count(*)::int as slots "
+    "from public.schedule_slots ss "
+    "where ss.user_id = cast(:user_id as uuid) and ss.status = 'planned' "
+    "and ss.starts_at >= cast(:start as timestamptz) "
+    "and ss.starts_at < cast(:end as timestamptz) "
+    "group by 1 order by 1 asc"
+)
+
+SELECT_WEEKLY_REVIEW_ACTION = text(
+    "select id::text as id, status::text as status, summary, payload, created_at "
+    "from public.automation_actions "
+    "where user_id = cast(:user_id as uuid) and automation = 'bilan' and kind = 'weekly_review' "
+    "and status in ('applied', 'consumed') "
+    "order by created_at desc, id desc limit 1"
+)
+
+SELECT_WEEKLY_REVIEW_ACTION_BY_ID = text(
+    "select id::text as id, status::text as status, summary, payload, created_at "
+    "from public.automation_actions "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid) "
+    "and automation = 'bilan' limit 1"
+)
+
+
+@dataclass(frozen=True, slots=True)
+class WeeklyReviewRow:
+    """One `bilan` journal row, read with the caller's own scope."""
+
+    id: str
+    status: str
+    summary: str
+    payload: Mapping[str, Any]
+    created_at: datetime
+
+
+def _weekly_review(row: Any) -> WeeklyReviewRow:
+    return WeeklyReviewRow(
+        id=str(row["id"]),
+        status=str(row["status"]),
+        summary=str(row["summary"]),
+        payload=row["payload"],
+        created_at=row["created_at"],
+    )
+
+
+async def weekly_study_minutes(tx: Tx, *, user_id: str, start: datetime, end: datetime) -> int:
+    """EF-2 - the minutes of the done slots of the local week, clamped to its bounds."""
+    result = await tx.conn.execute(
+        SELECT_WEEKLY_STUDY_MINUTES, {"user_id": user_id, "start": start, "end": end}
+    )
+    return max(0, int(result.mappings().one()["minutes"] or 0))
+
+
+async def retention_modules(tx: Tx, user_id: str) -> list[Mapping[str, Any]]:
+    result = await tx.conn.execute(SELECT_RETENTION_MODULES, {"user_id": user_id})
+    return [dict(row) for row in result.mappings()]
+
+
+async def retention_reviews(tx: Tx, user_id: str) -> list[Mapping[str, Any]]:
+    result = await tx.conn.execute(SELECT_RETENTION_REVIEWS, {"user_id": user_id})
+    return [dict(row) for row in result.mappings()]
+
+
+async def at_risk_notions(
+    tx: Tx, *, user_id: str, mastery_below: int, now: datetime
+) -> list[Mapping[str, Any]]:
+    """EF-1 - the notions due or carrying an open gap below the mastery threshold."""
+    result = await tx.conn.execute(
+        SELECT_AT_RISK_NOTIONS, {"user_id": user_id, "mastery": mastery_below, "now": now}
+    )
+    return [dict(row) for row in result.mappings()]
+
+
+async def next_week_plan(
+    tx: Tx, *, user_id: str, time_zone: str, start: datetime, end: datetime
+) -> list[Mapping[str, Any]]:
+    result = await tx.conn.execute(
+        SELECT_NEXT_WEEK_PLAN,
+        {"user_id": user_id, "time_zone": time_zone, "start": start, "end": end},
+    )
+    return [dict(row) for row in result.mappings()]
+
+
+async def latest_weekly_review_action(
+    tx: Tx, *, user_id: str, action_id: str | None
+) -> WeeklyReviewRow | None:
+    """CL-1 - the latest review of the learner, or one own review; a foreign id is absent."""
+    if action_id is None:
+        result = await tx.conn.execute(SELECT_WEEKLY_REVIEW_ACTION, {"user_id": user_id})
+    else:
+        result = await tx.conn.execute(
+            SELECT_WEEKLY_REVIEW_ACTION_BY_ID, {"user_id": user_id, "action_id": action_id}
+        )
+    row = result.mappings().first()
+    return None if row is None else _weekly_review(row)

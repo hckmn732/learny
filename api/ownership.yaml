@@ -172,7 +172,7 @@ operations:
   'me.profile.get': py
   'me.profile.update': py
   'me.update': py
-  'me.weekly-review.get': ts
+  'me.weekly-review.get': py
   'modules.course': py
   'modules.generateCourse': py
   'modules.screen': py

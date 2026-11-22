@@ -62,3 +62,6 @@ WEEKLY_MONTHS = (
     "déc.",
 )
 WEEKLY_WEEKDAYS = ("lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim.")
+
+# packages/services/src/weekly-review.ts - one review that is not this learner's own.
+WEEKLY_REVIEW_NOT_FOUND = "Bilan introuvable."

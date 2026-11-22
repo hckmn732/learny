@@ -136,3 +136,11 @@ async def me_automations_update(call: Call) -> Any:
 @handler("me.automation-actions.list")
 async def me_automation_actions_list(call: Call) -> Any:
     return await engagement.list_my_automation_actions(call.deps, _actor(call), _query(call))
+
+
+# --- weekly review -------------------------------------------------------------------------------
+
+
+@handler("me.weekly-review.get")
+async def me_weekly_review_get(call: Call) -> Any:
+    return await engagement.get_weekly_review(call.deps, _actor(call), _query(call).get("actionId"))

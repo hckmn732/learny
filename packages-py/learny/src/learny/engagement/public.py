@@ -54,6 +54,7 @@ from learny.engagement.application.unsubscribe import (
     unsubscribe_form,
     unsubscribe_invalid,
 )
+from learny.engagement.application.weekly_review import get_weekly_review
 
 __all__ = [
     "ClockPort",
@@ -68,6 +69,7 @@ __all__ = [
     "expire_due_automation_actions",
     "get_notification_settings",
     "get_unread_notification_count",
+    "get_weekly_review",
     "list_my_automation_actions",
     "list_my_automations",
     "list_notifications",

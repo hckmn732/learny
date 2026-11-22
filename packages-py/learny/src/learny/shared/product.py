@@ -36,3 +36,8 @@ AUTOMATION_DEFAULTS: Final[Mapping[str, Mapping[str, Any]]] = {
     "bilan": {"weekday": 7, "hour": 19, "channel": "app"},
     "pause": {"diagnosticOnReturn": True, "diagnosticMinutes": 10},
 }
+
+# ENGINE.retention of `packages/config/src/product.ts` (BR-MEM-06): the horizons of the retention
+# measure and the tolerance of the window, read by the weekly review of SPEC-720.
+RETENTION_HORIZONS_DAYS: Final = (30, 60)
+RETENTION_TOLERANCE_DAYS: Final = 3
