@@ -85,7 +85,7 @@ Parity OK: 1 scenarios replay identically against http://127.0.0.1:3101.
 `offline.pack` est la seule lecture du contexte sans paramètre de chemin : l'outil ne génère un
 scénario que pour celles-là. Les autres opérations `py` de la tranche portent un paramètre de
 chemin (`bricks.correct`, `bricks.report`, `quiz.attempts.get`, `quiz.answers.save`,
-`quiz.answers.check`) ou sont des mutations : leur comportement est prouvé par les tests
+`quiz.answers.check`, `exam.answers.save`, `exam.questions.mark`) ou sont des mutations : leur comportement est prouvé par les tests
 d'intégration serveur (`packages-py/learny/tests/integration/assessments/`), pas par la parité.
 
 Aucune divergence n'a été constatée sur la tranche : l'oracle `assessments` est enregistré dans
