@@ -63,7 +63,7 @@ async def outbox_names(tx: Any, user_id: str) -> list[str]:
     return [str(row["name"]) for row in result.mappings().all()]
 
 
-async def row(tx: Any, user_id: str) -> dict[str, Any] | None:
+async def row(tx: Any, user_id: str) -> dict[str, Any]:
     result = await tx.conn.execute(
         text(
             "select status::text as status, stripe_customer_id, stripe_subscription_id, "
@@ -73,7 +73,7 @@ async def row(tx: Any, user_id: str) -> dict[str, Any] | None:
         {"user": user_id},
     )
     found = result.mappings().all()
-    return None if not found else dict(found[0])
+    return {} if not found else dict(found[0])
 
 
 async def count_events(tx: Any) -> tuple[int, int]:
@@ -228,7 +228,7 @@ async def test_external_return_paths_are_refused_before_any_write(database: Data
             with pytest.raises(AppError) as raised:
                 await start_checkout(bundle, actor_for(user), {"successPath": path, "cancelPath": "/ko"})
             assert raised.value.code == "VALIDATION_FAILED"
-        assert await row(tx, user) is None
+        assert await row(tx, user) == {}
         assert bundle.stripe.state.counters["customer"] == 0
 
     await rolled_back(database, run)

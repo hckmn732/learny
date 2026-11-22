@@ -6,6 +6,7 @@ Storage and Auth are injected: the archive is captured in memory, the Auth admin
 2026-11-11T12:20:00Z and only advanced explicitly (ADR-0047).
 """
 
+import asyncio
 from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
@@ -16,7 +17,11 @@ from factories.db_support import rolled_back
 from factories.engagement_deps import EngagementTransactions, engagement_deps
 from factories.identity_support import FIXED, actor_for, create_user
 from learny.privacy.application.deletion import cancel_deletion, schedule_deletion
-from learny.privacy.application.deletion_job import DeletionJobDeps, run_account_deletion
+from learny.privacy.application.deletion_job import (
+    AccountAdmin,
+    DeletionJobDeps,
+    run_account_deletion,
+)
 from learny.privacy.application.export import download_export, get_export, request_export
 from learny.privacy.application.export_job import ExportJobDeps, run_data_export
 from learny.privacy.application.purge import PurgeDeps, purge_exports
@@ -28,6 +33,7 @@ from learny.shared.db.uow import Database
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import privacy as fr
 from sqlalchemy import text
+from sqlalchemy.exc import NoResultFound
 
 pytestmark = pytest.mark.spec("SPEC-2206")
 
@@ -73,12 +79,12 @@ def deps(tx: Any, now: Any = FIXED) -> PrivacyTestDeps:
     )
 
 
-def export_ports(started: dict[str, int]) -> ExportJobDeps:
+def export_ports(started: dict[str, Any]) -> ExportJobDeps:
     async def read_object(storage_path: str) -> bytes | None:
         return None
 
     async def upload_archive(bucket: Any, storage_path: str, archive: Path) -> None:
-        started["size"] = archive.stat().st_size if archive.exists() else -1
+        started["size"] = await asyncio.to_thread(lambda: archive.stat().st_size)
         started["path"] = storage_path
 
     return ExportJobDeps(read_object=read_object, upload_archive=upload_archive)
@@ -109,7 +115,8 @@ async def test_an_export_is_queued_then_downloadable_only_for_its_owner(database
         ports = export_ports({})
         outcome = await run_data_export(bundle, alice, accepted["exportId"], ports)
         assert outcome.status == "done"
-        assert outcome.size_bytes is not None and outcome.size_bytes > 0
+        assert outcome.size_bytes is not None
+        assert outcome.size_bytes > 0
         stored = await export_row(tx, accepted["exportId"])
         assert stored["status"] == "done"
         assert stored["storage_path"].startswith(f"{alice}/")
@@ -147,7 +154,7 @@ async def test_an_export_is_queued_then_downloadable_only_for_its_owner(database
         outcome_purge = await purge_exports(after, PurgeDeps(remove_object=remove_object))
         assert outcome_purge.rows >= 1
         assert ("exports", stored["storage_path"]) in removed
-        with pytest.raises(Exception):
+        with pytest.raises(NoResultFound):
             await export_row(tx, accepted["exportId"])
 
     await rolled_back(database, run)
@@ -216,7 +223,7 @@ async def test_an_account_is_deleted_only_once_due_and_after_a_cancellation_noth
         async def remove_object(bucket: str, path: str) -> None:
             return None
 
-        class Admin:
+        class Admin(AccountAdmin):
             def __init__(self) -> None:
                 self.deleted = False
 
@@ -281,7 +288,8 @@ async def test_the_purge_keeps_a_recent_expiration(database: Database) -> None:
         assert (await purge_exports(just_expired, PurgeDeps(remove_object=remove_object))).rows == 0
         after_grace = deps(tx, FIXED + timedelta(milliseconds=EXPORT_TTL_MS + EXPORT_PURGE_GRACE_MS + 1000))
         assert (await purge_exports(after_grace, PurgeDeps(remove_object=remove_object))).rows == 1
-        assert removed and removed[0][0] == "exports"
+        assert removed
+        assert removed[0][0] == "exports"
 
     await rolled_back(database, run)
 
@@ -295,7 +303,9 @@ async def test_the_queries_read_under_the_owner_row_level_security(database: Dat
         async with queries_tx(tx, bob) as foreign:
             assert await queries.get_export(foreign, bob, created.id) is None
         async with queries_tx(tx, alice) as mine:
-            assert (await queries.get_export(mine, alice, created.id)).id == created.id
+            mine_row = await queries.get_export(mine, alice, created.id)
+            assert mine_row is not None
+            assert mine_row.id == created.id
 
     await rolled_back(database, run)
 
