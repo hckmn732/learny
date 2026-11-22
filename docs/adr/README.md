@@ -249,3 +249,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2028](ADR-2028-qualification-byok-sondes-de-connexion-et-de-compatibilite-s.md) | Qualification BYOK : sondes de connexion et de compatibilite seulement | Déduite | SPEC-2204, SPEC-506 |
 | [ADR-2029](ADR-2029-session-de-fixtures-dans-llmgateway-pour-la-batterie-de-comp.md) | Session de fixtures dans LlmGateway pour la batterie de compatibilite | Déduite | SPEC-2204, ADR-0048, ADR-0153 |
 | [ADR-2030](ADR-2030-validation-stricte-des-corps-en-mode-json-pour-les-enums.md) | Validation stricte des corps en mode JSON pour les enums | Déduite | SPEC-2204, SPEC-2201, ADR-2012 |
+| [ADR-2031](ADR-2031-verification-de-la-signature-stripe-a-horloge-injectee.md) | Vérification de la signature Stripe à horloge injectée | Déduite | SPEC-2206, ADR-0047, ADR-2015, ADR-0215 |

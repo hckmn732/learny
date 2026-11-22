@@ -71,6 +71,12 @@ class Settings(BaseSettings):
     voyage_api_key: str | None = None
     search_api_key: str | None = None
 
+    # Payment provider (SPEC-2206): the same variables the TypeScript backend reads.
+    stripe_mode: str | None = None
+    stripe_secret_key: str | None = None
+    stripe_webhook_secret: str | None = None
+    stripe_price_id: str | None = None
+
     # Asynchronous execution (SPEC-2102): jobs mode and worker tuning.
     jobs_mode: str = "worker"
     py_dispatch_interval_ms: int = 500
@@ -80,6 +86,17 @@ class Settings(BaseSettings):
     py_worker_health_port: int = 0
     py_scheduler_retry_interval_s: int = 15
     py_scheduler_poll_interval_s: int = 20
+
+    def billing_env(self) -> dict[str, str | None]:
+        """The mapping `resolve_billing_config` reads, built from the settings."""
+        return {
+            "APP_ENV": self.app_env,
+            "STRIPE_MODE": self.stripe_mode,
+            "STRIPE_SECRET_KEY": self.stripe_secret_key,
+            "STRIPE_WEBHOOK_SECRET": self.stripe_webhook_secret,
+            "STRIPE_PRICE_ID": self.stripe_price_id,
+            "NEXT_PUBLIC_APP_URL": self.next_public_app_url,
+        }
 
     @property
     def is_test(self) -> bool:

@@ -51,7 +51,7 @@ SECRET_KEYS = frozenset(
 
 
 def _clean(value: str) -> str:
-    """`clean`: compatibility decomposition without combining marks (`Élève` -> `Eleve`)."""
+    """`clean`: compatibility decomposition without combining marks (`Eleve` -> `Eleve`)."""
     return _DIACRITICS.sub("", unicodedata.normalize("NFKD", value))
 
 

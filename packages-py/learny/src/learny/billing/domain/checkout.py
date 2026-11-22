@@ -15,7 +15,7 @@ SAFE_PATH_MAX = 512
 # `/[\\\s\u0000-\u001f\u007f]/` of the TypeScript source.
 _FORBIDDEN = re.compile(r"[\\\s\x00-\x1f\x7f]")
 
-# `/parametres#abonnement` - the « Abonnement » tab (BR-SET-01) the portal returns to (EF-2).
+# `/parametres#abonnement` - the "Abonnement" tab (BR-SET-01) the portal returns to (EF-2).
 PORTAL_RETURN_PATH = "/parametres#abonnement"
 
 
