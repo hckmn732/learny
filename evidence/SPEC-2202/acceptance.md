@@ -55,7 +55,7 @@ dans [`scope.md`](./scope.md), les scénarios rejoués dans [`parity.md`](./pari
   services d'évaluation (format et tentatives d'examen, quiz, résultat, remédiation, hors ligne).
 - Les cas non portés sont listés avec leur motif : `ensurePracticeExercise` (aucun appel du
   périmètre, SPEC-2205), correction des réponses ouvertes par le tuteur (contexte IA, SPEC-2204).
-- Suite Python complète : **1 473 tests** verts, dont les fichiers marqués
+- Suite Python complète : **1 476 tests** verts, dont les fichiers marqués
   `pytestmark = pytest.mark.spec("SPEC-2202")` rejoués par `validate.mjs`.
 
 ## CA-4 — Contrats import-linter verts, aucun adaptateur ne contient de règle métier ✅
@@ -73,9 +73,9 @@ dans [`scope.md`](./scope.md), les scénarios rejoués dans [`parity.md`](./pari
 
 ## CA-5 — Les e2e du périmètre passent sans modification à travers la façade Python ✅
 
-- `PLAYWRIGHT_REUSE_SERVER=0 pnpm test:e2e --grep "@SPEC-2202\b"` : **2 tests verts**, **2 vidéos**,
-  captures desktop et mobile dans `evidence/SPEC-2202/` (`e2e.json`, `e2e.xml`, `video/`,
-  `screenshots/`, `attachments/`).
+- `PLAYWRIGHT_REUSE_SERVER=0 pnpm test:e2e --grep "@SPEC-2202\b"` : **2 tests verts**, dont
+  **1 test `@visual`**, et **4 vidéos** collectées ; rapports `e2e.json` et `e2e.xml`, vidéos,
+  captures et résultats axe dans `evidence/SPEC-2202/`.
   - `apps/web/e2e/specs/p22/spec-2202.spec.ts` : session réelle (`createTestSession`) ; `series.streak`
     (`learning`) et `offline.pack` (`assessments`) répondent `200` avec `x-served-by: learny-api` et
     le contrat attendu (14 cases de régularité, `computedOn` au jour figé, paquet vide du compte
@@ -92,22 +92,26 @@ dans [`scope.md`](./scope.md), les scénarios rejoués dans [`parity.md`](./pari
 
 ## Contrôles de qualité
 
+Mesures du **2026-11-22** sur la VM de développement (Supabase local, horloge figée au
+2026-11-11T12:20:00Z, `LLM_MODE=mock`, `TZ=UTC`) ; les étapes `validate.mjs` sont enregistrées dans
+[`checks.json`](./checks.json) avec leur horodatage.
+
 | Contrôle | Commande | Résultat |
 |---|---|---|
 | Lint Python | `uv run ruff check .` et `uv run ruff format --check packages-py apps` | vert |
 | Types Python | `uv run mypy packages-py apps` | vert |
 | Import-linter | `uv run lint-imports` | vert |
-| Unités et intégration Python | `uv run pytest packages-py apps -q` | vert (**1 473 tests**) |
+| Unités et intégration Python | `uv run pytest packages-py apps -q` | vert (**1 476 tests**) |
 | Contrat Python | `pnpm py:contract:check` | vert (artefacts générés inchangés) |
 | Inventaire | `tsx tools/migration/inventory.mjs --check` | vert (217 opérations) |
 | Lint racine | `pnpm lint` | vert |
 | Types racine | `pnpm typecheck` | vert |
 | Construction | `pnpm build` | vert |
-| Unités TypeScript | `pnpm test:unit` | vert |
+| Unités TypeScript | `pnpm test:unit` | vert (aucun test TypeScript étiqueté `[SPEC-2202]`) |
 | Intégration TypeScript | `pnpm test:int` | vert |
-| e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2202\b"` | vert (2 tests, 2 vidéos) |
+| e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2202\b"` | vert (2 tests, 1 `@visual`, 4 vidéos) |
 | Visuel du périmètre | `pnpm test:e2e --grep "@SPEC-2202\b"` (test `@visual`) | vert |
-| Validation SDD | `node tools/sdd/validate.mjs SPEC-2202` | 8 étapes vertes |
+| Validation SDD | `node tools/sdd/validate.mjs SPEC-2202` | 8 étapes vertes : lint, typecheck, build, unit (729 pytest), intégration (210 pytest), e2e (2), visuel (1), acceptance (5/5) |
 
 ## Dettes de consommateurs portées par SPEC-2207
 
