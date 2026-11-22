@@ -423,13 +423,17 @@ fichiers ci-dessus (22 pour l'étape 3, 4 fichiers de plus ici).
   jalons de la série et de fin de session, elles, sont produites par le service `notify` du
   contexte `engagement`, qui n'existe pas encore : la donnée de série (`profiles.streak_days`) est
   écrite à l'identique, mais aucune notification n'est émise. Aucun scénario de parité ne
-  l'observe ; la dette est reprise par SPEC-2205 (engagement).
+  l'observe ; la dette est reprise par SPEC-2205 (engagement) — **faite** : `reconcile_milestones`
+  annonce les jalons `notions_100` et `streak_30` par `engagement.public.notify`, et la clôture
+  d'une session réconcilie les jalons après son commit (`learny/learning/application/series.py`,
+  `review.py`, prouvé par `tests/integration/engagement/test_engagement_milestone_wiring.py`).
 - `review.globalQuizToday` ne déclenche pas la demande de variantes de banque de questions
   (`requestRefill`, SPEC-513) quand tous les tirages sont épuisés : ce service dépend du contexte
   IA et des jobs, hors périmètre `learning`. Le DTO renvoyé est identique (`status: "empty"`), seule
   la demande de génération n'est pas émise ; consigné pour SPEC-2205.
-- `review.complete` ne déclenche pas non plus la génération de notifications de fin de session
-  (même service `notify`).
+- `review.complete` ne déclenchait pas non plus la génération de notifications de fin de session
+  (même service `notify`). **Reprise faite par SPEC-2205** : la clôture réconcilie les jalons après
+  son commit, comme le consommateur `review/session-completed` de SPEC-723.
 
 ## Étape 6 — examens blancs et tentatives de quiz (9 opérations de plus)
 

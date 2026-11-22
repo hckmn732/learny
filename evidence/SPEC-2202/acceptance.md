@@ -128,9 +128,11 @@ Aucune réponse HTTP n'en dépend.
 
 Autres restes documentés, hors périmètre de cette spécification :
 
-- Notifications `engagement` (jalon de série, fin de session, score) : le service `notify` relève de
-  SPEC-2205 ; la donnée (série, jalon) est écrite à l'identique, aucune notification n'est émise,
-  comme côté TypeScript sur ces chemins.
+- Notifications `engagement` (jalon de série, fin de session, score) : le service `notify` relevait
+  de SPEC-2205 ; la donnée (série, jalon) est écrite à l'identique. **Reprise faite par SPEC-2205**
+  (`learny/engagement/application/notify.py`) : les jalons `notions_100` et `streak_30` sont
+  désormais annoncés, et `review.complete` réconcilie les jalons après son commit. Preuve :
+  `tests/integration/engagement/test_engagement_milestone_wiring.py`.
 - `requestRefill` et `requestQuizRegeneration` (banque de questions épuisée, SPEC-513) : le DTO est
   identique (`status: "preparing"` ou `"empty"`), la demande de génération n'est pas émise.
 - `gradeOpenAnswers` (correction des réponses ouvertes par le tuteur, contexte IA) : la tentative
