@@ -7,6 +7,7 @@ with `${x}` turned into a bound `:x` parameter and the same `order by`, `for upd
 frozen row.
 """
 
+import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
@@ -15,6 +16,7 @@ from typing import Any
 from sqlalchemy import text
 
 from learny.shared.db.uow import Tx
+from learny.shared.time import to_iso
 
 ADVISORY_LOCK_USER = text("select pg_advisory_xact_lock(hashtext(:user_id)::bigint)")
 
@@ -694,3 +696,198 @@ async def read_automation_action_expiry(tx: Tx, action_id: str) -> object | None
     result = await tx.conn.execute(SELECT_AUTOMATION_ACTION_EXPIRY, {"action_id": action_id})
     row = result.mappings().first()
     return None if row is None else row["payload"]
+
+
+# --- automations of SPEC-2205 ------------------------------------------------------------------
+#
+# Copied from `packages/services/src/automations/index.ts` and
+# `packages/db/src/repositories/automation-actions.ts`: the same columns, the same
+# `on conflict (user_id, key)` and the same `(created_at, id) < cursor` page.
+
+SELECT_AUTOMATION_SETTINGS = text(
+    "select user_id, key::text as key, enabled, params, updated_at "
+    "from public.automation_settings where user_id = cast(:user_id as uuid) order by key"
+)
+
+UPSERT_AUTOMATION_SETTING = text(
+    "insert into public.automation_settings (user_id, key, enabled, params, updated_at) "
+    "values (cast(:user_id as uuid), cast(:key as public.automation_key), :enabled, "
+    "cast(:params as jsonb), :updated_at) "
+    "on conflict (user_id, key) do update set enabled = excluded.enabled, "
+    "params = excluded.params, updated_at = excluded.updated_at "
+    "returning user_id, key::text as key, enabled, params, updated_at"
+)
+
+SELECT_ACTIVE_PAUSE = text(
+    "select starts_on::text as starts_on, ends_on::text as ends_on from public.pauses "
+    "where user_id = cast(:user_id as uuid) and status = 'active' "
+    "and cast(:local_day as date) between starts_on and ends_on limit 1"
+)
+
+SELECT_AUTOMATION_ACTIONS = text(
+    "select id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at "
+    "from public.automation_actions "
+    "where user_id = cast(:user_id as uuid) "
+    "and (cast(:status as public.automation_status) is null "
+    "     or status = cast(:status as public.automation_status)) "
+    "and (cast(:kind as text) is null or kind = cast(:kind as text)) "
+    "and (cast(:automation as public.automation_key) is null "
+    "     or automation = cast(:automation as public.automation_key)) "
+    "and (cast(:formation_id as uuid) is null or formation_id = cast(:formation_id as uuid)) "
+    "and (cast(:since as timestamptz) is null or created_at >= cast(:since as timestamptz)) "
+    "and (cast(:cursor_k as timestamptz) is null "
+    "     or (created_at, id) < (cast(:cursor_k as timestamptz), cast(:cursor_id as uuid))) "
+    "order by created_at desc, id desc limit :limit"
+)
+
+COUNT_AUTOMATION_ACTIONS_SINCE = text(
+    "select count(*)::int as count from public.automation_actions "
+    "where user_id = cast(:user_id as uuid) and created_at >= cast(:since as timestamptz)"
+)
+
+EXPIRE_DUE_AUTOMATION_ACTIONS = text(
+    "update public.automation_actions set status = 'expired', decided_at = :now "
+    "where status = 'pending_consent' "
+    "and payload ? 'expiresAt' "
+    "and (payload ->> 'expiresAt')::timestamptz <= cast(:now as timestamptz) "
+    "returning id::text as id"
+)
+
+
+@dataclass(frozen=True, slots=True)
+class AutomationSettingRow:
+    """One stored setting; a missing key falls back to the canonical defaults."""
+
+    key: str
+    enabled: bool
+    params: Mapping[str, Any]
+    updated_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class AutomationActionRow:
+    """One journal row of the automation engine."""
+
+    id: str
+    formation_id: str | None
+    automation: str
+    kind: str
+    summary: str
+    payload: Mapping[str, Any]
+    undo_payload: Mapping[str, Any] | None
+    requires_consent: bool
+    status: str
+    decided_at: datetime | None
+    created_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class AutomationActionPage:
+    """One page of the journal plus the cursor of the next one."""
+
+    rows: list[AutomationActionRow]
+    next_cursor: tuple[str, str] | None
+
+
+def _automation_setting(row: Any) -> AutomationSettingRow:
+    return AutomationSettingRow(
+        key=str(row["key"]),
+        enabled=bool(row["enabled"]),
+        params=row["params"],
+        updated_at=row["updated_at"],
+    )
+
+
+def _automation_action(row: Any) -> AutomationActionRow:
+    return AutomationActionRow(
+        id=str(row["id"]),
+        formation_id=row["formation_id"],
+        automation=str(row["automation"]),
+        kind=str(row["kind"]),
+        summary=str(row["summary"]),
+        payload=row["payload"],
+        undo_payload=row["undo_payload"],
+        requires_consent=bool(row["requires_consent"]),
+        status=str(row["status"]),
+        decided_at=row["decided_at"],
+        created_at=row["created_at"],
+    )
+
+
+async def read_automation_settings(tx: Tx, user_id: str) -> list[AutomationSettingRow]:
+    result = await tx.conn.execute(SELECT_AUTOMATION_SETTINGS, {"user_id": user_id})
+    return [_automation_setting(row) for row in result.mappings()]
+
+
+async def upsert_automation_setting(
+    tx: Tx, *, user_id: str, key: str, enabled: bool, params: Mapping[str, Any], now: datetime
+) -> AutomationSettingRow:
+    result = await tx.conn.execute(
+        UPSERT_AUTOMATION_SETTING,
+        {
+            "user_id": user_id,
+            "key": key,
+            "enabled": enabled,
+            "params": json.dumps(dict(params), ensure_ascii=False),
+            "updated_at": now,
+        },
+    )
+    return _automation_setting(result.mappings().one())
+
+
+async def read_active_pause(tx: Tx, user_id: str, local_day: str) -> Any | None:
+    """CL-5 - the active global pause covering the given local civil day."""
+    result = await tx.conn.execute(SELECT_ACTIVE_PAUSE, {"user_id": user_id, "local_day": local_day})
+    return result.mappings().first()
+
+
+async def list_automation_actions(
+    tx: Tx,
+    *,
+    user_id: str,
+    status: str | None,
+    kind: str | None,
+    automation: str | None,
+    formation_id: str | None,
+    since: datetime | None,
+    limit: int,
+    cursor: tuple[str, str] | None,
+) -> AutomationActionPage:
+    """ET-5 - one filtered page, newest first, with the extra row giving the next cursor."""
+    cursor_k, cursor_id = (None, None) if cursor is None else cursor
+    result = await tx.conn.execute(
+        SELECT_AUTOMATION_ACTIONS,
+        {
+            "user_id": user_id,
+            "status": status,
+            "kind": kind,
+            "automation": automation,
+            "formation_id": formation_id,
+            "since": since,
+            "cursor_k": cursor_k,
+            "cursor_id": cursor_id,
+            "limit": limit + 1,
+        },
+    )
+    rows = [_automation_action(row) for row in result.mappings()]
+    page = rows[:limit]
+    extra = rows[limit] if len(rows) > limit else None
+    if extra is None or not page:
+        return AutomationActionPage(rows=page, next_cursor=None)
+    last = page[-1]
+    return AutomationActionPage(rows=page, next_cursor=(to_iso(last.created_at), last.id))
+
+
+async def count_automation_actions_since(tx: Tx, user_id: str, since: datetime) -> int:
+    """BR-AUT-12 - N actions cette semaine, from the given instant inclusive."""
+    result = await tx.conn.execute(COUNT_AUTOMATION_ACTIONS_SINCE, {"user_id": user_id, "since": since})
+    row = result.mappings().one()
+    return int(row["count"])
+
+
+async def expire_due_automation_actions(tx: Tx, now: datetime) -> int:
+    """CL-3 - expires every pending action whose `expiresAt` has passed; returns the count."""
+    result = await tx.conn.execute(EXPIRE_DUE_AUTOMATION_ACTIONS, {"now": now})
+    return len(list(result.mappings()))

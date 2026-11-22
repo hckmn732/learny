@@ -5,6 +5,12 @@ single entry point of the notification producers (BR-NOT-03): `learny.learning` 
 commit of a session or of a milestone, never a second implementation of the routing.
 """
 
+from learny.engagement.application.automations import (
+    expire_due_automation_actions,
+    list_my_automation_actions,
+    list_my_automations,
+    update_my_automation_setting,
+)
 from learny.engagement.application.email import (
     can_send_service_email,
     disable_email_channel,
@@ -59,8 +65,11 @@ __all__ = [
     "deliver_due_deliveries",
     "deliver_notification",
     "disable_email_channel",
+    "expire_due_automation_actions",
     "get_notification_settings",
     "get_unread_notification_count",
+    "list_my_automation_actions",
+    "list_my_automations",
     "list_notifications",
     "list_push_subscriptions",
     "mark_all_read",
@@ -80,6 +89,7 @@ __all__ = [
     "unsubscribe_done",
     "unsubscribe_form",
     "unsubscribe_invalid",
+    "update_my_automation_setting",
     "update_notification_settings",
     "upsert_push_subscription",
     "welcome_idempotency_key",

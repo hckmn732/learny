@@ -1105,5 +1105,117 @@
       ],
       "minutes": 75
     }
-  ]
+  ],
+  "pause": {
+    "summaries": [
+      {
+        "kind": "pause_started",
+        "tone": "tu",
+        "enabled": true,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Ton planning est gelé et ta série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "tu",
+        "enabled": false,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Ton planning est gelé et ta série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "vous",
+        "enabled": true,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Votre planning est gelé et votre série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "vous",
+        "enabled": false,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Votre planning est gelé et votre série reste intacte."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "tu",
+        "enabled": true,
+        "text": "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "tu",
+        "enabled": false,
+        "text": "Pause terminée : ton planning reprend dès aujourd’hui."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "vous",
+        "enabled": true,
+        "text": "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "vous",
+        "enabled": false,
+        "text": "Pause terminée : votre planning reprend dès aujourd’hui."
+      }
+    ],
+    "endDates": [
+      {
+        "endDate": "2026-11-20",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "endDate": "2026-11-11",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "endDate": "2026-11-10",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "la fin de pause ne peut pas précéder aujourd’hui"
+        }
+      },
+      {
+        "endDate": "2026-11-1",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "date civile AAAA-MM-JJ attendue"
+        }
+      },
+      {
+        "endDate": "2026-1-1",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "date civile AAAA-MM-JJ attendue"
+        }
+      }
+    ],
+    "endDateInZone": [
+      {
+        "instant": "2026-11-11T12:20:00.000Z",
+        "timeZone": "Europe/Paris",
+        "days": 3,
+        "endDate": "2026-11-14"
+      },
+      {
+        "instant": "2026-11-11T12:20:00.000Z",
+        "timeZone": "America/New_York",
+        "days": 7,
+        "endDate": "2026-11-18"
+      },
+      {
+        "instant": "2026-12-31T23:30:00.000Z",
+        "timeZone": "UTC",
+        "days": 1,
+        "endDate": "2027-01-01"
+      }
+    ]
+  }
 }

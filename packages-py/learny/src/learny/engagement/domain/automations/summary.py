@@ -2,7 +2,7 @@
 
 Ported from `AutomationSummary` of `packages/contracts/src/moteur-d-automatismes.ts`: the summary is
 trimmed, never empty, at most 160 characters and never spans two lines. `clip` is the truncation of
-the definitions that build a long sentence; `status_prefix` is the « Annule » / « Refuse » prefix
+the definitions that build a long sentence; `status_prefix` is the "Annule" / "Refuse" prefix
 the journal reads after a decision (EF-8). The French text lives in `locale_fr` (ADR-2011).
 """
 

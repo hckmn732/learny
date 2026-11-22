@@ -1,7 +1,7 @@
 """Display rules of the weekly review (SPEC-2205, SPEC-720 EF-2 and ET-4).
 
 Ported from the pure helpers of `packages/contracts/src/automatisme-9-bilan-de-la-semaine.ts`.
-Every label is copied word for word from the TypeScript: « 13 h 30 », « 86 % », « Non disponible »,
+Every label is copied word for word from the TypeScript: "13 h 30", "86 %", "Non disponible",
 the period and the reception labels. The French short names are a table, never the process locale,
 so the output is identical on every host (ADR-0047).
 """
@@ -36,7 +36,7 @@ def format_weekly_study(minutes: float) -> str:
 
 
 def weekly_retention_label(rate: float | None) -> str:
-    """CL-4 - a missing measure is « Non disponible », never 0 %."""
+    """CL-4 - a missing measure is "Non disponible", never 0 %."""
     return fr.WEEKLY_RETENTION_UNAVAILABLE if rate is None else f"{round_half_up(rate)} %"
 
 
@@ -47,7 +47,7 @@ def short_date(day: str) -> tuple[str, str]:
 
 
 def weekly_period_label(week_start: str, week_end: str) -> str:
-    """EF-2 - « 2 - 8 nov. » (the month is written once when both days share it)."""
+    """EF-2 - "2 - 8 nov." (the month is written once when both days share it)."""
     start_day, start_month = short_date(week_start)
     end_day, end_month = short_date(week_end)
     if start_month == end_month:
@@ -58,7 +58,7 @@ def weekly_period_label(week_start: str, week_end: str) -> str:
 
 
 def weekly_received_label(instant: str, time_zone: str) -> str:
-    """EF-2 - « reçu dim. 19:00 », computed in the learner's zone."""
+    """EF-2 - "recu dim. 19:00", computed in the learner's zone."""
     local = parse_iso(instant).astimezone(ZoneInfo(time_zone))
     weekday = fr.WEEKLY_WEEKDAYS[local.isoweekday() - 1]
     return fr.WEEKLY_RECEIVED.format(weekday=weekday, time=f"{local.hour:02d}:{local.minute:02d}")
@@ -87,24 +87,24 @@ def is_at_risk_notion(
 
 _TRANSLITERATION: Final = str.maketrans(
     {
-        "à": "a",
-        "â": "a",
-        "ä": "a",
-        "ç": "c",
-        "é": "e",
-        "è": "e",
-        "ê": "e",
-        "ë": "e",
-        "î": "i",
-        "ï": "i",
-        "ô": "o",
-        "ö": "o",
-        "ù": "u",
-        "û": "u",
-        "ü": "u",
-        "ÿ": "y",
-        "œ": "oe",
-        "æ": "ae",
+        "\u00e0": "a",
+        "\u00e2": "a",
+        "\u00e4": "a",
+        "\u00e7": "c",
+        "\u00e9": "e",
+        "\u00e8": "e",
+        "\u00ea": "e",
+        "\u00eb": "e",
+        "\u00ee": "i",
+        "\u00ef": "i",
+        "\u00f4": "o",
+        "\u00f6": "o",
+        "\u00f9": "u",
+        "\u00fb": "u",
+        "\u00fc": "u",
+        "\u00ff": "y",
+        "\u0153": "oe",
+        "\u00e6": "ae",
     }
 )
 

@@ -149,10 +149,10 @@ operations:
   'me.ai.task-models.update': py
   'me.automation-actions.accept': ts
   'me.automation-actions.decline': ts
-  'me.automation-actions.list': ts
+  'me.automation-actions.list': py
   'me.automation-actions.undo': ts
-  'me.automations.list': ts
-  'me.automations.update': ts
+  'me.automations.list': py
+  'me.automations.update': py
   'me.deletion.cancel': ts
   'me.deletion.schedule': ts
   'me.export.read': ts

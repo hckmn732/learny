@@ -207,7 +207,7 @@ def test_plan_minutes_match_the_contract(case: dict[str, Any]) -> None:
 
 def _definition(key: str = "micro_seance") -> AutomationDefinition:
     def explain(action: ActionView, tone: str, time_zone: str) -> str:
-        return f"Proposition « {action.kind} » ({tone}, {time_zone})."
+        return f"Proposition \u00ab {action.kind} \u00bb ({tone}, {time_zone})."
 
     return AutomationDefinition(key=key, triggers=({"type": "direct"},), explain=explain)
 
@@ -242,7 +242,7 @@ def test_registry_refuses_a_duplicate_and_an_unknown_key() -> None:
 
 def test_validate_draft_keeps_the_dedupe_key_in_the_payload() -> None:
     decision = validate_draft(_definition(), _draft(), "vous", "Europe/Paris")
-    assert decision.summary == "Proposition « micro_session_proposed » (vous, Europe/Paris)."
+    assert decision.summary == "Proposition \u00ab micro_session_proposed \u00bb (vous, Europe/Paris)."
     assert decision.payload == {"hour": 20, "dedupeKey": "micro:2026-11-11"}
 
 
@@ -281,47 +281,27 @@ def test_the_href_of_a_notification_must_be_an_internal_path() -> None:
 
 # --- global pause -------------------------------------------------------------------------------
 
-PAUSE_TEXT = {
-    ("pause_started", "vous"): (
-        "Pause déclarée jusqu’au 2026-11-20. Votre planning est gelé et votre série reste intacte."
-    ),
-    ("pause_started", "tu"): (
-        "Pause déclarée jusqu’au 2026-11-20. Ton planning est gelé et ta série reste intacte."
-    ),
-    ("pause_ended", "vous"): (
-        "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
-    ),
-    ("pause_ended", "tu"): (
-        "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
-    ),
-}
+
+@pytest.mark.parametrize(
+    "case", ORACLE["pause"]["summaries"], ids=lambda case: f"{case['kind']}-{case['tone']}-{case['enabled']}"
+)
+def test_pause_summary_is_the_journal_line(case: dict[str, Any]) -> None:
+    assert pause_summary(case["kind"], "2026-11-20", case["enabled"], case["tone"]) == case["text"]
 
 
-@pytest.mark.parametrize(("kind", "tone"), sorted(PAUSE_TEXT))
-def test_pause_summary_is_the_journal_line(kind: str, tone: str) -> None:
-    assert pause_summary(kind, "2026-11-20", True, tone) == PAUSE_TEXT[(kind, tone)]
+@pytest.mark.parametrize("case", ORACLE["pause"]["endDates"], ids=lambda case: case["endDate"])
+def test_pause_end_date_is_a_civil_day_not_before_today(case: dict[str, Any]) -> None:
+    result = validate_pause_end_date(case["endDate"], case["localDay"])
+    assert result == (None if case["result"]["ok"] else case["result"]["message"])
 
 
-def test_pause_summary_without_diagnostic_resumes_directly() -> None:
-    assert pause_summary("pause_ended", "2026-11-20", False, "vous") == (
-        "Pause terminée : votre planning reprend dès aujourd’hui."
-    )
-    assert pause_summary("pause_ended", "2026-11-20", False, "tu") == (
-        "Pause terminée : ton planning reprend dès aujourd’hui."
-    )
+@pytest.mark.parametrize(
+    "case", ORACLE["pause"]["endDateInZone"], ids=lambda case: f"{case['instant']}-{case['timeZone']}"
+)
+def test_pause_end_date_in_zone_uses_the_profile_zone(case: dict[str, Any]) -> None:
+    now = now_of(case["instant"])
+    assert pause_end_date_in_zone(now, case["timeZone"], case["days"]) == case["endDate"]
 
 
-def test_pause_end_date_is_a_civil_day_not_before_today() -> None:
-    assert validate_pause_end_date("2026-11-20", "2026-11-11") is None
-    assert validate_pause_end_date("2026-11-11", "2026-11-11") is None
-    assert validate_pause_end_date("2026-11-10", "2026-11-11") == (
-        "la fin de pause ne peut pas précéder aujourd’hui"
-    )
-    assert validate_pause_end_date("2026-11-1", "2026-11-11") == "date civile AAAA-MM-JJ attendue"
-
-
-def test_pause_end_date_in_zone_uses_the_profile_zone() -> None:
-    now = now_of(AT)
-    assert pause_end_date_in_zone(now, "Europe/Paris", 3) == "2026-11-14"
-    assert pause_end_date_in_zone(now, "America/New_York", 7) == "2026-11-18"
+def test_shift_day_crosses_the_year_boundary() -> None:
     assert shift_day("2026-12-31", 1) == "2027-01-01"

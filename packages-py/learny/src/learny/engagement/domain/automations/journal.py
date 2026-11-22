@@ -1,8 +1,8 @@
 """Selection and pagination of the automation journal (SPEC-2205, ET-5 of SPEC-711).
 
 Ported from `listMyAutomationActions` and `parametres-automatismes.ts` (BR-AUT-12): the journal is
-never in a random order — newest first, with the action identifier as an explicit ascending
-tie-break — and the « N actions cette semaine » counter is exactly the prefix of that list. The
+never in a random order - newest first, with the action identifier as an explicit ascending
+tie-break - and the N actions cette semaine counter is exactly the prefix of that list. The
 cursor is the opaque `base64url(JSON {k, id})` of `packages/contracts/src/cursor.ts`.
 """
 

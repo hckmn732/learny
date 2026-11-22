@@ -49,6 +49,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the sender reads the recipient address and tone, and the welcome job checks the
         # e-mail channel, on rows the authenticated role may not read for another purpose (EF-6).
         "learny.engagement.application.email": "recipient address and tone of the e-mail channel",
+        # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
+        # authenticated role of one learner may not update (CL-3, SPEC-711).
+        "learny.engagement.application.automations": "hourly tick expires the pending actions",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

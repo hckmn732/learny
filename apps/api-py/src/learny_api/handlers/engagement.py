@@ -118,3 +118,21 @@ async def email_unsubscribe(call: Call) -> Any:
             raise
         return _html(engagement.unsubscribe_invalid(nonce))
     return _html(engagement.unsubscribe_done(nonce))
+
+
+# --- automations ---------------------------------------------------------------------------------
+
+
+@handler("me.automations.list")
+async def me_automations_list(call: Call) -> Any:
+    return await engagement.list_my_automations(call.deps, _actor(call))
+
+
+@handler("me.automations.update")
+async def me_automations_update(call: Call) -> Any:
+    return await engagement.update_my_automation_setting(call.deps, _actor(call), _body(call))
+
+
+@handler("me.automation-actions.list")
+async def me_automation_actions_list(call: Call) -> Any:
+    return await engagement.list_my_automation_actions(call.deps, _actor(call), _query(call))

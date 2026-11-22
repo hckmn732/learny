@@ -28,6 +28,11 @@ import {
   AutomationSummary,
 } from '../../packages/contracts/src/moteur-d-automatismes.ts';
 import { automationParamsSchema } from '../../packages/contracts/src/parametres-automatismes.ts';
+import {
+  pauseEndDateInZone,
+  pauseSummary,
+  validatePauseEndDate,
+} from '../../packages/services/src/pause/index.ts';
 
 const AT = '2026-11-11T12:20:00.000Z';
 const NIGHT = '2026-11-11T22:30:00.000Z';
@@ -320,6 +325,33 @@ writeFileSync(
         ),
       })),
       planMinutes: PLAN_CASES.map((plan) => ({ plan, minutes: sumPlanMinutes(plan) })),
+      pause: {
+        summaries: ['pause_started', 'pause_ended'].flatMap((kind) =>
+          ['tu', 'vous'].flatMap((tone) =>
+            [true, false].map((enabled) => ({
+              kind,
+              tone,
+              enabled,
+              text: pauseSummary(kind, '2026-11-20', enabled, tone),
+            })),
+          ),
+        ),
+        endDates: ['2026-11-20', '2026-11-11', '2026-11-10', '2026-11-1', '2026-1-1'].map(
+          (endDate) => ({
+            endDate,
+            localDay: '2026-11-11',
+            result: validatePauseEndDate(endDate, '2026-11-11'),
+          }),
+        ),
+        endDateInZone: [
+          { instant: AT, timeZone: 'Europe/Paris', days: 3 },
+          { instant: AT, timeZone: 'America/New_York', days: 7 },
+          { instant: '2026-12-31T23:30:00.000Z', timeZone: 'UTC', days: 1 },
+        ].map((entry) => ({
+          ...entry,
+          endDate: pauseEndDateInZone(new Date(entry.instant), entry.timeZone, entry.days),
+        })),
+      },
     },
     null,
     2,

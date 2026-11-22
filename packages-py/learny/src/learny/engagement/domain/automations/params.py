@@ -57,7 +57,7 @@ def _object(raw: Any) -> dict[str, Any]:
 
 
 def _literal(values: Mapping[str, Any], name: str, allowed: tuple[int, ...], default: int) -> int:
-    """`z.union([z.literal(...)])`: a number outside the closed list is « Invalid input »."""
+    """`z.union([z.literal(...)])`: a number outside the closed list is "Invalid input"."""
     value = values.get(name, default)
     if isinstance(value, bool) or not isinstance(value, (int, float)) or value not in allowed:
         raise ParamsError(name, INVALID_INPUT)

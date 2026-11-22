@@ -2,8 +2,8 @@
 
 Ported from `expireDueAutomationActions` of `packages/db/src/repositories/automation-actions.ts`:
 the hourly tick only expires a row that still waits for consent and whose payload carries an
-`expiresAt` instant that has passed. A malformed instant cannot exist — `validateDraft` refuses it
-— so the strict parse below only guards the read, it never changes an observable behaviour.
+`expiresAt` instant that has passed. A malformed instant cannot exist - `validateDraft` refuses it
+- so the strict parse below only guards the read, it never changes an observable behaviour.
 """
 
 from collections.abc import Mapping
