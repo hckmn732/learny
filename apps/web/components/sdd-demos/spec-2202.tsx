@@ -113,7 +113,7 @@ export default function Spec2202Demo() {
         </p>
         <ul data-testid="spec-2202-operations" className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
           {scoped.map((operation) => (
-            <li key={operation.id} className="flex items-baseline justify-between gap-3">
+            <li key={operation.id} className="flex items-baseline gap-2">
               <span className="font-mono text-xs">{operation.id}</span>
               <span
                 className={
