@@ -40,6 +40,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2203 - telling a missing contribution from another owner's one (EF-6) and the
         # soft deletion of a contribution with its citations, which the authenticated role cannot do.
         "learny.content.application.resources": "owner probe and soft deletion of a contribution",
+        # SPEC-2203 - the ingestion job is an authorized system operation (ET-4): it reads a
+        # private object, locks the resource and writes the outbox event after the commit.
+        "learny.content.application.ingestion": "system ingestion job of a contribution (ET-4)",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

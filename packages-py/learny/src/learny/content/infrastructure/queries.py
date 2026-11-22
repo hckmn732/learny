@@ -6,6 +6,7 @@ and `packages/services/src/courses/*`): same tables, same columns, same `order b
 reads the clock.
 """
 
+import uuid
 from collections.abc import Mapping
 from typing import Any
 
@@ -976,3 +977,145 @@ async def mark_suggestion_status(tx: Tx, user_id: str, suggestion_id: str, statu
 async def select_imported_resource(tx: Tx, user_id: str, chapter_id: str, url: str) -> dict[str, Any] | None:
     """An already imported contribution with the same URL is reused (BR-APP-05)."""
     return await one(tx, SELECT_IMPORTED_RESOURCE, {"user_id": user_id, "chapter_id": chapter_id, "url": url})
+
+
+# --- chapters.summary (packages/services/src/courses/summary.ts) ---------------------------------
+
+LOCK_CHAPTER_SUMMARY = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
+FIND_CHAPTER_SUMMARY = text(
+    """
+    select id::text as id, chapter_id::text as chapter_id, course_id::text as course_id,
+           text, feedback, created_at
+      from public.chapter_summaries
+     where user_id = cast(:user_id as uuid) and request_key = :request_key
+     limit 1
+    """
+)
+SELECT_SUMMARY_COURSE = text(
+    """
+    select c.id::text as id, c.module_id::text as module_id, c.formation_id::text as formation_id
+      from public.courses c
+     where c.id = cast(:course_id as uuid)
+       and c.owner_id = cast(:user_id as uuid)
+       and c.is_current
+       and c.status = 'ready'
+     limit 1
+    """
+)
+SELECT_SUMMARY_CHAPTER = text(
+    """
+    select ch.id::text as id, ch.title
+      from public.chapters ch
+      join public.course_sections cs
+        on cs.chapter_id = ch.id and cs.course_id = cast(:course_id as uuid)
+     where ch.id = cast(:chapter_id as uuid) and ch.module_id = cast(:module_id as uuid)
+     limit 1
+    """
+)
+INSERT_CHAPTER_SUMMARY = text(
+    """
+    insert into public.chapter_summaries (
+      user_id, chapter_id, course_id, text, request_key, created_at
+    ) values (
+      cast(:user_id as uuid), cast(:chapter_id as uuid), cast(:course_id as uuid), :text,
+      :request_key, cast(:created_at as timestamptz)
+    )
+    returning id::text as id, chapter_id::text as chapter_id, course_id::text as course_id,
+              text, feedback, created_at
+    """
+)
+SELECT_SUMMARY_KEY_POINTS = text(
+    """
+    select data
+      from public.course_sections
+     where course_id = cast(:course_id as uuid)
+       and chapter_id = cast(:chapter_id as uuid)
+       and kind = 'retain'
+     order by position asc
+     limit 1
+    """
+)
+UPDATE_CHAPTER_SUMMARY_FEEDBACK = text(
+    """
+    update public.chapter_summaries
+       set feedback = cast(:feedback as jsonb)
+     where id = cast(:id as uuid) and user_id = cast(:user_id as uuid)
+    """
+)
+
+
+def is_uuid(value: object) -> bool:
+    """A canonical UUID, the same check as the Zod `Uuid` of the contract."""
+    if not isinstance(value, str):
+        return False
+    try:
+        uuid.UUID(value)
+    except (ValueError, AttributeError, TypeError):
+        return False
+    return True
+
+
+async def lock_chapter_summary(tx: Tx, user_id: str, chapter_id: str) -> None:
+    """Serialises the summaries of one (learner, chapter) pair (ET-2)."""
+    await execute(tx, LOCK_CHAPTER_SUMMARY, {"key": f"chapter-summary:{user_id}:{chapter_id}"})
+
+
+async def find_chapter_summary(tx: Tx, user_id: str, request_key: str) -> dict[str, Any] | None:
+    """A replay with the same request key returns the first summary (ET-2)."""
+    return await one(tx, FIND_CHAPTER_SUMMARY, {"user_id": user_id, "request_key": request_key})
+
+
+async def select_summary_course(tx: Tx, user_id: str, course_id: str) -> dict[str, Any] | None:
+    """The current, ready course of the caller (BR-COU-10)."""
+    return await one(tx, SELECT_SUMMARY_COURSE, {"user_id": user_id, "course_id": course_id})
+
+
+async def select_summary_chapter(
+    tx: Tx, chapter_id: str, module_id: str, course_id: str
+) -> dict[str, Any] | None:
+    """The chapter, only when the course has a section for it."""
+    return await one(
+        tx,
+        SELECT_SUMMARY_CHAPTER,
+        {"chapter_id": chapter_id, "module_id": module_id, "course_id": course_id},
+    )
+
+
+async def insert_chapter_summary(
+    tx: Tx,
+    *,
+    user_id: str,
+    chapter_id: str,
+    course_id: str,
+    text: str,
+    request_key: str | None,
+    created_at: str,
+) -> dict[str, Any] | None:
+    """The committed summary; `None` when the insert returned no row."""
+    return await one(
+        tx,
+        INSERT_CHAPTER_SUMMARY,
+        {
+            "user_id": user_id,
+            "chapter_id": chapter_id,
+            "course_id": course_id,
+            "text": text,
+            "request_key": request_key,
+            "created_at": created_at,
+        },
+    )
+
+
+async def select_summary_key_points(tx: Tx, course_id: str, chapter_id: str) -> Any:
+    """The `data` of the "A retenir" section, used as the expected content."""
+    found = await one(tx, SELECT_SUMMARY_KEY_POINTS, {"course_id": course_id, "chapter_id": chapter_id})
+    return None if found is None else found.get("data")
+
+
+async def update_chapter_summary_feedback(tx: Tx, *, row_id: str, user_id: str, feedback: str) -> None:
+    """Stores the tutor correction on the committed summary (BR-COU-07)."""
+    await execute(
+        tx,
+        UPDATE_CHAPTER_SUMMARY_FEEDBACK,
+        {"id": row_id, "user_id": user_id, "feedback": feedback},
+    )

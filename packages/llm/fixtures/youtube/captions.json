@@ -1,0 +1,40 @@
+{
+  "dQw4w9WgXcQ": {
+    "videoId": "dQw4w9WgXcQ",
+    "title": "Comptabilité de gestion : le compte de résultat",
+    "language": "fr",
+    "durationSec": 96,
+    "segments": [
+      {
+        "startSec": 0,
+        "endSec": 9,
+        "text": "Bienvenue dans cette séance consacrée au compte de résultat."
+      },
+      {
+        "startSec": 9,
+        "endSec": 24,
+        "text": "Le compte de résultat présente les charges et les produits d’un exercice."
+      },
+      {
+        "startSec": 24,
+        "endSec": 41,
+        "text": "La marge brute mesure la différence entre le chiffre d’affaires et le coût des marchandises vendues."
+      },
+      {
+        "startSec": 41,
+        "endSec": 58,
+        "text": "Le résultat d’exploitation ajoute les charges externes et les amortissements."
+      },
+      {
+        "startSec": 58,
+        "endSec": 76,
+        "text": "Le résultat net tient compte du résultat financier et de l’impôt sur les sociétés."
+      },
+      {
+        "startSec": 76,
+        "endSec": 96,
+        "text": "Retenez que le compte de résultat se lit toujours sur un exercice comptable."
+      }
+    ]
+  }
+}

@@ -40,6 +40,9 @@ class ContentDeps(Protocol):
     @property
     def logger(self) -> Any: ...
 
+    @property
+    def llm(self) -> Any: ...
+
 
 def storage_access(deps: ContentDeps, user_id: str, *, service: bool = False) -> StorageAccess:
     """The short-lived Storage token minted for one caller (SPEC-114, never logged)."""

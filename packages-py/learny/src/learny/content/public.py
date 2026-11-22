@@ -7,6 +7,11 @@ from learny.content.application.chapters import chapter_counts, complete_chapter
 from learny.content.application.citations import get_citation_source
 from learny.content.application.course import get_module_course
 from learny.content.application.generate import generate_course_now
+from learny.content.application.ingestion import (
+    IngestionPorts,
+    default_ports,
+    process_resource,
+)
 from learny.content.application.module_screen import get_module_screen
 from learny.content.application.ports import ContentDeps
 from learny.content.application.progress import (
@@ -35,6 +40,11 @@ from learny.content.application.sections import (
     suspend_bricks_for_notions,
 )
 from learny.content.application.suggestions import dismiss_suggestion, import_suggestion
+from learny.content.application.summary import (
+    CourseSummaryFeedback,
+    correct_chapter_summary,
+    submit_chapter_summary,
+)
 from learny.content.domain.chunk import chunk_text, excerpt_of
 from learny.content.domain.embeddings import embed_texts, fake_embedding
 from learny.content.domain.retrieval import (
@@ -46,14 +56,18 @@ from learny.content.domain.retrieval import (
 
 __all__ = [
     "ContentDeps",
+    "CourseSummaryFeedback",
+    "IngestionPorts",
     "assert_uuid",
     "chapter_counts",
     "chunk_text",
     "complete_chapter",
+    "correct_chapter_summary",
     "course_percent",
     "create_resource",
     "create_upload",
     "deduplicate_chunks",
+    "default_ports",
     "delete_resource",
     "deny_or_missing",
     "dismiss_suggestion",
@@ -71,6 +85,7 @@ __all__ = [
     "get_signed_read_url",
     "import_suggestion",
     "merge_progress",
+    "process_resource",
     "reactivate_bricks",
     "reading_percent",
     "record_course_progress",
@@ -78,6 +93,7 @@ __all__ = [
     "report_course_section",
     "retry_resource",
     "select_context",
+    "submit_chapter_summary",
     "suspend_bricks_for_notions",
     "text_overlap_ratio",
     "uploaded_event_id",

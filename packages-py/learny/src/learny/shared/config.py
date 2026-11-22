@@ -9,6 +9,7 @@ from typing import Literal
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RateLimitMode = Literal["on", "off"]
+LlmMode = Literal["live", "mock"]
 
 
 class Settings(BaseSettings):
@@ -49,6 +50,11 @@ class Settings(BaseSettings):
     # Legal documents whose acceptance is tracked (SPEC-806, ported by SPEC-2101).
     legal_cgu_version: str = "2026-11-11"
     legal_privacy_version: str = "2026-11-11"
+
+    # AI providers (SPEC-2203): mock outside production, secrets stay server-side.
+    llm_mode: LlmMode = "mock"
+    voyage_api_key: str | None = None
+    search_api_key: str | None = None
 
     # Asynchronous execution (SPEC-2102): jobs mode and worker tuning.
     jobs_mode: str = "worker"
