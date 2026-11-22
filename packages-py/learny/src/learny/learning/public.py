@@ -5,6 +5,7 @@ Other contexts and the apps import only this module; everything else stays inter
 
 from learny.learning.application.agenda import agenda_totals, get_agenda, slot_href, slot_label
 from learny.learning.application.apply_result import (
+    apply_learning_result,
     plan_notion_reviews,
     previous_state_of,
 )
@@ -51,6 +52,7 @@ __all__ = [
     "agenda_totals",
     "answer_review_item",
     "answer_warmup",
+    "apply_learning_result",
     "apply_replan",
     "build_final_review",
     "complete_review_session",

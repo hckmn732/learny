@@ -3571,3 +3571,70 @@ async def read_due_notions_rows(tx: Tx, user_id: str, formation_id: str, at: str
         READ_DUE_NOTIONS, {"user_id": user_id, "formation_id": formation_id, "at": at}
     )
     return [row_of(item) for item in result.mappings().all()]
+
+
+# --------------------------------------------------------------------------------------------------
+# apply_learning_result (packages/services/src/learning/apply-result.ts, SPEC-411 ET-1, ET-4)
+# --------------------------------------------------------------------------------------------------
+
+READ_ATTEMPT_FOR_APPLICATION = text(
+    """
+    select a.id::text as id,
+           a.user_id::text as user_id,
+           a.activity_id::text as activity_id,
+           a.attempt_no,
+           a.status::text as status,
+           a.started_at,
+           a.submitted_at,
+           a.duration_ms,
+           act.kind::text as activity_kind,
+           act.module_id::text as module_id,
+           act.formation_id::text as formation_id,
+           act.owner_id::text as owner_id,
+           act.config
+      from public.attempts a
+      join public.activities act on act.id = a.activity_id
+     where a.id = cast(:attempt_id as uuid)
+       and a.user_id = cast(:user_id as uuid)
+     for update of a
+    """
+)
+
+READ_ATTEMPT_ANSWERS_FOR_APPLICATION = text(
+    """
+    select a.id::text as id,
+           a.attempt_id::text as attempt_id,
+           a.position,
+           a.brick_version_id::text as brick_version_id,
+           b.type::text as brick_type,
+           b.notion_ids::text[] as notion_ids,
+           a.is_correct,
+           a.score::text as score,
+           a.max_score::text as max_score,
+           a.time_ms,
+           a.answered_at,
+           a.chosen_distractor_notion_id::text as chosen_distractor_notion_id,
+           a.response,
+           a.feedback
+      from public.answers a
+      join public.brick_versions bv on bv.id = a.brick_version_id
+      join public.bricks b on b.id = bv.brick_id
+     where a.attempt_id = cast(:attempt_id as uuid)
+     order by a.position
+    """
+)
+
+
+async def read_attempt_for_application(tx: Tx, user_id: str, attempt_id: str) -> Mapping[str, Any] | None:
+    """`loadAttemptForUpdate`: the graded attempt and its activity, locked for the application."""
+    result = await tx.conn.execute(
+        READ_ATTEMPT_FOR_APPLICATION, {"user_id": user_id, "attempt_id": attempt_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_attempt_answers_for_application(tx: Tx, attempt_id: str) -> list[Mapping[str, Any]]:
+    """`loadAnswers`: every answer of the attempt with the notion identifiers of its brick."""
+    result = await tx.conn.execute(READ_ATTEMPT_ANSWERS_FOR_APPLICATION, {"attempt_id": attempt_id})
+    return [row_of(row) for row in result.mappings().all()]

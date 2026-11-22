@@ -112,3 +112,14 @@ PLANNING_AUTOMATION_FAILED = "Action non créée."
 # packages/contracts/src/agenda-deplacer-et-reajuster-le-planning.ts (SPEC-705 ET-3).
 PLANNING_MOVE_WINDOW_ORDER = "La fin du créneau doit suivre son début."
 PLANNING_MOVE_WINDOW_PATH = "body.endsAt"
+
+
+# --- application of one graded attempt (packages/services/src/learning/apply-result.ts) -----------
+
+APPLY_ATTEMPT_NOT_FOUND = "Tentative introuvable."
+APPLY_NOT_GRADED = (
+    "La tentative n\u2019est pas corrig\u00e9e : "
+    "ses r\u00e9sultats ne peuvent pas encore \u00eatre appliqu\u00e9s."
+)
+APPLY_KIND_UNSUPPORTED = "Ce type d\u2019activit\u00e9 n\u2019alimente pas le moteur d\u2019apprentissage."
+APPLY_NOTION_NOT_FOUND = "Notion introuvable."

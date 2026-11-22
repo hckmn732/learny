@@ -45,3 +45,6 @@ class LearningDeps(Protocol):
 
     @property
     def db(self) -> Transactions: ...
+
+    @property
+    def logger(self) -> Any: ...

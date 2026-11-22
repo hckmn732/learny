@@ -10,13 +10,15 @@ functions, so a learner never gains a direct write policy (ADR-0112 section 4).
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from learny.identity.domain.actor import Actor
 from learny.learning.domain import fsrs, gaps, mastery
 from learny.learning.domain.params import ENGINE
-from learny.learning.domain.time import format_instant
+from learny.learning.domain.time import format_instant, local_date_of
 from learny.learning.infrastructure import queries
 from learny.shared import time as shared_time
 from learny.shared.errors import AppError
 from learny.shared.jsmath import js_round
+from learny.shared.locale_fr import learning as texts
 
 ATTEMPT_KIND_BY_ACTIVITY: dict[str, str] = {
     "validation_quiz": "validation_quiz",
@@ -704,3 +706,317 @@ async def apply_review_result(
 def apply_error(code: str, detail: str) -> AppError:
     """A learning application error carrying an already user-facing French detail."""
     return AppError(code, detail)
+
+
+def select_corrected_answers(
+    answers: Sequence[Mapping[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
+    """`selectCorrectedAnswers`: corrected, pending and ignored answers, in position order."""
+    corrected: list[dict[str, Any]] = []
+    pending: list[dict[str, Any]] = []
+    ignored: list[dict[str, Any]] = []
+    ordered = sorted(answers, key=lambda answer: int(answer["position"]))
+    for answer in ordered:
+        entry = {
+            "answerId": str(answer["id"]),
+            "position": int(answer["position"]),
+            "notionIds": [str(notion) for notion in (answer["notion_ids"] or [])],
+            "format": format_of(str(answer["brick_type"])),
+            "isCorrect": answer["is_correct"],
+            "selfRating": _rating_field(answer["response"]),
+            "score": answer["score"],
+            "maxScore": answer["max_score"],
+            "timeMs": answer["time_ms"],
+            "answeredAt": answer["answered_at"],
+        }
+        if entry["format"] is None:
+            ignored.append(entry)
+        elif entry["isCorrect"] is None:
+            pending.append(entry)
+        else:
+            corrected.append(entry)
+    return {"corrected": corrected, "pending": pending, "ignored": ignored}
+
+
+def review_key(answer_id: str, notion_id: str) -> str:
+    """Idempotence key of one persisted review row (ADR-0149)."""
+    return f"{answer_id}:{notion_id}"
+
+
+def _transition_of(
+    notion_id: str, before: Mapping[str, Any], after: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    """`transitionOf`: the stored state before and the planned state after, or the same one."""
+    card = before["fsrs"]
+    return {
+        "notionId": notion_id,
+        "masteryBefore": before["mastery"],
+        "masteryAfter": before["mastery"] if after is None else after["masteryAfter"],
+        "dueAtBefore": None if card is None else card["due"],
+        "dueAtAfter": (None if card is None else card["due"]) if after is None else after["dueAt"],
+        "gapBefore": before["gap"],
+        "gapAfter": before["gap"] if after is None else after["gapAfter"],
+    }
+
+
+async def apply_learning_result(deps: Any, actor: Actor, attempt_id: str) -> dict[str, Any]:
+    """ET-1, ET-4, CL-1 to CL-5 - applies the corrected answers of one graded attempt.
+
+    One user transaction: the attempt row and the notion states are locked, the pure plan of every
+    notion is persisted through the security-definer journals, the day's activity is recorded and
+    the gap events are queued in the outbox. A replayed attempt finds its `(answer, notion)` rows
+    and writes nothing (`already_applied`).
+    """
+    from learny.learning.application.ports import LearningDeps
+
+    typed: LearningDeps = deps
+    user_id = actor.user_id
+    now = typed.clock.now()
+    async with typed.db.user_tx(actor) as tx:
+        await queries.lock_learning_user(tx, user_id)
+        attempt = await queries.read_attempt_for_application(tx, user_id, attempt_id)
+        if attempt is None:
+            raise AppError("NOT_FOUND", texts.APPLY_ATTEMPT_NOT_FOUND)
+        if str(attempt["owner_id"]) != user_id:
+            raise AppError("NOT_FOUND", texts.APPLY_ATTEMPT_NOT_FOUND)
+        if attempt["status"] != "graded":
+            raise AppError("CONFLICT", texts.APPLY_NOT_GRADED)
+        attempt_kind = activity_kind(str(attempt["activity_kind"]))
+        if attempt_kind is None:
+            raise AppError("VALIDATION_FAILED", texts.APPLY_KIND_UNSUPPORTED)
+        answers = await queries.read_attempt_answers_for_application(tx, attempt_id)
+        diagnostic_positions = diagnostic_positions_of(attempt["config"])
+        diagnostic_ids = {
+            str(answer["id"]) for answer in answers if int(answer["position"]) in diagnostic_positions
+        }
+        diagnostic_notions = {
+            str(notion)
+            for answer in answers
+            if str(answer["id"]) in diagnostic_ids
+            for notion in (answer["notion_ids"] or [])
+        }
+        selection = select_corrected_answers(answers)
+        if not selection["corrected"]:
+            return {
+                "attemptId": attempt_id,
+                "status": "pending_correction" if selection["pending"] else "not_applicable",
+                "reviewCount": 0,
+                "notionIds": [],
+                "pendingAnswers": len(selection["pending"]),
+                "gapEvents": [],
+                "events": [],
+                "dailyActivity": None,
+                "states": [],
+            }
+
+        notion_ids = sorted(
+            {str(notion) for answer in selection["corrected"] for notion in answer["notionIds"]}
+        )
+        formation_id = str(attempt["formation_id"])
+        notions = {
+            str(row["id"]): row for row in await queries.read_formation_notions(tx, formation_id, notion_ids)
+        }
+        if len(notions) != len(notion_ids):
+            raise AppError("NOT_FOUND", texts.APPLY_NOTION_NOT_FOUND)
+        states = await load_states(tx, user_id, notion_ids)
+        applied = {
+            review_key(answer_id, notion_id)
+            for answer_id, notion_id in await queries.read_applied_review_keys(
+                tx, user_id, [str(answer["answerId"]) for answer in selection["corrected"]]
+            )
+        }
+
+        candidates: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for answer in selection["corrected"]:
+            for notion_id in answer["notionIds"]:
+                key = review_key(str(answer["answerId"]), notion_id)
+                if key in applied or key in seen:
+                    continue
+                seen.add(key)
+                candidates.append({"answer": answer, "notionId": notion_id})
+
+        if not candidates:
+            return {
+                "attemptId": attempt_id,
+                "status": "already_applied",
+                "reviewCount": 0,
+                "notionIds": notion_ids,
+                "pendingAnswers": len(selection["pending"]),
+                "gapEvents": [],
+                "events": [],
+                "dailyActivity": None,
+                "states": [
+                    _transition_of(notion_id, previous_state_of(states.get(notion_id)), None)
+                    for notion_id in notion_ids
+                ],
+            }
+
+        timed = await load_timed_history(tx, user_id)
+        answers_by_id = {str(answer["id"]): answer for answer in answers}
+        steps: list[dict[str, Any]] = []
+        gap_events: list[dict[str, Any]] = []
+        events: list[str] = []
+        transitions: list[dict[str, Any]] = []
+        for notion_id in notion_ids:
+            notion_candidates = [candidate for candidate in candidates if candidate["notionId"] == notion_id]
+            before = previous_state_of(states.get(notion_id))
+            if not notion_candidates:
+                transitions.append(_transition_of(notion_id, before, None))
+                continue
+            history_rows = await load_history(tx, user_id, notion_id)
+            gap_answers: list[dict[str, Any]] = []
+            for row in history_rows:
+                record = answer_record_of(row, frozenset(diagnostic_ids))
+                if record is not None:
+                    gap_answers.append(record)
+            mastery_history = [
+                {
+                    "answerId": str(row["answer_id"]),
+                    "attemptId": str(row["attempt_id"]),
+                    "score": score_value(row["score"], row["max_score"], row["is_correct"]),
+                    "answeredAt": _iso(row["answered_at"]),
+                }
+                for row in history_rows
+            ]
+            review_answers: list[dict[str, Any]] = []
+            for candidate in notion_candidates:
+                row = answers_by_id[str(candidate["answer"]["answerId"])]
+                review_answers.append(
+                    {
+                        "answerId": str(row["id"]),
+                        "attemptId": attempt_id,
+                        "attemptKind": attempt_kind,
+                        "attemptNo": int(attempt["attempt_no"]),
+                        "source": SOURCE_BY_ATTEMPT_KIND[attempt_kind],
+                        "notionId": notion_id,
+                        "format": format_of(str(row["brick_type"])),
+                        "correct": row["is_correct"] is True,
+                        "timeMs": float(row["time_ms"] or 0),
+                        "selfRating": _rating_field(row["response"]),
+                        "answeredAt": _iso(row["answered_at"]),
+                        "chosenDistractorNotionId": row["chosen_distractor_notion_id"],
+                        "confusedWithNotionId": confused_with_field(row["response"]),
+                        "normalizedResponse": normalized_response(row["response"]),
+                        "offTopic": off_topic_field(row["feedback"]),
+                        "countsForGaps": notion_id not in diagnostic_notions,
+                    }
+                )
+            plan = plan_notion_reviews(
+                notion_id=notion_id,
+                state=before,
+                answers=review_answers,
+                history={"mastery": mastery_history, "gapAnswers": gap_answers, "timed": timed},
+            )
+            last: dict[str, Any] | None = None
+            for step in plan:
+                written = await persist_step(tx, user_id, step)
+                if not written:
+                    continue
+                steps.append(step)
+                last = step
+                if step["gapEvent"] is not None:
+                    gap_events.append(
+                        {
+                            "notionId": notion_id,
+                            "kind": step["gapEvent"]["kind"],
+                            "nature": step["gapEvent"]["nature"],
+                            "before": before["gap"]["nature"] if before["gap"] is not None else None,
+                        }
+                    )
+            transitions.append(_transition_of(notion_id, before, last))
+
+        daily_activity: dict[str, Any] | None = None
+        if steps:
+            time_zone = await load_timezone(tx, user_id)
+            submitted_at = now if attempt["submitted_at"] is None else attempt["submitted_at"]
+            total_ms = (
+                attempt["duration_ms"]
+                if attempt["duration_ms"] is not None
+                else sum(int(answer["time_ms"] or 0) for answer in answers)
+            )
+            minutes = max(1, -(-int(total_ms) // 60_000))
+            day = local_date_of(_iso(submitted_at), time_zone)
+            activity = await queries.upsert_daily_activity(
+                tx,
+                user_id=user_id,
+                day=day,
+                minutes=minutes,
+                qualifying=True,
+                sources=[f"attempt:{attempt_id}"],
+            )
+            await queries.consume_automation_actions_of_day(
+                tx, user_id=user_id, automation="micro_seance", day=day, complete_slots=False
+            )
+            daily_activity = {
+                "day": str(activity["day"]),
+                "minutes": int(activity["minutes"]),
+                "qualifying": bool(activity["qualifying"]),
+            }
+
+        for index, gap_event in enumerate(gap_events):
+            notion = notions.get(str(gap_event["notionId"]))
+            if notion is None:
+                continue
+            nature = gap_event["nature"]
+            if nature is None:
+                continue
+            if gap_event["kind"] == "cleared":
+                await tx.emit(
+                    "gap/cleared",
+                    {
+                        "userId": user_id,
+                        "formationId": str(notion["formation_id"]),
+                        "notionId": str(gap_event["notionId"]),
+                    },
+                    event_id=(f"gap/cleared:{gap_event['notionId']}:{index}:{attempt_id}"),
+                )
+                events.append("gap/cleared")
+                continue
+            if gap_event["kind"] == "nature_changed":
+                previous = gap_event["before"]
+                if previous is None:
+                    continue
+                await tx.emit(
+                    "gap/nature-changed",
+                    {
+                        "userId": user_id,
+                        "formationId": str(notion["formation_id"]),
+                        "notionId": str(gap_event["notionId"]),
+                        "nature": nature,
+                        "previousNature": previous,
+                    },
+                    event_id=(f"gap/nature-changed:{gap_event['notionId']}:{index}:{attempt_id}"),
+                )
+                events.append("gap/nature-changed")
+                continue
+            await tx.emit(
+                "gap/detected",
+                {
+                    "userId": user_id,
+                    "formationId": str(notion["formation_id"]),
+                    "notionId": str(gap_event["notionId"]),
+                    "nature": nature,
+                },
+                event_id=f"gap/detected:{gap_event['notionId']}:{index}:{attempt_id}",
+            )
+            events.append("gap/detected")
+
+        return {
+            "attemptId": attempt_id,
+            "status": "applied" if steps else "already_applied",
+            "reviewCount": len(steps),
+            "notionIds": notion_ids,
+            "pendingAnswers": len(selection["pending"]),
+            "gapEvents": [
+                {
+                    "notionId": gap_event["notionId"],
+                    "kind": gap_event["kind"],
+                    "nature": gap_event["nature"],
+                }
+                for gap_event in gap_events
+            ],
+            "events": events,
+            "dailyActivity": daily_activity,
+            "states": transitions,
+        }
