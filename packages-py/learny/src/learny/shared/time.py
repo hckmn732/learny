@@ -15,6 +15,7 @@ _EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 _CIVIL_DAY = re.compile(r"^(\d{4})-(\d{2})-(\d{2})$")
 _TZDB_NAME = re.compile(r"^[A-Z][a-z]+(?:/[A-Z][a-z]*(?:[_-](?:[A-Z][a-z]*|au|of|d|de))*)+$")
 _DAYS_IN_MONTH = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+_TIME_OF_DAY = re.compile(r"^([01]\d|2[0-3]):([0-5]\d)(?::00)?$")
 
 
 def parse_iso(value: str) -> datetime:
@@ -210,3 +211,55 @@ def format_user_date(instant: datetime, time_zone: str, *, weekday: bool = True)
     if not weekday:
         return f"{day} {month}, {clock}"
     return f"{FRENCH_WEEKDAYS[local.weekday()]} {day} {month}, {clock}"
+
+
+# --- the rest of `packages/core/src/time.ts` (SPEC-2205) -----------------------------------------
+
+
+def add_civil_days(day: str, days: int) -> str:
+    """Next (or previous) civil day, independent of any time zone (CL-9, ET-7)."""
+    if read_civil_day(day) is None:
+        raise ValueError(f"invalid civil day: {day}")
+    shifted = from_epoch_ms(civil_day_ms(day) + days * MS_PER_DAY)
+    return f"{shifted.year:04d}-{shifted.month:02d}-{shifted.day:02d}"
+
+
+def user_weekday(instant_ms: int, time_zone: str) -> int:
+    """Local ISO weekday of an instant, 1 = Monday ... 7 = Sunday (EF-4)."""
+    local = from_epoch_ms(wall_ms_of(instant_ms, time_zone))
+    weekday = local.weekday()
+    return weekday + 1
+
+
+def end_of_user_day(day: str, time_zone: str) -> int:
+    """Exclusive upper bound of the civil day in the zone: the start of the next day (EF-3, ET-4)."""
+    return start_of_user_day(add_civil_days(day, 1), time_zone)
+
+
+def user_day_bounds(day: str, time_zone: str) -> tuple[int, int]:
+    """Half-open interval `[start, end)` of a civil day in the zone, in epoch milliseconds."""
+    return (start_of_user_day(day, time_zone), end_of_user_day(day, time_zone))
+
+
+def parse_time_of_day(value: object, path: str = "time") -> int:
+    """`HH:mm` (seconds optionally zero) as minutes since midnight; the TS rule of ET-3."""
+    if not isinstance(value, str) or _TIME_OF_DAY.match(value) is None:
+        raise ValueError(f"invalid time of day for {path}: {value!r}")
+    return int(value[0:2]) * 60 + int(value[3:5])
+
+
+def local_time_to_instant(day: str, time: str, time_zone: str) -> int:
+    """Instant of a local reading; a skipped reading resolves to the instant of the jump (ADR-0123)."""
+    wall = civil_day_ms(day) + parse_time_of_day(time) * MS_PER_MINUTE
+    return instants_from_wall(wall, time_zone)[0]
+
+
+def local_hour(instant_ms: int, time_zone: str) -> int:
+    """Local hour of an instant, 0 to 23 (EF-4)."""
+    return from_epoch_ms(wall_ms_of(instant_ms, time_zone)).hour
+
+
+def local_minute_of_day(instant_ms: int, time_zone: str) -> int:
+    """Local minutes since midnight of an instant (the clock reading of the quiet-hours test)."""
+    local = from_epoch_ms(wall_ms_of(instant_ms, time_zone))
+    return local.hour * 60 + local.minute

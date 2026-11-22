@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T09:30:25.573Z",
+  "updatedAt": "2026-11-22T09:35:00Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7013,11 +7013,11 @@
       "validations": {}
     },
     "SPEC-2205": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-22T09:35:00Z",
+      "branch": "spec/SPEC-2205-domaine-engagement",
       "completedAt": null,
-      "branch": null,
       "commit": null,
       "lastError": null,
       "validations": {}
