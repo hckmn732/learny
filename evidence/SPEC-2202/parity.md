@@ -13,7 +13,7 @@ démarrés avec `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`, `LLM_MODE=mock`, `TZ=UTC`
 2. `pnpm parity:record --target http://127.0.0.1:3112 --group learning` enregistre les scénarios
    générés pour les lectures sans paramètre de chemin.
 3. `pnpm parity:check --target http://127.0.0.1:3101 --group learning` rejoue les mêmes entrées :
-   les onze opérations `py` sont servies par Python, les quatre restantes sont relayées à Hono.
+   les quinze opérations `py` du contexte sont servies par Python.
 4. Comparaison sémantique : statut, en-têtes de `COMPARED_HEADERS`, corps JSON normalisé (UUID,
    instants, adresses) et clés triées.
 
@@ -34,9 +34,17 @@ Parity OK: 4 scenarios replay identically against http://127.0.0.1:3101.
 | `series.milestones` | GET `/api/v1/milestones` | `py` | liste vide, prochain jalon, fuseau |
 | `warmups.today.get` | GET `/api/v1/warmups/today` | `py` | liste vide |
 
-**Zéro divergence inexpliquée.** Les quatre entrées `ts` restantes du contexte ne sont pas
-générées par l'outil (paramètre de chemin `:sid`/`:fid` ou mutation) : elles restent relayées à
-Hono, donc la façade se comporte à l'identique, et leur logique Python n'existe pas encore.
+Les quatre opérations de l'étape 4 n'ont pas de scénario enregistré : `review.globalQuizToday` et
+`review.answer`/`review.complete` portent un paramètre de chemin (`:fid`, `:sid`) et les deux
+dernières sont des mutations, que l'outil ne génère pas (`generatedScenarios` ne retient que les
+lectures sans paramètre de chemin). Le contexte `learning` est néanmoins complet : 15/15 `py`.
+
+**Zéro divergence inexpliquée.** Les quatre entrées restantes du contexte (`review.answer`,
+`review.complete`, `review.globalQuizToday`, `warmups.answers.create`) ne sont pas générées par
+l'outil (paramètre de chemin `:sid`/`:fid` ou mutation) : elles sont désormais `py` et servies par
+Python, sans scénario de parité. Leurs écritures sont prouvées par les tests d'intégration serveur
+(`test_learning_review_flow.py`, `test_learning_review_answer.py`,
+`test_learning_warmup_answer.py`) : statuts, journal FSRS, idempotence et effets de bord en base.
 
 ## Divergences corrigées, et non contournées
 

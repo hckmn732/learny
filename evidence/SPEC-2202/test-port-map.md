@@ -121,8 +121,18 @@ et les cas de route de `packages/services/src/**/*.test.ts`).
 | `agenda-deplacer-et-reajuster-le-planning.test.ts` | 2 | `tests/integration/learning/test_learning_slots_replan.py` | alternatives, déplacement, chevauchement, options, allègement, version de plan | couverture élargie aux refus |
 | `warmup/warmup.test.ts`, `derive.test.ts` (partie lecture) | 5 + 9 | `tests/integration/learning/test_learning_warmups.py` | carte du jour, statut, RLS, item illisible, dérivées pures | l'écriture d'une réponse (EF-8/9) reste `ts` |
 
-Reste non porté dans ce contexte : `warmups.answers.create`, `review.globalQuizToday`,
-`review.answer`, `review.complete`. Ils dépendent de `packages/services/src/learning/apply-result.ts`
-(FSRS, maîtrise, lacunes, `review_logs`) et du service `review` (session du jour, correction,
-complétion), dont le portage est la tranche suivante. Leurs entrées restent `ts` et leurs
-handlers ne sont pas enregistrés, ce que vérifie `apps/api-py/tests/unit/test_handlers.py`.
+## Étape 4 — cœur du moteur de révision (4 opérations basculées)
+
+Les cas ci-dessous exercent les cas d'usage Python contre la pile Postgres locale, sous la
+transaction RLS de l'apprenant, et vérifient les mêmes règles que les tests TypeScript des
+services `review` et `warmup`.
+
+| Test TypeScript source | Cas source | Module pytest | Cas portés | Écart |
+|---|---|---|---|---|
+| `packages/services/src/learning/apply-result.test.ts`, `apply-review.test.ts` | 8 + 4 | `tests/integration/learning/test_learning_apply_result.py` | planificateur pur (note FSRS, maîtrise, carte), rejeu idempotent d'une étape, revue plus récente prioritaire, `again` sur carte mûre | les cartes FSRS sont comparées par état et par `lapses` ; l'égalité champ à champ avec `ts-fsrs` est déjà prouvée par les fixtures du domaine |
+| `packages/services/src/review/global-quiz.test.ts` (partie lecture) | 42 | `tests/integration/learning/test_learning_review_flow.py` | DTO vide sans écriture, formation en pause, 404 (inconnue, terminée, étrangère), création puis rejeu idempotent (un seul essai), en-têtes, intervalles de la carte de rappel | la demande de variantes (`requestRefill`, SPEC-513) n'est pas émise : dette consignée dans `scope.md` |
+| `packages/services/src/review/global-quiz.test.ts` (réponse et clôture) | 30 | `tests/integration/learning/test_learning_review_answer.py` | réponse + journal FSRS + rejeu par `clientAnswerId`, 409 même position, item passé sans mise à jour FSRS, brique non corrigeable (`RESPONSE_INVALID`), clôture (résumé, `daily_activity`, série), `SESSION_CLOSED` 422 | l'union de correction des quatre jeux est validée par les tests du domaine des briques ; la parité ne couvre pas cette route (paramètre de chemin) |
+| `packages/services/src/warmup/answer.test.ts` | 6 | `tests/integration/learning/test_learning_warmup_answer.py` | première réponse + événement `review/answered`, dernière réponse (essai noté, action consommée, activité du jour), 409 et hors bornes, RLS | la notification de fin d'échauffement relève du contexte engagement (dette SPEC-2205) |
+
+Quatre fichiers, 26 cas, tous marqués `pytestmark = pytest.mark.spec("SPEC-2202")`. La suite
+Python passe de 1335 à **1355 tests**. `api/inventory.json` reste à jour (aucune dérive).
