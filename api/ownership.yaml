@@ -43,10 +43,10 @@ operations:
   'dev.items': py
   'dev.notificationsGenerate': ts
   'dev.notify': ts
-  'dev.personal-data.deletion.cancel': ts
-  'dev.personal-data.deletion.schedule': ts
-  'dev.personal-data.execute': ts
-  'dev.personal-data.export': ts
+  'dev.personal-data.deletion.cancel': py
+  'dev.personal-data.deletion.schedule': py
+  'dev.personal-data.execute': py
+  'dev.personal-data.export': py
   'dev.pushSend': ts
   'dev.rateLimit.burst': py
   'dev.rateLimit.origin': py
@@ -223,7 +223,7 @@ operations:
 
 special:
   'DELETE /api/v1/dev/sdd/email/outbox': py
-  'DELETE /api/v1/dev/sdd/personal-data/deletion': ts
+  'DELETE /api/v1/dev/sdd/personal-data/deletion': py
   'GET /api/v1/auth/callback': ts
   'GET /api/v1/dev/sdd/email/outbox': py
   'GET /api/v1/dev/sdd/email/preview': py
@@ -242,9 +242,9 @@ special:
   'POST /api/v1/dev/sdd/events/demo': py
   'POST /api/v1/dev/sdd/notifications/generate': ts
   'POST /api/v1/dev/sdd/notify': ts
-  'POST /api/v1/dev/sdd/personal-data/deletion': ts
-  'POST /api/v1/dev/sdd/personal-data/execute': ts
-  'POST /api/v1/dev/sdd/personal-data/export': ts
+  'POST /api/v1/dev/sdd/personal-data/deletion': py
+  'POST /api/v1/dev/sdd/personal-data/execute': py
+  'POST /api/v1/dev/sdd/personal-data/export': py
   'POST /api/v1/dev/sdd/push/send': ts
   'POST /api/v1/dev/sdd/rate-limit/burst': py
   'POST /api/v1/dev/sdd/rate-limit/origin': py

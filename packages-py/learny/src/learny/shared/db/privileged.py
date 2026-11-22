@@ -17,6 +17,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_api.guards.rate_limit": "token buckets of the request pipeline",
         # `idempotency_keys` is a service-only table (SPEC-112 EF-3, ADR-0120).
         "learny_api.guards.idempotency": "idempotency reservations and replays",
+        # SPEC-2207 - the personal-data demonstration seeds a programme, schedules the deletion
+        # of a throwaway account and creates its own export row with the owner role (EF-9).
+        "learny_api.dev_demos.personal_data": "demo programme, throwaway deletion and export row",
         # SPEC-2207 - the rate-limit demonstration owns synthetic buckets and rows it deletes.
         "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
         # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.
