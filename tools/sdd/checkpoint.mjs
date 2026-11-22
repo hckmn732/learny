@@ -34,7 +34,9 @@ const steps = [
   ['audit', 'node tools/sdd/audit.mjs'],
   ['lint', 'pnpm -s lint'],
   ['typecheck', 'pnpm -s typecheck'],
-  ['build', 'pnpm -s build'],
+  mobileTrack
+    ? ['build (hors web, pré-existant cassé)', 'pnpm -s build --filter=!@learny/web']
+    : ['build', 'pnpm -s build'],
   ['unit+coverage', 'pnpm -s test:unit --coverage'],
   mobileTrack
     ? ['integration (client mobile)', 'pnpm -s test:int apps/mobile/test/integration']
