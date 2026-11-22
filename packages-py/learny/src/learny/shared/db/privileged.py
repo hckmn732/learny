@@ -82,5 +82,17 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
         "learny_worker.scheduler": "cron ticks written to the outbox",
         "learny_worker.health": "readiness probe of the worker",
+        # SPEC-2207 - the nightly cleanup deletes the delivered rows of every learner, which the
+        # authenticated role of one learner may not do (SPEC-203 ET-6, ADR-0122).
+        "learny.shared.outbox.purge": "nightly cleanup of the delivered outbox rows",
+        # SPEC-2207 - the hourly purge deletes the expired security rows of the whole instance;
+        # `rate_limits` and `idempotency_keys` are service-only tables (SPEC-208 EF-7, ADR-0258).
+        "learny.identity.application.purge_security": "hourly purge of the expired security rows",
+        # SPEC-2207 - the nightly purge deletes the receipts of every learner, which the
+        # authenticated role of one learner may not do (SPEC-801 ET-6, ADR-0200).
+        "learny.assessments.application.offline_purge": "nightly purge of the offline receipts",
+        # SPEC-2207 - the initial planning writes the slots of the formation owner after the
+        # programme validation, exactly like the TypeScript `ctx.sdb` of the job (SPEC-605 EF-4).
+        "learny.learning.application.plan_programme": "initial planning of a validated programme",
     }
 )

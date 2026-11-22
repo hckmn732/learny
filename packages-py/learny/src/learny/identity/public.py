@@ -19,6 +19,7 @@ from learny.identity.application.onboarding import advance_onboarding, get_onboa
 from learny.identity.application.ports import IdentityDeps
 from learny.identity.application.preferences import get_preferences, update_preferences
 from learny.identity.application.profile import get_settings_state, update_settings_profile
+from learny.identity.application.purge_security import purge_security_rows
 from learny.identity.application.sidebar import get_sidebar, read_sidebar, update_sidebar
 from learny.identity.domain.actor import Actor, Transport
 from learny.identity.infrastructure.gotrue import (
@@ -58,6 +59,7 @@ __all__ = [
     "is_legal_exempt",
     "map_gotrue_error",
     "parse_cookie_header",
+    "purge_security_rows",
     "read_me",
     "read_sidebar",
     "update_preferences",

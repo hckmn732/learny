@@ -24,6 +24,7 @@ from learny.assessments.application.exercises import (
     submit_exercise,
 )
 from learny.assessments.application.offline import build_pack
+from learny.assessments.application.offline_purge import purge_offline_receipts
 from learny.assessments.application.offline_sync import sync_offline_answers
 from learny.assessments.application.ports import (
     AssessmentDeps,
@@ -61,6 +62,7 @@ __all__ = [
     "get_remediation",
     "mark_exam_question",
     "prepare_remediation",
+    "purge_offline_receipts",
     "report_brick",
     "request_exercise_hint",
     "request_remediation_preparation",
