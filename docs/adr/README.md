@@ -251,3 +251,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2030](ADR-2030-validation-stricte-des-corps-en-mode-json-pour-les-enums.md) | Validation stricte des corps en mode JSON pour les enums | Déduite | SPEC-2204, SPEC-2201, ADR-2012 |
 | [ADR-2031](ADR-2031-verification-de-la-signature-stripe-a-horloge-injectee.md) | Vérification de la signature Stripe à horloge injectée | Déduite | SPEC-2206, ADR-0047, ADR-2015, ADR-0215 |
 | [ADR-2032](ADR-2032-consommateur-generate-course-laisse-en-typescript-faute-de-c.md) | Consommateur generate-course laisse en TypeScript faute de cas d'usage Python | Déduite | SPEC-2207, SPEC-2204, ADR-2006, ADR-2014 |
+| [ADR-2033](ADR-2033-extraction-mecanique-de-deux-regles-pures-du-pipeline-de-c.md) | Extraction mécanique de deux règles pures du pipeline de cours pour l'oracle | Déduite | SPEC-2207, SPEC-608, ADR-2008, ADR-2026 |
