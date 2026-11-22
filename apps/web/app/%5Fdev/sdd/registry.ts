@@ -13,6 +13,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-2201'),
   },
+  'SPEC-2202': {
+    title: 'Domaines learning et assessments en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2202'),
+  },
   'SPEC-1302': {
     title: 'Migration terminée',
     titleTestId: 'sdd-title',
