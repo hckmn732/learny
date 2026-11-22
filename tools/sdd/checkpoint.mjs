@@ -26,6 +26,10 @@ if (notDone.length) die(`Spécifications non terminées : ${notDone.map((s) => s
 // `checks` d'une phase (ADR-1006) : contrôles supplémentaires ('cross-browser', 'perf').
 const extra = phase.checks ?? [];
 const crossBrowser = ['CP-6', 'CP-7', 'CP-8', 'CP-9'].includes(cpId) || extra.includes('cross-browser');
+// ADR-3016 : une phase mobile n'exécute pas la suite web Playwright (piste `produit`) mais agrège
+// les campagnes Maestro déjà produites par `validate.mjs` pour chaque spécification de la phase.
+const mobileTrack = trackOf(phase) === 'mobile';
+const specIds = specs.map((s) => s.id);
 const steps = [
   ['audit', 'node tools/sdd/audit.mjs'],
   ['lint', 'pnpm -s lint'],
@@ -33,7 +37,9 @@ const steps = [
   ['build', 'pnpm -s build'],
   ['unit+coverage', 'pnpm -s test:unit --coverage'],
   ['integration', 'pnpm -s test:int'],
-  ['e2e (non-régression complète)', 'pnpm -s test:e2e'],
+  mobileTrack
+    ? ['e2e mobile (preuves de campagne)', `node tools/sdd/mobile-evidence.mjs ${specIds.join(' ')}`]
+    : ['e2e (non-régression complète)', 'pnpm -s test:e2e'],
 ];
 if (crossBrowser) steps.push(['cross-browser', 'pnpm -s test:e2e --project=cross-browser']);
 if (cpId === 'CP-8' || cpId === 'CP-9' || extra.includes('perf')) steps.push(['performances', 'pnpm -s test:perf']);
