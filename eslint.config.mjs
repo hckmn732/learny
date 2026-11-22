@@ -974,6 +974,14 @@ export default tseslint.config(
     },
   },
   {
+    // Unit tests of the mobile application run in Node (Vitest, canevas § 5): they read the
+    // design references (tokens, fonts) and drive ESLint to prove CA-5, which the application
+    // bundle never does. Only test files get this exemption: production code stays a pure
+    // client of the API (SPEC-3001 ET-3).
+    files: ['apps/mobile/src/**/*.test.ts', 'apps/mobile/test/**/*.{ts,tsx}'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+  {
     // The Expo configuration files (Metro, Babel, Jest) and the asset stub are CommonJS.
     files: ['apps/mobile/*.config.js', 'apps/mobile/test/**/*.js', 'apps/mobile/e2e/**/*.mjs'],
     languageOptions: {
