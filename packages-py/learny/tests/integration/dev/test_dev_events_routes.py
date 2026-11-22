@@ -104,6 +104,20 @@ async def test_the_outbox_counts_the_callers_events(
 
         assert response.status_code == 200
         assert response.json()["pending"] >= 1
+
+        # SPEC-2102: the worker stamps `dispatched_at`; the event is no longer pending and the
+        # demonstration counts it as sent, exactly like the TypeScript page did.
+        async with database.service_tx() as tx:
+            await tx.conn.execute(
+                text(
+                    "update public.event_outbox set dispatched_at = now(), sent_at = now()"
+                    " where event_id like :pattern"
+                ),
+                {"pattern": "sdd-demo:%"},
+            )
+        dispatched = client.get("/api/v1/dev/sdd/events/outbox")
+        assert dispatched.json()["pending"] == 0
+        assert dispatched.json()["sent"] >= 1
     finally:
         await _cleanup(database)
 

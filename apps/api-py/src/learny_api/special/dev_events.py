@@ -41,10 +41,15 @@ SELECT_TICK_USERS = text(
     limit :limit
     """
 )
+# The worker stamps `dispatched_at` instead of `sent_at` (SPEC-2102): an event handed to the
+# dispatcher is no longer pending, and the demonstration counts it as sent, exactly like the
+# TypeScript page did when Inngest delivered it inline.
 COUNT_OUTBOX = text(
     """
-    select count(*) filter (where sent_at is null and not failed)::int as pending,
-           count(*) filter (where sent_at is not null)::int as sent,
+    select count(*) filter (
+               where sent_at is null and dispatched_at is null and not failed
+           )::int as pending,
+           count(*) filter (where sent_at is not null or dispatched_at is not null)::int as sent,
            count(*) filter (where failed)::int as failed
     from public.event_outbox where user_id = cast(:user_id as uuid)
     """
