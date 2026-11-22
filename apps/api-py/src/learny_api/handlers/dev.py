@@ -7,7 +7,7 @@ same handlers with the development guard, so a call is served exactly like `devR
 
 from typing import Any
 
-from learny_api.dev_demos import personal_data
+from learny_api.dev_demos import notifications, personal_data, push
 from learny_api.pipeline import Call, handler
 from learny_api.special import (
     dev_echo,
@@ -127,3 +127,18 @@ async def personal_data_execute(call: Call) -> dict[str, Any]:
 @handler("dev.personal-data.export")
 async def personal_data_export(call: Call) -> dict[str, Any]:
     return await personal_data.run_export(call)
+
+
+@handler("dev.notify")
+async def dev_notify(call: Call) -> dict[str, Any]:
+    return await notifications.run_notify(call)
+
+
+@handler("dev.notificationsGenerate")
+async def dev_notifications_generate(call: Call) -> dict[str, Any]:
+    return await notifications.generate(call)
+
+
+@handler("dev.pushSend")
+async def dev_push_send(call: Call) -> dict[str, Any]:
+    return await push.send(call)

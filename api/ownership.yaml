@@ -41,13 +41,13 @@ operations:
   'dev.events.demo.start': py
   'dev.events.outbox': py
   'dev.items': py
-  'dev.notificationsGenerate': ts
-  'dev.notify': ts
+  'dev.notificationsGenerate': py
+  'dev.notify': py
   'dev.personal-data.deletion.cancel': py
   'dev.personal-data.deletion.schedule': py
   'dev.personal-data.execute': py
   'dev.personal-data.export': py
-  'dev.pushSend': ts
+  'dev.pushSend': py
   'dev.rateLimit.burst': py
   'dev.rateLimit.origin': py
   'dev.rateLimit.purge': py
@@ -240,12 +240,12 @@ special:
   'POST /api/v1/dev/sdd/echo': py
   'POST /api/v1/dev/sdd/email/send': py
   'POST /api/v1/dev/sdd/events/demo': py
-  'POST /api/v1/dev/sdd/notifications/generate': ts
-  'POST /api/v1/dev/sdd/notify': ts
+  'POST /api/v1/dev/sdd/notifications/generate': py
+  'POST /api/v1/dev/sdd/notify': py
   'POST /api/v1/dev/sdd/personal-data/deletion': py
   'POST /api/v1/dev/sdd/personal-data/execute': py
   'POST /api/v1/dev/sdd/personal-data/export': py
-  'POST /api/v1/dev/sdd/push/send': ts
+  'POST /api/v1/dev/sdd/push/send': py
   'POST /api/v1/dev/sdd/rate-limit/burst': py
   'POST /api/v1/dev/sdd/rate-limit/origin': py
   'POST /api/v1/dev/sdd/rate-limit/purge': py

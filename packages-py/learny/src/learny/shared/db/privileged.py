@@ -20,6 +20,10 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the personal-data demonstration seeds a programme, schedules the deletion
         # of a throwaway account and creates its own export row with the owner role (EF-9).
         "learny_api.dev_demos.personal_data": "demo programme, throwaway deletion and export row",
+        # SPEC-2207 - the notification demonstration simulates settings and tone then restores
+        # them, and the push demonstration writes the notification row of the caller (EF-8).
+        "learny_api.dev_demos.notifications": "simulated settings and tone of the demonstration",
+        "learny_api.dev_demos.push": "notification row of the push demonstration",
         # SPEC-2207 - the rate-limit demonstration owns synthetic buckets and rows it deletes.
         "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
         # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.

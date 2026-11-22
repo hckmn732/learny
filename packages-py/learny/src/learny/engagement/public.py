@@ -95,7 +95,9 @@ from learny.engagement.application.unsubscribe import (
 )
 from learny.engagement.application.weekly_review import get_weekly_review
 from learny.engagement.domain.automations import decode_cursor, encode_cursor
+from learny.engagement.domain.reminders import local_moment_label
 from learny.engagement.domain.tick import build_local_tick, tick_instant
+from learny.engagement.infrastructure.push import mock_outcome_of
 
 __all__ = [
     "LOCAL_TICK_EVENT",
@@ -129,11 +131,13 @@ __all__ = [
     "list_notifications",
     "list_push_subscriptions",
     "list_validation_reminders",
+    "local_moment_label",
     "local_tick_event_id",
     "local_tick_page",
     "local_tick_payload",
     "mark_all_read",
     "mark_notification_read",
+    "mock_outcome_of",
     "next_reminder_instant",
     "notification_group",
     "notification_settings_to_dto",
