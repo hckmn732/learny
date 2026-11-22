@@ -5,6 +5,9 @@ single entry point of the notification producers (BR-NOT-03): `learny.learning` 
 commit of a session or of a milestone, never a second implementation of the routing.
 """
 
+from collections.abc import Mapping
+from typing import Any
+
 from learny.engagement.application.automations import (
     accept_automation_action,
     decline_automation_action,
@@ -95,9 +98,20 @@ from learny.engagement.application.unsubscribe import (
 )
 from learny.engagement.application.weekly_review import get_weekly_review
 from learny.engagement.domain.automations import decode_cursor, encode_cursor
+from learny.engagement.domain.push_endpoint import is_public_push_endpoint
 from learny.engagement.domain.reminders import local_moment_label
 from learny.engagement.domain.tick import build_local_tick, tick_instant
 from learny.engagement.infrastructure.push import mock_outcome_of
+from learny.shared.locale_fr import engagement as fr
+
+
+def push_upsert_issues(body: Mapping[str, Any]) -> list[dict[str, str]]:
+    """The `PushEndpoint` refinement of `pushSubscriptions.upsert`: one `body.endpoint` issue."""
+    endpoint = body.get("endpoint")
+    if isinstance(endpoint, str) and not is_public_push_endpoint(endpoint):
+        return [{"path": "body.endpoint", "message": fr.PUSH_ENDPOINT_INVALID}]
+    return []
+
 
 __all__ = [
     "LOCAL_TICK_EVENT",
@@ -125,6 +139,7 @@ __all__ = [
     "get_unread_notification_count",
     "get_weekly_review",
     "held_block",
+    "is_public_push_endpoint",
     "list_demo_outbox",
     "list_my_automation_actions",
     "list_my_automations",
@@ -148,6 +163,7 @@ __all__ = [
     "profile_timezone",
     "prune_validation_quiz_reminders",
     "purge_demo_outbox",
+    "push_upsert_issues",
     "quiet_hours_of",
     "quiz_link",
     "read_unsubscribe_token",

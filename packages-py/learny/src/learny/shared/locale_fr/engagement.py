@@ -207,6 +207,7 @@ PUSH_FOREIGN_ENDPOINT = "Cet abonnement ne peut pas être enregistré sur ce com
 PUSH_NOT_REGISTERED = "Abonnement non enregistré."
 PUSH_LIVE_REFUSED_CI = "PUSH_MODE=live est refusé en intégration continue."
 PUSH_NOT_CONFIGURED = "Le canal push n’est pas configuré (clés VAPID absentes)."
+PUSH_ENDPOINT_INVALID = "un point de terminaison HTTPS public est attendu"
 
 # The e-mail texts live in `engagement_email`: the templates, their subjects and the unsubscribe
 # pages are copied word for word from the TypeScript e-mail package.

@@ -13,6 +13,7 @@ from types import NoneType, UnionType
 from typing import Annotated, Any, Literal, Union, get_args, get_origin
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from learny.engagement.public import push_upsert_issues
 from learny.shared.errors import AppError
 from learny.shared.jsonx import dumps
 from learny.shared.locale_fr import ai as ai_texts
@@ -521,6 +522,7 @@ REFINEMENTS: dict[str, Refinement] = {
     "agenda.get": _agenda_range,
     "slots.move": _slot_move_window,
     "review.answer": _review_answer_choice,
+    "pushSubscriptions.upsert": push_upsert_issues,
 }
 
 
