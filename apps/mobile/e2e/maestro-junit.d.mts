@@ -9,6 +9,7 @@ export interface JunitCase {
 
 export interface FlowHeader {
   name: string;
+  file?: string;
 }
 
 export function decodeXmlText(value: string): string;

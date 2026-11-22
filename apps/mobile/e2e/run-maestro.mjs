@@ -557,12 +557,15 @@ async function main() {
     fs.writeFileSync(campaignVideoPath, campaignVideo.buffer);
   }
 
-  // Comparaison visuelle flux par flux (ADR-3015 § 4).
+  // Comparaison visuelle flux par flux (ADR-3015 § 4). La capture de référence d'un flux est celle
+  // que le flux a demandée (`takeScreenshot:`) — jamais la capture d'étape qu'une assertion ratée
+  // laisse derrière elle, qui ne montrerait pas l'écran attendu.
   const visualResults = [];
   const pendingComparisons = [];
   for (const flow of selected) {
     if (!flow.tags.includes('visual')) continue;
-    const capture = (written.get(flowSlug(flow.name))?.screenshots ?? [])[0];
+    const candidates = written.get(flowSlug(flow.name))?.screenshots ?? [];
+    const capture = candidates.find((file) => file.includes('/takeScreenshot/')) ?? candidates[0];
     if (capture === undefined) {
       visualResults.push({
         flow: flow.name,

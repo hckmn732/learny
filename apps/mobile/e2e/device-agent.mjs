@@ -471,22 +471,26 @@ async function execute(job) {
   });
   job.child = null;
 
+  job.stdout = result.stdout;
+  job.stderr = result.stderr;
+
+  // Statut final calculé ici mais **publié seulement à la fin** : un client qui scrute ne doit
+  // jamais voir un statut terminal avant que le JUnit, la vidéo et les artefacts soient prêts
+  // (sinon il repart avec un rapport vide, ADR-3015 § 1).
+  let finalStatus;
   if (job.cancelled) {
-    job.status = 'cancelled';
+    finalStatus = 'cancelled';
     job.error = 'travail annulé par le lanceur';
   } else if (result.timedOut) {
-    job.status = 'error';
+    finalStatus = 'error';
     job.error = `campagne interrompue après ${String(Math.round(JOB_TIMEOUT_MS / 1000))} s (DEVICE_AGENT_JOB_TIMEOUT_MS)`;
   } else if (result.status === 127) {
-    job.status = 'error';
+    finalStatus = 'error';
     job.error = `maestro introuvable : ${result.stderr.trim()}`;
   } else {
     job.exitCode = result.status;
-    job.status = result.status === 0 ? 'done' : 'failed';
+    finalStatus = result.status === 0 ? 'done' : 'failed';
   }
-
-  job.stdout = result.stdout;
-  job.stderr = result.stderr;
 
   if (recording !== null) {
     job.progress = 'collecte de la vidéo';
@@ -505,12 +509,13 @@ async function execute(job) {
 
   // Le rapport JUnit est relu tel quel : Maestro l'a écrit une fois, on ne le reconstruit pas.
   job.junit = fs.existsSync(junitPath) ? fs.readFileSync(junitPath, 'utf8') : '';
-  if (job.junit === '' && job.status === 'done') {
-    job.status = 'error';
+  if (job.junit === '' && finalStatus === 'done') {
+    finalStatus = 'error';
     job.error = 'Maestro a rendu 0 sans rapport JUnit : campagne non prouvée (ADR-3015 § 3)';
   }
 
   job.finishedAt = new Date().toISOString();
+  job.status = finalStatus;
   job.progress = 'terminé';
   job.settle();
 }
@@ -560,8 +565,17 @@ async function route(request, response) {
     json(response, 200, health());
     return;
   }
+  // Nettoyage demandé par le préflight (ADR-3015 § 5) : tue les Maestro orphelins avant campagne.
+  if (request.method === 'POST' && pathname === '/cleanup') {
+    const killed = await killGhosts();
+    json(response, 200, { ok: true, killed });
+    return;
+  }
   if (request.method === 'GET' && pathname === '/jobs') {
+    // `/health` est intercepté par l'edge qui publie le port (il répond `{ ok: true }` sans
+    // transmettre) : l'état réel de l'agent se lit donc ici, et le préflight sonde cette route.
     json(response, 200, {
+      ...health(),
       jobs: [...jobs.values()].map((job) => ({
         id: job.id,
         status: job.status,
