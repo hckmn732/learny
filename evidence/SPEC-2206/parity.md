@@ -8,17 +8,24 @@ horloge figée au 2026-11-11T12:20:00Z (ADR-0047), `STRIPE_MODE=mock`, `LLM_MODE
 
 `tools/parity/scenarios/` ne contient **aucun scénario** pour les groupes `billing` et `privacy` :
 `corepack pnpm parity:record --group billing|privacy` n'a donc rien à enregistrer, et
-`parity:check` n'a rien à rejouer. Ce n'est pas une régression de cette spécification : les scénarios
-de parité de la piste Python ont été écrits pour les contextes portés en SPEC-2201 → 2205, et ces
-deux contextes n'en avaient pas. Constat consigné ici plutôt qu'un enregistrement inventé (ADR-2008).
+`parity:check` n'a rien à rejouer. Ce n'est pas une régression de cette spécification : le harnais
+rejoue des lectures enregistrées sur le jeu de démonstration, et ces deux contextes n'exposent
+aucune lecture enregistrable de ce type. `billing.subscription` ne lit une ligne d'abonnement
+qu'après `billing.checkout` (client Stripe et session) puis le webhook
+`checkout.session.completed` ; `me.export.read` exige l'identifiant d'un export créé par
+`me.export.request` (202) et rempli par le job ; `billing.webhook` est une écriture publique
+authentifiée par la signature du corps brut. Enregistrer un apprenant neuf ne prouverait que le
+statut `none` et un identifiant inexistant. Aucun scénario n'a été inventé (ADR-2008).
 
 Conséquence : la parité de ce périmètre est prouvée par les **vecteurs d'oracle** (enregistrés depuis
-le TypeScript par `tools/oracles/billing-privacy-vectors.mts`, rejoués en pytest à égalité stricte) et
-par les **tests d'intégration** ci-dessous, ce qui couvre CA-2 et CA-3 sans dépendre du harnais.
+le TypeScript par `tools/oracles/billing-privacy-vectors.mts`, rejoués en pytest à égalité stricte)
+et par les **tests d'intégration** ci-dessous, plus l'e2e de contrat
+`apps/web/e2e/specs/p2/spec-210.spec.ts` (« contrats de facturation et webhook signé »), qui passe
+sans modification à travers la façade. Cela couvre CA-2 et CA-3 sans dépendre du harnais.
 
 Reprise possible (facultatif) : ajouter `tools/parity/scenarios/billing/*.json` et
-`.../privacy/*.json` (requêtes signées en mode mock, `me.export.read` avec un identifiant
-d'enregistrement) puis `parity:record --group … --target http://127.0.0.1:3112` contre Hono et
+`.../privacy/*.json` avec une session enregistrée (client Stripe simulé, identifiant d'export
+préexistant) puis `parity:record --group … --target http://127.0.0.1:3112` contre Hono et
 `parity:check` contre la façade `:3101`/`:3113`.
 
 ## Matrice entrée → cas d'usage → règles → tables → tests
