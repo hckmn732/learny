@@ -17,6 +17,29 @@ export const mobile = {
       platformLabel: 'Plateforme',
       footer: 'Page de démonstration visible seulement si EXPO_PUBLIC_ENABLE_SDD_PAGES=1.',
     },
+    // SPEC-3003 EF-9, § 10 — page `/_dev/sdd/SPEC-3003`.
+    spec3003: {
+      eyebrow: 'Démonstration SDD',
+      title: 'SPEC-3003 · client d’API, session et cache',
+      sessionLabel: 'Session',
+      sessionLoading: 'Restauration de la session…',
+      sessionSignedIn: 'Connecté',
+      sessionSignedOut: 'Déconnecté',
+      sessionSigningIn: 'Connexion…',
+      accountLabel: 'Compte de démonstration',
+      firstNameLabel: 'Prénom lu sur /me',
+      streamLabel: 'Flux SSE de démonstration',
+      streamIdle: 'En attente du flux…',
+      cacheLabel: 'Cache',
+      cacheEntries: '{count} requête(s) en mémoire',
+      cacheRestored: 'restaurée depuis le stockage chiffré',
+      cacheCold: 'cache vide',
+      offlineToggle: 'Simuler la coupure réseau',
+      onlineToggle: 'Rétablir le réseau',
+      reload: 'Recharger /me',
+      footer:
+        'Page de démonstration : le mot de passe du compte de démonstration vient de l’environnement du build et n’est jamais affiché.',
+    },
   },
   config: {
     title: 'Configuration invalide',
@@ -29,6 +52,32 @@ export const mobile = {
     placeholderTitle: 'Learny',
     placeholderBody:
       'Le socle mobile est installé. Activez les pages de démonstration SDD pour ouvrir la page de SPEC-3001.',
+  },
+  // SPEC-3003 EF-3 — session expirée et actions de connexion.
+  session: {
+    expired: 'Votre session a expiré. Reconnectez-vous.',
+    loading: 'Restauration de la session…',
+    signedOut: 'Déconnecté',
+    signedIn: 'Connecté',
+    signingIn: 'Connexion…',
+    signOut: 'Se déconnecter',
+    signIn: 'Se connecter',
+  },
+  // SPEC-3003 EF-5 — bandeau hors ligne.
+  offline: {
+    banner: 'Hors ligne · affichage des données enregistrées',
+  },
+  // SPEC-3003 EF-7 — messages français des codes d'erreur de l'API.
+  errors: {
+    generic: 'Une erreur est survenue. Réessayez.',
+    rateLimited: 'Trop de requêtes. Réessayez dans {seconds} s.',
+    network: 'Le serveur est injoignable. Vérifiez votre connexion.',
+    unauthorized: 'Votre session a expiré. Reconnectez-vous.',
+    forbidden: 'Accès refusé.',
+    notFound: 'Élément introuvable.',
+    validationFailed: 'Certaines données sont invalides.',
+    conflict: 'Conflit : réessayez.',
+    serviceUnavailable: 'Service momentanément indisponible.',
   },
   ui: {
     retry: 'Réessayer',

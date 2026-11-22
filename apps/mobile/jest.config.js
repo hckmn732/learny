@@ -1,5 +1,5 @@
-// Jest configuration (SPEC-3001 ET-2, EF-3). Components and screens only: the pure logic of
-// `src/**` and `e2e/**` is covered by Vitest (canevas § 5).
+// Jest configuration (SPEC-3001 ET-2, EF-3; SPEC-3003 ET-1). Components and screens only: the pure
+// logic of `src/**` and `e2e/**` is covered by Vitest (canevas § 5).
 // `jest-expo/android` is the platform of the SDD validation (ADR-3004 § 6).
 module.exports = {
   preset: 'jest-expo/android',
@@ -21,6 +21,11 @@ module.exports = {
   moduleNameMapper: {
     // Static assets are irrelevant to behaviour: a stable stub keeps the tests fast.
     '\\.(ttf|otf|png|jpg|jpeg|gif|svg)$': '<rootDir>/test/asset-stub.js',
+    // SPEC-3003 ET-1 — native modules of the encrypted storage and of the network. The encryption
+    // contract itself is proved by the Vitest suite with an injected backend; a component test
+    // only needs the shape of MMKV and of NetInfo.
+    '^react-native-mmkv$': '<rootDir>/test/mocks/react-native-mmkv.js',
+    '^@react-native-community/netinfo$': '<rootDir>/test/mocks/netinfo.js',
   },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', 'app/**/*.tsx', '!**/*.test.{ts,tsx}'],
 };

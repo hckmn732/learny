@@ -1,0 +1,62 @@
+# SPEC-3003 — session sécurisée, client d'API et cache hors ligne (CA-1, CA-3, CA-4).
+#
+# Le harnais compare la première capture du flux au fichier de référence versionné
+# `e2e/visual/baselines/SPEC-3003-session.png` : page connectée (prénom « Alex » lu sur `/me`,
+# trois fragments du flux SSE) et bandeau hors ligne. Le réseau est coupé par le contrôle de
+# démonstration `sdd-offline-toggle` (Maestro 2.12.1 ne pilote pas le mode avion, voir
+# `evidence/SPEC-3003/acceptance.md`), puis l'application est tuée et relancée : la session et le
+# cache persisté doivent revenir seuls (CL-4).
+appId: fr.learny.app
+name: SPEC-3003 session
+tags:
+  - SPEC-3003
+  - visual
+---
+- launchApp:
+    clearState: true
+- openLink: learny:///_dev/sdd/SPEC-3003
+- assertVisible:
+    id: sdd-title
+# CA-1 — connexion du compte de démonstration et lecture de /me avec le Bearer.
+- extendedWaitUntil:
+    visible:
+      id: sdd-session-status
+      text: Connecté
+    timeout: 45000
+- extendedWaitUntil:
+    visible:
+      id: sdd-me-firstname
+      text: Alex
+    timeout: 45000
+# CA-3 — les trois fragments du flux SSE, reçus l'un après l'autre.
+- extendedWaitUntil:
+    visible:
+      id: sdd-stream
+      text: fragment-1fragment-2fragment-3
+    timeout: 45000
+- assertVisible:
+    id: sdd-cache-status
+# CA-4 — coupure réseau : le bandeau apparaît, les données restent affichées.
+- tapOn:
+    id: sdd-offline-toggle
+- assertVisible:
+    id: offline-banner
+- assertVisible: Hors ligne · affichage des données enregistrées
+- assertVisible:
+    id: sdd-me-firstname
+    text: Alex
+- takeScreenshot: SPEC-3003-session
+# CL-4 — redémarrage : la session chiffrée et le cache persisté sont restaurés (EF-4).
+- stopApp
+- launchApp
+- openLink: learny:///_dev/sdd/SPEC-3003
+- extendedWaitUntil:
+    visible:
+      id: sdd-cache-restored
+    timeout: 45000
+- assertVisible:
+    id: sdd-session-status
+    text: Connecté
+- assertVisible:
+    id: sdd-me-firstname
+    text: Alex
