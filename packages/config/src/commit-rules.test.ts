@@ -73,7 +73,7 @@ describe('[SPEC-002] commit rules', () => {
   it('reports the plugin messages', async () => {
     const scope = await check('feat(web): ajoute X');
     expect(scope.errors.find((e) => e.name === 'learny/scope-pattern')?.message).toBe(
-      'la portée doit être SPEC-xxx, CP-n ou sdd',
+      'la portée doit être SPEC-xxx, CP-n, CP-NOM ou sdd',
     );
     const long = await check(`feat(SPEC-001): ${'a'.repeat(73)}`);
     expect(long.errors.find((e) => e.name === 'learny/subject-max-length')?.message).toBe(
