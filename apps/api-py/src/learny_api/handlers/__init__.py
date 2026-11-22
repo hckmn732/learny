@@ -11,6 +11,7 @@ from learny_api.handlers import (
     formation,
     identity,
     learning,
+    tutor,
 )
 
-__all__ = ["assessments", "content", "engagement", "formation", "identity", "learning"]
+__all__ = ["assessments", "content", "engagement", "formation", "identity", "learning", "tutor"]

@@ -22,14 +22,14 @@ operations:
   'cadrage.page': py
   'chapters.complete': py
   'chapters.summary': py
-  'conversations.get': ts
-  'conversations.messages': ts
-  'conversations.self-test.answer': ts
+  'conversations.get': py
+  'conversations.messages': py
+  'conversations.self-test.answer': py
   'course-citations.source': py
   'course-sections.edit': py
   'course-sections.report': py
-  'courses.conversations.create': ts
-  'courses.conversations.list': ts
+  'courses.conversations.create': py
+  'courses.conversations.list': py
   'courses.progress': py
   'dev.cron.hourlyTick': ts
   'dev.echo': ts
