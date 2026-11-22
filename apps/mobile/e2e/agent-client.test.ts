@@ -11,6 +11,7 @@ import {
   createAgentClient,
   DEFAULT_JOB_TIMEOUT_MS,
   DEFAULT_REQUEST_TIMEOUT_MS,
+  isTransientAgentError,
   TERMINAL_STATUSES,
 } from './agent-client.mjs';
 
@@ -179,6 +180,36 @@ describe('[SPEC-3001] client de l’agent appareil', () => {
     const done = await client.runMaestro({ tags: ['SPEC-3001'] });
 
     expect(done.status).toBe('done');
+  });
+
+  it('retente un 502 `container_unreachable` de l’edge au lieu d’abandonner', async () => {
+    const { client, calls } = harness((_call, index) => {
+      if (index === 0) return { status: 202, body: { jobId: 'j-8' } };
+      if (index === 1) return { status: 502, body: { error: 'container_unreachable' } };
+      if (index === 2) return { status: 504, body: { error: 'container_unreachable' } };
+      return { body: { id: 'j-8', status: 'done', junit: '<testsuites/>', artifacts: [] } };
+    });
+
+    const done = await client.runMaestro({ tags: ['SPEC-3001'] });
+
+    expect(done.status).toBe('done');
+    expect(calls.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('n’avale pas une erreur de contrat (401, 404) pendant la scrutation', async () => {
+    const { client } = harness((_call, index) =>
+      index === 0
+        ? { status: 202, body: { jobId: 'j-9' } }
+        : { status: 401, body: { error: 'jeton invalide' } },
+    );
+
+    const thrown: unknown = await client
+      .runMaestro({ tags: ['SPEC-3001'] })
+      .then(() => null)
+      .catch((cause: unknown) => cause);
+
+    expect(thrown).toBeInstanceOf(AgentProtocolError);
+    expect(isTransientAgentError(thrown)).toBe(false);
   });
 
   it('abandonne après cinq scrutations en échec consécutives', async () => {

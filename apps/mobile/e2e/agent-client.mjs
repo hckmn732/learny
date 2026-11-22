@@ -53,6 +53,16 @@ export class AgentProtocolError extends AgentError {
 }
 
 /**
+ * Panne de transport passagère : requête coupée, ou edge qui répond 502/503/504 —
+ * l'edge Agent37 rend `{"error":"container_unreachable"}` quand il ne joint pas le conteneur un
+ * instant. Une scrutation perdue ne doit pas condamner la campagne : elle est retentée.
+ */
+export function isTransientAgentError(error) {
+  if (error instanceof AgentTimeoutError) return true;
+  return error instanceof AgentProtocolError && (error.status === undefined || error.status >= 500);
+}
+
+/**
  * Crée un client pour un agent appareil.
  *
  * Toutes les dépendances sont injectables pour les tests : `fetchImpl`, `now`, `delay`.
@@ -195,7 +205,7 @@ export function createAgentClient(options = {}) {
           payload = await request(statusRoute(jobId, { artifacts: false }));
           failures = 0;
         } catch (error) {
-          if (!(error instanceof AgentTimeoutError)) throw error;
+          if (!isTransientAgentError(error)) throw error;
           failures += 1;
           if (failures >= MAX_CONSECUTIVE_POLL_FAILURES) {
             throw new AgentTimeoutError(

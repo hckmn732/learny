@@ -67,4 +67,7 @@ export class AgentError extends Error {
 export class AgentTimeoutError extends AgentError {}
 export class AgentProtocolError extends AgentError {}
 
+/** Panne passagère (requête coupée, edge 502/503/504) : la scrutation est retentée. */
+export function isTransientAgentError(error: unknown): boolean;
+
 export function createAgentClient(options: AgentClientOptions): AgentClient;
