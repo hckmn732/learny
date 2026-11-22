@@ -3,12 +3,14 @@
 Port of `packages/jobs/src/inline.ts` for the Python side: with `JOBS_MODE=inline` an emitted event
 does not wait for the worker, the consumers Python owns run in the API process, the delays are
 ignored, a failing consumer is retried up to four executions and the depth of the events produced by
-a consumer is capped at five. Errors are logged and never reach the emitter. The bridge to the
-`ts`-owned consumers is the Hono dev dispatch route, used only outside production.
+a consumer is capped at five. Errors are logged and never reach the emitter.
+
+The bridge to the `ts`-owned consumers of P21 (a call to the Hono dev dispatch route) is removed by
+SPEC-2207: every consumer of the table is `py`, so nothing is relayed any more.
 """
 
 import asyncio
-from collections.abc import Awaitable, Callable, Iterable
+from collections.abc import Iterable
 from typing import Any
 
 import structlog
@@ -21,8 +23,6 @@ MAX_INLINE_DEPTH = 5
 MAX_INLINE_EXECUTIONS = 4
 SEEN_LIMIT = 10_000
 
-SendEvents = Callable[[Iterable[Event], int], Awaitable[None]]
-
 
 async def dispatch_inline(
     deps: Any,
@@ -31,7 +31,6 @@ async def dispatch_inline(
     *,
     depth: int = 0,
     seen: set[str] | None = None,
-    send: SendEvents | None = None,
     logger: Any = None,
 ) -> None:
     """Runs the Python consumers subscribed to `events`, depth first, once per event identifier."""
@@ -46,7 +45,7 @@ async def dispatch_inline(
         for consumer in consumers:
             if consumer.on != event.name:
                 continue
-            await _execute(deps, consumer, event, depth, executed, send, log)
+            await _execute(deps, consumer, event, depth, log)
 
 
 async def _execute(
@@ -54,8 +53,6 @@ async def _execute(
     consumer: Consumer,
     event: Event,
     depth: int,
-    seen: set[str],
-    send: SendEvents | None,
     log: Any,
 ) -> None:
     for execution in range(1, MAX_INLINE_EXECUTIONS + 1):
@@ -89,7 +86,7 @@ async def _execute(
                 **event.logging_fields(),
             )
             await asyncio.sleep(0)
-    del depth, seen, send
+    del depth
 
 
 def next_depth(depth: int) -> int | None:

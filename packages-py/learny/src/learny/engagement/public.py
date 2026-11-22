@@ -19,6 +19,7 @@ from learny.engagement.application.digest import (
     held_block,
     plan_daily_digests,
     send_daily_digest,
+    send_daily_digest_at,
 )
 from learny.engagement.application.email import (
     can_send_service_email,
@@ -34,6 +35,12 @@ from learny.engagement.application.inbox import (
     mark_notification_read,
     notification_group,
     previous_civil_day,
+)
+from learny.engagement.application.local_ticks import (
+    LOCAL_TICK_EVENT,
+    local_tick_event_id,
+    local_tick_page,
+    local_tick_payload,
 )
 from learny.engagement.application.notify import (
     count_sent_notifications,
@@ -83,6 +90,7 @@ from learny.engagement.application.unsubscribe import (
 from learny.engagement.application.weekly_review import get_weekly_review
 
 __all__ = [
+    "LOCAL_TICK_EVENT",
     "ClockPort",
     "EngagementDeps",
     "Transactions",
@@ -109,6 +117,9 @@ __all__ = [
     "list_notifications",
     "list_push_subscriptions",
     "list_validation_reminders",
+    "local_tick_event_id",
+    "local_tick_page",
+    "local_tick_payload",
     "mark_all_read",
     "mark_notification_read",
     "next_reminder_instant",
@@ -126,6 +137,7 @@ __all__ = [
     "remove_push_subscription",
     "schedule_validation_quiz_reminder",
     "send_daily_digest",
+    "send_daily_digest_at",
     "send_email",
     "send_push",
     "send_welcome_email",

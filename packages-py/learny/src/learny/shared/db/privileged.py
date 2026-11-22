@@ -58,6 +58,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
         # authenticated role of one learner may not update (CL-3, SPEC-711).
         "learny.engagement.application.automations": "hourly tick expires the pending actions",
+        # SPEC-2207 - the local-tick fan-out reads the profiles of every active learner with the
+        # owner role, exactly like the TypeScript `ctx.sdb` of `cron-hourly-tick` (SPEC-203 ET-5).
+        "learny.engagement.application.local_ticks": "hourly fan-out of the local ticks",
         # SPEC-2205 - the pause journals its own action with the service role, exactly like the
         # TypeScript `recordPauseAction` (the RLS policy reserves inserts to that role).
         "learny.engagement.application.pause": "pause journal row written after the commit",
@@ -81,6 +84,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
         "learny_worker.scheduler": "cron ticks written to the outbox",
+        # SPEC-2207 - the planner of the daily digests writes one `job/daily-digest` per due
+        # learner in a service transaction, like the TypeScript `step.sendEvent` of the job.
+        "learny_worker.consumers": "internal job/daily-digest events of the planned digests",
         "learny_worker.health": "readiness probe of the worker",
         # SPEC-2207 - the nightly cleanup deletes the delivered rows of every learner, which the
         # authenticated role of one learner may not do (SPEC-203 ET-6, ADR-0122).

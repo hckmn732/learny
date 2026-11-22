@@ -3,7 +3,7 @@
   "counts": {
     "operations": 217,
     "special": 32,
-    "events": 49,
+    "events": 50,
     "jobs": 22,
     "gaps": 133
   },
@@ -10590,6 +10590,11 @@
     },
     {
       "name": "group/member-left",
+      "producers": [],
+      "consumers": []
+    },
+    {
+      "name": "job/daily-digest",
       "producers": [],
       "consumers": []
     },
