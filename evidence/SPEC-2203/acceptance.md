@@ -117,8 +117,8 @@ Mesures du **2026-11-22** sur la VM de développement (Supabase local, horloge f
 | Construction | `pnpm build` | vert |
 | Unités TypeScript | `pnpm test:unit` | vert (aucun test TypeScript étiqueté `[SPEC-2203]`) |
 | Intégration TypeScript | `pnpm test:int` | vert |
-| e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2203\b"` | vert (2 tests, 1 `@visual`) |
-| Validation SDD | `node tools/sdd/validate.mjs SPEC-2203` | 8 étapes vertes |
+| e2e du périmètre | `pnpm test:e2e --grep "@SPEC-2203\b"` | vert (2 tests, 1 `@visual`, 4 vidéos) |
+| Validation SDD | `node tools/sdd/validate.mjs SPEC-2203` | 8 étapes vertes : lint, typecheck, build, unit (174 pytest), intégration (77 pytest), e2e (2), visuel (1), acceptance (5/5) |
 | Parité | `pnpm parity:check` sur `identity`, `formation`, `learning`, `assessments` | vert (14 scénarios, 0 divergence) ; `content` vide par construction, voir `parity.md` |
 
 ## Anomalies et décisions
@@ -149,7 +149,13 @@ Mesures du **2026-11-22** sur la VM de développement (Supabase local, horloge f
   ne produit aucun scénario parce que toutes les lectures portent un paramètre de chemin. Ce n'est
   pas un échec : c'est le cas prévu par le plan P22, et les preuves d'intégration et l'e2e le
   remplacent (CA-2, CA-5).
-- **Aucune assertion d'oracle ni ligne de base régénérée** : `git status --short
+- **Fixture YouTube hors du registre des modèles** : `packages/llm/fixtures/youtube/captions.json`
+  (ajouté avec l'ingestion) contient la transcription publique lue par l'extracteur Python ; ce n'est
+  pas une fixture de modèle simulé. Le test SPEC-504 qui vérifie l'exhaustivité du registre des
+  fixtures de modèle exclut donc ce répertoire, comme `search` et `qualification`, qui ont leur
+  propre lecteur et leurs propres tests (`test_content_extract.py`). Cette fixture n'a jamais été
+  dans `FIXTURE_REGISTRY` : l'assertion sur les fixtures de modèle n'est pas affaiblie, la
+  régression de la suite unitaire introduite par l'ingestion est corrigée.- **Aucune assertion d'oracle ni ligne de base régénérée** : `git status --short
   api/oracles/recordings/reads.json` vide après la campagne ; `apps/web/__screenshots__` inchangé.
 
 ## Dettes portées par SPEC-2207 (worker et consommateurs)
