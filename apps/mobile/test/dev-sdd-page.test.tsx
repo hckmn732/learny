@@ -2,11 +2,24 @@
 // The page is presentational: the tests render it with fixed props, so no network and no
 // navigation stack are involved. React Native Testing Library v14 renders asynchronously.
 import { render } from '@testing-library/react-native';
+import type { ReactElement } from 'react';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { SddSpecPage, type SddSpecPageProps } from '../src/features/sdd/SddSpecPage';
 
 import { expectAccessible, expectMinTouchTarget } from './utils/expectAccessible';
+
+/** Insets of a 1080 × 2400 Android device with the native status bar visible. */
+const METRICS: Metrics = {
+  frame: { x: 0, y: 0, width: 1080, height: 2400 },
+  insets: { top: 120, left: 0, right: 0, bottom: 48 },
+};
+
+function SafeAreaWrapper({ children }: { readonly children: ReactElement }) {
+  return <SafeAreaProvider initialMetrics={METRICS}>{children}</SafeAreaProvider>;
+}
 
 const baseProps: SddSpecPageProps = {
   appVersion: '1.0.0',
@@ -17,9 +30,13 @@ const baseProps: SddSpecPageProps = {
   health: { status: 'ok', version: '1.0.0', database: 'ok' },
 };
 
+function renderPage(overrides: Partial<SddSpecPageProps> = {}) {
+  return render(<SddSpecPage {...baseProps} {...overrides} />, { wrapper: SafeAreaWrapper });
+}
+
 describe('[SPEC-3001] page de démonstration', () => {
   it('affiche le titre, la version, l’URL de l’API, l’horloge et la plateforme (EF-2)', async () => {
-    const view = await render(<SddSpecPage {...baseProps} />);
+    const view = await renderPage();
 
     expect(view.getByTestId('sdd-title')).toHaveTextContent('SPEC-3001 · socle mobile');
     expect(view.getByTestId('sdd-version')).toHaveTextContent('1.0.0');
@@ -30,29 +47,37 @@ describe('[SPEC-3001] page de démonstration', () => {
   });
 
   it('annonce « API joignable » quand /health répond (CA-1)', async () => {
-    const view = await render(<SddSpecPage {...baseProps} />);
+    const view = await renderPage();
 
     expect(view.getByTestId('sdd-health')).toHaveTextContent('API joignable');
     expect(view.queryByText(/NETWORK_ERROR/)).toBeNull();
   });
 
   it('annonce « API injoignable » et le code d’erreur sans planter (CL-1)', async () => {
-    const view = await render(
-      <SddSpecPage {...baseProps} health={{ status: 'unreachable', code: 'NETWORK_ERROR' }} />,
-    );
+    const view = await renderPage({ health: { status: 'unreachable', code: 'NETWORK_ERROR' } });
 
     expect(view.getByTestId('sdd-health')).toHaveTextContent('API injoignable');
     expect(view.getByText(/NETWORK_ERROR/)).toBeTruthy();
   });
 
   it('affiche « Vérification… » pendant la requête', async () => {
-    const view = await render(<SddSpecPage {...baseProps} health={{ status: 'checking' }} />);
+    const view = await renderPage({ health: { status: 'checking' } });
 
     expect(view.getByTestId('sdd-health')).toHaveTextContent('Vérification…');
   });
 
+  it('respecte la zone sûre de la barre d’état native (canevas § 3)', async () => {
+    const view = await renderPage();
+    const content = StyleSheet.flatten(
+      view.getByTestId('sdd-page').props.contentContainerStyle as never,
+    ) as { paddingTop?: number };
+
+    // 24 dp of page padding plus the 120 px top inset of the status bar.
+    expect(content.paddingTop).toBeGreaterThanOrEqual(METRICS.insets.top);
+  });
+
   it('expose les testID, rôles et libellés vérifiés par les lecteurs d’écran (BR-PLA-03)', async () => {
-    const view = await render(<SddSpecPage {...baseProps} />);
+    const view = await renderPage();
 
     expectAccessible(view, 'sdd-title', { role: 'header', label: 'SPEC-3001 · socle mobile' });
     expectAccessible(view, 'sdd-health', {
@@ -66,7 +91,7 @@ describe('[SPEC-3001] page de démonstration', () => {
   });
 
   it('respecte la cible tactile minimale de la plateforme (BR-PLA-03)', async () => {
-    const view = await render(<SddSpecPage {...baseProps} />);
+    const view = await renderPage();
 
     const row = view.getByTestId('sdd-health').parent;
     expect(row).not.toBeNull();

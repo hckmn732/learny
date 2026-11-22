@@ -118,14 +118,21 @@ export function parseFlowHeader(content) {
   const tags = [];
   let inTags = false;
   for (const line of lines) {
+    // The YAML document separator closes the header (`---`).
+    if (line.trim() === '---') {
+      inTags = false;
+      continue;
+    }
     if (/^tags:\s*$/.test(line)) {
       inTags = true;
       continue;
     }
     if (inTags) {
       const match = /^\s*-\s*(.+?)\s*$/.exec(line);
-      if (match) {
-        tags.push(match[1].replace(/^["']|["']$/g, ''));
+      const tag = match?.[1]?.replace(/^["']|["']$/g, '') ?? '';
+      // Only real labels: the document separator and comments are not tags.
+      if (tag !== '' && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(tag)) {
+        tags.push(tag);
         continue;
       }
       inTags = false;
@@ -391,7 +398,7 @@ class RemoteDevice {
   }
 
   async ensure() {
-    const result = await this.call('/health');
+    const result = await this.call('/device');
     this.info_ = result.device ?? this.info_;
     return { ok: result.ok === true, detail: result.detail ?? '' };
   }
@@ -540,9 +547,13 @@ async function main() {
 
   const cases = parseJunit(junit);
 
-  // Artifacts: one directory per flow, keyed by the flow name.
+  // Artifacts: one directory per flow, keyed by the flow name (one file per name, the transport
+  // may return the same screenshot twice).
   const artifactIndex = {};
+  const seen = new Set();
   for (const artifact of artifacts) {
+    if (seen.has(artifact.name)) continue;
+    seen.add(artifact.name);
     const owner =
       selected.find((flow) =>
         artifact.name.toLowerCase().includes(path.basename(flow.file, '.yaml').toLowerCase()),

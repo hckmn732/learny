@@ -2,6 +2,7 @@
 // the configuration, the clock, the platform and the result of `GET /api/v1/health`.
 import { useEffect, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fr } from '@learny/i18n';
 
@@ -64,6 +65,7 @@ function Row({ testID, label, value, detail, figure = false }: RowProps) {
 /** Page `/_dev/sdd/SPEC-3001`. */
 export function SddSpecPage(props: SddSpecPageProps) {
   const reduceMotion = useReducedMotion();
+  const insets = useSafeAreaInsets();
   // A stable animated value created once, without reading a ref during render (CL-5).
   const [opacity] = useState(() => new Animated.Value(0));
 
@@ -84,7 +86,18 @@ export function SddSpecPage(props: SddSpecPageProps) {
 
   return (
     <Animated.View style={[styles.root, { opacity }]}>
-      <ScrollView contentContainerStyle={styles.content} accessibilityRole="none" testID="sdd-page">
+      <ScrollView
+        contentContainerStyle={[
+          styles.content,
+          // The native status bar is not overlaid (canevas § 3): the content starts below it.
+          {
+            paddingTop: theme.spacing.xl + insets.top,
+            paddingBottom: theme.spacing.xl + insets.bottom,
+          },
+        ]}
+        accessibilityRole="none"
+        testID="sdd-page"
+      >
         <Text style={styles.eyebrow} maxFontSizeMultiplier={theme.maxFontSizeMultiplier.heading}>
           {t.eyebrow}
         </Text>

@@ -10,7 +10,7 @@
 //   DEVICE_AGENT_TOKEN=<secret> node apps/mobile/e2e/device-agent.mjs --port 8098
 //
 // Routes (POST, JSON):
-//   /health    {}                                  -> { ok, detail, device }
+//   /device    {}                                  -> { ok, detail, device }
 //   /install   { apkUrl }                          -> { ok, detail }
 //   /freeze    {}                                  -> { ok, detail }
 //   /maestro   { tags, flows[], recordVideo }      -> { status, stdout, stderr, junit, artifacts[] }
@@ -308,7 +308,7 @@ const server = http.createServer((request, response) => {
   request.on('end', () => {
     try {
       const body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
-      if (request.url === '/health') {
+      if (request.url === '/device') {
         const ready = ensureDevice();
         json(response, 200, ready);
       } else if (request.url === '/install') {
