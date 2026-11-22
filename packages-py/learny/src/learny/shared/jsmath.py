@@ -30,11 +30,29 @@ def js_number(value: float | int) -> str:
     return _normalize_exponent(text)
 
 
+def _plain_decimal(mantissa: str, exponent: int) -> str:
+    """`5.2e-05` -> `0.000052` (JavaScript writes every number of [-6, 21) in decimal)."""
+    sign = ""
+    if mantissa.startswith("-"):
+        sign, mantissa = "-", mantissa[1:]
+    whole, _, fraction = mantissa.partition(".")
+    digits = whole + fraction
+    point = len(whole) + exponent
+    if point <= 0:
+        return f"{sign}0.{'0' * (-point)}{digits}"
+    if point >= len(digits):
+        return f"{sign}{digits}{'0' * (point - len(digits))}"
+    return f"{sign}{digits[:point]}.{digits[point:]}"
+
+
 def _normalize_exponent(text: str) -> str:
-    """`1e-07` -> `1e-7`, `1e+21` stays `1e+21` (JavaScript drops the leading zero)."""
+    """Renders a float like `Number#toString`: decimal notation for [-6, 21), exponent otherwise."""
     if "e" not in text:
         return text
     mantissa, exponent = text.split("e")
+    power = int(exponent)
+    if -6 <= power < 21:
+        return _plain_decimal(mantissa, power)
     sign = exponent[0]
     digits = exponent[1:].lstrip("0") or "0"
     return f"{mantissa}e{sign}{digits}"

@@ -1,0 +1,445 @@
+{
+  "generatedBy": "tools/content/oracle.mjs",
+  "targetTokens": 800,
+  "overlapTokens": 100,
+  "tokens": [
+    {
+      "text": "bonjour",
+      "tokens": 2
+    },
+    {
+      "text": "le monde entier",
+      "tokens": 4
+    },
+    {
+      "text": "aaaaaaa",
+      "tokens": 2
+    },
+    {
+      "text": "L’élève",
+      "tokens": 2
+    },
+    {
+      "text": "😀😀",
+      "tokens": 1
+    },
+    {
+      "text": "mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot ",
+      "tokens": 100
+    }
+  ],
+  "chunks": [
+    {
+      "name": "paragraphs-default",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "The first paragraph covers photosynthesis and light.\n\nThe second paragraph explains cellular respiration.\n\nA third, longer paragraph returns to chloroplasts and chlorophyll.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 173
+          },
+          "tokenCount": 44
+        }
+      ]
+    },
+    {
+      "name": "long-paragraphs",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte. phrase courte.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 899
+          },
+          "tokenCount": 225
+        },
+        {
+          "position": 1,
+          "text": "mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot",
+          "location": {
+            "charStart": 902,
+            "charEnd": 4101
+          },
+          "tokenCount": 800
+        },
+        {
+          "position": 2,
+          "text": "mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot mot",
+          "location": {
+            "charStart": 4102,
+            "charEnd": 4501
+          },
+          "tokenCount": 100
+        }
+      ]
+    },
+    {
+      "name": "small-target",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "The first paragraph covers photosynthesis and light.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 52
+          },
+          "tokenCount": 13
+        },
+        {
+          "position": 1,
+          "text": "The second paragraph explains cellular respiration.",
+          "location": {
+            "charStart": 54,
+            "charEnd": 105
+          },
+          "tokenCount": 13
+        },
+        {
+          "position": 2,
+          "text": "A third, longer paragraph returns to chloroplasts and chlorophyll.",
+          "location": {
+            "charStart": 107,
+            "charEnd": 173
+          },
+          "tokenCount": 17
+        }
+      ]
+    },
+    {
+      "name": "no-overlap",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "The first paragraph covers photosynthesis and light.\n\nThe second paragraph explains cellular respiration.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 105
+          },
+          "tokenCount": 27
+        },
+        {
+          "position": 1,
+          "text": "The second paragraph explains cellular respiration.\n\nA third, longer paragraph returns to chloroplasts and chlorophyll.",
+          "location": {
+            "charStart": 54,
+            "charEnd": 173
+          },
+          "tokenCount": 30
+        }
+      ]
+    },
+    {
+      "name": "accents",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "L’élève révise l’histoire générale.\n\nDeuxième paragraphe : ça compte.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 69
+          },
+          "tokenCount": 18
+        }
+      ]
+    },
+    {
+      "name": "pdf-pages",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "Page une.\n\nToujours page une.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 29,
+            "page": 1
+          },
+          "tokenCount": 8
+        },
+        {
+          "position": 1,
+          "text": "Page deux.",
+          "location": {
+            "charStart": 31,
+            "charEnd": 41,
+            "page": 2
+          },
+          "tokenCount": 3
+        }
+      ]
+    },
+    {
+      "name": "anchors",
+      "chunks": [
+        {
+          "position": 0,
+          "text": "Intro.",
+          "location": {
+            "charStart": 0,
+            "charEnd": 6,
+            "anchor": "intro"
+          },
+          "tokenCount": 2
+        },
+        {
+          "position": 1,
+          "text": "Section A.",
+          "location": {
+            "charStart": 8,
+            "charEnd": 18,
+            "anchor": "section-a"
+          },
+          "tokenCount": 3
+        },
+        {
+          "position": 2,
+          "text": "Section B.",
+          "location": {
+            "charStart": 20,
+            "charEnd": 30,
+            "anchor": "section-b"
+          },
+          "tokenCount": 3
+        }
+      ]
+    }
+  ],
+  "excerpt": "contenu",
+  "normalize": [
+    {
+      "text": "  L’Élève   révise.  ",
+      "normalized": "l’élève révise."
+    },
+    {
+      "text": "l’élève révise.",
+      "normalized": "l’élève révise."
+    },
+    {
+      "text": "Ligne\n\nsuivante\ttabulee",
+      "normalized": "ligne suivante tabulee"
+    }
+  ],
+  "overlaps": [
+    {
+      "left": "abcde",
+      "right": "abcde",
+      "ratio": 1
+    },
+    {
+      "left": "abcde",
+      "right": "abcdef",
+      "ratio": 1
+    },
+    {
+      "left": "Le chat dort.",
+      "right": "le   CHAT dort.",
+      "ratio": 1
+    },
+    {
+      "left": "",
+      "right": "texte",
+      "ratio": 0
+    },
+    {
+      "left": "abcdefghij",
+      "right": "abcdefghij",
+      "ratio": 1
+    }
+  ],
+  "order": [
+    "00000000-0000-4000-8000-000000000001",
+    "00000000-0000-4000-8000-000000000002",
+    "00000000-0000-4000-8000-000000000004",
+    "00000000-0000-4000-8000-000000000003"
+  ],
+  "deduplicated": {
+    "duplicates": 1,
+    "kept": [
+      "00000000-0000-4000-8000-000000000001",
+      "00000000-0000-4000-8000-000000000004",
+      "00000000-0000-4000-8000-000000000003"
+    ]
+  },
+  "documents": [
+    {
+      "chunkId": "00000000-0000-4000-8000-000000000001",
+      "document": "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000001\" location=\"p. 3 · car. 12–74\">La photosynthese transforme la lumiere en energie chimique.</document>",
+      "location": "p. 3 · car. 12–74"
+    },
+    {
+      "chunkId": "00000000-0000-4000-8000-000000000002",
+      "document": "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000002\" location=\"p. 4 · car. 0–62\">La photosynthese transforme la lumiere en energie chimique.  </document>",
+      "location": "p. 4 · car. 0–62"
+    },
+    {
+      "chunkId": "00000000-0000-4000-8000-000000000003",
+      "document": "<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000003\" location=\"12.5–18 s · car. 0–28\">Le coeur, muscle creux.</document>",
+      "location": "12.5–18 s · car. 0–28"
+    },
+    {
+      "chunkId": "00000000-0000-4000-8000-000000000004",
+      "document": "<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000004\" location=\"ancre note-1 · car. 0–48\">Les &lt;document&gt; balises &amp; guillemets \" sont echappes.</document>",
+      "location": "ancre note-1 · car. 0–48"
+    }
+  ],
+  "selections": [
+    {
+      "name": "task-budget",
+      "result": {
+        "task": "tutor",
+        "tokenBudget": 4000,
+        "estimatedTokens": 129,
+        "reason": null,
+        "chunks": [
+          {
+            "chunkId": "00000000-0000-4000-8000-000000000001",
+            "resourceId": "00000000-0000-4000-8000-0000000000aa",
+            "source": "Cours de biologie",
+            "position": 0,
+            "score": 0.91,
+            "text": "La photosynthese transforme la lumiere en energie chimique.",
+            "location": {
+              "page": 3,
+              "charStart": 12,
+              "charEnd": 74
+            },
+            "tokenCount": 16
+          },
+          {
+            "chunkId": "00000000-0000-4000-8000-000000000004",
+            "resourceId": "00000000-0000-4000-8000-0000000000bb",
+            "source": "Anatomie",
+            "position": 3,
+            "score": 0.7,
+            "text": "Les <document> balises & guillemets \" sont echappes.",
+            "location": {
+              "anchor": "note-1",
+              "charStart": 0,
+              "charEnd": 48
+            },
+            "tokenCount": 13
+          },
+          {
+            "chunkId": "00000000-0000-4000-8000-000000000003",
+            "resourceId": "00000000-0000-4000-8000-0000000000bb",
+            "source": "Anatomie",
+            "position": 2,
+            "score": 0.5,
+            "text": "Le coeur, muscle creux.",
+            "location": {
+              "startSec": 12.5,
+              "endSec": 18,
+              "charStart": 0,
+              "charEnd": 28
+            },
+            "tokenCount": 8
+          }
+        ],
+        "documents": [
+          "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000001\" location=\"p. 3 · car. 12–74\">La photosynthese transforme la lumiere en energie chimique.</document>",
+          "<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000004\" location=\"ancre note-1 · car. 0–48\">Les &lt;document&gt; balises &amp; guillemets \" sont echappes.</document>",
+          "<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000003\" location=\"12.5–18 s · car. 0–28\">Le coeur, muscle creux.</document>"
+        ],
+        "text": "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000001\" location=\"p. 3 · car. 12–74\">La photosynthese transforme la lumiere en energie chimique.</document>\n<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000004\" location=\"ancre note-1 · car. 0–48\">Les &lt;document&gt; balises &amp; guillemets \" sont echappes.</document>\n<document source=\"Anatomie\" chunk=\"00000000-0000-4000-8000-000000000003\" location=\"12.5–18 s · car. 0–28\">Le coeur, muscle creux.</document>",
+        "duplicates": 1,
+        "omitted": 0
+      }
+    },
+    {
+      "name": "explicit-budget",
+      "result": {
+        "task": "course",
+        "tokenBudget": 60,
+        "estimatedTokens": 46,
+        "reason": null,
+        "chunks": [
+          {
+            "chunkId": "00000000-0000-4000-8000-000000000001",
+            "resourceId": "00000000-0000-4000-8000-0000000000aa",
+            "source": "Cours de biologie",
+            "position": 0,
+            "score": 0.91,
+            "text": "La photosynthese transforme la lumiere en energie chimique.",
+            "location": {
+              "page": 3,
+              "charStart": 12,
+              "charEnd": 74
+            },
+            "tokenCount": 16
+          }
+        ],
+        "documents": [
+          "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000001\" location=\"p. 3 · car. 12–74\">La photosynthese transforme la lumiere en energie chimique.</document>"
+        ],
+        "text": "<document source=\"Cours de biologie\" chunk=\"00000000-0000-4000-8000-000000000001\" location=\"p. 3 · car. 12–74\">La photosynthese transforme la lumiere en energie chimique.</document>",
+        "duplicates": 1,
+        "omitted": 2
+      }
+    },
+    {
+      "name": "empty",
+      "result": {
+        "task": "gaps",
+        "tokenBudget": 8000,
+        "estimatedTokens": 0,
+        "reason": "no_matches",
+        "chunks": [],
+        "documents": [],
+        "text": "",
+        "duplicates": 0,
+        "omitted": 0
+      }
+    },
+    {
+      "name": "tiny-budget",
+      "result": {
+        "task": "tutor",
+        "tokenBudget": 1,
+        "estimatedTokens": 0,
+        "reason": "budget_exhausted",
+        "chunks": [],
+        "documents": [],
+        "text": "",
+        "duplicates": 1,
+        "omitted": 3
+      }
+    }
+  ],
+  "embeddings": [
+    {
+      "text": "La photosynthese.",
+      "dim": 1024,
+      "head": [
+        -0.029330199934039052, 0.006081510449138642, 0.04761743929479445, 0.03304976395343099
+      ],
+      "digest": "95799cb4f5cd22f3c38f7b96acb87d3f376780e7f1121f6a551c88160bb6529b"
+    },
+    {
+      "text": "",
+      "dim": 1024,
+      "head": [
+        0.024176029195553488, -0.039762476756818745, 0.00009672030698804476, -0.01709162019022242
+      ],
+      "digest": "3b60af20c562b8f09b9ab9f0be99f48531c75ff0df4644a2c85879214e7d0369"
+    },
+    {
+      "text": "Un texte plus long avec des accents éèà.",
+      "dim": 1024,
+      "head": [
+        0.004183549231577648, -0.013583155832985973, 0.010094216789212023, 0.04351832801336214
+      ],
+      "digest": "f33b99f89c4c7acaa0e82722c623cc7fcb2fff63b20c2f845aa9136038f1fb93"
+    },
+    {
+      "text": "x",
+      "dim": 1024,
+      "head": [
+        0.038787615626734884, -0.0029563907093117362, 0.04550466772768275, -0.04155113902383866
+      ],
+      "digest": "0ed9c33e60defeaa3c50d0a448bc5f3058d91e95ef296441b49d83b2a956d913"
+    }
+  ],
+  "vectorLiteral": "[0.5,-0.25,1,0]",
+  "overlapThreshold": 0.8
+}
