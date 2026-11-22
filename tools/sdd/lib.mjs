@@ -229,6 +229,14 @@ export function collectMobileEvidence(spec, resultsDir, evidenceRoot) {
     }
   }
 
+  // Vidéo de campagne (ADR-3015 § 2) : une seule par campagne, rattachée à aucun flux.
+  const campaignVideo =
+    typeof report.campaignVideo === 'string' ? path.join(resultsDir, report.campaignVideo) : null;
+  if (campaignVideo !== null && fs.existsSync(campaignVideo)) {
+    fs.copyFileSync(campaignVideo, path.join(dir, 'video', '00-campagne.mp4'));
+    videos += 1;
+  }
+
   fs.writeFileSync(
     path.join(dir, 'mobile-summary.md'),
     `# Campagne Maestro — ${spec.id}\n\n- Date : ${nowIso()}\n- Plateforme : ${report.platform ?? 'android'}\n` +

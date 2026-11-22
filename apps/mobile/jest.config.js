@@ -11,6 +11,8 @@ module.exports = {
     '<rootDir>/test/integration/',
     // SPEC-3002 CA-5: the lint-rule proof is a Vitest (Node) test, not a component test.
     '<rootDir>/test/lint-rules.test.ts',
+    // SPEC-3001 ET-2: ce test importe les globals Vitest, il n'est pas exécutable par Jest.
+    '<rootDir>/test/resolution.test.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)

@@ -248,3 +248,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-3012](ADR-3012-execution-des-validations-mobiles-et-compatibilite-babel.md) | Exécution des validations mobiles sur une VM séparée (agent appareil) et compatibilité Babel/React Native | Déduite | ADR-1007, ADR-3004, ADR-3005, SPEC-3001 |
 | [ADR-3013](ADR-3013-theme-natif-composants-et-galerie-de-la-piste-mobile.md) | Thème natif, composants et galerie de la piste mobile | Déduite | ADR-3003, ADR-3004, ADR-0131, SPEC-3002 |
 | [ADR-3014](ADR-3014-client-api-mobile-session-et-cache-hors-ligne.md) | Client API mobile, session et cache hors ligne | Déduite | ADR-1005, ADR-3004, ADR-3005, ADR-3008, SPEC-3003 |
+| [ADR-3015](ADR-3015-outillage-e2e-mobile-jobs-asynchrones-et-artefacts-par-flux.md) | Outillage e2e mobile : jobs asynchrones et artefacts par flux | Déduite | ADR-3004, ADR-3012, SPEC-3001, SPEC-3002, SPEC-3003 |

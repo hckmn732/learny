@@ -158,6 +158,31 @@ export function compareImages(captureBuffer, referenceBuffer, options = {}) {
   };
 }
 
+/**
+ * Compare une liste de captures à leurs références, **flux par flux** (ADR-3015 § 4).
+ *
+ * Chaque entrée porte son flux : une capture ne peut donc pas être comparée à la référence d'un
+ * autre flux, ce que faisait l'ancien index par nom de fichier (trois flux, un seul ratio).
+ *
+ * Entrées : `{ flow, capture, baseline }` (Buffers ; `null` = absent).
+ * Retour : `[{ flow, status, diffRatio, diffPng }]` avec
+ * `status` ∈ `passed` | `failed` | `no-capture` | `baseline-created`.
+ */
+export function compareFlows(entries, options = {}) {
+  return entries.map((entry) => {
+    const { flow, capture, baseline } = entry ?? {};
+    if (!capture) return { flow, status: 'no-capture', diffRatio: null, diffPng: null };
+    if (!baseline) return { flow, status: 'baseline-created', diffRatio: null, diffPng: null };
+    const result = compareImages(capture, baseline, options);
+    return {
+      flow,
+      status: result.ok ? 'passed' : 'failed',
+      diffRatio: result.diffRatio,
+      diffPng: result.diffPng,
+    };
+  });
+}
+
 /** Runs the command line; returns the exit code (0 under the threshold, 1 above, 2 on misuse). */
 export function runCli(argv) {
   const positional = [];

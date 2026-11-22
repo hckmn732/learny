@@ -62,8 +62,9 @@
     "quality:journeys": "node tools/quality/check-v1-journeys.mjs",
     "dev:mobile": "pnpm --filter @learny/mobile start",
     "test:mobile": "pnpm --filter @learny/mobile exec jest --ci --json --outputFile ../../test-results/mobile/jest.json",
-    "test:e2e:mobile": "node apps/mobile/e2e/run-maestro.mjs",
-    "build:mobile:e2e": "node apps/mobile/e2e/build-e2e.mjs"
+    "test:e2e:mobile": "node tools/dev/mobile-preflight.mjs && node apps/mobile/e2e/run-maestro.mjs",
+    "build:mobile:e2e": "node apps/mobile/e2e/build-e2e.mjs",
+    "mobile:preflight": "node tools/dev/mobile-preflight.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

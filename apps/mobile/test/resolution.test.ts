@@ -1,5 +1,7 @@
 // Proof that the shared packages resolve from the application (SPEC-3001 ET-2) under the same
 // module resolution the Metro bundle uses: pnpm workspace links, TypeScript sources transpiled.
+import { describe, expect, it } from 'vitest';
+
 import { HealthResponse } from '@learny/contracts';
 import { zonedParts } from '@learny/core';
 import { fr } from '@learny/i18n';

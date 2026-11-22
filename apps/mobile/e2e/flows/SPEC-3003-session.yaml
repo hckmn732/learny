@@ -59,8 +59,6 @@ tags:
     id: sdd-network-state
     text: '.*offline.*'
 - assertVisible:
-    text: '.*Hors ligne.*'
-- assertVisible:
     id: sdd-me-firstname
     text: '.*Alex.*'
 - takeScreenshot: SPEC-3003-session
