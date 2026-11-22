@@ -162,5 +162,5 @@ chemin, ces tests portent les cas de comportement) :
 | `packages/services/test/integration/offline-sync.test.ts` | 6 | `tests/integration/assessments/test_assessments_offline_sync.py` | réponse renotée + journal, `duplicate`, conflit, `EXPIRED`, `FORBIDDEN`, indépendance des entrées (ordre vérifié) | les identifiants sont figés comme dans la suite source |
 | `packages/services/test/integration/practice-exercise.test.ts` | 6 | `tests/integration/assessments/test_assessments_exercises.py`, `test_assessments_exercise_submit.py` | lecture, création/reprise, brouillon, indices, correction, rejeu | `ensurePracticeExercise` (génération idempotente) n'est pas porté : aucun appel du périmètre (dette `scope.md`, SPEC-2205) |
 
-Treize cas unitaires et vingt cas d'intégration ajoutés par l'étape 7 ; la suite Python passe de
-1425 à **1473 tests** et `api/inventory.json` reste à jour (`inventory.mjs --check`).
+Vingt et un cas unitaires et vingt-sept cas d'intégration ajoutés par l'étape 7 ; la suite
+Python passe de 1425 à **1473 tests** et `api/inventory.json` reste à jour (`inventory.mjs --check`).
