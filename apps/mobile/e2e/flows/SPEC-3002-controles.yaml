@@ -1,7 +1,7 @@
-# SPEC-3002 — comparaison visuelle de la section « Contrôles » (CA-4, ADR-3003 § 4).
-# Une capture par flux : le harnais compare la première image au fichier de référence versionné
-# `e2e/visual/baselines/SPEC-3002-controles.png`. Le contrôle segmenté est sur « Mois » et
-# l'interrupteur éteint : l'état comparé est stable.
+# SPEC-3002 — comparaison visuelle de la section « Contrôles » (CA-4).
+# Trois glissements de 60 % de la hauteur d'écran amènent le contrôle segmenté et l'interrupteur :
+# Maestro exige 100 % de visibilité, ce que `scrollUntilVisible` n'obtient pas sur cette liste.
+# L'état comparé est stable : segmenté sur « Mois », interrupteur éteint.
 appId: fr.learny.app
 name: SPEC-3002 controles
 tags:
@@ -13,16 +13,25 @@ tags:
 - assertVisible:
     id: sdd-title
 - openLink: learny:///_dev/ui
-- scrollUntilVisible:
-    element:
-      id: ui-segmented
-    direction: DOWN
+- assertVisible:
+    id: ui-gallery
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- assertVisible:
+    id: ui-segmented
 - tapOn:
     id: ui-segmented-month
-- scrollUntilVisible:
-    element:
-      id: ui-switch-control
-    direction: DOWN
+- assertVisible: month
 - tapOn:
     id: ui-switch-control
 - assertVisible: Désactivé

@@ -1,7 +1,8 @@
 # SPEC-3002 — galerie des composants : défilement des sept sections, sélection dans le contrôle
 # segmenté, bascule de l'interrupteur, apparition d'un toast et ouverture d'une feuille.
-# Une section de la galerie est plus haute que l'écran : le flux vise donc les composants, qui
-# sont courts, et non les conteneurs de section (Maestro exige 100 % de visibilité).
+# La galerie est une longue liste : les déplacements sont des glissements de 60 % de la hauteur
+# d'écran, dont les positions ont été relevées sur l'émulateur (une section fait plus d'un écran,
+# et Maestro exige 100 % de visibilité pour `scrollUntilVisible`).
 appId: fr.learny.app
 name: SPEC-3002 galerie
 tags:
@@ -11,8 +12,8 @@ tags:
     clearState: true
 - assertVisible:
     id: sdd-title
-# L'application est prête, la galerie est ouverte par son lien profond : le bandeau d'entrée est
-# un texte non cliquable pour le pilote.
+# L'application est prête ; la galerie est ouverte par son lien profond, seule forme stable pour le
+# pilote (le bandeau d'entrée est un texte non cliquable).
 - openLink: learny:///_dev/ui
 - assertVisible:
     id: ui-gallery
@@ -20,101 +21,75 @@ tags:
     id: ui-header
 - assertVisible: Galerie des composants
 
-# Jetons
-- scrollUntilVisible:
-    element:
-      id: ui-token-lime
-    direction: DOWN
+# Jetons (en haut de la galerie)
 - assertVisible:
     id: ui-token-lime
 - takeScreenshot: SPEC-3002-jetons
 
 # Boutons
-- scrollUntilVisible:
-    element:
-      id: ui-button-primary
-    direction: DOWN
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - assertVisible:
     id: ui-button-primary
-- scrollUntilVisible:
-    element:
-      id: ui-button-loading
-    direction: DOWN
 - assertVisible:
     id: ui-button-loading
-- scrollUntilVisible:
-    element:
-      id: ui-button-disabled
-    direction: DOWN
-- assertVisible:
-    id: ui-button-disabled
 
 # Cartes et puces
-- scrollUntilVisible:
-    element:
-      id: ui-stat-streak
-    direction: DOWN
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - assertVisible:
     id: ui-stat-streak
-- scrollUntilVisible:
-    element:
-      id: ui-card-ink
-    direction: DOWN
 - assertVisible:
     id: ui-card-ink
-- scrollUntilVisible:
-    element:
-      id: ui-chip-green
-    direction: DOWN
 - assertVisible:
     id: ui-chip-green
 
 # Contrôles : sélection et interrupteur (EF-4)
-- scrollUntilVisible:
-    element:
-      id: ui-segmented
-    direction: DOWN
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- assertVisible:
+    id: ui-segmented
 - tapOn:
     id: ui-segmented-month
 - assertVisible: month
-- scrollUntilVisible:
-    element:
-      id: ui-switch-control
-    direction: DOWN
 - tapOn:
     id: ui-switch-control
 - assertVisible: Désactivé
 - takeScreenshot: SPEC-3002-controles
 
 # Listes
-- scrollUntilVisible:
-    element:
-      id: ui-row-course
-    direction: DOWN
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - assertVisible:
     id: ui-row-course
-- scrollUntilVisible:
-    element:
-      id: ui-badge
-    direction: DOWN
 - assertVisible:
-    id: ui-badge
+    id: ui-row-switch-control
 
 # Feuilles et retours : toast puis feuille
-- scrollUntilVisible:
-    element:
-      id: ui-toast-trigger
-    direction: DOWN
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- assertVisible:
+    id: ui-toast-trigger
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - tapOn:
     id: ui-toast-trigger
 - assertVisible:
     id: ui-toast
 - assertVisible: Séance reportée à demain 9:00.
 - takeScreenshot: SPEC-3002-feuilles
-- scrollUntilVisible:
-    element:
-      id: ui-sheet-open
-    direction: DOWN
 - tapOn:
     id: ui-sheet-open
 - assertVisible:
@@ -126,22 +101,12 @@ tags:
 - assertNotVisible:
     id: ui-sheet
 
-# États
-- scrollUntilVisible:
-    element:
-      id: ui-empty
-    direction: DOWN
-- assertVisible:
-    id: ui-empty
-- scrollUntilVisible:
-    element:
-      id: ui-error
-    direction: DOWN
-- assertVisible:
-    id: ui-error
-- scrollUntilVisible:
-    element:
-      id: ui-skeleton
-    direction: DOWN
+# États (bas de la galerie)
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - assertVisible:
     id: ui-skeleton
+- assertVisible:
+    id: ui-error

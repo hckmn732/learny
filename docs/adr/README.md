@@ -246,3 +246,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-3010](ADR-3010-adaptations-tactiles-des-interactions-du-web.md) | Adaptations tactiles des interactions du web | Déduite | ADR-3003, SPEC-3302, SPEC-3303 |
 | [ADR-3011](ADR-3011-connexion-apple-et-google-sur-mobile.md) | Connexion avec Apple et Google sur l'application mobile | Déduite | ADR-0007, ADR-3006, SPEC-3402 |
 | [ADR-3012](ADR-3012-execution-des-validations-mobiles-et-compatibilite-babel.md) | Exécution des validations mobiles sur une VM séparée (agent appareil) et compatibilité Babel/React Native | Déduite | ADR-1007, ADR-3004, ADR-3005, SPEC-3001 |
+| [ADR-3013](ADR-3013-theme-natif-composants-et-galerie-de-la-piste-mobile.md) | Thème natif, composants et galerie de la piste mobile | Déduite | ADR-3003, ADR-3004, ADR-0131, SPEC-3002 |

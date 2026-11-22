@@ -1,5 +1,6 @@
 # SPEC-3002 — comparaison visuelle des « Feuilles et retours » (CA-4).
-# La feuille est ouverte : la capture compare le fond, le voile, la poignée et le titre.
+# Six glissements amènent la section des surcouches, le toast est déclenché puis la feuille est
+# ouverte : la capture compare le voile, la poignée, le titre et le corps de la feuille.
 appId: fr.learny.app
 name: SPEC-3002 feuilles
 tags:
@@ -11,18 +12,39 @@ tags:
 - assertVisible:
     id: sdd-title
 - openLink: learny:///_dev/ui
-- scrollUntilVisible:
-    element:
-      id: ui-toast-trigger
-    direction: DOWN
+- assertVisible:
+    id: ui-gallery
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
+- assertVisible:
+    id: ui-toast-trigger
 - tapOn:
     id: ui-toast-trigger
 - assertVisible:
     id: ui-toast
-- scrollUntilVisible:
-    element:
-      id: ui-sheet-open
-    direction: DOWN
+- assertVisible: Séance reportée à demain 9:00.
 - tapOn:
     id: ui-sheet-open
 - assertVisible:

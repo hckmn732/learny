@@ -376,14 +376,6 @@ export default function UiGalleryRoute() {
               testID="ui-sheet-open"
             />
           </View>
-          <Toast
-            visible={toastVisible}
-            message={t.labels.toast}
-            onHide={() => {
-              setToastVisible(false);
-            }}
-            testID="ui-toast"
-          />
         </Section>
 
         <Section id="etats" title={t.sections.states}>
@@ -401,6 +393,18 @@ export default function UiGalleryRoute() {
           <Skeleton lines={3} testID="ui-skeleton" />
         </Section>
       </ScrollView>
+
+      <View pointerEvents="box-none" style={styles.toastHost} testID="ui-toast-host">
+        <Toast
+          visible={toastVisible}
+          duration={12000}
+          message={t.labels.toast}
+          onHide={() => {
+            setToastVisible(false);
+          }}
+          testID="ui-toast"
+        />
+      </View>
 
       <Sheet
         visible={sheetVisible}
@@ -431,6 +435,13 @@ export default function UiGalleryRoute() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: theme.colors.canvas },
+  toastHost: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: theme.spacing.xxxl,
+    alignItems: 'center',
+  },
   content: { paddingBottom: theme.spacing.huge, gap: theme.spacing.md },
   intro: { paddingHorizontal: theme.spacing.xl },
   platformBlock: { paddingHorizontal: theme.spacing.xl, gap: theme.spacing.xs },
