@@ -88,6 +88,9 @@ class DevDeps:
     stripe: Any = None
     webhook_journal: Any = None
     settings: Any = None
+    gotrue: Any = None
+    storage: Any = None
+    push: Any = None
 
 
 def ownership_of(route_ids: tuple[str, ...]) -> Ownership:
