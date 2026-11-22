@@ -63,6 +63,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           './assets/fonts/Inter-Regular.ttf',
           './assets/fonts/Inter-Medium.ttf',
           './assets/fonts/Inter-SemiBold.ttf',
+          './assets/fonts/Inter-Bold.ttf',
+          './assets/fonts/SpaceGrotesk-SemiBold.ttf',
         ],
       },
     ],

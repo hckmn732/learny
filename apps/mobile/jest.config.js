@@ -6,7 +6,12 @@ module.exports = {
   rootDir: __dirname,
   testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/*.test.tsx'],
   // `test/integration/**` belongs to Vitest (canevas § 5): it talks to the local API.
-  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/test/integration/'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/test/integration/',
+    // SPEC-3002 CA-5: the lint-rule proof is a Vitest (Node) test, not a component test.
+    '<rootDir>/test/lint-rules.test.ts',
+  ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)
   // and the ESM-only dependencies of @learny/core.

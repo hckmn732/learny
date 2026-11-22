@@ -56,6 +56,8 @@ export default defineConfig({
             'apps/*/src/**/*.test.{ts,tsx}',
             // SPEC-3001: pure logic of the mobile e2e harness (compare.mjs).
             'apps/mobile/e2e/**/*.test.ts',
+            // SPEC-3002 CA-5: the lint-rule proof runs in Node (ESLint API), not in Jest.
+            'apps/mobile/test/*.test.ts',
             'apps/web/{app,components,lib}/**/*.test.{ts,tsx}',
             'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',

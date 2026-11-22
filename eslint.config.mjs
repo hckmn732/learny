@@ -280,6 +280,8 @@ export default tseslint.config(
       '**/.next/**',
       '**/dist/**',
       '**/next-env.d.ts',
+      'apps/mobile/android/**',
+      'apps/mobile/.expo/**',
       'test-results/**',
       'coverage/**',
       'design/**',
@@ -974,6 +976,21 @@ export default tseslint.config(
     },
   },
   {
+    // Unit tests of the mobile application run in Node (Vitest, canevas § 5): they read the
+    // design references (tokens, fonts) and drive ESLint to prove CA-5, which the application
+    // bundle never does. Only test files get this exemption: production code stays a pure
+    // client of the API (SPEC-3001 ET-3).
+    files: ['apps/mobile/src/**/*.test.ts', 'apps/mobile/test/**/*.{ts,tsx}'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+  {
+    // The icon set is generated from `design/app-mobile/assets/icons.js` (SPEC-3002 § 8.3): the
+    // brand marks of Apple and Google carry their own colours, and `Rect` attributes named `x`/`y`
+    // are the SVG geometry of the mockup, not the deprecated DOM props of the base rule.
+    files: ['apps/mobile/src/ui/icons.tsx'],
+    rules: { 'no-restricted-syntax': 'off', '@typescript-eslint/no-deprecated': 'off' },
+  },
+  {
     // The Expo configuration files (Metro, Babel, Jest) and the asset stub are CommonJS.
     files: ['apps/mobile/*.config.js', 'apps/mobile/test/**/*.js', 'apps/mobile/e2e/**/*.mjs'],
     languageOptions: {
@@ -986,6 +1003,7 @@ export default tseslint.config(
         console: 'readonly',
         Buffer: 'readonly',
         fetch: 'readonly',
+        AbortSignal: 'readonly',
         URL: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',

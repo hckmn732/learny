@@ -382,16 +382,29 @@ class RemoteDevice {
   }
 
   async call(route, body) {
-    const response = await fetch(`${this.cfg.deviceAgentUrl.replace(/\/+$/, '')}${route}`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        ...(this.cfg.deviceAgentToken === null
-          ? {}
-          : { 'x-device-token': this.cfg.deviceAgentToken }),
-      },
-      body: JSON.stringify(body ?? {}),
-    });
+    // A campaign installs the APK, records the video and runs several flows: the default undici
+    // header timeout (5 min) cuts a healthy run. The wait is explicit and configurable
+    // (`MOBILE_DEVICE_AGENT_TIMEOUT_MS`), and a real failure is reported as such instead of a raw
+    // `fetch failed` (ADR-3012).
+    const timeoutMs = Number(process.env.MOBILE_DEVICE_AGENT_TIMEOUT_MS ?? 1_800_000);
+    let response;
+    try {
+      response = await fetch(`${this.cfg.deviceAgentUrl.replace(/\/+$/, '')}${route}`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          ...(this.cfg.deviceAgentToken === null
+            ? {}
+            : { 'x-device-token': this.cfg.deviceAgentToken }),
+        },
+        body: JSON.stringify(body ?? {}),
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch (cause) {
+      throw new Error(
+        `agent appareil injoignable après ${String(Math.round(timeoutMs / 1000))} s (${route}) : ${cause instanceof Error ? cause.message : String(cause)}`,
+      );
+    }
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error ?? `agent HTTP ${String(response.status)}`);
     return payload;

@@ -1,121 +1,148 @@
-// Native theme of the mobile application (canevas § 2, ADR-3004 § 4): every colour, size, radius
-// and font comes from the tokens of `@learny/ui/tokens`. A literal is refused by ESLint.
-import type { TextStyle } from 'react-native';
+// Native theme of the mobile application (SPEC-3002 EF-1): the tokens of `./tokens` resolved for
+// the running platform. A component imports `theme` and never writes a colour, a size or a radius
+// (ET-1, ESLint `no-restricted-syntax`).
+import { Platform, type TextStyle, type ViewStyle } from 'react-native';
 
 import {
   colors,
+  controlHeights,
+  durations,
   fontFamilies,
-  fontSizesPx,
-  fontWeights,
-  lineHeights,
-  radiiPx,
-  spacingPx,
-} from '@learny/ui/tokens';
-import type { FontSizePx, LineHeight, RadiusPx } from '@learny/ui/tokens';
+  minTouchTarget,
+  radii,
+  shadows,
+  spacing,
+  typeScale,
+} from './tokens';
+import type { PlatformName, ShadowSpec, TypeToken } from './tokens';
 
-/** Families of the embedded fonts (`app.config.ts` declares the same files). */
-export const fonts = {
-  display: 'SpaceGrotesk-Bold',
-  displayMedium: 'SpaceGrotesk-Medium',
-  body: 'Inter-Regular',
-  bodyMedium: 'Inter-Medium',
-  bodySemiBold: 'Inter-SemiBold',
-} as const;
+export { colors, durations, fontFamilies, minTouchTarget, radii, shadows, spacing, typeScale };
+export type { ColorName, FontFamilyName, PlatformName, ShadowSpec, TypeToken } from './tokens';
 
-/** Safe indexed access to a token tuple (`noUncheckedIndexedAccess`). */
-function at<T>(values: readonly T[], index: number, fallback: T): T {
-  return values[index] ?? fallback;
+/** Platform of the running application: iOS or Android, never a third (canevas § 3). */
+export const platform: PlatformName = Platform.OS === 'ios' ? 'ios' : 'android';
+
+/** Picks the value of the running platform in a two-platform pair. */
+function perPlatform<T>(values: { readonly ios: T; readonly android: T }): T {
+  return platform === 'ios' ? values.ios : values.android;
 }
 
-/** Font size token by value: a size that is not in the design system cannot be used. */
-export function size(px: FontSizePx): number {
-  return at(fontSizesPx, fontSizesPx.indexOf(px), px);
+function textStyle(token: TypeToken): TextStyle {
+  return {
+    fontFamily: fontFamilies[token.fontFamily],
+    fontSize: token.fontSize,
+    lineHeight: token.lineHeight,
+    letterSpacing: token.letterSpacing,
+    ...(token.textTransform === undefined ? {} : { textTransform: token.textTransform }),
+  };
 }
 
-/** Line height token by value. */
-export function line(ratio: LineHeight): number {
-  return at(lineHeights, lineHeights.indexOf(ratio), ratio);
-}
+const scale = typeScale[platform];
 
-/** Radius token by value. */
-export function radiusToken(px: RadiusPx): number {
-  return at(radiiPx, radiiPx.indexOf(px), px);
-}
-
-/** Spacing scale, in density-independent pixels. */
-export const spacing = {
-  xs: at(spacingPx, 2, 3),
-  sm: at(spacingPx, 5, 6),
-  md: at(spacingPx, 9, 12),
-  lg: at(spacingPx, 13, 16),
-  xl: at(spacingPx, 16, 24),
-  xxl: at(spacingPx, 18, 28),
-} as const;
-
-/** Radii used by the components of SPEC-3001 (the mockups use 22 for their cards, § 10). */
-export const radius = {
-  card: radiusToken(22),
-  control: radiusToken(12),
-  pill: 999,
-} as const;
-
-/** Text styles: Space Grotesk for titles and figures, Inter for running text (canevas § 3). */
+/**
+ * Text styles. `largeTitle` and `sectionTitle` are headings: they stop growing at 160 %
+ * (`maxFontSizeMultiplier.heading`); running text has no cap (ET-5).
+ */
 export const type = {
-  eyebrow: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: size(12),
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-  },
-  title: {
-    fontFamily: fonts.display,
-    fontSize: size(30),
-    lineHeight: size(30) * line(1.2),
-    letterSpacing: -0.6,
-  },
-  figure: {
-    fontFamily: fonts.display,
-    fontSize: size(22),
-  },
-  body: {
-    fontFamily: fonts.body,
-    fontSize: size(15),
-    lineHeight: size(15) * line(1.45),
-  },
-  value: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: size(15),
-  },
-  detail: {
-    fontFamily: fonts.body,
-    fontSize: size(13),
-  },
-  caption: {
-    fontFamily: fonts.body,
-    fontSize: size(12),
-    lineHeight: size(12) * line(1.5),
-  },
-  meta: {
-    fontFamily: fonts.body,
-    fontSize: size(12),
-    letterSpacing: 0.3,
-  },
+  eyebrow: textStyle(scale.eyebrow),
+  largeTitle: textStyle(scale.largeTitle),
+  sectionTitle: textStyle(scale.sectionTitle),
+  title: textStyle(scale.title),
+  body: textStyle(scale.body),
+  bodySmall: textStyle(scale.bodySmall),
+  label: textStyle(scale.label),
+  caption: textStyle(scale.caption),
+  figure: textStyle(scale.figure),
+  button: textStyle(scale.button),
+  buttonSmall: textStyle(scale.buttonSmall),
+  chip: textStyle(scale.chip),
+  rowTitle: textStyle(scale.rowTitle),
+  rowSubtitle: textStyle(scale.rowSubtitle),
+  statLabel: textStyle(scale.statLabel),
+  toast: textStyle(scale.toast),
+  badge: textStyle(scale.badge),
+  sheetTitle: textStyle(scale.sheetTitle),
+  // Aliases kept from SPEC-3001 so that the screens of the track share one vocabulary.
+  value: textStyle(scale.title),
+  detail: textStyle(scale.bodySmall),
+  meta: textStyle(scale.caption),
 } satisfies Record<string, TextStyle>;
 
-/** Minimum touch target per platform (canevas § 3: 44 × 44 pt on iOS, 48 × 48 dp on Android). */
-export const MIN_TOUCH_TARGET = { width: 48, height: 48 } as const;
+/** Radii of the running platform. */
+export const radius = {
+  card: radii.card,
+  option: radii.option,
+  control: radii.control,
+  sheet: perPlatform(radii.sheet),
+  chip: perPlatform(radii.chip),
+  stat: perPlatform(radii.stat),
+  list: perPlatform(radii.list),
+  iconButton: perPlatform(radii.iconButton),
+  badge: radii.badge,
+  pill: radii.pill,
+} as const;
+
+function viewStyle(spec: ShadowSpec): ViewStyle {
+  if (platform === 'android') return { elevation: spec.android.elevation };
+  return {
+    shadowColor: spec.ios.shadowColor,
+    shadowOpacity: spec.ios.shadowOpacity,
+    shadowRadius: spec.ios.shadowRadius,
+    shadowOffset: spec.ios.shadowOffset,
+  };
+}
+
+/** Elevations of the running platform. */
+export const elevation = {
+  card: viewStyle(shadows.card),
+  float: viewStyle(shadows.float),
+  toast: viewStyle(shadows.toast),
+  sheet: viewStyle(shadows.sheet),
+} as const;
+
+/** Minimum touch target of the platform (BR-PLA-02). */
+export const touchTarget: { readonly width: number; readonly height: number } = perPlatform<{
+  readonly width: number;
+  readonly height: number;
+}>(minTouchTarget);
+
+/**
+ * Vertical `hitSlop` that lifts a control of `height` to the platform minimum: a 40 dp button on
+ * Android gets 4 dp on each side and never misses the 48 dp rule (CA-3).
+ */
+export function verticalHitSlop(height: number): number {
+  return Math.max(0, Math.ceil((touchTarget.height - height) / 2));
+}
+
+/** Title growth stops at 160 %; running text follows the system without limit (canevas § 3). */
+export const maxFontSizeMultiplier = { heading: 1.6, body: 0 } as const;
+
+/** Control geometry of the running platform (see `controlHeights` in `./tokens`). */
+export const controls = {
+  button: perPlatform<{ readonly md: number; readonly sm: number }>(controlHeights.button),
+  chip: perPlatform<number>(controlHeights.chip),
+  iconButton: controlHeights.iconButton,
+  row: controlHeights.row,
+  avatar: controlHeights.avatar,
+  fab: controlHeights.fab,
+  progressTrack: controlHeights.progressTrack,
+  progressSegment: controlHeights.progressSegment,
+  sheetGrabber: controlHeights.sheetGrabber,
+} as const;
 
 export const theme = {
+  platform,
   colors,
-  fonts,
   fontFamilies,
-  fontWeights,
-  spacing,
-  radius,
   type,
-  minTouchTarget: MIN_TOUCH_TARGET,
-  /** Titles stop growing at 160 % (canevas § 3); running text has no cap (`0`). */
-  maxFontSizeMultiplier: { heading: 1.6, body: 0 },
+  radius,
+  elevation,
+  spacing,
+  durations,
+  minTouchTarget: touchTarget,
+  touchTarget,
+  controls,
+  maxFontSizeMultiplier,
 } as const;
 
 export type Theme = typeof theme;

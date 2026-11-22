@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="agent37" tests="1" failures="0" time="6.171" timestamp="2026-11-22T17:45:20">
+    <testcase id="SPEC-3002 jetons" name="SPEC-3002 jetons" classname="SPEC-3002 jetons" file="/tmp/learny-device-agent/flows/SPEC-3002-jetons.yaml" time="6.163" timestamp="2026-11-22T17:45:20" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3002, visual"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>
