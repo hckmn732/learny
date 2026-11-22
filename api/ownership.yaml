@@ -48,9 +48,9 @@ operations:
   'dev.personal-data.execute': ts
   'dev.personal-data.export': ts
   'dev.pushSend': ts
-  'dev.rateLimit.burst': ts
-  'dev.rateLimit.origin': ts
-  'dev.rateLimit.purge': ts
+  'dev.rateLimit.burst': py
+  'dev.rateLimit.origin': py
+  'dev.rateLimit.purge': py
   'dev.sdd.spec-007.demo': ts
   'dev.sdd.spec-009.demo': ts
   'dev.sdd.spec-1004.demo': ts
@@ -246,9 +246,9 @@ special:
   'POST /api/v1/dev/sdd/personal-data/execute': ts
   'POST /api/v1/dev/sdd/personal-data/export': ts
   'POST /api/v1/dev/sdd/push/send': ts
-  'POST /api/v1/dev/sdd/rate-limit/burst': ts
-  'POST /api/v1/dev/sdd/rate-limit/origin': ts
-  'POST /api/v1/dev/sdd/rate-limit/purge': ts
+  'POST /api/v1/dev/sdd/rate-limit/burst': py
+  'POST /api/v1/dev/sdd/rate-limit/origin': py
+  'POST /api/v1/dev/sdd/rate-limit/purge': py
   'POST /api/v1/dev/sdd/stripe/checkout/cancel': ts
   'POST /api/v1/dev/sdd/stripe/checkout/pay': ts
   'POST /api/v1/dev/sdd/stripe/simulate': ts

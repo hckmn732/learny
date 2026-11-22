@@ -50,19 +50,23 @@ def retention_limit(now: datetime) -> datetime:
     return now - SECURITY_RETENTION
 
 
+async def purge_rows_in_tx(tx: Any, now: datetime) -> dict[str, int]:
+    """The two deletions inside an existing transaction (the demonstration owns its rows)."""
+    before = retention_limit(now)
+    keys = len((await tx.conn.execute(DELETE_EXPIRED_IDEMPOTENCY_KEYS, {"before": before})).mappings().all())
+    buckets = len((await tx.conn.execute(DELETE_STALE_RATE_LIMITS, {"before": before})).mappings().all())
+    return {"idempotencyKeys": keys, "rateLimitBuckets": buckets}
+
+
 async def purge_security_rows(deps: SecurityPurgeDeps) -> dict[str, int]:
     """Deletes both families of expired rows and returns their counts."""
-    before = retention_limit(deps.clock.now())
     async with deps.db.service_tx() as tx:
-        keys = len(
-            (await tx.conn.execute(DELETE_EXPIRED_IDEMPOTENCY_KEYS, {"before": before})).mappings().all()
-        )
-        buckets = len((await tx.conn.execute(DELETE_STALE_RATE_LIMITS, {"before": before})).mappings().all())
+        removed = await purge_rows_in_tx(tx, deps.clock.now())
     deps.logger.info(
         "security purge completed",
-        outcome=f"idempotency_keys={keys} buckets={buckets}",
+        outcome=f"idempotency_keys={removed['idempotencyKeys']} buckets={removed['rateLimitBuckets']}",
     )
-    return {"idempotencyKeys": keys, "rateLimitBuckets": buckets}
+    return removed
 
 
 def outcome_of(removed: Mapping[str, int]) -> Mapping[str, int]:

@@ -8,7 +8,7 @@ same handlers with the development guard, so a call is served exactly like `devR
 from typing import Any
 
 from learny_api.pipeline import Call, handler
-from learny_api.special import dev_echo
+from learny_api.special import dev_echo, dev_rate_limit
 
 
 @handler("dev.echo")
@@ -19,3 +19,18 @@ async def echo(call: Call) -> dict[str, Any]:
 @handler("dev.items")
 async def items(call: Call) -> dict[str, Any]:
     return await dev_echo.items(call)
+
+
+@handler("dev.rateLimit.burst")
+async def rate_limit_burst(call: Call) -> dict[str, Any]:
+    return await dev_rate_limit.burst(call)
+
+
+@handler("dev.rateLimit.origin")
+async def rate_limit_origin(call: Call) -> dict[str, Any]:
+    return await dev_rate_limit.origin(call)
+
+
+@handler("dev.rateLimit.purge")
+async def rate_limit_purge(call: Call) -> dict[str, Any]:
+    return await dev_rate_limit.purge_demo(call)
