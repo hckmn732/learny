@@ -6,11 +6,13 @@ import Constants from 'expo-constants';
 import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { checkApiHealth, UNREACHABLE_CODE, type HealthCheck } from '../../../src/api/health';
 import { configResult } from '../../../src/config';
 import { SddSpecPage, type HealthDisplay } from '../../../src/features/sdd/SddSpecPage';
 import { clock, formatClockTime } from '../../../src/lib/clock';
+import { theme } from '../../../src/theme';
 
 const CLOCK_REFRESH_MS = 30_000;
 
@@ -30,6 +32,7 @@ function platformLabel(): string {
 }
 
 export default function Spec3001Route() {
+  const insets = useSafeAreaInsets();
   const config = configResult.ok ? configResult.config : null;
   const apiUrl = config?.apiUrl ?? '';
 
@@ -57,7 +60,11 @@ export default function Spec3001Route() {
     (health.isPending ? { status: 'checking' } : { status: 'unreachable', code: UNREACHABLE_CODE });
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
+      {/* Entry of the component gallery (SPEC-3002 EF-3). */}
+      <Link href="/_dev/ui" testID="sdd-ui-link" style={styles.galleryLink}>
+        Galerie des composants
+      </Link>
       <SddSpecPage
         appVersion={appVersion()}
         runtimeVersion={runtimeVersion()}
@@ -66,15 +73,16 @@ export default function Spec3001Route() {
         platform={platformLabel()}
         health={display}
       />
-      {/* Entry of the component gallery (SPEC-3002 EF-3). */}
-      <Link href="/_dev/ui" testID="sdd-ui-link" style={styles.galleryLink}>
-        Galerie des composants
-      </Link>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  galleryLink: { padding: 12, textAlign: 'center' },
+  galleryLink: {
+    padding: 10,
+    textAlign: 'center',
+    backgroundColor: theme.colors.limeSoft,
+    color: theme.colors.limeInk,
+  },
 });

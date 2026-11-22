@@ -1,0 +1,30 @@
+# SPEC-3002 — comparaison visuelle des « Feuilles et retours » (CA-4).
+# La feuille est ouverte : la capture compare le fond, le voile, la poignée et le titre.
+appId: fr.learny.app
+name: SPEC-3002 feuilles
+tags:
+  - SPEC-3002
+  - visual
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: sdd-title
+- openLink: learny:///_dev/ui
+- scrollUntilVisible:
+    element:
+      id: ui-toast-trigger
+    direction: DOWN
+- tapOn:
+    id: ui-toast-trigger
+- assertVisible:
+    id: ui-toast
+- scrollUntilVisible:
+    element:
+      id: ui-sheet-open
+    direction: DOWN
+- tapOn:
+    id: ui-sheet-open
+- assertVisible:
+    id: ui-sheet
+- takeScreenshot: SPEC-3002-feuilles
