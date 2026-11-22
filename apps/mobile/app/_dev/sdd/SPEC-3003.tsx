@@ -19,8 +19,13 @@ import { nativeFetch } from '../../../src/api/transport';
 import { readDemoCredentials } from '../../../src/auth/demo-credentials';
 import { useSession } from '../../../src/auth/session';
 import { queryKeys } from '../../../src/data/keys';
-import { isCacheRestored, restoredQueryCount, subscribeCacheRestored } from '../../../src/data/persist';
+import {
+  isCacheRestored,
+  restoredQueryCount,
+  subscribeCacheRestored,
+} from '../../../src/data/persist';
 import { isOnline, setOnlineForDemo } from '../../../src/offline/network';
+import { OfflineBanner } from '../../../src/offline/OfflineBanner';
 import { theme } from '../../../src/theme';
 import { Text } from '../../../src/ui/Text';
 
@@ -163,6 +168,8 @@ export default function Spec3003Route() {
         <Text variant="caption" tone="secondary" testID="sdd-network-state">
           {`réseau : ${online ? 'online' : 'offline'}`}
         </Text>
+
+        <OfflineBanner />
 
         <Pressable
           accessibilityRole="button"
