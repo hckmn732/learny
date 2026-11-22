@@ -41,11 +41,11 @@ ci-dessous sont la liste exacte des entrées à basculer (constat consigné dans
 |---|---|---|---|
 | `chapters.complete` | `chapters.complete_chapter` | chapters, chapter_progress, modules, module_progress, resources, event_outbox | `test_content_resources.py` |
 | `chapters.summary` | `summary.submit_chapter_summary` | chapter_summaries, courses, course_sections, event_outbox | `test_content_summary.py` |
-| `course-citations.source` | `citations.get_citation_source` | citations, resources | à porter |
-| `course-sections.edit` | `sections.edit_course_section` | course_sections, courses, course_section_reports, bricks, event_outbox | à porter |
-| `course-sections.report` | `sections.report_course_section` | course_sections, courses, course_section_reports, bricks, event_outbox | à porter |
-| `courses.progress` | `progress.record_course_progress` | courses, chapters, course_sections, reading_progress, event_outbox | à porter |
-| `modules.course` | `course.get_module_course` | modules, formations, chapters, courses, course_sections, citations, chapter_summaries, notions, notion_states, reading_progress | à porter |
+| `course-citations.source` | `citations.get_citation_source` | citations, resources | `test_content_citation_source.py` |
+| `course-sections.edit` | `sections.edit_course_section` | course_sections, courses, course_section_reports, bricks, event_outbox | `test_content_sections.py` |
+| `course-sections.report` | `sections.report_course_section` | course_sections, courses, course_section_reports, bricks, event_outbox | `test_content_sections.py` |
+| `courses.progress` | `progress.record_course_progress` | courses, chapters, course_sections, reading_progress, event_outbox | `test_content_progress.py` (+ `test_content_progress_rules.py`) |
+| `modules.course` | `course.get_module_course` | modules, formations, chapters, courses, course_sections, citations, chapter_summaries, notions, notion_states, reading_progress | `test_content_course.py` |
 | `modules.generateCourse` | `generate.generate_course_now` | modules, module_progress, chapters, chapter_progress, resources, event_outbox | `test_content_resources.py` |
 | `modules.screen` | `module_screen.get_module_screen` | modules, formations, module_progress, chapters, chapter_progress, resources | `test_content_resources.py` |
 | `resources.create` | `resources.create_resource` | resources, chapters, event_outbox | `test_content_resources.py` |
@@ -56,7 +56,7 @@ ci-dessous sont la liste exacte des entrées à basculer (constat consigné dans
 | `resources.retry` | `resources.retry_resource` | resources, event_outbox | `test_content_resources.py` |
 | `suggestions.dismiss` | `suggestions.dismiss_suggestion` | resources | `test_content_resources.py` |
 | `suggestions.import` | `suggestions.import_suggestion` | resources, chapters, event_outbox | `test_content_resources.py` |
-| `uploads.create` | `resources.create_upload` | resources, chapters | `test_content_resources.py` |
+| `uploads.create` | `resources.create_upload` | resources, chapters | `test_content_uploads.py` |
 
 ## Domaine pur porté (étape 2)
 
@@ -66,6 +66,7 @@ ci-dessous sont la liste exacte des entrées à basculer (constat consigné dans
 | `packages/ingestion/src/retrieval/select-context.ts` | `learny/content/domain/retrieval.py` | `tests/unit/content/test_content_retrieval.py` |
 | `packages/ingestion/src/retrieval/format-document.ts` | `learny/content/domain/retrieval.py` | `tests/unit/content/test_content_retrieval.py` |
 | `packages/ingestion/src/embeddings.ts` (mock + validation) | `learny/content/domain/embeddings.py` | `tests/unit/content/test_content_embeddings.py` |
+| `packages/tutor/src/course/citations.ts` (via `packages/services/src/courses/validate-citations.ts`) | `learny/content/domain/citations.py` | `tests/unit/content/test_content_validate_citations.py` |
 | `packages/services/src/resources/limits.ts` | `learny/content/domain/limits.py` | couvert par les tests d'intégration des contributions |
 | `packages/services/src/tutor-chat/starters.ts` | `learny/tutor/domain/starters.py` | premier usage (règle du plan P22), consommé par `modules.course` |
 
@@ -94,9 +95,10 @@ en SPEC-2207 ; le cas d'usage est dès maintenant appelable et testé.
 2. `acceptance.md` à finaliser (CA-1 et CA-3 peuvent passer ✅ ; CA-2 reste une campagne non
    exécutée, CA-5 attend la page et l'e2e).
 3. `validate.mjs` puis `complete.mjs` (jamais lancés dans cette tranche ; CP-21 reste `pending`).
-4. Cas d'usage de lecture encore non couverts par un test d'intégration (`course-citations.source`,
-   `course-sections.*`, `courses.progress`, `modules.course`) : comportements déjà portés et verts,
-   seuls les tests listés « à porter » de `test-port-map.md` manquent.
+4. Cas d'usage de lecture et de correction des sections : couverts depuis cette tranche par
+   `test_content_course.py`, `test_content_progress.py`, `test_content_sections.py` et
+   `test_content_citation_source.py` ; les seuls cas TypeScript sans équivalent sont des états
+   atteignables uniquement avec une transaction factice (voir `test-port-map.md`).
 5. Upload PDF vers l'API Files d'Anthropic : le port `UploadPdf` existe mais le défaut renvoie
    `None` tant que la résolution BYOK n'est pas branchée (SPEC-2204) ; l'extraction texte reste
    complète, aucune donnée n'est perdue.
