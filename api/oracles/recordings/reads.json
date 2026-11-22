@@ -5710,6 +5710,119 @@
           ]
         }
       ]
+    },
+    {
+      "group": "tutor",
+      "scenarios": [
+        {
+          "name": "me.ai.credentials.list",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.ai.models.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "providers": [],
+                "tasks": [
+                  {
+                    "available": false,
+                    "credentialId": null,
+                    "modelId": null,
+                    "options": [],
+                    "outsideEu": false,
+                    "provider": null,
+                    "providerLabel": null,
+                    "requiredCapabilities": [
+                      "tools",
+                      "structured",
+                      "web_search"
+                    ],
+                    "task": "programme",
+                    "unavailableReason": "no_model_selected"
+                  },
+                  {
+                    "available": false,
+                    "credentialId": null,
+                    "modelId": null,
+                    "options": [],
+                    "outsideEu": false,
+                    "provider": null,
+                    "providerLabel": null,
+                    "requiredCapabilities": [
+                      "structured",
+                      "passage_refs"
+                    ],
+                    "task": "course",
+                    "unavailableReason": "no_model_selected"
+                  },
+                  {
+                    "available": false,
+                    "credentialId": null,
+                    "modelId": null,
+                    "options": [],
+                    "outsideEu": false,
+                    "provider": null,
+                    "providerLabel": null,
+                    "requiredCapabilities": [
+                      "structured"
+                    ],
+                    "task": "gaps",
+                    "unavailableReason": "no_model_selected"
+                  },
+                  {
+                    "available": false,
+                    "credentialId": null,
+                    "modelId": null,
+                    "options": [],
+                    "outsideEu": false,
+                    "provider": null,
+                    "providerLabel": null,
+                    "requiredCapabilities": [
+                      "tools",
+                      "structured"
+                    ],
+                    "task": "tutor",
+                    "unavailableReason": "no_model_selected"
+                  },
+                  {
+                    "available": false,
+                    "credentialId": null,
+                    "modelId": null,
+                    "options": [],
+                    "outsideEu": false,
+                    "provider": null,
+                    "providerLabel": null,
+                    "requiredCapabilities": [
+                      "structured",
+                      "vision"
+                    ],
+                    "task": "light",
+                    "unavailableReason": "no_model_selected"
+                  }
+                ],
+                "updatedAt": "<timestamp>"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
