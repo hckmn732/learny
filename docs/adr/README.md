@@ -246,3 +246,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2025](ADR-2025-offsets-de-passage-en-points-de-code-et-emission-de-resource.md) | Offsets de passage en points de code et emission de resource/uploaded dans la transaction | Déduite | SPEC-2203, ADR-2006, ADR-2008, ADR-2014 |
 | [ADR-2026](ADR-2026-copie-verbatim-des-predicates-prives-du-service-dans-l-oracl.md) | Copie verbatim des predicates prives du service dans l'oracle tuteur | Déduite | SPEC-2204, ADR-2008 |
 | [ADR-2027](ADR-2027-learny-api-sse-py-cree-par-spec-2204-malgre-la-section-2-des.md) | `learny_api/sse.py` créé par SPEC-2204 malgré la section 2 des conventions | Déduite | SPEC-2204, ADR-2012 |
+| [ADR-2028](ADR-2028-qualification-byok-sondes-de-connexion-et-de-compatibilite-s.md) | Qualification BYOK : sondes de connexion et de compatibilite seulement | Déduite | SPEC-2204, SPEC-506 |
+| [ADR-2029](ADR-2029-session-de-fixtures-dans-llmgateway-pour-la-batterie-de-comp.md) | Session de fixtures dans LlmGateway pour la batterie de compatibilite | Déduite | SPEC-2204, ADR-0048, ADR-0153 |
