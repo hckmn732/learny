@@ -76,7 +76,7 @@ class SubscriptionRow:
 
 
 def _row(record: Any) -> SubscriptionRow:
-    data = dict(record._mapping)
+    data = dict(record)
     return SubscriptionRow(
         user_id=str(data["user_id"]),
         status=str(data["status"]),

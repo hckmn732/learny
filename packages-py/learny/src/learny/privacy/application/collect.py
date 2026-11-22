@@ -7,8 +7,10 @@ path is carried as is and read only later, in the zip step.
 """
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime, time
+from decimal import Decimal
 from typing import Any
+from uuid import UUID
 
 from learny.identity.domain.actor import Actor
 from learny.privacy.application.ports import PrivacyDeps
@@ -43,9 +45,20 @@ def _text(value: Any) -> str:
     return value if isinstance(value, str) else ""
 
 
+def _scalar(value: Any) -> Any:
+    """Serialises a driver value like `node-postgres` does: instants as ISO, the rest as text."""
+    if isinstance(value, datetime):
+        return to_iso(value)
+    if isinstance(value, (date, time)):
+        return value.isoformat()
+    if isinstance(value, (Decimal, UUID)):
+        return str(value)
+    return value
+
+
 def _plain(row: dict[str, Any]) -> dict[str, Any]:
     """Converts every instant of a row to an ISO string so the value can cross a step boundary."""
-    return {key: (to_iso(value) if isinstance(value, datetime) else value) for key, value in row.items()}
+    return {key: _scalar(value) for key, value in row.items()}
 
 
 def _programme_of(

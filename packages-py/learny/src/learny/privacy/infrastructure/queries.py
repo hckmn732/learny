@@ -81,7 +81,7 @@ class ProfileDeletionRow:
 
 
 def export_row(record: Any) -> DataExportRow:
-    data = dict(record._mapping)
+    data = dict(record)
     return DataExportRow(
         id=str(data["id"]),
         user_id=str(data["user_id"]),
