@@ -1,4 +1,4 @@
-# Reprise — SPEC-2205 (état au 2026-11-22, fin de la tranche « cas d'usage de job »)
+﻿# Reprise — SPEC-2205 (état au 2026-11-22, fin de la tranche « cas d'usage de job »)
 
 Spécification **partielle** : le domaine pur, la couche notifications, le moteur d'automatismes, le
 service de pause et les **quatre cas d'usage de job** sont portés, prouvés et committés.
@@ -27,7 +27,8 @@ Il reste la clôture : parité finale, page de démonstration + e2e/visuel, `acc
 Suite Python : **3408 tests unitaires verts** (`3375` au départ) et **465 tests d'intégration verts**
 (`453` au départ). `ruff check`, `ruff format --check`, `mypy`, `lint-imports` verts.
 Commits de cette tranche : `c3fd4fad` (domaine, cas d'usage, requêtes, textes, surface publique),
-`6dec8c50` (oracle `tsx`, fixture, 33 unitaires, 12 intégrations).
+`6dec8c50` (oracle `tsx`, fixture, 33 unitaires, 12 intégrations), `0f469c42` (aucun apprenant
+éligible dans la fenêtre) et `66b82cf2` (preuves).
 
 ## Ce qui reste, dans l'ordre
 
