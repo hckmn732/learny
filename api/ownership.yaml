@@ -20,17 +20,17 @@ operations:
   'cadrage.get': py
   'cadrage.message': py
   'cadrage.page': py
-  'chapters.complete': ts
-  'chapters.summary': ts
+  'chapters.complete': py
+  'chapters.summary': py
   'conversations.get': ts
   'conversations.messages': ts
   'conversations.self-test.answer': ts
-  'course-citations.source': ts
-  'course-sections.edit': ts
-  'course-sections.report': ts
+  'course-citations.source': py
+  'course-sections.edit': py
+  'course-sections.report': py
   'courses.conversations.create': ts
   'courses.conversations.list': ts
-  'courses.progress': ts
+  'courses.progress': py
   'dev.cron.hourlyTick': ts
   'dev.echo': ts
   'dev.email.outbox': ts
@@ -173,9 +173,9 @@ operations:
   'me.profile.update': py
   'me.update': py
   'me.weekly-review.get': ts
-  'modules.course': ts
-  'modules.generateCourse': ts
-  'modules.screen': ts
+  'modules.course': py
+  'modules.generateCourse': py
+  'modules.screen': py
   'notifications.list': ts
   'notifications.read': ts
   'notifications.readAll': ts
@@ -199,12 +199,12 @@ operations:
   'remediation.complete': py
   'remediation.get': py
   'remediation.prepare': py
-  'resources.create': ts
-  'resources.delete': ts
-  'resources.finalize': ts
-  'resources.readUrl': ts
-  'resources.rename': ts
-  'resources.retry': ts
+  'resources.create': py
+  'resources.delete': py
+  'resources.finalize': py
+  'resources.readUrl': py
+  'resources.rename': py
+  'resources.retry': py
   'review.answer': py
   'review.complete': py
   'review.globalQuizToday': py
@@ -215,9 +215,9 @@ operations:
   'sidebar.update': py
   'slots.alternatives': py
   'slots.move': py
-  'suggestions.dismiss': ts
-  'suggestions.import': ts
-  'uploads.create': ts
+  'suggestions.dismiss': py
+  'suggestions.import': py
+  'uploads.create': py
   'warmups.answers.create': py
   'warmups.today.get': py
 

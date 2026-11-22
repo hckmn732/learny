@@ -26,6 +26,7 @@ from learny.shared.config import Settings
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.locale_fr.details import (
+    STORAGE_ACCESS_SECRET_MISSING,
     STORAGE_CONTROL_CHARACTER,
     STORAGE_EMPTY_FILE_NAME,
     STORAGE_ENCODED_SEPARATOR,
@@ -174,6 +175,31 @@ def normalize_storage_file_name(original_name: str) -> str:
     if len(cleaned) > MAX_STORAGE_FILE_NAME_LENGTH:
         raise _invalid(STORAGE_FILE_NAME_TOO_LONG)
     return cleaned
+
+
+def mint_user_access_token(user_id: str, jwt_secret: str, clock: Clock, ttl_seconds: int = 60) -> str:
+    """Mints the `authenticated` JWT Storage evaluates its policies with (SPEC-206 ET-4).
+
+    It is signed with the server-side Supabase secret (never sent to the browser) and uses the
+    injected clock: Storage checks `exp` against its own clock, like `mintUserAccessToken` does.
+    """
+    if jwt_secret == "":
+        raise AppError("SERVICE_UNAVAILABLE", STORAGE_ACCESS_SECRET_MISSING)
+    now = int(clock.now().timestamp())
+    header = _base64url(json.dumps({"alg": "HS256", "typ": "JWT"}))
+    payload = _base64url(
+        json.dumps(
+            {
+                "iss": "learny",
+                "sub": user_id,
+                "role": "authenticated",
+                "aud": "authenticated",
+                "iat": now,
+                "exp": now + ttl_seconds,
+            }
+        )
+    )
+    return f"{header}.{payload}.{_sign(f'{header}.{payload}', jwt_secret)}"
 
 
 def resource_path(user_id: str, resource_id: str, original_name: str) -> str:

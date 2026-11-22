@@ -1,0 +1,123 @@
+"""[SPEC-2203] Embedding adapters: deterministic mock, Voyage errors and bounds.
+
+Ported from `packages/ingestion/src/embeddings.ts` (mock vectors, key failure, transient 429/5xx,
+invalid answer) and the `voyageEmbeddingClient` cases of the TypeScript suite.
+"""
+
+import json
+
+import httpx
+import pytest
+from learny.content.domain.embeddings import EMBEDDING_DIM, fake_embedding
+from learny.platform.embeddings import (
+    MockEmbedder,
+    VoyageEmbedder,
+    default_embedder,
+)
+from learny.shared.config import Settings
+from learny.shared.errors import AppError
+
+pytestmark = pytest.mark.spec("SPEC-2203")
+
+
+def embedder_with(handler: object) -> VoyageEmbedder:
+    return VoyageEmbedder("voyage-secret", transport=httpx.MockTransport(handler))  # type: ignore[arg-type]
+
+
+async def test_the_mock_vector_is_deterministic_and_normalised() -> None:
+    client = MockEmbedder()
+
+    first = await client.embed(["Le compte 512 enregistre la banque."])
+    second = await client.embed(["Le compte 512 enregistre la banque."])
+
+    assert len(first) == 1
+    assert len(first[0]) == EMBEDDING_DIM
+    assert first == second
+    assert first[0] == fake_embedding("Le compte 512 enregistre la banque.")
+    norm = sum(component * component for component in first[0]) ** 0.5
+    assert norm == pytest.approx(1.0)
+
+
+async def test_a_missing_key_is_a_permanent_configuration_failure() -> None:
+    with pytest.raises(AppError) as error:
+        await VoyageEmbedder(None).embed(["texte"])
+
+    assert error.value.code == "EMBEDDING_KEY_INVALID"
+    assert getattr(error.value, "permanent", True) is True
+
+
+async def test_the_voyage_request_carries_the_documented_parameters() -> None:
+    seen: dict[str, object] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["authorization"] = request.headers["authorization"]
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"data": [{"embedding": [0.0] * EMBEDDING_DIM}]})
+
+    vectors = await embedder_with(handler).embed(["premier passage"])
+
+    assert len(vectors) == 1
+    assert len(vectors[0]) == EMBEDDING_DIM
+    assert seen["authorization"] == "Bearer voyage-secret"
+    assert seen["body"] == {
+        "input": ["premier passage"],
+        "model": "voyage-4-lite",
+        "input_type": "document",
+        "output_dimension": EMBEDDING_DIM,
+    }
+
+
+@pytest.mark.parametrize(
+    ("status", "code", "permanent"),
+    [
+        (401, "EMBEDDING_KEY_INVALID", True),
+        (403, "EMBEDDING_KEY_INVALID", True),
+        (429, "EMBEDDING_UNAVAILABLE", False),
+        (503, "EMBEDDING_UNAVAILABLE", False),
+        (400, "EMBEDDING_INVALID", True),
+    ],
+)
+async def test_provider_statuses_map_to_the_ingestion_codes(status: int, code: str, permanent: bool) -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(status, json={})
+
+    with pytest.raises(AppError) as error:
+        await embedder_with(handler).embed(["texte"])
+
+    assert error.value.code == code
+    assert getattr(error.value, "permanent", True) is permanent
+
+
+async def test_a_network_failure_is_transient() -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("connection refused")
+
+    with pytest.raises(AppError) as error:
+        await embedder_with(handler).embed(["texte"])
+
+    assert error.value.code == "EMBEDDING_UNAVAILABLE"
+    assert getattr(error.value, "permanent", True) is False
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        b"not json",
+        json.dumps({"data": "not a list"}).encode(),
+        json.dumps({"data": [{"embedding": "not a list"}]}).encode(),
+        json.dumps({"data": [{"embedding": ["x"]}]}).encode(),
+    ],
+)
+async def test_an_invalid_answer_is_refused(payload: bytes) -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=payload)
+
+    with pytest.raises(AppError) as error:
+        await embedder_with(handler).embed(["texte"])
+
+    assert error.value.code == "EMBEDDING_INVALID"
+
+
+def test_the_default_adapter_follows_llm_mode() -> None:
+    assert isinstance(default_embedder(Settings(llm_mode="mock")), MockEmbedder)
+    assert isinstance(default_embedder(Settings(llm_mode="live", voyage_api_key="k")), VoyageEmbedder)

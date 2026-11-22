@@ -37,6 +37,12 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.learning.application.planning": "automation journal of the lightening proposal (BR-AUT-11)",
         # SPEC-2202 - the owner of a session read with the service role answers FORBIDDEN (ET-7).
         "learny.assessments.application.offline_sync": "owner probe of an offline session (ET-7)",
+        # SPEC-2203 - telling a missing contribution from another owner's one (EF-6) and the
+        # soft deletion of a contribution with its citations, which the authenticated role cannot do.
+        "learny.content.application.resources": "owner probe and soft deletion of a contribution",
+        # SPEC-2203 - the ingestion job is an authorized system operation (ET-4): it reads a
+        # private object, locks the resource and writes the outbox event after the commit.
+        "learny.content.application.ingestion": "system ingestion job of a contribution (ET-4)",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

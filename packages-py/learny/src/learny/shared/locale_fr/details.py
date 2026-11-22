@@ -221,3 +221,6 @@ MODULE_LABEL = "Module {position} · {title}"
 ELLIPSIS = "…"
 WEB_SEARCH_UNAVAILABLE = "Recherche web indisponible : la proposition repose sur le cadrage seul."
 PROGRAMME_PROPOSAL_VERSION_TITLE = "Version {version} de la proposition"
+
+# packages/services/src/resources/storage.ts — the Storage JWT secret is missing.
+STORAGE_ACCESS_SECRET_MISSING = "Accès au stockage indisponible : secret JWT absent."
