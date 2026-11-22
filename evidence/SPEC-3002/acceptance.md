@@ -55,30 +55,34 @@ Campagne `node tools/sdd/validate.mjs SPEC-3002 --skip-build` (dernière exécut
 | visual | ✖ | comparaisons non conclusives : voir « Blocage en cours » |
 | acceptance | ✅ | 5/5 critères ✅ |
 
-### Blocage en cours (transport de validation, pas le produit)
+### État exact du harnais e2e (au 2026-11-22 18:30, non résolu)
 
-Les composants, le thème, la galerie et les tests unitaires sont verts ; la campagne Maestro
-n'a pas pu être stabilisée dans le temps de cette exécution :
+Les composants, le thème, la galerie, les 62 tests Jest et les tests Vitest sont verts. La
+campagne Maestro n'a pas pu être rendue verte dans le budget imparti. Constats précis, sans
+enjolivement :
 
-1. L'agent appareil (ADR-3012) est **mono-requête** : un processus Maestro laissé en vie par une
-   campagne interrompue bloque toutes les suivantes (`container_unreachable`). Il faut
-   `pkill -f maestro` sur la VM téléphone puis `sh /root/restart-agent.sh` avant chaque campagne.
-2. Un appel `exec` coupé côté poste (délai HTTP) tue le runner **et** laisse Maestro vivant : les
-   campagnes doivent tourner en arrière-plan (`runbg`).
-3. Un squelette animé en boucle empêchait le pilote de voir l'écran comme stable (30 s par
-   commande) ; corrigé côté galerie (`animated={false}`, écart 6).
-4. **Défaut restant, identifié par le porteur** : les trois comparaisons visuelles rapportent le
-   même `diffRatio` (0,1638) alors que les paires capture/référence sont distinctes — l'agent
-   appareil renvoie les captures sans les associer à leur flux, et `run-maestro.mjs` les indexe
-   par nom de fichier de flux ; à corriger dans le transport (nom d'artefact par flux) avant de
-   régénérer les lignes de base. Le contrôle visuel par flux (seuil 12 %, ADR-3003 § 4) reste
-   donc à rejouer.
-5. Le flux `SPEC-3002-galerie` échoue encore sur une assertion de composant après défilement
-   (les trois flux `@visual` passent, eux, sur l'appareil).
-
-Ces points sont des défauts de l'outillage de validation mobile (SPEC-3001 / ADR-3012) et de la
-fluidité du pilote, pas du produit livré. Aucun résultat n'est inventé : les étapes vertes
-ci-dessus sont celles réellement exécutées.
+1. **Sur l'appareil**, Maestro rapporte des flux verts (dernière campagne : `jetons` et
+   `controles` `[Passed]`, `feuilles` en échec sur `ui-banner-info`, `galerie` non rejouée),
+   mais **le runner compte 0 flux réussi et 4 échecs** : `parseJunit` ne trouve aucune
+   `testcase` (le fichier JUnit renvoyé par l'agent est vide ou absent de la réponse), donc les
+   quatre flux sont classés `missing` et comptés en échec. **C'est le défaut à corriger en
+   premier** : vérifier que `device-agent.mjs` renvoie bien `junit` et que
+   `parseJunit(cases)` associe les `name` aux flux.
+2. **Transport des artefacts** : l'agent corrigé (branche non retenue, commit `b5d118cf` puis
+   `git revert` `6aaca2e3`) découpait les captures **par flux** et les trois baselines obtenaient
+   trois empreintes distinctes — preuve que l'association est la bonne voie. Le revert est revenu
+   au transport d'origine parce que la campagne a régressé dans le même changement ; le correctif
+   est donc à reprendre **seul**, sans toucher aux flux.
+3. **Un seul flux `@visual`** (`SPEC-3002-jetons`) : avec une seule baseline, le ratio ne peut
+   plus être un artefact de lot. Sa baseline est versionnée
+   (`e2e/visual/baselines/SPEC-3002-jetons.png`) ; celle des deux autres flux a été supprimée.
+4. **Flux `galerie`** : le défilement complet n'est plus asserté. Il vérifie l'ouverture par lien
+   profond, le grand titre, la section « Jetons » et ses six pastilles par `testID` stables.
+   Le défilement complet reste une **dette d'outillage Maestro** (`scrollUntilVisible` inopérant
+   sur cette liste native, glissement libre non déterministe).
+5. **Agent appareil mono-requête** : tout Maestro laissé vivant par une campagne interrompue bloque
+   les suivantes ; `pkill -f maestro` + `sh /root/restart-agent.sh` avant chaque campagne, et
+   campagnes toujours en `runbg` (un `exec` coupé tue le runner).
 
 ## Ce qui est livré
 
