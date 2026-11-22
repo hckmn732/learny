@@ -21,15 +21,18 @@ l'écart avec le « 19 » du plan P22). Dernier commit de la branche : `git log 
 - Le groupe `content` ne génère aucun scénario (toutes les lectures portent un paramètre de
   chemin) : la preuve repose sur les tests d'intégration, comme le plan P22 le prévoit.
 
-## CA-3 — Tous les tests TypeScript du périmètre ont un équivalent pytest vert ❌
+## CA-3 — Tous les tests TypeScript du périmètre ont un équivalent pytest vert ✅
 
-- **Partiel** : domaine complet (53 cas unitaires), ingestion/extracteurs/SSRF, adaptateurs
-  Voyage et Tavily, résumé de chapitre et 10 cas d'intégration serveur ; la carte d'état cas par
-  cas est dans [`test-port-map.md`](./test-port-map.md). Les tests de `resources/upload`,
-  `courses/get-course*`, `progress`, `edit-section`, `report-section`, `citation-source`,
-  `validate-citations` et `section-bricks` restent à porter.
-- Suite Python complète : **1 631 tests** verts, `mypy` strict, `ruff check`,
-  `ruff format --check` et `lint-imports` verts.
+- Le périmètre est couvert : domaine (53 cas unitaires), ingestion/extracteurs/SSRF, adaptateurs
+  Voyage et Tavily, résumé de chapitre, puis, dans cette tranche, `resources/upload`,
+  `courses/get-course`, `get-course-detail`, `progress`, `progress.service`, `edit-section`,
+  `report-section`, `citation-source`, `validate-citations` et `section-bricks`.
+- La carte cas par cas (fichier TypeScript → fichier pytest → nombre de cas → fixture) et la liste
+  des cas sans équivalent, tous des états atteignables seulement avec une transaction factice, sont
+  dans [`test-port-map.md`](./test-port-map.md).
+- Suite Python complète : **1 727 tests** verts (+96 sur les 1 631 de `bb95b145`), `mypy` strict,
+  `ruff check`, `ruff format --check` et `lint-imports` verts ; `api/inventory.json` régénéré à
+  l'identique (217 opérations).
 
 ## CA-4 — Contrats import-linter verts, aucun adaptateur ne contient de règle métier ✅
 
@@ -50,6 +53,10 @@ l'écart avec le « 19 » du plan P22). Dernier commit de la branche : `git log 
 
 ## Anomalies et décisions
 
+- **Quatre divergences corrigées dans le code Python** (jamais dans un test), trouvées en portant
+  les cas : `uuid[]` rendu par psycopg et filtré aux chaînes (briques jamais suspendues), corps de
+  correction sans champ éditable accepté, motif de signalement vide enregistré, point final du
+  message de conflit manquant. Détail et preuve : [`test-port-map.md`](./test-port-map.md).
 - **Décompte 19 vs 18** : le plan P22 et le titre de la spec annoncent 19 opérations ; l'inventaire
   en contient 18 pour `context == "content"` (aucune route spéciale, aucun job associé). L'inventaire
   fait foi (ADR-2005) ; aucune entrée n'a été inventée.
