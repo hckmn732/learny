@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-22T21:43:23.292Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-22T22:55:34.523Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -9,14 +9,14 @@
 | Spécifications | 175 (V1 : 124, V2 : 8, migration : 43) |
 | Terminées | 130 |
 | En cours | 0 |
-| Prêtes | 1 |
-| En attente de dépendances | 44 |
+| Prêtes | 2 |
+| En attente de dépendances | 43 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **74.3 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | checkpoint CP-30 |
+| Prochaine action | start SPEC-3101 — Connexion, inscription et lien magique |
 
 ## Phases et checkpoints
 
@@ -40,7 +40,7 @@
 | P21 | Migration Python — données, identité et worker | 0/2 | CP-21 | ⏳ |
 | P22 | Migration Python — domaines métier | 0/7 | CP-22 | ⏳ |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
-| P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ⏳ |
+| P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ✅ 2026-11-22 cp-30 |
 | P31 | Mobile — accès et coquille | 0/2 | CP-31 | ⏳ |
 | P32 | Mobile — Aujourd’hui, Programme et Agenda | 0/3 | CP-32 | ⏳ |
 | P33 | Mobile — cours, tuteur, quiz et révisions | 0/5 | CP-33 | ⏳ |
@@ -212,7 +212,7 @@
 | [SPEC-3001](../specs/p30-mobile-socle/SPEC-3001-application-expo-monorepo-et-outillage-sdd-mobile.md) | Application Expo, intégration au monorepo et outillage SDD mobile | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-3002](../specs/p30-mobile-socle/SPEC-3002-theme-jetons-et-composants-natifs.md) | Thème, jetons et composants natifs iOS et Android | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
 | [SPEC-3003](../specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md) | Client d'API, session sécurisée et cache hors ligne | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
-| [SPEC-3101](../specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md) | Connexion, inscription et lien magique | P31 | ⏳ waiting | 0 | — | SPEC-3002, SPEC-3003 |
+| [SPEC-3101](../specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md) | Connexion, inscription et lien magique | P31 | 🟢 ready | 0 | — | SPEC-3002, SPEC-3003 |
 | [SPEC-3102](../specs/p31-mobile-acces/SPEC-3102-coquille-onglets-natifs-et-notifications.md) | Coquille, onglets natifs, compte et centre de notifications | P31 | ⏳ waiting | 0 | — | SPEC-3101 |
 | [SPEC-3201](../specs/p32-mobile-quotidien/SPEC-3201-ecran-aujourd-hui.md) | Écran Aujourd'hui | P32 | ⏳ waiting | 0 | — | SPEC-3102 |
 | [SPEC-3202](../specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md) | Programme, modules et chapitres en lecture | P32 | ⏳ waiting | 0 | — | SPEC-3102 |
