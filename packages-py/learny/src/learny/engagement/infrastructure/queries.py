@@ -32,8 +32,9 @@ SELECT_NOTIFICATION = text(
     "select id, user_id, formation_id, type, title, body, href, icon, dedupe_key, read_at, "
     "created_at from public.notifications "
     "where user_id = cast(:user_id as uuid) "
-    "and (:notification_id is null or id = cast(:notification_id as uuid)) "
-    "and (:dedupe_key is null or dedupe_key = :dedupe_key) "
+    # A bound NULL has no type until it is cast: `:x is null` alone is ambiguous for the planner.
+    "and (cast(:notification_id as uuid) is null or id = cast(:notification_id as uuid)) "
+    "and (cast(:dedupe_key as text) is null or dedupe_key = :dedupe_key) "
     "order by created_at desc limit 1"
 )
 
@@ -71,7 +72,8 @@ UPDATE_DELIVERY = text(
 
 LOAD_DELIVERY = text(
     "select d.id as delivery_id, d.notification_id, d.channel, d.status, d.scheduled_for, "
-    "d.sent_at, d.error, n.user_id, n.formation_id, n.type, n.title, n.body, n.href, n.icon, "
+    "d.sent_at, d.error, n.id as id, n.user_id, n.formation_id, n.type, n.title, n.body, "
+    "n.href, n.icon, "
     "n.dedupe_key, n.read_at, n.created_at, p.first_name, p.tutor_tone, p.email "
     "from public.notification_deliveries d "
     "join public.notifications n on n.id = d.notification_id "
