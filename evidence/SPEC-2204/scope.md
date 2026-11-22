@@ -70,8 +70,14 @@ service that owns them. Columns in the same order, same `order by created_at asc
 | `apps/api/test/integration/ai-qualify-route.test.ts` | `tests/integration/tutor/test_tutor_byok.py` | done (service level) |
 | `apps/api/test/integration/spec-709-routes.test.ts` | `tests/integration/tutor/test_tutor_byok.py` | done (state, assign, clear, foreign key) |
 | `packages/tutor/src/loop.test.ts` | — | pending (agent loop not ported, SPEC-2205/2207) |
-| `apps/web/e2e/specs/p6/spec-602-onboarding.spec.ts` | `apps/web/e2e/specs/p22/spec-2204.spec.ts` | pending (page and e2e) |
-| `apps/web/e2e/specs/p7/spec-709.spec.ts` | `apps/web/e2e/specs/p22/spec-2204.spec.ts` | pending (page and e2e) |
+| `apps/web/e2e/specs/p6/spec-602-onboarding.spec.ts` | `apps/web/e2e/specs/p22/spec-2204.spec.ts` | done (`@SPEC-2204`: BYOK create, mask, list, discover, qualify, models get/update, delete) |
+| `apps/web/e2e/specs/p7/spec-709.spec.ts` | `apps/web/e2e/specs/p22/spec-2204.spec.ts` | done (same test: five tasks, immediate assign, clear, delete without fallback) |
+
+The `spec-2204.spec.ts` file also carries the functional test of the conversation chain: it creates a
+real session and a ready course, opens a conversation, consumes the SSE body whole (ordered `data:`
+frames, `finish` then `[DONE]`) and reads the persisted tutor message. The remaining row,
+`loop.test.ts`, is the agent loop (`packages/tutor/src/loop.ts`), which is not ported by this slice
+and travels with SPEC-2205/2207 (see `acceptance.md`, CA-3).
 
 Cases of `credentials-service.test.ts` and `qualify-model.test.ts` that stay in TypeScript for now,
 with their reason:

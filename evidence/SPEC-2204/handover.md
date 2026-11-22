@@ -1,8 +1,10 @@
 # SPEC-2204 — passation
 
-Branche `spec/SPEC-2204-domaine-tuteur-sse`, worktree `learny-wt-SPEC-2204`. SPEC-2204 reste
-`in_progress` : les douze opérations du contexte `tutor` sont servies par Python (conversations, SSE
-et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
+Branche `spec/SPEC-2204-domaine-tuteur-sse`, worktree `learny-wt-SPEC-2204`. SPEC-2204 est
+**clôturée** : les douze opérations du contexte `tutor` sont servies par Python (conversations, flux
+SSE et BYOK), la page de démonstration et son e2e sont livrés, et `validate.mjs` passe ses huit
+étapes (`evidence/SPEC-2204/checks.json`). Commits de clôture : `7c393e37` (page) et `3514a0b9`
+(e2e, inventaire).
 
 ## Livré
 
@@ -17,19 +19,23 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
 | Writer SSE | `apps/api-py/src/learny_api/sse.py` |
 | Handlers | `apps/api-py/src/learny_api/handlers/tutor.py`, `handlers/__init__.py`, `validate.py` (raffinements `me.ai.*`) |
 | Bascule | `api/ownership.yaml` : les douze opérations du contexte `tutor` → `py` |
-| Tests | `tests/factories/{tutor_support,byok_support}.py`, `tests/integration/tutor/test_tutor_{conversations,stream,self_test,stream_facade,byok}.py` (55 cas), `tests/unit/tutor/test_tutor_ai_models.py` (22 cas), `apps/api-py/tests/unit/test_validate.py` (31 cas) |
+| Tests | `tests/factories/{tutor_support,byok_support}.py`, `tests/integration/tutor/test_tutor_{conversations,stream,self_test,stream_facade,byok}.py` (55 cas), `tests/unit/tutor/test_tutor_ai_models.py` (22 cas), `tests/unit/tutor/test_tutor_domain_vectors.py` (50 cas), `apps/api-py/tests/unit/test_validate.py` (31 cas) |
 | Parité | `tools/parity/run.ts` (comparaison SSE) + `tools/parity/test/unit/event-stream.test.ts` ; groupe `tutor` enregistré (2 scénarios) |
+| Page et e2e | `apps/web/components/sdd-demos/spec-2204.tsx`, entrée `SPEC-2204` du registre, `apps/web/e2e/specs/p22/spec-2204.spec.ts` (fonctionnel SSE + BYOK, `@visual` desktop et mobile) |
 | Décisions | ADR-2026 (copie verbatim des prédicats dans l'oracle), ADR-2027 (`sse.py` créé), ADR-2028 (périmètre de `qualify`), ADR-2029 (session de fixtures), ADR-2030 (corps validés en mode JSON) |
 
-## Reste à faire
+## Reste
 
-1. **Page `/_dev/sdd/SPEC-2204` et e2e** `apps/web/e2e/specs/p22/spec-2204.spec.ts` (parcours
-   discussion, Teste-moi, citation, clé personnelle et onglet Modèles d'IA), avec `@visual` si la page
-   en a besoin.
-2. **Acceptance finale** : cocher CA-1 à CA-5, joindre les sorties de `validate.mjs`, puis
-   `node tools/sdd/validate.mjs SPEC-2204` et `node tools/sdd/complete.mjs SPEC-2204 --no-merge --no-push`.
-3. `loop.test.ts` (`packages/tutor/src/loop.test.ts`) n'a pas encore de jumeau pytest : l'agent loop
-   n'est pas porté (SPEC-2205/2207).
+Rien pour cette spécification. Les dettes sont explicitement rattachées :
+
+1. `loop.test.ts` (13 cas) et l'agent loop `run_tutor` : aucune des douze opérations ne l'appelle ;
+   bascule avec les jobs (SPEC-2205/2207).
+2. `gradeOpenAnswers` (correction IA des réponses ouvertes d'une tentative de quiz) : job de
+   soumission, aucune route du périmètre ; reprise par SPEC-2207.
+3. `prepare_question_bank` et `process_question_bank_jobs` : crons et `course/generated`, repris par
+   SPEC-2207.
+4. Ligne de base visuelle du panneau tuteur (SPEC-610) : écart de rendu de police sur cet hôte
+   (3 % des pixels, chaque glyphe), non régénérée ; décision du porteur, comme ADR-2019.
 
 ## Points d'attention pour la suite
 
@@ -37,7 +43,7 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
   doivent y être ajoutés, jamais dans le code ni dans les tests. Les messages attendus se comparent
   aux constantes (`learny.shared.locale_fr.ai`, `details`), jamais à un littéral.
 - La base locale partagée est sérialisée par `flock /tmp/learny-sdd-db.lock` ; les tests du tuteur
-  utilisent `rolled_back` et ne commitent rien.
+  utilisent `rolled_back` et ne commitent rien. `validate.mjs` ne doit jamais tourner sous `flock`.
 - Les transactions de `LearningTransactions` sont des savepoints : `created_at`/`now()` sont donc
   identiques pour deux lignes d'un même test. Trier par `created_at` ne suffit pas dans un test ;
   viser les lignes par identifiant, par libellé ou par contenu.
@@ -46,7 +52,8 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
 - **BYOK** : `create_credential` et `qualify_credential` chargent la clé maîtresse avec
   `load_keyring(os.environ)` (`APP_ENCRYPTION_KEY`, 32 octets base64) ; un test qui appelle les cas
   d'usage directement doit poser la variable (voir la fixture `master_key` de `test_tutor_byok.py`).
-  `ALLOW_LOCAL_MODELS=true` est le seul moyen d'enregistrer un fournisseur `local`.
+  La façade de test la reçoit désormais par `apps/web/playwright.config.ts`, ce qui rend l'e2e BYOK
+  possible. `ALLOW_LOCAL_MODELS=true` est le seul moyen d'enregistrer un fournisseur `local`.
 - **Fixtures de qualification** : elles ne sont pas dans le registre global des tâches. Une session
   de qualification doit passer `fixtures=qualification_registry()` (ADR-2029) ; sans cela,
   `MOCK_FIXTURE_NOT_FOUND`. Le curseur de session est ce qui rend la sonde `vision` de la tâche
@@ -58,6 +65,7 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
 - **Découverte** : `discover_provider_models` est simulée par `LLM_MODE=mock` (liste fixe par
   fournisseur) et n'ouvre aucune socket en test ; le chemin vivant (httpx, 15 s) prend un `fetcher`
   injectable et n'est pas exercé par la suite.
-- Les preuves BYOK reposent sur `test_tutor_byok.py` (26 cas) : le wrapper HTTP (idempotence,
-  fresh auth, origin) est prouvé par les tests génériques du pipeline (SPEC-2201) et
-  `test_handlers.py` ; la parité couvre les deux lectures générables.
+- **E2E** : le fixture `request` ne partage pas les cookies du contexte ; passer
+  `cookie: session.cookieHeader` et `origin`, plus `idempotency-key` sur les routes idempotentes.
+  Pour le SSE, lire le corps en `text()` puis analyser les lignes `data:` (le writer ferme le corps
+  par `data: [DONE]`).
