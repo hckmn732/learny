@@ -17,9 +17,9 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
 | Writer SSE | `apps/api-py/src/learny_api/sse.py` |
 | Handlers | `apps/api-py/src/learny_api/handlers/tutor.py`, `handlers/__init__.py`, `validate.py` (raffinements `me.ai.*`) |
 | Bascule | `api/ownership.yaml` : les douze opérations du contexte `tutor` → `py` |
-| Tests | `tests/factories/{tutor_support,byok_support}.py`, `tests/integration/tutor/test_tutor_{conversations,stream,self_test,stream_facade,byok}.py` (55 cas), `tests/unit/tutor/test_tutor_ai_models.py` (22 cas) |
+| Tests | `tests/factories/{tutor_support,byok_support}.py`, `tests/integration/tutor/test_tutor_{conversations,stream,self_test,stream_facade,byok}.py` (55 cas), `tests/unit/tutor/test_tutor_ai_models.py` (22 cas), `apps/api-py/tests/unit/test_validate.py` (31 cas) |
 | Parité | `tools/parity/run.ts` (comparaison SSE) + `tools/parity/test/unit/event-stream.test.ts` ; groupe `tutor` enregistré (2 scénarios) |
-| Décisions | ADR-2026 (copie verbatim des prédicats dans l'oracle), ADR-2027 (`sse.py` créé), ADR-2028 (périmètre de `qualify`), ADR-2029 (session de fixtures) |
+| Décisions | ADR-2026 (copie verbatim des prédicats dans l'oracle), ADR-2027 (`sse.py` créé), ADR-2028 (périmètre de `qualify`), ADR-2029 (session de fixtures), ADR-2030 (corps validés en mode JSON) |
 
 ## Reste à faire
 
@@ -51,6 +51,10 @@ et BYOK), la clôture (page, e2e, validation, `complete`) reste à faire.
   de qualification doit passer `fixtures=qualification_registry()` (ADR-2029) ; sans cela,
   `MOCK_FIXTURE_NOT_FOUND`. Le curseur de session est ce qui rend la sonde `vision` de la tâche
   `light` distincte de la sonde `structured`.
+- **Validation des corps** : `validate_input` valide un corps depuis sa forme JSON
+  (`model_validate_json(strict=True)`, ADR-2030). Un test unitaire qui appelle `validate_input` avec
+  un `StrEnum` doit donc passer par le pipeline, pas par `model_validate(strict=True)` : ce dernier
+  refuse la valeur texte d'un enum.
 - **Découverte** : `discover_provider_models` est simulée par `LLM_MODE=mock` (liste fixe par
   fournisseur) et n'ouvre aucune socket en test ; le chemin vivant (httpx, 15 s) prend un `fetcher`
   injectable et n'est pas exercé par la suite.

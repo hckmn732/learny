@@ -27,11 +27,12 @@ démonstration, l'e2e et la clôture). Chaque critère dit ce qui est prouvé et
 | Contexte BYOK, projections et batterie de compatibilité | `uv run pytest packages-py/learny/tests/unit/tutor/test_tutor_ai_models.py -q` | 22 passed |
 | Clés personnelles sur la base locale (RLS, création, listage, suppression, découverte, qualification, erreurs) | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py/learny/tests/integration/tutor/test_tutor_byok.py -q` | 26 passed |
 | Intégration du contexte tutor (conversations, SSE, Teste-moi, BYOK) | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py/learny/tests/integration/tutor -q` | 55 passed |
-| Suite unitaire complète | `uv run pytest packages-py/learny/tests/unit apps/api-py/tests/unit -q` | 3480 passed |
+| Suite unitaire complète | `uv run pytest packages-py/learny/tests/unit apps/api-py/tests/unit -q` | 3482 passed |
 | Handlers = opérations `py` | `uv run pytest apps/api-py/tests/unit/test_handlers.py -q` | 3 passed |
 | Parité du groupe `tutor` | `corepack pnpm parity:record --group tutor --target http://127.0.0.1:3112` puis `corepack pnpm parity:check --group tutor --target http://127.0.0.1:3113` | 2 scénarios, 0 divergence |
 | Lint / types / frontières | `uv run ruff check .`, `uv run ruff format --check packages-py apps`, `uv run mypy packages-py apps`, `uv run lint-imports` | vert |
 | Inventaire à jour | `corepack pnpm exec tsx tools/migration/inventory.mjs --check` | « Inventory up to date: 217 operations » |
+| Les sept opérations de bout en bout par la façade | script ponctuel `createTestSession` puis `fetch` sur `uvicorn learny_api.main:app --port 3113` | `create` 201 (clé masquée), `list` 200, `discover` 200, `qualify` connexion 200, `qualify` tutor 200, `models.get` 200, `models.update` assign puis clear 200, `delete` 204, `list` vide après suppression |
 
 Chiffrement aller-retour : `test_the_stored_key_is_encrypted_with_the_row_envelope` déchiffre la
 colonne `encrypted_key` avec `decrypt_secret` et l'AAD `learny:ai_credentials:<credId>:<userId>`, et
@@ -67,6 +68,22 @@ la liste ordonnée des types de trames reçues par le client à celle de `sse.ch
 `x-vercel-ai-ui-message-stream`, `x-request-id`, `x-served-by`, et la terminaison exacte
 `data: [DONE]\n\n`.
 
+## Anomalie trouvée et corrigée — validation stricte des enums (ADR-2030)
+
+Le test de bout en bout par la façade a révélé que `me.ai.credentials.create` répondait 422
+`VALIDATION_FAILED` avec un seul champ en erreur, `body.provider` : le pipeline validait les corps
+avec `model_validate(strict=True)`, et Pydantic refuse alors la valeur texte d'un `StrEnum`
+(`is_instance_of`), là où Zod accepte la chaîne et seulement elle. Le défaut était **latent depuis
+SPEC-2201** et touchait déjà `me.ai.task-models.update` (`body.task`).
+
+Correction dans le code Python (aucun contrat, aucun oracle, aucun libellé modifié) :
+`validate_input` valide désormais un corps depuis sa forme JSON
+(`model_validate_json(strict=True)`), le mode JSON acceptant la valeur texte d'un enum tout en
+refusant toujours un nombre envoyé comme chaîne. Deux cas ajoutés à
+`apps/api-py/tests/unit/test_validate.py` (enum accepté, valeur inconnue refusée) ; le cas existant
+« nombre en chaîne refusé en mode strict » reste vert. Après correction, les sept opérations
+répondent comme le TypeScript (voir la ligne « de bout en bout » du tableau ci-dessus).
+
 ## Écarts assumés et décisions
 
 - **ADR-2026** — copie verbatim de `looksInjection`, `asksForTest` et `mockGradeScenario` dans
@@ -76,6 +93,8 @@ la liste ordonnée des types de trames reçues par le client à celle de `sse.ch
   connexion ou compatibilité par tâche) ; la batterie de treize briques, `markCredentialStatus` et
   `stopAfterInvalidBrick` restent hors tranche (page de démonstration et SPEC-2207), sans changement
   visible pour le client.
+- **ADR-2030** — validation stricte des corps en mode JSON (`model_validate_json`), pour que les
+  enums acceptent leur valeur texte comme Zod ; anomalie latente depuis SPEC-2201, corrigée ici.
 - **ADR-2029** — `LlmGateway.session` et `MockSession` : une session partage le curseur d'une fixture
   entre ses appels, comme `LearnMockModel` ; sans cela la sonde `vision` de `light` réutiliserait la
   sortie structurée et produirait une fausse réserve `NO_VISION`.
