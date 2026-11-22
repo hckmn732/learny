@@ -135,3 +135,38 @@ Conseils de reprise, par difficulté croissante :
 
 E2E de référence pour ces routes : `PLAYWRIGHT_REUSE_SERVER=0 corepack pnpm test:e2e --grep
 "@SPEC-201\b|@SPEC-203\b|@SPEC-204\b|@SPEC-205\b|@SPEC-206\b|@SPEC-208\b|@SPEC-210\b"`.
+
+## 6. E2E rejoué : 7 verts, 18 rouges, diagnostic pour la reprise
+
+Commande : `PLAYWRIGHT_REUSE_SERVER=0 corepack pnpm test:e2e --grep
+"@SPEC-201\\b|@SPEC-203\\b|@SPEC-204\\b|@SPEC-205\\b|@SPEC-206\\b|@SPEC-208\\b|@SPEC-210\\b"`
+sur une base remise à zéro puis `db:seed:demo`. Rapport : `test-results/playwright.json`.
+
+Premier passage : 24 rouges, tous les appels de démonstration en 404. Cause trouvée et corrigée
+(`fd56855c`) : la pile Playwright passait `ENABLE_SDD_PAGES` à Hono et au web mais **pas à la
+façade Python**, qui sert désormais ces routes ; `devOnly` répondait donc 404. Deuxième passage :
+**7 verts, 18 rouges**, qui se répartissent en quatre chantiers :
+
+1. **Visuel (7 paires desktop/mobile)** — les pages se rendent, mais l'image diffère de 2 à 3 % en
+   desktop et la hauteur change de 22 px en mobile (`spec-201-demo.png`, `spec-204-demo.png`,
+   `spec-205-demo.png`, `spec-206-demo.png`, `spec-208-protections.png`). Aucune ligne de base n'a été
+   régénérée (interdit). À diagnostiquer page par page : le contenu de démonstration diffère encore
+   du TypeScript (une valeur, un compteur ou un libellé).
+2. **SPEC-203** — `jobs-step-1-state` reste « En attente » : l'événement `sdd/demo-requested` est
+   émis mais le worker ne marque pas les étapes dans le délai du test. Le consommateur
+   `devtools.demo_job` est bien enregistré (`apps/worker-py/src/learny_worker/consumers.py:620`) :
+   vérifier le démarrage du worker dans la pile (`JOBS_MODE=worker`), le dispatcher et l'écriture de
+   `sdd_demo_runs`, ainsi que la lecture de `dev.events.demo.run`.
+3. **SPEC-205 / SPEC-206, routes réelles** — écarts de statut : `400` attendu mais `500` reçu sur
+   l'abonnement push (unicité, retrait) et `400` attendu mais `201` sur l'envoi de fichier. Ce sont
+   les routes de production de SPEC-205/206 (pas les routes `dev.*`) : la parité de validation reste
+   à corriger dans le Python, jamais dans le test.
+4. **SPEC-210** — la page `/_dev/stripe/checkout` n'affiche pas « Paiement simulé » : la session
+   `cs_mock_*` créée par `billing.checkout` (façade) n'est pas retrouvée par `dev.sdd.stripe.session`.
+   Piste : `learny.billing.application.dev.get_mock_checkout_session` passe par `mock_gateway(deps)`,
+   à vérifier contre l'état du gateway simulé construit par `build_stripe_gateway` ; la session doit
+   vivre dans le même état mémoire que celui de `start_checkout`.
+
+Ces quatre points sont indépendants des 15 routes basculées dans cette tranche et touchent des
+opérations déjà servies par Python (SPEC-205/206/210/203). Ils constituent la preuve e2e à obtenir
+avant `validate.mjs`.
