@@ -176,3 +176,49 @@ planificateur et une seule émission par période).
 | `corepack pnpm exec eslint --max-warnings=0 tools packages/tutor/src/course/generate.ts` | vert |
 | `corepack pnpm exec tsx tools/migration/inventory.mjs --check` | inventaire à jour (217 opérations) |
 | `corepack pnpm contract:check`, `sdk:check`, `py:contract:check`, `openapi:check` | à jour (aucun contrat touché) |
+
+## 7. Quatrième tranche : routes `dev.*` servies par Python (18/70)
+
+Date : 2026-11-22. Commits : `cb6e85eb` (registre des spéciales, `dev.echo`, `dev.items`),
+`809d1e99` (`dev.rateLimit.*`), `55d79788` (`dev.email.*`), `9bc2aaca` (`dev.stripe.*`),
+`3126a962` (`dev.uploadSimulation`), `4c560c9c` (`dev.events.*`, `dev.cron.hourlyTick`).
+
+`api/ownership.yaml` porte **70** opérations `dev.*` (le chiffre 72 de la commande comptait aussi les
+deux routes `_dev` hors périmètre) et **26** routes spéciales `dev/sdd`, dont 25 sont des opérations
+`dev.*` et `relay-stream`. **18 opérations** sont passées à `py` dans cette tranche, avec leurs clés
+spéciales :
+
+| Famille | Opérations | Module |
+|---|---|---|
+| écho et pagination | `dev.echo`, `dev.items` | `special/dev_echo.py` |
+| limitation de débit | `dev.rateLimit.burst`, `origin`, `purge` | `special/dev_rate_limit.py` |
+| e-mail | `dev.email.preview`, `send`, `outbox`, `outbox.purge` | `special/dev_email.py` |
+| Stripe simulé | `dev.stripe.checkoutPay`, `checkoutCancel`, `events`, `simulate` | `special/dev_stripe.py` |
+| limites d'envoi | `dev.uploadSimulation` | `special/dev_upload.py` |
+| jobs et tick | `dev.events.demo.start`, `demo.run`, `outbox`, `dev.cron.hourlyTick` | `special/dev_events.py` |
+
+Architecture de la tranche (conforme au plan P22, section « Dev/demo routes ») :
+
+- `apps/api-py/src/learny_api/special/__init__.py` : registre des routes spéciales. Les 25 routes de
+  développement sont installées **avant** le pipeline et avant le relais ; la garde
+  `ENABLE_SDD_PAGES` (`true` ou `1`) et `APP_ENV != production` répond le même problem+json 404 que
+  `devOnly`, avant toute authentification (`RESOURCE_NOT_FOUND` dans `locale_fr/details.py`).
+- `pipeline.install` n'installe plus une opération dont la clé spéciale est `py` : c'est le registre
+  qui la sert, avec la garde. Les handlers restent déclarés (`handlers/dev.py`) et
+  `test_handlers.py` continue d'imposer `py_operations == HANDLERS`.
+- Les corps des routes sont des fonctions minces de `special/dev_*.py` ; les cas d'usage réutilisables
+  sont portés dans le contexte propriétaire et exportés par son `public.py` :
+  `engagement.application.dev_email` (+ fixtures de gabarits dans
+  `locale_fr/engagement_email_fixtures.py`), `billing.application.dev`,
+  `content.application.dev_uploads`, `identity.application.purge_security.purge_rows_in_tx`.
+- `service_tx` est déclaré dans `learny/shared/db/privileged.py` pour `special.dev_rate_limit` et
+  `special.dev_events` (seaux et lignes synthétiques, utilisateurs de fabrique, compteurs d'outbox).
+- Tests d'intégration par famille (`packages-py/learny/tests/integration/dev/`) : réponse nominale et
+  garde de développement (désactivée, valeur non canonique, production). Harnais commun :
+  `packages-py/learny/tests/dev_route_support.py`.
+
+Restent hors de cette tranche : **52 opérations `dev.*`** — `dev.notificationsGenerate`,
+`dev.notify`, `dev.pushSend`, `dev.personal-data.{deletion.schedule,deletion.cancel,execute,export}`
+et les **45 `dev.sdd.*`** (spec-007 à spec-1301, `dev.sddApiCoverage`, `dev.sddAuthProxy`,
+`dev.sdd.stripe.session`) — plus `auth.*`, `health.get`, `home.get`, `formations.resume`, les routes
+spéciales hors `dev.*`, l'e2e complet, `acceptance.md`, `validate.mjs` et `complete.mjs`.
