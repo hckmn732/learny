@@ -63,6 +63,18 @@ class RecordingGateway:
         async for chunk in self._inner.stream(task, prompt_id, input, scenario=scenario):
             yield chunk
 
+    def session(
+        self,
+        task: Any,
+        prompt_id: str,
+        *,
+        scenario: Any = None,
+        fixtures: Any = None,
+    ) -> Any:
+        """A mock session over the given fixtures, recorded like the other entry points."""
+        self._record(task, prompt_id, scenario, None)
+        return self._inner.session(task, prompt_id, scenario=scenario, fixtures=fixtures)
+
 
 class UnavailableGateway:
     """An AI provider that is down, for the error paths of the use cases."""
