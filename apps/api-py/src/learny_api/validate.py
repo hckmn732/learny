@@ -14,6 +14,7 @@ from typing import Annotated, Any, Literal, Union, get_args, get_origin
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
+from learny.shared.jsonx import dumps
 from learny.shared.locale_fr import ai as ai_texts
 from learny.shared.locale_fr import learning as learning_texts
 from learny.shared.locale_fr import review as review_texts
@@ -121,8 +122,15 @@ def validate_input(
     strict: bool = False,
     route_id: str | None = None,
 ) -> BaseModel:
-    """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues."""
+    """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues.
+
+    A body is validated from its JSON form, like `schema.safeParse` on a decoded body: Pydantic's
+    JSON mode accepts the string value of a `StrEnum` while still refusing `"20"` for an `int`
+    (ADR-2030). Path and query inputs keep the object mode.
+    """
     try:
+        if strict:
+            return model.model_validate_json(dumps(value), strict=True)
         return model.model_validate(value, strict=strict)
     except ValidationError as error:
         raise AppError(
