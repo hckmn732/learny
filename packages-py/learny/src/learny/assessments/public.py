@@ -24,6 +24,8 @@ from learny.assessments.application.ports import (
 )
 from learny.assessments.application.quiz import check_answer, get_attempt, save_draft
 from learny.assessments.application.quiz_result import get_quiz_result
+from learny.assessments.application.quiz_start import start_validation_attempt
+from learny.assessments.application.quiz_submit import finalize_attempt, submit_attempt
 
 __all__ = [
     "AssessmentDeps",
@@ -34,6 +36,7 @@ __all__ = [
     "confirm_exam_format",
     "correct_brick",
     "ensure_mock_exam_slots",
+    "finalize_attempt",
     "get_attempt",
     "get_exam_attempt",
     "get_exam_intro",
@@ -44,5 +47,7 @@ __all__ = [
     "save_draft",
     "save_exam_answer",
     "start_exam_attempt",
+    "start_validation_attempt",
+    "submit_attempt",
     "submit_exam",
 ]

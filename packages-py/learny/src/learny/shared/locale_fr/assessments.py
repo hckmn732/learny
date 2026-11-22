@@ -127,3 +127,20 @@ GAP_PROPOSALS = {
 
 REMEDIATION_MAX_GAPS = 3
 """REMEDIATION_RULES.maxGaps (ADR-0173)."""
+
+# --- creation of a validation attempt (packages/services/src/quiz/start.ts) -----------------------
+
+QUIZ_MODULE_INVALID_ID = "Identifiant de module invalide."
+QUIZ_MODULE_NOT_FOUND = "Module introuvable."
+QUIZ_MODULE_LOCKED = "Ce module est verrouill\u00e9."
+QUIZ_MODULE_WITHOUT_NOTIONS = "Ce module n\u2019a pas encore de notions."
+QUIZ_NO_QUESTION_FOR_MODULE = "Aucune question disponible pour ce module."
+QUIZ_ACTIVITY_NOT_CREATED = "Activit\u00e9 non cr\u00e9\u00e9e."
+QUIZ_ATTEMPT_NOT_CREATED = "Tentative non cr\u00e9\u00e9e."
+
+# --- submission of a validation attempt (packages/services/src/quiz/submit.ts) --------------------
+
+QUIZ_NOT_SUBMITTED = "Cette tentative n\u2019est pas soumise."
+QUIZ_NOT_MODIFIABLE = "Cette tentative n\u2019est plus modifiable."
+QUIZ_UNCHECKED = "Toutes les questions doivent \u00eatre v\u00e9rifi\u00e9es."
+QUIZ_UNCHECKED_HINT = "V\u00e9rifiez cette question avant de terminer."

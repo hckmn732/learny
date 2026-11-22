@@ -70,6 +70,16 @@ async def offline_pack(call: Call) -> Any:
 # --- quiz attempts -------------------------------------------------------------------------------
 
 
+@handler("quiz.attempts.create")
+async def quiz_attempts_create(call: Call) -> Any:
+    result = await assessments.start_validation_attempt(call.deps, _actor(call), _params(call)["mid"])
+    if result.get("preparing") is True:
+        return _json(result, 202)
+    if result.get("resumed") is True:
+        return _json(result, 200)
+    return _json(result, 201)
+
+
 @handler("quiz.attempts.get")
 async def quiz_attempts_get(call: Call) -> Any:
     return await assessments.get_attempt(call.deps, _actor(call), _params(call)["aid"])
@@ -78,6 +88,11 @@ async def quiz_attempts_get(call: Call) -> Any:
 @handler("quiz.attempts.result")
 async def quiz_attempts_result(call: Call) -> Any:
     return await assessments.get_quiz_result(call.deps, _actor(call), _params(call)["aid"])
+
+
+@handler("quiz.attempts.submit")
+async def quiz_attempts_submit(call: Call) -> Any:
+    return await assessments.submit_attempt(call.deps, _actor(call), _params(call)["aid"])
 
 
 @handler("quiz.answers.save")

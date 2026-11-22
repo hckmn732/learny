@@ -192,10 +192,10 @@ operations:
   'pushSubscriptions.upsert': ts
   'quiz.answers.check': py
   'quiz.answers.save': py
-  'quiz.attempts.create': ts
+  'quiz.attempts.create': py
   'quiz.attempts.get': py
   'quiz.attempts.result': py
-  'quiz.attempts.submit': ts
+  'quiz.attempts.submit': py
   'remediation.complete': ts
   'remediation.get': ts
   'remediation.prepare': ts
