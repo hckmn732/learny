@@ -1,0 +1,75 @@
+# SPEC-3101 — connexion, erreur générique et déconnexion (CA-1, CA-5, CA-6).
+#
+# Le flux est l'unique flux `@visual` de la spécification (ADR-3015 § 5) : il capture l'écran de
+# connexion dans son état initial, comparé à l'export de référence
+# `design/app-mobile/exports/screens/android-01-connexion.png` (ADR-3003 § 4, CA-6).
+#
+# Précautions Maestro 2.12.1 : matcher `text` ancré et accents abîmés en transit, donc les
+# assertions n'utilisent que des `id` et des textes ASCII (`signedIn`).
+appId: fr.learny.app
+name: SPEC-3101 connexion
+tags:
+  - SPEC-3101
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 30000
+# EF-1 — les contrôles de l'écran de connexion.
+- assertVisible:
+    id: auth-mode
+- assertVisible:
+    id: auth-email
+- assertVisible:
+    id: auth-password
+- assertVisible:
+    id: auth-forgot
+- assertVisible:
+    id: auth-magic-link
+- assertVisible:
+    id: auth-submit
+# CA-6 — capture de l'état initial comparée à l'export de référence.
+- takeScreenshot: SPEC-3101-connexion
+# CA-1 — des identifiants faux affichent le message générique, sans révéler le compte.
+- tapOn:
+    id: auth-email
+- inputText: inconnu@exemple.fr
+- tapOn:
+    id: auth-password
+- inputText: mauvais-mot-de-passe
+- tapOn:
+    id: auth-submit
+- extendedWaitUntil:
+    visible:
+      id: auth-error
+    timeout: 45000
+- assertVisible:
+    id: auth-title
+# CA-1 — le compte de démonstration se connecte par le formulaire et arrive dans la coquille.
+- tapOn:
+    id: auth-demo-signin
+- extendedWaitUntil:
+    visible:
+      id: shell-placeholder
+    timeout: 45000
+- assertVisible:
+    id: shell-placeholder-state
+    text: '.*signedIn.*'
+# CA-5 — « Se déconnecter » ramène à la connexion.
+- tapOn:
+    id: auth-signout
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 45000
+- assertVisible:
+    id: auth-mode

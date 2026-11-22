@@ -23,16 +23,13 @@ import {
 } from 'react';
 
 import { messageFor, sessionExpiredMessage } from '../api/errors';
+import { requireApiClient } from '../api/registry';
 import { appQueryClient } from '../data/query-client';
 import { purgeUserData } from '../offline/purge';
 
 import { secureSessionStorage } from './secure-backend';
 import type { SessionPort, SessionSnapshot } from './session-port';
-import {
-  setExpiredHandler,
-  setRenewalHandler,
-  setSessionToken,
-} from './session-token';
+import { setExpiredHandler, setRenewalHandler, setSessionToken } from './session-token';
 
 export type SessionStatus = 'loading' | 'signedOut' | 'signedIn';
 
@@ -157,6 +154,13 @@ export function SessionProvider({
 
   const signOut = useCallback(async () => {
     setBusy(true);
+    // ADR-3008 § 6 — l'API révoque le jeton de rafraîchissement avant que le client oublie la
+    // session (BR-ACC-09) ; une réponse en échec ne bloque jamais la déconnexion locale.
+    try {
+      await requireApiClient().api.authSignOut({});
+    } catch {
+      // A local sign-out never depends on the server answer.
+    }
     try {
       await port.signOut();
     } catch {

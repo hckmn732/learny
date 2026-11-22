@@ -1,0 +1,51 @@
+# SPEC-3101 — lien magique : envoi sans fuite d'existence et lien déjà utilisé (CA-3, CA-4).
+#
+# Le flux n'est pas `@visual` : l'unique capture de la spécification est celle du flux de
+# connexion (ADR-3015 § 5). Le lien est ouvert par `openLink` sur le schéma `learny`, ce qui
+# exerce la vraie route `auth/callback` contre le Supabase local : un `token_hash` inconnu est
+# refusé par le fournisseur et l'écran affiche « Ce lien n'est plus valide. » (CA-3).
+appId: fr.learny.app
+name: SPEC-3101 lien magique
+tags:
+  - SPEC-3101
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 30000
+# EF-3 — la feuille s'ouvre et l'adresse est préremplie par le formulaire.
+- tapOn:
+    id: auth-magic-link
+- extendedWaitUntil:
+    visible:
+      id: auth-magic-sheet
+    timeout: 30000
+- tapOn:
+    id: auth-magic-sheet-email
+- inputText: inconnu@exemple.fr
+- tapOn:
+    id: auth-magic-sheet-submit
+# CA-4 — la réponse est la même pour une adresse inconnue que pour une adresse connue.
+- extendedWaitUntil:
+    visible:
+      id: auth-magic-sheet-sent
+    timeout: 45000
+- tapOn:
+    id: auth-magic-sheet-close
+# CA-3 — un lien expiré ou déjà utilisé est refusé et propose un nouveau lien.
+- openLink: 'learny://auth/callback?token_hash=lien-deja-utilise-3101&type=magiclink'
+- extendedWaitUntil:
+    visible:
+      id: auth-callback-error
+    timeout: 45000
+- assertVisible:
+    id: auth-callback-ask
+- assertVisible:
+    id: auth-callback-back

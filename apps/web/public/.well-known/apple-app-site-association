@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appID": "TEAMID1234.fr.learny.app",
+        "paths": ["/auth/mobile", "/api/v1/auth/callback"],
+        "comment": "SPEC-3101 ET-3 — l'identifiant d'équipe (TEAMID1234) doit être remplacé par celui du compte Apple Developer du porteur avant la publication ; le bundle est fr.learny.app (app.config.ts)."
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["TEAMID1234.fr.learny.app"]
+  }
+}

@@ -58,11 +58,15 @@ export const mobile = {
     forgot: 'Mot de passe oublié ?',
     divider: 'ou',
     showPassword: 'Afficher le mot de passe',
+    submitBusyLogin: 'Connexion…',
+    submitBusySignup: 'Création…',
+    demoSignIn: 'Connexion de démonstration',
     hidePassword: 'Masquer le mot de passe',
     strengthLabel: 'Solidité du mot de passe',
     termsLabel: 'J’accepte les conditions d’utilisation et la politique de confidentialité',
     termsHint: 'Obligatoire pour créer votre compte.',
     magic: {
+      title: 'Recevoir un lien de connexion',
       intro: 'Sans mot de passe : un lien valable 1 heure, envoyé par e-mail.',
       send: 'Recevoir mon lien',
       sending: 'Envoi…',
@@ -88,6 +92,13 @@ export const mobile = {
       accept: 'J’accepte',
       later: 'Plus tard',
       recorded: 'Acceptation enregistrée.',
+    },
+    // SPEC-3101 EF-8 — page web `/auth/mobile` qui rend le lien à l’application.
+    bridge: {
+      eyebrow: 'Learny',
+      title: 'Ouverture de l’application…',
+      body: 'Si rien ne se passe, ouvrez le lien ci-dessous : il termine la connexion dans l’application.',
+      open: 'Ouvrir Learny',
     },
     shell: {
       title: 'Vous êtes connecté',

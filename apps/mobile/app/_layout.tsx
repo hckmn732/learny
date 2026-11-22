@@ -26,6 +26,7 @@ import { supabaseSessionPort } from '../src/auth/session-port';
 import { configResult } from '../src/config';
 import { AppQueryProvider } from '../src/data/providers';
 import { appQueryClient } from '../src/data/query-client';
+import { AuthGate } from '../src/features/auth/AuthGate';
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { startOfflineWiring } from '../src/offline/network-wiring';
 import { OfflineBanner } from '../src/offline/OfflineBanner';
@@ -79,6 +80,9 @@ export default function RootLayout() {
 
   return (
     <SessionProvider port={supabaseSessionPort}>
+      {/* SPEC-3101 EF-7 — garde : coquille fermée hors session, connexion quittée une fois
+          la session ouverte. Les pages /_dev des builds de test restent hors garde. */}
+      <AuthGate />
       <AppQueryProvider appVersion={appVersion()}>
         <SafeAreaProvider>
           <StatusBar style="dark" />

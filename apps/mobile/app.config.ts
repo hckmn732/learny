@@ -22,6 +22,24 @@ if (!parsed.ok) {
   throw new Error(`Configuration mobile invalide.\n${formatConfigError(parsed)}`);
 }
 
+/**
+ * Host of the web application, used by the universal links (SPEC-3101 ET-3). A loopback
+ * host cannot be verified by the platform, so no filter is declared for it.
+ */
+const webUrl = parsed.config.webUrl;
+
+function universalLinkHost(url: string): string | null {
+  try {
+    const { host } = new URL(url);
+    if (host === '' || host.startsWith('localhost') || host.startsWith('127.0.0.1')) return null;
+    return host;
+  } catch {
+    return null;
+  }
+}
+
+const linkHost = universalLinkHost(webUrl);
+
 const sddPages = parsed.config.enableSddPages;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -39,6 +57,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   ios: {
     bundleIdentifier: 'fr.learny.app',
+    // SPEC-3101 ET-3 — the universal link of the web application, served by
+    // `apps/web/public/.well-known/apple-app-site-association`.
+    associatedDomains: linkHost === null ? [] : [`applinks:${linkHost}`],
     supportsTablet: false,
     infoPlist: {
       // The demo page talks to the local API of the development stack (ADR-3004 § 7).
@@ -47,6 +68,23 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: 'fr.learny.app',
+    // SPEC-3101 ET-3, EF-6 — App Links verified on the two paths a link can land on: the
+    // static page `/auth/mobile` and the callback of the API carried by the e-mails.
+    ...(linkHost === null
+      ? {}
+      : {
+          intentFilters: [
+            {
+              action: 'VIEW',
+              autoVerify: true,
+              data: [
+                { scheme: 'https', host: linkHost, pathPrefix: '/auth/mobile' },
+                { scheme: 'https', host: linkHost, pathPrefix: '/api/v1/auth/callback' },
+              ],
+              category: ['BROWSABLE', 'DEFAULT'],
+            },
+          ],
+        }),
     adaptiveIcon: {
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundColor: CANVAS,
