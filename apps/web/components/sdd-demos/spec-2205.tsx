@@ -378,10 +378,9 @@ export default function Spec2205Demo() {
             <dd>
               Les {parity.engagement ?? 0} scénarios du groupe{' '}
               <code className="font-mono text-xs">engagement</code> rejouent à l’identique entre
-              Hono et la façade, et les groupes déjà enregistrés n’ont pas régressé : dix scénarios
-              au total sur la campagne de clôture ({parityTotal} scénarios enregistrés dans
-              l’oracle, tous contextes confondus). Les mutations et les routes à paramètre de chemin
-              sont prouvées par l’intégration serveur.
+              Hono et la façade, et les groupes déjà enregistrés n’ont pas régressé : {parityTotal}{' '}
+              scénarios rejoués au total sur la campagne de clôture, tous contextes confondus. Les
+              mutations et les routes à paramètre de chemin sont prouvées par l’intégration serveur.
             </dd>
           </div>
           <div>
