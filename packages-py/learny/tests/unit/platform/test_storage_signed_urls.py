@@ -232,8 +232,7 @@ async def test_a_signed_url_that_already_carries_its_token_is_kept() -> None:
 
     url = await storage(handler).sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
     assert url == (
-        f"http://127.0.0.1:54321/storage/v1/object/upload/sign/resources/{PATH}"
-        "?token=server-token"
+        f"http://127.0.0.1:54321/storage/v1/object/upload/sign/resources/{PATH}?token=server-token"
     )
 
 
