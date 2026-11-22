@@ -108,6 +108,15 @@ la liste ordonnée des types de trames reçues par le client à celle de `sse.ch
 `data: [DONE]\n\n`. La page de démonstration affiche cette séquence lue dans le même oracle, et son
 e2e vérifie l'ordre reçu sur le fil.
 
+## Isolation corrigée — l'événement du test de flux
+
+`test_tutor_stream.py::test_the_answer_is_streamed_in_order_and_persisted_complete` comptait les
+lignes de `public.event_outbox` sans filtre : la table est partagée par toute la base et un
+événement `tutor/question-asked` commité par un autre run (e2e compris) faisait échouer le compte.
+La requête est désormais bornée à la conversation du test (`data->>'conversationId'`), à assertions
+identiques — un seul événement pour ce message, même texte, même identifiant. Aucun contrat, aucun
+oracle et aucun libellé modifié ; le test est seulement isolé des runs précédents.
+
 ## Anomalie trouvée et corrigée — validation stricte des enums (ADR-2030)
 
 Le test de bout en bout par la façade a révélé que `me.ai.credentials.create` répondait 422
