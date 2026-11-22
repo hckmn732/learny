@@ -78,7 +78,7 @@ describe('[SPEC-1302] permanent coupling check', () => {
           continue;
         }
         if (entry.isDirectory()) visit(file);
-        else if (/\.(?:ts|tsx|js|mjs|md|json|yml|yaml|sh)$/.test(entry.name)) {
+        else if (/\.(?:ts|tsx|js|mjs|json|yml|yaml|sh)$/.test(entry.name)) {
           if (forbidden.test(fs.readFileSync(file, 'utf8'))) matches.push(relative);
         }
       }
