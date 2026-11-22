@@ -9,9 +9,9 @@ dont **0** sont déjà `py` dans `api/ownership.yaml` au démarrage (toutes `ts`
 
 | Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
 |---|---|---|---|---|
-| learning | 15 | 15 | 0 | contexte terminé : `apply-result.ts` et le service `review` sont portés |
-| assessments | 26 | 17 | 9 | domaine porté ; 17 opérations servies (étapes 5 et 6) |
-| **Total** | **41** | **32** | **9** | |
+| learning | 15 | 15 | 0 | contexte terminé : `apply-result.ts`, `applyLearningResult` et le service `review` sont portés |
+| assessments | 26 | 26 | 0 | contexte terminé : étapes 5, 6 et 7 |
+| **Total** | **41** | **41** | **0** | |
 
 ## Comptage
 
@@ -112,22 +112,22 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 | [x] | `exam.format.confirm` | POST | `/api/v1/formations/:fid/mock-exams/format` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
 | [x] | `exam.intro` | GET | `/api/v1/formations/:fid/mock-exams` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
 | [x] | `exam.questions.mark` | PUT | `/api/v1/mock-exams/:aid/marks/:pos` | ts | `mock-exams.ts` | activities, answers, attempts, brick_versions, bricks, chapters, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, resources, review_logs, schedule_slots | — |
-| [ ] | `exercises.detail` | GET | `/api/v1/formations/:fid/modules/:mid/exercises/:aid` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [ ] | `exercises.hint` | POST | `/api/v1/modules/:mid/exercises/:aid/hint` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [ ] | `exercises.saveDraft` | PUT | `/api/v1/exercises/:aid/draft` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [ ] | `exercises.start` | POST | `/api/v1/modules/:mid/exercises/:aid/attempts` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [ ] | `exercises.submit` | POST | `/api/v1/exercises/:aid/submissions` | ts | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
-| [x] | `offline.pack` | GET | `/api/v1/offline/pack` | ts | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `offline.spec.ts` |
-| [ ] | `offline.sync` | POST | `/api/v1/sync/offline-answers` | ts | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `sync-route.test.ts`, `review-automations.spec.ts`, `offline.spec.ts` |
+| [x] | `exercises.detail` | GET | `/api/v1/formations/:fid/modules/:mid/exercises/:aid` | py | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
+| [x] | `exercises.hint` | POST | `/api/v1/modules/:mid/exercises/:aid/hint` | py | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
+| [x] | `exercises.saveDraft` | PUT | `/api/v1/exercises/:aid/draft` | py | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
+| [x] | `exercises.start` | POST | `/api/v1/modules/:mid/exercises/:aid/attempts` | py | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
+| [x] | `exercises.submit` | POST | `/api/v1/exercises/:aid/submissions` | py | `exercises.ts` | activities, answers, attempts, brick_versions, bricks, formations, its, modules, notion_states, notions, profiles, public, resources, review_logs | — |
+| [x] | `offline.pack` | GET | `/api/v1/offline/pack` | py | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `offline.spec.ts` |
+| [x] | `offline.sync` | POST | `/api/v1/sync/offline-answers` | py | `offline.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, modules, notion_states, notions, offline_sync_receipts, one, profiles, public, review_logs, schedule_slots, started_at, two | `sync-route.test.ts`, `review-automations.spec.ts`, `offline.spec.ts` |
 | [x] | `quiz.answers.check` | POST | `/api/v1/attempts/:aid/answers/:pos/check` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [x] | `quiz.answers.save` | PUT | `/api/v1/attempts/:aid/answers/:pos` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [x] | `quiz.attempts.create` | POST | `/api/v1/modules/:mid/quiz/attempts` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [x] | `quiz.attempts.get` | GET | `/api/v1/attempts/:aid` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
 | [x] | `quiz.attempts.result` | GET | `/api/v1/attempts/:aid/result` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
 | [x] | `quiz.attempts.submit` | POST | `/api/v1/attempts/:aid/submit` | ts | `attempts.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, chapters, courses, formations, group_members, groups, its, module_progress, modules, notion_states, notions, profiles, public, review_logs | — |
-| [ ] | `remediation.complete` | POST | `/api/v1/modules/:mid/remediation/complete` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
-| [ ] | `remediation.get` | GET | `/api/v1/modules/:mid/remediation` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
-| [ ] | `remediation.prepare` | POST | `/api/v1/modules/:mid/remediation` | ts | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
+| [x] | `remediation.complete` | POST | `/api/v1/modules/:mid/remediation/complete` | py | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
+| [x] | `remediation.get` | GET | `/api/v1/modules/:mid/remediation` | py | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
+| [x] | `remediation.prepare` | POST | `/api/v1/modules/:mid/remediation` | py | `quiz-result.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, citations, course_sections, courses, formations, group_members, groups, its, modules, notion_states, notions, persisted, profiles, public, review_logs | — |
 
 ## Étape 5 — tranche `assessments` (8 des 26 opérations)
 
@@ -473,9 +473,10 @@ Total de la suite Python après l'étape 6 : **1425 tests**, dont 40 ajoutés.
 
 - `exercises.detail`, `exercises.hint`, `exercises.saveDraft`, `exercises.start`,
   `exercises.submit`, `remediation.get`, `remediation.prepare`, `remediation.complete` et
-  `offline.sync` restent `ts` : elles dépendent de la génération d'exercices et de remédiation par
-  le tuteur (`ensurePracticeExercise`, `requestRemediationPreparation`) et du journal de révision
-  hors ligne, hors de cette tranche. Leur DTO n'est pas modifié.
+  `offline.sync` restaient `ts` à cette étape (levé à l'étape 7) : elles dépendaient de la
+  génération d'exercices et de remédiation par le tuteur (`ensurePracticeExercise`,
+  `requestRemediationPreparation`) et du journal de révision hors ligne. Leur DTO n'est pas
+  modifié.
 - `quiz.attempts.create` renvoie `preparing` quand la banque est épuisée, sans émettre la demande de
   génération de variantes (`requestQuizRegeneration`, SPEC-513) : ce service n'existe pas encore
   côté Python. Le DTO et le délai de reprise sont identiques au TypeScript, aucune tentative n'est
@@ -489,3 +490,67 @@ Total de la suite Python après l'étape 6 : **1425 tests**, dont 40 ajoutés.
   (`applyLearningResult`) et le déblocage du module suivant ne sont donc pas déclenchés par le
   worker Python. Aucun test de parité ne l'observe.
 - Aucune notification `engagement` (SPEC-2205) n'est émise sur ces chemins, comme côté TypeScript.
+
+## Étape 7 — exercices, remédiation et synchronisation hors ligne (9 dernières opérations)
+
+| Opération | Requêtes (`infrastructure/queries.py`) | Cas d'usage | Domaine pur | Tests d'intégration serveur |
+|---|---|---|---|---|
+| `exercises.detail` | `read_exercise`, `read_exercise_notion_state`, `read_exercise_latest_attempt` | `application/exercises.get_practice_exercise` | `domain/exercise.py` | `test_assessments_exercises.py` |
+| `exercises.start` | `lock_exercise_attempt`, `lock_exercise_latest_attempt`, `lock_exercise_activity`, `read_next_exercise_attempt_no`, `insert_exercise_attempt` | `application/exercises.start_exercise_attempt` | — | idem |
+| `exercises.saveDraft` | `read_exercise_brick_version_id`, `upsert_exercise_answer` | `application/exercises.save_exercise_draft` | `domain/exercise.parse_submission`, `validate_production` | idem |
+| `exercises.hint` | `increment_exercise_hints` | `application/exercises.request_exercise_hint` | — | idem |
+| `exercises.submit` | `read_owned_resource_file`, `update_exercise_graded_attempt`, `update_exercise_mastery_after` | `application/exercises.submit_exercise` + `learning.application.apply_result.apply_learning_result` | `domain/exercise.grade_exercise` (tuteur déterministe `mock_tutor`) | `test_assessments_exercise_submit.py` |
+| `remediation.get` | `read_latest_remediation`, `read_remediation_module` + `application/quiz.get_attempt` | `application/remediation.get_remediation` | — | `test_assessments_remediation.py` |
+| `remediation.prepare` | `read_remediation_gaps`, `read_remediation_bank`, `read_remediation_excerpts`, `read_existing_remediation`, `insert_remediation_activity`, `archive_other_remediations`, `insert_remediation_attempt`, `insert_remediation_answer` | `application/remediation.prepare_remediation` | plan structuré `RemediationPlan` (pydantic, même schéma que le TS) | idem |
+| `remediation.complete` | `read_latest_remediation`, `read_unchecked_remediation_answers`, `read_remediation_answer_scores`, `update_remediation_graded_attempt`, `archive_remediation_activity` | `application/remediation.complete_remediation` | — | idem |
+| `offline.sync` | `sync_receipt_exists`, `insert_sync_receipt`, `read_sync_session`, `read_sync_activity_owner`, `read_sync_brick`, `read_sync_answer_position`, `insert_sync_answer`, `read_sync_profile_timezone` | `application/offline_sync.sync_offline_answers` | `domain/bricks.grade_brick` + `learning.application.review_games` | `test_assessments_offline_sync.py` |
+
+Conventions respectées : SQL copié du TypeScript (mêmes colonnes, `order by`, `for update`, verrou
+consultatif `exercise-attempt:<apprenant>:<exercice>`), un cas d'usage par fonction de service,
+mêmes codes `AppError` et textes de `locale_fr`, ports explicites, handlers sans logique. Le
+domaine des briques reste la seule autorité de correction ; `validate_production` et
+`grade_exercise` sont purs et ne sont pas dupliqués dans la couche application.
+
+Le plan de remédiation passe par `learny.platform.llm` : tâche `gaps`, prompt
+`tutor.remediation-plan`, scénario mock `remediation-plan` — **la même fixture**
+`packages/llm/fixtures/gaps/remediation-plan-sap-m3.json` que le TypeScript. Les identifiants de
+notion inconnus du modèle simulé sont alignés sur l'ordre d'entrée du prompt, comme côté TS, et le
+plan est borné par le schéma (1 à 3 items, textes de 1 200 et propositions de 120 caractères).
+
+`apply_learning_result` (port de `applyLearningResult`) devient public dans
+`learny.learning.application.apply_result` : verrou consultatif `learning:<apprenant>`, plan par
+notion, `daily_activity` avec la source `attempt:<tentative>`, consommation des actions
+`micro_seance` et événements `gap/detected`, `gap/nature-changed`, `gap/cleared` avec les
+identifiants de déduplication du TypeScript. `exercises.submit` l'appelle après le commit ;
+`remediation.complete` l'appelle pour la tentative terminée.
+
+### Tests
+
+| Fichier | Cas | Couverture |
+|---|---|---|
+| `tests/unit/assessments/test_validate_production.py` | 6 | tableau typé et équilibré, déséquilibre avant le tuteur, cellule non numérique, valeur hors liste, explication obligatoire, productions texte/fichier/lien |
+| `tests/unit/assessments/test_grade_exercise.py` | 6 | barème de 10, pénalité d'indice, sous-scores hors bornes, plafond, production invalide sans appel au tuteur, somme des critères |
+| `tests/unit/assessments/test_sync.py` | 3 | tri par `answeredAt`, plafonnement à l'instant serveur, expiration au jour local et à sept jours |
+| `tests/unit/assessments/test_remediation_plan.py` | 6 | prompt et échappement des données, fixture mock identique et alignement des notions, bornes du plan, texte de secours, préférence par nature et empreintes vues, notion étrangère exclue |
+| `tests/integration/assessments/test_assessments_exercises.py` | 7 | lecture sans tentative, 404 (autre apprenant, autre module), création puis reprise de l'unique tentative, deux indices puis refus, brouillon rejoué sans correction, production d'un autre type refusée, brouillon relu |
+| `tests/integration/assessments/test_assessments_exercise_submit.py` | 6 | correction, maîtrise appliquée (journal FSRS, `daily_activity`), événement `exercise/submitted`, rejeu sans second effet, pénalité d'indice, production invalide sans écriture, verdict `retry` et lien de lacunes, RLS |
+| `tests/integration/assessments/test_assessments_remediation.py` | 7 | `none` sans remédiation, demande explicite (brouillon + événement `remediation/requested`), plan, extraits et deux questions par notion, rejeu de la remédiation existante, refus sans tentative échouée, complétion refusée si question non vérifiée, complétion (score, maîtrise, archivage) |
+| `tests/integration/assessments/test_assessments_offline_sync.py` | 7 | réponse renotée et journalisée, rejeu `duplicate`, `EXPIRED`, `FORBIDDEN`, conflit de position, clôture de session, ordre d'application |
+
+Total de la suite Python après l'étape 7 : **1473 tests**, dont 48 ajoutés (6 + 6 + 3 + 6 unitaires,
+7 + 6 + 7 + 7 d'intégration).
+
+### Dettes consignées (reprises par leur spec propriétaire)
+
+- Les consommateurs `module-unlock`, `exam-deadline` et `remediation-prepare` (déclenché par
+  `remediation/requested`, émis par `request_remediation_preparation`) restent `ts` jusqu'à
+  SPEC-2207 : les cas d'usage sont portés, les événements sont écrits dans la transaction métier et
+  la fixture mock est testée, mais le branchement worker arrive en SPEC-2207 (ADR-2014).
+- `apply_learning_result` n'est pas encore appelé par `quiz.attempts.submit` : ce chemin est
+  déclenché par le consommateur `quiz-grade` (`ts` jusqu'à SPEC-2207). Le cas d'usage est
+  désormais disponible, public et couvert par les tests d'exercice et de remédiation.
+- `ensurePracticeExercise` (création idempotente de l'exercice d'une notion, fixture déterministe
+  du TS) n'est pas porté : aucune opération ni consommateur du périmètre ne l'appelle ; il est
+  consommé par l'automatisation `jeu-lacune` (SPEC-2205) et par les e2e SPEC-613. Les cinq
+  opérations servies lisent un exercice déjà créé.
+- Aucune notification `engagement` n'est émise sur ces chemins, comme côté TypeScript.

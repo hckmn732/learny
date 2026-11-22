@@ -150,3 +150,17 @@ chemin, ces tests portent les cas de comportement) :
 | `packages/services/src/quiz/start.ts` | 8 cas de création (matérialisation, reprise, module verrouillé, module sans notion, banque vide ou trop petite en `preparing`, portail de nouvelle tentative, RLS) | `tests/integration/assessments/test_assessments_quiz_start.py` |
 | `packages/services/src/quiz/submit.ts` | 7 cas de soumission et de score final (événement, rejeu à identifiant distinct, tentative déjà notée, question non vérifiée, attente de correction ouverte, score calculé, RLS) | `tests/integration/assessments/test_assessments_quiz_submit.py` |
 | `packages/services/src/quiz/result.ts` + `retry-gate.ts` | 6 cas de résultat (score provisoire, lacunes et points manquants, notions maîtrisées et historique, portail lu dans l'action gelée, message de délai dans le fuseau, RLS) | `tests/integration/assessments/test_assessments_quiz_result.py` |
+
+## Étape 7 — exercices, remédiation et synchronisation hors ligne
+
+| Test TypeScript source | Cas source | Module pytest | Cas portés | Écart |
+|---|---|---|---|---|
+| `packages/services/src/exercises/validate-production.test.ts` | 6 | `tests/unit/assessments/test_validate_production.py` | tableau équilibré, déséquilibre, cellule non numérique, valeur hors liste, explication, trois types de production | les messages attendus viennent des constantes `locale_fr`, jamais d'un littéral |
+| `packages/services/src/exercises/grade-exercise.test.ts` | 6 | `tests/unit/assessments/test_grade_exercise.py` | barème, pénalité d'indice, bornes du tuteur, plafond, production invalide, somme des critères | `z.uuid`/schéma remplacés par `parse_instruction`, mêmes valeurs |
+| `packages/services/src/offline/sync.test.ts` | 3 | `tests/unit/assessments/test_sync.py` | tri, plafonnement, expiration | mêmes instants et fuseau que le test source |
+| `packages/services/src/remediation/index.test.ts` | 13 | `tests/integration/assessments/test_assessments_remediation.py` + `tests/unit/assessments/test_remediation_plan.py` | 7 cas serveur (absente, demande explicite, plan persisté, rejeu, sans tentative échouée, complétion refusée, complétion) et 6 cas purs (prompt, fixture, bornes, secours, sélection, notion étrangère) | l'automatisme désactivé et l'échec du tuteur sont couverts par le cas de secours pur et par `onAiUnavailable` ; pas de base factice |
+| `packages/services/test/integration/offline-sync.test.ts` | 6 | `tests/integration/assessments/test_assessments_offline_sync.py` | réponse renotée + journal, `duplicate`, conflit, `EXPIRED`, `FORBIDDEN`, indépendance des entrées (ordre vérifié) | les identifiants sont figés comme dans la suite source |
+| `packages/services/test/integration/practice-exercise.test.ts` | 6 | `tests/integration/assessments/test_assessments_exercises.py`, `test_assessments_exercise_submit.py` | lecture, création/reprise, brouillon, indices, correction, rejeu | `ensurePracticeExercise` (génération idempotente) n'est pas porté : aucun appel du périmètre (dette `scope.md`, SPEC-2205) |
+
+Treize cas unitaires et vingt cas d'intégration ajoutés par l'étape 7 ; la suite Python passe de
+1425 à **1473 tests** et `api/inventory.json` reste à jour (`inventory.mjs --check`).

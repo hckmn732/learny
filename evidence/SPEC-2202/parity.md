@@ -144,3 +144,45 @@ consultatif et effets de bord en base.
   n'est encore révisée par FSRS côté Python.
 - `exercises.*` (5), `remediation.*` (3) et `offline.sync` restent `ts` : génération d'exercices et
   de remédiation par le tuteur et journal de révision hors ligne, hors de cette tranche.
+
+## Contexte `assessments` (étape 7 — 9 dernières opérations basculées)
+
+Même méthode, exécutée après la bascule des neuf dernières opérations : clés Supabase locales lues
+par `supabase status -o env`, Hono sur `:3112` (`PORT=3112`, `JOBS_MODE=inline`,
+`EMAIL_MODE=memory`, `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`, `LLM_MODE=mock`, `TZ=UTC`), puis
+façade sur `:3101` (`PY_HONO_UPSTREAM_URL=http://127.0.0.1:3112`, `LLM_MODE=mock`).
+
+```
+$ pnpm parity:record --target http://127.0.0.1:3112 --group assessments
+Recorded 1 scenarios against http://127.0.0.1:3112
+
+$ git status --short api/oracles/recordings/reads.json
+(vide : l'oracle réenregistré est identique à celui de l'étape 6)
+
+$ pnpm parity:check --target http://127.0.0.1:3101 --group assessments
+Parity OK: 1 scenarios replay identically against http://127.0.0.1:3101.
+```
+
+**Zéro divergence.** L'enregistrement n'a modifié aucune ligne de
+`api/oracles/recordings/reads.json` et le rejeu contre la façade est identique.
+
+`offline.pack` reste la seule lecture du contexte sans paramètre de chemin, donc la seule que
+l'outil génère. Les neuf opérations basculées portent un paramètre de chemin
+(`exercises.detail`, `exercises.start`, `exercises.hint`, `exercises.saveDraft`,
+`exercises.submit`, `remediation.get`, `remediation.prepare`, `remediation.complete`) ou sont une
+mutation (`offline.sync`) : leur comportement est prouvé par les tests d'intégration serveur
+(`packages-py/learny/tests/integration/assessments/test_assessments_exercises.py`,
+`test_assessments_exercise_submit.py`, `test_assessments_remediation.py`,
+`test_assessments_offline_sync.py`) — statuts, corrections, événements, idempotence, verrous
+consultatif et effets de bord en base.
+
+### Dettes de l'étape 7 (reprises par leur spec propriétaire)
+
+- Les consommateurs `module-unlock`, `exam-deadline` et `remediation-prepare` restent `ts`
+  jusqu'à SPEC-2207 : les cas d'usage sont portés et les événements émis dans la transaction, mais
+  le branchement worker arrive en SPEC-2207 (ADR-2014).
+- `apply_learning_result` est porté et testé, mais `quiz.attempts.submit` ne l'appelle toujours
+  pas dans la requête : c'est le consommateur `quiz-grade` (SPEC-2207) qui l'exécutera.
+- `ensurePracticeExercise` n'est pas porté : aucune opération ni consommateur du périmètre ne
+  l'appelle (automatisation `jeu-lacune`, SPEC-2205). Les cinq opérations d'exercice lisent un
+  exercice déjà créé ; le DTO est inchangé.
