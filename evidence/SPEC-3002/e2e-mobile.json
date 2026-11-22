@@ -1,0 +1,126 @@
+{
+  "spec": "SPEC-3002",
+  "platform": "android",
+  "transport": "agent",
+  "device": {
+    "serial": "emulator-5554",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400",
+    "platform": "android"
+  },
+  "tags": [
+    "SPEC-3002"
+  ],
+  "startedAt": "2026-11-22T16:49:05.384Z",
+  "finishedAt": "2026-11-22T16:52:34.435Z",
+  "passed": 3,
+  "failed": 1,
+  "videos": 1,
+  "visual": 0,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3002-controles.yaml",
+      "name": "SPEC-3002 controles",
+      "tags": [
+        "SPEC-3002",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 118.158,
+      "message": null,
+      "videos": [
+        "artifacts/SPEC-3002-controles/SPEC-3002-controles.mp4"
+      ],
+      "screenshots": [
+        "artifacts/SPEC-3002-controles/SPEC-3002-controles.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3002 controles",
+        "status": "failed",
+        "diffRatio": 0.1638,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-controles/SPEC-3002-controles.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3002-controles.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-controles/SPEC-3002-controles.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3002-feuilles.yaml",
+      "name": "SPEC-3002 feuilles",
+      "tags": [
+        "SPEC-3002",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 47.723,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/SPEC-3002-feuilles/SPEC-3002-feuilles.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3002 feuilles",
+        "status": "failed",
+        "diffRatio": 0.1638,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-feuilles/SPEC-3002-feuilles.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3002-feuilles.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-feuilles/SPEC-3002-feuilles.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3002-galerie.yaml",
+      "name": "SPEC-3002 galerie",
+      "tags": [
+        "SPEC-3002"
+      ],
+      "status": "failed",
+      "durationSec": 26.369,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/SPEC-3002-galerie/SPEC-3002-galerie.png"
+      ],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3002-jetons.yaml",
+      "name": "SPEC-3002 jetons",
+      "tags": [
+        "SPEC-3002",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 7.049,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/SPEC-3002-jetons/SPEC-3002-jetons.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3002 jetons",
+        "status": "failed",
+        "diffRatio": 0.1638,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-jetons/SPEC-3002-jetons.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3002-jetons.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3002/artifacts/SPEC-3002-jetons/SPEC-3002-jetons.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3002 controles",
+      "status": "failed",
+      "diffRatio": 0.1638
+    },
+    {
+      "flow": "SPEC-3002 feuilles",
+      "status": "failed",
+      "diffRatio": 0.1638
+    },
+    {
+      "flow": "SPEC-3002 jetons",
+      "status": "failed",
+      "diffRatio": 0.1638
+    }
+  ]
+}

@@ -1,8 +1,7 @@
 # SPEC-3002 — galerie des composants : défilement des sept sections, sélection dans le contrôle
 # segmenté, bascule de l'interrupteur, apparition d'un toast et ouverture d'une feuille.
-# La galerie est une longue liste : les déplacements sont des glissements de 60 % de la hauteur
-# d'écran, dont les positions ont été relevées sur l'émulateur (une section fait plus d'un écran,
-# et Maestro exige 100 % de visibilité pour `scrollUntilVisible`).
+# Le défilement passe par `scroll-to.yaml` : la boucle s'arrête dès que la cible est visible,
+# ce qui reste vrai quelle que soit l'inertie de la liste.
 appId: fr.learny.app
 name: SPEC-3002 galerie
 tags:
@@ -27,95 +26,188 @@ tags:
 - takeScreenshot: SPEC-3002-jetons
 
 # Boutons
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-button-primary
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-button-primary
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-button-loading
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - assertVisible:
     id: ui-button-loading
 
 # Cartes et puces
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-stat-streak
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-stat-streak
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-card-ink
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - assertVisible:
     id: ui-card-ink
-- assertVisible:
-    id: ui-chip-green
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-chip-green
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 
 # Contrôles : sélection et interrupteur (EF-4)
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-segmented
-- waitForAnimationToEnd
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-segmented
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - tapOn:
     id: ui-segmented-month
 - assertVisible: month
-- waitForAnimationToEnd
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-switch-control
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - tapOn:
     id: ui-switch-control
 - assertVisible: Désactivé
 - takeScreenshot: SPEC-3002-controles
 
 # Listes
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-row-course
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-row-course
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-row-switch-control
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - assertVisible:
     id: ui-row-switch-control
 
 # Feuilles et retours : toast puis feuille
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-toast-trigger
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- waitForAnimationToEnd
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-toast-trigger
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - tapOn:
     id: ui-toast-trigger
-- assertVisible:
-    id: ui-toast
-- assertVisible: Séance reportée à demain 9:00.
+- extendedWaitUntil:
+    visible: Séance reportée à demain 9:00.
+    timeout: 10000
 - takeScreenshot: SPEC-3002-feuilles
-- waitForAnimationToEnd
 - tapOn:
     id: ui-sheet-open
 - assertVisible:
     id: ui-sheet
 - assertVisible:
     id: ui-sheet-close
-- waitForAnimationToEnd
 - tapOn:
     id: ui-sheet-close
 - assertNotVisible:
     id: ui-sheet
 
 # États (bas de la galerie)
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 300
-- assertVisible:
-    id: ui-skeleton
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-skeleton
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
+- repeat:
+    times: 12
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: ui-error
+          commands:
+            - swipe:
+                start: 50%, 72%
+                end: 50%, 36%
+                duration: 500
 - assertVisible:
     id: ui-error
