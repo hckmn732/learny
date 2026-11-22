@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T13:56:50.692Z",
+  "updatedAt": "2026-11-22T14:01:04.466Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6735,12 +6735,12 @@
       "validations": {}
     },
     "SPEC-3001": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-22T12:19:33.823Z",
-      "completedAt": null,
+      "completedAt": "2026-11-22T14:01:04.464Z",
       "branch": "spec/SPEC-3001-application-expo-monorepo-et-outillage-s",
-      "commit": null,
+      "commit": "6a916850",
       "lastError": null,
       "validations": {
         "lint": {
