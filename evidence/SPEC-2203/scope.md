@@ -88,17 +88,24 @@ ci-dessous sont la liste exacte des entrées à basculer (constat consigné dans
 Aucune route spéciale n'est concernée. Le worker (`apps/worker-py`) branchera `process_resource`
 en SPEC-2207 ; le cas d'usage est dès maintenant appelable et testé.
 
-## Reste à faire (reprise)
+## Clôture (2026-11-22)
 
-1. Page de démonstration `/_dev/sdd/SPEC-2203` et tests e2e `@SPEC-2203 @visual` : hors de cette
-   tranche, le contexte est basculé mais la page n'est pas encore livrée.
-2. `acceptance.md` à finaliser (CA-1 et CA-3 peuvent passer ✅ ; CA-2 reste une campagne non
-   exécutée, CA-5 attend la page et l'e2e).
-3. `validate.mjs` puis `complete.mjs` (jamais lancés dans cette tranche ; CP-21 reste `pending`).
-4. Cas d'usage de lecture et de correction des sections : couverts depuis cette tranche par
+1. Page de démonstration `/_dev/sdd/SPEC-2203` livrée : `apps/web/components/sdd-demos/spec-2203.tsx`
+   et entrée `'SPEC-2203'` dans `apps/web/app/%5Fdev/sdd/registry.ts`. Les compteurs (18 / 18, 0
+   relais) sont lus dans `api/inventory.json` et `api/ownership.yaml`.
+2. e2e `@SPEC-2203 @visual` livrés : `apps/web/e2e/specs/p22/spec-2203.spec.ts`, 2 tests verts
+   (`modules.screen`, `modules.course`, `resources.rename` et le contrat 404), captures desktop
+   1440 × 900 et mobile 390 × 844, axe sans violation bloquante.
+3. Campagne de parité exécutée : groupe `content` vide par construction (les quatre lectures portent
+   un paramètre de chemin, les quatorze autres opérations sont des mutations), 14 scénarios des
+   groupes existants rejoués à l'identique contre la façade, oracle inchangé. Voir `parity.md`.
+4. `acceptance.md` finalisé (CA-1 à CA-5 ✅) ; `validate.mjs` puis `complete.mjs --no-merge
+   --no-push` sont lancés après ce commit. **CP-21 reste `pending`** (décision du porteur, hors
+   périmètre de cette spécification).
+5. Cas d'usage de lecture et de correction des sections : couverts depuis cette tranche par
    `test_content_course.py`, `test_content_progress.py`, `test_content_sections.py` et
    `test_content_citation_source.py` ; les seuls cas TypeScript sans équivalent sont des états
    atteignables uniquement avec une transaction factice (voir `test-port-map.md`).
-5. Upload PDF vers l'API Files d'Anthropic : le port `UploadPdf` existe mais le défaut renvoie
+6. Upload PDF vers l'API Files d'Anthropic : le port `UploadPdf` existe mais le défaut renvoie
    `None` tant que la résolution BYOK n'est pas branchée (SPEC-2204) ; l'extraction texte reste
    complète, aucune donnée n'est perdue.
