@@ -10,6 +10,7 @@ export {
   DEFAULT_TRACK, DISPLAY_STATUSES, MAX_ATTEMPTS, STATUSES, activeTrack, displayStatus, emptySpecState, indexCatalog,
   isBlockedTransitively, nextAction, nextActionJson, nextAdrNumber, normalizeState, phaseOf, phaseUnlocked, progressSummary,
   readySpecs, renderProgressMarkdown, specTrack, trackConfig, trackOf, e2eVerdict, summarizePlaywright, visualVerdict,
+  maestroVerdict, mobileVisualVerdict, summarizeJest, summarizeMaestro, validationPlan,
 } from './core.mjs';
 
 /** Piste active de la commande : SDD_TRACK l'emporte sur `catalog.activeTrack` (ADR-1006). */
@@ -172,4 +173,84 @@ export function argSpec(catalog) {
   const spec = catalog.byId[id];
   if (!spec) die(`Spécification inconnue : ${id}`);
   return spec;
+}
+
+/**
+ * Copie les preuves d'une campagne Maestro dans `evidence/<SPEC>/` (SPEC-3001 EF-4) : vidéos,
+ * captures et comparaisons visuelles réellement produites, jamais inventées.
+ */
+export function collectMobileEvidence(spec, resultsDir, evidenceRoot) {
+  const dir = path.join(evidenceRoot, spec.id);
+  const reportPath = path.join(resultsDir, 'e2e-mobile.json');
+  if (!fs.existsSync(reportPath)) return { videos: 0, screenshots: 0, visual: 0, report: false };
+
+  let report;
+  try {
+    report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  } catch {
+    return { videos: 0, screenshots: 0, visual: 0, report: false };
+  }
+
+  for (const sub of ['video', 'screenshots', 'visual']) fs.mkdirSync(path.join(dir, sub), { recursive: true });
+  fs.copyFileSync(reportPath, path.join(dir, 'e2e-mobile.json'));
+  // The report of every level of the campaign travels with the evidence (unit, integration, Jest).
+  for (const report of ['unit.json', 'integration.json', 'jest.json', 'e2e-mobile.xml']) {
+    const source = path.join(resultsDir, report);
+    if (fs.existsSync(source)) fs.copyFileSync(source, path.join(dir, report));
+  }
+
+  const slug = (text) => String(text).normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
+
+  let videos = 0;
+  let screenshots = 0;
+  let visual = 0;
+  for (const [index, flow] of (report.flows ?? []).entries()) {
+    const prefix = String(index + 1).padStart(2, '0');
+    const name = slug(flow.name ?? 'flux');
+    for (const rel of flow.videos ?? []) {
+      const src = path.join(resultsDir, rel);
+      if (!fs.existsSync(src)) continue;
+      fs.copyFileSync(src, path.join(dir, 'video', `${prefix}-${name}.mp4`));
+      videos += 1;
+    }
+    for (const rel of flow.screenshots ?? []) {
+      const src = path.join(resultsDir, rel);
+      if (!fs.existsSync(src)) continue;
+      fs.copyFileSync(src, path.join(dir, 'screenshots', `${prefix}-${name}.png`));
+      screenshots += 1;
+    }
+    const check = flow.visual;
+    if (!check) continue;
+    for (const [label, source] of [['capture', check.capture], ['baseline', check.baseline], ['diff', check.diff]]) {
+      if (typeof source !== 'string' || !fs.existsSync(source)) continue;
+      fs.copyFileSync(source, path.join(dir, 'visual', `${prefix}-${name}-${label}.png`));
+      visual += 1;
+    }
+  }
+
+  fs.writeFileSync(
+    path.join(dir, 'mobile-summary.md'),
+    `# Campagne Maestro — ${spec.id}\n\n- Date : ${nowIso()}\n- Plateforme : ${report.platform ?? 'android'}\n` +
+      `- Transport : ${report.transport ?? 'local'}\n- Appareil : ${JSON.stringify(report.device ?? {})}\n` +
+      `- Flux : ${String(report.passed ?? 0)} réussi(s), ${String(report.failed ?? 0)} échec(s)\n` +
+      `- Vidéos : ${String(videos)}\n- Captures : ${String(screenshots)}\n- Comparaisons visuelles : ${String(visual)}\n`,
+    'utf8',
+  );
+
+  // The generic summary (evidence.mjs) only knows the Playwright attachments: it is completed
+  // with the Maestro campaign so that the evidence directory tells the whole story.
+  const generic = path.join(dir, 'summary.md');
+  if (fs.existsSync(generic)) {
+    const lines = ['', '## Campagne mobile (Maestro)', ''];
+    lines.push('- Plateforme : ' + String(report.platform ?? 'android'));
+    lines.push('- Transport : ' + String(report.transport ?? 'local'));
+    lines.push('- Flux : ' + String(report.passed ?? 0) + ' réussi(s), ' + String(report.failed ?? 0) + ' échec(s)');
+    lines.push('- Vidéos : ' + String(videos) + ' (`video/`)');
+    lines.push('- Captures : ' + String(screenshots) + ' (`screenshots/`)');
+    lines.push('- Comparaisons visuelles : ' + String(visual) + ' (`visual/`)');
+    fs.appendFileSync(generic, lines.join('\n') + '\n', 'utf8');
+  }
+
+  return { videos, screenshots, visual, report: true };
 }

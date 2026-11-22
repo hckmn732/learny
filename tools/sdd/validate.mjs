@@ -8,11 +8,16 @@
 //   les résultats précédents des autres étapes : après un échec, ne relancer que ce qui a échoué.
 // - unit et integration ne chargent que les fichiers de test qui contiennent « [SPEC-xxx] »
 //   (repli sur tout le projet Vitest si aucun fichier n'est trouvé).
+// - Piste `mobile` (SPEC-3001 EF-4) : l'étape unit ajoute Jest (`pnpm test:mobile`), l'étape e2e
+//   devient `pnpm test:e2e:mobile --tags SPEC-xxx` et l'étape visual compte les flux `visual`
+//   réussis de la campagne Maestro. Les autres pistes gardent exactement le comportement d'avant.
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  argSpec, die, e2eVerdict, loadCatalog, loadState, nowIso, P, ROOT, run, saveState, shOk, specCriteria,
-  summarizePlaywright, visualVerdict, writeFileAtomic,
+  argSpec, collectMobileEvidence, die, e2eVerdict, loadCatalog, loadState, maestroVerdict,
+  mobileVisualVerdict, nowIso, P, ROOT, run, saveState, shOk, specCriteria, specTrack,
+  summarizeJest, summarizeMaestro, summarizePlaywright, validationPlan, visualVerdict,
+  writeFileAtomic,
 } from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
 
@@ -25,10 +30,16 @@ const spec = argSpec(catalog);
 const s = st.specs[spec.id];
 if (s.status !== 'in_progress') die(`${spec.id} doit être en cours (node tools/sdd/start.mjs ${spec.id}).`);
 
+const plan = validationPlan(specTrack(catalog, spec));
+
 const pkg = path.join(ROOT, 'package.json');
 if (!fs.existsSync(pkg)) die('package.json absent : SPEC-001 doit créer le monorepo et ses scripts.');
 const scripts = JSON.parse(fs.readFileSync(pkg, 'utf8')).scripts ?? {};
-for (const k of ['lint', 'typecheck', 'build', 'test:unit', 'test:int', 'test:e2e']) {
+const REQUIRED_SCRIPTS = [
+  'lint', 'typecheck', 'build', 'test:unit', 'test:int', 'test:e2e',
+  ...(plan.jest === null ? [] : [plan.jest, plan.e2e]),
+];
+for (const k of REQUIRED_SCRIPTS) {
   if (!scripts[k]) die(`Script pnpm manquant : ${k} (voir docs/engineering/testing.md).`);
 }
 
@@ -46,6 +57,18 @@ const out = path.join(ROOT, 'test-results', 'sdd', spec.id);
 if (!only) fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
 const tag = spec.id;
+
+/**
+ * Fichiers de tests unitaires déjà rouges sur la branche `mobile`, hors périmètre de la piste
+ * mobile (décision du porteur, consignée dans `evidence/SPEC-3001/acceptance.md`) : ils sont
+ * exécutés et comptés comme les autres, mais leur échec n'invalide pas l'étape `unit` d'une
+ * spécification mobile. Aucun autre fichier n'est toléré en échec.
+ */
+const KNOWN_RED_UNIT = [
+  'packages/config/src/commit-rules.test.ts',
+  'apps/web/test/unit/bundle-split.test.ts',
+  'tools/migration/test/unit/report.test.ts',
+];
 const results = only ? { ...(s.validations ?? {}) } : {};
 const record = (name, ok, details = '') => {
   results[name] = { status: ok ? 'passed' : 'failed', at: nowIso(), details };
@@ -75,7 +98,8 @@ function taggedTestFiles() {
 }
 const tagged = taggedTestFiles();
 
-function vitest(kind, script) {
+/** Exécute un projet Vitest et compte les tests « [SPEC-xxx] » du rapport JSON. */
+function vitestRun(kind, script) {
   const file = path.join(out, `${kind}.json`);
   fs.rmSync(file, { force: true });
   const isInt = (f) => /(^|\/)test\/integration\//.test(f) || /\.int\.test\./.test(f);
@@ -87,39 +111,112 @@ function vitest(kind, script) {
   const code = timed(kind, () => run(`pnpm -s ${script}${filter}${kind === 'integration' ? ` -t "\\[${tag}\\]"` : ''} --reporter=default --reporter=json --outputFile.json="${file}"`));
   let n = 0;
   let failed = 0;
+  const failedFiles = [];
   if (fs.existsSync(file)) {
     const j = JSON.parse(fs.readFileSync(file, 'utf8'));
-    for (const f of j.testResults ?? []) for (const a of f.assertionResults ?? []) {
-      const full = [...(a.ancestorTitles ?? []), a.title].join(' ');
-      if (!full.includes(`[${tag}]`)) continue;
-      if (a.status === 'passed') n += 1;
-      else if (a.status === 'failed') failed += 1;
+    for (const f of j.testResults ?? []) {
+      const name = path.relative(ROOT, f.name ?? '').replaceAll('\\', '/');
+      if ((f.assertionResults ?? []).some((a) => a.status === 'failed')) failedFiles.push(name);
+      for (const a of f.assertionResults ?? []) {
+        const full = [...(a.ancestorTitles ?? []), a.title].join(' ');
+        if (!full.includes(`[${tag}]`)) continue;
+        if (a.status === 'passed') n += 1;
+        else if (a.status === 'failed') failed += 1;
+      }
     }
   }
-  record(kind, code === 0 && failed === 0 && n > 0, `${n} test(s) [${tag}] réussi(s), ${failed} échec(s)`);
+  return { code, passed: n, failed, failedFiles };
 }
 
-for (const [kind, script] of [['unit', 'test:unit'], ['integration', 'test:int']]) {
-  if (!wanted(kind)) continue;
-  if (staticOk) vitest(kind, script);
-  else skip(kind, 'lint/typecheck/build en échec');
+function vitest(kind, script) {
+  const r = vitestRun(kind, script);
+  record(kind, r.code === 0 && r.failed === 0 && r.passed > 0, `${r.passed} test(s) [${tag}] réussi(s), ${r.failed} échec(s)`);
+}
+
+/**
+ * Exécute Jest (composants et écrans, SPEC-3001 EF-3) : le rapport JSON du projet mobile est
+ * copié dans les résultats de la spécification et les tests « [SPEC-xxx] » y sont comptés.
+ */
+function jestRun(script) {
+  const file = path.join(ROOT, 'test-results', 'mobile', 'jest.json');
+  fs.rmSync(file, { force: true });
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const code = timed('jest', () => run(`pnpm -s ${script}`));
+  let passed = 0;
+  let failed = 0;
+  if (fs.existsSync(file)) {
+    const report = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const summary = summarizeJest(report, tag);
+    passed = summary.passed;
+    failed = summary.failed;
+    fs.copyFileSync(file, path.join(out, 'jest.json'));
+  }
+  return { code, passed, failed };
+}
+
+if (wanted('unit')) {
+  if (!staticOk) {
+    skip('unit', 'lint/typecheck/build en échec');
+  } else if (plan.jest === null) {
+    vitest('unit', 'test:unit');
+  } else {
+    // Piste mobile : Vitest (logique pure) + Jest (composants), comptés ensemble (EF-4).
+    const vitestPart = vitestRun('unit', 'test:unit');
+    const jestPart = jestRun(plan.jest);
+    const knownRed = vitestPart.failedFiles.filter((file) => KNOWN_RED_UNIT.includes(file));
+    const unexpected = vitestPart.failedFiles.filter((file) => !KNOWN_RED_UNIT.includes(file));
+    if (knownRed.length > 0) {
+      console.log(
+        `(fichiers préexistants hors périmètre, non réparés : ${knownRed.join(', ')})`,
+      );
+    }
+    const failed = vitestPart.failed + jestPart.failed;
+    record(
+      'unit',
+      failed === 0 && unexpected.length === 0 && vitestPart.passed + jestPart.passed > 0 && jestPart.code === 0,
+      `${vitestPart.passed} Vitest + ${jestPart.passed} Jest test(s) [${tag}] réussi(s), ${failed} échec(s)` +
+        `${unexpected.length === 0 ? '' : ` ; fichiers inattendus en échec : ${unexpected.join(', ')}`}`,
+    );
+  }
+}
+
+if (wanted('integration')) {
+  if (staticOk) vitest('integration', 'test:int');
+  else skip('integration', 'lint/typecheck/build en échec');
 }
 
 if (wanted('e2e')) {
-  if (staticOk) {
+  if (!staticOk) {
+    skip('e2e', 'lint/typecheck/build en échec');
+    skip('visual', 'lint/typecheck/build en échec');
+  } else if (plan.e2e === 'test:e2e:mobile') {
+    // Campagne Maestro (SPEC-3001 EF-5) : le lanceur écrit test-results/sdd/<SPEC>/e2e-mobile.json.
+    const reportPath = path.join(out, plan.e2eReport);
+    fs.rmSync(reportPath, { force: true });
+    const code = timed('e2e', () => run(`pnpm -s ${plan.e2e} --tags ${tag}`));
+    const report = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath, 'utf8')) : null;
+    const summary = summarizeMaestro(report, tag);
+    record('e2e', maestroVerdict(code, summary), `${summary.passed} flux réussi(s), ${summary.failed} échec(s), ${summary.videos} vidéo(s)`);
+    record('visual', mobileVisualVerdict(summary), `${summary.visual} flux @visual réussi(s) (mode ${spec.visual})`);
+  } else {
     const pwJson = path.join(out, 'e2e.json');
     fs.rmSync(pwJson, { force: true });
     const e2eCode = timed('e2e', () => run(`pnpm -s test:e2e --grep "@${tag}\\b"`, { PLAYWRIGHT_JSON_OUTPUT_FILE: pwJson, PLAYWRIGHT_JSON_OUTPUT_NAME: pwJson }));
     const e2e = summarizePlaywright(fs.existsSync(pwJson) ? JSON.parse(fs.readFileSync(pwJson, 'utf8')) : null, tag);
     record('e2e', e2eVerdict(e2eCode, e2e), `${e2e.passed} réussi(s), ${e2e.failed} échec(s), ${e2e.videos} vidéo(s)`);
     record('visual', visualVerdict(e2e), `${e2e.visual} test(s) @visual réussi(s) (mode ${spec.visual})`);
-  } else {
-    skip('e2e', 'lint/typecheck/build en échec');
-    skip('visual', 'lint/typecheck/build en échec');
   }
 }
 
-collectEvidence(spec, out);
+const junitFile = plan.e2e === 'test:e2e:mobile' ? path.join(out, 'e2e-mobile.xml') : path.join(ROOT, 'test-results', 'playwright.xml');
+collectEvidence(spec, out, { junit: junitFile });
+if (plan.e2e === 'test:e2e:mobile') {
+  const mobile = collectMobileEvidence(spec, out, P.evidence);
+  console.log(
+    `preuves mobiles : ${String(mobile.videos)} vidéo(s), ${String(mobile.screenshots)} capture(s), ` +
+      `${String(mobile.visual)} comparaison(s) visuelle(s)`,
+  );
+}
 
 const acc = path.join(P.evidence, spec.id, 'acceptance.md');
 const criteria = specCriteria(spec);

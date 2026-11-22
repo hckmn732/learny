@@ -59,7 +59,11 @@
     "analyze": "ANALYZE=true pnpm --filter @learny/web build",
     "legal:check": "node tools/legal/check.mjs",
     "test:v1:journeys": "node apps/web/e2e/run-playwright.mjs --project=journeys --project=journeys-firefox --project=journeys-webkit",
-    "quality:journeys": "node tools/quality/check-v1-journeys.mjs"
+    "quality:journeys": "node tools/quality/check-v1-journeys.mjs",
+    "dev:mobile": "pnpm --filter @learny/mobile start",
+    "test:mobile": "pnpm --filter @learny/mobile exec jest --ci --json --outputFile ../../test-results/mobile/jest.json",
+    "test:e2e:mobile": "node apps/mobile/e2e/run-maestro.mjs",
+    "build:mobile:e2e": "node apps/mobile/e2e/build-e2e.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

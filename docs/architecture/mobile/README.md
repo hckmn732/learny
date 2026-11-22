@@ -8,6 +8,19 @@ pour un écran seul).
 Priorité : ADR > `docs/product/business-rules.md` > spécification > maquette mobile (lue avec les
 corrections d'ADR-3003) > ce canevas > autres documents.
 
+## 0. Versions installées par SPEC-3001 (2026-11-22)
+
+Expo **SDK 58** — `expo ~58.0.26`, React Native **0.88.1**, React **19.3.0**, Expo Router
+**58.0.32**, `expo-constants ~58.0.16`, `expo-font ~58.0.12`, `expo-linking ~58.0.17`,
+`expo-status-bar ~58.0.5`, `expo-system-ui ~58.0.7`, `react-native-screens ~4.30.1`,
+`react-native-safe-area-context ~5.11.1`, Jest **30.5.2** et `jest-expo ~58.0.15`,
+`@testing-library/react-native` **14.1.0** (rendu asynchrone). Nouvelle architecture et Hermes sont
+les seuls modes de React Native 0.88 : aucune option `newArchEnabled` ni `jsEngine` n'existe plus
+dans `app.config.ts` (ADR-3012).
+
+Commandes : `pnpm dev:mobile`, `pnpm test:mobile` (Jest), `pnpm test:e2e:mobile --tags SPEC-3xxx`
+(Maestro), `pnpm build:mobile:e2e` (APK de test local).
+
 ## 1. Périmètre et architecture
 
 - Une application `apps/mobile` (Expo, React Native, TypeScript strict) pour Android et iOS,

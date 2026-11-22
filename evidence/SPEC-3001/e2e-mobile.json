@@ -1,0 +1,55 @@
+{
+  "spec": "SPEC-3001",
+  "platform": "android",
+  "transport": "agent",
+  "device": {
+    "serial": "emulator-5554",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400",
+    "platform": "android"
+  },
+  "tags": [
+    "SPEC-3001"
+  ],
+  "startedAt": "2026-11-22T13:56:38.692Z",
+  "finishedAt": "2026-11-22T13:56:50.665Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "visual": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3001-demo.yaml",
+      "name": "SPEC-3001 demo",
+      "tags": [
+        "SPEC-3001",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 5.227,
+      "message": null,
+      "videos": [
+        "artifacts/SPEC-3001-demo/SPEC-3001-demo.mp4"
+      ],
+      "screenshots": [
+        "artifacts/SPEC-3001-demo/SPEC-3001-demo.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3001 demo",
+        "status": "passed",
+        "diffRatio": 0,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3001/artifacts/SPEC-3001-demo/SPEC-3001-demo.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3001-demo.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3001/artifacts/SPEC-3001-demo/SPEC-3001-demo.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3001 demo",
+      "status": "passed",
+      "diffRatio": 0
+    }
+  ]
+}
