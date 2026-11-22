@@ -13,6 +13,7 @@ import {
   QUERY_CACHE_STORAGE_KEY,
   readPersistedClient,
   resetCacheRestored,
+  restoredQueryCount,
 } from './persist';
 
 function memoryStore(): KeyValueStore & { readonly values: Map<string, string> } {
@@ -71,8 +72,16 @@ describe('[SPEC-3003] cache persistant (EF-4, CL-5)', () => {
   it('signale une restauration réussie et lit un cache persisté (CL-4)', async () => {
     resetCacheRestored();
     expect(isCacheRestored()).toBe(false);
-    markCacheRestored();
+    expect(restoredQueryCount()).toBe(0);
+
+    // A first launch restores zero query: the marker must not pretend a restore happened.
+    markCacheRestored(0);
+    expect(isCacheRestored()).toBe(false);
+    expect(restoredQueryCount()).toBe(0);
+
+    markCacheRestored(2);
     expect(isCacheRestored()).toBe(true);
+    expect(restoredQueryCount()).toBe(2);
 
     const store = memoryStore();
     await store.setItem(QUERY_CACHE_STORAGE_KEY, JSON.stringify({ timestamp: 1, buster: 'x' }));

@@ -7,9 +7,15 @@
 # `evidence/SPEC-3003/acceptance.md`), puis l'application est tuée et relancée : la session et le
 # cache persisté doivent revenir seuls (CL-4).
 #
-# Les assertions n'utilisent que des `id` et des textes ASCII : Maestro 2.12.1 abîme les
-# caractères accentués de son matcher `text` (« Connecté » arrive en « Connect? »), d'où
-# `sdd-session-state` qui expose l'état technique `signedIn` / `signedOut`.
+# Précautions imposées par Maestro 2.12.1 :
+# - `launchApp` démarre sur `/`, que `app/index.tsx` redirige vers la page de SPEC-3001 : on attend
+#   cette page (`sdd-health`) avant `openLink`, sinon le lien profond peut arriver pendant la
+#   redirection et ne pas être appliqué (constaté sur cet émulateur) ;
+# - son matcher `text` est ancré (correspondance sur toute la valeur) : un libellé partiel s'écrit
+#   `.*motif.*` ;
+# - les caractères accentués de ce matcher sont abîmés en transit (« Connecté » arrive en
+#   « Connect? ») : les assertions n'utilisent que des `id` et des textes ASCII, d'où
+#   `sdd-session-state` qui expose l'état technique `signedIn` / `signedOut`.
 appId: fr.learny.app
 name: SPEC-3003 session
 tags:
@@ -18,6 +24,11 @@ tags:
 ---
 - launchApp:
     clearState: true
+# La page d'accueil des builds SDD (SPEC-3001) : l'application est prête à recevoir un lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
 - openLink: learny:///_dev/sdd/SPEC-3003
 - assertVisible:
     id: sdd-title
@@ -25,34 +36,41 @@ tags:
 - extendedWaitUntil:
     visible:
       id: sdd-session-state
-      text: signedIn
+      text: '.*signedIn.*'
     timeout: 45000
 - extendedWaitUntil:
     visible:
       id: sdd-me-firstname
-      text: Alex
+      text: '.*Alex.*'
     timeout: 45000
 # CA-3 — les trois fragments du flux SSE, reçus l'un après l'autre.
 - extendedWaitUntil:
     visible:
       id: sdd-stream
-      text: fragment-1fragment-2fragment-3
+      text: '.*fragment-1fragment-2fragment-3.*'
     timeout: 45000
 - assertVisible:
     id: sdd-cache-status
 # CA-4 — coupure réseau : le bandeau apparaît, les données restent affichées.
 - tapOn:
     id: sdd-offline-toggle
+# CA-4 — l'état technique passe à `offline` et le bandeau affiche son libellé.
 - assertVisible:
-    id: offline-banner
-- assertVisible: Hors ligne
+    id: sdd-network-state
+    text: '.*offline.*'
+- assertVisible:
+    text: '.*Hors ligne.*'
 - assertVisible:
     id: sdd-me-firstname
-    text: Alex
+    text: '.*Alex.*'
 - takeScreenshot: SPEC-3003-session
 # CL-4 — redémarrage : la session chiffrée et le cache persisté sont restaurés (EF-4).
 - stopApp
 - launchApp
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
 - openLink: learny:///_dev/sdd/SPEC-3003
 - extendedWaitUntil:
     visible:
@@ -60,7 +78,7 @@ tags:
     timeout: 45000
 - assertVisible:
     id: sdd-session-state
-    text: signedIn
+    text: '.*signedIn.*'
 - assertVisible:
     id: sdd-me-firstname
-    text: Alex
+    text: '.*Alex.*'

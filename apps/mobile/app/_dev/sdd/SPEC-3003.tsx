@@ -19,7 +19,7 @@ import { nativeFetch } from '../../../src/api/transport';
 import { readDemoCredentials } from '../../../src/auth/demo-credentials';
 import { useSession } from '../../../src/auth/session';
 import { queryKeys } from '../../../src/data/keys';
-import { isCacheRestored, subscribeCacheRestored } from '../../../src/data/persist';
+import { isCacheRestored, restoredQueryCount, subscribeCacheRestored } from '../../../src/data/persist';
 import { isOnline, setOnlineForDemo } from '../../../src/offline/network';
 import { theme } from '../../../src/theme';
 import { Text } from '../../../src/ui/Text';
@@ -38,7 +38,12 @@ export default function Spec3003Route() {
   const [streamError, setStreamError] = useState<string | null>(null);
   const [online, setOnline] = useState(() => isOnline());
 
-  const restored = useSyncExternalStore(subscribeCacheRestored, isCacheRestored, isCacheRestored);
+  const restoredCount = useSyncExternalStore(
+    subscribeCacheRestored,
+    restoredQueryCount,
+    restoredQueryCount,
+  );
+  const restored = restoredCount > 0 && isCacheRestored();
 
   // EF-9 — the demonstration account signs in by itself; the password comes from the build
   // environment (`EXPO_PUBLIC_SDD_DEMO_PASSWORD`) and is never rendered.
@@ -154,6 +159,10 @@ export default function Spec3003Route() {
             {online ? t.offlineToggle : t.onlineToggle}
           </Text>
         </Pressable>
+        {/* ASCII state of the connection, asserted by the Maestro flow (EF-5, CA-4). */}
+        <Text variant="caption" tone="secondary" testID="sdd-network-state">
+          {`réseau : ${online ? 'online' : 'offline'}`}
+        </Text>
 
         <Pressable
           accessibilityRole="button"

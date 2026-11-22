@@ -77,16 +77,27 @@ export function createQueryPersistOptions(options: {
 }
 
 let restored = false;
+let restoredCount = 0;
 const restoredListeners = new Set<() => void>();
 
-/** Called by the provider once a persisted cache was restored (proof of CL-4, `sdd-cache-status`). */
-export function markCacheRestored(): void {
-  restored = true;
+/**
+ * Called by the provider once a persisted cache was read back, with the number of queries it
+ * contained (proof of CL-4, `sdd-cache-status`). A first launch after `clearState` restores zero
+ * query: the marker then stays absent instead of pretending a restore.
+ */
+export function markCacheRestored(queryCount: number): void {
+  restored = queryCount > 0;
+  restoredCount = queryCount;
   for (const listener of restoredListeners) listener();
 }
 
 export function isCacheRestored(): boolean {
   return restored;
+}
+
+/** Number of queries read back from the encrypted store (0 before the first restore). */
+export function restoredQueryCount(): number {
+  return restoredCount;
 }
 
 /** Subscribes to the restore event (`useSyncExternalStore` of the demonstration page). */
@@ -97,9 +108,10 @@ export function subscribeCacheRestored(listener: () => void): () => void {
   };
 }
 
-/** Resets the flag (tests, sign-out). */
+/** Resets the marker (tests, sign-out). */
 export function resetCacheRestored(): void {
   restored = false;
+  restoredCount = 0;
   for (const listener of restoredListeners) listener();
 }
 
