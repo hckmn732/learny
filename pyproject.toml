@@ -78,3 +78,9 @@ name = "Nobody imports views or apps"
 type = "forbidden"
 source_modules = ["learny.shared", "learny.platform"]
 forbidden_modules = ["learny.views", "learny_api", "learny_worker"]
+
+[[tool.importlinter.contracts]]
+name = "Billing and privacy layers"
+type = "layers"
+containers = ["learny.billing", "learny.privacy"]
+layers = ["infrastructure", "application", "domain"]

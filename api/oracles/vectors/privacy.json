@@ -1,0 +1,453 @@
+{
+  "slugs": [
+    {
+      "value": "SAP S/4HANA — Finance",
+      "slug": "sap-s-4hana-finance"
+    },
+    {
+      "value": "Élève",
+      "slug": "eleve"
+    },
+    {
+      "value": "Formation",
+      "slug": "formation"
+    },
+    {
+      "value": "  ",
+      "slug": "sans-titre"
+    },
+    {
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "slug": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "moduleFolders": [
+    {
+      "position": 1,
+      "title": "Comptabilité générale",
+      "folder": "01-comptabilite-generale"
+    },
+    {
+      "position": 12,
+      "title": "Module",
+      "folder": "12-module"
+    },
+    {
+      "position": 0,
+      "title": "Module",
+      "folder": "01-module"
+    },
+    {
+      "position": 3,
+      "title": "",
+      "folder": "03-module"
+    }
+  ],
+  "normalizedNames": [
+    {
+      "value": "../../etc/passwd",
+      "normalized": "etc-passwd"
+    },
+    {
+      "value": "..\\..\\windows\\system32",
+      "normalized": "windows-system32"
+    },
+    {
+      "value": "a\u0000b.txt",
+      "normalized": "ab.txt"
+    },
+    {
+      "value": "",
+      "normalized": "fichier"
+    },
+    {
+      "value": "C:secret?.pdf",
+      "normalized": "C-secret-.pdf"
+    },
+    {
+      "value": "  Guide FI.pdf  ",
+      "normalized": "Guide FI.pdf"
+    },
+    {
+      "value": "Élève – notes.txt",
+      "normalized": "Eleve – notes.txt"
+    },
+    {
+      "value": ".hidden",
+      "normalized": "hidden"
+    },
+    {
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "normalized": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "entries": [
+    {
+      "model": {
+        "readme": "README",
+        "settings": {
+          "profile": {}
+        },
+        "results": {},
+        "conversations": {},
+        "formations": [
+          {
+            "title": "SAP S/4HANA Finance",
+            "programme": {
+              "formation": {
+                "title": "SAP",
+                "count": 2
+              },
+              "modules": []
+            },
+            "modules": [
+              {
+                "position": 1,
+                "title": "Comptabilité générale",
+                "courseMarkdown": "# Cours\n",
+                "apports": [
+                  {
+                    "name": "Guide FI.pdf",
+                    "storagePath": "user/resource/Guide FI.pdf"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "entries": [
+        {
+          "name": "README.txt",
+          "text": "README"
+        },
+        {
+          "name": "settings.json",
+          "text": "{\n  \"profile\": {}\n}\n"
+        },
+        {
+          "name": "results.json",
+          "text": "{}\n"
+        },
+        {
+          "name": "conversations.json",
+          "text": "{}\n"
+        },
+        {
+          "name": "formations/sap-s-4hana-finance/programme.json",
+          "text": "{\n  \"formation\": {\n    \"title\": \"SAP\",\n    \"count\": 2\n  },\n  \"modules\": []\n}\n"
+        },
+        {
+          "name": "formations/sap-s-4hana-finance/01-comptabilite-generale/cours.md",
+          "text": "# Cours\n"
+        },
+        {
+          "name": "apports/sap-s-4hana-finance/01-comptabilite-generale/Guide FI.pdf",
+          "storagePath": "user/resource/Guide FI.pdf"
+        }
+      ]
+    },
+    {
+      "model": {
+        "readme": "",
+        "settings": {
+          "a": 1,
+          "b": null,
+          "c": true
+        },
+        "results": {
+          "score": 12.5,
+          "list": [
+            1,
+            2
+          ]
+        },
+        "conversations": {},
+        "formations": [
+          {
+            "title": "Formation",
+            "programme": {},
+            "modules": [
+              {
+                "position": 1,
+                "title": "Module",
+                "courseMarkdown": null,
+                "apports": [
+                  {
+                    "name": "notes.txt",
+                    "text": "a"
+                  },
+                  {
+                    "name": "notes.txt",
+                    "text": "b"
+                  },
+                  {
+                    "name": "notes.txt",
+                    "text": "c"
+                  },
+                  {
+                    "name": "../../etc/passwd",
+                    "text": "x"
+                  },
+                  {
+                    "name": "vide.txt",
+                    "storagePath": ""
+                  }
+                ]
+              },
+              {
+                "position": 2,
+                "title": "Module",
+                "courseMarkdown": "  ",
+                "apports": []
+              }
+            ]
+          },
+          {
+            "title": "Formation",
+            "programme": {
+              "second": true
+            },
+            "modules": []
+          },
+          {
+            "title": "",
+            "programme": [],
+            "modules": []
+          }
+        ]
+      },
+      "entries": [
+        {
+          "name": "README.txt",
+          "text": ""
+        },
+        {
+          "name": "settings.json",
+          "text": "{\n  \"a\": 1,\n  \"b\": null,\n  \"c\": true\n}\n"
+        },
+        {
+          "name": "results.json",
+          "text": "{\n  \"score\": 12.5,\n  \"list\": [\n    1,\n    2\n  ]\n}\n"
+        },
+        {
+          "name": "conversations.json",
+          "text": "{}\n"
+        },
+        {
+          "name": "formations/formation/programme.json",
+          "text": "{}\n"
+        },
+        {
+          "name": "apports/formation/01-module/notes.txt",
+          "text": "a"
+        },
+        {
+          "name": "apports/formation/01-module/notes-2.txt",
+          "text": "b"
+        },
+        {
+          "name": "apports/formation/01-module/notes-3.txt",
+          "text": "c"
+        },
+        {
+          "name": "apports/formation/01-module/etc-passwd",
+          "text": "x"
+        },
+        {
+          "name": "formations/formation/02-module/cours.md",
+          "text": "  "
+        },
+        {
+          "name": "formations/formation-2/programme.json",
+          "text": "{\n  \"second\": true\n}\n"
+        },
+        {
+          "name": "formations/formation-3/programme.json",
+          "text": "[]\n"
+        }
+      ]
+    }
+  ],
+  "sizes": [
+    {
+      "bytes": 12400000,
+      "label": "12,4 Mo"
+    },
+    {
+      "bytes": 1024,
+      "label": "1 Ko"
+    },
+    {
+      "bytes": 980,
+      "label": "980 o"
+    },
+    {
+      "bytes": 0,
+      "label": "0 o"
+    },
+    {
+      "bytes": -5,
+      "label": "0 o"
+    },
+    {
+      "bytes": 999,
+      "label": "999 o"
+    },
+    {
+      "bytes": 1000,
+      "label": "1 Ko"
+    },
+    {
+      "bytes": 1000000000,
+      "label": "1 Go"
+    },
+    {
+      "bytes": 12450,
+      "label": "12,5 Ko"
+    }
+  ],
+  "dates": [
+    {
+      "instant": "2026-11-18T12:20:00Z",
+      "timezone": "Europe/Paris",
+      "label": "mercredi 18 novembre à 13:20"
+    },
+    {
+      "instant": "2026-11-11T12:20:00Z",
+      "timezone": "Europe/Paris",
+      "label": "mercredi 11 novembre à 13:20"
+    },
+    {
+      "instant": "2026-11-11T00:05:00Z",
+      "timezone": "America/New_York",
+      "label": "mardi 10 novembre à 19:05"
+    },
+    {
+      "instant": "2026-12-31T23:30:00Z",
+      "timezone": "Pacific/Auckland",
+      "label": "vendredi 1 janvier à 12:30"
+    }
+  ],
+  "settings": [
+    {
+      "input": {
+        "profile": {
+          "email": "eleve@test.learny.test",
+          "timezone": "Europe/Paris"
+        },
+        "studyPreferences": {
+          "hoursPerDay": 2
+        },
+        "notificationSettings": {
+          "channelEmail": true
+        },
+        "automations": [
+          {
+            "key": "reprise",
+            "enabled": true,
+            "params": {
+              "apiKey": "secret",
+              "nested": {
+                "token": "x"
+              }
+            }
+          }
+        ]
+      },
+      "output": {
+        "profile": {
+          "email": "eleve@test.learny.test",
+          "timezone": "Europe/Paris"
+        },
+        "studyPreferences": {
+          "hoursPerDay": 2
+        },
+        "notificationSettings": {
+          "channelEmail": true
+        },
+        "automations": [
+          {
+            "key": "reprise",
+            "enabled": true,
+            "params": {
+              "nested": {}
+            }
+          }
+        ]
+      }
+    },
+    {
+      "input": {
+        "profile": {},
+        "studyPreferences": null,
+        "notificationSettings": null,
+        "automations": []
+      },
+      "output": {
+        "profile": {},
+        "studyPreferences": null,
+        "notificationSettings": null,
+        "automations": []
+      }
+    }
+  ],
+  "download": [
+    {
+      "status": "done",
+      "storagePath": "u/x.zip",
+      "expiresAt": "2026-11-18T12:20:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": true
+    },
+    {
+      "status": "done",
+      "storagePath": "",
+      "expiresAt": "2026-11-18T12:20:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "done",
+      "storagePath": null,
+      "expiresAt": "2026-11-18T12:20:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "done",
+      "storagePath": "u/x.zip",
+      "expiresAt": null,
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "done",
+      "storagePath": "u/x.zip",
+      "expiresAt": "2026-11-11T12:20:00.000Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "running",
+      "storagePath": "u/x.zip",
+      "expiresAt": "2026-11-18T12:20:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "failed",
+      "storagePath": "u/x.zip",
+      "expiresAt": "2026-11-18T12:20:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    },
+    {
+      "status": "done",
+      "storagePath": "u/x.zip",
+      "expiresAt": "2026-10-01T00:00:00Z",
+      "now": "2026-11-11T12:20:00.000Z",
+      "downloadable": false
+    }
+  ]
+}
