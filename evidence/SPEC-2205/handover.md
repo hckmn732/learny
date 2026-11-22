@@ -1,5 +1,11 @@
 ﻿# Reprise — SPEC-2205 (état au 2026-11-22, fin de la tranche « cas d'usage de job »)
 
+> **Clôture faite le 2026-11-22** : campagne de parité finale (8 scénarios `engagement` rejoués à
+> l'identique, 22 scénarios des cinq groupes sans divergence), e2e `@SPEC-2205` (2 tests, dont
+> 1 `@visual`) et `node tools/sdd/validate.mjs SPEC-2205` (8 / 8 étapes) verts. L'état de référence
+> est [`acceptance.md`](./acceptance.md) ; les sections ci-dessous décrivent la reprise avant la
+> clôture.
+
 Spécification **partielle** : le domaine pur, la couche notifications, le moteur d'automatismes, le
 service de pause et les **quatre cas d'usage de job** sont portés, prouvés et committés.
 **Les vingt-et-une opérations** `engagement` de l'inventaire sont servies par Python et basculées.
