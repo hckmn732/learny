@@ -3,6 +3,7 @@
 // Records the reference responses of the TypeScript backend and replays them against any target
 // (the Hono API today, the Python facade tomorrow). Comparison is semantic: status, an allow-list
 // of headers, and the JSON body after normalisation of the non-deterministic values (CL-2).
+// For an SSE answer the body is the ordered list of parsed `data:` payloads (00-conventions §11).
 //
 //   corepack pnpm exec tsx tools/parity/run.mts --record --target http://127.0.0.1:3102
 //   corepack pnpm exec tsx tools/parity/run.mts --check  --target http://127.0.0.1:3102
@@ -85,6 +86,29 @@ export function normalizeBody(value: unknown): unknown {
   return value;
 }
 
+/**
+ * Ordered payloads of a `text/event-stream` answer (00-conventions §11): one entry per `data:` line,
+ * `[DONE]` kept as the literal string, a non-JSON payload kept verbatim, comments and ids ignored.
+ */
+export function parseEventStream(text: string): unknown[] {
+  const events: unknown[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.startsWith('data:')) continue;
+    const payload = line.slice(5).trim();
+    if (payload === '') continue;
+    if (payload === '[DONE]') {
+      events.push('[DONE]');
+      continue;
+    }
+    try {
+      events.push(JSON.parse(payload) as unknown);
+    } catch {
+      events.push(payload);
+    }
+  }
+  return events;
+}
+
 /** Server timing and numeric variance are normalised out of the header allow-list. */
 export function normalizeHeaders(headers: Headers): Record<string, string> {
   const out: Record<string, string> = {};
@@ -141,11 +165,16 @@ async function executeStep(
   }
   const response = await fetch(`${target}${step.path}`, init);
   const text = await response.text();
+  const contentType = response.headers.get('content-type') ?? '';
   let body: unknown = text;
-  try {
-    body = JSON.parse(text) as unknown;
-  } catch {
-    body = text;
+  if (contentType.startsWith('text/event-stream')) {
+    body = parseEventStream(text);
+  } else {
+    try {
+      body = JSON.parse(text) as unknown;
+    } catch {
+      body = text;
+    }
   }
   return {
     status: response.status,
