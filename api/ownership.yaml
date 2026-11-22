@@ -147,10 +147,10 @@ operations:
   'me.ai.models.get': ts
   'me.ai.models.update': ts
   'me.ai.task-models.update': py
-  'me.automation-actions.accept': ts
-  'me.automation-actions.decline': ts
+  'me.automation-actions.accept': py
+  'me.automation-actions.decline': py
   'me.automation-actions.list': py
-  'me.automation-actions.undo': ts
+  'me.automation-actions.undo': py
   'me.automations.list': py
   'me.automations.update': py
   'me.deletion.cancel': ts
@@ -163,10 +163,10 @@ operations:
   'me.notificationSettings.update': py
   'me.onboarding.get': py
   'me.onboarding.update': py
-  'me.pause.diagnostic': ts
-  'me.pause.end': ts
-  'me.pause.get': ts
-  'me.pause.start': ts
+  'me.pause.diagnostic': py
+  'me.pause.end': py
+  'me.pause.get': py
+  'me.pause.start': py
   'me.preferences.get': py
   'me.preferences.update': py
   'me.profile.get': py

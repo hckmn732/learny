@@ -144,3 +144,43 @@ async def me_automation_actions_list(call: Call) -> Any:
 @handler("me.weekly-review.get")
 async def me_weekly_review_get(call: Call) -> Any:
     return await engagement.get_weekly_review(call.deps, _actor(call), _query(call).get("actionId"))
+
+
+@handler("me.automation-actions.accept")
+async def me_automation_actions_accept(call: Call) -> Any:
+    return await engagement.accept_automation_action(
+        call.deps, _actor(call), _params(call)["id"], _body(call, partial=True)
+    )
+
+
+@handler("me.automation-actions.decline")
+async def me_automation_actions_decline(call: Call) -> Any:
+    return await engagement.decline_automation_action(call.deps, _actor(call), _params(call)["id"])
+
+
+@handler("me.automation-actions.undo")
+async def me_automation_actions_undo(call: Call) -> Any:
+    return await engagement.undo_automation_action(call.deps, _actor(call), _params(call)["id"])
+
+
+# --- pause ---------------------------------------------------------------------------------------
+
+
+@handler("me.pause.get")
+async def me_pause_get(call: Call) -> Any:
+    return await engagement.get_pause_state(call.deps, _actor(call))
+
+
+@handler("me.pause.start")
+async def me_pause_start(call: Call) -> Any:
+    return await engagement.start_pause(call.deps, _actor(call), _body(call))
+
+
+@handler("me.pause.end")
+async def me_pause_end(call: Call) -> Any:
+    return await engagement.end_pause(call.deps, _actor(call))
+
+
+@handler("me.pause.diagnostic")
+async def me_pause_diagnostic(call: Call) -> Any:
+    return await engagement.complete_pause_diagnostic(call.deps, _actor(call), _body(call))
