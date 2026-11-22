@@ -41,6 +41,60 @@ export const mobile = {
         'Page de démonstration : le mot de passe du compte de démonstration vient de l’environnement du build et n’est jamais affiché.',
     },
   },
+  // SPEC-3101 — connexion, inscription et lien magique (libellés propres au mobile ; les
+  // libellés identiques au web sont importés de `fr.auth`, canevas § 2).
+  auth: {
+    titleLogin: 'Reprenez là où vous en êtes.',
+    titleSignup: 'Créez votre espace d’apprentissage.',
+    ledeLogin:
+      'Votre tuteur a préparé la séance de 14:00 : 10 questions, 40 minutes, seuil de validation 80 %.',
+    ledeSignup:
+      'Trois minutes pour poser votre rythme, votre objectif et le tuteur qui vous accompagne.',
+    modeLabel: 'Mode de connexion',
+    modeLogin: 'Se connecter',
+    modeSignup: 'Créer un compte',
+    sessionSecure: 'Session sécurisée',
+    passwordMin: '12 caractères minimum',
+    forgot: 'Mot de passe oublié ?',
+    divider: 'ou',
+    showPassword: 'Afficher le mot de passe',
+    hidePassword: 'Masquer le mot de passe',
+    strengthLabel: 'Solidité du mot de passe',
+    termsLabel: 'J’accepte les conditions d’utilisation et la politique de confidentialité',
+    termsHint: 'Obligatoire pour créer votre compte.',
+    magic: {
+      intro: 'Sans mot de passe : un lien valable 1 heure, envoyé par e-mail.',
+      send: 'Recevoir mon lien',
+      sending: 'Envoi…',
+      sent: 'Si un compte existe pour cette adresse, un lien vient d’être envoyé.',
+    },
+    verify: {
+      resent: 'Nouveau lien envoyé. Il reste valable 1 heure.',
+      resend: 'Renvoyer le lien',
+      countdown: (seconds: number) => `Renvoyer le lien (dans ${String(seconds)} s)`,
+      text: (email: string) =>
+        `Nous avons envoyé un lien de connexion à ${email}. Ouvrez-le sur cet appareil pour continuer.`,
+      back: 'Revenir à la connexion',
+    },
+    callback: {
+      opening: 'Ouverture de votre session…',
+      invalid: 'Ce lien n’est plus valide. Demandez-en un nouveau.',
+      askNew: 'Recevoir un nouveau lien',
+      back: 'Revenir à la connexion',
+    },
+    legalSheet: {
+      title: 'Nouvelles conditions d’utilisation',
+      body: 'Une nouvelle version des conditions d’utilisation et de la politique de confidentialité est en vigueur. Acceptez-la pour continuer.',
+      accept: 'J’accepte',
+      later: 'Plus tard',
+      recorded: 'Acceptation enregistrée.',
+    },
+    shell: {
+      title: 'Vous êtes connecté',
+      body: 'La coquille de l’application (onglets Aujourd’hui, Programme, Réviser, Agenda, Profil) arrive avec SPEC-3102.',
+      placeholder: 'Coquille à venir · SPEC-3102',
+    },
+  },
   config: {
     title: 'Configuration invalide',
     intro:
