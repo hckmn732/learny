@@ -12,12 +12,23 @@ export interface SkeletonProps {
   readonly height?: number;
   /** Number of stacked lines (a paragraph placeholder). */
   readonly lines?: number;
+  /**
+   * Pulse the placeholder. A gallery turns it off: an endless animation prevents the e2e driver
+   * from seeing the screen as idle, and a moving block cannot be compared to a baseline.
+   */
+  readonly animated?: boolean;
   readonly testID?: string;
 }
 
 /** Grey block shown while its content loads. */
-export function Skeleton({ width = '100%', height = 16, lines = 1, testID }: SkeletonProps) {
-  const animated = usePulseStyle(true, theme.durations.skeleton);
+export function Skeleton({
+  width = '100%',
+  height = 16,
+  lines = 1,
+  animated = true,
+  testID,
+}: SkeletonProps) {
+  const pulse = usePulseStyle(animated, theme.durations.skeleton);
   return (
     <View
       {...(testID === undefined ? {} : { testID })}
@@ -29,7 +40,7 @@ export function Skeleton({ width = '100%', height = 16, lines = 1, testID }: Ske
         <Animated.View
           key={index}
           testID={testID === undefined ? undefined : `${testID}-line-${String(index)}`}
-          style={[styles.line, animated, { width, height }]}
+          style={[styles.line, pulse, { width, height }]}
         />
       ))}
     </View>

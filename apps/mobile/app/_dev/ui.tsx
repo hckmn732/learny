@@ -390,7 +390,7 @@ export default function UiGalleryRoute() {
             onRetry={() => undefined}
             testID="ui-error"
           />
-          <Skeleton lines={3} testID="ui-skeleton" />
+          <Skeleton lines={3} animated={false} testID="ui-skeleton" />
         </Section>
       </ScrollView>
 

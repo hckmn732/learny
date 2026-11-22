@@ -53,11 +53,17 @@ tags:
     start: 50%, 80%
     end: 50%, 20%
     duration: 300
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 300
 - assertVisible:
     id: ui-segmented
+- waitForAnimationToEnd
 - tapOn:
     id: ui-segmented-month
 - assertVisible: month
+- waitForAnimationToEnd
 - tapOn:
     id: ui-switch-control
 - assertVisible: Désactivé
@@ -84,18 +90,21 @@ tags:
     start: 50%, 80%
     end: 50%, 20%
     duration: 300
+- waitForAnimationToEnd
 - tapOn:
     id: ui-toast-trigger
 - assertVisible:
     id: ui-toast
 - assertVisible: Séance reportée à demain 9:00.
 - takeScreenshot: SPEC-3002-feuilles
+- waitForAnimationToEnd
 - tapOn:
     id: ui-sheet-open
 - assertVisible:
     id: ui-sheet
 - assertVisible:
     id: ui-sheet-close
+- waitForAnimationToEnd
 - tapOn:
     id: ui-sheet-close
 - assertNotVisible:

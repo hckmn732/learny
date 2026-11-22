@@ -29,9 +29,11 @@ tags:
     duration: 300
 - assertVisible:
     id: ui-segmented
+- waitForAnimationToEnd
 - tapOn:
     id: ui-segmented-month
 - assertVisible: month
+- waitForAnimationToEnd
 - tapOn:
     id: ui-switch-control
 - assertVisible: Désactivé

@@ -40,11 +40,13 @@ tags:
     duration: 300
 - assertVisible:
     id: ui-toast-trigger
+- waitForAnimationToEnd
 - tapOn:
     id: ui-toast-trigger
 - assertVisible:
     id: ui-toast
 - assertVisible: Séance reportée à demain 9:00.
+- waitForAnimationToEnd
 - tapOn:
     id: ui-sheet-open
 - assertVisible:
