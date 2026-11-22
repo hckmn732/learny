@@ -100,7 +100,7 @@ operations:
   'dev.stripe.checkoutPay': py
   'dev.stripe.events': py
   'dev.stripe.simulate': py
-  'dev.uploadSimulation': ts
+  'dev.uploadSimulation': py
   'email.unsubscribe': py
   'email.unsubscribe.page': py
   'exam.answers.save': py
@@ -252,7 +252,7 @@ special:
   'POST /api/v1/dev/sdd/stripe/checkout/cancel': py
   'POST /api/v1/dev/sdd/stripe/checkout/pay': py
   'POST /api/v1/dev/sdd/stripe/simulate': py
-  'POST /api/v1/dev/sdd/uploads': ts
+  'POST /api/v1/dev/sdd/uploads': py
   'POST /api/v1/formations/:fid/sprints': ts
 
 consumers:
