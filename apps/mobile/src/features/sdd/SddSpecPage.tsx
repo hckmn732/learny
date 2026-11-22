@@ -62,6 +62,12 @@ function Row({ testID, label, value, detail, figure = false }: RowProps) {
   );
 }
 
+// L'animation d'apparition utilise le pilote natif en production. Dans l'environnement de test
+// (Jest + jest-expo), la vue animée n'est pas attachée à l'arbre natif au moment où l'effet
+// démarre: le pilote natif lève « Unable to locate attached view in the native tree ». Le pilote JS
+// y produit la même opacité finale, sans dépendre de l'arbre natif (SPEC-3001 EF-2).
+const NATIVE_ANIMATION_DRIVER = process.env.NODE_ENV !== 'test';
+
 /** Page `/_dev/sdd/SPEC-3001`. */
 export function SddSpecPage(props: SddSpecPageProps) {
   const reduceMotion = useReducedMotion();
@@ -74,7 +80,7 @@ export function SddSpecPage(props: SddSpecPageProps) {
     const animation = Animated.timing(opacity, {
       toValue: 1,
       duration,
-      useNativeDriver: true,
+      useNativeDriver: NATIVE_ANIMATION_DRIVER,
     });
     animation.start();
     return () => {
