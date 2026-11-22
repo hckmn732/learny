@@ -27,7 +27,7 @@ def clamps_title(value: str) -> str:
     text = _WHITESPACE.sub(" ", value).strip()
     if len(text) <= TITLE_MAX:
         return text
-    return f"{text[: TITLE_MAX - 1].rstrip()}…"
+    return f"{text[: TITLE_MAX - 1].rstrip()}{fr.NOTIFICATION_ELLIPSIS}"
 
 
 def clamp_body(value: str) -> str:
@@ -35,7 +35,7 @@ def clamp_body(value: str) -> str:
     text = _SPACES.sub(" ", value).strip()
     if len(text) <= BODY_MAX:
         return text
-    return f"{text[: BODY_MAX - 1].rstrip()}…"
+    return f"{text[: BODY_MAX - 1].rstrip()}{fr.NOTIFICATION_ELLIPSIS}"
 
 
 clamp_title = clamps_title
@@ -124,7 +124,7 @@ def _validation_soon_title(data: Mapping[str, Any], tone: Tone) -> str:
 def _validation_soon_body(data: Mapping[str, Any], tone: Tone) -> str:
     return fr.NOTIFICATION_BODY_VALIDATION_SOON[tone].format(
         module=_module_label(data),
-        when=_text(data, "when", "bientôt"),
+        when=_text(data, "when", fr.NOTIFICATION_WHEN_SHORT),
         minutes=js_number_text(_number(data, "minutes", 20)),
     )
 
@@ -411,7 +411,7 @@ NOTIFICATION_TYPES: tuple[str, ...] = tuple(NOTIFICATION_TEMPLATES)
 
 
 def channels_of(notification_type: str) -> tuple[str, ...]:
-    """ADR-0265 — the external channels a type may use (EF-6, ET-7)."""
+    """ADR-0265 - the external channels a type may use (EF-6, ET-7)."""
     if notification_type == "daily_digest":
         return ("email",)
     if notification_type == "export_ready":

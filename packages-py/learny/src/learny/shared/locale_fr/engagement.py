@@ -219,3 +219,7 @@ EMAIL_WELCOME_SUBJECT = "Bienvenue sur Learny"
 EMAIL_WELCOME_TITLE = "Bienvenue sur Learny"
 EMAIL_UNSUBSCRIBE_NOTICE = "Vous recevez cet e-mail parce que vous avez un compte Learny."
 EMAIL_UNSUBSCRIBE_LINK = "Ne plus recevoir ces e-mails"
+
+# packages/notifications/src/templates/index.ts — the truncation mark of a clamped text.
+NOTIFICATION_ELLIPSIS = "…"
+NOTIFICATION_WHEN_SHORT = "bientôt"

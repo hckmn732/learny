@@ -25,7 +25,7 @@ from learny.shared.time import (
 DeliveryChannel = Literal["email", "push"]
 DeliveryStatus = Literal["sent", "scheduled", "deferred_quiet", "capped", "skipped_pref"]
 
-# EF-3 — the preference switch a type obeys; `None` means the type is always active.
+# EF-3 - the preference switch a type obeys; `None` means the type is always active.
 TYPE_SWITCH: dict[str, str] = {
     "global_quiz_today": "type_revision",
     "validation_soon": "type_validation",
@@ -67,7 +67,7 @@ class DeliveryDecision:
 
 
 def type_switch_of(notification_type: str) -> str | None:
-    """EF-3 — the preference switch of a type; `None` when the type is always active."""
+    """EF-3 - the preference switch of a type; `None` when the type is always active."""
     return TYPE_SWITCH.get(notification_type)
 
 
@@ -81,7 +81,7 @@ def _type_enabled(settings: DeliverySettings, notification_type: str) -> bool:
 
 
 def _next_monday_quiet_end(now_ms: int, time_zone: str, quiet_start: str, quiet_end: str) -> int:
-    """EF-4, CL-9 — Monday, end of the quiet hours, in the learner's zone.
+    """EF-4, CL-9 - Monday, end of the quiet hours, in the learner's zone.
 
     When the quiet range is empty (`start = end`, CL-10), the report is Monday at 00:00.
     """
@@ -109,7 +109,7 @@ def decide_delivery(
     read: bool = False,
     stale_at: datetime | None = None,
 ) -> DeliveryDecision:
-    """EF-2 to EF-5, CL-1, CL-2, CL-9, CL-10 — the single decision table of a delivery.
+    """EF-2 to EF-5, CL-1, CL-2, CL-9, CL-10 - the single decision table of a delivery.
 
     Order: preference, eligibility, weekend, quiet hours, daily cap, send.
     """
