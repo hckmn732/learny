@@ -31,6 +31,17 @@ EMAIL_TEMPLATE_KEYS: tuple[str, ...] = (
     "reminder",
     "weekly_review",
     "ai_task_failed",
+    "deletion_scheduled",
+    "deletion_completed",
+    "export_ready",
+)
+
+# SPEC-211, ported by SPEC-2206: the self-service export and account deletion e-mails are
+# transactional (ADR-0032), so they carry no unsubscribe link and no List-Unsubscribe headers.
+TRANSACTIONAL_TEMPLATE_KEYS: tuple[str, ...] = (
+    "deletion_scheduled",
+    "deletion_completed",
+    "export_ready",
 )
 
 # Every template used by a notification is a service e-mail (ADR-0124): it carries the one-click
@@ -183,6 +194,12 @@ def subject_of(template: str, props: Mapping[str, Any], tone: Tone) -> str:
         return _tone(tone, fr.WEEKLY_REVIEW_SUBJECT).format(
             start=props["periodStartLabel"], end=props["periodEndLabel"]
         )
+    if template == "deletion_scheduled":
+        return _tone(tone, fr.DELETION_SCHEDULED_SUBJECT).format(scheduledLabel=props["scheduledLabel"])
+    if template == "deletion_completed":
+        return _tone(tone, fr.DELETION_COMPLETED_SUBJECT)
+    if template == "export_ready":
+        return _tone(tone, fr.EXPORT_READY_SUBJECT)
     return fr.AI_TASK_FAILED_SUBJECT.format(task_label=props["taskLabel"])
 
 
@@ -208,6 +225,48 @@ def _welcome_context(props: Mapping[str, Any], tone: Tone, frame: Mapping[str, A
         ],
         "cta_label": fr.WELCOME_CTA,
         "cta_href": f"{frame['app_url']}{fr.WELCOME_CTA_PATH}",
+    }
+
+
+def _deletion_scheduled_context(
+    props: Mapping[str, Any], tone: Tone, frame: Mapping[str, Any]
+) -> dict[str, Any]:
+    label = str(props["scheduledLabel"])
+    return {
+        **frame,
+        "preview": _tone(tone, fr.DELETION_SCHEDULED_PREVIEW).format(scheduledLabel=label),
+        "title": _tone(tone, fr.DELETION_SCHEDULED_SUBJECT).format(scheduledLabel=label),
+        "body": _tone(tone, fr.DELETION_SCHEDULED_BODY).format(scheduledLabel=label),
+        "cancel": _tone(tone, fr.DELETION_SCHEDULED_CANCEL),
+        "cancel_label": fr.DELETION_SCHEDULED_CTA,
+        "cancel_href": f"{frame['app_url']}{fr.PROFILE_PATH}",
+        "export_label": fr.DELETION_SCHEDULED_EXPORT_CTA,
+        "export_href": f"{frame['app_url']}{fr.PROFILE_PATH}",
+    }
+
+
+def _deletion_completed_context(
+    props: Mapping[str, Any], tone: Tone, frame: Mapping[str, Any]
+) -> dict[str, Any]:
+    return {
+        **frame,
+        "preview": fr.DELETION_COMPLETED_PREVIEW,
+        "title": _tone(tone, fr.DELETION_COMPLETED_SUBJECT),
+        "body": _tone(tone, fr.DELETION_COMPLETED_BODY).format(requestedLabel=str(props["requestedLabel"])),
+    }
+
+
+def _export_ready_context(props: Mapping[str, Any], tone: Tone, frame: Mapping[str, Any]) -> dict[str, Any]:
+    size_label = str(props["sizeLabel"])
+    expires_label = str(props["expiresLabel"])
+    return {
+        **frame,
+        "preview": fr.EXPORT_READY_PREVIEW.format(sizeLabel=size_label),
+        "title": _tone(tone, fr.EXPORT_READY_SUBJECT),
+        "body": _tone(tone, fr.EXPORT_READY_BODY).format(sizeLabel=size_label, expiresLabel=expires_label),
+        "download_label": fr.EXPORT_READY_CTA,
+        "download_url": str(props["downloadUrl"]),
+        "private_note": _tone(tone, fr.EXPORT_READY_PRIVATE),
     }
 
 
@@ -317,11 +376,13 @@ def render_email(
     """Renders one template into HTML, text, subject, headers and tags (SPEC-204 ET-1, ET-4)."""
     template = str(content["template"])
     props: Mapping[str, Any] = content["props"]
-    template_unsubscribe = unsubscribe_url(app_url, link_secret, user_id)
+    transactional = template in TRANSACTIONAL_TEMPLATE_KEYS
+    category = fr.EMAIL_TRANSACTIONAL_CATEGORY if transactional else SERVICE_CATEGORY
+    template_unsubscribe = None if transactional else unsubscribe_url(app_url, link_secret, user_id)
     frame: dict[str, Any] = {
         "tone": tone,
         "app_url": app_url,
-        "unsubscribe_url": template_unsubscribe,
+        "unsubscribe_url": None if transactional else template_unsubscribe,
         "preferences_url": f"{app_url}{fr.EMAIL_PREFERENCES_PATH}",
         "footer": _tone(tone, fr.EMAIL_FOOTER),
         "preferences_link": fr.EMAIL_PREFERENCES_LINK,
@@ -339,14 +400,24 @@ def render_email(
         context = _weekly_review_context(props, tone, frame)
     elif template == "ai_task_failed":
         context = _ai_task_failed_context(props, tone, frame)
+    elif template == "deletion_scheduled":
+        context = _deletion_scheduled_context(props, tone, frame)
+    elif template == "deletion_completed":
+        context = _deletion_completed_context(props, tone, frame)
+    elif template == "export_ready":
+        context = _export_ready_context(props, tone, frame)
     else:
         context = _reminder_context(props, frame)
     html = render_template_file(f"{template}.html.j2", context)
     text = render_template_file(f"{template}.txt.j2", context)
-    headers = {
-        "List-Unsubscribe": f"<{template_unsubscribe}>",
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-    }
+    headers = (
+        {}
+        if transactional
+        else {
+            "List-Unsubscribe": f"<{template_unsubscribe}>",
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        }
+    )
     return RenderedEmail(
         subject=subject_of(template, props, tone),
         html=html,
@@ -354,8 +425,9 @@ def render_email(
         headers=headers,
         tags=(
             EmailTag(name="template", value=template),
-            EmailTag(name="category", value=SERVICE_CATEGORY),
+            EmailTag(name="category", value=category),
         ),
+        category=category,
     )
 
 
@@ -379,6 +451,7 @@ __all__ = [
     "ACTIVITY_LIMIT",
     "EMAIL_TEMPLATE_KEYS",
     "SERVICE_CATEGORY",
+    "TRANSACTIONAL_TEMPLATE_KEYS",
     "EmailContentUnknown",
     "build_email_content",
     "build_message",

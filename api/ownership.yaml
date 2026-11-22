@@ -10,10 +10,10 @@ operations:
   'auth.signIn': ts
   'auth.signOut': ts
   'auth.signUp': ts
-  'billing.checkout': ts
-  'billing.portal': ts
-  'billing.subscription': ts
-  'billing.webhook': ts
+  'billing.checkout': py
+  'billing.portal': py
+  'billing.subscription': py
+  'billing.webhook': py
   'bricks.correct': py
   'bricks.report': py
   'cadrage.complete': py
@@ -153,10 +153,10 @@ operations:
   'me.automation-actions.undo': py
   'me.automations.list': py
   'me.automations.update': py
-  'me.deletion.cancel': ts
-  'me.deletion.schedule': ts
-  'me.export.read': ts
-  'me.export.request': ts
+  'me.deletion.cancel': py
+  'me.deletion.schedule': py
+  'me.export.read': py
+  'me.export.request': py
   'me.get': py
   'me.legal.accept': py
   'me.notificationSettings.get': py

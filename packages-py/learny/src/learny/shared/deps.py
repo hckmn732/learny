@@ -26,7 +26,7 @@ from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.platform.llm.gateway import LlmGateway, MockGateway
 from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
-from learny.platform.stripe import StripeGateway, build_stripe_gateway
+from learny.platform.stripe import StripeGateway, WebhookJournal, build_stripe_gateway
 from learny.shared.clock import Clock, from_env
 from learny.shared.config import PushMode, Settings
 from learny.shared.db.uow import Database
@@ -50,6 +50,7 @@ class Deps:
     email: EmailTransport
     push: PushTransport
     stripe: StripeGateway
+    webhook_journal: WebhookJournal | None
 
 
 def jwks_fetcher(settings: Settings) -> Any:
@@ -70,6 +71,8 @@ def build_deps(settings: Settings) -> Deps:
     clock = from_env({"CLOCK_FIXED_AT": os.environ.get("CLOCK_FIXED_AT", "")})
     email_config = build_email_config(settings)
     stripe = build_stripe_gateway(resolve_billing_config(settings.billing_env()), clock)
+    # EF-8 - the simulated mode keeps the recent webhook outcomes in memory (dev routes, SPEC-2207).
+    webhook_journal = WebhookJournal() if stripe.mode == "mock" else None
     return Deps(
         settings=settings,
         clock=clock,
@@ -83,6 +86,7 @@ def build_deps(settings: Settings) -> Deps:
         email=create_email_transport(email_config, clock),
         push=build_push(settings, clock),
         stripe=stripe,
+        webhook_journal=webhook_journal,
     )
 
 

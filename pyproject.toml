@@ -83,4 +83,4 @@ forbidden_modules = ["learny.views", "learny_api", "learny_worker"]
 name = "Billing and privacy layers"
 type = "layers"
 containers = ["learny.billing", "learny.privacy"]
-layers = ["infrastructure", "application", "domain"]
+layers = ["application", "infrastructure", "domain"]
