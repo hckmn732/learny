@@ -72,7 +72,7 @@ UPDATE_DELIVERY = text(
 LOAD_DELIVERY = text(
     "select d.id as delivery_id, d.notification_id, d.channel, d.status, d.scheduled_for, "
     "d.sent_at, d.error, n.user_id, n.formation_id, n.type, n.title, n.body, n.href, n.icon, "
-    "n.dedupe_key, n.read_at, n.created_at, p.first_name, p.tutor_tone "
+    "n.dedupe_key, n.read_at, n.created_at, p.first_name, p.tutor_tone, p.email "
     "from public.notification_deliveries d "
     "join public.notifications n on n.id = d.notification_id "
     "join public.profiles p on p.id = n.user_id "
@@ -208,6 +208,26 @@ LIST_SUBSCRIPTIONS = text(
     "where user_id = cast(:user_id as uuid) order by created_at, id"
 )
 
+DELETE_SUBSCRIPTION_BY_ID = text(
+    "delete from public.push_subscriptions where id = cast(:subscription_id as uuid) returning id"
+)
+
+RESET_SUBSCRIPTION_FAILURES = text(
+    "update public.push_subscriptions set failure_count = 0, last_success_at = :now, "
+    "updated_at = :now where id = cast(:subscription_id as uuid)"
+)
+
+INCREMENT_SUBSCRIPTION_FAILURES = text(
+    "update public.push_subscriptions set failure_count = failure_count + 1, updated_at = :now "
+    "where id = cast(:subscription_id as uuid)"
+)
+
+# packages/notifications/src/deliveries.ts (`automationStaleAt`): an automation notification
+# expires with the action it announces.
+SELECT_AUTOMATION_ACTION_EXPIRY = text(
+    "select payload from public.automation_actions where id = cast(:action_id as uuid) limit 1"
+)
+
 
 @dataclass(frozen=True, slots=True)
 class NotificationRow:
@@ -298,6 +318,7 @@ class LoadedDelivery:
     notification: NotificationRow
     first_name: str | None
     tutor_tone: str
+    email: str
 
 
 def _notification(row: Any) -> NotificationRow:
@@ -488,6 +509,7 @@ async def load_delivery(tx: Tx, delivery_id: str) -> LoadedDelivery | None:
         notification=_notification(row),
         first_name=None if row["first_name"] is None else str(row["first_name"]),
         tutor_tone=str(row["tutor_tone"]),
+        email=str(row["email"]),
     )
 
 
@@ -639,3 +661,34 @@ async def delete_subscription(tx: Tx, *, user_id: str, endpoint: str) -> int:
 async def list_subscriptions(tx: Tx, user_id: str) -> list[SubscriptionRow]:
     result = await tx.conn.execute(LIST_SUBSCRIPTIONS, {"user_id": user_id})
     return [_subscription(row) for row in result.mappings()]
+
+
+async def delete_subscription_by_id(tx: Tx, subscription_id: str) -> bool:
+    """The push round removes a subscription whose endpoint is gone or has failed five times."""
+    result = await tx.conn.execute(DELETE_SUBSCRIPTION_BY_ID, {"subscription_id": subscription_id})
+    return result.mappings().first() is not None
+
+
+async def reset_subscription_failures(tx: Tx, *, subscription_id: str, now: datetime) -> None:
+    """A success resets the consecutive-failure counter and stamps the last success."""
+    await tx.conn.execute(RESET_SUBSCRIPTION_FAILURES, {"subscription_id": subscription_id, "now": now})
+
+
+async def increment_subscription_failures(tx: Tx, *, subscription_id: str, now: datetime) -> None:
+    await tx.conn.execute(INCREMENT_SUBSCRIPTION_FAILURES, {"subscription_id": subscription_id, "now": now})
+
+
+async def find_delivery(tx: Tx, *, notification_id: str, channel: str) -> DeliveryRow | None:
+    """`getDelivery`: the journal line of one (notification, channel) pair, or `None`."""
+    result = await tx.conn.execute(
+        SELECT_DELIVERY_FOR_CHANNEL, {"notification_id": notification_id, "channel": channel}
+    )
+    row = result.mappings().first()
+    return None if row is None else _delivery(row)
+
+
+async def read_automation_action_expiry(tx: Tx, action_id: str) -> object | None:
+    """`automationStaleAt`: the `expiresAt` of the action a notification announces, if any."""
+    result = await tx.conn.execute(SELECT_AUTOMATION_ACTION_EXPIRY, {"action_id": action_id})
+    row = result.mappings().first()
+    return None if row is None else row["payload"]

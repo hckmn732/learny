@@ -1,0 +1,12 @@
+{% extends "layout.html.j2" %}
+{% from "_macros.html.j2" import h1, para, cta %}
+{% block content %}
+{{ h1(greeting) }}
+{{ para(intro) }}
+<ul style="margin:0 0 24px;padding-left:20px">
+{% for bullet in bullets %}
+<li style="margin:0 0 8px;font-size:15px;line-height:24px">{{ bullet }}</li>
+{% endfor %}
+</ul>
+{{ cta(cta_href, cta_label) }}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html.j2" %}
+{% from "_macros.html.j2" import h1, para, cta %}
+{% block content %}
+{{ h1(greeting) }}
+{% if empty %}
+{{ para(empty_text) }}
+{% else %}
+{{ para(intro) }}
+<ul style="margin:0 0 16px;padding-left:20px" data-testid="email-activities">
+{% for activity in activities %}
+<li style="margin:0 0 8px;font-size:15px;line-height:24px"><strong>{{ activity.time }} · {{ activity.title }}</strong><br><span style="color:#62626B;font-size:13px">{{ activity.detail }} · {{ activity.formationTitle }}</span></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% if global_quiz_text %}{{ para(global_quiz_text) }}
+{% endif %}
+{% if held %}
+{{ para(held_title_label) }}
+{{ para(held_intro) }}
+<ul style="margin:0 0 16px;padding-left:20px">
+{% for held_title in held.titles %}
+<li style="margin:0 0 8px;font-size:15px;line-height:24px">{{ held_title }}</li>
+{% endfor %}
+</ul>
+{{ para(held_link_label) }}
+{% endif %}
+{{ cta(cta_href, cta_label) }}
+{% endblock %}

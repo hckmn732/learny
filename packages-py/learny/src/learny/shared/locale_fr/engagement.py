@@ -196,6 +196,7 @@ UNSUBSCRIBE_DONE = "C’est fait. Vous pouvez réactiver les e-mails dans Param�
 UNSUBSCRIBE_INVALID_TITLE = "Lien invalide"
 UNSUBSCRIBE_INVALID = "Ce lien n’est plus valide."
 UNSUBSCRIBE_INVALID_HINT = "Vous pouvez gérer vos e-mails depuis Paramètres › Notifications."
+UNSUBSCRIBE_PAGE_TITLE_SUFFIX = " · Learny"
 
 # packages/notifications/src/push/*.ts (SPEC-205).
 PUSH_UNAUTHENTICATED = "Vous devez être connecté pour effectuer cette action."
@@ -204,21 +205,8 @@ PUSH_NOT_REGISTERED = "Abonnement non enregistré."
 PUSH_LIVE_REFUSED_CI = "PUSH_MODE=live est refusé en intégration continue."
 PUSH_NOT_CONFIGURED = "Le canal push n’est pas configuré (clés VAPID absentes)."
 
-# packages/notifications/emails/*.tsx — the eight e-mail templates (subject lines and bodies).
-EMAIL_CTA_LABEL = "Ouvrir"
-EMAIL_FIRST_NAME_FALLBACK = "bonjour"
-EMAIL_DATE_TODAY = "aujourd’hui"
-EMAIL_WEEK_THIS = "cette semaine"
-EMAIL_STUDY_ZERO = "0 h"
-EMAIL_SUCCEEDED_DEFAULT = "Vos acquis progressent."
-EMAIL_AT_RISK_DEFAULT = "Aucune notion à risque."
-EMAIL_NEXT_WEEK_DEFAULT = "La prochaine semaine est planifiée."
-EMAIL_TASK_FALLBACK = "Une tâche IA"
-EMAIL_MODEL_FALLBACK = "modèle personnel"
-EMAIL_WELCOME_SUBJECT = "Bienvenue sur Learny"
-EMAIL_WELCOME_TITLE = "Bienvenue sur Learny"
-EMAIL_UNSUBSCRIBE_NOTICE = "Vous recevez cet e-mail parce que vous avez un compte Learny."
-EMAIL_UNSUBSCRIBE_LINK = "Ne plus recevoir ces e-mails"
+# The e-mail texts live in `engagement_email`: the templates, their subjects and the unsubscribe
+# pages are copied word for word from the TypeScript e-mail package.
 
 # packages/notifications/src/templates/index.ts — the truncation mark of a clamped text.
 NOTIFICATION_ELLIPSIS = "…"

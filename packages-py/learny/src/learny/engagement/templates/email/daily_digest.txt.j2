@@ -1,0 +1,28 @@
+{% extends "layout.txt.j2" %}
+{% block content %}{{ greeting }}
+{% if empty %}
+
+{{ empty_text }}
+{% else %}
+
+{{ intro }}
+{% for activity in activities %}
+- {{ activity.time }} · {{ activity.title }} — {{ activity.detail }} · {{ activity.formationTitle }}
+{% endfor %}
+{% endif %}
+{% if global_quiz_text %}
+
+{{ global_quiz_text }}
+{% endif %}
+{% if held %}
+
+{{ held_title_label }}
+{{ held_intro }}
+{% for held_title in held.titles %}
+- {{ held_title }}
+{% endfor %}
+{{ held_link_label }} : {{ held_href }}
+{% endif %}
+
+{{ cta_label }} : {{ cta_href }}
+{% endblock %}

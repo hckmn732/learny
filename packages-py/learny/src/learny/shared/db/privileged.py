@@ -43,6 +43,12 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2203 - the ingestion job is an authorized system operation (ET-4): it reads a
         # private object, locks the resource and writes the outbox event after the commit.
         "learny.content.application.ingestion": "system ingestion job of a contribution (ET-4)",
+        # SPEC-2205 - `notify` writes the in-app row and the delivery journal of a learner with the
+        # owner role, exactly like the TypeScript `sdb` of the notification producers (SPEC-209).
+        "learny.engagement.application.notify": "notification producer writes the inbox and the journal",
+        # SPEC-2205 - the sender reads the recipient address and tone, and the welcome job checks the
+        # e-mail channel, on rows the authenticated role may not read for another purpose (EF-6).
+        "learny.engagement.application.email": "recipient address and tone of the e-mail channel",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

@@ -1,0 +1,15 @@
+{% extends "layout.html.j2" %}
+{% from "_macros.html.j2" import h1, para, cta, secondary %}
+{% block content %}
+{{ h1(title) }}
+<div style="margin:0 0 24px" data-testid="email-figures">
+<span style="display:inline-block;width:33%;vertical-align:top;font-family:'Space Grotesk',Arial,sans-serif;font-size:22px;line-height:28px;font-weight:600">{{ study_figure }}</span>
+<span style="display:inline-block;width:33%;vertical-align:top;font-family:'Space Grotesk',Arial,sans-serif;font-size:22px;line-height:28px;font-weight:600">{{ retention_figure }}</span>
+<span style="display:inline-block;width:33%;vertical-align:top;font-family:'Space Grotesk',Arial,sans-serif;font-size:22px;line-height:28px;font-weight:600">{{ at_risk_figure }}</span>
+</div>
+{{ para(succeeded_text) }}
+{{ para(at_risk_text) }}
+{{ para(next_week_text) }}
+{{ para(question) }}
+{{ cta(cta_href, cta_label) }} {{ secondary(secondary_href, secondary_label) }}
+{% endblock %}

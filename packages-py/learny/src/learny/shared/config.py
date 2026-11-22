@@ -10,6 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 RateLimitMode = Literal["on", "off"]
 LlmMode = Literal["live", "mock"]
+EmailMode = Literal["memory", "smtp", "resend"]
+PushMode = Literal["mock", "live"]
 
 
 class Settings(BaseSettings):
@@ -53,6 +55,19 @@ class Settings(BaseSettings):
 
     # AI providers (SPEC-2203): mock outside production, secrets stay server-side.
     llm_mode: LlmMode = "mock"
+
+    # E-mail and browser push (SPEC-2205): the same variables the TypeScript backend reads.
+    email_mode: EmailMode | None = None
+    email_from: str | None = None
+    email_link_secret: str | None = None
+    smtp_host: str | None = None
+    smtp_port: int | None = None
+    resend_api_key: str | None = None
+    push_mode: PushMode | None = None
+    vapid_subject: str | None = None
+    vapid_public_key: str | None = None
+    vapid_private_key: str | None = None
+    ci: str | None = None
     voyage_api_key: str | None = None
     search_api_key: str | None = None
 
