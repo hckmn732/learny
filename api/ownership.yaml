@@ -108,8 +108,8 @@ operations:
   'exam.attempts.get': ts
   'exam.attempts.result': ts
   'exam.attempts.submit': ts
-  'exam.format.confirm': ts
-  'exam.intro': ts
+  'exam.format.confirm': py
+  'exam.intro': py
   'exam.questions.mark': py
   'exercises.detail': ts
   'exercises.hint': ts

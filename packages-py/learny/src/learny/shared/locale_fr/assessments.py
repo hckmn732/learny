@@ -61,3 +61,34 @@ EXAM_TIME_OVER = "Le temps de l\u2019examen est \u00e9coul\u00e9."
 EXAM_POSITION_UNKNOWN = "Cette question n\u2019existe pas dans l\u2019examen."
 EXAM_QUESTION_UNREADABLE = "La question jou\u00e9e est illisible."
 EXAM_RESPONSE_MISMATCH = "La r\u00e9ponse ne correspond pas \u00e0 la question."
+
+# --- exam format and introduction (packages/services/src/mock-exams/format.ts) ---------------------
+
+EXAM_FORMATION_INVALID_ID = "Identifiant de formation invalide."
+EXAM_FORMATION_NOT_FOUND = "Formation introuvable."
+EXAM_FORMAT_NOT_CONFIRMED = "Confirmez le format extrait de votre guide avant de commencer."
+EXAM_NO_PROGRAMME = "Cette formation n\u2019a pas encore de programme."
+EXAM_NO_QUESTION_AVAILABLE = "Aucune question d\u2019examen n\u2019est disponible."
+
+# --- exam attempts (packages/services/src/mock-exams/attempt.ts) -----------------------------------
+
+EXAM_ATTEMPT_INVALID_ID = "Identifiant de tentative invalide."
+EXAM_NOT_GRADED = "Cet examen n\u2019est pas encore corrig\u00e9."
+EXAM_ACTIVITY_NOT_CREATED = "Activit\u00e9 non cr\u00e9\u00e9e."
+EXAM_ATTEMPT_NOT_CREATED = "Tentative non cr\u00e9\u00e9e."
+EXAM_GIVEN_NONE = "sans r\u00e9ponse"
+EXAM_GIVEN_INCOMPLETE = "r\u00e9ponse incompl\u00e8te"
+EXAM_PLAN_STUDIED_ALL = "vos modules \u00e9tudi\u00e9s"
+EXAM_PLAN_STUDIED_ONE = "le module {position}"
+EXAM_PLAN_STUDIED_MANY = "les modules {first} \u00e0 {last}"
+EXAM_PLAN_KEEP_STUDIED = "Vos prochains quiz globaux entretiennent {label}."
+EXAM_PLAN_SPRINT = "Un sprint de r\u00e9vision sera propos\u00e9 avant le prochain quiz de validation."
+EXAM_PLAN_GAPS_ONE = "1 notion ajout\u00e9e en priorit\u00e9 dans vos prochains quiz globaux."
+EXAM_PLAN_GAPS_MANY = "{count} notions ajout\u00e9es en priorit\u00e9 dans vos prochains quiz globaux."
+EXAM_PLAN_SPRINT_AFTER_GAPS = (
+    "Un sprint de r\u00e9vision sera propos\u00e9 avant le prochain quiz de validation de {label}."
+)
+EXAM_PLAN_DIAGNOSTIC = (
+    "Les modules diagnostiques seront travaill\u00e9s dans l\u2019ordre du programme, "
+    "sans p\u00e9naliser {label}."
+)

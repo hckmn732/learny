@@ -731,3 +731,296 @@ async def update_exam_answer(
 async def update_exam_marked_positions(tx: Tx, attempt_id: str, positions: str) -> None:
     """BR-PRA-03 - the marked positions survive a reload."""
     await tx.conn.execute(UPDATE_EXAM_MARKED_POSITIONS, {"attempt_id": attempt_id, "positions": positions})
+
+
+# --------------------------------------------------------------------------------------------------
+# exam.intro / exam.format.confirm
+# (packages/services/src/mock-exams/format.ts, SPEC-614 EF-1, EF-5, ET-3; BR-PRA-05)
+# --------------------------------------------------------------------------------------------------
+
+READ_EXAM_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.title,
+           f.objectives::text[] as objectives,
+           f.exam_format
+      from public.formations f
+     where f.id = cast(:formation_id as uuid)
+       and (
+         f.owner_id = cast(:user_id as uuid)
+         or exists (
+           select 1
+             from public.groups g
+             join public.group_members gm on gm.group_id = g.id
+            where g.formation_id = f.id
+              and gm.user_id = cast(:user_id as uuid)
+              and gm.member_status = 'active'
+         )
+       )
+     limit 1
+    """
+)
+
+READ_EXAM_GUIDE = text(
+    """
+    select id::text as id, metadata, content_text
+      from public.resources
+     where formation_id = cast(:formation_id as uuid)
+       and kind = 'exam_guide'
+       and deleted_at is null
+       and status in ('ready', 'processing')
+     order by created_at asc, id asc
+     limit 1
+    """
+)
+
+READ_EXAM_MODULES = text(
+    """
+    select m.id::text as module_id,
+           m.position,
+           m.title as label,
+           coalesce(mp.status, m.status)::text as status,
+           count(distinct n.id)::int as notion_count,
+           count(distinct ns.notion_id) filter (where ns.first_seen_at is not null)::int as seen_count
+      from public.modules m
+      left join public.module_progress mp
+        on mp.module_id = m.id and mp.user_id = cast(:user_id as uuid)
+      left join public.chapters c on c.module_id = m.id
+      left join public.notions n on n.chapter_id = c.id
+      left join public.notion_states ns
+        on ns.notion_id = n.id and ns.user_id = cast(:user_id as uuid)
+     where m.formation_id = cast(:formation_id as uuid)
+     group by m.id, m.position, m.title, m.status, mp.status
+     order by m.position asc
+    """
+)
+
+READ_EXAM_NEXT_SLOTS = text(
+    """
+    select starts_at, title
+      from public.schedule_slots
+     where user_id = cast(:user_id as uuid)
+       and formation_id = cast(:formation_id as uuid)
+       and kind = 'mock_exam'
+       and status = 'planned'
+       and starts_at >= cast(:now as timestamptz)
+     order by starts_at asc
+     limit 2
+    """
+)
+
+READ_EXAM_LAST_ATTEMPT = text(
+    """
+    select at.id::text as id, at.status::text as status, at.score::text as score
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.user_id = cast(:user_id as uuid)
+       and act.formation_id = cast(:formation_id as uuid)
+       and act.kind = 'mock_exam'
+     order by at.created_at desc, at.id desc
+     limit 1
+    """
+)
+
+UPDATE_EXAM_FORMAT = text(
+    """
+    update public.formations
+       set exam_format = cast(:format as jsonb),
+           updated_at = cast(:now as timestamptz)
+     where id = cast(:formation_id as uuid)
+    """
+)
+
+LOCK_MOCK_EXAM_SLOTS = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
+
+READ_MOCK_EXAM_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.title,
+           f.status::text as status,
+           f.end_date::text as end_date,
+           f.objectives::text[] as objectives,
+           f.exam_format,
+           p.timezone
+      from public.formations f
+      join public.profiles p on p.id = f.owner_id
+     where f.id = cast(:formation_id as uuid)
+       and (
+         f.owner_id = cast(:user_id as uuid)
+         or exists (
+           select 1
+             from public.groups g
+             join public.group_members gm on gm.group_id = g.id
+            where g.formation_id = f.id
+              and gm.user_id = cast(:user_id as uuid)
+              and gm.member_status = 'active'
+         )
+       )
+     limit 1
+    """
+)
+
+READ_MOCK_EXAM_MODULES = text(
+    """
+    select id::text as id, position, title, planned_end::text as planned_end
+      from public.modules
+     where formation_id = cast(:formation_id as uuid)
+     order by position asc
+    """
+)
+
+READ_MOCK_EXAM_SLOT = text(
+    """
+    select id::text as id
+      from public.schedule_slots
+     where user_id = cast(:user_id as uuid)
+       and planner_key = :planner_key
+       and status = 'planned'
+     limit 1
+    """
+)
+
+INSERT_MOCK_EXAM_SLOT = text(
+    """
+    insert into public.schedule_slots (
+      user_id, formation_id, module_id, kind, title, starts_at, ends_at,
+      status, created_by, planner_key
+    ) values (
+      cast(:user_id as uuid), cast(:formation_id as uuid), null, 'mock_exam', :title,
+      cast(:starts_at as timestamptz), cast(:ends_at as timestamptz),
+      'planned', 'planner', :planner_key
+    )
+    returning id::text as id
+    """
+)
+
+UPDATE_MOCK_EXAM_SLOT = text(
+    """
+    update public.schedule_slots
+       set title = :title,
+           starts_at = cast(:starts_at as timestamptz),
+           ends_at = cast(:ends_at as timestamptz),
+           updated_at = cast(:now as timestamptz)
+     where id = cast(:slot_id as uuid)
+       and status = 'planned'
+       and created_by <> 'learner'
+    """
+)
+
+READ_SLOT_TIMES = text(
+    """
+    select starts_at, ends_at from public.schedule_slots where id = cast(:slot_id as uuid)
+    """
+)
+
+
+async def read_exam_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The formation of the learner (owner or active member), or nothing (404)."""
+    result = await tx.conn.execute(READ_EXAM_FORMATION, {"formation_id": formation_id, "user_id": user_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_exam_guide(tx: Tx, formation_id: str) -> Mapping[str, Any] | None:
+    """EF-5 - the exam guide the format is extracted from, when one exists."""
+    result = await tx.conn.execute(READ_EXAM_GUIDE, {"formation_id": formation_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_exam_modules(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """ET-3 - the modules with their notion and seen counts, in programme order."""
+    result = await tx.conn.execute(READ_EXAM_MODULES, {"user_id": user_id, "formation_id": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_exam_next_slots(tx: Tx, user_id: str, formation_id: str, now: str) -> list[Mapping[str, Any]]:
+    """BR-PRA-05 - the two planned mock exams still to come."""
+    result = await tx.conn.execute(
+        READ_EXAM_NEXT_SLOTS, {"user_id": user_id, "formation_id": formation_id, "now": now}
+    )
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_exam_last_attempt(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The last mock-exam attempt of the formation, whatever its status."""
+    result = await tx.conn.execute(READ_EXAM_LAST_ATTEMPT, {"user_id": user_id, "formation_id": formation_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def update_exam_format(tx: Tx, formation_id: str, format_value: str, now: str) -> None:
+    """ET-3 - records the learner confirmation of the proposed format."""
+    await tx.conn.execute(
+        UPDATE_EXAM_FORMAT, {"formation_id": formation_id, "format": format_value, "now": now}
+    )
+
+
+async def lock_mock_exam_slots(tx: Tx, user_id: str, formation_id: str) -> None:
+    """BR-PRA-05 - serialises the reconciliation of the two mock exams of one formation."""
+    await tx.conn.execute(LOCK_MOCK_EXAM_SLOTS, {"key": f"mock-exams:{user_id}:{formation_id}"})
+
+
+async def read_mock_exam_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The formation, its objectives, its stored format and the zone of its owner."""
+    result = await tx.conn.execute(
+        READ_MOCK_EXAM_FORMATION, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_mock_exam_modules(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """BR-PRA-05 - the modules and their planned end, in programme order."""
+    result = await tx.conn.execute(READ_MOCK_EXAM_MODULES, {"formation_id": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_mock_exam_slot(tx: Tx, user_id: str, planner_key: str) -> str | None:
+    """The planned slot of one stable planner key, when the reconciliation created it."""
+    result = await tx.conn.execute(READ_MOCK_EXAM_SLOT, {"user_id": user_id, "planner_key": planner_key})
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def insert_mock_exam_slot(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    title: str,
+    starts_at: str,
+    ends_at: str,
+    planner_key: str,
+) -> str | None:
+    """BR-PRA-05 - one planned mock exam, `None` when the insert returned no row."""
+    result = await tx.conn.execute(
+        INSERT_MOCK_EXAM_SLOT,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "title": title,
+            "starts_at": starts_at,
+            "ends_at": ends_at,
+            "planner_key": planner_key,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def update_mock_exam_slot(
+    tx: Tx, *, slot_id: str, title: str, starts_at: str, ends_at: str, now: str
+) -> None:
+    """Re-dates a planned slot the planner owns; a learner move is never overwritten."""
+    await tx.conn.execute(
+        UPDATE_MOCK_EXAM_SLOT,
+        {"slot_id": slot_id, "title": title, "starts_at": starts_at, "ends_at": ends_at, "now": now},
+    )
+
+
+async def read_slot_times(tx: Tx, slot_id: str) -> Mapping[str, Any] | None:
+    """The stored instants of a slot, after the insert or the update."""
+    result = await tx.conn.execute(READ_SLOT_TIMES, {"slot_id": slot_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)

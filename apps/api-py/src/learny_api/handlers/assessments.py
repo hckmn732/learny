@@ -102,6 +102,16 @@ async def exam_answers_save(call: Call) -> Any:
     )
 
 
+@handler("exam.intro")
+async def exam_intro(call: Call) -> Any:
+    return await assessments.get_exam_intro(call.deps, _actor(call), _params(call)["fid"])
+
+
+@handler("exam.format.confirm")
+async def exam_format_confirm(call: Call) -> Any:
+    return await assessments.confirm_exam_format(call.deps, _actor(call), _params(call)["fid"])
+
+
 @handler("exam.questions.mark")
 async def exam_questions_mark(call: Call) -> Any:
     params = _params(call)
