@@ -341,6 +341,8 @@ export function summarizeMaestro(report, tag) {
     if (isVisual && flow.visual?.status === 'passed') out.visual += 1;
     out.flows.push({ name: String(flow.name ?? ''), status, videos, visual: isVisual });
   }
+  // Vidéo de campagne (ADR-3015 § 2) : unique pour la campagne, elle ne se rattache à aucun flux.
+  if (report?.campaignVideo) out.videos += 1;
   return out;
 }
 

@@ -1,20 +1,26 @@
 #!/usr/bin/env node
-// Maestro runner of the mobile track (SPEC-3001 EF-5, CL-3, CL-4).
+// Maestro runner of the mobile track (SPEC-3001 EF-5, CL-3, CL-4 ; ADR-3012, ADR-3015).
 //
-// Usage (through `pnpm test:e2e:mobile`):
+// Usage (through `pnpm test:e2e:mobile`, précédé du préflight `tools/dev/mobile-preflight.mjs`) :
 //   node apps/mobile/e2e/run-maestro.mjs --tags SPEC-3001 [--platform android] [--apk <path>]
-//                                        [--flows <dir>] [--out <dir>] [--record-video]
+//                                        [--flows <dir>] [--record-video]
 //
 // Steps: check (or start) the emulator, install the `e2e` build, freeze the status bar (canevas
-// § 5), run `maestro test --include-tags` in JUnit mode, copy the videos and screenshots, run the
-// visual comparison of the flows tagged `visual` against `e2e/visual/baselines/`, then write
+// § 5), run `maestro test --include-tags` in JUnit mode with `--test-output-dir`, keep the JUnit
+// report verbatim, associate every artifact with the flow that produced it, run the visual
+// comparison of the flows tagged `visual` against `e2e/visual/baselines/`, then write
 // `test-results/sdd/<SPEC>/e2e-mobile.json` = `{ passed, failed, videos, visual, flows[] }`.
 //
 // Two transports, same contract:
 //   - local (default): `adb` and `maestro` are on this machine;
 //   - remote: `MOBILE_DEVICE_AGENT_URL` points at `e2e/device-agent.mjs` running on the machine
-//     that owns the emulator (the dual-VM setup of this project, ADR-3012). The APK is pulled by
-//     the agent from `MOBILE_APK_URL`, a signed URL of the development machine.
+//     that owns the emulator (the dual-VM setup of this project, ADR-3012). The campaign is an
+//     asynchronous job (ADR-3015 § 1) : `POST /maestro` rend un `jobId`, le lanceur scrute
+//     `GET /maestro/<jobId>` ; aucune requête ne dure plus de quelques secondes. The APK is pulled
+//     by the agent from `MOBILE_APK_URL`, a signed URL of the development machine.
+//
+// Le JUnit est la seule source du statut des flux (ADR-3015 § 3) : un rapport absent, vide ou sans
+// `<testcase>` fait échouer la campagne explicitement, et un flux sans cas est `missing`.
 //
 // Exit codes: 0 campaign passed, 1 campaign failed, 2 misuse or no emulator (CL-4).
 import { spawn, spawnSync } from 'node:child_process';
@@ -25,7 +31,15 @@ import { fileURLToPath } from 'node:url';
 
 import { PNG } from 'pngjs';
 
-import { compareImages } from './visual/compare.mjs';
+import { AgentProtocolError, AgentTimeoutError, createAgentClient } from './agent-client.mjs';
+import { attributeArtifacts, flowSlug, screenshotsForFlow, videosForFlow } from './artifacts.mjs';
+import { parseFlowHeader } from './flows.mjs';
+import { junitProblem, parseJunit } from './maestro-junit.mjs';
+import { compareFlows } from './visual/compare.mjs';
+
+export { parseFlowHeader } from './flows.mjs';
+export { junitProblem, parseJunit } from './maestro-junit.mjs';
+export { parseJunit as readJunit };
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const APP_DIR = path.resolve(HERE, '..');
@@ -85,10 +99,14 @@ function config(argv) {
     flowsDir: path.resolve(ROOT, String(flags.flows ?? env.MOBILE_FLOWS ?? FLOWS_DIR)),
     deviceAgentUrl: env.MOBILE_DEVICE_AGENT_URL ?? null,
     deviceAgentToken: env.MOBILE_DEVICE_AGENT_TOKEN ?? null,
+    // Aucune requête HTTP ne dépasse ce délai (ADR-3015 § 1) ; le travail, lui, peut durer.
+    agentRequestTimeoutMs: Number(
+      env.MOBILE_DEVICE_AGENT_REQUEST_TIMEOUT_MS ?? env.MOBILE_DEVICE_AGENT_TIMEOUT_MS ?? 5_000,
+    ),
+    agentJobTimeoutMs: Number(env.MOBILE_DEVICE_AGENT_JOB_TIMEOUT_MS ?? 1_800_000),
+    agentPollIntervalMs: Number(env.MOBILE_DEVICE_AGENT_POLL_INTERVAL_MS ?? 2_000),
     avd: env.MOBILE_AVD ?? 'agent37',
     recordVideo: flags['record-video'] !== undefined || env.MOBILE_RECORD_VIDEO === '1',
-    outDir: null,
-    tagsWanted: tags,
   };
 }
 
@@ -110,71 +128,17 @@ function run(cmd, args, options = {}) {
   };
 }
 
-/** Reads `name:` and `tags:` of a Maestro flow without a YAML dependency. */
-export function parseFlowHeader(content) {
-  const lines = content.split('\n');
-  const nameLine = lines.find((line) => line.startsWith('name:'));
-  const name = nameLine === undefined ? '' : nameLine.slice('name:'.length).trim();
-  const tags = [];
-  let inTags = false;
-  for (const line of lines) {
-    // The YAML document separator closes the header (`---`).
-    if (line.trim() === '---') {
-      inTags = false;
-      continue;
-    }
-    if (/^tags:\s*$/.test(line)) {
-      inTags = true;
-      continue;
-    }
-    if (inTags) {
-      const match = /^\s*-\s*(.+?)\s*$/.exec(line);
-      const tag = match?.[1]?.replace(/^["']|["']$/g, '') ?? '';
-      // Only real labels: the document separator and comments are not tags.
-      if (tag !== '' && /^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(tag)) {
-        tags.push(tag);
-        continue;
-      }
-      inTags = false;
-    }
-  }
-  const appIdLine = lines.find((line) => line.startsWith('appId:'));
-  return {
-    name,
-    tags,
-    appId: appIdLine === undefined ? '' : appIdLine.slice('appId:'.length).trim(),
-    content,
-  };
-}
-
+/** Flow headers of a directory, sorted by file name. */
 function readFlows(dir) {
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
     .filter((file) => file.endsWith('.yaml') || file.endsWith('.yml'))
     .sort()
-    .map((file) => ({ file, ...parseFlowHeader(fs.readFileSync(path.join(dir, file), 'utf8')) }));
-}
-
-/** Minimal JUnit reader: test cases and their failures. */
-export function parseJunit(xml) {
-  const cases = [];
-  const blocks = xml.split(/<testcase\b/).slice(1);
-  for (const block of blocks) {
-    const head = block.split('>')[0] ?? '';
-    const name = /name="([^"]*)"/.exec(head)?.[1] ?? '';
-    const time = Number(/time="([^"]*)"/.exec(head)?.[1] ?? '0');
-    const body = block.split('</testcase>')[0] ?? '';
-    const failed = /<failure\b/.test(body) || /<error\b/.test(body);
-    const skipped = /<skipped\b/.test(body);
-    cases.push({
-      name,
-      time,
-      status: failed ? 'failed' : skipped ? 'skipped' : 'passed',
-      message: /message="([^"]*)"/.exec(body)?.[1] ?? null,
-    });
-  }
-  return cases;
+    .map((file) => ({
+      file,
+      ...parseFlowHeader(fs.readFileSync(path.join(dir, file), 'utf8')),
+    }));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -185,6 +149,7 @@ class LocalDevice {
   constructor(cfg) {
     this.cfg = cfg;
     this.adb = process.env.ADB ?? 'adb';
+    this.info_ = { platform: cfg.platform };
   }
 
   device() {
@@ -304,49 +269,29 @@ class LocalDevice {
     return { ok: true, detail: 'barre d’état figée (13:20, réseau et batterie pleins)' };
   }
 
-  maestro(tags, flowsDir, output) {
+  /** Lance Maestro une fois : rapport JUnit et sortie par flux dans `outputDir` (ADR-3015 § 2). */
+  maestro(tags, flowsDir, junitPath, outputDir) {
     const binary = process.env.MAESTRO ?? path.join(os.homedir(), '.maestro', 'bin', 'maestro');
     const command = fs.existsSync(binary) ? binary : 'maestro';
-    return run(
+    fs.rmSync(outputDir, { recursive: true, force: true });
+    fs.mkdirSync(outputDir, { recursive: true });
+    const result = run(
       command,
-      ['test', '--include-tags', tags.join(','), '--format', 'junit', '--output', output, flowsDir],
+      [
+        'test',
+        '--include-tags',
+        tags.join(','),
+        '--format',
+        'junit',
+        '--output',
+        junitPath,
+        '--test-output-dir',
+        outputDir,
+        flowsDir,
+      ],
       { timeout: 900_000, env: { ...process.env, MAESTRO_CLI_NO_ANALYTICS: '1' } },
     );
-  }
-
-  artifacts(names) {
-    // Maestro keeps its screenshots and recordings under ~/.maestro/tests/<date>/.
-    const dir = path.join(os.homedir(), '.maestro', 'tests');
-    if (!fs.existsSync(dir)) return [];
-    const files = [];
-    const walk = (current) => {
-      for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
-        const full = path.join(current, entry.name);
-        if (entry.isDirectory()) walk(full);
-        else if (/\.(png|mp4)$/.test(entry.name)) files.push(full);
-      }
-    };
-    walk(dir);
-    files.sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs);
-    const wanted = names.map((name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
-    return files
-      .filter((file) => {
-        const base = path
-          .basename(file)
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-');
-        return wanted.some((name) => base.includes(name));
-      })
-      .slice(0, 20)
-      .map((file) => ({ name: path.basename(file), buffer: fs.readFileSync(file) }));
-  }
-
-  screenshot(name) {
-    const result = spawnSync(this.adb, ['exec-out', 'screencap', '-p'], {
-      maxBuffer: 64 * 1024 * 1024,
-    });
-    if (result.status !== 0 || !result.stdout || result.stdout.length === 0) return null;
-    return { name: `${name}.png`, buffer: result.stdout };
+    return { ...result, artifacts: collectOutputArtifacts(outputDir) };
   }
 
   startVideo(name) {
@@ -367,51 +312,48 @@ class LocalDevice {
     const local = path.join(os.tmpdir(), `${name}.mp4`);
     const pull = spawnSync(this.adb, ['pull', this.videoFile, local], { timeout: 120_000 });
     run(this.adb, ['shell', 'rm', '-f', this.videoFile], { timeout: 20_000 });
-    if (pull.status !== 0 || !fs.existsSync(local)) return [];
+    if (pull.status !== 0 || !fs.existsSync(local)) return null;
     const buffer = fs.readFileSync(local);
     fs.rmSync(local, { force: true });
-    return [{ name: `${name}.mp4`, buffer }];
+    return { flow: null, kind: 'video', name: `${name}.mp4`, buffer };
   }
 }
 
-/** Runs the same steps on the machine that owns the emulator (ADR-3012). */
+/** Fichiers de `--test-output-dir` (chemins relatifs POSIX) avec leur contenu. */
+function collectOutputArtifacts(outputDir) {
+  const files = [];
+  const walk = (current, prefix) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const relative = prefix === '' ? entry.name : `${prefix}/${entry.name}`;
+      if (entry.isDirectory()) walk(path.join(current, entry.name), relative);
+      else if (/\.(png|jpe?g|mp4|mov|webm)$/i.test(entry.name)) files.push(relative);
+    }
+  };
+  if (fs.existsSync(outputDir)) walk(outputDir, '');
+  return files.sort().map((relative) => ({
+    path: relative,
+    name: path.basename(relative),
+    buffer: fs.readFileSync(path.join(outputDir, relative)),
+  }));
+}
+
+/** Runs the same steps on the machine that owns the emulator (ADR-3012, ADR-3015 § 1). */
 class RemoteDevice {
   constructor(cfg) {
     this.cfg = cfg;
     this.info_ = { platform: cfg.platform };
-  }
-
-  async call(route, body) {
-    // A campaign installs the APK, records the video and runs several flows: the default undici
-    // header timeout (5 min) cuts a healthy run. The wait is explicit and configurable
-    // (`MOBILE_DEVICE_AGENT_TIMEOUT_MS`), and a real failure is reported as such instead of a raw
-    // `fetch failed` (ADR-3012).
-    const timeoutMs = Number(process.env.MOBILE_DEVICE_AGENT_TIMEOUT_MS ?? 1_800_000);
-    let response;
-    try {
-      response = await fetch(`${this.cfg.deviceAgentUrl.replace(/\/+$/, '')}${route}`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          ...(this.cfg.deviceAgentToken === null
-            ? {}
-            : { 'x-device-token': this.cfg.deviceAgentToken }),
-        },
-        body: JSON.stringify(body ?? {}),
-        signal: AbortSignal.timeout(timeoutMs),
-      });
-    } catch (cause) {
-      throw new Error(
-        `agent appareil injoignable après ${String(Math.round(timeoutMs / 1000))} s (${route}) : ${cause instanceof Error ? cause.message : String(cause)}`,
-      );
-    }
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.error ?? `agent HTTP ${String(response.status)}`);
-    return payload;
+    this.client = createAgentClient({
+      baseUrl: cfg.deviceAgentUrl,
+      token: cfg.deviceAgentToken,
+      requestTimeoutMs: cfg.agentRequestTimeoutMs,
+      pollIntervalMs: cfg.agentPollIntervalMs,
+      jobTimeoutMs: cfg.agentJobTimeoutMs,
+      log: (event) => logProgress(event),
+    });
   }
 
   async ensure() {
-    const result = await this.call('/device');
+    const result = await this.client.device();
     this.info_ = result.device ?? this.info_;
     return { ok: result.ok === true, detail: result.detail ?? '' };
   }
@@ -421,55 +363,50 @@ class RemoteDevice {
   }
 
   async install() {
-    const result = await this.call('/install', { apkUrl: this.cfg.apkUrl });
+    const result = await this.client.install(this.cfg.apkUrl);
     return { ok: result.ok === true, detail: result.detail ?? '' };
   }
 
   async freeze() {
-    const result = await this.call('/freeze');
+    const result = await this.client.freeze();
     return { ok: result.ok === true, detail: result.detail ?? '' };
   }
 
-  async maestro(tags, flows, recordVideo) {
-    const result = await this.call('/maestro', {
+  /** Soumet la campagne, scrute son statut, rend le rapport et les artefacts par flux. */
+  async campaign({ tags, flows, recordVideo }) {
+    const done = await this.client.runMaestro({
       tags,
       recordVideo,
-      flows: flows.map((flow) => ({ file: flow.file, content: flow.content })),
+      flows: flows.map((flow) => ({ file: flow.file, name: flow.name, content: flow.content })),
     });
     return {
-      status: result.status ?? 1,
-      stdout: result.stdout ?? '',
-      stderr: result.stderr ?? '',
-      junit: result.junit ?? '',
-      artifacts: (result.artifacts ?? []).map((artifact) => ({
+      jobId: done.jobId,
+      status: done.status,
+      junit: done.junit ?? '',
+      stdout: done.stdout ?? '',
+      stderr: done.stderr ?? '',
+      error: done.error ?? null,
+      artifacts: (done.artifacts ?? []).map((artifact) => ({
+        flow: typeof artifact.flow === 'string' ? artifact.flow : null,
+        path: artifact.path ?? null,
         name: artifact.name,
-        buffer: Buffer.from(artifact.base64, 'base64'),
+        buffer: Buffer.from(artifact.base64 ?? '', 'base64'),
       })),
     };
   }
+}
 
-  startVideo() {
-    return { ok: true, detail: 'vidéo enregistrée par l’agent' };
-  }
-
-  stopVideo() {
-    return [];
-  }
+/** Une ligne par changement d'état seulement : un travail de 3 min ne noie pas la sortie. */
+let lastProgressLine = '';
+function logProgress(event) {
+  const line = `${String(event.status ?? '')} ${String(event.progress ?? event.note ?? '')}`.trim();
+  if (line === lastProgressLine || line === '') return;
+  lastProgressLine = line;
+  console.log(`… ${line}`);
 }
 
 // ---------------------------------------------------------------------------------------------
 // Campaign.
-
-function writeArtifacts(dir, artifacts) {
-  fs.mkdirSync(dir, { recursive: true });
-  const written = [];
-  for (const artifact of artifacts) {
-    const target = path.join(dir, artifact.name);
-    fs.writeFileSync(target, artifact.buffer);
-    written.push(target);
-  }
-  return written;
-}
 
 async function main() {
   const cfg = config(process.argv.slice(2));
@@ -511,8 +448,8 @@ async function main() {
   }
   console.log(`✔ émulateur : ${JSON.stringify(device.info())}`);
 
-  if (cfg.deviceAgentUrl === null) {
-    const installed = await device.install(cfg.apk);
+  if (device instanceof LocalDevice) {
+    const installed = device.install(cfg.apk);
     if (!installed.ok) {
       console.error(`✖ installation impossible : ${installed.detail}`);
       return 2;
@@ -535,67 +472,107 @@ async function main() {
   console.log(`${frozen.ok ? '✔' : '…'} ${frozen.detail}`);
 
   const junitPath = path.join(outDir, 'e2e-mobile.xml');
+  const outputDir = path.join(outDir, 'maestro-output');
   const startedAt = new Date().toISOString();
-  let junit;
+  let junit = '';
   let artifacts = [];
+  let campaignVideo = null;
+  let jobId = null;
+  let transportError = null;
 
-  if (device instanceof RemoteDevice) {
-    const result = await device.maestro(cfg.tags, selected, cfg.recordVideo);
-    junit = result.junit;
-    artifacts = result.artifacts;
-    fs.writeFileSync(junitPath, junit);
-    if (result.status !== 0) {
-      console.log(result.stdout);
-      console.error(result.stderr);
+  try {
+    if (device instanceof RemoteDevice) {
+      const result = await device.campaign({
+        tags: cfg.tags,
+        flows: selected,
+        recordVideo: cfg.recordVideo,
+      });
+      jobId = result.jobId;
+      junit = result.junit;
+      artifacts = result.artifacts;
+      campaignVideo =
+        result.artifacts.find((artifact) => artifact.flow === null && artifact.buffer.length > 0) ??
+        null;
+      if (result.error !== null) transportError = result.error;
+      if (result.status !== 'done') {
+        if (result.stdout !== '') console.log(result.stdout);
+        if (result.stderr !== '') console.error(result.stderr);
+      }
+    } else {
+      if (cfg.recordVideo) device.startVideo(spec);
+      const result = device.maestro(cfg.tags, cfg.flowsDir, junitPath, outputDir);
+      if (cfg.recordVideo) campaignVideo = device.stopVideo(spec);
+      if (result.status !== 0) {
+        if (result.stdout !== '') console.log(result.stdout);
+        if (result.stderr !== '') console.error(result.stderr);
+      }
+      artifacts = result.artifacts;
+      junit = fs.existsSync(junitPath) ? fs.readFileSync(junitPath, 'utf8') : '';
     }
-  } else {
-    device.startVideo(spec);
-    const result = device.maestro(cfg.tags, cfg.flowsDir, junitPath);
-    const video = device.stopVideo(spec);
-    if (result.status !== 0) {
-      console.log(result.stdout);
-      console.error(result.stderr);
-    }
-    const screenshots = selected
-      .map((flow) => device.screenshot(path.basename(flow.file, '.yaml')))
-      .filter((shot) => shot !== null);
-    artifacts = [...video, ...screenshots];
-    junit = fs.existsSync(junitPath) ? fs.readFileSync(junitPath, 'utf8') : '';
+  } catch (error) {
+    const known = error instanceof AgentTimeoutError || error instanceof AgentProtocolError;
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`✖ ${known ? message : `campagne interrompue : ${message}`}`);
+    transportError = message;
   }
 
+  // Le rapport JUnit est écrit tel que Maestro l'a produit (ADR-3015 § 3).
+  if (junit !== '') fs.writeFileSync(junitPath, junit);
+  const problem = junitProblem(junit);
   const cases = parseJunit(junit);
 
-  // Artifacts: one directory per flow, keyed by the flow name (one file per name, the transport
-  // may return the same screenshot twice).
-  const artifactIndex = {};
-  const seen = new Set();
-  for (const artifact of artifacts) {
-    if (seen.has(artifact.name)) continue;
-    seen.add(artifact.name);
-    const owner =
-      selected.find((flow) =>
-        artifact.name.toLowerCase().includes(path.basename(flow.file, '.yaml').toLowerCase()),
-      ) ?? selected[0];
-    const dir = path.join(outDir, 'artifacts', path.basename(owner.file, '.yaml'));
-    const [written] = writeArtifacts(dir, [artifact]);
-    artifactIndex[path.basename(owner.file, '.yaml')] ??= { screenshots: [], videos: [] };
-    if (artifact.name.endsWith('.mp4'))
-      artifactIndex[path.basename(owner.file, '.yaml')].videos.push(written);
-    else artifactIndex[path.basename(owner.file, '.yaml')].screenshots.push(written);
+  // Artefacts : un répertoire par flux, jamais de repli sur le premier flux (ADR-3015 § 2).
+  const flowArtifacts = artifacts.filter((artifact) => artifact.flow !== null);
+  const { byFlow, unattributed } = attributeArtifacts({
+    artifacts: flowArtifacts,
+    flows: selected,
+  });
+  const written = new Map();
+  for (const flow of selected) {
+    const dir = path.join(outDir, 'artifacts', flowSlug(flow.name));
+    const own = new Set();
+    const screenshots = [];
+    const videos = [];
+    const write = (artifact, bucket) => {
+      fs.mkdirSync(dir, { recursive: true });
+      let name = path.basename(artifact.name);
+      let target = path.join(dir, name);
+      if (own.has(target)) {
+        name = `${String(bucket.length + 1).padStart(2, '0')}-${name}`;
+        target = path.join(dir, name);
+      }
+      own.add(target);
+      fs.writeFileSync(target, artifact.buffer);
+      bucket.push(target);
+    };
+    for (const artifact of screenshotsForFlow(byFlow, flow)) write(artifact, screenshots);
+    for (const artifact of videosForFlow(byFlow, flow)) write(artifact, videos);
+    written.set(flowSlug(flow.name), { screenshots, videos });
   }
 
-  // Visual comparison of the flows tagged `visual` (EF-6, ADR-3003 § 4).
-  let visualPassed = 0;
+  let campaignVideoPath = null;
+  if (campaignVideo !== null) {
+    campaignVideoPath = path.join(outDir, 'artifacts', 'campagne', 'campagne.mp4');
+    fs.mkdirSync(path.dirname(campaignVideoPath), { recursive: true });
+    fs.writeFileSync(campaignVideoPath, campaignVideo.buffer);
+  }
+
+  // Comparaison visuelle flux par flux (ADR-3015 § 4).
   const visualResults = [];
+  const pendingComparisons = [];
   for (const flow of selected) {
     if (!flow.tags.includes('visual')) continue;
-    const base = path.basename(flow.file, '.yaml');
-    const capture = (artifactIndex[base]?.screenshots ?? []).find((file) => /\.png$/.test(file));
+    const capture = (written.get(flowSlug(flow.name))?.screenshots ?? [])[0];
     if (capture === undefined) {
-      visualResults.push({ flow: flow.name, status: 'failed', detail: 'aucune capture' });
+      visualResults.push({
+        flow: flow.name,
+        status: 'failed',
+        detail: 'aucune capture rattachée à ce flux (`takeScreenshot` absent ou nommé autrement)',
+      });
       continue;
     }
-    const baseline = path.join(BASELINES_DIR, `${base}.png`);
+    const stamp = path.basename(flow.file, '.yaml');
+    const baseline = path.join(BASELINES_DIR, `${stamp}.png`);
     if (!fs.existsSync(baseline)) {
       fs.mkdirSync(BASELINES_DIR, { recursive: true });
       fs.copyFileSync(capture, baseline);
@@ -608,23 +585,46 @@ async function main() {
       });
       continue;
     }
-    const result = compareImages(fs.readFileSync(capture), fs.readFileSync(baseline));
-    const diffPath = path.join(outDir, 'artifacts', base, `${base}.diff.png`);
-    fs.writeFileSync(diffPath, PNG.sync.write(result.diffPng));
-    visualResults.push({
-      flow: flow.name,
-      status: result.ok ? 'passed' : 'failed',
-      diffRatio: Number(result.diffRatio.toFixed(4)),
-      capture,
-      baseline,
-      diff: diffPath,
-    });
-    if (result.ok) visualPassed += 1;
+    pendingComparisons.push({ flow, capture, baseline });
   }
 
+  const compared = compareFlows(
+    pendingComparisons.map((entry) => ({
+      flow: entry.flow.name,
+      capture: fs.readFileSync(entry.capture),
+      baseline: fs.readFileSync(entry.baseline),
+    })),
+  );
+  pendingComparisons.forEach((entry, index) => {
+    const result = compared[index];
+    const diffPath = path.join(
+      outDir,
+      'artifacts',
+      flowSlug(entry.flow.name),
+      `${path.basename(entry.flow.file, '.yaml')}.diff.png`,
+    );
+    if (result?.diffPng !== null && result?.diffPng !== undefined) {
+      fs.mkdirSync(path.dirname(diffPath), { recursive: true });
+      fs.writeFileSync(diffPath, PNG.sync.write(result.diffPng));
+    }
+    visualResults.push({
+      flow: entry.flow.name,
+      status: result?.status ?? 'failed',
+      ...(result?.diffRatio === null || result?.diffRatio === undefined
+        ? {}
+        : { diffRatio: Number(result.diffRatio.toFixed(4)) }),
+      capture: entry.capture,
+      baseline: entry.baseline,
+      ...(result?.diffPng === null || result?.diffPng === undefined ? {} : { diff: diffPath }),
+    });
+  });
+
+  const visualPassed = visualResults.filter((entry) => entry.status === 'passed').length;
+
   const flowReports = selected.map((flow) => {
+    const slug = flowSlug(flow.name);
     const testcase = cases.find((entry) => entry.name === flow.name);
-    const base = path.basename(flow.file, '.yaml');
+    const files = written.get(slug) ?? { screenshots: [], videos: [] };
     return {
       file: path.relative(ROOT, path.join(cfg.flowsDir, flow.file)),
       name: flow.name,
@@ -632,20 +632,21 @@ async function main() {
       status: testcase?.status ?? 'missing',
       durationSec: testcase?.time ?? 0,
       message: testcase?.message ?? null,
-      videos: (artifactIndex[base]?.videos ?? []).map((file) => path.relative(outDir, file)),
-      screenshots: (artifactIndex[base]?.screenshots ?? []).map((file) =>
-        path.relative(outDir, file),
-      ),
+      videos: files.videos.map((file) => path.relative(outDir, file)),
+      screenshots: files.screenshots.map((file) => path.relative(outDir, file)),
       visual: visualResults.find((entry) => entry.flow === flow.name) ?? null,
     };
   });
 
   const passed = flowReports.filter((flow) => flow.status === 'passed').length;
-  const videos = flowReports.reduce((total, flow) => total + flow.videos.length, 0);
+  const videos =
+    flowReports.reduce((total, flow) => total + flow.videos.length, 0) +
+    (campaignVideoPath === null ? 0 : 1);
   const report = {
     spec,
     platform: cfg.platform,
     transport: cfg.deviceAgentUrl === null ? 'local' : 'agent',
+    jobId,
     device: device.info(),
     tags: cfg.tags,
     startedAt,
@@ -653,7 +654,9 @@ async function main() {
     passed,
     failed: flowReports.length - passed,
     videos,
+    campaignVideo: campaignVideoPath === null ? null : path.relative(outDir, campaignVideoPath),
     visual: visualPassed,
+    junitCases: cases.length,
     flows: flowReports,
     visualChecks: visualResults.map((entry) => ({
       flow: entry.flow,
@@ -661,14 +664,34 @@ async function main() {
       ...(entry.diffRatio === undefined ? {} : { diffRatio: entry.diffRatio }),
       ...(entry.detail === undefined ? {} : { detail: entry.detail }),
     })),
+    unattributed: unattributed.map((entry) => ({
+      name: entry.artifact.name,
+      path: entry.artifact.path ?? null,
+      reason: entry.reason,
+    })),
   };
 
   fs.writeFileSync(path.join(outDir, 'e2e-mobile.json'), `${JSON.stringify(report, null, 2)}\n`);
+
+  if (problem !== null) {
+    console.error(`✖ campagne ${spec} non prouvée : ${problem} (ADR-3015 § 3)`);
+    if (transportError !== null) console.error(`  transport : ${transportError}`);
+    return 1;
+  }
+  if (transportError !== null && passed === 0) {
+    console.error(`✖ campagne ${spec} interrompue : ${transportError}`);
+    return 1;
+  }
   console.log(
     `✔ campagne ${spec} : ${String(passed)} flux réussi(s), ${String(report.failed)} échec(s), ` +
       `${String(videos)} vidéo(s), ${String(visualPassed)} comparaison(s) visuelle(s)`,
   );
   console.log(`  rapport : ${path.relative(ROOT, path.join(outDir, 'e2e-mobile.json'))}`);
+  if (unattributed.length > 0) {
+    console.log(
+      `  ${String(unattributed.length)} artefact(s) non rattaché(s) à un flux (voir le rapport)`,
+    );
+  }
   return passed > 0 && report.failed === 0 ? 0 : 1;
 }
 

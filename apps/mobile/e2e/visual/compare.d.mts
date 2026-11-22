@@ -39,7 +39,11 @@ export const DEFAULT_THRESHOLD: number;
 export const DEFAULT_COLOR_THRESHOLD: number;
 export const DEFAULT_ZONES: { top: number; bottom: number; left: number; right: number };
 
-export function parseMask(value: string | undefined | null, width: number, height: number): MaskRect[];
+export function parseMask(
+  value: string | undefined | null,
+  width: number,
+  height: number,
+): MaskRect[];
 export function parseZones(value: string): MaskZones;
 export function maskPng(png: unknown, rects: MaskRect[]): unknown;
 export function resizeImage(png: unknown, width: number, height: number): unknown;
@@ -48,4 +52,21 @@ export function compareImages(
   referenceBuffer: Buffer,
   options?: CompareOptions,
 ): CompareResult;
+export interface CompareFlowEntry {
+  flow: string;
+  capture: Buffer | null;
+  baseline: Buffer | null;
+}
+
+export interface CompareFlowResult {
+  flow: string;
+  status: 'passed' | 'failed' | 'no-capture' | 'baseline-created';
+  diffRatio: number | null;
+  diffPng: unknown;
+}
+
+export function compareFlows(
+  entries: CompareFlowEntry[],
+  options?: CompareOptions,
+): CompareFlowResult[];
 export function runCli(argv: string[]): number;
