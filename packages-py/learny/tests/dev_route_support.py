@@ -25,7 +25,7 @@ from learny_api.pipeline import PipelineContext
 from learny_api.special import install as install_special
 from starlette.requests import Request
 
-ROOT = Path(__file__).resolve().parents[4]
+ROOT = Path(__file__).resolve().parents[3]
 CATALOG: dict[str, ErrorEntry] = load_catalog(ROOT / "api" / "errors.json")
 NOW = datetime(2026, 11, 11, 12, 20, tzinfo=UTC)
 USER_ID = "22222222-2222-4222-8222-222222222222"

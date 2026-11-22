@@ -33,10 +33,10 @@ operations:
   'courses.progress': py
   'dev.cron.hourlyTick': ts
   'dev.echo': py
-  'dev.email.outbox': ts
-  'dev.email.outbox.purge': ts
-  'dev.email.preview': ts
-  'dev.email.send': ts
+  'dev.email.outbox': py
+  'dev.email.outbox.purge': py
+  'dev.email.preview': py
+  'dev.email.send': py
   'dev.events.demo.run': ts
   'dev.events.demo.start': ts
   'dev.events.outbox': ts
@@ -222,11 +222,11 @@ operations:
   'warmups.today.get': py
 
 special:
-  'DELETE /api/v1/dev/sdd/email/outbox': ts
+  'DELETE /api/v1/dev/sdd/email/outbox': py
   'DELETE /api/v1/dev/sdd/personal-data/deletion': ts
   'GET /api/v1/auth/callback': ts
-  'GET /api/v1/dev/sdd/email/outbox': ts
-  'GET /api/v1/dev/sdd/email/preview': ts
+  'GET /api/v1/dev/sdd/email/outbox': py
+  'GET /api/v1/dev/sdd/email/preview': py
   'GET /api/v1/dev/sdd/events/demo/:runId': ts
   'GET /api/v1/dev/sdd/events/outbox': ts
   'GET /api/v1/dev/sdd/items': py
@@ -238,7 +238,7 @@ special:
   'POST /api/v1/_dev/secret-scan': ts
   'POST /api/v1/dev/sdd/cron/hourly-tick': ts
   'POST /api/v1/dev/sdd/echo': py
-  'POST /api/v1/dev/sdd/email/send': ts
+  'POST /api/v1/dev/sdd/email/send': py
   'POST /api/v1/dev/sdd/events/demo': ts
   'POST /api/v1/dev/sdd/notifications/generate': ts
   'POST /api/v1/dev/sdd/notify': ts

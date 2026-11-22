@@ -14,6 +14,12 @@ from learny.engagement.application.automations import (
     undo_automation_action,
     update_my_automation_setting,
 )
+from learny.engagement.application.dev_email import (
+    list_demo_outbox,
+    preview_email,
+    purge_demo_outbox,
+    send_demo_email,
+)
 from learny.engagement.application.digest import (
     build_digest_data,
     held_block,
@@ -115,6 +121,7 @@ __all__ = [
     "get_unread_notification_count",
     "get_weekly_review",
     "held_block",
+    "list_demo_outbox",
     "list_my_automation_actions",
     "list_my_automations",
     "list_notifications",
@@ -130,9 +137,11 @@ __all__ = [
     "notification_settings_to_dto",
     "notify",
     "plan_daily_digests",
+    "preview_email",
     "previous_civil_day",
     "profile_timezone",
     "prune_validation_quiz_reminders",
+    "purge_demo_outbox",
     "quiet_hours_of",
     "quiz_link",
     "read_unsubscribe_token",
@@ -141,6 +150,7 @@ __all__ = [
     "schedule_validation_quiz_reminder",
     "send_daily_digest",
     "send_daily_digest_at",
+    "send_demo_email",
     "send_email",
     "send_push",
     "send_welcome_email",

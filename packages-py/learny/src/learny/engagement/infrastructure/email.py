@@ -24,6 +24,7 @@ import jinja2
 from learny.shared.clock import Clock
 from learny.shared.config import Settings
 from learny.shared.locale_fr import engagement_email as fr
+from learny.shared.time import to_iso
 
 EmailMode = Literal["memory", "smtp", "resend"]
 
@@ -156,11 +157,12 @@ class RenderedEmail:
 
 @dataclass(frozen=True, slots=True)
 class OutboxEntry:
-    """One captured message of the `memory` transport."""
+    """One captured message of the `memory` transport, with its capture instant."""
 
     message_id: str
     idempotency_key: str
     message: EmailMessage
+    at: str
 
 
 class EmailTransport(Protocol):
@@ -196,7 +198,12 @@ class MemoryEmailTransport:
                 return entry.message_id
         message_id = message_id_for("mem", idempotency_key)
         self._outbox.append(
-            OutboxEntry(message_id=message_id, idempotency_key=idempotency_key, message=message)
+            OutboxEntry(
+                message_id=message_id,
+                idempotency_key=idempotency_key,
+                message=message,
+                at=to_iso(self._clock.now()),
+            )
         )
         return message_id
 
