@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
   },
   body: {
     ...theme.type.body,
-    color: theme.colors['ink-secondary'],
+    color: theme.colors.inkSecondary,
   },
 });

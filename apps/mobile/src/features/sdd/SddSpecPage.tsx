@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     ...theme.type.eyebrow,
-    color: theme.colors['ink-muted'],
+    color: theme.colors.inkMuted,
   },
   title: {
     ...theme.type.title,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   rowLabel: {
     ...theme.type.meta,
-    color: theme.colors['ink-muted'],
+    color: theme.colors.inkMuted,
   },
   rowValue: {
     ...theme.type.value,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   rowDetail: {
     ...theme.type.detail,
     marginTop: 2,
-    color: theme.colors['ink-secondary'],
+    color: theme.colors.inkSecondary,
   },
   separator: {
     height: 1,
@@ -191,6 +191,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     ...theme.type.caption,
-    color: theme.colors['ink-muted'],
+    color: theme.colors.inkMuted,
   },
 });

@@ -5,6 +5,7 @@ import { Platform, type TextStyle, type ViewStyle } from 'react-native';
 
 import {
   colors,
+  controlHeights,
   durations,
   fontFamilies,
   minTouchTarget,
@@ -27,14 +28,13 @@ function perPlatform<T>(values: { readonly ios: T; readonly android: T }): T {
 }
 
 function textStyle(token: TypeToken): TextStyle {
-  const style: TextStyle = {
+  return {
     fontFamily: fontFamilies[token.fontFamily],
     fontSize: token.fontSize,
     lineHeight: token.lineHeight,
     letterSpacing: token.letterSpacing,
+    ...(token.textTransform === undefined ? {} : { textTransform: token.textTransform }),
   };
-  if (token.textTransform !== undefined) style.textTransform = token.textTransform;
-  return style;
 }
 
 const scale = typeScale[platform];
@@ -53,6 +53,15 @@ export const type = {
   label: textStyle(scale.label),
   caption: textStyle(scale.caption),
   figure: textStyle(scale.figure),
+  button: textStyle(scale.button),
+  buttonSmall: textStyle(scale.buttonSmall),
+  chip: textStyle(scale.chip),
+  rowTitle: textStyle(scale.rowTitle),
+  rowSubtitle: textStyle(scale.rowSubtitle),
+  statLabel: textStyle(scale.statLabel),
+  toast: textStyle(scale.toast),
+  badge: textStyle(scale.badge),
+  sheetTitle: textStyle(scale.sheetTitle),
   // Aliases kept from SPEC-3001 so that the screens of the track share one vocabulary.
   value: textStyle(scale.title),
   detail: textStyle(scale.bodySmall),
@@ -92,8 +101,10 @@ export const elevation = {
 } as const;
 
 /** Minimum touch target of the platform (BR-PLA-02). */
-export const touchTarget: { readonly width: number; readonly height: number } =
-  perPlatform(minTouchTarget);
+export const touchTarget: { readonly width: number; readonly height: number } = perPlatform<{
+  readonly width: number;
+  readonly height: number;
+}>(minTouchTarget);
 
 /**
  * Vertical `hitSlop` that lifts a control of `height` to the platform minimum: a 40 dp button on
@@ -106,6 +117,19 @@ export function verticalHitSlop(height: number): number {
 /** Title growth stops at 160 %; running text follows the system without limit (canevas § 3). */
 export const maxFontSizeMultiplier = { heading: 1.6, body: 0 } as const;
 
+/** Control geometry of the running platform (see `controlHeights` in `./tokens`). */
+export const controls = {
+  button: perPlatform<{ readonly md: number; readonly sm: number }>(controlHeights.button),
+  chip: perPlatform<number>(controlHeights.chip),
+  iconButton: controlHeights.iconButton,
+  row: controlHeights.row,
+  avatar: controlHeights.avatar,
+  fab: controlHeights.fab,
+  progressTrack: controlHeights.progressTrack,
+  progressSegment: controlHeights.progressSegment,
+  sheetGrabber: controlHeights.sheetGrabber,
+} as const;
+
 export const theme = {
   platform,
   colors,
@@ -115,7 +139,9 @@ export const theme = {
   elevation,
   spacing,
   durations,
+  minTouchTarget: touchTarget,
   touchTarget,
+  controls,
   maxFontSizeMultiplier,
 } as const;
 

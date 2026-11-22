@@ -100,6 +100,24 @@ export interface TypeScale {
   readonly caption: TypeToken;
   /** Figures of the stat cards (Space Grotesk, 26 pt). */
   readonly figure: TypeToken;
+  /** Label of a button (15 pt semibold on iOS, 15 pt medium on Android). */
+  readonly button: TypeToken;
+  /** Label of a small button (13 pt). */
+  readonly buttonSmall: TypeToken;
+  /** Label of a chip (12 pt). */
+  readonly chip: TypeToken;
+  /** Title of a `ListRow` (16 pt). */
+  readonly rowTitle: TypeToken;
+  /** Subtitle of a `ListRow` (13 pt). */
+  readonly rowSubtitle: TypeToken;
+  /** Label above the figure of a stat card (11 pt). */
+  readonly statLabel: TypeToken;
+  /** Toast message (13 pt medium). */
+  readonly toast: TypeToken;
+  /** Count of a badge (11 pt semibold). */
+  readonly badge: TypeToken;
+  /** Title of a large header or of a sheet (18 pt on iOS, 19 pt on Android). */
+  readonly sheetTitle: TypeToken;
 }
 
 /** Typography of both platforms: the only place where a font size is written down. */
@@ -114,6 +132,15 @@ export const typeScale = {
     label: { fontSize: 12, lineHeight: 16, fontFamily: 'bodySemiBold', letterSpacing: 0.2 },
     caption: { fontSize: 12, lineHeight: 17, fontFamily: 'body', letterSpacing: 0 },
     figure: { fontSize: 26, lineHeight: 29, fontFamily: 'display', letterSpacing: -0.8 },
+    button: { fontSize: 15, lineHeight: 20, fontFamily: 'bodySemiBold', letterSpacing: -0.15 },
+    buttonSmall: { fontSize: 13, lineHeight: 18, fontFamily: 'bodySemiBold', letterSpacing: 0 },
+    chip: { fontSize: 12, lineHeight: 16, fontFamily: 'bodySemiBold', letterSpacing: 0 },
+    rowTitle: { fontSize: 16, lineHeight: 21, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    rowSubtitle: { fontSize: 13, lineHeight: 18, fontFamily: 'body', letterSpacing: 0 },
+    statLabel: { fontSize: 11, lineHeight: 15, fontFamily: 'bodySemiBold', letterSpacing: 0 },
+    toast: { fontSize: 13, lineHeight: 18, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    badge: { fontSize: 11, lineHeight: 14, fontFamily: 'bodySemiBold', letterSpacing: 0 },
+    sheetTitle: { fontSize: 18, lineHeight: 24, fontFamily: 'display', letterSpacing: -0.2 },
   },
   android: {
     eyebrow: {
@@ -142,6 +169,15 @@ export const typeScale = {
     },
     caption: { fontSize: 12, lineHeight: 17, fontFamily: 'body', letterSpacing: 0 },
     figure: { fontSize: 26, lineHeight: 29, fontFamily: 'displayMedium', letterSpacing: -0.8 },
+    button: { fontSize: 15, lineHeight: 20, fontFamily: 'bodyMedium', letterSpacing: 0.15 },
+    buttonSmall: { fontSize: 13, lineHeight: 18, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    chip: { fontSize: 12, lineHeight: 16, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    rowTitle: { fontSize: 16, lineHeight: 21, fontFamily: 'body', letterSpacing: 0 },
+    rowSubtitle: { fontSize: 13, lineHeight: 18, fontFamily: 'body', letterSpacing: 0 },
+    statLabel: { fontSize: 11, lineHeight: 15, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    toast: { fontSize: 13, lineHeight: 18, fontFamily: 'bodyMedium', letterSpacing: 0 },
+    badge: { fontSize: 11, lineHeight: 14, fontFamily: 'bodySemiBold', letterSpacing: 0 },
+    sheetTitle: { fontSize: 19, lineHeight: 25, fontFamily: 'displayMedium', letterSpacing: -0.1 },
   },
 } as const satisfies Record<PlatformName, TypeScale>;
 
@@ -251,4 +287,21 @@ export const durations = {
 export const minTouchTarget = {
   ios: { width: 44, height: 44 },
   android: { width: 48, height: 48 },
+} as const;
+
+/**
+ * Control geometry of the mockups (`design/app-mobile/assets/app.css`), in pt/dp. The heights
+ * follow the native scales of § Choix de conception (50/52 for a button, 30/32 for a chip); the
+ * mockup-only values (row 56, avatar 64) are listed here so that no component writes one (ET-1).
+ */
+export const controlHeights = {
+  button: { ios: { md: 50, sm: 38 }, android: { md: 52, sm: 40 } },
+  chip: { ios: 30, android: 32 },
+  iconButton: 44,
+  row: 56,
+  avatar: { sm: 32, md: 44, lg: 64 },
+  fab: 56,
+  progressTrack: 6,
+  progressSegment: 4,
+  sheetGrabber: { width: 36, height: 5 },
 } as const;

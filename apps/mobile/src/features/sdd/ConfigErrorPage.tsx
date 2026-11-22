@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
   },
   title: {
     ...theme.type.title,
-    color: theme.colors['danger'],
+    color: theme.colors.danger,
   },
   intro: {
     ...theme.type.body,
-    color: theme.colors['ink-secondary'],
+    color: theme.colors.inkSecondary,
   },
   sectionTitle: {
     ...theme.type.eyebrow,

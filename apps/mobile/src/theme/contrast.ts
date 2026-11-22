@@ -4,21 +4,20 @@
 // they are imported through the `@learny/ui/accessibility/contrast` entry point so that the web
 // and the mobile cannot diverge. The pairs below are the text/background combinations the
 // components of `src/ui/` actually render; the test asserts the AA thresholds.
-import {
-  AA_LARGE_TEXT,
-  AA_NORMAL_TEXT,
-  contrastRatio,
-  type ContrastPair,
-} from '@learny/ui/accessibility/contrast';
+import { AA_LARGE_TEXT, AA_NORMAL_TEXT, contrastRatio } from '@learny/ui/accessibility/contrast';
 
 import { colors, type ColorName } from './tokens';
 
 /** A text/background pair of the mobile theme, with the WCAG threshold that applies to it. */
-export interface ThemeContrastPair extends ContrastPair {
+export interface ThemeContrastPair {
+  /** Stable identifier of the pair, used by the evidence table. */
+  readonly id: string;
   /** Foreground colour of the theme (not only a web token). */
   readonly foreground: ColorName;
   /** Background colour of the theme. */
   readonly background: ColorName;
+  /** WCAG threshold that applies to this pair. */
+  readonly minimum: number;
 }
 
 function pair(

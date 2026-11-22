@@ -1,20 +1,37 @@
-// Root layout (SPEC-3001 § 8.3): providers, theme, fonts, and the configuration guard.
-// The configuration is validated once, at start-up; an invalid configuration shows the
-// « Configuration invalide » screen instead of a crash (CL-2).
+// Root layout (SPEC-3001 § 8.3, SPEC-3002 ET-3): providers, theme, embedded fonts and the
+// configuration guard. The splash screen stays until the fonts are loaded; a failed load falls
+// back to the system fonts instead of blocking the start-up.
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import interBold from '../assets/fonts/Inter-Bold.ttf';
 import interMedium from '../assets/fonts/Inter-Medium.ttf';
 import interRegular from '../assets/fonts/Inter-Regular.ttf';
 import interSemiBold from '../assets/fonts/Inter-SemiBold.ttf';
 import spaceGroteskBold from '../assets/fonts/SpaceGrotesk-Bold.ttf';
 import spaceGroteskMedium from '../assets/fonts/SpaceGrotesk-Medium.ttf';
+import spaceGroteskSemiBold from '../assets/fonts/SpaceGrotesk-SemiBold.ttf';
 import { configResult } from '../src/config';
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { theme } from '../src/theme';
+
+void SplashScreen.preventAutoHideAsync();
+
+/** The seven weights of the design system (SPEC-3002 § 3); a family carries its weight. */
+const FONTS = {
+  'SpaceGrotesk-Medium': spaceGroteskMedium,
+  'SpaceGrotesk-SemiBold': spaceGroteskSemiBold,
+  'SpaceGrotesk-Bold': spaceGroteskBold,
+  'Inter-Regular': interRegular,
+  'Inter-Medium': interMedium,
+  'Inter-SemiBold': interSemiBold,
+  'Inter-Bold': interBold,
+} as const;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,15 +40,14 @@ const queryClient = new QueryClient({
 });
 
 export default function RootLayout() {
-  // The fonts are also embedded natively by the expo-font plugin; loading them here keeps the
-  // development client and the tests on the same code path. Rendering never waits for them.
-  useFonts({
-    'SpaceGrotesk-Bold': spaceGroteskBold,
-    'SpaceGrotesk-Medium': spaceGroteskMedium,
-    'Inter-Regular': interRegular,
-    'Inter-Medium': interMedium,
-    'Inter-SemiBold': interSemiBold,
-  });
+  const [fontsLoaded, fontError] = useFonts(FONTS);
+
+  useEffect(() => {
+    if (fontsLoaded || fontError !== null) void SplashScreen.hideAsync();
+  }, [fontError, fontsLoaded]);
+
+  // Nothing renders before the fonts (or their failure): the system fonts then take over (ET-3).
+  if (!fontsLoaded && fontError === null) return null;
 
   if (!configResult.ok) {
     return (

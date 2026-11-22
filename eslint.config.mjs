@@ -982,6 +982,13 @@ export default tseslint.config(
     rules: { 'no-restricted-imports': 'off' },
   },
   {
+    // The icon set is generated from `design/app-mobile/assets/icons.js` (SPEC-3002 § 8.3): the
+    // brand marks of Apple and Google carry their own colours, and `Rect` attributes named `x`/`y`
+    // are the SVG geometry of the mockup, not the deprecated DOM props of the base rule.
+    files: ['apps/mobile/src/ui/icons.tsx'],
+    rules: { 'no-restricted-syntax': 'off', '@typescript-eslint/no-deprecated': 'off' },
+  },
+  {
     // The Expo configuration files (Metro, Babel, Jest) and the asset stub are CommonJS.
     files: ['apps/mobile/*.config.js', 'apps/mobile/test/**/*.js', 'apps/mobile/e2e/**/*.mjs'],
     languageOptions: {
