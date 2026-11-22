@@ -55,9 +55,17 @@ describe('[SPEC-1302] permanent coupling check', () => {
   });
 
   it('contains no reference to the removed worker application outside historical material', () => {
-    const forbidden = ['apps', 'worker'].join('/');
+    const forbidden = new RegExp(`apps/worker(?!-py)`);
     const excluded = new Set(['.git', 'node_modules', '.next']);
-    const historical = new Set(['docs/legacy', 'docs/adr', 'evidence', 'design/references']);
+    // `docs/architecture/python-headless-migration/` est le dossier de conception historique de la
+    // migration Hono (avant la piste Python) : il décrit `apps/worker` comme cible de l'époque.
+    const historical = new Set([
+      'docs/legacy',
+      'docs/adr',
+      'evidence',
+      'design/references',
+      'docs/architecture/python-headless-migration',
+    ]);
     const matches: string[] = [];
     const visit = (directory: string): void => {
       for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -71,7 +79,7 @@ describe('[SPEC-1302] permanent coupling check', () => {
         }
         if (entry.isDirectory()) visit(file);
         else if (/\.(?:ts|tsx|js|mjs|md|json|yml|yaml|sh)$/.test(entry.name)) {
-          if (fs.readFileSync(file, 'utf8').includes(forbidden)) matches.push(relative);
+          if (forbidden.test(fs.readFileSync(file, 'utf8'))) matches.push(relative);
         }
       }
     };

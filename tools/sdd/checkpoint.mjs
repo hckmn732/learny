@@ -36,7 +36,9 @@ const steps = [
   ['typecheck', 'pnpm -s typecheck'],
   ['build', 'pnpm -s build'],
   ['unit+coverage', 'pnpm -s test:unit --coverage'],
-  ['integration', 'pnpm -s test:int'],
+  mobileTrack
+    ? ['integration (client mobile)', 'pnpm -s test:int apps/mobile/test/integration']
+    : ['integration', 'pnpm -s test:int'],
   mobileTrack
     ? ['e2e mobile (preuves de campagne)', `node tools/sdd/mobile-evidence.mjs ${specIds.join(' ')}`]
     : ['e2e (non-régression complète)', 'pnpm -s test:e2e'],
