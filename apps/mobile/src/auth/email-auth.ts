@@ -1,19 +1,22 @@
 // Sign-in, magic link and callback of the native application (SPEC-3101 EF-3, EF-6, ET-1;
-// ADR-3008 § 4 et § 5).
+// ADR-3008 § 4 et § 5, ADR-3017).
 //
 // The application talks to Supabase Auth directly (never to a new `/auth/*` route of the API,
 // ADR-3008 § 4) and exchanges the code or the `token_hash` of the received link. The client is
 // injected so that the rules of this module — non-enumeration, redirect, single-use link — are
-// testable in Node without a native Auth client (Jest, Vitest).
+// tested in Node without a native Auth client (Vitest, Jest). The module imports **nothing** that
+// reaches Expo: the native client lives in `native-auth.ts`.
+import type { Session } from '@supabase/supabase-js';
+
+import type { CallbackType } from './link-types';
 import type { SessionSnapshot } from './session-port';
-import { snapshotOf } from './session-port';
 
-/** Deep link the magic link of the application comes back to (ADR-3008 § 4). */
-export const MAGIC_LINK_REDIRECT = 'learny://auth/callback';
-
-/** Types carried by the links of the API contract (`CALLBACK_TYPES` of `packages/contracts`). */
-export const CALLBACK_TYPES = ['magiclink', 'signup', 'email'] as const;
-export type CallbackType = (typeof CALLBACK_TYPES)[number];
+export {
+  CALLBACK_TYPES,
+  MAGIC_LINK_REDIRECT,
+  isCallbackType,
+  type CallbackType,
+} from './link-types';
 
 /** Answer of a Supabase Auth call, reduced to what this module reads. */
 export interface AuthResult {
@@ -23,21 +26,13 @@ export interface AuthResult {
 
 /** Surface of Supabase Auth used by the application; the tests pass a fake implementation. */
 export interface EmailAuthClient {
-  signInWithPassword(credentials: {
-    email: string;
-    password: string;
-  }): Promise<AuthResult & { data?: { session?: unknown } | null }>;
+  signInWithPassword(credentials: { email: string; password: string }): Promise<AuthResult>;
   signInWithOtp(credentials: {
     email: string;
     options: { shouldCreateUser: boolean; emailRedirectTo?: string };
   }): Promise<AuthResult>;
-  verifyOtp(params: {
-    token_hash: string;
-    type: CallbackType;
-  }): Promise<AuthResult & { data?: { session?: unknown } | null }>;
-  exchangeCodeForSession(
-    code: string,
-  ): Promise<AuthResult & { data?: { session?: unknown } | null }>;
+  verifyOtp(params: { token_hash: string; type: CallbackType }): Promise<AuthResult>;
+  exchangeCodeForSession(code: string): Promise<AuthResult>;
 }
 
 /**
@@ -89,6 +84,16 @@ function codeOf(error: unknown): string {
   return typeof code === 'string' ? code.toLowerCase() : '';
 }
 
+/** Maps a Supabase session to the snapshot of the application; never exposes a token. */
+function snapshotFrom(session: Session | null): SessionSnapshot | null {
+  if (session === null) return null;
+  return {
+    userId: session.user.id,
+    accessToken: session.access_token,
+    email: session.user.email ?? null,
+  };
+}
+
 /**
  * Password sign-in (BR-ACC-01, ET-1). The session is published by `onAuthStateChange`, so the
  * provider of `session.tsx` updates by itself; a failure is thrown as received and described by
@@ -111,7 +116,7 @@ export async function signInWithPassword(
 export async function requestMagicLink(
   client: EmailAuthClient,
   email: string,
-  redirect: string = MAGIC_LINK_REDIRECT,
+  redirect: string = 'learny://auth/callback',
 ): Promise<MagicLinkOutcome> {
   const { error } = await client.signInWithOtp({
     email: email.trim(),
@@ -122,12 +127,9 @@ export async function requestMagicLink(
   throw authFailure(error);
 }
 
-function sessionOf(result: {
-  error: unknown;
-  data?: { session?: unknown } | null;
-}): SessionSnapshot {
+function sessionOf(result: AuthResult): SessionSnapshot {
   if (result.error !== null && result.error !== undefined) throw authFailure(result.error);
-  const snapshot = snapshotOf((result.data?.session ?? null) as Parameters<typeof snapshotOf>[0]);
+  const snapshot = snapshotFrom((result.data?.session ?? null) as Session | null);
   if (snapshot === null) throw new Error('Session absente après la vérification du lien.');
   return snapshot;
 }

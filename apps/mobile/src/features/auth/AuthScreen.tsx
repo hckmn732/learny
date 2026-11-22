@@ -6,7 +6,7 @@
 // at sign-up, « Mot de passe oublié ? » and magic link sheet, legal footer, and the redirect of
 // EF-7. The magic-link buttons never show whether an account exists (ADR-0121, CA-4).
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
-import { useState, type ReactElement } from 'react';
+import { useRef, useState, type ReactElement } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -63,6 +63,9 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   const insets = useSafeAreaInsets();
   const legalGate = useLegalGate();
   const params = useLocalSearchParams<{ magic?: string }>();
+  // CL-1 — a ref, not the state, guards the double press: the second press of the same frame
+  // would still see `submitting === false`.
+  const inFlight = useRef(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -133,7 +136,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   };
 
   const submit = async (): Promise<void> => {
-    if (submitting) return; // CL-1 — a second press never sends a second request.
+    if (inFlight.current) return; // CL-1 — a second press never sends a second request.
     setGlobalError(null);
     setFieldErrors({});
 
@@ -145,11 +148,13 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
       return;
     }
 
+    inFlight.current = true;
     setSubmitting(true);
     try {
       if (signup) await create(checked.values.email, checked.values.password);
       else await signIn(checked.values.email, checked.values.password);
     } finally {
+      inFlight.current = false;
       setSubmitting(false);
     }
   };

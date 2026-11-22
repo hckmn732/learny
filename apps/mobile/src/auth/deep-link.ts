@@ -1,4 +1,4 @@
-// Parsing of the links that open the application (SPEC-3101 EF-6, CL-3; ADR-3008 § 4).
+// Parsing of the links that open the application (SPEC-3101 EF-6, CL-3; ADR-3008 § 4, ADR-3017).
 //
 // Three shapes reach the callback route:
 // - `learny://auth/callback?code=…` and `https://<web>/auth/mobile?code=…` (PKCE code);
@@ -6,7 +6,7 @@
 //   of the project (`supabase/templates`), intercepted by the application when it is installed;
 // - anything else, answered by the « Ce lien n'est plus valide » screen.
 // Pure module: the route only forwards `useLocalSearchParams()` and reads the result.
-import { CALLBACK_TYPES, type CallbackType } from './email-auth';
+import { isCallbackType, type CallbackType } from './link-types';
 
 export type AuthLink =
   | { readonly kind: 'code'; readonly code: string }
@@ -23,10 +23,6 @@ function single(value: string | string[] | undefined): string | null {
     return first === undefined ? null : first.trim();
   }
   return null;
-}
-
-function isCallbackType(value: string): value is CallbackType {
-  return (CALLBACK_TYPES as readonly string[]).includes(value);
 }
 
 /** Reads the parameters of the callback route (EF-6). */

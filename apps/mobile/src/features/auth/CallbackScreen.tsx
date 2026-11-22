@@ -45,6 +45,9 @@ export function CallbackScreen(): ReactElement {
   const started = useRef(false);
 
   useEffect(() => {
+    // CL-4 — the session is restored asynchronously: wait for the provider before acting, so that
+    // a link of another account closes and purges the current session first.
+    if (session.status === 'loading') return;
     if (started.current) return;
     started.current = true;
     const link = parseAuthLink(params);

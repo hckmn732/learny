@@ -82,7 +82,8 @@ describe('[SPEC-3101] validation des formulaires', () => {
     expect(passwordStrength('court')).toBe(0);
     expect(passwordStrength(WEAK)).toBe(1);
     expect(passwordStrength(`${WEAK}1`)).toBe(2);
-    expect(passwordStrength(`${WEAK}1!`)).toBe(3);
+    expect(passwordStrength(`${WEAK}1!`)).toBe(4);
+    expect(passwordStrength('motdepass1!')).toBe(3);
     expect(passwordStrength(STRONG_SYMBOL)).toBe(4);
     expect(strengthHint('')).toBe(fr.auth.account.strengthEmpty);
     expect(strengthHint(STRONG_SYMBOL)).toBe(fr.auth.account.strengthStrong);
