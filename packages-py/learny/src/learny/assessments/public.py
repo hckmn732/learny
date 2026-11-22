@@ -24,6 +24,8 @@ from learny.assessments.application.exercises import (
     start_exercise_attempt,
     submit_exercise,
 )
+from learny.assessments.application.grade_open import grade_open_answers
+from learny.assessments.application.grade_quiz import grade_quiz
 from learny.assessments.application.offline import build_pack
 from learny.assessments.application.offline_purge import purge_offline_receipts
 from learny.assessments.application.offline_sync import sync_offline_answers
@@ -61,6 +63,8 @@ __all__ = [
     "get_practice_exercise",
     "get_quiz_result",
     "get_remediation",
+    "grade_open_answers",
+    "grade_quiz",
     "mark_exam_question",
     "prepare_remediation",
     "purge_offline_receipts",
