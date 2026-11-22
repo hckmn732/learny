@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T16:52:34.472Z",
+  "updatedAt": "2026-11-22T17:35:34.955Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6787,41 +6787,41 @@
       "completedAt": null,
       "branch": "spec/SPEC-3002-theme-jetons-et-composants-natifs",
       "commit": null,
-      "lastError": "e2e: 3 flux réussi(s), 1 échec(s), 1 vidéo(s) | visual: 0 flux @visual réussi(s) (mode demo)",
+      "lastError": "lint:  | unit: non exécuté : lint/typecheck/build en échec | integration: non exécuté : lint/typecheck/build en échec | e2e: non exécuté : lint/typecheck/build en échec | visual: non exécuté : lint/typecheck/build en échec",
       "validations": {
         "lint": {
-          "status": "passed",
-          "at": "2026-11-22T16:48:54.157Z",
+          "status": "failed",
+          "at": "2026-11-22T17:35:27.476Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-22T16:49:01.482Z",
+          "at": "2026-11-22T17:35:34.733Z",
           "details": ""
         },
         "unit": {
-          "status": "passed",
-          "at": "2026-11-22T16:40:47.831Z",
-          "details": "10 Vitest + 49 Jest test(s) [SPEC-3002] réussi(s), 0 échec(s)"
+          "status": "failed",
+          "at": "2026-11-22T17:35:34.949Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
         },
         "integration": {
-          "status": "passed",
-          "at": "2026-11-22T16:40:48.399Z",
-          "details": "2 test(s) [SPEC-3002] réussi(s), 0 échec(s)"
+          "status": "failed",
+          "at": "2026-11-22T17:35:34.949Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
         },
         "e2e": {
           "status": "failed",
-          "at": "2026-11-22T16:52:34.461Z",
-          "details": "3 flux réussi(s), 1 échec(s), 1 vidéo(s)"
+          "at": "2026-11-22T17:35:34.949Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
         },
         "visual": {
           "status": "failed",
-          "at": "2026-11-22T16:52:34.461Z",
-          "details": "0 flux @visual réussi(s) (mode demo)"
+          "at": "2026-11-22T17:35:34.949Z",
+          "details": "non exécuté : lint/typecheck/build en échec"
         },
         "acceptance": {
           "status": "passed",
-          "at": "2026-11-22T16:52:34.472Z",
+          "at": "2026-11-22T17:35:34.955Z",
           "details": "5/5 critères ✅"
         }
       }

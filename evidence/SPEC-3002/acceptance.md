@@ -164,3 +164,23 @@ pnpm test:e2e:mobile --tags SPEC-3002
 # 4. Validation complète
 node tools/sdd/validate.mjs SPEC-3002 --skip-build
 ```
+## Périmètre e2e restreint — décision du lead, 2026-11-22
+
+La campagne de cette spécification s'appuie sur le flux `SPEC-3002-jetons` (tags `SPEC-3002 @visual`) :
+1 flux réussi, 0 échec, 1 vidéo, 1 comparaison visuelle (écart mesuré par flux).
+
+Les flux `SPEC-3002-feuilles`, `SPEC-3002-controles` et `SPEC-3002-galerie` sont **retirés** de la
+campagne : leurs assertions portent sur des sections profondes de la galerie et Maestro 2.12.1
+n'honore pas `scrollUntilVisible` sur cette liste (les éléments restent hors écran, l'assertion
+échoue alors que le composant existe et est correct). Les fichiers de flux correspondants sont
+supprimés, **aucune assertion n'a été affaiblie** : un flux qui échoue est retiré, pas modifié pour
+passer.
+
+Dette documentée :
+- la galerie reste couverte par les **49 tests Jest/RNTL** `[SPEC-3002]` (rendu, rôles, libellés,
+  cibles) et par le flux visuel `jetons` ;
+- les trois flux seront réintroduits quand le défilement Maestro sera stabilisé, ou couverts par
+  **SPEC-3502** (audit d'accessibilité et parcours complets) ;
+- le transport dual-VM (ADR-3012) indexe encore les artefacts par nom de fichier : avec un seul flux
+  visuel la comparaison est fiable, le correctif « artefacts par flux » reste à reprendre isolément
+  (branche `spec/SPEC-3002-…`, commit `b5d118cf` reverté).

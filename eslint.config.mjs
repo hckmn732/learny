@@ -280,6 +280,8 @@ export default tseslint.config(
       '**/.next/**',
       '**/dist/**',
       '**/next-env.d.ts',
+      'apps/mobile/android/**',
+      'apps/mobile/.expo/**',
       'test-results/**',
       'coverage/**',
       'design/**',
