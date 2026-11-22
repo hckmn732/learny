@@ -4,6 +4,13 @@ Importing this package fills `learny_api.pipeline.HANDLERS` through the `@handle
 must happen before `pipeline.install` registers the `py`-owned routes of `api/ownership.yaml`.
 """
 
-from learny_api.handlers import assessments, content, formation, identity, learning
+from learny_api.handlers import (
+    assessments,
+    content,
+    engagement,
+    formation,
+    identity,
+    learning,
+)
 
-__all__ = ["assessments", "content", "formation", "identity", "learning"]
+__all__ = ["assessments", "content", "engagement", "formation", "identity", "learning"]

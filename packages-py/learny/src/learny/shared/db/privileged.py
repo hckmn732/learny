@@ -43,6 +43,24 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2203 - the ingestion job is an authorized system operation (ET-4): it reads a
         # private object, locks the resource and writes the outbox event after the commit.
         "learny.content.application.ingestion": "system ingestion job of a contribution (ET-4)",
+        # SPEC-2205 - `notify` writes the in-app row and the delivery journal of a learner with the
+        # owner role, exactly like the TypeScript `sdb` of the notification producers (SPEC-209).
+        "learny.engagement.application.notify": "notification producer writes the inbox and the journal",
+        # SPEC-2205 - the sender reads the recipient address and tone, and the welcome job checks the
+        # e-mail channel, on rows the authenticated role may not read for another purpose (EF-6).
+        "learny.engagement.application.email": "recipient address and tone of the e-mail channel",
+        # SPEC-2205 - the digest tick reads the agenda and the capped sends of every learner
+        # with the owner role, exactly like the TypeScript `sdb` of the job (SPEC-209).
+        "learny.engagement.application.digest": "hourly tick of the daily digests",
+        # SPEC-2205 - the reminder tick reads and cancels the unsent reminders of every
+        # learner, which the authenticated role of one learner cannot do (BR-NOT-07).
+        "learny.engagement.application.reminders": "hourly tick of the quiz reminders",
+        # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
+        # authenticated role of one learner may not update (CL-3, SPEC-711).
+        "learny.engagement.application.automations": "hourly tick expires the pending actions",
+        # SPEC-2205 - the pause journals its own action with the service role, exactly like the
+        # TypeScript `recordPauseAction` (the RLS policy reserves inserts to that role).
+        "learny.engagement.application.pause": "pause journal row written after the commit",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

@@ -13,13 +13,20 @@ from typing import Any
 import httpx
 import structlog
 
+from learny.engagement.infrastructure.email import (
+    EmailConfig,
+    EmailTransport,
+    build_email_config,
+    create_email_transport,
+)
+from learny.engagement.infrastructure.push import PushTransport, create_push_transport
 from learny.identity.infrastructure.gotrue import GoTrueClient
 from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.platform.llm.gateway import LlmGateway, MockGateway
 from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
 from learny.shared.clock import Clock, from_env
-from learny.shared.config import Settings
+from learny.shared.config import PushMode, Settings
 from learny.shared.db.uow import Database
 
 JWKS_TIMEOUT_SECONDS = 10.0
@@ -37,6 +44,9 @@ class Deps:
     storage: SupabaseStorage
     logger: Any
     llm: LlmGateway
+    email_config: EmailConfig
+    email: EmailTransport
+    push: PushTransport
 
 
 def jwks_fetcher(settings: Settings) -> Any:
@@ -55,6 +65,7 @@ def jwks_fetcher(settings: Settings) -> Any:
 def build_deps(settings: Settings) -> Deps:
     """Builds the bundle from the settings; the caller owns the lifecycle of the pools."""
     clock = from_env({"CLOCK_FIXED_AT": os.environ.get("CLOCK_FIXED_AT", "")})
+    email_config = build_email_config(settings)
     return Deps(
         settings=settings,
         clock=clock,
@@ -64,6 +75,31 @@ def build_deps(settings: Settings) -> Deps:
         storage=SupabaseStorage(settings, clock),
         logger=structlog.get_logger("learny"),
         llm=build_llm(settings),
+        email_config=email_config,
+        email=create_email_transport(email_config, clock),
+        push=build_push(settings, clock),
+    )
+
+
+def build_push(settings: Settings, clock: Clock) -> PushTransport:
+    """The browser push transport of the configuration (SPEC-2205).
+
+    `mock` outside production (the environment default of `envDefaults`), `live` only with the
+    three VAPID values: a production process without them fails at startup instead of silently
+    dropping every push.
+    """
+    mode: PushMode = (
+        settings.push_mode
+        if settings.push_mode is not None
+        else ("mock" if settings.app_env in ("local", "test", "development", "") else "live")
+    )
+    return create_push_transport(
+        mode,
+        clock=clock,
+        ci=settings.ci,
+        subject=settings.vapid_subject,
+        public_key=settings.vapid_public_key,
+        private_key=settings.vapid_private_key,
     )
 
 

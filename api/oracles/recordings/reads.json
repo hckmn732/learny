@@ -5445,6 +5445,271 @@
           ]
         }
       ]
+    },
+    {
+      "group": "engagement",
+      "scenarios": [
+        {
+          "name": "email.unsubscribe.page",
+          "steps": [
+            {
+              "status": 400,
+              "headers": {
+                "content-type": "application/problem+json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "detail": "Les données envoyées sont invalides.",
+                "errors": [
+                  {
+                    "message": "Entrée invalide : chaîne de caractères attendu, indéfini reçu",
+                    "path": "query.token"
+                  }
+                ],
+                "requestId": "<uuid>",
+                "status": 400,
+                "title": "Données invalides",
+                "type": "https://learny.app/errors/validation-failed"
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.automation-actions.list",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": [],
+                "nextCursor": null,
+                "weekCount": 0
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.automations.list",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": [
+                  {
+                    "automation": "reprise",
+                    "enabled": true,
+                    "params": {
+                      "inactiveDays": 2,
+                      "lightenDays": 5,
+                      "mode": "accord"
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "micro_seance",
+                    "enabled": true,
+                    "params": {
+                      "durationMin": 5,
+                      "hour": 20
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "echauffement",
+                    "enabled": true,
+                    "params": {
+                      "count": 3,
+                      "scope": "yesterday_prerequisites"
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "remediation",
+                    "enabled": true,
+                    "params": {
+                      "delayHours": 24,
+                      "mode": "advised"
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "jeu_lacune",
+                    "enabled": true,
+                    "params": {
+                      "preference": "vary"
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "questions_cartes",
+                    "enabled": true,
+                    "params": {
+                      "mode": "confirm"
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "plafond_quiz",
+                    "enabled": true,
+                    "params": {
+                      "maxMinutes": 15,
+                      "targetRetention": 0.9
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "sprint",
+                    "enabled": true,
+                    "params": {
+                      "daysBefore": 3,
+                      "durationMin": 30
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "bilan",
+                    "enabled": true,
+                    "params": {
+                      "channel": "app",
+                      "hour": 19,
+                      "weekday": 7
+                    },
+                    "updatedAt": "<timestamp>"
+                  },
+                  {
+                    "automation": "pause",
+                    "enabled": true,
+                    "params": {
+                      "diagnosticMinutes": 10,
+                      "diagnosticOnReturn": true
+                    },
+                    "updatedAt": "<timestamp>"
+                  }
+                ],
+                "paused": false
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.notificationSettings.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "activeTypeCount": 6,
+                "channels": {
+                  "app": true,
+                  "browser": true,
+                  "email": true
+                },
+                "digestTime": "08:00",
+                "maxPerDay": 5,
+                "quiet": {
+                  "crossesMidnight": true,
+                  "empty": false,
+                  "end": "08:00",
+                  "start": "21:00"
+                },
+                "types": {
+                  "course": true,
+                  "gap": true,
+                  "planning": true,
+                  "relaunch": true,
+                  "revision": true,
+                  "validation": true
+                },
+                "updatedAt": "<timestamp>",
+                "weekendQuiet": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.pause.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "diagnostic": null,
+                "diagnosticOnReturn": true,
+                "endedAt": null,
+                "endsOn": null,
+                "pausedFormationIds": [],
+                "returnDue": false,
+                "startsOn": null,
+                "status": "none"
+              }
+            }
+          ]
+        },
+        {
+          "name": "me.weekly-review.get",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "available": false,
+                "review": null,
+                "timezone": "Europe/Paris"
+              }
+            }
+          ]
+        },
+        {
+          "name": "notifications.list",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "items": [],
+                "timezone": "Europe/Paris",
+                "total": 0,
+                "unreadCount": 0
+              }
+            }
+          ]
+        },
+        {
+          "name": "notifications.unreadCount",
+          "steps": [
+            {
+              "status": 200,
+              "headers": {
+                "content-type": "application/json; charset=utf-<n>",
+                "cache-control": "no-store"
+              },
+              "body": {
+                "count": 0
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

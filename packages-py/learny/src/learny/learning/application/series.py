@@ -9,8 +9,10 @@ role in one transaction, and a duplicate `(user, key, ref)` inserts nothing (CL-
 """
 
 from collections.abc import Mapping, Sequence
-from typing import Any
+from typing import Any, cast
 
+from learny.engagement import public as engagement
+from learny.engagement.application.ports import EngagementDeps
 from learny.identity.domain.actor import Actor
 from learny.learning.application.ports import LearningDeps
 from learny.learning.domain.params import ENGINE
@@ -29,6 +31,8 @@ from learny.shared.time import parse_iso, to_iso
 
 DEFAULT_STUDY_DAYS: tuple[int, ...] = (1, 2, 3, 4, 5)
 MILESTONE_KEY_ORDER = {"module_validated": 0, "notions_100": 1, "streak_30": 2}
+# SPEC-723: only these two milestones are announced outside the application.
+NOTIFIED_MILESTONE_KEYS = ("notions_100", "streak_30")
 
 
 def to_study_days(row: Mapping[str, Any] | None) -> list[int]:
@@ -241,7 +245,35 @@ async def _insert_milestones(
             )
             if row is not None:
                 inserted.append(row)
+    # SPEC-723 - the announcement is produced after the commit of the milestone, for the rows this
+    # call actually created: a replay inserts nothing and therefore announces nothing.
+    await _notify_milestones(deps, user_id, inserted)
     return inserted
+
+
+async def _notify_milestones(deps: LearningDeps, user_id: str, inserted: Sequence[Mapping[str, Any]]) -> None:
+    """SPEC-723 - announces a new hundred notions or a thirty-day streak through `notify`.
+
+    Exactly like `sendMilestoneNotification`: the notification is produced after the commit of the
+    milestone, keyed by the milestone so a replay never creates a second one, and a failure of the
+    channel never fails the read of the milestones.
+    """
+    for row in inserted:
+        key = str(row["key"])
+        if key not in NOTIFIED_MILESTONE_KEYS:
+            continue
+        formation_id = row["formation_id"]
+        try:
+            await engagement.notify(
+                cast(EngagementDeps, deps),
+                user_id=user_id,
+                notification_type="milestone",
+                data={"label": milestone_label(key), "href": "/accueil"},
+                formation_id=None if formation_id is None else str(formation_id),
+                dedupe_key=f"milestone:{key}",
+            )
+        except Exception:  # the notification channel never breaks the milestone read
+            deps.logger.warn("milestones.notify.failed", outcome="notification_failed")
 
 
 async def reconcile_milestones(deps: LearningDeps, actor: Actor) -> list[Mapping[str, Any]]:

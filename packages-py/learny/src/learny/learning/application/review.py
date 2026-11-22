@@ -28,6 +28,7 @@ from learny.learning.application.review_games import (
     split_result_by_notion,
     to_game_correction,
 )
+from learny.learning.application.series import reconcile_milestones
 from learny.learning.domain import fsrs, global_quiz
 from learny.learning.domain.params import ENGINE
 from learny.learning.domain.time import (
@@ -2137,7 +2138,15 @@ async def complete_review_session(deps: LearningDeps, actor: Actor, session_id: 
             },
             event_id=f"review-session-completed:{session_id}",
         )
-        return summary
+
+    # SPEC-723 consumes `review/session-completed` to reconcile the milestones; the notification
+    # of a new milestone (SPEC-2205 `notify`) is produced here, after the commit of the closure, and
+    # a failure of the channel never fails the closure itself.
+    try:
+        await reconcile_milestones(deps, actor)
+    except Exception:
+        deps.logger.warn("review.milestones.failed", outcome="reconcile_failed")
+    return summary
 
 
 async def bump_streak(tx: Any, user_id: str, day: str) -> int:

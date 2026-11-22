@@ -7380,6 +7380,7 @@
         "apps/web/e2e/journeys/data-rights.spec.ts",
         "apps/web/e2e/specs/p2/spec-205.spec.ts",
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",
         "apps/web/e2e/specs/p6/formation-management.spec.ts",
@@ -7468,6 +7469,7 @@
       "events": [],
       "tests": [
         "apps/api/test/integration/spec-708-routes.test.ts",
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p7/spec-708.spec.ts"
       ],
       "gap": false
@@ -7499,6 +7501,7 @@
       "events": [],
       "tests": [
         "apps/api/test/integration/spec-708-routes.test.ts",
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p7/spec-708.spec.ts"
       ],
       "gap": false
@@ -7611,6 +7614,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p7/spec-721.spec.ts"
       ],
       "gap": false
@@ -7921,6 +7925,7 @@
         "apps/web/e2e/journeys/data-rights.spec.ts",
         "apps/web/e2e/specs/p2/spec-205.spec.ts",
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",
         "apps/web/e2e/specs/p6/formation-management.spec.ts",
@@ -8123,6 +8128,7 @@
       "tables": [],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-306.spec.ts",
         "apps/web/e2e/specs/p7/spec-706.spec.ts",
         "apps/web/test/integration/notifications-panel.test.ts"
@@ -8215,6 +8221,7 @@
       "tables": [],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-306.spec.ts",
         "apps/web/test/integration/notifications-panel.test.ts"
       ],
