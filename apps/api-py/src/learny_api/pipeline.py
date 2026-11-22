@@ -409,7 +409,7 @@ def _check_output(spec: RouteSpec, payload: Any, logger: Any) -> Any:
     if spec.output is None:
         return payload
     try:
-        return spec.output.model_validate(payload).model_dump()
+        validated = spec.output.model_validate(payload)
     except ValidationError as error:
         logger.error(
             "contract_violation",
@@ -418,6 +418,32 @@ def _check_output(spec: RouteSpec, payload: Any, logger: Any) -> Any:
             path=",".join(".".join(str(part) for part in issue["loc"]) for issue in error.errors()),
         )
         raise AppError("INTERNAL_ERROR") from error
+    return without_absent_optionals(validated.model_dump(), payload)
+
+
+def without_absent_optionals(dumped: Any, source: Any) -> Any:
+    """`zod` keeps an optional field the handler did not set absent; Pydantic fills `None`.
+
+    `JSON.stringify` omits the `undefined` of the TypeScript contract, so the pipeline drops every
+    key the handler did not provide; an explicit `null` stays a `null`, because it was provided.
+    Nested objects and lists are walked in parallel with the handler payload (SPEC-2202).
+    """
+    if isinstance(dumped, dict):
+        if not isinstance(source, Mapping):
+            return dumped
+        return {
+            key: without_absent_optionals(value, source[key])
+            for key, value in dumped.items()
+            if key in source
+        }
+    if isinstance(dumped, list):
+        if not isinstance(source, list):
+            return dumped
+        return [
+            without_absent_optionals(value, source[index]) if index < len(source) else value
+            for index, value in enumerate(dumped)
+        ]
+    return dumped
 
 
 def _replay(
