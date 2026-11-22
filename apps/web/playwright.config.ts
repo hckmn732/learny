@@ -212,6 +212,9 @@ export default defineConfig({
         // explicitly. `STRIPE_MODE=mock` needs no key and opens no socket (`build_stripe_gateway`);
         // the webhook tolerance and the error codes are those of ADR-2031.
         STRIPE_MODE: 'mock',
+        // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
+        // same development flag as the web and Hono or `devOnly` answers 404 to every page.
+        ENABLE_SDD_PAGES: 'true',
       },
     },
     {
