@@ -6,7 +6,7 @@
 // at sign-up, « Mot de passe oublié ? » and magic link sheet, legal footer, and the redirect of
 // EF-7. The magic-link buttons never show whether an account exists (ADR-0121, CA-4).
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
-import { useRef, useState, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type ReactElement } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -27,6 +27,7 @@ import { emailAuthClient } from '../../auth/native-auth';
 import { rememberPendingVerification } from '../../auth/pending-auth';
 import { radius, spacing, theme } from '../../theme';
 import { Button } from '../../ui/Button';
+import { Icon } from '../../ui/Icon';
 import { Segmented } from '../../ui/Segmented';
 import { Text } from '../../ui/Text';
 
@@ -62,7 +63,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const legalGate = useLegalGate();
-  const params = useLocalSearchParams<{ magic?: string }>();
+  const params = useLocalSearchParams<{ magic?: string; demo?: string }>();
   // CL-1 — a ref, not the state, guards the double press: the second press of the same frame
   // would still see `submitting === false`.
   const inFlight = useRef(false);
@@ -174,6 +175,23 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
     }
   };
 
+  // Connexion de démonstration des builds de test : `learny://connexion?demo=1` (aucun bouton
+  // dans la capture visuelle, la maquette n'en montre pas). Les identifiants viennent de
+  // l'environnement du build, jamais du dépôt. L'appel est différé pour ne pas écrire d'état
+  // pendant l'effet lui-même.
+  useEffect(() => {
+    if (params.demo !== '1' || demo === null) return;
+    const timer = setTimeout(() => {
+      void submitDemo();
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+    };
+    // `submitDemo` est stable pour une session de l'écran : la dépendance est volontairement
+    // limitée aux paramètres de la route.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [demo, params.demo]);
+
   return (
     <View style={[styles.root, { paddingTop: insets.top }]}>
       <KeyboardAvoidingView
@@ -187,9 +205,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
         >
           <View style={styles.brand}>
             <View style={styles.brandTile}>
-              <Text tone="limeInk" variant="caption">
-                L
-              </Text>
+              <Icon color={theme.colors.lime} name="logo" size={18} />
             </View>
             <Text variant="sectionTitle">{a.layout.label}</Text>
           </View>
@@ -322,8 +338,8 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
           ) : null}
 
           {globalError === null ? null : (
-            <View accessibilityLiveRegion="polite">
-              <Text testID="auth-error" tone="danger" variant="bodySmall">
+            <View accessibilityLiveRegion="polite" testID="auth-error">
+              <Text tone="danger" variant="bodySmall">
                 {globalError}
               </Text>
             </View>
@@ -363,18 +379,6 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             <Text align="center" tone="muted" variant="caption">
               {`${a.account.termsBefore}${a.account.termsCgu}${a.account.termsAnd}${a.account.termsPrivacy}${a.account.termsAfter}`}
             </Text>
-          )}
-
-          {demo === null ? null : (
-            <Button
-              block
-              label={t.demoSignIn}
-              onPress={() => {
-                void submitDemo();
-              }}
-              testID="auth-demo-signin"
-              variant="text"
-            />
           )}
         </ScrollView>
       </KeyboardAvoidingView>

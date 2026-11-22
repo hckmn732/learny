@@ -93,12 +93,11 @@ export function MagicLinkSheet({
           value={email}
         />
         {sent ? (
-          <View accessibilityLiveRegion="polite">
-            <Text
-              testID={testID === undefined ? undefined : `${testID}-sent`}
-              tone="success"
-              variant="bodySmall"
-            >
+          <View
+            accessibilityLiveRegion="polite"
+            testID={testID === undefined ? undefined : `${testID}-sent`}
+          >
+            <Text tone="success" variant="bodySmall">
               {t.sent}
             </Text>
           </View>

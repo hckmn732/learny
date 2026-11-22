@@ -114,10 +114,9 @@ describe('[SPEC-3101] retour d’un lien dans l’application', () => {
     const view = await renderCallback(fakePort(null));
 
     await waitFor(() => {
-      expect(view.getByTestId('auth-callback-error')).toHaveTextContent(
-        fr.mobile.auth.callback.invalid,
-      );
+      expect(view.getByTestId('auth-callback-error')).toBeTruthy();
     });
+    expect(view.getAllByText(fr.mobile.auth.callback.invalid).length).toBeGreaterThan(0);
     expect(mockVerify).not.toHaveBeenCalled();
     expect(mockReplace).not.toHaveBeenCalled();
   });
@@ -169,10 +168,9 @@ describe('[SPEC-3101] retour d’un lien dans l’application', () => {
     const view = await renderCallback(fakePort(null));
 
     await waitFor(() => {
-      expect(view.getByTestId('auth-callback-error')).toHaveTextContent(
-        fr.mobile.auth.callback.invalid,
-      );
+      expect(view.getByTestId('auth-callback-error')).toBeTruthy();
     });
+    expect(view.getAllByText(fr.mobile.auth.callback.invalid).length).toBeGreaterThan(0);
     expect(view.getByTestId('auth-callback-ask')).toBeTruthy();
     expect(mockReplace).not.toHaveBeenCalled();
   });

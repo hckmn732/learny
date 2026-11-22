@@ -83,16 +83,14 @@ export function CallbackScreen(): ReactElement {
     >
       <View style={styles.body}>
         {invalid ? (
-          <>
-            <Text testID="auth-callback-error" variant="largeTitle">
-              {t.invalid}
-            </Text>
+          <View testID="auth-callback-error" style={styles.body}>
+            <Text variant="largeTitle">{t.invalid}</Text>
             {message === null ? null : (
               <Text tone="muted" variant="bodySmall">
                 {message}
               </Text>
             )}
-          </>
+          </View>
         ) : (
           <>
             <Text variant="largeTitle">{t.opening}</Text>

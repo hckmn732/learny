@@ -30,6 +30,8 @@ tags:
 - tapOn:
     id: auth-magic-sheet-email
 - inputText: inconnu@exemple.fr
+# Le clavier masque le bas de la feuille : on le referme avant d'atteindre le bouton d'envoi.
+- hideKeyboard
 - tapOn:
     id: auth-magic-sheet-submit
 # CA-4 — la réponse est la même pour une adresse inconnue que pour une adresse connue.
