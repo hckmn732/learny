@@ -87,8 +87,15 @@ async def test_the_answer_is_streamed_in_order_and_persisted_complete(database: 
             ),
             {"id": seed["conversation"]},
         )
+        # Scoped to this conversation: the outbox is shared by the whole database, so a committed
+        # event left by another run must not change the count of this one.
         events = await tx.conn.execute(
-            text("select event_id, name, data from public.event_outbox where name = 'tutor/question-asked'")
+            text(
+                "select event_id, name, data from public.event_outbox "
+                "where name = 'tutor/question-asked' "
+                "and data->>'conversationId' = cast(:conversation as text)"
+            ),
+            {"conversation": seed["conversation"]},
         )
         return (
             frames,
