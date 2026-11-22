@@ -7,6 +7,7 @@ citations and, for a base course, the pending resource suggestions.
 """
 
 import json
+import uuid
 from collections.abc import Sequence
 from typing import Any
 
@@ -42,8 +43,13 @@ def as_object(value: Any) -> dict[str, Any] | None:
 
 
 def as_string_array(value: Any) -> list[str]:
+    """A `uuid[]` column read as text: psycopg hands back `UUID` objects, not strings."""
     if isinstance(value, list):
-        return [entry for entry in value if isinstance(entry, str)]
+        return [
+            entry if isinstance(entry, str) else str(entry)
+            for entry in value
+            if isinstance(entry, (str, uuid.UUID))
+        ]
     if isinstance(value, str):
         body = value.strip("{}")
         return [entry.strip().strip('"') for entry in body.split(",") if entry.strip().strip('"')]

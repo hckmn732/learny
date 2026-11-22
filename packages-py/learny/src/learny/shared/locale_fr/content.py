@@ -82,6 +82,7 @@ RESOURCE_NOT_FOUND = "Apport introuvable."
 RESOURCE_CHANGED_SINCE_READ = "Cet apport a changé entre-temps : le titre actuel est restitué."
 RESOURCE_MODIFIED_CONCURRENTLY = "L’apport a été modifié en parallèle : réessayez."
 VERSION_CURRENT = "Version actuelle : {version}"
+SECTION_VERSION_CURRENT = "Version actuelle : {version}."
 
 # packages/services/src/resources/create-resource.ts
 YOUTUBE_URL_INVALID = "Cette adresse n’est pas celle d’une vidéo YouTube."
@@ -111,11 +112,20 @@ COURSE_NOT_FOUND = "Cours introuvable."
 INVALID_IDENTIFIER = "Identifiant invalide : {field}."
 SECTION_NOT_FOUND = "Section introuvable."
 SECTION_CHANGED_SINCE_READ = "La section a changé depuis votre lecture."
+EDIT_NO_FIELD = "Au moins un champ doit être corrigé."
 INVALID_SECTION_ID = "Identifiant de section invalide."
 INVALID_REQUEST_KEY = "Clé de demande invalide."
 REPORT_NOT_STORED = "Signalement non enregistré."
 CITATION_NOT_FOUND = "Citation introuvable."
 INVALID_CITATION_ID = "Identifiant de citation invalide."
+
+# packages/tutor/src/course/citations.ts (SPEC-608 EF-2, ET-4, CL-4, BR-COU-02)
+CITATION_MISSING = "Le passage cité est introuvable."
+CITATION_FOREIGN = "Le passage cité appartient à un autre apprenant."
+CITATION_OTHER_CHAPTER = "Le passage cité appartient à un autre chapitre."
+CITATION_DELETED = "Le passage cité a été supprimé."
+CITATION_NOT_READY = "Le passage cité n’est plus prêt."
+CITATION_OUTSIDE_CONTEXT = "Le passage cité ne fait pas partie du contexte envoyé au tuteur."
 
 # packages/services/src/tutor-chat/starters.ts (SPEC-610 EF-2)
 STARTER_EXPLAIN = "Explique-moi les {label} autrement"

@@ -8,6 +8,7 @@ section readable, suspends the bank bricks of its notions and is idempotent per 
 """
 
 import re
+import uuid
 from typing import Any
 
 from learny.content.application.ports import ContentDeps
@@ -17,15 +18,21 @@ from learny.identity.domain.actor import Actor
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import content as texts
+from learny.shared.locale_fr import validation
+from learny.shared.locale_fr.details import INVALID_INPUT
 from learny.shared.time import to_iso
 
 REQUEST_KEY = re.compile(r"^[A-Za-z0-9_-]{8,128}$")
 
 
 def as_string_array(value: Any) -> list[str]:
-    """A `uuid[]` column read as text, or a parsed array."""
+    """A `uuid[]` column read as text, or a parsed array (psycopg hands back `UUID` objects)."""
     if isinstance(value, list):
-        return [entry for entry in value if isinstance(entry, str)]
+        return [
+            entry if isinstance(entry, str) else str(entry)
+            for entry in value
+            if isinstance(entry, (str, uuid.UUID))
+        ]
     if isinstance(value, str):
         body = value.strip("{}")
         return [entry.strip().strip('"') for entry in body.split(",") if entry.strip().strip('"')]
@@ -55,6 +62,31 @@ def _check_request_key(request_key: str | None) -> str | None:
     return request_key
 
 
+def _edit_fields(body: dict[str, Any]) -> tuple[str | None, str | None]:
+    """BR-COU-09: a correction always carries at least one editable field (contract refine)."""
+    title = body.get("title")
+    content_md = body.get("contentMd")
+    if title is None and content_md is None:
+        raise AppError(
+            "VALIDATION_FAILED",
+            INVALID_INPUT,
+            errors=[{"path": "body.contentMd", "message": texts.EDIT_NO_FIELD}],
+        )
+    return title, content_md
+
+
+def _report_reason(body: dict[str, Any]) -> str:
+    """EF-4: the reason is trimmed like the contract and cannot be blank."""
+    reason = str(body.get("reason") or "").strip()
+    if reason == "":
+        raise AppError(
+            "VALIDATION_FAILED",
+            INVALID_INPUT,
+            errors=[{"path": "body.reason", "message": validation.too_small("string", 1, inclusive=True)}],
+        )
+    return reason
+
+
 async def edit_course_section(
     deps: ContentDeps,
     actor: Actor,
@@ -64,6 +96,7 @@ async def edit_course_section(
 ) -> dict[str, Any]:
     """BR-COU-09: applies the learner correction of one section, guarded by its version."""
     assert_uuid(section_id, "sectionId")
+    requested_title, requested_content = _edit_fields(body)
     key = _check_request_key(request_key)
     async with deps.db.user_tx(actor) as tx:
         await queries.execute(
@@ -94,12 +127,12 @@ async def edit_course_section(
                 errors=[
                     {
                         "path": "expectedVersion",
-                        "message": texts.VERSION_CURRENT.format(version=current["version"]),
+                        "message": texts.SECTION_VERSION_CURRENT.format(version=current["version"]),
                     }
                 ],
             )
-        title = current.get("title") if body.get("title") is None else body["title"]
-        content_md = current.get("content_md") if body.get("contentMd") is None else body["contentMd"]
+        title = current.get("title") if requested_title is None else requested_title
+        content_md = current.get("content_md") if requested_content is None else requested_content
         changed = title != current.get("title") or content_md != current.get("content_md")
         if not changed and not current.get("reported"):
             return _view(current)
@@ -176,6 +209,7 @@ async def report_course_section(
 ) -> dict[str, Any]:
     """BR-COU-09, BR-MEM-09: reports a section once and suspends the bricks of its notions."""
     assert_uuid(section_id, "sectionId")
+    reason = _report_reason(body)
     key = _check_request_key(request_key)
     async with deps.db.user_tx(actor) as tx:
         await queries.execute(
@@ -227,7 +261,7 @@ async def report_course_section(
             {
                 "user_id": actor.user_id,
                 "id": section_id,
-                "reason": body["reason"],
+                "reason": reason,
                 "affected": affected,
                 "request_key": key,
                 "now": now,
