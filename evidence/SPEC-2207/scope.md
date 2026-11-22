@@ -266,3 +266,23 @@ Décisions de la tranche :
 Restent **37 opérations `dev.*`**, toutes des `dev.sdd.spec-*` : 009, 101, 102 (demo/create/remove),
 103 à 109, 111, 112, 113, 115, 1301, 202, 411, 501 (demo/create/report/correct), 504 (demo/call),
 505 (demo/create/delete), 506, 508, 509, 510, 511, 512 (demo/suggest/decide), 711.
+
+## 9. Huitième tranche : santé, SSE, scan de secrets, reprise et auth (190/217)
+
+Date : 2026-11-22. Commits : `1e650bfd`, `a1901b66`, `dd86eec5`, `d6d91585`. Détails, différés et
+preuves dans `handover.md` §9.
+
+- **Opérations** : `health.get`, `formations.resume`, `auth.{magicLink,resend,signIn,signOut,signUp,
+  callback}` — 190 des 217 opérations sont `py`.
+- **Routes spéciales** : `GET /api/v1/health`, `POST /api/v1/_dev/secret-scan`,
+  `GET /api/v1/dev/sdd/relay-stream`, `GET /api/v1/auth/callback` — 4 des 7 restantes.
+- **Socle** : `learny/shared/health.py` (sonde bornée, `not_configured`), `learny/shared/secret_scan.py`
+  (`scanText`), `learny/identity/infrastructure/auth_cookies.py` (adaptateur `@supabase/ssr`),
+  `learny/identity/application/auth.py` (les six cas d'usage et `finalize_first_verification`),
+  `learny/formation/application/formations.resume_formation`, `learny_api/special/guards.py`
+  (les deux drapeaux), `learny_api/special/{auth_callback,sdd_tools,relay_stream}.py`.
+- **Preuve de parité** : `api/oracles/vectors/auth-cookies.json`, enregistré depuis Hono, rejoué
+  octet pour octet par `packages-py/learny/tests/integration/identity/test_auth_routes.py`.
+- **Différés** : `home.get`, `POST /api/v1/_dev/commit-check`, `POST /api/v1/_dev/demo-job`,
+  `POST /api/v1/formations/:fid/sprints` (`handover.md` §9.2). `ADR-2022` et `ADR-2024` sont
+  remplacées par `ADR-2034` ; `ADR-2023` reste ouverte.

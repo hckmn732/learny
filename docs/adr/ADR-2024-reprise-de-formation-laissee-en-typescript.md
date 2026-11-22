@@ -1,6 +1,6 @@
 # ADR-2024 — Reprise de formation laissee en TypeScript
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-2034 (portée par SPEC-2207)
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
 - **Date** : 2026-11-21
 - **Liens** : —

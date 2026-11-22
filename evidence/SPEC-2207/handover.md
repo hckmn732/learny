@@ -302,3 +302,73 @@ chantiers identifiés (fabriques de test, services `@learny/llm` et `@learny/tut
 d'ingestion), pas des oublis de la tranche. Les quatre chantiers e2e du §6 restent ouverts et
 indépendants.
 
+
+## 9. Huitième tranche : santé, SSE, scan de secrets, reprise et auth (+12 routes)
+
+Date : 2026-11-22. Commits : `1e650bfd` puis `a1901b66` (santé, relay-stream, scan de secrets),
+`dd86eec5` (reprise de formation), `d6d91585` (auth et callback). Base remise à zéro puis semée avant
+les runs d'intégration.
+
+### 9.1 Ce qui est fait
+
+**Opérations (8 des 9 restantes)** : `health.get`, `formations.resume` et les six `auth.*`
+(`magicLink`, `resend`, `signIn`, `signOut`, `signUp`, `callback`). `api/ownership.yaml` porte donc
+**190 opérations `py` sur 217** ; les 27 `ts` restantes sont `home.get` et les 26 démos
+`dev.sdd.*` du §8.
+
+**Routes spéciales (4 des 7 restantes)** : `GET /api/v1/health`, `POST /api/v1/_dev/secret-scan`,
+`GET /api/v1/dev/sdd/relay-stream` et `GET /api/v1/auth/callback`. Les 3 restantes sont ci-dessous.
+
+Détails :
+
+- **Santé** : `learny/shared/health.py` porte `probeDatabase`/`buildInfo`/`buildStatus` ; la sonde est
+  bornée à 2 s (`asyncio.timeout`), une base non explicitement configurée répond `not_configured`
+  (`Settings.database_configured` lit `model_fields_set`, donc la présence réelle de `DATABASE_URL`),
+  et `Database.ping()` exécute le `select 1`. Le handler rend la `Response` du document SPEC-006
+  EF-2 : le pipeline n'ajoute que l'identifiant de requête, le timing et `x-served-by`, exactement
+  comme `routeHandler` pour une réponse directe.
+- **Deux gardes distinctes**, comme le TypeScript : `special/guards.py` porte `devRoutesEnabled`
+  (`true` **ou** `1`, jamais en production) pour les démos et `sddPagesEnabled` (la valeur exacte
+  `true`) pour les outils `_dev`, qui répondent un 404 **vide** et non un problem+json.
+- **Scan de secrets** : `learny/shared/secret_scan.py` porte `scanText` (14 motifs, premier motif
+  gagnant en cas de recouvrement, aperçu masqué) ; `isForbiddenSecretFile` n'est pas porté, le
+  backend Python ne parcourt pas le dépôt.
+- **Reprise** : `resume_formation` rejoue `formations/resume.ts` et réutilise
+  `learning.replan_formation_in_tx` ; le doublon `replan_formation_after_resume` d'`engagement.pause`
+  est supprimé (ADR-2034).
+- **Auth** : `learny.identity.application.auth` (port de `auth/requests.ts`, `finalize.ts`,
+  `verify.ts`) et `learny.identity.infrastructure.auth_cookies` (adaptateur de `@supabase/ssr`) ;
+  `GoTrueSession` conserve le document GoTrue brut, ce qui rend le cookie byte-identique.
+  `finalize_first_verification` écrit les deux acceptations, les conditions et le fuseau, puis émet
+  `user/signed-up` dans la même transaction.
+- **Parité corrigée** : un cookie refusé par le serveur d'authentification est une requête anonyme
+  (`supabaseSessionResolver` rend `null`). Le portage levait `UNAUTHENTICATED`, ce qui rendait la
+  déconnexion sans session impossible (CL-10 exige 204). `_cookie_actor` rend `None` ; le test
+  unitaire correspondant est renommé et assied la nouvelle attente.
+
+### 9.2 Différés de la tranche (une ligne par route, comme la règle de déferrement)
+
+| Route | Raison précise | Couple fichier + fonction à porter |
+| --- | --- | --- |
+| `home.get` | agrégat de 18 lectures SQL (1 340 lignes) **sans aucun test** dans `api/inventory.json` : aucun oracle, plus que le budget d'une route | `packages/services/src/home/get-home.ts::getHome` et `packages/domain/src/home/derive.ts` (13 fonctions pures, libellés `locale_fr`, `HomeDto` du contrat) |
+| `POST /api/v1/_dev/commit-check` | dépend de `@commitlint/config-conventional` + `@commitlint/lint` (règles `commitlintRules` et plugin `commitlintPlugin`) ; décision de ne pas embarquer une bibliothèque Node dans la façade | `packages/api-routes/src/special/sdd-tools.ts::commitCheck`, `packages/config/src/commitlint*.ts` |
+| `POST /api/v1/_dev/demo-job` | exige l'adaptateur d'étapes `executeDirect` et `DEMO_STEPS` (exécution directe d'un job Inngest sans serveur) et `sddDemoStore` : chantier d'outillage, pas une route | `packages/api-routes/src/special/sdd-tools.ts::demoJob`, `packages/jobs/src/...::runDemoJob`, `packages/jobs/src/testing` |
+| `POST /api/v1/formations/:fid/sprints` | `planSprintsBeforeMilestones` est un service de 857 lignes (automatisme 8) sans équivalent Python | `packages/automations/src/automatisme-8-sprint-avant-un-jalon.ts::planSprintsBeforeMilestones` |
+
+`ADR-2023` reste donc ouverte pour `home.get` ; `ADR-2022` et `ADR-2024` sont remplacées par
+`ADR-2034`.
+
+### 9.3 Preuves
+
+| Commande | Résultat |
+| --- | --- |
+| `uv run ruff check .` | vert |
+| `uv run ruff format --check packages-py apps` | vert (638 fichiers) |
+| `uv run mypy packages-py apps` | vert (632 fichiers) |
+| `uv run pytest apps/api-py/tests packages-py/learny/tests/unit` | 3 735 passés |
+| `uv run pytest … tests/integration/identity` (dont le vecteur de cookies) | 10 cas de parité octet pour octet + 66 unitaires |
+| `uv run pytest … tests/integration/formation` (base remise à zéro) | 51 passés (dont 6 pour la reprise) |
+| `api/oracles/vectors/auth-cookies.json` | 7 échanges enregistrés depuis Hono (`@supabase/ssr` 0.12.7) |
+
+Les quatre chantiers e2e du §6 restent ouverts et indépendants ; `acceptance.md`, `validate.mjs` et
+`complete.mjs` n'ont pas été lancés (CP-21 reste `pending`).
