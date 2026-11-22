@@ -20,6 +20,9 @@ class FakeResult:
     def all(self) -> list[Mapping[str, Any]]:
         return list(self._rows)
 
+    def __iter__(self) -> Any:
+        return iter(self._rows)
+
     def scalar(self) -> Any:
         return self._rows[0] if self._rows else None
 
