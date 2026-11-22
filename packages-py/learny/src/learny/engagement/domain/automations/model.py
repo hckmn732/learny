@@ -57,9 +57,10 @@ class ActionView:
 
 @dataclass(frozen=True, slots=True)
 class AppliedEffect:
-    """The columns an `apply` or an `undo` asks the use case to write; no key means no change."""
+    """The columns and the effects an `apply` or an `undo` asks the use case to write."""
 
     changes: Mapping[str, Any] = field(default_factory=dict)
+    effects: tuple[Any, ...] = ()
 
     def summary_payload(self, current: Mapping[str, Any]) -> Mapping[str, Any]:
         """The payload the summary of the journal is computed on, after the effect."""
@@ -97,7 +98,7 @@ class DraftError(Exception):
 
 Explain = Callable[[ActionView, str, str], str]
 Apply = Callable[[EffectContext, ActionView], AppliedEffect]
-Undo = Callable[[EffectContext, ActionView], Mapping[str, Any] | None]
+Undo = Callable[[EffectContext, ActionView], AppliedEffect]
 
 
 @dataclass(frozen=True, slots=True)

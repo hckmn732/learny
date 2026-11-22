@@ -52,6 +52,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
         # authenticated role of one learner may not update (CL-3, SPEC-711).
         "learny.engagement.application.automations": "hourly tick expires the pending actions",
+        # SPEC-2205 - the pause journals its own action with the service role, exactly like the
+        # TypeScript `recordPauseAction` (the RLS policy reserves inserts to that role).
+        "learny.engagement.application.pause": "pause journal row written after the commit",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

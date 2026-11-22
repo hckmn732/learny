@@ -1033,3 +1033,110 @@ async def latest_weekly_review_action(
         )
     row = result.mappings().first()
     return None if row is None else _weekly_review(row)
+
+
+# --- decisions of the learner on one action (SPEC-2205, EF-2, EF-3, ET-5) ----------------------
+#
+# Copied from `getAutomationAction`, `decideAutomationAction` and `undoAutomationAction` of
+# `packages/db/src/repositories/automation-actions.ts`: the row is locked before any decision
+# (CL-1, CA-2), a foreign identifier is absent, and the committed status is the idempotence key.
+
+SELECT_AUTOMATION_ACTION = text(
+    "select id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at "
+    "from public.automation_actions "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid)"
+)
+
+LOCK_AUTOMATION_ACTION = text(
+    "select status::text as status from public.automation_actions "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid) for update"
+)
+
+DECIDE_AUTOMATION_ACTION = text(
+    "update public.automation_actions set status = cast(:status as public.automation_status), "
+    "decided_at = cast(:now as timestamptz) "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid) "
+    "returning id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at"
+)
+
+UNDO_AUTOMATION_ACTION = text(
+    "update public.automation_actions set status = 'undone', decided_at = cast(:now as timestamptz) "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid) "
+    "returning id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at"
+)
+
+UPDATE_AUTOMATION_ACTION_EFFECT = text(
+    "update public.automation_actions set summary = :summary, "
+    "payload = coalesce(cast(:payload as jsonb), payload), "
+    "undo_payload = case when cast(:undo_present as boolean) then cast(:undo_payload as jsonb) "
+    "else undo_payload end "
+    "where id = cast(:action_id as uuid) and user_id = cast(:user_id as uuid) "
+    "returning id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at"
+)
+
+
+async def read_automation_action(tx: Tx, *, user_id: str, action_id: str) -> AutomationActionRow | None:
+    """The learner's own action, or `None`: a foreign identifier never leaks its existence."""
+    result = await tx.conn.execute(SELECT_AUTOMATION_ACTION, {"user_id": user_id, "action_id": action_id})
+    row = result.mappings().first()
+    return None if row is None else _automation_action(row)
+
+
+async def lock_automation_action_status(tx: Tx, *, user_id: str, action_id: str) -> str | None:
+    """CA-2 - locks the row first; a concurrent second decision sees the committed status."""
+    result = await tx.conn.execute(LOCK_AUTOMATION_ACTION, {"user_id": user_id, "action_id": action_id})
+    row = result.mappings().first()
+    return None if row is None else str(row["status"])
+
+
+async def decide_automation_action(
+    tx: Tx, *, user_id: str, action_id: str, status: str, now: datetime
+) -> AutomationActionRow:
+    result = await tx.conn.execute(
+        DECIDE_AUTOMATION_ACTION,
+        {"user_id": user_id, "action_id": action_id, "status": status, "now": now},
+    )
+    return _automation_action(result.mappings().one())
+
+
+async def undo_automation_action(
+    tx: Tx, *, user_id: str, action_id: str, now: datetime
+) -> AutomationActionRow:
+    result = await tx.conn.execute(
+        UNDO_AUTOMATION_ACTION, {"user_id": user_id, "action_id": action_id, "now": now}
+    )
+    return _automation_action(result.mappings().one())
+
+
+async def update_automation_action_effect(
+    tx: Tx,
+    *,
+    user_id: str,
+    action_id: str,
+    summary: str,
+    payload: Mapping[str, Any] | None,
+    undo_payload: Mapping[str, Any] | None,
+    undo_present: bool,
+) -> AutomationActionRow:
+    result = await tx.conn.execute(
+        UPDATE_AUTOMATION_ACTION_EFFECT,
+        {
+            "user_id": user_id,
+            "action_id": action_id,
+            "summary": summary,
+            "payload": None if payload is None else json.dumps(dict(payload), ensure_ascii=False),
+            "undo_payload": None
+            if undo_payload is None
+            else json.dumps(dict(undo_payload), ensure_ascii=False),
+            "undo_present": undo_present,
+        },
+    )
+    return _automation_action(result.mappings().one())

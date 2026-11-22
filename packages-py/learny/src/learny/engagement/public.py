@@ -6,9 +6,12 @@ commit of a session or of a milestone, never a second implementation of the rout
 """
 
 from learny.engagement.application.automations import (
+    accept_automation_action,
+    decline_automation_action,
     expire_due_automation_actions,
     list_my_automation_actions,
     list_my_automations,
+    undo_automation_action,
     update_my_automation_setting,
 )
 from learny.engagement.application.email import (
@@ -33,6 +36,12 @@ from learny.engagement.application.notify import (
     notify,
     send_push,
     settings_of,
+)
+from learny.engagement.application.pause import (
+    complete_pause_diagnostic,
+    end_pause,
+    get_pause_state,
+    start_pause,
 )
 from learny.engagement.application.ports import ClockPort, EngagementDeps, Transactions
 from learny.engagement.application.settings import (
@@ -60,14 +69,19 @@ __all__ = [
     "ClockPort",
     "EngagementDeps",
     "Transactions",
+    "accept_automation_action",
     "active_notification_type_count",
     "can_send_service_email",
+    "complete_pause_diagnostic",
     "count_sent_notifications",
+    "decline_automation_action",
     "deliver_due_deliveries",
     "deliver_notification",
     "disable_email_channel",
+    "end_pause",
     "expire_due_automation_actions",
     "get_notification_settings",
+    "get_pause_state",
     "get_unread_notification_count",
     "get_weekly_review",
     "list_my_automation_actions",
@@ -87,6 +101,8 @@ __all__ = [
     "send_push",
     "send_welcome_email",
     "settings_of",
+    "start_pause",
+    "undo_automation_action",
     "unsubscribe_by_token",
     "unsubscribe_done",
     "unsubscribe_form",

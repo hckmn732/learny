@@ -10,6 +10,7 @@ simply absent, never a disclosure (CL-1). The domain rules live in
 from collections.abc import Mapping
 from typing import Any
 
+from learny.engagement.application.effect_runner import apply_effects
 from learny.engagement.application.ports import EngagementDeps
 from learny.engagement.domain.automations import (
     AUTOMATION_KEYS,
@@ -182,3 +183,225 @@ __all__ = [
     "setting_to_dto",
     "update_my_automation_setting",
 ]
+
+
+# --- decisions of the learner (EF-2, EF-3, ET-5, CL-1 to CL-4) ----------------------------------
+#
+# Ported from `acceptAutomationAction`, `declineAutomationAction` and `undoAutomationAction` of
+# `packages/automations/src/moteur-d-automatismes.ts`. One transaction under the learner's RLS:
+# the row is locked first, a foreign identifier is a 404, a replayed decision returns the committed
+# answer with no second effect, and the definition decides the effects the use case executes.
+
+
+def _registry() -> Any:
+    """The product registry, built lazily so the import graph stays acyclic."""
+    from learny.engagement.domain.automations.definitions import product_registry
+
+    return product_registry()
+
+
+def _view(row: queries.AutomationActionRow) -> Any:
+    from learny.engagement.domain.automations import ActionView
+
+    return ActionView(
+        id=row.id,
+        automation=row.automation,
+        kind=row.kind,
+        summary=row.summary,
+        formation_id=row.formation_id,
+        payload=dict(row.payload),
+        undo_payload=None if row.undo_payload is None else dict(row.undo_payload),
+        requires_consent=row.requires_consent,
+        status=row.status,
+        decided_at=None if row.decided_at is None else to_iso(row.decided_at),
+        created_at=to_iso(row.created_at),
+    )
+
+
+def _context(now: Any, user_id: str, time_zone: str, tone: str, deps: EngagementDeps) -> Any:
+    from learny.engagement.domain.automations import EffectContext
+
+    return EffectContext(user_id=user_id, time_zone=time_zone, tone=tone, now=now)
+
+
+async def _apply_definition(
+    deps: EngagementDeps,
+    tx: Any,
+    *,
+    actor: Actor,
+    row: queries.AutomationActionRow,
+    definition: Any,
+    decision: str,
+    choice: Mapping[str, Any] | None,
+    now: Any,
+    time_zone: str,
+    tone: str,
+) -> queries.AutomationActionRow:
+    """Applies the effect at consent time, then writes the payload and the summary of the row."""
+    payload = dict(row.payload)
+    if choice is not None and decision == "accept":
+        payload = {**payload, "choice": dict(choice)}
+    view = _view(
+        queries.AutomationActionRow(
+            id=row.id,
+            formation_id=row.formation_id,
+            automation=row.automation,
+            kind=row.kind,
+            summary=row.summary,
+            payload=payload,
+            undo_payload=row.undo_payload,
+            requires_consent=row.requires_consent,
+            status="applied",
+            decided_at=row.decided_at,
+            created_at=row.created_at,
+        )
+    )
+    effect = definition.apply(_context(now, actor.user_id, time_zone, tone, deps), view)
+    assignments = await apply_effects(tx, user_id=actor.user_id, now=now, effects=effect.effects)
+    changes = dict(effect.changes)
+    payload_after = changes.get("payload")
+    payload_after = payload if payload_after is None else dict(payload_after)
+    payload_after = {**payload_after, **dict(assignments.payload)}
+    undo_after = changes.get("undo_payload")
+    undo_present = "undo_payload" in changes
+    if undo_present and undo_after is not None:
+        undo_after = {**dict(undo_after), **dict(assignments.undo)}
+    summary = definition.explain(
+        _view(
+            queries.AutomationActionRow(
+                id=row.id,
+                formation_id=row.formation_id,
+                automation=row.automation,
+                kind=row.kind,
+                summary=row.summary,
+                payload=payload_after,
+                undo_payload=None if undo_after is None else dict(undo_after),
+                requires_consent=row.requires_consent,
+                status="applied",
+                decided_at=row.decided_at,
+                created_at=row.created_at,
+            )
+        ),
+        tone,
+        time_zone,
+    )
+    return await queries.update_automation_action_effect(
+        tx,
+        user_id=actor.user_id,
+        action_id=row.id,
+        summary=summary,
+        payload=payload_after,
+        undo_payload=None if undo_after is None else dict(undo_after),
+        undo_present=undo_present,
+    )
+
+
+async def _decide(
+    deps: EngagementDeps, actor: Actor, action_id: str, decision: str, choice: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    now = deps.clock.now()
+    target = "applied" if decision == "accept" else "declined"
+    async with deps.db.user_tx(actor) as tx:
+        time_zone, tone = await _profile(tx, actor.user_id)
+        status = await queries.lock_automation_action_status(tx, user_id=actor.user_id, action_id=action_id)
+        if status is None:
+            raise AppError("NOT_FOUND", fr.ACTION_NOT_FOUND)
+        if status == target:
+            existing = await queries.read_automation_action(tx, user_id=actor.user_id, action_id=action_id)
+            if existing is None:
+                raise AppError("NOT_FOUND", fr.ACTION_NOT_FOUND)
+            return action_to_dto(existing)
+        if status != "pending_consent":
+            raise AppError("CONFLICT", fr.DECISION_NOT_PENDING)
+        row = await queries.decide_automation_action(
+            tx, user_id=actor.user_id, action_id=action_id, status=target, now=now
+        )
+        definition = _registry().get(row.automation)
+        if decision == "accept" and definition is not None and definition.apply is not None:
+            row = await _apply_definition(
+                deps,
+                tx,
+                actor=actor,
+                row=row,
+                definition=definition,
+                decision=decision,
+                choice=choice,
+                now=now,
+                time_zone=time_zone,
+                tone=tone,
+            )
+        if decision == "accept":
+            await tx.emit(
+                "automation/action-applied",
+                {"userId": actor.user_id, "actionId": row.id, "automation": row.automation},
+                event_id=f"automation-action-applied:{row.id}",
+            )
+        if decision == "decline" and definition is not None:
+            summary = definition.explain(_view(row), tone, time_zone)
+            row = await queries.update_automation_action_effect(
+                tx,
+                user_id=actor.user_id,
+                action_id=row.id,
+                summary=summary,
+                payload=None,
+                undo_payload=None,
+                undo_present=False,
+            )
+        final = await queries.read_automation_action(tx, user_id=actor.user_id, action_id=action_id)
+        if final is None:
+            raise AppError("NOT_FOUND", fr.ACTION_NOT_FOUND)
+        return action_to_dto(final)
+
+
+async def accept_automation_action(
+    deps: EngagementDeps, actor: Actor, action_id: str, body: Mapping[str, Any]
+) -> dict[str, Any]:
+    """EF-3, ET-5 - accepts a pending action and applies the effect once (CA-2, CL-3)."""
+    choice = body.get("choice")
+    return await _decide(deps, actor, action_id, "accept", choice if isinstance(choice, Mapping) else None)
+
+
+async def decline_automation_action(deps: EngagementDeps, actor: Actor, action_id: str) -> dict[str, Any]:
+    """EF-2, ET-5 - declines a pending action; the journal keeps the row (BR-AUT-12)."""
+    return await _decide(deps, actor, action_id, "decline", None)
+
+
+async def undo_automation_action(deps: EngagementDeps, actor: Actor, action_id: str) -> dict[str, Any]:
+    """EF-3, CL-4 - undoes an applied action; a consumed action answers 422."""
+    now = deps.clock.now()
+    async with deps.db.user_tx(actor) as tx:
+        time_zone, tone = await _profile(tx, actor.user_id)
+        current = await queries.read_automation_action(tx, user_id=actor.user_id, action_id=action_id)
+        if current is None:
+            raise AppError("NOT_FOUND", fr.ACTION_NOT_FOUND)
+        if current.status == "consumed":
+            raise AppError("AUTOMATION_ACTION_CONSUMED", fr.UNDO_CONSUMED)
+        if current.status == "undone":
+            return action_to_dto(current)
+        if current.status != "applied":
+            raise AppError("CONFLICT", fr.UNDO_NOT_APPLIED)
+        if current.undo_payload is None:
+            raise AppError("VALIDATION_FAILED", fr.UNDO_NO_PAYLOAD)
+        definition = _registry().get(current.automation)
+        if definition is not None and definition.undo is not None:
+            effect = definition.undo(_context(now, actor.user_id, time_zone, tone, deps), _view(current))
+            await apply_effects(tx, user_id=actor.user_id, now=now, effects=effect.effects)
+        row = await queries.undo_automation_action(tx, user_id=actor.user_id, action_id=action_id, now=now)
+        summary = row.summary
+        if definition is not None:
+            summary = definition.explain(_view(row), tone, time_zone)
+            row = await queries.update_automation_action_effect(
+                tx,
+                user_id=actor.user_id,
+                action_id=row.id,
+                summary=summary,
+                payload=None,
+                undo_payload=None,
+                undo_present=False,
+            )
+        await tx.emit(
+            "automation/action-undone",
+            {"userId": actor.user_id, "actionId": row.id, "automation": row.automation},
+            event_id=f"automation-action-undone:{row.id}",
+        )
+        return action_to_dto(row)
