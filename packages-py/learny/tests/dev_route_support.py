@@ -93,9 +93,10 @@ class DevDeps:
     push: Any = None
 
 
-def ownership_of(route_ids: tuple[str, ...]) -> Ownership:
+def ownership_of(route_ids: tuple[str, ...], pipeline_ids: tuple[str, ...] = ()) -> Ownership:
+    """`route_ids` are served by the special registry, `pipeline_ids` by the pipeline."""
     return Ownership(
-        operations={route_id: "py" for route_id in route_ids},
+        operations={route_id: "py" for route_id in (*route_ids, *pipeline_ids)},
         special={
             special_key(ROUTES_BY_ID[route_id].method, ROUTES_BY_ID[route_id].path): "py"
             for route_id in route_ids
@@ -120,7 +121,7 @@ def build_dev_app(
         idempotency=Idempotency(),  # type: ignore[arg-type]
         handlers={route_id: pipeline.HANDLERS[route_id] for route_id in (*route_ids, *pipeline_ids)},
     )
-    ownership = ownership_of((*route_ids, *pipeline_ids))
+    ownership = ownership_of(route_ids, pipeline_ids)
     app = FastAPI()
     install_special(app, context, ownership)
     pipeline.install(app, context, ownership)
