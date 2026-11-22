@@ -19,15 +19,7 @@ commandes s'exécutent **dans les VM**, jamais sur le poste local.
 - APK servi : `MOBILE_APK_URL` doit répondre **200** ;
 - URLs de `apps/mobile/e2e/e2e.env` cohérentes : un port public **périmé** (000/404) est
   **republié** et `e2e.env` réécrit (chaque `publish` crée une URL neuve) ;
-- agent relancé automatiquement s'il ne répond pas (`GET /jobs` : l'edge qui publie le port
-  intercepte `/health` et répond `{ ok: true }` sans transmettre) ;
-- Maestro orphelin sur l'appareil (`pgrep maestro`) tué avant la campagne (`POST /cleanup` sur
-  l'agent, qui le fait aussi au début de chaque travail).
-
-La republication et le redémarrage de l'agent passent par l'API Agent37 : le préflight lit sa clé
-dans `AGENT37_API_KEY`, `AGENT37_API_KEY_FILE` ou `~/.agent37/api-key` (jamais versionnée), et les
-identifiants d'instance dans `AGENT37_INSTANCE_ID` (VM dev) et `MOBILE_DEVICE_AGENT_INSTANCE_ID`
-(VM téléphone). Sans ces valeurs il vérifie tout et échoue en donnant la commande exacte.
+- Maestro orphelin sur l'appareil (`pgrep maestro`) tué avant la campagne.
 
 ## 3. Boucle quotidienne (VM dev)
 
@@ -90,10 +82,10 @@ node tools/sdd/complete.mjs SPEC-xxxx --no-merge --no-push
 
 | Symptôme | Cause | Remède |
 |---|---|---|
-| `container_unreachable` | requête longue coupée, port périmé, Maestro orphelin | préflight (republie, relance l'agent, tue Maestro), contrat async |
-| agent muet (`/jobs` sans réponse) | VM téléphone saturée, agent arrêté | le préflight relance `sh /root/agent-deploy.sh` par l'API sandbox ; sinon le lancer à la main |
+| `container_unreachable` | requête longue coupée, port périmé, Maestro orphelin | préflight (republie + tue Maestro), contrat async |
 | `curl: (22) 404` sur l'APK | serveur 8099 arrêté ou mauvais dossier | relancer `python3 -m http.server 8099` dans `outputs/apk/release` |
 | `diffRatio` identiques sur plusieurs flux | artefacts non rattachés | ADR-3015 (artefacts par flux) |
 | `fatal error: … file not found` (C++) | `transforms` purgés | rebuild complet sans purge des transforms |
 | `/health` → `database: not_configured` | `pnpm dev` (turbo) filtre l'env | `set -a; . ./.env.local; pnpm --filter @learny/api dev` |
 | `createReleaseExpoConfig` échoue | env incomplet (`SUPABASE_ANON_KEY`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`) | passer par `pnpm build:mobile:e2e`, pas par `gradlew` brut |
+| ANR SystemUI, `sdd-health` invisible, flux en échec trompeur | VM téléphone 8 Go saturée (émulateur + Maestro + agent) | vérifier `free -m` avant campagne ; redémarrer à froid l'émulateur (`sh /root/restart-emulator.sh`) ; ne pas relancer la campagne avant que l'appareil réponde |
