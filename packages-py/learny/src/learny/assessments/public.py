@@ -10,6 +10,7 @@ from learny.assessments.application.exam_attempts import (
     start_exam_attempt,
     submit_exam,
 )
+from learny.assessments.application.exam_deadline import submit_exam_at_deadline
 from learny.assessments.application.exam_format import (
     confirm_exam_format,
     ensure_mock_exam_slots,
@@ -74,6 +75,7 @@ __all__ = [
     "start_validation_attempt",
     "submit_attempt",
     "submit_exam",
+    "submit_exam_at_deadline",
     "submit_exercise",
     "sync_offline_answers",
 ]

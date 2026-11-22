@@ -13,6 +13,8 @@ from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import Any
 
+from sqlalchemy import text
+
 from learny.identity.domain.actor import Actor
 from learny.learning.application.ports import LearningDeps
 from learny.learning.domain.params import ENGINE
@@ -1029,3 +1031,36 @@ async def apply_replan(
         "hoursPerDay": result["hoursPerDay"],
         "consentActionId": consent_action_id,
     }
+
+
+SELECT_ACTIVE_FORMATIONS = text(
+    """
+    select id::text as id
+    from public.formations
+    where owner_id = cast(:user_id as uuid) and status = 'active'
+    order by created_at asc, id asc
+    """
+)
+
+
+async def replan_formation_in_tx(tx: Any, user_id: str, formation_id: str, now: datetime) -> None:
+    """Replans one formation in place, reusing the planner and the slot reconciliation.
+
+    Port of `replanFormationAfterResume` of `packages/services/src/planning/index.ts`: the pause
+    and the module unlock share it, so no planning rule is duplicated (ADR-2011 section 4).
+    """
+    actor = Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
+    context = await _read_planning_context_tx(tx, actor, formation_id, now)
+    planned = plan_schedule(plan_input_of(context, now))
+    await reconcile_plan_slots(tx, user_id, formation_id, planned["slots"], now)
+
+
+async def replan_user_in_tx(tx: Any, user_id: str, now: datetime) -> list[str]:
+    """Replans every active formation of one learner (`replanUser`); one failure cancels none."""
+    rows = (await tx.conn.execute(SELECT_ACTIVE_FORMATIONS, {"user_id": user_id})).mappings().all()
+    replanned: list[str] = []
+    for row in rows:
+        formation_id = str(row["id"])
+        await replan_formation_in_tx(tx, user_id, formation_id, now)
+        replanned.append(formation_id)
+    return replanned
