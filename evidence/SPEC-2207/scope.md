@@ -222,3 +222,47 @@ Restent hors de cette tranche : **52 opérations `dev.*`** — `dev.notification
 et les **45 `dev.sdd.*`** (spec-007 à spec-1301, `dev.sddApiCoverage`, `dev.sddAuthProxy`,
 `dev.sdd.stripe.session`) — plus `auth.*`, `health.get`, `home.get`, `formations.resume`, les routes
 spéciales hors `dev.*`, l'e2e complet, `acceptance.md`, `validate.mjs` et `complete.mjs`.
+
+## 8. Cinquième tranche : quinze routes `dev.*` de plus (33/70)
+
+Date : 2026-11-22. Commits : `76c7fc2a` et `f1196d9e` (données personnelles), `852982b9` (correctif
+`sent_at` du push), `ca67557a` et `71d16850` (notifications et push), `f3c41077` et `6cccadcb`
+(couverture, proxy, session Stripe), `f88fa88d` et `8ff21447` (pages statiques).
+
+**Quinze opérations** de plus sont servies par Python, avec leurs clés spéciales quand elles en ont
+une ; `api/ownership.yaml` porte désormais **33 des 70** opérations `dev.*` à `py`.
+
+| Famille | Opérations | Module |
+|---|---|---|
+| données personnelles | `dev.personal-data.deletion.schedule`, `deletion.cancel`, `execute`, `export` | `dev_demos/personal_data.py` |
+| notifications | `dev.notify`, `dev.notificationsGenerate`, `dev.pushSend` | `dev_demos/notifications.py`, `dev_demos/push.py` |
+| socle SDD | `dev.sddApiCoverage`, `dev.sddAuthProxy`, `dev.sdd.stripe.session` | `dev_demos/sdd.py`, `dev_demos/coverage.py` |
+| pages statiques | `dev.sdd.spec-007`, `spec-1004`, `spec-110`, `spec-114`, `spec-1203` | `dev_demos/sdd.py` |
+
+Décisions de la tranche :
+
+- **Cas d'usage partagés** : les quatre routes de données personnelles délèguent à `learny.privacy`
+  (`schedule_deletion`, `cancel_deletion`, `run_account_deletion`, `run_data_export`) et rendent
+  exactement la forme du contrat ; la démonstration ne contourne que le quota d'exports, en créant
+  sa propre ligne comme le TypeScript. Le compte jetable est créé par l'admin GoTrue de la façade et
+  supprimé dans un `finally` s'il subsiste.
+- **Notifications** : `notify`, `held_block`, `schedule_validation_quiz_reminder` et `send_push`
+  sont réutilisés ; les réglages et le ton simulés sont écrits puis restaurés dans un `finally`.
+  Les douze producteurs de la page de génération partagent les clés de déduplication du TypeScript.
+  `learny.engagement.public` exporte `local_moment_label` et `mock_outcome_of` pour la route.
+- **Correctif de parité** : `queries.insert_delivery` n'écrivait jamais `sent_at`, ce qui violait la
+  contrainte `notification_deliveries_sent_at_check` au premier envoi push réussi. La colonne est
+  maintenant passée (`fix(SPEC-2205)`).
+- **Couverture** : `dev_demos/coverage.py` porte `routeCoverage` depuis `api/inventory.json` et
+  `api/ownership.yaml` (les deux tables du contrat), avec `contract_files.py` partagé avec `main.py`.
+- **Garde des routes du pipeline** : `dev_demos/guard.py` (`require_dev`) lit `ENABLE_SDD_PAGES` et
+  `APP_ENV` depuis `deps.settings`, comme `guarded()`. Le contrat valide le corps avant le handler,
+  donc une requête sans corps reste un 400 de validation, jamais un 404.
+- **Harnais** : `build_dev_app` distingue désormais les routes spéciales (`route_ids`) des routes du
+  pipeline (`pipeline_ids`) ; `DevDeps` porte `gotrue`, `storage` et `push` injectables.
+- **Tests** : `test_dev_personal_data_routes.py`, `test_dev_notification_routes.py`,
+  `test_dev_sdd_demo_routes.py`, `test_dev_sdd_static_demos.py` (nominal + garde par famille).
+
+Restent **37 opérations `dev.*`**, toutes des `dev.sdd.spec-*` : 009, 101, 102 (demo/create/remove),
+103 à 109, 111, 112, 113, 115, 1301, 202, 411, 501 (demo/create/report/correct), 504 (demo/call),
+505 (demo/create/delete), 506, 508, 509, 510, 511, 512 (demo/suggest/decide), 711.
