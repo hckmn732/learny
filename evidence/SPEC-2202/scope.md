@@ -9,9 +9,9 @@ dont **0** sont déjà `py` dans `api/ownership.yaml` au démarrage (toutes `ts`
 
 | Contexte | Opérations | `py` | `ts` restantes | Motif des `ts` |
 |---|---|---|---|---|
-| learning | 15 | 11 | 4 | `apply-result.ts` (1338 lignes) et le service `review` (2598 lignes) restent à porter : `warmups.answers.create`, `review.globalQuizToday`, `review.answer`, `review.complete` |
+| learning | 15 | 15 | 0 | contexte terminé : `apply-result.ts` et le service `review` sont portés |
 | assessments | 26 | 0 | 26 | domaine à porter (étape 2) |
-| **Total** | **41** | **11** | **30** | |
+| **Total** | **41** | **15** | **26** | |
 
 ## Comptage
 
@@ -88,14 +88,14 @@ Détail des cas, fixtures d'oracle et restes : `evidence/SPEC-2202/test-port-map
 | [x] | `formations.replan` | POST | `/api/v1/formations/:fid/replan` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
 | [x] | `formations.replan-options` | POST | `/api/v1/formations/:fid/replan-options` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
 | [x] | `gaps.list` | GET | `/api/v1/formations/:fid/gaps` | py | `gaps.ts` | chapters, course_sections, courses, formations, free, gap_events, group_members, groups, modules, notion_states, notions, profiles | — |
-| [ ] | `review.answer` | POST | `/api/v1/review-sessions/:sid/answers` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
-| [ ] | `review.complete` | POST | `/api/v1/review-sessions/:sid/complete` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | `final-review.test.ts` |
-| [ ] | `review.globalQuizToday` | GET | `/api/v1/formations/:fid/global-quiz/today` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
+| [x] | `review.answer` | POST | `/api/v1/review-sessions/:sid/answers` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
+| [x] | `review.complete` | POST | `/api/v1/review-sessions/:sid/complete` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | `final-review.test.ts` |
+| [x] | `review.globalQuizToday` | GET | `/api/v1/formations/:fid/global-quiz/today` | ts | `review.ts` | activities, answers, attempts, automation_actions, automation_settings, brick_versions, bricks, chapters, daily_activity, formations, game, group_members, groups, its, module_progress, modules, notion_states, notions, one, profiles, public, review_logs, schedule_slots, started_at, two | — |
 | [x] | `series.milestones` | GET | `/api/v1/milestones` | py | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts`, `spec-723.spec.ts` |
 | [x] | `series.streak` | GET | `/api/v1/streak` | py | `serie-regularite-et-jalons-interface.ts` | daily_activity, formations, group_members, groups, milestones, module_progress, modules, notion_states, notions, pauses, persisted, profiles, public, study_preferences | `streak-milestones-route.test.ts` |
 | [x] | `slots.alternatives` | GET | `/api/v1/slots/:sid/alternatives` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
 | [x] | `slots.move` | POST | `/api/v1/slots/:sid/move` | py | `agenda-deplacer-et-reajuster-le-planning.ts` | chapters, formations, group_members, groups, modules, profiles, public, schedule_slots, study_preferences | `agenda-deplacer-et-reajuster-le-planning.test.ts` |
-| [ ] | `warmups.answers.create` | POST | `/api/v1/warmups/:activityId/answers` | ts | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
+| [x] | `warmups.answers.create` | POST | `/api/v1/warmups/:activityId/answers` | ts | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
 | [x] | `warmups.today.get` | GET | `/api/v1/warmups/today` | py | `warmup.ts` | activities, answers, attempts, automation_actions, brick_versions, bricks, modules, notion_states, notions, profiles, public, review_logs, schedule_slots | — |
 
 ### assessments (26)
@@ -336,3 +336,49 @@ verrous consultatifs et dérivation de clé), un cas d'usage par fonction de ser
 Total de la suite Python après la tranche : **1335 tests**, dont 22 ajoutés par les quatre fichiers
 d'intégration ci-dessus. `api/inventory.json` reste à jour (`inventory.mjs --check`) : il ne liste
 que les tests TypeScript sources.
+
+## Étape 4 — cœur du moteur de révision (4 dernières opérations `learning`)
+
+| Opération | Requêtes (`infrastructure/queries.py`) | Cas d'usage | Handler | Tests d'intégration serveur |
+|---|---|---|---|---|
+| `warmups.answers.create` | `lock_warmup_activity`, `ensure_warmup_attempt`, `read_warmup_answer_positions`, `read_warmup_item_brick`, `insert_warmup_answer`, `read_evening_quiz`, `read_quiz_brick_of_notion`, `read_notion_label`, `reschedule_notion`, `update_evening_quiz`, `read_warmup_action`, `update_warmup_action_payload`, `mark_attempt_graded`, `complete_warmup_slot`, `upsert_daily_activity`, `consume_automation_action` | `application/warmups.answer_warmup` | `handlers/learning.py` | `test_learning_warmup_answer.py` |
+| `review.globalQuizToday` | `read_quiz_formation`, `read_quiz_due_rows`, `read_quiz_active_bricks`, `read_quiz_last_formats`, `read_quiz_automation_params`, `read_quiz_forced_actions`, `read_quiz_seen_fingerprints`, `read_quiz_today_activity`, `read_quiz_stale_sessions`, `lock_quiz_session`, `install_quiz_activity`, `install_quiz_attempt`, `read_session_*`, `read_mode_options`, `read_quiz_smoothing_actions`, `insert_automation_action_quiet` | `application/review.get_or_create_today_session` | idem | `test_learning_review_flow.py` |
+| `review.answer` | `read_quiz_answer_activity`, `read_replay_answer`, `read_position_answer`, `read_answer_brick`, `insert_review_answer`, `read_answer_logs`, `consume_quiz_item_action` | `application/review.answer_review_item` | idem | `test_learning_review_answer.py` |
+| `review.complete` | `read_quiz_activity_for_update`, `read_latest_attempt`, `read_quiz_attempt_for_closure`, `read_attempt_positions`, `insert_skipped_answer`, `read_attempt_answer_rows`, `mark_attempt_graded`, `store_attempt_summary`, `upsert_daily_activity`, `consume_automation_actions_of_day`, `complete_quiz_slots`, `read_profile_streak_for_update`, `read_yesterday_qualifying`, `update_profile_streak`, `read_next_quiz_slot` | `application/review.complete_review_session` | idem | `test_learning_review_answer.py` |
+
+Le cœur du moteur est porté dans `application/apply_result.py` (port de
+`packages/services/src/learning/apply-result.ts` et `apply-review.ts`) : `plan_notion_reviews`
+enchaîne, pour une notion, la note FSRS (`learny.learning.domain.fsrs`), la maîtrise
+(`domain.mastery`), le cycle de vie des lacunes (`domain.gaps`) et les instantanés
+avant/après ; `persist_step` écrit `notion_states` puis `append_review_log` et
+`append_gap_event` (fonctions `security definer` de la migration 0037), donc un rejeu
+`(answer_id, notion_id)` n'écrit rien. Les jeux de la session sont corrigés par
+`learny.assessments.domain.bricks.grade_brick` ; `application/review_games.py` traduit la
+correction de brique vers l'union de correction du contrat et répartit le résultat par notion
+(confusions `matching`/`categorization` comprises). Aucune règle n'est dupliquée.
+
+### Tests
+
+| Fichier | Cas | Couverture |
+|---|---|---|
+| `tests/integration/learning/test_learning_apply_result.py` | 6 | planificateur pur (note, maîtrise, carte), rejeu idempotent d'une étape, blocage par une revue plus récente, `again` sur carte mûre (lapse, pas de lacune avant la fenêtre d'oubli) |
+| `tests/integration/learning/test_learning_review_flow.py` | 5 | DTO vide sans écriture, formation en pause, 404 (inconnue, terminée, étrangère), création puis rejeu idempotent (un seul essai) |
+| `tests/integration/learning/test_learning_review_answer.py` | 7 | réponse + journal FSRS + rejeu par `clientAnswerId`, 409 même position, item passé sans mise à jour FSRS, brique non corrigeable (`RESPONSE_INVALID`), clôture (résumé, `daily_activity`, série), `SESSION_CLOSED` 422 |
+| `tests/integration/learning/test_learning_warmup_answer.py` | 4 | première réponse + événement `review/answered`, dernière réponse (essai noté, action consommée, activité du jour), 409 et hors bornes, RLS |
+
+Total de la suite Python après la tranche : **1355 tests**, dont 26 ajoutés par les quatre
+fichiers ci-dessus (22 pour l'étape 3, 4 fichiers de plus ici).
+
+### Dettes consignées (reprises par SPEC-2205)
+
+- `review.complete` émet `review/session-completed` (comme le TypeScript). Les notifications de
+  jalons de la série et de fin de session, elles, sont produites par le service `notify` du
+  contexte `engagement`, qui n'existe pas encore : la donnée de série (`profiles.streak_days`) est
+  écrite à l'identique, mais aucune notification n'est émise. Aucun scénario de parité ne
+  l'observe ; la dette est reprise par SPEC-2205 (engagement).
+- `review.globalQuizToday` ne déclenche pas la demande de variantes de banque de questions
+  (`requestRefill`, SPEC-513) quand tous les tirages sont épuisés : ce service dépend du contexte
+  IA et des jobs, hors périmètre `learning`. Le DTO renvoyé est identique (`status: "empty"`), seule
+  la demande de génération n'est pas émise ; consigné pour SPEC-2205.
+- `review.complete` ne déclenche pas non plus la génération de notifications de fin de session
+  (même service `notify`).

@@ -1903,7 +1903,7 @@ APPEND_REVIEW_LOG = text(
       cast(:source as public.review_source),
       cast(:rating as public.fsrs_grade),
       :correct,
-      :time_ms,
+      cast(:time_ms as integer),
       cast(:reviewed_at as timestamptz),
       cast(:card_before as jsonb),
       cast(:card_after as jsonb)

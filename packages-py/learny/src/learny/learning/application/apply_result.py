@@ -12,8 +12,9 @@ from typing import Any
 
 from learny.learning.domain import fsrs, gaps, mastery
 from learny.learning.domain.params import ENGINE
-from learny.learning.domain.time import format_instant, parse_instant
+from learny.learning.domain.time import format_instant
 from learny.learning.infrastructure import queries
+from learny.shared import time as shared_time
 from learny.shared.errors import AppError
 from learny.shared.jsmath import js_round
 
@@ -188,14 +189,22 @@ def _iso(value: Any) -> str:
     import datetime as datetime_module
 
     if isinstance(value, str):
-        return format_instant(parse_instant(value))
+        return format_instant(shared_time.to_epoch_ms(shared_time.parse_iso(value)))
     if isinstance(value, datetime_module.datetime):
-        return format_instant(parse_instant(value.isoformat()))
+        return format_instant(shared_time.to_epoch_ms(value))
     raise TypeError(f"not an instant: {value!r}")
 
 
-def to_persistence_card(card: Mapping[str, Any]) -> dict[str, Any]:
+def card_dict(card: Any) -> dict[str, Any]:
+    """The engine card as a plain mapping (`apply_review` returns a value object)."""
+    if hasattr(card, "to_dict"):
+        return dict(card.to_dict())
+    return dict(card)
+
+
+def to_persistence_card(card: Any) -> dict[str, Any]:
     """The engine card with the numeric `state` of `notion_states.fsrs`."""
+    card = card_dict(card)
     state = FSRS_STATE_NAMES.index(str(card["state"]))
     return {
         "due": card["due"],
@@ -395,10 +404,13 @@ def plan_notion_reviews(
         if decision.rating is None:
             continue
 
-        card_before = current_state["fsrs"] or fsrs.create_notion_card(str(answer["answeredAt"]), retention)
-        card_after, due_at = fsrs.apply_review(
+        card_before = card_dict(
+            current_state["fsrs"] or fsrs.create_notion_card(str(answer["answeredAt"]), retention)
+        )
+        card_after_value, due_at = fsrs.apply_review(
             card_before, decision.rating, str(answer["answeredAt"]), retention
         )
+        card_after = card_dict(card_after_value)
         mastery_result = mastery.calculate_mastery(
             _mastery_answers(history["mastery"], answer),
             str(answer["answeredAt"]),
