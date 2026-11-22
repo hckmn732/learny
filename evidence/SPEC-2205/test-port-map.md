@@ -50,13 +50,25 @@ base (Supabase local) passent par l'intégration serveur, jamais par un mock de 
 | `moteur-d-automatismes.test.ts` (journal) | page stable, filtres, curseur, compteur hebdomadaire, RLS, expiration idempotente | `tests/integration/engagement/test_engagement_automations_journal.py` |
 | `services/src/weekly-review.ts` (`getWeeklyReview`, `collectWeeklyReviewData`) | état vide explicite, charge figée, recalcul, `actionId` étranger → 404 | `tests/integration/engagement/test_engagement_weekly_review.py` |
 
-## Non porté dans cette tranche
+## Cas d'usage de job (cette tranche)
+
+| Test TypeScript | Cas | Test Python |
+|---|---|---|
+| `packages/jobs/src/time-window.ts`, `packages/jobs/src/tick.ts` | fenêtre locale `[T - 5 min, T + 55 min[`, jour local et jour de semaine, heure d'été (heure inexistante et heure ambiguë), zone à demi-heure, heure déjà passée | `tests/unit/engagement/test_engagement_jobs_domain.py` (oracle `tools/engagement/oracle-jobs.mjs`, section `windows`) |
+| `packages/notifications/src/digest.ts` (`durationLabel`, `previousCivilDay`, `dateLabel`, `hhmm`) | durées, jour civil précédent (mois et année), libellé long, heure locale, plafond des envois écartés | idem (sections `digestDates`, `reminders`) |
+| `packages/notifications/test/integration/notify.test.ts` (programme du jour) | un seul programme par jour local, bloc des envois écartés de la veille, plafond quotidien ignoré, rejeu sans doublon, e-mail capturé une fois | `tests/integration/engagement/test_engagement_jobs.py` |
+| `packages/notifications/src/producers/index.ts`, `producers/reminders.ts` (rappels) | 40 minutes avant, clé `validation_soon:<slot>:<startsAt>`, libellé local, fenêtre de l'heure | `test_engagement_jobs_domain.py` (sections `reminders`, `labels`, `window`) |
+| `packages/services/src/notifications-generation-des-rappels.test.ts` (rappels) | `expired` (CL-5), `CONFLICT` (CL-2), déplacement qui annule l'ancien rappel (CA-2), fuseau du profil | `test_engagement_jobs.py` + unitaires de `parse_request` |
+| `packages/services/test/integration/spec-706.test.ts` (job horaire) | un rappel par quiz de l'heure, rejeu sans doublon, rappel livré conservé, aucun quiz dans l'heure | `test_engagement_jobs.py` |
+| `packages/services/test/integration/practice-exercise.test.ts` (`ensurePracticeExercise`) | création unique par `(notion, version du cours)`, rejeu, notion inconnue, notion étrangère, version suivante | `test_engagement_jobs.py` + `test_engagement_jobs_domain.py` (contenu de la consigne) |
+
+## Reste hors de cette tranche
+
+Les définitions des automatismes (dont `jeu-lacune` et son exercice pratique) et le service de pause
+ont été portés et prouvés par `512aeac2`, `8c68ca0c` et `8f85fcba` ; les trois opérations de décision
+et les quatre opérations de pause sont basculées. Seul l'instantané HTML de React Email n'est pas
+rejoué : les textes et les sujets le sont, la structure DOM diffère (consigné dans `parity.md`).
 
 | Test TypeScript | Motif |
 |---|---|
-| `moteur-d-automatismes.test.ts` (parties `accept`/`decline`/`undo`, `reproposeAfterUndo`) | dépendent des **définitions** (`definition.apply`/`undo`/`explain`) : passe suivante, avec les trois opérations `me.automation-actions.{accept,decline,undo}` |
-| `definitions/*.test.ts` (échauffement, jeu-lacune, micro-séance, questions-cartes, remédiation, reprise, pause), `micro-seance/should-propose.test.ts`, `reprise/*.test.ts` | même passe : les définitions ne sont pas encore portées |
-| `automatisme-7-quiz-global-plafonne-et-lisse.ts`, `automatisme-8-sprint-avant-un-jalon.ts`, `automatisme-9-bilan-de-la-semaine.ts` (définitions) | effets des automatismes `plafond_quiz`, `sprint`, `bilan` : même passe (les aides pures de `bilan` sont déjà portées et prouvées) |
-| `packages/services/src/pause/*.test.ts` | service de pause (4 opérations `me.pause.*`) : passe suivante |
-| `packages/services/src/notifications-generation-des-rappels.test.ts` | producteurs de rappels (job), branchés au worker en SPEC-2207 |
 | `packages/notifications/src/email/render.ts` (instantané HTML) | l'instantané React Email n'est pas rejoué : les textes et les sujets le sont, la structure DOM diffère (consigné dans `parity.md`) |
