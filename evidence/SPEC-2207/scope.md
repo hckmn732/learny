@@ -1,117 +1,134 @@
-# SPEC-2207 — première tranche : portage des 9 cas d'usage de job
+# SPEC-2207 — état après la deuxième tranche : worker câblé, crons basculés
 
 Date : 2026-11-22. Branche : `spec/SPEC-2207-bascule-jobs-crons-demos`. Base : `main` `c4d2467c`.
-Périmètre : **seuls les cas d'usage appelés par les consommateurs et les crons** sont portés ici.
-Le câblage du registre, les tâches du planificateur, la bascule `consumers`/`crons`, les routes
-`dev.*`, l'e2e complet, `validate.mjs` et `complete.mjs` restent à faire (voir `handover.md`).
+Commits : `3171f677` (câblage et bascule), `ce8c13d1` (tests unitaires), `358e2cd0` (tests
+d'intégration), `f54b0a45` (Hono sans Inngest dans la pile de tests).
 
-## 1. Cas d'usage portés dans cette tranche
+Périmètre de la tranche : registre des consommateurs, événement interne `job/daily-digest`, deux
+tâches du planificateur, bascule `consumers` + `crons` à `py`, retrait du pont inline, tests
+unitaires et d'intégration. Restent hors périmètre : routes `dev.*` et spéciales, e2e complet,
+`acceptance.md`, `validate.mjs`, `complete.mjs`.
 
-| Cas d'usage | Contexte | Fichier Python | Source TypeScript | Tests |
-|---|---|---|---|---|
-| `purge_outbox` | shared | `learny/shared/outbox/purge.py` | `packages/jobs/src/functions/nightly-outbox-cleanup.ts` + `emit.ts#purgeSentEvents` | `tests/unit/shared/test_shared_jobs_purges.py`, `tests/integration/shared/test_shared_jobs_purge_outbox.py` |
-| `purge_security_rows` | identity | `learny/identity/application/purge_security.py` | `packages/services/src/security/purge.ts` + `packages/db/src/repositories/security-purge.ts` | `tests/unit/shared/test_shared_jobs_purges.py`, `tests/integration/identity/test_identity_jobs_security_purge.py` |
-| `purge_offline_receipts` | assessments | `learny/assessments/application/offline_purge.py` | `packages/jobs/src/functions/offline-receipts-purge.ts` | `tests/unit/shared/test_shared_jobs_purges.py`, `tests/integration/assessments/test_assessments_jobs_offline_purge.py` |
-| `process_question_bank_jobs` | tutor | `learny/tutor/application/question_bank.py` | `packages/tutor/src/services/question-bank.ts#processQuestionBankJobs` | `tests/unit/tutor/test_tutor_jobs_question_bank.py`, `tests/integration/tutor/test_tutor_jobs_question_bank.py` |
-| `prepare_question_bank` | tutor | `learny/tutor/application/question_bank.py` | `packages/jobs/src/functions/prepare-question-bank.ts` + `#enqueueCourseQuestionBanks` | idem |
-| `plan_programme` | learning | `learny/learning/application/plan_programme.py` | `packages/jobs/src/functions/programme.ts` | `tests/unit/learning/test_learning_jobs_programme.py`, `tests/integration/learning/test_learning_jobs_plan_programme.py` |
-| `grade_quiz` | assessments | `learny/assessments/application/grade_quiz.py` (+ `grade_open.py`) | `packages/jobs/src/functions/quiz-grade.ts`, `packages/services/src/quiz/{submit,grade-open}.ts` | `tests/unit/assessments/test_assessments_jobs_grade_open.py`, `tests/integration/assessments/test_assessments_jobs_grade_quiz.py` |
-| `submit_exam_at_deadline` | assessments | `learny/assessments/application/exam_deadline.py` | `packages/jobs/src/functions/exam-deadline.ts` | `tests/unit/assessments/test_assessments_jobs_deadline.py`, `tests/integration/assessments/test_assessments_jobs_exam_deadline.py` |
-| `unlock_module` | formation | `learny/formation/application/unlock_module.py` | `packages/jobs/src/functions/module-unlock.ts`, `packages/services/src/quiz/module-unlock.ts` | `tests/integration/formation/test_formation_jobs_unlock_module.py` |
+## 1. Cas d'usage de job portés (première tranche, inchangés)
 
-Chaque cas d'usage est exposé par le `public.py` de son contexte (`purge_security_rows`,
-`purge_offline_receipts`, `grade_quiz`, `grade_open_answers`, `submit_exam_at_deadline`,
-`plan_programme`, `replan_formation_in_tx`, `replan_user_in_tx`, `prepare_question_bank`,
-`process_question_bank_jobs`, `unlock_module`). `purge_outbox` vit dans `learny.shared.outbox`.
-
-Réutilisation (ADR-2011 §4, aucune règle dupliquée) : `plan_schedule`/`ENGINE['planner']` (SPEC-407),
-`reconcile_plan_slots`/`replan_formation_in_tx` (SPEC-411/618), `finalize_attempt`,
-`apply_learning_result`, `create_notion_card`/`to_persistence_card` (FSRS), `validate_brick` +
-`BrickReferenceResolver` (SPEC-501), `validate_candidate` du planificateur, `engagement.notify`,
-`default_embedder` (Voyage/mock), `LlmGateway`.
-
-## 2. Table des 23 consommateurs du plan P22 (§SPEC-2207, normative)
-
-« Porté » = le cas d'usage Python existe et est testé ; « à câbler » = le consommateur ou la tâche
-du planificateur doit être déclaré dans `consumers.py` / `scheduler.py` (tranche suivante).
-
-| # | Fonction Inngest | Déclencheur | Cas d'usage Python | État |
-|---|---|---|---|---|
-| 1 | cron-hourly-tick | `5 * * * *` UTC | `expire_due_automation_actions` + `user/local-tick` + `cron/hourly-tick` | à câbler (tâche du planificateur) |
-| 2 | cron-nightly | `30 1 * * *` UTC | émission de `cron/nightly{runDate}` | à câbler (tâche du planificateur) |
-| 3 | account-deletion | cron/nightly | `privacy.run_account_deletions` | porté (SPEC-2206), à câbler |
-| 4 | exports-purge | cron/nightly | `privacy.purge_exports` | porté (SPEC-2206), à câbler |
-| 5 | nightly-outbox-cleanup | cron/nightly | `shared.purge_outbox` | **porté ici**, à câbler |
-| 6 | offline-receipts-purge | cron/nightly | `assessments.purge_offline_receipts` | **porté ici**, à câbler |
-| 7 | question-bank-nightly | cron/nightly | `tutor.process_question_bank_jobs` (limite 50) | **porté ici**, à câbler |
-| 8 | security-purge | cron/hourly-tick | `identity.purge_security_rows` | **porté ici**, à câbler |
-| 9 | notifications-daily-digest | cron/hourly-tick | `engagement.plan_daily_digests` → `job/daily-digest` | porté (SPEC-2205, à vérifier), à câbler |
-| 10 | (nouveau, interne) | job/daily-digest | `engagement.send_daily_digest` | porté (SPEC-2205), événement à ajouter |
-| 11 | notifications-deferred-due | cron/hourly-tick | `engagement.deliver_due_deliveries` | porté (SPEC-2205), à câbler |
-| 12 | notifications-reminders | cron/hourly-tick | `engagement.sync_validation_quiz_reminders` | porté (SPEC-2205), à câbler |
-| 13 | data-export | account/export-requested | `privacy.run_data_export` | porté (SPEC-2206), à câbler |
-| 14 | email-welcome | user/signed-up | `engagement.send_welcome_email` | porté (SPEC-2205), à câbler |
-| 15 | notification-delivery | notification/delivery-due | `engagement.deliver_notification` | porté (SPEC-2205), à câbler |
-| 16 | ingest-resource | resource/uploaded | `content.process_resource` | porté (SPEC-2203), à câbler |
-| 17 | generate-course | chapter/contributions-completed | `tutor.generate_course` | **non porté** (reste à porter, tranche suivante) |
-| 18 | prepare-question-bank | course/generated | `tutor.prepare_question_bank` | **porté ici**, à câbler |
-| 19 | plan-programme | formation/programme-validated | `learning.plan_programme` | **porté ici**, à câbler |
-| 20 | quiz-grade | quiz/submitted | `assessments.grade_quiz` | **porté ici**, à câbler |
-| 21 | exam-deadline | exam/started | `assessments.submit_exam_at_deadline` (`run_at = deadlineAt + 5 s`) | **porté ici**, à câbler |
-| 22 | module-unlock | quiz/graded | `formation.unlock_module` | **porté ici**, à câbler |
-| 23 | remediation-prepare / -requested | quiz/graded, remediation/requested | `tutor.prepare_remediation` (auto / manuel) | porté (via `assessments.prepare_remediation`), à câbler |
-
-## 3. Les 6 crons à porter au planificateur
-
-Les six fonctions déclenchées par un cron qui ne dépendent pas d'un événement métier, plus les
-trois tâches horaires de notification (même déclencheur `cron/hourly-tick`) :
-
-| Cron | Instant | Tâche du planificateur | Cas d'usage |
+| Cas d'usage | Contexte | Fichier Python | Tests |
 |---|---|---|---|
-| nightly-outbox-cleanup | nightly | purge de l'outbox | `shared.purge_outbox` (porté ici) |
-| offline-receipts-purge | nightly | purge des reçus hors ligne | `assessments.purge_offline_receipts` (porté ici) |
-| question-bank-nightly | nightly | drainage de la banque | `tutor.process_question_bank_jobs` (porté ici) |
-| account-deletion | nightly | suppressions dues | `privacy.run_account_deletions` (porté) |
-| exports-purge | nightly | purge des exports | `privacy.purge_exports` (porté) |
-| security-purge | hourly-tick | purge des tables de sécurité | `identity.purge_security_rows` (porté ici) |
-| notifications-daily-digest | hourly-tick | plan des résumés | `engagement.plan_daily_digests` (porté) |
-| notifications-deferred-due | hourly-tick | envois différés | `engagement.deliver_due_deliveries` (porté) |
-| notifications-reminders | hourly-tick | rappels de quiz | `engagement.sync_validation_quiz_reminders` (porté) |
+| `purge_outbox` | shared | `learny/shared/outbox/purge.py` | `test_shared_jobs_purges.py`, `test_shared_jobs_purge_outbox.py` |
+| `purge_security_rows` | identity | `learny/identity/application/purge_security.py` | `test_shared_jobs_purges.py`, `test_identity_jobs_security_purge.py` |
+| `purge_offline_receipts` | assessments | `learny/assessments/application/offline_purge.py` | `test_shared_jobs_purges.py`, `test_assessments_jobs_offline_purge.py` |
+| `process_question_bank_jobs` | tutor | `learny/tutor/application/question_bank.py` | `test_tutor_jobs_question_bank.py` |
+| `prepare_question_bank` | tutor | `learny/tutor/application/question_bank.py` | idem |
+| `plan_programme` | learning | `learny/learning/application/plan_programme.py` | `test_learning_jobs_programme.py`, `test_learning_jobs_plan_programme.py` |
+| `grade_quiz` | assessments | `learny/assessments/application/grade_quiz.py` | `test_assessments_jobs_grade_open.py`, `test_assessments_jobs_grade_quiz.py` |
+| `submit_exam_at_deadline` | assessments | `learny/assessments/application/exam_deadline.py` | `test_assessments_jobs_deadline.py`, `test_assessments_jobs_exam_deadline.py` |
+| `unlock_module` | formation | `learny/formation/application/unlock_module.py` | `test_formation_jobs_unlock_module.py` |
 
-`api/ownership.yaml` déclare aujourd'hui deux crons (`cron/hourly-tick`, `cron/nightly`) et un
-consommateur (`devtools.demo_job`), tous encore `ts` : rien n'a été basculé dans cette tranche.
+Ajouts de cette tranche, dans les contextes (jamais de SQL dans le worker) :
 
-## 4. Écarts trouvés et décisions
+- `learny/engagement/application/local_ticks.py` — `local_tick_page` / `local_tick_payload` /
+  `local_tick_event_id` : sélection des apprenants actifs, fenêtre locale et identifiant
+  d'événement identiques à `packages/jobs/src/tick.ts`.
+- `learny/engagement/application/digest.py` — `send_daily_digest_at(deps, user_id, at)` : point
+  d'entrée du job `job/daily-digest` (lit la zone du profil, puis délègue à `send_daily_digest`).
 
-1. **`generate_course` absent.** Le plan P22 l'attribue à SPEC-2204 mais aucun cas d'usage Python
-   n'existe (`content.generate_course_now` n'est que la demande HTTP). Le consommateur
-   `generate-course` ne peut pas être câblé en l'état : inscrit dans `handover.md`.
-2. **Expiration de l'outbox.** Le worker Python estampille `dispatched_at` et non `sent_at`
-   (SPEC-2102) ; la purge supprime donc `coalesce(sent_at, dispatched_at) < now - 7 j`. Les lignes
-   jamais distribuées (`sent_at` et `dispatched_at` nuls) sont conservées. Comportement observable
-   identique pour les lignes distribuées, et cascade `job_deliveries` inchangée (FK `on delete
-   cascade`).
-3. **Motifs internes en anglais.** Les retours internes du job `plan-programme` (« formation
-   absente », « programme vide », « déjà planifié ») ne sont jamais montrés : ils sont renommés
-   `formation missing`, `empty programme`, `already planned` (ADR-2011 impose l'anglais hors
-   `locale_fr`). Aucune conséquence observable.
-4. **Textes utilisateur.** Les messages d'erreur, les libellés de correction (`Exact.`,
-   `Pas tout à fait.`), le libellé de secours des distracteurs et les données de la notification
-   `ai_task_failed` sont dans `locale_fr` (`assessments.py`, `tutor.py`, `details.py`), copiés mot
-   pour mot du TypeScript. Le prompt de `grade-open` et les instructions des banques sont en
-   anglais, comme le veut ADR-2011 pour les prompts (`packages/tutor/prompts/*.md` sont anglais) ;
-   les scénarios de simulation sont explicites, donc la sélection de fixture est inchangée.
-5. **Bornes.** `process_question_bank_jobs` borne le lot à `max(1, min(50, limite))` (défaut 20) ;
-   `purge_*` utilisent une comparaison stricte (`<`) sur l'instant injecté ; `grade_quiz` garde
-   l'état par tentative (`submitted`/`graded`) ; `unlock_module` garde l'état par module validé ;
-   `submit_exam_at_deadline` planifie `deadlineAt + 5 s` sans jamais planifier dans le passé.
-6. **Nouveaux appelants privilégiés.** `shared/outbox/purge`, `identity/purge_security`,
-   `assessments/offline_purge`, `learning/plan_programme`, `formation/unlock_module` et
-   `tutor/question_bank` sont déclarés dans `learny/shared/db/privileged.py` avec leur motif
-   (transactions de service des jobs, comme les jobs SPEC-2205/2206 déjà portés).
-7. **Point d'entrée du planning.** `plan_programme` calcule `hours = max(1, floor(volume / modules))`
-   comme `programme.ts` ; il n'utilise pas `_planner_formation` (qui arrondit au plus proche) pour
-   ne pas changer les créneaux produits au moment de la validation.
-8. **Replanification après déblocage.** `replan_user_in_tx` est ajouté à
-   `learning/application/planning.py` et réutilise `plan_schedule` + `reconcile_plan_slots` : la
-   pause (SPEC-618) garde son propre appel, aucun comportement existant n'est modifié.
+## 2. Registre des consommateurs et bascule (cette tranche)
+
+`apps/worker-py/src/learny_worker/consumers.py` déclare **21 consommateurs** : une entrée
+`Consumer(name, on, run, timeout_s, max_attempts, run_at, validate, tags)` par ligne de la table du
+plan P22 dont le cas d'usage Python existe. Les 22 entrées de consommateurs de la table sont donc
+couvertes sauf `generate-course` (voir section 5).
+
+| # | Consommateur (`name`) | Événement | Cas d'usage | Options | État | Test |
+|---|---|---|---|---|---|---|
+| 3 | `privacy.run_account_deletions` | `cron/nightly` | `privacy.run_account_deletions` | 900 s, 4 tentatives | câblé + testé | `test_worker_consumers_purges.py` (famille purges) |
+| 4 | `privacy.purge_exports` | `cron/nightly` | `privacy.purge_exports` | 300 s | câblé + testé | idem |
+| 5 | `shared.purge_outbox` | `cron/nightly` | `purge_outbox` | 300 s | câblé + testé | `test_a_nightly_tick_purges_the_delivered_outbox_once` |
+| 6 | `assessments.purge_offline_receipts` | `cron/nightly` | `purge_offline_receipts` | 300 s | câblé + testé | `test_a_nightly_tick_purges_the_offline_receipts_once` |
+| 7 | `tutor.process_question_bank_jobs` | `cron/nightly` | `process_question_bank_jobs(limit=50)` | 900 s | câblé + testé | unitaire (registre) |
+| 8 | `identity.purge_security_rows` | `cron/hourly-tick` | `purge_security_rows` | 300 s | câblé + testé | `test_an_hourly_tick_purges_the_security_rows_once` |
+| 9 | `engagement.plan_daily_digests` | `cron/hourly-tick` | `plan_daily_digests` → émet `job/daily-digest` | 300 s | câblé + testé | `test_worker_consumers_digest.py` |
+| 10 | `engagement.send_daily_digest` | `job/daily-digest` | `send_daily_digest_at` | 300 s, `run_at = data.at` | câblé + testé | idem (dont `run_at`) |
+| 11 | `engagement.deliver_due_deliveries` | `cron/hourly-tick` | `deliver_due_deliveries(limit=100)` | 300 s, 2 tentatives | câblé + testé | unitaire (registre) |
+| 12 | `engagement.sync_validation_quiz_reminders` | `cron/hourly-tick` | `sync_validation_quiz_reminders(batchSize=200)` | 300 s, 2 tentatives | câblé + testé | unitaire (registre) |
+| 13 | `privacy.run_data_export` | `account/export-requested` | `run_data_export` | 900 s | câblé + testé | `test_worker_consumers_export.py` |
+| 14 | `engagement.send_welcome_email` | `user/signed-up` | `send_welcome_email` | 300 s | câblé + testé | unitaire (registre) |
+| 15 | `engagement.deliver_notification` | `notification/delivery-due` | `deliver_notification` | 300 s | câblé + testé | unitaire (registre) |
+| 16 | `content.process_resource` | `resource/uploaded` | `process_resource` | 600 s | câblé + testé | `test_worker_consumers_ingestion.py` |
+| 17 | `tutor.generate_course` | `chapter/contributions-completed` | **absent** | — | **non câblé** (`ts`, ADR-2032) | écart épinglé par `test_consumers_registry.py` |
+| 18 | `tutor.prepare_question_bank` | `course/generated` | `prepare_question_bank` | 600 s | câblé + testé | unitaire (registre) |
+| 19 | `learning.plan_programme` | `formation/programme-validated` | `plan_programme` | 600 s | câblé + testé | unitaire (registre) |
+| 20 | `assessments.grade_quiz` | `quiz/submitted` | `grade_quiz` | 300 s | câblé + testé | `test_worker_consumers_grading.py` |
+| 21 | `assessments.submit_exam_at_deadline` | `exam/started` | `submit_exam_at_deadline` | `run_at = deadlineAt + 5 s` | câblé + testé | unitaire (registre) |
+| 22 | `formation.unlock_module` | `quiz/graded` | `unlock_module` | 300 s | câblé + testé | `test_worker_consumers_grading.py` |
+| 23a | `tutor.prepare_remediation` | `quiz/graded` | `prepare_remediation(trigger="auto")`, ignoré si réussi | 300 s | câblé + testé | unitaire (registre) |
+| 23b | `tutor.prepare_requested_remediation` | `remediation/requested` | `prepare_remediation(trigger="manual")` | 300 s | câblé + testé | unitaire (registre) |
+| — | `devtools.demo_job` | `sdd/demo-requested` | `demo_job` (SPEC-2102) | 300 s | câblé + testé | `test_worker_outbox.py` |
+
+Chaque consommateur porte un `validate` qui refuse une charge hors contrat avec
+`PermanentJobError("VALIDATION_FAILED")` : la livraison est `failed` au premier essai, sans reprise
+(CL-1).
+
+`api/ownership.yaml` : `consumers` à `py` pour les 22 entrées existantes sauf `tutor.generate_course`
+(`ts`, ADR-2032) ; `crons` : `cron/hourly-tick` et `cron/nightly` à `py`. Preuve :
+`test_every_registry_consumer_is_owned_by_python` (tous les consommateurs du registre sont actifs) et
+`test_no_typescript_consumer_is_ever_active` (aucun `ts` ne tourne).
+
+## 3. Événement interne `job/daily-digest`
+
+Ajouté à `packages/contracts/src/events.ts` (source du contrat), donc à `api/events.schema.json`
+(50 entrées), `api/inventory.json` (`events: 50`) et `evidence/SPEC-2001/inventory.md`. Schéma
+`{userId, at}`, documenté comme interne par ADR-2014 : jamais émis par un client, jamais relayé.
+`user/local-tick` n'a **aucun** consommateur dans la table du plan : il n'en a pas été inventé.
+
+## 4. Planificateur : deux tâches
+
+`apps/worker-py/src/learny_worker/scheduler.py` :
+
+- **horaire** (minute 5 UTC, `hourly_task`) : `expire_due_automation_actions(deps)`, puis émission
+  de `user/local-tick` par apprenant actif (pages de 500, charge et identifiant identiques à
+  `cron-hourly-tick.ts`, fuseau invalide ignoré et journalisé), puis `cron/hourly-tick {tickAt}` ;
+- **nocturne** (`emit_due`) : `cron/nightly {runDate}`.
+
+Le renvoi d'outbox par Inngest n'est pas porté (le répartiteur interroge). Les tâches ne s'exécutent
+que si `ownership.yaml` déclare le cron `py` ; les identifiants déterministes (`hourly-tick:<T>`,
+`nightly:<runDate>`, `local-tick:<user>:<windowStart>`) rendent un rejeu sans effet. Couverture :
+`apps/worker-py/tests/unit/test_scheduler_tasks.py` (10 tests) et
+`apps/worker-py/tests/integration/test_worker_scheduler_ticks.py` (2 tests, dont deux instances du
+planificateur et une seule émission par période).
+
+## 5. Écarts et décisions
+
+1. **`generate-course` non câblé.** Aucun cas d'usage Python de génération de cours n'existe
+   (`tutor.generate_course`, SPEC-2204) : l'entrée reste `ts`, documentée par ADR-2032 et épinglée
+   par un test. C'est la seule ligne de la table non basculée.
+2. **Expiration de l'outbox.** Le worker estampille `dispatched_at` et non `sent_at` (SPEC-2102) ;
+   la purge supprime `coalesce(sent_at, dispatched_at) < now - 7 j`.
+3. **Pont inline retiré.** L'argument `send` de `dispatch_inline` (appel à la route de dispatch Hono
+   de P21) est supprimé ; aucune route `POST /api/v1/dev/jobs/dispatch` n'avait été ajoutée, donc il
+   n'y avait rien d'autre à retirer. `JOBS_MODE=inline` continue d'exécuter les consommateurs `py`
+   in-process (`test_inline_ownership.py` prouve qu'aucun `ts` ne tourne).
+4. **Hono sans Inngest.** `apps/web/playwright.config.ts` passe `LEARNY_API_ROLE=api` au serveur Hono
+   de la pile de tests : la route `/api/inngest` n'est plus montée (étape 2 de la procédure du plan).
+5. **Budgets de temps.** `timeout_s` reprend `timeouts.finish` quand il existe (banques et export
+   900 s, ingestion et préparation de banque 600 s, notation et déblocage 300 s). Pour
+   `exam-deadline`, le budget Inngest d'une heure incluait l'attente : `run_at` l'externalise, donc
+   la soumission garde le défaut de 300 s. `max_attempts` = `retries + 1` (2 pour les trois
+   producteurs horaires de notifications, 4 ailleurs).
+6. **Textes internes en anglais**, messages utilisateur issus de `locale_fr` : aucune chaîne vue par
+   l'utilisateur n'est ajoutée par cette tranche.
+
+## 6. Preuves de cette tranche
+
+| Commande | Résultat |
+|---|---|
+| `uv run ruff check .` | vert |
+| `uv run ruff format --check packages-py apps` | vert (576 fichiers) |
+| `uv run mypy packages-py apps` | vert (570 fichiers) |
+| `uv run lint-imports` | 2 contrats conservés |
+| `uv run pytest packages-py/learny/tests/unit apps/api-py/tests/unit apps/worker-py/tests/unit -q` | 3672 passés |
+| `uv run pytest apps/worker-py/tests/integration -q` (sous `flock`) | 21 passés (12 ajoutés) |
+| `corepack pnpm contract:check` | contrat à jour |
+| `corepack pnpm exec tsx tools/migration/inventory.mjs --check` | inventaire à jour |
+| `node tools/migration/report.mjs --check` | réussi |
+| `corepack pnpm sdk:check`, `py:contract:check`, `openapi:check` | à jour |
+| `corepack pnpm exec vitest run packages/contracts/src/events.test.ts` | 106 passés |

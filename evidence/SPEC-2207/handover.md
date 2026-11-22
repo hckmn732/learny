@@ -1,64 +1,69 @@
-# SPEC-2207 — handover : ce qui reste après la première tranche
+# SPEC-2207 — handover après la deuxième tranche (worker câblé, crons basculés)
 
-Date : 2026-11-22. Branche : `spec/SPEC-2207-bascule-jobs-crons-demos`.
-État : **9 cas d'usage de job portés et testés** (voir `scope.md`), aucun câblage, aucune bascule.
+Date : 2026-11-22. Branche : `spec/SPEC-2207-bascule-jobs-crons-demos`. HEAD de la tranche :
+`f54b0a45` (puis commits de documentation). État : **21 consommateurs câblés et testés, deux crons
+basculés, deux tâches de planificateur portées, pont inline retiré**. Aucune route `dev.*` touchée.
 
 ## 1. Ce qui est fait
 
-- Les neuf cas d'usage de la table du plan P22 : `purge_outbox`, `purge_security_rows`,
-  `purge_offline_receipts`, `process_question_bank_jobs`, `prepare_question_bank`, `plan_programme`,
-  `grade_quiz`, `submit_exam_at_deadline`, `unlock_module`, exposés par le `public.py` de leur
-  contexte, avec leurs tests unitaires et d'intégration.
-- Événements émis identiques (noms, identifiants de déduplication, charges) :
-  `quiz/graded` (`quiz-graded:<attemptId>`), `module/validated` (`module-validated:<moduleId>`),
-  `formation/completed` (`formation-completed:<formationId>`), `exam/submitted` (déjà porté).
-- Codes `AppError` et textes `locale_fr` identiques au TypeScript ; horloge injectée partout ;
-  aucun `time.time()`, `datetime.now()` ni `random`.
-- `progress/state.json` : `SPEC-2207` est `in_progress` (branche, horodatage, validations vides).
-  Les checkpoints n'ont pas été touchés.
+- `learny_worker/consumers.py` : 21 consommateurs (une ligne par entrée de la table du plan P22 dont
+  le cas d'usage Python existe), chacun déléguant au cas d'usage de son contexte, avec `timeout_s`,
+  `max_attempts`, `run_at` et `validate` issus du plan. Détail et état par consommateur :
+  `evidence/SPEC-2207/scope.md` §2.
+- `learny_worker/scheduler.py` : tâche horaire (expiration des actions, `user/local-tick` par pages
+  de 500 avec les charges et identifiants du TypeScript, `cron/hourly-tick {tickAt}`) et tâche
+  nocturne (`cron/nightly {runDate}`) ; plus aucune tâche inactive après la bascule.
+- `api/ownership.yaml` : `consumers` et `crons` à `py` (seul `tutor.generate_course` reste `ts`,
+  ADR-2032) ; `api/events.schema.json` gagne l'événement interne `job/daily-digest` (50 événements),
+  `api/inventory.json` et `evidence/SPEC-2001/inventory.md` régénérés.
+- `apps/worker-py/src/learny_worker/inline.py` : pont Hono retiré (`send` supprimé) ;
+  `JOBS_MODE=inline` exécute les consommateurs `py` in-process.
+- `apps/web/playwright.config.ts` : Hono tourne avec `LEARNY_API_ROLE=api` (pas de `/api/inngest`).
+- Contexte engagement : `local_ticks.py` (fan-out horaire) et `digest.send_daily_digest_at` (point
+  d'entrée de `job/daily-digest`), exportés par `learny.engagement.public`.
+- Tests : 3 fichiers unitaires (`test_consumers_registry.py`, `test_scheduler_tasks.py`,
+  `test_inline_ownership.py`), 6 fichiers d'intégration (`test_worker_consumers_purges.py`,
+  `test_worker_consumers_digest.py`, `test_worker_consumers_export.py`,
+  `test_worker_consumers_ingestion.py`, `test_worker_consumers_grading.py`,
+  `test_worker_scheduler_ticks.py`) et le harnais `tests/support/jobs.py`.
 
-## 2. Ce qui reste à faire (ordre conseillé)
+## 2. Ce qui reste exactement
 
-1. **Porter `generate_course`.** Le consommateur `generate-course` (`chapter/contributions-completed`)
-   n'a **aucun** cas d'usage Python : la table du plan l'attribue à SPEC-2204, mais seule la demande
-   HTTP (`content.generate_course_now`) existe. Sans lui, la bascule des consommateurs est
-   incomplète (les banques de questions ne se déclenchent jamais sur `course/generated`).
-2. **Câbler le registre `apps/worker-py/src/learny_worker/consumers.py`** : une entrée par
-   consommateur de la table du plan, avec `validate`, `run_at` (`submit_exam_at_deadline.run_at`) et
-   les délais (`timeout_s` : 900 s banque de questions et export, 600 s ingestion et génération de
-   cours, 300 s notation de quiz).
-3. **Porter les tâches du planificateur** dans `learny_worker/scheduler.py` : `expire_due_automation_actions`,
-   `user/local-tick` par pages de 500 (conservé pour la parité), émission de `cron/hourly-tick` et
-   `cron/nightly`, puis les 6 tâches cron de `scope.md` §3 (dont les 3 tâches horaires de
-   notification).
-4. **Ajouter l'événement interne `job/daily-digest`** à `api/events.schema.json` (ADR-2014), avec la
-   tâche `engagement.plan_daily_digests` qui l'émet (`run_at = data.at`, remplace `step.sleepUntil`).
-5. **Basculer `consumers` et `crons` à `py`** dans `api/ownership.yaml` (en une fois), retirer le
-   pont inline (P21) et la route de dispatch éventuelle, et configurer Hono sans `/api/inngest`
-   (`LEARNY_API_ROLE=api`) dans `apps/web/playwright.config.ts`.
-6. **Porter les routes `dev`, `dev-migration`, `dev-sdd-migration`** (43 routes de démonstration) et
-   les routes spéciales `_dev` / `relay-stream` dans `apps/api-py/src/learny_api/special/dev_*.py`,
-   avec la garde `ENABLE_SDD_PAGES && APP_ENV != production` et `service_tx` autorisé.
-7. **Tests du worker** (SPEC-2207 ET-2) : un test d'intégration par consommateur câblé (succès,
-   reprise, échec définitif, livraison dupliquée avec `job_deliveries`), et un test du planificateur
-   à deux instances (un seul tick par échéance).
-8. **E2E complet** `@SPEC-2207` avec vidéo, page de démonstration `@visual`, `validate.mjs SPEC-2207`
-   puis `complete.mjs SPEC-2207`. Aucun de ces deux outils n'a été lancé dans cette tranche.
+1. **Porter `tutor.generate_course`** (SPEC-2204) puis basculer la dernière ligne
+   `tutor.generate_course` à `py` et la déclarer dans le registre ; le test
+   `test_the_only_typescript_consumer_is_the_unported_course_generation` échouera volontairement et
+   devra être mis à jour avec ADR-2032.
+2. **Routes `dev`, `dev-migration`, `dev-sdd-migration`** (43 routes de démonstration) et routes
+   spéciales `_dev` / `relay-stream` dans `apps/api-py/src/learny_api/special/dev_*.py`, avec la
+   garde `ENABLE_SDD_PAGES && APP_ENV != production` et `service_tx` autorisé. La façade relaie
+   encore ces entrées `ts` : c'est la dernière zone avant CA-1 complet.
+3. **Spéciaux restants** de `api/ownership.yaml` (`auth.*`, `dev.*`, `_dev/*`,
+   `formations/:fid/sprints`, `relay-stream`) : hors périmètre de cette tranche.
+4. **E2E complet** `@SPEC-2207` avec vidéo, page de démonstration `@visual`, puis
+   `node tools/sdd/validate.mjs SPEC-2207` et `node tools/sdd/complete.mjs SPEC-2207`. Aucun des
+   deux outils n'a été lancé dans cette tranche (CP-21 reste `pending`).
+5. **`evidence/SPEC-2207/acceptance.md`** : à écrire avec les preuves de CA-1 à CA-3 quand les
+   routes `dev.*` seront servies par Python (CA-1 dépend de leur bascule).
 
 ## 3. Points de vigilance pour la tranche suivante
 
-- **Ancien écart assumé** : la purge de l'outbox lit `coalesce(sent_at, dispatched_at)` (le worker
-  Python n'écrit que `dispatched_at`). Un test d'intégration le couvre.
-- **`grade_quiz`** délègue à `grade_open_answers` → `finalize_attempt` → `apply_learning_result` :
-  un rejeu du même `quiz/submitted` ne corrige rien et ne réémet pas `quiz/graded`
-  (`quiz-graded:<attemptId>` est unique dans l'outbox). Le test d'intégration le vérifie.
-- **`unlock_module`** écrit le jalon en transaction de service ; `engagement.notify` et la
+- **Purge de l'outbox** : lit `coalesce(sent_at, dispatched_at)` ; couvert par
+  `test_a_nightly_tick_purges_the_delivered_outbox_once` (rejeu : aucun second effet).
+- **`job/daily-digest`** : la charge ne porte que `{userId, at}` ; la zone vient du profil dans
+  `send_daily_digest_at` (un profil disparu entre le plan et l'envoi ne notifie rien, sans échec).
+  `run_at` est prouvé de bout en bout (colonne `run_after` d'une livraison en attente).
+- **Planificateur** : les identifiants d'événement sont la garde d'idempotence entre deux instances
+  (`test_two_schedulers_emit_a_single_tick_for_a_period`) ; le verrou consultatif reste celui de
+  SPEC-2102 (`test_two_schedulers_elect_a_single_leader`, `test_only_the_leader_runs_the_new_tasks`).
+- **`grade_quiz`** délègue à `grade_open_answers` → `finalize_attempt` → `apply_learning_result` ;
+  un rejeu ne corrige rien et n'émet pas un second `quiz/graded` (test d'intégration dédié).
+- **`unlock_module`** écrit le jalon en transaction de service ; la notification et la
   replanification sont après le commit et ne peuvent pas annuler le déblocage.
-- **`prepare_question_bank`** écrit 4 tâches par notion (une par format) : la clé
-  `(learner, notion, format, course version)` rend le rejeu sans effet. Le lot nocturne est borné à
-  50 lignes et n'invente jamais de variante quand le fournisseur échoue (tâche `failed`,
-  `error_code` du fournisseur).
-- **Prompt de correction ouverte** : en anglais (ADR-2011) alors que le TypeScript l'écrit en
-  français ; la fixture de simulation est sélectionnée par scénario explicite, donc aucun test ne
-  dépend du texte du prompt. À aligner si la parité des prompts devient contractuelle en SPEC-2302.
-- **`api/ownership.yaml`** n'a pas été modifié : `consumers` et `crons` restent `ts`.
+- **`prepare_question_bank`** / `process_question_bank_jobs` : lot nocturne borné à 50, aucune
+  variante inventée quand le fournisseur échoue.
+- **Prompt de correction ouverte** en anglais (ADR-2011) alors que le TypeScript l'écrit en
+  français ; la fixture de simulation est sélectionnée par scénario explicite. À aligner si la
+  parité des prompts devient contractuelle en SPEC-2302.
+- **`tutor.generate_course`** : Inngest n'étant plus démarré (pile de tests et production), ce
+  consommateur n'est exécuté par personne aujourd'hui ; l'écart est antérieur à cette tranche et
+  documenté par ADR-2032.
