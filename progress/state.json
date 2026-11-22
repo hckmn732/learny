@@ -7003,11 +7003,11 @@
       }
     },
     "SPEC-2204": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-22T13:58:00Z",
+      "branch": "spec/SPEC-2204-domaine-tuteur-sse",
       "completedAt": null,
-      "branch": null,
       "commit": null,
       "lastError": null,
       "validations": {}
