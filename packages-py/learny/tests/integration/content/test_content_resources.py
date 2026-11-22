@@ -65,6 +65,7 @@ class ContentTestDeps:
     db: LearningTransactions
     storage: Any
     logger: Any
+    llm: Any = None
 
 
 def content_deps(tx: Tx, *, now: datetime = FIXED) -> ContentTestDeps:
