@@ -54,6 +54,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
+    // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:
+    // the plugin keeps it out of the Android backups (`allowBackup` rules).
+    'expo-secure-store',
     [
       'expo-font',
       {
