@@ -24,7 +24,7 @@ qui est prouvé et ce qui reste.
 | Preuve | Commande | Résultat |
 |---|---|---|
 | Domaine identique à l'oracle TypeScript (strict) | `uv run pytest packages-py/learny/tests/unit/tutor -q` | 50 passed |
-| Conversations, flux SSE et Teste-moi sur la base locale | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py/learny/tests/integration/tutor -q` | 28 passed |
+| Conversations, flux SSE et Teste-moi sur la base locale | `flock /tmp/learny-sdd-db.lock uv run pytest packages-py/learny/tests/integration/tutor -q` | 29 passed |
 | Suite unitaire complète | `uv run pytest packages-py/learny/tests/unit apps/api-py/tests/unit -q` | 3458 passed |
 | Handlers = opérations `py` | `uv run pytest apps/api-py/tests/unit/test_handlers.py -q` | 3 passed |
 | Lint / types / frontières | `uv run ruff check .`, `uv run ruff format --check packages-py apps`, `uv run mypy packages-py apps`, `uv run lint-imports` | vert |
@@ -68,6 +68,8 @@ la liste ordonnée des types de trames reçues par le client à celle de `sse.ch
 - Le message apprenant est écrit et `tutor/question-asked` émis avant l'appel modèle ; le message du
   tuteur n'est écrit qu'après un flux complet, et une erreur du flux marque le message apprenant
   (`context.error`) puis écrit une trame `error`.
+- Une coupure du client annule le générateur : le marqueur de flux est libéré, aucune transaction ne
+  reste ouverte et aucun message du tuteur n'est écrit (`test_a_client_disconnect_cancels_the_stream_without_leaking`).
 
 ## Reste à faire (prochaine session)
 

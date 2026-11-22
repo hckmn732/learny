@@ -15,17 +15,19 @@ from typing import Any
 import pytest
 from factories.db_support import rolled_back
 from factories.identity_support import actor_for
-from factories.tutor_support import seed_tutor, tutor_deps
+from factories.tutor_support import RecordingGateway, seed_tutor, tutor_deps
 from learny.identity.domain.actor import Actor
 from learny.shared.config import Settings
 from learny.shared.db.uow import Database, Tx
 from learny.shared.errors import load_catalog
+from learny.tutor.application.stream import STREAMING
 from learny_api import pipeline
 from learny_api.guards.idempotency import IdempotencyStore
 from learny_api.guards.origin import create_request_origin_guard
 from learny_api.guards.rate_limit import create_rate_limiter
 from learny_api.main import create_app
 from learny_api.sse import STREAM_CONTENT_TYPE
+from sqlalchemy import text
 
 pytestmark = pytest.mark.spec("SPEC-2204")
 
@@ -219,3 +221,94 @@ async def test_a_foreign_conversation_is_a_problem_before_any_stream(
     assert result.status == 404
     assert result.headers["content-type"].startswith("application/problem+json")
     assert b"data:" not in result.body
+
+
+async def call_and_disconnect(app: Any, path: str, payload: dict[str, Any]) -> FacadeResult:
+    """One POST whose client drops the moment the first body chunk leaves the writer."""
+    body = json.dumps(payload).encode("utf-8")
+    messages: list[tuple[float, dict[str, Any]]] = []
+    started = time.perf_counter()
+    consumed = False
+    delivered = asyncio.Event()
+    dropped = False
+
+    async def receive() -> dict[str, Any]:
+        nonlocal consumed
+        if not consumed:
+            consumed = True
+            return {"type": "http.request", "body": body, "more_body": False}
+        await delivered.wait()
+        return {"type": "http.disconnect"}
+
+    async def send(message: dict[str, Any]) -> None:
+        nonlocal dropped
+        messages.append((time.perf_counter(), message))
+        if message["type"] == "http.response.body" and message["body"] != b"" and not dropped:
+            dropped = True
+            delivered.set()
+
+    scope = {
+        "type": "http",
+        "asgi": {"version": "3.0", "spec_version": "2.3"},
+        "http_version": "1.1",
+        "method": "POST",
+        "scheme": "http",
+        "path": path,
+        "raw_path": path.encode("utf-8"),
+        "query_string": b"",
+        "root_path": "",
+        "headers": [
+            (b"content-type", b"application/json"),
+            (b"content-length", str(len(body)).encode("ascii")),
+            (b"authorization", b"Bearer suite-token"),
+            (b"sec-fetch-site", b"same-origin"),
+        ],
+        "client": ("127.0.0.1", 41235),
+        "server": ("testserver", 80),
+    }
+    await app(scope, receive, send)
+    start = next(message for _, message in messages if message["type"] == "http.response.start")
+    chunks = [
+        (at, message["body"])
+        for at, message in messages
+        if message["type"] == "http.response.body" and message["body"] != b""
+    ]
+    headers = {key.decode("utf-8").lower(): value.decode("utf-8") for key, value in start["headers"]}
+    first = None if not chunks else (chunks[0][0] - started) * 1000.0
+    return FacadeResult(int(start["status"]), headers, [body for _, body in chunks], first)
+
+
+class SlowGateway(RecordingGateway):
+    """One slow chunk, so the disconnect lands while the model stream is awaited."""
+
+    async def stream(self, *args: Any, **kwargs: Any) -> Any:
+        yield "Bonjour"
+        await asyncio.sleep(0.05)
+        yield " le monde."
+
+
+async def test_a_client_disconnect_cancels_the_stream_without_leaking(
+    database: Database, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    async def run(tx: Tx) -> tuple[set[str], int, bytes]:
+        seed = await seed_tutor(tx)
+        stub_identity(monkeypatch, actor_for(seed["user"]))
+        app = build_app(tutor_deps(tx, llm=SlowGateway()))
+        result = await call_and_disconnect(
+            app,
+            f"/api/v1/conversations/{seed['conversation']}/messages",
+            {"text": "Bonjour", "context": {"include": {}}},
+        )
+        counted = await tx.conn.execute(
+            text(
+                "select count(*)::int as total from public.tutor_messages "
+                "where conversation_id = cast(:id as uuid) and role = 'tutor'"
+            ),
+            {"id": seed["conversation"]},
+        )
+        return set(STREAMING), int(counted.scalar_one()), result.body
+
+    streaming, tutor_messages, body = await rolled_back(database, run)
+    assert set() == streaming
+    assert tutor_messages == 1
+    assert not body.endswith(b"data: [DONE]\n\n")
