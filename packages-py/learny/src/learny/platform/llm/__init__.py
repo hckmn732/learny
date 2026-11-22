@@ -1,9 +1,17 @@
 """`learny.platform.llm` - the AI capability shared by the contexts (SPEC-2201).
 
-Mirrors `packages/llm`: the task table, the BYOK envelope, the deterministic fixture selection and
-the `LlmGateway` protocol. Live provider adapters land with the specs that first call them.
+Mirrors `packages/llm`: the task table, the provider catalogue, the BYOK envelope, the deterministic
+fixture selection, the discovery of the provider catalogues, the qualification battery and the
+`LlmGateway` protocol. Live provider adapters land with the specs that first call them.
 """
 
+from learny.platform.llm.catalog import (
+    AI_PROVIDERS,
+    PROVIDER_REGIONS,
+    AiProvider,
+    ProviderRegion,
+    provider_region,
+)
 from learny.platform.llm.credentials import (
     AES_GCM_ENVELOPE_BYTES,
     KEYRING_KEY_BYTES,
@@ -19,7 +27,19 @@ from learny.platform.llm.credentials import (
     mask_key,
     same_fingerprint,
 )
-from learny.platform.llm.gateway import ERROR_CODES, LlmGateway, MockGateway, strip_markers
+from learny.platform.llm.discovery import (
+    chat_model_ids_of,
+    discover_provider_models,
+    llm_mode,
+    mock_models,
+)
+from learny.platform.llm.gateway import (
+    ERROR_CODES,
+    LlmGateway,
+    LlmSession,
+    MockGateway,
+    strip_markers,
+)
 from learny.platform.llm.mock import (
     FixtureFile,
     RegisteredFixture,
@@ -31,7 +51,17 @@ from learny.platform.llm.mock import (
     select_fixture,
     strip_mock_markers,
 )
+from learny.platform.llm.qualification import (
+    COMPATIBILITY_TIMEOUT_MS,
+    QualificationReport,
+    evaluate_task_compatibility,
+    is_compatibility_scenario,
+    is_qualification_scenario,
+    parse_report,
+    qualification_registry,
+)
 from learny.platform.llm.tasks import (
+    AI_TASKS,
     STREAMING_OUTPUT_THRESHOLD,
     TASK_CAPABILITIES,
     TASK_CONFIG,
@@ -57,11 +87,16 @@ from learny.platform.llm.types import (
 
 __all__ = [
     "AES_GCM_ENVELOPE_BYTES",
+    "AI_PROVIDERS",
+    "AI_TASKS",
+    "COMPATIBILITY_TIMEOUT_MS",
     "ERROR_CODES",
     "KEYRING_KEY_BYTES",
+    "PROVIDER_REGIONS",
     "STREAMING_OUTPUT_THRESHOLD",
     "TASK_CAPABILITIES",
     "TASK_CONFIG",
+    "AiProvider",
     "AiTask",
     "CitationPart",
     "DocumentRef",
@@ -69,7 +104,10 @@ __all__ = [
     "Keyring",
     "KeyringError",
     "LlmGateway",
+    "LlmSession",
     "MockGateway",
+    "ProviderRegion",
+    "QualificationReport",
     "RegisteredFixture",
     "StepFinishReason",
     "StepInput",
@@ -81,22 +119,32 @@ __all__ = [
     "ToolDeclaration",
     "Usage",
     "WebSearch",
+    "chat_model_ids_of",
     "credential_aad",
     "decrypt_secret",
+    "discover_provider_models",
     "empty_usage",
     "encrypt_secret",
     "estimate_tokens",
+    "evaluate_task_compatibility",
     "fixtures_directory",
     "fixtures_for_task",
+    "is_compatibility_scenario",
+    "is_qualification_scenario",
     "key_fingerprint",
     "key_last4_of",
     "key_prefix_of",
+    "llm_mode",
     "load_keyring",
     "load_registry",
     "marker_scenario",
     "mask_key",
+    "mock_models",
     "needs_provider_streaming",
     "parse_fixture",
+    "parse_report",
+    "provider_region",
+    "qualification_registry",
     "same_fingerprint",
     "select_fixture",
     "strip_markers",
