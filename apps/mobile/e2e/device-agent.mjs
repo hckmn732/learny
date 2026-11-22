@@ -176,38 +176,43 @@ function install() {
   };
 }
 
-function collectArtifacts(baseNames) {
-  const dir = path.join(os.homedir(), '.maestro', 'tests');
-  if (!fs.existsSync(dir)) return [];
-  const files = [];
-  const walk = (current) => {
-    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
-      const full = path.join(current, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (/\.(png|mp4)$/.test(entry.name)) files.push(full);
-    }
-  };
-  walk(dir);
-  files.sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs);
+/**
+ * Artifacts of the campaign, tagged by the flow Maestro wrote them for: the run directory holds one
+ * sub-directory per flow, and only its \`takeScreenshot/\` files are captures of that flow (the
+ * \`screenshots/\` directory holds the failure snapshots). Only the files created by this run are
+ * returned, so a previous campaign cannot leak into the comparison (SPEC-3002).
+ */
+function collectArtifacts(startedAt) {
+  const root = path.join(os.homedir(), '.maestro', 'tests');
+  if (!fs.existsSync(root)) return [];
+  const runs = fs
+    .readdirSync(root, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => ({
+      dir: path.join(root, entry.name),
+      mtime: fs.statSync(path.join(root, entry.name)).mtimeMs,
+    }))
+    .filter((run) => run.mtime >= startedAt - 5_000)
+    .sort((a, b) => b.mtime - a.mtime);
+  const run = runs[0];
+  if (run === undefined) return [];
 
-  const wanted = [
-    ...baseNames.map((name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')),
-    'screen',
-    'recording',
-  ];
-  return files
-    .filter((file) => {
-      const base = path
-        .basename(file)
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-');
-      return wanted.some((name) => base.includes(name));
-    })
-    .slice(0, 12)
-    .map((file) => ({
-      name: path.basename(file),
-      base64: fs.readFileSync(file).toString('base64'),
-    }));
+  const artifacts = [];
+  for (const entry of fs.readdirSync(run.dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const flow = entry.name;
+    const shots = path.join(run.dir, flow, 'takeScreenshot');
+    if (!fs.existsSync(shots)) continue;
+    for (const file of fs.readdirSync(shots)) {
+      if (!/\.png$/i.test(file)) continue;
+      artifacts.push({
+        name: file,
+        flow,
+        base64: fs.readFileSync(path.join(shots, file)).toString('base64'),
+      });
+    }
+  }
+  return artifacts;
 }
 
 function screenshot(name) {
@@ -240,6 +245,7 @@ function maestro(body) {
     };
   }
 
+  const startedAt = Date.now();
   const binary = process.env.MAESTRO ?? path.join(os.homedir(), '.maestro', 'bin', 'maestro');
   const command = fs.existsSync(binary) ? binary : 'maestro';
   const result = run(
@@ -258,15 +264,19 @@ function maestro(body) {
     if (pull.status === 0 && fs.existsSync(local)) {
       artifacts.push({
         name: path.basename(local),
+        flow: baseNames[0] ?? '',
         base64: fs.readFileSync(local).toString('base64'),
       });
     }
   }
-  for (const name of baseNames) {
-    const shot = screenshot(name);
-    if (shot !== null) artifacts.push(shot);
+  // One screenshot per flow, named after it: the one the campaign closed on is a last resort when
+  // the flow produced no \`takeScreenshot\` at all.
+  const collected = collectArtifacts(startedAt);
+  artifacts.push(...collected);
+  if (!collected.some((artifact) => artifact.name.endsWith('.png'))) {
+    const shot = screenshot(baseNames[0] ?? 'campaign');
+    if (shot !== null) artifacts.push({ ...shot, flow: baseNames[0] ?? '' });
   }
-  artifacts.push(...collectArtifacts(baseNames));
 
   return {
     status: result.status,

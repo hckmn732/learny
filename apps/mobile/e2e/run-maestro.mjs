@@ -26,6 +26,7 @@ import { fileURLToPath } from 'node:url';
 import { PNG } from 'pngjs';
 
 import { compareImages } from './visual/compare.mjs';
+import { associateArtifacts, pickCapture } from './visual/artifacts.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const APP_DIR = path.resolve(HERE, '..');
@@ -443,6 +444,9 @@ class RemoteDevice {
       junit: result.junit ?? '',
       artifacts: (result.artifacts ?? []).map((artifact) => ({
         name: artifact.name,
+        ...(typeof artifact.flow === 'string' && artifact.flow !== ''
+          ? { flow: artifact.flow }
+          : {}),
         buffer: Buffer.from(artifact.base64, 'base64'),
       })),
     };
@@ -565,23 +569,29 @@ async function main() {
 
   const cases = parseJunit(junit);
 
-  // Artifacts: one directory per flow, keyed by the flow name (one file per name, the transport
-  // may return the same screenshot twice).
+  // Artifacts: one directory per flow. The agent tags every artifact with the flow Maestro wrote
+  // it for; an artifact without a flow is reported and dropped instead of being handed to the
+  // first flow — that fallback made every visual flow compare the same image (SPEC-3002).
+  const { entries, unassigned } = associateArtifacts(
+    artifacts,
+    selected.map((flow) => ({ name: flow.name, base: path.basename(flow.file, '.yaml') })),
+  );
+  for (const artifact of unassigned) {
+    console.warn(`⚠ artefact non attribué ignoré : ${artifact.name}`);
+  }
   const artifactIndex = {};
-  const seen = new Set();
-  for (const artifact of artifacts) {
-    if (seen.has(artifact.name)) continue;
-    seen.add(artifact.name);
-    const owner =
-      selected.find((flow) =>
-        artifact.name.toLowerCase().includes(path.basename(flow.file, '.yaml').toLowerCase()),
-      ) ?? selected[0];
-    const dir = path.join(outDir, 'artifacts', path.basename(owner.file, '.yaml'));
-    const [written] = writeArtifacts(dir, [artifact]);
-    artifactIndex[path.basename(owner.file, '.yaml')] ??= { screenshots: [], videos: [] };
-    if (artifact.name.endsWith('.mp4'))
-      artifactIndex[path.basename(owner.file, '.yaml')].videos.push(written);
-    else artifactIndex[path.basename(owner.file, '.yaml')].screenshots.push(written);
+  for (const entry of entries.values()) {
+    if (entry.screenshots.length === 0 && entry.videos.length === 0) continue;
+    const dir = path.join(outDir, 'artifacts', entry.base);
+    artifactIndex[entry.base] = { screenshots: [], videos: [] };
+    for (const artifact of entry.screenshots) {
+      const [written] = writeArtifacts(dir, [artifact]);
+      artifactIndex[entry.base].screenshots.push({ name: artifact.name, path: written });
+    }
+    for (const artifact of entry.videos) {
+      const [written] = writeArtifacts(dir, [artifact]);
+      artifactIndex[entry.base].videos.push({ name: artifact.name, path: written });
+    }
   }
 
   // Visual comparison of the flows tagged `visual` (EF-6, ADR-3003 § 4).
@@ -590,7 +600,8 @@ async function main() {
   for (const flow of selected) {
     if (!flow.tags.includes('visual')) continue;
     const base = path.basename(flow.file, '.yaml');
-    const capture = (artifactIndex[base]?.screenshots ?? []).find((file) => /\.png$/.test(file));
+    const picked = pickCapture(artifactIndex[base]);
+    const capture = picked === null ? undefined : picked.path;
     if (capture === undefined) {
       visualResults.push({ flow: flow.name, status: 'failed', detail: 'aucune capture' });
       continue;
@@ -632,9 +643,11 @@ async function main() {
       status: testcase?.status ?? 'missing',
       durationSec: testcase?.time ?? 0,
       message: testcase?.message ?? null,
-      videos: (artifactIndex[base]?.videos ?? []).map((file) => path.relative(outDir, file)),
-      screenshots: (artifactIndex[base]?.screenshots ?? []).map((file) =>
-        path.relative(outDir, file),
+      videos: (artifactIndex[base]?.videos ?? []).map((artifact) =>
+        path.relative(outDir, artifact.path),
+      ),
+      screenshots: (artifactIndex[base]?.screenshots ?? []).map((artifact) =>
+        path.relative(outDir, artifact.path),
       ),
       visual: visualResults.find((entry) => entry.flow === flow.name) ?? null,
     };
