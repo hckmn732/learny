@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T16:46:23.103Z",
+  "updatedAt": "2026-11-22T17:52:00.000Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7176,11 +7176,11 @@
       "validations": {}
     },
     "SPEC-2207": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-22T17:52:00.000Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2207-bascule-jobs-crons-demos",
       "commit": null,
       "lastError": null,
       "validations": {}
