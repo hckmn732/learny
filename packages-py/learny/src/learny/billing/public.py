@@ -4,6 +4,13 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.billing.application.checkout import get_subscription, open_portal, start_checkout
+from learny.billing.application.dev import (
+    cancel_mock_checkout,
+    get_mock_checkout_session,
+    list_stripe_events,
+    pay_mock_checkout,
+    simulate_stripe_action,
+)
 from learny.billing.application.ports import BillingDeps
 from learny.billing.application.webhook import WebhookOutcome, handle_webhook
 from learny.billing.domain.checkout import PORTAL_RETURN_PATH, is_safe_relative_path
@@ -34,18 +41,23 @@ __all__ = [
     "StripeEvent",
     "SubscriptionStatus",
     "WebhookOutcome",
+    "cancel_mock_checkout",
+    "get_mock_checkout_session",
     "get_subscription",
     "grants_access",
     "handle_webhook",
     "is_handled_event_type",
     "is_known_stripe_status",
     "is_safe_relative_path",
+    "list_stripe_events",
     "map_stripe_status",
     "mask_stripe_id",
     "normalize_stripe_event",
     "open_portal",
+    "pay_mock_checkout",
     "resolve_billing_config",
     "sign_payload",
+    "simulate_stripe_action",
     "start_checkout",
     "verify_signature",
 ]

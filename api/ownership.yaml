@@ -96,10 +96,10 @@ operations:
   'dev.sdd.stripe.session': ts
   'dev.sddApiCoverage': ts
   'dev.sddAuthProxy': ts
-  'dev.stripe.checkoutCancel': ts
-  'dev.stripe.checkoutPay': ts
-  'dev.stripe.events': ts
-  'dev.stripe.simulate': ts
+  'dev.stripe.checkoutCancel': py
+  'dev.stripe.checkoutPay': py
+  'dev.stripe.events': py
+  'dev.stripe.simulate': py
   'dev.uploadSimulation': ts
   'email.unsubscribe': py
   'email.unsubscribe.page': py
@@ -231,7 +231,7 @@ special:
   'GET /api/v1/dev/sdd/events/outbox': ts
   'GET /api/v1/dev/sdd/items': py
   'GET /api/v1/dev/sdd/relay-stream': ts
-  'GET /api/v1/dev/sdd/stripe/events': ts
+  'GET /api/v1/dev/sdd/stripe/events': py
   'GET /api/v1/health': ts
   'POST /api/v1/_dev/commit-check': ts
   'POST /api/v1/_dev/demo-job': ts
@@ -249,9 +249,9 @@ special:
   'POST /api/v1/dev/sdd/rate-limit/burst': py
   'POST /api/v1/dev/sdd/rate-limit/origin': py
   'POST /api/v1/dev/sdd/rate-limit/purge': py
-  'POST /api/v1/dev/sdd/stripe/checkout/cancel': ts
-  'POST /api/v1/dev/sdd/stripe/checkout/pay': ts
-  'POST /api/v1/dev/sdd/stripe/simulate': ts
+  'POST /api/v1/dev/sdd/stripe/checkout/cancel': py
+  'POST /api/v1/dev/sdd/stripe/checkout/pay': py
+  'POST /api/v1/dev/sdd/stripe/simulate': py
   'POST /api/v1/dev/sdd/uploads': ts
   'POST /api/v1/formations/:fid/sprints': ts
 

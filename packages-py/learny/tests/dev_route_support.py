@@ -106,6 +106,7 @@ def build_dev_app(
     route_ids: tuple[str, ...],
     deps: DevDeps,
     env: Mapping[str, str | None],
+    pipeline_ids: tuple[str, ...] = (),
 ) -> tuple[FastAPI, TestClient]:
     context = PipelineContext(
         deps=deps,  # type: ignore[arg-type]
@@ -114,10 +115,12 @@ def build_dev_app(
         origin_guard=OriginGuard(),  # type: ignore[arg-type]
         rate_limiter=RateLimiter(),
         idempotency=Idempotency(),  # type: ignore[arg-type]
-        handlers={route_id: pipeline.HANDLERS[route_id] for route_id in route_ids},
+        handlers={route_id: pipeline.HANDLERS[route_id] for route_id in (*route_ids, *pipeline_ids)},
     )
+    ownership = ownership_of((*route_ids, *pipeline_ids))
     app = FastAPI()
-    install_special(app, context, ownership_of(route_ids))
+    install_special(app, context, ownership)
+    pipeline.install(app, context, ownership)
     return app, TestClient(app)
 
 

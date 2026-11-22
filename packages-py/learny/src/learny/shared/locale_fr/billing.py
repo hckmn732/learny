@@ -28,3 +28,9 @@ UNAUTHENTICATED = "Vous devez être connecté."
 SUBSCRIPTION_NOT_FOUND = "Abonnement introuvable."
 ALREADY_SUBSCRIBED = "Votre abonnement est déjà actif."
 NO_SUBSCRIPTION_TO_MANAGE = "Aucun abonnement à gérer."
+
+# packages/services/src/billing/dev.ts (SPEC-210 EF-7, EF-8, ported by SPEC-2207).
+SIMULATION_UNAVAILABLE = "La simulation n’est disponible qu’avec STRIPE_MODE=mock."
+SESSION_NOT_FOUND = "Session de paiement introuvable."
+NO_WEBHOOK_TO_REPLAY = "Aucun webhook à rejouer."
+NO_SIMULATED_SUBSCRIPTION = "Aucun abonnement simulé pour cet utilisateur."
