@@ -193,13 +193,13 @@ export default function Spec2203Demo() {
               <code className="font-mono text-xs">search_user_content</code>
             </strong>{' '}
             : la recherche s’exécute sous les claims de la transaction (RLS), le texte normalisé est
-            passé en paramètre lié, l’ordre est stable et les passages en double ou fortement
-            recouvrants sont retirés.
+            passé en paramètre lié et l’ordre est stable (score puis identifiant).
           </li>
           <li>
             <strong>Sélection du contexte</strong> : budgets par tâche — programme 6 000, cours 24
             000, lacunes 8 000, tuteur 4 000 tokens —, tri par score décroissant puis par source,
-            position et identifiant de passage ; un passage ne rentre jamais partiellement.
+            position et identifiant de passage ; les doublons et les recouvrements supérieurs à 80 %
+            sont écartés, et un passage ne rentre jamais partiellement.
           </li>
           <li>
             <strong>Plateformes</strong> : Voyage AI pour les embeddings et Tavily pour la recherche
