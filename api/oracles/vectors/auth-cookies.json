@@ -1,0 +1,268 @@
+{
+  "source": "Recorded from @learny/api (Hono) serving these requests through @supabase/ssr 0.12.7, against a deterministic GoTrue stand-in whose answers are the `gotrue` member below (the local Supabase stack was running, the upstream Auth server was replaced so that no token of a real account is ever stored).",
+  "supabaseUrl": "http://127.0.0.1:54991",
+  "publicAppUrl": "http://127.0.0.1:3199",
+  "cases": [
+    {
+      "name": "sign-in-single-cookie",
+      "method": "POST",
+      "path": "/api/v1/auth/sign-in",
+      "origin": "http://127.0.0.1:3199",
+      "body": {
+        "email": "alex@test.learny.test",
+        "password": "secret-password"
+      },
+      "gotrue": {
+        "access_token": "fake-access-token",
+        "token_type": "bearer",
+        "expires_in": 3600,
+        "expires_at": 2000000000,
+        "refresh_token": "fake-refresh-token",
+        "user": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "alex@test.learny.test",
+          "email_confirmed_at": "2026-11-11T12:20:00Z",
+          "phone": "",
+          "confirmed_at": "2026-11-11T12:20:00Z",
+          "last_sign_in_at": "2026-11-11T12:20:00Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email"
+            ]
+          },
+          "user_metadata": {
+            "first_name": "Alex",
+            "timezone": "Europe/Paris"
+          },
+          "identities": [],
+          "created_at": "2026-11-11T12:20:00Z",
+          "updated_at": "2026-11-11T12:20:00Z",
+          "is_anonymous": false
+        }
+      },
+      "status": 200,
+      "set_cookie": [
+        "sb-127-auth-token=base64-eyJhY2Nlc3NfdG9rZW4iOiJmYWtlLWFjY2Vzcy10b2tlbiIsInRva2VuX3R5cGUiOiJiZWFyZXIiLCJleHBpcmVzX2luIjozNjAwLCJleHBpcmVzX2F0IjoyMDAwMDAwMDAwLCJyZWZyZXNoX3Rva2VuIjoiZmFrZS1yZWZyZXNoLXRva2VuIiwidXNlciI6eyJpZCI6IjExMTExMTExLTExMTEtNDExMS04MTExLTExMTExMTExMTExMSIsImF1ZCI6ImF1dGhlbnRpY2F0ZWQiLCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImVtYWlsIjoiYWxleEB0ZXN0LmxlYXJueS50ZXN0IiwiZW1haWxfY29uZmlybWVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJwaG9uZSI6IiIsImNvbmZpcm1lZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwibGFzdF9zaWduX2luX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJmaXJzdF9uYW1lIjoiQWxleCIsInRpbWV6b25lIjoiRXVyb3BlL1BhcmlzIn0sImlkZW50aXRpZXMiOltdLCJjcmVhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJpc19hbm9ueW1vdXMiOmZhbHNlfX0; Max-Age=34560000; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": "{\"destination\":\"/premiers-pas/profil\"}"
+    },
+    {
+      "name": "sign-in-chunked-cookie",
+      "method": "POST",
+      "path": "/api/v1/auth/sign-in",
+      "origin": "http://127.0.0.1:3199",
+      "body": {
+        "email": "long@test.learny.test",
+        "password": "secret-password"
+      },
+      "gotrue": {
+        "access_token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "token_type": "bearer",
+        "expires_in": 3600,
+        "expires_at": 2000000000,
+        "refresh_token": "fake-refresh-token",
+        "user": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "alex@test.learny.test",
+          "email_confirmed_at": "2026-11-11T12:20:00Z",
+          "phone": "",
+          "confirmed_at": "2026-11-11T12:20:00Z",
+          "last_sign_in_at": "2026-11-11T12:20:00Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email"
+            ]
+          },
+          "user_metadata": {
+            "first_name": "Alex",
+            "timezone": "Europe/Paris"
+          },
+          "identities": [],
+          "created_at": "2026-11-11T12:20:00Z",
+          "updated_at": "2026-11-11T12:20:00Z",
+          "is_anonymous": false
+        }
+      },
+      "status": 200,
+      "set_cookie": [
+        "sb-127-auth-token.0=base64-eyJhY2Nlc3NfdG9rZW4iOiJhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhY; Max-Age=34560000; Path=/; HttpOnly; SameSite=Lax",
+        "sb-127-auth-token.1=WFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEiLCJ0b2tlbl90eXBlIjoiYmVhcmVyIiwiZXhwaXJlc19pbiI6MzYwMCwiZXhwaXJlc19hdCI6MjAwMDAwMDAwMCwicmVmcmVzaF90b2tlbiI6ImZha2UtcmVmcmVzaC10b2tlbiIsInVzZXIiOnsiaWQiOiIxMTExMTExMS0xMTExLTQxMTEtODExMS0xMTExMTExMTExMTEiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJlbWFpbCI6ImFsZXhAdGVzdC5sZWFybnkudGVzdCIsImVtYWlsX2NvbmZpcm1lZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwicGhvbmUiOiIiLCJjb25maXJtZWRfYXQiOiIyMDI2LTExLTExVDEyOjIwOjAwWiIsImxhc3Rfc2lnbl9pbl9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwiYXBwX21ldGFkYXRhIjp7InByb3ZpZGVyIjoiZW1haWwiLCJwcm92aWRlcnMiOlsiZW1haWwiXX0sInVzZXJfbWV0YWRhdGEiOnsiZmlyc3RfbmFtZSI6IkFsZXgiLCJ0aW1lem9uZSI6IkV1cm9wZS9QYXJpcyJ9LCJpZGVudGl0aWVzIjpbXSwiY3JlYXRlZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwidXBkYXRlZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwiaXNfYW5vbnltb3VzIjpmYWxzZX19; Max-Age=34560000; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": "{\"destination\":\"/premiers-pas/profil\"}"
+    },
+    {
+      "name": "magic-link-next-cookie",
+      "method": "POST",
+      "path": "/api/v1/auth/magic-link",
+      "origin": "http://127.0.0.1:3199",
+      "body": {
+        "email": "alex@test.learny.test",
+        "mode": "sign-in",
+        "next": "/formations/abc"
+      },
+      "gotrue": null,
+      "status": 202,
+      "set_cookie": [
+        "lr-next=%2Fformations%2Fabc; Max-Age=3600; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": ""
+    },
+    {
+      "name": "sign-up-confirmation",
+      "method": "POST",
+      "path": "/api/v1/auth/sign-up",
+      "origin": "http://127.0.0.1:3199",
+      "body": {
+        "email": "alex@test.learny.test",
+        "password": "a-long-password",
+        "acceptedTerms": true,
+        "timezone": "Europe/Paris"
+      },
+      "gotrue": {
+        "user": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "alex@test.learny.test",
+          "email_confirmed_at": "2026-11-11T12:20:00Z",
+          "phone": "",
+          "confirmed_at": "2026-11-11T12:20:00Z",
+          "last_sign_in_at": "2026-11-11T12:20:00Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email"
+            ]
+          },
+          "user_metadata": {
+            "first_name": "Alex",
+            "timezone": "Europe/Paris"
+          },
+          "identities": [],
+          "created_at": "2026-11-11T12:20:00Z",
+          "updated_at": "2026-11-11T12:20:00Z",
+          "is_anonymous": false
+        }
+      },
+      "status": 201,
+      "set_cookie": [],
+      "response_body": "{\"status\":\"confirmation_sent\"}"
+    },
+    {
+      "name": "sign-out-removal",
+      "method": "POST",
+      "path": "/api/v1/auth/sign-out",
+      "origin": "http://127.0.0.1:3199",
+      "body": {},
+      "cookie": "sb-127-auth-token=base64-eyJhY2Nlc3NfdG9rZW4iOiJmYWtlLWFjY2Vzcy10b2tlbiIsInRva2VuX3R5cGUiOiJiZWFyZXIiLCJleHBpcmVzX2luIjozNjAwLCJleHBpcmVzX2F0IjoyMDAwMDAwMDAwLCJyZWZyZXNoX3Rva2VuIjoiZmFrZS1yZWZyZXNoLXRva2VuIiwidXNlciI6eyJpZCI6IjExMTExMTExLTExMTEtNDExMS04MTExLTExMTExMTExMTExMSIsImF1ZCI6ImF1dGhlbnRpY2F0ZWQiLCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImVtYWlsIjoiYWxleEB0ZXN0LmxlYXJueS50ZXN0IiwiZW1haWxfY29uZmlybWVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJwaG9uZSI6IiIsImNvbmZpcm1lZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwibGFzdF9zaWduX2luX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJmaXJzdF9uYW1lIjoiQWxleCIsInRpbWV6b25lIjoiRXVyb3BlL1BhcmlzIn0sImlkZW50aXRpZXMiOltdLCJjcmVhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJpc19hbm9ueW1vdXMiOmZhbHNlfX0; learny_ob=ticket-123; lr-next=/formations/abc",
+      "gotrue": null,
+      "status": 204,
+      "set_cookie": [
+        "sb-127-auth-token=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax",
+        "learny_ob=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax",
+        "lr-next=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": ""
+    },
+    {
+      "name": "callback-verification",
+      "method": "GET",
+      "path": "/api/v1/auth/callback?token_hash=recorded-token-hash&type=magiclink",
+      "origin": "http://127.0.0.1:3199",
+      "body": null,
+      "gotrue": {
+        "access_token": "fake-access-token",
+        "token_type": "bearer",
+        "expires_in": 3600,
+        "expires_at": 2000000000,
+        "refresh_token": "fake-refresh-token",
+        "user": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "alex@test.learny.test",
+          "email_confirmed_at": "2026-11-11T12:20:00Z",
+          "phone": "",
+          "confirmed_at": "2026-11-11T12:20:00Z",
+          "last_sign_in_at": "2026-11-11T12:20:00Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email"
+            ]
+          },
+          "user_metadata": {
+            "first_name": "Alex",
+            "timezone": "Europe/Paris"
+          },
+          "identities": [],
+          "created_at": "2026-11-11T12:20:00Z",
+          "updated_at": "2026-11-11T12:20:00Z",
+          "is_anonymous": false
+        }
+      },
+      "status": 302,
+      "location": "/premiers-pas/profil",
+      "set_cookie": [
+        "sb-127-auth-token=base64-eyJhY2Nlc3NfdG9rZW4iOiJmYWtlLWFjY2Vzcy10b2tlbiIsInRva2VuX3R5cGUiOiJiZWFyZXIiLCJleHBpcmVzX2luIjozNjAwLCJleHBpcmVzX2F0IjoyMDAwMDAwMDAwLCJyZWZyZXNoX3Rva2VuIjoiZmFrZS1yZWZyZXNoLXRva2VuIiwidXNlciI6eyJpZCI6IjExMTExMTExLTExMTEtNDExMS04MTExLTExMTExMTExMTExMSIsImF1ZCI6ImF1dGhlbnRpY2F0ZWQiLCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImVtYWlsIjoiYWxleEB0ZXN0LmxlYXJueS50ZXN0IiwiZW1haWxfY29uZmlybWVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJwaG9uZSI6IiIsImNvbmZpcm1lZF9hdCI6IjIwMjYtMTEtMTFUMTI6MjA6MDBaIiwibGFzdF9zaWduX2luX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJmaXJzdF9uYW1lIjoiQWxleCIsInRpbWV6b25lIjoiRXVyb3BlL1BhcmlzIn0sImlkZW50aXRpZXMiOltdLCJjcmVhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJ1cGRhdGVkX2F0IjoiMjAyNi0xMS0xMVQxMjoyMDowMFoiLCJpc19hbm9ueW1vdXMiOmZhbHNlfX0; Max-Age=34560000; Path=/; HttpOnly; SameSite=Lax",
+        "lr-next=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": ""
+    },
+    {
+      "name": "callback-invalid-link",
+      "method": "GET",
+      "path": "/api/v1/auth/callback?token_hash=invalid-token-hash&type=magiclink",
+      "origin": "http://127.0.0.1:3199",
+      "body": null,
+      "gotrue": {
+        "access_token": "fake-access-token",
+        "token_type": "bearer",
+        "expires_in": 3600,
+        "expires_at": 2000000000,
+        "refresh_token": "fake-refresh-token",
+        "user": {
+          "id": "11111111-1111-4111-8111-111111111111",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "alex@test.learny.test",
+          "email_confirmed_at": "2026-11-11T12:20:00Z",
+          "phone": "",
+          "confirmed_at": "2026-11-11T12:20:00Z",
+          "last_sign_in_at": "2026-11-11T12:20:00Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email"
+            ]
+          },
+          "user_metadata": {
+            "first_name": "Alex",
+            "timezone": "Europe/Paris"
+          },
+          "identities": [],
+          "created_at": "2026-11-11T12:20:00Z",
+          "updated_at": "2026-11-11T12:20:00Z",
+          "is_anonymous": false
+        }
+      },
+      "status": 302,
+      "location": "/connexion?erreur=lien-invalide",
+      "set_cookie": [
+        "lr-next=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax"
+      ],
+      "response_body": "",
+      "gotrue_error": {
+        "status": 403,
+        "code": "otp_expired",
+        "message": "Token has expired"
+      }
+    }
+  ]
+}

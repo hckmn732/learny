@@ -19,7 +19,7 @@ from starlette.responses import Response
 from learny_api import pipeline
 from learny_api.generated.routes import ROUTES_BY_ID, RouteSpec
 from learny_api.pipeline import PipelineContext, special_path
-from learny_api.special import relay_stream, sdd_tools
+from learny_api.special import auth_callback, relay_stream, sdd_tools
 from learny_api.special.guards import dev_routes_enabled, not_found_problem, sdd_pages_enabled
 
 if TYPE_CHECKING:
@@ -68,6 +68,7 @@ def install(app: FastAPI, context: PipelineContext, ownership: "Ownership") -> l
     installed += _install_ungated(app, context, ownership)
     installed += sdd_tools.install(app, context, ownership)
     installed += relay_stream.install(app, context, ownership)
+    installed += auth_callback.install(app, context, ownership)
     return installed
 
 

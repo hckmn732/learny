@@ -111,6 +111,10 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the hourly purge deletes the expired security rows of the whole instance;
         # `rate_limits` and `idempotency_keys` are service-only tables (SPEC-208 EF-7, ADR-0258).
         "learny.identity.application.purge_security": "hourly purge of the expired security rows",
+        # SPEC-2207 - the first verification reads `auth.users` and writes the legal acceptances
+        # and the terms of the account with the owner role, exactly like `serviceDb()` in
+        # `packages/services/src/auth/finalize.ts` (SPEC-202 EF-10, ET-4).
+        "learny.identity.application.auth": "legal acceptances of the first verification",
         # SPEC-2207 - the nightly purge deletes the receipts of every learner, which the
         # authenticated role of one learner may not do (SPEC-801 ET-6, ADR-0200).
         "learny.assessments.application.offline_purge": "nightly purge of the offline receipts",

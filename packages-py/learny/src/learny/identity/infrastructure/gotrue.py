@@ -41,11 +41,17 @@ class GoTrueUser:
 
 @dataclass(frozen=True, slots=True)
 class GoTrueSession:
-    """A password grant answer: the session cookies are written by the caller."""
+    """A session answer of GoTrue, with the exact document the session cookie serialises.
+
+    `document` keeps the GoTrue answer as parsed (insertion order preserved): `@supabase/ssr`
+    stores `JSON.stringify(session)` in the cookie, so the bytes of this document are the bytes
+    of the cookie value (see `learny.identity.infrastructure.auth_cookies`).
+    """
 
     access_token: str
     refresh_token: str
     user: GoTrueUser
+    document: dict[str, Any]
 
 
 class GoTrueError(Exception):
@@ -84,6 +90,22 @@ def _user_from_signup(payload: Any) -> GoTrueUser | None:
     if isinstance(payload, dict) and isinstance(payload.get("user"), dict):
         return parse_user(payload["user"])
     return None
+
+
+def session_of(payload: Any) -> GoTrueSession | None:
+    """A session document of GoTrue (`/token`, `/verify`, or an auto-confirmed sign-up)."""
+    if not isinstance(payload, dict):
+        return None
+    token = payload.get("access_token")
+    refresh = payload.get("refresh_token")
+    if not isinstance(token, str) or not isinstance(refresh, str):
+        return None
+    return GoTrueSession(
+        access_token=token,
+        refresh_token=refresh,
+        user=parse_user(payload.get("user")),
+        document=payload,
+    )
 
 
 class GoTrueClient:
@@ -150,12 +172,18 @@ class GoTrueClient:
             raise _error_of(response.status_code, payload)
         return payload
 
-    async def sign_up(self, email: str, password: str, data: dict[str, Any]) -> GoTrueUser | None:
-        """Creates an account; the caller maps `user_already_exists` to the same answer."""
+    async def sign_up(
+        self, email: str, password: str, data: dict[str, Any]
+    ) -> tuple[GoTrueUser | None, GoTrueSession | None]:
+        """Creates an account; the caller maps `user_already_exists` to the same answer.
+
+        A sign-up that GoTrue answers with a session (confirmations disabled) also yields that
+        session, because the cookie of the TypeScript client is then written as well.
+        """
         payload = await self._send(
             "POST", "/auth/v1/signup", body={"email": email, "password": password, "data": data}
         )
-        return _user_from_signup(payload)
+        return _user_from_signup(payload), session_of(payload)
 
     async def sign_in_with_password(self, email: str, password: str) -> GoTrueSession:
         """Password grant: the only endpoint returning an access and a refresh token."""
@@ -165,13 +193,10 @@ class GoTrueClient:
             params={"grant_type": "password"},
             body={"email": email, "password": password},
         )
-        if not isinstance(payload, dict):
-            raise GoTrueError(502, "invalid_response", "session document missing")
-        token = payload.get("access_token")
-        refresh = payload.get("refresh_token")
-        if not isinstance(token, str) or not isinstance(refresh, str):
+        session = session_of(payload)
+        if session is None:
             raise GoTrueError(502, "invalid_response", "session without tokens")
-        return GoTrueSession(access_token=token, refresh_token=refresh, user=parse_user(payload.get("user")))
+        return session
 
     async def sign_in_with_otp(
         self,
@@ -197,6 +222,11 @@ class GoTrueClient:
     async def sign_out(self, access_token: str) -> None:
         """Closes the session; GoTrue answers 204."""
         await self._send("POST", "/auth/v1/logout", access_token=access_token)
+
+    async def verify_otp(self, token_hash: str, kind: str) -> GoTrueSession | None:
+        """`/auth/v1/verify`: the token hash of an e-mailed link becomes a session, or nothing."""
+        payload = await self._send("POST", "/auth/v1/verify", body={"token_hash": token_hash, "type": kind})
+        return session_of(payload)
 
     async def get_user(self, access_token: str) -> GoTrueUser | None:
         """`GET /auth/v1/user`: the fallback of ADR-1009 and the freshness check of `freshAuth`."""

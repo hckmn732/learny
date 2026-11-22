@@ -612,6 +612,48 @@ async def read_legal_acceptance(
 # data exports
 # --------------------------------------------------------------------------------------------------
 
+READ_DESTINATION_PROFILE = text(
+    """
+    select onboarding_step::text as onboarding_step,
+           deletion_scheduled_for
+      from public.profiles
+     where id = cast(:user_id as uuid)
+    """
+)
+
+COUNT_LEGAL_ACCEPTANCES = text(
+    """
+    select count(*)::int as count
+      from public.legal_acceptances
+     where user_id = cast(:user_id as uuid)
+    """
+)
+
+READ_SIGNUP_METADATA = text(
+    """
+    select raw_user_meta_data as meta
+      from auth.users
+     where id = cast(:user_id as uuid)
+    """
+)
+
+KNOWN_TIME_ZONE = text(
+    """
+    select exists (select 1 from pg_catalog.pg_timezone_names where name = :name) as ok
+    """
+)
+
+UPDATE_TERMS_AND_TIMEZONE = text(
+    """
+    update public.profiles
+       set terms_version = :terms_version,
+           terms_accepted_at = cast(:accepted_at as timestamptz),
+           timezone = coalesce(:time_zone, timezone)
+     where id = cast(:user_id as uuid)
+    """
+)
+
+
 READ_LATEST_EXPORT = text(
     """
     select id::text as id,
@@ -803,3 +845,52 @@ async def read_selectable_formation(tx: Tx, user_id: str, formation_id: str | No
     )
     found = result.mappings().all()
     return str(found[0]["id"]) if found else None
+
+
+async def read_destination_profile(tx: Tx, user_id: str) -> dict[str, Any]:
+    """`loadDestinationProfile`: the two fields `resolvePostAuthDestination` reads."""
+    result = await tx.conn.execute(READ_DESTINATION_PROFILE, {"user_id": user_id})
+    found = result.mappings().all()
+    row = None if not found else found[0]
+    return {
+        "onboardingStep": "profil" if row is None else str(row["onboarding_step"]),
+        "deletionScheduledFor": None if row is None else row["deletion_scheduled_for"],
+    }
+
+
+async def count_legal_acceptances(tx: Tx, user_id: str) -> int:
+    """The number of acceptances already recorded for the account."""
+    result = await tx.conn.execute(COUNT_LEGAL_ACCEPTANCES, {"user_id": user_id})
+    return int(result.mappings().all()[0]["count"])
+
+
+async def read_signup_metadata(tx: Tx, user_id: str) -> Any:
+    """`raw_user_meta_data` of the Auth account, `None` when the account is missing."""
+    result = await tx.conn.execute(READ_SIGNUP_METADATA, {"user_id": user_id})
+    found = result.mappings().all()
+    return None if not found else found[0]["meta"]
+
+
+async def time_zone_is_known(tx: Tx, name: str) -> bool:
+    """`pg_timezone_names` probe: an unknown zone is never written to the profile."""
+    result = await tx.conn.execute(KNOWN_TIME_ZONE, {"name": name})
+    return bool(result.mappings().all()[0]["ok"])
+
+
+async def update_terms_and_timezone(
+    tx: Tx,
+    user_id: str,
+    terms_version: str,
+    accepted_at: datetime,
+    time_zone: str | None,
+) -> None:
+    """`finalizeFirstVerification` - the terms pair and the time zone given at sign-up."""
+    await tx.conn.execute(
+        UPDATE_TERMS_AND_TIMEZONE,
+        {
+            "user_id": user_id,
+            "terms_version": terms_version,
+            "accepted_at": accepted_at,
+            "time_zone": time_zone,
+        },
+    )

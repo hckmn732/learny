@@ -4,6 +4,18 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.identity.application.ai_models import assign_task_model
+from learny.identity.application.auth import (
+    INVALID_LINK_DESTINATION,
+    NEXT_COOKIE,
+    AuthRequest,
+    complete_verification,
+    expire_cookie,
+    request_magic_link,
+    resend_link,
+    sign_in,
+    sign_out,
+    sign_up,
+)
 from learny.identity.application.authenticate import (
     AuthDeps,
     assert_fresh,
@@ -29,6 +41,7 @@ from learny.identity.domain.destination import (
     onboarding_destination,
     resolve_post_auth_destination,
 )
+from learny.identity.infrastructure.auth_cookies import is_local_host
 from learny.identity.infrastructure.gotrue import (
     GoTrueClient,
     GoTrueError,
@@ -41,9 +54,12 @@ from learny.identity.infrastructure.supabase_cookies import access_token_from_co
 
 __all__ = [
     "DEFAULT_DESTINATION",
+    "INVALID_LINK_DESTINATION",
+    "NEXT_COOKIE",
     "PROFILE_DELETION_DESTINATION",
     "Actor",
     "AuthDeps",
+    "AuthRequest",
     "GoTrueClient",
     "GoTrueError",
     "GoTrueSession",
@@ -59,13 +75,16 @@ __all__ = [
     "assign_task_model",
     "authenticate",
     "bearer_token",
+    "complete_verification",
     "expected_versions",
+    "expire_cookie",
     "get_me",
     "get_onboarding_state",
     "get_preferences",
     "get_settings_state",
     "get_sidebar",
     "is_legal_exempt",
+    "is_local_host",
     "is_safe_next_path",
     "map_gotrue_error",
     "onboarding_destination",
@@ -74,7 +93,12 @@ __all__ = [
     "purge_security_rows",
     "read_me",
     "read_sidebar",
+    "request_magic_link",
+    "resend_link",
     "resolve_post_auth_destination",
+    "sign_in",
+    "sign_out",
+    "sign_up",
     "update_preferences",
     "update_profile",
     "update_settings_profile",
