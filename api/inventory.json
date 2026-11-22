@@ -5,7 +5,7 @@
     "special": 32,
     "events": 50,
     "jobs": 22,
-    "gaps": 133
+    "gaps": 132
   },
   "operations": [
     {
@@ -1356,7 +1356,8 @@
       "tables": [],
       "events": [],
       "tests": [
-        "apps/web/e2e/specs/p21/spec-2102.spec.ts"
+        "apps/web/e2e/specs/p21/spec-2102.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2207.spec.ts"
       ],
       "gap": false
     },
@@ -6672,8 +6673,10 @@
         "schedule_slots"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2207.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "invitationAccept",
