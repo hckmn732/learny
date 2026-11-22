@@ -251,9 +251,18 @@ async def test_prepare_replays_the_existing_remediation(database: Database) -> N
         second = await service.prepare_remediation(
             assessment_deps(tx), actor_for(seed["userId"]), seed["moduleId"]
         )
+        # Scoped to the learner and module of this test: the shared local database also carries
+        # the demonstration dataset, whose remediation must not be counted here.
         activities = await count(
             tx.conn,
-            "select count(*)::int as count from public.activities where kind = 'remediation'",
+            """
+            select count(*)::int as count from public.activities
+             where kind = 'remediation'
+               and owner_id = cast(:user as uuid)
+               and module_id = cast(:module as uuid)
+            """,
+            user=seed["userId"],
+            module=seed["moduleId"],
         )
         return first, second, activities
 
