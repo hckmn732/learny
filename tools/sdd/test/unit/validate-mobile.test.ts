@@ -1,7 +1,11 @@
 // Unit tests of the SDD tooling of the mobile track (SPEC-3001 EF-4, CA-3).
 // They prove that the mobile selection is additive: a specification of another track keeps exactly
 // the commands it had before.
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
+import { parse as parseYaml } from 'yaml';
 
 import {
   maestroVerdict,
@@ -152,5 +156,44 @@ describe('[SPEC-3001] summarizeJest', () => {
     expect(summarizeJest(report, 'SPEC-3001')).toEqual({ passed: 1, failed: 1 });
     expect(summarizeJest(report, 'SPEC-3003')).toEqual({ passed: 0, failed: 0 });
     expect(summarizeJest(null, 'SPEC-3001')).toEqual({ passed: 0, failed: 0 });
+  });
+});
+
+describe('[SPEC-3001] workflow CI mobile', () => {
+  const root = path.resolve(import.meta.dirname, '..', '..', '..', '..');
+  const workflow = parseYaml(
+    fs.readFileSync(path.join(root, '.github/workflows/mobile.yml'), 'utf8'),
+  ) as {
+    on: Record<string, unknown> & { push?: { branches?: string[] } };
+    jobs: Record<string, { steps?: { run?: string }[] }>;
+  };
+  const scripts = Object.keys(
+    (JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')) as {
+      scripts: Record<string, string>;
+    }).scripts,
+  );
+
+  it('se déclenche sur la branche mobile et les branches de spécification mobile (EF-7)', () => {
+    const branches = workflow.on.push?.branches ?? [];
+
+    expect(branches).toContain('mobile');
+    expect(branches.some((branch) => branch.startsWith('spec/SPEC-3'))).toBe(true);
+  });
+
+  it('déclare les jobs qualité, Android et iOS (EF-7)', () => {
+    expect(Object.keys(workflow.jobs).sort()).toEqual(['android', 'ios', 'quality']);
+  });
+
+  it('n’appelle que des scripts pnpm qui existent', () => {
+    const commands = Object.values(workflow.jobs)
+      .flatMap((job) => job.steps ?? [])
+      .map((step) => step.run ?? '')
+      .join('\n');
+    const referenced = [...commands.matchAll(/pnpm (?:-s )?([a-z:0-9-]+)/g)]
+      .map((match) => match[1] ?? '')
+      .filter((script) => script !== '' && script !== 'install');
+
+    expect(referenced.length).toBeGreaterThan(3);
+    for (const script of referenced) expect(scripts).toContain(script);
   });
 });
