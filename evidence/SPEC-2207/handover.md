@@ -1,7 +1,7 @@
 # SPEC-2207 — handover après la quatrième tranche (routes `dev.*` en cours)
 
 Date : 2026-11-22. Branche : `spec/SPEC-2207-bascule-jobs-crons-demos`. HEAD de la tranche :
-`4c560c9c`. État : **22 consommateurs et deux crons `py`, pont inline retiré, et 18 des 70
+`96a3eaa8`. État : **22 consommateurs et deux crons `py`, pont inline retiré, et 18 des 70
 opérations `dev.*` servies par Python avec leurs routes spéciales**. Le worker est entièrement
 basculé ; la façade ne relaie plus ces 18 entrées.
 
@@ -65,6 +65,16 @@ basculé ; la façade ne relaie plus ces 18 entrées.
   en comptant les routes du registre Python et les spéciales installées.
 - `dev.sdd.spec-1301.demo` dépend du scénario natif (`runNativeClientScenario`) : prévoir un port
   dédié, il n'a pas d'équivalent Python.
+
+## 3 bis. Câblage vérifié sur la table réelle
+
+`apps/api-py/tests/integration/test_dev_routes_install.py` construit la façade avec
+`api/ownership.yaml` réel et vérifie que chaque opération `dev.*` à `py` est installée exactement
+une fois : par le registre spécial pour les routes de développement, par le pipeline pour les autres.
+Il a révélé un piège corrigé dans `pipeline.special_path` : `api/inventory.json` et
+`api/ownership.yaml` notent les paramètres en `:runId` (Hono), alors que `generated/routes.py` les
+note `{runId}` (FastAPI). Toute recherche de clé spéciale doit passer par `special_path`. Sans cela,
+`dev.events.demo.run` était servi par le pipeline **sans garde**.
 
 ## 4. Points de vigilance
 
