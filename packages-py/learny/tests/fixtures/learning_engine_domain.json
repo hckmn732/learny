@@ -1,0 +1,639 @@
+[
+  {
+    "key": "mastery.0",
+    "input": {
+      "answers": [
+        {
+          "answerId": "a1",
+          "attemptId": "t1",
+          "score": 1,
+          "answeredAt": "2026-11-01T09:00:00.000Z"
+        },
+        {
+          "answerId": "a2",
+          "attemptId": "t2",
+          "score": 0.5,
+          "answeredAt": "2026-11-05T18:30:00.000Z"
+        },
+        {
+          "answerId": "a3",
+          "attemptId": "t3",
+          "score": 0,
+          "answeredAt": "2026-11-10T07:15:00.000Z"
+        },
+        {
+          "answerId": "a4",
+          "attemptId": "t4",
+          "score": 1,
+          "answeredAt": "2026-11-11T12:00:00.000Z"
+        }
+      ],
+      "at": "2026-11-11T12:20:00.000Z",
+      "threshold": 80,
+      "halfLifeDays": 14
+    },
+    "output": {
+      "mastery": 60.04685520058486,
+      "threshold": 80,
+      "mastered": false,
+      "answerCount": 4,
+      "weightSum": 3.2989193204007305,
+      "weightedScore": 1.9808973075051446,
+      "weights": [
+        {
+          "answerId": "a1",
+          "attemptId": "t1",
+          "score": 1,
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "ageDays": 10.13888888888889,
+          "weight": 0.6053299552153317
+        },
+        {
+          "answerId": "a2",
+          "attemptId": "t2",
+          "score": 0.5,
+          "answeredAt": "2026-11-05T18:30:00.000Z",
+          "ageDays": 5.743055555555555,
+          "weight": 0.7525095238558753
+        },
+        {
+          "answerId": "a3",
+          "attemptId": "t3",
+          "score": 0,
+          "answeredAt": "2026-11-10T07:15:00.000Z",
+          "ageDays": 1.2118055555555556,
+          "weight": 0.9417672509676485
+        },
+        {
+          "answerId": "a4",
+          "attemptId": "t4",
+          "score": 1,
+          "answeredAt": "2026-11-11T12:00:00.000Z",
+          "ageDays": 0.013888888888888888,
+          "weight": 0.9993125903618753
+        }
+      ]
+    }
+  },
+  {
+    "key": "mastery.1",
+    "input": {
+      "answers": [
+        {
+          "answerId": "a1",
+          "attemptId": "t1",
+          "score": 1,
+          "answeredAt": "2026-11-01T09:00:00.000Z"
+        },
+        {
+          "answerId": "a2",
+          "attemptId": "t2",
+          "score": 0.5,
+          "answeredAt": "2026-11-05T18:30:00.000Z"
+        },
+        {
+          "answerId": "a3",
+          "attemptId": "t3",
+          "score": 0,
+          "answeredAt": "2026-11-10T07:15:00.000Z"
+        },
+        {
+          "answerId": "a4",
+          "attemptId": "t4",
+          "score": 1,
+          "answeredAt": "2026-11-11T12:00:00.000Z"
+        }
+      ],
+      "at": "2026-11-20T00:00:00.000Z",
+      "threshold": 60,
+      "halfLifeDays": 7
+    },
+    "output": {
+      "mastery": 58.48265957088212,
+      "threshold": 60,
+      "mastered": false,
+      "answerCount": 4,
+      "weightSum": 1.2162974052804716,
+      "weightedScore": 0.7113230708996506,
+      "weights": [
+        {
+          "answerId": "a1",
+          "attemptId": "t1",
+          "score": 1,
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "ageDays": 18.625,
+          "weight": 0.15814125831248205
+        },
+        {
+          "answerId": "a2",
+          "attemptId": "t2",
+          "score": 0.5,
+          "answeredAt": "2026-11-05T18:30:00.000Z",
+          "ageDays": 14.229166666666666,
+          "weight": 0.24439080392735937
+        },
+        {
+          "answerId": "a3",
+          "attemptId": "t3",
+          "score": 0,
+          "answeredAt": "2026-11-10T07:15:00.000Z",
+          "ageDays": 9.697916666666666,
+          "weight": 0.38277893241714134
+        },
+        {
+          "answerId": "a4",
+          "attemptId": "t4",
+          "score": 1,
+          "answeredAt": "2026-11-11T12:00:00.000Z",
+          "ageDays": 8.5,
+          "weight": 0.4309864106234889
+        }
+      ]
+    }
+  },
+  {
+    "key": "retention.0",
+    "input": {
+      "modules": [
+        {
+          "moduleId": "m1",
+          "validatedAt": "2026-10-01T08:00:00.000Z",
+          "notionIds": ["n1", "n2", "n3"]
+        },
+        {
+          "moduleId": "m2",
+          "validatedAt": "2026-10-20T23:30:00.000Z",
+          "notionIds": ["n4", "n1"]
+        },
+        {
+          "moduleId": "m3",
+          "validatedAt": null,
+          "notionIds": ["n5"]
+        }
+      ],
+      "reviews": [
+        {
+          "reviewId": "r1",
+          "notionId": "n1",
+          "reviewedAt": "2026-11-01T09:00:00.000Z",
+          "correct": true
+        },
+        {
+          "reviewId": "r2",
+          "notionId": "n1",
+          "reviewedAt": "2026-11-02T09:00:00.000Z",
+          "correct": false
+        },
+        {
+          "reviewId": "r3",
+          "notionId": "n2",
+          "reviewedAt": "2026-11-03T09:00:00.000Z",
+          "correct": false
+        },
+        {
+          "reviewId": "r4",
+          "notionId": "n3",
+          "reviewedAt": "2026-10-05T09:00:00.000Z",
+          "correct": true
+        },
+        {
+          "reviewId": "r5",
+          "notionId": "n4",
+          "reviewedAt": "2026-11-10T09:00:00.000Z",
+          "correct": true
+        },
+        {
+          "reviewId": "r6",
+          "notionId": "n5",
+          "reviewedAt": "2026-11-10T09:00:00.000Z",
+          "correct": true
+        },
+        {
+          "reviewId": "r1",
+          "notionId": "n1",
+          "reviewedAt": "2026-11-01T09:00:00.000Z",
+          "correct": true
+        }
+      ],
+      "at": "2026-11-11T12:20:00.000Z",
+      "timeZone": "Europe/Paris"
+    },
+    "output": [
+      {
+        "horizonDays": 30,
+        "windowStartDays": 27,
+        "windowEndDays": 33,
+        "eligible": 3,
+        "reviewed": 2,
+        "successful": 1,
+        "rate": 50
+      },
+      {
+        "horizonDays": 60,
+        "windowStartDays": 57,
+        "windowEndDays": 63,
+        "eligible": 0,
+        "reviewed": 0,
+        "successful": 0,
+        "rate": null
+      }
+    ]
+  },
+  {
+    "key": "retention.1",
+    "input": {
+      "modules": [],
+      "reviews": [],
+      "at": "2026-11-11T12:20:00.000Z"
+    },
+    "output": [
+      {
+        "horizonDays": 30,
+        "windowStartDays": 27,
+        "windowEndDays": 33,
+        "eligible": 0,
+        "reviewed": 0,
+        "successful": 0,
+        "rate": null
+      },
+      {
+        "horizonDays": 60,
+        "windowStartDays": 57,
+        "windowEndDays": 63,
+        "eligible": 0,
+        "reviewed": 0,
+        "successful": 0,
+        "rate": null
+      }
+    ]
+  },
+  {
+    "key": "retention.2",
+    "input": {
+      "modules": [
+        {
+          "moduleId": "m1",
+          "validatedAt": "2026-09-01T00:00:00.000Z",
+          "notionIds": ["n1", "n2"]
+        }
+      ],
+      "reviews": [
+        {
+          "reviewId": "a",
+          "notionId": "n1",
+          "reviewedAt": "2026-10-02T00:00:00.000Z",
+          "correct": true
+        },
+        {
+          "reviewId": "b",
+          "notionId": "n2",
+          "reviewedAt": "2026-12-01T00:00:00.000Z",
+          "correct": true
+        }
+      ],
+      "at": "2026-11-11T12:20:00.000Z",
+      "timeZone": "UTC",
+      "params": {
+        "horizonsDays": [30, 60],
+        "toleranceDays": 0
+      }
+    },
+    "output": [
+      {
+        "horizonDays": 30,
+        "windowStartDays": 30,
+        "windowEndDays": 30,
+        "eligible": 2,
+        "reviewed": 0,
+        "successful": 0,
+        "rate": null
+      },
+      {
+        "horizonDays": 60,
+        "windowStartDays": 60,
+        "windowEndDays": 60,
+        "eligible": 2,
+        "reviewed": 0,
+        "successful": 0,
+        "rate": null
+      }
+    ]
+  },
+  {
+    "key": "progress.0",
+    "input": {
+      "modules": [
+        {
+          "moduleId": "m1",
+          "status": "validated"
+        },
+        {
+          "moduleId": "m2",
+          "status": "open"
+        },
+        {
+          "moduleId": "m1",
+          "status": "open"
+        }
+      ],
+      "slots": [
+        {
+          "slotId": "s1",
+          "kind": "course",
+          "status": "done",
+          "startsAt": "2026-11-10T09:00:00.000Z",
+          "endsAt": "2026-11-10T10:00:00.000Z"
+        },
+        {
+          "slotId": "s2",
+          "kind": "course",
+          "status": "moved",
+          "startsAt": "2026-11-11T09:00:00.000Z",
+          "endsAt": "2026-11-11T10:00:00.000Z"
+        },
+        {
+          "slotId": "s3",
+          "kind": "revision",
+          "status": "planned",
+          "startsAt": "2026-11-12T09:00:00.000Z",
+          "endsAt": "2026-11-12T09:30:00.000Z",
+          "movedFromId": "s2"
+        },
+        {
+          "slotId": "s4",
+          "kind": "buffer",
+          "status": "cancelled",
+          "startsAt": "2026-11-13T09:00:00.000Z",
+          "endsAt": "2026-11-13T10:00:00.000Z"
+        }
+      ],
+      "notionStates": [
+        {
+          "notionId": "n1",
+          "mastery": 80
+        },
+        {
+          "notionId": "n2",
+          "mastery": 40
+        },
+        {
+          "notionId": "n1",
+          "mastery": 90
+        }
+      ]
+    },
+    "output": {
+      "validatedModules": 1,
+      "totalModules": 2,
+      "progressPercent": 50,
+      "plannedMinutes": 90,
+      "completedMinutes": 60,
+      "masteredNotions": 1,
+      "status": "in_progress"
+    }
+  },
+  {
+    "key": "progress.1",
+    "input": {
+      "modules": [],
+      "slots": [],
+      "notionStates": []
+    },
+    "output": {
+      "validatedModules": 0,
+      "totalModules": 0,
+      "progressPercent": 0,
+      "plannedMinutes": 0,
+      "completedMinutes": 0,
+      "masteredNotions": 0,
+      "status": "no_modules"
+    }
+  },
+  {
+    "key": "progress.2",
+    "input": {
+      "modules": [
+        {
+          "moduleId": "m1",
+          "status": "validated"
+        }
+      ],
+      "slots": [
+        {
+          "slotId": "s1",
+          "kind": "course",
+          "status": "done",
+          "startsAt": "2026-03-29T01:00:00.000Z",
+          "endsAt": "2026-03-29T03:00:00.000Z"
+        }
+      ],
+      "notionStates": [
+        {
+          "notionId": "n1",
+          "mastery": 100
+        }
+      ],
+      "masteryThreshold": 95
+    },
+    "output": {
+      "validatedModules": 1,
+      "totalModules": 1,
+      "progressPercent": 100,
+      "plannedMinutes": 120,
+      "completedMinutes": 120,
+      "masteredNotions": 1,
+      "status": "complete"
+    }
+  },
+  {
+    "key": "streak.0",
+    "input": {
+      "dailyActivity": [
+        {
+          "at": "2026-11-11T08:00:00.000Z",
+          "kind": "quiz"
+        },
+        {
+          "at": "2026-11-10T20:00:00.000Z",
+          "kind": "reading",
+          "durationSeconds": 320
+        },
+        {
+          "at": "2026-11-09T20:00:00.000Z",
+          "kind": "reading",
+          "durationSeconds": 120
+        },
+        {
+          "at": "2026-11-08T10:00:00.000Z",
+          "kind": "global_quiz"
+        },
+        {
+          "at": "2026-11-06T10:00:00.000Z",
+          "kind": "exercise"
+        }
+      ],
+      "studyDays": [1, 2, 3, 4, 5],
+      "pauses": [
+        {
+          "startsOn": "2026-11-07",
+          "endsOn": "2026-11-08"
+        }
+      ],
+      "at": "2026-11-11T12:20:00.000Z",
+      "timeZone": "Europe/Paris",
+      "params": {
+        "readingMinSeconds": 300,
+        "regularityDays": 14,
+        "maxLookbackDays": 3660
+      }
+    },
+    "output": {
+      "days": 2,
+      "calendar": [
+        {
+          "date": "2026-10-29",
+          "status": "missed"
+        },
+        {
+          "date": "2026-10-30",
+          "status": "missed"
+        },
+        {
+          "date": "2026-10-31",
+          "status": "neutral"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "neutral"
+        },
+        {
+          "date": "2026-11-02",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-03",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-04",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-05",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-06",
+          "status": "studied"
+        },
+        {
+          "date": "2026-11-07",
+          "status": "neutral"
+        },
+        {
+          "date": "2026-11-08",
+          "status": "studied"
+        },
+        {
+          "date": "2026-11-09",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-10",
+          "status": "studied"
+        },
+        {
+          "date": "2026-11-11",
+          "status": "studied"
+        }
+      ],
+      "lastQualifyingDay": "2026-11-11"
+    }
+  },
+  {
+    "key": "streak.1",
+    "input": {
+      "dailyActivity": [],
+      "studyDays": [1, 2, 3, 4, 5, 6, 7],
+      "pauses": [
+        {
+          "startsOn": "2026-11-05",
+          "endsOn": "2026-11-07"
+        },
+        {
+          "startsOn": "2026-11-06",
+          "endsOn": "2026-11-09"
+        }
+      ],
+      "at": "2026-11-11T12:20:00.000Z",
+      "timeZone": "UTC",
+      "params": {
+        "readingMinSeconds": 300,
+        "regularityDays": 3,
+        "maxLookbackDays": 2
+      }
+    },
+    "output": {
+      "days": 0,
+      "calendar": [
+        {
+          "date": "2026-11-09",
+          "status": "neutral"
+        },
+        {
+          "date": "2026-11-10",
+          "status": "missed"
+        },
+        {
+          "date": "2026-11-11",
+          "status": "neutral"
+        }
+      ],
+      "lastQualifyingDay": null
+    }
+  },
+  {
+    "key": "milestones.0",
+    "input": {
+      "previousKeys": ["module_validated:m1"],
+      "validatedModules": ["m2", "m1", "m2"],
+      "masteredNotions": 100,
+      "streakDays": 30,
+      "params": {
+        "notionsRetained": 100,
+        "streakDays": 30
+      }
+    },
+    "output": [
+      {
+        "key": "module_validated:m2",
+        "kind": "module_validated",
+        "moduleId": "m2"
+      },
+      {
+        "key": "notions_100",
+        "kind": "notions_100",
+        "moduleId": null
+      },
+      {
+        "key": "streak_30",
+        "kind": "streak_30",
+        "moduleId": null
+      }
+    ]
+  },
+  {
+    "key": "milestones.1",
+    "input": {
+      "previousKeys": ["module_validated:m1", "notions_100", "streak_30"],
+      "validatedModules": ["m1"],
+      "masteredNotions": 200,
+      "streakDays": 90,
+      "params": {
+        "notionsRetained": 100,
+        "streakDays": 30
+      }
+    },
+    "output": []
+  }
+]

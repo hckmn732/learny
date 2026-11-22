@@ -8309,6 +8309,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2202.spec.ts",
         "apps/web/e2e/specs/p8/offline.spec.ts"
       ],
       "gap": false
@@ -8366,6 +8367,7 @@
       "tests": [
         "apps/api/test/integration/sync-route.test.ts",
         "apps/web/e2e/journeys/review-automations.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2202.spec.ts",
         "apps/web/e2e/specs/p8/offline.spec.ts"
       ],
       "gap": false
@@ -9679,7 +9681,8 @@
       ],
       "events": [],
       "tests": [
-        "apps/api/test/integration/streak-milestones-route.test.ts"
+        "apps/api/test/integration/streak-milestones-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2202.spec.ts"
       ],
       "gap": false
     },

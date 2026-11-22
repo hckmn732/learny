@@ -1,19 +1,19 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-21T20:41:53.293Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-22T07:02:58.047Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 158 (V1 : 124, V2 : 8, migration : 26) |
-| Terminées | 133 |
+| Terminées | 134 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 25 |
+| En attente de dépendances | 24 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **84.2 %** |
+| **Avancement global** | **84.8 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | python-migration |
 | Prochaine action | checkpoint CP-21 |
@@ -38,7 +38,7 @@
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
 | P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
 | P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ⏳ |
-| P22 | Migration Python — domaines métier | 1/7 | CP-22 | ⏳ |
+| P22 | Migration Python — domaines métier | 2/7 | CP-22 | ⏳ |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 
 ## Détail des spécifications
@@ -195,7 +195,7 @@
 | [SPEC-2101](../specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md) | Connexion PostgreSQL, identité, RLS et Storage en Python | P21 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2002, SPEC-2003 |
 | [SPEC-2102](../specs/p21-python-donnees/SPEC-2102-outbox-worker.md) | Outbox et worker Python remplaçant Inngest | P21 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2101 |
 | [SPEC-2201](../specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md) | Domaines Identity & Access et Formation & Programme en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2101, SPEC-2102 |
-| [SPEC-2202](../specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md) | Domaines Learning State & Planning et Assessments en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
+| [SPEC-2202](../specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md) | Domaines Learning State & Planning et Assessments en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201 |
 | [SPEC-2203](../specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md) | Domaine Content & Retrieval et ingestion en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
 | [SPEC-2204](../specs/p22-python-domaines/SPEC-2204-domaine-tuteur-sse.md) | Domaine Tutor & Conversations et flux SSE IA en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202, SPEC-2203 |
 | [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202 |

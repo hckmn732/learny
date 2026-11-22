@@ -3,7 +3,7 @@
 # An operation may only switch to `py` once parity is proven.
 
 operations:
-  'agenda.get': ts
+  'agenda.get': py
   'auth.callback': ts
   'auth.magicLink': ts
   'auth.resend': ts
@@ -14,8 +14,8 @@ operations:
   'billing.portal': ts
   'billing.subscription': ts
   'billing.webhook': ts
-  'bricks.correct': ts
-  'bricks.report': ts
+  'bricks.correct': py
+  'bricks.report': py
   'cadrage.complete': py
   'cadrage.get': py
   'cadrage.message': py
@@ -103,34 +103,34 @@ operations:
   'dev.uploadSimulation': ts
   'email.unsubscribe': ts
   'email.unsubscribe.page': ts
-  'exam.answers.save': ts
-  'exam.attempts.create': ts
-  'exam.attempts.get': ts
-  'exam.attempts.result': ts
-  'exam.attempts.submit': ts
-  'exam.format.confirm': ts
-  'exam.intro': ts
-  'exam.questions.mark': ts
-  'exercises.detail': ts
-  'exercises.hint': ts
-  'exercises.saveDraft': ts
-  'exercises.start': ts
-  'exercises.submit': ts
+  'exam.answers.save': py
+  'exam.attempts.create': py
+  'exam.attempts.get': py
+  'exam.attempts.result': py
+  'exam.attempts.submit': py
+  'exam.format.confirm': py
+  'exam.intro': py
+  'exam.questions.mark': py
+  'exercises.detail': py
+  'exercises.hint': py
+  'exercises.saveDraft': py
+  'exercises.start': py
+  'exercises.submit': py
   'formations.access': py
   'formations.archive': py
   'formations.create': py
   'formations.current': py
-  'formations.finalReview': ts
+  'formations.finalReview': py
   'formations.group.create': py
   'formations.group.get': py
   'formations.list': py
-  'formations.maintenance': ts
+  'formations.maintenance': py
   'formations.pause': py
-  'formations.replan': ts
-  'formations.replan-options': ts
+  'formations.replan': py
+  'formations.replan-options': py
   'formations.resume': ts
   'formations.update': py
-  'gaps.list': ts
+  'gaps.list': py
   'groups.leave': py
   'groups.members.remove': py
   'groups.rotateCode': py
@@ -181,8 +181,8 @@ operations:
   'notifications.readAll': ts
   'notifications.unreadCount': ts
   'notionGraph.get': py
-  'offline.pack': ts
-  'offline.sync': ts
+  'offline.pack': py
+  'offline.sync': py
   'programme.adjust': py
   'programme.generate': py
   'programme.get': py
@@ -190,36 +190,36 @@ operations:
   'programme.validate': py
   'pushSubscriptions.delete': ts
   'pushSubscriptions.upsert': ts
-  'quiz.answers.check': ts
-  'quiz.answers.save': ts
-  'quiz.attempts.create': ts
-  'quiz.attempts.get': ts
-  'quiz.attempts.result': ts
-  'quiz.attempts.submit': ts
-  'remediation.complete': ts
-  'remediation.get': ts
-  'remediation.prepare': ts
+  'quiz.answers.check': py
+  'quiz.answers.save': py
+  'quiz.attempts.create': py
+  'quiz.attempts.get': py
+  'quiz.attempts.result': py
+  'quiz.attempts.submit': py
+  'remediation.complete': py
+  'remediation.get': py
+  'remediation.prepare': py
   'resources.create': ts
   'resources.delete': ts
   'resources.finalize': ts
   'resources.readUrl': ts
   'resources.rename': ts
   'resources.retry': ts
-  'review.answer': ts
-  'review.complete': ts
-  'review.globalQuizToday': ts
+  'review.answer': py
+  'review.complete': py
+  'review.globalQuizToday': py
   'search.global': py
-  'series.milestones': ts
-  'series.streak': ts
+  'series.milestones': py
+  'series.streak': py
   'sidebar.get': py
   'sidebar.update': py
-  'slots.alternatives': ts
-  'slots.move': ts
+  'slots.alternatives': py
+  'slots.move': py
   'suggestions.dismiss': ts
   'suggestions.import': ts
   'uploads.create': ts
-  'warmups.answers.create': ts
-  'warmups.today.get': ts
+  'warmups.answers.create': py
+  'warmups.today.get': py
 
 special:
   'DELETE /api/v1/dev/sdd/email/outbox': ts

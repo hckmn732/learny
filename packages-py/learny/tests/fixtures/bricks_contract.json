@@ -1,0 +1,3922 @@
+{
+  "ids": {
+    "version": "99999999-9999-4999-8999-999999999999",
+    "brick": "88888888-8888-4888-8888-888888888888",
+    "notions": [
+      "11111111-1111-4111-8111-111111111111",
+      "22222222-2222-4222-8222-222222222222",
+      "33333333-3333-4333-8333-333333333333"
+    ]
+  },
+  "examples": {
+    "text": {
+      "valid": {
+        "title": "La comptabilité générale",
+        "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+        "sources": []
+      },
+      "normalized": {
+        "title": "La comptabilité générale",
+        "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+        "sources": []
+      },
+      "invalid": {
+        "title": "La comptabilité générale",
+        "bodyMd": "Un paragraphe <strong>en gras</strong> inséré comme HTML brut.",
+        "sources": []
+      },
+      "invalidCode": "HTML_NOT_ALLOWED"
+    },
+    "resource_excerpt": {
+      "valid": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "location": {
+          "page": 4,
+          "charStart": 120,
+          "charEnd": 260
+        },
+        "quote": "Le compte de résultat présente les produits et les charges de l’exercice.",
+        "label": "Guide FI, p. 4",
+        "sources": [
+          {
+            "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "quote": "produits et charges de l’exercice"
+          }
+        ]
+      },
+      "normalized": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "location": {
+          "page": 4,
+          "charStart": 120,
+          "charEnd": 260
+        },
+        "quote": "Le compte de résultat présente les produits et les charges de l’exercice.",
+        "label": "Guide FI, p. 4",
+        "sources": [
+          {
+            "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "quote": "produits et charges de l’exercice"
+          }
+        ]
+      },
+      "invalid": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "location": {
+          "startSec": 42,
+          "endSec": 12
+        },
+        "quote": "Un extrait dont la fin précède le début.",
+        "label": "Guide FI, p. 4",
+        "sources": []
+      },
+      "invalidCode": "SCHEMA_INVALID"
+    },
+    "choice_question": {
+      "valid": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "normalized": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "invalid": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": true,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "Deux options justes ne peuvent pas coexister dans une question à choix unique.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "invalidCode": "CHOICE_SINGLE_NEEDS_ONE"
+    },
+    "open_question": {
+      "valid": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": [
+          "La partie double",
+          "L’égalité des débits et des crédits",
+          "La traçabilité des flux"
+        ],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe de la partie double",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre débit-crédit",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Toute opération affecte au moins deux comptes pour le même montant, ce qui maintient l’équilibre.",
+        "explanation": "La partie double garantit que chaque flux est enregistré deux fois, au débit d’un compte et au crédit d’un autre.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "normalized": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": [
+          "La partie double",
+          "L’égalité des débits et des crédits",
+          "La traçabilité des flux"
+        ],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe de la partie double",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre débit-crédit",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Toute opération affecte au moins deux comptes pour le même montant, ce qui maintient l’équilibre.",
+        "explanation": "La partie double garantit que chaque flux est enregistré deux fois, au débit d’un compte et au crédit d’un autre.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "invalid": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": ["La partie double"],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe",
+            "points": 10,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre",
+            "points": 10,
+            "description": ""
+          },
+          {
+            "key": "limite",
+            "label": "Limites",
+            "points": 10,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Une réponse modèle suffisamment longue pour être acceptée par le schéma.",
+        "explanation": "Une explication suffisamment longue pour être acceptée par le schéma.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "invalidCode": "CRITERIA_POINTS_MISMATCH"
+    },
+    "cloze": {
+      "valid": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "normalized": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "invalid": {
+        "template": "Le compte de résultat présente les {{2}} de l’exercice.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits"],
+            "hint": "Ce que l’entreprise gagne"
+          }
+        ],
+        "explanation": "Un texte à trous dont le jeton ne correspond pas à l’identifiant du trou est invalide.",
+        "sources": []
+      },
+      "invalidCode": "CLOZE_GAP_MISMATCH"
+    },
+    "matching": {
+      "valid": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "normalized": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "invalid": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "facture de vente",
+            "right": "Cycle des achats",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "extraRights": [],
+        "explanation": "Deux colonnes de gauche identiques rendent l’association ambiguë et sont refusées.",
+        "sources": []
+      },
+      "invalidCode": "MATCHING_DUPLICATE"
+    },
+    "ordering": {
+      "valid": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "normalized": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "invalid": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "Deux étapes au texte identique ne peuvent pas être ordonnées de manière univoque.",
+        "sources": []
+      },
+      "invalidCode": "ORDERING_DUPLICATE"
+    },
+    "categorization": {
+      "valid": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "normalized": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "invalid": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "charges",
+            "label": "Charges",
+            "notionId": null
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "Une catégorie sans aucun item ne peut pas être corrigée et doit être supprimée.",
+        "sources": []
+      },
+      "invalidCode": "CATEGORY_EMPTY"
+    },
+    "recall_card": {
+      "valid": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "normalized": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "invalid": {
+        "front": "ok",
+        "back": "Trop court pour être une carte de rappel valide.",
+        "sources": []
+      },
+      "invalidCode": "SCHEMA_INVALID"
+    },
+    "instruction": {
+      "valid": {
+        "title": "Justifier un relevé bancaire",
+        "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+        "data": [
+          "Solde du relevé : 12 400 €",
+          "Solde comptable : 12 150 €",
+          "Frais bancaires : 250 €"
+        ],
+        "deliverable": "Un tableau de rapprochement complété et justifié.",
+        "production": {
+          "kind": "table",
+          "fields": [
+            {
+              "key": "libelle",
+              "label": "Libellé",
+              "type": "text"
+            }
+          ],
+          "columns": [
+            {
+              "key": "debit",
+              "label": "Débit",
+              "type": "number"
+            },
+            {
+              "key": "credit",
+              "label": "Crédit",
+              "type": "number"
+            },
+            {
+              "key": "sens",
+              "label": "Sens",
+              "type": "select",
+              "options": [
+                {
+                  "value": "D",
+                  "label": "Débit"
+                },
+                {
+                  "value": "C",
+                  "label": "Crédit"
+                }
+              ]
+            }
+          ],
+          "minRows": 1,
+          "maxRows": 5,
+          "initialRows": 2,
+          "checks": [
+            {
+              "type": "sum_equal",
+              "numberColumn": "debit",
+              "groupColumn": "sens",
+              "left": ["Débit"],
+              "right": ["Crédit"],
+              "leftLabel": "Débit",
+              "rightLabel": "Crédit",
+              "sideColumnLabel": "Sens"
+            }
+          ]
+        },
+        "explanationPrompt": "Expliquez avec vos mots pourquoi les deux soldes diffèrent.",
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "estimatedMinutes": 20,
+        "passPoints": 8,
+        "sources": []
+      },
+      "normalized": {
+        "title": "Justifier un relevé bancaire",
+        "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+        "data": [
+          "Solde du relevé : 12 400 €",
+          "Solde comptable : 12 150 €",
+          "Frais bancaires : 250 €"
+        ],
+        "deliverable": "Un tableau de rapprochement complété et justifié.",
+        "production": {
+          "kind": "table",
+          "fields": [
+            {
+              "key": "libelle",
+              "label": "Libellé",
+              "type": "text"
+            }
+          ],
+          "columns": [
+            {
+              "key": "debit",
+              "label": "Débit",
+              "type": "number"
+            },
+            {
+              "key": "credit",
+              "label": "Crédit",
+              "type": "number"
+            },
+            {
+              "key": "sens",
+              "label": "Sens",
+              "type": "select",
+              "options": [
+                {
+                  "value": "D",
+                  "label": "Débit"
+                },
+                {
+                  "value": "C",
+                  "label": "Crédit"
+                }
+              ]
+            }
+          ],
+          "minRows": 1,
+          "maxRows": 5,
+          "initialRows": 2,
+          "checks": [
+            {
+              "type": "sum_equal",
+              "numberColumn": "debit",
+              "groupColumn": "sens",
+              "left": ["Débit"],
+              "right": ["Crédit"],
+              "leftLabel": "Débit",
+              "rightLabel": "Crédit",
+              "sideColumnLabel": "Sens"
+            }
+          ]
+        },
+        "explanationPrompt": "Expliquez avec vos mots pourquoi les deux soldes diffèrent.",
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "estimatedMinutes": 20,
+        "passPoints": 8,
+        "sources": []
+      },
+      "invalid": {
+        "title": "Justifier un relevé bancaire",
+        "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+        "data": ["Solde du relevé : 12 400 €"],
+        "deliverable": "Un tableau de rapprochement complété et justifié.",
+        "production": {
+          "kind": "link"
+        },
+        "explanationPrompt": null,
+        "hints": [],
+        "criteria": [
+          {
+            "key": "globale",
+            "label": "Qualité globale",
+            "points": 9,
+            "description": "Une note globale."
+          }
+        ],
+        "estimatedMinutes": 20,
+        "passPoints": 8,
+        "sources": []
+      },
+      "invalidCode": "CRITERIA_POINTS_MISMATCH"
+    },
+    "scripted_dialogue": {
+      "valid": {
+        "role": "Contrôleur de gestion",
+        "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+        "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+        "endCondition": "L’apprenant a distingué les deux effets et proposé une action corrective chiffrée.",
+        "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+        "maxTurns": 12,
+        "criteria": [
+          {
+            "key": "distinction",
+            "label": "Distinction prix / volume",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "action",
+            "label": "Action corrective",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "sources": []
+      },
+      "normalized": {
+        "role": "Contrôleur de gestion",
+        "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+        "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+        "endCondition": "L’apprenant a distingué les deux effets et proposé une action corrective chiffrée.",
+        "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+        "maxTurns": 12,
+        "criteria": [
+          {
+            "key": "distinction",
+            "label": "Distinction prix / volume",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "action",
+            "label": "Action corrective",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "sources": []
+      },
+      "invalid": {
+        "role": "Contrôleur de gestion",
+        "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+        "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+        "endCondition": "L’apprenant a distingué les deux effets et proposé une action corrective chiffrée.",
+        "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+        "maxTurns": 12,
+        "criteria": [
+          {
+            "key": "a",
+            "label": "Critère A",
+            "points": 9,
+            "description": ""
+          },
+          {
+            "key": "b",
+            "label": "Critère B",
+            "points": 9,
+            "description": ""
+          },
+          {
+            "key": "c",
+            "label": "Critère C",
+            "points": 9,
+            "description": ""
+          }
+        ],
+        "sources": []
+      },
+      "invalidCode": "CRITERIA_POINTS_MISMATCH"
+    },
+    "timer": {
+      "valid": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "normalized": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "invalid": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": [],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "invalidCode": "TIMER_SCOPE_INVALID"
+    },
+    "scoring": {
+      "valid": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "normalized": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "invalid": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 10
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "invalidCode": "SCORING_SUM_MISMATCH"
+    }
+  },
+  "normalize": [
+    {
+      "input": "  L’Élan —  déjà  ",
+      "output": "l'elan - deja",
+      "key": "l'elan - deja"
+    },
+    {
+      "input": "SAP : les écritures (comptes)!",
+      "output": "sap : les ecritures (comptes)",
+      "key": "sap : les ecritures (comptes)"
+    },
+    {
+      "input": "« Coût » “marginal”…",
+      "output": "\" cout \" \"marginal\"",
+      "key": "\" cout \" \"marginal\""
+    },
+    {
+      "input": "ÉTAT  DE   RÉSULTAT ?",
+      "output": "etat de resultat",
+      "key": "etat de resultat"
+    },
+    {
+      "input": "‐‑–— tirets",
+      "output": "---- tirets",
+      "key": "---- tirets"
+    },
+    {
+      "input": "Ünïcödé NFKC ﬁ ligature",
+      "output": "unicode nfkc fi ligature",
+      "key": "unicode nfkc fi ligature"
+    },
+    {
+      "input": "Réponse:",
+      "output": "reponse",
+      "key": "reponse"
+    },
+    {
+      "input": "  déjà   normalisé. ",
+      "output": "deja normalise",
+      "key": "deja normalise"
+    }
+  ],
+  "sha256": [
+    {
+      "input": "",
+      "hex": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "input": "a",
+      "hex": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"
+    },
+    {
+      "input": "abc",
+      "hex": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "input": "Learny — épreuve",
+      "hex": "e45d0d62b2091f3cfb3b6d7893238b831b8ab95bb1a9a7336a8bf0736953a6de"
+    },
+    {
+      "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "hex": "44f8354494a5ba03ba1792a8d3e9c534c47a9181980fde7a3f44b06ef2ae7c7f"
+    }
+  ],
+  "shuffle": [
+    {
+      "items": ["a", "b", "c", "d", "e"],
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "output": ["b", "c", "d", "e", "a"]
+    },
+    {
+      "items": ["a", "b", "c", "d", "e"],
+      "seed": "99999999-9999-4999-8999-999999999999:items",
+      "output": ["e", "d", "c", "b", "a"]
+    },
+    {
+      "items": ["a", "b", "c", "d", "e"],
+      "seed": "99999999-9999-4999-8999-999999999999:rights",
+      "output": ["e", "c", "d", "a", "b"]
+    },
+    {
+      "items": ["a", "b", "c", "d", "e"],
+      "seed": "seed",
+      "output": ["c", "b", "d", "a", "e"]
+    },
+    {
+      "items": ["a", "b", "c", "d", "e"],
+      "seed": "",
+      "output": ["e", "a", "c", "b", "d"]
+    }
+  ],
+  "fingerprints": [
+    {
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "stem": "quel compte augmente au debit lorsqu'une entreprise encaisse un client",
+      "answer": "le compte de banque",
+      "fingerprint": "f60d313e69b17f57f2a9ff64f4957219c409b5eccea5fff539c08aeaa9cf6332"
+    },
+    {
+      "type": "open_question",
+      "payload": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": [
+          "La partie double",
+          "L’égalité des débits et des crédits",
+          "La traçabilité des flux"
+        ],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe de la partie double",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre débit-crédit",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Toute opération affecte au moins deux comptes pour le même montant, ce qui maintient l’équilibre.",
+        "explanation": "La partie double garantit que chaque flux est enregistré deux fois, au débit d’un compte et au crédit d’un autre.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "stem": "expliquez pourquoi une ecriture comptable respecte toujours l'equilibre debit-credit",
+      "answer": "l'egalite des debits et des credits|la partie double|la tracabilite des flux",
+      "fingerprint": "dfeb33fe28c85e4d503f58f7153b9b9d0af2a9aa06652a83887b0d02a5fc38a0"
+    },
+    {
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "stem": "l'etat annuel presente les {{1}} et les {{2}} de l'exercice, puis degage le {{3}}",
+      "answer": "produits|charges|resultat",
+      "fingerprint": "3cfcf72321eb863d477fd76f296f5b2436e2eda49360613e2066873f4c24b123"
+    },
+    {
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "stem": "associez chaque document au cycle comptable auquel il se rattache|bulletin de paie|facture de vente|releve bancaire",
+      "answer": "bulletin de paie=>cycle des salaires|facture de vente=>cycle des ventes|releve bancaire=>cycle de tresorerie",
+      "fingerprint": "ec4f54843ee6f7adf459c5b24ea8417f2d55cd6a1a913d56389aec3ebffcf0b5"
+    },
+    {
+      "type": "ordering",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "stem": "remettez dans l'ordre les etapes de la cloture comptable|arreter et presenter les etats financiers|enregistrer les ecritures de l'exercice|justifier les soldes des comptes",
+      "answer": "enregistrer les ecritures de l'exercice|justifier les soldes des comptes|arreter et presenter les etats financiers",
+      "fingerprint": "45ed49d0a7a979079e508c03e8e03950cc234b86d3df6567a69e150e2debe9fb"
+    },
+    {
+      "type": "categorization",
+      "payload": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "stem": "classez chaque compte dans la categorie de bilan qui lui correspond|banque|capital social|emprunt bancaire|stock de marchandises",
+      "answer": "banque=>actif|capital social=>passif|emprunt bancaire=>passif|stock de marchandises=>actif",
+      "fingerprint": "10f4d24dec7c79c88c58a3a3081dd4647deb0d71e09bbdfe28e278e1033935e7"
+    },
+    {
+      "type": "recall_card",
+      "payload": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "stem": "que signifie le principe de la partie double",
+      "answer": "chaque operation est enregistree au debit d'un compte et au credit d'un autre, pour le meme montant",
+      "fingerprint": "d6394a189fc1951c4f09340d8927b00ea764966987569e4302168ae534a8719a"
+    },
+    {
+      "type": "text",
+      "payload": {
+        "title": "La comptabilité générale",
+        "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+        "sources": []
+      },
+      "stem": null,
+      "answer": null,
+      "fingerprint": null
+    }
+  ],
+  "public": [
+    {
+      "type": "text",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "title": "La comptabilité générale",
+        "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "text",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "title": "La comptabilité générale",
+          "bodyMd": "La comptabilité générale enregistre les flux de l’entreprise. **À retenir** : chaque écriture respecte le principe de la partie double.",
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "resource_excerpt",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "location": {
+          "page": 4,
+          "charStart": 120,
+          "charEnd": 260
+        },
+        "quote": "Le compte de résultat présente les produits et les charges de l’exercice.",
+        "label": "Guide FI, p. 4",
+        "sources": [
+          {
+            "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "quote": "produits et charges de l’exercice"
+          }
+        ]
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "resource_excerpt",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+          "location": {
+            "page": 4,
+            "charStart": 120,
+            "charEnd": 260
+          },
+          "quote": "Le compte de résultat présente les produits et les charges de l’exercice.",
+          "label": "Guide FI, p. 4",
+          "sources": [
+            {
+              "chunkId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+              "quote": "produits et charges de l’exercice"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "choice_question",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "choice_question",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+          "mode": "single",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque"
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital"
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat"
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "open_question",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": [
+          "La partie double",
+          "L’égalité des débits et des crédits",
+          "La traçabilité des flux"
+        ],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe de la partie double",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre débit-crédit",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Toute opération affecte au moins deux comptes pour le même montant, ce qui maintient l’équilibre.",
+        "explanation": "La partie double garantit que chaque flux est enregistré deux fois, au débit d’un compte et au crédit d’un autre.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "open_question",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+          "answerMaxChars": 1500,
+          "criteria": [
+            {
+              "label": "Principe de la partie double",
+              "points": 5
+            },
+            {
+              "label": "Équilibre débit-crédit",
+              "points": 5
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "cloze",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "cloze",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+          "gaps": [
+            {
+              "id": 1,
+              "hint": "Ce que l’entreprise gagne"
+            },
+            {
+              "id": 2,
+              "hint": "Ce que l’entreprise dépense"
+            },
+            {
+              "id": 3,
+              "hint": "La différence des deux"
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "matching",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "matching",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+          "lefts": [
+            {
+              "id": "a",
+              "text": "Facture de vente"
+            },
+            {
+              "id": "b",
+              "text": "Relevé bancaire"
+            },
+            {
+              "id": "c",
+              "text": "Bulletin de paie"
+            }
+          ],
+          "rights": [
+            {
+              "id": "r1",
+              "text": "Cycle des immobilisations"
+            },
+            {
+              "id": "r2",
+              "text": "Cycle des salaires"
+            },
+            {
+              "id": "r3",
+              "text": "Cycle des ventes"
+            },
+            {
+              "id": "r4",
+              "text": "Cycle de trésorerie"
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "ordering",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "ordering",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+          "items": [
+            {
+              "id": "b",
+              "text": "Justifier les soldes des comptes"
+            },
+            {
+              "id": "c",
+              "text": "Arrêter et présenter les états financiers"
+            },
+            {
+              "id": "a",
+              "text": "Enregistrer les écritures de l’exercice"
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "categorization",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "categorization",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+          "categories": [
+            {
+              "id": "actif",
+              "label": "Actif"
+            },
+            {
+              "id": "passif",
+              "label": "Passif"
+            }
+          ],
+          "items": [
+            {
+              "id": "d",
+              "text": "Emprunt bancaire"
+            },
+            {
+              "id": "c",
+              "text": "Capital social"
+            },
+            {
+              "id": "b",
+              "text": "Stock de marchandises"
+            },
+            {
+              "id": "a",
+              "text": "Banque"
+            }
+          ],
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "recall_card",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "recall_card",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "front": "Que signifie le principe de la partie double ?",
+          "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+          "sourceLabel": "Guide FI, p. 4",
+          "mnemonic": "« Un débit, un crédit, même montant. »",
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "instruction",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "title": "Justifier un relevé bancaire",
+        "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+        "data": [
+          "Solde du relevé : 12 400 €",
+          "Solde comptable : 12 150 €",
+          "Frais bancaires : 250 €"
+        ],
+        "deliverable": "Un tableau de rapprochement complété et justifié.",
+        "production": {
+          "kind": "table",
+          "fields": [
+            {
+              "key": "libelle",
+              "label": "Libellé",
+              "type": "text"
+            }
+          ],
+          "columns": [
+            {
+              "key": "debit",
+              "label": "Débit",
+              "type": "number"
+            },
+            {
+              "key": "credit",
+              "label": "Crédit",
+              "type": "number"
+            },
+            {
+              "key": "sens",
+              "label": "Sens",
+              "type": "select",
+              "options": [
+                {
+                  "value": "D",
+                  "label": "Débit"
+                },
+                {
+                  "value": "C",
+                  "label": "Crédit"
+                }
+              ]
+            }
+          ],
+          "minRows": 1,
+          "maxRows": 5,
+          "initialRows": 2,
+          "checks": [
+            {
+              "type": "sum_equal",
+              "numberColumn": "debit",
+              "groupColumn": "sens",
+              "left": ["Débit"],
+              "right": ["Crédit"],
+              "leftLabel": "Débit",
+              "rightLabel": "Crédit",
+              "sideColumnLabel": "Sens"
+            }
+          ]
+        },
+        "explanationPrompt": "Expliquez avec vos mots pourquoi les deux soldes diffèrent.",
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "estimatedMinutes": 20,
+        "passPoints": 8,
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "instruction",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "title": "Justifier un relevé bancaire",
+          "taskMd": "À partir des données ci-dessous, complétez le tableau de rapprochement bancaire et justifiez chaque ligne par une phrase.",
+          "data": [
+            "Solde du relevé : 12 400 €",
+            "Solde comptable : 12 150 €",
+            "Frais bancaires : 250 €"
+          ],
+          "deliverable": "Un tableau de rapprochement complété et justifié.",
+          "production": {
+            "kind": "table",
+            "fields": [
+              {
+                "key": "libelle",
+                "label": "Libellé",
+                "type": "text"
+              }
+            ],
+            "columns": [
+              {
+                "key": "debit",
+                "label": "Débit",
+                "type": "number"
+              },
+              {
+                "key": "credit",
+                "label": "Crédit",
+                "type": "number"
+              },
+              {
+                "key": "sens",
+                "label": "Sens",
+                "type": "select",
+                "options": [
+                  {
+                    "value": "D",
+                    "label": "Débit"
+                  },
+                  {
+                    "value": "C",
+                    "label": "Crédit"
+                  }
+                ]
+              }
+            ],
+            "minRows": 1,
+            "maxRows": 5,
+            "initialRows": 2,
+            "checks": [
+              {
+                "type": "sum_equal",
+                "numberColumn": "debit",
+                "groupColumn": "sens",
+                "left": ["Débit"],
+                "right": ["Crédit"],
+                "leftLabel": "Débit",
+                "rightLabel": "Crédit",
+                "sideColumnLabel": "Sens"
+              }
+            ]
+          },
+          "explanationPrompt": "Expliquez avec vos mots pourquoi les deux soldes diffèrent.",
+          "hintsCount": 1,
+          "criteria": [
+            {
+              "key": "exactitude",
+              "label": "Exactitude des montants",
+              "points": 4
+            },
+            {
+              "key": "justification",
+              "label": "Justification des lignes",
+              "points": 3
+            },
+            {
+              "key": "presentation",
+              "label": "Présentation du tableau",
+              "points": 3
+            }
+          ],
+          "estimatedMinutes": 20,
+          "passPoints": 8,
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "scripted_dialogue",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "role": "Contrôleur de gestion",
+        "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+        "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+        "endCondition": "L’apprenant a distingué les deux effets et proposé une action corrective chiffrée.",
+        "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+        "maxTurns": 12,
+        "criteria": [
+          {
+            "key": "distinction",
+            "label": "Distinction prix / volume",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "action",
+            "label": "Action corrective",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "scripted_dialogue",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "role": "Contrôleur de gestion",
+          "context": "Vous êtes le contrôleur de gestion d’une PME. L’apprenant vous présente son analyse des écarts de marge.",
+          "learnerGoal": "Expliquer l’écart de marge en distinguant l’effet prix de l’effet volume.",
+          "openingLine": "Bonjour, la marge a baissé de deux points ce trimestre. Par où commençons-nous ?",
+          "maxTurns": 12
+        }
+      }
+    },
+    {
+      "type": "timer",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "timer",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "durationSec": 600,
+          "scope": "items",
+          "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+          "warnAtSec": 120,
+          "autoSubmit": true,
+          "sources": []
+        }
+      }
+    },
+    {
+      "type": "scoring",
+      "versionId": "99999999-9999-4999-8999-999999999999",
+      "payload": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "output": {
+        "brickId": "88888888-8888-4888-8888-888888888888",
+        "versionId": "99999999-9999-4999-8999-999999999999",
+        "type": "scoring",
+        "notionIds": [
+          "11111111-1111-4111-8111-111111111111",
+          "22222222-2222-4222-8222-222222222222",
+          "33333333-3333-4333-8333-333333333333"
+        ],
+        "publicPayload": {
+          "total": 20,
+          "threshold": 12,
+          "mode": "weighted",
+          "weights": [
+            {
+              "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+              "points": 5
+            },
+            {
+              "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+              "points": 15
+            }
+          ],
+          "display": "points",
+          "sources": []
+        }
+      }
+    }
+  ],
+  "grades": [
+    {
+      "name": "choice-single-correct",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": false,
+              "chosen": false
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": false
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "choice-single-wrong",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["b"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0,
+        "chosenDistractorNotionId": "22222222-2222-4222-8222-222222222222",
+        "confusions": [],
+        "normalizedResponse": "b",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": false
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": false,
+              "chosen": true
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "choice-single-trimmed",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["  a  "]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": false,
+              "chosen": false
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": false
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "choice-multiple-exact",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "multiple",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": true,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a", "b"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a,b",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": false
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "choice-multiple-missing",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "multiple",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": true,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.5,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": true,
+              "chosen": false
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "choice-multiple-extra",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "multiple",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": true,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a", "b", "c"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.5,
+        "chosenDistractorNotionId": "22222222-2222-4222-8222-222222222222",
+        "confusions": [],
+        "normalizedResponse": "a,b,c",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": true
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "choice-multiple-tie",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "multiple",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": true,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a", "c"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0,
+        "chosenDistractorNotionId": "22222222-2222-4222-8222-222222222222",
+        "confusions": [],
+        "normalizedResponse": "a,c",
+        "correction": {
+          "kind": "choice_question",
+          "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Le compte de banque",
+              "correct": true,
+              "chosen": true
+            },
+            {
+              "id": "b",
+              "text": "Le compte de capital",
+              "correct": true,
+              "chosen": false
+            },
+            {
+              "id": "c",
+              "text": "Le compte de résultat",
+              "correct": false,
+              "chosen": true
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "cloze-all-correct",
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "response": {
+        "gaps": {
+          "1": "produits",
+          "2": "charges",
+          "3": "résultat"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "produits|charges|resultat",
+        "correction": {
+          "kind": "cloze",
+          "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+          "gaps": [
+            {
+              "id": 1,
+              "given": "produits",
+              "expected": "produits",
+              "correct": true
+            },
+            {
+              "id": 2,
+              "given": "charges",
+              "expected": "charges",
+              "correct": true
+            },
+            {
+              "id": 3,
+              "given": "résultat",
+              "expected": "résultat",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "cloze-upper-case",
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "response": {
+        "gaps": {
+          "1": "PRODUITS",
+          "2": "CHARGES",
+          "3": "RÉSULTAT"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "produits|charges|resultat",
+        "correction": {
+          "kind": "cloze",
+          "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+          "gaps": [
+            {
+              "id": 1,
+              "given": "PRODUITS",
+              "expected": "produits",
+              "correct": true
+            },
+            {
+              "id": 2,
+              "given": "CHARGES",
+              "expected": "charges",
+              "correct": true
+            },
+            {
+              "id": 3,
+              "given": "RÉSULTAT",
+              "expected": "résultat",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "cloze-partial",
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "response": {
+        "gaps": {
+          "1": "produits",
+          "2": "faux",
+          "3": "faux"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.3333,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "produits|faux|faux",
+        "correction": {
+          "kind": "cloze",
+          "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+          "gaps": [
+            {
+              "id": 1,
+              "given": "produits",
+              "expected": "produits",
+              "correct": true
+            },
+            {
+              "id": 2,
+              "given": "faux",
+              "expected": "charges",
+              "correct": false
+            },
+            {
+              "id": 3,
+              "given": "faux",
+              "expected": "résultat",
+              "correct": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "matching-correct",
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "response": {
+        "pairs": {
+          "a": "r3",
+          "b": "r4",
+          "c": "r2"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "cycle des ventes|cycle de tresorerie|cycle des salaires",
+        "correction": {
+          "kind": "matching",
+          "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+          "pairs": [
+            {
+              "pairId": "a",
+              "left": "Facture de vente",
+              "expectedRight": "Cycle des ventes",
+              "givenRight": "Cycle des ventes",
+              "correct": true
+            },
+            {
+              "pairId": "b",
+              "left": "Relevé bancaire",
+              "expectedRight": "Cycle de trésorerie",
+              "givenRight": "Cycle de trésorerie",
+              "correct": true
+            },
+            {
+              "pairId": "c",
+              "left": "Bulletin de paie",
+              "expectedRight": "Cycle des salaires",
+              "givenRight": "Cycle des salaires",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "matching-swapped",
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "response": {
+        "pairs": {
+          "a": "r4",
+          "b": "r3",
+          "c": "r2"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.3333,
+        "chosenDistractorNotionId": null,
+        "confusions": [
+          {
+            "notionId": "11111111-1111-4111-8111-111111111111",
+            "confusedWithNotionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "notionId": "22222222-2222-4222-8222-222222222222",
+            "confusedWithNotionId": "11111111-1111-4111-8111-111111111111"
+          }
+        ],
+        "normalizedResponse": "cycle de tresorerie|cycle des ventes|cycle des salaires",
+        "correction": {
+          "kind": "matching",
+          "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+          "pairs": [
+            {
+              "pairId": "a",
+              "left": "Facture de vente",
+              "expectedRight": "Cycle des ventes",
+              "givenRight": "Cycle de trésorerie",
+              "correct": false
+            },
+            {
+              "pairId": "b",
+              "left": "Relevé bancaire",
+              "expectedRight": "Cycle de trésorerie",
+              "givenRight": "Cycle des ventes",
+              "correct": false
+            },
+            {
+              "pairId": "c",
+              "left": "Bulletin de paie",
+              "expectedRight": "Cycle des salaires",
+              "givenRight": "Cycle des salaires",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "matching-null",
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "response": {
+        "pairs": {
+          "a": null,
+          "b": null,
+          "c": null
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "||",
+        "correction": {
+          "kind": "matching",
+          "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+          "pairs": [
+            {
+              "pairId": "a",
+              "left": "Facture de vente",
+              "expectedRight": "Cycle des ventes",
+              "givenRight": null,
+              "correct": false
+            },
+            {
+              "pairId": "b",
+              "left": "Relevé bancaire",
+              "expectedRight": "Cycle de trésorerie",
+              "givenRight": null,
+              "correct": false
+            },
+            {
+              "pairId": "c",
+              "left": "Bulletin de paie",
+              "expectedRight": "Cycle des salaires",
+              "givenRight": null,
+              "correct": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "matching-extra-right",
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "response": {
+        "pairs": {
+          "a": "r4",
+          "b": "r4",
+          "c": "r2"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.6667,
+        "chosenDistractorNotionId": null,
+        "confusions": [
+          {
+            "notionId": "11111111-1111-4111-8111-111111111111",
+            "confusedWithNotionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "normalizedResponse": "cycle de tresorerie|cycle de tresorerie|cycle des salaires",
+        "correction": {
+          "kind": "matching",
+          "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+          "pairs": [
+            {
+              "pairId": "a",
+              "left": "Facture de vente",
+              "expectedRight": "Cycle des ventes",
+              "givenRight": "Cycle de trésorerie",
+              "correct": false
+            },
+            {
+              "pairId": "b",
+              "left": "Relevé bancaire",
+              "expectedRight": "Cycle de trésorerie",
+              "givenRight": "Cycle de trésorerie",
+              "correct": true
+            },
+            {
+              "pairId": "c",
+              "left": "Bulletin de paie",
+              "expectedRight": "Cycle des salaires",
+              "givenRight": "Cycle des salaires",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "ordering-correct",
+      "type": "ordering",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "response": {
+        "order": ["a", "b", "c"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a|b|c",
+        "correction": {
+          "kind": "ordering",
+          "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+          "positions": [
+            {
+              "id": "a",
+              "text": "Enregistrer les écritures de l’exercice",
+              "expectedIndex": 0,
+              "givenIndex": 0,
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Justifier les soldes des comptes",
+              "expectedIndex": 1,
+              "givenIndex": 1,
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Arrêter et présenter les états financiers",
+              "expectedIndex": 2,
+              "givenIndex": 2,
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "ordering-reversed",
+      "type": "ordering",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "response": {
+        "order": ["c", "b", "a"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.3333,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "c|b|a",
+        "correction": {
+          "kind": "ordering",
+          "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+          "positions": [
+            {
+              "id": "a",
+              "text": "Enregistrer les écritures de l’exercice",
+              "expectedIndex": 0,
+              "givenIndex": 2,
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Justifier les soldes des comptes",
+              "expectedIndex": 1,
+              "givenIndex": 1,
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Arrêter et présenter les états financiers",
+              "expectedIndex": 2,
+              "givenIndex": 0,
+              "correct": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "categorization-correct",
+      "type": "categorization",
+      "payload": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "response": {
+        "assignments": {
+          "a": "actif",
+          "b": "actif",
+          "c": "passif",
+          "d": "passif"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "a=actif|b=actif|c=passif|d=passif",
+        "correction": {
+          "kind": "categorization",
+          "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+          "items": [
+            {
+              "id": "a",
+              "text": "Banque",
+              "expectedCategoryId": "actif",
+              "expectedCategoryLabel": "Actif",
+              "givenCategoryId": "actif",
+              "givenCategoryLabel": "Actif",
+              "correct": true
+            },
+            {
+              "id": "b",
+              "text": "Stock de marchandises",
+              "expectedCategoryId": "actif",
+              "expectedCategoryLabel": "Actif",
+              "givenCategoryId": "actif",
+              "givenCategoryLabel": "Actif",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Capital social",
+              "expectedCategoryId": "passif",
+              "expectedCategoryLabel": "Passif",
+              "givenCategoryId": "passif",
+              "givenCategoryLabel": "Passif",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Emprunt bancaire",
+              "expectedCategoryId": "passif",
+              "expectedCategoryLabel": "Passif",
+              "givenCategoryId": "passif",
+              "givenCategoryLabel": "Passif",
+              "correct": true
+            }
+          ]
+        },
+        "feedbackTitle": "Exact."
+      }
+    },
+    {
+      "name": "categorization-swapped",
+      "type": "categorization",
+      "payload": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "response": {
+        "assignments": {
+          "a": "passif",
+          "b": "actif",
+          "c": "passif",
+          "d": "actif"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0.5,
+        "chosenDistractorNotionId": null,
+        "confusions": [
+          {
+            "notionId": "11111111-1111-4111-8111-111111111111",
+            "confusedWithNotionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "notionId": "22222222-2222-4222-8222-222222222222",
+            "confusedWithNotionId": "11111111-1111-4111-8111-111111111111"
+          }
+        ],
+        "normalizedResponse": "a=passif|b=actif|c=passif|d=actif",
+        "correction": {
+          "kind": "categorization",
+          "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+          "items": [
+            {
+              "id": "a",
+              "text": "Banque",
+              "expectedCategoryId": "actif",
+              "expectedCategoryLabel": "Actif",
+              "givenCategoryId": "passif",
+              "givenCategoryLabel": "Passif",
+              "correct": false
+            },
+            {
+              "id": "b",
+              "text": "Stock de marchandises",
+              "expectedCategoryId": "actif",
+              "expectedCategoryLabel": "Actif",
+              "givenCategoryId": "actif",
+              "givenCategoryLabel": "Actif",
+              "correct": true
+            },
+            {
+              "id": "c",
+              "text": "Capital social",
+              "expectedCategoryId": "passif",
+              "expectedCategoryLabel": "Passif",
+              "givenCategoryId": "passif",
+              "givenCategoryLabel": "Passif",
+              "correct": true
+            },
+            {
+              "id": "d",
+              "text": "Emprunt bancaire",
+              "expectedCategoryId": "passif",
+              "expectedCategoryLabel": "Passif",
+              "givenCategoryId": "actif",
+              "givenCategoryLabel": "Actif",
+              "correct": false
+            }
+          ]
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "recall-again",
+      "type": "recall_card",
+      "payload": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "response": {
+        "selfGrade": "again"
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": false,
+        "score": 0,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "again",
+        "correction": {
+          "kind": "recall_card",
+          "front": "Que signifie le principe de la partie double ?",
+          "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+          "selfGrade": "again",
+          "fsrsGrade": "again",
+          "correct": false,
+          "explanation": null
+        },
+        "feedbackTitle": "Pas tout à fait."
+      }
+    },
+    {
+      "name": "recall-good",
+      "type": "recall_card",
+      "payload": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "response": {
+        "selfGrade": "good"
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "outcome": {
+        "isCorrect": true,
+        "score": 1,
+        "chosenDistractorNotionId": null,
+        "confusions": [],
+        "normalizedResponse": "good",
+        "correction": {
+          "kind": "recall_card",
+          "front": "Que signifie le principe de la partie double ?",
+          "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+          "selfGrade": "good",
+          "fsrsGrade": "good",
+          "correct": true,
+          "explanation": null
+        },
+        "feedbackTitle": "Exact."
+      }
+    }
+  ],
+  "gradeErrors": [
+    {
+      "name": "choice-root-not-object",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": [],
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response"]
+    },
+    {
+      "name": "choice-unknown-key",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a"],
+        "extra": true
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response"]
+    },
+    {
+      "name": "choice-missing-key",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {},
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.optionIds"]
+    },
+    {
+      "name": "choice-unknown-option",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["zz"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.optionIds.0"]
+    },
+    {
+      "name": "choice-single-two-options",
+      "type": "choice_question",
+      "payload": {
+        "stem": "Quel compte augmente au débit lorsqu’une entreprise encaisse un client ?",
+        "mode": "single",
+        "options": [
+          {
+            "id": "a",
+            "text": "Le compte de banque",
+            "correct": true,
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "text": "Le compte de capital",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "text": "Le compte de résultat",
+            "correct": false,
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "explanation": "L’encaissement augmente le compte de banque au débit ; le compte de produit est crédité.",
+        "objective": "Distinguer un compte d’actif d’un compte de passif",
+        "sources": []
+      },
+      "response": {
+        "optionIds": ["a", "b"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.optionIds"]
+    },
+    {
+      "name": "cloze-missing-gap",
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "response": {
+        "gaps": {}
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.gaps.1", "response.gaps.2", "response.gaps.3"]
+    },
+    {
+      "name": "cloze-unknown-gap",
+      "type": "cloze",
+      "payload": {
+        "template": "L’état annuel présente les {{1}} et les {{2}} de l’exercice, puis dégage le {{3}}.",
+        "gaps": [
+          {
+            "id": 1,
+            "answers": ["produits", "revenus"],
+            "hint": "Ce que l’entreprise gagne"
+          },
+          {
+            "id": 2,
+            "answers": ["charges", "dépenses"],
+            "hint": "Ce que l’entreprise dépense"
+          },
+          {
+            "id": 3,
+            "answers": ["résultat", "benefice"],
+            "hint": "La différence des deux"
+          }
+        ],
+        "explanation": "Les produits diminués des charges donnent le résultat de l’exercice, bénéfice ou perte.",
+        "sources": []
+      },
+      "response": {
+        "gaps": {
+          "1": "produits",
+          "2": "charges",
+          "3": "résultat",
+          "99": "x"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.gaps.99"]
+    },
+    {
+      "name": "matching-unknown-right",
+      "type": "matching",
+      "payload": {
+        "instruction": "Associez chaque document au cycle comptable auquel il se rattache.",
+        "pairs": [
+          {
+            "id": "a",
+            "left": "Facture de vente",
+            "right": "Cycle des ventes",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "b",
+            "left": "Relevé bancaire",
+            "right": "Cycle de trésorerie",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          },
+          {
+            "id": "c",
+            "left": "Bulletin de paie",
+            "right": "Cycle des salaires",
+            "notionId": "33333333-3333-4333-8333-333333333333"
+          }
+        ],
+        "extraRights": ["Cycle des immobilisations"],
+        "explanation": "Chaque pièce justificative appartient à un cycle comptable précis, ce qui structure le classement.",
+        "sources": []
+      },
+      "response": {
+        "pairs": {
+          "a": "r99",
+          "b": null,
+          "c": null
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.pairs.a"]
+    },
+    {
+      "name": "ordering-duplicate",
+      "type": "ordering",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "response": {
+        "order": ["a", "a"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.order"]
+    },
+    {
+      "name": "ordering-wrong-length",
+      "type": "ordering",
+      "payload": {
+        "instruction": "Remettez dans l’ordre les étapes de la clôture comptable.",
+        "items": [
+          {
+            "id": "a",
+            "text": "Enregistrer les écritures de l’exercice"
+          },
+          {
+            "id": "b",
+            "text": "Justifier les soldes des comptes"
+          },
+          {
+            "id": "c",
+            "text": "Arrêter et présenter les états financiers"
+          }
+        ],
+        "explanation": "La clôture suit l’enregistrement, la justification puis l’arrêté des comptes.",
+        "sources": []
+      },
+      "response": {
+        "order": ["a"]
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.order", "response.order", "response.order"]
+    },
+    {
+      "name": "categorization-unknown-category",
+      "type": "categorization",
+      "payload": {
+        "instruction": "Classez chaque compte dans la catégorie de bilan qui lui correspond.",
+        "categories": [
+          {
+            "id": "actif",
+            "label": "Actif",
+            "notionId": "11111111-1111-4111-8111-111111111111"
+          },
+          {
+            "id": "passif",
+            "label": "Passif",
+            "notionId": "22222222-2222-4222-8222-222222222222"
+          }
+        ],
+        "items": [
+          {
+            "id": "a",
+            "text": "Banque",
+            "categoryId": "actif"
+          },
+          {
+            "id": "b",
+            "text": "Stock de marchandises",
+            "categoryId": "actif"
+          },
+          {
+            "id": "c",
+            "text": "Capital social",
+            "categoryId": "passif"
+          },
+          {
+            "id": "d",
+            "text": "Emprunt bancaire",
+            "categoryId": "passif"
+          }
+        ],
+        "explanation": "L’actif regroupe les emplois de l’entreprise, le passif ses ressources durables et ses dettes.",
+        "sources": []
+      },
+      "response": {
+        "assignments": {
+          "a": "inconnue",
+          "b": "actif",
+          "c": "passif",
+          "d": "passif"
+        }
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.assignments.a"]
+    },
+    {
+      "name": "recall-unknown-grade",
+      "type": "recall_card",
+      "payload": {
+        "front": "Que signifie le principe de la partie double ?",
+        "back": "Chaque opération est enregistrée au débit d’un compte et au crédit d’un autre, pour le même montant.",
+        "sourceLabel": "Guide FI, p. 4",
+        "mnemonic": "« Un débit, un crédit, même montant. »",
+        "sources": []
+      },
+      "response": {
+        "selfGrade": "parfait"
+      },
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["response.selfGrade"]
+    },
+    {
+      "name": "tutor-graded-open-question",
+      "type": "open_question",
+      "payload": {
+        "stem": "Expliquez pourquoi une écriture comptable respecte toujours l’équilibre débit-crédit.",
+        "expectedElements": [
+          "La partie double",
+          "L’égalité des débits et des crédits",
+          "La traçabilité des flux"
+        ],
+        "criteria": [
+          {
+            "key": "principe",
+            "label": "Principe de la partie double",
+            "points": 5,
+            "description": ""
+          },
+          {
+            "key": "equilibre",
+            "label": "Équilibre débit-crédit",
+            "points": 5,
+            "description": ""
+          }
+        ],
+        "answerMaxChars": 1500,
+        "modelAnswer": "Toute opération affecte au moins deux comptes pour le même montant, ce qui maintient l’équilibre.",
+        "explanation": "La partie double garantit que chaque flux est enregistré deux fois, au débit d’un compte et au crédit d’un autre.",
+        "objective": "Justifier le principe de la partie double",
+        "sources": []
+      },
+      "response": {},
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "GRADED_BY_TUTOR",
+      "paths": ["type"]
+    },
+    {
+      "name": "no-code-correction-timer",
+      "type": "timer",
+      "payload": {
+        "durationSec": 600,
+        "scope": "items",
+        "itemBrickIds": ["cccccccc-cccc-4ccc-8ccc-cccccccccccc"],
+        "warnAtSec": 120,
+        "autoSubmit": true,
+        "sources": []
+      },
+      "response": {},
+      "seed": "99999999-9999-4999-8999-999999999999",
+      "code": "RESPONSE_INVALID",
+      "paths": ["type"]
+    }
+  ],
+  "tutorScores": [
+    {
+      "points": 7.456,
+      "maxPoints": 10,
+      "value": 7.46
+    },
+    {
+      "points": -3,
+      "maxPoints": 10,
+      "value": 0
+    },
+    {
+      "points": 30,
+      "maxPoints": 10,
+      "value": 10
+    },
+    {
+      "points": 0,
+      "maxPoints": 0,
+      "value": 0
+    },
+    {
+      "points": 2.005,
+      "maxPoints": 3,
+      "value": 2.01
+    }
+  ]
+}

@@ -202,6 +202,30 @@ export function serializeRecording(results: ScenarioResult[]): string {
   return `${JSON.stringify({ version: 1, groups }, null, 2)}\n`;
 }
 
+/**
+ * A group-filtered recording replaces only the selected groups: the other group containers are
+ * written back untouched, so a partial record never flattens or loses another context.
+ */
+export function serializeMergedRecording(
+  kept: readonly { group: string; scenarios: { name: string; steps: Captured[] }[] }[],
+  results: ScenarioResult[],
+): string {
+  const byGroup = new Map<string, ScenarioResult[]>();
+  for (const result of results) {
+    if (!byGroup.has(result.group)) byGroup.set(result.group, []);
+    byGroup.get(result.group)?.push(result);
+  }
+  const fresh = [...byGroup.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([group, entries]) => ({
+      group,
+      scenarios: entries
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((entry) => ({ name: entry.name, steps: entry.steps })),
+    }));
+  return `${JSON.stringify({ version: 1, groups: [...kept, ...fresh] }, null, 2)}\n`;
+}
+
 /** First JSON path where two captured values differ (diagnostics of a divergence). */
 export function firstDifference(expected: unknown, actual: unknown, pointer = ''): string | null {
   if (JSON.stringify(expected) === JSON.stringify(actual)) return null;
@@ -278,18 +302,16 @@ async function main(argv: string[]): Promise<void> {
 
   if (!check) {
     // A group-filtered recording keeps the other groups of the committed oracle untouched.
-    const kept =
+    const keptGroups =
       groups.length === 0 || !fs.existsSync(RECORDING_FILE)
         ? []
         : (
             JSON.parse(fs.readFileSync(RECORDING_FILE, 'utf8')) as {
-              groups: { group: string; scenarios: ScenarioResult[] }[];
+              groups: { group: string; scenarios: { name: string; steps: Captured[] }[] }[];
             }
-          ).groups
-            .filter((group) => !groups.includes(group.group))
-            .flatMap((group) => group.scenarios);
+          ).groups.filter((group) => !groups.includes(group.group));
     fs.mkdirSync(path.dirname(RECORDING_FILE), { recursive: true });
-    fs.writeFileSync(RECORDING_FILE, serializeRecording([...kept, ...results]));
+    fs.writeFileSync(RECORDING_FILE, serializeMergedRecording(keptGroups, results));
     console.log(`Recorded ${String(results.length)} scenarios against ${target}`);
     return;
   }

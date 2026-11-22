@@ -14,11 +14,20 @@ from typing import Annotated, Any, Literal, Union, get_args, get_origin
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import learning as learning_texts
+from learny.shared.locale_fr import review as review_texts
 from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_INPUT, INVITATION_CODE_FORMAT
 from pydantic import BaseModel, ValidationError
 
 InputLocation = Literal["params", "query", "body"]
+
+# The OpenAPI document loses the object key order of the Zod contract, so the generated models
+# validate alphabetically. Zod reports the issues in declaration order; this table restores it for
+# the routes whose contract order is observable in the 400 body (ADR-1001).
+ISSUE_ORDER: dict[str, tuple[str, ...]] = {
+    "agenda.get": ("query.from", "query.to", "query.formation"),
+}
 
 # Pydantic error type -> the Zod expected type it stands for.
 _TYPE_ERRORS: dict[str, str] = {
@@ -73,6 +82,7 @@ def validate_input(
     *,
     status: int | None = None,
     strict: bool = False,
+    route_id: str | None = None,
 ) -> BaseModel:
     """Parses `value`; on failure raises `VALIDATION_FAILED` with the Zod-shaped issues."""
     try:
@@ -82,7 +92,7 @@ def validate_input(
             "VALIDATION_FAILED",
             INVALID_INPUT,
             **({} if status is None else {"status": status}),
-            errors=issues_of(model, error, location),
+            errors=issues_of(model, error, location, issue_order=ISSUE_ORDER.get(route_id or "")),
         ) from error
 
 
@@ -95,6 +105,8 @@ def issues_of(
     model: type[BaseModel],
     error: ValidationError,
     location: InputLocation,
+    *,
+    issue_order: Sequence[str] | None = None,
 ) -> list[dict[str, str]]:
     """Turns Pydantic errors into the `{path, message}` list `validate.ts` builds from Zod."""
     issues: list[dict[str, str]] = []
@@ -119,6 +131,9 @@ def issues_of(
             _insertion_index(issues, error, parent),
             {"path": _path(location, parent), "message": validation.unrecognized_keys(keys)},
         )
+    if issue_order:
+        ranked = {path: index for index, path in enumerate(issue_order)}
+        issues.sort(key=lambda issue: ranked.get(issue["path"], len(ranked)))
     return issues
 
 
@@ -231,6 +246,11 @@ def _annotation(model: type[BaseModel], loc: tuple[Any, ...]) -> Any:
         if not (isinstance(current, type) and issubclass(current, BaseModel)):
             return None
         field = current.model_fields.get(str(part))
+        if field is None:
+            field = next(
+                (item for item in current.model_fields.values() if item.alias == str(part)),
+                None,
+            )
         if field is None:
             return None
         current = field.annotation
@@ -383,6 +403,56 @@ def _legal_versions(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
     return errors or None
 
 
+def _agenda_range(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`AgendaQuery` refinements: ordered civil bounds and a window of 42 days at most."""
+    start = value.get("from_")
+    end = value.get("to")
+    if not isinstance(start, str) or not isinstance(end, str):
+        return None
+    if start > end:
+        return [_issue("query", learning_texts.AGENDA_RANGE_ORDER)]
+    if _civil_day_distance(start, end) > MAX_AGENDA_RANGE_DAYS:
+        return [_issue("query", learning_texts.AGENDA_RANGE_TOO_WIDE)]
+    return None
+
+
+def _slot_move_window(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`SlotMoveInput` refinement: the end of the moved window must follow its start."""
+    start = value.get("startsAt")
+    end = value.get("endsAt")
+    if not isinstance(start, str) or not isinstance(end, str):
+        return None
+    if end <= start:
+        return [
+            _issue(
+                learning_texts.PLANNING_MOVE_WINDOW_PATH,
+                learning_texts.PLANNING_MOVE_WINDOW_ORDER,
+            )
+        ]
+    return None
+
+
+def _civil_day_distance(start: str, end: str) -> int:
+    """`civilDayDistance`: civil days between two `YYYY-MM-DD` values (`to - from`)."""
+    from datetime import date
+
+    first = date(int(start[0:4]), int(start[5:7]), int(start[8:10]))
+    second = date(int(end[0:4]), int(end[5:7]), int(end[8:10]))
+    return (second - first).days
+
+
+MAX_AGENDA_RANGE_DAYS = 42
+
+
+def _review_answer_choice(value: Mapping[str, Any]) -> list[dict[str, str]] | None:
+    """`ReviewAnswerInputSchema` refinement: exactly one of `skipped` or `response` is required."""
+    has_skipped = value.get("skipped") is True
+    has_response = "response" in value and value.get("response") is not None
+    if has_skipped == has_response:
+        return [_issue("body", review_texts.REVIEW_ANSWER_EXCLUSIVE)]
+    return None
+
+
 REFINEMENTS: dict[str, Refinement] = {
     "me.update": _at_least_one_profile_field,
     "me.profile.update": _at_least_one_settings_field,
@@ -391,6 +461,9 @@ REFINEMENTS: dict[str, Refinement] = {
     "me.ai.task-models.update": _task_model,
     "me.legal.accept": _legal_versions,
     "sidebar.update": _sidebar_update,
+    "agenda.get": _agenda_range,
+    "slots.move": _slot_move_window,
+    "review.answer": _review_answer_choice,
 }
 
 
