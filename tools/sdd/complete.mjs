@@ -22,7 +22,8 @@ const missing = required.filter((k) => s.validations?.[k]?.status !== 'passed');
 if (missing.length) die(`Validations non réussies : ${missing.join(', ')}. Lancez node tools/sdd/validate.mjs ${spec.id}.`);
 const ev = path.join(P.evidence, spec.id);
 for (const f of ['summary.md', 'acceptance.md', 'checks.json']) if (!fs.existsSync(path.join(ev, f))) die(`Preuve manquante : evidence/${spec.id}/${f}`);
-if (!fs.existsSync(path.join(ev, 'video')) || !fs.readdirSync(path.join(ev, 'video')).some((f) => f.endsWith('.webm'))) die(`Aucune vidéo dans evidence/${spec.id}/video`);
+// Playwright writes .webm, the Maestro campaign of the mobile track writes .mp4 (SPEC-3001 EF-5).
+if (!fs.existsSync(path.join(ev, 'video')) || !fs.readdirSync(path.join(ev, 'video')).some((f) => f.endsWith('.webm') || f.endsWith('.mp4'))) die(`Aucune vidéo dans evidence/${spec.id}/video`);
 
 const git = isGitRepo();
 if (git) {
