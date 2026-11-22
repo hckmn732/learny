@@ -84,6 +84,14 @@ def handler(route_id: str) -> Callable[[Handler], Handler]:
     return decorator
 
 
+SPECIAL_PATH_PARAM = re.compile(r"\{([^}]+)\}")
+
+
+def special_path(path: str) -> str:
+    """FastAPI path in the Hono notation of `api/inventory.json` (`{runId}` -> `:runId`)."""
+    return SPECIAL_PATH_PARAM.sub(lambda match: ":" + match.group(1), path)
+
+
 def resolve_api_request_id(value: str | None) -> str:
     """`resolveApiRequestId`: a short alphanumeric id is reused, anything else becomes a UUID."""
     if value is not None and API_REQUEST_ID_PATTERN.match(value) is not None:
@@ -535,7 +543,7 @@ def install(app: FastAPI, context: PipelineContext, ownership: Any) -> list[str]
         if ownership.operations.get(spec.id) != "py":
             continue
         # The special registry serves it, with the development guard before authentication.
-        if ownership.special.get(special_key(spec.method, spec.path)) == "py":
+        if ownership.special.get(special_key(spec.method, special_path(spec.path))) == "py":
             continue
         if spec.id not in context.handlers:
             raise RuntimeError(f"py route {spec.id} has no handler")

@@ -18,7 +18,12 @@ from starlette.responses import Response
 
 from learny_api import pipeline
 from learny_api.generated.routes import ROUTES_BY_ID, RouteSpec
-from learny_api.pipeline import PipelineContext, api_problem_response, resolve_api_request_id
+from learny_api.pipeline import (
+    PipelineContext,
+    api_problem_response,
+    resolve_api_request_id,
+    special_path,
+)
 
 if TYPE_CHECKING:
     from learny.shared.ownership import Ownership
@@ -66,7 +71,7 @@ def install(app: FastAPI, context: PipelineContext, ownership: "Ownership") -> l
     installed: list[str] = []
     for route_id in DEVELOPMENT_ROUTE_IDS:
         spec = ROUTES_BY_ID[route_id]
-        if ownership.special.get(special_key(spec.method, spec.path)) != "py":
+        if ownership.special.get(special_key(spec.method, special_path(spec.path))) != "py":
             continue
         app.add_api_route(
             spec.path,
