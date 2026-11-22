@@ -71,7 +71,7 @@ async def send_email(
         component=deps.email.name,
         messageId=message_id,
     )
-    return {"messageId": message_id, "category": "service"}
+    return {"messageId": message_id, "category": rendered.category}
 
 
 async def can_send_service_email(deps: EngagementDeps, user_id: str) -> bool:

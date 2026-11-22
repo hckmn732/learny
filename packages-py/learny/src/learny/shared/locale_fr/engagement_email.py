@@ -144,3 +144,72 @@ RESEND_REFUSED = "Resend a refusé le message."
 ACTIVITY_TIME_FALLBACK = "00:00"
 ACTIVITY_TITLE_FALLBACK = "Activité"
 TOKEN_INVALID_USER = "Identifiant utilisateur invalide pour le jeton."
+
+# packages/notifications/emails/{deletion-scheduled,deletion-completed,export-ready}.tsx - the
+# transactional e-mails of SPEC-211, ported by SPEC-2206. Two tones, no unsubscribe link (ADR-0032).
+DELETION_SCHEDULED_SUBJECT = {
+    "vous": "Suppression de votre compte programmée le {scheduledLabel}",
+    "tu": "Suppression de ton compte programmée le {scheduledLabel}",
+}
+DELETION_SCHEDULED_PREVIEW = {
+    "vous": "Effective le {scheduledLabel} ; annulable à tout moment en vous reconnectant.",
+    "tu": "Effective le {scheduledLabel} ; annulable à tout moment en te reconnectant.",
+}
+DELETION_SCHEDULED_BODY = {
+    "vous": (
+        "Vous avez demandé la suppression de votre compte. Elle sera effective le "
+        "{scheduledLabel} : formations, apports, cours, résultats et réglages seront alors "
+        "effacés définitivement."
+    ),
+    "tu": (
+        "Tu as demandé la suppression de ton compte. Elle sera effective le {scheduledLabel} : "
+        "formations, apports, cours, résultats et réglages seront alors effacés définitivement."
+    ),
+}
+DELETION_SCHEDULED_CANCEL = {
+    "vous": "D’ici là, vous pouvez l’annuler à tout moment : il suffit de vous reconnecter.",
+    "tu": "D’ici là, tu peux l’annuler à tout moment : il suffit de te reconnecter.",
+}
+DELETION_SCHEDULED_CTA = "Annuler la suppression"
+DELETION_SCHEDULED_EXPORT_CTA = "Exporter mes données"
+PROFILE_PATH = "/parametres#profil"
+
+DELETION_COMPLETED_SUBJECT = {
+    "vous": "Votre compte Learny a été supprimé",
+    "tu": "Ton compte Learny a été supprimé",
+}
+DELETION_COMPLETED_PREVIEW = "Merci d’avoir appris avec Learny."
+DELETION_COMPLETED_BODY = {
+    "vous": (
+        "Comme demandé le {requestedLabel}, votre compte et toutes vos données ont été supprimés "
+        "définitivement aujourd’hui. Merci d’avoir appris avec Learny."
+    ),
+    "tu": (
+        "Comme demandé le {requestedLabel}, ton compte et toutes tes données ont été supprimés "
+        "définitivement aujourd’hui. Merci d’avoir appris avec Learny."
+    ),
+}
+
+EXPORT_READY_SUBJECT = {
+    "vous": "Votre export Learny est prêt",
+    "tu": "Ton export Learny est prêt",
+}
+EXPORT_READY_PREVIEW = "Archive de {sizeLabel}, lien valable 7 jours."
+EXPORT_READY_BODY = {
+    "vous": (
+        "Votre archive ({sizeLabel}) est prête. Le lien de téléchargement est valable 7 jours, "
+        "jusqu’au {expiresLabel}."
+    ),
+    "tu": (
+        "Ton archive ({sizeLabel}) est prête. Le lien de téléchargement est valable 7 jours, "
+        "jusqu’au {expiresLabel}."
+    ),
+}
+EXPORT_READY_CTA = "Télécharger mes données"
+EXPORT_READY_PRIVATE = {
+    "vous": "Ce lien est personnel : ne le transférez pas.",
+    "tu": "Ce lien est personnel : ne le transfère pas.",
+}
+
+# `templates/email/*.j2` - the labels shared by the three transactional templates.
+EMAIL_TRANSACTIONAL_CATEGORY = "transactional"

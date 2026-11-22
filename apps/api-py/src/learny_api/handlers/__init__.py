@@ -6,12 +6,24 @@ must happen before `pipeline.install` registers the `py`-owned routes of `api/ow
 
 from learny_api.handlers import (
     assessments,
+    billing,
     content,
     engagement,
     formation,
     identity,
     learning,
+    privacy,
     tutor,
 )
 
-__all__ = ["assessments", "content", "engagement", "formation", "identity", "learning", "tutor"]
+__all__ = [
+    "assessments",
+    "billing",
+    "content",
+    "engagement",
+    "formation",
+    "identity",
+    "learning",
+    "privacy",
+    "tutor",
+]

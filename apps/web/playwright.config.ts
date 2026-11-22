@@ -205,6 +205,10 @@ export default defineConfig({
         // relay exactly like Hono does (SPEC-208 origin guard) — same secret, same forwarded host.
         API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         TRUST_PROXY: 'true',
+        // SPEC-2206: the billing routes owned by `py` resolve the simulated Stripe gateway
+        // explicitly. `STRIPE_MODE=mock` needs no key and opens no socket (`build_stripe_gateway`);
+        // the webhook tolerance and the error codes are those of ADR-2031.
+        STRIPE_MODE: 'mock',
       },
     },
     {

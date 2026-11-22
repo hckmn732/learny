@@ -139,6 +139,7 @@ class EmailMessage:
     text: str
     headers: Mapping[str, str]
     tags: tuple[EmailTag, ...]
+    category: str = "service"
 
 
 @dataclass(frozen=True, slots=True)
@@ -150,6 +151,7 @@ class RenderedEmail:
     text: str
     headers: Mapping[str, str]
     tags: tuple[EmailTag, ...]
+    category: str = "service"
 
 
 @dataclass(frozen=True, slots=True)

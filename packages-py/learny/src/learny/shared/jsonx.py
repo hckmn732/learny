@@ -42,6 +42,30 @@ def dumps(value: JsonValue) -> bytes:
     return _encode(value).encode("utf-8")
 
 
+def dumps_pretty(value: JsonValue, indent: int = 2) -> bytes:
+    """`JSON.stringify(value, null, indent)` as UTF-8 bytes (the archive files of SPEC-211)."""
+    return _encode_indented(value, 0, indent).encode("utf-8")
+
+
+def _encode_indented(value: JsonValue, depth: int, indent: int) -> str:
+    padding = " " * (indent * (depth + 1))
+    closing = " " * (indent * depth)
+    if isinstance(value, (list, tuple)):
+        if len(value) == 0:
+            return "[]"
+        members = ",\n".join(f"{padding}{_encode_indented(item, depth + 1, indent)}" for item in value)
+        return f"[\n{members}\n{closing}]"
+    if isinstance(value, dict):
+        if len(value) == 0:
+            return "{}"
+        members = ",\n".join(
+            f"{padding}{_encode_string(str(key))}: {_encode_indented(item, depth + 1, indent)}"
+            for key, item in value.items()
+        )
+        return f"{{\n{members}\n{closing}}}"
+    return _encode(value)
+
+
 def _utf16_key(key: str) -> bytes:
     """JavaScript sorts object keys by UTF-16 code units, not by code points."""
     return key.encode("utf-16-be")

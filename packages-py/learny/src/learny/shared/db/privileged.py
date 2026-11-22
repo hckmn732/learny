@@ -61,6 +61,22 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the pause journals its own action with the service role, exactly like the
         # TypeScript `recordPauseAction` (the RLS policy reserves inserts to that role).
         "learny.engagement.application.pause": "pause journal row written after the commit",
+        # SPEC-2206 - the subscription row and the Stripe event journal are read and written with
+        # the owner role, exactly like the TypeScript `serviceDb()` of `billing/` (ADR-0215).
+        "learny.billing.application.checkout": "subscription row of the Checkout and the portal",
+        "learny.billing.application.webhook": "claim of the Stripe event and subscription state",
+        # SPEC-2206 - the export request reads the profile time zone and writes the job row and its
+        # outbox event with the owner role, like the TypeScript `serviceDb()` (SPEC-211 EF-1).
+        "learny.privacy.application.export": "export job row, quota and outbox event",
+        # SPEC-2206 - the deletion schedule locks and updates the profile columns (SPEC-211 EF-5).
+        "learny.privacy.application.deletion": "deletion schedule of the profile",
+        # SPEC-2206 - the data-export job reads and writes the job row with the owner role, like the
+        # TypeScript `ctx.sdb` of the Inngest function (SPEC-211 EF-1, ET-2).
+        "learny.privacy.application.export_job": "data-export job row and archive finalisation",
+        # SPEC-2206 - the nightly account deletion and the purge act on behalf of a learner who may
+        # already be gone, so they need the owner role (SPEC-211 EF-7, EF-8).
+        "learny.privacy.application.deletion_job": "nightly deletion of due accounts",
+        "learny.privacy.application.purge": "nightly purge of expired exports",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

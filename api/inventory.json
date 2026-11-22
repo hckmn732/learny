@@ -339,6 +339,7 @@
       "events": [],
       "tests": [
         "apps/web/e2e/specs/p2/spec-210.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p7/spec-725.spec.ts"
       ],
       "gap": false
@@ -368,6 +369,7 @@
       "tests": [
         "apps/api/test/integration/relay-e2e.test.ts",
         "apps/web/e2e/specs/p2/spec-210.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "packages/services/src/security/origin-guard.test.ts"
       ],
       "gap": false
@@ -7247,6 +7249,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p7/spec-707.spec.ts",
         "packages/http/src/security.test.ts",
         "packages/services/src/legal/accept.test.ts"
@@ -7279,6 +7282,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p7/spec-707.spec.ts",
         "packages/http/src/security.test.ts",
         "packages/services/src/legal/accept.test.ts",
@@ -7313,6 +7317,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "packages/services/src/legal/accept.test.ts"
       ],
       "gap": false
@@ -7346,6 +7351,7 @@
       "events": [],
       "tests": [
         "apps/web/e2e/journeys/data-rights.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p7/spec-707.spec.ts",
         "packages/services/src/legal/accept.test.ts",
         "packages/services/test/integration/legal.test.ts"
@@ -7397,6 +7403,7 @@
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
         "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p22/spec-2205.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",
         "apps/web/e2e/specs/p6/formation-management.spec.ts",
@@ -7943,6 +7950,7 @@
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
         "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p22/spec-2205.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2206.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",
         "apps/web/e2e/specs/p6/formation-management.spec.ts",

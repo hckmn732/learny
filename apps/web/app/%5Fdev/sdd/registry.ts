@@ -37,6 +37,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-2205'),
   },
+  'SPEC-2206': {
+    title: 'Domaines billing et privacy, abonnements et données personnelles en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2206'),
+  },
   'SPEC-1302': {
     title: 'Migration terminée',
     titleTestId: 'sdd-title',
