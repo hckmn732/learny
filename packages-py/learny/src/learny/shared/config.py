@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     app_env: str = "local"
     # The facade relays every operation to Hono until the ownership table flips an entry.
     py_hono_upstream_url: str = "http://127.0.0.1:3102"
+    # Raw value of the development guard (SPEC-201 ET-7): only "true" and "1" open the routes.
+    enable_sdd_pages: str | None = None
     ownership_overrides: str | None = None
     sentry_dsn: str | None = None
     commit: str = "unknown"

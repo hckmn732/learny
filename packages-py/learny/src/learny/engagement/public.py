@@ -88,6 +88,7 @@ from learny.engagement.application.unsubscribe import (
     unsubscribe_invalid,
 )
 from learny.engagement.application.weekly_review import get_weekly_review
+from learny.engagement.domain.automations import decode_cursor, encode_cursor
 
 __all__ = [
     "LOCAL_TICK_EVENT",
@@ -101,9 +102,11 @@ __all__ = [
     "complete_pause_diagnostic",
     "count_sent_notifications",
     "decline_automation_action",
+    "decode_cursor",
     "deliver_due_deliveries",
     "deliver_notification",
     "disable_email_channel",
+    "encode_cursor",
     "end_pause",
     "ensure_practice_exercise",
     "expire_due_automation_actions",

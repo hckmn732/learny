@@ -234,6 +234,8 @@ def create_request_origin_guard(env: Mapping[str, str | None]) -> RequestOriginG
 def settings_env(settings: Any) -> dict[str, str | None]:
     """The environment mapping the ported helpers expect, read from `Settings`."""
     return {
+        "APP_ENV": settings.app_env,
+        "ENABLE_SDD_PAGES": settings.enable_sdd_pages,
         "NEXT_PUBLIC_APP_URL": settings.next_public_app_url,
         "ALLOWED_ORIGINS": settings.allowed_origins,
         "API_PROXY_SECRET": settings.api_proxy_secret,

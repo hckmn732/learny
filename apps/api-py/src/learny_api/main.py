@@ -17,7 +17,7 @@ from learny.shared.deps import build_deps
 from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
 from starlette.responses import JSONResponse, Response
 
-from learny_api import handlers, pipeline, relay  # noqa: F401 - handlers registers @handler roles
+from learny_api import handlers, pipeline, relay, special  # noqa: F401 - handlers registers roles
 from learny_api.ownership import (
     Ownership,
     load_ownership,
@@ -123,7 +123,9 @@ def create_app(
     app.state.ownership = resolved_ownership
     app.state.pipeline = resolved_context
 
-    # Python-owned operations first: the catch-all relay below only sees what is still `ts`.
+    # Special routes first: a development route must refuse before any authentication, and the
+    # catch-all relay below only sees what is still `ts` (SPEC-2207).
+    special.install(app, resolved_context, resolved_ownership)
     pipeline.install(app, resolved_context, resolved_ownership)
 
     @app.api_route(

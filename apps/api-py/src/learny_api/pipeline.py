@@ -29,6 +29,7 @@ from learny.shared.locale_fr.details import (
     RATE_LIMITED,
     UNAUTHENTICATED,
 )
+from learny.shared.ownership import special_key
 from pydantic import BaseModel, ValidationError
 from starlette.responses import Response
 
@@ -532,6 +533,9 @@ def install(app: FastAPI, context: PipelineContext, ownership: Any) -> list[str]
     installed: list[str] = []
     for spec in ROUTES:
         if ownership.operations.get(spec.id) != "py":
+            continue
+        # The special registry serves it, with the development guard before authentication.
+        if ownership.special.get(special_key(spec.method, spec.path)) == "py":
             continue
         if spec.id not in context.handlers:
             raise RuntimeError(f"py route {spec.id} has no handler")

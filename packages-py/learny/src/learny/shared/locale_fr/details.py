@@ -230,3 +230,13 @@ STORAGE_ACCESS_SECRET_MISSING = "Accès au stockage indisponible : secret JWT ab
 # --------------------------------------------------------------------------------------------------
 USER_ID_INVALID = "Identifiant utilisateur invalide."
 MODULE_NOT_FOUND = "Module introuvable."
+
+# packages/http/src/dev-guard.ts (SPEC-201 ET-7, CL-10, ported by SPEC-2207).
+RESOURCE_NOT_FOUND = "Ressource introuvable."
+
+# packages/services/src/dev/echo.ts (SPEC-201): demonstration payloads.
+DEV_ECHO_FORMATION_LIMIT = (
+    "Vous avez déjà trois formations actives : archivez-en une pour en créer une autre."
+)
+CURSOR_INVALID = "Le curseur de pagination est illisible."
+CURSOR_INVALID_ITEM = "Curseur invalide."

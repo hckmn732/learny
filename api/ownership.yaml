@@ -32,7 +32,7 @@ operations:
   'courses.conversations.list': py
   'courses.progress': py
   'dev.cron.hourlyTick': ts
-  'dev.echo': ts
+  'dev.echo': py
   'dev.email.outbox': ts
   'dev.email.outbox.purge': ts
   'dev.email.preview': ts
@@ -40,7 +40,7 @@ operations:
   'dev.events.demo.run': ts
   'dev.events.demo.start': ts
   'dev.events.outbox': ts
-  'dev.items': ts
+  'dev.items': py
   'dev.notificationsGenerate': ts
   'dev.notify': ts
   'dev.personal-data.deletion.cancel': ts
@@ -229,7 +229,7 @@ special:
   'GET /api/v1/dev/sdd/email/preview': ts
   'GET /api/v1/dev/sdd/events/demo/:runId': ts
   'GET /api/v1/dev/sdd/events/outbox': ts
-  'GET /api/v1/dev/sdd/items': ts
+  'GET /api/v1/dev/sdd/items': py
   'GET /api/v1/dev/sdd/relay-stream': ts
   'GET /api/v1/dev/sdd/stripe/events': ts
   'GET /api/v1/health': ts
@@ -237,7 +237,7 @@ special:
   'POST /api/v1/_dev/demo-job': ts
   'POST /api/v1/_dev/secret-scan': ts
   'POST /api/v1/dev/sdd/cron/hourly-tick': ts
-  'POST /api/v1/dev/sdd/echo': ts
+  'POST /api/v1/dev/sdd/echo': py
   'POST /api/v1/dev/sdd/email/send': ts
   'POST /api/v1/dev/sdd/events/demo': ts
   'POST /api/v1/dev/sdd/notifications/generate': ts
