@@ -21,7 +21,7 @@ operations:
   'cadrage.message': py
   'cadrage.page': py
   'chapters.complete': py
-  'chapters.summary': ts
+  'chapters.summary': py
   'conversations.get': ts
   'conversations.messages': ts
   'conversations.self-test.answer': ts

@@ -149,3 +149,10 @@ async def course_sections_report(call: Call) -> Any:
 
 
 _ = AppError
+
+
+@handler("chapters.summary")
+async def chapters_summary(call: Call) -> Any:
+    return await content.submit_chapter_summary(
+        call.deps, _actor(call), _params(call)["cid"], _body(call), _request_key(call)
+    )
