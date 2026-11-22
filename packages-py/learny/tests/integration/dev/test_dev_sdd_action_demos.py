@@ -38,6 +38,12 @@ ENABLED = {"APP_ENV": "test", "ENABLE_SDD_PAGES": "true"}
 JSON_ACCEPT = {"accept": "application/json"}
 IDEMPOTENT = {"idempotency-key": "demo-sdd-action-1", **JSON_ACCEPT}
 COUNT_DEMO_RUNS = text("select count(*)::int as count from auth.users where email like 'sdd-506-demo-%'")
+# A seeded base gives the demonstration account a group (SPEC-111) and the group owner cannot leave
+# it (BR, `assert_group_owner_not_removed`). The fixture deletes the group first so the page can be
+# observed in its "no demonstration account" state whatever the state of the base.
+DELETE_DEMO_GROUPS = text(
+    "delete from public.groups where owner_id = (select id from auth.users where email = :email)"
+)
 
 
 @pytest.fixture(autouse=True)
@@ -62,6 +68,7 @@ async def seed_demo_account(database: Database) -> str:
 
 async def remove_demo_account(database: Database) -> None:
     async with database.service_tx() as tx:
+        await tx.conn.execute(DELETE_DEMO_GROUPS, {"email": fixture.DEMO_USER_EMAIL})
         await tx.conn.execute(DELETE_AUTH_USER, {"email": fixture.DEMO_USER_EMAIL})
 
 
