@@ -111,11 +111,11 @@ operations:
   'exam.format.confirm': py
   'exam.intro': py
   'exam.questions.mark': py
-  'exercises.detail': ts
-  'exercises.hint': ts
-  'exercises.saveDraft': ts
-  'exercises.start': ts
-  'exercises.submit': ts
+  'exercises.detail': py
+  'exercises.hint': py
+  'exercises.saveDraft': py
+  'exercises.start': py
+  'exercises.submit': py
   'formations.access': py
   'formations.archive': py
   'formations.create': py
@@ -182,7 +182,7 @@ operations:
   'notifications.unreadCount': ts
   'notionGraph.get': py
   'offline.pack': py
-  'offline.sync': ts
+  'offline.sync': py
   'programme.adjust': py
   'programme.generate': py
   'programme.get': py
@@ -196,9 +196,9 @@ operations:
   'quiz.attempts.get': py
   'quiz.attempts.result': py
   'quiz.attempts.submit': py
-  'remediation.complete': ts
-  'remediation.get': ts
-  'remediation.prepare': ts
+  'remediation.complete': py
+  'remediation.get': py
+  'remediation.prepare': py
   'resources.create': ts
   'resources.delete': ts
   'resources.finalize': ts

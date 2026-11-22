@@ -1984,3 +1984,984 @@ async def read_result_remediation(
     )
     found = result.mappings().first()
     return None if found is None else row_of(found)
+
+
+# --------------------------------------------------------------------------------------------------
+# exercises (packages/services/src/exercises/{exercise-store,attempt-service}.ts, SPEC-613)
+# --------------------------------------------------------------------------------------------------
+
+READ_EXERCISE = text(
+    """
+    select act.id::text as exercise_id,
+           act.formation_id::text as formation_id,
+           f.title as formation_title,
+           act.module_id::text as module_id,
+           m.title as module_title,
+           m.position as module_position,
+           (b.notion_ids)[1]::text as notion_id,
+           n.label as notion_label,
+           v.payload as payload
+      from public.activities act
+      join public.formations f on f.id = act.formation_id
+      join public.modules m on m.id = act.module_id
+      join public.brick_versions v
+        on v.id = (act.items -> 0 ->> 'brickVersionId')::uuid
+      join public.bricks b on b.id = v.brick_id
+      join public.notions n on n.id = (b.notion_ids)[1]
+     where act.id = cast(:exercise_id as uuid)
+       and act.owner_id = cast(:user_id as uuid)
+       and act.kind = 'exercise'
+       and act.status = 'ready'
+    """
+)
+
+READ_EXERCISE_NOTION_STATE = text(
+    """
+    select mastery::text as mastery, gap_nature::text as gap_nature
+      from public.notion_states
+     where user_id = cast(:user_id as uuid)
+       and notion_id = cast(:notion_id as uuid)
+    """
+)
+
+READ_EXERCISE_LATEST_ATTEMPT = text(
+    """
+    select a.id::text as id,
+           a.status::text as status,
+           a.hints_used,
+           a.started_at,
+           a.submitted_at,
+           a.duration_ms,
+           a.review_feedback,
+           ans.response,
+           ans.feedback,
+           ans.score,
+           ans.max_score,
+           ans.is_correct
+      from public.attempts a
+      left join public.answers ans
+        on ans.attempt_id = a.id and ans.position = 1
+     where a.user_id = cast(:user_id as uuid)
+       and a.activity_id = cast(:exercise_id as uuid)
+     order by a.attempt_no desc
+     limit 1
+    """
+)
+
+LOCK_EXERCISE_LATEST_ATTEMPT = text(
+    """
+    select a.id::text as id,
+           a.status::text as status,
+           a.hints_used,
+           a.started_at,
+           a.submitted_at,
+           a.duration_ms,
+           a.review_feedback,
+           null as response,
+           null as feedback,
+           null as score,
+           null as max_score,
+           null as is_correct
+      from public.attempts a
+     where a.user_id = cast(:user_id as uuid)
+       and a.activity_id = cast(:exercise_id as uuid)
+     order by a.attempt_no desc
+     limit 1
+     for update
+    """
+)
+
+LOCK_EXERCISE_ACTIVITY = text(
+    """
+    select id::text as id, status::text as status
+      from public.activities
+     where id = cast(:exercise_id as uuid) and owner_id = cast(:user_id as uuid)
+     for update
+    """
+)
+
+NEXT_EXERCISE_ATTEMPT_NO = text(
+    """
+    select coalesce(max(attempt_no), 0) + 1 as attempt_no
+      from public.attempts
+     where activity_id = cast(:exercise_id as uuid) and user_id = cast(:user_id as uuid)
+    """
+)
+
+INSERT_EXERCISE_ATTEMPT = text(
+    """
+    insert into public.attempts (user_id, activity_id, attempt_no)
+    values (cast(:user_id as uuid), cast(:exercise_id as uuid), :attempt_no)
+    on conflict (activity_id, user_id, attempt_no) do nothing
+    returning id::text as id, status::text as status, hints_used, started_at
+    """
+)
+
+UPSERT_EXERCISE_ANSWER = text(
+    """
+    insert into public.answers (
+      attempt_id, brick_version_id, position, response, is_correct, score, max_score,
+      graded_by, feedback, answered_at
+    ) values (
+      cast(:attempt_id as uuid),
+      cast(:version_id as uuid),
+      1,
+      cast(:response as jsonb),
+      :is_correct,
+      :score,
+      :max_score,
+      cast(:graded_by as public.grader),
+      cast(:feedback as jsonb),
+      cast(:answered_at as timestamptz)
+    )
+    on conflict (attempt_id, position) do update set
+      response = excluded.response,
+      is_correct = excluded.is_correct,
+      score = excluded.score,
+      max_score = excluded.max_score,
+      graded_by = excluded.graded_by,
+      feedback = excluded.feedback,
+      answered_at = excluded.answered_at
+    """
+)
+
+READ_EXERCISE_BRICK_VERSION_ID = text(
+    """
+    select (items -> 0 ->> 'brickVersionId') as version_id
+      from public.activities
+     where id = cast(:exercise_id as uuid) and owner_id is not null
+    """
+)
+
+READ_OWNED_RESOURCE_FILE = text(
+    """
+    select id::text as id, mime, size_bytes
+      from public.resources
+     where id = cast(:resource_id as uuid)
+       and owner_id = cast(:user_id as uuid)
+       and deleted_at is null
+    """
+)
+
+UPDATE_EXERCISE_GRADED_ATTEMPT = text(
+    """
+    update public.attempts
+       set status = 'graded',
+           submitted_at = cast(:now as timestamptz),
+           duration_ms = greatest(
+             0,
+             floor(extract(epoch from (cast(:now as timestamptz) - started_at)) * 1000)::int
+           ),
+           score = :score,
+           passed = :passed,
+           per_notion = cast(:per_notion as jsonb),
+           hints_used = :hints_used,
+           review_feedback = cast(:review_feedback as jsonb)
+     where id = cast(:attempt_id as uuid)
+       and user_id = cast(:user_id as uuid)
+       and status = 'in_progress'
+    """
+)
+
+UPDATE_EXERCISE_MASTERY_AFTER = text(
+    """
+    update public.attempts
+       set review_feedback = jsonb_set(
+             coalesce(review_feedback, '{}'::jsonb),
+             '{masteryAfter}',
+             to_jsonb(cast(:mastery_after as numeric))
+           )
+     where id = cast(:attempt_id as uuid)
+    """
+)
+
+LOCK_EXERCISE_ATTEMPT = text("select pg_advisory_xact_lock(hashtextextended(:lock_key, 0))")
+
+
+async def read_exercise(tx: Tx, user_id: str, exercise_id: str) -> Mapping[str, Any] | None:
+    """`readExercise`: one exercise of the learner, with its immutable instruction payload."""
+    result = await tx.conn.execute(READ_EXERCISE, {"user_id": user_id, "exercise_id": exercise_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_exercise_notion_state(tx: Tx, user_id: str, notion_id: str) -> Mapping[str, Any] | None:
+    """`readNotionState`: the stored mastery and gap nature of the exercise notion."""
+    result = await tx.conn.execute(READ_EXERCISE_NOTION_STATE, {"user_id": user_id, "notion_id": notion_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_exercise_latest_attempt(tx: Tx, user_id: str, exercise_id: str) -> Mapping[str, Any] | None:
+    """`readLatestAttempt`: the latest attempt and the answer stored at position one."""
+    result = await tx.conn.execute(
+        READ_EXERCISE_LATEST_ATTEMPT, {"user_id": user_id, "exercise_id": exercise_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def lock_exercise_latest_attempt(tx: Tx, user_id: str, exercise_id: str) -> Mapping[str, Any] | None:
+    """`lockLatestAttempt`: the latest attempt row locked for the transition."""
+    result = await tx.conn.execute(
+        LOCK_EXERCISE_LATEST_ATTEMPT, {"user_id": user_id, "exercise_id": exercise_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def lock_exercise_activity(tx: Tx, user_id: str, exercise_id: str) -> Mapping[str, Any] | None:
+    """`createAttempt`: the activity row locked before the attempt numbering."""
+    result = await tx.conn.execute(LOCK_EXERCISE_ACTIVITY, {"user_id": user_id, "exercise_id": exercise_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def lock_exercise_attempt(tx: Tx, user_id: str, exercise_id: str) -> None:
+    """`exercise-attempt:<learner>:<exercise>`: one transition at a time."""
+    await tx.conn.execute(LOCK_EXERCISE_ATTEMPT, {"lock_key": f"exercise-attempt:{user_id}:{exercise_id}"})
+
+
+async def read_next_exercise_attempt_no(tx: Tx, user_id: str, exercise_id: str) -> int:
+    """`coalesce(max(attempt_no), 0) + 1` of `createAttempt`."""
+    result = await tx.conn.execute(NEXT_EXERCISE_ATTEMPT_NO, {"user_id": user_id, "exercise_id": exercise_id})
+    found = result.mappings().first()
+    return 1 if found is None else int(found["attempt_no"])
+
+
+async def insert_exercise_attempt(
+    tx: Tx, *, user_id: str, exercise_id: str, attempt_no: int
+) -> Mapping[str, Any] | None:
+    """`createAttempt`: one attempt, `None` when a concurrent transaction won the number."""
+    result = await tx.conn.execute(
+        INSERT_EXERCISE_ATTEMPT,
+        {"user_id": user_id, "exercise_id": exercise_id, "attempt_no": attempt_no},
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def upsert_exercise_answer(
+    tx: Tx,
+    *,
+    attempt_id: str,
+    version_id: str,
+    response: str,
+    is_correct: bool | None = None,
+    score: float | int | None = None,
+    max_score: float | int | None = None,
+    graded_by: str | None = None,
+    feedback: str | None = None,
+    answered_at: str,
+) -> None:
+    """`upsertAnswer`: rewrites the answer at position one without touching the rest."""
+    await tx.conn.execute(
+        UPSERT_EXERCISE_ANSWER,
+        {
+            "attempt_id": attempt_id,
+            "version_id": version_id,
+            "response": response,
+            "is_correct": is_correct,
+            "score": score,
+            "max_score": max_score,
+            "graded_by": graded_by,
+            "feedback": feedback,
+            "answered_at": answered_at,
+        },
+    )
+
+
+async def read_exercise_brick_version_id(tx: Tx, exercise_id: str) -> str | None:
+    """`readBrickVersionId`: the brick version recorded by the exercise items."""
+    result = await tx.conn.execute(READ_EXERCISE_BRICK_VERSION_ID, {"exercise_id": exercise_id})
+    found = result.mappings().first()
+    return None if found is None else found["version_id"]
+
+
+async def read_owned_resource_file(tx: Tx, user_id: str, resource_id: str) -> Mapping[str, Any] | None:
+    """`assertFileOwned`: an owned, not deleted resource, with its mime and size."""
+    result = await tx.conn.execute(READ_OWNED_RESOURCE_FILE, {"user_id": user_id, "resource_id": resource_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def update_exercise_graded_attempt(
+    tx: Tx,
+    *,
+    attempt_id: str,
+    user_id: str,
+    now: str,
+    score: float,
+    passed: bool,
+    per_notion: str,
+    hints_used: int,
+    review_feedback: str,
+) -> None:
+    """`persistSubmission`: the graded attempt, its score, its verdict and its feedback."""
+    await tx.conn.execute(
+        UPDATE_EXERCISE_GRADED_ATTEMPT,
+        {
+            "attempt_id": attempt_id,
+            "user_id": user_id,
+            "now": now,
+            "score": score,
+            "passed": passed,
+            "per_notion": per_notion,
+            "hints_used": hints_used,
+            "review_feedback": review_feedback,
+        },
+    )
+
+
+async def update_exercise_mastery_after(tx: Tx, *, attempt_id: str, mastery_after: float) -> None:
+    """`submitExercise`: the mastery after the application, kept on the attempt feedback."""
+    await tx.conn.execute(
+        UPDATE_EXERCISE_MASTERY_AFTER,
+        {"attempt_id": attempt_id, "mastery_after": mastery_after},
+    )
+
+
+INCREMENT_EXERCISE_HINTS = text(
+    """
+    update public.attempts
+       set hints_used = hints_used + 1
+     where id = cast(:attempt_id as uuid)
+       and user_id = cast(:user_id as uuid)
+       and status = 'in_progress'
+       and hints_used < 2
+    returning hints_used
+    """
+)
+
+
+async def increment_exercise_hints(tx: Tx, *, attempt_id: str, user_id: str) -> int | None:
+    """`requestExerciseHint`: one hint at a time, never more than two; `None` at the cap."""
+    result = await tx.conn.execute(INCREMENT_EXERCISE_HINTS, {"attempt_id": attempt_id, "user_id": user_id})
+    found = result.mappings().first()
+    return None if found is None else int(found["hints_used"])
+
+
+# --------------------------------------------------------------------------------------------------
+# remediation (packages/services/src/remediation/index.ts, SPEC-612, ADR-0173)
+# --------------------------------------------------------------------------------------------------
+
+READ_REMEDIATION_MODULE = text(
+    """
+    select m.id::text as id,
+           m.formation_id::text as formation_id,
+           m.position::int as position,
+           m.title
+      from public.modules m
+      join public.formations f on f.id = m.formation_id
+     where m.id = cast(:module_id as uuid)
+       and (f.owner_id = cast(:user_id as uuid) or exists (
+         select 1
+           from public.groups g
+           join public.group_members gm on gm.group_id = g.id
+          where g.formation_id = f.id
+            and gm.user_id = cast(:user_id as uuid)
+            and gm.member_status = 'active'
+       ))
+     limit 1
+    """
+)
+
+READ_REMEDIATION_FAILED_ATTEMPT = text(
+    """
+    select at.id::text as id, act.formation_id::text as formation_id
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.user_id = cast(:user_id as uuid)
+       and act.module_id = cast(:module_id as uuid)
+       and act.kind = 'validation_quiz'
+       and at.status = 'graded'
+       and at.passed = false
+     order by at.attempt_no desc, at.created_at desc
+     limit 1
+    """
+)
+
+READ_REMEDIATION_GAPS = text(
+    """
+    select n.id::text as notion_id,
+           n.label,
+           ns.gap_nature::text as nature,
+           ns.gap_evidence as evidence,
+           ns.mastery::text as mastery,
+           ns.gap_confused_with::text as confused_with
+      from public.notions n
+      join public.notion_states ns
+        on ns.notion_id = n.id and ns.user_id = cast(:user_id as uuid)
+     where n.module_id = cast(:module_id as uuid)
+       and ns.gap_nature is not null
+       and ns.gap_cleared_at is null
+     order by ns.mastery asc, n.position asc
+     limit :max_gaps
+    """
+)
+
+READ_REMEDIATION_BANK = text(
+    """
+    select b.id::text as brick_id,
+           bv.id::text as version_id,
+           b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           bv.payload,
+           bv.fingerprint
+      from public.bricks b
+      join public.brick_versions bv on bv.brick_id = b.id and bv.version = b.current_version
+     where b.owner_id = cast(:user_id as uuid)
+       and b.formation_id = cast(:formation_id as uuid)
+       and b.purpose = 'bank'
+       and b.status = 'active'
+     order by b.id asc
+    """
+)
+
+READ_REMEDIATION_EXCERPTS = text(
+    """
+    select ci.id::text as citation_id,
+           ci.label,
+           cs.id::text as section_id,
+           cs.anchor,
+           ch.id::text as chapter_id,
+           cs.course_id::text as course_id
+      from public.citations ci
+      join public.course_sections cs on cs.id = ci.section_id
+      join public.chapters ch on ch.id = cs.chapter_id
+      join public.courses co on co.id = cs.course_id
+     where ci.owner_id = cast(:user_id as uuid)
+       and cs.owner_id = cast(:user_id as uuid)
+       and co.owner_id = cast(:user_id as uuid)
+       and co.formation_id = cast(:formation_id as uuid)
+       and co.is_current
+       and co.status = 'ready'
+       and cs.notion_ids @> array[cast(:notion_id as uuid)]
+     order by
+       case when ci.id::text = any(
+         array(select jsonb_array_elements_text(cast(:citation_ids as jsonb)))
+       ) then 0 else 1 end,
+       cs.position asc,
+       ci.created_at asc
+     limit 2
+    """
+)
+
+READ_EXISTING_REMEDIATION = text(
+    """
+    select act.id::text as id,
+           act.status::text as status,
+           at.id::text as attempt_id,
+           at.status::text as attempt_status,
+           (select count(*)::int
+              from public.answers a
+             where a.attempt_id = at.id and a.graded_by is not null) as checked,
+           coalesce((act.config ->> 'preparing')::boolean, false) as preparing
+      from public.activities act
+      left join public.attempts at
+        on at.activity_id = act.id and at.user_id = cast(:user_id as uuid)
+     where act.owner_id = cast(:user_id as uuid)
+       and act.module_id = cast(:module_id as uuid)
+       and act.kind = 'remediation'
+       and (act.config ->> 'sourceAttemptId') = cast(:source_attempt_id as text)
+     order by act.created_at desc, act.id desc
+     limit 1
+    """
+)
+
+READ_AUTOMATION_ENABLED = text(
+    """
+    select enabled
+      from public.automation_settings
+     where user_id = cast(:user_id as uuid) and key = 'remediation'
+     limit 1
+    """
+)
+
+INSERT_REMEDIATION_ACTIVITY = text(
+    """
+    insert into public.activities (
+      owner_id, formation_id, module_id, kind, config, items, status
+    ) values (
+      cast(:user_id as uuid),
+      cast(:formation_id as uuid),
+      cast(:module_id as uuid),
+      'remediation',
+      cast(:config as jsonb),
+      cast(:items as jsonb),
+      cast(:status as public.activity_status)
+    )
+    returning id::text as id
+    """
+)
+
+ARCHIVE_OTHER_REMEDIATIONS = text(
+    """
+    update public.activities
+       set status = 'archived'
+     where owner_id = cast(:user_id as uuid)
+       and module_id = cast(:module_id as uuid)
+       and kind = 'remediation'
+       and id <> cast(:activity_id as uuid)
+       and status <> 'archived'
+    """
+)
+
+INSERT_REMEDIATION_ATTEMPT = text(
+    """
+    insert into public.attempts (user_id, activity_id, attempt_no, status, started_at)
+    values (
+      cast(:user_id as uuid),
+      cast(:activity_id as uuid),
+      1,
+      'in_progress',
+      cast(:started_at as timestamptz)
+    )
+    returning id::text as id
+    """
+)
+
+INSERT_REMEDIATION_ANSWER = text(
+    """
+    insert into public.answers (
+      attempt_id, brick_version_id, position, response, max_score, answered_at
+    ) values (
+      cast(:attempt_id as uuid),
+      cast(:version_id as uuid),
+      :position,
+      '{}'::jsonb,
+      :max_score,
+      cast(:answered_at as timestamptz)
+    )
+    """
+)
+
+READ_LATEST_REMEDIATION = text(
+    """
+    select act.id::text as id,
+           act.status::text as status,
+           act.config,
+           at.id::text as attempt_id,
+           at.status::text as attempt_status,
+           (select count(*)::int
+              from public.answers a
+             where a.attempt_id = at.id and a.graded_by is not null) as checked,
+           coalesce((act.config ->> 'preparing')::boolean, false) as preparing
+      from public.activities act
+      left join public.attempts at
+        on at.activity_id = act.id and at.user_id = cast(:user_id as uuid)
+     where act.owner_id = cast(:user_id as uuid)
+       and act.module_id = cast(:module_id as uuid)
+       and act.kind = 'remediation'
+     order by act.created_at desc, act.id desc
+     limit 1
+    """
+)
+
+READ_UNCHECKED_REMEDIATION_ANSWERS = text(
+    """
+    select position
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid) and graded_by is null
+     order by position asc
+    """
+)
+
+READ_REMEDIATION_ANSWER_SCORES = text(
+    """
+    select max_score::text as max_score, score::text as score
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid)
+    """
+)
+
+UPDATE_REMEDIATION_GRADED_ATTEMPT = text(
+    """
+    update public.attempts
+       set status = 'graded',
+           score = :score,
+           passed = :passed,
+           submitted_at = cast(:now as timestamptz),
+           duration_ms = greatest(
+             0,
+             floor(extract(epoch from (cast(:now as timestamptz) - started_at)) * 1000)::int
+           )
+     where id = cast(:attempt_id as uuid)
+    """
+)
+
+ARCHIVE_REMEDIATION_ACTIVITY = text(
+    """
+    update public.activities
+       set status = 'archived'
+     where id = cast(:activity_id as uuid)
+    """
+)
+
+
+async def read_remediation_module(tx: Tx, user_id: str, module_id: str) -> Mapping[str, Any] | None:
+    """`readModule`: the module of the learner (owner or active member), or nothing (404)."""
+    result = await tx.conn.execute(READ_REMEDIATION_MODULE, {"user_id": user_id, "module_id": module_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_remediation_failed_attempt(tx: Tx, user_id: str, module_id: str) -> Mapping[str, Any] | None:
+    """`latestFailedAttempt`: the latest failed validation attempt of the module."""
+    result = await tx.conn.execute(
+        READ_REMEDIATION_FAILED_ATTEMPT, {"user_id": user_id, "module_id": module_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_remediation_gaps(
+    tx: Tx, user_id: str, module_id: str, max_gaps: int
+) -> list[Mapping[str, Any]]:
+    """`readGaps`: the open gaps of the module, the weakest mastery first."""
+    result = await tx.conn.execute(
+        READ_REMEDIATION_GAPS,
+        {"user_id": user_id, "module_id": module_id, "max_gaps": max_gaps},
+    )
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_remediation_bank(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """`readBank`: the active bank bricks of the formation, in identifier order."""
+    result = await tx.conn.execute(READ_REMEDIATION_BANK, {"user_id": user_id, "formation_id": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_remediation_excerpts(
+    tx: Tx, user_id: str, formation_id: str, notion_id: str, citation_ids: list[str]
+) -> list[Mapping[str, Any]]:
+    """`readExcerpts`: at most two current course excerpts of the notion."""
+    import json
+
+    result = await tx.conn.execute(
+        READ_REMEDIATION_EXCERPTS,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "notion_id": notion_id,
+            "citation_ids": json.dumps(citation_ids),
+        },
+    )
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_existing_remediation(
+    tx: Tx, user_id: str, module_id: str, source_attempt_id: str
+) -> Mapping[str, Any] | None:
+    """`existingRemediation`: the remediation of the same failed attempt, if any."""
+    result = await tx.conn.execute(
+        READ_EXISTING_REMEDIATION,
+        {
+            "user_id": user_id,
+            "module_id": module_id,
+            "source_attempt_id": source_attempt_id,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_automation_enabled(tx: Tx, user_id: str) -> bool | None:
+    """`isAutomationEnabled`: the stored switch, `None` when the learner never changed it."""
+    result = await tx.conn.execute(READ_AUTOMATION_ENABLED, {"user_id": user_id})
+    found = result.mappings().first()
+    return None if found is None else found["enabled"] is True
+
+
+async def insert_remediation_activity(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    module_id: str,
+    config: str,
+    items: str,
+    status: str,
+) -> str | None:
+    """`prepareRemediation` and `requestRemediationPreparation`: the remediation activity."""
+    result = await tx.conn.execute(
+        INSERT_REMEDIATION_ACTIVITY,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "module_id": module_id,
+            "config": config,
+            "items": items,
+            "status": status,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def archive_other_remediations(tx: Tx, user_id: str, module_id: str, activity_id: str) -> None:
+    """One current remediation per module: the previous ones are archived."""
+    await tx.conn.execute(
+        ARCHIVE_OTHER_REMEDIATIONS,
+        {"user_id": user_id, "module_id": module_id, "activity_id": activity_id},
+    )
+
+
+async def insert_remediation_attempt(
+    tx: Tx, *, user_id: str, activity_id: str, started_at: str
+) -> str | None:
+    """One attempt of the remediation, in progress from its start instant."""
+    result = await tx.conn.execute(
+        INSERT_REMEDIATION_ATTEMPT,
+        {"user_id": user_id, "activity_id": activity_id, "started_at": started_at},
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def insert_remediation_answer(
+    tx: Tx, *, attempt_id: str, version_id: str, position: int, max_score: float, answered_at: str
+) -> None:
+    """One empty answer per remediation question, at its position."""
+    await tx.conn.execute(
+        INSERT_REMEDIATION_ANSWER,
+        {
+            "attempt_id": attempt_id,
+            "version_id": version_id,
+            "position": position,
+            "max_score": max_score,
+            "answered_at": answered_at,
+        },
+    )
+
+
+async def read_latest_remediation(tx: Tx, user_id: str, module_id: str) -> Mapping[str, Any] | None:
+    """`readLatestActivity`: the current remediation of the module."""
+    result = await tx.conn.execute(READ_LATEST_REMEDIATION, {"user_id": user_id, "module_id": module_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_unchecked_remediation_answers(tx: Tx, attempt_id: str) -> list[int]:
+    """`completeRemediation`: the positions still waiting for their check (409)."""
+    result = await tx.conn.execute(READ_UNCHECKED_REMEDIATION_ANSWERS, {"attempt_id": attempt_id})
+    return [int(row["position"]) for row in result.mappings().all()]
+
+
+async def read_remediation_answer_scores(tx: Tx, attempt_id: str) -> list[Mapping[str, Any]]:
+    """`completeRemediation`: the earned and possible points of the attempt."""
+    result = await tx.conn.execute(READ_REMEDIATION_ANSWER_SCORES, {"attempt_id": attempt_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def update_remediation_graded_attempt(
+    tx: Tx, *, attempt_id: str, score: float, passed: bool, now: str
+) -> None:
+    """`completeRemediation`: the attempt is graded with its ratio and its verdict."""
+    await tx.conn.execute(
+        UPDATE_REMEDIATION_GRADED_ATTEMPT,
+        {"attempt_id": attempt_id, "score": score, "passed": passed, "now": now},
+    )
+
+
+async def archive_remediation_activity(tx: Tx, activity_id: str) -> None:
+    """`completeRemediation`: the terminated remediation leaves the current slot."""
+    await tx.conn.execute(ARCHIVE_REMEDIATION_ACTIVITY, {"activity_id": activity_id})
+
+
+# --------------------------------------------------------------------------------------------------
+# offline.sync (packages/services/src/offline/sync.ts, SPEC-801 ET-6 to ET-8, ADR-0200)
+# --------------------------------------------------------------------------------------------------
+
+READ_SYNC_RECEIPT = text(
+    """
+    select client_id::text as client_id
+      from public.offline_sync_receipts
+     where user_id = cast(:user_id as uuid) and client_id = cast(:client_id as uuid)
+    """
+)
+
+INSERT_SYNC_RECEIPT = text(
+    """
+    insert into public.offline_sync_receipts (user_id, client_id, status, answer_id)
+    values (
+      cast(:user_id as uuid),
+      cast(:client_id as uuid),
+      :status,
+      cast(:answer_id as uuid)
+    )
+    on conflict (user_id, client_id) do nothing
+    returning client_id::text as client_id
+    """
+)
+
+READ_SYNC_SESSION = text(
+    """
+    select a.id::text as id,
+           a.owner_id::text as owner_id,
+           a.formation_id::text as formation_id,
+           a.for_date::text as for_date,
+           a.items,
+           at.id::text as attempt_id,
+           at.status::text as attempt_status
+      from public.activities a
+      join public.attempts at on at.activity_id = a.id
+     where a.id = cast(:session_id as uuid)
+     order by at.attempt_no desc
+     limit 1
+    """
+)
+
+READ_SYNC_ACTIVITY_OWNER = text(
+    """
+    select owner_id::text as owner_id
+      from public.activities
+     where id = cast(:session_id as uuid)
+     limit 1
+    """
+)
+
+READ_SYNC_BRICK = text(
+    """
+    select b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           b.status::text as status,
+           bv.payload
+      from public.brick_versions bv
+      join public.bricks b on b.id = bv.brick_id
+     where bv.id = cast(:version_id as uuid)
+    """
+)
+
+READ_SYNC_ANSWER_POSITION = text(
+    """
+    select id::text as id
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid)
+       and position = :position
+     limit 1
+    """
+)
+
+INSERT_SYNC_ANSWER = text(
+    """
+    insert into public.answers
+      (id, attempt_id, brick_version_id, position, response, is_correct, score, max_score,
+       time_ms, graded_by, feedback, answered_at)
+    values (
+      cast(:answer_id as uuid),
+      cast(:attempt_id as uuid),
+      cast(:version_id as uuid),
+      :position,
+      cast(:response as jsonb),
+      :is_correct,
+      :score,
+      :max_score,
+      :time_ms,
+      'code',
+      cast(:feedback as jsonb),
+      cast(:answered_at as timestamptz)
+    )
+    """
+)
+
+READ_SYNC_PROFILE_TIMEZONE = text(
+    """
+    select timezone
+      from public.profiles
+     where id = cast(:user_id as uuid)
+    """
+)
+
+
+async def sync_receipt_exists(tx: Tx, user_id: str, client_id: str) -> bool:
+    """`receiptStatus`: a replayed entry is a `duplicate` with no effect."""
+    result = await tx.conn.execute(READ_SYNC_RECEIPT, {"user_id": user_id, "client_id": client_id})
+    return result.mappings().first() is not None
+
+
+async def insert_sync_receipt(
+    tx: Tx, *, user_id: str, client_id: str, status: str, answer_id: str | None
+) -> bool:
+    """`insertReceipt`: the receipt of one processed entry, idempotent by `(user, clientId)`."""
+    result = await tx.conn.execute(
+        INSERT_SYNC_RECEIPT,
+        {
+            "user_id": user_id,
+            "client_id": client_id,
+            "status": status,
+            "answer_id": answer_id,
+        },
+    )
+    return result.mappings().first() is not None
+
+
+async def read_sync_session(tx: Tx, session_id: str) -> Mapping[str, Any] | None:
+    """`loadSession`: the session activity and its latest attempt."""
+    result = await tx.conn.execute(READ_SYNC_SESSION, {"session_id": session_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_sync_activity_owner(tx: Tx, session_id: str) -> str | None:
+    """`sessionOf`: the owner read with the service role, to answer `FORBIDDEN` (ET-7)."""
+    result = await tx.conn.execute(READ_SYNC_ACTIVITY_OWNER, {"session_id": session_id})
+    found = result.mappings().first()
+    return None if found is None else str(found["owner_id"])
+
+
+async def read_sync_brick(tx: Tx, version_id: str) -> Mapping[str, Any] | None:
+    """`loadBrick`: the type, the notions and the payload of the answered version."""
+    result = await tx.conn.execute(READ_SYNC_BRICK, {"version_id": version_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def read_sync_answer_position(tx: Tx, attempt_id: str, position: int) -> str | None:
+    """`applyAnswer`: an answer already stored at this position is a `conflict`."""
+    result = await tx.conn.execute(
+        READ_SYNC_ANSWER_POSITION, {"attempt_id": attempt_id, "position": position}
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def insert_sync_answer(
+    tx: Tx,
+    *,
+    answer_id: str,
+    attempt_id: str,
+    version_id: str,
+    position: int,
+    response: str,
+    is_correct: bool | None,
+    score: float | None,
+    max_score: float | None,
+    time_ms: int,
+    feedback: str,
+    answered_at: str,
+) -> None:
+    """`applyAnswer`: the answer recomputed by the server, never the client verdict."""
+    await tx.conn.execute(
+        INSERT_SYNC_ANSWER,
+        {
+            "answer_id": answer_id,
+            "attempt_id": attempt_id,
+            "version_id": version_id,
+            "position": position,
+            "response": response,
+            "is_correct": is_correct,
+            "score": score,
+            "max_score": max_score,
+            "time_ms": time_ms,
+            "feedback": feedback,
+            "answered_at": answered_at,
+        },
+    )
+
+
+async def read_sync_profile_timezone(tx: Tx, user_id: str) -> str | None:
+    """`timeZoneOf`: the learner zone, `Europe/Paris` when the profile row is unreadable."""
+    result = await tx.conn.execute(READ_SYNC_PROFILE_TIMEZONE, {"user_id": user_id})
+    found = result.mappings().first()
+    return None if found is None else str(found["timezone"])

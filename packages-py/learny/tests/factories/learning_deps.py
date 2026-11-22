@@ -13,6 +13,8 @@ from datetime import datetime
 from typing import Any
 
 import structlog
+from learny.platform.llm.gateway import MockGateway
+from learny.platform.llm.mock import load_registry
 from learny.shared.clock import FixedClock
 from learny.shared.config import Settings
 from learny.shared.db.uow import Tx
@@ -58,6 +60,7 @@ class LearningTestDeps:
     settings: Settings
     clock: FixedClock
     db: LearningTransactions
+    llm: MockGateway
     logger: Any
 
 
@@ -67,5 +70,6 @@ def learning_deps(tx: Tx, *, now: datetime = FIXED) -> LearningTestDeps:
         settings=Settings(),
         clock=FixedClock(now),
         db=LearningTransactions(tx),
+        llm=MockGateway(load_registry()),
         logger=structlog.get_logger("learny.test"),
     )

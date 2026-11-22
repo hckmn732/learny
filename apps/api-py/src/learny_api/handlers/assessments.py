@@ -67,6 +67,71 @@ async def offline_pack(call: Call) -> Any:
     return await assessments.build_pack(call.deps, _actor(call))
 
 
+@handler("offline.sync")
+async def offline_sync(call: Call) -> Any:
+    return await assessments.sync_offline_answers(call.deps, _actor(call), _body(call)["entries"])
+
+
+# --- practice exercises --------------------------------------------------------------------------
+# SPEC-613: the tutor generation, the attempt lifecycle and the mastery application.
+
+
+@handler("exercises.detail")
+async def exercises_detail(call: Call) -> Any:
+    params = _params(call)
+    return await assessments.get_practice_exercise(
+        call.deps, _actor(call), params["fid"], params["mid"], params["aid"]
+    )
+
+
+@handler("exercises.start")
+async def exercises_start(call: Call) -> Any:
+    params = _params(call)
+    result = await assessments.start_exercise_attempt(call.deps, _actor(call), params["aid"], params["mid"])
+    return _json(result, 201)
+
+
+@handler("exercises.saveDraft")
+async def exercises_save_draft(call: Call) -> Any:
+    return await assessments.save_exercise_draft(
+        call.deps, _actor(call), _params(call)["aid"], _body(call)["submission"]
+    )
+
+
+@handler("exercises.submit")
+async def exercises_submit(call: Call) -> Any:
+    result = await assessments.submit_exercise(
+        call.deps, _actor(call), _params(call)["aid"], _body(call)["submission"]
+    )
+    return _json(result, 201)
+
+
+@handler("exercises.hint")
+async def exercises_hint(call: Call) -> Any:
+    params = _params(call)
+    result = await assessments.request_exercise_hint(call.deps, _actor(call), params["aid"], params["mid"])
+    return _json(result, 201)
+
+
+# --- remediation ---------------------------------------------------------------------------------
+
+
+@handler("remediation.get")
+async def remediation_get(call: Call) -> Any:
+    return await assessments.get_remediation(call.deps, _actor(call), _params(call)["mid"])
+
+
+@handler("remediation.prepare")
+async def remediation_prepare(call: Call) -> Any:
+    result = await assessments.request_remediation_preparation(call.deps, _actor(call), _params(call)["mid"])
+    return _json(result, 202)
+
+
+@handler("remediation.complete")
+async def remediation_complete(call: Call) -> Any:
+    return await assessments.complete_remediation(call.deps, _actor(call), _params(call)["mid"])
+
+
 # --- quiz attempts -------------------------------------------------------------------------------
 
 

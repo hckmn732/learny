@@ -16,7 +16,15 @@ from learny.assessments.application.exam_format import (
     get_exam_intro,
 )
 from learny.assessments.application.exams import mark_exam_question, save_exam_answer
+from learny.assessments.application.exercises import (
+    get_practice_exercise,
+    request_exercise_hint,
+    save_exercise_draft,
+    start_exercise_attempt,
+    submit_exercise,
+)
 from learny.assessments.application.offline import build_pack
+from learny.assessments.application.offline_sync import sync_offline_answers
 from learny.assessments.application.ports import (
     AssessmentDeps,
     ClockPort,
@@ -26,6 +34,12 @@ from learny.assessments.application.quiz import check_answer, get_attempt, save_
 from learny.assessments.application.quiz_result import get_quiz_result
 from learny.assessments.application.quiz_start import start_validation_attempt
 from learny.assessments.application.quiz_submit import finalize_attempt, submit_attempt
+from learny.assessments.application.remediation import (
+    complete_remediation,
+    get_remediation,
+    prepare_remediation,
+    request_remediation_preparation,
+)
 
 __all__ = [
     "AssessmentDeps",
@@ -33,6 +47,7 @@ __all__ = [
     "Transactions",
     "build_pack",
     "check_answer",
+    "complete_remediation",
     "confirm_exam_format",
     "correct_brick",
     "ensure_mock_exam_slots",
@@ -41,13 +56,22 @@ __all__ = [
     "get_exam_attempt",
     "get_exam_intro",
     "get_exam_result",
+    "get_practice_exercise",
     "get_quiz_result",
+    "get_remediation",
     "mark_exam_question",
+    "prepare_remediation",
     "report_brick",
+    "request_exercise_hint",
+    "request_remediation_preparation",
     "save_draft",
     "save_exam_answer",
+    "save_exercise_draft",
     "start_exam_attempt",
+    "start_exercise_attempt",
     "start_validation_attempt",
     "submit_attempt",
     "submit_exam",
+    "submit_exercise",
+    "sync_offline_answers",
 ]

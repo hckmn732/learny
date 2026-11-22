@@ -35,6 +35,8 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.learning.application.series": "milestone rows are read-only for the authenticated role",
         "learny.learning.application.final_review": "skips the reminders of a stopped interview (ADR-0112)",
         "learny.learning.application.planning": "automation journal of the lightening proposal (BR-AUT-11)",
+        # SPEC-2202 - the owner of a session read with the service role answers FORBIDDEN (ET-7).
+        "learny.assessments.application.offline_sync": "owner probe of an offline session (ET-7)",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",

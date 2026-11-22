@@ -7,14 +7,13 @@ names that bundle for the assessments tests instead of borrowing the learning na
 
 from datetime import datetime
 
-from learny.learning.application.ports import LearningDeps
 from learny.shared.db.uow import Tx
 
 from factories.identity_support import FIXED
-from factories.learning_deps import learning_deps
+from factories.learning_deps import LearningTestDeps, learning_deps
 
 
-def assessment_deps(tx: Tx, *, now: datetime = FIXED) -> LearningDeps:
+def assessment_deps(tx: Tx, *, now: datetime = FIXED) -> LearningTestDeps:
     """The dependency bundle the assessments use cases see."""
     return learning_deps(tx, now=now)
 
