@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T15:22:52.906Z",
+  "updatedAt": "2026-11-22T15:31:58.511Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7105,11 +7105,11 @@
       }
     },
     "SPEC-2206": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-22T15:31:58.000Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2206-domaines-facturation-confidentialite",
       "commit": null,
       "lastError": null,
       "validations": {}
