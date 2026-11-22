@@ -1024,3 +1024,278 @@ async def read_slot_times(tx: Tx, slot_id: str) -> Mapping[str, Any] | None:
     result = await tx.conn.execute(READ_SLOT_TIMES, {"slot_id": slot_id})
     found = result.mappings().first()
     return None if found is None else row_of(found)
+
+
+# --------------------------------------------------------------------------------------------------
+# exam.attempts.create / get / submit / result
+# (packages/services/src/mock-exams/attempt.ts, SPEC-614 EF-1 to EF-4, ET-4, ET-5, ADR-0172)
+# --------------------------------------------------------------------------------------------------
+
+LOCK_EXAM_START = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
+
+LOCK_EXAM_SUBMIT = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
+
+READ_EXAM_BANK = text(
+    """
+    select b.id::text as brick_id,
+           bv.id::text as version_id,
+           b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           b.purpose::text as purpose,
+           bv.payload,
+           n.id::text as notion_id,
+           n.label as notion_label,
+           m.id::text as module_id,
+           m.position as module_position,
+           m.title as module_label
+      from public.bricks b
+      join public.brick_versions bv
+        on bv.brick_id = b.id and bv.version = b.current_version
+      join public.notions n on n.id = b.notion_ids[1]
+      join public.modules m on m.id = n.module_id
+     where b.owner_id = cast(:user_id as uuid)
+       and b.formation_id = cast(:formation_id as uuid)
+       and b.purpose in ('exam', 'bank')
+       and b.status = 'active'
+     order by m.position asc, b.id asc
+    """
+)
+
+IN_PROGRESS_EXAM_ATTEMPT = text(
+    """
+    select at.id::text as id
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.user_id = cast(:user_id as uuid)
+       and act.formation_id = cast(:formation_id as uuid)
+       and act.kind = 'mock_exam'
+       and at.status = 'in_progress'
+     order by at.created_at desc, at.id desc
+     limit 1
+    """
+)
+
+NEXT_EXAM_ATTEMPT_NO = text(
+    """
+    select count(*)::int as count
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.user_id = cast(:user_id as uuid)
+       and act.formation_id = cast(:formation_id as uuid)
+       and act.kind = 'mock_exam'
+    """
+)
+
+INSERT_EXAM_ACTIVITY = text(
+    """
+    insert into public.activities (
+      owner_id, formation_id, module_id, kind, config, items, status
+    ) values (
+      cast(:user_id as uuid), cast(:formation_id as uuid), null, 'mock_exam',
+      cast(:config as jsonb), cast(:items as jsonb), 'ready'
+    )
+    returning id::text as id
+    """
+)
+
+INSERT_EXAM_ATTEMPT = text(
+    """
+    insert into public.attempts (
+      user_id, activity_id, attempt_no, status, started_at, deadline_at
+    ) values (
+      cast(:user_id as uuid), cast(:activity_id as uuid), :attempt_no, 'in_progress',
+      cast(:started_at as timestamptz), cast(:deadline_at as timestamptz)
+    )
+    returning id::text as id
+    """
+)
+
+INSERT_EXAM_ANSWER = text(
+    """
+    insert into public.answers (
+      attempt_id, brick_version_id, position, response, max_score, answered_at
+    ) values (
+      cast(:attempt_id as uuid), cast(:version_id as uuid), :position,
+      '{}'::jsonb, :max_score, cast(:answered_at as timestamptz)
+    )
+    """
+)
+
+READ_EXAM_ANSWERS = text(
+    """
+    select id::text as id,
+           position,
+           brick_version_id::text as brick_version_id,
+           response,
+           is_correct,
+           score::text as score,
+           max_score::text as max_score,
+           graded_by::text as graded_by,
+           feedback,
+           time_ms
+      from public.answers
+     where attempt_id = cast(:attempt_id as uuid)
+     order by position asc
+    """
+)
+
+UPDATE_EXAM_GRADED_ANSWER = text(
+    """
+    update public.answers
+       set is_correct = :is_correct,
+           score = :score,
+           max_score = :max_score,
+           graded_by = 'code',
+           feedback = cast(:feedback as jsonb),
+           answered_at = coalesce(answered_at, cast(:now as timestamptz))
+     where id = cast(:answer_id as uuid)
+    """
+)
+
+UPDATE_EXAM_GRADED_ATTEMPT = text(
+    """
+    update public.attempts
+       set status = 'graded',
+           score = :score,
+           passed = :passed,
+           per_notion = cast(:per_notion as jsonb),
+           submitted_at = cast(:now as timestamptz),
+           duration_ms = :duration_ms,
+           review_feedback = cast(:review_feedback as jsonb)
+     where id = cast(:attempt_id as uuid)
+    """
+)
+
+
+async def lock_exam_start(tx: Tx, user_id: str, formation_id: str) -> None:
+    """`exam-start:<user>:<formation>`: one exam started at a time per learner and formation."""
+    await tx.conn.execute(LOCK_EXAM_START, {"key": f"exam-start:{user_id}:{formation_id}"})
+
+
+async def lock_exam_submit(tx: Tx, attempt_id: str) -> None:
+    """`exam-submit:<attempt>`: the button and the deadline job converge on a single grade."""
+    await tx.conn.execute(LOCK_EXAM_SUBMIT, {"key": f"exam-submit:{attempt_id}"})
+
+
+async def read_exam_bank(tx: Tx, user_id: str, formation_id: str) -> list[Mapping[str, Any]]:
+    """EF-2 - the active bricks of the formation, exam purpose first, in programme order."""
+    result = await tx.conn.execute(READ_EXAM_BANK, {"user_id": user_id, "formation_id": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_in_progress_exam_attempt(tx: Tx, user_id: str, formation_id: str) -> str | None:
+    """EF-1 - the single running exam of the formation, resumed instead of duplicated."""
+    result = await tx.conn.execute(
+        IN_PROGRESS_EXAM_ATTEMPT, {"user_id": user_id, "formation_id": formation_id}
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def read_next_exam_attempt_no(tx: Tx, user_id: str, formation_id: str) -> int:
+    """The number of the next attempt of the formation, one-based."""
+    result = await tx.conn.execute(NEXT_EXAM_ATTEMPT_NO, {"user_id": user_id, "formation_id": formation_id})
+    found = result.mappings().first()
+    return (0 if found is None else int(found["count"])) + 1
+
+
+async def insert_exam_activity(
+    tx: Tx, *, user_id: str, formation_id: str, config: str, items: str
+) -> str | None:
+    """EF-2 - the activity holding every materialised item of the exam."""
+    result = await tx.conn.execute(
+        INSERT_EXAM_ACTIVITY,
+        {"user_id": user_id, "formation_id": formation_id, "config": config, "items": items},
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def insert_exam_attempt(
+    tx: Tx, *, user_id: str, activity_id: str, attempt_no: int, started_at: str, deadline_at: str
+) -> str | None:
+    """EF-2 - the attempt, with its absolute deadline computed once (ADR-0172 section 1)."""
+    result = await tx.conn.execute(
+        INSERT_EXAM_ATTEMPT,
+        {
+            "user_id": user_id,
+            "activity_id": activity_id,
+            "attempt_no": attempt_no,
+            "started_at": started_at,
+            "deadline_at": deadline_at,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def insert_exam_answer(
+    tx: Tx, *, attempt_id: str, version_id: str, position: int, max_score: float, answered_at: str
+) -> None:
+    """EF-2 - one empty answer per question, at its position."""
+    await tx.conn.execute(
+        INSERT_EXAM_ANSWER,
+        {
+            "attempt_id": attempt_id,
+            "version_id": version_id,
+            "position": position,
+            "max_score": max_score,
+            "answered_at": answered_at,
+        },
+    )
+
+
+async def read_exam_answers(tx: Tx, attempt_id: str) -> list[Mapping[str, Any]]:
+    """`readAnswers`: every answer of the exam, in position order."""
+    result = await tx.conn.execute(READ_EXAM_ANSWERS, {"attempt_id": attempt_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def update_exam_graded_answer(
+    tx: Tx,
+    *,
+    answer_id: str,
+    is_correct: bool,
+    score: float,
+    max_score: float,
+    feedback: str,
+    now: str,
+) -> None:
+    """EF-3 - the code correction of one exam answer and its feedback."""
+    await tx.conn.execute(
+        UPDATE_EXAM_GRADED_ANSWER,
+        {
+            "answer_id": answer_id,
+            "is_correct": is_correct,
+            "score": score,
+            "max_score": max_score,
+            "feedback": feedback,
+            "now": now,
+        },
+    )
+
+
+async def update_exam_graded_attempt(
+    tx: Tx,
+    *,
+    attempt_id: str,
+    score: float,
+    passed: bool,
+    per_notion: str,
+    now: str,
+    duration_ms: int,
+    review_feedback: str,
+) -> None:
+    """EF-3 - the graded attempt: score, verdict, per-notion detail and review payload."""
+    await tx.conn.execute(
+        UPDATE_EXAM_GRADED_ATTEMPT,
+        {
+            "attempt_id": attempt_id,
+            "score": score,
+            "passed": passed,
+            "per_notion": per_notion,
+            "now": now,
+            "duration_ms": duration_ms,
+            "review_feedback": review_feedback,
+        },
+    )

@@ -102,6 +102,34 @@ async def exam_answers_save(call: Call) -> Any:
     )
 
 
+@handler("exam.attempts.create")
+async def exam_attempts_create(call: Call) -> Any:
+    result = await assessments.start_exam_attempt(call.deps, _actor(call), _params(call)["fid"])
+    if result.get("resumed") is True:
+        return _json(result, 200)
+    return _json(result, 201)
+
+
+@handler("exam.attempts.get")
+async def exam_attempts_get(call: Call) -> Any:
+    return await assessments.get_exam_attempt(call.deps, _actor(call), _params(call)["aid"])
+
+
+@handler("exam.attempts.submit")
+async def exam_attempts_submit(call: Call) -> Any:
+    result = await assessments.submit_exam(call.deps, _actor(call), _params(call)["aid"])
+    return {
+        "status": result["status"],
+        "unansweredCount": result["unansweredCount"],
+        "markedCount": result["markedCount"],
+    }
+
+
+@handler("exam.attempts.result")
+async def exam_attempts_result(call: Call) -> Any:
+    return await assessments.get_exam_result(call.deps, _actor(call), _params(call)["aid"])
+
+
 @handler("exam.intro")
 async def exam_intro(call: Call) -> Any:
     return await assessments.get_exam_intro(call.deps, _actor(call), _params(call)["fid"])

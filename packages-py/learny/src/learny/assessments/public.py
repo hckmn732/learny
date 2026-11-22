@@ -4,6 +4,12 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.assessments.application.bricks import correct_brick, report_brick
+from learny.assessments.application.exam_attempts import (
+    get_exam_attempt,
+    get_exam_result,
+    start_exam_attempt,
+    submit_exam,
+)
 from learny.assessments.application.exam_format import (
     confirm_exam_format,
     ensure_mock_exam_slots,
@@ -28,9 +34,13 @@ __all__ = [
     "correct_brick",
     "ensure_mock_exam_slots",
     "get_attempt",
+    "get_exam_attempt",
     "get_exam_intro",
+    "get_exam_result",
     "mark_exam_question",
     "report_brick",
     "save_draft",
     "save_exam_answer",
+    "start_exam_attempt",
+    "submit_exam",
 ]

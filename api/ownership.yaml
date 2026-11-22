@@ -104,10 +104,10 @@ operations:
   'email.unsubscribe': ts
   'email.unsubscribe.page': ts
   'exam.answers.save': py
-  'exam.attempts.create': ts
-  'exam.attempts.get': ts
-  'exam.attempts.result': ts
-  'exam.attempts.submit': ts
+  'exam.attempts.create': py
+  'exam.attempts.get': py
+  'exam.attempts.result': py
+  'exam.attempts.submit': py
   'exam.format.confirm': py
   'exam.intro': py
   'exam.questions.mark': py
