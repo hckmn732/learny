@@ -219,10 +219,16 @@ async def test_a_bank_smaller_than_the_quiz_returns_preparing(database: Database
 async def test_the_retry_gate_refuses_a_new_attempt_inside_the_delay(database: Database) -> None:
     async def run(tx: Any) -> AppError:
         seed = await seed_module(tx.conn)
+        # A brick of this learner only: the shared local database also carries the
+        # demonstration dataset, and the activity check refuses another owner's brick.
         versions = await one(
             tx.conn,
             "select bv.id::text as version_id, bv.brick_id::text as brick_id "
-            "from public.brick_versions bv order by bv.id limit 1",
+            "from public.brick_versions bv "
+            "join public.bricks b on b.id = bv.brick_id "
+            "where b.owner_id = cast(:user as uuid) "
+            "order by bv.id limit 1",
+            user=seed["userId"],
         )
         activity_id = await identifier(
             tx.conn,
