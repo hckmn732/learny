@@ -51,3 +51,13 @@ QUIZ_TYPE_CLOZE = "Texte \u00e0 trous"
 QUIZ_TYPE_MATCHING = "Association"
 QUIZ_TYPE_OPEN = "Question ouverte"
 QUIZ_DEFAULT_NOTION_LABEL = "Notion"
+
+
+# --- mock exams (packages/services/src/mock-exams/attempt.ts) --------------------------------------
+
+EXAM_ATTEMPT_NOT_FOUND = "Examen introuvable."
+EXAM_ATTEMPT_CLOSED = "Cet examen est termin\u00e9."
+EXAM_TIME_OVER = "Le temps de l\u2019examen est \u00e9coul\u00e9."
+EXAM_POSITION_UNKNOWN = "Cette question n\u2019existe pas dans l\u2019examen."
+EXAM_QUESTION_UNREADABLE = "La question jou\u00e9e est illisible."
+EXAM_RESPONSE_MISMATCH = "La r\u00e9ponse ne correspond pas \u00e0 la question."

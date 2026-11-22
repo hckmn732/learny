@@ -4,6 +4,7 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.assessments.application.bricks import correct_brick, report_brick
+from learny.assessments.application.exams import mark_exam_question, save_exam_answer
 from learny.assessments.application.offline import build_pack
 from learny.assessments.application.ports import (
     AssessmentDeps,
@@ -20,6 +21,8 @@ __all__ = [
     "check_answer",
     "correct_brick",
     "get_attempt",
+    "mark_exam_question",
     "report_brick",
     "save_draft",
+    "save_exam_answer",
 ]

@@ -103,14 +103,14 @@ operations:
   'dev.uploadSimulation': ts
   'email.unsubscribe': ts
   'email.unsubscribe.page': ts
-  'exam.answers.save': ts
+  'exam.answers.save': py
   'exam.attempts.create': ts
   'exam.attempts.get': ts
   'exam.attempts.result': ts
   'exam.attempts.submit': ts
   'exam.format.confirm': ts
   'exam.intro': ts
-  'exam.questions.mark': ts
+  'exam.questions.mark': py
   'exercises.detail': ts
   'exercises.hint': ts
   'exercises.saveDraft': ts

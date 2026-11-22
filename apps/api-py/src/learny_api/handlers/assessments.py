@@ -89,3 +89,22 @@ async def quiz_answers_check(call: Call) -> Any:
     return await assessments.check_answer(
         call.deps, _actor(call), params["aid"], int(params["pos"]), _body(call)
     )
+
+
+# --- mock exams ----------------------------------------------------------------------------------
+
+
+@handler("exam.answers.save")
+async def exam_answers_save(call: Call) -> Any:
+    params = _params(call)
+    return await assessments.save_exam_answer(
+        call.deps, _actor(call), params["aid"], int(params["pos"]), _body(call)
+    )
+
+
+@handler("exam.questions.mark")
+async def exam_questions_mark(call: Call) -> Any:
+    params = _params(call)
+    return await assessments.mark_exam_question(
+        call.deps, _actor(call), params["aid"], int(params["pos"]), _body(call)["marked"] is True
+    )

@@ -620,3 +620,114 @@ async def update_quiz_answer_checked(
             "now": now,
         },
     )
+
+
+# --------------------------------------------------------------------------------------------------
+# exam.answers.save / exam.questions.mark
+# (packages/services/src/mock-exams/attempt.ts, SPEC-614 EF-2, ET-4, BR-PRA-03)
+# --------------------------------------------------------------------------------------------------
+
+READ_EXAM_ATTEMPT = text(
+    """
+    select at.id::text as id,
+           at.activity_id::text as activity_id,
+           at.attempt_no,
+           at.status::text as status,
+           at.started_at,
+           at.deadline_at,
+           at.submitted_at,
+           at.duration_ms,
+           at.score::text as score,
+           at.passed,
+           at.review_feedback,
+           act.formation_id::text as formation_id,
+           act.config,
+           act.items
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.id = cast(:attempt_id as uuid)
+       and at.user_id = cast(:user_id as uuid)
+       and act.kind = 'mock_exam'
+     limit 1
+    """
+)
+
+LOCK_EXAM_ATTEMPT = text(
+    """
+    select at.id::text as id,
+           at.activity_id::text as activity_id,
+           at.attempt_no,
+           at.status::text as status,
+           at.started_at,
+           at.deadline_at,
+           at.submitted_at,
+           at.duration_ms,
+           at.score::text as score,
+           at.passed,
+           at.review_feedback,
+           act.formation_id::text as formation_id,
+           act.config,
+           act.items
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.id = cast(:attempt_id as uuid)
+       and at.user_id = cast(:user_id as uuid)
+       and act.kind = 'mock_exam'
+     limit 1
+     for update of at
+    """
+)
+
+UPDATE_EXAM_ANSWER = text(
+    """
+    update public.answers
+       set response = cast(:response as jsonb),
+           time_ms = :time_ms,
+           answered_at = cast(:now as timestamptz)
+     where attempt_id = cast(:attempt_id as uuid) and position = :position
+    """
+)
+
+UPDATE_EXAM_MARKED_POSITIONS = text(
+    """
+    update public.attempts
+       set review_feedback = jsonb_set(
+             coalesce(review_feedback, '{}'::jsonb),
+             '{markedPositions}',
+             cast(:positions as jsonb),
+             true
+           )
+     where id = cast(:attempt_id as uuid)
+    """
+)
+
+
+async def read_exam_attempt(
+    tx: Tx, user_id: str, attempt_id: str, *, lock: bool = False
+) -> Mapping[str, Any] | None:
+    """`readAttempt`: the exam attempt of this learner, locked `for update of at` on demand."""
+    statement = LOCK_EXAM_ATTEMPT if lock else READ_EXAM_ATTEMPT
+    result = await tx.conn.execute(statement, {"user_id": user_id, "attempt_id": attempt_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
+
+
+async def update_exam_answer(
+    tx: Tx, *, attempt_id: str, position: int, response: str, time_ms: int, now: str
+) -> None:
+    """EF-2 - writes the answer of one position before the deadline."""
+    await tx.conn.execute(
+        UPDATE_EXAM_ANSWER,
+        {
+            "attempt_id": attempt_id,
+            "position": position,
+            "response": response,
+            "time_ms": time_ms,
+            "now": now,
+        },
+    )
+
+
+async def update_exam_marked_positions(tx: Tx, attempt_id: str, positions: str) -> None:
+    """BR-PRA-03 - the marked positions survive a reload."""
+    await tx.conn.execute(UPDATE_EXAM_MARKED_POSITIONS, {"attempt_id": attempt_id, "positions": positions})
