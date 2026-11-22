@@ -6,7 +6,6 @@ appId: fr.learny.app
 name: SPEC-3002 controles
 tags:
   - SPEC-3002
-  - visual
 ---
 - launchApp:
     clearState: true

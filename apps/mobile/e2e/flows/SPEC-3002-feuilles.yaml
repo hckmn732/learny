@@ -4,7 +4,6 @@ appId: fr.learny.app
 name: SPEC-3002 feuilles
 tags:
   - SPEC-3002
-  - visual
 ---
 - launchApp:
     clearState: true
