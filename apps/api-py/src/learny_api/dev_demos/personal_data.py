@@ -133,7 +133,7 @@ def _deletion_ports(deps: Any, user_id: str) -> privacy.DeletionJobDeps:
     async def remove(bucket: Any, path: str) -> None:
         if not _storage_configured(deps):
             return
-        token = mint_user_access_token(user_id, deps.settings.supabase_jwt_secret, deps.clock)
+        token = mint_user_access_token(user_id, deps.settings.supabase_jwt_secret)
         try:
             await deps.storage.remove(bucket, path, token)
         except AppError:

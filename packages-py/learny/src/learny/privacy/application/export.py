@@ -33,7 +33,7 @@ def _require_user(actor: Actor | None) -> str:
 async def _signed_url(deps: PrivacyDeps, user_id: str, path: str | None) -> str:
     if path is None:
         raise AppError("NOT_FOUND", fr.EXPORT_NOT_FOUND)
-    token = mint_user_access_token(user_id, deps.settings.supabase_jwt_secret, deps.clock)
+    token = mint_user_access_token(user_id, deps.settings.supabase_jwt_secret)
     return await deps.storage.sign_read("exports", path, token, SIGNED_URL_TTL_SECONDS)
 
 

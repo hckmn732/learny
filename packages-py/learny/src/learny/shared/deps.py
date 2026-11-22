@@ -27,7 +27,7 @@ from learny.platform.llm.gateway import LlmGateway, MockGateway
 from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
 from learny.platform.stripe import StripeGateway, WebhookJournal, build_stripe_gateway
-from learny.shared.clock import Clock, from_env
+from learny.shared.clock import Clock, SystemClock, from_env
 from learny.shared.config import PushMode, Settings
 from learny.shared.db.uow import Database
 
@@ -79,7 +79,9 @@ def build_deps(settings: Settings) -> Deps:
         db=Database.from_settings(settings),
         jwks=JwtVerifier(settings, clock, jwks_fetcher(settings)),
         gotrue=GoTrueClient(settings),
-        storage=SupabaseStorage(settings, clock),
+        # The Storage gateway signs with the **system** clock: Supabase checks `exp` against its
+        # own clock, never against the injected one (the TypeScript deps pass `systemClock`).
+        storage=SupabaseStorage(settings, SystemClock()),
         logger=structlog.get_logger("learny"),
         llm=build_llm(settings),
         email_config=email_config,

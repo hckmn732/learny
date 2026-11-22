@@ -199,28 +199,53 @@ def decode(token: str) -> dict[str, Any]:
     return decoded
 
 
-async def test_mints_an_upload_token_with_the_exact_claims() -> None:
-    url = await storage().sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
-    assert url.startswith("http://127.0.0.1:54321/storage/v1/object/upload/sign/resources/")
-    token = url.split("?token=", 1)[1]
-    claims = decode(token)
-    assert claims["owner"] == USER
-    assert claims["url"] == f"resources/{PATH}"
-    assert claims["scope"] == "upload"
-    assert claims["upsert"] is False
-    assert claims["iat"] == int(FIXED.timestamp())
-    assert claims["exp"] - claims["iat"] == SIGNED_URL_TTL_SECONDS
+async def test_signs_an_upload_through_the_storage_api() -> None:
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(
+            200,
+            json={"url": f"/object/upload/sign/resources/{PATH}", "token": "server-token"},
+        )
+
+    url = await storage(handler).sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
+    assert url == (
+        f"http://127.0.0.1:54321/storage/v1/object/upload/sign/resources/{PATH}?token=server-token"
+    )
+    assert seen[0].method == "POST"
+    assert seen[0].url.path == f"/storage/v1/object/upload/sign/resources/{PATH}"
+    assert seen[0].headers["apikey"] == "anon-key"
+    assert seen[0].headers["authorization"] == f"Bearer {TOKEN}"
+    assert json.loads(seen[0].content) == {"upsert": False}
 
 
-async def test_refuses_an_upload_without_a_token_or_a_secret() -> None:
+async def test_a_signed_url_that_already_carries_its_token_is_kept() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            json={
+                "url": f"/object/upload/sign/resources/{PATH}?token=server-token",
+                "token": "server-token",
+            },
+        )
+
+    url = await storage(handler).sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
+    assert url == (
+        f"http://127.0.0.1:54321/storage/v1/object/upload/sign/resources/{PATH}"
+        "?token=server-token"
+    )
+
+
+async def test_refuses_an_upload_without_a_token_or_a_signed_url() -> None:
     with pytest.raises(AppError, match="FORBIDDEN"):
         await storage().sign_upload("resources", PATH, "", SIGNED_URL_TTL_SECONDS)
-    without_secret = SupabaseStorage(
-        Settings(app_env="test", supabase_url="http://127.0.0.1:54321", supabase_anon_key="k"),
-        CLOCK,
-    )
+
+    def incomplete(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"url": "/object/upload/sign/resources/x"})
+
     with pytest.raises(AppError, match="SERVICE_UNAVAILABLE"):
-        await without_secret.sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
+        await storage(incomplete).sign_upload("resources", PATH, TOKEN, SIGNED_URL_TTL_SECONDS)
 
 
 async def test_signs_a_read_through_the_storage_api() -> None:

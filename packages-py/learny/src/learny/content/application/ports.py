@@ -50,6 +50,6 @@ def storage_access(deps: ContentDeps, user_id: str, *, service: bool = False) ->
 
     return StorageAccess(
         user_id=user_id,
-        access_token=mint_user_access_token(user_id, deps.settings.supabase_jwt_secret, deps.clock),
+        access_token=mint_user_access_token(user_id, deps.settings.supabase_jwt_secret),
         role="service" if service else "user",
     )

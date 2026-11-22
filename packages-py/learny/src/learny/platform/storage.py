@@ -21,7 +21,7 @@ from urllib.parse import quote, unquote
 import httpx
 from sqlalchemy import text
 
-from learny.shared.clock import Clock
+from learny.shared.clock import Clock, SystemClock
 from learny.shared.config import Settings
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
@@ -42,7 +42,7 @@ from learny.shared.locale_fr.details import (
     STORAGE_RESOURCE_ID_INVALID,
     STORAGE_TOKEN_MISSING,
     STORAGE_UNAVAILABLE,
-    STORAGE_UPLOAD_SECRET_MISSING,
+    STORAGE_UPLOAD_URL_UNAVAILABLE,
     STORAGE_USER_ID_INVALID,
 )
 
@@ -177,15 +177,22 @@ def normalize_storage_file_name(original_name: str) -> str:
     return cleaned
 
 
-def mint_user_access_token(user_id: str, jwt_secret: str, clock: Clock, ttl_seconds: int = 60) -> str:
+def mint_user_access_token(
+    user_id: str,
+    jwt_secret: str,
+    clock: Clock | None = None,
+    ttl_seconds: int = 60,
+) -> str:
     """Mints the `authenticated` JWT Storage evaluates its policies with (SPEC-206 ET-4).
 
-    It is signed with the server-side Supabase secret (never sent to the browser) and uses the
-    injected clock: Storage checks `exp` against its own clock, like `mintUserAccessToken` does.
+    It is signed with the server-side Supabase secret (never sent to the browser). Storage checks
+    `exp` against its **own** clock, so the stamp is the system clock, exactly like the TypeScript
+    `mintUserAccessToken(userId, jwtSecret)` whose clock defaults to `systemClock`; the injected
+    clock stays the only source of business time.
     """
     if jwt_secret == "":
         raise AppError("SERVICE_UNAVAILABLE", STORAGE_ACCESS_SECRET_MISSING)
-    now = int(clock.now().timestamp())
+    now = int((clock or SystemClock()).now().timestamp())
     header = _base64url(json.dumps({"alg": "HS256", "typ": "JWT"}))
     payload = _base64url(
         json.dumps(
@@ -291,7 +298,6 @@ class SupabaseStorage:
     ) -> None:
         self._base = f"{settings.supabase_url.rstrip('/')}/storage/v1"
         self._api_key = settings.supabase_anon_key
-        self._jwt_secret = settings.supabase_jwt_secret
         self._clock = clock
         self._client = client
         self._owned: httpx.AsyncClient | None = None
@@ -349,27 +355,29 @@ class SupabaseStorage:
     async def sign_upload(
         self, bucket: StorageBucket, path: str, access_token: str, expires_in_seconds: int
     ) -> str:
-        """Mints the scoped `upload` token locally: the Storage API ignores `expiresIn`."""
+        """`createSignedUploadUrl`: the Storage API mints the scoped upload token itself.
+
+        Minting it locally would stamp `exp` with the injected clock, and the Storage server checks
+        that claim against its own clock: a frozen test clock mints a token that is already expired.
+        The endpoint also applies the bucket policies, so the answer proves the caller may write.
+        """
         if access_token == "":
             raise AppError("FORBIDDEN", STORAGE_TOKEN_MISSING)
-        if self._jwt_secret == "":
-            raise AppError("SERVICE_UNAVAILABLE", STORAGE_UPLOAD_SECRET_MISSING)
-        now = int(self._clock.now().timestamp())
-        header = _base64url(json.dumps({"alg": "HS256", "typ": "JWT"}))
-        payload = _base64url(
-            json.dumps(
-                {
-                    "owner": path.split("/")[0],
-                    "url": f"{bucket}/{path}",
-                    "upsert": False,
-                    "scope": "upload",
-                    "iat": now,
-                    "exp": now + expires_in_seconds,
-                }
-            )
+        del expires_in_seconds
+        payload = await self._request(
+            "POST",
+            f"/object/upload/sign/{bucket}/{_encode_path(path)}",
+            access_token,
+            {"upsert": False},
         )
-        token = f"{header}.{payload}.{_sign(f'{header}.{payload}', self._jwt_secret)}"
-        return f"{self._base}/object/upload/sign/{bucket}/{_encode_path(path)}?token={token}"
+        url = payload.get("url") if isinstance(payload, dict) else None
+        token = payload.get("token") if isinstance(payload, dict) else None
+        if not isinstance(url, str) or not isinstance(token, str) or url == "" or token == "":
+            raise AppError("SERVICE_UNAVAILABLE", STORAGE_UPLOAD_URL_UNAVAILABLE)
+        # The GoTrue build of the local stack returns `url` with its token already; the hosted API
+        # returns a bare path, and then the token is appended (`createSignedUploadUrl`).
+        separator = "&" if "token=" in url else "?"
+        return f"{self._base}{url}" if "token=" in url else f"{self._base}{url}{separator}token={token}"
 
     async def sign_read(
         self, bucket: StorageBucket, path: str, access_token: str, expires_in_seconds: int
