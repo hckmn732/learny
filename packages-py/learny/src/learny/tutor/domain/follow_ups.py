@@ -6,7 +6,7 @@ pair exists in the chapter. The follow-up just served is not proposed again (CL-
 """
 
 import re
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from learny.shared.locale_fr import tutor as texts
@@ -38,6 +38,6 @@ def build_follow_ups(confusion: Mapping[str, str] | None, served: str | None = N
     return [entry for entry in entries if entry["key"] != served]
 
 
-def follow_up_labels(follow_ups: list[Mapping[str, Any]]) -> dict[str, str]:
+def follow_up_labels(follow_ups: Sequence[Mapping[str, Any]]) -> dict[str, str]:
     """The `followUpLabels` map stored in the message context."""
     return {str(entry["key"]): str(entry["label"]) for entry in follow_ups}
