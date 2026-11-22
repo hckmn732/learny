@@ -28,6 +28,7 @@ from learny.identity.domain.actor import Actor
 from learny.learning import public as learning
 from learny.privacy import public as privacy
 from learny.shared.clock import Clock
+from learny.shared.devtools import run_demo_pipeline
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
 from learny.shared.outbox.purge import purge_outbox
@@ -396,15 +397,21 @@ def validate_demo_event(event: Event) -> None:
 
 
 async def demo_job(deps: Any, event: Event) -> None:
-    """Demonstration consumer: proves the pipeline on a real flow (step 7 of the plan).
+    """Demonstration consumer: records the three steps of the pipeline in `sdd_demo_runs`.
 
-    Its observable effect is the `job_deliveries` row itself (status, attempts, instant): the
-    worker marks one delivery per (event, consumer), so a replayed event never runs it twice.
+    The steps are the ones `sdd-demo-pipeline` wrote before the cutover (`SDD_DEMO_STEPS`), so the
+    SPEC-203 page reads the same state as on Hono: `attempts` counts the executions of the second
+    step and `finished_at` closes the run. The delivery row marks one execution per (event,
+    consumer), and a finished run is left untouched, so a replay has no effect (ET-1).
     """
+    run_id = str(event.data["runId"])
+    run = await run_demo_pipeline(deps, run_id, str(event.data["failOnceAt"]))
     deps.logger.info(
         "demo job consumed",
         job=DEMO_CONSUMER,
-        runId=event.data.get("runId"),
+        runId=run_id,
+        attempts=run.attempts,
+        skipped=run.skipped,
         **event.logging_fields(),
     )
 

@@ -13,6 +13,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
     {
         # The unit of work itself defines `service_tx`; it holds no business call.
         "learny.shared.db.uow": "defines the service transaction",
+        # SPEC-2207 - the demonstration pipeline writes synthetic runs of `sdd_demo_runs`, a
+        # table without policy for learners (SPEC-203 ET-7, ADR-2014).
+        "learny.shared.devtools": "synthetic demonstration runs of the pipeline",
         # `rate_limits` has no policy for learners (SPEC-208 ET-4).
         "learny_api.guards.rate_limit": "token buckets of the request pipeline",
         # `idempotency_keys` is a service-only table (SPEC-112 EF-3, ADR-0120).

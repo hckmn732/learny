@@ -20,7 +20,7 @@ from learny_worker.consumers import (
     subscribed,
     validate_demo_event,
 )
-from support.fakes import FakeClock, FakeDatabase, FakeDeps, RecordingLogger
+from support.fakes import FakeClock, FakeDatabase, FakeDeps, RecordingConnection, RecordingLogger
 
 pytestmark = pytest.mark.spec("SPEC-2102")
 
@@ -103,12 +103,50 @@ def test_refuses_an_invalid_demo_payload(data: dict[str, object]) -> None:
         validate_demo_event(event(data))
 
 
-async def test_the_demo_consumer_logs_its_run() -> None:
+async def test_the_demo_consumer_records_the_three_steps() -> None:
     logger = RecordingLogger()
-    deps = FakeDeps(db=FakeDatabase(), clock=FakeClock(FIXED), logger=logger)
+    database = FakeDatabase()
+    deps = FakeDeps(db=database, clock=FakeClock(FIXED), logger=logger)
     await demo_job(deps, event())
-    assert logger.messages() == ["demo job consumed"]
-    assert logger.lines[0][1]["runId"] == "11111111-1111-4111-8111-111111111111"
+    # The pipeline wrote the row, its three steps, the attempt counter and the closing instant.
+    statements = database.conn.statements()
+    assert statements[0].startswith("insert into public.sdd_demo_runs")
+
+    def updates(prefix: str) -> list[str]:
+        return [statement for statement in statements if statement.startswith(prefix)]
+
+    assert len(updates("update public.sdd_demo_runs set steps")) == 3
+    assert len(updates("update public.sdd_demo_runs set attempts")) == 1
+    assert len(updates("update public.sdd_demo_runs set finished_at")) == 1
+    assert logger.messages()[-1] == "demo job consumed"
+    assert logger.lines[-1][1]["runId"] == "11111111-1111-4111-8111-111111111111"
+    assert logger.lines[-1][1]["attempts"] == 1
+
+
+async def test_the_demo_switch_fails_the_second_step_once() -> None:
+    logger = RecordingLogger()
+    database = FakeDatabase()
+    deps = FakeDeps(db=database, clock=FakeClock(FIXED), logger=logger)
+    await demo_job(deps, event({"runId": "11111111-1111-4111-8111-111111111111", "failOnceAt": "step-2"}))
+    assert "demo step failed once" in logger.messages()
+    assert logger.lines[-1][1]["attempts"] == 2
+    increments = [
+        parameters["attempts"]
+        for statement, parameters in database.conn.calls
+        if statement.startswith("update public.sdd_demo_runs set attempts")
+    ]
+    assert increments == [1, 2]
+
+
+async def test_a_finished_demo_run_is_left_untouched() -> None:
+    logger = RecordingLogger()
+    database = FakeDatabase()
+    finished = {"name": "step-1-prepare", "at": "2026-11-11T12:20:00.000Z"}
+    database.conn = RecordingConnection([[], [{"attempts": 2, "steps": [finished], "finished_at": FIXED}]])
+    deps = FakeDeps(db=database, clock=FakeClock(FIXED), logger=logger)
+    await demo_job(deps, event())
+    assert [statement for statement in database.conn.statements() if statement.startswith("update")] == []
+    assert logger.lines[-1][1]["skipped"] is True
 
 
 def test_a_delayed_consumer_exposes_its_first_run() -> None:
