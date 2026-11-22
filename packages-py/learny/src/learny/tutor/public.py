@@ -18,6 +18,11 @@ from learny.tutor.application.conversations import (
     create_conversation,
     list_conversations,
 )
+from learny.tutor.application.question_bank import (
+    BankPorts,
+    prepare_question_bank,
+    process_question_bank_jobs,
+)
 from learny.tutor.application.self_test import answer_self_test
 from learny.tutor.application.stream import stream_reply
 from learny.tutor.domain.ai_credentials import (
@@ -28,6 +33,7 @@ from learny.tutor.domain.ai_credentials import (
 from learny.tutor.domain.starters import confusion_of, starters_of
 
 __all__ = [
+    "BankPorts",
     "ConversationRef",
     "answer_self_test",
     "confusion_of",
@@ -42,6 +48,8 @@ __all__ = [
     "list_conversations",
     "list_credentials",
     "models_update_issues",
+    "prepare_question_bank",
+    "process_question_bank_jobs",
     "qualify_credential",
     "starters_of",
     "stream_reply",

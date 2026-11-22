@@ -102,3 +102,16 @@ OPEN_QUESTION_CRITERION = "Idée essentielle de {label}"
 OPEN_QUESTION_MODEL_ANSWER = "Une réponse juste mobilise {label} et l’explique dans le contexte du chapitre."
 OPEN_QUESTION_EXPLANATION = "La question vérifie la compréhension de {label}, sans récitation."
 OPEN_QUESTION_OBJECTIVE = "Vérifier {label}"
+
+# --- question banks (packages/tutor/src/services/question-bank.ts, SPEC-513) -----------------------
+
+QUESTION_BANK_PARAMS_INVALID = "Les param\u00e8tres de la banque sont invalides."
+QUESTION_BANK_COURSE_MISSING = "Aucune version de cours priv\u00e9e n\u2019est disponible."
+QUESTION_BANK_COURSE_NOT_READY = "La version du cours n\u2019est pas encore pr\u00eate."
+QUESTION_BANK_NOTION_NOT_FOUND = "Notion introuvable dans ce cours."
+QUESTION_BANK_NOTION_FALLBACK = "Notion li\u00e9e"
+QUESTION_BANK_JOB_NOT_CREATED = "Job de banque non cr\u00e9\u00e9."
+QUESTION_BANK_BRICK_NOT_CREATED = "Brique de banque non cr\u00e9\u00e9e."
+QUESTION_BANK_CONTEXT_UNAVAILABLE = "Le contexte du cours n\u2019a pas pu \u00eatre pr\u00e9par\u00e9."
+QUESTION_BANK_MODULE_MISMATCH = "Le module ne correspond pas \u00e0 la version du cours."
+QUESTION_BANK_QUESTION_FALLBACK = "Question de banque"

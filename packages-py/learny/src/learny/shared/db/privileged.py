@@ -97,5 +97,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the unlock writes the `module_validated` milestone, a system-managed row
         # read-only for the authenticated role (SPEC-408 policy, SPEC-612 EF-7).
         "learny.formation.application.unlock_module": "module validation milestone row",
+        # SPEC-2207 - the bank jobs read and write the jobs, the bricks and their versions with
+        # the owner role, exactly like the TypeScript `store: ctx.sdb.transaction` of the job
+        # (SPEC-513 ET-2).
+        "learny.tutor.application.question_bank": "question bank jobs, bricks and versions",
     }
 )

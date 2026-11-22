@@ -11,6 +11,7 @@ from typing import Any, Protocol
 from learny.identity.domain.actor import Actor
 from learny.platform.llm.gateway import LlmGateway
 from learny.shared.clock import Clock
+from learny.shared.config import Settings
 
 
 class Transactions(Protocol):
@@ -23,6 +24,9 @@ class Transactions(Protocol):
 
 class TutorDeps(Protocol):
     """What the tutor use cases need; `learny.shared.deps.Deps` satisfies it."""
+
+    @property
+    def settings(self) -> Settings: ...
 
     @property
     def clock(self) -> Clock: ...
