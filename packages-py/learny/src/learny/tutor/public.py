@@ -18,6 +18,7 @@ from learny.tutor.application.conversations import (
     create_conversation,
     list_conversations,
 )
+from learny.tutor.application.generate_course import generate_course
 from learny.tutor.application.question_bank import (
     BankPorts,
     prepare_question_bank,
@@ -44,6 +45,7 @@ __all__ = [
     "delete_credential",
     "discover_body_issues",
     "discover_credential_models",
+    "generate_course",
     "get_models_state",
     "list_conversations",
     "list_credentials",

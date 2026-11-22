@@ -43,8 +43,6 @@ AT = "2026-11-11T12:20:00.000Z"
 DAY = "2026-11-11"
 
 # The consumer table of the P22 plan (SPEC-2207): the name and the event of every row.
-# `generate-course` is absent: `tutor.generate_course` has no Python use case yet (see the test
-# below, which pins the gap so it cannot be forgotten before the checkpoint).
 PLAN: dict[str, str] = {
     "privacy.run_account_deletions": "cron/nightly",
     "privacy.purge_exports": "cron/nightly",
@@ -59,6 +57,7 @@ PLAN: dict[str, str] = {
     "engagement.send_welcome_email": "user/signed-up",
     "engagement.deliver_notification": "notification/delivery-due",
     "content.process_resource": "resource/uploaded",
+    "tutor.generate_course": "chapter/contributions-completed",
     "tutor.prepare_question_bank": "course/generated",
     "learning.plan_programme": "formation/programme-validated",
     "assessments.grade_quiz": "quiz/submitted",
@@ -83,6 +82,12 @@ VALID_PAYLOADS: dict[str, dict[str, Any]] = {
     "engagement.send_welcome_email": {"userId": USER},
     "engagement.deliver_notification": {"userId": USER, "deliveryId": DELIVERY},
     "content.process_resource": {"userId": USER, "resourceId": RESOURCE},
+    "tutor.generate_course": {
+        "userId": USER,
+        "moduleId": MODULE,
+        "chapterId": None,
+        "force": True,
+    },
     "tutor.prepare_question_bank": {"userId": USER, "courseId": COURSE, "moduleId": MODULE},
     "learning.plan_programme": {"userId": USER, "formationId": FORMATION},
     "assessments.grade_quiz": {"userId": USER, "attemptId": ATTEMPT},
@@ -126,7 +131,7 @@ def event(name: str, data: dict[str, Any], event_id: str = "spec-2207:event") ->
 def test_the_registry_declares_the_consumers_of_the_plan() -> None:
     declared = {consumer.name: consumer.on for consumer in CONSUMERS if consumer.name != DEMO_CONSUMER}
     assert declared == PLAN
-    assert len(declared) == 21
+    assert len(declared) == 22
 
 
 def test_every_consumer_has_a_valid_name_and_options() -> None:
@@ -145,19 +150,26 @@ def test_every_registry_consumer_is_owned_by_python(ownership: dict[str, Owner])
     assert all(ownership[consumer.name] == "py" for consumer in CONSUMERS)
 
 
-def test_the_only_typescript_consumer_is_the_unported_course_generation(
-    ownership: dict[str, Owner],
-) -> None:
-    # Documented gap: `tutor.generate_course` has no Python use case (SPEC-2204), so the entry stays
-    # `ts` and is not declared here. Wiring it is the last row of the table to close.
-    assert ownership["tutor.generate_course"] == "ts"
-    assert "tutor.generate_course" not in {consumer.name for consumer in CONSUMERS}
-    assert [name for name, owner in ownership.items() if owner == "ts"] == ["tutor.generate_course"]
+def test_no_consumer_is_left_to_typescript(ownership: dict[str, Owner]) -> None:
+    # ADR-2032 pinned the last gap (`tutor.generate_course`); the port closed it, so the whole table
+    # is `py` and every consumer of the registry is executed by the Python worker (ADR-2006).
+    assert [name for name, owner in ownership.items() if owner == "ts"] == []
+    assert "tutor.generate_course" in {consumer.name for consumer in CONSUMERS}
+    assert ownership["tutor.generate_course"] == "py"
 
 
 def test_no_typescript_consumer_is_ever_active() -> None:
     everything_ts = FakeOwnership({consumer.name: "ts" for consumer in CONSUMERS})
     assert active_consumers(everything_ts) == ()
+
+
+def test_the_course_generation_runs_once_per_completion_event() -> None:
+    consumer = consumer_named("tutor.generate_course")
+    assert consumer.on == "chapter/contributions-completed"
+    assert consumer.timeout_s == 600
+    # `retries: 3` in the job definition: the first attempt plus three retries.
+    assert consumer.max_attempts == 4
+    assert consumer.run_after(event(consumer.on, VALID_PAYLOADS[consumer.name]), FakeClock(FIXED)) is None
 
 
 def test_the_two_graders_of_a_graded_quiz_are_both_subscribed() -> None:
@@ -225,6 +237,12 @@ def test_a_valid_payload_passes_its_validator(name: str) -> None:
         ("tutor.prepare_remediation", {"userId": USER, "moduleId": MODULE, "passed": "yes"}),
         ("learning.plan_programme", {"userId": USER, "formationId": ""}),
         ("shared.purge_outbox", {"runDate": "11/11/2026"}),
+        ("tutor.generate_course", {"userId": USER, "moduleId": MODULE, "chapterId": None}),
+        ("tutor.generate_course", {"userId": USER, "moduleId": "nope", "chapterId": None, "force": True}),
+        (
+            "tutor.generate_course",
+            {"userId": USER, "moduleId": MODULE, "chapterId": "not-a-uuid", "force": True},
+        ),
         ("identity.purge_security_rows", {}),
     ],
 )

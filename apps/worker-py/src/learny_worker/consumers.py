@@ -54,6 +54,8 @@ GENERATION_TIMEOUT_S = 600
 GRADING_TIMEOUT_S = 300
 NIGHTLY_DELETION_TIMEOUT_S = 900
 HOURLY_NOTIFICATION_ATTEMPTS = 2
+# `generate-course` declares `retries: 3`: the first attempt and three retries (P22 plan).
+COURSE_GENERATION_ATTEMPTS = 4
 
 # Kinds of the payload fields the consumers read (`api/events.schema.json`).
 UUID = "uuid"
@@ -282,6 +284,26 @@ async def engagement_send_daily_digest(deps: Any, event: Event) -> None:
 async def content_process_resource(deps: Any, event: Event) -> None:
     """`ingest-resource`: the extraction pipeline of one uploaded contribution."""
     await content.process_resource(deps, _text_of(event.data, "resourceId"))
+
+
+def validate_course_generation_event(event: Event) -> None:
+    """`chapter/contributions-completed` is `{userId, moduleId, chapterId | null, force}`."""
+    _check_field(event.data, "userId", UUID)
+    _check_field(event.data, "moduleId", UUID)
+    chapter_id = event.data.get("chapterId")
+    if chapter_id is not None and not _is_uuid(chapter_id):
+        raise PermanentJobError("VALIDATION_FAILED", "chapterId must be a uuid or null")
+    _check_field(event.data, "force", BOOLEAN)
+
+
+async def tutor_generate_course(deps: Any, event: Event) -> None:
+    """`generate-course`: the whole course of one module, guarded by the generation key."""
+    await tutor.generate_course(
+        deps,
+        _text_of(event.data, "userId"),
+        _text_of(event.data, "moduleId"),
+        event.event_id,
+    )
 
 
 async def tutor_prepare_question_bank(deps: Any, event: Event) -> None:
@@ -514,6 +536,15 @@ CONSUMERS: tuple[Consumer, ...] = (
         timeout_s=INGESTION_TIMEOUT_S,
         validate=payload_validator(userId=UUID, resourceId=UUID),
         tags={"context": "content"},
+    ),
+    Consumer(
+        name="tutor.generate_course",
+        on="chapter/contributions-completed",
+        run=tutor_generate_course,
+        timeout_s=GENERATION_TIMEOUT_S,
+        max_attempts=COURSE_GENERATION_ATTEMPTS,
+        validate=validate_course_generation_event,
+        tags={"context": "tutor"},
     ),
     Consumer(
         name="tutor.prepare_question_bank",
