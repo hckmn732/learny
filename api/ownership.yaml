@@ -139,13 +139,13 @@ operations:
   'home.get': ts
   'invitations.accept': py
   'invitations.get': py
-  'me.ai.credentials.create': ts
-  'me.ai.credentials.delete': ts
-  'me.ai.credentials.discover': ts
-  'me.ai.credentials.list': ts
-  'me.ai.credentials.qualify': ts
-  'me.ai.models.get': ts
-  'me.ai.models.update': ts
+  'me.ai.credentials.create': py
+  'me.ai.credentials.delete': py
+  'me.ai.credentials.discover': py
+  'me.ai.credentials.list': py
+  'me.ai.credentials.qualify': py
+  'me.ai.models.get': py
+  'me.ai.models.update': py
   'me.ai.task-models.update': py
   'me.automation-actions.accept': py
   'me.automation-actions.decline': py
