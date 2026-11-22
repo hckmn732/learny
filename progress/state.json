@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T07:02:58.040Z",
+  "updatedAt": "2026-11-22T07:07:41.140Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6952,11 +6952,11 @@
       }
     },
     "SPEC-2203": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-22T07:07:41.139Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2203-domaine-contenu-ingestion",
       "commit": null,
       "lastError": null,
       "validations": {}
