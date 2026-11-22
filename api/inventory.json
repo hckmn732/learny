@@ -5,7 +5,7 @@
     "special": 32,
     "events": 49,
     "jobs": 22,
-    "gaps": 137
+    "gaps": 133
   },
   "operations": [
     {
@@ -751,8 +751,10 @@
         "tutor_messages"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "conversationMessage",
@@ -806,6 +808,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "packages/contracts/src/routes.test.ts"
       ],
       "gap": false
@@ -1042,8 +1045,10 @@
         "tutor_messages"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "courseConversationList",
@@ -1090,8 +1095,10 @@
         "tutor_messages"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "courseProgress",
@@ -6807,6 +6814,7 @@
       "tests": [
         "apps/api/test/integration/ai-credentials-routes.test.ts",
         "apps/api/test/integration/ai-qualify-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p6/spec-602-onboarding.spec.ts"
       ],
       "gap": false
@@ -6834,7 +6842,8 @@
       "tables": [],
       "events": [],
       "tests": [
-        "apps/api/test/integration/ai-qualify-route.test.ts"
+        "apps/api/test/integration/ai-qualify-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
       ],
       "gap": false
     },
@@ -6863,8 +6872,10 @@
       "implementation": "packages/api-routes/src/implementations/ai-credentials.ts",
       "tables": [],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
+      ],
+      "gap": false
     },
     {
       "key": "meAiCredentialsList",
@@ -6889,6 +6900,7 @@
       "tests": [
         "apps/api/test/integration/ai-credentials-routes.test.ts",
         "apps/api/test/integration/ai-qualify-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p6/spec-602-onboarding.spec.ts"
       ],
       "gap": false
@@ -6925,7 +6937,8 @@
       "tables": [],
       "events": [],
       "tests": [
-        "apps/api/test/integration/ai-qualify-route.test.ts"
+        "apps/api/test/integration/ai-qualify-route.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts"
       ],
       "gap": false
     },
@@ -6954,6 +6967,7 @@
       "tests": [
         "apps/api/src/mount.test.ts",
         "apps/api/test/integration/spec-709-routes.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p7/spec-709.spec.ts"
       ],
       "gap": false
@@ -6986,6 +7000,7 @@
       "tests": [
         "apps/api/src/mount.test.ts",
         "apps/api/test/integration/spec-709-routes.test.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p7/spec-709.spec.ts"
       ],
       "gap": false
@@ -7380,6 +7395,7 @@
         "apps/web/e2e/journeys/data-rights.spec.ts",
         "apps/web/e2e/specs/p2/spec-205.spec.ts",
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",
@@ -7925,6 +7941,7 @@
         "apps/web/e2e/journeys/data-rights.spec.ts",
         "apps/web/e2e/specs/p2/spec-205.spec.ts",
         "apps/web/e2e/specs/p21/spec-2101.spec.ts",
+        "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "apps/web/e2e/specs/p22/spec-2205.spec.ts",
         "apps/web/e2e/specs/p3/spec-304.spec.ts",
         "apps/web/e2e/specs/p3/spec-305.spec.ts",

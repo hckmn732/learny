@@ -196,6 +196,9 @@ export default defineConfig({
       timeout: 180000,
       env: {
         ...TEST_SERVER_ENV,
+        // SPEC-2204: BYOK encryption is served by the Python facade, which reads the keyring at
+        // request time; it receives the same test-only key as the web and Hono.
+        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         PY_HONO_UPSTREAM_URL: HONO_URL,
         APP_ENV: 'test',
         // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
