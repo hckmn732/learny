@@ -183,6 +183,9 @@ importers:
       '@learny/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@learny/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@learny/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
