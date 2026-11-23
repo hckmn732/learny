@@ -32,6 +32,7 @@ import { Segmented } from '../../ui/Segmented';
 import { Sheet } from '../../ui/Sheet';
 import { Skeleton } from '../../ui/Skeleton';
 import { Text } from '../../ui/Text';
+import { useStartQuiz } from '../quiz/use-start-quiz';
 
 import { FormationCard } from './FormationCard';
 import { FormationSwitcherSheet } from './FormationSwitcherSheet';
@@ -105,6 +106,7 @@ export function ProgrammeScreen() {
   const sigil = options.current?.monogram ?? formationSigil(title);
   const canSwitch = options.formations.length > 1;
 
+  const starter = useStartQuiz();
   const openWeb = (path: string): void => {
     setSheet(null);
     void openOnWeb(path);
@@ -118,8 +120,17 @@ export function ProgrammeScreen() {
       params: { courseId: moduleId, chapitre: chapterId },
     });
   };
+  // SPEC-3304 EF-1 — « Quiz de validation » crée (ou reprend) la tentative et ouvre l'écran plein
+  // écran ; un refus (délai de nouvelle tentative, banque en préparation) ouvre la fiche du module,
+  // qui porte le message et le bouton de reprise.
   const openQuiz = (module: ModuleView): void => {
-    if (module.href !== null) void openOnWeb(`${module.href}/quiz`);
+    void starter.start(module.id).then((outcome) => {
+      if (!outcome.ok) {
+        openDetail(module);
+        return;
+      }
+      router.push(`/quiz/${outcome.attemptId}`);
+    });
   };
   const openDetail = (module: ModuleView): void => {
     router.push({

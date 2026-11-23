@@ -120,8 +120,12 @@ describe('[SPEC-3202] onglet Programme', () => {
         chapitre: '00000000-0000-4000-8000-00000000000301',
       },
     });
+    // SPEC-3304 : le quiz de validation s'ouvre en natif (route `quiz/[attemptId]`), il ne part
+    // plus vers le web (CA-3, BR-QUI-05).
     await fireEvent.press(screen.getByTestId('module-3-quiz'));
-    expect(mockOpenOnWeb).toHaveBeenCalledWith(expect.stringContaining('/quiz'));
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      expect.objectContaining({ pathname: '/programme/module/[moduleId]' }),
+    );
   });
 
   it('affiche la condition de déblocage d’un module verrouillé (CA-2, BR-FOR-08)', async () => {

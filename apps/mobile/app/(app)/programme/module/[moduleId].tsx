@@ -5,7 +5,7 @@
 // (BR-FOR-08). Adding contributions, exercises and the quiz are out of the mobile scope and open
 // the web page (ADR-3002 § 3); nothing is written here.
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { isActiveProgramme } from '@learny/contracts';
@@ -14,6 +14,7 @@ import { fr } from '@learny/i18n';
 import { useMe, useModuleCourse, useProgramme } from '../../../../src/data/use-programme';
 import { ChapterRow } from '../../../../src/features/programme/ChapterRow';
 import { buildProgrammeView } from '../../../../src/features/programme/view-model';
+import { useStartQuiz } from '../../../../src/features/quiz/use-start-quiz';
 import { openOnWeb } from '../../../../src/lib/web';
 import { theme } from '../../../../src/theme';
 import { Button } from '../../../../src/ui/Button';
@@ -54,6 +55,10 @@ export default function ModuleRoute() {
     [active, courseProgress],
   );
   const module = model?.modules.find((entry) => entry.id === moduleId) ?? null;
+  // SPEC-3304 EF-1 — « Quiz de validation » crée (ou reprend) la tentative puis ouvre l'écran
+  // plein écran ; le quiz n'est plus renvoyé au web (ADR-3002, périmètre V1).
+  const starter = useStartQuiz();
+  const [quizError, setQuizError] = useState<string | null>(null);
 
   return (
     <View style={styles.screen} testID="module-screen">
@@ -147,11 +152,29 @@ export default function ModuleRoute() {
                 />
                 <Button
                   label={t.moduleScreen.quiz}
+                  loading={starter.pending}
                   onPress={() => {
-                    void openOnWeb(`${module.href ?? ''}/quiz`);
+                    setQuizError(null);
+                    void starter.start(module.id).then((outcome) => {
+                      if (!outcome.ok) {
+                        setQuizError(outcome.message);
+                        return;
+                      }
+                      router.push(`/quiz/${outcome.attemptId}`);
+                    });
                   }}
                   testID="module-detail-quiz"
                 />
+                {starter.preparing ? (
+                  <Text variant="caption" tone="secondary" testID="module-quiz-preparing">
+                    {t.moduleScreen.quizPreparing}
+                  </Text>
+                ) : null}
+                {quizError === null ? null : (
+                  <Text variant="caption" tone="danger" testID="module-quiz-error">
+                    {quizError}
+                  </Text>
+                )}
               </View>
             )}
           </>

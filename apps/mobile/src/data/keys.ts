@@ -42,6 +42,8 @@ export const queryKeys = {
     health: (apiUrl: string) => ['sdd', 'health', apiUrl] as const,
     me: () => ['sdd', 'me'] as const,
   },
+  attempt: (attemptId: string) => ['attempt', attemptId] as const,
+  attemptResult: (attemptId: string) => ['attempt', attemptId, 'result'] as const,
 } as const;
 
 export type QueryKeys = typeof queryKeys;
