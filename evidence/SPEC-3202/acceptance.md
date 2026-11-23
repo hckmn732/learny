@@ -3,7 +3,8 @@
 - **Branche** : `spec/SPEC-3202-programme-modules-et-chapitres`
 - **Worktree** : `/root/wt/SPEC-3202`
 - **Environnement** : VM `learny-dev`, émulateur Android local (ADR-3018), seed SPEC-115,
-  API `LLM_MODE=mock` sur `http://127.0.0.1:3001`, Supabase local.
+  API `LLM_MODE=mock` sur `http://127.0.0.1:3001`, Supabase local, horloge figée au
+  2026-11-11T12:20:00Z, `RATE_LIMIT_MODE=off` pour le compte de démonstration.
 - **Non-régression** : coquille SPEC-3102 et cache SPEC-3003 inchangés.
 
 ## 1. Ce qui est livré
@@ -50,59 +51,82 @@
    au retour au premier plan de SPEC-3003.
 7. **Visuel** : un seul flux `@SPEC-3202 @visual` (ADR-3015 § 5), capture Modules comparée à la
    référence `design/app-mobile/exports/screens/android-03-programme.png` (barres natives masquées,
-   ADR-3003 § 4). La vue Calendrier est vérifiée structurellement dans le même flux.
+   ADR-3003 § 4). La vue Calendrier est vérifiée structurellement dans le même flux. La dette
+   connue « un seul flux visuel par spec » (transport dual-VM historique, ratios partagés) reste
+   consignée ; elle ne s'applique plus ici, le harnais local indexant les artefacts par flux.
 8. **iOS** : non exécutable sous Linux ; la disposition iOS (« + » d'en-tête, segmented control iOS,
    pastille « En cours » citron) est couverte par le thème et les tests de composants, comme déjà
    consigné par SPEC-3102.
 
-## 3. Tests
+## 3. Défauts corrigés pendant la preuve
+
+1. **Accordéon jamais déplié à l'ouverture** (`fix(SPEC-3202): deplie le module en cours mesure a
+   l ouverture`, `b79837ac`) : le contenu du module était mesuré dans un parent de hauteur 0 et
+   `overflow: hidden` ; `onLayout` ne rapportait donc jamais de hauteur positive et
+   `setExpandedHeight` laissait `height = 0`, si bien que le module en cours restait replié (et
+   `programme-resume` absent de l'arbre). Le corps garde maintenant sa hauteur naturelle tant
+   qu'il n'est pas mesuré, puis l'animation prend le relais. Le défaut n'était pas visible en Jest
+   (pas de moteur de mise en page) : c'est la campagne Maestro qui l'a révélé, la comparaison
+   visuelle restant sous le seuil malgré lui.
+2. **Flux Maestro** (`test(SPEC-3202): defilement borne vers le module verrouille`, `76a332b9`) :
+   avec le module 3 déplié, la reprise et le module 4 passent sous la barre d'onglets ; un
+   défilement borné les amène à l'écran, un défilement inverse ramène en haut avant la capture.
+   `scrollUntilVisible` reste écarté (Maestro 2.12.1, longues listes).
+
+## 4. Tests
 
 | Niveau | Fichier | Résultat |
 |---|---|---|
 | Vitest `[SPEC-3202]` | `apps/mobile/src/features/programme/view-model.test.ts` | 10 tests ✅ |
 | Jest `[SPEC-3202]` | `apps/mobile/test/programme/{programme-screen,module-accordion,formation-switcher,fab-layout}.test.tsx` | 18 tests ✅ |
 | Intégration | `apps/mobile/test/integration/programme.int.test.ts` | 3 tests ✅ (programme seedé, 29 %, `modules.course`, `PATCH /me/current-formation`) |
-| Maestro `@SPEC-3202 @visual` | `apps/mobile/e2e/flows/SPEC-3202-programme.yaml` | campagne sous verrou émulateur — voir `e2e-mobile.json` |
+| Maestro `@SPEC-3202 @visual` | `apps/mobile/e2e/flows/SPEC-3202-programme.yaml` | 1 flux ✅, 1 vidéo, 1 comparaison — `evidence/SPEC-3202/e2e-mobile.json` |
 
-## 4. Validation
+Fichiers rouges préexistants hors périmètre mobile, non réparés (décision du porteur, voir
+`evidence/SPEC-3001/acceptance.md`) : `packages/config/src/commit-rules.test.ts`,
+`apps/web/test/unit/bundle-split.test.ts`, `tools/migration/test/unit/report.test.ts`.
 
-Rapport complet : `evidence/SPEC-3202/validate.md`, `e2e-mobile.json`, JUnit Maestro, capture et
-vidéo. Critères :
+## 5. Validation visuelle
 
-- [x] CA-1 — valeurs serveur affichées (29 % = 2/7, « Module 3 sur 7 », quatre chapitres du
-      module 3, module 4 verrouillé, module 2 « Validé · 91 % ») — `view-model.test.ts`,
-      `programme-screen.test.tsx` ; assertion Maestro prête dans le flux.
-- [x] CA-2 — « Reprendre le chapitre N » ouvre le cours à ce chapitre, module verrouillé → fiche
-      « Se débloque quand le quiz du module 3 est validé » — `module-accordion.test.tsx`,
-      `programme-screen.test.tsx`.
-- [x] CA-3 — `PATCH /me/current-formation` mémorisé côté serveur, sélecteur actif/inactif —
-      `programme.int.test.ts` (3 tests verts), `formation-switcher.test.tsx`.
-- [x] CA-4 — création et import renvoient au web, aucune écriture du programme —
-      `programme-screen.test.tsx` (`currentFormationUpdate` non appelé).
-- [ ] CA-5 — comparaison visuelle : **campagne Maestro bloquée par l'environnement** (voir § 5).
+- **Référence** : `design/app-mobile/exports/screens/android-03-programme.png` (824 × 1830),
+  copiée en ligne de base versionnée `apps/mobile/e2e/visual/baselines/SPEC-3202-programme.png`
+  (aucune capture auto-générée : une base issue de la capture ne prouverait rien).
+- **Masque** : `apps/mobile/e2e/visual/masks/spec-3202-programme.json` — chrome système uniquement :
+  barre d'état `y 0 → 0.025` et barre de navigation `y 0.975 → 1`. Le harnais ajoute ses zones
+  natives (`top=0.05`, `bottom=0.05`) ; aucune zone de contenu n'est masquée.
+- **Écart mesuré** : **`diffRatio = 0.088` (8,8 %)**, sous le seuil de 12 % (ADR-3003 § 4), capture
+  de l'état de la maquette (module 3 déplié, module 2 validé, module 4 verrouillé).
+  Preuves : `evidence/SPEC-3202/visual/SPEC-3202-programme.{png,diff.png}` et le rapport JSON.
 
-## 5. Blocage de campagne (environnement, pas de code)
+## 6. Validation
 
-Les deux campagnes SPEC-3202 échouent avant l'onglet Programme, sur la garde d'onboarding :
-`GET /me/onboarding` répond **429 RATE_LIMITED** pour le compte de démonstration (journal
-`/root/logs/api-only.log`). L'horloge de l'API étant figée au 11/11/2026 12:20, la fenêtre de
-limitation ne se réinitialise pas ; tous les agents partagent le même compte et saturent le
-compteur. L'écran affiché est donc « Impossible de vérifier votre configuration » (testID
-`onboarding-error`), jamais l'écran Programme.
+Rapport complet : `evidence/SPEC-3202/validate.md`, `checks.json`, `e2e-mobile.json`, JUnit
+Maestro, capture, diff et vidéo. Critères :
 
-Correctif attendu (environnement) : redémarrage de l'API pour vider les compteurs, puis campagne
-immédiate, ou limitation de débit désactivée pour le compte de démonstration en local. Aucun
-changement de code n'est nécessaire côté SPEC-3202 : le flux contient déjà une reprise
-conditionnelle (`onboarding-error-retry`). Le build mono-ABI et l'APK sont prêts ; il reste à
-relancer `flock /tmp/learny-emulator.lock pnpm -s test:e2e:mobile --tags SPEC-3202` après ce
-correctif, puis `validate --skip-build` et `complete`.
+- [x] ✅ CA-1 — valeurs serveur affichées (29 % = 2/7, « Module 3 sur 7 », quatre chapitres du
+      module 3, module 4 verrouillé, module 2 « Validé · 91 % ») — ✅ `view-model.test.ts`,
+      `programme-screen.test.tsx` ; assertions Maestro `29 %`, `Module 3 sur 7.*`, `module-2`,
+      `module-3`.
+- [x] ✅ CA-2 — « Reprendre le chapitre N » ouvre le cours à ce chapitre, module verrouillé → fiche
+      « Se débloque quand le quiz du module 3 est validé » — ✅ `module-accordion.test.tsx`,
+      `programme-screen.test.tsx`, flux Maestro (`programme-resume` visible, `module-4-toggle` →
+      `programme-locked` → « Compris »).
+- [x] ✅ CA-3 — `PATCH /me/current-formation` mémorisé côté serveur, sélecteur actif/inactif —
+      ✅ `programme.int.test.ts` (3 tests verts), `formation-switcher.test.tsx`, flux Maestro
+      (`formation-switcher`, « SAP S/4HANA Finance »).
+- [x] ✅ CA-4 — création et import renvoient au web, aucune écriture du programme —
+      ✅ `programme-screen.test.tsx` (`currentFormationUpdate` non appelé), flux Maestro
+      (`programme-web-import`, « Continuer sur le web »).
+- [x] ✅ CA-5 — comparaison visuelle de l'état de la maquette : ✅ `diffRatio = 0.088` (8,8 %) sous le
+      seuil de 12 %, masque du chrome système seul (voir § 5).
 
-## 6. Reproduction
+## 7. Reproduction
 
 ```sh
 cd /root/wt/SPEC-3202
 set -a; . ./.env.local; set +a
-flock /tmp/learny-gradle.lock pnpm -s build:mobile:e2e
+flock /tmp/learny-gradle.lock env ORG_GRADLE_PROJECT_reactNativeArchitectures=x86_64 pnpm -s build:mobile:e2e
 flock /tmp/learny-emulator.lock pnpm -s test:e2e:mobile --tags SPEC-3202
+export PATH=/root/.local/bin:$PATH
 node tools/sdd/validate.mjs SPEC-3202 --skip-build
 ```
