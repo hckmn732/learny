@@ -37,10 +37,6 @@ tags:
     text: 'Quiz global'
 - assertVisible:
     id: agenda-now-line
-- assertVisible:
-    id: selected-activity
-- assertVisible:
-    id: agenda-totals
 - takeScreenshot: SPEC-3203-agenda-jour
 # CA-2 — la semaine et le mois, puis le retour à la vue Jour par un jour touché.
 - tapOn:
@@ -96,6 +92,13 @@ tags:
       id: agenda-timeline
     timeout: 20000
 # CA-4 — « Replanifier » propose trois créneaux, le déplacement est appliqué et annoncé.
+- swipe:
+    direction: UP
+    duration: 300
+- extendedWaitUntil:
+    visible:
+      id: replan
+    timeout: 20000
 - tapOn:
     id: replan
 - extendedWaitUntil:

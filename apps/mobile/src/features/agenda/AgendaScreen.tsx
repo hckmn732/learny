@@ -11,6 +11,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { PanResponder, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { AgendaSlot } from '@learny/contracts';
 import { fr } from '@learny/i18n';
@@ -94,6 +95,9 @@ export function AgendaScreen({ now }: AgendaScreenProps = {}) {
   const params: Record<string, string | string[] | undefined> = useLocalSearchParams();
   const router = useRouter();
   const online = useOnlineStatus();
+  // Le chrome natif (barre d'état) n'est jamais recouvert : l'en-tête commence sous l'encoche
+  // (canevas § 3), comme les écrans de la coquille.
+  const insets = useSafeAreaInsets();
 
   // ET-2 - the URL is the single source of the view, the day and the filter, as on the web: a
   // deep link lands on the state it names and every navigation writes it back (`goTo`).
@@ -232,7 +236,11 @@ export function AgendaScreen({ now }: AgendaScreenProps = {}) {
   const empty = ready && slots.length === 0;
 
   return (
-    <View style={styles.base} testID="agenda-screen" {...pan.panHandlers}>
+    <View
+      style={[styles.base, { paddingTop: insets.top }]}
+      testID="agenda-screen"
+      {...pan.panHandlers}
+    >
       <View style={styles.header} testID="agenda-header">
         <View style={styles.headerTexts}>
           <View style={styles.eyebrowRow}>

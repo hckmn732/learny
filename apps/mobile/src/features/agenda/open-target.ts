@@ -24,8 +24,10 @@ export function opensInApp(kind: AgendaSlotKind): boolean {
 
 /** True when the « Ouvrir » link is drawn: a pending activity the learner can open (EF-3). */
 export function isOpenable(slot: AgendaSlot): boolean {
+  // Seules les activités réellement ouvrables portent le lien : une marge de rattrapage, un
+  // sprint ou un apport restent des lignes d'agenda, jamais des destinations (EF-3, EF-6).
   if (slot.status === 'done' || slot.status === 'missed') return false;
-  return opensInApp(slot.kind) || slot.href !== '';
+  return opensInApp(slot.kind);
 }
 
 /**
