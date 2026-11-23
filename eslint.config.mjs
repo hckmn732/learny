@@ -992,12 +992,7 @@ export default tseslint.config(
   },
   {
     // The Expo configuration files (Metro, Babel, Jest) and the asset stub are CommonJS.
-    files: [
-      'apps/mobile/*.config.js',
-      'apps/mobile/test/**/*.js',
-      'apps/mobile/e2e/**/*.mjs',
-      'apps/mobile/plugins/**/*.cjs',
-    ],
+    files: ['apps/mobile/*.config.js', 'apps/mobile/test/**/*.js', 'apps/mobile/e2e/**/*.mjs'],
     languageOptions: {
       globals: {
         module: 'writable',
