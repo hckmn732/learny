@@ -19,6 +19,7 @@ from learny.engagement.domain.automations.definitions.sprint import (
 )
 from learny.learning.domain.planner import PlannerPreferences
 from learny.learning.domain.types import Availability
+from learny.shared.locale_fr import engagement_automations as fr
 
 pytestmark = pytest.mark.spec("SPEC-719")
 
@@ -169,11 +170,11 @@ def test_the_explanation_fits_on_one_line_of_160_characters() -> None:
             summary="",
             formation_id=uuid(1),
             payload={
-                "examTitle": "Quiz de validation · Partie 3",
+                "examTitle": "Quiz de validation Partie 3",
                 "durationMin": 30,
                 "notionIds": [uuid(1)],
                 "notionLabels": [
-                    "Clé de comptabilisation",
+                    "Cle de comptabilisation",
                     "Date comptable",
                     "Plan comptable",
                 ],
@@ -208,5 +209,5 @@ def test_the_explanation_fits_on_one_line_of_160_characters() -> None:
     )
 
     assert len(text) <= 160
-    assert "Vos sprints de 30 min" in text
+    assert text.startswith(fr.SPRINT_SENTENCE_VOUS.split("{duration}")[0] + "30 min")
     assert "\n" not in text

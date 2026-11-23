@@ -16,6 +16,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2207 - the demonstration pipeline writes synthetic runs of `sdd_demo_runs`, a
         # table without policy for learners (SPEC-203 ET-7, ADR-2014).
         "learny.shared.devtools": "synthetic demonstration runs of the pipeline",
+        # SPEC-719 - the sprint engine reads the milestones, the agenda and the journal with the
+        # owner role, exactly like `serviceDb()` of `planSprintsBeforeMilestones` (ADR-0190).
+        "learny.engagement.application.sprints": "sprint planning engine (SPEC-719)",
         # SPEC-2302 - the factories of the demonstration pages write the owner role fixture of
         # a throwaway account inside a transaction that is always rolled back.
         "learny.shared.devfixtures": "rolled-back fixtures of the demonstration pages",

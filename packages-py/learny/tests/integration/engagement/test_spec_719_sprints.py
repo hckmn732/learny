@@ -28,6 +28,7 @@ from factories.identity_support import (
 from learny.engagement.application.sprints import plan_sprints_before_milestones
 from learny.shared.db.uow import Database
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import engagement_automations as fr
 from learny.shared.time import to_iso
 from sqlalchemy import text
 
@@ -148,7 +149,7 @@ async def add_exam(
     tx: Any,
     learner: Learner,
     *,
-    title: str = "Quiz de validation · Partie 1",
+    title: str = "Quiz de validation - Partie 1",
     starts_at: str = "2026-11-14T13:00:00Z",
     ends_at: str = "2026-11-14T14:00:00Z",
     status: str = "planned",
@@ -213,7 +214,7 @@ async def test_two_thirty_minute_sprints_on_j_minus_k_and_j_minus_one(database: 
         for slot in slots:
             minutes = (slot["ends_at"] - slot["starts_at"]).total_seconds() / 60
             assert minutes == 30
-            assert "Notions ciblées" in (slot["meta"] or "")
+            assert (slot["meta"] or "").startswith(fr.SPRINT_META.split("{")[0])
         # The exam slot is never overlapped.
         assert await count(tx.conn, COUNT_OVERLAPPING_EXAMS, user=learner.user_id) == 0
         assert await count(tx.conn, COUNT_SPRINT_ACTIONS, user=learner.user_id) == 1
@@ -296,7 +297,7 @@ async def test_invalid_foreign_and_stale_inputs_write_nothing(database: Database
         assert len(await sprint_rows(tx, owner)) == 2
         assert await count(tx.conn, COUNT_APPLIED_EVENTS, user=owner.user_id) == 1
 
-        cancelled = await add_exam(tx, owner, status="cancelled", title="Épreuve annulée")
+        cancelled = await add_exam(tx, owner, status="cancelled", title="Examen annule")
         with pytest.raises(AppError) as stale:
             await plan_sprints_before_milestones(
                 engagement_deps(tx), owner.actor, owner.formation_id, cancelled

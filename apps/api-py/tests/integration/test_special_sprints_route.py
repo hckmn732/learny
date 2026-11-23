@@ -54,7 +54,7 @@ RESULT: dict[str, Any] = {
             "examSlotId": EXAM,
             "examKind": "validation_quiz",
             "examDate": "2026-11-14",
-            "examTitle": "Quiz de validation · Partie 1",
+            "examTitle": "Quiz de validation Partie 1",
             "daysBefore": 3,
             "durationMin": 30,
             "notionIds": [NOTION],
@@ -70,7 +70,7 @@ RESULT: dict[str, Any] = {
                 }
             ],
             "impossible": [],
-            "summary": "Vos sprints de 30 min avant « Quiz de validation · Partie 1 » : mercredi à 18:30.",
+            "summary": "Vos sprints de 30 min avant Quiz de validation Partie 1 : mercredi a 18:30.",
         }
     ],
 }
