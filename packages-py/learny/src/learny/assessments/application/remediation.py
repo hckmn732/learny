@@ -21,7 +21,7 @@ from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.application.quiz import get_attempt
 from learny.assessments.application.quiz_result import nature_label_of, proposal_of
 from learny.assessments.application.retry_gate import retry_gate
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.identity.domain.actor import Actor

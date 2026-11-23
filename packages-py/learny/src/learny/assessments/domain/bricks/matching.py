@@ -15,7 +15,7 @@ from learny.assessments.domain.bricks.grade_support import (
     round4,
 )
 from learny.assessments.domain.bricks.normalize import normalize_text
-from learny.assessments.domain.bricks.public import opaque_mapping
+from learny.assessments.domain.bricks.public_payload import opaque_mapping
 from learny.assessments.domain.bricks.responses import read_object, read_record
 
 

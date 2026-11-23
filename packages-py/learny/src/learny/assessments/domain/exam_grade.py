@@ -14,7 +14,7 @@ from typing import Any
 
 from learny.assessments.domain.bricks.grade import grade_brick
 from learny.assessments.domain.bricks.grade_support import BrickGradeError
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.random import shuffle_seeded
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.domain.exam_format import allocate_question_counts

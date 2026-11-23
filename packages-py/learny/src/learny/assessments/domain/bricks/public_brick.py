@@ -7,7 +7,7 @@ version always shuffles the same way and the server can recompute the opaque-id 
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 
 BRICK_PUBLIC_REQUIRED_ABSENT_FIELDS = (
     "correct",

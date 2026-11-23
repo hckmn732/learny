@@ -129,4 +129,4 @@ def test_the_domain_reads_no_clock_and_no_global_randomness() -> None:
 
 def test_the_domain_tree_is_complete() -> None:
     names = {file.stem for file in (DOMAIN / "bricks").glob("*.py")}
-    assert {"registry", "schema", "checks", "references", "validate", "public", "grade"} <= names
+    assert {"registry", "schema", "checks", "references", "validate", "public_payload", "grade"} <= names

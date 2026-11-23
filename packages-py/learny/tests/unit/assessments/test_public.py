@@ -8,11 +8,11 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from learny.assessments.domain.bricks.public import ordering_public
 from learny.assessments.domain.bricks.public_brick import (
     BRICK_PUBLIC_REQUIRED_ABSENT_FIELDS,
     to_public_brick,
 )
+from learny.assessments.domain.bricks.public_payload import ordering_public
 from learny.assessments.domain.bricks.random import shuffle_seeded
 
 pytestmark = pytest.mark.spec("SPEC-2202")

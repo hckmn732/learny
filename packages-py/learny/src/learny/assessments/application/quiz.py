@@ -13,7 +13,7 @@ from typing import Any
 from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.domain.bricks.grade import grade_brick
 from learny.assessments.domain.bricks.grade_support import BrickGradeError
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.identity.domain.actor import Actor

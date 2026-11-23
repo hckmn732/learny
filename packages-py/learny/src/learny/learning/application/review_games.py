@@ -8,7 +8,7 @@ clock, no database, no model call.
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from learny.assessments.domain.bricks.public import opaque_mapping
+from learny.assessments.domain.bricks.public_payload import opaque_mapping
 
 
 def brick_format_response(type_name: str, response: Any) -> Any:
