@@ -1,9 +1,10 @@
 # SPEC-3303 — contexte transmis et nouvelle discussion (BR-TUT-02, CA-5, BR-TUT-06).
 #
-# Le chapitre est retiré du contexte depuis la fiche, puis une question est posée : la requête part
-# avec `chapter: false` (preuve du corps dans `evidence/SPEC-3303/tutor-context-request.json`). Le
-# menu « Nouvelle discussion » vide le fil sans écrire côté serveur et repropose les questions de
-# l'API (EF-4, ET-1).
+# Le fil est ouvert par « Nouvelle discussion » (aucune écriture serveur : ET-1), le chapitre est
+# retiré du contexte depuis la fiche, puis une question est posée : la requête part avec
+# `chapter: false` (corps versionné dans `evidence/SPEC-3303/tutor-context-request.json`). Le menu
+# « Nouvelle discussion » vide le fil sans écrire côté serveur et repropose les questions de l'API
+# (EF-4, ET-1).
 #
 # Écart consigné : le flux d'interruption par coupure réseau (mode avion pendant le flux) n'est pas
 # automatisable ici — l'émulateur est partagé par plusieurs spécifications et Maestro 2.12.1 ne
@@ -39,6 +40,13 @@ tags:
     visible:
       id: tutor-sheet
     timeout: 30000
+# Fil neuf : la question du flux ne s'ajoute pas à la discussion de démonstration.
+- tapOn:
+    id: tutor-new-discussion
+- extendedWaitUntil:
+    visible:
+      id: tutor-empty
+    timeout: 10000
 # BR-TUT-02 — la ligne « Contexte · N éléments » et la fiche d'interrupteurs.
 - tapOn:
     id: tutor-context
@@ -61,11 +69,12 @@ tags:
 - tapOn:
     id: tutor-input
 - inputText: Comment se lit un en-tete de piece ?
+- hideKeyboard
 - tapOn:
     id: tutor-send
 - extendedWaitUntil:
     visible:
-      id: tutor-message-4
+      id: tutor-follow-up-0
     timeout: 30000
 # BR-TUT-06 — « Nouvelle discussion » vide le fil ; les questions de l'API restent proposées (EF-4).
 - tapOn:

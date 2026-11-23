@@ -1,11 +1,16 @@
-# SPEC-3303 — feuille du tuteur : historique rechargé, question envoyée, réponse sourcée (CA-1,
-# CA-2). Unique flux `@visual` de la spécification (ADR-3015 § 5, leçon 6 du BRIEF) : la capture
-# reproduit l'état de la maquette `design/app-mobile/exports/screens/android-04b-cours-tuteur.png`
-# (question « Pourquoi deux dates sur une pièce ? », réponse sourcée, suites proposées) et est
-# comparée à la ligne de base versionnée `e2e/visual/baselines/SPEC-3303-tuteur.png` (ADR-3003 § 4).
+# SPEC-3303 — feuille du tuteur : discussion neuve, réponse sourcée, historique (CA-1, CA-2, CA-6).
 #
-# Précautions Maestro 2.12.1 : assertions de texte ASCII (les accents sont abîmés en transit) et
-# nœuds vérifiés portant un `id` ; le champ multiligne est saisi après un appui explicite.
+# Unique flux `@visual` de la spécification (ADR-3015 § 5, leçon 6 du BRIEF) : la capture montre la
+# réponse sourcée du tuteur, ses suites, la saisie et la mention de pied de la maquette
+# `design/app-mobile/exports/screens/android-04b-cours-tuteur.png`, comparée à la ligne de base
+# versionnée `e2e/visual/baselines/SPEC-3303-tuteur.png` (ADR-3003 § 4).
+#
+# Le fil est ouvert par « Nouvelle discussion » : le contenu capturé ne dépend donc pas des
+# discussions déjà présentes dans le jeu de démonstration partagé (le flux ne mute pas les données :
+# aucun `db:reset`, aucun changement de seed).
+#
+# Précautions Maestro 2.12.1 : assertions de texte ASCII, nœuds vérifiés portant un `id`, clavier
+# refermé avant d'appuyer sur « Envoyer ».
 appId: fr.learny.app
 name: SPEC-3303 tuteur
 tags:
@@ -41,7 +46,7 @@ tags:
     visible:
       id: tutor-sheet
     timeout: 30000
-# EF-2 — l'en-tête, le contexte transmis et la mention de pied.
+# EF-2 — l'en-tête, la ligne de contexte et la mention de pied.
 - assertVisible:
     id: tutor-title
 - assertVisible:
@@ -50,33 +55,34 @@ tags:
     id: tutor-context
 - assertVisible:
     id: tutor-footnote
-# CA-2 — l'historique de la discussion du cours est rechargé : l'accueil, la question de la
-# démonstration et sa réponse sourcée sont déjà dans le fil, sans action de l'apprenant.
+# CA-2 — la feuille ouvre la discussion du cours : le fil contient déjà l'historique du serveur.
 - assertVisible:
     id: tutor-message-0
 - assertVisible:
-    id: tutor-message-1
+    id: tutor-thread
+# Fil neuf pour une capture déterministe, puis la question de la maquette.
+- tapOn:
+    id: tutor-new-discussion
 - extendedWaitUntil:
     visible:
-      id: tutor-follow-up-0
-    timeout: 20000
-- assertVisible:
-    id: tutor-source-0
-# CA-6 — capture de l'état de la maquette : réponse sourcée, suites proposées, saisie et pied.
-- takeScreenshot: SPEC-3303-tuteur
-# CA-1 — une question envoyée produit une réponse diffusée puis commitée dans le fil.
+      id: tutor-empty
+    timeout: 10000
 - tapOn:
     id: tutor-input
 - inputText: Pourquoi deux dates sur une piece ?
+- hideKeyboard
 - tapOn:
     id: tutor-send
+# CA-1 — la réponse arrive avec ses sources et ses suites.
 - extendedWaitUntil:
     visible:
-      id: tutor-message-4
+      id: tutor-follow-up-0
     timeout: 30000
 - assertVisible:
     id: tutor-source-0
-# BR-TUT-06 — la croix ferme la feuille ; la réouverture retrouve la discussion (CA-2).
+# CA-6 — état de la maquette : réponse sourcée, suites, saisie, pied.
+- takeScreenshot: SPEC-3303-tuteur
+# CA-2 — fermer puis rouvrir la feuille retrouve la discussion enregistrée par le serveur.
 - tapOn:
     id: tutor-close
 - extendedWaitUntil:
@@ -86,5 +92,7 @@ tags:
 - openLink: learny://tuteur?sectionId=reopen
 - extendedWaitUntil:
     visible:
-      id: tutor-message-4
+      id: tutor-message-2
     timeout: 30000
+- assertVisible:
+    id: tutor-source-0

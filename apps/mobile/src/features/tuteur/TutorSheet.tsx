@@ -138,7 +138,9 @@ export function TutorSheet({
         style={styles.backdrop}
       />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // Android resizes the window itself (`adjustResize`) : `padding` y déplaçait la
+        // saisie sous le clavier (ET-4). iOS garde `padding`, faute de redimensionnement.
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.avoider}
       >
         <View
