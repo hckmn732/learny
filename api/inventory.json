@@ -45,7 +45,7 @@
       "tests": [
         "apps/api-py/tests/unit/test_pipeline.py",
         "apps/api-py/tests/unit/test_route_coverage.py",
-        "packages-py/learny/tests/integration/learning-engine/test_learning_agenda_gaps.py"
+        "packages-py/learny/tests/integration/learning/test_learning_agenda_gaps.py"
       ],
       "gap": false,
       "served": true
