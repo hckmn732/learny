@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 // SPEC-2302 — final inventory of the Python backend (ADR-2006, ADR-2008, ADR-2012).
 //
 // The TypeScript backend is gone: this extractor reads the *contract artefact* and the *Python
@@ -370,7 +371,23 @@ export function pythonCrons(consumers = [], root = ROOT) {
 
 /** Paths of the removed TypeScript backend that still exist (a non-empty list is a regression). */
 export function remainingTsPaths(root = ROOT) {
-  return REMOVED_PATHS.filter((relativePath) => exists(root, relativePath));
+  // A leftover `node_modules` or `.turbo` directory is a local build artefact, not source: the
+  // tracked content is what ships, so a removed package only counts as present when git still
+  // tracks a file under it. `git ls-files` is authoritative and works in any worktree.
+  const tracked = (relativePath) => {
+    try {
+      return (
+        execFileSync('git', ['ls-files', '--', relativePath], {
+          cwd: root,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'ignore'],
+        }).trim().length > 0
+      );
+    } catch {
+      return exists(root, relativePath);
+    }
+  };
+  return REMOVED_PATHS.filter((relativePath) => tracked(relativePath));
 }
 
 /** Event names of the outbox catalogue (`api/events.schema.json`). */
