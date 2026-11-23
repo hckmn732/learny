@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-23T20:36:40.027Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-23T22:47:35.048Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -220,8 +220,8 @@
 | [SPEC-3301](../specs/p33-mobile-apprentissage/SPEC-3301-rendu-natif-des-briques.md) | Rendu natif des briques et du Markdown | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
 | [SPEC-3302](../specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md) | Lecture du cours | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3202 |
 | [SPEC-3303](../specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md) | Discussion avec le tuteur | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3302 |
-| [SPEC-3304](../specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md) | Quiz de validation et résultat | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3202 |
-| [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3201 |
+| [SPEC-3304](../specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md) | Quiz de validation et résultat | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3202 |
+| [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3201 |
 | [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | ⏳ waiting | 0 | — | SPEC-3102 |
 | [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | ⏳ waiting | 0 | — | SPEC-3101 |
 | [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | ⏳ waiting | 0 | — | SPEC-3401 |
