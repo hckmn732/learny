@@ -66,20 +66,27 @@ tags:
 - swipe:
     direction: UP
     duration: 400
-- assertVisible:
-    id: gallery-brick-matching
+# Les deux colonnes du jeu sont longues : chaque cible est amenée dans la zone visible avant
+# l'appui (un `assertVisible` échouerait sur un élément simplement hors écran).
+- scrollUntilVisible:
+    element:
+      id: brick-item-a
+    direction: UP
+    timeout: 20000
 - tapOn:
     id: brick-item-a
-# Les définitions sont sous les notions : un défilement borné les amène dans la zone visible.
-- swipe:
+- scrollUntilVisible:
+    element:
+      id: brick-item-r1
     direction: UP
-    duration: 300
-- assertVisible:
-    id: brick-item-r1
+    timeout: 20000
 - tapOn:
     id: brick-item-r1
 # La région vive ne porte un texte qu'après un placement : elle prouve que les deux appuis ont
 # réellement changé l'état du jeu (ET-4).
-- assertVisible:
-    id: brick-live
+- scrollUntilVisible:
+    element:
+      id: brick-live
+    direction: UP
+    timeout: 20000
 - takeScreenshot: SPEC-3301-association
