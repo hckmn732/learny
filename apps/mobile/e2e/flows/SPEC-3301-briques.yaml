@@ -70,6 +70,12 @@ tags:
     id: gallery-brick-matching
 - tapOn:
     id: brick-item-a
+# Les définitions sont sous les notions : un défilement borné les amène dans la zone visible.
+- swipe:
+    direction: UP
+    duration: 300
+- assertVisible:
+    id: brick-item-r1
 - tapOn:
     id: brick-item-r1
 # La région vive ne porte un texte qu'après un placement : elle prouve que les deux appuis ont
