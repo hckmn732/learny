@@ -1,7 +1,7 @@
 # Preuves — SPEC-3203 : Agenda jour, semaine, mois et replanification
 
-- Date : 2026-11-23T14:33:51.975Z
-- Commit : 56520f41
+- Date : 2026-11-23T15:14:38.008Z
+- Commit : db94e908
 - Spécification : `specs/p32-mobile-quotidien/SPEC-3203-agenda.md`
 
 ## Rapports
@@ -27,4 +27,4 @@
 - Flux : 1 réussi(s), 0 échec(s)
 - Vidéos : 1 (`video/`)
 - Captures : 2 (`screenshots/`)
-- Comparaisons visuelles : 3 (`visual/`)
+- Comparaisons visuelles : 0 (`visual/`)

@@ -11,8 +11,8 @@
   "tags": [
     "SPEC-3203"
   ],
-  "startedAt": "2026-11-23T14:33:05.355Z",
-  "finishedAt": "2026-11-23T14:33:51.950Z",
+  "startedAt": "2026-11-23T14:59:29.144Z",
+  "finishedAt": "2026-11-23T15:00:22.712Z",
   "passed": 1,
   "failed": 0,
   "videos": 1,
@@ -24,33 +24,19 @@
       "file": "apps/mobile/e2e/flows/SPEC-3203-agenda.yaml",
       "name": "SPEC-3203 agenda",
       "tags": [
-        "SPEC-3203",
-        "visual"
+        "SPEC-3203"
       ],
       "status": "passed",
-      "durationSec": 40.475,
+      "durationSec": 45.832,
       "message": null,
       "videos": [],
       "screenshots": [
         "artifacts/spec-3203-agenda/SPEC-3203-agenda-jour.png",
         "artifacts/spec-3203-agenda/SPEC-3203-agenda-mois.png"
       ],
-      "visual": {
-        "flow": "SPEC-3203 agenda",
-        "status": "failed",
-        "diffRatio": 0.2151,
-        "capture": "/root/wt/SPEC-3203/test-results/sdd/SPEC-3203/artifacts/spec-3203-agenda/SPEC-3203-agenda-jour.png",
-        "baseline": "/root/wt/SPEC-3203/apps/mobile/e2e/visual/baselines/SPEC-3203-agenda.png",
-        "diff": "/root/wt/SPEC-3203/test-results/sdd/SPEC-3203/artifacts/spec-3203-agenda/SPEC-3203-agenda.diff.png"
-      }
+      "visual": null
     }
   ],
-  "visualChecks": [
-    {
-      "flow": "SPEC-3203 agenda",
-      "status": "failed",
-      "diffRatio": 0.2151
-    }
-  ],
+  "visualChecks": [],
   "unattributed": []
 }

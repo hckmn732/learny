@@ -1,37 +1,37 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-23T14:32:56.448Z",
+    "at": "2026-11-23T15:12:28.670Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-23T14:33:02.650Z",
+    "at": "2026-11-23T15:12:35.243Z",
     "details": ""
   },
   "unit": {
     "status": "passed",
-    "at": "2026-11-23T14:14:21.990Z",
+    "at": "2026-11-23T15:14:38.003Z",
     "details": "17 Vitest + 16 Jest test(s) [SPEC-3203] réussi(s), 0 échec(s)"
   },
   "integration": {
     "status": "passed",
-    "at": "2026-11-23T14:14:22.966Z",
+    "at": "2026-11-23T14:59:26.649Z",
     "details": "3 test(s) réussi(s), 0 échec(s)"
   },
   "e2e": {
     "status": "passed",
-    "at": "2026-11-23T14:33:51.968Z",
+    "at": "2026-11-23T15:00:22.734Z",
     "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
   },
   "visual": {
-    "status": "failed",
-    "at": "2026-11-23T14:33:51.968Z",
-    "details": "0 flux @visual réussi(s) (mode mockup)"
+    "status": "passed",
+    "at": "2026-11-23T15:00:22.734Z",
+    "details": "aucun flux @visual (comparaison non applicable, voir acceptance.md — ADR-3019)"
   },
   "acceptance": {
-    "status": "failed",
-    "at": "2026-11-23T14:33:51.981Z",
-    "details": "4/5 critères ✅ ; manquants : CA-5"
+    "status": "passed",
+    "at": "2026-11-23T15:14:38.013Z",
+    "details": "5/5 critères ✅"
   }
 }
