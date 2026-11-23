@@ -177,6 +177,8 @@ export interface MaestroFlowSummary {
   status: 'passed' | 'failed';
   videos: number;
   visual: boolean;
+  /** Étiquettes Maestro du flux (`visual`, `SPEC-xxxx`), telles que déclarées dans le YAML. */
+  tags?: readonly string[];
 }
 export interface MaestroSummary {
   passed: number;

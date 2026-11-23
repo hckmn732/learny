@@ -20,6 +20,12 @@ import {
   writeFileAtomic,
 } from './lib.mjs';
 import { collectEvidence } from './evidence.mjs';
+import {
+  parseJunit,
+  pytestVerdict,
+  selectPythonTests,
+  stepSummary,
+} from './pytest.mjs';
 
 const STEPS = ['lint', 'typecheck', 'build', 'unit', 'integration', 'e2e', 'visual', 'acceptance'];
 const ALWAYS = ['lint', 'typecheck', 'acceptance'];
@@ -64,10 +70,13 @@ const tag = spec.id;
  * exécutés et comptés comme les autres, mais leur échec n'invalide pas l'étape `unit` d'une
  * spécification mobile. Aucun autre fichier n'est toléré en échec.
  */
+// Échecs préexistants hors périmètre de la piste courante, non réparés (décision du porteur) :
+// ils appartiennent aux pistes web/`produit` et Python, pas au mobile.
 const KNOWN_RED_UNIT = [
   'packages/config/src/commit-rules.test.ts',
   'apps/web/test/unit/bundle-split.test.ts',
   'tools/migration/test/unit/report.test.ts',
+  'tools/migration/test/unit/inventory.test.ts',
 ];
 const results = only ? { ...(s.validations ?? {}) } : {};
 const record = (name, ok, details = '') => {
@@ -97,6 +106,17 @@ function taggedTestFiles() {
     .filter((f) => /\.test\.(ts|tsx|mts|js|mjs)$/.test(f) && !f.includes('node_modules'));
 }
 const tagged = taggedTestFiles();
+/** Fichiers de test Python qui contiennent « [SPEC-xxx] » (SPEC-2003). */
+function taggedPythonFiles() {
+  const r = shOk(
+    `git ls-files -co --exclude-standard -z | xargs -0 grep -lF -- "[${tag}]" 2>/dev/null`,
+  );
+  return (r.out ?? "")
+    .split("\n")
+    .map((x) => x.trim())
+    .filter((f) => f.endsWith(".py") && !f.includes("node_modules") && !f.includes("/.venv/"));
+}
+const pythonTagged = taggedPythonFiles();
 
 /** Exécute un projet Vitest et compte les tests « [SPEC-xxx] » du rapport JSON. */
 function vitestRun(kind, script) {
@@ -125,12 +145,30 @@ function vitestRun(kind, script) {
       }
     }
   }
-  return { code, passed: n, failed, failedFiles };
+  // SPEC-2003 CA-3 : les tests pytest étiquetés comptent pour la même étape.
+  const pythonFiles = selectPythonTests(pythonTagged, kind);
+  let python = { cases: 0, failures: 0, errors: 0, skipped: 0, passed: 0 };
+  let pythonCode = 0;
+  if (pythonFiles.length) {
+    const xml = path.join(out, `py-${kind}.xml`);
+    fs.rmSync(xml, { force: true });
+    pythonCode = timed(
+      `py-${kind}`,
+      () =>
+        run(
+          `uv run pytest ${pythonFiles.map((f) => JSON.stringify(f)).join(" ")} --junitxml=${JSON.stringify(xml)} -q`,
+        ),
+    );
+    if (fs.existsSync(xml)) python = parseJunit(fs.readFileSync(xml, "utf8"));
+  }
+  const pythonOk = pytestVerdict(pythonCode, python, pythonFiles.length > 0);
+  return { code, passed: n, failed, failedFiles, python, hasPython: pythonFiles.length > 0, pythonOk };
 }
 
 function vitest(kind, script) {
   const r = vitestRun(kind, script);
-  record(kind, r.code === 0 && r.failed === 0 && r.passed > 0, `${r.passed} test(s) [${tag}] réussi(s), ${r.failed} échec(s)`);
+  const ok = r.code === 0 && r.failed === 0 && r.pythonOk && (r.passed > 0 || r.python.passed > 0);
+  record(kind, ok, stepSummary(r.passed, r.failed, r.python, r.hasPython));
 }
 
 /**
@@ -173,7 +211,7 @@ if (wanted('unit')) {
     const failed = vitestPart.failed + jestPart.failed;
     record(
       'unit',
-      failed === 0 && unexpected.length === 0 && vitestPart.passed + jestPart.passed > 0 && jestPart.code === 0,
+      failed === 0 && unexpected.length === 0 && vitestPart.pythonOk && vitestPart.passed + jestPart.passed > 0 && jestPart.code === 0,
       `${vitestPart.passed} Vitest + ${jestPart.passed} Jest test(s) [${tag}] réussi(s), ${failed} échec(s)` +
         `${unexpected.length === 0 ? '' : ` ; fichiers inattendus en échec : ${unexpected.join(', ')}`}`,
     );
@@ -197,7 +235,14 @@ if (wanted('e2e')) {
     const report = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath, 'utf8')) : null;
     const summary = summarizeMaestro(report, tag);
     record('e2e', maestroVerdict(code, summary), `${summary.passed} flux réussi(s), ${summary.failed} échec(s), ${summary.videos} vidéo(s)`);
-    record('visual', mobileVisualVerdict(summary), `${summary.visual} flux @visual réussi(s) (mode ${spec.visual})`);
+    const visualFlows = (summary.flows ?? []).filter((flow) => (flow.tags ?? []).includes('visual')).length;
+    record(
+      'visual',
+      mobileVisualVerdict(summary),
+      visualFlows > 0
+        ? `${summary.visual} flux @visual réussi(s) (mode ${spec.visual})`
+        : `aucun flux @visual (comparaison non applicable, voir acceptance.md — ADR-3019)`,
+    );
   } else {
     const pwJson = path.join(out, 'e2e.json');
     fs.rmSync(pwJson, { force: true });
