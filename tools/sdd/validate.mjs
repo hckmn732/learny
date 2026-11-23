@@ -49,6 +49,8 @@ for (const k of REQUIRED_SCRIPTS) {
   if (!scripts[k]) die(`Script pnpm manquant : ${k} (voir docs/engineering/testing.md).`);
 }
 
+// `--skip-campaign` : reutilise une campagne Maestro recente au lieu de la rejouer.
+const skipCampaign = process.argv.includes('--skip-campaign');
 const onlyIdx = process.argv.indexOf('--only');
 const onlyArg = onlyIdx > 0 ? process.argv[onlyIdx + 1] ?? '' : (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7);
 const only = onlyArg ? onlyArg.split(',').map((x) => x.trim()).filter(Boolean) : null;
@@ -230,8 +232,19 @@ if (wanted('e2e')) {
   } else if (plan.e2e === 'test:e2e:mobile') {
     // Campagne Maestro (SPEC-3001 EF-5) : le lanceur écrit test-results/sdd/<SPEC>/e2e-mobile.json.
     const reportPath = path.join(out, plan.e2eReport);
-    fs.rmSync(reportPath, { force: true });
-    const code = timed('e2e', () => run(`pnpm -s ${plan.e2e} --tags ${tag}`));
+    // `--skip-campaign` : reutilise une campagne de moins de 20 minutes (iteration rapide sur les
+    // autres etapes). La preuve reste celle du lanceur, horodatee dans le rapport.
+    const FRESH_MS = 20 * 60 * 1000;
+    const fresh =
+      skipCampaign &&
+      fs.existsSync(reportPath) &&
+      Date.now() - fs.statSync(reportPath).mtimeMs < FRESH_MS;
+    if (fresh) {
+      console.log('• campagne reutilisee (--skip-campaign, rapport de moins de 20 min)');
+    } else {
+      fs.rmSync(reportPath, { force: true });
+    }
+    const code = fresh ? 0 : timed('e2e', () => run(`pnpm -s ${plan.e2e} --tags ${tag}`));
     const report = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath, 'utf8')) : null;
     const summary = summarizeMaestro(report, tag);
     record('e2e', maestroVerdict(code, summary), `${summary.passed} flux réussi(s), ${summary.failed} échec(s), ${summary.videos} vidéo(s)`);
