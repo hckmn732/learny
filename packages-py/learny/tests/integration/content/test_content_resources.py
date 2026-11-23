@@ -1,9 +1,8 @@
 """[SPEC-2203] Contributions, module screen and chapter completion under RLS.
 
-Ported from `packages/services/src/resources/{create,retry,module,complete-chapter}.test.ts` and
-`test/integration/resource.test.ts`: a note is created queued with one `resource/uploaded` event, a
-failed contribution is retried once, the module screen selects the first open chapter and hides
-another learner's module, and completing the last chapter requests one generation.
+A note is created queued with one `resource/uploaded` event, a failed contribution is retried once,
+the module screen selects the first open chapter and hides another learner's module, and completing
+the last chapter requests one generation.
 """
 
 from dataclasses import dataclass

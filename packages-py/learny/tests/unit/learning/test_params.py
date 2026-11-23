@@ -1,7 +1,7 @@
 """[SPEC-2202] Parameter resolution of the engine (SPEC-401 ET-4, CL-7).
 
-Ported from `packages/learning-engine/src/params.test.ts`: the Python defaults mirror `ENGINE` of
-`packages/config/src/product.ts` and the merge refuses every unknown or unauthorised value.
+The Python defaults mirror `ENGINE` of `packages/config/src/product.ts` and the merge refuses every
+unknown or unauthorised value.
 """
 
 from collections.abc import Callable

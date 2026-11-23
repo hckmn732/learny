@@ -1,9 +1,8 @@
 """AI SDK UI message stream v1 writer (SPEC-2204, 00-conventions section 2).
 
-The route only sets the SSE headers: the framed body comes from `learny.tutor.domain.events`, which
-is validated against the TypeScript recording. `StreamingResponse` writes each frame as soon as it
-is produced (no buffering), and the generator is cancelled when the client disconnects, so the use
-case loses its `finally` hook and never leaves a transaction open.
+`StreamingResponse` writes each frame as soon as it is produced (no buffering), and the generator is
+cancelled when the client disconnects, so the use case loses its `finally` hook and never leaves a
+transaction open.
 """
 
 from collections.abc import AsyncIterable

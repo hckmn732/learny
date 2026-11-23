@@ -1,4 +1,4 @@
-"""Local windows of the hourly tick (SPEC-2205, ported from `packages/jobs/src/{tick,time-window}.ts`).
+"""Local windows of the hourly tick (SPEC-2205).
 
 The tick at `T` covers `[T - 5 min, T + 55 min[`: a local clock time such as `08:00` falls in at
 most one window, so two consecutive ticks never both return it (ADR-0123). A non-existent local time

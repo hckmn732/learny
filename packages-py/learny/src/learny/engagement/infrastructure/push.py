@@ -1,4 +1,4 @@
-"""Browser push channel of the engagement context (SPEC-2205, ported from `packages/notifications/src/push`).
+"""Browser push channel of the engagement context (SPEC-2205).
 
 The payload carries the minimum the service worker needs: the short title and body already written
 for the in-app inbox (SPEC-109 bounds), the icon slug, an internal path and the notification

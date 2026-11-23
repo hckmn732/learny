@@ -1,8 +1,4 @@
-"""[SPEC-2203] Chapter summary: commit before the model call, replay and deferred draft.
-
-Ported from `packages/services/src/courses/summary.test.ts` (SPEC-609 EF-3, CA-4, CL-4) with the
-committed mock fixture `packages/llm/fixtures/light/course-summary.json`.
-"""
+"""[SPEC-2203] Chapter summary: commit before the model call, replay and deferred draft."""
 
 from dataclasses import dataclass
 from typing import Any

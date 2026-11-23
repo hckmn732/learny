@@ -1,9 +1,8 @@
 """Read-only SQL of the home screen (SPEC-603, SPEC-2302).
 
-Every statement is the one of `packages/services/src/home/get-home.ts`: same tables, same columns,
-same join order, same `order by` and same bounds. `${x}` placeholders become bound `:x` parameters;
-nothing here reads the clock, applies a rule or writes. The caller opens the learner's transaction,
-so row-level security limits every row to that learner.
+`${x}` placeholders become bound `:x` parameters; nothing here reads the clock, applies a rule or
+writes. The caller opens the learner's transaction, so row-level security limits every row to that
+learner.
 """
 
 from typing import Any

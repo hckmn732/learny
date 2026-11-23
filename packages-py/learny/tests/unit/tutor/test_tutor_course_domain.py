@@ -1,10 +1,6 @@
-"""[SPEC-2207] Course generation domain against the TypeScript oracle (SPEC-608).
+"""[SPEC-2207] Course generation domain against the reference oracle (SPEC-608).
 
-The expected values of `api/oracles/vectors/course.json` are the recordings of the real TypeScript
-pure helpers (`sectionAnchor`, `dataOf`, `contentOf`, `mediaOf`, `selectChapterDocuments`,
-`scenarioFor`, `notionLinkEnds`, `replaceCoursePlaceholders`) and of the real chapter validation
-(`CourseChapterDraftSchema`), produced by `tools/oracles/course-vectors.mts` (2026-11-22). Equality
-is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
+Equality is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
 """
 
 import json

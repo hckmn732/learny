@@ -1,8 +1,7 @@
 """[SPEC-2202] Deterministic planner of the learning engine (SPEC-407, ADR-0029, ADR-0280).
 
-Ported from `packages/learning-engine/src/planner/plan.test.ts`. The expected slots, conflicts,
-daily capacities, BR-FOR-14 options and deadlines are the recordings of the TypeScript engine taken
-on 2026-11-21 from the same inputs, replayed here with a strict equality (no tolerance).
+The expected slots, conflicts, daily capacities, BR-FOR-14 options and deadlines are the reference
+recordings, replayed here with a strict equality (no tolerance).
 """
 
 import json
@@ -43,7 +42,7 @@ FORMATIONS = PLAN_INPUTS["base"]["formations"]
 
 
 def preferences(**overrides: Any) -> dict[str, Any]:
-    """The learner preferences of the TypeScript test, with availability overrides."""
+    """The learner preferences of the reference suite, with availability overrides."""
     return {
         "tz": TZ,
         "availability": {**AVAILABILITY, **overrides},
@@ -52,7 +51,7 @@ def preferences(**overrides: Any) -> dict[str, Any]:
 
 
 def plan_input(**overrides: Any) -> dict[str, Any]:
-    """One planning input built like the TypeScript `input()` helper."""
+    """One planning input for the planner."""
     payload: dict[str, Any] = {
         "formations": FORMATIONS,
         "preferences": preferences(),

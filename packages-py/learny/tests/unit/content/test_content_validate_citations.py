@@ -1,8 +1,7 @@
 """[SPEC-2203] Verification of the citations of a generated course.
 
-Ported from `packages/services/src/courses/validate-citations.test.ts` (SPEC-608 EF-2, ET-4, CL-4,
-BR-COU-02, BR-COU-10): the same draft, the same passage fixtures and the same expected issue codes,
-case by case. The resolver is pure, so no database is involved.
+The same draft, the same passage fixtures and the same expected issue codes, case by case. The
+resolver is pure, so no database is involved.
 """
 
 from typing import Any
@@ -46,7 +45,7 @@ def chunk(**overrides: Any) -> KnownChunk:
 
 
 def draft_with_source(kind: str = "markdown") -> dict[str, Any]:
-    """The draft of the TypeScript fixture, section for section."""
+    """The draft of the reference fixture, section for section."""
     if kind == "markdown":
         sections: list[dict[str, Any]] = [
             {

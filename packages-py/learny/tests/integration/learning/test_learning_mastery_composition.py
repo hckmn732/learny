@@ -1,8 +1,7 @@
 """[SPEC-2202] Composition of the weighted mastery (SPEC-403, CA-1 to CA-4).
 
-Ported from `packages/learning-engine/test/integration/mastery.test.ts`: the engine is composed with
-the `ENGINE.mastery` bounds of the configuration package, and the stored answer is projected onto
-the narrow mastery contract exactly like the service does.
+The engine is composed with the `ENGINE.mastery` bounds of the configuration package, and the stored
+answer is projected onto the narrow mastery contract exactly like the service does.
 """
 
 import math
@@ -26,7 +25,7 @@ FOURTEEN_DAYS_AGO = "2026-10-28T12:20:00.000Z"
 def recorded(
     answer_id: str, attempt_id: str, score: float, max_score: float, answered_at: str
 ) -> dict[str, Any]:
-    """A stored answer, built by the shared factory like the TypeScript test does."""
+    """A stored answer, built by the shared factory."""
     return build_answer(
         answerId=answer_id,
         attemptId=attempt_id,

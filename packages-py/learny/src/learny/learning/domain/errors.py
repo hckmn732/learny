@@ -36,7 +36,7 @@ class EngineError(Exception):
         self.path = path
 
     def details(self) -> dict[str, Any]:
-        """The `details` payload of the TypeScript error, key order preserved."""
+        """The `details` payload of the error, key order preserved."""
         return {} if self.path is None else {"path": self.path}
 
     def __str__(self) -> str:

@@ -1,8 +1,7 @@
 """Public input/output contracts of the pure engine (SPEC-401 ET-2).
 
-Every object produced by the engine survives a JSON round-trip without loss (CA-2): unknown
-fields are refused on input, numbers are finite and never -0, and dates are real civil days.
-The `to_dict` methods keep the TypeScript key order so the JSON output is byte-identical.
+Every object produced by the engine survives a JSON round-trip without loss (CA-2): unknown fields
+are refused on input, numbers are finite and never -0, and dates are real civil days.
 """
 
 from collections.abc import Mapping

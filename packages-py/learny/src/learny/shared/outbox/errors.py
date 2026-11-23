@@ -1,7 +1,6 @@
 """Job errors shared by the worker and the consumers (SPEC-2102).
 
-A permanent failure is never retried: the delivery is marked `failed` at the first attempt, exactly
-like the TypeScript `NonRetriableError`.
+A permanent failure is never retried: the delivery is marked `failed` at the first attempt.
 """
 
 

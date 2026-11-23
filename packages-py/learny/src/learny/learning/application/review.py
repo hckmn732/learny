@@ -1,11 +1,10 @@
 """Daily global quiz session of one formation (SPEC-701, BR-MEM-03/08/09/10, ADR-0180, ADR-0319).
 
-Port of `packages/services/src/review/{global-quiz,rationale,micro-composition,per-notion}.ts` and
-of `packages/domain/src/review/game-response.ts`. One activity per (owner, formation, local day,
-mode): the first `GET` of the day creates the session under a consultative lock, the following ones
-replay the same DTO. The pure engine draws one item per notion; this service groups the notions
-served by the same brick into one game item, records each answer in its transaction and closes the
-session idempotently. Every read goes through the learner's RLS transaction.
+One activity per (owner, formation, local day, mode): the first `GET` of the day creates the session
+under a consultative lock, the following ones replay the same DTO. The pure engine draws one item
+per notion; this service groups the notions served by the same brick into one game item, records
+each answer in its transaction and closes the session idempotently. Every read goes through the
+learner's RLS transaction.
 """
 
 import uuid
@@ -1386,7 +1385,7 @@ def _engine_quiz_params() -> dict[str, Any]:
 async def read_due_notions(
     deps: LearningDeps, tx: Any, user_id: str, formation_id: str, now: datetime
 ) -> dict[str, Any]:
-    """The due notions of the formation (port of `learning/get-due-notions.ts`)."""
+    """The due notions of the formation."""
     rows = await queries.read_due_notions_rows(tx, user_id, formation_id, to_iso(now))
     notions: list[dict[str, Any]] = []
     for row in rows:

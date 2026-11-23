@@ -1,11 +1,8 @@
 """Personal AI keys: public shape and body refinements (SPEC-2204).
 
-Port of `toDto` (`packages/services/src/ai/credentials-service.ts`) and of the Zod refinements the
-OpenAPI document cannot express (`packages/contracts/src/ai-credentials.ts`,
-`packages/contracts/src/parametres-modeles-d-ia.ts`). A credential row becomes the only shape a
-browser receives: the mask, the region flag and the note, never the key nor the ciphertext (EF-4).
-The issue lists are shared by the HTTP pipeline and by the use cases, so a direct call refuses the
-same bodies as a route call (ADR-2012).
+A credential row becomes the only shape a browser receives: the mask, the region flag and the note,
+never the key nor the ciphertext (EF-4). The issue lists are shared by the HTTP pipeline and by the
+use cases, so a direct call refuses the same bodies as a route call (ADR-2012).
 """
 
 import json

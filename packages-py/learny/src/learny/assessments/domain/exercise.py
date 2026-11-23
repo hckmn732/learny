@@ -1,10 +1,6 @@
 """Practice exercise rules (SPEC-613 EF-1 to EF-3, CL-1, CL-4, CL-5; BR-PRA-01).
 
-Port of `packages/services/src/exercises/validate-production.ts` and
-`packages/services/src/exercises/grade-exercise.ts`: the instruction invariants, the pure validation
-of a production and the bounded correction. The deterministic tutor is the committed
-`LLM_MODE=mock` fixture of the TypeScript service: a complete, well-explained production passes
-every criterion, and a missing explanation loses its own criterion, never the others.
+The instruction invariants, the pure validation of a production and the bounded correction.
 
 Everything here is pure: no IO, no clock, no model call. The structured-table control reuses the
 live `sum_equal` evaluator of the brick domain instead of duplicating it (ADR-0027).

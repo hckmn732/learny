@@ -1,8 +1,7 @@
 """Rules of the three-active-formations limit and of the pause/resume/archive transitions.
 
-Port of `formations/active-limit.ts` (SPEC-618 EF-2, EF-3, CL-2, CL-5; BR-FOR-10, ADR-0016). The
-functions are pure so the limit is testable without a database; the services call them inside the
-per-learner advisory lock that serialises concurrent transitions.
+The functions are pure so the limit is testable without a database; the services call them inside
+the per-learner advisory lock that serialises concurrent transitions.
 """
 
 from collections.abc import Sequence

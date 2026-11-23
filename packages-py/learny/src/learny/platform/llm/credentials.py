@@ -1,4 +1,4 @@
-"""BYOK envelope of the personal AI keys (SPEC-2201, port of `credentials/crypto.ts`).
+"""BYOK envelope of the personal AI keys (SPEC-2201).
 
 Stored layout: `iv(12) | tag(16) | ciphertext`, AES-256-GCM. The additional authenticated data binds
 a ciphertext to one `ai_credentials` row, so copying it onto another learner's row makes decryption

@@ -1,9 +1,9 @@
-"""The `LlmGateway` protocol and its deterministic mock adapter (SPEC-2201, port of `session.ts`).
+"""The `LlmGateway` protocol and its deterministic mock adapter (SPEC-2201).
 
 The protocol mirrors `session.ts`: `step` returns text and tool calls, `object` returns a value
 validated against the caller's schema, `stream` yields text deltas, and `session` opens a session
-whose fixture cursor is shared across calls (the qualification probes of SPEC-2204 consume the
-steps of one fixture in order, exactly like `LearnMockModel`). Live adapters (Anthropic,
+whose fixture cursor is shared across calls (the qualification probes of SPEC-2204 consume the steps
+of one fixture in order, exactly like `LearnMockModel`). Live adapters (Anthropic,
 OpenAI-compatible) implement the same four calls; this specification ships the protocol, the task
 table, BYOK and the mock adapter, and later specs wire the live providers.
 """
@@ -257,7 +257,7 @@ class MockGateway:
         scenario: str | None = None,
         fixtures: Sequence[RegisteredFixture] | None = None,
     ) -> LlmSession:
-        """One session whose fixture steps are consumed in order (`createSession` in TypeScript)."""
+        """One session whose fixture steps are consumed in order."""
         return MockSession(
             self,
             task,
@@ -268,7 +268,7 @@ class MockGateway:
 
 
 class MockSession:
-    """A fixture cursor shared by every call of one session (`LearnMockModel` in TypeScript)."""
+    """A fixture cursor shared by every call of one session."""
 
     def __init__(
         self,

@@ -1,10 +1,10 @@
 """Deterministic selection and formatting of the model context (SPEC-511 EF-2 to EF-4; ADR-0300).
 
-Port of `packages/ingestion/src/retrieval/{select-context,format-document}.ts`. Candidates are
-ordered by decreasing cosine score, then by source, position and chunk identifier; duplicates and
-strongly overlapping passages are removed in that order, so the result does not depend on the input
-order. Each kept passage is formatted as a `<document>` tag and its complete cost is reserved
-before it is added: the budget is never exceeded and a passage never fits partially.
+Candidates are ordered by decreasing cosine score, then by source, position and chunk identifier;
+duplicates and strongly overlapping passages are removed in that order, so the result does not
+depend on the input order. Each kept passage is formatted as a `<document>` tag and its complete
+cost is reserved before it is added: the budget is never exceeded and a passage never fits
+partially.
 """
 
 import re

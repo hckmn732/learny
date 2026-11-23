@@ -1,9 +1,8 @@
 """Dependency protocols of the privacy use cases (00-conventions section 4).
 
 The account page reads under the learner's RLS (`user_tx`); the creation, the deletion schedule and
-the jobs act with the owner role (`service_tx`), exactly like the TypeScript `serviceDb()` calls.
-Storage and e-mail stay explicit ports, so the integration suite never touches Supabase Storage nor
-a real mail transport (ET-7).
+the jobs act with the owner role (`service_tx`). Storage and e-mail stay explicit ports, so the
+integration suite never touches Supabase Storage nor a real mail transport (ET-7).
 """
 
 from contextlib import AbstractAsyncContextManager

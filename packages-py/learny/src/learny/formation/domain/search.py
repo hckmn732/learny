@@ -1,10 +1,9 @@
 """Plain-text snippets and highlight positions of the global search (SPEC-212 EF-4, ET-3, ET-4).
 
-Port of `search/normalize.ts` and `search/highlight.ts` (CL-2, CL-7, CL-8; ADR-0217). A snippet is
-plain text of at most 160 characters, ellipses included, centred on the first match, and never
-contains markup. Highlight ranges are half-open `[start, end[` **UTF-16 units** of the returned
-text, computed on the folded text so case and accents never matter, and never split a surrogate
-pair or a combining sequence.
+A snippet is plain text of at most 160 characters, ellipses included, centred on the first match,
+and never contains markup. Highlight ranges are half-open `[start, end[` **UTF-16 units** of the
+returned text, computed on the folded text so case and accents never matter, and never split a
+surrogate pair or a combining sequence.
 """
 
 import re

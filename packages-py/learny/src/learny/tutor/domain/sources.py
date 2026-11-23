@@ -1,9 +1,8 @@
 """Citation identifiers of a tutor answer (SPEC-610 ET-5, CA-3).
 
-Port of `packages/services/src/tutor-chat/sources.ts`: the model cites by `chunkId` only, the code
-keeps the identifiers actually sent in the context, turns them into readable labels from the
-resource location and drops an invented citation with a warning. A marker block is hidden while
-streaming, so the visible answer is exactly what the learner must read.
+The model cites by `chunkId` only, the code keeps the identifiers actually sent in the context,
+turns them into readable labels from the resource location and drops an invented citation with a
+warning.
 """
 
 import re

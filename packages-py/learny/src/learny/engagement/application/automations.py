@@ -1,9 +1,7 @@
 """Automation settings, journal and expiration (SPEC-2205, SPEC-711 ET-5 and BR-AUT-12).
 
-Ported from `listMyAutomations`, `updateMyAutomationSetting`, `listMyAutomationActions` and
-`expirePendingActions` of `packages/automations/src/moteur-d-automatismes.ts`. Every read and every
-write of the learner runs in ONE transaction under the learner's RLS (ET-3): a foreign identifier is
-simply absent, never a disclosure (CL-1). The domain rules live in
+Every read and every write of the learner runs in ONE transaction under the learner's RLS (ET-3): a
+foreign identifier is simply absent, never a disclosure (CL-1). The domain rules live in
 `learny.engagement.domain.automations`; this module only loads, applies and projects.
 """
 
@@ -167,8 +165,7 @@ async def list_my_automation_actions(
 async def expire_due_automation_actions(deps: EngagementDeps) -> int:
     """CL-3 - the hourly tick: expires the pending actions whose `expiresAt` has passed.
 
-    Ported from `expirePendingActions` and wired to the worker in SPEC-2207. It runs on the service
-    role because it sweeps every learner, exactly like the TypeScript `engine.sdb` tick.
+    It runs on the service role because it sweeps every learner.
     """
     now = deps.clock.now()
     async with deps.db.service_tx() as tx:
@@ -186,11 +183,9 @@ __all__ = [
 
 
 # --- decisions of the learner (EF-2, EF-3, ET-5, CL-1 to CL-4) ----------------------------------
-#
-# Ported from `acceptAutomationAction`, `declineAutomationAction` and `undoAutomationAction` of
-# `packages/automations/src/moteur-d-automatismes.ts`. One transaction under the learner's RLS:
-# the row is locked first, a foreign identifier is a 404, a replayed decision returns the committed
-# answer with no second effect, and the definition decides the effects the use case executes.
+# One transaction under the learner's RLS: the row is locked first, a foreign identifier is a
+# 404, a replayed decision returns the committed answer with no second effect, and the definition
+# decides the effects the use case executes.
 
 
 def _registry() -> Any:
@@ -420,7 +415,7 @@ async def _repropose_after_undo(
     time_zone: str,
     tone: str,
 ) -> None:
-    """Writes the new pending proposal on the service role, as the TypeScript engine does."""
+    """Writes the new pending proposal on the service role."""
     payload = {
         key: value
         for key, value in dict(current.payload).items()

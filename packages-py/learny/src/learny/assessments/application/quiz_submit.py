@@ -1,10 +1,10 @@
 """Submission and final score of a validation attempt (SPEC-611 EF-7, ET-7, ET-8, CL-3, CL-6).
 
-Port of the HTTP half of `packages/services/src/quiz/submit.ts`: the submission commits the answers
-and the `quiz/submitted` event together, and a second submission relaunches the correction with a
-distinct event identifier. `finalize_attempt` is the second step of the grade job: it computes the
-score, the `per_notion` detail and the verdict without any client-supplied value. The tutor
-correction of the open answers (`gradeOpenAnswers`) belongs to the AI context and is not ported here.
+The submission commits the answers and the `quiz/submitted` event together, and a second submission
+relaunches the correction with a distinct event identifier. `finalize_attempt` is the second step of
+the grade job: it computes the score, the `per_notion` detail and the verdict without any
+client-supplied value. The tutor correction of the open answers (`gradeOpenAnswers`) belongs to the
+AI context and is not ported here.
 """
 
 import json

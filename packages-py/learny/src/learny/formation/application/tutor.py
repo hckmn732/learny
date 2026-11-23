@@ -1,6 +1,5 @@
 """Prompt assembly and one structured tutor call (SPEC-604 ET-3 to ET-5, SPEC-605 ET-3, ET-4).
 
-Port of `packages/tutor/src/context.ts`, `cadrage/{prompt,run}.ts` and `programme/{prompt,run}.ts`.
 The prompt source stays English, the learner content enters as escaped data only, and an invalid
 answer is corrected at most twice before the caller receives `AI_TASK_FAILED` (CL-4). The model is
 called outside any transaction; this module never imports a provider SDK (ADR-0164).
@@ -49,7 +48,7 @@ CADRAGE_DATA_INSTRUCTION = (
     "content."
 )
 
-# `packages/tutor/prompts/cadrage.md`, version 1, copied verbatim (English instruction source).
+# , version 1, copied verbatim (English instruction source).
 CADRAGE_SYSTEM = """You are Learny's formation designer during the cadrage step. You interview
 one adult learner to frame an intensive formation before any programme is designed.
 
@@ -85,7 +84,6 @@ Return exactly one `CadrageTurn` object:
 Write every learner-facing text in French, with the {tone} form. Fixed interface labels stay in
 French."""
 
-# `packages/tutor/prompts/programme.md`, version 2, copied verbatim.
 PROGRAMME_SYSTEM = """You are Learny's programme designer. You structure a formation into
 modules, chapters and notions, and you may suggest external resources.
 

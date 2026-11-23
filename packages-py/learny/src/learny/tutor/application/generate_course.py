@@ -1,13 +1,13 @@
 """Generation of the course of one module (SPEC-608 EF-1 to EF-5, SPEC-2207).
 
-Port of `packages/tutor/src/course/generate.ts` and of the `generate-course` job: the caller supplies
-a learner-scoped store, so every read and write runs under Row Level Security and the explicit owner
-filters repeat the rule. The model calls run outside any transaction; the whole course is validated
-before one transaction inserts the new version, its sections, citations, suggestions and notion
-links. A replay of the same generation key returns the version created by the first run.
+The caller supplies a learner-scoped store, so every read and write runs under Row Level Security
+and the explicit owner filters repeat the rule. The model calls run outside any transaction; the
+whole course is validated before one transaction inserts the new version, its sections, citations,
+suggestions and notion links. A replay of the same generation key returns the version created by the
+first run.
 
-Resumability: every step re-reads the persisted state and skips what is already done, without a
-step engine. The entry point returns the existing version of the key before any model call, the
+Resumability: every step re-reads the persisted state and skips what is already done, without a step
+engine. The entry point returns the existing version of the key before any model call, the
 publishing transaction re-reads it under an advisory lock, the citations are verified a second time
 just before publishing (a passage deleted meanwhile is never published), and a non-retryable failure
 persists one failed version of the key so a redelivery does nothing.
@@ -329,7 +329,7 @@ class ModuleSnapshot:
 
 
 def _job_actor(user_id: str) -> Actor:
-    """The actor a job carries: the identifier only, like the TypeScript service context."""
+    """The actor a job carries: the identifier only."""
     return Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
 
 
@@ -413,7 +413,7 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
 
 
 def _result_of(row: Mapping[str, Any], module_id: str, *, created: bool) -> dict[str, Any]:
-    """One course version as the caller receives it (TS `CourseGenerationResult`)."""
+    """One course version as the caller receives it."""
     return {
         "courseId": str(row["id"]),
         "moduleId": module_id,

@@ -1,8 +1,8 @@
 """Response schemas of an instruction brick (SPEC-502 ET-1).
 
-Port of `packages/bricks/src/types/instruction/response.ts`: the text, file, link and structured
-table productions, with the row and character bounds fixed on the brick at creation. The stable code
-and the JSON paths of an issue are preserved; the message is written in English (ADR-2011).
+The text, file, link and structured table productions, with the row and character bounds fixed on
+the brick at creation. The stable code and the JSON paths of an issue are preserved; the message is
+written in English (ADR-2011).
 """
 
 from collections.abc import Mapping, Sequence

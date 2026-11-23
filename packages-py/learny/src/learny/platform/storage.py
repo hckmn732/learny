@@ -1,9 +1,9 @@
 """Private storage of Learny (SPEC-2101 step 4, SPEC-114, ADR-0249).
 
-Port of `packages/db/src/storage/paths.ts` and `signed-urls.ts`: an object always lives at
-`<userId>/<uuid>/<name>`, a read URL is signed for exactly ten minutes and only after the linked
-database row proved ownership, and the upload token is minted locally with HS256 because the
-Storage API itself hard-codes a two-hour lifetime. URLs and tokens are never logged.
+An object always lives at `<userId>/<uuid>/<name>`, a read URL is signed for exactly ten minutes and
+only after the linked database row proved ownership, and the upload token is minted locally with
+HS256 because the Storage API itself hard-codes a two-hour lifetime. URLs and tokens are never
+logged.
 """
 
 import base64
@@ -186,9 +186,8 @@ def mint_user_access_token(
     """Mints the `authenticated` JWT Storage evaluates its policies with (SPEC-206 ET-4).
 
     It is signed with the server-side Supabase secret (never sent to the browser). Storage checks
-    `exp` against its **own** clock, so the stamp is the system clock, exactly like the TypeScript
-    `mintUserAccessToken(userId, jwtSecret)` whose clock defaults to `systemClock`; the injected
-    clock stays the only source of business time.
+    `exp` against its **own** clock, so the stamp is the system clock; the injected clock stays the
+    only source of business time.
     """
     if jwt_secret == "":
         raise AppError("SERVICE_UNAVAILABLE", STORAGE_ACCESS_SECRET_MISSING)

@@ -1,9 +1,6 @@
-"""Deterministic fixture selection (SPEC-2201, port of `mock/select.ts` and `mock/fixture-schema.ts`).
+"""Deterministic fixture selection (SPEC-2201).
 
-Selection order, identical to the TypeScript backend: explicit scenario, the first `[[mock:x]]`
-marker in message order, the first fixture of the task whose `promptId` and `match.contains` all
-match, then `<promptId>.default.json` and `<basename>.default.json`, then
-`MOCK_FIXTURE_NOT_FOUND`. Selection never touches the network (ADR-0153).
+Selection never touches the network (ADR-0153).
 """
 
 import json

@@ -1,1 +1,1 @@
-"""SQL of the formation context: one statement per TypeScript query, bound parameters only."""
+"""SQL of the formation context: one statement per read or write, bound parameters only."""

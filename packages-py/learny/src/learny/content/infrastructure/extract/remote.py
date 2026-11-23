@@ -1,8 +1,8 @@
 """Shared limits, inputs and error mapping of the remote extractors (SPEC-510 ET-1 to ET-5).
 
-Port of `packages/ingestion/src/extract/remote.ts`: the network guard lives in
-`learny.platform.safe_fetch` and this module only translates its typed errors into the ingestion
-contract. A page or a video detail is never copied into a log or an error message.
+The network guard lives in `learny.platform.safe_fetch` and this module only translates its typed
+errors into the ingestion contract. A page or a video detail is never copied into a log or an error
+message.
 """
 
 from urllib.parse import urlsplit

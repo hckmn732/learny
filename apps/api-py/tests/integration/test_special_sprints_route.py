@@ -208,7 +208,7 @@ def test_the_route_is_installed_before_the_generic_routes_and_requires_a_session
 
 
 def test_the_idempotency_key_is_mandatory(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The contract is `idempotent: true`: without the header the answer is 400, like Hono."""
+    """The contract is `idempotent: true`: without the header the answer is 400."""
     allow_authentication(monkeypatch)
     client = build_app()
 
@@ -232,7 +232,7 @@ def test_the_body_is_strict_and_refuses_an_unknown_key(monkeypatch: pytest.Monke
 
 
 def test_the_optional_exam_slot_refuses_an_explicit_null(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`Uuid.optional()` accepts a missing key, never `null`: same `invalid_type` as Hono."""
+    """`Uuid.optional()` accepts a missing key, never `null`: the same `invalid_type` error."""
     allow_authentication(monkeypatch)
     client = build_app()
 

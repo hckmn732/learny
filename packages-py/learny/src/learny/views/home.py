@@ -1,10 +1,9 @@
 """Home screen of the authenticated learner (SPEC-603, SPEC-2302).
 
-Port of `packages/services/src/home/get-home.ts`: one read-only aggregation under the learner's
-RLS, no rule and no write, so another learner's formations, slots, attempts or memory states never
-reach the DTO. The local day comes from the learner's time zone and every instant from
-`deps.clock.now()` (ADR-0047); the pure derivations live in `learny.views.home_derivations` and the SQL
-in `learny.views.home_queries`.
+One read-only aggregation under the learner's RLS, no rule and no write, so another learner's
+formations, slots, attempts or memory states never reach the DTO. The local day comes from the
+learner's time zone and every instant from `deps.clock.now()` (ADR-0047); the pure derivations live
+in `learny.views.home_derivations` and the SQL in `learny.views.home_queries`.
 """
 
 import math
@@ -46,7 +45,7 @@ LINE_BREAK = re.compile(r"\r?\n")
 
 
 def _instant(value: Any) -> str:
-    """A database instant as a canonical ISO string (`iso` in the TypeScript service)."""
+    """A database instant as a canonical ISO string."""
     if isinstance(value, str):
         return shared_time.to_iso(shared_time.parse_iso(value))
     return shared_time.to_iso(value)

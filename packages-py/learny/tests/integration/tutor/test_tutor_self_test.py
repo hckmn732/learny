@@ -1,8 +1,7 @@
 """[SPEC-2204] Teste-moi: the pending question, the verdict, the mastery and the correction.
 
-Ported from `packages/services/src/tutor-chat/self-test.test.ts` (SPEC-610 ET-7, BR-TUT-04,
-ADR-0174): the brick, the activity and the attempt are real rows, and `apply_learning_result` runs
-its own transaction, so the mastery read is the one the learning engine wrote.
+The brick, the activity and the attempt are real rows, and `apply_learning_result` runs its own
+transaction, so the mastery read is the one the learning engine wrote.
 """
 
 from typing import Any

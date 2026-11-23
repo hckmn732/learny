@@ -1,4 +1,4 @@
-"""[SPEC-2101] Storage path helpers, ported from packages/db/src/storage/paths.ts."""
+"""[SPEC-2101] Storage path helpers."""
 
 import pytest
 from learny.platform.storage import (

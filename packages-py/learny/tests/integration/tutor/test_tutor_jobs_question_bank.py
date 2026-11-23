@@ -1,9 +1,9 @@
-"""[SPEC-2207] The question bank jobs against the local stack (port of `question-bank.ts`).
+"""[SPEC-2207] The question bank jobs against the local stack.
 
-A generated course enqueues one job per notion and format under the key
-`(learner, notion, format, course version)`, and the nightly batch drains at most fifty rows: the
-variants are validated, deduplicated by fingerprint and inserted once. A provider failure marks the
-job failed without inventing a question, and a replayed batch inserts nothing.
+A generated course enqueues one job per notion and format under the key `(learner, notion, format,
+course version)`, and the nightly batch drains at most fifty rows: the variants are validated,
+deduplicated by fingerprint and inserted once. A provider failure marks the job failed without
+inventing a question, and a replayed batch inserts nothing.
 """
 
 import json

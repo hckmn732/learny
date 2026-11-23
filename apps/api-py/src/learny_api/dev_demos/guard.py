@@ -9,7 +9,7 @@ from learny_api.special import dev_routes_enabled
 
 
 def require_dev(deps: Any) -> None:
-    """`guarded()`: the problem+json 404 of the TypeScript guard, before any other logic."""
+    """`guarded()`: the problem+json 404 of the demonstration guard, before any other logic."""
     settings = getattr(deps, "settings", None)
     env = {
         "ENABLE_SDD_PAGES": getattr(settings, "enable_sdd_pages", None),

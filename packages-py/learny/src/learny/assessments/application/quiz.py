@@ -1,9 +1,8 @@
 """Read model, drafts and immediate correction of one attempt (SPEC-611 EF-1 to EF-7).
 
-Port of `packages/services/src/quiz/check.ts`. The correct answers, expected gaps and explanations
-are read from the immutable brick version on the server only; a question that is not checked never
-carries them. Every write runs in the caller's RLS transaction and the answer row is locked by a
-consultative lock on `(attempt, position)`.
+The correct answers, expected gaps and explanations are read from the immutable brick version on the
+server only; a question that is not checked never carries them. Every write runs in the caller's RLS
+transaction and the answer row is locked by a consultative lock on `(attempt, position)`.
 """
 
 import json

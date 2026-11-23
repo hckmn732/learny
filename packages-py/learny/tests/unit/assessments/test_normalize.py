@@ -1,8 +1,7 @@
 """[SPEC-2202] Text normalization of the brick contract (SPEC-501, ADR-0151, BR-MEM-05).
 
-Ported from `packages/bricks/src/normalize.test.ts`. The expected forms are the recordings of the
-TypeScript implementation taken on 2026-11-21 from the same inputs. Every non-ASCII input is
-written as an escape so this module stays plain ASCII (ADR-2011).
+The expected forms are the reference recordings. Every non-ASCII input is written as an escape so
+this module stays plain ASCII (ADR-2011).
 """
 
 import json

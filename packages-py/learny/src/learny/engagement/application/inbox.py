@@ -1,4 +1,4 @@
-"""Inbox of the notification panel (SPEC-2205, ported from `packages/services/src/notifications/list.ts`).
+"""Inbox of the notification panel (SPEC-2205).
 
 Every read and every mutation runs with the learner's own RLS transaction: another learner's
 notifications are neither listed, counted nor updated. The three groups of the mockup are resolved

@@ -1,4 +1,4 @@
-"""[SPEC-603] Pure derivations of the home screen (port of `derive.test.ts`)."""
+"""[SPEC-603] Pure derivations of the home screen."""
 
 from typing import Any
 

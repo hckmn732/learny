@@ -1,8 +1,7 @@
 """[SPEC-2202] Registry and architecture of the brick contract (SPEC-501 ET-1).
 
-Ported from `packages/bricks/src/registry.test.ts` and `architecture.test.ts`: the thirteen types
-all have a definition, the grading mode is fixed by BR-BRI-08, and no pure module imports a model
-SDK, a database driver or a web framework (CA-7).
+The thirteen types all have a definition, the grading mode is fixed by BR-BRI-08, and no pure module
+imports a model SDK, a database driver or a web framework (CA-7).
 """
 
 import ast

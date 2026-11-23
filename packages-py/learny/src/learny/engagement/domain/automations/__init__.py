@@ -1,9 +1,8 @@
 """Pure rules of the automation engine of the engagement context (SPEC-2205).
 
-Ported from `packages/automations` and the automation contracts: the closed vocabularies, the
-canonical parameter schemas, the one-line summaries, the stable journal order, the expiration rule,
-the local weeks, the weekly-review labels and the global-pause wording. No IO, no framework, and the
-instant always comes from the caller (ADR-0047).
+The closed vocabularies, the canonical parameter schemas, the one-line summaries, the stable journal
+order, the expiration rule, the local weeks, the weekly-review labels and the global-pause wording.
+No IO, no framework, and the instant always comes from the caller (ADR-0047).
 """
 
 from learny.engagement.domain.automations.expiry import is_due_for_expiry

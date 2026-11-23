@@ -1,9 +1,9 @@
 """Pure layout of the personal-data ZIP (SPEC-211 EF-3, CL-10, ADR-0216).
 
-Port of `packages/jobs/src/personal-data/zip-layout.ts`. Every name in the archive is built here,
-never by string concatenation at the call site: path separators, traversal segments and control
-characters are neutralised, collisions inside one directory are suffixed `-2`, `-3`..., and the order
-of the entries is deterministic so the demonstration, the tests and the evidence always agree.
+Every name in the archive is built here, never by string concatenation at the call site: path
+separators, traversal segments and control characters are neutralised, collisions inside one
+directory are suffixed `-2`, `-3`..., and the order of the entries is deterministic so the
+demonstration, the tests and the evidence always agree.
 """
 
 import re

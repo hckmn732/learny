@@ -1,8 +1,7 @@
 """Checkout, customer portal and subscription reading (SPEC-210 EF-1, EF-2, EF-3, CL-5, CL-6, CL-8).
 
-Port of `packages/services/src/billing/checkout.ts`. The learner's subscription row is locked for the
-whole call, so two simultaneous clicks create a single Stripe customer; a Stripe outage rolls
-everything back and leaves no partial row.
+The learner's subscription row is locked for the whole call, so two simultaneous clicks create a
+single Stripe customer; a Stripe outage rolls everything back and leaves no partial row.
 """
 
 from typing import Any

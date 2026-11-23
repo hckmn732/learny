@@ -1,7 +1,7 @@
-"""Fixtures of the RLS matrix replay, ported from packages/db/test/integration/rls-matrix.test.ts.
+"""Fixtures of the RLS matrix replay.
 
-Every row is written by the owner role; the probes then act as `authenticated`. The seed mirrors
-the TypeScript fixture one table at a time so a missing or renamed column fails loudly here too.
+Every row is written by the owner role; the probes then act as `authenticated`. The seed mirrors the
+reference fixture one table at a time so a missing or renamed column fails loudly here too.
 """
 
 import json

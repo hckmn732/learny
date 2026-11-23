@@ -1,8 +1,8 @@
 """ISO-8601 handling shared by every context (00-conventions section 7).
 
-Boundary values stay strings in the contract; they become `datetime` only inside use cases.
-The time-zone helpers below are the port of `packages/core/src/time.ts` used by the learning
-engine: every instant comes from the caller, nothing reads the process time zone.
+Boundary values stay strings in the contract; they become `datetime` only inside use cases. The
+time-zone helpers below are shared by the learning engine: every instant comes from the
+caller, nothing reads the process time zone.
 """
 
 import re
@@ -226,8 +226,8 @@ FRENCH_MONTHS_LONG = (
 def format_user_date(instant: datetime, time_zone: str, *, weekday: bool = True) -> str:
     """French rendering of an instant in the zone, e.g. "jeudi 12 nov., 14:20" (EF-2).
 
-    Port of `formatUserDate` with the options of the retry guard: the zone always comes from the
-    caller, never from the process, and the layout is the one `Intl` produces for `fr-FR`.
+    The zone always comes from the caller, never from the process, and the layout is the one `Intl`
+    produces for `fr-FR`.
     """
     milliseconds = to_epoch_ms(instant)
     local = from_epoch_ms(wall_ms_of(milliseconds, time_zone))
@@ -268,7 +268,7 @@ def user_day_bounds(day: str, time_zone: str) -> tuple[int, int]:
 
 
 def parse_time_of_day(value: object, path: str = "time") -> int:
-    """`HH:mm` (seconds optionally zero) as minutes since midnight; the TS rule of ET-3."""
+    """`HH:mm` (seconds optionally zero) as minutes since midnight; the rule of ET-3."""
     if not isinstance(value, str) or _TIME_OF_DAY.match(value) is None:
         raise ValueError(f"invalid time of day for {path}: {value!r}")
     return int(value[0:2]) * 60 + int(value[3:5])

@@ -1,7 +1,5 @@
 """Notifications tab of the settings screen (SPEC-2205).
 
-Ported from `packages/services/src/parametres-notifications.ts`.
-
 The stored row stays `notification_settings` (SPEC-102, SPEC-209): this service only normalises it
 for the screen and writes a partial patch in ONE transaction under the learner's RLS transaction.
 The in-app channel is always on. A stale `expectedUpdatedAt` answers 409 and leaves the row

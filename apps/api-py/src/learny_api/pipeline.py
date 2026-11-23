@@ -1,9 +1,9 @@
 """The generic contract pipeline (SPEC-2201, ADR-2012).
 
-Line-by-line port of `packages/http/src/route-handler.ts`. The order is normative and identical:
-request id, origin, rate limit, idempotency key, authentication, validation, idempotency, legal
-acceptance, handler, output validation, response headers. FastAPI is only the ASGI host: it matches
-the path, and everything else (body reading, validation, error rendering) happens here.
+The order is normative and identical: request id, origin, rate limit, idempotency key,
+authentication, validation, idempotency, legal acceptance, handler, output validation, response
+headers. FastAPI is only the ASGI host: it matches the path, and everything else (body reading,
+validation, error rendering) happens here.
 """
 
 import json
@@ -295,7 +295,7 @@ async def handle(spec: RouteSpec, request: Request, context: PipelineContext) ->
                 state["actor"] = actor
                 await limit(actor.user_id)
 
-        # 5. validation of the three inputs, in the TypeScript order
+        # 5. validation of the three inputs
         params = _validate_params(spec, request)
         query = _validate_query(spec, request)
         body = await _validate_body(spec, request)
@@ -424,8 +424,6 @@ def _check_output(spec: RouteSpec, payload: Any, logger: Any) -> Any:
 def without_absent_optionals(dumped: Any, source: Any) -> Any:
     """`zod` keeps an optional field the handler did not set absent; Pydantic fills `None`.
 
-    `JSON.stringify` omits the `undefined` of the TypeScript contract, so the pipeline drops every
-    key the handler did not provide; an explicit `null` stays a `null`, because it was provided.
     Nested objects and lists are walked in parallel with the handler payload (SPEC-2202).
     """
     if isinstance(dumped, dict):

@@ -1,8 +1,8 @@
 """[SPEC-719] Rules and calculations of the sprints before a milestone (BR-AUT-08, ADR-0190).
 
-Ported from `packages/services/src/spec-719.test.ts`. The helpers are pure (ADR-0020): no database
-and no process clock. They pin the local J-K/J-1 calendar days across a daylight-saving change, the
-stable weakest-notion order, the planner placement and the explicit impossible days of CL-3.
+The helpers are pure (ADR-0020): no database and no process clock. They pin the local J-K/J-1
+calendar days across a daylight-saving change, the stable weakest-notion order, the planner
+placement and the explicit impossible days of CL-3.
 """
 
 from datetime import UTC, datetime
@@ -37,7 +37,7 @@ PREFERENCES = PlannerPreferences(
 
 
 def uuid(index: int) -> str:
-    """The stable identifier of the TypeScript test helper."""
+    """The stable identifier of the reference suite helper."""
     return f"00000000-0000-4000-8000-{index:012d}"
 
 

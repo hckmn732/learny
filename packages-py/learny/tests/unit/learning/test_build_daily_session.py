@@ -1,8 +1,6 @@
 """[SPEC-2202] Daily global quiz session, smoothing and format choice (SPEC-406, SPEC-716, SPEC-718).
 
-Ported from `packages/learning-engine/src/global-quiz/build-daily-session.test.ts` and
-`packages/learning-engine/src/session/format-choice.test.ts`. The expected values are the
-recordings of the TypeScript engine taken on 2026-11-21 from the same inputs.
+The expected values are the reference recordings.
 """
 
 import json

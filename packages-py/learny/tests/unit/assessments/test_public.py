@@ -1,7 +1,6 @@
 """[SPEC-2202] Public payload of every brick type (SPEC-501 ET-7, ADR-0150).
 
-Ported from `packages/bricks/src/public.test.ts`. The expected projections are the recordings of
-the TypeScript engine taken on 2026-11-21 from the reference examples and the version seed.
+The expected projections are the reference recordings.
 """
 
 import json

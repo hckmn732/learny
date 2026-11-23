@@ -1,8 +1,4 @@
-"""[SPEC-2102] `JOBS_MODE=inline` middleware of the facade (P21 plan, step 6).
-
-The events a request commits run before the answer starts, as with the inline jobs of Hono; the
-mode is refused in production and absent otherwise.
-"""
+"""[SPEC-2102] `JOBS_MODE=inline` middleware of the facade (P21 plan, step 6)."""
 
 from types import SimpleNamespace
 from typing import Any, cast

@@ -1,8 +1,8 @@
 """[SPEC-2202] FSRS card scheduling and review grading (SPEC-402).
 
-Ported from `packages/learning-engine/src/fsrs/review.test.ts` (SPEC-402). The expected values
-are the recordings of `ts-fsrs` 5.4.2 taken from the TypeScript engine on 2026-11-21: the Python
-scheduler must produce the same cards, due dates, difficulties and stabilities, digit for digit.
+The expected values are the recordings of `ts-fsrs` 5.4.2 recorded once from the reference
+implementation: the Python scheduler must produce the same cards, due dates, difficulties and
+stabilities, digit for digit.
 """
 
 import json

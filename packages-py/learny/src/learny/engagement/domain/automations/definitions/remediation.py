@@ -1,9 +1,9 @@
 """Remediation after a failed quiz (SPEC-715, BR-AUT-03, ADR-0190).
 
-Ported from `packages/automations/src/definitions/remediation.ts`: the one-line explanation of the
-applied and undone rows, the label of the retry slot and the slot effects (a retry attempt inserted
-or moved, the remediation slot when the activity exists). The preparation of the remediation
-activity itself is the job of SPEC-2207; the same branch as an unavailable AI applies here.
+The one-line explanation of the applied and undone rows, the label of the retry slot and the slot
+effects (a retry attempt inserted or moved, the remediation slot when the activity exists). The
+preparation of the remediation activity itself is the job of SPEC-2207; the same branch as an
+unavailable AI applies here.
 """
 
 from typing import Any

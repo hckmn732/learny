@@ -1,10 +1,8 @@
 """Invitation codes of the shared formations (SPEC-724 ET-2, EF-1, CL-2, CL-3).
 
-Port of `packages/db/src/repositories/invite-code.ts` and of the pure projections of
-`formations-a-plusieurs.ts`. The code is `LRN-` followed by four characters drawn from `A-Z2-9`
-(34 symbols, no `0`, no `1`), with rejection sampling so every symbol is equally likely; the code
-is never derived from a sequential identifier. The random source is injectable, which keeps the
-tests deterministic.
+The code is `LRN-` followed by four characters drawn from `A-Z2-9` (34 symbols, no `0`, no `1`),
+with rejection sampling so every symbol is equally likely; the code is never derived from a
+sequential identifier. The random source is injectable, which keeps the tests deterministic.
 """
 
 import secrets

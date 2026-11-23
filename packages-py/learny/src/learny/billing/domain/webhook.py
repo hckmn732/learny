@@ -1,8 +1,8 @@
 """Stripe event shape used by the application, and the webhook signature scheme (SPEC-210 EF-4, ET-2).
 
-Port of `packages/services/src/billing/stripe-event.ts`. The real gateway verifies through the SDK;
-the simulated one verifies with `verify_signature`, which implements the same documented scheme:
-`t=<unix seconds>,v1=<hex HMAC-SHA256 of "t.body">`, tolerance 300 s (ADR-0215).
+The real gateway verifies through the SDK; the simulated one verifies with `verify_signature`, which
+implements the same documented scheme: `t=<unix seconds>,v1=<hex HMAC-SHA256 of "t.body">`,
+tolerance 300 s (ADR-0215).
 """
 
 import hashlib

@@ -1,7 +1,7 @@
-"""[SPEC-615] `GET /api/v1/formations/{id}/gaps` on the local stack (port of `list-gaps.ts`).
+"""[SPEC-615] `GET /api/v1/formations/{id}/gaps` on the local stack.
 
-The driver returns `timestamptz` columns as `datetime`: the card's `detectedAt` is the ISO instant of
-the detection, like `new Date(row.detected_at).toISOString()`.
+The driver returns `timestamptz` columns as `datetime`: the card's `detectedAt` is the ISO instant
+of the detection, like `new Date(row.detected_at).toISOString()`.
 """
 
 from typing import Any

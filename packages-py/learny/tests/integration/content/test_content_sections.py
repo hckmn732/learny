@@ -1,10 +1,6 @@
 """[SPEC-2203] Section report and correction: optimistic guard, replay and brick suspension.
 
-Ported from `packages/services/src/courses/{edit-section,report-section,section-bricks}.test.ts`
-(SPEC-609 EF-4, ET-2, ET-4, CL-2, BR-COU-09, BR-MEM-09): the same identifiers, the same expected
-codes, versions and events, on the local stack. Two TypeScript cases pin a reachable-only-with-a-
-fake state (a `null` insert and a row deleted between the write and the re-read); they have no
-database equivalent and are listed as such in `test-port-map.md`.
+The same identifiers, the same expected codes, versions and events, on the local stack.
 """
 
 from typing import Any

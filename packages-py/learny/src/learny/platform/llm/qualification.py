@@ -1,11 +1,8 @@
-"""Non-blocking compatibility battery of one personal model (SPEC-2204, port of
-`packages/llm/src/qualification/{compatibility,fixtures}.ts`).
+"""Non-blocking compatibility battery of one personal model (SPEC-2204).
 
 Only the probes required by `TASK_CONFIG` run: a strict tool call, a structured output and an image
 for the tasks that need them. A provider failure is a reserve, never a blocking error; brick
-validation and runtime correction stay in the normal task flow. The fixtures are the committed ones
-of the TypeScript repository plus the compatibility ones it builds in code, and no prompt, key or
-payload is ever returned by the report (ET-1, ET-2).
+validation and runtime correction stay in the normal task flow.
 """
 
 import asyncio

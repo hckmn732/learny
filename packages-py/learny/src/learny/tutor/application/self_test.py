@@ -1,9 +1,8 @@
 """Teste-moi: one open question, a bounded verdict and the mastery application (SPEC-610 ET-7).
 
-Port of `packages/services/src/tutor-chat/self-test.ts` (BR-TUT-04, ADR-0174): the question is an
-`open_question` brick wrapped in a `self_test` activity, the answer is written before the correction,
-and `apply_learning_result` owns every mastery, FSRS and gap write (SPEC-411). Each transaction is
-short and closed before the model calls.
+The question is an `open_question` brick wrapped in a `self_test` activity, the answer is written
+before the correction, and `apply_learning_result` owns every mastery, FSRS and gap write
+(SPEC-411). Each transaction is short and closed before the model calls.
 """
 
 import math

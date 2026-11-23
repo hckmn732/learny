@@ -1,9 +1,8 @@
 """Production ports of the export and deletion jobs (SPEC-211 ET-2, EF-7, CL-8).
 
-Port of `packages/jobs/src/personal-data/deps.ts`. The ZIP is uploaded to the private `exports`
-bucket and the apports are read from the private `resources` bucket with the service role: the job
-acts on behalf of a learner who may already be deleted. URLs, tokens and e-mail addresses are never
-logged (ET-7).
+The ZIP is uploaded to the private `exports` bucket and the apports are read from the private
+`resources` bucket with the service role: the job acts on behalf of a learner who may already be
+deleted. URLs, tokens and e-mail addresses are never logged (ET-7).
 """
 
 import asyncio

@@ -1,7 +1,6 @@
 """[SPEC-2204] Reply stream of the tutor: SSH chunks, committed messages and Teste-moi.
 
-Ported from `packages/services/src/tutor-chat/stream.test.ts` (SPEC-610 ET-2, ET-3, EF-8, ADR-0066):
-the mock gateway and the seeded rows replace the fakes, and the assertions read the protocol order,
+The mock gateway and the seeded rows replace the fakes, and the assertions read the protocol order,
 the committed rows and the queued event.
 """
 

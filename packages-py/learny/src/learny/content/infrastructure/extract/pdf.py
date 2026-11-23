@@ -1,9 +1,9 @@
 """PDF extractor (SPEC-509 EF-2, ET-2, CL-1, CL-2; ADR-0057).
 
-Port of `packages/ingestion/src/extract/pdf.ts` on `pypdf`: no rendering and no embedded script
-execution. A password-protected document, a damaged file, a page beyond BR-APP-02 or a document
-without any text becomes a safe, named failure and never a partial set of passages. The page
-coordinates are preserved so a citation always points to the exact page and character range.
+No rendering and no embedded script execution. A password-protected document, a damaged file, a page
+beyond BR-APP-02 or a document without any text becomes a safe, named failure and never a partial
+set of passages. The page coordinates are preserved so a citation always points to the exact page
+and character range.
 """
 
 import io

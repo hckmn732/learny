@@ -1,7 +1,7 @@
 """[SPEC-2202] Composition of the streak and its milestones (SPEC-409).
 
-Ported from `packages/learning-engine/test/integration/streak.test.ts`: daily activity, the engine
-clock and the `ENGINE` bounds of the configuration package composed end to end.
+Daily activity, the engine clock and the `ENGINE` bounds of the configuration package composed end
+to end.
 """
 
 from typing import Any

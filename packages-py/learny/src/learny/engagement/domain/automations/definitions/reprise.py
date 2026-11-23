@@ -1,10 +1,10 @@
 """Catch-up after an absence (SPEC-712, BR-AUT-04, ADR-0190, ADR-0191 section 3).
 
-Ported from `packages/automations/src/definitions/reprise.ts`: the one-line explanation of the four
-kinds and of every status (both tones), and the effects of the three explicit choices of the learner
-(``shift_end`` / ``lighten`` recorded, five-minute restart placed, missed session replaced). The
-definition never reads the database: the replacement reads the missed slot inside the effect
-executor, and the journal identifiers come back through the assignments.
+The one-line explanation of the four kinds and of every status (both tones), and the effects of the
+three explicit choices of the learner (``shift_end`` / ``lighten`` recorded, five-minute restart
+placed, missed session replaced). The definition never reads the database: the replacement reads the
+missed slot inside the effect executor, and the journal identifiers come back through the
+assignments.
 """
 
 from typing import Any

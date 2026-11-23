@@ -1,8 +1,8 @@
-"""Health probe of the facade (port of `packages/api-routes/src/deps/health.ts`, SPEC-006 EF-2).
+"""Health probe of the facade (SPEC-006, EF-2).
 
-The probe runs one trivial query with a bounded delay; its result and its error message are
-ignored, so no connection string and no driver message ever reaches the answer. A database that is
-not explicitly configured stays `not_configured` instead of probing a local default, exactly like
+The probe runs one trivial query with a bounded delay; its result and its error message are ignored,
+so no connection string and no driver message ever reaches the answer. A database that is not
+explicitly configured stays `not_configured` instead of probing a local default, exactly like
 `registerDatabaseHealth`.
 """
 

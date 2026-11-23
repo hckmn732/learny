@@ -1,8 +1,8 @@
 """Pure rules of the personal question banks (SPEC-513 ET-1, BR-MEM-07, ADR-0026).
 
-Port of the deterministic half of `packages/tutor/src/services/question-bank.ts`: the four formats a
-bank can hold, the minimum number of distinct variants, the placeholder substitution of a fixture,
-the distractors of a choice question, the batch bound and the job group. No IO, no clock.
+The four formats a bank can hold, the minimum number of distinct variants, the placeholder
+substitution of a fixture, the distractors of a choice question, the batch bound and the job group.
+No IO, no clock.
 """
 
 import json

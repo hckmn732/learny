@@ -1,4 +1,4 @@
-"""[SPEC-2201] Imported programme text extraction (port of programme/import-file.ts)."""
+"""[SPEC-2201] Imported programme text extraction."""
 
 import base64
 import io

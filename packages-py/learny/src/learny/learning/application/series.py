@@ -1,8 +1,8 @@
 """Streak, regularity and milestones (SPEC-723 EF-1 to EF-4, BR-GAM-02, BR-GAM-03, ADR-0321).
 
-Port of `packages/services/src/serie-regularite-et-jalons-interface.ts`: the engine of SPEC-409
-computes the streak from the persisted `daily_activity`; this module only reads behind RLS, maps
-the three engine states to the sidebar boxes and reconciles the milestones the learner reached.
+The engine of SPEC-409 computes the streak from the persisted `daily_activity`; this module only
+reads behind RLS, maps the three engine states to the sidebar boxes and reconciles the milestones
+the learner reached.
 
 Milestones are system-managed: after the RLS reads the missing rows are inserted with the service
 role in one transaction, and a duplicate `(user, key, ref)` inserts nothing (CL-2, CL-5).

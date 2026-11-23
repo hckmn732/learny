@@ -1,8 +1,8 @@
 """Daily warm-up read model (SPEC-714 EF-7, ET-2, BR-WAR-01, BR-WAR-02).
 
-Port of `packages/services/src/warmup/{derive,get-today}.ts`: the card is built from the exact brick
-versions the activity stores, the next session comes from the day's schedule, and every read runs
-in the learner's RLS transaction, so a foreign activity never appears (CA-7).
+The card is built from the exact brick versions the activity stores, the next session comes from the
+day's schedule, and every read runs in the learner's RLS transaction, so a foreign activity never
+appears (CA-7).
 """
 
 import json

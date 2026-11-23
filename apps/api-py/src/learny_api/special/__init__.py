@@ -1,13 +1,11 @@
-"""Special routes of the facade (SPEC-2207, port of `packages/api-routes/src/special`).
+"""Special routes of the facade (SPEC-2207).
 
 Every route that does not follow the generic contract pipeline is registered here, before the
 pipeline. Two families live here:
 
 - the development routes of the SDD harness (`special/dev-routes.ts`): the same twelve steps as a
-  normal operation, behind the development guard of `devOnly` (SPEC-201 ET-7, CL-10), which answers
-  the problem+json 404 of the TypeScript handler before any authentication;
+normal operation, behind the development guard of `devOnly` (SPEC-201 ET-7, CL-10), which answers
 - the remaining special routes of the inventory (health probe, auth callback and sprint planning),
-  each with the guard and the answer shape of its TypeScript counterpart.
 """
 
 from collections.abc import Awaitable, Callable

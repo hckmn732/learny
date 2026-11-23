@@ -1,12 +1,10 @@
 """Demonstration pipeline of SPEC-203, executed by the Python worker (SPEC-2207, ADR-2014).
 
-Port of `packages/jobs/src/functions/sdd-demo-pipeline.ts`. The Inngest function recorded three
-idempotent steps in `sdd_demo_runs` and failed the second one on its first execution, to show that a
-retry replays only that step. The Python worker has no step engine: the demonstration consumer runs
-the same sequence in one service transaction, the persisted `attempts` counter carrying the state.
-The simulated failure is replayed immediately, because the worker backoff after a first failure is
-ten seconds while the demonstration page polls for five; a real delivery failure still goes through
-the worker retry and its backoff.
+The Python worker has no step engine: the demonstration consumer runs the same sequence in one
+service transaction, the persisted `attempts` counter carrying the state. The simulated failure is
+replayed immediately, because the worker backoff after a first failure is ten seconds while the
+demonstration page polls for five; a real delivery failure still goes through the worker retry and
+its backoff.
 
 The rows are synthetic demonstration state: `sdd_demo_runs` has no policy for learners, so the
 transaction uses the owner role (`learny.shared.db.privileged`, SPEC-2101 EF-4).

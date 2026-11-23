@@ -1,8 +1,6 @@
-"""[SPEC-2206] Privacy domain against the TypeScript oracle (SPEC-211, CA-2).
+"""[SPEC-2206] Privacy domain against the reference oracle (SPEC-211, CA-2).
 
-The expected values of `api/oracles/vectors/privacy.json` are the recordings of the real TypeScript
-`zip-layout.ts` helpers and of `isDataExportDownloadable` (`packages/db/src/schema/privacy-search.ts`),
-2026-11-22. Equality is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
+Equality is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
 """
 
 import json

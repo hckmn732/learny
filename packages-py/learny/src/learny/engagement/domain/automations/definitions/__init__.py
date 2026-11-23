@@ -1,8 +1,8 @@
 """Product definitions of the ten automations (SPEC-2205, ADR-0190).
 
-One module per key, as ADR-0190 requires: each one ports the explanation and the effects of
-`packages/automations/src/definitions/*.ts`. `product_registry` registers all ten on a fresh
-registry, in the order of the database enumeration, and is the only place the engine finds them.
+One module per key, as ADR-0190 requires: each one ports the explanation and the effects.
+`product_registry` registers all ten on a fresh registry, in the order of the database enumeration,
+and is the only place the engine finds them.
 """
 
 from learny.engagement.domain.automations.definitions import (

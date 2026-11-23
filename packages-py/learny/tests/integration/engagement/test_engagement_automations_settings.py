@@ -1,9 +1,7 @@
 """[SPEC-2205] Automation settings: defaults, partial update and RLS of the ten keys.
 
-The service reads the stored rows of the learner only, completes the missing keys with the
-canonical defaults of the contracts and upserts one row in the same RLS transaction. A parameter
-outside its schema answers 400 with the zod message of the TypeScript, and another learner's row is
-never read nor written.
+The service reads the stored rows of the learner only, completes the missing keys with the canonical
+defaults of the contracts and upserts one row in the same RLS transaction.
 """
 
 from typing import Any

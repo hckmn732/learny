@@ -1,7 +1,6 @@
 """[SPEC-2202] Detection, nature and clearance of gaps (SPEC-404, BR-LAC-02 to BR-LAC-06).
 
-Ported from `packages/learning-engine/src/gaps/detect.test.ts`. The expected values, evidence lines
-included, are the recordings of the TypeScript engine taken on 2026-11-21.
+The expected values, evidence lines included, are the reference recordings.
 """
 
 import json

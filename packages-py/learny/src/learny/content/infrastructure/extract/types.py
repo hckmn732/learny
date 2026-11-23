@@ -1,7 +1,7 @@
 """Common shape returned by every extractor (SPEC-509 EF-2; SPEC-510 reuses it).
 
-Port of `packages/ingestion/src/extract/types.ts`: absolute character ranges in `text`, optional
-page/offset/anchor attributes, the extracted title and the provenance of a model reading.
+Absolute character ranges in `text`, optional page/offset/anchor attributes, the extracted title and
+the provenance of a model reading.
 """
 
 from dataclasses import dataclass, field

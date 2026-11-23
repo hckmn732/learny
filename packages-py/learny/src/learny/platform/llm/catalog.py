@@ -1,4 +1,4 @@
-"""Provider catalogue of the AI capability (SPEC-2204, port of `providers/catalog.ts`).
+"""Provider catalogue of the AI capability (SPEC-2204).
 
 The six providers of `docs/architecture/data-model.md` section 9, their hosting region, the warning
 shown by BR-IA-04 and the label of the credential card. The messages are French user-facing texts

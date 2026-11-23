@@ -1,9 +1,9 @@
 """Brick lifecycle use cases (SPEC-501 ET-8, EF-1 to EF-7).
 
-Port of `packages/services/src/bricks/{brick-service,reference-resolver}.ts`. The pure package owns
-the schemas, the checks, the references and the fingerprints; this module only reads locked rows,
-opens one user transaction and writes immutable versions. A reported brick never enters a new
-activity; a correction resolves every open report and makes the brick active again (BR-BRI-06).
+The pure package owns the schemas, the checks, the references and the fingerprints; this module only
+reads locked rows, opens one user transaction and writes immutable versions. A reported brick never
+enters a new activity; a correction resolves every open report and makes the brick active again
+(BR-BRI-06).
 """
 
 import json

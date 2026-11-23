@@ -1,12 +1,12 @@
 """Inline execution of the Python consumers (SPEC-2102 step 6).
 
-Port of `packages/jobs/src/inline.ts` for the Python side: with `JOBS_MODE=inline` an emitted event
-does not wait for the worker, the consumers Python owns run in the API process, the delays are
-ignored, a failing consumer is retried up to four executions and the depth of the events produced by
-a consumer is capped at five. Errors are logged and never reach the emitter.
+With `JOBS_MODE=inline` an emitted event does not wait for the worker, the consumers Python owns run
+in the API process, the delays are ignored, a failing consumer is retried up to four executions and
+the depth of the events produced by a consumer is capped at five. Errors are logged and never reach
+the emitter.
 
-The bridge to the `ts`-owned consumers of P21 (a call to the Hono dev dispatch route) is removed by
-SPEC-2207: every consumer of the table is `py`, so nothing is relayed any more.
+The bridge to the `ts`-owned consumers of P21 is removed by SPEC-2207: every consumer of the table
+is `py`, so nothing is relayed any more.
 
 `run_committed` is what the API calls after a request committed its events (P21 plan, step 6): the
 events go through the same `job_deliveries` rows as with the worker (one delivery per consumer,

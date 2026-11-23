@@ -1,7 +1,6 @@
 """[SPEC-2203] Web search adapter: public URLs, HTML removal, dedup and token budget.
 
-Ported from `packages/llm/src/search/search.test.ts` and the committed fixtures
-`packages/llm/fixtures/search/tavily/*.json`: normalization is applied once for every provider.
+Normalization is applied once for every provider.
 """
 
 import json

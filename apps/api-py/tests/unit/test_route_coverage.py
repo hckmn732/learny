@@ -54,7 +54,7 @@ def installed_names(app: FastAPI, prefix: str) -> list[str]:
 
 
 def normalized(path: str) -> str:
-    """Hono notation of an inventory path (`/x/{id}` -> `/x/:id`)."""
+    """Framework notation of an inventory path (`/x/{id}` -> `/x/:id`)."""
     return PARAM.sub(lambda match: ":" + match.group(1), path)
 
 

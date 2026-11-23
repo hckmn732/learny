@@ -1,7 +1,6 @@
 """[SPEC-2202] Deterministic selection of the warm-up notions (SPEC-410, BR-AUT-03, ADR-0148).
 
-Ported from `packages/learning-engine/src/warmup/select.test.ts`. The expected choices and the
-ranked candidate sets are the recordings of the TypeScript engine taken on 2026-11-21.
+The expected choices and the ranked candidate sets are the reference recordings.
 """
 
 import json

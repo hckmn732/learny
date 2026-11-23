@@ -1,4 +1,4 @@
-"""[SPEC-2201] Legal acceptance (port of legal/accept.ts)."""
+"""[SPEC-2201] Legal acceptance."""
 
 from typing import Any
 

@@ -1,10 +1,9 @@
 """Introduction and format confirmation of a mock exam (SPEC-614 EF-1, EF-5, ET-3, BR-PRA-02).
 
-Port of `packages/services/src/mock-exams/format.ts` and of `ensureMockExamSlots`
-(`packages/services/src/planning/index.ts`): the introduction shows the proposed or confirmed
-format, the studied and diagnostic modules with the diagnostic share, the two planned exams and the
-last attempt. Confirming the format is the only write: an extracted guide format is never applied
-before the learner accepts it (ET-3), and confirming an already stored format is idempotent.
+The introduction shows the proposed or confirmed format, the studied and diagnostic modules with the
+diagnostic share, the two planned exams and the last attempt. Confirming the format is the only
+write: an extracted guide format is never applied before the learner accepts it (ET-3), and
+confirming an already stored format is idempotent.
 """
 
 import json

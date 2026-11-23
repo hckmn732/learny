@@ -1,10 +1,4 @@
-"""[SPEC-2205] Pure rules of the engagement domain replayed against the TypeScript oracle.
-
-The fixture `engagement_domain.json` is produced by `corepack pnpm exec tsx
-tools/engagement/oracle.mjs`, which runs the TypeScript implementation on the same inputs: the
-pytest assertions compare the Python port to the source of truth, never to a hand-written
-expectation (ADR-2008, CA-3).
-"""
+"""[SPEC-2205] Pure rules of the engagement domain replayed against the reference oracle."""
 
 import json
 from datetime import datetime

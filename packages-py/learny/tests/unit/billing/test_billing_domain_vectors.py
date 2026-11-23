@@ -1,10 +1,6 @@
-"""[SPEC-2206] Billing domain against the TypeScript oracle (SPEC-210, CA-2).
+"""[SPEC-2206] Billing domain against the reference oracle (SPEC-210, CA-2).
 
-Every expected value of `api/oracles/vectors/billing.json` is the recording of the real TypeScript
-helpers (`resolveBillingConfig`, `mapStripeStatus`, `maskStripeId`, `signPayload`, `verifySignature`,
-`normalizeStripeEvent`, `isSafeRelativePath`) and of the private `absoluteUrl` reproduced by the
-oracle script (2026-11-22). Equality is strict: a divergence is a Python bug, never an oracle change
-(ADR-2008).
+Equality is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
 """
 
 import json

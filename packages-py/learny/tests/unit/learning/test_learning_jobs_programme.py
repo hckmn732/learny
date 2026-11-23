@@ -1,8 +1,4 @@
-"""Bounds of the initial planning (SPEC-2207, port of `programme.ts`).
-
-The volume per module, the horizon of the last module and the planner modules keep the exact
-arithmetic of the TypeScript job, without any database.
-"""
+"""Bounds of the initial planning (SPEC-2207)."""
 
 from typing import Any
 

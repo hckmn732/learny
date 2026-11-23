@@ -1,7 +1,5 @@
 """Unified notification service (SPEC-2205).
 
-Ported from `packages/notifications/src/notify.ts` and `deliveries.ts`.
-
 `notify` is the only entry point of the notification producers. It always creates the in-app row
 (BR-NOT-03), then records one decision per external channel inside the same transaction, and finally
 sends the deliveries that are due after the commit. Deduplication is the database unique key

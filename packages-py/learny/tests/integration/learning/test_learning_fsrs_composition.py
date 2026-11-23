@@ -1,7 +1,7 @@
 """[SPEC-2202] Composition of the FSRS scheduler and the automatic grade (SPEC-402, CA-2 to CA-4).
 
-Ported from `packages/learning-engine/test/integration/fsrs.test.ts`: the personal median, the grade
-decision, the card update and the preview are chained with the `ENGINE.fsrs` bounds.
+The personal median, the grade decision, the card update and the preview are chained with the
+`ENGINE.fsrs` bounds.
 """
 
 from typing import Any

@@ -1,8 +1,7 @@
 """Final review and memory interview of a completed formation (SPEC-617, BR-FOR-12, BR-PRO-03).
 
-Port of `packages/services/src/formations/{final-review,get-final-review,set-maintenance}.ts`: the
-projection is pure, the reads run on the learner's RLS transaction, and the mode transition locks
-the formation, cancels the future slots when the interview stops and writes one
+The projection is pure, the reads run on the learner's RLS transaction, and the mode transition
+locks the formation, cancels the future slots when the interview stops and writes one
 `formation/maintenance-changed` event in the same commit.
 """
 

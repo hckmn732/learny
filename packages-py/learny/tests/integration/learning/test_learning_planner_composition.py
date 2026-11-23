@@ -1,7 +1,7 @@
 """[SPEC-2202] Composition of the planner (SPEC-407, CA-1, CA-3, CA-4).
 
-Ported from `packages/learning-engine/test/integration/planner.test.ts`: the planning, the
-incremental replanning, the time helpers and the `ENGINE.planner` bounds composed end to end.
+The planning, the incremental replanning, the time helpers and the `ENGINE.planner` bounds composed
+end to end.
 """
 
 from typing import Any

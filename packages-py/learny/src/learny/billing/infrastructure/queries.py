@@ -1,9 +1,7 @@
-"""SQL of the billing context (SPEC-2206, port of the Drizzle queries of `billing/`).
+"""SQL of the billing context (SPEC-2206).
 
-The statements are the TypeScript ones: same column order, same `for update`, same
-`on conflict do nothing`. The billing service acts with the owner role, exactly like the TypeScript
-`serviceDb()` it replaces (the subscription is not a learner-writable row); every function takes the
-transaction as its first parameter so a use case can chain them in one unit of work.
+The billing service acts with the owner role; every function takes the transaction as its first
+parameter so a use case can chain them in one unit of work.
 """
 
 from dataclasses import dataclass

@@ -1,8 +1,7 @@
 """[SPEC-2204] Conversations of the tutor: private reads under RLS, greeting and message mapping.
 
-Ported from `packages/services/src/tutor-chat/conversations.test.ts` (SPEC-610 ET-3, BR-TUT-07,
-ADR-0040): the seeded rows replace the fake client, and every read runs as the authenticated
-learner, so a foreign conversation is a real 404 instead of a stub.
+The seeded rows replace the fake client, and every read runs as the authenticated learner, so a
+foreign conversation is a real 404 instead of a stub.
 """
 
 from typing import Any

@@ -1,9 +1,9 @@
 """YouTube extractor (SPEC-510 EF-2, ET-2, CA-2, CL-4; ADR-0057).
 
-Port of `packages/ingestion/src/extract/youtube.ts` on `youtube-transcript-api`: the URL is parsed
-into a strict 11-character identifier, captions are read through a port, and a video without public
-captions is a permanent `YOUTUBE_NO_CAPTIONS` failure, never an empty list and never an invented
-transcript. The mock provider reads the committed fixtures and is the only one a test can reach.
+The URL is parsed into a strict 11-character identifier, captions are read through a port, and a
+video without public captions is a permanent `YOUTUBE_NO_CAPTIONS` failure, never an empty list and
+never an invented transcript. The mock provider reads the committed fixtures and is the only one a
+test can reach.
 """
 
 import re

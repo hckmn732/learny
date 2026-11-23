@@ -1,8 +1,7 @@
 """[SPEC-2202] Code correction of the six auto-graded bricks (SPEC-502, BR-BRI-08).
 
-Ported from `packages/bricks/src/grade.test.ts` and the six `types/<type>/grade.test.ts`. The
-expected outcomes are the recordings of the TypeScript engine taken on 2026-11-21: same score,
-same correction, same confusions and same normalized response.
+The expected outcomes are the reference recordings: same score, same correction, same confusions and
+same normalized response.
 """
 
 import json

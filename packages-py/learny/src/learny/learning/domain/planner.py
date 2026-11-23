@@ -1,12 +1,10 @@
 """Deterministic greedy planner of the learning engine (SPEC-407, ADR-0029, ADR-0280).
 
-Pure port of `packages/learning-engine/src/planner/{grid,plan,find-compatible-slots,replan}.ts`:
-the time grid, the schedule, the compatible slots and the incremental replanning. Every date, time
+The time grid, the schedule, the compatible slots and the incremental replanning. Every date, time
 zone and business parameter is an input; nothing here reads the clock, the configuration package,
 the database or the network. Formations are visited by end date then identifier, their modules by
 position, and every activity is placed in the first compatible free window while the cumulative
-daily capacity of all formations is respected. Outputs keep the TypeScript key order so the JSON
-stays byte-identical (ADR-2008).
+daily capacity of all formations is respected.
 """
 
 import math
@@ -91,7 +89,7 @@ class PlannerPreferences:
     holidays: tuple[str, ...] = ()
 
     def with_availability(self, availability: Availability) -> "PlannerPreferences":
-        """Same preferences with another availability, as the TS object spread does."""
+        """Same preferences with another availability."""
         return PlannerPreferences(self.tz, availability, self.holidays)
 
 
@@ -410,7 +408,7 @@ def slot_identifier(key: str) -> str:
 
 
 def activity_key(formation_id: str, module_id: str | None, kind: str, title: str) -> str:
-    """Identity of an activity inside the agenda, as the TypeScript template builds it."""
+    """Identity of an activity inside the agenda."""
     return f"{formation_id}|{module_id or ''}|{kind}|{title}"
 
 

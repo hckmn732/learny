@@ -1,10 +1,4 @@
-"""Product constants of the Python backend, copied from `packages/config/src/product.ts`.
-
-Only the values a Python use case reads are copied here, verbatim from the TypeScript file that
-remains the single source of truth until SPEC-2302 moves the product configuration (ADR-2011).
-Each constant keeps the identifier of the TypeScript object it comes from so a divergence is easy
-to spot.
-"""
+"""Product constants of the Python backend, copied from `packages/config/src/product.ts`."""
 
 from collections.abc import Mapping
 from typing import Any, Final
@@ -20,7 +14,7 @@ STUDY_DEFAULTS: Final[Mapping[str, Any]] = {
 NOTIFICATION_DEFAULT_EMAIL: Final = True
 NOTIFICATION_DEFAULT_PUSH: Final = True
 
-# `ONBOARDING_AUTOMATION_KEYS` of `packages/services/src/onboarding/state.ts` (SPEC-602 EF-10).
+# `ONBOARDING_AUTOMATION_KEYS` (SPEC-602 EF-10).
 ONBOARDING_AUTOMATION_KEYS: Final = ("reprise", "micro_seance", "echauffement", "plafond_quiz")
 
 # AUTOMATION_DEFAULTS (BR-AUT-01 to BR-AUT-10), the ten keys of `public.automation_key`.

@@ -1,9 +1,7 @@
 """Display rules of the weekly review (SPEC-2205, SPEC-720 EF-2 and ET-4).
 
-Ported from the pure helpers of `packages/contracts/src/automatisme-9-bilan-de-la-semaine.ts`.
-Every label is copied word for word from the TypeScript: "13 h 30", "86 %", "Non disponible",
-the period and the reception labels. The French short names are a table, never the process locale,
-so the output is identical on every host (ADR-0047).
+The French short names are a table, never the process locale, so the output is identical on every
+host (ADR-0047).
 """
 
 import math

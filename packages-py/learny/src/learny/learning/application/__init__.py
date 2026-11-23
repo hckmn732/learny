@@ -1,1 +1,1 @@
-"""Use cases of the learning context: one async function per TypeScript service function."""
+"""Use cases of the learning context: one async function per business operation."""

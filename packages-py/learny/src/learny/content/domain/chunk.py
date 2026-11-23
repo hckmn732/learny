@@ -1,9 +1,9 @@
 """Paragraph-aware splitting of an extracted contribution (SPEC-509 ET-2, EF-3, CA-1).
 
-Port of `packages/ingestion/src/chunk.ts`. The function is pure and deterministic: the same text
-and locations always produce the same passages. A passage never crosses a source location (page
-for a PDF), always ends on a paragraph boundary when possible, keeps an exact
-`{charStart, charEnd}` range and repeats the trailing units of the previous passage as overlap.
+The function is pure and deterministic: the same text and locations always produce the same
+passages. A passage never crosses a source location (page for a PDF), always ends on a paragraph
+boundary when possible, keeps an exact `{charStart, charEnd}` range and repeats the trailing units
+of the previous passage as overlap.
 
 `estimateTokens` counts JavaScript string units: `Math.ceil(text.length / 4)` where `length` is the
 number of UTF-16 code units, so an astral character counts for two here as it does in Node.
@@ -26,7 +26,7 @@ MIN_TARGET_TOKENS = 20
 MAX_TARGET_TOKENS = 4000
 MAX_OVERLAP_TOKENS = 3999
 
-# The `\s` class of ECMAScript 262, which is what `/\s/` matches in the TypeScript implementation.
+# The `\s` class of ECMAScript 262
 JS_SPACE = frozenset(
     "\t\n\v\f\r \u00a0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009"
     "\u200a\u2028\u2029\u202f\u205f\u3000\ufeff"

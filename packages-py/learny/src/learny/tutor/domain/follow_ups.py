@@ -1,8 +1,8 @@
 """Follow-ups of a tutor answer (SPEC-610 ET-6, EF-9).
 
-Port of `packages/services/src/tutor-chat/follow-ups.ts`: the code computes the follow-ups, never
-the model. `rephrase`, `example` and `test_me` are always proposed; `compare` only when a confusion
-pair exists in the chapter. The follow-up just served is not proposed again (CL-3).
+The code computes the follow-ups, never the model. `rephrase`, `example` and `test_me` are always
+proposed; `compare` only when a confusion pair exists in the chapter. The follow-up just served is
+not proposed again (CL-3).
 """
 
 import re

@@ -1,8 +1,6 @@
-"""[SPEC-2205] Pure rules of the four job use cases, replayed against the TypeScript oracle.
+"""[SPEC-2205] Pure rules of the four job use cases, replayed against the reference oracle.
 
-The fixture `engagement_jobs.json` is produced by `corepack pnpm exec tsx
-tools/engagement/oracle-jobs.mjs`, which runs the TypeScript helpers on the same inputs. The
-assertions compare the Python port to the source of truth, never to a hand-written expectation.
+The assertions compare the Python port to the source of truth, never to a hand-written expectation.
 """
 
 import json

@@ -1,4 +1,4 @@
-"""[SPEC-2206] Real Stripe gateway against a fake SDK (ported from `billing/stripe-client.test.ts`).
+"""[SPEC-2206] Real Stripe gateway against a fake SDK.
 
 Every SDK call is a fake: no key leaves the process and no network call happens. The error
 translation never forwards the SDK message.

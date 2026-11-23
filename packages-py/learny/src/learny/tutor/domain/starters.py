@@ -1,9 +1,8 @@
 """Starter questions of the tutor card (SPEC-610 EF-2).
 
-Port of `packages/services/src/tutor-chat/starters.ts`: the three questions are computed without AI
-from the selected chapter. The primary notion is the most cited one in `course_sections.notion_ids`;
-ties choose the weakest notion of the chapter (the followed gap when one exists). The label is used
-as provided, without automatic agreement.
+The three questions are computed without AI from the selected chapter. The primary notion is the
+most cited one in `course_sections.notion_ids`; ties choose the weakest notion of the chapter (the
+followed gap when one exists). The label is used as provided, without automatic agreement.
 """
 
 import json
@@ -46,7 +45,7 @@ def confusion_of(sections: Sequence[Mapping[str, Any]]) -> dict[str, str] | None
 
 
 def short_left(label: str) -> str:
-    """The left label up to its first ` de `, like the TypeScript `shortLeft`."""
+    """The left label up to its first ` de `."""
     parts = DE.split(label, maxsplit=1)
     return parts[0].strip() if parts and parts[0].strip() else label
 

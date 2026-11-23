@@ -1,9 +1,7 @@
 """Pure rules of the global pause (SPEC-2205, SPEC-721 EF-1 to EF-3).
 
-Ported from `pauseSummary`, `validatePauseEndDate` and `pauseEndDateInZone` of
-`packages/services/src/pause/index.ts`. The French sentences live in `locale_fr` (ADR-2011): the
-same sentence serves the journal entry and the settings card, so the learner never reads two
-wordings.
+The French sentences live in `locale_fr` (ADR-2011): the same sentence serves the journal entry and
+the settings card, so the learner never reads two wordings.
 """
 
 from datetime import datetime

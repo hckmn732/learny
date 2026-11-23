@@ -1,11 +1,10 @@
 """[SPEC-719] Sprint planning service: RLS, journal, effects and idempotence.
 
-Ported from `packages/services/test/integration/spec-719.test.ts`. Postgres is real: the two
-30-minute `sprint` slots are written under RLS for the learner, the `sprint_planned` journal action
-and its event are committed once, a moved milestone replans only the future sprints, and the
-400/404/409 cases write nothing. The milestone move replays the same use case on the moved slot: the
-Python worker has no `agenda/slot-moved` consumer of this automation yet (the event trigger of the
-TypeScript definition), so the direct run carries the same observable effect.
+Postgres is real: the two 30-minute `sprint` slots are written under RLS for the learner, the
+`sprint_planned` journal action and its event are committed once, a moved milestone replans only the
+future sprints, and the 400/404/409 cases write nothing. The milestone move replays the same use
+case on the moved slot: the Python worker has no `agenda/slot-moved` consumer of this automation
+yet, so the direct run carries the same observable effect.
 """
 
 from dataclasses import dataclass
@@ -99,7 +98,7 @@ COUNT_OVERLAPPING_EXAMS = (
 
 @dataclass(frozen=True, slots=True)
 class Learner:
-    """One seeded learner with a one-module programme, like `createLearner` of the TS suite."""
+    """One seeded learner with a one-module programme."""
 
     user_id: str
     formation_id: str

@@ -1,9 +1,9 @@
 """[SPEC-2202] Result of a corrected validation attempt (SPEC-612, EF-1 to EF-5).
 
-Port of the useful cases of `packages/services/src/quiz/result.ts`: the screen shows the persisted
-verdict, the gap cards of the failed notions with their evidence and proposal, the mastered notions,
-the history and the retry gate. The gate comes from the frozen payload of the remediation action or,
-without one, from the settings row and the latest failed attempt.
+The screen shows the persisted verdict, the gap cards of the failed notions with their evidence and
+proposal, the mastered notions, the history and the retry gate. The gate comes from the frozen
+payload of the remediation action or, without one, from the settings row and the latest failed
+attempt.
 """
 
 import json

@@ -1,8 +1,7 @@
 """Internal rules of the thirteen brick types (SPEC-501 ET-4).
 
-Pure port of `packages/bricks/src/types/<type>/checks.ts` and of `checks-helpers.ts`: same codes,
-same JSON paths and the same English messages, because the tutor loop sends them back to a model
-(BR-IA-11). No IO and no framework import.
+Same codes, same JSON paths and the same English messages, because the tutor loop sends them back to
+a model (BR-IA-11). No IO and no framework import.
 """
 
 import re

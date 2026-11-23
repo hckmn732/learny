@@ -1,8 +1,8 @@
 """Individual copy of a shared programme (SPEC-724 EF-4, ET-5; BR-APP-03, ADR-0035).
 
-Port of `copyProgrammeForMember` (`formations-a-plusieurs.ts`): when a member leaves or is removed,
-the programme entities are copied as new rows owned by the member and every personal row of that
-member is *moved* to the copied entities. Another learner's rows are never selected.
+When a member leaves or is removed, the programme entities are copied as new rows owned by the
+member and every personal row of that member is *moved* to the copied entities. Another learner's
+rows are never selected.
 """
 
 import json
