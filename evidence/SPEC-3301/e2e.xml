@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="emulator-5554" tests="1" failures="0" time="32.037" timestamp="2026-11-23T14:11:55">
+    <testcase id="SPEC-3301 briques" name="SPEC-3301 briques" classname="SPEC-3301 briques" file="apps/mobile/e2e/flows/SPEC-3301-briques.yaml" time="32.026" timestamp="2026-11-23T14:11:55" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3301, visual"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

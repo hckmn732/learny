@@ -29,6 +29,8 @@ export type { LargeTitleHeaderProps } from './LargeTitleHeader';
 export { ListGroupHeader } from './ListGroupHeader';
 export type { ListGroupHeaderProps } from './ListGroupHeader';
 export { ListRow } from './ListRow';
+export { Markdown } from './Markdown';
+export type { MarkdownProps } from './Markdown';
 export type { ListRowProps } from './ListRow';
 export { ProgressBar } from './ProgressBar';
 export type { ProgressBarProps } from './ProgressBar';

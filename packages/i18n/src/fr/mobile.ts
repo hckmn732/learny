@@ -1,6 +1,9 @@
 // Messages propres à l'application mobile : espace `mobile` de `@learny/i18n` (canevas § 2,
 // ADR-3005 § 3). Textes vus par l'utilisateur, en français (BR-ACC-06), ton neutre vouvoiement.
+import { mobileBricks } from './mobileBricks';
 export const mobile = {
+  // SPEC-3301 — rendus natifs des briques et du Markdown (ADR-3009).
+  bricks: mobileBricks,
   sdd: {
     spec3001: {
       eyebrow: 'Démonstration SDD',
