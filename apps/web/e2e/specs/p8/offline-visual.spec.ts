@@ -1,8 +1,8 @@
 // Visual conformity of the offline screens (SPEC-801 §10, CA-8): tokens and structure of
 // `/hors-ligne` with and without a pack, and of the offline revision screen in 1440×900 and
 // 390×844. Baselines are compared with a 1 % pixel tolerance.
-import { serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
+import { serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';

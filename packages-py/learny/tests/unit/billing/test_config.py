@@ -1,4 +1,4 @@
-"""[SPEC-2206] Billing configuration (ported from `billing/config.test.ts`, SPEC-210).
+"""[SPEC-2206] Billing configuration (SPEC-210).
 
 The default mode follows `APP_ENV`, `STRIPE_MODE=mock` is refused in production (ADR-0215) and the
 public address is normalised while empty values are ignored.

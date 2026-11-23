@@ -1,8 +1,8 @@
 """[SPEC-2203] Passage chunking of an extracted contribution (SPEC-509 ET-2, EF-3).
 
-Ported from `packages/ingestion/src/chunk.ts` and its assertions. The vectors are the recordings of
-the TypeScript implementation (`tools/content/oracle.mjs`): the Python passages must have the same
-text, the same exact `{charStart, charEnd}` range, the same page or anchor and the same cost.
+The vectors are the reference recordings (`tools/content/oracle.mjs`): the Python passages must have
+the same text, the same exact `{charStart, charEnd}` range, the same page or anchor and the same
+cost.
 """
 
 import json

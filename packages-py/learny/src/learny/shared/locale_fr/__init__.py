@@ -1,1 +1,1 @@
-"""User-facing French strings, copied verbatim from the TypeScript backend (ADR-2011)."""
+"""User-facing French strings, copied verbatim from the reference implementation (ADR-2011)."""

@@ -1,15 +1,14 @@
 """Bridge between the review game contracts and the brick grading (SPEC-702 ET-1, ET-2).
 
-Port of `packages/domain/src/review/game-response.ts` and `packages/services/src/review/per-notion.ts`.
 The contract speaks arrays of pairs/assignments/gaps, `grade_brick` speaks records keyed by the
-opaque ids of the public payload, and `brick_format_response` maps the second to the first. Pure:
-no clock, no database, no model call.
+opaque ids of the public payload, and `brick_format_response` maps the second to the first. Pure: no
+clock, no database, no model call.
 """
 
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from learny.assessments.domain.bricks.public import opaque_mapping
+from learny.assessments.domain.bricks.public_payload import opaque_mapping
 
 
 def brick_format_response(type_name: str, response: Any) -> Any:

@@ -1,9 +1,9 @@
 """[SPEC-2207] The auth routes answer the recorded `Set-Cookie` headers, byte for byte.
 
-`api/oracles/vectors/auth-cookies.json` was recorded from `@learny/api` (Hono) serving these
-requests through `@supabase/ssr` 0.12.7, whose GoTrue answers are the `gotrue` member of each case.
-The facade is built with a fake Auth client replaying those answers, so this test compares the
-Python writer with the real library and never with itself. The recorded account does not exist in
+`api/oracles/vectors/auth-cookies.json` was recorded from `@learny/api` serving these requests
+through `@supabase/ssr` 0.12.7, whose GoTrue answers are the `gotrue` member of each case. The
+facade is built with a fake Auth client replaying those answers, so this test compares the Python
+writer with the real library and never with itself. The recorded account does not exist in
 `auth.users`, so the first verification performs no write and the destination is a fresh account.
 """
 
@@ -24,7 +24,6 @@ from learny_api import (
     pipeline,
 )
 from learny_api.main import create_app
-from learny_api.ownership import load_ownership
 
 pytestmark = pytest.mark.spec("SPEC-2207")
 
@@ -114,7 +113,6 @@ class FakeGoTrue:
 def settings_for() -> Settings:
     return Settings(
         app_env="test",
-        py_hono_upstream_url="http://upstream",
         next_public_app_url=VECTORS["publicAppUrl"],
         supabase_url=VECTORS["supabaseUrl"],
         supabase_anon_key="fake-anon-key",
@@ -134,7 +132,6 @@ def build_app(document: Any, error: Any = None) -> tuple[FastAPI, TestClient, Fa
     context = pipeline.build_context(deps, settings, CATALOG)
     app = create_app(
         settings,
-        ownership=load_ownership(ROOT / "api" / "ownership.yaml"),
         context=context,
     )
     # The recorded requests reached the API on this origin, so `Secure` is left out as it was.

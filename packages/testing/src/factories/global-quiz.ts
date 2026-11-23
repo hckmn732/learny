@@ -5,7 +5,7 @@
 // produce schema-valid payloads, and `createMicroSessionBricks` inserts them through the brick
 // factory. Every created row stays in the caller's transaction.
 
-import type { DbTx } from '@learny/db';
+import type { DbTx } from '../db';
 
 import { createBrick, type BrickFactoryOverrides, type FactoryBrick } from './brick';
 

@@ -1,8 +1,7 @@
 """AI SDK UI message stream v1 chunks (SPEC-610 ET-2, ADR-0066, SPEC-2204).
 
 The web client parses `data: {type,...}` chunks; the order, the payload keys and the framing are
-part of the contract (`00-conventions` section 11). This module builds the chunks and their exact
-`data:` framing; it performs no IO, so the sequence is reproducible from the TypeScript recording.
+part of the contract (`00-conventions` section 11).
 """
 
 from typing import Any
@@ -49,5 +48,5 @@ def error(error_text: str) -> dict[str, Any]:
 
 
 def frame(chunk: dict[str, Any]) -> str:
-    """One server-sent event: `data: <json>\\n\\n`, exactly like the TypeScript `sse()`."""
+    """One server-sent event: `data: <json>\\n\\n`."""
     return f"data: {dumps(chunk).decode('utf-8')}\n\n"

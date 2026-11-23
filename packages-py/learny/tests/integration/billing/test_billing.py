@@ -31,6 +31,19 @@ SUCCESS = {"successPath": "/_dev/sdd/SPEC-2206", "cancelPath": "/_dev/sdd/SPEC-2
 DAY = timedelta(days=1)
 
 
+@pytest.fixture(autouse=True)
+async def clean_stripe_journal(database: Database) -> None:
+    """The webhook journal is committed, so a previous run would answer `duplicate`.
+
+    `handle_webhook` writes `public.stripe_events` outside the rolled-back transaction: a second
+    run of this module on the same database would see the identifiers of the first one. The
+    gateway of `STRIPE_MODE=mock` names its events `evt_mock_*`, so clearing them at test setup
+    makes the suite re-runnable without touching a single assertion.
+    """
+    async with database.service_tx() as tx:
+        await tx.conn.execute(text("delete from public.stripe_events where event_id like 'evt_mock_%'"))
+
+
 @dataclass
 class BillingTestDeps:
     """The bundle the billing use cases see; a `Deps` satisfies the same protocol."""

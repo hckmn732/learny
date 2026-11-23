@@ -1,157 +1,72 @@
-# Runbook — bascule Python, arrêt d'urgence, rollback et restauration (SPEC-2301)
+# Runbook — exploitation du backend Python, rollback et restauration (SPEC-2301, SPEC-2302)
 
-Ce runbook est la **procédure écrite** de la bascule du runtime Python (ADR-2007, ADR-2005). Chaque
-étape est réversible et porte son **critère d'arrêt** : aucune étape ne commence avant que la
-précédente ait atteint ses critères de promotion (plan P23, étape 3).
+Ce runbook est la **procédure écrite** d'exploitation du backend Python (ADR-2007, ADR-2043). Depuis
+SPEC-2302, la production est servie par **deux services seulement** — `api-py` (façade FastAPI) et
+`worker-py` (outbox, livraisons, crons) — avec `web` et le job `migrate`. Il n'y a **plus** de Hono,
+plus d'Inngest, plus de relais, plus de `OWNERSHIP_OVERRIDES`, plus de bascule par contexte ni de
+rollback de relais : une entrée du contrat est servie par Python ou n'existe pas (la façade refuse
+de démarrer si une opération n'a pas de handler).
 
-Deux invariants commandent tout le document :
+Ce qui reste vrai et normatif ici : le déploiement, la santé, le drain du worker, le **rollback de
+déploiement** (retour à l'image précédente) et la **restauration** d'une sauvegarde.
 
-- **un seul écrivain** : une opération a exactement un propriétaire, `ts` ou `py` ; les mutations
-  d'un contexte basculent **toutes ensemble** (ADR-2005) ;
-- **aucune mesure locale n'est une mesure de staging** : les budgets d'ADR-0041, le canary et la
-  restauration chronométrée se mesurent sur le staging fourni par le porteur (ADR-2009). Ce qui est
-  prouvé en local est indiqué comme tel.
-
-Fichiers de référence : `docker/compose.coolify.yml` et son inclusion `docker/compose.coolify-py.yml`
-(services `api-py`, `worker-py`, `migrate`),
-`tools/deploy/cutover.mjs` (production de `OWNERSHIP_OVERRIDES`), le module `learny_worker.drain` du
-paquet worker Python (contrôle du drain), `docs/operations/coolify.md` § 10 (variables et sondes).
-
-## 0. Prérequis et notations
+## 0. Préalables
 
 ```bash
-export STAGING_APP_URL="https://learny-staging.exemple.fr"      # URL publique du web
-export STAGING_API_URL="https://learny-staging.exemple.fr/api"  # via le web, ou le domaine de la façade
-export COOLIFY_COMPOSE="docker/compose.coolify.yml"
-export STAGING_DATABASE_URL="postgresql://postgres:<mot-de-passe>@<hôte>:5432/postgres"
+export COOLIFY_COMPOSE=/chemin/vers/compose.coolify.yml   # pile résolue par Coolify
+export APP_URL=https://<domaine-du-web>
+export API_URL=https://<domaine-de-api-py>
 ```
-
-Les commandes `docker compose` de ce runbook s'exécutent **sur l'hôte du staging**, dans le
-répertoire `/docker` de la ressource Coolify, avec le fichier `.env` de la ressource
-(`--env-file`). Les commandes `node tools/…` s'exécutent **dans le dépôt**, sur cet hôte ou en
-local : elles ne touchent qu'aux fichiers versionnés.
-
-## 1. Déployer les deux services Python (étape « build and ship »)
 
 L'image est unique (`docker/api-py.Dockerfile`, SPEC-2003) et la CI la construit à chaque commit
-(`.github/workflows/ci.yml`, étape « Construire l'image Python »). Coolify construit la même image :
-il n'y a **aucun secret de registre** à configurer.
+(`.github/workflows/ci.yml`, `ghcr.io/<owner>/learny-py:<sha>`).
 
-1. Dans Coolify, la ressource Docker Compose déploie `docker/compose.coolify.yml` : les services
-   `api-py` et `worker-py` démarrent aux côtés de `api` (Hono), `web` et `migrate`.
-2. Vérifier les sondes et l'image :
-
-   ```bash
-   docker compose -f "$COOLIFY_COMPOSE" ps api-py worker-py
-   curl -fsS "https://<domaine-de-api-py>/health"
-   docker compose -f "$COOLIFY_COMPOSE" exec worker-py \
-     python -c "import os,urllib.request; p=os.environ['PORT']; \
-     print(urllib.request.urlopen(f'http://127.0.0.1:{p}/health/ready').status)"
-   ```
-
-   **Critère** : `api-py` sain sur `GET /health`, `worker-py` sain sur `/health/live` **et**
-   `/health/ready`.
-3. **Budget de connexions** : le pooler Supabase doit accepter au moins
-   `répliques api × 2 processus × 5 connexions + répliques worker × 5 + Hono` (constantes du code,
-   ADR-2042) : un worker → `2 × 2 × 5 + 5 + 10 = 35` connexions. Vérifier la limite du pooler
-   avant d'ajouter des répliques.
-4. **Migrations** : le job `migrate` reste un singleton (`restart: 'no'`, image cible `migrate`,
-   enregistrement SHA-256 par fichier dans `public.selfhost_schema_migrations`) ; `api-py` et
-   `worker-py` attendent `service_completed_successfully`. Pour les environnements Supabase gérés,
-   le job de release est verrouillé :
-
-   ```bash
-   flock /tmp/learny-migrate.lock node tools/deploy/migrate.mjs --env staging
-   ```
-
-   **Critère** : le job sort en 0, `docker compose ps migrate` affiche `exited (0)`.
-
-## 2. Étape 1 — la façade devant, tout relayé
-
-La façade démarre en **relais pur** : `OWNERSHIP_OVERRIDES={"*":"ts"}`, et le web lui envoie le
-trafic.
+## 1. Déployer une version
 
 ```bash
-# 1. Surcharge de repli total, produite par l'outil (jamais à la main).
-export OWNERSHIP_OVERRIDES="$(node tools/deploy/cutover.mjs --all --stage rollback)"
-echo "$OWNERSHIP_OVERRIDES"            # {"*":"ts"}
+# a. Migrations d'abord : le job `migrate` est un singleton et s'arrête après application.
+docker compose -f "$COOLIFY_COMPOSE" run --rm --no-deps migrate
+
+# b. Les deux services du backend, même image, commandes différentes.
+docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py worker-py
+
+# c. Le web en dernier (il pointe sur http://api-py:8000).
+docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps web
 ```
 
-1. Dans Coolify, ajouter la variable `OWNERSHIP_OVERRIDES` avec cette valeur sur `api-py`, puis
-   `API_INTERNAL_URL=http://api-py:8000` sur `web`. Redéployer `api-py` puis `web` (la surcharge est
-   lue au démarrage de la façade, un redémarrage est obligatoire).
-2. Vérifier que le trafic traverse la façade et que Hono répond toujours :
+**Critère de promotion** : `api-py` sain sur `GET /health` et `GET /api/v1/health`, `worker-py` sain
+sur `/health/live` et `/health/ready`, et aucune livraison `failed` nouvelle pendant 30 minutes.
 
-   ```bash
-   curl -fsS -D - -o /dev/null "$STAGING_APP_URL/api/v1/health"
-   curl -fsS -o /dev/null -w '%{http_code}\n' "$STAGING_APP_URL/api/v1/home"
-   ```
-
-   **Critère de promotion** (staging 30 min, production 24 h) : taux de 5xx ≤ référence,
-   surcoût p95 ≤ 20 ms, aucune nouvelle alerte.
-   **Rollback** : remettre `API_INTERNAL_URL=http://api:3001` sur `web`, redéployer `web`.
-
-## 3. Étape 2 — les jobs au worker Python
-
-1. Déployer `worker-py`, puis passer Hono en `LEARNY_API_ROLE=api` et arrêter la synchronisation
-   Inngest (`LEARNY_API_ROLE` dans `docker/compose.coolify.yml`, service `api`).
-2. Exécuter le drain avant tout basculement de propriété (§ 5) : aucun événement ne doit rester
-   sans livraison.
-3. Passer les consommateurs et les crons à `py` (déjà le cas dans `api/ownership.yaml`), redémarrer
-   `worker-py`.
-
-   **Critère de promotion** : aucune livraison `failed`, plus ancienne livraison en attente
-   < 2 min, compteurs de résumés et de rappels égaux à la veille ± 5 %.
-   **Rollback** : arrêter `worker-py`, réactiver Inngest, puis drainer et rejouer (§ 4).
-
-## 4. Étape 3 — bascule d'un contexte HTTP (canary en lecture)
-
-Un contexte = la valeur `context` de `api/inventory.json` (`learning`, `tutor`, `billing`,
-`assessments`, `formation`, `content`, `engagement`, `identity`, `privacy`, `dev`). L'outil refuse
-toute combinaison incohérente : promotion sans canary, mutations des deux côtés, propriétaire
-`py@N` que la façade ignorerait.
+## 2. Vérifier la santé
 
 ```bash
-# a. Canary en lecture : les GET du contexte passent à py, ses mutations restent à ts.
-node tools/deploy/cutover.mjs --context billing --stage reads \
-  --current "${OWNERSHIP_OVERRIDES}" --out /tmp/ownership.json
-export OWNERSHIP_OVERRIDES="$(cat /tmp/ownership.json)"
-
-# b. Injecter la valeur dans Coolify (variable OWNERSHIP_OVERRIDES de api-py) et redéployer api-py.
-docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
+curl -fsS "$API_URL/health"
+curl -fsS "$API_URL/api/v1/health"
+docker compose -f "$COOLIFY_COMPOSE" ps api-py worker-py
+docker compose -f "$COOLIFY_COMPOSE" logs --tail=200 api-py worker-py
 ```
 
-Mesure du canary (lecture seule, aucune mutation) :
+Retard de l'outbox (le worker réclame `event_outbox` → `job_deliveries`) :
 
-```bash
-for i in $(seq 1 50); do
-  curl -s -o /dev/null -w '%{http_code} %{time_total}\n' \
-    -H "Authorization: Bearer $STAGING_ACCESS_TOKEN" "$STAGING_APP_URL/api/v1/billing/subscription"
-done | tee /tmp/canary.txt | awk '{code[$1]++} END {for (c in code) print "HTTP " c ": " code[c]}'
-sort -k2 -n /tmp/canary.txt | awk '{t[NR]=$2} END {print "p95 = " t[int(NR*0.95)] " s"}'
+```sql
+select
+  count(*) filter (where sent_at is null and not failed) as en_attente,
+  count(*) filter (where failed)                        as echoues,
+  min(created_at) filter (where sent_at is null and not failed) as plus_ancien
+from public.event_outbox;
+
+select status, count(*), min(created_at)
+from public.job_deliveries
+where status <> 'done'
+group by status;
 ```
 
-**Critère de promotion** : 0 réponse 5xx, p95 < 300 ms hors routes IA (BR-PLA-07), aucune alerte de
-parité. **Critère d'arrêt** : un seul 5xx ou un p95 hors budget → rollback du contexte (§ 6).
-Ensuite seulement, promouvoir les mutations **d'un bloc** :
+**Critère** : aucune livraison `failed` non expliquée, plus ancien événement en attente < 2 min.
 
-```bash
-node tools/deploy/cutover.mjs --context billing --stage writes \
-  --current "${OWNERSHIP_OVERRIDES}" --out /tmp/ownership.json
-export OWNERSHIP_OVERRIDES="$(cat /tmp/ownership.json)"
-docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
-```
+## 3. Drainer le worker (maintenance, restauration, rollback)
 
-Fin de la bascule, quand tous les contextes sont `py` : plus aucune surcharge.
-
-```bash
-export OWNERSHIP_OVERRIDES="$(node tools/deploy/cutover.mjs --all --stage writes)"   # {}
-```
-
-## 5. Drain du worker (préalable à tout basculement de propriété)
-
-Le répartiteur estampille `dispatched_at` **avant** de créer les livraisons : basculer un
-consommateur à `ts` avec des événements en file les perdrait. Le drain est le critère d'arrêt écrit.
+Le worker est le seul écrivain des livraisons : on le draine avant toute opération qui change la
+base ou l'image.
 
 ```bash
 # a. Arrêt de la réclamation : SIGTERM, le worker finit ses lots en cours (45 s au plus).
@@ -162,11 +77,9 @@ docker compose -f "$COOLIFY_COMPOSE" run --rm --no-deps worker-py \
   python -m learny_worker.drain --wait 60 --require-empty
 ```
 
-Codes de sortie : `0` = file vide (la bascule ne perd rien) ; `1` = au moins un événement en
-attente, en cours, en échec, non réparti (`undispatched`) ou **estampillé sans livraison**
-(`orphaned`). Dans ce cas : redémarrer le worker (`up -d worker-py`), laisser la file se vider,
-recommencer. Un `orphaned` provient d'un consommateur déjà repassé à `ts` : rejouer ces événements
-vers Inngest avant de continuer (étape « jobs rollback » du plan P23).
+Codes de sortie : `0` = file vide ; `1` = au moins un événement en attente, en cours, en échec, non
+réparti (`undispatched`) ou estampillé sans livraison (`orphaned`). Dans ce cas : redémarrer le
+worker (`up -d worker-py`), laisser la file se vider, recommencer.
 
 En local, sans Docker :
 
@@ -174,50 +87,42 @@ En local, sans Docker :
 uv run python -m learny_worker.drain --wait 30 --require-empty --json
 ```
 
-Preuve locale : `test_worker_cutover_rollback.py` (4 cas, paquet worker Python) montre
-qu'un événement en attente bloque le drain, qu'un événement réparti sans livraison est signalé
-`orphaned`, et qu'après le drain le rejeu ne mute rien deux fois.
+## 4. Rollback de déploiement
 
-## 6. Rollback d'un contexte, puis rollback total
+Le rollback est un **retour à l'image précédente**, pas un changement de runtime : il n'y a plus de
+second backend vers lequel revenir.
 
 ```bash
-# Rollback d'un seul contexte : tout son périmètre revient au relais.
-node tools/deploy/cutover.mjs --context billing --stage rollback \
-  --current "${OWNERSHIP_OVERRIDES}" --out /tmp/ownership.json
-export OWNERSHIP_OVERRIDES="$(cat /tmp/ownership.json)"
-docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
+# a. Redéployer le SHA précédent sur les deux services (même image, même configuration).
+IMAGE_TAG=<sha-précédent> docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py worker-py
 
-# Rollback total : la façade ne sert plus rien, Hono reprend tout.
-export OWNERSHIP_OVERRIDES="$(node tools/deploy/cutover.mjs --all --stage rollback)"  # {"*":"ts"}
-docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
+# b. Vérifier la santé et une lecture par service.
+curl -fsS "$API_URL/api/v1/health"
+curl -fsS "$APP_URL/api/v1/me" -H "Cookie: $SESSION"   # ou un Bearer de test
+
+# c. Consigner l'heure, le SHA et les mesures brutes dans evidence/SPEC-2301/.
 ```
 
-Ordre obligatoire pour un rollback complet :
+Ce que le rollback **ne fait pas** : il ne défait pas une migration appliquée. Si la version
+déployée a changé le schéma, restaurer d'abord la sauvegarde (§ 6) ou appliquer une migration
+compensatoire écrite et testée — jamais de `down` improvisé en production.
 
-1. **Drain du worker** (§ 5) — aucune livraison en cours, aucun événement sans livraison.
-2. **Remise des propriétés à `ts`** : `--all --stage rollback`, redéploiement de `api-py`.
-3. **Vérification** : `curl -fsS "$STAGING_APP_URL/api/v1/health"` puis un GET et une mutation
-   idempotente (`curl -X POST -H "Idempotency-Key: …" …`), corps et en-têtes inchangés.
-4. Si les jobs reviennent à Inngest : réactiver les fonctions et la synchronisation, puis rejouer
-   les événements dont la livraison Python n'est pas `done` (identifiants d'origine, Inngest déduplique).
-5. Le worker Python peut rester arrêté : la façade relaie tout.
-
-## 7. Arrêt d'urgence (incident en cours)
+## 5. Arrêt d'urgence (incident en cours)
 
 ```bash
-# 1. Tout relayé, sans attendre : la façade ne sert plus aucune opération.
-export OWNERSHIP_OVERRIDES="$(node tools/deploy/cutover.mjs --all --stage rollback)"
-docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
-# 2. Le web repointe Hono (rollback immédiat de l'étape 1).
-#    Coolify : API_INTERNAL_URL=http://api:3001 sur web, puis redéployer web.
-curl -fsS -o /dev/null -w '%{http_code}\n' "$STAGING_APP_URL/api/v1/health"
-# 3. Le worker Python ne réclame plus rien.
+# 1. Drainer le worker : plus aucune écriture de livraison.
 docker compose -f "$COOLIFY_COMPOSE" stop -t 60 worker-py
+
+# 2. Revenir à l'image précédente de la façade, ou l'arrêter si elle est la cause.
+IMAGE_TAG=<sha-précédent> docker compose -f "$COOLIFY_COMPOSE" up -d --no-deps api-py
+
+# 3. Mesurer l'impact avant toute autre action.
+curl -fsS -o /dev/null -w '%{http_code}\n' "$API_URL/api/v1/health"
 ```
 
 Aucun secret n'est imprimé : les variables restent dans Coolify.
 
-## 8. Restauration d'une sauvegarde (staging)
+## 6. Restauration d'une sauvegarde (staging)
 
 Deux chemins, selon la sauvegarde disponible. Les deux se font **sans toucher la production** et se
 chronomètrent. Ils exigent le client PostgreSQL (`apt-get install -y postgresql-client`) sur l'hôte
@@ -249,7 +154,7 @@ for table in profiles formations modules chapters schedule_slots event_outbox jo
 done
 # Contrôle de contenu (mêmes données, même empreinte) sur les tables de référence.
 for table in profiles formations modules; do
-  psql "$STAGING_DATABASE_URL" -tAc "select md5(string_agg(t::text, '' order by t::text)) from public.$table t" 
+  psql "$STAGING_DATABASE_URL" -tAc "select md5(string_agg(t::text, '' order by t::text)) from public.$table t"
   psql "$RESTORED" -tAc "select md5(string_agg(t::text, '' order by t::text)) from public.$table t"
 done
 ```
@@ -258,28 +163,28 @@ Puis les contrôles de fumée de l'API sur la copie restaurée, avec `DATABASE_U
 
 ```bash
 DATABASE_URL="$RESTORED" uv run uvicorn learny_api.main:app --port 8099 &
-curl -fsS http://127.0.0.1:8099/api/v1/health
 curl -fsS http://127.0.0.1:8099/health
+curl -fsS http://127.0.0.1:8099/api/v1/health
 kill %1
 ```
 
-**Critère** : les comptes des tables de référence sont égaux, les empreintes aussi, `/api/v1/health`
-répond 200 et la sonde de la façade répond `ok`. Consigner la durée des deux commandes `time`.
+**Critère** : les comptes des tables de référence sont égaux, les empreintes aussi, `/health` et
+`/api/v1/health` répondent 200. Consigner la durée des deux commandes `time`.
 
-## 9. Liste de contrôle d'incident
+## 7. Liste de contrôle d'incident
 
-1. Constater : 5xx, p95, plus ancienne livraison en attente, livraisons `failed`.
-2. Décider : rollback d'un contexte (§ 6) ou arrêt d'urgence (§ 7).
-3. Drainer avant toute remise de propriété (§ 5).
-4. Vérifier la façade (`/health`, `/api/v1/health`) et une lecture par runtime.
-5. Consigner l'heure, la surcharge appliquée et les mesures brutes dans `evidence/SPEC-2301/`.
+1. Constater : 5xx, p95, plus ancienne livraison en attente, livraisons `failed` (§ 2).
+2. Décider : rollback de déploiement (§ 4) ou arrêt d'urgence (§ 5).
+3. Drainer le worker avant toute opération sur la base (§ 3).
+4. Vérifier la façade (`/health`, `/api/v1/health`) et une lecture authentifiée.
+5. Consigner l'heure, le SHA, les mesures brutes dans `evidence/SPEC-2301/`.
 
-## 10. Ce qui est prouvé en local, ce qui exige le staging
+## 8. Ce qui est prouvé en local, ce qui exige le staging
 
 | Preuve | Environnement | Statut |
 |---|---|---|
-| Canary et promotion d'un contexte, refus des combinaisons incohérentes | local (outil, inventaire réel) | prouvé (Vitest + pytest) |
-| Drain du worker et remise des propriétés | local (PostgreSQL local, worker) | prouvé (4 cas d'intégration) |
-| Rejeu sans perte d'événement et sans double mutation | local (outbox + `job_deliveries`) | prouvé |
-| Client Bearer externe sans cookie | local (façade + Supabase local) | prouvé (e2e) |
-| Sondes et services Coolify, budgets de charge, rollback chronométré, restauration chronométrée | staging fourni par le porteur | **bloqué externe** (ADR-2009) |
+| Couverture du contrat : chaque opération et route spéciale a un handler Python | local (`test_route_coverage.py`, `inventory.mjs --runtime`) | prouvé |
+| Consommateurs et crons servis par Python, aucun paquet backend TypeScript | local (`inventory.mjs --check`) | prouvé |
+| Drain du worker et rejeu sans perte d'événement ni double mutation | local (PostgreSQL local, worker) | prouvé |
+| Restauration logique dans une base de travail (`pg_dump`/`pg_restore`) | local | prouvé sur une base de développement |
+| Sondes et services Coolify, rollback chronométré sous charge, restauration chronométrée du staging, budgets de charge | staging fourni par le porteur | **bloqué externe** (ADR-2009) |

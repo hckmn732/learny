@@ -1,8 +1,4 @@
-"""[SPEC-2206] Export and deletion use cases (ported from `personal-data/services.test.ts`).
-
-The database, the storage gateway and the e-mail service are fakes: the cases and the expected values
-are the TypeScript ones (SPEC-211 EF-1, EF-2, EF-5, EF-6, CL-1, CL-2, CL-5, CL-7).
-"""
+"""[SPEC-2206] Export and deletion use cases."""
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager

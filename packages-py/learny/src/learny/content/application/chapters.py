@@ -1,10 +1,9 @@
 """Declare a chapter's contributions finished, or reopen it (BR-APP-04, SPEC-607 EF-4, ET-2).
 
-Port of `packages/services/src/resources/complete-chapter.ts`: one transaction serialises the
-transition per learner and chapter, updates `chapter_progress` and enqueues
-`chapter/contributions-completed` only when the module becomes complete. The event identifier is
-deterministic for the completion version, so replaying a committed request cannot request a second
-generation. Reopening a chapter never generates anything.
+One transaction serialises the transition per learner and chapter, updates `chapter_progress` and
+enqueues `chapter/contributions-completed` only when the module becomes complete. The event
+identifier is deterministic for the completion version, so replaying a committed request cannot
+request a second generation. Reopening a chapter never generates anything.
 """
 
 from typing import Any

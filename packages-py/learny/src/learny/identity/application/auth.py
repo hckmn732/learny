@@ -1,9 +1,8 @@
-"""Authentication requests (port of `packages/services/src/auth/*.ts`, SPEC-202 ET-4, ADR-0121).
+"""Authentication requests (SPEC-202, ET-4, ADR-0121).
 
 The use cases are HTTP-free: the handler passes the request-scoped values (public origin, the
 `Secure` flag, the presented cookies) and a sink that appends one `Set-Cookie` header, and receives
-the answer body. The cookies are written at the exact point the TypeScript client writes them, so a
-failing step after a successful grant still carries them, like the Hono answer.
+the answer body.
 
 `finalize_first_verification` is the only part that reads `auth.users` and writes with the owner
 role: the legal acceptances, the terms pair and the time zone given at sign-up are recorded once,

@@ -1,9 +1,8 @@
 """Unit of work and RLS claims (SPEC-2101 step 1, ADR-2010).
 
 A transaction is bound to one connection. For a user transaction the Supabase JWT claims are set
-locally, so the row-level security policies see the same `auth.uid()` as the TypeScript backend,
-then the connection switches to the `authenticated` role. A service transaction keeps the owner
-role and bypasses RLS; its callers are restricted by `privileged.PRIVILEGED_CALLERS`.
+locally, so the row-level security policies see the same `auth.uid()`. A service transaction keeps
+the owner role and bypasses RLS; its callers are restricted by `privileged.PRIVILEGED_CALLERS`.
 
 `collect_committed_events` lets the API run the consumers of the events a request committed before
 it answers (`JOBS_MODE=inline`, tests only), like `withTransaction` of `packages/jobs` does.

@@ -1,7 +1,6 @@
 """Shared-formation use cases (SPEC-724 EF-1 to EF-5, ET-1 to ET-5; BR-GRP-01 to BR-GRP-05).
 
-Port of `formations-a-plusieurs.ts` and of the `packages/db` group repository it calls. The
-invitation lookup and the acceptance run with the service client because an invitee has no
+The invitation lookup and the acceptance run with the service client because an invitee has no
 membership yet (ADR-0246); everything else runs with the caller's RLS client, so another learner's
 group is a 404 and never a 403.
 """

@@ -1,5 +1,5 @@
 // Attempt factory (SPEC-115 EF-6, CL-7). The attempt belongs to the owner of its activity.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { insert, now, type IdRow } from './helpers';
 

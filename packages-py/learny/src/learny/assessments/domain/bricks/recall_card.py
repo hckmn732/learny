@@ -1,7 +1,7 @@
 """Code grading of a recall card (SPEC-502 EF-8, BR-MEM-02).
 
 The learner self-assesses and the same grade feeds FSRS: `again` is incorrect, the three other
-grades are correct. Pure port of `packages/bricks/src/types/recall-card/grade.ts`.
+grades are correct.
 """
 
 from collections.abc import Mapping

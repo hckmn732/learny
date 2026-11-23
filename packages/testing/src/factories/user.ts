@@ -1,7 +1,8 @@
 // User factory (SPEC-115 EF-6). Inserts a real `auth.users` row with a reserved test address;
 // the SPEC-102 trigger creates the profile and the default settings in the same transaction.
-import { sql, type DbTx } from '@learny/db';
-import { createTestUser } from '@learny/db/testing';
+import { createTestUser } from '@learny/testing/db';
+
+import { sql, type DbTx } from '../db';
 
 import { insert, uniqueEmail } from './helpers';
 

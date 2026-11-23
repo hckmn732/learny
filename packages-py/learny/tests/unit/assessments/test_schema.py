@@ -1,9 +1,7 @@
 """[SPEC-2202] Payload schemas of the thirteen brick types (SPEC-501 ET-2/ET-3).
 
-Ported from `packages/bricks/src/types/<type>/schema.test.ts` and `validate.test.ts`. The expected
-values are the recordings of the Zod schemas taken on 2026-11-21: same bounds, same defaults, same
-trimming, same strictness. The message of a `SCHEMA_INVALID` issue is written in English here, so
-only its code and its path are compared with TypeScript (ADR-2011).
+The expected values are the recordings of the Zod schemas taken on 2026-11-21: same bounds, same
+defaults, same trimming, same strictness.
 """
 
 import json

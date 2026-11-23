@@ -9,9 +9,9 @@ from learny.shared.config import Settings
 
 
 class BillingTransactions(Protocol):
-    """The unit of work as billing sees it: the owner-role transaction of the TypeScript `serviceDb`."""
-
-    def service_tx(self) -> AbstractAsyncContextManager[Any]: ...
+    def service_tx(self) -> AbstractAsyncContextManager[Any]:
+        """The unit of work as billing sees it: the owner-role transaction."""
+        ...
 
 
 class BillingDeps(Protocol):

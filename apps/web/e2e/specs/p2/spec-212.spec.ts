@@ -1,5 +1,5 @@
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestCourse, createTestProgramme } from '@learny/db/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestCourse, createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 

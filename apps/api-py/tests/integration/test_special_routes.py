@@ -4,6 +4,7 @@
 endpoints and the relay stream are retired by ADR-2041).
 """
 
+import json
 from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
@@ -23,7 +24,6 @@ from learny_api import (
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
-from learny_api.ownership import Ownership
 from learny_api.pipeline import PipelineContext
 from starlette.requests import Request
 
@@ -33,7 +33,6 @@ ROOT = Path(__file__).resolve().parents[4]
 CATALOG: dict[str, ErrorEntry] = load_catalog(ROOT / "api" / "errors.json")
 NOW = datetime(2026, 11, 11, 12, 20, tzinfo=UTC)
 HEALTH_KEY = "GET /api/v1/health"
-OWNED_SPECIAL_KEYS = (HEALTH_KEY,)
 
 
 class Clock:
@@ -104,7 +103,6 @@ def settings_for(env: Mapping[str, str | None], *, failing: bool = False) -> Set
     return Settings(
         app_env=str(env.get("APP_ENV") or "test"),
         enable_sdd_pages=env.get("ENABLE_SDD_PAGES"),
-        py_hono_upstream_url="http://upstream",
         rate_limit_mode="off",
         database_url="postgresql://postgres:postgres@127.0.0.1:54322/postgres",
         app_version="1.4.2",
@@ -120,22 +118,13 @@ def context(settings: Settings, env: Mapping[str, str | None], *, failing: bool 
         origin_guard=OriginGuard(),  # type: ignore[arg-type]
         rate_limiter=RateLimiter(),
         idempotency=Idempotency(),  # type: ignore[arg-type]
-        handlers={"health.get": pipeline.HANDLERS["health.get"]},
-    )
-
-
-def ownership() -> Ownership:
-    return Ownership(
-        operations={"health.get": "py"},
-        special={key: "py" for key in OWNED_SPECIAL_KEYS},
-        consumers={},
-        crons={},
+        handlers=dict(pipeline.HANDLERS),
     )
 
 
 def build_app(env: Mapping[str, str | None], *, failing: bool = False) -> tuple[FastAPI, TestClient]:
     settings = settings_for(env, failing=failing)
-    app = create_app(settings, ownership=ownership(), context=context(settings, env, failing=failing))
+    app = create_app(settings, context=context(settings, env, failing=failing))
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -187,4 +176,14 @@ def test_an_unavailable_database_answers_503_and_a_degraded_status() -> None:
     assert body["components"] == {"database": "unavailable", "build": "ok"}
 
 
-# --- GET /api/v1/dev/sdd/relay-stream ------------------------------------------------------------
+# --- GET /health ---------------------------------------------------------------------------------
+
+
+def test_the_liveness_probe_answers_without_the_database() -> None:
+    _app, client = build_app(ENABLED, failing=True)
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert json.loads(response.content) == {"status": "ok", "version": "1.4.2", "commit": "abcdef1"}
+    assert response.headers["cache-control"] == "no-store"
+    assert response.headers["content-type"] == "application/json; charset=utf-8"

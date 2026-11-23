@@ -1,9 +1,9 @@
 """Rules of the proposed and of the active programme (SPEC-605, SPEC-606).
 
-Port of `programme/rules.ts` and `programme/progress.ts`: a draft has no positions (the service
-numbers it once, then validates the ordered payload again), the threshold stays between 60 and 95,
-a chapter never carries the same notion twice and a module never ends before it starts. The
-percentage keeps the exact counts and only rounds the displayed value.
+A draft has no positions (the service numbers it once, then validates the ordered payload again),
+the threshold stays between 60 and 95, a chapter never carries the same notion twice and a module
+never ends before it starts. The percentage keeps the exact counts and only rounds the displayed
+value.
 """
 
 import unicodedata

@@ -1,8 +1,7 @@
 """Application errors and problem+json rendering (00-conventions section 4 and section 7).
 
-Business code raises `AppError(code)`; the HTTP pipeline maps it to the same problem body the
-TypeScript backend produces. Titles come from the generated catalog (`api/errors.json`, SPEC-2002),
-never from a literal in the code (ADR-2011).
+Titles come from the generated catalog (`api/errors.json`, SPEC-2002), never from a literal in the
+code (ADR-2011).
 """
 
 import json
@@ -63,10 +62,10 @@ def to_problem(
     request_id: str,
     catalog: dict[str, ErrorEntry],
 ) -> dict[str, Any]:
-    """Port of `toProblem` (`packages/core/src/errors.ts`): same fields, same order.
+    """Same fields, same order.
 
-    An unknown code becomes `INTERNAL_ERROR`; a server error never echoes its message and only
-    gives the request reference. `retry_after` drives the `Retry-After` header, never the body.
+    An unknown code becomes `INTERNAL_ERROR`; a server error never echoes its message and only gives
+    the request reference. `retry_after` drives the `Retry-After` header, never the body.
     """
     known = catalog.get(error.code)
     entry = known if known is not None else catalog["INTERNAL_ERROR"]
@@ -99,5 +98,5 @@ def to_problem(
 
 
 def _unexpected(request_id: str) -> str:
-    """Generic French detail for 5xx, copied verbatim from the TypeScript behaviour."""
+    """Generic French detail for 5xx."""
     return UNEXPECTED_ERROR.format(request_id=request_id)

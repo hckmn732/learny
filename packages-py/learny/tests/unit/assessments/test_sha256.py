@@ -1,8 +1,4 @@
-"""[SPEC-2202] SHA-256 of the brick fingerprints (SPEC-501, ADR-0289, FIPS 180-4).
-
-The TypeScript package ships its own implementation; these cases are its recordings of 2026-11-21
-plus the FIPS reference vectors, so the standard-library port is proven identical.
-"""
+"""[SPEC-2202] SHA-256 of the brick fingerprints (SPEC-501, ADR-0289, FIPS 180-4)."""
 
 import hashlib
 import json

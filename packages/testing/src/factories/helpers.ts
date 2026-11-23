@@ -7,7 +7,8 @@
 import { randomBytes } from 'node:crypto';
 
 import { clock } from '@learny/core';
-import { sql, type DbTx } from '@learny/db';
+
+import { sql, type DbTx } from '../db';
 
 export interface IdRow extends Record<string, unknown> {
   id: string;

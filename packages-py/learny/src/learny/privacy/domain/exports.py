@@ -1,9 +1,8 @@
 """State rules of the personal-data exports (SPEC-211 EF-1, EF-2, EF-8, CL-2, CL-4, ADR-0044).
 
-Port of `export.ts` constants and of the pure `isDataExportDownloadable` rule
-(`packages/db/src/schema/privacy-search.ts`). The archive of a learner is downloadable only while it
-is `done`, stored and not expired; an expired archive stays readable for audit but never issues a
-signed URL, and it is purged only after a one-day grace period.
+The archive of a learner is downloadable only while it is `done`, stored and not expired; an expired
+archive stays readable for audit but never issues a signed URL, and it is purged only after a
+one-day grace period.
 """
 
 from dataclasses import dataclass

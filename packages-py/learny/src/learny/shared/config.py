@@ -32,7 +32,7 @@ JobsMode = Literal["worker", "inline"]
 
 # ADR-2042 - the environment contract of the Python backend. Steady-state deployment variables
 # first, then the optional ones (key rotation, SMTP target of the simulated stacks, local models,
-# test and QA switches, build metadata, coexistence with Hono until SPEC-2302, standard `CI`).
+# test and QA switches, build metadata, standard `CI`).
 ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "APP_ENV",
     "NEXT_PUBLIC_APP_URL",
@@ -61,8 +61,6 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "CLOCK_FIXED_AT",
     "GIT_COMMIT",
     "APP_VERSION",
-    "PY_HONO_UPSTREAM_URL",
-    "OWNERSHIP_OVERRIDES",
     # Standard variables (ADR-0227): the CI marker and the listening port of the worker health.
     "CI",
     "PORT",
@@ -162,9 +160,6 @@ class Settings(BaseSettings):
     # Build metadata of the health probe (SPEC-006 EF-1): the names the deployment already sets.
     git_commit: str | None = None
     app_version: str | None = None
-    # Coexistence with Hono (ADR-2005): removed with the relay by SPEC-2302.
-    py_hono_upstream_url: str = "http://127.0.0.1:3102"
-    ownership_overrides: str | None = None
     ci: str | None = None
     port: int = 0
 
@@ -204,7 +199,7 @@ class Settings(BaseSettings):
 
     @property
     def fixed_instant(self) -> str | None:
-        """`CLOCK_FIXED_AT` unless empty or `real` (the real clock, like the TypeScript stack)."""
+        """`CLOCK_FIXED_AT` unless empty or `real`."""
         value = (self.clock_fixed_at or "").strip()
         return None if value in ("", "real") else value
 
@@ -302,9 +297,6 @@ class ConfigurationError(RuntimeError):
         super().__init__(CONFIGURATION_INVALID.format(scope=scope, names=", ".join(self.names)))
 
 
-# Port of PRODUCTION_REQUIRED_KEYS (packages/config/src/env.ts), restricted to the contract of the
-# Python backend (ADR-2040, ADR-2042). Inngest is gone (ADR-2006), the platform owns no AI key
-# (SPEC-709); the rate-limit key and the VAPID public key and subject are derived (ADR-2042).
 PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (
     "APP_ENCRYPTION_KEY",
     "API_PROXY_SECRET",
@@ -368,7 +360,7 @@ def ensure_production_configuration(
     settings: Settings,
     environ: Mapping[str, str] | None = None,
 ) -> None:
-    """Refuses an incomplete APP_ENV=production start (port of checkEnvironment, SPEC-009 CA-2)."""
+    """Refuses an incomplete APP_ENV=production start (SPEC-009, CA-2)."""
     if not settings.is_production:
         return
     issues = production_configuration_issues(settings, environ)

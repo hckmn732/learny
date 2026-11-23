@@ -1,10 +1,9 @@
 """Format of the mock exam and its question quotas (SPEC-614 EF-1, EF-5, ET-3, BR-PRA-02).
 
-Port of the pure half of `packages/services/src/mock-exams/format.ts`: the normative default comes
-from the product configuration, a format extracted from a guide stays *proposed* until the learner
-confirms it, and a stored confirmed format always wins. The quota distribution shares the question
-count over the modules in proportion to their notions, then by largest fractional share in a stable
-module order. No IO, no clock, no model call.
+The normative default comes from the product configuration, a format extracted from a guide stays
+*proposed* until the learner confirms it, and a stored confirmed format always wins. The quota
+distribution shares the question count over the modules in proportion to their notions, then by
+largest fractional share in a stable module order. No IO, no clock, no model call.
 """
 
 import math

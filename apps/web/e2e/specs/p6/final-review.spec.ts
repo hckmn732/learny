@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createNotionState } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';

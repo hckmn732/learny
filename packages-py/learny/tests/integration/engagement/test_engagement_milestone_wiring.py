@@ -1,9 +1,6 @@
 """[SPEC-2205] The milestone notification of `learning` (debt taken over from SPEC-2202/SPEC-2203).
 
-`reconcile_milestones` announces a new hundred notions or a thirty-day streak through
-`engagement.public.notify`, exactly like `sendMilestoneNotification` of the TypeScript service: the
-notification is keyed by the milestone, produced once, and only for those two keys. A session
-completion reconciles the milestones after its commit, which is where SPEC-723's
+A session completion reconciles the milestones after its commit, which is where SPEC-723's
 `review/session-completed` consumer sat.
 """
 

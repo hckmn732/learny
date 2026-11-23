@@ -1,10 +1,8 @@
-"""[SPEC-2102] Scheduler: schedules, payloads, idempotence and ownership (CA-2, CA-3)."""
+"""[SPEC-2102] Scheduler: schedules, payloads and idempotence (CA-2)."""
 
-from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 import pytest
-from learny.shared.ownership import Owner
 from learny_worker.scheduler import (
     CRON_HOURLY,
     CRON_NIGHTLY,
@@ -19,22 +17,15 @@ from support.fakes import FakeClock, FakeDatabase, FakeDeps, RecordingLogger
 pytestmark = pytest.mark.spec("SPEC-2102")
 
 
-@dataclass
-class FakeOwnership:
-    crons: dict[str, Owner] = field(default_factory=dict)
-    consumers: dict[str, Owner] = field(default_factory=dict)
-
-
 def at(hour: int, minute: int, second: int = 0) -> datetime:
     return datetime(2026, 11, 11, hour, minute, second, tzinfo=UTC)
 
 
-def scheduler(owner: Owner | None = None) -> tuple[Scheduler, FakeDatabase, RecordingLogger]:
+def scheduler() -> tuple[Scheduler, FakeDatabase, RecordingLogger]:
     database = FakeDatabase()
     logger = RecordingLogger()
     deps = FakeDeps(db=database, clock=FakeClock(at(5, 5)), logger=logger)
-    crons: dict[str, Owner] = {} if owner is None else {CRON_HOURLY: owner, CRON_NIGHTLY: owner}
-    return Scheduler(deps, FakeOwnership(crons=crons), logger=logger), database, logger
+    return Scheduler(deps, logger=logger), database, logger
 
 
 def test_the_hourly_tick_is_not_due_before_minute_five() -> None:
@@ -83,20 +74,8 @@ def test_next_tick_moves_to_the_next_hour() -> None:
     assert next_tick(at(5, 4)) == at(5, 5)
 
 
-def test_the_scheduler_stays_idle_while_the_crons_are_typescript() -> None:
-    idle, _, _ = scheduler()
-    assert idle.owns(CRON_HOURLY) is False
-    assert idle.owns(CRON_NIGHTLY) is False
-
-
-async def test_an_idle_scheduler_emits_nothing() -> None:
-    idle, database, _ = scheduler()
-    assert await idle.emit_due() == []
-    assert database.emitted == []
-
-
-async def test_a_python_owned_cron_is_emitted_once() -> None:
-    owned, database, logger = scheduler(owner="py")
+async def test_the_crons_are_emitted_once() -> None:
+    owned, database, logger = scheduler()
     emitted = await owned.emit_due()
     assert len(emitted) == 2
     assert [entry[0] for entry in database.emitted] == [CRON_HOURLY, CRON_NIGHTLY]

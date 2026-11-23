@@ -1,10 +1,9 @@
 """Nightly account deletion (SPEC-211 EF-7, ET-4, ET-5, CL-7, CL-8, CL-9, ADR-0216, ADR-0267).
 
-Port of `packages/jobs/src/personal-data/deletion.ts`. Steps run in the order fixed by ADR-0216:
-capture the address under `select ... for update`, transfer or delete the shared formations, remove
-the private blobs, anonymise `ai_calls`, delete the Auth user, delete the business rows (the profile
-cascades), then send `deletion_completed` to the captured address. Every step is idempotent: a replay
-after a failed step resumes at that step.
+Steps run in the order fixed by ADR-0216: capture the address under `select... for update`, transfer
+or delete the shared formations, remove the private blobs, anonymise `ai_calls`, delete the Auth
+user, delete the business rows (the profile cascades), then send `deletion_completed` to the
+captured address. Every step is idempotent: a replay after a failed step resumes at that step.
 """
 
 from collections.abc import Awaitable, Callable

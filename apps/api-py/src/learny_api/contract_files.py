@@ -14,13 +14,9 @@ ROOT = Path(__file__).resolve().parents[4]
 def api_dir() -> Path:
     """Directory holding the generated contract artefacts."""
     for candidate in (ROOT / "api", Path.cwd() / "api"):
-        if (candidate / "ownership.yaml").exists():
+        if (candidate / "inventory.json").exists():
             return candidate
     return ROOT / "api"
-
-
-def ownership_file() -> Path:
-    return api_dir() / "ownership.yaml"
 
 
 def inventory_file() -> Path:

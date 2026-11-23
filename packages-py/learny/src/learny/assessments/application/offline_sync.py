@@ -1,11 +1,10 @@
 """Server side of the offline synchronisation (SPEC-801 ET-6 to ET-8, ADR-0200).
 
-Port of `packages/services/src/offline/sync.ts`. Each entry is handled in its own transaction, in
-`answeredAt` order: the server regrades the answer with `learny.assessments.domain.bricks` (the
-client verdict is ignored), applies FSRS with the response instant, and records an
-`offline_sync_receipts` row so a replay is a `duplicate` with no effect. The most recent revision
-always wins: an answer older than an existing `review_logs` row is stored but never regresses the
-current FSRS state (`skip_fsrs_if_newer`).
+Each entry is handled in its own transaction, in `answeredAt` order: the server regrades the answer
+with `learny.assessments.domain.bricks` (the client verdict is ignored), applies FSRS with the
+response instant, and records an `offline_sync_receipts` row so a replay is a `duplicate` with no
+effect. The most recent revision always wins: an answer older than an existing `review_logs` row is
+stored but never regresses the current FSRS state (`skip_fsrs_if_newer`).
 """
 
 import json

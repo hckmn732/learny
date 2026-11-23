@@ -1,8 +1,6 @@
 """[SPEC-2203] Extractors: note, PDF, web page, YouTube captions and image reading.
 
-Ported from `packages/ingestion/src/extract/remote.test.ts` and `process-resource.test.ts` with the
-same fixtures as the TypeScript suite (`packages/ingestion/fixtures/{web,pdf,youtube}.ts`). No test
-opens a socket: the web fetcher and the vision reader are injected.
+No test opens a socket: the web fetcher and the vision reader are injected.
 """
 
 import json
@@ -40,7 +38,7 @@ def web_fixture() -> dict[str, Any]:
     return payload
 
 
-# --- PDF fixture builder (port of `packages/ingestion/fixtures/pdf.ts`) --------------------------
+# --- PDF fixture builder --------------------------
 
 
 def pdf_literal(value: str) -> str:

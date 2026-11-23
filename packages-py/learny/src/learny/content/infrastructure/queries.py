@@ -1,9 +1,6 @@
 """SQL of the content context (SPEC-2203).
 
-Every statement is copied from the TypeScript service it replaces (`packages/services/src/resources/*`
-and `packages/services/src/courses/*`): same tables, same columns, same `order by`, same
-`for update`, same advisory locks. `${x}` placeholders become bound `:x` parameters; nothing here
-reads the clock.
+`${x}` placeholders become bound `:x` parameters; nothing here reads the clock.
 """
 
 import uuid
@@ -222,7 +219,7 @@ RELABEL_CITATIONS = text(
     """
 )
 
-# --- suggestions (packages/services/src/resources/suggestions.ts) --------------------------------
+# --- suggestions --------------------------------
 
 LOCK_SUGGESTION = text(
     """
@@ -266,7 +263,7 @@ MARK_SUGGESTION_STATUS = text(
     """
 )
 
-# --- chapters.complete (packages/services/src/resources/complete-chapter.ts) ---------------------
+# --- chapters.complete ---------------------
 
 SELECT_CHAPTER_FOR_COMPLETION = text(
     """
@@ -327,7 +324,7 @@ COUNT_FORMATION_RESOURCES = text(
     """
 )
 
-# --- modules.screen (packages/services/src/resources/module.ts) ----------------------------------
+# --- modules.screen ----------------------------------
 
 SELECT_MODULE = text(
     """
@@ -409,7 +406,7 @@ STORAGE_USED = text(
     """
 )
 
-# --- modules.generateCourse (packages/services/src/resources/generate.ts) ------------------------
+# --- modules.generateCourse ------------------------
 
 SELECT_GENERATION_ACCESS = text(
     """
@@ -437,7 +434,7 @@ SELECT_GENERATION_ACCESS = text(
     """
 )
 
-# --- modules.course (packages/services/src/courses/get-course.ts) --------------------------------
+# --- modules.course --------------------------------
 
 SELECT_COURSE_MODULE = text(
     """
@@ -572,7 +569,7 @@ SELECT_CHAPTER_NOTIONS = text(
     """
 )
 
-# --- courses.progress (packages/services/src/courses/progress.ts) --------------------------------
+# --- courses.progress --------------------------------
 
 LOCK_COURSE_PROGRESS = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
 SELECT_PROGRESS_COURSE = text(
@@ -628,7 +625,7 @@ SELECT_PROGRESS_BY_CHAPTER = text(
     """
 )
 
-# --- course-sections.edit / report (packages/services/src/courses/{edit,report}-section.ts) ------
+# --- course-sections.edit / report ------
 
 SELECT_EDIT_SECTION = text(
     """
@@ -772,7 +769,7 @@ REACTIVATE_BRICKS = text(
     """
 )
 
-# --- course-citations.source (packages/services/src/courses/citation-source.ts) -----------------
+# --- course-citations.source -----------------
 
 SELECT_CITATION_SOURCE = text(
     """
@@ -979,7 +976,7 @@ async def select_imported_resource(tx: Tx, user_id: str, chapter_id: str, url: s
     return await one(tx, SELECT_IMPORTED_RESOURCE, {"user_id": user_id, "chapter_id": chapter_id, "url": url})
 
 
-# --- chapters.summary (packages/services/src/courses/summary.ts) ---------------------------------
+# --- chapters.summary ---------------------------------
 
 LOCK_CHAPTER_SUMMARY = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
 FIND_CHAPTER_SUMMARY = text(

@@ -1,6 +1,6 @@
 # Intelligence artificielle — normes d'implémentation
 
-Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions : ADR-0019 à ADR-0023, ADR-0026, ADR-0048, ADR-0340 (la plateforme ne fournit aucun modèle ; l'ADR-0018 est remplacé).
+Normatif pour `learny.platform.llm`, `learny.tutor` et `learny.content`. Décisions : ADR-0019 à ADR-0023, ADR-0026, ADR-0048, ADR-0340 (la plateforme ne fournit aucun modèle ; l'ADR-0018 est remplacé).
 
 ## 1. Tâches et modèles
 
@@ -12,16 +12,16 @@ Normatif pour `packages/llm`, `packages/tutor`, `packages/ingestion`. Décisions
 | `tutor` | discussion, questions et jeux, banques, correction (ouvertes, exercices, résumés), cadrage | faible | outils, sortie structurée |
 | `light` | classification, découpage, titres, variantes simples, lecture d'images courtes | aucun | sortie structurée |
 
-**Aucun modèle par défaut** (BR-IA-01, ADR-0340, ADR-0341) : la plateforme ne fournit aucun modèle. Le modèle d'une tâche est celui que l'utilisateur a choisi parmi les modèles de chat de ses clés (`ai_task_models`). La résolution ne connaît que ce choix et renvoie `AI_UNAVAILABLE` sans repli lorsqu'une clé ou un identifiant manque ; une réserve de compatibilité reste non bloquante. Aucun identifiant de modèle n'est écrit en dur dans le code ; les efforts de réflexion par tâche sont dans `packages/config/src/models.ts`. Les tarifs, quand ils existent, sont des valeurs de configuration révisables (`packages/config/src/pricing.ts`).
+**Aucun modèle par défaut** (BR-IA-01, ADR-0340, ADR-0341) : la plateforme ne fournit aucun modèle. Le modèle d'une tâche est celui que l'utilisateur a choisi parmi les modèles de chat de ses clés (`ai_task_models`). La résolution ne connaît que ce choix et renvoie `AI_UNAVAILABLE` sans repli lorsqu'une clé ou un identifiant manque ; une réserve de compatibilité reste non bloquante. Aucun identifiant de modèle n'est écrit en dur dans le code ; les efforts de réflexion par tâche sont dans `learny.platform.llm.tasks`. Les tarifs, quand ils existent, sont des valeurs de configuration révisables (`packages/config/src/pricing.ts`).
 
 ## 2. Accès aux modèles
 
-- Bibliothèque : AI SDK (`ai`) avec les fournisseurs `@ai-sdk/anthropic`, `@ai-sdk/openai`, `@ai-sdk/mistral`, `@ai-sdk/deepseek`, `@ai-sdk/openai-compatible` (ADR-0019).
+- Accès : `learny.platform.llm.gateway` parle à chaque fournisseur en HTTP (Anthropic, OpenAI, Mistral, DeepSeek et toute API compatible), `catalog.py` liste les modèles et `discovery.py` les découvre avec la clé de l'utilisateur (ADR-0019, ADR-2031).
 - Fonctions propres à Anthropic utilisées quand le fournisseur est Anthropic : outils stricts, sorties structurées, citations sur documents, API Files pour les PDF, recherche web serveur, mise en cache (`cacheControl` sur le contexte stable), API Batches pour les banques, réflexion adaptative (`thinking: { type: 'adaptive' }`) avec effort par tâche.
 - Pour les autres fournisseurs, les substituts sont : recherche web via `SEARCH_API_KEY` (Tavily par défaut, ADR-0048), citations reconstruites par le code (chaque passage généré référence des `chunkId` vérifiés), texte PDF extrait à l'ingestion.
-- `LLM_MODE` : `live` (production), `mock` (tests et CI ; défaut en local sans clé). En `mock`, `packages/llm` utilise `MockLanguageModel` (AI SDK `ai/test`) alimenté par des **fixtures** déterministes (`packages/llm/fixtures/<task>/<scenario>.json`), sélectionnées par une clé de scénario calculée sur l'entrée (ADR-0048). Aucun test automatisé n'appelle un vrai fournisseur ; un jeu de tests « live » optionnel est activé par `LLM_LIVE_TESTS=1`.
+- `LLM_MODE` : `live` (production), `mock` (tests et CI ; défaut en local sans clé). En `mock`, `learny.platform.llm.mock` rejoue des **fixtures** déterministes (`packages-py/learny/src/learny/platform/llm/fixtures/<task>/<scenario>.json`), sélectionnées par une clé de scénario calculée sur l'entrée (ADR-0048). Aucun test automatisé n'appelle un vrai fournisseur ; un jeu de tests « live » optionnel est activé par `LLM_LIVE_TESTS=1`.
 
-## 3. Registre d'actions du tuteur (`packages/tutor/src/tools/`)
+## 3. Registre d'actions du tuteur (`packages-py/learny/src/learny/tutor/domain/`)
 
 Une action = un fichier exportant `{ name, description, inputSchema (Zod), outputSchema, guard(ctx, input), execute(ctx, input) }`. Les outils sont déclarés au modèle en mode strict.
 

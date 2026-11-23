@@ -1,5 +1,5 @@
 // Schedule-slot factory (SPEC-115 EF-6). The slot belongs to a user who can access the formation.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, insert, now, type IdRow } from './helpers';
 

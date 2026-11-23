@@ -1,7 +1,6 @@
 """[SPEC-2202] Read model, attempts, hints and draft of a practice exercise (SPEC-613).
 
-Port of the useful cases of `packages/services/src/exercises/{get-practice-exercise,attempt-service}.ts`:
-the exercise of another learner or of another module is absent, the single in-progress attempt is
+The exercise of another learner or of another module is absent, the single in-progress attempt is
 resumed, the two hints are revealed one by one and the draft is stored without correction.
 """
 

@@ -1,8 +1,4 @@
-"""Pure rules of the personal question banks (SPEC-2207, port of `question-bank.ts`).
-
-The four formats, the minimum variants, the placeholder substitution, the distractors and the batch
-bound keep the exact behaviour of the TypeScript service, without any database.
-"""
+"""Pure rules of the personal question banks (SPEC-2207)."""
 
 import pytest
 from learny.shared.locale_fr import tutor as texts

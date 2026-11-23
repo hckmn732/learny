@@ -1,9 +1,7 @@
 """Reply stream of the tutor (SPEC-610 ET-2, ET-3, EF-8, ADR-0066).
 
-Port of `packages/services/src/tutor-chat/stream.ts`: the reply follows the AI SDK UI message stream
-protocol (SSE `data: {type,...}` chunks) framed by `learny.tutor.domain.events`, which is the module
-validated against the TypeScript oracle. The learner message is committed before the model call, the
-tutor message only after a complete stream, and no transaction is ever held across the model.
+The learner message is committed before the model call, the tutor message only after a complete
+stream, and no transaction is ever held across the model.
 """
 
 from collections.abc import AsyncIterator, Mapping

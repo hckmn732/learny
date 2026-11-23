@@ -1,4 +1,4 @@
-"""Fixtures of the e-mail templates (SPEC-204 ET-8), ported from `emails/fixtures.ts`."""
+"""Fixtures of the e-mail templates (SPEC-204 ET-8)."""
 
 from typing import Any
 

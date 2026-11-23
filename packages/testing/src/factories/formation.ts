@@ -1,5 +1,5 @@
 // Formation factory (SPEC-115 EF-6, ET-5). Creates an active formation owned by the given user.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { insert, type IdRow } from './helpers';
 

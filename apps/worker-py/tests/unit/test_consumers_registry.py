@@ -1,23 +1,20 @@
-"""[SPEC-2207] Registry of the consumers of the P22 plan: ownership, delays, payloads, retries."""
+"""[SPEC-2207] Registry of the consumers of the P22 plan: delays, payloads, retries."""
 
 import dataclasses
 import re
 import uuid
 from datetime import timedelta
-from pathlib import Path
 from typing import Any
 
 import pytest
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner, load_ownership
 from learny.shared.time import parse_iso
 from learny_worker.consumers import (
     CONSUMERS,
     DAILY_DIGEST_EVENT,
     DEMO_CONSUMER,
     Consumer,
-    active_consumers,
     daily_digest_event_id,
     subscribed,
 )
@@ -26,8 +23,6 @@ from support.fakes import FakeClock, FakeDatabase, FakeDeps, RecordingConnection
 
 pytestmark = pytest.mark.spec("SPEC-2207")
 
-ROOT = Path(__file__).resolve().parents[4]
-OWNERSHIP = ROOT / "api" / "ownership.yaml"
 FIXED = parse_iso("2026-11-11T12:20:00Z")
 NAME = re.compile(r"^[a-z]+(\.[a-z0-9_]+)+$")
 USER = "0b6f2a7e-9a3c-4c1c-8a55-3d1f6f1d2a01"
@@ -110,16 +105,6 @@ VALID_PAYLOADS: dict[str, dict[str, Any]] = {
 }
 
 
-@pytest.fixture(scope="module")
-def ownership() -> dict[str, Owner]:
-    return dict(load_ownership(OWNERSHIP).consumers)
-
-
-class FakeOwnership:
-    def __init__(self, consumers: dict[str, Owner]) -> None:
-        self.consumers = consumers
-
-
 def consumer_named(name: str) -> Consumer:
     return next(consumer for consumer in CONSUMERS if consumer.name == name)
 
@@ -141,26 +126,6 @@ def test_every_consumer_has_a_valid_name_and_options() -> None:
         assert consumer.timeout_s > 0
         assert consumer.max_attempts >= 1
         assert consumer.tags["context"]
-
-
-def test_every_registry_consumer_is_owned_by_python(ownership: dict[str, Owner]) -> None:
-    # CA-1 of the flip: the worker runs every consumer of the registry, none is left to Hono.
-    active = active_consumers(FakeOwnership(ownership))
-    assert [consumer.name for consumer in active] == [consumer.name for consumer in CONSUMERS]
-    assert all(ownership[consumer.name] == "py" for consumer in CONSUMERS)
-
-
-def test_no_consumer_is_left_to_typescript(ownership: dict[str, Owner]) -> None:
-    # ADR-2032 pinned the last gap (`tutor.generate_course`); the port closed it, so the whole table
-    # is `py` and every consumer of the registry is executed by the Python worker (ADR-2006).
-    assert [name for name, owner in ownership.items() if owner == "ts"] == []
-    assert "tutor.generate_course" in {consumer.name for consumer in CONSUMERS}
-    assert ownership["tutor.generate_course"] == "py"
-
-
-def test_no_typescript_consumer_is_ever_active() -> None:
-    everything_ts = FakeOwnership({consumer.name: "ts" for consumer in CONSUMERS})
-    assert active_consumers(everything_ts) == ()
 
 
 def test_the_course_generation_runs_once_per_completion_event() -> None:

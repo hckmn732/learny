@@ -1,10 +1,9 @@
 """Verification of the citations of a generated course (SPEC-608 EF-2, ET-4, CL-4).
 
-Port of `packages/tutor/src/course/citations.ts`: the pure function works on a snapshot of the
-owner's passages, so a citation is valid only when the chunk exists, belongs to the learner and to
-the chapter, and its resource is still ready and not deleted. The generation pipeline calls it twice
-(after generation and just before publishing), so a passage deleted between the two reads can never
-be published (ADR-0039). No IO, no clock.
+The pure function works on a snapshot of the owner's passages, so a citation is valid only when the
+chunk exists, belongs to the learner and to the chapter, and its resource is still ready and not
+deleted. The generation pipeline calls it twice (after generation and just before publishing), so a
+passage deleted between the two reads can never be published (ADR-0039). No IO, no clock.
 """
 
 from collections.abc import Collection, Mapping, Sequence
@@ -96,7 +95,7 @@ def _code_of(
     chapter_id: str,
     allowed_chunk_ids: Collection[str],
 ) -> CitationIssueCode | None:
-    """The first rule a citation breaks, in the order the TypeScript resolver applies them."""
+    """The first rule a citation breaks, in the resolver order."""
     if chunk is None:
         return "missing"
     if chunk.owner_id != user_id:

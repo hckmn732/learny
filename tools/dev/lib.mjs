@@ -14,7 +14,6 @@ export const LOCAL_HOSTS = new Set(['127.0.0.1', 'localhost', '::1', '[::1]']);
 export const STACK = {
   supabaseApi: 54321,
   postgres: 54322,
-  inngest: 8288,
   mailpitSmtp: 1025,
   mailpitUi: 8025,
   web: 3000,
@@ -25,7 +24,6 @@ export function serviceUrls(env = process.env) {
   return {
     supabase: `http://127.0.0.1:${String(STACK.supabaseApi)}`,
     postgres: `postgresql://127.0.0.1:${String(STACK.postgres)}/postgres`,
-    inngest: `http://127.0.0.1:${String(STACK.inngest)}`,
     mailpit: env.MAILPIT_URL ?? `http://127.0.0.1:${String(STACK.mailpitUi)}`,
     web: env.NEXT_PUBLIC_APP_URL ?? `http://127.0.0.1:${String(STACK.web)}`,
     api: env.API_INTERNAL_URL ?? `http://127.0.0.1:${String(STACK.api)}`,

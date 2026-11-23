@@ -1,9 +1,9 @@
 """Controlled link of a course citation (SPEC-609 EF-2, ET-1, ET-3, CL-3, BR-COU-02).
 
-Port of `packages/services/src/courses/citation-source.ts`: the browser never receives a
-model-produced URL, it asks this use case with the citation identifier. A deleted or foreign source
-returns the "source supprimee" label without signing anything; a PDF or an image gets a ten-minute
-read URL with the page fragment, a web page keeps its URL with the anchor or the minute.
+The browser never receives a model-produced URL, it asks this use case with the citation identifier.
+A deleted or foreign source returns the "source supprimee" label without signing anything; a PDF or
+an image gets a ten-minute read URL with the page fragment, a web page keeps its URL with the anchor
+or the minute.
 """
 
 from typing import Any

@@ -1,5 +1,5 @@
 # Pile de QA de Learny pour Coolify : même architecture que docker/compose.coolify.yml (Supabase,
-# Inngest, api, web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
+# web, migrations, modèles d'e-mails Auth), avec des données et des fournisseurs
 # simulés pour la recette visuelle et manuelle.
 #
 # Différences avec la production (valeurs par défaut, toutes modifiables depuis Coolify) :
@@ -44,7 +44,7 @@ x-app-environment: &app-environment
   # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
   # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
   GIT_COMMIT: ${GIT_COMMIT:-}
-  API_INTERNAL_URL: http://api:3001
+  API_INTERNAL_URL: http://api-py:8000
   API_PROXY_SECRET: ${API_PROXY_SECRET:?}
   LEARNY_API_ROLE: all
 
@@ -93,12 +93,8 @@ x-app-environment: &app-environment
   VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
   VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
 
-  # Tâches de fond (Inngest de la pile).
-  JOBS_MODE: ${JOBS_MODE:-inngest}
-  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
-  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
-  INNGEST_BASE_URL: http://inngest:8288
-  INNGEST_DEV: ${INNGEST_DEV:-0}
+  # Tâches de fond : le worker Python de la pile (ADR-2006).
+  JOBS_MODE: ${JOBS_MODE:-inline}
 
   # E-mails : par défaut tous capturés par Mailpit (smtp) ; resend exige RESEND_API_KEY.
   EMAIL_MODE: ${EMAIL_MODE:-smtp}
@@ -350,82 +346,6 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  inngest:
-    build:
-      context: ..
-      dockerfile: docker/coolify-support.Dockerfile
-      target: inngest
-    command:
-      - inngest
-      - start
-      - --host
-      - 0.0.0.0
-      - --port
-      - '8288'
-      - --sdk-url
-      - http://api:3001/api/inngest
-      - --event-key
-      - ${INNGEST_EVENT_KEY:?}
-      - --signing-key
-      - ${INNGEST_SIGNING_KEY:?}
-      - --sqlite-dir
-      - /var/lib/inngest
-    expose:
-      - '8288'
-    volumes:
-      - inngest-data:/var/lib/inngest
-    healthcheck:
-      test: ['CMD', 'perl', '/healthcheck.pl']
-      interval: 5s
-      timeout: 5s
-      retries: 30
-      start_period: 15s
-    restart: unless-stopped
-    logging: *logging
-
-  api:
-    build:
-      context: ..
-      dockerfile: docker/api.Dockerfile
-      args:
-        APP_VERSION: ${APP_VERSION:-qa}
-    user: '1000:1000'
-    read_only: true
-    tmpfs:
-      - /tmp:size=16m
-    security_opt:
-      - no-new-privileges:true
-    cap_drop: [ALL]
-    command:
-      - sh
-      - -c
-      - >-
-        if [ "$$CLOCK_FIXED_AT" = "real" ]; then unset CLOCK_FIXED_AT; fi;
-        exec node dist/server.mjs
-    environment:
-      <<: *app-environment
-      PORT: '3001'
-      API_INTERNAL_URL: http://api:3001
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?}
-      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
-      LEARNY_API_ROLE: all
-    expose:
-      - '3001'
-    depends_on:
-      inngest:
-        condition: service_healthy
-      seed:
-        condition: service_completed_successfully
-    healthcheck:
-      test: ['CMD', 'node', '/app/healthcheck-api.mjs']
-      interval: 10s
-      timeout: 5s
-      retries: 6
-      start_period: 15s
-    restart: unless-stopped
-    logging: *logging
-
-  # Application web. Domaine Coolify sur le port 3000 (URL = LEARNY_PUBLIC_APP_URL).
   web:
     build:
       context: ..
@@ -451,7 +371,7 @@ services:
         exec node apps/web/server.js
     environment:
       <<: *app-environment
-      API_INTERNAL_URL: http://api:3001
+      API_INTERNAL_URL: http://api-py:8000
       API_PROXY_SECRET: ${API_PROXY_SECRET:?}
     expose:
       - '3000'
@@ -466,10 +386,6 @@ services:
         condition: service_started
       storage:
         condition: service_healthy
-      inngest:
-        condition: service_healthy
-      api:
-        condition: service_healthy
     healthcheck:
       test: ['CMD', 'node', '/app/healthcheck-web.mjs']
       interval: 10s
@@ -482,4 +398,3 @@ services:
 volumes:
   db-data:
   storage-data:
-  inngest-data:

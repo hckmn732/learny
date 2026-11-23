@@ -1,9 +1,8 @@
 """Retry gate of a validation attempt (SPEC-612 ET-5, EF-8, SPEC-715 EF-5, ADR-0173, ADR-0190).
 
-Port of the pure half of `packages/services/src/quiz/retry-gate.ts`: the authoritative values come
-from the frozen payload of the latest applied `remediation_ready` action; without an action the
-settings row and the latest failed attempt keep the documented fallback of SPEC-612. No IO and no
-clock: both are passed by the caller.
+The authoritative values come from the frozen payload of the latest applied `remediation_ready`
+action; without an action the settings row and the latest failed attempt keep the documented
+fallback of SPEC-612. No IO and no clock: both are passed by the caller.
 """
 
 from collections.abc import Mapping

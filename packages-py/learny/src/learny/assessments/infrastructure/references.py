@@ -1,8 +1,7 @@
 """Database resolver of brick references (SPEC-501 ET-8, BR-BRI-05).
 
-Port of `packages/services/src/bricks/reference-resolver.ts`. Every query filters on the learner and
-the formation on top of RLS: no other user's notion, chunk, resource or brick can be discovered
-through a validation error.
+Every query filters on the learner and the formation on top of RLS: no other user's notion, chunk,
+resource or brick can be discovered through a validation error.
 """
 
 from collections.abc import Sequence

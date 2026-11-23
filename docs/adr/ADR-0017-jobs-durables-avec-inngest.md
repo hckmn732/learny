@@ -1,6 +1,6 @@
 # ADR-0017 — Jobs durables avec Inngest
 
-- **Statut** : Acceptée — amendée par ADR-1002
+- **Statut** : Remplacée par ADR-2001 / ADR-2006
 - **Origine** : Validée (décision prise avec le porteur du projet)
 - **Date** : 2026-11-11
 - **Liens** : SPEC-007, SPEC-203

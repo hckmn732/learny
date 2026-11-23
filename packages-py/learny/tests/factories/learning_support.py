@@ -1,10 +1,10 @@
 """Shared data of the learning-engine port (SPEC-2202).
 
-The reference fixture `learning_engine_reference.json` is recorded from the TypeScript engine
-(`@learny/learning-engine/fixtures` and `@learny/learning-engine/fixtures/builders`) on 2026-11-21:
-the SAP demonstration curriculum, the reference instant and the defaults of the test builders.
-Tests replay it instead of transcribing it, so the Python port is compared with the source of
-truth (SPEC-401 ET-7, ET-8).
+The reference fixture `learning_engine_reference.json` is recorded once from the reference
+implementation (`@learny/learning-engine/fixtures` and `@learny/learning-engine/fixtures/builders`)
+on 2026-11-21: the SAP demonstration curriculum, the reference instant and the defaults of the test
+builders. Tests replay it instead of transcribing it, so the Python port is compared with the source
+of truth (SPEC-401 ET-7, ET-8).
 """
 
 import json

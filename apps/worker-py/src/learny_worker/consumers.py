@@ -1,15 +1,11 @@
 """Consumer registry of the Python worker (SPEC-2102 step 2, SPEC-2207, ADR-2006, ADR-2014).
 
-A consumer is one async function subscribed to one event name, declared by the table of the P22
-plan (SPEC-2207). Every consumer delegates to the use case of its context, imported from the
-`public.py` of that context: the worker holds no business rule and no SQL. `ownership.yaml` decides
-which consumers Python runs: a consumer declared `ts` is never executed here (CA-3), even though it
-is listed, so the registry describes the target state before the flip.
+A consumer is one async function subscribed to one event name, declared by the table of the P22 plan
+(SPEC-2207). Every consumer delegates to the use case of its context, imported from the `public.py`
+of that context: the worker holds no business rule and no SQL.
 
-Options of the table: `timeout_s` is the Inngest `timeouts.finish` of the function (a sane default
-otherwise), `max_attempts` counts the first attempt (`retries + 1`) and `run_at` replaces
-`step.sleepUntil`. A payload the consumer cannot handle is refused at dispatch time by `validate`,
-so the delivery is `failed` at once, without a retry (CL-1).
+A payload the consumer cannot handle is refused at dispatch time by `validate`, so the delivery is
+`failed` at once, without a retry (CL-1).
 """
 
 import re
@@ -17,7 +13,7 @@ import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Protocol
+from typing import Any
 
 from learny.assessments import public as assessments
 from learny.content import public as content
@@ -32,7 +28,6 @@ from learny.shared.devtools import run_demo_pipeline
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
 from learny.shared.outbox.purge import purge_outbox
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny.tutor import public as tutor
 
@@ -75,13 +70,6 @@ RunAt = Callable[[Event, Clock], datetime | None]
 Validate = Callable[[Event], None]
 
 
-class Ownership(Protocol):
-    """The part of the ownership table the worker reads."""
-
-    @property
-    def consumers(self) -> dict[str, Owner]: ...
-
-
 @dataclass(frozen=True, slots=True)
 class Consumer:
     """One consumer of one event; `max_attempts` counts the first attempt."""
@@ -96,7 +84,7 @@ class Consumer:
     tags: dict[str, str] = field(default_factory=dict)
 
     def run_after(self, event: Event, clock: Clock) -> datetime | None:
-        """Delayed first execution (replaces Inngest `step.sleepUntil`); None means right now."""
+        """Delayed first execution; None means right now."""
         if self.run_at is None:
             return None
         return self.run_at(event, clock)
@@ -181,7 +169,7 @@ def _boolean_of(data: Mapping[str, Any], name: str) -> bool:
 
 
 def _job_actor(user_id: str) -> Actor:
-    """The actor a job carries: the identifier only, like the TypeScript service context."""
+    """The actor a job carries: the identifier only."""
     return Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
 
 
@@ -407,10 +395,8 @@ def validate_demo_event(event: Event) -> None:
 async def demo_job(deps: Any, event: Event) -> None:
     """Demonstration consumer: records the three steps of the pipeline in `sdd_demo_runs`.
 
-    The steps are the ones `sdd-demo-pipeline` wrote before the cutover (`SDD_DEMO_STEPS`), so the
-    SPEC-203 page reads the same state as on Hono: `attempts` counts the executions of the second
-    step and `finished_at` closes the run. The delivery row marks one execution per (event,
-    consumer), and a finished run is left untouched, so a replay has no effect (ET-1).
+    The delivery row marks one execution per (event, consumer), and a finished run is left
+    untouched, so a replay has no effect (ET-1).
     """
     run_id = str(event.data["runId"])
     run = await run_demo_pipeline(deps, run_id, str(event.data["failOnceAt"]))
@@ -638,14 +624,6 @@ CONSUMERS: tuple[Consumer, ...] = (
         tags={"context": "devtools"},
     ),
 )
-
-
-def active_consumers(
-    ownership: Ownership,
-    registry: tuple[Consumer, ...] = CONSUMERS,
-) -> tuple[Consumer, ...]:
-    """The consumers Python owns; `ts`-owned ones are described but never run (CA-3)."""
-    return tuple(consumer for consumer in registry if ownership.consumers.get(consumer.name) == "py")
 
 
 def subscribed(consumers: tuple[Consumer, ...], event_name: str) -> tuple[Consumer, ...]:

@@ -1,7 +1,5 @@
 """Local weeks of the learner, from the injected instant and the IANA zone (SPEC-2205).
 
-Ported from `startOfUserWeek` of `packages/automations/src/moteur-d-automatismes.ts` and from
-`weeklyReviewWeek`/`isoWeekKey` of `packages/contracts/src/automatisme-9-bilan-de-la-semaine.ts`.
 Nothing reads the process clock or the process zone (ADR-0047): the instant is always a parameter.
 """
 

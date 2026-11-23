@@ -1,10 +1,9 @@
 """Creation of one validation quiz attempt (SPEC-611 EF-1, EF-8, ET-3, ET-4, ET-6, BR-QUI-01).
 
-Port of `packages/services/src/quiz/start.ts`: everything runs in the learner's RLS transaction, the
-draw is pure and deterministic (hash of learner, module and attempt number) and every question is
-materialised in `activities.items`, so a later threshold change never rewrites the attempt (CL-10).
-The module guard and the retry gate run before any write; an exhausted bank returns `preparing` and
-creates nothing (EF-8).
+Everything runs in the learner's RLS transaction, the draw is pure and deterministic (hash of
+learner, module and attempt number) and every question is materialised in `activities.items`, so a
+later threshold change never rewrites the attempt (CL-10). The module guard and the retry gate run
+before any write; an exhausted bank returns `preparing` and creates nothing (EF-8).
 """
 
 import hashlib

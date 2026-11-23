@@ -1,6 +1,13 @@
-// Contrôle permanent du couplage de apps/web (SPEC-1302, ADR-1003, ADR-1007).
-// Aucune dépendance externe : Node.js ≥ 24 pur, l'analyse des imports se fait
-// par expressions régulières sur `from '…'` et `import('…')`, jamais par exécution du code.
+// Frontière de `apps/web` après le retrait du backend TypeScript (SPEC-2302, ADR-1003, ADR-1007).
+// Aucune dépendance externe : Node.js ≥ 24 pur, l'analyse des imports se fait par expressions
+// régulières sur `from '…'` et `import('…')`, jamais par exécution du code.
+//
+// SPEC-2302 EF-2 : les paquets serveur (`services`, `jobs`, `llm`, `tutor`, `http`, `api-routes`…)
+// n'existent plus, donc une liste d'interdits serait vide et ne prouverait rien. Le contrôle porte
+// désormais sur ce qui peut encore casser : tout import `@learny/<paquet>` de `apps/web` doit
+// désigner un paquet **présent** dans `packages/`. Un import fantôme signale le reliquat d'un
+// paquet retiré (ou un paquet oublié dans le graphe), et le rapport recense ce que le web consomme.
+//
 // Racine injectable : MIGRATION_ROOT est réservée aux tests (comme SDD_ROOT dans tools/sdd).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,174 +18,115 @@ export const ROOT = process.env.MIGRATION_ROOT
   ? path.resolve(process.env.MIGRATION_ROOT)
   : REPO_ROOT;
 
-// Paquets serveur interdits dans apps/web (EF-4). @learny/core, @learny/contracts, @learny/config,
-// @learny/testing et @learny/ui restent autorisés (ADR-1007).
-export const SERVER_PACKAGES = [
-  'db',
-  'services',
-  'jobs',
-  'llm',
-  'tutor',
-  'ingestion',
-  'automations',
-  'notifications',
-  'http',
-  'api-routes',
-];
+/** `from '@learny/db/schema'`, `import('@learny/bricks')` : le nom du paquet, jamais un préfixe. */
+const IMPORT_RE = /(?:from\s+|import\(\s*)['"]@learny\/([a-z0-9-]+)(?:\/[^'"]*)?['"]/g;
 
-// `from '@learny/db/…'`, `} from "@learny/services"`, `import('@learny/llm/budget')`… Le nom du
-// paquet doit être suivi d'un sous-chemin ou du délimiteur : `@learny/dbx` ne compte pas.
-const IMPORT_RE = new RegExp(
-  '(?:^|[^A-Za-z0-9_$])(?:from\\s+|import\\(\\s*)[\'"]@learny/(' +
-    SERVER_PACKAGES.join('|') +
-    ')(?:/[^\'"]*)?[\'"]',
-);
-
-export const WEB_CATEGORIES = ['pages', 'lib', 'components', 'dev', 'proxy', 'apiRoutes'];
-/** Catégorie d'un fichier de apps/web (EF-6) ; `null` hors périmètre (test/, e2e/, scripts/…). */
-export function categorizeWebFile(file) {
-  if (file === 'apps/web/proxy.ts') return 'proxy';
-  if (file.startsWith('apps/web/app/%5Fdev/')) return 'dev';
-  if (file.startsWith('apps/web/app/api/')) return 'apiRoutes';
-  if (file.startsWith('apps/web/app/')) return 'pages';
-  if (file.startsWith('apps/web/lib/')) return 'lib';
-  if (file.startsWith('apps/web/components/')) return 'components';
-  return null;
+function listFiles(dir, predicate, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'node_modules' || entry.name === '.next' || entry.name === '.turbo')
+      continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) listFiles(full, predicate, out);
+    else if (predicate(full)) out.push(full);
+  }
+  return out;
 }
 
-/** Vrai si le texte importe un paquet serveur, statiquement ou dynamiquement (ET-5). */
-export function importsServerPackage(text) {
-  return IMPORT_RE.test(text);
+function relative(root, file) {
+  return path.relative(root, file).split(path.sep).join('/');
 }
 
-function listWebFiles(root) {
-  const out = [];
-  const walk = (dir) => {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      if (entry.name === 'node_modules' || entry.name === '.next') continue;
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else out.push(full);
-    }
-  };
-  walk(path.join(root, 'apps', 'web'));
-  return out
-    .filter((file) => /\.(ts|tsx)$/.test(file))
-    .map((file) => path.relative(root, file).split(path.sep).join('/'))
+/** Paquets du workspace TypeScript (`packages/<nom>`), triés. */
+export function workspacePackages(root = ROOT) {
+  const dir = path.join(root, 'packages');
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .map((entry) => entry.name)
     .sort();
 }
 
-/**
- * Nombre de routes du registre ROUTES (EF-6) : chaque route est une entrée `defineRoute(…)` d'un
- * module importé par `packages/contracts/src/routes.ts` (les modules non fusionnés et les
- * fichiers de test ne comptent pas). Un arbre partiel (tests) rend 0.
- */
-export function countRegistryRoutes(root = ROOT) {
-  const registry = path.join(root, 'packages', 'contracts', 'src', 'routes.ts');
-  if (!fs.existsSync(registry)) return 0;
-  const modules = [...fs.readFileSync(registry, 'utf8').matchAll(/from '\.\/([\w-]+)'/g)].map(
-    (match) => match[1],
-  );
-  let total = 0;
-  for (const name of modules) {
-    const file = path.join(root, 'packages', 'contracts', 'src', `${name}.ts`);
-    if (!fs.existsSync(file)) continue;
-    const source = fs.readFileSync(file, 'utf8');
-    const factories = source.match(/= (?:demo|action)\(/g)?.length ?? 0;
-    const explicit = (source.match(/defineRoute\(/g)?.length ?? 0) - factoryDefinitions(source);
-    total += explicit + factories;
+/** Imports `@learny/<paquet>` d'un texte, avec les paquets réellement présents. */
+export function learnyImports(text, packages) {
+  const found = [];
+  for (const match of text.matchAll(IMPORT_RE)) {
+    found.push({ name: match[1], resolved: packages.includes(match[1]) });
   }
-  return total;
+  return found;
+}
+
+/** Fichiers .ts/.tsx de `apps/web` (hors tests et e2e : ils ne partent pas dans le build). */
+export function listWebFiles(root = ROOT) {
+  return listFiles(path.join(root, 'apps', 'web'), (file) => /\.(ts|tsx)$/.test(file))
+    .map((file) => relative(root, file))
+    .filter((file) => !file.includes('/e2e/') && !/\.(test|spec)\.tsx?$/.test(file))
+    .sort();
+}
+
+/** Nombre d'opérations de `api/openapi.yaml` (le contrat vit hors de TypeScript, ADR-2012). */
+export function contractOperations(root = ROOT) {
+  const file = path.join(root, 'api', 'openapi.yaml');
+  if (!fs.existsSync(file)) return 0;
+  return (fs.readFileSync(file, 'utf8').match(/^\s+operationId: /gm) ?? []).length;
 }
 
 /**
- * Nombre de `defineRoute(` situés dans le corps d'une fabrique de routes (`function demo(…)`,
- * `function action(…)`, …) : ces appels ne sont pas des routes, chaque invocation de la fabrique
- * en produit une. Sans cette soustraction, `dev-sdd-migration.ts` comptait 45 routes au lieu de 43
- * et le registre affichait 219 au lieu de 217 (SPEC-2001, ADR-2004).
- */
-export function factoryDefinitions(source) {
-  const lines = source.split('\n');
-  let inside = 0;
-  for (let index = 0; index < lines.length; index += 1) {
-    if (!/^function\s+\w+\s*\(/.test(lines[index])) continue;
-    let depth = 0;
-    let opened = false;
-    let body = '';
-    for (let cursor = index; cursor < lines.length; cursor += 1) {
-      body += `${lines[cursor]}\n`;
-      for (const character of lines[cursor]) {
-        if (character === '{') {
-          depth += 1;
-          opened = true;
-        } else if (character === '}') depth -= 1;
-      }
-      if (opened && depth === 0) break;
-    }
-    inside += body.match(/defineRoute\(/g)?.length ?? 0;
-  }
-  return inside;
-}
-
-/**
- * Mesure le couplage de apps/web sur l'arbre courant (EF-6) : fichiers .ts/.tsx important un
- * paquet serveur par catégorie (`app/api` compte à part ; test/ et e2e/ sont exemptés, EF-4),
- * routes du registre ROUTES, fichiers route.ts et composants client couplés.
+ * Mesure la frontière du web : fichiers analysés, paquets importés, imports non résolus, routes du
+ * contrat et fichiers `route.ts` (un `route.ts` restant serait un proxy du backend supprimé).
  */
 export function measureWebBoundary(root = ROOT) {
-  const coupled = [];
-  const clientComponents = [];
+  const packages = workspacePackages(root);
+  const used = new Map();
+  const unresolved = [];
+  let files = 0;
   let routeFiles = 0;
-  const byCategory = Object.fromEntries(WEB_CATEGORIES.map((category) => [category, 0]));
   for (const file of listWebFiles(root)) {
-    if (file.startsWith('apps/web/app/') && /(^|\/)route\.ts$/.test(file)) routeFiles += 1;
-    const category = categorizeWebFile(file);
-    if (category === null) continue;
+    files += 1;
+    if (/\/route\.ts$/.test(file)) routeFiles += 1;
     const text = fs.readFileSync(path.join(root, file), 'utf8');
-    if (!importsServerPackage(text)) continue;
-    coupled.push({ file, category });
-    byCategory[category] += 1;
-    const directive = text.trimStart();
-    if (directive.startsWith("'use client'") || directive.startsWith('"use client"')) {
-      clientComponents.push(file);
+    for (const entry of learnyImports(text, packages)) {
+      used.set(entry.name, (used.get(entry.name) ?? 0) + 1);
+      if (!entry.resolved) unresolved.push({ file, package: entry.name });
     }
   }
   return {
-    coupled,
-    byCategory,
-    clientComponents: clientComponents.sort(),
-    routesRegistry: countRegistryRoutes(root),
+    files,
+    packages,
+    used: [...used.entries()].sort(([left], [right]) => left.localeCompare(right)),
+    unresolved,
+    routes: contractOperations(root),
     routeFiles,
   };
 }
 
-/** Point d'entrée : affiche le rapport puis impose zéro couplage. */
+/** Point d'entrée : affiche le rapport puis impose zéro import non résolu. */
 export function main(argv = process.argv.slice(2), root = ROOT) {
   const check = argv.includes('--check');
   const measure = measureWebBoundary(root);
 
-  console.log('Couplage de apps/web (ADR-1003, ADR-1007) :');
-  for (const category of WEB_CATEGORIES) {
-    console.log(`  ${category.padEnd(11)}${String(measure.byCategory[category] ?? 0)}`);
+  console.log('Frontière de apps/web (ADR-1003, ADR-1007, SPEC-2302) :');
+  console.log(`  fichiers .ts/.tsx analysés      ${String(measure.files)}`);
+  console.log(`  paquets du workspace            ${String(measure.packages.length)}`);
+  console.log(`  paquets @learny importés        ${String(measure.used.length)}`);
+  for (const [name, count] of measure.used) {
+    console.log(`    ${name.padEnd(14)}${String(count)}`);
   }
-  const horsApi = WEB_CATEGORIES.filter((category) => category !== 'apiRoutes').reduce(
-    (total, category) => total + (measure.byCategory[category] ?? 0),
-    0,
-  );
-  console.log(`  ${'total'.padEnd(11)}${String(horsApi)} (hors app/api)`);
-  console.log(`Routes du registre ROUTES : ${String(measure.routesRegistry)}`);
-  console.log(`Fichiers route.ts sous apps/web/app : ${String(measure.routeFiles)}`);
-  console.log(`Composants client couplés : ${String(measure.clientComponents.length)}`);
-  for (const file of measure.clientComponents) console.log(`  ${file}`);
+  console.log(`  imports non résolus             ${String(measure.unresolved.length)}`);
+  console.log(`  opérations du contrat           ${String(measure.routes)}`);
+  console.log(`  fichiers route.ts sous apps/web ${String(measure.routeFiles)}`);
 
-  if (measure.coupled.length === 0) {
+  if (measure.unresolved.length === 0) {
     console.log(
-      `${check ? 'Contrôle réussi' : 'Rapport réussi'} : apps/web est un client pur de l’API.`,
+      `${check ? 'Contrôle réussi' : 'Rapport réussi'} : apps/web n’importe que des paquets ` +
+        'existants ; aucun backend TypeScript ne subsiste (SPEC-2302 EF-2).',
     );
     return;
   }
-  console.error('Fichiers couplés interdits :');
-  for (const entry of measure.coupled) console.error(`  ${entry.file}`);
+  console.error('Imports @learny non résolus (paquet absent du workspace) :');
+  for (const entry of measure.unresolved)
+    console.error(`  ${entry.file} → @learny/${entry.package}`);
   process.exitCode = 1;
 }
 

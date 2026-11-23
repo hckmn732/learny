@@ -84,7 +84,7 @@ CLAIM = text(
     """
 )
 # `JOBS_MODE=inline`: the pending deliveries of the given events, whatever their `run_after` (the
-# inline mode ignores the delays, like `packages/jobs/src/inline.ts`).
+# inline mode ignores the delays,).
 CLAIM_EVENTS = text(
     """
     update public.job_deliveries d
@@ -197,7 +197,7 @@ async def schedule_delivery(
 
 
 async def schedule_failed_delivery(tx: Any, event: Event, consumer: str, error: str) -> None:
-    """A payload the consumer rejects is never retried (port of `NonRetriableError`)."""
+    """A payload the consumer rejects is never retried."""
     await tx.conn.execute(
         INSERT_FAILED_DELIVERY,
         {"event_id": event.event_id, "consumer": consumer, "error": _bounded(error)},

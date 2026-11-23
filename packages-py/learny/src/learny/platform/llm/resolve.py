@@ -1,4 +1,4 @@
-"""Resolution (user, task) -> model (SPEC-709, port of `packages/llm/src/resolve.ts`).
+"""Resolution (user, task) -> model (SPEC-709).
 
 The platform provides no model: a task runs only on the qualified personal model the learner
 assigned to it. Without an assignment the task is unavailable, whatever the subscription. The read
@@ -42,7 +42,7 @@ class ResolvedModel:
 
 
 def _unavailable(reason: str) -> AppError:
-    """`aiUnavailable`: the same code, detail and `reason` as the TypeScript backend."""
+    """`aiUnavailable`: the same code, detail and `reason`."""
     return AppError("AI_UNAVAILABLE", AI_UNAVAILABLE_MODEL, reason=reason)
 
 

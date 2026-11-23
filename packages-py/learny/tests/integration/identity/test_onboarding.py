@@ -1,4 +1,4 @@
-"""[SPEC-2201] Onboarding state and advancement (port of onboarding/{state,advance}.ts)."""
+"""[SPEC-2201] Onboarding state and advancement."""
 
 from typing import Any
 

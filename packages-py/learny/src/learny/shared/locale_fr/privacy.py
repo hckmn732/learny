@@ -1,7 +1,6 @@
-"""User-facing French strings of the privacy context, copied from the TypeScript backend.
+"""User-facing French strings of the privacy context (SPEC-211, ADR-0044, ADR-0216).
 
-Sources: `packages/services/src/personal-data/{export,deletion}.ts`,
-`packages/jobs/src/personal-data/{zip-layout,collect}.ts` (SPEC-211, ADR-0044, ADR-0216).
+Every literal is copied verbatim from the reference implementation.
 """
 
 # `export.ts` - the daily quota (three exports per local civil day) and the archive lifetime.

@@ -1,10 +1,10 @@
 """Deferred correction of the open answers of a validation attempt (SPEC-611 ET-8, CL-6).
 
-Port of `packages/services/src/quiz/grade-open.ts`: one structured tutor call per pending open
-answer, three attempts per answer (ADR-0017), then the answer stays pending and the learner is
-notified. The learner text and the expected elements are escaped before they enter the prompt, so
-they can never define an instruction. The grader is an injected port: the integration suite passes
-a deterministic one and the default reads the committed fixture (`LLM_MODE=mock`).
+One structured tutor call per pending open answer, three attempts per answer (ADR-0017), then the
+answer stays pending and the learner is notified. The learner text and the expected elements are
+escaped before they enter the prompt, so they can never define an instruction. The grader is an
+injected port: the integration suite passes a deterministic one and the default reads the committed
+fixture (`LLM_MODE=mock`).
 """
 
 import json
@@ -84,7 +84,7 @@ def escape_data(value: str) -> str:
 
 
 def prompt_of(item: Mapping[str, Any], response: str) -> str:
-    """The user prompt of one answer, verbatim from `promptOf` in TypeScript."""
+    """The user prompt of one answer."""
     payload, _ = parse_payload("open_question", item.get("payload"))
     expected = [] if payload is None else list(payload["expectedElements"])
     criteria = [] if payload is None else list(payload["criteria"])

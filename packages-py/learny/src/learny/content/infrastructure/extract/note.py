@@ -1,8 +1,8 @@
 """Note extractor (SPEC-509 EF-2, ET-2).
 
-Port of `packages/ingestion/src/extract/note.ts`: a note is already text, so nothing is normalised
-and every character range stays true to the learner's contribution. An empty note or a note beyond
-the coded limit is a permanent, readable failure.
+A note is already text, so nothing is normalised and every character range stays true to the
+learner's contribution. An empty note or a note beyond the coded limit is a permanent, readable
+failure.
 """
 
 from learny.content.domain.chunk import SourceLocation

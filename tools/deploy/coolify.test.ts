@@ -141,10 +141,11 @@ describe.each(STACKS)('[SPEC-2301] $base — services Python de la bascule', ({ 
     }
   });
 
-  it('keeps the web on Hono until the documented flip', () => {
+  it('keeps the web on the Python facade and no relay', () => {
     const web = environment(service(stack.doc, 'web'));
-    expect(web.API_INTERNAL_URL, base).toBe('http://api:3001');
-    expect(environment(api).PY_HONO_UPSTREAM_URL, overlay).toBe('http://api:3001');
-    expect(environment(api).OWNERSHIP_OVERRIDES, overlay).toBe('${OWNERSHIP_OVERRIDES:-}');
+    expect(web.API_INTERNAL_URL, base).toBe('http://api-py:8000');
+    expect(stack.doc.services, base).not.toHaveProperty('api');
+    expect(environment(api).PY_HONO_UPSTREAM_URL, overlay).toBeUndefined();
+    expect(environment(api).OWNERSHIP_OVERRIDES, overlay).toBeUndefined();
   });
 });

@@ -1,7 +1,6 @@
 """Chapter summary: stored by the learner, corrected by the tutor (SPEC-609 EF-3, ET-2 to ET-5).
 
-Port of `packages/services/src/courses/summary.ts` and `packages/tutor/src/course/summary.ts`. The
-learner's text is committed before the model call, so a model failure never loses it (CL-4); a
+The learner's text is committed before the model call, so a model failure never loses it (CL-4); a
 replay with the same request key returns the first summary and emits no second event (ET-2). The
 summary references the course version that was read (BR-COU-10) and never rewrites a past attempt.
 """

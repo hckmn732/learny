@@ -1,9 +1,7 @@
 """[SPEC-2203] Signed upload: reservation, idempotent replay and quota refusal under RLS.
 
-Ported from the `create-upload` part of `packages/services/src/resources/upload.test.ts` (SPEC-206
-EF-1, EF-6, ET-4, ET-5, ET-7, CL-1 to CL-3, BR-APP-02): the same declared bounds, the same business
-codes and the same stored reservation, on the local stack. The Storage gateway is a fake that
-records its calls: no socket is opened.
+The same declared bounds, the same business codes and the same stored reservation, on the local
+stack. The Storage gateway is a fake that records its calls: no socket is opened.
 """
 
 from datetime import timedelta

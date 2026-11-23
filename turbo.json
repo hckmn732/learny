@@ -9,12 +9,8 @@
     "LLM_MODE",
     "NODE_ENV",
     "PORT",
-    "INNGEST_DEV",
-    "INNGEST_SIGNING_KEY",
-    "INNGEST_SIGNING_KEY_FALLBACK",
-    "INNGEST_EVENT_KEY",
+    "JOBS_MODE",
     "API_INTERNAL_URL",
-    "LEARNY_API_ROLE",
     "API_PORT"
   ],
   "tasks": {
@@ -29,27 +25,12 @@
         "public/swe-worker-build.txt"
       ]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
-    },
-    "test": {
-      "cache": false
-    },
-    "test:unit": {
-      "cache": false
-    },
-    "test:int": {
-      "cache": false
-    },
-    "test:e2e": {
-      "cache": false
-    }
+    "dev": { "cache": false, "persistent": true },
+    "lint": { "dependsOn": ["^lint"] },
+    "typecheck": { "dependsOn": ["^typecheck"] },
+    "test": { "cache": false },
+    "test:unit": { "cache": false },
+    "test:int": { "cache": false },
+    "test:e2e": { "cache": false }
   }
 }

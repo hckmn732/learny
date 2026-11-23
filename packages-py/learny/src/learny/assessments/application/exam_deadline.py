@@ -1,10 +1,9 @@
 """Durable submission of a mock exam at its deadline (SPEC-614 EF-2, ET-4, ADR-0172 section 3b).
 
-Port of `packages/jobs/src/functions/exam-deadline.ts` and of the `exam-deadline` function: the
-`exam/started` event schedules the run at `deadlineAt + 5 s` (the network tolerance that replaces
-`step.sleepUntil`), then the exam service submits and grades the attempt once. The service checks
-the deadline again (`trigger='deadline'`), so an early execution - a replayed delivery, a clock
-skew - never ends the exam before its time.
+The `exam/started` event schedules the run at `deadlineAt + 5 s` (the network tolerance that
+replaces `step.sleepUntil`), then the exam service submits and grades the attempt once. The service
+checks the deadline again (`trigger='deadline'`), so an early execution - a replayed delivery, a
+clock skew - never ends the exam before its time.
 
 The state guard is the attempt status: `submit_exam` returns the restored outcome without writing
 when the attempt is no longer `in_progress`, which makes a duplicated delivery harmless.

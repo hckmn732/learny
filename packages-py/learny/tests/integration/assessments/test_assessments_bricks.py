@@ -1,8 +1,7 @@
 """[SPEC-2202] Brick lifecycle: report, correction and owner isolation (SPEC-501 ET-8).
 
-Port of `packages/services/test/integration/bricks.test.ts` for the two routes of the assessments
-context. Reporting excludes the brick from every draw until the next immutable version resolves the
-open reports; two learners never see each other's brick (RLS, CA-6).
+Reporting excludes the brick from every draw until the next immutable version resolves the open
+reports; two learners never see each other's brick (RLS, CA-6).
 """
 
 import json
@@ -29,7 +28,7 @@ pytestmark = pytest.mark.spec("SPEC-2202")
 
 
 def choice_payload(notion_ids: list[str], stem: str = "Which account increases on debit?") -> dict[str, Any]:
-    """A valid single-choice payload, exactly the shape of the TypeScript fixture."""
+    """A valid single-choice payload, exactly the shape of the reference fixture."""
     return {
         "stem": stem,
         "mode": "single",

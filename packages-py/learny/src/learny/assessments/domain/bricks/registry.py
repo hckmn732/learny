@@ -11,7 +11,7 @@ from typing import Any, cast
 
 from learny.assessments.domain.bricks.checks import CHECKS
 from learny.assessments.domain.bricks.fingerprint import canonical_answer, stem_text
-from learny.assessments.domain.bricks.public import (
+from learny.assessments.domain.bricks.public_payload import (
     PUBLIC_PROJECTIONS,
     SEEDED_PUBLIC_TYPES,
     PublicProjection,

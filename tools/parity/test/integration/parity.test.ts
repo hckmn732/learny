@@ -4,8 +4,8 @@
 // admin API and the recorded responses are replayed. The run is serialised on the shared database
 // lock by the caller (`flock /tmp/learny-sdd-db.lock`, AGENTS.md).
 //
-// Target: `PARITY_TARGET` (default `http://127.0.0.1:3102`). When no backend answers, the replay is
-// skipped explicitly instead of pretending to pass.
+// Target: `PARITY_TARGET` (default `http://127.0.0.1:3001`, the Python facade of the local stack).
+// When no backend answers, the replay is skipped explicitly instead of pretending to pass.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -15,7 +15,7 @@ import { ROOT } from '../../../migration/inventory.mjs';
 import { diffRecordings, loadMutations, runScenarios } from '../../run';
 import type { Scenario, ScenarioResult } from '../../run';
 
-const TARGET = process.env.PARITY_TARGET ?? 'http://127.0.0.1:3102';
+const TARGET = process.env.PARITY_TARGET ?? 'http://127.0.0.1:3001';
 const RECORDING = path.join(ROOT, 'api', 'oracles', 'recordings', 'reads.json');
 const SAMPLE = ['health.get', 'me.get', 'dev.sdd.spec-103.demo'];
 
@@ -29,7 +29,7 @@ async function reachable(): Promise<boolean> {
 }
 
 describe('[SPEC-2001] parity harness integration', () => {
-  it('replays three recorded scenarios identically against the TypeScript backend', async () => {
+  it('replays three recorded scenarios identically against the Python facade', async () => {
     if (!(await reachable())) {
       console.warn(`Parity target unreachable (${TARGET}): integration replay skipped.`);
       return;
@@ -45,7 +45,9 @@ describe('[SPEC-2001] parity harness integration', () => {
     const inventory = JSON.parse(
       fs.readFileSync(path.join(ROOT, 'api', 'inventory.json'), 'utf8'),
     ) as { operations: { id: string; path: string }[] };
-    const pathById = new Map(inventory.operations.map((operation) => [operation.id, operation.path]));
+    const pathById = new Map(
+      inventory.operations.map((operation) => [operation.id, operation.path]),
+    );
 
     const scenarios: Scenario[] = [];
     for (const entry of sample) {
@@ -73,7 +75,8 @@ describe('[SPEC-2001] parity harness integration', () => {
     expect(mutations.length).toBeGreaterThan(0);
     for (const scenario of mutations) {
       expect(scenario.steps.length).toBeGreaterThan(0);
-      for (const step of scenario.steps) expect(step.method).toMatch(/^(GET|POST|PUT|PATCH|DELETE)$/);
+      for (const step of scenario.steps)
+        expect(step.method).toMatch(/^(GET|POST|PUT|PATCH|DELETE)$/);
     }
   });
 });

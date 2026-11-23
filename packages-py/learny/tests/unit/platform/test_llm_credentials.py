@@ -1,4 +1,4 @@
-"""[SPEC-2201] The BYOK envelope of `learny.platform.llm` (port of `credentials/crypto.test.ts`)."""
+"""[SPEC-2201] The BYOK envelope of `learny.platform.llm`."""
 
 import base64
 

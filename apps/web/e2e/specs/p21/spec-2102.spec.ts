@@ -4,7 +4,7 @@
 // owned by TypeScript (`sdd-demo-pipeline`), so the event it writes stays undispatched by Hono and
 // the Python worker fans it out to its own consumer `devtools.demo_job`. The proof is the delivery
 // row: one per (event, consumer), claimed once, completed once.
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 

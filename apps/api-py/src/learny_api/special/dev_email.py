@@ -1,7 +1,6 @@
 """Development demonstrations of SPEC-204: preview, send and memory outbox (thin routes).
 
-Port of the e-mail entries of `special/dev-routes.ts`. The preview answers HTML unless the client
-asks for JSON, exactly like `wantsJson`.
+The preview answers HTML unless the client asks for JSON, exactly like `wantsJson`.
 """
 
 from typing import Any

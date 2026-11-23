@@ -1,7 +1,5 @@
 """Validation-quiz reminders of the hourly tick (SPEC-2205).
 
-Ported from `packages/notifications/src/producers/reminders.ts`.
-
 The reminder of a planned quiz is requested forty minutes before it, with `eligibleAt` set to that
 instant; moving a slot changes the dedupe key, so the new reminder is created while the old unsent
 one is removed (CA-2). A reminder whose instant already passed is never sent late (CL-5), and a

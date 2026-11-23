@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Starts the local stack: Supabase (CLI) then Inngest and Mailpit (Compose) (SPEC-008, EF-1).
+// Starts the local stack: Supabase (CLI) then Mailpit (Compose) (SPEC-008, EF-1).
 import {
   COMPOSE_FILE,
   dockerDiagnostic,
@@ -39,7 +39,6 @@ if (composeCode !== 0) {
 
 const urls = serviceUrls();
 try {
-  await waitForHttp(`${urls.inngest}/health`);
   await waitForHttp(`${urls.mailpit}/api/v1/info`);
 } catch (error) {
   console.error(`✖ ${error instanceof Error ? error.message : String(error)}`);
@@ -49,7 +48,6 @@ try {
 console.log('✔ Pile locale prête (aucune donnée supprimée)');
 console.log(`  Supabase API  ${urls.supabase}`);
 console.log(`  Postgres      ${urls.postgres}`);
-console.log(`  Inngest       ${urls.inngest}`);
 console.log(`  Mailpit       ${urls.mailpit} (SMTP 127.0.0.1:1025)`);
 console.log(`  Web           ${urls.web}`);
 console.log(`  API           ${urls.api} (démarrée par pnpm dev)`);

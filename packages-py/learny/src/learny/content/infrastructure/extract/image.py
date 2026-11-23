@@ -1,9 +1,9 @@
 """Image extractor (SPEC-510 EF-3, ET-2, CA-4, CL-5; ADR-0057).
 
-Port of `packages/ingestion/src/extract/image.ts`: the bytes are checked against their real
-signature (never the declared MIME), bounded to BR-APP-02 and read by the `light` task with vision
-through an injected port. The returned text is explicitly marked as a model reading. An unreadable
-image or an unavailable model is a readable failure, never an invented description.
+The bytes are checked against their real signature (never the declared MIME), bounded to BR-APP-02
+and read by the `light` task with vision through an injected port. The returned text is explicitly
+marked as a model reading. An unreadable image or an unavailable model is a readable failure, never
+an invented description.
 """
 
 import re
@@ -55,7 +55,7 @@ class VisionReading:
 
 
 class VisionReader(Protocol):
-    """ET-2: the model port of the image extraction."""
+    """ET-2: the model boundary of the image extraction."""
 
     async def read(self, resource: ImageResourceInput) -> VisionReading: ...
 

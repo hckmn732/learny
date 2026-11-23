@@ -1,8 +1,7 @@
 """[SPEC-2203] Reading progress rules: percentages, monotonicity and the reading estimate.
 
-Ported from `packages/services/src/courses/progress.test.ts` (SPEC-609 section 12, CA-2, BR-COU-08,
-BR-COU-11): the same inputs and the same expected values, function by function. The HTTP and RLS
-path is covered by `tests/integration/content/test_content_progress.py`.
+The same inputs and the same expected values, function by function. The HTTP and RLS path is covered
+by `tests/integration/content/test_content_progress.py`.
 """
 
 import pytest

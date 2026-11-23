@@ -78,8 +78,8 @@ def build_deps(settings: Settings) -> Deps:
         db=Database.from_settings(settings),
         jwks=JwtVerifier(settings, clock, jwks_fetcher(settings)),
         gotrue=GoTrueClient(settings),
-        # The Storage gateway signs with the **system** clock: Supabase checks `exp` against its
-        # own clock, never against the injected one (the TypeScript deps pass `systemClock`).
+        # The Storage gateway signs with the **system** clock: Supabase checks `exp` against its own clock,
+        # never against the injected one.
         storage=SupabaseStorage(settings, SystemClock()),
         logger=structlog.get_logger("learny"),
         llm=build_llm(settings),

@@ -1,9 +1,8 @@
 """Read model, drafts and immediate correction of one attempt (SPEC-611 EF-1 to EF-7).
 
-Port of `packages/services/src/quiz/check.ts`. The correct answers, expected gaps and explanations
-are read from the immutable brick version on the server only; a question that is not checked never
-carries them. Every write runs in the caller's RLS transaction and the answer row is locked by a
-consultative lock on `(attempt, position)`.
+The correct answers, expected gaps and explanations are read from the immutable brick version on the
+server only; a question that is not checked never carries them. Every write runs in the caller's RLS
+transaction and the answer row is locked by a consultative lock on `(attempt, position)`.
 """
 
 import json
@@ -14,7 +13,7 @@ from typing import Any
 from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.domain.bricks.grade import grade_brick
 from learny.assessments.domain.bricks.grade_support import BrickGradeError
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.identity.domain.actor import Actor

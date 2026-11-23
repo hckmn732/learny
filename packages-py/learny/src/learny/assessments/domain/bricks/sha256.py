@@ -1,8 +1,7 @@
 """SHA-256 of a UTF-8 string (FIPS 180-4), the hash of every brick fingerprint (ADR-0289).
 
-The TypeScript package ships its own implementation to stay isomorphic; the Python backend uses
-the standard library, which computes the same digest. `_utf8` mirrors the `TextEncoder` behaviour
-on a lone surrogate (replaced by U+FFFD) so both sides agree on every input.
+`_utf8` mirrors the `TextEncoder` behaviour on a lone surrogate (replaced by U+FFFD) so both sides
+agree on every input.
 """
 
 import hashlib

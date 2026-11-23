@@ -15,9 +15,8 @@ import structlog
 import uvicorn
 from learny.shared.config import Settings, load_settings
 from learny.shared.deps import Deps, build_deps
-from learny.shared.ownership import Ownership, load_ownership_for_worker
 
-from learny_worker.consumers import active_consumers
+from learny_worker.consumers import CONSUMERS
 from learny_worker.dispatcher import Dispatcher
 from learny_worker.health import create_health_app
 from learny_worker.runner import Runner
@@ -33,16 +32,15 @@ SCHEDULER_RETRY_INTERVAL_S = 15
 SCHEDULER_POLL_INTERVAL_S = 20
 
 
-def build(settings: Settings, ownership: Ownership, deps: Deps | None = None) -> dict[str, Any]:
+def build(settings: Settings, deps: Deps | None = None) -> dict[str, Any]:
     """Builds the loops; exposed so the integration tests can drive them without a process."""
     resolved = deps or build_deps(settings)
-    consumers = active_consumers(ownership)
+    consumers = CONSUMERS
     return {
         "deps": resolved,
         "consumers": consumers,
         "dispatcher": Dispatcher(
             resolved,
-            ownership,
             interval_ms=DISPATCH_INTERVAL_MS,
             batch_size=DISPATCH_BATCH_SIZE,
             consumers=consumers,
@@ -55,7 +53,6 @@ def build(settings: Settings, ownership: Ownership, deps: Deps | None = None) ->
         ),
         "scheduler": Scheduler(
             resolved,
-            ownership,
             retry_interval_s=SCHEDULER_RETRY_INTERVAL_S,
             poll_interval_s=SCHEDULER_POLL_INTERVAL_S,
         ),
@@ -116,8 +113,7 @@ async def run(settings: Settings) -> None:
     """Builds the dependencies, runs the loops, and closes the pool on the way out."""
     deps = build_deps(settings)
     try:
-        ownership = load_ownership_for_worker()
-        await serve(settings, build(settings, ownership, deps))
+        await serve(settings, build(settings, deps))
     finally:
         await deps.db.close()
 

@@ -1,9 +1,8 @@
-"""[SPEC-613] Correction of a practice exercise (ported from `grade-exercise.test.ts`).
+"""[SPEC-613] Correction of a practice exercise.
 
 The deterministic tutor is the committed `LLM_MODE=mock` fixture; the raw sub-scores are bounded by
 `normalize_tutor_correction` before anything is persisted or displayed, and the hint penalty is
-applied after the scale (CL-5). Each case is the Python port of a Vitest case of
-`packages/services/src/exercises/grade-exercise.test.ts`.
+applied after the scale (CL-5). Each case replays one reference case of the exercise correction.
 """
 
 from typing import Any
@@ -22,7 +21,7 @@ NEXT_STEP = {"label": "Next step: consolidate the notion.", "href": "/programme"
 
 
 def instruction() -> dict[str, Any]:
-    """The `instruction` fixture of the TypeScript test, same shape."""
+    """The `instruction` fixture of the reference suite, same shape."""
     parsed = parse_instruction(
         {
             "title": "Piece equilibree",
@@ -81,7 +80,7 @@ def instruction() -> dict[str, Any]:
 
 
 def submission() -> dict[str, Any]:
-    """The `SUBMISSION` fixture of the TypeScript test, same shape."""
+    """The `SUBMISSION` fixture of the reference suite, same shape."""
     parsed, issues = parse_submission(
         {
             "kind": "table",

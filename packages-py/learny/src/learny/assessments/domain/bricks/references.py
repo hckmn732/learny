@@ -1,8 +1,7 @@
 """References of a payload, grouped by resolver method (SPEC-501 ET-5).
 
-Port of `references.ts` and of the thirteen `types/<type>/references.ts`: each entry keeps the exact
-JSON path, so NOTION_NOT_FOUND, SOURCE_NOT_FOUND and BRICK_REF_NOT_FOUND point at the offending
-field.
+Each entry keeps the exact JSON path, so NOTION_NOT_FOUND, SOURCE_NOT_FOUND and BRICK_REF_NOT_FOUND
+point at the offending field.
 """
 
 from collections.abc import Mapping, Sequence

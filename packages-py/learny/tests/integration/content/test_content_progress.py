@@ -1,9 +1,6 @@
 """[SPEC-2203] Reading progress: monotone write, single event and stored timestamp under RLS.
 
-Ported from `packages/services/src/courses/progress.service.test.ts` (SPEC-609 EF-3, ET-5,
-BR-COU-08): the same chapter, section and timestamp fixtures, read on the local stack. The
-unauthenticated case of the TypeScript file is enforced by the facade (`requireUser`), covered by
-the pipeline tests, so it has no use-case equivalent here.
+The same chapter, section and timestamp fixtures, read on the local stack.
 """
 
 from typing import Any

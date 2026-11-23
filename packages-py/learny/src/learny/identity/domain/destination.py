@@ -1,7 +1,7 @@
 """Where a learner lands after authenticating (SPEC-202 EF-8, ADR-0121, CL-4, CL-5, CL-6).
 
-Port of `packages/services/src/auth/destination.ts`. The destinations are paths of the application,
-not translated labels: every language keeps the same URL.
+The destinations are paths of the application, not translated labels: every language keeps the same
+URL.
 """
 
 from collections.abc import Mapping

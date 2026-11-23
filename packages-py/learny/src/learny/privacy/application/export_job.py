@@ -1,9 +1,9 @@
 """Personal-data export job (SPEC-211 EF-1 to EF-4, ET-2, ET-6, CL-1, CL-6, ADR-0216).
 
-Port of `packages/jobs/src/functions/data-export.ts`. Five durable steps: `load`, `collect` (under
-RLS), `zip` (streamed to a temporary file), `upload` (upsert, so a crash at this step leaves exactly
-one final object) and `finalize` (fifteen-minute bound, expiration, e-mail, in-app notification). The
-job is idempotent on `exportId`: a replay of a finished export returns its stored result.
+Five durable steps: `load`, `collect` (under RLS), `zip` (streamed to a temporary file), `upload`
+(upsert, so a crash at this step leaves exactly one final object) and `finalize` (fifteen-minute
+bound, expiration, e-mail, in-app notification). The job is idempotent on `exportId`: a replay of a
+finished export returns its stored result.
 """
 
 import tempfile

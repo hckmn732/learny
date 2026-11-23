@@ -6,9 +6,9 @@ import { randomBytes } from 'node:crypto';
 import type { Browser, BrowserContext, Page } from '@playwright/test';
 
 import { activeLegalVersions } from '@learny/config';
-import { serviceDb, sql } from '@learny/db';
 import { createFormation, createModule, createNotion } from '@learny/testing';
 import { FIXED_TIME_ISO } from '@learny/testing/clock';
+import { serviceDb, sql } from '@learny/testing/db';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 export interface GroupJourney {

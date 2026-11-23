@@ -1,5 +1,5 @@
 // Course factory (SPEC-115 EF-6). Creates a ready current course with one text section per chapter.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, assertModuleBelongsTo, insert, type IdRow } from './helpers';
 

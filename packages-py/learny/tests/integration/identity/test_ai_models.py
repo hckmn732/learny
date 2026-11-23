@@ -1,4 +1,4 @@
-"""[SPEC-2201] Personal model assignment (port of ai/qualify-model.ts assignTaskModel)."""
+"""[SPEC-2201] Personal model assignment."""
 
 import uuid
 from typing import Any

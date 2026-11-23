@@ -1,14 +1,14 @@
-"""Drain check of the worker before a cutover or a rollback (SPEC-2301, CL-2, ADR-2005).
+"""Drain check of the worker before a stop or a restart (SPEC-2301, CL-2).
 
-Stopping the worker is not enough to hand the jobs back to Inngest: the dispatcher stamps
-`dispatched_at` before it fans out, so flipping a consumer to `ts` while events wait in the outbox
-would strand them without any delivery. This command is the written stop criterion of the runbook:
+Stopping the worker is not enough to know the outbox is empty: the dispatcher stamps
+`dispatched_at` before it fans out, so an event waiting in the outbox would be picked up by the
+next process, later. This command is the written stop criterion of the runbook:
 
     docker compose exec worker-py python -m learny_worker.drain --wait 60 --require-empty
 
 `--require-empty` exits 1 as soon as an event is still waiting, running, failed or stamped without
-delivery; the operator must let the worker catch up (or replay the orphaned events) before flipping
-the ownership table. It reads no clock: a fixed number of polls keeps it deterministic (ADR-0047).
+delivery; the operator must let the worker catch up (or replay the orphaned events) before stopping
+the service. It reads no clock: a fixed number of polls keeps it deterministic (ADR-0047).
 """
 
 import argparse

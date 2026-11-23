@@ -1,8 +1,6 @@
 """Pure rules of the practice exercise of one notion (SPEC-2205, from SPEC-613 ET-4).
 
-Ported from `packages/services/src/exercises/ensure-practice-exercise.ts`: the deterministic
-`LLM_MODE=mock` fixture of the instruction of a notion. The rule that selects the table instruction
-is the one of the TypeScript regex; the texts live in `locale_fr.engagement_exercises` (ADR-2011).
+The deterministic `LLM_MODE=mock` fixture of the instruction of a notion.
 """
 
 import copy
@@ -16,7 +14,7 @@ TABLE_LABEL = re.compile(r"\u00e9quilibre.*pi\u00e8ce|equilibre.*piece", re.IGNO
 
 
 def criteria_total(criteria: list[dict[str, Any]]) -> int:
-    """`criteriaTotal`: the points of the ten-point scale, summed like the TypeScript reduce."""
+    """`criteriaTotal`: the points of the ten-point scale, summed."""
     return sum(int(criterion["points"]) for criterion in criteria)
 
 

@@ -1,14 +1,13 @@
 """Personal question banks: enqueue after a course, drain on the nightly cron (SPEC-513).
 
-Port of `packages/tutor/src/services/question-bank.ts` and of the `prepare-question-bank` /
-`question-bank-nightly` functions: a generated course enqueues one job per notion and format under
-the key `(learner, notion, format, course version)`; the nightly batch drains at most fifty rows in
-one provider batch. Both handlers are idempotent: the job row is upserted, the fingerprints are
-re-checked under a transaction advisory lock, and no question is invented when the provider is
-unavailable (the job is marked failed with the provider code, nothing is inserted).
+A generated course enqueues one job per notion and format under the key `(learner, notion, format,
+course version)`; the nightly batch drains at most fifty rows in one provider batch. Both handlers
+are idempotent: the job row is upserted, the fingerprints are re-checked under a transaction
+advisory lock, and no question is invented when the provider is unavailable (the job is marked
+failed with the provider code, nothing is inserted).
 
-The provider call, the embeddings and the brick validation are injected ports: the integration
-suite replaces the generator and the embedder, production uses the gateway and the Voyage adapter.
+The provider call, the embeddings and the brick validation are injected ports: the integration suite
+replaces the generator and the embedder, production uses the gateway and the Voyage adapter.
 """
 
 import json
@@ -768,11 +767,7 @@ def _payload_schemas() -> Mapping[str, Any]:
 
 
 def payload_guide(format_name: str) -> str:
-    """The JSON Schema of one brick payload, given to the model as guidance (hotfix QA).
-
-    The schemas are exported from the TypeScript brick registry (`z.toJSONSchema`, input side); the
-    strict check stays `validate_brick`.
-    """
+    """The JSON Schema of one brick payload, given to the model as guidance (hotfix QA)."""
     schema = _payload_schemas().get(format_name, {})
     return json.dumps(schema, ensure_ascii=False, separators=(",", ":"))
 

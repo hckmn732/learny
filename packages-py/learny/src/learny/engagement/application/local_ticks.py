@@ -1,10 +1,9 @@
-"""Hourly local-tick fan-out of the scheduler (SPEC-2207, from `packages/jobs/src/tick.ts`).
+"""Hourly local-tick fan-out of the scheduler.
 
-The hourly task of the worker emits one `user/local-tick` per active learner: `[T - 5 min,
-T + 55 min[` in the zone of the profile, with the same payload and the same event identifier as the
+The hourly task of the worker emits one `user/local-tick` per active learner: `[T - 5 min, T + 55
+min[` in the zone of the profile, with the same payload and the same event identifier as the
 `cron-hourly-tick` function. The selection, the window and the identifier stay in this context, so
-the worker never writes SQL (00-conventions section 2). The event has no Python consumer yet (the
-plan P22 lists none): it is emitted for parity with the TypeScript cron.
+the worker never writes SQL (00-conventions section 2).
 """
 
 from collections.abc import Mapping

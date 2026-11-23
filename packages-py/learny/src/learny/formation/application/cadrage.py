@@ -1,8 +1,8 @@
 """Scoping chat use cases (SPEC-604 EF-1, EF-4 to EF-11; BR-FOR-01, BR-FOR-03, ADR-0162).
 
-Port of `cadrage/{get,create,post,complete}.ts`. The learner message is committed in its own
-transaction, the model is called outside any transaction, then the validated turn is committed in a
-second transaction: a failed tutor turn keeps the answer and can be retried without losing it.
+The learner message is committed in its own transaction, the model is called outside any
+transaction, then the validated turn is committed in a second transaction: a failed tutor turn keeps
+the answer and can be retried without losing it.
 """
 
 from collections.abc import Mapping, Sequence

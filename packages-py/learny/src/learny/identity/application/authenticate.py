@@ -1,9 +1,8 @@
 """Identity use cases: caller resolution, freshness and legal acceptance (SPEC-2101 step 2).
 
-Port of the parts of `packages/http/src/session.ts` and `packages/services/src/legal/accept.ts` the
-backend needs: Bearer first, then the session cookie, an invalid Bearer never falls back to the
-cookie, `freshAuth` rechecks the Auth account for a Bearer token, and a mutation that requires the
-current legal documents answers `LEGAL_ACCEPTANCE_REQUIRED` with the two expected versions.
+Bearer first, then the session cookie, an invalid Bearer never falls back to the cookie, `freshAuth`
+rechecks the Auth account for a Bearer token, and a mutation that requires the current legal
+documents answers `LEGAL_ACCEPTANCE_REQUIRED` with the two expected versions.
 
 The dependencies are structural protocols so this module stays in the application layer: the
 concrete verifier and Auth client live in `infrastructure` and are injected through `Deps`.
@@ -143,9 +142,7 @@ async def _bearer_actor(deps: AuthDeps, token: str) -> Actor:
 
 
 async def _cookie_actor(deps: AuthDeps, token: str) -> Actor | None:
-    """A cookie session is validated by the Auth server, like `getUser()` in TypeScript.
-
-    A refused cookie is an anonymous request, never an error: `supabaseSessionResolver` answers
+    """A refused cookie is an anonymous request, never an error: `supabaseSessionResolver` answers
     `null`, so a public route (the sign-out, CL-10) still runs and a protected one answers its own
     401. An invalid Bearer token, by contrast, never falls back (ET-3, CL-6).
     """

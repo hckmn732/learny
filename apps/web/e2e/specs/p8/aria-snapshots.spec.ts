@@ -1,7 +1,7 @@
 // SPEC-803 EF-4, CA-3 — accessible-name snapshots of the nine key regions. The .aria.yml files
 // are versioned next to the spec; a rename or a missing aria-label changes the snapshot.
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 

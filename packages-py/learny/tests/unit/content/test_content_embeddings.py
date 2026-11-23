@@ -1,8 +1,4 @@
-"""[SPEC-2203] Deterministic embeddings and vector literals (SPEC-509 EF-4, ADR-0056).
-
-Ported from `packages/ingestion/src/embeddings.ts`. The mock vector must be bit-identical to the
-TypeScript `fakeEmbedding`, because the same passages are searched from both runtimes.
-"""
+"""[SPEC-2203] Deterministic embeddings and vector literals (SPEC-509 EF-4, ADR-0056)."""
 
 import hashlib
 import json

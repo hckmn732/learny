@@ -1,8 +1,7 @@
 """Live `sum_equal` control of a structured table (SPEC-502 ET-4, ADR-0027, CA-4).
 
-Port of `packages/bricks/src/types/instruction/table-checks.ts`: rows are counted on the left or the
-right from their group value, amounts are compared at the cent, and the three labels are exactly
-those of the Exercice mockup.
+Rows are counted on the left or the right from their group value, amounts are compared at the cent,
+and the three labels are exactly those of the Exercice mockup.
 """
 
 import math

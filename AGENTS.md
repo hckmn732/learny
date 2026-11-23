@@ -2,17 +2,28 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
-## Objectif unique : migration du backend vers une API Python headless (piste « python-migration »)
+## Branche `mobile` : piste « mobile » (ADR-3001)
 
-Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuivie.** Le backend TypeScript (`apps/api` Hono, paquets `services`, `db`, `jobs`, `llm`, `tutor`…) est remplacé par une API FastAPI et un worker Python organisés par domaines ; le web Next.js reste un client de l'API. Décisions : ADR-2001 à ADR-2010.
+Sur la branche `mobile` (partie de `main` le 2026-11-22), la piste pilotée par `node tools/sdd/next.mjs` est **`mobile`** (`activeTrack`) : application Android et iOS en React Native + Expo (ADR-1004, ADR-3001 à ADR-3011), phases P30 → P35, SPEC-3001 → SPEC-3502, checkpoints CP-30 → CP-35, ADR numérotés à partir d’ADR-3001. Les branches de spécification partent de `mobile` et y sont fusionnées.
 
-- **Point de départ : `main`.** Les spécifications partent de `main` et y sont fusionnées ; aucune branche ni worktree de piste.
-- `node tools/sdd/next.mjs` pilote la piste `python-migration` (P20 → P23, SPEC-2001 → SPEC-2302, checkpoints CP-20 → CP-23). Les ADR de la piste sont numérotés à partir d'ADR-2001.
+- **Canevas obligatoire** : lire `docs/architecture/mobile/README.md` avant toute spec SPEC-3xxx, puis la spécification et la maquette `design/app-mobile/` (lue avec les corrections d’ADR-3003, jamais modifiée).
+- **Un seul écrivain par zone** : la piste mobile n’écrit que dans `apps/mobile/` et les zones listées par ADR-3001 §4 ; aucune modification du backend ni du contrat avant P35 (qui exige CP-23).
+- Fusionner `main` dans `mobile` (`node tools/sdd/sync-main.mjs`) à chaque checkpoint et après chaque checkpoint de la piste Python.
+- Validation : `validate.mjs` exécute Vitest, Jest (`pnpm test:mobile`) et Maestro (`pnpm test:e2e:mobile`) pour les specs mobiles (ADR-3004, livré par SPEC-3001).
+- Le reste de ce fichier décrit l’état de `main`, qui s’applique tel quel à la piste mobile.
+
+## Backend : un seul runtime, Python (piste « python-migration »)
+
+Décision du porteur du projet (ADR-2001), menée à son terme par SPEC-2302 et actée par ADR-2043 : le backend TypeScript a été **retiré**. Il n'y a plus de coexistence, plus de relais, plus de `api/ownership.yaml`, plus d'Inngest, plus de paquet serveur TypeScript.
+
+- **Ce qui sert les requêtes** : `apps/api-py`, façade FastAPI (`uvicorn learny_api.main:app`) qui sert **tout** le contrat — 156 opérations d'`api/openapi.yaml` et 11 routes spéciales — et `apps/worker-py`, worker maison sur l'outbox PostgreSQL (`python -m learny_worker`, 23 consommateurs, 2 crons). Le web Next.js reste un client pur de l'API. Décisions : ADR-2001 à ADR-2010, ADR-2011 (canevas), ADR-2012 (pipeline), ADR-2043 (retrait).
+- **Ce qui reste en TypeScript** : `packages/contracts` (source unique du contrat, export `api/openapi.yaml`), les clients (`apps/web`, `apps/mobile` sur la branche `mobile`) et leurs dépendances (`api-client`, `api-sdk`, `bricks`, `ui`, `i18n`, `config`, `core`, `domain`), `packages/db` (schéma Drizzle, migrations, RLS), l'outillage et les suites e2e.
+- `node tools/sdd/next.mjs` pilote la piste `python-migration` (P20 → P23, SPEC-2001 → SPEC-2302, checkpoints CP-20 → CP-23) ; la piste se clôt par CP-23. Les ADR de la piste sont numérotés à partir d'ADR-2001.
 - **Specs gelées** : piste `produit` (SPEC-808, SPEC-901 → 908, CP-7 → CP-9) et piste `migration` Hono (SPEC-1101 → SPEC-1302, CP-10 → CP-13, branche `migration`, worktree `learny-wt-migration`). Ne jamais les démarrer, les modifier ni les supprimer.
-- **Invariant absolu : conserver le fonctionnel actuel** (ADR-1001, précisé par ADR-2008). Aucune assertion d'oracle (e2e, visuel, accessibilité, contrat HTTP) modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Les tests TypeScript des paquets retirés sont portés en pytest avec les mêmes cas (`evidence/SPEC-2001/test-port-map.md`). Un écart est une anomalie à corriger dans le code Python, jamais dans le test.
-- **Coexistence** (ADR-2005) : la façade FastAPI reçoit tout le trafic et relaie vers Hono les entrées dont `api/ownership.yaml` indique `ts` ; une entrée passe à `py` seulement avec parité prouvée. Jamais deux écrivains.
-- Jobs : worker Python maison sur outbox PostgreSQL, Inngest retiré à la fin (ADR-2006, ADR-2014). Hébergement : Coolify (ADR-2007). Preuves de charge, canary, rollback et restauration : staging fourni par le porteur, sinon blocage `--external` (ADR-2009).
-- **Canevas technique obligatoire** (ADR-2011) : avant toute spec SPEC-2xxx, lire `docs/architecture/python-backend/00-conventions.md` puis le plan de la phase (`P20-plan.md` … `P23-plan.md`) et le suivre pas à pas. Le backend Python est écrit **en anglais** (code, commentaires, journaux, tests) ; seuls les textes vus par l'utilisateur restent en français, copiés à l'identique du TypeScript dans `learny/shared/locale_fr/` et les gabarits. Pas de sur-ingénierie : la liste des motifs autorisés et interdits (§4 des conventions) est contraignante.
+- **Invariant absolu : conserver le fonctionnel existant** (ADR-1001, précisé par ADR-2008). Aucune assertion d'oracle (e2e, visuel, accessibilité, contrat HTTP) modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Un écart est une anomalie à corriger dans le code Python, jamais dans le test.
+- **Garde-fous de complétude** (remplacent la table de propriété supprimée) : `apps/api-py/tests/unit/test_route_coverage.py` (`[SPEC-2302]`) compare l'inventaire, la table de routes générée et les routes installées ; `node tools/migration/inventory.mjs --check` échoue en cas de dérive et `--runtime` imprime le verdict (toutes les opérations, routes spéciales, consommateurs et crons sont Python ; aucun chemin backend TypeScript). Une opération sans handler est refusée au démarrage de la façade.
+- Jobs : worker Python maison sur outbox PostgreSQL, Inngest retiré (ADR-2006, ADR-2014). Hébergement : Coolify (ADR-2007). Le staging est fourni par le porteur pour les preuves de charge, canary, rollback et restauration ; sinon blocage `--external` (ADR-2009).
+- **Canevas technique obligatoire** (ADR-2011) : avant toute intervention sur le backend, lire `docs/architecture/python-backend/00-conventions.md` puis le plan de la phase (`P20-plan.md` … `P23-plan.md`) et le suivre pas à pas. Le backend Python est écrit **en anglais** (code, commentaires, journaux, tests) ; seuls les textes vus par l'utilisateur restent en français, copiés à l'identique du TypeScript dans `learny/shared/locale_fr/` et les gabarits. Pas de sur-ingénierie : la liste des motifs autorisés et interdits (§4 des conventions) est contraignante.
 
 ## Règle absolue : zéro intervention humaine
 
@@ -29,7 +40,7 @@ Ordre du porteur du projet (ADR-2001) : **seule la migration Python est poursuiv
 5. `docs/engineering/conventions.md`, `testing.md`, `git.md`.
 6. `docs/adr/README.md` — **les ADR priment** sur tout autre document.
 7. La spécification à exécuter (`specs/<phase>/SPEC-xxx-*.md`) et sa maquette (`design/maquettes/*.dc.html`, ouvrir `design/maquettes/index.html`).
-8. Pour SPEC-2xxx : `docs/architecture/python-backend/README.md`, `00-conventions.md` et le plan de la phase.
+8. Pour le backend : `docs/architecture/python-backend/README.md`, `00-conventions.md` et le plan de la phase.
 
 Priorité en cas de conflit : ADR > business-rules > spécification > maquette > autres documents > `docs/legacy/` (historique, non normatif).
 

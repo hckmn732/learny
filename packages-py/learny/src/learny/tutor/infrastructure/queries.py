@@ -1,10 +1,6 @@
 """SQL of the tutor context (SPEC-2204).
 
-Every statement is copied from the TypeScript service it replaces
-(`packages/services/src/tutor-chat/{conversations,context,stream,self-test}.ts`) and from the
-repository functions they call (`createActivity`, `createAttempt`, `recordAnswer`, `writeBrick`):
-same tables, same columns in the same order, same `order by`, same `for update`, same advisory
-locks. `${x}` placeholders become bound `:x` parameters; nothing here reads the clock.
+`${x}` placeholders become bound `:x` parameters; nothing here reads the clock.
 """
 
 from collections.abc import Mapping

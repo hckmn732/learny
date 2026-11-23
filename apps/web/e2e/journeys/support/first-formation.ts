@@ -5,10 +5,8 @@ import { randomBytes } from 'node:crypto';
 
 import type { Page } from '@playwright/test';
 
-import { createLogger } from '@learny/core/server';
-import { serviceDb, sql } from '@learny/db';
-import { processResource } from '@learny/ingestion';
-import { createFixedClock, FIXED_TIME_ISO } from '@learny/testing';
+import { FIXED_TIME_ISO } from '@learny/testing';
+import { serviceDb, sql } from '@learny/testing/db';
 import { expect } from '@learny/testing/playwright';
 
 /** ET-2 — every run owns its learner: a unique reserved address, deleted at the end. */
@@ -101,29 +99,13 @@ export async function deleteJourneyUser(email: string): Promise<void> {
 }
 
 /**
- * EF-2 « attend leur traitement » — declared job step. The ingestion of SPEC-509 runs through the
- * jobs pipeline; exactly like `module-resources.spec.ts` (SPEC-607, « erreur et reprise »), the
- * test runs the real handler `processResource` (mock embeddings, real PDF text extraction) for the
- * learner's contributions that the inline dispatcher has not finished yet. The handler is
- * idempotent: a contribution already ready is left untouched.
+ * EF-2 Â« attend leur traitement Â» â€” the Python API runs the ingestion inline (`JOBS_MODE=inline`
+ * in the Playwright configuration), so the contributions are ready when the request returns and
+ * there is nothing left to drive from the test. Kept as a no-op so the journey still names the
+ * step explicitly.
  */
 export async function finishIngestion(userId: string): Promise<void> {
-  const pending = await serviceDb().execute<{ id: string }>(sql`
-    select id::text as id from public.resources
-    where owner_id = ${userId}::uuid and status <> 'ready'
-    order by created_at asc
-  `);
-  for (const row of pending) {
-    await processResource(
-      {
-        sdb: serviceDb(),
-        clock: createFixedClock(FIXED_TIME_ISO),
-        logger: createLogger({ level: 'silent' }),
-        requestId: `e2e-spec-807-${row.id}`,
-      },
-      row.id,
-    );
-  }
+  await Promise.resolve(userId);
 }
 
 export interface JourneyCitation {

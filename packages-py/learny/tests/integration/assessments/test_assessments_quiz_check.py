@@ -1,8 +1,7 @@
 """[SPEC-2202] Read model, drafts and immediate correction of a validation quiz (SPEC-611).
 
-Port of the useful cases of `packages/services/src/quiz/check.ts`: a question that is not checked
-never carries its correction, a draft is recorded without grading, a checked question is graded by
-code and locked, and a closed attempt or a foreign attempt is refused.
+A question that is not checked never carries its correction, a draft is recorded without grading, a
+checked question is graded by code and locked, and a closed attempt or a foreign attempt is refused.
 """
 
 import json

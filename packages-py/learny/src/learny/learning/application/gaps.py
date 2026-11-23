@@ -1,7 +1,7 @@
 """Gap read model and link derivation (SPEC-615 EF-1 to EF-5, BR-LAC-04, BR-LAC-05).
 
-Port of `packages/services/src/gaps/{list-gaps,links}.ts`: everything is read with the learner's RLS
-transaction, so a formation of another learner is a 404 and never an empty page revealing it.
+Everything is read with the learner's RLS transaction, so a formation of another learner is a 404
+and never an empty page revealing it.
 """
 
 from collections.abc import Mapping

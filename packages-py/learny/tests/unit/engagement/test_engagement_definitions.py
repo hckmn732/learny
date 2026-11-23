@@ -1,9 +1,7 @@
 """[SPEC-2205] Ten automation definitions: registry and one-line explanations.
 
-The vectors are produced by `tools/engagement/oracle-definitions.mjs` from the TypeScript
-definitions on frozen journal rows; the Python port must return the same sentence, character for
-character, in both tones and for every status (EF-2, EF-8, ET-3). The `apply`/`undo` effects are
-proved by the server integration tests, where a real transaction exists.
+The `apply`/`undo` effects are proved by the server integration tests, where a real transaction
+exists.
 """
 
 import json

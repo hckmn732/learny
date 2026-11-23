@@ -1,10 +1,9 @@
 """Token-bucket rate limiter on PostgreSQL (SPEC-2101 step 3, ADR-0213, ADR-0042).
 
-Line-by-line port of `packages/services/src/security/rate-limit.ts`. One atomic statement refills
-the bucket linearly (capped at its capacity) and takes a token; the clock is injected, so tests are
-deterministic. A database failure refuses the request (503): a request is never accepted without
-control. `RATE_LIMIT_MODE=off` installs the no-op limiter of the QA stack and is refused in
-production.
+One atomic statement refills the bucket linearly (capped at its capacity) and takes a token; the
+clock is injected, so tests are deterministic. A database failure refuses the request (503): a
+request is never accepted without control. `RATE_LIMIT_MODE=off` installs the no-op limiter of the
+QA stack and is refused in production.
 """
 
 import hmac
@@ -104,7 +103,7 @@ class RateLimiter(Protocol):
 
 
 def _four_decimals(value: float) -> str:
-    """Column precision is 4 decimals; the TypeScript limiter sends `toFixed(4)` literals too."""
+    """Column precision is 4 decimals; the limiter sends `toFixed(4)` literals too."""
     return f"{value:.4f}"
 
 

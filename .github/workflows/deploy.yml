@@ -2,10 +2,10 @@
 # - Un run de CI terminé avec succès pour la ref exacte est la seule porte d'entrée.
 # - `preview` et `production` sont deux environnements GitHub distincts, avec leurs propres
 #   secrets préfixés : aucune clé de production ne peut atteindre une preview (EF-2).
-# - La production exige un tag `v*` appartenant à `main` et une migration réussie avant Inngest,
-#   Vercel puis le contrôle de fumée (EF-3, CL-3, CL-4).
-# - La piste `migration` est aussi prévisualisée maintenant que l'API et le web se déploient
-#   ensemble (SPEC-1103, ADR-1006) ; seules les étapes `API → web` sont publiées.
+# - La production exige un tag `v*` appartenant à `main` et une migration réussie avant Vercel
+#   puis le contrôle de fumée (EF-3, CL-3, CL-4).
+# - Le backend Python tourne sur Coolify (ADR-2007) : Vercel ne déploie plus que le web, et
+#   Inngest est retiré (ADR-2006, SPEC-2302).
 name: Deploy
 
 on:
@@ -48,20 +48,15 @@ jobs:
       DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
       SUPABASE_DB_URL: ${{ secrets.PREVIEW_SUPABASE_DB_URL }}
       APP_ENCRYPTION_KEY: ${{ secrets.PREVIEW_APP_ENCRYPTION_KEY }}
-      INNGEST_EVENT_KEY: ${{ secrets.PREVIEW_INNGEST_EVENT_KEY }}
-      INNGEST_SIGNING_KEY: ${{ secrets.PREVIEW_INNGEST_SIGNING_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.PREVIEW_ANTHROPIC_API_KEY }}
       RESEND_API_KEY: ${{ secrets.PREVIEW_RESEND_API_KEY }}
       RATE_LIMIT_IP_SECRET: ${{ secrets.PREVIEW_RATE_LIMIT_IP_SECRET }}
       EMAIL_LINK_SECRET: ${{ secrets.PREVIEW_EMAIL_LINK_SECRET }}
       SUPABASE_ACCESS_TOKEN: ${{ secrets.PREVIEW_SUPABASE_ACCESS_TOKEN }}
       SUPABASE_REGION: ${{ vars.PREVIEW_SUPABASE_REGION }}
-      INNGEST_REGION: ${{ vars.PREVIEW_INNGEST_REGION }}
-      INNGEST_APP_URL: ${{ vars.PREVIEW_INNGEST_APP_URL }}
       VERCEL_TOKEN: ${{ secrets.PREVIEW_VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_PROJECT_ID }}
-      VERCEL_API_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_API_PROJECT_ID }}
       API_INTERNAL_URL: ${{ vars.PREVIEW_API_URL }}
       API_PROXY_SECRET: ${{ secrets.PREVIEW_API_PROXY_SECRET }}
     steps:
@@ -88,25 +83,8 @@ jobs:
         run: node tools/deploy/check.mjs --env preview --ref "$GIT_COMMIT" --branch "${{ github.event.workflow_run.head_branch }}" --event "${{ github.event.workflow_run.event }}"
       - name: Appliquer les migrations preview
         run: node tools/deploy/migrate.mjs --env preview
-      - name: Déployer la preview de l’API Vercel
-        id: deploy_api
-        run: |
-          test -n "$VERCEL_API_PROJECT_ID" || {
-            echo "::error::Le projet Vercel learny-api n’est pas configuré pour preview."
-            exit 1
-          }
-          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --cwd apps/api --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
-          test -n "$url"
-          echo "url=$url" >> "$GITHUB_OUTPUT"
-          echo "API preview fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
-      - name: Synchroniser Inngest (branche API)
-        env:
-          API_INTERNAL_URL: ${{ steps.deploy_api.outputs.url }}
-        run: node tools/deploy/sync-inngest.mjs --env preview --app-url "$API_INTERNAL_URL" --region "$INNGEST_REGION" --commit "$GIT_COMMIT"
       - name: Déployer la preview web Vercel
         id: deploy
-        env:
-          API_INTERNAL_URL: ${{ steps.deploy_api.outputs.url }}
         run: |
           test -n "$API_INTERNAL_URL"
           test -n "$API_PROXY_SECRET"
@@ -144,8 +122,6 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.PRODUCTION_SUPABASE_ACCESS_TOKEN }}
       PRODUCTION_SUPABASE_BACKUP_REFERENCE: ${{ secrets.PRODUCTION_SUPABASE_BACKUP_REFERENCE }}
       APP_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_APP_ENCRYPTION_KEY }}
-      INNGEST_EVENT_KEY: ${{ secrets.PRODUCTION_INNGEST_EVENT_KEY }}
-      INNGEST_SIGNING_KEY: ${{ secrets.PRODUCTION_INNGEST_SIGNING_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.PRODUCTION_ANTHROPIC_API_KEY }}
       VOYAGE_API_KEY: ${{ secrets.PRODUCTION_VOYAGE_API_KEY }}
       RESEND_API_KEY: ${{ secrets.PRODUCTION_RESEND_API_KEY }}
@@ -163,12 +139,9 @@ jobs:
       LEGAL_CONTACT_EMAIL: ${{ vars.PRODUCTION_LEGAL_CONTACT_EMAIL }}
       LEGAL_HOST_NAME: ${{ vars.PRODUCTION_LEGAL_HOST_NAME }}
       SUPABASE_REGION: ${{ vars.PRODUCTION_SUPABASE_REGION }}
-      INNGEST_REGION: ${{ vars.PRODUCTION_INNGEST_REGION }}
-      INNGEST_APP_URL: ${{ vars.PRODUCTION_INNGEST_APP_URL }}
       VERCEL_TOKEN: ${{ secrets.PRODUCTION_VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_PROJECT_ID }}
-      VERCEL_API_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_API_PROJECT_ID }}
       API_INTERNAL_URL: ${{ vars.PRODUCTION_API_URL }}
       API_PROXY_SECRET: ${{ secrets.PRODUCTION_API_PROXY_SECRET }}
     steps:
@@ -201,25 +174,8 @@ jobs:
         run: test -n "$PRODUCTION_SUPABASE_BACKUP_REFERENCE"
       - name: Appliquer les migrations production
         run: node tools/deploy/migrate.mjs --env production --backup "$PRODUCTION_SUPABASE_BACKUP_REFERENCE"
-      - name: Déployer l’API Vercel en production
-        id: deploy_api
-        run: |
-          test -n "$VERCEL_API_PROJECT_ID" || {
-            echo "::error::Le projet Vercel learny-api n’est pas configuré pour production."
-            exit 1
-          }
-          url="$(VERCEL_PROJECT_ID="$VERCEL_API_PROJECT_ID" pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --cwd apps/api --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT")"
-          test -n "$url"
-          echo "url=$url" >> "$GITHUB_OUTPUT"
-          echo "API production fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
-      - name: Synchroniser Inngest (API production)
-        env:
-          API_INTERNAL_URL: ${{ steps.deploy_api.outputs.url }}
-        run: node tools/deploy/sync-inngest.mjs --env production --app-url "$API_INTERNAL_URL" --region "$INNGEST_REGION" --commit "$GIT_COMMIT"
       - name: Déployer le web Vercel en production
         id: deploy
-        env:
-          API_INTERNAL_URL: ${{ steps.deploy_api.outputs.url }}
         run: |
           test -n "$API_INTERNAL_URL"
           test -n "$API_PROXY_SECRET"

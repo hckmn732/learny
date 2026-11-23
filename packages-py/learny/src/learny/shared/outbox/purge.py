@@ -1,10 +1,8 @@
 """Nightly cleanup of the delivered outbox rows (SPEC-203 ET-6, ADR-0122).
 
-Port of `packages/jobs/src/emit.ts` (`purgeSentEvents`) and of the `nightly-outbox-cleanup`
-function: the rows delivered more than seven days ago are deleted. `job_deliveries` cascades on the
-foreign key (`on delete cascade`), so no delivery outlives its event. The retention instant comes
-from the injected clock, and the purge is idempotent: a replay of the same nightly tick deletes
-nothing.
+The rows delivered more than seven days ago are deleted. `job_deliveries` cascades on the foreign
+key (`on delete cascade`), so no delivery outlives its event. The retention instant comes from the
+injected clock, and the purge is idempotent: a replay of the same nightly tick deletes nothing.
 
 The worker stamps `dispatched_at` instead of `sent_at` (SPEC-2102): a row counts as delivered when
 either instant is older than the retention, which keeps the purge effective after the cutover while

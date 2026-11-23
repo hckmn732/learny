@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import {
   createTestSession,
@@ -13,7 +13,7 @@ import {
 // Same-origin mutations from the API request context (SPEC-208 origin guard).
 const ORIGIN = 'http://127.0.0.1:3100';
 
-import { buildPdf } from '../../../../../packages/services/test/support/files';
+import { buildPdf } from '../../support/files';
 
 let session: TestSession;
 

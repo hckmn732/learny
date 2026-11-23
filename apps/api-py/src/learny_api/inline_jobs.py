@@ -1,28 +1,23 @@
 """`JOBS_MODE=inline` for the tests: a request's events run before its answer (P21 plan, step 6).
 
-Port of the inline branch of `withTransaction` (`packages/jobs/src/emit.ts`): the TypeScript backend
-committed, ran the consumers of the committed events in the process, then answered, so a page opened
-right after a request already sees what its jobs wrote. This middleware collects the events the
-request commits and, when the answer starts, hands them to `learny_worker.inline.run_committed`
-(same `job_deliveries` rows as the worker). Events committed once a streamed answer has started are
-left to the worker. Forbidden in production, like `resolveJobsMode`.
+This middleware collects the events the request commits and, when the answer starts, hands them to
+`learny_worker.inline.run_committed` (same `job_deliveries` rows as the worker). Events committed
+once a streamed answer has started are left to the worker. Forbidden in production, like
+`resolveJobsMode`.
 """
 
 from typing import Any
 
 from learny.shared.config import Settings
 from learny.shared.db.uow import collect_committed_events
-from learny.shared.ownership import Ownership
-from learny_worker.consumers import active_consumers
+from learny_worker.consumers import CONSUMERS
 from learny_worker.dispatcher import Dispatcher
 from learny_worker.inline import run_committed
 from learny_worker.runner import Runner
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 INLINE_MODE = "inline"
-# The personal-data export is asynchronous by contract (202 then polling, SPEC-211): the
-# TypeScript backend never ran it inline because its emitter was already Python, and running it
-# before the answer would flip the queued row to done. It always stays on the worker.
+# It always stays on the worker.
 WORKER_ONLY_CONSUMERS = ("privacy.run_data_export",)
 
 
@@ -62,15 +57,15 @@ class InlineJobsMiddleware:
             await self._app(scope, receive, send_after_jobs)
 
 
-def inline_jobs_options(settings: Settings, deps: Any, ownership: Ownership) -> dict[str, Any] | None:
+def inline_jobs_options(settings: Settings, deps: Any) -> dict[str, Any] | None:
     """The middleware options when `JOBS_MODE=inline`, None otherwise; refused in production."""
     if settings.jobs_mode != INLINE_MODE:
         return None
     if settings.is_production:
         raise RuntimeError("JOBS_MODE=inline is forbidden in production")
-    consumers = active_consumers(ownership)
+    consumers = CONSUMERS
     return {
-        "dispatcher": Dispatcher(deps, ownership, consumers=consumers),
+        "dispatcher": Dispatcher(deps, consumers=consumers),
         "runner": Runner(deps, consumers),
         "exclude": WORKER_ONLY_CONSUMERS,
     }

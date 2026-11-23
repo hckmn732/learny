@@ -1,9 +1,8 @@
 """Questions turned into recall cards (SPEC-717, BR-AUT-06, ADR-0190, ADR-0193).
 
-Ported from `packages/automations/src/definitions/questions-cartes.ts`: the one-line explanation of
-the six statuses, the pure decision of a source, the `recall_card` brick and the notion entering
-review (SPEC-501, ADR-0193 section 2), and the undo that retires the brick instead of deleting it.
-The insertion itself is an effect specification the use case executes.
+The one-line explanation of the six statuses, the pure decision of a source, the `recall_card` brick
+and the notion entering review (SPEC-501, ADR-0193 section 2), and the undo that retires the brick
+instead of deleting it. The insertion itself is an effect specification the use case executes.
 """
 
 from typing import Any, Final
@@ -75,7 +74,7 @@ def question_card_skip_reason(
     notion_exists: bool,
     reported: bool,
 ) -> str | None:
-    """CL-3 - the pure decision of the source, in the order of the TypeScript function."""
+    """CL-3 - the pure decision of a source, in the documented order."""
     if not _is_uuid(notion_id):
         return "missing_notion"
     if not isinstance(question, str) or len(question.strip()) < 3:

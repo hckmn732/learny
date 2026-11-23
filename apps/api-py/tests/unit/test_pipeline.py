@@ -24,7 +24,14 @@ from learny.shared.locale_fr.details import (
 from learny_api.generated.routes import ROUTES, ROUTES_BY_ID, RouteSpec
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
-from learny_api.pipeline import Call, PipelineContext, handle, handler, resolve_api_request_id
+from learny_api.pipeline import (
+    HANDLERS,
+    Call,
+    PipelineContext,
+    handle,
+    handler,
+    resolve_api_request_id,
+)
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -611,8 +618,11 @@ def test_the_handler_decorator_refuses_a_duplicate() -> None:
     async def first(call: Call) -> Any:
         return None
 
-    with pytest.raises(RuntimeError):
+    try:
+        with pytest.raises(RuntimeError):
 
-        @handler("test.duplicate")
-        async def second(call: Call) -> Any:
-            return None
+            @handler("test.duplicate")
+            async def second(call: Call) -> Any:
+                return None
+    finally:
+        HANDLERS.pop("test.duplicate", None)

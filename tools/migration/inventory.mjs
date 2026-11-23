@@ -1,16 +1,30 @@
-// SPEC-2001 — inventory extractor (ADR-2005, ADR-2011).
+import { execFileSync } from 'node:child_process';
+// SPEC-2302 — final inventory of the Python backend (ADR-2006, ADR-2008, ADR-2012).
 //
-// Produces `api/inventory.json` and `evidence/SPEC-2001/inventory.md` from the live contract
-// registry, the special-route manifest, the event catalog and the job definitions.
+// The TypeScript backend is gone: this extractor reads the *contract artefact* and the *Python
+// sources*, never a TypeScript registry. It proves CA-3 and EF-4 of SPEC-2302:
 //
-// Run with tsx (it imports the TypeScript registries directly, never a regular expression on
-// `ROUTES`): `corepack pnpm exec tsx tools/migration/inventory.mjs [--check]`.
+//   - every operation of `api/openapi.yaml` has a Python handler (`@handler("<id>")` of
+//     `apps/api-py/src/learny_api/handlers/*`) or is installed by the special registry of
+//     `apps/api-py/src/learny_api/special/*` (routes outside the generic pipeline);
+//   - every event consumer comes from `learny_worker/consumers.py` and every cron tick from
+//     `learny_worker/scheduler.py`, i.e. the Python worker;
+//   - no TypeScript backend package nor app subsists in the tree.
 //
-// `--check` regenerates in memory and exits 1 when the committed JSON differs: an operation,
-// event or job added or removed without updating the inventory breaks the build (CA-2).
+// `api/inventory.json` stays the committed artefact: `apps/api-py/tests/unit/test_route_coverage.py`
+// compares it to the installed routes, `packages/api-sdk/src/schema.test.ts` to the generated SDK and
+// `tools/parity/run.ts` to its scenario paths.
+//
+//   node tools/migration/inventory.mjs            write `api/inventory.json` and the report
+//   node tools/migration/inventory.mjs --check    exit 1 when the committed artefacts drift
+//   node tools/migration/inventory.mjs --runtime  print the coverage verdict, write nothing
+//
+// `MIGRATION_ROOT` overrides the repository root (unit tests, fixture trees).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import { parse as parseYaml } from 'yaml';
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -18,81 +32,82 @@ export const ROOT = process.env.MIGRATION_ROOT
   ? path.resolve(process.env.MIGRATION_ROOT)
   : REPO_ROOT;
 
-/** Target context of every implementation module (ADR-2003, P20 plan §"Default mapping"). */
+/** Contract artefacts and Python sources this inventory is built from. */
+export const CONTRACT_FILE = 'api/openapi.yaml';
+export const EVENTS_FILE = 'api/events.schema.json';
+export const HANDLERS_DIR = 'apps/api-py/src/learny_api/handlers';
+export const SPECIAL_DIR = 'apps/api-py/src/learny_api/special';
+export const CONSUMERS_FILE = 'apps/worker-py/src/learny_worker/consumers.py';
+export const SCHEDULER_FILE = 'apps/worker-py/src/learny_worker/scheduler.py';
+export const TEST_DIRS = ['packages-py', 'apps/api-py', 'apps/worker-py'];
+export const INVENTORY_JSON = 'api/inventory.json';
+export const INVENTORY_MD = 'evidence/SPEC-2302/inventory.md';
+
+/** Python handler module -> target context of the migration (P20 plan "Default mapping"). */
 export const CONTEXT_BY_MODULE = {
-  agenda: 'learning',
-  'agenda-deplacer-et-reajuster-le-planning': 'learning',
-  'ai-credentials': 'tutor',
-  attempts: 'assessments',
+  assessments: 'assessments',
   auth: 'identity',
-  'automatisme-10-mode-pause-et-retour': 'engagement',
-  'automatisme-9-bilan-de-la-semaine': 'engagement',
   billing: 'billing',
-  bricks: 'assessments',
-  cadrage: 'formation',
-  course: 'content',
-  'course-reading': 'content',
+  content: 'content',
   dev: 'dev',
-  'dev-sdd': 'dev',
-  email: 'engagement',
-  exercises: 'assessments',
-  'final-review': 'learning',
-  'formation-management': 'formation',
-  'formations-a-plusieurs': 'formation',
-  gaps: 'learning',
-  header: 'identity',
+  engagement: 'engagement',
+  formation: 'formation',
+  health: 'special',
   home: 'identity',
-  legal: 'identity',
-  me: 'identity',
-  'mock-exams': 'assessments',
-  'moteur-d-automatismes': 'engagement',
-  notifications: 'engagement',
-  'notion-graph': 'formation',
-  offline: 'assessments',
-  'parametres-modeles-d-ia': 'tutor',
-  'parametres-notifications': 'engagement',
-  'parametres-onglets-et-profil': 'identity',
-  'personal-data': 'privacy',
-  programme: 'formation',
-  push: 'engagement',
-  'quiz-result': 'assessments',
-  resources: 'content',
-  review: 'learning',
-  search: 'formation',
-  'serie-regularite-et-jalons-interface': 'learning',
-  sidebar: 'identity',
-  'tutor-chat': 'tutor',
-  uploads: 'content',
-  warmup: 'learning',
+  identity: 'identity',
+  learning: 'learning',
+  privacy: 'privacy',
+  tutor: 'tutor',
 };
 
-/** Spec that ports a context (P20 plan). */
+/** Spec of the python-migration track that ported a context (P20 plan, P22 plan). */
 export const SPEC_BY_CONTEXT = {
-  identity: 'SPEC-2201',
-  formation: 'SPEC-2201',
-  learning: 'SPEC-2202',
   assessments: 'SPEC-2202',
-  content: 'SPEC-2203',
-  tutor: 'SPEC-2204',
-  engagement: 'SPEC-2205',
   billing: 'SPEC-2206',
-  privacy: 'SPEC-2206',
-  'jobs-demo': 'SPEC-2102',
+  content: 'SPEC-2203',
   dev: 'SPEC-2207',
+  engagement: 'SPEC-2205',
+  formation: 'SPEC-2201',
+  identity: 'SPEC-2201',
+  learning: 'SPEC-2202',
+  privacy: 'SPEC-2206',
   special: 'SPEC-2207',
+  tutor: 'SPEC-2204',
 };
 
-const TEST_FILE_RE = /\.(?:test|spec)\.(?:ts|tsx)$/;
-const TEST_DIRS = ['apps', 'packages'];
+/**
+ * TypeScript backend paths SPEC-2302 removes (`apps/api`, `apps/worker`, the eleven server
+ * packages). A path that reappears is a regression of EF-2.
+ */
+export const REMOVED_PATHS = [
+  'apps/api',
+  'apps/worker',
+  'packages/api-routes',
+  'packages/automations',
+  'packages/http',
+  'packages/ingestion',
+  'packages/jobs',
+  'packages/learning-engine',
+  'packages/llm',
+  'packages/notifications',
+  'packages/services',
+  'packages/tutor',
+];
+
+const SKIP_DIRS = new Set(['node_modules', '.venv', '__pycache__', '.next', 'dist', 'build']);
 
 function readText(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
+function exists(root, relativePath) {
+  return fs.existsSync(path.join(root, relativePath));
+}
+
 function listFiles(dir, predicate, out = []) {
   if (!fs.existsSync(dir)) return out;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === 'node_modules' || entry.name === '.next' || entry.name === 'dist') continue;
+    if (SKIP_DIRS.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) listFiles(full, predicate, out);
     else if (predicate(full)) out.push(full);
@@ -104,385 +119,540 @@ function relative(root, file) {
   return path.relative(root, file).split(path.sep).join('/');
 }
 
-/**
- * Route key -> implementation module (base name), read from `implementations/<module>.ts`.
- * The contract key is the first property of the exported `*Implementations` object.
- */
-export function implementationModules(root = ROOT) {
-  const dir = path.join(root, 'packages', 'api-routes', 'src', 'implementations');
-  const mapping = new Map();
-  for (const file of listFiles(dir, (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f))) {
-    const source = readText(file);
-    const start = source.search(/Implementations\s*=\s*\{/);
-    if (start === -1) continue;
-    const moduleName = path.basename(file, '.ts');
-    for (const match of source.slice(start).matchAll(/^\s{2}(\w+):/gm)) {
-      mapping.set(match[1], moduleName);
+/** Body between the first `open` at or after `from` and its matching `close`, exclusive. */
+export function balanced(source, from, open = '(', close = ')') {
+  const start = source.indexOf(open, from);
+  if (start === -1) return null;
+  let depth = 0;
+  for (let index = start; index < source.length; index += 1) {
+    if (source[index] === open) depth += 1;
+    else if (source[index] === close) {
+      depth -= 1;
+      if (depth === 0) return { body: source.slice(start + 1, index), end: index };
     }
   }
-  return mapping;
+  return null;
 }
 
-/** Resolves `id: SOME_CONSTANT` to the string literal declared in the same file. */
-function resolveJobId(source) {
-  const direct = source.match(/id:\s*'([^']+)'/)?.[1];
-  if (direct !== undefined) return direct;
-  const reference = source.match(/id:\s*([A-Z][A-Z0-9_]+)\s*,/)?.[1];
-  if (reference === undefined) return undefined;
-  return source.match(new RegExp(`const\\s+${reference}\\s*=\\s*'([^']+)'`))?.[1];
-}
-
-/** Job definitions parsed statically from `packages/jobs/src/functions/*.ts`. */
-export function jobDefinitions(root = ROOT) {
-  const dir = path.join(root, 'packages', 'jobs', 'src', 'functions');
-  const jobs = [];
-  for (const file of listFiles(
-    dir,
-    (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f) && f !== 'index.ts',
+/** Module-level constants of a Python file: `NAME = "text"`, `NAME: Final = 5`. */
+export function pythonConstants(source) {
+  const constants = new Map();
+  for (const match of source.matchAll(
+    /^([A-Z][A-Z0-9_]*)\s*(?::\s*[^=\n]+)?=\s*(?:"([^"\n]*)"|'([^'\n]*)'|(\d+))\s*$/gm,
   )) {
+    constants.set(match[1], match[2] ?? match[3] ?? Number(match[4]));
+  }
+  return constants;
+}
+
+/** Resolves a Python expression to its literal value through the module constants. */
+export function resolveValue(expression, constants) {
+  const text = String(expression).trim();
+  const quoted = /^["'](.*)["']$/s.exec(text);
+  if (quoted !== null) return quoted[1];
+  if (/^\d+$/.test(text)) return Number(text);
+  if (constants.has(text)) return constants.get(text);
+  return null;
+}
+
+/** Hono notation of a contract path: `/x/{id}` -> `/x/:id` (the inventory's special routes). */
+export function honoPath(contractPath) {
+  return contractPath.replace(/\{([^}]+)\}/g, ':$1');
+}
+
+/** Operations of `api/openapi.yaml`, read from `x-learny` (ADR-2004, ADR-2012). */
+export function contractOperations(root = ROOT) {
+  const file = path.join(root, CONTRACT_FILE);
+  if (!fs.existsSync(file)) return [];
+  const document = parseYaml(readText(file));
+  const operations = [];
+  for (const [routePath, item] of Object.entries(document?.paths ?? {})) {
+    for (const [method, operation] of Object.entries(item ?? {})) {
+      if (!['get', 'post', 'put', 'patch', 'delete'].includes(method)) continue;
+      const policy = operation?.['x-learny'] ?? {};
+      operations.push({
+        id: String(policy.id ?? operation?.operationId ?? `${method}:${routePath}`),
+        method: method.toUpperCase(),
+        path: routePath,
+        auth: String(policy.auth ?? 'user'),
+        rateLimit: String(policy.rateLimit ?? 'default'),
+        idempotent: policy.idempotent === true,
+        requiresIdempotencyKey: policy.requiresIdempotencyKey === true,
+        freshAuth: policy.freshAuth === true,
+        legalAcceptance: policy.legalAcceptance === true,
+        validationStatus: Number(policy.validationStatus ?? 400),
+        successStatus: Number(policy.successStatus ?? 200),
+        summary: String(operation?.summary ?? operation?.description ?? ''),
+      });
+    }
+  }
+  return operations.sort((left, right) => left.id.localeCompare(right.id));
+}
+
+/** Route id -> handler module, from the `@handler("<id>")` decorator of the facade (ADR-2012). */
+export function pythonHandlers(root = ROOT) {
+  const handlers = new Map();
+  const dirs = [HANDLERS_DIR, SPECIAL_DIR].map((dir) => path.join(root, dir));
+  for (const dir of dirs) {
+    for (const file of listFiles(dir, (entry) => entry.endsWith('.py'))) {
+      for (const match of readText(file).matchAll(/^@handler\(\s*["']([^"']+)["']\s*\)/gm)) {
+        handlers.set(match[1], relative(root, file));
+      }
+    }
+  }
+  return handlers;
+}
+
+/**
+ * Special routes of the facade: the ids `special/__init__.py` installs plus the `*_ROUTE_ID`
+ * constants of `auth_callback.py` and `sprints.py`. A route outside the contract (the sprint plan)
+ * carries its own `RouteSpec`, read for its method and path.
+ */
+export function specialRoutes(root = ROOT, operationsById = new Map(), handlers = new Map()) {
+  const dir = path.join(root, SPECIAL_DIR);
+  const registryFile = path.join(dir, '__init__.py');
+  const registry = fs.existsSync(registryFile) ? readText(registryFile) : '';
+  const ids = [];
+  for (const name of ['DEVELOPMENT_ROUTE_IDS', 'UNGATED_ROUTE_IDS']) {
+    const start = registry.indexOf(`${name}`);
+    if (start === -1) continue;
+    const block = balanced(registry, start, '(', ')');
+    for (const match of (block?.body ?? '').matchAll(/"([^"]+)"/g)) ids.push(match[1]);
+  }
+  const entries = [];
+  for (const file of listFiles(dir, (entry) => entry.endsWith('.py'))) {
     const source = readText(file);
-    if (!source.includes('defineFunction(')) continue;
-    const id = resolveJobId(source);
-    if (id === undefined) continue;
-    const event = source.match(/event:\s*'([^']+)'/)?.[1];
-    const cron = source.match(/cron:\s*'([^']+)'/)?.[1];
-    const retries = source.match(/retries:\s*(\d+)/)?.[1];
-    jobs.push({
+    const constants = pythonConstants(source);
+    for (const [name, value] of constants) {
+      if (!/_ROUTE_ID$/.test(name) || typeof value !== 'string') continue;
+      if (!ids.includes(value)) ids.push(value);
+      const localPath = constants.get(name.replace(/_ROUTE_ID$/, '_PATH'));
+      let method = null;
+      let routePath = typeof localPath === 'string' ? localPath : null;
+      const specStart = source.indexOf('RouteSpec(');
+      if (specStart !== -1) {
+        const block = balanced(source, specStart)?.body ?? '';
+        const declaredId = resolveValue(/id=([^,\n]+)/.exec(block)?.[1] ?? '', constants);
+        if (declaredId === value) {
+          method = resolveValue(/method=([^,\n]+)/.exec(block)?.[1] ?? '', constants);
+          const declaredPath = resolveValue(/path=([^,\n]+)/.exec(block)?.[1] ?? '', constants);
+          routePath = typeof declaredPath === 'string' ? declaredPath : routePath;
+        }
+      }
+      entries.push({
+        id: value,
+        method: typeof method === 'string' ? method.toUpperCase() : null,
+        path: routePath,
+        module: relative(root, file),
+      });
+    }
+  }
+  return ids.map((id) => {
+    const declared = entries.find((entry) => entry.id === id) ?? null;
+    const operation = operationsById.get(id) ?? null;
+    const routePath = operation?.path ?? declared?.path ?? null;
+    return {
+      key: id,
       id,
-      module: relative(root, file),
-      trigger: event ?? (cron === undefined ? null : { cron }),
-      retries: retries === undefined ? null : Number(retries),
-    });
-  }
-  return jobs.sort((a, b) => a.id.localeCompare(b.id));
+      method: operation?.method ?? declared?.method ?? null,
+      path: routePath === null ? null : honoPath(routePath),
+      contractPath: routePath,
+      inRegistry: operation !== null,
+      handler: handlers.get(id) ?? declared?.module ?? null,
+      module: declared?.module ?? null,
+    };
+  });
 }
 
-/** Event producers/consumers, best effort from `outbox.emit` / job triggers. */
-export function eventUsage(root = ROOT) {
-  const files = [
-    ...listFiles(path.join(root, 'packages'), (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f)),
-    ...listFiles(path.join(root, 'apps'), (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f)),
-  ];
-  const producers = new Map();
-  const consumers = new Map();
-  for (const file of files) {
-    const source = readText(file);
-    const rel = relative(root, file);
-    for (const match of source.matchAll(/(?:emit|add)\(\s*'([a-z][a-z0-9-]*\/[a-z0-9-]+)'/g)) {
-      if (!producers.has(match[1])) producers.set(match[1], new Set());
-      producers.get(match[1]).add(rel);
-    }
-    for (const match of source.matchAll(/event:\s*'([a-z][a-z0-9-]*\/[a-z0-9-]+)'/g)) {
-      if (!consumers.has(match[1])) consumers.set(match[1], new Set());
-      consumers.get(match[1]).add(rel);
-    }
-  }
-  const toSorted = (map) =>
-    Object.fromEntries(
-      [...map.entries()].map(([k, v]) => [k, [...v].sort()]).sort(([a], [b]) => a.localeCompare(b)),
-    );
-  return { producers: toSorted(producers), consumers: toSorted(consumers) };
+/** Path parameters of a Python route path, needed for Hono-notation matching in tests. */
+function pathNeedles(routePath) {
+  return [routePath, honoPath(routePath)];
 }
 
-/** Test files referencing a route id or path (Vitest `[SPEC-x]`, Playwright `@SPEC-x`). */
-export function testIndex(root = ROOT) {
-  const files = TEST_DIRS.flatMap((dir) =>
-    listFiles(path.join(root, dir), (f) => TEST_FILE_RE.test(f) && !f.includes('/node_modules/')),
-  );
+/** Test files of the Python suites, indexed by content for the per-operation test lookup. */
+export function pythonTests(root = ROOT) {
+  const dirs = TEST_DIRS.map((dir) => path.join(root, dir));
   const index = new Map();
-  for (const file of files) {
-    const source = readText(file);
-    const rel = relative(root, file);
-    const tags = [...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2]);
-    index.set(rel, { source, tags: [...new Set(tags)].sort() });
+  for (const dir of dirs) {
+    for (const file of listFiles(dir, (entry) => {
+      if (!entry.endsWith('.py')) return false;
+      return relative(root, entry).includes('/tests/') || path.basename(entry).startsWith('test_');
+    })) {
+      const text = readText(file);
+      index.set(relative(root, file), {
+        text,
+        // `[SPEC-xxxx]` tags of the SDD suites (specs are named in the test module docstring).
+        tags: [...new Set([...text.matchAll(/\[(SPEC-\d+)\]/g)].map((match) => match[1]))].sort(),
+      });
+    }
   }
   return index;
 }
 
-function testsFor(entry, index) {
+function testsFor(operation, index) {
+  if (operation.path === null) return [];
+  const needles = [operation.id, ...pathNeedles(operation.path)].filter(
+    (needle) => typeof needle === 'string' && needle.length > 3,
+  );
   const found = [];
-  const needles = [entry.id, entry.path];
-  for (const [file, { source }] of index) {
-    if (needles.some((needle) => source.includes(needle))) found.push(file);
+  for (const [file, { text }] of index) {
+    if (needles.some((needle) => text.includes(needle))) found.push(file);
   }
   return found.sort();
 }
 
-const SERVICES_INDEX_CACHE = new Map();
-
-/** name -> file under `packages/services/src`, for `import { name } from '@learny/services'`. */
-function servicesIndex(root) {
-  if (SERVICES_INDEX_CACHE.has(root)) return SERVICES_INDEX_CACHE.get(root);
-  const index = new Map();
-  const dir = path.join(root, 'packages', 'services', 'src');
-  for (const file of listFiles(dir, (f) => f.endsWith('.ts') && !TEST_FILE_RE.test(f))) {
-    const source = readText(file);
-    for (const match of source.matchAll(
-      /export\s+(?:async\s+)?(?:function|const)\s+([A-Za-z_$][\w$]*)/g,
-    )) {
-      if (!index.has(match[1])) index.set(match[1], file);
-    }
+/** One `Consumer(...)` of `learny_worker/consumers.py`. */
+export function pythonConsumers(root = ROOT) {
+  const file = path.join(root, CONSUMERS_FILE);
+  if (!fs.existsSync(file)) return [];
+  const source = readText(file);
+  const constants = pythonConstants(source);
+  const start = source.indexOf('CONSUMERS');
+  const block = start === -1 ? null : balanced(source, start);
+  if (block === null) return [];
+  const consumers = [];
+  let cursor = block.body.indexOf('Consumer(');
+  while (cursor !== -1) {
+    const entry = balanced(block.body, cursor);
+    if (entry === null) break;
+    const read = (pattern) => {
+      const match = pattern.exec(entry.body);
+      return match === null ? null : resolveValue(match[1], constants);
+    };
+    const name = read(/name=([^,\n]+)/);
+    const event = read(/\bon=([^,\n]+)/);
+    const run = /run=([a-z_][a-z0-9_]*)/.exec(entry.body)?.[1] ?? null;
+    const tags = /"context":\s*"([^"]+)"/.exec(entry.body)?.[1] ?? null;
+    const timeout = read(/timeout_s=([^,\n]+)/);
+    const attempts = read(/max_attempts=([^,\n]+)/);
+    consumers.push({
+      name: typeof name === 'string' ? name : null,
+      event: typeof event === 'string' ? event : null,
+      run,
+      context: tags,
+      timeoutS: typeof timeout === 'number' ? timeout : null,
+      maxAttempts: typeof attempts === 'number' ? attempts : null,
+      delayed: /run_at=/.test(entry.body),
+      module: path.relative(root, file).split(path.sep).join('/'),
+    });
+    cursor = block.body.indexOf('Consumer(', entry.end);
   }
-  SERVICES_INDEX_CACHE.set(root, index);
-  return index;
+  return consumers.sort((left, right) => String(left.name).localeCompare(String(right.name)));
 }
 
-const SQL_STOPWORDS = new Set([
-  'select',
-  'where',
-  'set',
-  'values',
-  'on',
-  'the',
-  'and',
-  'null',
-  'true',
-  'false',
-  'into',
-  'from',
-  'join',
-  'left',
-  'right',
-  'inner',
-  'outer',
-  'cross',
-  'lateral',
-  'with',
-  'using',
-]);
+/** The two cron ticks of `learny_worker/scheduler.py`, with their consumers (SPEC-2102). */
+export function pythonCrons(consumers = [], root = ROOT) {
+  const file = path.join(root, SCHEDULER_FILE);
+  if (!fs.existsSync(file)) return [];
+  const constants = pythonConstants(readText(file));
+  const schedule = (minute, hour) =>
+    hour === undefined ? `${minute} * * * *` : `${minute} ${hour} * * *`;
+  const crons = [];
+  const hourly = constants.get('CRON_HOURLY');
+  if (typeof hourly === 'string') {
+    crons.push({
+      event: hourly,
+      schedule: schedule(constants.get('HOURLY_MINUTE') ?? 5),
+      task: 'expire due automations, emit user/local-tick, emit the tick',
+      consumers: consumers.filter((entry) => entry.event === hourly).map((entry) => entry.name),
+    });
+  }
+  const nightly = constants.get('CRON_NIGHTLY');
+  if (typeof nightly === 'string') {
+    crons.push({
+      event: nightly,
+      schedule: schedule(constants.get('NIGHTLY_MINUTE') ?? 30, constants.get('NIGHTLY_HOUR') ?? 1),
+      task: 'fan out the nightly treatments',
+      consumers: consumers.filter((entry) => entry.event === nightly).map((entry) => entry.name),
+    });
+  }
+  return crons.sort((left, right) => String(left.event).localeCompare(String(right.event)));
+}
 
-/** SQL table names read/written by an implementation and the services it calls (ET-3, best effort). */
-export function tablesForModule(root, moduleFile) {
-  const tables = new Set();
-  const visited = new Set();
-  const index = servicesIndex(root);
-  const scan = (file, depth) => {
-    if (depth > 2 || visited.has(file) || !fs.existsSync(file)) return;
-    visited.add(file);
-    const source = readText(file);
-    for (const match of source.matchAll(
-      /\b(?:from|into|update|join)\s+(?:[a-z_][a-z0-9_]*\.)?([a-z][a-z0-9_]{2,})\b(?!\s*\()/gi,
-    )) {
-      const name = match[1].toLowerCase();
-      if (!SQL_STOPWORDS.has(name)) tables.add(name);
-    }
-    for (const importMatch of source.matchAll(
-      /import\s*\{([^}]+)\}\s*from\s*'@learny\/services'/g,
-    )) {
-      for (const rawName of importMatch[1].split(',')) {
-        const name = rawName
-          .trim()
-          .split(/\s+as\s+/)[0]
-          ?.trim();
-        const target = name === undefined ? undefined : index.get(name);
-        if (target !== undefined) scan(target, depth + 1);
-      }
-    }
-    for (const match of source.matchAll(/from '(\.[^']+)'/g)) {
-      const target = path.resolve(path.dirname(file), match[1]);
-      scan(target.endsWith('.ts') ? target : `${target}.ts`, depth + 1);
+/** Paths of the removed TypeScript backend that still exist (a non-empty list is a regression). */
+export function remainingTsPaths(root = ROOT) {
+  // A leftover `node_modules` or `.turbo` directory is a local build artefact, not source: the
+  // tracked content is what ships, so a removed package only counts as present when git still
+  // tracks a file under it. `git ls-files` is authoritative and works in any worktree.
+  const tracked = (relativePath) => {
+    try {
+      return (
+        execFileSync('git', ['ls-files', '--', relativePath], {
+          cwd: root,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'ignore'],
+        }).trim().length > 0
+      );
+    } catch {
+      return exists(root, relativePath);
     }
   };
-  scan(moduleFile, 0);
-  return [...tables].sort();
+  return REMOVED_PATHS.filter((relativePath) => tracked(relativePath));
 }
 
-function contextOf(key, moduleName) {
-  if (key.startsWith('devJobs'))
-    return { context: 'jobs-demo', spec: SPEC_BY_CONTEXT['jobs-demo'] };
-  if (moduleName !== undefined && CONTEXT_BY_MODULE[moduleName] !== undefined) {
-    const context = CONTEXT_BY_MODULE[moduleName];
-    return { context, spec: SPEC_BY_CONTEXT[context] };
-  }
-  return { context: 'dev', spec: SPEC_BY_CONTEXT.dev };
+/** Event names of the outbox catalogue (`api/events.schema.json`). */
+export function eventCatalog(root = ROOT) {
+  const file = path.join(root, EVENTS_FILE);
+  if (!fs.existsSync(file)) return [];
+  const catalog = JSON.parse(readText(file));
+  return Object.keys(catalog).sort();
 }
 
-/**
- * Builds the inventory. `deps` is injectable so unit tests run on fixtures without tsx.
- */
-export function buildInventory({ root = ROOT, deps }) {
-  const { routes, special, events, jobs, usage, index } = deps;
-  const modules = implementationModules(root);
-  const operations = Object.entries(routes)
-    .map(([key, route]) => {
-      const moduleName = modules.get(key);
-      const { context, spec } = contextOf(key, moduleName);
-      const entry = {
-        key,
-        id: route.id,
-        method: route.method,
-        path: route.path,
-        auth: route.auth,
-        rateLimit: route.rateLimit ?? 'default',
-        idempotent: route.idempotent === true,
-        requiresIdempotencyKey: route.requiresIdempotencyKey === true,
-        freshAuth: route.freshAuth === true,
-        legalAcceptance: route.legalAcceptance === true,
-        validationStatus: route.validationStatus ?? 400,
-        successStatus: route.successStatus,
-        errors: [...route.errors].sort(),
-        summary: route.summary,
-        context,
-        spec,
-        implementation:
-          moduleName === undefined
-            ? null
-            : `packages/api-routes/src/implementations/${moduleName}.ts`,
-        tables:
-          moduleName === undefined
-            ? []
-            : tablesForModule(
-                root,
-                path.join(
-                  root,
-                  'packages',
-                  'api-routes',
-                  'src',
-                  'implementations',
-                  `${moduleName}.ts`,
-                ),
-              ),
-        events: [],
-        tests: [],
-      };
-      entry.tests = testsFor(entry, index);
-      entry.gap = entry.tests.length === 0;
-      return entry;
-    })
-    .sort((a, b) => a.id.localeCompare(b.id));
+function contextOf(operation, handlers, specialIds) {
+  if (specialIds.has(operation.id)) return 'special';
+  const module = handlers.get(operation.id);
+  const base = module === undefined ? null : path.basename(module, '.py');
+  if (base !== null && CONTEXT_BY_MODULE[base] !== undefined) return CONTEXT_BY_MODULE[base];
+  return 'dev';
+}
 
+/** Builds the inventory. `deps` is injectable so unit tests run on fixtures without the tree. */
+export function buildInventory({
+  root = ROOT,
+  operations = contractOperations(root),
+  handlers = pythonHandlers(root),
+  consumers = pythonConsumers(root),
+  crons = pythonCrons(consumers, root),
+  catalog = eventCatalog(root),
+  index = pythonTests(root),
+  removed = remainingTsPaths(root),
+} = {}) {
   const operationsById = new Map(operations.map((entry) => [entry.id, entry]));
-  for (const [name, producers] of Object.entries(usage.producers)) {
-    for (const file of producers) {
-      for (const entry of operations) {
-        if (
-          entry.implementation !== null &&
-          file.startsWith(entry.implementation.replace(/\.ts$/, ''))
-        ) {
-          if (!entry.events.includes(name)) entry.events.push(name);
-        }
-      }
-    }
-  }
-  for (const entry of operations) entry.events.sort();
+  const specials = specialRoutes(root, operationsById, handlers);
+  const specialIds = new Set(specials.map((entry) => entry.id));
 
-  const specialEntries = special
-    .map((item) => {
-      const operation = operationsById.get(`special:${item.key}`) ?? null;
-      return {
-        key: item.key,
-        method: item.method,
-        path: item.path,
-        context: 'special',
-        spec: SPEC_BY_CONTEXT.special,
-        inRegistry: Object.values(routes).some(
-          (route) => route.path === item.path && route.method === item.method,
-        ),
-        tests: operation === null ? [] : operation.tests,
-      };
-    })
-    .sort((a, b) => a.path.localeCompare(b.path));
+  const operationEntries = operations.map((operation) => {
+    const context = contextOf(operation, handlers, specialIds);
+    const handler = handlers.get(operation.id) ?? null;
+    const special = specials.find((entry) => entry.id === operation.id) ?? null;
+    const entry = {
+      key: operation.id,
+      id: operation.id,
+      method: operation.method,
+      path: operation.path,
+      auth: operation.auth,
+      rateLimit: operation.rateLimit,
+      idempotent: operation.idempotent,
+      requiresIdempotencyKey: operation.requiresIdempotencyKey,
+      freshAuth: operation.freshAuth,
+      legalAcceptance: operation.legalAcceptance,
+      validationStatus: operation.validationStatus,
+      successStatus: operation.successStatus,
+      summary: operation.summary,
+      context,
+      spec: SPEC_BY_CONTEXT[context] ?? 'SPEC-2207',
+      handler,
+      installedBy: specialIds.has(operation.id) ? 'special' : 'pipeline',
+      specialModule: special === null ? null : special.module,
+      tests: [],
+      gap: false,
+    };
+    entry.served = handler !== null || specialIds.has(operation.id);
+    entry.tests = testsFor(entry, index);
+    entry.gap = entry.tests.length === 0;
+    return entry;
+  });
 
-  const eventEntries = Object.keys(events)
-    .sort()
-    .map((name) => ({
-      name,
-      producers: usage.producers[name] ?? [],
-      consumers: usage.consumers[name] ?? [],
-    }));
+  const specialEntries = specials.map((special) => ({
+    ...special,
+    context: 'special',
+    spec: SPEC_BY_CONTEXT.special,
+    tests: testsFor({ id: special.id, path: special.contractPath }, index),
+  }));
+
+  const consumedEvents = [
+    ...new Set([
+      ...consumers.map((entry) => entry.event).filter((event) => typeof event === 'string'),
+      ...crons.map((entry) => entry.event),
+    ]),
+  ].sort();
+  const knownEvents = new Set(catalog);
+  const unknownEvents = consumedEvents.filter((event) => !knownEvents.has(event));
+
+  const counts = {
+    operations: operationEntries.length,
+    special: specialEntries.length,
+    consumers: consumers.length,
+    crons: crons.length,
+    events: consumedEvents.length,
+    handlers: handlers.size,
+    gaps: operationEntries.filter((entry) => entry.gap).length,
+    operationsWithoutHandler: operationEntries.filter((entry) => !entry.served).length,
+    specialWithoutInstall: specialEntries.filter(
+      (entry) => entry.method === null || entry.path === null || entry.handler === null,
+    ).length,
+    consumersWithoutEvent: consumers.filter((entry) => entry.event === null).length,
+    unknownEvents: unknownEvents.length,
+    remainingTypeScript: removed.length,
+  };
 
   return {
-    generatedFrom: 'SPEC-2001',
-    counts: {
-      operations: operations.length,
-      special: specialEntries.length,
-      events: eventEntries.length,
-      jobs: jobs.length,
-      gaps: operations.filter((entry) => entry.gap).length,
-    },
-    operations,
+    generatedFrom: 'SPEC-2302',
+    sources: [
+      CONTRACT_FILE,
+      EVENTS_FILE,
+      HANDLERS_DIR,
+      SPECIAL_DIR,
+      CONSUMERS_FILE,
+      SCHEDULER_FILE,
+    ],
+    counts,
+    operations: operationEntries,
     special: specialEntries,
-    events: eventEntries,
-    jobs,
+    consumers,
+    crons,
+    events: consumedEvents.map((name) => ({
+      name,
+      consumers: consumers.filter((entry) => entry.event === name).map((entry) => entry.name),
+      inCatalog: knownEvents.has(name),
+    })),
+    removedTypeScript: REMOVED_PATHS.map((relativePath) => ({
+      path: relativePath,
+      present: removed.includes(relativePath),
+    })),
+    python: { testFiles: index.size },
   };
 }
 
-/** Markdown rendering of the inventory (CA-1). */
+/** The verdict SPEC-2302 CA-3 and EF-4 require; an empty list means the inventory is green. */
+export function inventoryResidue(inventory) {
+  const residue = [];
+  const { counts } = inventory;
+  if (counts.operationsWithoutHandler > 0) {
+    residue.push(`${counts.operationsWithoutHandler} operation(s) without a Python handler`);
+  }
+  if (counts.specialWithoutInstall > 0) {
+    residue.push(`${counts.specialWithoutInstall} special route(s) not installed by Python`);
+  }
+  if (counts.consumersWithoutEvent > 0) {
+    residue.push(`${counts.consumersWithoutEvent} consumer(s) without an event`);
+  }
+  if (counts.unknownEvents > 0) {
+    residue.push(`${counts.unknownEvents} consumed event(s) outside api/events.schema.json`);
+  }
+  if (counts.remainingTypeScript > 0) {
+    const present = inventory.removedTypeScript.filter((entry) => entry.present);
+    residue.push(
+      `TypeScript backend path(s) still present: ${present.map((e) => e.path).join(', ')}`,
+    );
+  }
+  return residue;
+}
+
+/** Human-readable verdict lines (shared by `--runtime`, `--check` and the report). */
+export function verdictLines(inventory) {
+  const { counts } = inventory;
+  return [
+    `${counts.operations}/${counts.operations} operations served by Python ` +
+      `(${counts.handlers} @handler, ${counts.special} installed by the special registry)`,
+    `${counts.special}/${counts.special} special routes installed by Python`,
+    `${counts.consumers} event consumers, all in learny_worker/consumers.py`,
+    `${counts.crons} cron ticks, all in learny_worker/scheduler.py`,
+    `${counts.events} consumed events, all declared in api/events.schema.json` +
+      (counts.unknownEvents === 0 ? '' : ` (${counts.unknownEvents} unknown)`),
+    `TypeScript backend paths remaining: ${counts.remainingTypeScript} of ${REMOVED_PATHS.length}`,
+  ];
+}
+
+function tableCell(value) {
+  return value === null || value === undefined || value === ''
+    ? '—'
+    : String(value).replace(/\|/g, '\\|');
+}
+
+/** Markdown rendering of the inventory (evidence/SPEC-2302/inventory.md). */
 export function renderInventoryMarkdown(inventory) {
+  const { counts } = inventory;
   const lines = [];
-  lines.push('# Inventory — TypeScript backend on `main` (SPEC-2001)');
+  lines.push('# Inventory — Python backend after the TypeScript removal (SPEC-2302)');
   lines.push('');
   lines.push(
-    'Generated by `corepack pnpm exec tsx tools/migration/inventory.mjs` from the live registries. ' +
-      'Do not edit by hand: `--check` fails when this file drifts from the code (CA-2).',
+    `Generated by \`node tools/migration/inventory.mjs\` from ${inventory.sources
+      .map((source) => `\`${source}\``)
+      .join(
+        ', ',
+      )}. Do not edit by hand: \`--check\` fails when this file or \`api/inventory.json\` ` +
+      'drifts from the code.',
   );
   lines.push('');
   lines.push('## Counts');
   lines.push('');
   lines.push('| Kind | Count |');
   lines.push('|---|---|');
-  lines.push(`| Operations (\`ROUTES\`) | ${inventory.counts.operations} |`);
-  lines.push(`| Special routes | ${inventory.counts.special} |`);
-  lines.push(`| Events | ${inventory.counts.events} |`);
-  lines.push(`| Jobs | ${inventory.counts.jobs} |`);
-  lines.push(`| Operations without test (CL-1 gaps) | ${inventory.counts.gaps} |`);
+  lines.push(`| Operations of the contract | ${counts.operations} |`);
+  lines.push(`| Special routes | ${counts.special} |`);
+  lines.push(`| \`@handler\` decorators | ${counts.handlers} |`);
+  lines.push(`| Event consumers (Python worker) | ${counts.consumers} |`);
+  lines.push(`| Cron ticks (Python scheduler) | ${counts.crons} |`);
+  lines.push(`| Consumed events | ${counts.events} |`);
+  lines.push(`| Operations without a Python handler | ${counts.operationsWithoutHandler} |`);
+  lines.push(`| Special routes not installed by Python | ${counts.specialWithoutInstall} |`);
+  lines.push(`| Consumed events outside the catalogue | ${counts.unknownEvents} |`);
+  lines.push(`| Removed TypeScript backend paths still present | ${counts.remainingTypeScript} |`);
+  lines.push(`| Operations without a tagged test (informational) | ${counts.gaps} |`);
   lines.push('');
-  lines.push('## Operations by target context');
+  lines.push('## Verdict');
   lines.push('');
-  const byContext = new Map();
-  for (const op of inventory.operations) {
-    if (!byContext.has(op.context)) byContext.set(op.context, []);
-    byContext.get(op.context).push(op);
-  }
-  lines.push('| Context | Spec | Operations |');
-  lines.push('|---|---|---|');
-  for (const [context, ops] of [...byContext.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-    lines.push(`| ${context} | ${ops[0].spec} | ${ops.length} |`);
-  }
+  const residue = inventoryResidue(inventory);
+  for (const line of verdictLines(inventory)) lines.push(`- ${line}`);
+  lines.push(
+    residue.length === 0
+      ? '- No residue: every operation, special route, consumer and cron is served by Python.'
+      : `- Residue: ${residue.join(' ; ')}`,
+  );
   lines.push('');
   lines.push('## Operations');
   lines.push('');
-  lines.push('| Id | Method | Path | Auth | Context | Spec | Impl | Tables | Tests | Gap |');
-  lines.push('|---|---|---|---|---|---|---|---|---|---|');
-  for (const op of inventory.operations) {
-    const tests = op.tests.length === 0 ? '—' : op.tests.map((t) => `\`${t}\``).join('<br>');
-    const tables = op.tables.length === 0 ? '—' : op.tables.join(', ');
+  lines.push('| Id | Method | Path | Auth | Context | Handler | Installed by | Tests |');
+  lines.push('|---|---|---|---|---|---|---|---|');
+  for (const operation of inventory.operations) {
+    const handler = operation.handler ?? operation.specialModule ?? null;
     lines.push(
-      `| \`${op.id}\` | ${op.method} | \`${op.path}\` | ${op.auth} | ${op.context} | ${op.spec} | ` +
-        `${op.implementation === null ? '—' : `\`${op.implementation}\``} | ${tables} | ${tests} | ${op.gap ? 'CL-1' : ''} |`,
+      `| \`${operation.id}\` | ${operation.method} | \`${operation.path}\` | ${operation.auth} | ` +
+        `${operation.context} | ${handler === null ? '—' : `\`${handler}\``} | ` +
+        `${operation.installedBy} | ${operation.tests.length} |`,
     );
   }
   lines.push('');
   lines.push('## Special routes');
   lines.push('');
-  lines.push('| Key | Method | Path | In registry | Tests |');
-  lines.push('|---|---|---|---|---|');
-  for (const item of inventory.special) {
+  lines.push('| Id | Method | Path | In contract | Installed by | Tests |');
+  lines.push('|---|---|---|---|---|---|');
+  for (const special of inventory.special) {
     lines.push(
-      `| \`${item.key}\` | ${item.method} | \`${item.path}\` | ${item.inRegistry ? 'yes' : 'no'} | ${item.tests.length} |`,
+      `| \`${special.id}\` | ${tableCell(special.method)} | \`${tableCell(special.path)}\` | ` +
+        `${special.inRegistry ? 'yes' : 'no'} | \`${tableCell(special.module)}\` | ${special.tests.length} |`,
     );
   }
   lines.push('');
-  lines.push('## Events');
+  lines.push('## Event consumers (Python worker)');
   lines.push('');
-  lines.push('| Event | Producers | Consumers |');
-  lines.push('|---|---|---|');
-  for (const event of inventory.events) {
-    lines.push(`| \`${event.name}\` | ${event.producers.length} | ${event.consumers.length} |`);
+  lines.push('| Consumer | Event | Context | Attempts | Delayed | Module |');
+  lines.push('|---|---|---|---|---|---|');
+  for (const consumer of inventory.consumers) {
+    lines.push(
+      `| \`${tableCell(consumer.name)}\` | \`${tableCell(consumer.event)}\` | ` +
+        `${tableCell(consumer.context)} | ${tableCell(consumer.maxAttempts)} | ` +
+        `${consumer.delayed ? 'run_at' : '—'} | \`${consumer.module}\` |`,
+    );
   }
   lines.push('');
-  lines.push('## Jobs');
+  lines.push('## Cron ticks (Python scheduler)');
   lines.push('');
-  lines.push('| Id | Trigger | Retries | Module |');
+  lines.push('| Event | Schedule (UTC) | Task | Consumers |');
   lines.push('|---|---|---|---|');
-  for (const job of inventory.jobs) {
-    const trigger =
-      typeof job.trigger === 'string'
-        ? job.trigger
-        : job.trigger === null
-          ? '—'
-          : `cron ${job.trigger.cron}`;
-    lines.push(`| \`${job.id}\` | ${trigger} | ${job.retries ?? '—'} | \`${job.module}\` |`);
+  for (const cron of inventory.crons) {
+    lines.push(
+      `| \`${cron.event}\` | \`${cron.schedule}\` | ${cron.task} | ${cron.consumers.length} |`,
+    );
+  }
+  lines.push('');
+  lines.push('## Removed TypeScript backend');
+  lines.push('');
+  lines.push('| Path | Present |');
+  lines.push('|---|---|');
+  for (const entry of inventory.removedTypeScript) {
+    lines.push(`| \`${entry.path}\` | ${entry.present ? '**yes (regression)**' : 'no'} |`);
   }
   lines.push('');
   return `${lines.join('\n')}`;
@@ -492,201 +662,45 @@ export function serialize(inventory) {
   return `${JSON.stringify(inventory, null, 2)}\n`;
 }
 
-/** Backend packages whose tests are ported to pytest (ADR-2008). Web tests stay as they are. */
-export const BACKEND_PACKAGES = [
-  'core',
-  'config',
-  'contracts',
-  'db',
-  'services',
-  'jobs',
-  'llm',
-  'tutor',
-  'ingestion',
-  'learning-engine',
-  'notifications',
-  'automations',
-  'http',
-  'api-routes',
-  'bricks',
-];
-
-function slugOf(file) {
-  return path
-    .basename(file)
-    .replace(/\.(?:test|spec)\.tsx?$/, '')
-    .replace(/[^a-z0-9]+/gi, '_')
-    .toLowerCase();
-}
-
-/** Area and business context of the future Python test module. */
-function portArea(relativePath) {
-  const parts = relativePath.split('/');
-  if (parts[0] === 'apps') return { area: 'api', raw: 'api' };
-  const packageName = parts[1] ?? 'shared';
-  const srcIndex = parts.indexOf('src');
-  const kindIndex = parts.findIndex((part) => part === 'integration' || part === 'unit');
-  let raw;
-  if (srcIndex !== -1 && parts.length > srcIndex + 2) raw = parts[srcIndex + 1];
-  else if (kindIndex !== -1 && parts.length > kindIndex + 2) raw = parts[kindIndex + 1];
-  if (raw === undefined) {
-    raw = path.basename(parts[parts.length - 1]).replace(/\.(?:test|spec)\.tsx?$/, '');
+/** Prints the coverage verdict; returns the process exit code (0 when nothing remains). */
+export function runtime(inventory, log = console.log) {
+  log(`Python backend inventory (SPEC-2302, ADR-2006) :`);
+  for (const line of verdictLines(inventory)) log(`  ${line}`);
+  const residue = inventoryResidue(inventory);
+  if (residue.length === 0) {
+    log('  Résultat : aucun chemin résiduel TypeScript.');
+    return 0;
   }
-  const area =
-    packageName === 'services' || packageName === 'api-routes'
-      ? (CONTEXT_BY_MODULE[raw] ?? raw)
-      : packageName;
-  return { area, raw };
+  for (const line of residue) console.error(`  ✖ ${line}`);
+  return 1;
 }
 
-/** Spec of the python-migration track that ports a backend package (or a services area). */
-export function trackSpecFor(packageName, area) {
-  const byPackage = {
-    core: 'SPEC-2003',
-    config: 'SPEC-2003',
-    contracts: 'SPEC-2003',
-    http: 'SPEC-2003',
-    'api-routes': 'SPEC-2003',
-    db: 'SPEC-2101',
-    jobs: 'SPEC-2102',
-    automations: 'SPEC-2102',
-    'learning-engine': 'SPEC-2202',
-    bricks: 'SPEC-2202',
-    ingestion: 'SPEC-2203',
-    llm: 'SPEC-2204',
-    tutor: 'SPEC-2204',
-    notifications: 'SPEC-2205',
-    testing: 'SPEC-2003',
-  };
-  if (packageName === 'services')
-    return SPEC_BY_CONTEXT[CONTEXT_BY_MODULE[area] ?? area] ?? 'SPEC-2207';
-  return byPackage[packageName] ?? 'SPEC-2207';
-}
-
-/**
- * One row per backend test file: file, test count, target pytest module, target spec, status.
- * The pytest module is a *plan*: `TODO` rows are written by the spec that ports the package
- * (ADR-2008, evidence/SPEC-2001/test-port-map.md).
- */
-export function buildPortMap(root = ROOT) {
-  const rows = [];
-  for (const packageName of BACKEND_PACKAGES) {
-    for (const file of listFiles(path.join(root, 'packages', packageName), (f) =>
-      TEST_FILE_RE.test(f),
-    )) {
-      const source = readText(file);
-      const rel = relative(root, file);
-      const count = source.match(/\b(?:it|test)(?:\.\w+)?\(\s*['"`]/g)?.length ?? 0;
-      const tags = [
-        ...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2])),
-      ].sort();
-      const integration = rel.includes('/test/integration/') || rel.includes('/tests/integration/');
-      const kind = integration ? 'integration' : 'unit';
-      const { area, raw } = portArea(rel);
-      rows.push({
-        file: rel,
-        tests: count,
-        tags,
-        python: `packages-py/learny/tests/${kind}/${area}/test_${slugOf(file)}.py`,
-        spec: trackSpecFor(packageName, raw),
-        status: 'todo',
-      });
-    }
-  }
-  // API application tests (apps/api) are ported with the facade (SPEC-2003).
-  for (const file of listFiles(path.join(root, 'apps', 'api'), (f) => TEST_FILE_RE.test(f))) {
-    const source = readText(file);
-    const rel = relative(root, file);
-    const tags = [
-      ...new Set([...source.matchAll(/\[(SPEC-\d+)\]|@(SPEC-\d+)/g)].map((m) => m[1] ?? m[2])),
-    ].sort();
-    const integration = rel.includes('/test/integration/');
-    rows.push({
-      file: rel,
-      tests: source.match(/\b(?:it|test)(?:\.\w+)?\(\s*['"`]/g)?.length ?? 0,
-      tags,
-      python: `apps/api-py/tests/${integration ? 'integration' : 'unit'}/test_${slugOf(file)}.py`,
-      spec: 'SPEC-2003',
-      status: 'todo',
-    });
-  }
-  return rows.sort((a, b) => a.file.localeCompare(b.file));
-}
-
-export function renderPortMap(rows) {
-  const total = rows.reduce((sum, row) => sum + row.tests, 0);
-  const lines = [
-    '# Test port map — TypeScript backend to pytest (SPEC-2001, ADR-2008)',
-    '',
-    'Generated by `corepack pnpm exec tsx tools/migration/inventory.mjs --port-map`.',
-    'One row per backend test file: the pytest module is the planned landing zone, `status` becomes',
-    '`ported` in the spec that writes it (ADR-2008 keeps the same cases and the same expected values).',
-    '`apps/web` tests are out of this map: they stay in TypeScript (the web keeps its suite).',
-    '',
-    `Total backend test files: ${rows.length} — test cases: ${total}.`,
-    '',
-    '| File | Tests | Tags | Target pytest module | Target spec | Status |',
-    '|---|---|---|---|---|---|',
-  ];
-  for (const row of rows) {
-    lines.push(
-      `| \`${row.file}\` | ${row.tests} | ${row.tags.join(', ') || '—'} | \`${row.python}\` | ${row.spec || '—'} | ${row.status} |`,
-    );
-  }
-  lines.push('');
-  return `${lines.join('\n')}`;
-}
-
-async function loadRegistries(root) {
-  const load = async (relativePath) => import(pathToFileURL(path.join(root, relativePath)).href);
-  const { ROUTES } = await load('packages/contracts/src/routes.ts');
-  const { SPECIAL_ROUTE_MANIFEST } = await load('packages/api-routes/src/special/manifest.ts');
-  const { EVENTS } = await load('packages/contracts/src/events.ts');
-  return { routes: ROUTES, special: SPECIAL_ROUTE_MANIFEST, events: EVENTS };
-}
-
-export async function main(argv = process.argv.slice(2), root = ROOT) {
+export function main(argv = process.argv.slice(2), root = ROOT) {
   const check = argv.includes('--check');
-  if (argv.includes('--port-map')) {
-    const markdownPath = path.join(root, 'evidence', 'SPEC-2001', 'test-port-map.md');
-    const rows = buildPortMap(root);
-    const markdown = renderPortMap(rows);
-    if (check) {
-      const current = fs.existsSync(markdownPath) ? readText(markdownPath) : '';
-      if (current !== markdown) {
-        console.error(
-          'Test port map drift: regenerate evidence/SPEC-2001/test-port-map.md (CA-4).',
-        );
-        process.exitCode = 1;
-      } else {
-        console.log(`Test port map up to date: ${rows.length} files.`);
-      }
-      return rows;
-    }
-    fs.mkdirSync(path.dirname(markdownPath), { recursive: true });
-    fs.writeFileSync(markdownPath, `${markdown}\n`);
-    console.log(`Test port map written: ${rows.length} backend test files.`);
-    return rows;
+  const runtimeOnly = argv.includes('--runtime');
+  const inventory = buildInventory({ root });
+
+  if (runtimeOnly) {
+    process.exitCode = runtime(inventory);
+    return inventory;
   }
-  const registries = await loadRegistries(root);
-  const inventory = buildInventory({
-    root,
-    deps: {
-      ...registries,
-      jobs: jobDefinitions(root),
-      usage: eventUsage(root),
-      index: testIndex(root),
-    },
-  });
-  const jsonPath = path.join(root, 'api', 'inventory.json');
-  const markdownPath = path.join(root, 'evidence', 'SPEC-2001', 'inventory.md');
+
+  const jsonPath = path.join(root, INVENTORY_JSON);
+  const markdownPath = path.join(root, INVENTORY_MD);
   const json = serialize(inventory);
   const markdown = renderInventoryMarkdown(inventory);
 
   if (check) {
-    const current = fs.existsSync(jsonPath) ? readText(jsonPath) : '';
-    if (current !== json) {
-      console.error('Inventory drift: api/inventory.json does not match the registries (CA-2).');
+    const drift = [];
+    if (!fs.existsSync(jsonPath) || readText(jsonPath) !== json) drift.push(INVENTORY_JSON);
+    if (!fs.existsSync(markdownPath) || readText(markdownPath) !== `${markdown}\n`) {
+      drift.push(INVENTORY_MD);
+    }
+    if (drift.length > 0) {
+      console.error(
+        `Inventory drift: ${drift.join(', ')} does not match the contract and the Python sources ` +
+          '(node tools/migration/inventory.mjs).',
+      );
       process.exitCode = 1;
       return inventory;
     }
@@ -700,13 +714,14 @@ export async function main(argv = process.argv.slice(2), root = ROOT) {
   fs.writeFileSync(markdownPath, `${markdown}\n`);
   console.log(
     `Inventory written: ${inventory.counts.operations} operations, ` +
-      `${inventory.counts.special} special routes, ${inventory.counts.events} events, ` +
-      `${inventory.counts.jobs} jobs, ${inventory.counts.gaps} without test.`,
+      `${inventory.counts.special} special routes, ${inventory.counts.consumers} consumers, ` +
+      `${inventory.counts.crons} crons, ${inventory.counts.remainingTypeScript} TypeScript ` +
+      'backend path(s) remaining.',
   );
   return inventory;
 }
 
 const entry = process.argv[1] === undefined ? null : pathToFileURL(process.argv[1]).href;
 if (entry !== null && fileURLToPath(entry) === fileURLToPath(import.meta.url)) {
-  await main();
+  main();
 }

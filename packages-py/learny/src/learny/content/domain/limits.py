@@ -1,9 +1,4 @@
-"""Upload rules of BR-APP-02 (SPEC-206 EF-6, ET-2, CL-1 to CL-3, ADR-0039).
-
-Port of `packages/services/src/resources/limits.ts`: every bound comes from the product constants,
-never from the route, and each refusal carries a stable code and the French message of the
-TypeScript service.
-"""
+"""Upload rules of BR-APP-02 (SPEC-206 EF-6, ET-2, CL-1 to CL-3, ADR-0039)."""
 
 from dataclasses import dataclass
 

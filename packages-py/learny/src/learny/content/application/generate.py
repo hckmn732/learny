@@ -1,8 +1,8 @@
 """Generate the course now (BR-APP-04, SPEC-607 EF-4, ET-2).
 
-Port of `packages/services/src/resources/generate.ts`: an explicit demand is accepted even while a
-chapter is still open, the event carries `force`, and its identifier covers the completion version
-so a repeated click cannot request a second generation. A locked module is refused.
+An explicit demand is accepted even while a chapter is still open, the event carries `force`, and
+its identifier covers the completion version so a repeated click cannot request a second generation.
+A locked module is refused.
 """
 
 from typing import Any

@@ -1,4 +1,4 @@
-import { serviceDb, sql } from '@learny/db';
+import { serviceDb, sql } from '@learny/testing/db';
 
 // ADR-0340 — the platform provides no model: a task can only run on the learner's own qualified key.
 // The e2e journeys that exercise an AI task seed that choice here instead of a subscription. With

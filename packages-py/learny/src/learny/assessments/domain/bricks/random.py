@@ -1,8 +1,6 @@
 """Deterministic pseudo-randomness of the public payloads (SPEC-501 ET-7).
 
 Same seed, same order, in the browser and on the server: no `random` module and no system state.
-Port of `packages/bricks/src/random.ts`; the generator itself lives in `learny.shared.prng` so the
-whole backend shares one implementation (ADR-0140).
 """
 
 import math

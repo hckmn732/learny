@@ -1,8 +1,6 @@
-"""Guards of the special routes (port of `packages/http/src/dev-guard.ts` and `deps/sdd-pages.ts`).
+"""Guards of the special routes.
 
-The TypeScript backend carries two distinct flags, and they do not accept the same values:
-`devRoutesEnabled` opens the demonstration routes on `true` **or** `1`, while `sddPagesEnabled`
-opens the `_dev` tooling endpoints on the exact value `true` only. Both refuse `APP_ENV=production`.
+Both refuse `APP_ENV=production`.
 """
 
 from collections.abc import Mapping
@@ -28,7 +26,7 @@ def sdd_pages_enabled(env: Mapping[str, str | None]) -> bool:
 
 
 def not_found_problem(request: Request, context: "pipeline.PipelineContext") -> Response:
-    """`devOnly` refusal: the same problem+json 404 as the TypeScript guard, no extra header."""
+    """`devOnly` refusal: the same problem+json 404."""
     request_id = resolve_api_request_id(request.headers.get(pipeline.API_REQUEST_ID_HEADER))
     return api_problem_response(AppError("NOT_FOUND", RESOURCE_NOT_FOUND), request_id, dict(context.catalog))
 

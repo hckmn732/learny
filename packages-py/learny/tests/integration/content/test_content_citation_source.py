@@ -1,8 +1,7 @@
 """[SPEC-2203] Controlled citation link: deleted label, signed page fragment and web anchor.
 
-Ported from `packages/services/src/courses/citation-source.test.ts` (SPEC-609 EF-2, ET-1, ET-3,
-CL-3, BR-COU-02; ADR-0039): the same citation rows and the same expected URLs, on the local stack.
-The Storage gateway is a fake that records its calls: no socket is opened.
+The same citation rows and the same expected URLs, on the local stack. The Storage gateway is a fake
+that records its calls: no socket is opened.
 """
 
 from typing import Any

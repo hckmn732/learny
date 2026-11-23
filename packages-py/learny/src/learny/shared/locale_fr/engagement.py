@@ -1,13 +1,10 @@
 """User-facing French strings of the engagement context services (ADR-2011).
 
-Every literal is copied verbatim from the TypeScript backend: the notification templates from
-`packages/notifications/src/templates/index.ts`, the e-mail subjects and bodies from
-`packages/notifications/emails/*.tsx`, the unsubscribe pages from `packages/i18n/src/fr/email.ts`
-and the service messages from `packages/services/src/{notifications,parametres-notifications,email}`
-and `packages/notifications/src/{notify,deliveries,digest}.ts`.
+Every literal is copied verbatim from the reference implementation: the notification templates,
+the e-mail subjects and bodies, the unsubscribe pages and the service messages.
 """
 
-# packages/notifications/src/templates/index.ts — one title/body per notification type and tone.
+# one title/body per notification type and tone.
 # The `vous` and `tu` variants are both copied: no `tu` variant may borrow a vouvoiement.
 
 NOTIFICATION_MODULE_FALLBACK = "le module en cours"
@@ -150,7 +147,7 @@ NOTIFICATION_HREF_SETTINGS_AI = "/reglages/ia"
 NOTIFICATION_HREF_SETTINGS_DATA = "/reglages/donnees"
 NOTIFICATION_HREF_GROUPS = "/groupes"
 
-# packages/notifications/src/notify.ts, deliveries.ts, digest.ts — service messages.
+# deliveries.ts, digest.ts — service messages.
 NOTIFY_INVALID = "Notification invalide."
 NOTIFY_PROFILE_NOT_FOUND = "Profil introuvable."
 DELIVERY_NOT_FOUND = "Livraison introuvable."
@@ -177,17 +174,17 @@ DIGEST_SLOT_LABELS: dict[str, str] = {
     "weekly_review": "Bilan de la semaine",
 }
 
-# packages/services/src/notifications/list.ts (SPEC-306).
+# SPEC-306.
 INBOX_NOTIFICATION_NOT_FOUND = "Notification introuvable."
 
-# packages/services/src/parametres-notifications.ts (SPEC-708).
+# SPEC-708.
 SETTINGS_INVALID_BODY = "Les réglages envoyés sont invalides."
 SETTINGS_INCONSISTENT = "Réglages de notifications incohérents."
 SETTINGS_NOT_FOUND = "Réglages de notifications introuvables."
 SETTINGS_PROFILE_NOT_FOUND = "Profil introuvable."
 SETTINGS_CONFLICT = "Vos réglages ont été modifiés ailleurs. Rechargez-les puis réessayez."
 
-# packages/services/src/email/unsubscribe.ts (SPEC-204 EF-5).
+# SPEC-204 EF-5.
 UNSUBSCRIBE_TOKEN_INVALID = "Ce lien n’est plus valide."
 
 # packages/i18n/src/fr/email.ts — the two unsubscribe HTML pages.
@@ -201,7 +198,7 @@ UNSUBSCRIBE_INVALID = "Ce lien n’est plus valide."
 UNSUBSCRIBE_INVALID_HINT = "Vous pouvez gérer vos e-mails depuis Paramètres › Notifications."
 UNSUBSCRIBE_PAGE_TITLE_SUFFIX = " · Learny"
 
-# packages/notifications/src/push/*.ts (SPEC-205).
+# SPEC-205.
 PUSH_UNAUTHENTICATED = "Vous devez être connecté pour effectuer cette action."
 PUSH_FOREIGN_ENDPOINT = "Cet abonnement ne peut pas être enregistré sur ce compte."
 PUSH_NOT_REGISTERED = "Abonnement non enregistré."
@@ -210,13 +207,13 @@ PUSH_NOT_CONFIGURED = "Le canal push n’est pas configuré (clés VAPID absente
 PUSH_ENDPOINT_INVALID = "un point de terminaison HTTPS public est attendu"
 
 # The e-mail texts live in `engagement_email`: the templates, their subjects and the unsubscribe
-# pages are copied word for word from the TypeScript e-mail package.
+# pages.
 
-# packages/notifications/src/templates/index.ts — the truncation mark of a clamped text.
+# the truncation mark of a clamped text.
 NOTIFICATION_ELLIPSIS = "…"
 NOTIFICATION_WHEN_SHORT = "bientôt"
 
-# packages/notifications/src/producers/{index,reminders}.ts (SPEC-706, BR-NOT-07).
+# SPEC-706, BR-NOT-07.
 REMINDER_INVALID = "Rappel invalide."
 REMINDER_SLOT_MOVED = "Le cr\u00e9neau a \u00e9t\u00e9 d\u00e9plac\u00e9."
 REMINDER_PROFILE_NOT_FOUND = "Profil introuvable."
@@ -225,7 +222,7 @@ REMINDER_TODAY = "aujourd\u2019hui \u00e0 {time}"
 REMINDER_TOMORROW = "demain \u00e0 {time}"
 REMINDER_OTHER = "le {date}"
 
-# packages/services/src/exercises/ensure-practice-exercise.ts (SPEC-613 ET-4).
+# SPEC-613 ET-4.
 PRACTICE_NOTION_INVALID = "Identifiant de notion invalide."
 PRACTICE_NOTION_NOT_FOUND = "Notion introuvable."
 PRACTICE_BRICK_NOT_CREATED = "Brique non cr\u00e9\u00e9e."

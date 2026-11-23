@@ -1,7 +1,6 @@
 """Demonstrations of the SDD pages: the API coverage, the auth proxy and the Checkout session.
 
-Port of `packages/api-routes/src/implementations/dev.ts` and of `devSddStripeCheckout`. The three
-routes are guarded by `devRoutesEnabled` inside the handler, exactly like the TypeScript `guarded`.
+The three routes are guarded by `devRoutesEnabled` inside the handler.
 """
 
 from typing import Any
@@ -29,8 +28,6 @@ async def stripe_session(call: Call) -> dict[str, Any]:
     return {"sessionId": str(session_id) if session is not None and session.status == "open" else None}
 
 
-# The demonstration job of the worker (SPEC-203): the page shows it and its retry budget. The page
-# keeps the job identifier of the TypeScript registry (`DEMO_JOB_ID` of `@learny/jobs`), whatever the
-# name of the Python consumer that runs it (`devtools.demo_job`).
+# The demonstration job of the worker (SPEC-203): the page shows it and its retry budget.
 DEMO_JOB_ID = "sdd-demo-job"
 DEMO_JOB_RETRIES = 3

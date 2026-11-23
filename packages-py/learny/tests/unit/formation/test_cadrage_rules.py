@@ -1,4 +1,4 @@
-"""[SPEC-2201] Pure rules of the scoping chat (port of cadrage/apply-tutor-turn.ts)."""
+"""[SPEC-2201] Pure rules of the scoping chat."""
 
 import pytest
 from learny.formation.domain.cadrage import (

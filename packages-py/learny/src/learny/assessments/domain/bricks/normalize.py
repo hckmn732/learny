@@ -1,9 +1,8 @@
 """Text normalization shared by fingerprints, cloze correction and bank deduplication.
 
-Port of `packages/bricks/src/normalize.ts` (ADR-0151, BR-MEM-05). The steps and their order are
 normative, and the function is idempotent: `normalize_text(normalize_text(s)) == normalize_text(s)`.
-    1. NFKC; 2. typographic apostrophes/quotes/dashes/spaces to ASCII; 3. lower case;
-    4. NFD, remove diacritics, NFC; 5. collapse whitespace; 6. trim; 7. drop trailing punctuation.
+1. NFKC; 2. typographic apostrophes/quotes/dashes/spaces to ASCII; 3. lower case;
+4. NFD, remove diacritics, NFC; 5. collapse whitespace; 6. trim; 7. drop trailing punctuation.
 """
 
 import re

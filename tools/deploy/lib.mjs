@@ -20,7 +20,7 @@ export const UNCONFIGURED = 'Non configuré';
 
 export const LOCAL_HOSTS = new Set(['127.0.0.1', 'localhost', '::1', '[::1]', '0.0.0.0']);
 
-/** API keys required by a preview. The production list is read from packages/config (ET-2). */
+/** API keys required by a preview (ADR-2042: the Python backend owns the contract). */
 export const PREVIEW_REQUIRED_KEYS = Object.freeze([
   'NEXT_PUBLIC_APP_URL',
   'NEXT_PUBLIC_SUPABASE_URL',
@@ -28,10 +28,7 @@ export const PREVIEW_REQUIRED_KEYS = Object.freeze([
   'SUPABASE_SERVICE_ROLE_KEY',
   'DATABASE_URL',
   'APP_ENCRYPTION_KEY',
-  'INNGEST_EVENT_KEY',
-  'INNGEST_SIGNING_KEY',
   'RESEND_API_KEY',
-  'RATE_LIMIT_IP_SECRET',
   'EMAIL_LINK_SECRET',
   'API_INTERNAL_URL',
   'API_PROXY_SECRET',
@@ -81,6 +78,14 @@ export function parseStringArray(source, name) {
  * Reads the managed regions, the EU allow-list and the production requirements from
  * `packages/config`, the single source validated by SPEC-009.
  */
+/** `PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (...)` of the Python contract (ADR-2042). */
+function parsePythonStringTuple(source, name) {
+  const pattern = new RegExp(`${name}\\s*(?::[^=]+)?=\\s*\\(([\\s\\S]*?)\\)`, 'm');
+  const match = pattern.exec(source);
+  if (match === null) return null;
+  return [...match[1].matchAll(/"([A-Z0-9_]+)"/g)].map((entry) => entry[1]);
+}
+
 export function readManagedConfig(root = ROOT) {
   const platform = readText(path.join(root, 'packages/config/src/platform.ts'));
   if (platform === null) throw new Error('packages/config/src/platform.ts est absent.');
@@ -91,11 +96,11 @@ export function readManagedConfig(root = ROOT) {
       'HOSTING_REGIONS ou EU_REGIONS est illisible dans packages/config/src/platform.ts.',
     );
   }
-  const envSource = readText(path.join(root, 'packages/config/src/env.ts'));
-  if (envSource === null) throw new Error('packages/config/src/env.ts est absent.');
-  const productionRequiredKeys = parseStringArray(envSource, 'PRODUCTION_REQUIRED_KEYS');
+  const envSource = readText(path.join(root, 'packages-py/learny/src/learny/shared/config.py'));
+  if (envSource === null) throw new Error('learny/shared/config.py est absent.');
+  const productionRequiredKeys = parsePythonStringTuple(envSource, 'PRODUCTION_REQUIRED_ENV');
   if (productionRequiredKeys === null) {
-    throw new Error('PRODUCTION_REQUIRED_KEYS est illisible dans packages/config/src/env.ts.');
+    throw new Error('PRODUCTION_REQUIRED_ENV est illisible dans learny/shared/config.py.');
   }
   return { regions, euRegions, productionRequiredKeys };
 }

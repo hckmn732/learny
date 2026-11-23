@@ -1,8 +1,5 @@
 """SQL of the formation context (SPEC-2201).
 
-Every statement is copied from the TypeScript service it replaces (`cadrage/*.ts`,
-`formations/*.ts`, `programme/*.ts`, `formations-a-plusieurs.ts` and the `packages/db` repositories
-it calls): same tables, same columns, same `order by`, same `for update` and same advisory locks.
 `${x}` placeholders become bound `:x` parameters and nothing here reads the clock.
 """
 

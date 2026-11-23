@@ -1,10 +1,9 @@
 """Start, read, submit and result of a mock exam (SPEC-614 EF-1 to EF-4, ET-4, ET-5, ADR-0172).
 
-Port of `packages/services/src/mock-exams/attempt.ts`. The deadline is an absolute instant computed
-once at the creation of the attempt, an answer is refused five seconds after it, and the advisory
-lock plus the row lock make the button, the deadline job and a lazy read converge on a single
-graded attempt. The questions are materialised in `activities.items`, so a later bank change never
-rewrites an attempt in progress.
+The deadline is an absolute instant computed once at the creation of the attempt, an answer is
+refused five seconds after it, and the advisory lock plus the row lock make the button, the deadline
+job and a lazy read converge on a single graded attempt. The questions are materialised in
+`activities.items`, so a later bank change never rewrites an attempt in progress.
 """
 
 import json
