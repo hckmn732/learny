@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T23:09:26.950Z",
+  "updatedAt": "2026-11-23T23:52:35.319Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7343,11 +7343,11 @@
       "validations": {}
     },
     "SPEC-3402": {
-      "status": "pending",
-      "attempts": 0,
-      "startedAt": null,
+      "status": "in_progress",
+      "attempts": 1,
+      "startedAt": "2026-11-23T23:12:46.308Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-3402-connexion-avec-apple-et-google",
       "commit": null,
       "lastError": null,
       "validations": {}
@@ -7519,5 +7519,13 @@
       "report": null
     }
   },
-  "anomalies": []
+  "anomalies": [
+    {
+      "spec": "SPEC-3402",
+      "at": "2026-11-23T23:52:35.317Z",
+      "attempts": 1,
+      "reason": "identifiants OAuth Apple/Google absents (aucun compte developpeur Apple, aucun client OAuth fourni)",
+      "external": true
+    }
+  ]
 }
