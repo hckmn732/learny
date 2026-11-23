@@ -15,12 +15,11 @@ import { fr } from '@learny/i18n';
 import { requireApiClient } from '../../api/registry';
 import type { LegalVersions } from '../../auth/legal';
 import { hasLegalAcceptance, rememberLegalAcceptance } from '../../auth/legal-cache';
+import { MOBILE_LEGAL_VERSIONS } from '../../auth/legal-versions';
 import { holdNavigation, releaseNavigation } from '../../auth/navigation-hold';
 import {
   applyProviderName,
   currentProviderSession,
-  LEGAL_PROBE_VERSIONS,
-  pendingLegalVersions,
   signInWithProviderToken,
   type ProviderAccessApi,
   type ProviderAuthClient,
@@ -55,9 +54,6 @@ function accessApi(): ProviderAccessApi {
     },
     updateProfile: async (body) => {
       await client.api.meUpdate({ body });
-    },
-    probeLegalAcceptance: async () => {
-      await client.api.meLegalAccept({ body: LEGAL_PROBE_VERSIONS });
     },
   };
 }
@@ -113,13 +109,10 @@ export function useProviderSignIn(): ProviderSignIn {
         name.current = result.name;
 
         if (!(await hasLegalAcceptance(secureSessionStorage, established.userId))) {
-          const versions = await pendingLegalVersions(accessApi());
-          if (versions !== null) {
-            // CA-2 — the gate stays held until the sheet is accepted.
-            setLegalVersions(versions);
-            return;
-          }
-          await rememberLegalAcceptance(secureSessionStorage, established.userId);
+          // CA-2 — the gate stays held until the sheet is accepted. The versions are the ones of
+          // this release (ADR-3024); the server validates the pair when it is recorded.
+          setLegalVersions(MOBILE_LEGAL_VERSIONS);
+          return;
         }
         await finish();
       } catch (cause) {

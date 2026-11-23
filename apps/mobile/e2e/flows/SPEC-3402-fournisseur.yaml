@@ -8,7 +8,7 @@
 # Précautions Maestro 2.12.1 : assertions sur des `id` et des textes ASCII ; clavier refermé avant
 # d'appuyer sur un bouton du bas de l'écran.
 appId: fr.learny.app
-name: SPEC-3402 fournisseur simulé
+name: SPEC-3402 fournisseur simule
 tags:
   - SPEC-3402
   - visual

@@ -1,4 +1,4 @@
-// Active legal versions known by the mobile build (SPEC-3402 CA-2, BR-ACC-02; ADR-3020).
+// Active legal versions known by the mobile build (SPEC-3402 CA-2, BR-ACC-02; ADR-3024).
 //
 // The API serialises the `errors` of a problem only for `VALIDATION_FAILED` (and two siblings), so
 // neither `422 LEGAL_ACCEPTANCE_REQUIRED` nor the `409 CONFLICT` of a submitted pair carries the
