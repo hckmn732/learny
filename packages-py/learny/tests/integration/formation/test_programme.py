@@ -59,7 +59,7 @@ async def test_a_tutor_without_model_makes_the_creation_unavailable(database: Da
     async def run(tx: Any) -> Any:
         alice = await create_user(tx.conn, "Alice")
         deps = formation_deps(tx)
-        return await cadrage_service.create_formation(deps, actor_for(alice), {"title": "Sans clé"})
+        return await cadrage_service.create_formation(deps, actor_for(alice), {"title": "Sans cl\u00e9"})
 
     created = await rolled_back(database, run)
     parsed = FormationsCreateOutput.model_validate(created)
