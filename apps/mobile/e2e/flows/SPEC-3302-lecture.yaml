@@ -1,0 +1,123 @@
+# SPEC-3302 — lecture du cours : ouverture depuis Programme, corps, sommaire, source (CA-1, CA-2,
+# CA-3).
+#
+# Unique flux `@visual` de la spécification (leçon 6 du BRIEF, ADR-3015 § 5) : la capture
+# `SPEC-3302-lecture` montre le haut du chapitre 2 (« Saisie des pièces comptables », chapitre 2
+# sur 4, progression de lecture) et est comparée à la ligne de base versionnée
+# `e2e/visual/baselines/SPEC-3302-lecture.png` (masque : barre d'état et indicateur d'accueil, le
+# reste est du contenu). Les autres états sont capturés pour la preuve mais ne sont pas comparés.
+#
+# Le flux ne mute rien : la progression envoyée porte sur un chapitre déjà lu à 100 % (valeur
+# monotone, BR-COU-08), le signalement et le résumé sont couverts par le test d'intégration et les
+# tests de composants. Maestro 2.12.1 : assertions sur `id` et texte ASCII, `scrollUntilVisible`
+# remplacé par des `swipe` bornés.
+appId: fr.learny.app
+name: SPEC-3302 lecture
+tags:
+  - SPEC-3302
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 20000
+# CA-1 — « Reprendre » ouvre l'écran Cours natif, empilé au-dessus des onglets (EF-1).
+- extendedWaitUntil:
+    visible:
+      id: programme-resume
+    timeout: 20000
+- tapOn:
+    id: programme-resume
+- extendedWaitUntil:
+    visible:
+      id: course-header
+    timeout: 20000
+- assertVisible:
+    id: course-title
+- assertVisible:
+    id: course-progress
+- assertVisible:
+    id: course-toc
+- assertVisible:
+    id: course-ask-tutor
+- assertVisible:
+    id: course-open-quiz
+# CA-5 — état de la maquette : haut du chapitre 2, barre de progression pleine (chapitre déjà lu).
+- takeScreenshot: SPEC-3302-lecture
+# EF-2 — le corps : le Markdown de la première section puis la question éclair.
+- assertVisible:
+    id: course-markdown
+- swipe:
+    start: 50%, 75%
+    end: 50%, 30%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: course-quick-question
+    timeout: 10000
+# BR-COU-05 — la réponse reste masquée jusqu'à « Afficher la réponse ».
+- tapOn:
+    id: course-reveal
+- assertVisible:
+    id: course-answer
+- takeScreenshot: SPEC-3302-lecture-question
+# CA-3 — la citation du chapitre ouvre sa source contrôlée (BR-COU-02).
+- swipe:
+    start: 50%, 75%
+    end: 50%, 45%
+    duration: 500
+- tapOn:
+    id: course-citation-chapitre-2-flash-question
+- extendedWaitUntil:
+    visible:
+      id: course-source
+    timeout: 10000
+- assertVisible:
+    id: course-source-label
+- takeScreenshot: SPEC-3302-lecture-source
+- tapOn:
+    id: course-source-close
+# EF-4 — la fin du chapitre propose le chapitre suivant.
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 600
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+    duration: 600
+- extendedWaitUntil:
+    visible:
+      id: course-next
+    timeout: 20000
+- takeScreenshot: SPEC-3302-lecture-fin
+# BR-NAV-04 — le retour ramène à l'onglet Programme.
+- tapOn:
+    id: course-back
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 20000

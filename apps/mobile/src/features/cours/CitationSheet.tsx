@@ -53,7 +53,10 @@ export function CitationSheet({ citation, onClose }: CitationSheetProps) {
 
   if (citation === null) return null;
   const source = resolved?.id === citationId ? resolved.source : null;
-  const unavailable = source !== null && (source.deleted || source.url === null);
+  // ADR-0039 - a deleted source says so; a note of the learner has no external file to open, so its
+  // fiche shows the extract and no action (the contract allows a null URL without a deletion).
+  const unavailable = source !== null && source.deleted;
+  const openable = source !== null && !source.deleted && source.url !== null;
   const location = source === null ? '' : sourceLocationLabel(source);
 
   return (
@@ -93,18 +96,19 @@ export function CitationSheet({ citation, onClose }: CitationSheetProps) {
               {location}
             </Text>
           )}
-          <Button
-            disabled={source.url === null}
-            label={m.source.open}
-            onPress={() => {
-              const url = source.url;
-              if (url === null) return;
-              onClose();
-              void openExternal(url).catch(() => undefined);
-            }}
-            testID="course-source-open"
-            variant="ink"
-          />
+          {openable && source.url !== null ? (
+            <Button
+              label={m.source.open}
+              onPress={() => {
+                const url = source.url;
+                if (url === null) return;
+                onClose();
+                void openExternal(url).catch(() => undefined);
+              }}
+              testID="course-source-open"
+              variant="ink"
+            />
+          ) : null}
         </View>
       )}
       <Button
