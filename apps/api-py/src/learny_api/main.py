@@ -10,7 +10,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from learny.shared.config import Settings
+from learny.shared.config import Settings, load_settings
 from learny.shared.deps import build_deps
 from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
 from starlette.responses import JSONResponse, Response
@@ -77,7 +77,7 @@ def create_app(
     `ownership` and `context` are injectable so a test can serve one operation with fake guards
     without touching the real table or opening a database connection.
     """
-    resolved = settings or Settings()
+    resolved = settings or load_settings()
     global CATALOG
     CATALOG = load_catalog(api_dir() / "errors.json")
     resolved_ownership = ownership or load_ownership_checked(resolved)

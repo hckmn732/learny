@@ -4,6 +4,9 @@ The variable names are the ones the TypeScript backend already reads; Python-spe
 prefixed with `PY_`. Nothing is renamed, so an existing deployment keeps working.
 """
 
+import os
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -129,3 +132,111 @@ class Settings(BaseSettings):
         if self.supabase_jwks_url is not None:
             return self.supabase_jwks_url
         return f"{self.supabase_url.rstrip('/')}/auth/v1/.well-known/jwks.json"
+
+
+@dataclass(frozen=True, slots=True)
+class ConfigurationIssue:
+    """One refused production variable: its name and a safe code, never its value (SPEC-009)."""
+
+    name: str
+    code: Literal["missing", "forbidden", "incompatible"]
+
+
+class ConfigurationError(RuntimeError):
+    """A production start refused before any connection: names and safe codes only."""
+
+    code = "INVALID_ENVIRONMENT"
+
+    def __init__(self, scope: str, issues: Iterable[ConfigurationIssue]) -> None:
+        unique: dict[str, ConfigurationIssue] = {}
+        for issue in issues:
+            unique.setdefault(issue.name, issue)
+        self.scope = scope
+        self.names: tuple[str, ...] = tuple(sorted(unique))
+        self.issues: tuple[ConfigurationIssue, ...] = tuple(unique[name] for name in self.names)
+        super().__init__(f"Configuration {scope} invalide : variables à corriger : {', '.join(self.names)}.")
+
+
+# Port of PRODUCTION_REQUIRED_KEYS (packages/config/src/env.ts), restricted to the variables that
+# docker/compose.coolify-py.yml provides to api-py and worker-py. Inngest is gone (ADR-2006), the
+# platform owns no AI key (SPEC-709), and the web-only or legal keys are not read by the Python
+# backend. `NEXT_PUBLIC_SUPABASE_*` are the Python names `SUPABASE_URL` / `SUPABASE_ANON_KEY`.
+PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (
+    "APP_ENCRYPTION_KEY",
+    "API_PROXY_SECRET",
+    "DATABASE_URL",
+    "EMAIL_LINK_SECRET",
+    "NEXT_PUBLIC_APP_URL",
+    "RATE_LIMIT_IP_SECRET",
+    "RESEND_API_KEY",
+    "STRIPE_PRICE_ID",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "VAPID_PRIVATE_KEY",
+    "VAPID_SUBJECT",
+    "VOYAGE_API_KEY",
+)
+
+
+def production_configuration_issues(
+    settings: Settings,
+    environ: Mapping[str, str] | None = None,
+) -> tuple[ConfigurationIssue, ...]:
+    """Every reason an APP_ENV=production start is incomplete; empty when it is valid.
+
+    Only names and safe codes leave this function: a secret value is never copied, logged or
+    rendered (SPEC-009 CA-2, CL-7). Missing variables are read from the process environment, never
+    from the documented defaults, so a default cannot hide an absent production secret.
+    """
+    values = os.environ if environ is None else environ
+    issues: list[ConfigurationIssue] = [
+        ConfigurationIssue(name, "missing")
+        for name in PRODUCTION_REQUIRED_ENV
+        if not values.get(name, "").strip()
+    ]
+    forbidden = (
+        ("LLM_MODE", settings.llm_mode, "mock"),
+        ("RATE_LIMIT_MODE", settings.rate_limit_mode, "off"),
+        ("STRIPE_MODE", settings.stripe_mode, "mock"),
+        ("EMAIL_MODE", settings.email_mode, "memory"),
+        ("PUSH_MODE", settings.push_mode, "mock"),
+        ("JOBS_MODE", settings.jobs_mode, "inline"),
+    )
+    for variable, value, refused in forbidden:
+        if value == refused:
+            issues.append(ConfigurationIssue(variable, "forbidden"))
+    if (settings.enable_sdd_pages or "").strip() == "true":
+        issues.append(ConfigurationIssue("ENABLE_SDD_PAGES", "forbidden"))
+    for variable, url in (
+        ("NEXT_PUBLIC_APP_URL", settings.next_public_app_url),
+        ("SUPABASE_URL", settings.supabase_url),
+    ):
+        if url is not None and not url.startswith("https://"):
+            issues.append(ConfigurationIssue(variable, "incompatible"))
+    return tuple(issues)
+
+
+def ensure_production_configuration(
+    settings: Settings,
+    environ: Mapping[str, str] | None = None,
+) -> None:
+    """Refuses an incomplete APP_ENV=production start (port of checkEnvironment, SPEC-009 CA-2)."""
+    if not settings.is_production:
+        return
+    issues = production_configuration_issues(settings, environ)
+    if issues:
+        raise ConfigurationError("production", issues)
+
+
+def load_settings() -> Settings:
+    """Reads the process environment once and applies the startup guards of the deployment.
+
+    The API (`uvicorn learny_api.main:app`) and the worker (`python -m learny_worker`) both enter
+    through this function; an explicit `Settings(...)` (tests, tooling) owns its own configuration.
+    """
+    settings = Settings()
+    ensure_production_configuration(settings)
+    return settings
