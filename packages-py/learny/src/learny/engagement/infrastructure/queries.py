@@ -1073,6 +1073,19 @@ UNDO_AUTOMATION_ACTION = text(
     "status::text as status, decided_at, created_at"
 )
 
+INSERT_REPROPOSED_ACTION = text(
+    "insert into public.automation_actions (user_id, formation_id, automation, kind, summary, "
+    "payload, requires_consent, status, created_at) "
+    "values (cast(:user_id as uuid), cast(:formation_id as uuid), "
+    "cast(:automation as public.automation_key), :kind, :summary, cast(:payload as jsonb), "
+    "cast(:requires_consent as boolean), 'pending_consent', cast(:now as timestamptz)) "
+    "on conflict do nothing "
+    "returning id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at"
+)
+
+
 UPDATE_AUTOMATION_ACTION_EFFECT = text(
     "update public.automation_actions set summary = :summary, "
     "payload = coalesce(cast(:payload as jsonb), payload), "
@@ -1116,6 +1129,36 @@ async def undo_automation_action(
         UNDO_AUTOMATION_ACTION, {"user_id": user_id, "action_id": action_id, "now": now}
     )
     return _automation_action(result.mappings().one())
+
+
+async def insert_reproposed_action(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str | None,
+    automation: str,
+    kind: str,
+    summary: str,
+    payload: Mapping[str, Any],
+    requires_consent: bool,
+    now: datetime,
+) -> AutomationActionRow | None:
+    """ADR-0191 section 3 - the proposal comes back on a suffixed dedupe key (service role)."""
+    result = await tx.conn.execute(
+        INSERT_REPROPOSED_ACTION,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "automation": automation,
+            "kind": kind,
+            "summary": summary,
+            "payload": json.dumps(dict(payload), ensure_ascii=False),
+            "requires_consent": requires_consent,
+            "now": now,
+        },
+    )
+    row = result.mappings().first()
+    return None if row is None else _automation_action(row)
 
 
 async def update_automation_action_effect(

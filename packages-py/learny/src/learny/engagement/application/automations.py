@@ -404,4 +404,64 @@ async def undo_automation_action(deps: EngagementDeps, actor: Actor, action_id: 
             {"userId": actor.user_id, "actionId": row.id, "automation": row.automation},
             event_id=f"automation-action-undone:{row.id}",
         )
-        return action_to_dto(row)
+    # ADR-0191 section 3 - the proposal comes back right after the undo, on a suffixed dedupe key;
+    # the undone row stays in the journal (BR-AUT-12). A failing proposal never cancels the undo.
+    if (
+        definition is not None
+        and definition.repropose_after_undo
+        and current.status == "applied"
+    ):
+        await _repropose_after_undo(deps, actor, current, definition, now, time_zone, tone)
+    return action_to_dto(row)
+
+
+async def _repropose_after_undo(
+    deps: EngagementDeps,
+    actor: Actor,
+    current: queries.AutomationActionRow,
+    definition: Any,
+    now: Any,
+    time_zone: str,
+    tone: str,
+) -> None:
+    """Writes the new pending proposal on the service role, as the TypeScript engine does."""
+    payload = {
+        key: value
+        for key, value in dict(current.payload).items()
+        if key not in ("chosenStartsAt", "appliedAt", "choice")
+    }
+    base_key = str(payload.get("dedupeKey") or definition.key)
+    payload["dedupeKey"] = f"{base_key}#undo:{to_epoch_ms(now)}"
+    view = _view(
+        queries.AutomationActionRow(
+            id=current.id,
+            formation_id=current.formation_id,
+            automation=current.automation,
+            kind=current.kind,
+            summary=current.summary,
+            payload=payload,
+            undo_payload=None,
+            requires_consent=current.requires_consent,
+            status="pending_consent",
+            decided_at=None,
+            created_at=now,
+        )
+    )
+    summary = definition.explain(view, tone, time_zone)
+    try:
+        async with deps.db.service_tx() as tx:
+            await queries.insert_reproposed_action(
+                tx,
+                user_id=actor.user_id,
+                formation_id=current.formation_id,
+                automation=current.automation,
+                kind=current.kind,
+                summary=summary,
+                payload=payload,
+                requires_consent=current.requires_consent,
+                now=now,
+            )
+    except Exception:
+        logger = getattr(deps, "logger", None)
+        if logger is not None:
+            logger.warn("automation repropose failed", outcome="repropose_failed")
