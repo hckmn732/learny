@@ -49,6 +49,12 @@ export const sddDemos: Record<string, SddDemo> = {
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-2207'),
   },
+  'SPEC-2301': {
+    title: 'Déploiement Coolify, bascule progressive et rollback',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2301'),
+  },
   'SPEC-1302': {
     title: 'Migration terminée',
     titleTestId: 'sdd-title',

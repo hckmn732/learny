@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-23T00:10:15.734Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-23T01:24:33.794Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -10,9 +10,9 @@
 | Terminées | 139 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 19 |
-| Bloquées | 0 |
-| Bloquées par une dépendance | 0 |
+| En attente de dépendances | 17 |
+| Bloquées | 1 |
+| Bloquées par une dépendance | 1 |
 | **Avancement global** | **88.0 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | python-migration |
@@ -201,11 +201,12 @@
 | [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2202 |
 | [SPEC-2207](../specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md) | Bascule des jobs, des crons et des routes de démonstration vers Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2206 |
 | [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
-| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⏳ waiting | 0 | — | SPEC-2207 |
-| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | ⏳ waiting | 0 | — | SPEC-2301 |
+| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⛔ blocked | 1 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2207 |
+| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | 🚫 dependency_blocked | 0 | — | SPEC-2301 |
 
 ## Anomalies et blocages
 
-Aucun.
+- SPEC-2301 (blocked) : staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)
+- SPEC-2302 (dependency_blocked) : dépendance bloquée
 
 Détails : [anomalies.md](anomalies.md), [blockers.md](blockers.md).

@@ -8,6 +8,7 @@ decide which consumers and crons it runs (SPEC-2102 CA-3).
 
 import json
 import os
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
@@ -18,6 +19,7 @@ Owner = Literal["ts", "py"]
 
 OPERATIONS_KEY = "operations"
 SPECIAL_KEY = "special"
+WILDCARD = "*"
 CONSUMERS_KEY = "consumers"
 CRONS_KEY = "crons"
 
@@ -90,13 +92,44 @@ def special_key(method: str, path: str) -> str:
 
 
 def overrides_from_env(raw: str | None) -> dict[str, Owner]:
-    """`OWNERSHIP_OVERRIDES` is a JSON object `{route_id: "py"}` used by tests and canaries."""
+    """`OWNERSHIP_OVERRIDES` is a JSON object `{route_id: "py"}` used by tests and canaries.
+
+    `"*"` is the only accepted wildcard (SPEC-2301): it forces every entry to the same owner, so
+    `{"*": "ts"}` is the relay-only deployment and the total rollback of a cutover.
+    """
     if not raw:
         return {}
     parsed = json.loads(raw)
     if not isinstance(parsed, dict):
         raise OwnershipError("OWNERSHIP_OVERRIDES must be a JSON object")
     return {str(key): value for key, value in parsed.items() if value in ("ts", "py")}
+
+
+def apply_overrides(ownership: Ownership, overrides: Mapping[str, Owner]) -> Ownership:
+    """Returns the table with `OWNERSHIP_OVERRIDES` applied (ADR-2005, SPEC-2301).
+
+    An explicit entry wins over the `"*"` wildcard, which itself wins over the committed table. The
+    wildcard never reaches the completeness check: it is expanded here into concrete entries.
+    """
+    if not overrides:
+        return ownership
+    default = overrides.get(WILDCARD)
+
+    def owner(entry: str, current: Owner) -> Owner:
+        explicit = overrides.get(entry)
+        if explicit is not None:
+            return explicit
+        return default if default is not None else current
+
+    def table(section: dict[str, Owner]) -> dict[str, Owner]:
+        return {entry: owner(entry, current) for entry, current in section.items()}
+
+    return Ownership(
+        operations=table(ownership.operations),
+        special=table(ownership.special),
+        consumers=table(ownership.consumers),
+        crons=table(ownership.crons),
+    )
 
 
 def find_api_dir(start: Path | None = None) -> Path:
@@ -119,11 +152,4 @@ def load_ownership_for_worker(path: Path | None = None) -> Ownership:
     resolved = path or (find_api_dir() / "ownership.yaml")
     ownership = load_ownership(resolved)
     overrides = overrides_from_env(os.environ.get("OWNERSHIP_OVERRIDES"))
-    if not overrides:
-        return ownership
-    return Ownership(
-        operations={**ownership.operations, **overrides},
-        special={**ownership.special, **overrides},
-        consumers={**ownership.consumers, **overrides},
-        crons={**ownership.crons, **overrides},
-    )
+    return apply_overrides(ownership, overrides)

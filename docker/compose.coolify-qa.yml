@@ -15,6 +15,12 @@
 # Compose Location `/compose.coolify-qa.yml`. Guide : docs/operations/coolify-qa.md.
 # Ne jamais y mettre de données réelles : les comptes et contenus y sont fictifs.
 
+# SPEC-2301 — la pile de QA gagne les services Python `api-py` et `worker-py`
+# (ADR-2007), déclarés dans un fichier inclus pour ne pas changer le rendu de la page
+# `/_dev/sdd/SPEC-1103` (ligne de base visuelle d'une autre spécification, ADR-1001).
+include:
+  - path: ./compose.coolify-qa-py.yml
+
 x-logging: &logging
   driver: json-file
   options:

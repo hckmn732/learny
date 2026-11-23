@@ -40,3 +40,4 @@
 - **Portée** : les pages et l’acceptation serveur sont fonctionnelles en local et en test. SPEC-808
   ne peut pas annoncer la publication V1 tant que ces quatre valeurs ne sont pas fournies en
   prépublication/production ; le contrôle de prépublication échoue alors avec les noms des champs.
+- **SPEC-2301** (2026-11-23T01:24:33.788Z, 1 tentative(s)) — staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)
