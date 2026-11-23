@@ -11,6 +11,8 @@ from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from learny.shared.locale_fr.details import CONFIGURATION_INVALID
+
 RateLimitMode = Literal["on", "off"]
 LlmMode = Literal["live", "mock"]
 EmailMode = Literal["memory", "smtp", "resend"]
@@ -154,7 +156,7 @@ class ConfigurationError(RuntimeError):
         self.scope = scope
         self.names: tuple[str, ...] = tuple(sorted(unique))
         self.issues: tuple[ConfigurationIssue, ...] = tuple(unique[name] for name in self.names)
-        super().__init__(f"Configuration {scope} invalide : variables à corriger : {', '.join(self.names)}.")
+        super().__init__(CONFIGURATION_INVALID.format(scope=scope, names=", ".join(self.names)))
 
 
 # Port of PRODUCTION_REQUIRED_KEYS (packages/config/src/env.ts), restricted to the variables that

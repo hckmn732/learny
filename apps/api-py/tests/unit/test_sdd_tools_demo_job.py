@@ -7,6 +7,7 @@ from typing import Any, cast
 import pytest
 from fastapi import FastAPI
 from learny.shared.clock import FixedClock
+from learny.shared.locale_fr.details import INVALID_REQUEST_TITLE
 from learny.shared.time import parse_iso
 from learny_api.special import sdd_tools
 from learny_api.special.sdd_tools import DEMO_JOB_KEY, DEMO_JOB_PATH, DEMO_STORE, demo_job
@@ -128,7 +129,7 @@ async def test_the_route_shape_answers_the_problem_of_the_dev_tools(body: Any) -
     assert headers["content-type"] == "application/problem+json"
     assert payload == {
         "type": "about:blank",
-        "title": "Requête invalide",
+        "title": INVALID_REQUEST_TITLE,
         "status": 400,
         "code": "VALIDATION_FAILED",
     }

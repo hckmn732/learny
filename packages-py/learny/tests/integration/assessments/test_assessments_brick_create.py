@@ -24,6 +24,7 @@ from factories.identity_support import (
 from learny.assessments.application import bricks as brick_service
 from learny.shared.db.uow import Database
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import assessments as texts
 
 pytestmark = pytest.mark.spec("SPEC-2302")
 
@@ -132,7 +133,7 @@ async def test_an_unknown_formation_and_an_invalid_payload_are_refused(database:
 
     errors, count = await rolled_back(database, run)
     assert [error.code for error in errors] == ["NOT_FOUND", "BRICK_INVALID", "VALIDATION_FAILED"]
-    assert errors[0].detail == "Formation introuvable."
+    assert errors[0].detail == texts.FORMATION_NOT_FOUND
     assert errors[1].extra["errors"]
     assert count == 0
 
@@ -162,4 +163,4 @@ async def test_the_public_payload_is_served_to_its_owner_only(database: Database
     assert '"correct"' not in serialized
     assert "The bank account" in serialized
     assert [error.code for error in refused] == ["NOT_FOUND", "NOT_FOUND", "VALIDATION_FAILED"]
-    assert refused[0].detail == "Version de brique introuvable."
+    assert refused[0].detail == texts.BRICK_VERSION_NOT_FOUND

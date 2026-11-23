@@ -247,3 +247,5 @@ DEV_ECHO_FORMATION_LIMIT = (
 )
 CURSOR_INVALID = "Le curseur de pagination est illisible."
 CURSOR_INVALID_ITEM = "Curseur invalide."
+# Production start refused (SPEC-009, ADR-2040), verbatim of packages/config/src/env-shared.ts.
+CONFIGURATION_INVALID = "Configuration {scope} invalide : variables à corriger : {names}."
