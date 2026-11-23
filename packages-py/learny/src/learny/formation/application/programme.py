@@ -8,6 +8,7 @@ version. Modules and planning rows are never touched before the validation.
 
 import json
 from collections.abc import Mapping, Sequence
+from datetime import datetime
 from typing import Any
 
 from learny.formation.application.ports import FormationDeps
@@ -179,6 +180,12 @@ def build_proposal_dto(
         "versions": _version_summaries(proposals, latest_version),
         "activeFormationCount": active_count,
     }
+
+
+def _anchor_reference(formation: Mapping[str, Any], now: datetime) -> str:
+    """The day a proposed programme may not start before: the formation start, else today."""
+    start = formation.get("start_date")
+    return str(start) if start else now.date().isoformat()
 
 
 async def read_programme_state(
@@ -457,6 +464,7 @@ async def generate_proposal(
                 "objectifs": list(formation["objectives"]),
                 "cadrage": _cadrage_summary(formation["cadrage_profile"]),
                 "volumeHeures": formation["volume_hours"],
+                "dateDuJour": now.date().isoformat(),
                 "dateDebut": formation["start_date"],
                 "dateFin": formation["end_date"],
                 "sourcesWeb": sources,
@@ -464,7 +472,9 @@ async def generate_proposal(
         ),
         scenario=rules.programme_scenario("generate", str(formation["title"])),
     )
-    payload = rules.normalize_draft(result.draft)
+    payload = rules.anchor_programme_dates(
+        rules.normalize_draft(result.draft), _anchor_reference(formation, now)
+    )
 
     async with deps.db.user_tx(actor) as tx:
         await queries.lock_programme(tx, formation_id)
@@ -538,7 +548,9 @@ async def adjust_proposal(
                 tx, actor.user_id, change_request_id, "failed", error.detail, now
             )
         raise
-    payload = rules.normalize_draft(result.draft)
+    payload = rules.anchor_programme_dates(
+        rules.normalize_draft(result.draft), _anchor_reference(formation, now)
+    )
 
     async with deps.db.user_tx(actor) as tx:
         await queries.lock_programme(tx, formation_id)
@@ -694,7 +706,9 @@ async def import_proposal(
         async with deps.db.service_tx() as tx:
             await queries.fail_import(tx, actor.user_id, import_id, error.detail or "", now)
         raise
-    payload = rules.normalize_draft(result.draft)
+    payload = rules.anchor_programme_dates(
+        rules.normalize_draft(result.draft), _anchor_reference(formation, now)
+    )
 
     async with deps.db.user_tx(actor) as tx:
         await queries.lock_programme(tx, formation_id)

@@ -5,11 +5,14 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import {
   NoObjectGeneratedError,
+  asSchema,
   generateObject,
+  jsonSchema,
   generateText,
   streamObject,
   streamText,
   tool,
+  type JSONSchema7,
   type LanguageModel,
   type ModelMessage,
   type ToolSet,
@@ -372,10 +375,14 @@ export async function createSession(
     assertCitationsCompatible({ citations: input.citations, structured: true });
     const started = clock.now();
     const system = buildAnthropicSystem(input.system);
+    // OpenAI strict JSON schema forbids optional fields and several keywords used by product
+    // schemas; the response is still validated by Zod, so the non-strict mode is used instead.
     const providerOptions =
       resolved.provider === 'anthropic' && opts.probe === undefined
         ? buildAnthropicOptions({ task: opts.task, modelId: resolved.modelId }).providerOptions
-        : undefined;
+        : resolved.provider === 'openai'
+          ? { openai: { strictJsonSchema: false } }
+          : undefined;
     const headers =
       resolved.provider === 'anthropic' ? { [LEARNY_TASK_HEADER]: opts.task } : undefined;
     const messages = outgoingMessages(mode, input, resolved.provider);
@@ -389,7 +396,7 @@ export async function createSession(
       if (opts.probe === undefined && needsProviderStreaming(opts.task)) {
         const streamed = streamObject({
           model: currentModel,
-          schema: input.schema,
+          schema: strictCompatibleSchema(input.schema, resolved.provider),
           ...(system === undefined ? {} : { system }),
           messages,
           maxOutputTokens: execution.maxOutputTokens,
@@ -403,7 +410,7 @@ export async function createSession(
       } else {
         const generated = await generateObject({
           model: currentModel,
-          schema: input.schema,
+          schema: strictCompatibleSchema(input.schema, resolved.provider),
           ...(system === undefined ? {} : { system }),
           messages,
           maxOutputTokens: execution.maxOutputTokens,
@@ -567,4 +574,93 @@ function usageFromError(error: unknown): CallUsage {
     return usageOf(error.usage);
   }
   return emptyUsage();
+}
+
+/**
+ * OpenAI-compatible strict structured outputs reject `oneOf` (only `anyOf` is accepted). Zod
+ * discriminated unions convert to `oneOf`, so non-Anthropic providers receive the same schema with
+ * `oneOf` rewritten to `anyOf`; validation still runs through the original Zod schema.
+ */
+function strictCompatibleSchema<S extends z.ZodType>(
+  schema: S,
+  provider: AiProviderValue,
+): S | ReturnType<typeof jsonSchema<z.infer<S>>> {
+  if (provider === 'anthropic') return schema;
+  const base = asSchema(schema);
+  return jsonSchema<z.infer<S>>(async () => rewriteOneOf(await base.jsonSchema) as JSONSchema7, {
+    validate: (value: unknown) => {
+      const parsed = schema.safeParse(value);
+      if (parsed.success) return { success: true as const, value: parsed.data };
+      // Non-strict providers often emit `null` for optional fields: retry without them.
+      const cleaned = stripNulls(value);
+      const retried = schema.safeParse(cleaned);
+      if (retried.success) return { success: true as const, value: retried.data };
+      // Over-long strings only: truncate them to the schema maximum instead of failing the turn.
+      const truncated = truncateTooLongStrings(cleaned, retried.error.issues);
+      if (truncated !== undefined) {
+        const fixed = schema.safeParse(truncated);
+        if (fixed.success) return { success: true as const, value: fixed.data };
+      }
+      console.warn(
+        JSON.stringify({
+          level: 'warn',
+          component: 'llm',
+          message: 'structured output rejected',
+          provider,
+          issues: retried.error.issues.slice(0, 10).map((issue) => ({
+            path: issue.path.map(String).join('.'),
+            code: issue.code,
+          })),
+        }),
+      );
+      return { success: false as const, error: retried.error };
+    },
+  });
+}
+
+function truncateTooLongStrings(value: unknown, issues: readonly z.core.$ZodIssue[]): unknown {
+  if (issues.length === 0) return undefined;
+  const copy: unknown = structuredClone(value);
+  for (const issue of issues) {
+    if (issue.code !== 'too_big' || issue.origin !== 'string') return undefined;
+    const maximum = Number(issue.maximum);
+    let parent: unknown = copy;
+    for (const key of issue.path.slice(0, -1)) {
+      parent = (parent as Record<PropertyKey, unknown> | undefined)?.[key];
+    }
+    const last = issue.path[issue.path.length - 1];
+    const holder = parent as Record<PropertyKey, unknown> | undefined;
+    if (
+      holder === undefined ||
+      last === undefined ||
+      typeof holder[last] !== 'string'
+    ) {
+      return undefined;
+    }
+    holder[last] = (holder[last])
+      .trim()
+      .slice(0, maximum)
+      .trim();
+  }
+  return copy;
+}
+
+function stripNulls(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(stripNulls);
+  if (node === null || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+    if (value !== null) out[key] = stripNulls(value);
+  }
+  return out;
+}
+
+function rewriteOneOf(node: unknown): unknown {
+  if (Array.isArray(node)) return node.map(rewriteOneOf);
+  if (node === null || typeof node !== 'object') return node;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+    out[key === 'oneOf' ? 'anyOf' : key] = rewriteOneOf(value);
+  }
+  return out;
 }

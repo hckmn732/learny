@@ -406,6 +406,13 @@ export function ModuleScreen({ initial }: ModuleScreenProps) {
               >
                 {pending ? t.generating : t.generate}
               </button>
+              <a
+                className="inline-flex min-h-48 items-center rounded-14 border border-white/40 px-22 text-15 font-700 text-white no-underline"
+                data-testid="course-open"
+                href={`/formations/${encodeURIComponent(screen.formation.id)}/modules/${encodeURIComponent(screen.module.id)}/cours`}
+              >
+                {t.openCourse}
+              </a>
             </section>
           </div>
         </div>

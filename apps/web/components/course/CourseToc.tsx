@@ -16,7 +16,16 @@ function sectionLabel(section: CourseSection): string {
   if (section.kind === 'retain') return t.takeaway;
   if (section.kind === 'flash_question') return t.quickQuestion.split(' · ')[0] ?? t.quickQuestion;
   if (section.kind === 'summary_prompt') return t.summaryTitle;
-  return section.anchor.replaceAll('-', ' ');
+  if (section.kind === 'dont_confuse') return t.comparison;
+  // Untitled prose section: its first words, without Markdown marks, rather than the raw anchor.
+  const words = (section.contentMd ?? '')
+    .replace(/[`*_#>[\]()]/gu, '')
+    .split(/\s+/u)
+    .filter((word) => word !== '')
+    .slice(0, 7)
+    .join(' ');
+  if (words !== '') return words.length > 48 ? `${words.slice(0, 47).trimEnd()}…` : words;
+  return section.kind === 'tutor_completed' ? (t.tutorCompleted.split(' · ')[0] ?? '') : '';
 }
 
 /** BR-COU-11 — chapter and section table of contents with the persisted chapter progress. */

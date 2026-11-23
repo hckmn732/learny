@@ -1,0 +1,387 @@
+{
+  "choice_question": {
+    "type": "object",
+    "properties": {
+      "stem": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 600
+      },
+      "mode": {
+        "type": "string",
+        "enum": [
+          "single",
+          "multiple"
+        ]
+      },
+      "options": {
+        "minItems": 2,
+        "maxItems": 6,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]{1,8}$"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "correct": {
+              "type": "boolean"
+            },
+            "notionId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rationale": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "id",
+            "text",
+            "correct",
+            "notionId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "explanation": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 1200
+      },
+      "objective": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 200
+      },
+      "sources": {
+        "default": [],
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "chunkId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "chunkId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "stem",
+      "mode",
+      "options",
+      "explanation",
+      "objective"
+    ],
+    "additionalProperties": false
+  },
+  "open_question": {
+    "type": "object",
+    "properties": {
+      "stem": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 600
+      },
+      "expectedElements": {
+        "minItems": 1,
+        "maxItems": 8,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 200
+        }
+      },
+      "criteria": {
+        "minItems": 1,
+        "maxItems": 6,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]{1,32}$"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120
+            },
+            "points": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "key",
+            "label",
+            "points",
+            "description"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "answerMaxChars": {
+        "default": 1500,
+        "type": "integer",
+        "minimum": 50,
+        "maximum": 4000
+      },
+      "modelAnswer": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 2000
+      },
+      "explanation": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 1200
+      },
+      "objective": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 200
+      },
+      "sources": {
+        "default": [],
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "chunkId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "chunkId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "stem",
+      "expectedElements",
+      "criteria",
+      "modelAnswer",
+      "explanation",
+      "objective"
+    ],
+    "additionalProperties": false
+  },
+  "cloze": {
+    "type": "object",
+    "properties": {
+      "template": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 1000
+      },
+      "gaps": {
+        "minItems": 1,
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "answers": {
+              "minItems": 1,
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              }
+            },
+            "hint": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            }
+          },
+          "required": [
+            "id",
+            "answers"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "explanation": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 1200
+      },
+      "sources": {
+        "default": [],
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "chunkId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "chunkId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "template",
+      "gaps",
+      "explanation"
+    ],
+    "additionalProperties": false
+  },
+  "matching": {
+    "type": "object",
+    "properties": {
+      "instruction": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 300
+      },
+      "pairs": {
+        "minItems": 2,
+        "maxItems": 8,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]{1,8}$"
+            },
+            "left": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "right": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "notionId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "required": [
+            "id",
+            "left",
+            "right",
+            "notionId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "extraRights": {
+        "default": [],
+        "maxItems": 3,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "explanation": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 1200
+      },
+      "sources": {
+        "default": [],
+        "maxItems": 10,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "chunkId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "quote": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            }
+          },
+          "required": [
+            "chunkId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "instruction",
+      "pairs",
+      "explanation"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -13,7 +13,16 @@ GAP_EVIDENCE_MISUNDERSTANDING_OFF_TOPIC = (
 )
 GAP_EVIDENCE_FORGETTING_LAPSE = "Lapse FSRS signalé sur la notion."
 GAP_EVIDENCE_FORGETTING = "Notion réussie le {day}, échouée {days} jours plus tard."
-GAP_TRIGGER_QUALIFYING = "Tentative qualifiante « {kind} » sous le seuil de {threshold} %."
+GAP_TRIGGER_QUALIFYING = "{kind} sous le seuil de {threshold} % pour cette notion."
+# Learner-facing name of a qualifying activity (hotfix QA), "Tentative" for an unknown kind.
+GAP_ATTEMPT_KIND_LABELS = {
+    "validation_quiz": "Quiz de validation",
+    "global_quiz": "Quiz global",
+    "mock_exam": "Examen blanc",
+    "exercise": "Exercice",
+    "remediation": "Remédiation",
+}
+GAP_ATTEMPT_KIND_FALLBACK = "Tentative"
 GAP_TRIGGER_REPEATED = "Erreur « {key} » répétée sur {count} tentatives."
 GAP_INACTIVE_NO_ATTEMPT = "Aucune tentative qualifiante pour cette notion."
 GAP_INACTIVE_MASTERED = "Maîtrise {mastery} % au seuil de {threshold} %, aucune erreur répétée."

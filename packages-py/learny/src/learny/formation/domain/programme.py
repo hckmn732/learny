@@ -8,7 +8,7 @@ percentage keeps the exact counts and only rounds the displayed value.
 
 import unicodedata
 from collections.abc import Mapping, Sequence
-from datetime import date
+from datetime import date, timedelta
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
@@ -283,6 +283,34 @@ def _payload_issues(payload: ProgrammeProposalPayload) -> list[dict[str, str]]:
                     )
                 seen.add(key)
     return issues
+
+
+def anchor_programme_dates(payload: dict[str, Any], reference: str) -> dict[str, Any]:
+    """Moves a programme that starts before `reference` by whole weeks (hotfix QA, ADR-2038).
+
+    The model picks the module dates without knowing today's date and may place them in the past.
+    `reference` is the formation's own start date, or today when it has none; weekdays, durations
+    and gaps between modules are kept.
+    """
+    modules = payload.get("modules") or []
+    if not modules:
+        return payload
+    first = str(modules[0]["plannedStart"])
+    if first >= reference:
+        return payload
+    late = (date.fromisoformat(reference) - date.fromisoformat(first)).days
+    shift = timedelta(days=-(-late // 7) * 7)
+    return {
+        **payload,
+        "modules": [
+            {
+                **module,
+                "plannedStart": (date.fromisoformat(module["plannedStart"]) + shift).isoformat(),
+                "plannedEnd": (date.fromisoformat(module["plannedEnd"]) + shift).isoformat(),
+            }
+            for module in modules
+        ],
+    }
 
 
 def normalize_draft(raw: Any) -> dict[str, Any]:

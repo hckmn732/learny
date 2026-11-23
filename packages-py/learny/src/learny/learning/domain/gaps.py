@@ -450,7 +450,8 @@ def _trigger_evidence(
         triggers.append("qualifying_attempt")
         parts.append(
             texts.GAP_TRIGGER_QUALIFYING.format(
-                kind=latest.attempt_kind, threshold=_format_number(params.mastery_threshold)
+                kind=texts.GAP_ATTEMPT_KIND_LABELS.get(latest.attempt_kind, texts.GAP_ATTEMPT_KIND_FALLBACK),
+                threshold=_format_number(params.mastery_threshold),
             )
         )
     if repeated_errors:

@@ -57,10 +57,11 @@ COMPATIBILITY_SCENARIOS = (
 
 COMPATIBILITY_TASKS = ("programme", "course", "gaps", "tutor", "light")
 
-# A one-pixel opaque PNG, exactly the bytes of `compatibility.ts`.
+# A valid 16x16 RGB PNG (CRC checked), exactly the bytes of `compatibility.ts`; the former 1x1
+# pixel was corrupted and rejected by live providers.
 TRANSPARENT_PIXEL = bytes.fromhex(
-    "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c489"
-    "0000000d4944415408d763f8cfc0001005010114b09db30000000049454e44ae426082"
+    "89504e470d0a1a0a0000000d4948445200000010000000100802000000909168360000001649444154789c"
+    "63b8232747126218d530aa61f86a00009a331810746bb5600000000049454e44ae426082"
 )
 
 STRUCTURED_SYSTEM = "Compatibility probe: return the exact structured value requested. No explanation."

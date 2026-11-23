@@ -64,10 +64,17 @@ export async function relayToApi(request: NextRequest): Promise<NextResponse> {
     const responseHeaders = new Headers(response.headers);
     if (!responseHeaders.has('x-request-id')) responseHeaders.set('x-request-id', id);
     // The proxy only relays an absolute `location`: a relative one of the API (the callback
-    // redirect) is resolved against the URL the browser requested.
+    // redirect) is resolved against the public origin the browser requested.
     const location = responseHeaders.get('location');
-    if (location !== null)
-      responseHeaders.set('location', new URL(location, request.url).toString());
+    if (location !== null && !/^https?:\/\//u.test(location)) {
+      const proto =
+        request.headers.get('x-forwarded-proto')?.split(',')[0]?.trim() ??
+        request.nextUrl.protocol.replace(':', '');
+      responseHeaders.set(
+        'location',
+        new URL(location, `${proto}://${forwardedHost(request)}`).href,
+      );
+    }
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,
