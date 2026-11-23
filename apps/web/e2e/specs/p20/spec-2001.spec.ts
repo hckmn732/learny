@@ -9,8 +9,8 @@ test('présente l’inventaire du backend et la matrice de parité @SPEC-2001', 
     'Inventaire et parité du backend',
   );
   await expect(page.getByTestId('spec-2001-counts')).toContainText('217');
-  await expect(page.getByTestId('spec-2001-counts')).toContainText('49');
-  await expect(page.getByTestId('spec-2001-gaps')).toHaveText('141');
+  await expect(page.getByTestId('spec-2001-counts')).toContainText('50');
+  await expect(page.getByTestId('spec-2001-gaps')).toHaveText('132');
   const rows = page.getByTestId('spec-2001-contexts').getByRole('row');
   await expect(rows).not.toHaveCount(1);
   await expect(page.getByTestId('spec-2001-parity')).toContainText('scénarios de lecture');

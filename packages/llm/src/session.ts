@@ -630,17 +630,10 @@ function truncateTooLongStrings(value: unknown, issues: readonly z.core.$ZodIssu
     }
     const last = issue.path[issue.path.length - 1];
     const holder = parent as Record<PropertyKey, unknown> | undefined;
-    if (
-      holder === undefined ||
-      last === undefined ||
-      typeof holder[last] !== 'string'
-    ) {
+    if (holder === undefined || last === undefined || typeof holder[last] !== 'string') {
       return undefined;
     }
-    holder[last] = (holder[last])
-      .trim()
-      .slice(0, maximum)
-      .trim();
+    holder[last] = holder[last].trim().slice(0, maximum).trim();
   }
   return copy;
 }

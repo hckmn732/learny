@@ -103,7 +103,7 @@ test('conformité visuelle de la bascule @SPEC-2301 @visual', async ({
   // CA-1 (local part) — the four counters, read from the committed ownership table.
   const scope = page.getByTestId('spec-2301-scope');
   await expect(scope).toContainText('Opérations servies par Python');
-  await expect(scope).toContainText('190 / 217');
+  await expect(scope).toContainText('201 / 217');
   await expect(scope).toContainText('Routes spéciales servies par Python');
   await expect(scope).toContainText('29 / 32');
   await expect(scope).toContainText('Consommateurs Python');
@@ -111,7 +111,7 @@ test('conformité visuelle de la bascule @SPEC-2301 @visual', async ({
   await expect(scope).toContainText('Crons Python');
   await expect(scope).toContainText('2 / 2');
   await expect(page.getByTestId('spec-2301-relayed')).toContainText(
-    '27 opérations et 3 routes spéciales restent relayées',
+    '16 opérations et 3 routes spéciales restent relayées',
   );
 
   // EF-2 — the cutover state of every context of the inventory.

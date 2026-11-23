@@ -95,7 +95,7 @@ test('conformité visuelle de la bascule @SPEC-2207 @visual', async ({
   // CA-1 — the four tables of the ownership file, read by the page itself.
   const scope = page.getByTestId('spec-2207-scope');
   await expect(scope).toContainText('Opérations servies par Python');
-  await expect(scope).toContainText('190 / 217');
+  await expect(scope).toContainText('201 / 217');
   await expect(scope).toContainText('Routes spéciales servies par Python');
   await expect(scope).toContainText('29 / 32');
   await expect(scope).toContainText('Consommateurs Python');
@@ -103,7 +103,7 @@ test('conformité visuelle de la bascule @SPEC-2207 @visual', async ({
   await expect(scope).toContainText('Crons Python');
   await expect(scope).toContainText('2 / 2');
   await expect(page.getByTestId('spec-2207-scope-deferred')).toContainText(
-    '30 entrées restent relayées',
+    '19 entrées restent relayées',
   );
 
   // CA-1 — every consumer and both crons are Python, and the page says why the rest is relayed.
@@ -114,8 +114,8 @@ test('conformité visuelle de la bascule @SPEC-2207 @visual', async ({
   await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/hourly-tick');
   await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/nightly');
   const deferred = page.getByTestId('spec-2207-deferred');
-  await expect(deferred.locator('span')).toHaveCount(30);
-  await expect(deferred).toContainText('fabriques de');
+  await expect(deferred.locator('span')).toHaveCount(19);
+  await expect(deferred).toContainText('pas encore porté');
   await expect(deferred).toContainText('agrégat de dix-huit lectures');
   await expect(deferred).toContainText('commitlint');
   await expect(deferred).toContainText('planSprintsBeforeMilestones');
