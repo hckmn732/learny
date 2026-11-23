@@ -37,6 +37,11 @@ PROVIDER_NO_MODELS = "Le fournisseur n’a retourné aucun modèle disponible."
 CHAT_MODEL_UNCONFIRMED = "Le modèle de chat n’a pas confirmé la connexion."
 MODEL_ID_INVALID = "Identifiant de modèle invalide."
 
+AI_UNAVAILABLE_DETAIL = (
+    "Cette fonction demande un modèle d’IA. Choisissez un modèle de votre propre clé dans "
+    "Paramètres › Modèles d’IA."
+)
+
 # --- onglet « Modèles d'IA » --------------------------------------------------------------------
 
 MODEL_NOT_FOUND = "Modèle introuvable."
