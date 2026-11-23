@@ -1,0 +1,65 @@
+{
+  "spec": "SPEC-3101",
+  "platform": "android",
+  "transport": "agent",
+  "jobId": null,
+  "device": {
+    "serial": "emulator-5554",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400",
+    "platform": "android"
+  },
+  "tags": [
+    "SPEC-3101"
+  ],
+  "startedAt": "2026-11-23T00:06:35.954Z",
+  "finishedAt": "2026-11-23T00:10:24.706Z",
+  "passed": 0,
+  "failed": 2,
+  "videos": 0,
+  "campaignVideo": null,
+  "visual": 0,
+  "junitCases": 0,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3101-connexion.yaml",
+      "name": "SPEC-3101 connexion",
+      "tags": [
+        "SPEC-3101",
+        "visual"
+      ],
+      "status": "missing",
+      "durationSec": 0,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": {
+        "flow": "SPEC-3101 connexion",
+        "status": "failed",
+        "detail": "aucune capture rattachée à ce flux (`takeScreenshot` absent ou nommé autrement)"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3101-lien-magique.yaml",
+      "name": "SPEC-3101 lien magique",
+      "tags": [
+        "SPEC-3101"
+      ],
+      "status": "missing",
+      "durationSec": 0,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3101 connexion",
+      "status": "failed",
+      "detail": "aucune capture rattachée à ce flux (`takeScreenshot` absent ou nommé autrement)"
+    }
+  ],
+  "unattributed": []
+}
