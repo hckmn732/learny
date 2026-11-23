@@ -1,14 +1,6 @@
-// Programme (SPEC-3102 EF-2; the real screen arrives with SPEC-3202).
-import { fr } from '@learny/i18n';
-
-import { PlaceholderTabScreen } from '../../../src/features/shell/PlaceholderTabScreen';
+// Programme tab (SPEC-3202): the real screen replaces the placeholder of SPEC-3102.
+import { ProgrammeScreen } from '../../../src/features/programme/ProgrammeScreen';
 
 export default function ProgrammeRoute() {
-  return (
-    <PlaceholderTabScreen
-      title={fr.mobile.shell.tabs.programme}
-      icon="layers"
-      testID="programme-screen"
-    />
-  );
+  return <ProgrammeScreen />;
 }
