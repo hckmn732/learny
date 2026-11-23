@@ -9,7 +9,6 @@ appId: fr.learny.app
 name: SPEC-3203 agenda
 tags:
   - SPEC-3203
-  - visual
 ---
 - launchApp:
     clearState: true
