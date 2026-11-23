@@ -259,3 +259,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2038](ADR-2038-correctifs-qa-du-2026-11-21-portes-dans-le-backend-python.md) | Correctifs QA du 2026-11-21 portés dans le backend Python | Déduite | SPEC-504, SPEC-513, SPEC-503, SPEC-605, SPEC-704, SPEC-2207 |
 | [ADR-2039](ADR-2039-constantes-des-tableaux-de-bord-de-migration-mises-a-jour-av.md) | Constantes des tableaux de bord de migration mises à jour avec l inventaire | Déduite | CP-21, CP-22, ADR-2008, ADR-2036, SPEC-113, SPEC-2001, SPEC-2207 |
 | [ADR-2040](ADR-2040-demarrage-de-production-refuse-par-l-api-et-le-worker-python.md) | Démarrage de production refusé par l'API et le worker Python quand l'environnement est incomplet | Déduite | SPEC-009, ADR-2037, ADR-2006, SPEC-709 |
+| [ADR-2041](ADR-2041-retrait-des-pages-de-demonstration-sdd-et-des-routes-dev.md) | Retrait des pages de démonstration SDD et des routes _dev | Déduite | ADR-0049, ADR-2008, ADR-2036, SPEC-2302 |

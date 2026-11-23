@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { defineRoute } from './define-route';
 
 // Rate-limit profiles (ADR-0213) and the demonstration routes of SPEC-208. The profile table lives
 // here so the browser demo and the server limiter read the same numbers.
@@ -53,48 +52,3 @@ export const PurgeOutput = z.object({
 });
 export type PurgeOutput = z.infer<typeof PurgeOutput>;
 
-// Demonstration routes: active only with ENABLE_SDD_PAGES, never in production. They simulate on
-// synthetic buckets and do not use the caller's own rate-limit buckets.
-export const devRateLimitBurst = defineRoute({
-  id: 'dev.rateLimit.burst',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/rate-limit/burst',
-  auth: 'public',
-  body: BurstInput,
-  output: BurstOutput,
-  successStatus: 200,
-  rateLimit: 'none',
-  summary: 'Route de démonstration : rafale simulée sur un profil de débit (SPEC-208).',
-  errors: ['VALIDATION_FAILED'],
-});
-
-export const devRateLimitOrigin = defineRoute({
-  id: 'dev.rateLimit.origin',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/rate-limit/origin',
-  auth: 'public',
-  body: OriginInput,
-  output: OriginOutput,
-  successStatus: 200,
-  rateLimit: 'none',
-  summary: 'Route de démonstration : mutation d’origine identique ou étrangère (SPEC-208).',
-  errors: ['VALIDATION_FAILED'],
-});
-
-export const devRateLimitPurge = defineRoute({
-  id: 'dev.rateLimit.purge',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/rate-limit/purge',
-  auth: 'public',
-  output: PurgeOutput,
-  successStatus: 200,
-  rateLimit: 'none',
-  summary: 'Route de démonstration : purge des clés et seaux périmés (SPEC-208).',
-  errors: [],
-});
-
-export const securityRoutes = {
-  devRateLimitBurst,
-  devRateLimitOrigin,
-  devRateLimitPurge,
-} as const;

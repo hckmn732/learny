@@ -9,16 +9,13 @@ from typing import Any
 import pytest
 from dev_route_support import DevDeps, allow_authentication, build_dev_app
 from learny.shared.db.uow import Database
-from learny.shared.locale_fr.details import RESOURCE_NOT_FOUND
 from sqlalchemy import text
 
 pytestmark = pytest.mark.spec("SPEC-2207")
 
 ROUTE_IDS = (
-    "dev.cron.hourlyTick",
     "dev.events.demo.run",
     "dev.events.demo.start",
-    "dev.events.outbox",
 )
 ENABLED = {"APP_ENV": "test", "ENABLE_SDD_PAGES": "true"}
 
@@ -74,57 +71,3 @@ async def test_the_start_emits_the_pipeline_event(
         }
     finally:
         await _cleanup(database)
-
-
-async def test_the_tick_previews_the_factory_users(
-    app: tuple[Any, Any], database: Database, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    _app, client = app
-    allow_authentication(monkeypatch, await seeded_user(database))
-    response = client.post("/api/v1/dev/sdd/cron/hourly-tick", json={"at": "2026-11-11T12:20:00Z"})
-
-    assert response.status_code == 200
-    body = response.json()
-    assert body["tickAt"] == "2026-11-11T12:20:00.000Z"
-    assert isinstance(body["users"], list)
-
-
-async def test_the_outbox_counts_the_callers_events(
-    app: tuple[Any, Any], database: Database, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    _app, client = app
-    allow_authentication(monkeypatch, await seeded_user(database))
-    try:
-        client.post(
-            "/api/v1/dev/sdd/events/demo",
-            json={"failOnceAt": "none"},
-            headers={"idempotency-key": "dev-events-2"},
-        )
-        response = client.get("/api/v1/dev/sdd/events/outbox")
-
-        assert response.status_code == 200
-        assert response.json()["pending"] >= 1
-
-        # SPEC-2102: the worker stamps `dispatched_at`; the event is no longer pending and the
-        # demonstration counts it as sent, exactly like the TypeScript page did.
-        async with database.service_tx() as tx:
-            await tx.conn.execute(
-                text(
-                    "update public.event_outbox set dispatched_at = now(), sent_at = now()"
-                    " where event_id like :pattern"
-                ),
-                {"pattern": "sdd-demo:%"},
-            )
-        dispatched = client.get("/api/v1/dev/sdd/events/outbox")
-        assert dispatched.json()["pending"] == 0
-        assert dispatched.json()["sent"] >= 1
-    finally:
-        await _cleanup(database)
-
-
-async def test_the_guard_refuses_the_tick_in_production() -> None:
-    _app, client = build_dev_app(ROUTE_IDS, DevDeps(), {"APP_ENV": "production", "ENABLE_SDD_PAGES": "true"})
-    response = client.post("/api/v1/dev/sdd/cron/hourly-tick", json={})
-
-    assert response.status_code == 404
-    assert response.json()["detail"] == RESOURCE_NOT_FOUND

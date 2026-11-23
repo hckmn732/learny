@@ -71,33 +71,8 @@ export const devEventsDemoRun = defineRoute({
   errors: ['VALIDATION_FAILED'],
 });
 
-export const devCronHourlyTick = defineRoute({
-  id: 'dev.cron.hourlyTick',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/cron/hourly-tick',
-  auth: 'user',
-  body: HourlyTickInput,
-  output: HourlyTickOutput,
-  successStatus: 200,
-  summary:
-    'Route de démonstration : exécute le tick horaire et liste les utilisateurs de fabrique sélectionnés (SPEC-203).',
-  errors: ['VALIDATION_FAILED'],
-});
-
-export const devEventsOutbox = defineRoute({
-  id: 'dev.events.outbox',
-  method: 'GET',
-  path: '/api/v1/dev/sdd/events/outbox',
-  auth: 'user',
-  output: OutboxCounts,
-  successStatus: 200,
-  summary: 'Route de démonstration : état de la boîte d’envoi de l’utilisateur (SPEC-203).',
-  errors: [],
-});
-
+// ADR-2041: only the worker harness of the e2e suite stays (SPEC-2102, SPEC-2207).
 export const devJobsRoutes = {
   devEventsDemoStart,
   devEventsDemoRun,
-  devEventsOutbox,
-  devCronHourlyTick,
 } as const;

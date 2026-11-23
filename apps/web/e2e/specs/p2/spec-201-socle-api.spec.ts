@@ -18,7 +18,7 @@ test.afterEach(async () => {
 
 test('refuse un appel sans session @SPEC-201', async ({ request }) => {
   // CA-5 — without a session cookie the API answers 401 problem+json.
-  const response = await request.get('/api/v1/dev/sdd/items', { headers: { cookie: '' } });
+  const response = await request.get('/api/v1/me', { headers: { cookie: '' } });
   expect(response.status()).toBe(401);
   expect(response.headers()['content-type']).toContain('application/problem+json');
   const body = (await response.json()) as { code: string; requestId: string };

@@ -23,21 +23,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_api.guards.rate_limit": "token buckets of the request pipeline",
         # `idempotency_keys` is a service-only table (SPEC-112 EF-3, ADR-0120).
         "learny_api.guards.idempotency": "idempotency reservations and replays",
-        # SPEC-2207 - the personal-data demonstration seeds a programme, schedules the deletion
-        # of a throwaway account and creates its own export row with the owner role (EF-9).
-        "learny_api.dev_demos.personal_data": "demo programme, throwaway deletion and export row",
-        # SPEC-2207 - the notification demonstration simulates settings and tone then restores
-        # them, and the push demonstration writes the notification row of the caller (EF-8).
+        # SPEC-2207 - the reminder generation of the e2e harness simulates settings and tone then
+        # restores them (EF-8).
         "learny_api.dev_demos.notifications": "simulated settings and tone of the demonstration",
-        "learny_api.dev_demos.push": "notification row of the push demonstration",
-        # SPEC-2207 - the rate-limit demonstration owns synthetic buckets and rows it deletes.
-        # SPEC-2207 - the SDD demonstration pages build their fixture in a transaction that is
-        # always rolled back and read the seeded account of the credential page (EF-9).
-        "learny_api.dev_demos.sdd_state": "rolled-back demo fixtures and the seeded account",
-        # SPEC-2207 - the action pages call the real use cases on the seeded account and read
-        # the throwaway account of the qualification run with the owner role.
-        "learny_api.dev_demos.sdd_actions": "seeded demo account and throwaway qualification user",
-        "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
         # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.
         "learny_api.special.dev_events": "factory users and outbox counts of the demonstration",
         # The smoothing journal of the daily quiz is an automation proposal (SPEC-718 ET-4).

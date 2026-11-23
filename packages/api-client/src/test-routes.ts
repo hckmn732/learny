@@ -1,9 +1,10 @@
+// Route definitions used only by the typed client tests (ADR-2041): no server answers them and
+// they are not part of the ROUTES registry.
 import { z } from 'zod';
 
-import { PaginationQuery, page } from './common';
-import { defineRoute } from './define-route';
+import { PaginationQuery, defineRoute, page } from '@learny/contracts';
 
-// Demonstration routes of SPEC-201 (active only with ENABLE_SDD_PAGES, never in production).
+// Shapes of the former SPEC-201 echo and paginated list, kept as client test fixtures.
 export const EchoInput = z.object({
   message: z.string().min(1).max(200),
   fail: z.enum(['business', 'crash']).optional(),

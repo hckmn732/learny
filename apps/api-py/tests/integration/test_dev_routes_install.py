@@ -75,4 +75,4 @@ def test_the_development_guard_of_the_real_table_is_closed_in_production(app: Fa
     instance = create_app(settings, ownership=ownership, context=app.state.pipeline)
     names = {getattr(route, "name", "") for route in instance.routes}
 
-    assert "special:dev.echo" in names
+    assert "special:dev.email.outbox" in names

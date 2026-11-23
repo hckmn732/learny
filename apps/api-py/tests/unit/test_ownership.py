@@ -36,8 +36,9 @@ def test_ownership_covers_every_operation_and_special_route() -> None:
     ownership = load_ownership(OWNERSHIP)
     operation_ids, special_keys = contract_entries()
     validate_completeness(ownership, operation_ids, special_keys)
-    assert len(ownership.operations) == 217
-    assert len(ownership.special) == 32
+    # ADR-2041: the SDD demonstration operations and routes are retired (217 -> 156, 32 -> 11).
+    assert len(ownership.operations) == 156
+    assert len(ownership.special) == 11
     assert set(ownership.operations.values()) <= {"ts", "py"}
 
 
