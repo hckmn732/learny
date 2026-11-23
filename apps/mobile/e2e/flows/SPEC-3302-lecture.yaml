@@ -8,13 +8,13 @@
 # reste est du contenu). Les autres états sont capturés pour la preuve, sans comparaison.
 #
 # Le flux ne mute rien : la progression envoyée porte sur un chapitre déjà lu à 100 % (valeur
-# monotone, BR-COU-08), le signalement et le résumé sont couverts par le test d'intégration et les
-# tests de composants. Maestro 2.12.1 : assertions sur `id` et texte ASCII, `scrollUntilVisible`
-# remplacé par des `swipe` bornés.
+# monotone, BR-COU-08) ; le signalement et le résumé sont couverts par le test d'intégration et les
+# tests de composants. Maestro 2.12.1 : assertions sur `id` et texte ASCII, aucun `scrollUntilVisible`
+# (les sections sont atteintes par le sommaire, ce qui couvre aussi EF-6).
 #
 # Le chapitre 2 est ouvert par sa rangée dans le module 3 : « Reprendre » du Programme pointe le
-# chapitre en cours de lecture (le 3), pas le chapitre 2 de la maquette. L'identifiant de la rangée
-# est celui du jeu de démonstration SPEC-115 (identifiants déterministes, `demoChapterId`).
+# chapitre en cours de lecture (le 3), pas le chapitre 2 de la maquette. Les identifiants de la
+# rangée et des sections sont ceux du jeu de démonstration SPEC-115 (identifiants déterministes).
 appId: fr.learny.app
 name: SPEC-3302 lecture
 tags:
@@ -77,19 +77,24 @@ tags:
     id: course-ask-tutor
 - assertVisible:
     id: course-open-quiz
-# CA-5 — état de la maquette : haut du chapitre 2, barre de lecture.
-- takeScreenshot: SPEC-3302-lecture
-# EF-2 — le corps : le Markdown de la première section puis la question éclair.
+# EF-2 — le corps commence par le Markdown de la section « Présentation ».
 - assertVisible:
     id: course-markdown
-- swipe:
-    start: 50%, 75%
-    end: 50%, 30%
-    duration: 500
+# CA-5 — état de la maquette : haut du chapitre 2, barre de lecture.
+- takeScreenshot: SPEC-3302-lecture
+# EF-6 — le sommaire amène la question éclair à l'écran (ancrage par section).
+- tapOn:
+    id: course-toc
+- extendedWaitUntil:
+    visible:
+      id: course-toc-sheet
+    timeout: 10000
+- tapOn:
+    id: course-toc-section-fb0a6111-aa92-5632-9fe2-a8fc00cf1288
 - extendedWaitUntil:
     visible:
       id: course-quick-question
-    timeout: 10000
+    timeout: 20000
 # BR-COU-05 — la réponse reste masquée jusqu'à « Afficher la réponse ».
 - tapOn:
     id: course-reveal
@@ -97,6 +102,10 @@ tags:
     id: course-answer
 - takeScreenshot: SPEC-3302-lecture-question
 # CA-3 — la citation du chapitre ouvre sa source contrôlée (BR-COU-02).
+- extendedWaitUntil:
+    visible:
+      id: course-citation-chapitre-2-flash-question
+    timeout: 20000
 - tapOn:
     id: course-citation-chapitre-2-flash-question
 - extendedWaitUntil:
@@ -108,15 +117,29 @@ tags:
 - takeScreenshot: SPEC-3302-lecture-source
 - tapOn:
     id: course-source-close
+# BR-COU-04 — « À retenir » en fin de chapitre, atteint par le sommaire.
+- tapOn:
+    id: course-toc
+- extendedWaitUntil:
+    visible:
+      id: course-toc-sheet
+    timeout: 10000
+- tapOn:
+    id: course-toc-section-d46c099c-d636-5e7f-902d-f87a8c7cd434
+- extendedWaitUntil:
+    visible:
+      id: course-takeaway
+    timeout: 20000
 # EF-4 — la fin du chapitre propose le chapitre suivant.
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 600
-- swipe:
-    start: 50%, 80%
-    end: 50%, 20%
-    duration: 600
+- runFlow:
+    when:
+      notVisible:
+        id: course-next
+    commands:
+      - swipe:
+          start: 50%, 80%
+          end: 50%, 40%
+          duration: 500
 - extendedWaitUntil:
     visible:
       id: course-next

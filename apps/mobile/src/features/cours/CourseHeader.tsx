@@ -4,6 +4,7 @@
 // Programme tab, a « Sommaire » button and the lime reading bar right under the bar. The bookmark
 // of the mockup is not implemented: no rule and no route carry it (ADR-3003 § 2).
 import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fr } from '@learny/i18n';
 
@@ -25,8 +26,11 @@ export interface CourseHeaderProps {
 
 /** Navigation bar and reading bar of the course screen. */
 export function CourseHeader({ badge, percent, onBack, onToc }: CourseHeaderProps) {
+  // The screen is stacked above the tabs: the header starts under the status bar, as the mockup
+  // draws it, otherwise the two icon buttons sit in the system area and miss their touch target.
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.root} testID="course-header">
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="course-header">
       <View style={styles.bar}>
         <IconButton
           accessibilityLabel={m.header.back}
