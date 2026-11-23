@@ -55,7 +55,29 @@ Aucune zone de contenu n'est masquée, aucun ADR n'est invoqué pour une zone re
   (mise à jour ciblée d'une ligne, sans `db:reset`, sous `flock /tmp/learny-sdd-db.lock`) : c'est
   l'état de la maquette et celui qu'attend CA-4 ; l'opération est idempotente.
 
-## 3. Critères d'acceptation
+## 3. Défaut produit corrigé (hors visuel, trouvé par la campagne)
+
+**Symptôme** : « Accepter » une action du tuteur affichait « Une erreur est survenue. Réessayez. »
+sans émettre la moindre requête (ucun POST dans les journaux de l'API, action restée
+pending_consent en base).
+
+**Cause** : les routes me.automation-actions.accept|decline|undo et slots/:sid/move sont
+idempotent: true ; packages/api-client forge la clé par défaut avec crypto.randomUUID(), absent
+de Hermes et du bundle release (le client mobile n'injecte que 
+ewRequestId via expo-crypto).
+L'appel levait donc **avant** le etch.
+
+**Portée** : toute mutation idempotente de l'application native (tuteur, report de séance, et toute
+route idempotent: true ajoutée ensuite). À reprendre centralement dans packages/api-client ou
+dans l'injection mobile (hors périmètre de SPEC-3201, consigné pour P33).
+
+**Correctif** (2b2e114a) : la clé est forgée par l'application avec idempotencyRegistry
+(src/api/idempotency.ts, générateur uuidV4 maison, SPEC-3003 ET-3), une clé par intention
+(utomation:<action>:<id>, slot-move:<sid>:<startsAt>), passée en CallOptions.idempotencyKey
+puis esolve() au succès — un rejeu garde la même clé, une nouvelle intention en reçoit une neuve.
+	ypecheck, lint et 147 tests Jest verts après le correctif.
+
+## 4. Critères d'acceptation
 
 - **CA-1** ✅ — séance « Quiz de validation » à 14:00, « 3 h faites » / « 5 h prévues », série
   12 jours, 4 notions, actions du tuteur affichées (`today-hero`, `stat-streak`, `stat-gaps`,
@@ -72,7 +94,7 @@ Aucune zone de contenu n'est masquée, aucun ADR n'est invoqué pour une zone re
 - **CA-5** ✅ — comparaison visuelle Android **6,31 %** ≤ 12 % hors zones natives ; iOS non
   exécutable sur la VM (pas de macOS), écart consigné.
 
-## 4. Tests
+## 5. Tests
 
 | Étape | Résultat |
 |---|---|
@@ -85,7 +107,7 @@ Fichiers préexistants en échec sur `mobile`, hors périmètre (décision du po
 `packages/config/src/commit-rules.test.ts`, `apps/web/test/unit/bundle-split.test.ts`,
 `tools/migration/test/unit/report.test.ts`.
 
-## 5. Reproductibilité
+## 6. Reproductibilité
 
 ```sh
 cd /root/wt/SPEC-3201

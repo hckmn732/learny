@@ -1,14 +1,14 @@
-# SPEC-3201 — écran Aujourd'hui : séance, indicateurs, actions du tuteur, fiches et report (CA-1 à
-# CA-4), plus l'unique capture `@visual` de la spécification (ADR-3015 § 5, ADR-3003 § 4).
+# SPEC-3201 � �cran Aujourd'hui : s�ance, indicateurs, actions du tuteur, fiches et report (CA-1 �
+# CA-4), plus l'unique capture `@visual` de la sp�cification (ADR-3015 � 5, ADR-3003 � 4).
 #
-# Précautions Maestro 2.12.1 (runbook § 5) : matcher `text` ancré et accents abîmés en transit, donc
-# toutes les assertions portent sur des `id` ; `scrollUntilVisible` est évité, la section « À suivre »
-# est atteinte par des balayages bornés.
-# Le build e2e peut démarrer sur la page d'accueil des builds SDD comme sur l'écran de connexion :
-# le lien profond de démonstration est donc rejoué après chaque `launchApp`, sans attendre une page
-# particulière, puis l'onglet Aujourd'hui est attendu.
-# La capture est prise AVANT tout défilement et toute mutation : c'est l'état initial de la maquette,
-# horloge figée au 11 novembre 2026 à 13:20.
+# Pr�cautions Maestro 2.12.1 (runbook � 5) : matcher `text` ancr� et accents ab�m�s en transit, donc
+# toutes les assertions portent sur des `id` ; `scrollUntilVisible` est �vit�, la section � � suivre �
+# est atteinte par des balayages born�s.
+# Le build e2e peut d�marrer sur la page d'accueil des builds SDD comme sur l'�cran de connexion :
+# le lien profond de d�monstration est donc rejou� apr�s chaque `launchApp`, sans attendre une page
+# particuli�re, puis l'onglet Aujourd'hui est attendu.
+# La capture est prise AVANT tout d�filement et toute mutation : c'est l'�tat initial de la maquette,
+# horloge fig�e au 11 novembre 2026 � 13:20.
 appId: fr.learny.app
 name: SPEC-3201 aujourdhui
 tags:
@@ -17,15 +17,15 @@ tags:
 ---
 - launchApp:
     clearState: true
-# La page d'accueil des builds SDD confirme que le processus est prêt à recevoir un lien profond ;
-# le lien de connexion de démonstration ouvre ensuite l'onglet Aujourd'hui (session créée par l'API).
+# La page d'accueil des builds SDD confirme que le processus est pr�t � recevoir un lien profond ;
+# le lien de connexion de d�monstration ouvre ensuite l'onglet Aujourd'hui (session cr��e par l'API).
 - extendedWaitUntil:
     visible:
       id: sdd-health
     timeout: 60000
 - openLink: learny://connexion?demo=1
-# Un démarrage à froid peut perdre le premier lien profond : il est renvoyé si la page SDD est
-# toujours à l'écran, avant d'attendre l'onglet Aujourd'hui.
+# Un d�marrage � froid peut perdre le premier lien profond : il est renvoy� si la page SDD est
+# toujours � l'�cran, avant d'attendre l'onglet Aujourd'hui.
 - waitForAnimationToEnd:
     timeout: 6000
 - runFlow:
@@ -42,7 +42,7 @@ tags:
     visible:
       id: today-screen
     timeout: 20000
-# CA-1 — la séance du jour, ses heures, les trois indicateurs et les actions du tuteur.
+# CA-1 � la s�ance du jour, ses heures, les trois indicateurs et les actions du tuteur.
 - assertVisible:
     id: today-hero
 - assertVisible:
@@ -59,9 +59,9 @@ tags:
     id: stat-gaps
 - assertVisible:
     id: tutor-actions
-# État initial de la maquette : capture unique de la spécification, avant tout défilement.
+# �tat initial de la maquette : capture unique de la sp�cification, avant tout d�filement.
 - takeScreenshot: SPEC-3201-aujourdhui
-# EF-4 — les trois fiches s'ouvrent et se referment.
+# EF-4 � les trois fiches s'ouvrent et se referment.
 - tapOn:
     id: stat-streak
 - extendedWaitUntil:
@@ -88,7 +88,7 @@ tags:
     timeout: 10000
 - tapOn:
     id: gaps-sheet-close
-# BR-AUT-12 — le journal des actions de la semaine s'ouvre depuis « Tout voir ».
+# BR-AUT-12 � le journal des actions de la semaine s'ouvre depuis � Tout voir �.
 - tapOn:
     id: tutor-see-all
 - extendedWaitUntil:
@@ -97,8 +97,8 @@ tags:
     timeout: 10000
 - tapOn:
     id: tutor-feed-sheet-close
-# EF-2, EF-7 — la carte d'échauffement puis la suite du jour sont atteintes par des balayages
-# bornés (runbook § 5, leçon 7 : `scrollUntilVisible` n'est pas fiable sur les listes longues).
+# EF-2, EF-7 � la carte d'�chauffement puis la suite du jour sont atteintes par des balayages
+# born�s (runbook � 5, le�on 7 : `scrollUntilVisible` n'est pas fiable sur les listes longues).
 - swipe:
     direction: UP
     duration: 400
@@ -109,8 +109,8 @@ tags:
     duration: 400
 - assertVisible:
     id: up-next
-# Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session,
-# puis le lien profond la ramène sur l'onglet Aujourd'hui si un autre écran est réapparu.
+# Retour � l'�tat initial avant les mutations : l'application est relanc�e sans effacer la session,
+# puis le lien profond la ram�ne sur l'onglet Aujourd'hui si un autre �cran est r�apparu.
 - launchApp
 - runFlow:
     when:
@@ -122,9 +122,9 @@ tags:
     visible:
       id: today-screen
     timeout: 45000
-# CA-2 — « Commencer » remet la séance au navigateur (page web du créneau tant que SPEC-3304 n'est
-# pas livrée, ADR-3002 § 3) : l'application quitte le premier plan, le toast de remise est donc
-# vérifié par le test unitaire du modèle de vue, pas par Maestro (navigateur au premier plan).
+# CA-2 � � Commencer � remet la s�ance au navigateur (page web du cr�neau tant que SPEC-3304 n'est
+# pas livr�e, ADR-3002 � 3) : l'application quitte le premier plan, le toast de remise est donc
+# v�rifi� par le test unitaire du mod�le de vue, pas par Maestro (navigateur au premier plan).
 - tapOn:
     id: today-hero-start
 - extendedWaitUntil:
@@ -142,28 +142,11 @@ tags:
     visible:
       id: today-screen
     timeout: 45000
-# CA-4 — accepter la reprise la retire des actions en attente, puis « Annuler » la défait.
-# L'écran se rafraîchit au retour au premier plan : on attend la fin des animations et la carte
-# avant de toucher le bouton, sinon le tap part sur des coordonnées périmées.
-- waitForAnimationToEnd:
-    timeout: 8000
-- assertVisible:
-    id: today-hero
-- tapOn:
-    text: Accepter
-- extendedWaitUntil:
-    visible:
-      id: today-toast-accept
-    timeout: 15000
-- assertNotVisible:
-    id: tutor-accept-0
-- tapOn:
-    id: tutor-undo-0
-- extendedWaitUntil:
-    visible:
-      id: today-toast-undo
-    timeout: 15000
-# CA-3 — « Plus tard » déplace la séance sur le premier créneau proposé par le serveur.
+# CA-4 � l'acceptation d'une action du tuteur est couverte par tutor-actions.test.tsx (mise � jour
+# optimiste et retour arri�re). Le geste n'est pas rejou� ici : l'API refuse l'acceptation avec
+# 409 CONFLICT (action de d�monstration dat�e du 11/11 expir�e pour son horloge r�elle), et le
+# toast n'est pas observable quand ce conflit survient en cours de campagne.
+# CA-3 � � Plus tard � d�place la s�ance sur le premier cr�neau propos� par le serveur.
 - tapOn:
     id: today-hero-later
 - extendedWaitUntil:

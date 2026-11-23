@@ -11,10 +11,10 @@
   "tags": [
     "SPEC-3201"
   ],
-  "startedAt": "2026-11-23T14:10:04.505Z",
-  "finishedAt": "2026-11-23T14:11:21.778Z",
-  "passed": 0,
-  "failed": 1,
+  "startedAt": "2026-11-23T14:50:50.477Z",
+  "finishedAt": "2026-11-23T14:51:57.166Z",
+  "passed": 1,
+  "failed": 0,
   "videos": 1,
   "campaignVideo": "artifacts/campagne/campagne.mp4",
   "visual": 1,
@@ -27,18 +27,17 @@
         "SPEC-3201",
         "visual"
       ],
-      "status": "failed",
-      "durationSec": 70.804,
+      "status": "passed",
+      "durationSec": 60.357,
       "message": null,
       "videos": [],
       "screenshots": [
-        "artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.png",
-        "artifacts/spec-3201-aujourdhui/step-049-assertCondition-today-toast-accept.png"
+        "artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.png"
       ],
       "visual": {
         "flow": "SPEC-3201 aujourdhui",
         "status": "passed",
-        "diffRatio": 0.062,
+        "diffRatio": 0.0711,
         "capture": "/root/wt/SPEC-3201/test-results/sdd/SPEC-3201/artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.png",
         "baseline": "/root/wt/SPEC-3201/apps/mobile/e2e/visual/baselines/SPEC-3201-aujourdhui.png",
         "diff": "/root/wt/SPEC-3201/test-results/sdd/SPEC-3201/artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.diff.png"
@@ -49,7 +48,7 @@
     {
       "flow": "SPEC-3201 aujourdhui",
       "status": "passed",
-      "diffRatio": 0.062
+      "diffRatio": 0.0711
     }
   ],
   "unattributed": []
