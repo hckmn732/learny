@@ -153,7 +153,9 @@ async def test_the_drain_refuses_a_pending_delivery_and_accepts_an_empty_queue(
     # Sans `--require-empty`, seule une livraison en cours bloque la bascule.
     assert drain.verdict(waiting, require_empty=False)
 
-    assert await runner(database, py_ownership()).run_once() >= 1
+    # Only the delivery of this drill: the shared stack may hold older due deliveries that a
+    # global claim would take first (the claim is ordered by run_after and bounded).
+    await runner(database, py_ownership()).run_events([event_id])
     drained = await drain.wait_for_drain(database, attempts=1, event_ids=[event_id])
     assert drained.empty
     assert drain.verdict(drained, require_empty=True)
@@ -164,11 +166,11 @@ async def test_rollback_after_drain_loses_no_event_and_runs_it_once(
 ) -> None:
     event_id, run_id = await emit(database, events)
 
-    # 1. Le worker Python répartit l'événement : une livraison, encore en attente.
+    # 1. The Python worker fans the event out: one delivery, still pending.
     assert await dispatcher(database, py_ownership()).dispatch_once() >= 1
     assert (await delivery(database, event_id))["status"] == "pending"
 
-    # 2. Bascule vers ts (surcharge de propriété) : Python ne réclame plus le consommateur.
+    # 2. Flip to ts (ownership override): Python no longer claims the consumer.
     rolled_back = ts_ownership()
     assert rolled_back.consumers[DEMO_CONSUMER] == "ts"
     assert await dispatcher(database, rolled_back).dispatch_once() == 0
@@ -184,7 +186,7 @@ async def test_rollback_after_drain_loses_no_event_and_runs_it_once(
     drained = await drain.snapshot(database, [event_id])
     assert drained.empty
 
-    # 4. Retour à py : rejouer l'événement ne crée rien et ne mute rien deux fois.
+    # 4. Back to py: replaying the event creates nothing and mutates nothing twice.
     assert await dispatcher(database, py_ownership()).dispatch_once() == 0
     assert await runner(database, py_ownership()).run_once() == 0
     assert (await delivery(database, event_id))["attempts"] == 1
@@ -193,7 +195,7 @@ async def test_rollback_after_drain_loses_no_event_and_runs_it_once(
 
 
 async def test_flipping_before_the_drain_would_strand_an_event(events: list[str], database: Database) -> None:
-    # Le consommateur est déjà chez TypeScript : l'événement est estampillé sans livraison.
+    # The consumer is already TypeScript-owned: the event is stamped without a delivery.
     event_id, _run_id = await emit(database, events)
     assert await dispatcher(database, ts_ownership()).dispatch_once() == 0
     stranded = await drain.snapshot(database, [event_id])
@@ -201,7 +203,7 @@ async def test_flipping_before_the_drain_would_strand_an_event(events: list[str]
     assert stranded.orphaned == 1
     assert not drain.verdict(stranded, require_empty=True)
 
-    # Reprise documentée : remettre l'événement en file, puis le laisser au worker Python.
+    # Documented recovery: put the event back in the queue, then leave it to the Python worker.
     async with database.service_tx() as tx:
         await tx.conn.execute(
             text("update public.event_outbox set dispatched_at = null where event_id = :id"),
@@ -217,12 +219,12 @@ async def test_flipping_before_the_drain_would_strand_an_event(events: list[str]
 async def test_an_event_carries_no_python_delivery_when_the_consumer_is_ts(
     events: list[str], database: Database
 ) -> None:
-    # Preuve de la règle « un seul écrivain » côté jobs (ADR-2005, CA-3) : Python ne réclame
-    # jamais un consommateur `ts`, et le relais Inngest reste seul à l'exécuter.
+    # Proof of the single-writer rule for jobs (ADR-2005, CA-3): Python never claims a `ts`
+    # consumer, and the Inngest relay alone runs it.
     event_id, _run_id = await emit(database, events)
     assert await dispatcher(database, ts_ownership()).dispatch_once() == 0
     assert await delivery(database, event_id) == {}
-    # L'événement existe pourtant, non perdu côté base : c'est le drain qui le signale.
+    # The event still exists, not lost in the database: the drain reports it.
     async with database.service_tx() as tx:
         rows = (
             (

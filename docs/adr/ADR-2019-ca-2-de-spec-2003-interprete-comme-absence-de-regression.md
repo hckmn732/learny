@@ -1,9 +1,11 @@
 # ADR-2019 — CA-2 de SPEC-2003 interprete comme absence de regression
 
-- **Statut** : Acceptée
+- **Statut** : Remplacée par ADR-2037
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
 - **Date** : 2026-11-21
 - **Liens** : SPEC-2003
+
+> Remplacée par ADR-2037 (2026-11-23) : la contradiction de SPEC-006 est levée, la démonstration affiche la santé de l'API et les oracles sont alignés sur SPEC-1203. Le texte ci-dessous est conservé pour l'historique.
 
 ## Contexte
 

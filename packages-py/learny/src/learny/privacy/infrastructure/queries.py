@@ -349,7 +349,8 @@ COLLECT_SQL: dict[str, str] = {
         "from public.profiles where id = cast(:user_id as uuid)"
     ),
     "study": (
-        "select hours_per_day, study_days, preferred_slots from public.study_preferences "
+        "select hours_per_day, study_days, preferred_slots::text[] as preferred_slots "
+        "from public.study_preferences "
         "where user_id = cast(:user_id as uuid)"
     ),
     "notifications": (

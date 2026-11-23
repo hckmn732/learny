@@ -39,13 +39,21 @@ async function startServer(port: number, env: Record<string, string>): Promise<C
     ['--filter', '@learny/web', 'exec', 'next', 'start', '-p', String(port)],
     { cwd: ROOT, env: { ...process.env, ...env }, stdio: 'ignore', detached: true },
   );
-  await expect
-    .poll(
-      async () =>
-        (await fetch(`http://127.0.0.1:${String(port)}/api/v1/health`).catch(() => null))?.status,
-      { timeout: 30000 },
-    )
-    .toBe(200);
+  try {
+    await expect
+      .poll(
+        async () =>
+          // SPEC-1203: the web relays /api/v1 to the API; its readiness is its own manifest route.
+          (await fetch(`http://127.0.0.1:${String(port)}/manifest.webmanifest`).catch(() => null))
+            ?.status,
+        { timeout: 30000 },
+      )
+      .toBe(200);
+  } catch (error) {
+    // A server that never became ready must not outlive the test and hold its port.
+    if (server.pid) process.kill(-server.pid, 'SIGTERM');
+    throw error;
+  }
   return server;
 }
 
@@ -169,7 +177,13 @@ test('répond 404 hors garde et pour un identifiant inconnu @SPEC-006', async ({
   await expect(page.getByRole('link', { name: 'Retour à l’accueil' })).toBeVisible();
 
   // Same build, guard refused: the flag is not exactly "true".
-  const servers = [{ port: 3102, env: { ENABLE_SDD_PAGES: '1', APP_ENV: 'test' } }];
+  // SPEC-1203: production starts (the web validates only its public configuration) and the guard
+  // keeps every demonstration page out of it.
+  const servers = [
+    { port: 3102, env: { ENABLE_SDD_PAGES: '1', APP_ENV: 'test' } },
+    // 3103 is the health port of the Python worker in the e2e stack (playwright.config.ts).
+    { port: 3105, env: { ENABLE_SDD_PAGES: 'true', APP_ENV: 'production' } },
+  ];
   for (const { port, env } of servers) {
     const server = await startServer(port, env);
     try {
@@ -182,39 +196,6 @@ test('répond 404 hors garde et pour un identifiant inconnu @SPEC-006', async ({
       }
     } finally {
       if (server.pid) process.kill(-server.pid, 'SIGTERM');
-    }
-  }
-
-  // Production: SPEC-009 refuses the boot outright, so the pages can never be served. The
-  // dedicated start-up check lives in spec-009.spec.ts (ADR-0227).
-  const production = spawn(
-    'pnpm',
-    ['--filter', '@learny/web', 'exec', 'next', 'start', '-p', '3103'],
-    {
-      cwd: ROOT,
-      env: { ...process.env, ENABLE_SDD_PAGES: 'true', APP_ENV: 'production' },
-      stdio: 'ignore',
-      detached: true,
-    },
-  );
-  try {
-    const stopped = await new Promise<boolean>((resolve) => {
-      const timer = setTimeout(() => {
-        resolve(false);
-      }, 30000);
-      production.once('exit', () => {
-        clearTimeout(timer);
-        resolve(true);
-      });
-    });
-    expect(stopped, 'un serveur de production ne démarre pas').toBe(true);
-  } finally {
-    if (production.pid) {
-      try {
-        process.kill(-production.pid, 'SIGTERM');
-      } catch {
-        // Already stopped: SPEC-009 refuses an incomplete production environment.
-      }
     }
   }
 });

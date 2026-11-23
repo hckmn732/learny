@@ -77,6 +77,7 @@ export const sddDemos: Record<string, SddDemo> = {
   },
   'SPEC-1201': {
     title: "Bascule de l'API",
+    titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-1201'),
   },
   'SPEC-001': {

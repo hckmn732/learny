@@ -1459,8 +1459,8 @@ async def spec_107(call: Call) -> dict[str, Any]:
             nature="confusion",
             confused_with=third,
             evidence={
-                "chosen": "Compte de résultat",
-                "expected": "Compte fournisseur",
+                "chosen": fixture.SPEC107_EVIDENCE_CHOSEN,
+                "expected": fixture.SPEC107_EVIDENCE_EXPECTED,
                 "answerId": None,
             },
             detected_at=GAP_DETECTED,
@@ -1478,7 +1478,7 @@ async def spec_107(call: Call) -> dict[str, Any]:
         foreign = await create_user(
             conn,
             email=demo_email(call.deps.clock.now(), "spec-107-foreign"),
-            first_name="Béatrice",
+            first_name=fixture.SPEC107_FOREIGN_FIRST_NAME,
         )
         foreign_programme = await create_programme(
             conn,
@@ -2943,7 +2943,10 @@ async def spec_115(call: Call) -> dict[str, Any]:
         "sap": sap,
         "group": {
             "members": members,
-            "names": ["—" if row["first_name"] is None else str(row["first_name"]) for row in member_rows],
+            "names": [
+                fixture.SPEC115_MISSING_FIRST_NAME if row["first_name"] is None else str(row["first_name"])
+                for row in member_rows
+            ],
         },
         "agenda": {"days": days, "slots": len(slot_rows), "unread": unread},
         "checks": [

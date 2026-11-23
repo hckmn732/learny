@@ -134,7 +134,7 @@ Mode `demo` (ADR-0049, ADR-0102). Pas de maquette.
 
 **Contenu de `/_dev/sdd/SPEC-001`** (composant `spec-001.tsx`, Server Component) :
 1. Section `data-testid="spec-001-workspace"`, `h2` « Espace de travail » : tableau (`table`, en-têtes « Paquet », « Rôle ») listant `@learny/web`, `@learny/core`, `@learny/config` lus depuis une constante `WORKSPACE_PACKAGES` du composant.
-2. Section `data-testid="spec-001-health"`, `h2` « Santé de l'API » : résultat d'un appel serveur à la fonction `getHealth()` partagée avec la route (pas de requête HTTP) affiché `status : ok`.
+2. Section `data-testid="spec-001-health"`, `h2` « Santé de l'API » : santé de l'API lue sur sa route publique `GET /api/v1/health` (le web n'a plus de base depuis SPEC-1203) et affichée `status : ok`.
 3. Section `data-testid="spec-001-regions"`, `h2` « Hébergement (BR-PLA-04) » : liste `ul` des entrées de `HOSTING_REGIONS` (« Vercel : fra1 — UE », « Supabase : eu-central-1 — UE », « Inngest : eu — UE ») ; chaque ligne porte `data-testid="region-<service>"`.
 4. Section `data-testid="spec-001-clock"`, `h2` « Horloge injectable » : « CLOCK_FIXED_AT = 2026-11-11T12:20:00Z » et « clock.now() = 2026-11-11T12:20:00.000Z ».
 
@@ -191,3 +191,7 @@ Définition commune de `docs/engineering/testing.md` §7, plus : le dépôt Git 
 - ADR créés pendant l'implémentation : **ADR-0220** (lint de `tools/sdd`, exclusions Prettier, `lib/health.ts`, `globalDependencies` Turborepo), **ADR-0221** (versions compatibles retenues : TypeScript 6.0, ESLint 9, `@types/node` 24).
 - Hypothèse : les paquets internes sont consommés en TypeScript source (`transpilePackages`) ; un paquet n'a une étape `build` que s'il doit être exécuté hors de Next.js (ex. worker, SPEC-007).
 - Hypothèse : si Next.js ≥ 16 est la dernière version stable, les fichiers et API sont ceux de cette version (ex. `proxy.ts` remplace `middleware.ts`) ; la spécification n'utilise aucune API dépréciée.
+
+## Amendements
+
+- **2026-11-23, ADR-2037** — Depuis SPEC-1203, le web est un client pur : `/api/v1/health` est relayé vers l'API et la démonstration affiche la santé de l'API (`readApiHealth`), non une sonde locale.

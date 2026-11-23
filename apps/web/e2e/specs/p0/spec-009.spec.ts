@@ -1,6 +1,3 @@
-import { spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
-
 import { PUBLIC_ENV_KEYS } from '@learny/config';
 import { expect, test } from '@learny/testing/playwright';
 import {
@@ -11,7 +8,6 @@ import {
 
 import { DEMO_SECRET_SENTINEL } from '../../../lib/sdd-config-demo';
 
-const ROOT = fileURLToPath(new URL('../../../../../', import.meta.url));
 const DEMO = '/_dev/sdd/SPEC-009';
 // Values that must never reach the page: simulated secrets and provider key shapes.
 const LEAKS = new RegExp([DEMO_SECRET_SENTINEL, 'BwcHBwc', 'sk-ant-', 'whsec_', 'signkey-'].join('|'));
@@ -47,8 +43,8 @@ test('inspecte la configuration @SPEC-009', async ({ page, consoleErrors }) => {
 
   // A truncated production configuration names its fields and nothing else.
   const invalid = page.getByTestId('spec-009-invalid');
+  // SPEC-709: no platform model, so ANTHROPIC_API_KEY is no longer required in production.
   await expect(invalid.getByTestId('spec-009-invalid-field')).toContainText([
-    'ANTHROPIC_API_KEY',
     'APP_ENCRYPTION_KEY',
     'ENABLE_SDD_PAGES',
   ]);
@@ -159,66 +155,5 @@ test('configuration conforme @SPEC-009 @visual', async ({ page, axeCheck, captur
   await captureEvidence('spec-009-mobile');
 });
 
-test('refuse le démarrage en production incomplète @SPEC-009', async () => {
-  const port = 3105;
-  const output: string[] = [];
-  // learny-test-only: values that must never be echoed by the startup error.
-  const child = spawn(
-    'pnpm',
-    ['--filter', '@learny/web', 'exec', 'next', 'start', '-p', String(port)],
-    {
-      cwd: ROOT,
-      detached: true,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env: {
-        ...process.env,
-        APP_ENV: 'production',
-        ENABLE_SDD_PAGES: 'true',
-        // Local QA artifacts may provide a key in `.env.local`: an explicit empty value keeps the
-        // production check independent from the developer environment.
-        APP_ENCRYPTION_KEY: '',
-        APP_ENCRYPTION_KEY_PREVIOUS: '',
-        DATABASE_URL: 'postgresql://learny:learny-test-only-LEAK@db.example:5432/learny',
-        ANTHROPIC_API_KEY: 'sk-ant-learny-test-only-LEAK', // learny-test-only
-      },
-    },
-  );
-  child.stdout.on('data', (chunk: Buffer) => output.push(chunk.toString()));
-  child.stderr.on('data', (chunk: Buffer) => output.push(chunk.toString()));
-
-  try {
-    const outcome = await Promise.race([
-      new Promise<number | null>((resolve) => {
-        child.once('exit', (code) => {
-          resolve(code);
-        });
-      }),
-      new Promise<'timeout'>((resolve) => {
-        setTimeout(() => {
-          resolve('timeout');
-        }, 30000);
-      }),
-    ]);
-
-    const text = output.join('');
-    expect(outcome, 'le serveur de production doit s’arrêter').not.toBe('timeout');
-    expect(outcome).not.toBe(0);
-    expect(text).toContain('Configuration production invalide');
-    expect(text).toContain('APP_ENCRYPTION_KEY');
-    expect(text).toContain('ENABLE_SDD_PAGES');
-    expect(text).not.toContain('LEAK');
-
-    const health = await fetch(`http://127.0.0.1:${String(port)}/api/v1/health`).catch(
-      () => null,
-    );
-    expect(health).toBeNull();
-  } finally {
-    if (child.pid) {
-      try {
-        process.kill(-child.pid, 'SIGTERM');
-      } catch {
-        // Already stopped: the startup refused the production environment.
-      }
-    }
-  }
-});
+// SPEC-1203: the web is a pure client and validates only its public configuration; refusing an
+// incomplete production environment is the API's responsibility (ADR-2037).

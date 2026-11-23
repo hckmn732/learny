@@ -111,6 +111,7 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # learner in a service transaction, like the TypeScript `step.sendEvent` of the job.
         "learny_worker.consumers": "internal job/daily-digest events of the planned digests",
         "learny_worker.health": "readiness probe of the worker",
+        "learny_worker.drain": "read-only drain probe of the job tables before a flip",
         # SPEC-2207 - the nightly cleanup deletes the delivered rows of every learner, which the
         # authenticated role of one learner may not do (SPEC-203 ET-6, ADR-0122).
         "learny.shared.outbox.purge": "nightly cleanup of the delivered outbox rows",
