@@ -42,7 +42,7 @@ BEGIN
   VALUES (
     v_user, v_formation, v_module, 'validation_quiz',
     jsonb_build_object('threshold', 80, 'questionCount', 10, 'scoring', 'equal', 'sdd', 'SPEC-3304'),
-    '[]'::jsonb, 'ready'
+    '[]'::jsonb, 'draft'
   )
   RETURNING id INTO v_activity;
 
@@ -88,7 +88,7 @@ BEGIN
     v_bricks := v_bricks || to_jsonb(v_brick);
   END LOOP;
 
-  UPDATE public.activities SET items = v_items WHERE id = v_activity;
+  UPDATE public.activities SET items = v_items, status = 'ready' WHERE id = v_activity;
   UPDATE public.activities
   SET config = config || jsonb_build_object('brickIds', v_bricks, 'attemptId', v_attempt)
   WHERE id = v_activity;

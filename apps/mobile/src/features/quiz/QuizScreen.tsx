@@ -166,7 +166,12 @@ export function QuizScreen({
   const label = question.type === 'open_question' ? `${t.open} ${t.consigne}` : t.consigne;
 
   return (
-    <View style={[styles.screen, { paddingBottom: insets.bottom + theme.spacing.md }]}>
+    <View
+      style={[
+        styles.screen,
+        { paddingTop: insets.top, paddingBottom: insets.bottom + theme.spacing.md },
+      ]}
+    >
       <QuizHeader
         position={index + 1}
         total={total}
