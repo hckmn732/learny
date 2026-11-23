@@ -133,10 +133,7 @@ def apply_overrides(ownership: Ownership, overrides: Mapping[str, Owner]) -> Own
 
 
 def find_api_dir(start: Path | None = None) -> Path:
-    """Directory holding the generated contract artefacts (`PY_API_DIR` wins)."""
-    override = os.environ.get("PY_API_DIR")
-    if override:
-        return Path(override)
+    """Directory holding the generated contract artefacts, searched upwards from `start` and cwd."""
     candidates = []
     if start is not None:
         candidates.extend([start, *start.parents])

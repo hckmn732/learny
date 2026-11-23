@@ -1,4 +1,4 @@
-"""[SPEC-009] Production environment is refused when incomplete (CA-2, ADR-2040)."""
+"""[SPEC-009] Production environment is refused when incomplete (CA-2, ADR-2040, ADR-2042)."""
 
 import pytest
 from learny.shared.config import (
@@ -12,22 +12,28 @@ from learny.shared.config import (
 
 pytestmark = pytest.mark.spec("SPEC-009")
 
+
+@pytest.fixture(autouse=True)
+def _real_clock(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The suite freezes the clock through the environment; production refuses it (ADR-2042)."""
+    monkeypatch.delenv("CLOCK_FIXED_AT", raising=False)
+
+
 VALID_ENV = {
     "APP_ENCRYPTION_KEY": "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
     "API_PROXY_SECRET": "learny-test-only-api-proxy-secret-value",
     "DATABASE_URL": "postgresql://postgres:postgres@db:5432/postgres",
+    "EMAIL_FROM": "Learny <bonjour@learny.example>",
     "EMAIL_LINK_SECRET": "learny-test-only-email-link-secret-value",
     "NEXT_PUBLIC_APP_URL": "https://learny.example",
-    "RATE_LIMIT_IP_SECRET": "learny-test-only-rate-limit-secret-value",
     "RESEND_API_KEY": "re_test_only",
     "STRIPE_PRICE_ID": "price_test_only",
     "STRIPE_SECRET_KEY": "sk_test_only",
     "STRIPE_WEBHOOK_SECRET": "whsec_test_only",
-    "SUPABASE_ANON_KEY": "anon-test-only",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "anon-test-only",
     "SUPABASE_SERVICE_ROLE_KEY": "service-test-only",
-    "SUPABASE_URL": "https://project.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://project.supabase.co",
     "VAPID_PRIVATE_KEY": "private-test-only",
-    "VAPID_SUBJECT": "mailto:test@learny.example",
     "VOYAGE_API_KEY": "voyage-test-only",
 }
 
@@ -96,7 +102,8 @@ def test_the_error_never_contains_a_secret_value() -> None:
         ({"jobs_mode": "inline"}, "JOBS_MODE", "forbidden"),
         ({"enable_sdd_pages": "true"}, "ENABLE_SDD_PAGES", "forbidden"),
         ({"next_public_app_url": "http://learny.example"}, "NEXT_PUBLIC_APP_URL", "incompatible"),
-        ({"supabase_url": "http://127.0.0.1:54321"}, "SUPABASE_URL", "incompatible"),
+        ({"supabase_url": "http://127.0.0.1:54321"}, "NEXT_PUBLIC_SUPABASE_URL", "incompatible"),
+        ({"clock_fixed_at": "2026-11-11T12:20:00Z"}, "CLOCK_FIXED_AT", "forbidden"),
     ],
 )
 def test_production_refuses_simulated_modes_and_plain_http(
@@ -115,15 +122,13 @@ def test_load_settings_applies_the_production_guard(monkeypatch: pytest.MonkeyPa
     for key, value in VALID_ENV.items():
         monkeypatch.setenv(key, value)
     monkeypatch.setenv("APP_ENV", "production")
-    monkeypatch.setenv("LLM_MODE", "live")
-    monkeypatch.setenv("STRIPE_MODE", "live")
-    monkeypatch.setenv("EMAIL_MODE", "resend")
-    monkeypatch.setenv("PUSH_MODE", "live")
-    monkeypatch.setenv("JOBS_MODE", "worker")
 
     settings = load_settings()
 
     assert settings.is_production
+    # ADR-2042: the production modes are derived (APP_ENV, Stripe key), never read from the environment.
+    assert (settings.llm_mode, settings.stripe_mode, settings.email_mode) == ("live", "test", "resend")
+    assert (settings.push_mode, settings.jobs_mode, settings.rate_limit_mode) == ("live", "worker", "on")
 
 
 def test_load_settings_refuses_an_incomplete_production(monkeypatch: pytest.MonkeyPatch) -> None:

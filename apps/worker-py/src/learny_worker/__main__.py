@@ -24,6 +24,13 @@ from learny_worker.runner import Runner
 from learny_worker.scheduler import Scheduler
 
 STOP_TIMEOUT_SECONDS = 45
+# Tuning of the loops (ADR-2042): constants of the code, identical in every environment.
+DISPATCH_INTERVAL_MS = 500
+DISPATCH_BATCH_SIZE = 100
+WORKER_CONCURRENCY = 8
+WORKER_POLL_INTERVAL_MS = 500
+SCHEDULER_RETRY_INTERVAL_S = 15
+SCHEDULER_POLL_INTERVAL_S = 20
 
 
 def build(settings: Settings, ownership: Ownership, deps: Deps | None = None) -> dict[str, Any]:
@@ -36,21 +43,21 @@ def build(settings: Settings, ownership: Ownership, deps: Deps | None = None) ->
         "dispatcher": Dispatcher(
             resolved,
             ownership,
-            interval_ms=settings.py_dispatch_interval_ms,
-            batch_size=settings.py_dispatch_batch_size,
+            interval_ms=DISPATCH_INTERVAL_MS,
+            batch_size=DISPATCH_BATCH_SIZE,
             consumers=consumers,
         ),
         "runner": Runner(
             resolved,
             consumers,
-            concurrency=settings.py_worker_concurrency,
-            poll_interval_ms=settings.py_worker_poll_interval_ms,
+            concurrency=WORKER_CONCURRENCY,
+            poll_interval_ms=WORKER_POLL_INTERVAL_MS,
         ),
         "scheduler": Scheduler(
             resolved,
             ownership,
-            retry_interval_s=settings.py_scheduler_retry_interval_s,
-            poll_interval_s=settings.py_scheduler_poll_interval_s,
+            retry_interval_s=SCHEDULER_RETRY_INTERVAL_S,
+            poll_interval_s=SCHEDULER_POLL_INTERVAL_S,
         ),
     }
 
@@ -66,7 +73,7 @@ async def serve(settings: Settings, loops: dict[str, Any]) -> None:
     logger.info(
         "worker started",
         consumers=[consumer.name for consumer in loops["consumers"]],
-        concurrency=settings.py_worker_concurrency,
+        concurrency=WORKER_CONCURRENCY,
     )
     server = _health_server(settings, loops["deps"])
     tasks = [
@@ -92,12 +99,13 @@ async def serve(settings: Settings, loops: dict[str, Any]) -> None:
 
 
 def _health_server(settings: Settings, deps: Deps) -> uvicorn.Server | None:
-    if settings.py_worker_health_port <= 0:
+    """The health server listens on the standard `PORT` when the deployment sets one."""
+    if settings.port <= 0:
         return None
     config = uvicorn.Config(
         create_health_app(deps),
         host="127.0.0.1",
-        port=settings.py_worker_health_port,
+        port=settings.port,
         log_level="warning",
         access_log=False,
     )
@@ -117,12 +125,6 @@ async def run(settings: Settings) -> None:
 def main() -> int:
     """Entry point of the worker process."""
     settings = load_settings()
-    if settings.jobs_mode != "worker":
-        structlog.get_logger("learny.worker").warning(
-            "worker not started: the jobs mode runs the consumers elsewhere",
-            jobsMode=settings.jobs_mode,
-        )
-        return 0
     try:
         asyncio.run(run(settings))
     except KeyboardInterrupt:

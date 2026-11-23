@@ -22,3 +22,7 @@ def pytest_configure(config: object) -> None:
     mode = os.environ.get("LLM_MODE", "mock")
     if mode not in ("", "mock"):
         raise RuntimeError(f"LLM_MODE={mode} is refused in tests: only mock is allowed")
+    # ADR-2042: the Python modes derive from APP_ENV, so a live environment is refused as well.
+    app_env = os.environ.get("APP_ENV", "")
+    if app_env in ("preview", "production"):
+        raise RuntimeError(f"APP_ENV={app_env} is refused in tests: its modes are live")

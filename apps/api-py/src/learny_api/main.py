@@ -85,7 +85,7 @@ def create_app(
 
     app = FastAPI(
         title="Learny API",
-        version=resolved.version,
+        version=resolved.app_version or "dev",
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
