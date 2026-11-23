@@ -67,9 +67,9 @@ def _wall_of(instant_ms: int, time_zone: str) -> datetime:
     return shared_time.from_epoch_ms(shared_time.wall_ms_of(instant_ms, time_zone))
 
 
-def _clock_of(instant_ms: int, time_zone: str) -> str:
-    """Local `HH:MM` reading of an instant."""
-    local = _wall_of(instant_ms, time_zone)
+def local_clock(instant: str, time_zone: str) -> str:
+    """Local `HH:MM` reading of an instant (`toUserZone(instant, zone).time`)."""
+    local = _wall_of(_instant_ms(instant), time_zone)
     return f"{local.hour:02d}:{local.minute:02d}"
 
 
@@ -210,7 +210,7 @@ def next_activity_label(starts_at: str, now: datetime, time_zone: str) -> str:
     starts_ms = _instant_ms(starts_at)
     today = shared_time.user_local_day(shared_time.to_epoch_ms(now), time_zone)
     day = shared_time.user_local_day(starts_ms, time_zone)
-    clock = _clock_of(starts_ms, time_zone)
+    clock = local_clock(starts_at, time_zone)
     difference = _day_difference(today, day)
     if difference == 0:
         return texts.NEXT_ACTIVITY_TODAY.format(time=clock)

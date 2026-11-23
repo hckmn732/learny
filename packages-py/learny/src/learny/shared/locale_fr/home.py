@@ -37,6 +37,9 @@ HOME_SLOT_LABELS: dict[str, str] = {
     "weekly_review": "Bilan",
 }
 
+# `objectiveText` joins the labels of a formation with a middle dot.
+OBJECTIVE_SEPARATOR = " · "
+
 # `formatDuration` (EF-2).
 DURATION_MINUTES = "{minutes} min"
 DURATION_HOURS = "{hours} h"
